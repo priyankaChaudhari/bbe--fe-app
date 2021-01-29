@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "extends": ["airbnb", "airbnb/hooks", "prettier", "prettier/react"],
+  "rules": {
+    "react/jsx-props-no-spreading": "off",
+    "no-nested-ternary": "off",
+    "no-restricted-syntax": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "jsx-a11y/label-has-for": [
+      1,
+      {
+        "required": {
+          "every": ["id"]
+        }
+      }
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

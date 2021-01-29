@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="48px" viewBox="0 0 64 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="2.-Customer-Account-Setup" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Account_Setup-5.4" transform="translate(-516.000000, -228.000000)" fill="#FF5933" fill-rule="nonzero">
+            <g id="Group" transform="translate(436.000000, 197.000000)">
+                <g transform="translate(80.000000, 31.000000)" id="Path">
+                    <path d="M63.0625,10.0525 L33.09375,40.1875 L24,31.07375 L54.01375,0.94875 C54.6090223,0.348438895 55.4184676,0.00930998891 56.2638739,0.00600372104 C57.1092802,0.00274554731 57.9213344,0.335579115 58.52125,0.93125 L58.53875,0.94875 L63.0625,5.5 C64.3122917,6.76017229 64.3122917,8.79232771 63.0625,10.0525 Z" opacity="0.200000003"></path>
+                    <path d="M33.08375,40.19875 L26.2625,47.0575 C25.0225764,48.3069383 23.0045878,48.314773 21.755,47.075 L21.7375,47.0575 L0.9375,26.1375 C-0.312827285,24.8780357 -0.312827285,22.8457143 0.9375,21.58625 L5.4625,17.035 C6.70024915,15.7888198 8.71303683,15.779315 9.9625,17.01375 L9.9825,17.035 L33.08375,40.19875 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
