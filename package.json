@@ -17,6 +17,7 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "eslint": "^6.6.0",
+    "hellosign-embedded": "^2.9.0",
     "html-to-draftjs": "^1.5.0",
     "jquery": "^3.5.1",
     "node-sass": "^4.14.1",

@@ -68,6 +68,8 @@ export default function Agreement() {
         show: true,
         message: history.location.state.message,
       });
+      history.location.state.message = '';
+      history.replace(history.location.pathname);
     }
     dispatch(getAccountDetails(id));
     agreementTemplate().then((response) => {

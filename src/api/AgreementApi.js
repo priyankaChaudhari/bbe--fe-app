@@ -8,6 +8,8 @@ import {
   API_CONTRACT_DOCUMENT,
   API_CREATE_ADDENDUM,
   API_TRANSACTION_DATA,
+  API_CONTRACT_DESIGN,
+  API_TRANSACTIONAL_SIGN_URL,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -163,6 +165,42 @@ export async function updateAddendum(id, data) {
 export async function createTransactionData(data) {
   const result = await axiosInstance
     .post(API_TRANSACTION_DATA, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getTransactionData(data) {
+  const result = await axiosInstance
+    .get(API_TRANSACTION_DATA, { params: data })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function createContractDesign(data) {
+  const result = await axiosInstance
+    .post(API_CONTRACT_DESIGN, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function transactionalSignUp(data) {
+  const result = await axiosInstance
+    .get(API_TRANSACTIONAL_SIGN_URL, { params: data })
     .then((response) => {
       return response;
     })

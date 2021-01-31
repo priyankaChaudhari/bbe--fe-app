@@ -18,6 +18,7 @@ export const PATH_ADDENDUM = `${PATH_CUSTOMER_DETAILS}/addendum`;
 export const PATH_ONE_TIME_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/onetime-addendum`;
 export const PATH_SERVICE_AMENDMENT = `${PATH_CUSTOMER_DETAILS}/service-amendment`;
 export const PATH_DSP_ADDENDUM = `${PATH_CUSTOMER_DETAILS}/dsp-addendum`;
+export const PATH_HELLO_SIGN = `/contract-signature`;
 
 // Account Setup
 export const PATH_ACCOUNT_SETUP = '/account-setup/';

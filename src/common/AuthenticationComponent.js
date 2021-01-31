@@ -92,7 +92,6 @@ export default function AuthenticationComponent() {
           <Route path={PATH_ONE_TIME_AGREEMENT} component={OneTimeAgreement} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
           <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
-
           {/* Account Setup */}
           <Route path={PATH_AMAZON_ACCOUNT} component={AmazonAccount} />
           <Route path={PATH_BILLING_DETAILS} component={BillingDetails} />
