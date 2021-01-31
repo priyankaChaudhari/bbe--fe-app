@@ -114,43 +114,42 @@ export default function Statement() {
           ) {
             fields.push(
               `<tr>
-            <td>${
-              item.service ? item.service.name : item && item.name
-            }</td><td>$ ${
-                item.service
-                  ? item.service.fee
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : item.fee
-                  ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : ''
-              } /month</td></tr>`,
+            <td style="border: 1px solid black;
+    padding: 13px;">${
+      item.service ? item.service.name : item && item.name
+    }</td><td style="border: 1px solid black;
+    padding: 13px;">$ ${
+      item.service
+        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : item.fee
+        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : ''
+    } /month</td></tr>`,
             );
           }
         } else {
           fields.push(
             `<tr>
-                <td>${
-                  item && item.quantity
-                    ? item.quantity
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0
-                }</td>
+                <td style="border: 1px solid black;
+    padding: 13px;">${
+      item && item.quantity
+        ? item.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : 0
+    }</td>
             <td>${
               item.service ? item.service.name : item && item.name
-            }</td><td>$ ${
-              item.service
-                ? item.service.fee
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : item.fee
-                ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : ''
-            } /month</td>
-            <td>$ ${(item.quantity * item.service.fee)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+            }</td><td style="border: 1px solid black;
+    padding: 13px;">$ ${
+      item.service
+        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : item.fee
+        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : ''
+    } /month</td>
+            <td style="border: 1px solid black;
+    padding: 13px;">$ ${(item.quantity * item.service.fee)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
             </tr>`,
           );
         }
@@ -273,6 +272,24 @@ export default function Statement() {
                                 )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
                                   'additional_one_time_services',
                                 )}
+                              </td></tr>
+                                </table>`,
+                              )
+                              .replace(
+                                'ONE_TIME_SERVICE_TABLE',
+                                `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
                               </td></tr>
                                 </table>`,
                               ),

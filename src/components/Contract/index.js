@@ -5,6 +5,7 @@ import ServicesAmendment from './ServicesAmendment';
 import OneTimeAgreement from './OneTimeAgreement';
 import DSPAddendum from './DSPAddendum';
 import AdditionalServices from './AdditionalServices';
+import HelloSignComponent from './HelloSignComponent';
 
 export {
   Agreement,
@@ -14,4 +15,5 @@ export {
   OneTimeAgreement,
   DSPAddendum,
   AdditionalServices,
+  HelloSignComponent,
 };

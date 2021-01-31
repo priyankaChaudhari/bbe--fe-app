@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import HelloSign from 'hellosign-embedded';
 import queryString from 'query-string';
 import {
   Button,
@@ -26,11 +26,12 @@ import {
   deleteContactInfo,
   createContactInfo,
   updateContactInfo,
-  // updateAccountDetails,
+  createContractDesign,
   createTransactionData,
 } from '../../api/index';
 
 import { getContactDetails } from '../../store/actions/customerState';
+
 import { PATH_AGREEMENT } from '../../constants';
 
 function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
@@ -47,6 +48,8 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
   const [ccEmails, setCCEmails] = useState([{}, {}]);
   const [approvalNote, setApprovalNote] = useState({});
   const [sendContractCopy, setSendContractCopy] = useState(false);
+  const [contractDesignData, setContractDesignData] = useState(null);
+  const [showHelloSignPage, setShowHelloSign] = useState(true);
   const contactFields = [
     {
       key: 'first_name',
@@ -101,10 +104,10 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
   const removeContact = (index) => {
     // setShowSuccessContact({ show: false, message: '' });
     if (index && index.includes('CT')) {
-      setIsLoading({ loader: true, type: 'page' });
+      setIsLoading({ loader: true, type: 'button' });
 
       deleteContactInfo(index).then(() => {
-        setIsLoading({ loader: false, type: 'page' });
+        setIsLoading({ loader: false, type: 'button' });
 
         dispatch(getContactDetails(id));
         // setShowSuccessContact({ show: true, message: 'Contact Removed.' });
@@ -121,10 +124,10 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
     if (info) {
       setFormData(info);
       setParams('add-new-contact');
-      setIsLoading({ loader: true, type: 'page' });
+      setIsLoading({ loader: true, type: 'button' });
 
       updateContactInfo(info && info.id, formData).then((res) => {
-        setIsLoading({ loader: false, type: 'page' });
+        setIsLoading({ loader: false, type: 'button' });
 
         if (res && res.status === 400) {
           setContactApiError(res && res.data);
@@ -136,11 +139,11 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
       });
     } else {
       setFormData({ ...formData, customer: id });
-      setIsLoading({ loader: true, type: 'page' });
+      setIsLoading({ loader: true, type: 'button' });
 
       createContactInfo({ ...formData, customer: id }).then(
         (responseContact) => {
-          setIsLoading({ loader: false, type: 'page' });
+          setIsLoading({ loader: false, type: 'button' });
           if (responseContact && responseContact.status === 201) {
             dispatch(getContactDetails(id));
             setParams('select-contact');
@@ -252,7 +255,6 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
 
     setCCEmails(list);
   };
-
   const displayCCEmails = () => {
     return ccEmails.map((data, i) => {
       return (
@@ -310,19 +312,58 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
     );
   };
 
-  const sendRequestSignature = () => {
-    const requestSignaturedata = {
-      user: userInfo.id,
+  const verifyDocument = () => {
+    setIsLoading({ loader: true, type: 'button' });
+
+    const contractData = {
       contract: agreementData.id,
-      primary_email: selectedContact && selectedContact.email,
-      cc_email_address: ccEmails,
-      send_contract_copy: sendContractCopy,
-      contract_status: 'pending contract signature',
+      to: selectedContact && selectedContact.email,
+      cc: ccEmails,
+      contract_data: pdfData,
     };
-    createTransactionData(requestSignaturedata).then(
-      // );
-      // updateAccountDetails(agreementData.id, requestSignaturedata).then(
-      (response) => {
+    createContractDesign(contractData).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+
+      if (res && res.status === 200) {
+        setContractDesignData(res && res.data);
+      }
+    });
+  };
+
+  const displayHelloSign = () => {
+    const client = new HelloSign({
+      clientId: process.env.REACT_APP_HELLOSIGN_CLIENT_ID,
+    });
+    client.open(
+      contractDesignData &&
+        contractDesignData.design_url &&
+        contractDesignData.design_url.claim_url,
+      {
+        skipDomainVerification: true,
+      },
+    );
+
+    client.on('ready', () => {
+      setShowHelloSign(false);
+    });
+
+    client.on('finish', () => {
+      const requestSignaturedata = {
+        user: userInfo.id,
+        contract: agreementData.id,
+        primary_email: selectedContact && selectedContact.email,
+        cc_email_address: ccEmails.filter(
+          (item) => Object.keys(item).length !== 0,
+        ),
+        send_contract_copy: sendContractCopy,
+        contract_status: 'pending contract signature',
+        hellosign_request_id:
+          contractDesignData &&
+          contractDesignData.design_url &&
+          contractDesignData.design_url.signature_request_id,
+      };
+
+      createTransactionData(requestSignaturedata).then((response) => {
         if (response && response.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
           // setApiError(response && response.data);
@@ -333,17 +374,22 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
             pathname: PATH_AGREEMENT.replace(':id', id),
             state: { message: 'Signature Requested Successfully' },
           });
-          setShowModal(false);
           setIsLoading({ loader: false, type: 'button' });
         }
-      },
-    );
-  };
+      });
+      setShowModal(false);
+    });
 
+    client.on('close', (data) => {
+      console.log('The document has been signed!', data);
+      setShowModal(false);
+    });
+  };
   return (
     <>
-      {params && params.step === 'request-signature' ? (
+      {params && params.step === 'verify-document' ? (
         <>
+          {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
           <div className="modal-body on-boarding">
             <h4 className="on-boarding mb-4">Request Signature</h4>
 
@@ -397,8 +443,13 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
           <div className=" col-12  modal-footer">
             <Button
               className=" btn-primary on-boarding w-100"
-              onClick={() => sendRequestSignature()}>
-              Request Signature
+              onClick={() => verifyDocument()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Request Signature'
+              )}
+              {/* Verify Document */}
             </Button>
           </div>
         </>
@@ -521,14 +572,18 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
           <div
             className=" col-12  modal-footer"
             role="presentation"
-            onClick={() => setParams('request-signature')}>
+            onClick={() => setParams('verify-document')}>
             <Button
               className={
                 selectedContact && selectedContact.id
                   ? ' btn-primary on-boarding w-100'
                   : ' btn-primary on-boarding w-100 disabled'
               }>
-              Request Signature
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Next'
+              )}
             </Button>
           </div>
         </div>
@@ -565,7 +620,11 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
                 saveContact(formData);
               }}>
               <Button className=" btn-primary on-boarding">
-                Update Contact
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  ' Update Contact'
+                )}
               </Button>
             </div>
           ) : (
@@ -575,7 +634,13 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
               onClick={() => {
                 saveContact();
               }}>
-              <Button className=" btn-primary on-boarding">Add Contact</Button>
+              <Button className=" btn-primary on-boarding">
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Add Contact'
+                )}
+              </Button>
             </div>
           )}
         </>

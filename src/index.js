@@ -11,6 +11,7 @@ import PageLoader from './common/PageLoader';
 import userStateReducer from './store/reducers/userStateReducer';
 import customerStateReducer from './store/reducers/customerStateReducer';
 import accountStateReducer from './store/reducers/accountStateReducer';
+
 import * as serviceWorker from './serviceWorker';
 import './theme/css/style.scss';
 import './theme/css/bootstrap-grid.min.css';

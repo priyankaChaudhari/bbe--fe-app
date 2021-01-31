@@ -76,7 +76,10 @@ export default function Header() {
   };
 
   window.addEventListener('click', (e) => {
-    if (document.getElementById('clickbox').contains(e.target)) {
+    if (
+      document.getElementById('clickbox') &&
+      document.getElementById('clickbox').contains(e.target)
+    ) {
       setShowDropDown(true);
     } else {
       setShowDropDown(false);

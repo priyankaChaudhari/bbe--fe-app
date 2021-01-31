@@ -47,16 +47,12 @@ export default function Addendum() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const details = useSelector((state) => state.accountState.data);
-  // const customerData = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.accountState.isLoading);
   const [editorState, setEditorState] = useState(null);
   const [contentState, setContentState] = useState(null);
   const [newAddendumData, setNewAddendum] = useState(null);
   const [showEditor, setShowEditor] = useState(false);
   const [pdfData, setPDFData] = useState('');
-
-  // contentState = convertFromRaw(content);
-  // const ref = React.createRef();
 
   useEffect(() => {
     // dispatch(getCustomerDetails(id));
@@ -73,12 +69,6 @@ export default function Addendum() {
     });
 
     getAddendum({ customer_id: id }).then((addendum) => {
-      // console.log(addendum, 'addemdum');
-      // var combinedAddendum = '';
-      // addendum.data.results.forEach((item) => {
-      //   combinedAddendum += item.addendum;
-      // });
-      // console.log(combinedAddendum);
       setNewAddendum(
         addendum &&
           addendum.data &&
@@ -98,14 +88,6 @@ export default function Addendum() {
 
       if (editorState === null) {
         let contentBlock;
-        // console.log(
-        //   editorState,
-        //   '@@@@',
-        //   addendum &&
-        //     addendum.data &&
-        //     addendum.data.results &&
-        //     addendum.data.results[0],
-        // );
 
         if (addendum.data.results[0]) {
           contentBlock = htmlToDraft(
@@ -128,7 +110,6 @@ export default function Addendum() {
             addendum.data.results &&
             addendum.data.results[0],
         );
-        // console.log(editorState, contentState);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,44 +196,105 @@ export default function Addendum() {
 
   const showRevTable = () => {
     if (details && details.sales_threshold) {
-      return `<table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
-      </tr><tr><td>% Of Incremental Sales</td>
-      <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td>REV_THRESHOLD</td></tr></table>`;
+      return `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Description</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;"> Rev Share %</th><th> Sales Threshold</th>
+      </tr><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td style="border: 1px solid black;
+    padding: 13px;">% Of Incremental Sales</td>
+      <td style="border: 1px solid black;
+    padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td style="border: 1px solid black;
+    padding: 13px;">REV_THRESHOLD</td></tr></table>`;
     }
-    return `<table class="contact-list"><tr><th>Type</th><th>Description</th>
-    <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td> REVENUE_SHARE</td></tr></table>`;
+    return `<table class="contact-list"  style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Description</th>
+    <th style="text-align: left;border: 1px solid black;
+    padding: 13px;"> Rev Share %</th></tr><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td style="border: 1px solid black;
+    padding: 13px;">% Of Sales</td><td style="border: 1px solid black;
+    padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
+    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
+    padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
   };
 
   const mapMonthlyServices = (key, label) => {
     if (details && details[key]) {
       const fields = [];
       for (const item of details[key]) {
-        if (
-          (item.service && item.service.name !== undefined) ||
-          item.name !== undefined
-        )
-          fields.push(
-            `<tr><td  style="border: 1px solid black;
+        if (key !== 'additional_one_time_services') {
+          if (
+            (item.service && item.service.name !== undefined) ||
+            item.name !== undefined
+          ) {
+            fields.push(
+              `<tr>
+            <td style="border: 1px solid black;
     padding: 13px;">${
       item.service ? item.service.name : item && item.name
-    }</td><td  style="border: 1px solid black;
+    }</td><td style="border: 1px solid black;
     padding: 13px;">$ ${
       item.service
         ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         : item.fee
         ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         : ''
-    }/month</td></tr>`,
+    } /month</td></tr>`,
+            );
+          }
+        } else {
+          fields.push(
+            `<tr>
+                <td style="border: 1px solid black;
+    padding: 13px;">${
+      item && item.quantity
+        ? item.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : 0
+    }</td>
+            <td style="border: 1px solid black;
+    padding: 13px;">${
+      item.service ? item.service.name : item && item.name
+    }</td><td style="border: 1px solid black;
+    padding: 13px;">$ ${
+      item.service
+        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : item.fee
+        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : ''
+    } /month</td>
+            <td style="border: 1px solid black;
+    padding: 13px;">$ ${(item.quantity * item.service.fee)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+            </tr>`,
           );
+        }
       }
       return fields;
     }
     return `Enter ${label}.`;
   };
 
-  const mapServiceTotal = () => {
+  const mapServiceTotal = (key) => {
+    if (key === 'additional_one_time_services') {
+      return `$ ${
+        details && details.total_fee.onetime_service
+          ? details.total_fee.onetime_service
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : 0
+      }`;
+    }
     const market = details.total_fee.additional_marketplaces
       ? details.total_fee.additional_marketplaces
       : 0;
@@ -264,33 +306,81 @@ export default function Addendum() {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
+  const getAgreementAccorType = (index) => {
+    if (data && details && details.contract_type === 'one time') {
+      return (
+        data &&
+        data.one_time_service_agreement &&
+        data.one_time_service_agreement[index]
+      );
+    }
+    return (
+      data &&
+      data.recurring_service_agreement &&
+      data.recurring_service_agreement[index]
+    );
+  };
+
   const createAgreementDoc = () => {
-    const agreementData =
-      data.one_time_service_agreement &&
-      data.one_time_service_agreement[0]
-        .replace(
-          'CUSTOMER_NAME',
-          mapDefaultValues('company_name', 'Customer Name'),
-        )
-        .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
-        .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-        .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-        .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-        .replace(
-          'CUSTOMER_POSTAL',
-          mapDefaultValues('zip_code', 'Postal Code, '),
-        )
-        .replace(
-          'AGREEMENT_LENGTH',
-          mapDefaultValues('length', 'Contract Length'),
-        );
+    const agreementData = getAgreementAccorType(0)
+      .replace(
+        'CUSTOMER_NAME',
+        mapDefaultValues('contract_company_name', 'Customer Name'),
+      )
+      .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+      .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
+      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+      .replace(
+        'AGREEMENT_LENGTH',
+        mapDefaultValues('length', 'Contract Length'),
+      )
+      .replace(
+        'ONE_TIME_SERVICE_TABLE',
+        `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
+                              </td></tr>
+                                </table>`,
+      )
+      .replace(
+        'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+        `${mapServiceTotal('additional_one_time_services')}`,
+      );
+
+    const agreementSignatureData = getAgreementAccorType(1)
+      .replace(
+        'CUSTOMER_NAME',
+        mapDefaultValues('contract_company_name', 'Customer Name'),
+      )
+      .replace('AGREEMENT_DATE', mapDefaultValues('start_date', 'Start Date'))
+      .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
+      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+      .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
 
     const statmentData =
       data.statement_of_work &&
       data.statement_of_work[0]
         .replace(
           'CUSTOMER_NAME',
-          mapDefaultValues('company_name', 'Customer Name'),
+          mapDefaultValues('contract_company_name', 'Customer Name'),
         )
         .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace(
@@ -318,17 +408,67 @@ export default function Addendum() {
         )
         .replace(
           'MAP_MONTHLY_SERVICES',
-          `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+          `<table class="contact-list" style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
     padding: 13px;">Service Fee</th></tr>${mapMonthlyServices(
       'additional_monthly_services',
       'Monthly Services',
     )}${mapMonthlyServices(
             'additional_marketplaces',
-          )}<tr><td class="total-service"  style="border: 1px solid black;
+          )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" style="border: 1px solid black;
     padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal()}
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_monthly_services',
+    )}
+                              </td></tr>
+                                </table>`,
+        )
+        .replace(
+          'ONE_TIME_SERVICES',
+          `<table class="contact-list" style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
+                              </td></tr>
+                                </table>`,
+        )
+        .replace(
+          'ONE_TIME_SERVICE_TABLE',
+          `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
                               </td></tr>
                                 </table>`,
         );
@@ -338,13 +478,24 @@ export default function Addendum() {
       data.addendum[0]
         .replace(
           'CUSTOMER_NAME',
-          mapDefaultValues('company_name', 'Customer Name'),
+          mapDefaultValues('contract_company_name', 'Customer Name'),
         )
         .replace(
           'AGREEMENT_DATE',
           mapDefaultValues('start_date', 'Start Date'),
         );
-    const finalAgreement = `${agreementData} ${statmentData} ${addendumData}`;
+
+    const newAddendumAddedData = newAddendumData && newAddendumData.addendum;
+    const addendumSignatureData =
+      data.addendum &&
+      data.addendum[1]
+        .replace(
+          'CUSTOMER_NAME',
+          mapDefaultValues('contract_company_name', 'Customer Name'),
+        )
+        .replace('AGREEMENT_DATE', mapDefaultValues('start_date', 'Start Date'))
+        .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
+    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
     // createAgreement({ contract_data: finalAgreement }).then(() => {
     //   // console.log('!!!!!!', res);
@@ -384,38 +535,22 @@ export default function Addendum() {
     );
   };
 
-  // const saveAddendum = () => {
-  //   const info = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-  //   console.log(info, 'info');
-  //   setNewAddendum(info);
-  // };
-
   const onEditAddendum = () => {
-    // console.log('in edit');
     setShowEditor(true);
   };
 
   const updateAddendumChanges = () => {
-    // const info = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    //   console.log(info, 'info');
-    //   setNewAddendum(info);
-
-    // console.log(newAddendumData);
     setIsLoading({ loader: true, type: 'page' });
 
     updateAddendum(newAddendumData.id, {
       addendum: newAddendumData.addendum,
-      // steps_completed: { agreement: true, statement: true, addendum: true },
     }).then(() => {
       setIsLoading({ loader: false, type: 'page' });
       const stepsData = {
         steps_completed: { agreement: true, statement: true, addendum: true },
       };
       updateAccountDetails(details.id, stepsData);
-      // .then((response) => {
-      //   if (response && response.status === 200) {
-      //   }
-      // });
+
       setShowEditor(false);
     });
   };
@@ -438,6 +573,7 @@ export default function Addendum() {
       details && details.length && details.length.value,
       10,
     );
+
     if (
       rev < 3 &&
       contractTermLength < 12 &&
@@ -501,23 +637,6 @@ export default function Addendum() {
                           }}
                         />
                       )}
-                      {/* {newAddendumData && newAddendumData.id && showEditor ? (
-                        <div className="container">
-                          <Button
-                            className="btn-primary on-boarding w-320 mt-3 mr-5"
-                            onClick={() => updateAddendumChanges()}>
-                            Save Changes
-                          </Button>
-
-                          <Button
-                            className="btn-primary on-boarding w-320 mt-3 mr-5"
-                            onClick={() => setShowEditor(false)}>
-                            Discard Changes
-                          </Button>
-                        </div>
-                      ) : (
-                        ''
-                      )} */}
 
                       <p
                         className="long-text"
@@ -562,54 +681,75 @@ export default function Addendum() {
               setNewAddendum={setNewAddendum}
             />
           </div>
-          <Footer className="sticky">
-            {newAddendumData && newAddendumData.id && showEditor ? (
-              <div className="container">
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => updateAddendumChanges()}>
-                  Save Changes
-                </Button>
-
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => setShowEditor(false)}>
-                  Discard Changes
-                </Button>
-              </div>
-            ) : (
-              <div className="container">
-                {checkApprovalCondition() ? (
+          {isLoading.loader && isLoading.type === 'page' ? (
+            ''
+          ) : (
+            <Footer className="sticky">
+              {newAddendumData && newAddendumData.id && showEditor ? (
+                <div className="container">
                   <Button
                     className="btn-primary on-boarding w-320 mt-3 mr-5"
-                    onClick={() => {
-                      setParams('request-approve');
-                      setShowModal(true);
-                    }}>
-                    Request Approval
+                    onClick={() => updateAddendumChanges()}>
+                    Save Changes
                   </Button>
-                ) : (
+
                   <Button
                     className="btn-primary on-boarding w-320 mt-3 mr-5"
-                    onClick={() => {
-                      createAgreementDoc();
-                      setParams('select-contact');
-                      setShowModal(true);
-                    }}>
-                    Request Signature
+                    onClick={() => setShowEditor(false)}>
+                    Discard Changes
                   </Button>
-                )}
-                {/* create contract copy */}
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => createAgreementDoc()}>
-                  Save as PDF
-                </Button>
+                </div>
+              ) : (
+                <div className="container">
+                  <>
+                    {
+                      checkApprovalCondition() ? (
+                        <Button
+                          className="btn-primary on-boarding w-320 mt-3 mr-5"
+                          onClick={() => {
+                            setParams('request-approve');
+                            setShowModal(true);
+                          }}>
+                          Request Approval
+                        </Button>
+                      ) : (
+                        // params && params.step === 'request-signature' ? (
+                        <Button
+                          className="btn-primary on-boarding w-320 mt-3 mr-5"
+                          onClick={() => {
+                            // sendRequestSign();
+                            createAgreementDoc();
+                            setParams('select-contact');
+                            setShowModal(true);
+                          }}>
+                          Request Signature
+                        </Button>
+                      )
 
-                <p>Last updated by You on Dec 1, 4:18 PM</p>
-              </div>
-            )}
-          </Footer>
+                      // ) : (
+                      //   <Button
+                      //     className="btn-primary on-boarding w-320 mt-3 mr-5"
+                      //     onClick={() => {
+                      //       createAgreementDoc();
+                      //       setParams('select-contact');
+                      //       setShowModal(true);
+                      //     }}>
+                      //     Select Contact
+                      //   </Button>
+                      // )}
+                      // {/* create contract copy */}
+                      // {/* <Button
+                      //   className="btn-primary on-boarding w-320 mt-3 mr-5"
+                      //   onClick={() => createAgreementDoc()}>
+                      //   Save as PDF
+                      // </Button> */}
+                    }
+                    <p>Last updated by You on Dec 1, 4:18 PM</p>
+                  </>
+                </div>
+              )}
+            </Footer>
+          )}
         </>
       ) : (
         <PageNotFound />

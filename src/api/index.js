@@ -65,6 +65,9 @@ export {
   getAddendum,
   updateAddendum,
   createTransactionData,
+  createContractDesign,
+  transactionalSignUp,
+  getTransactionData,
 } from './AgreementApi';
 
 // Knowledge Base
