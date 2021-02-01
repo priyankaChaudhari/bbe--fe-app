@@ -22,6 +22,7 @@ import {
   PATH_DSP_ADDENDUM,
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
+  PATH_HELLO_SIGN,
 } from '../constants/index';
 
 import { CustomerList, CustomerDetails } from '../components/Customer';
@@ -35,6 +36,7 @@ import {
   OneTimeAgreement,
   ServicesAmendment,
   DSPAddendum,
+  HelloSignComponent,
 } from '../components/Contract';
 import {
   CompanyDetails,
@@ -110,12 +112,7 @@ export default function AuthenticationComponent() {
           {/* Customer */}
 
           {userInfo && userInfo.role !== 'Customer' ? (
-            <>
-              <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
-              {/* Knowledge Base  */}
-              <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
-              <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
-            </>
+            <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
           ) : (
             ''
           )}
@@ -132,8 +129,22 @@ export default function AuthenticationComponent() {
           <Route path={PATH_ONE_TIME_AGREEMENT} component={OneTimeAgreement} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
           <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
+          <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
+
           {/* Account Setup */}
           {generateAccountSetup()}
+
+          {/* Knowledge Base  */}
+          {userInfo && userInfo.role !== 'Customer' ? (
+            <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
+          ) : (
+            ''
+          )}
+          {userInfo && userInfo.role !== 'Customer' ? (
+            <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
+          ) : (
+            ''
+          )}
 
           <Route component={PageNotFound} />
         </Switch>
