@@ -18,6 +18,7 @@ export const API_ACTIVITY_LOG = '/history/';
 export const API_CONTACT = '/contact/';
 export const API_CREDENTIALS = '/credentials/';
 export const API_BGS = '/bgs/';
+export const API_AMAZON_DETAILS = '/merchant/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

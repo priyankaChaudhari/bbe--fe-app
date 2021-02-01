@@ -2,6 +2,8 @@
 /* eslint-disable jsx-a11y/label-has-for */
 
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import LoadingBar from 'react-top-loading-bar';
 import styled from 'styled-components';
@@ -30,13 +32,19 @@ import {
 } from '../../common';
 import AccountInfoPage from './AccountInfoPage';
 import { Billing } from '../../constants/FieldConstants';
+import { updateUserMe } from '../../api';
+import { PATH_CUSTOMER_DETAILS } from '../../constants';
+import { userMe } from '../../store/actions';
 
 export default function BillingDetails() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [openCollapse, setOpenCollapse] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showInfo, setShowInfo] = useState(true);
   const [successMsg, setSuccessMsg] = useState(false);
   const [termsRead, setTermsRead] = useState(false);
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   const customStyles = {
     content: {
@@ -148,6 +156,15 @@ export default function BillingDetails() {
     setSuccessMsg(true);
   };
 
+  const nextStep = () => {
+    updateUserMe(userInfo.id, { step: 4 }).then((res) => {
+      if (res && res.status === 200) {
+        dispatch(userMe());
+        history.push(PATH_CUSTOMER_DETAILS.replace(':id', userInfo.customer));
+      }
+    });
+  };
+
   return (
     <div>
       {showInfo ? (
@@ -243,7 +260,9 @@ export default function BillingDetails() {
                   If you have any questions in the meantime please reach out to{' '}
                   <span> onboarding@buyboxexperts.com.</span>
                 </p>
-                <Button className="btn-primary w-100 on-boarding mt-3">
+                <Button
+                  className="btn-primary w-100 on-boarding mt-3"
+                  onClick={() => nextStep()}>
                   Ok. Got it!
                 </Button>
               </div>

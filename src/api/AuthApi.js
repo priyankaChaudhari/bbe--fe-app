@@ -83,3 +83,15 @@ export async function userCustomerRoleList(id, pageNumber, searchQuery, role) {
     });
   return result;
 }
+
+export async function updateUserMe(id, data) {
+  const result = await axiosInstance
+    .patch(`${API_USER + id}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

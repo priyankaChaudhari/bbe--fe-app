@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import LoadingBar from 'react-top-loading-bar';
 import Modal from 'react-modal';
@@ -16,12 +17,25 @@ import {
   RightCircle,
 } from '../../theme/images/index';
 import AccountInfoPage from './AccountInfoPage';
+import { createAmazonDetails, updateUserMe, getAmazonDetails } from '../../api';
+import { userMe } from '../../store/actions';
 
 export default function AmazonAccount() {
   const history = useHistory();
-  const [showInfo, setShowInfo] = useState(true);
+  const dispatch = useDispatch();
+  const [showInfo, setShowInfo] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [amazonDetails, setAmazonDetails] = useState([
+    {
+      key: 'merchant_id',
+      label: 'Merchant Id',
+    },
+    { key: 'marketplace_id', label: 'Marketplace Id' },
+  ]);
+  const [data, setData] = useState({});
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   const customStyles = {
     content: {
@@ -38,8 +52,60 @@ export default function AmazonAccount() {
     },
   };
 
+  useEffect(() => {
+    getAmazonDetails().then((response) => {
+      setData(
+        response &&
+          response.data &&
+          response.data.results &&
+          response.data.results[0],
+      );
+    });
+  }, []);
+
   const saveAccount = () => {
-    setSuccessMsg(true);
+    const fields = [];
+    for (const market of Object.keys(formData)) {
+      if (market.includes('marketplace_id')) {
+        fields.push(formData[market]);
+      }
+    }
+    const detail = {
+      merchant_id: formData.merchant_id,
+      marketplace_id: fields,
+    };
+    createAmazonDetails(detail).then((market) => {
+      if (market && market.status === 201) {
+        setSuccessMsg(false);
+      }
+    });
+    // setSuccessMsg(true);
+  };
+
+  const nextStep = () => {
+    updateUserMe(userInfo.id, { step: 3 }).then((res) => {
+      if (res && res.status === 200) {
+        dispatch(userMe());
+        history.push(PATH_BILLING_DETAILS);
+      }
+    });
+  };
+
+  const addMarketplace = (index) => {
+    setAmazonDetails([
+      ...amazonDetails,
+      { key: `marketplace_id_${index}`, label: 'Marketplace Id' },
+    ]);
+  };
+
+  const removeMarketplace = (index) => {
+    const list = [...amazonDetails];
+    list.splice(index, 1);
+    setAmazonDetails(list);
+  };
+
+  const mapDefaultValues = (item) => {
+    return data[item];
   };
 
   return (
@@ -81,44 +147,65 @@ export default function AmazonAccount() {
                 <img className="video-call-icon" src={VideoCall} alt="" />
                 Watch the tutorial
               </span>
-              <form>
-                <FormField className="mt-4">
-                  <label htmlFor="emailAddress">
-                    Merchant ID
+              {amazonDetails.map((item, index) => (
+                <FormField className="mt-4" key={item.key}>
+                  <label htmlFor={item.key}>
+                    {item.label}
                     <br />
-                    <input className="form-control" type="text" />
+                    <input
+                      className="form-control"
+                      type="text"
+                      name={item.key}
+                      onChange={(event) =>
+                        setFormData({
+                          ...formData,
+                          [item.key]: event.target.value,
+                        })
+                      }
+                      defaultValue={mapDefaultValues(item.key)}
+                    />
+                    {item.key !== 'merchant_id' &&
+                      item.key !== 'marketplace_id' &&
+                      amazonDetails.length !== 1 && (
+                        <img
+                          src={CloseIcon}
+                          alt="cross"
+                          className="cursor"
+                          onClick={() => removeMarketplace(index)}
+                          role="presentation"
+                        />
+                      )}
                   </label>
+                  {item.key !== 'merchant_id' &&
+                    amazonDetails.length - 1 === index && (
+                      <Button
+                        className="btn-add-contact"
+                        onClick={() => addMarketplace(index)}>
+                        {' '}
+                        <img
+                          className="mr-2 add-new-icon "
+                          src={AddNewIcons}
+                          alt="add"
+                        />
+                        Add New Marketplace ID
+                      </Button>
+                    )}
                 </FormField>
-                <FormField className="mt-3">
-                  <label htmlFor="emailAddress">
-                    Marketplace ID
-                    <br />
-                    <input className="form-control" type="text" />
-                  </label>
-                </FormField>
-                <Button className="btn-add-contact">
-                  {' '}
-                  <img
-                    className="mr-2 add-new-icon "
-                    src={AddNewIcons}
-                    alt="add"
-                  />
-                  Add New Marketplace ID
-                </Button>
-                <Button className="btn-transparent w-100 mt-4">
-                  <a
-                    href="https://www.amazon.in/"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    Login to your Amazon Account
-                  </a>
-                </Button>
-                <Button
-                  className="btn-primary w-100 mt-3"
-                  onClick={() => saveAccount()}>
-                  Continue
-                </Button>
-              </form>
+              ))}
+
+              <Button className="btn-transparent w-100 mt-4">
+                <a
+                  href="https://www.amazon.com/"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Login to your Amazon Account
+                </a>
+              </Button>
+              <Button
+                className="btn-primary w-100 mt-3"
+                onClick={() => saveAccount()}>
+                Continue
+              </Button>
             </InnerContainer>
           ) : (
             <InnerContainer>
@@ -140,7 +227,7 @@ export default function AmazonAccount() {
 
               <Button
                 className="btn-primary w-100 on-boarding mt-4"
-                onClick={() => history.push(PATH_BILLING_DETAILS)}>
+                onClick={() => nextStep()}>
                 Got it! & Continue
               </Button>
             </InnerContainer>
