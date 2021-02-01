@@ -31,12 +31,12 @@ export default function CompanyDetails() {
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
   const contactInfo = useSelector((state) => state.customerState.contactData);
-  const id = 'CMJ8Ixm';
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   useEffect(() => {
-    dispatch(getCustomerDetails(id));
-    dispatch(getContactDetails(id));
-  }, [dispatch]);
+    dispatch(getCustomerDetails(userInfo.customer));
+    dispatch(getContactDetails(userInfo.customer));
+  }, [dispatch, userInfo.customer]);
 
   const customStyles = {
     content: {
@@ -56,7 +56,7 @@ export default function CompanyDetails() {
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     if (formData && Object.keys(formData).length) {
-      updateCustomerDetails(id, formData).then((res) => {
+      updateCustomerDetails(userInfo.customer, formData).then((res) => {
         if (res && res.status === 200) {
           setShowContactDetails(true);
           setIsLoading({ loader: false, type: 'button' });
@@ -93,7 +93,7 @@ export default function CompanyDetails() {
             <>
               <LoadingBar color="#FF5933" progress="50" />
               {showContactDetails ? (
-                <ContactDetails contactInfo={contactInfo} id={id} />
+                <ContactDetails contactInfo={contactInfo} userInfo={userInfo} />
               ) : (
                 <InnerContainer>
                   <div className="logo text-center">

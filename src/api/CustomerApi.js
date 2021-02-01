@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import axiosInstance from '../axios';
 import {
   API_ACTIVITY_LOG,
+  API_AMAZON_DETAILS,
   API_CONTACT,
   API_CREDENTIALS,
   API_CUSTOMER,
@@ -282,6 +283,30 @@ export async function deleteCredentials(id) {
     .delete(`${API_CREDENTIALS + id}/`)
     .then(() => {
       return {};
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function createAmazonDetails(data) {
+  const result = await axiosInstance
+    .post(API_AMAZON_DETAILS, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAmazonDetails() {
+  const result = await axiosInstance
+    .get(API_AMAZON_DETAILS)
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       return error.response;

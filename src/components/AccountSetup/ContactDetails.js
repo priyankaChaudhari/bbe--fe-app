@@ -25,11 +25,13 @@ import {
   createContactInfo,
   deleteContactInfo,
   updateContactInfo,
+  updateUserMe,
 } from '../../api';
 import { getContactDetails } from '../../store/actions/customerState';
 import { customerContactDetails } from '../../constants/FieldConstants';
+import { userMe } from '../../store/actions';
 
-export default function ContactDetails({ contactInfo, id }) {
+export default function ContactDetails({ contactInfo, userInfo }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [addContact, setAddContact] = useState(false);
@@ -50,7 +52,7 @@ export default function ContactDetails({ contactInfo, id }) {
     if (formData && Object.keys(formData).length) {
       const data = {
         ...formData,
-        customer: id,
+        customer: userInfo.id,
       };
 
       if (editDetails && editDetails.id) {
@@ -60,7 +62,7 @@ export default function ContactDetails({ contactInfo, id }) {
             setIsLoading({ loader: false, type: 'button' });
           }
           if (res && res.status === 200) {
-            dispatch(getContactDetails(id));
+            dispatch(getContactDetails(userInfo.id));
             setApiError({});
             setAddContact(true);
             setIsLoading({ loader: false, type: 'button' });
@@ -73,7 +75,7 @@ export default function ContactDetails({ contactInfo, id }) {
             setIsLoading({ loader: false, type: 'button' });
           }
           if (responseContact && responseContact.status === 201) {
-            dispatch(getContactDetails(id));
+            dispatch(getContactDetails(userInfo.id));
             setApiError({});
             setAddContact(true);
             setIsLoading({ loader: false, type: 'button' });
@@ -90,7 +92,7 @@ export default function ContactDetails({ contactInfo, id }) {
 
   const deleteContact = (contactId) => {
     deleteContactInfo(contactId).then(() => {
-      dispatch(getContactDetails(id));
+      dispatch(getContactDetails(userInfo.id));
     });
   };
 
@@ -99,6 +101,17 @@ export default function ContactDetails({ contactInfo, id }) {
     setApiError({
       ...apiError,
       [event.target.name]: '',
+    });
+  };
+
+  const nextStep = () => {
+    updateUserMe(userInfo.id, {
+      step: 2,
+    }).then((response) => {
+      if (response && response.status === 200) {
+        dispatch(userMe());
+        history.push(PATH_AMAZON_ACCOUNT);
+      }
     });
   };
 
@@ -214,7 +227,7 @@ export default function ContactDetails({ contactInfo, id }) {
           </Button>
           <Button
             className="btn-primary w-100 on-boarding mt-4"
-            onClick={() => history.push(PATH_AMAZON_ACCOUNT)}>
+            onClick={() => nextStep()}>
             Continue
           </Button>
         </InnerContainer>
@@ -224,10 +237,12 @@ export default function ContactDetails({ contactInfo, id }) {
 }
 
 ContactDetails.defaultProps = {
-  id: '',
+  userInfo: {},
 };
 
 ContactDetails.propTypes = {
-  id: PropTypes.string,
+  userInfo: PropTypes.shape({
+    id: PropTypes.string,
+  }),
   contactInfo: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

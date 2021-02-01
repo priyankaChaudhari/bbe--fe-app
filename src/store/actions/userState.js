@@ -6,7 +6,14 @@ import {
   API_USER_ME,
   API_LOGOUT,
 } from '../../constants/ApiConstants';
-import { PATH_LOGIN, PATH_CUSTOMER_LIST } from '../../constants/index';
+import {
+  PATH_LOGIN,
+  PATH_CUSTOMER_LIST,
+  PATH_CUSTOMER_DETAILS,
+  PATH_AMAZON_ACCOUNT,
+  PATH_BILLING_DETAILS,
+  PATH_COMPANY_DETAILS,
+} from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
 export const userRequestInitiated = () => {
@@ -17,7 +24,22 @@ export const userRequestInitiated = () => {
 
 export const userRequestSuccess = (data, history) => {
   localStorage.setItem('token', data.token);
-  history.push(PATH_CUSTOMER_LIST);
+  if (data.user && data.user.role === 'Customer') {
+    if (data.user.step === null) {
+      history.push(PATH_COMPANY_DETAILS);
+    }
+    if (data.user.step === 2) {
+      history.push(PATH_AMAZON_ACCOUNT);
+    }
+    if (data.user.step === 3) {
+      history.push(PATH_BILLING_DETAILS);
+    }
+    if (data.user.step === 4) {
+      history.push(PATH_CUSTOMER_DETAILS.replace(data.user.customer));
+    }
+  } else {
+    history.push(PATH_CUSTOMER_LIST);
+  }
 
   return {
     type: actionTypes.USER_REQUEST_SUCCESS,

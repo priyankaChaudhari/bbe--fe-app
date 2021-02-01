@@ -13,7 +13,6 @@ import {
   PATH_AGREEMENT,
   PATH_STATEMENT,
   PATH_ADDENDUM,
-  PATH_CREATE_PASSWORD,
   PATH_COMPANY_DETAILS,
   PATH_AMAZON_ACCOUNT,
   PATH_BILLING_DETAILS,
@@ -38,7 +37,6 @@ import {
   DSPAddendum,
 } from '../components/Contract';
 import {
-  CreatePassword,
   CompanyDetails,
   AmazonAccount,
   BillingDetails,
@@ -63,27 +61,69 @@ export default function AuthenticationComponent() {
     }
   }, [history, isAuthenticated, userInfo]);
 
-  if (isAuthenticated && Object.keys(userInfo).length > 0) {
-    return (
-      <>
-        {!history.location.pathname.includes('account-setup') ? (
-          <>
-            <Header />
-            <LeftSideBar />
-          </>
-        ) : (
-          ''
-        )}
-        <Switch>
-          {/* Customer */}
-          <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
+  const generateHeader = () => {
+    if (history.location.pathname.includes('account-setup')) return '';
+    if (userInfo && userInfo.role === 'Customer') return <Header />;
+    if (
+      !history.location.pathname.includes('account-setup') &&
+      userInfo &&
+      userInfo.role !== 'Customer'
+    )
+      return (
+        <>
+          <Header />
+          <LeftSideBar />
+        </>
+      );
+    return '';
+  };
+
+  const generateAccountSetup = () => {
+    if (userInfo && userInfo.role === 'Customer') {
+      if (userInfo.step === null) {
+        return <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />;
+      }
+      if (userInfo.step === 2) {
+        return <Route path={PATH_AMAZON_ACCOUNT} component={AmazonAccount} />;
+      }
+      if (userInfo.step === 3) {
+        return <Route path={PATH_BILLING_DETAILS} component={BillingDetails} />;
+      }
+      if (userInfo.step === 4) {
+        return (
           <Route
             path={PATH_CUSTOMER_DETAILS}
             exact
             component={CustomerDetails}
           />
-          <Route path={PATH_CREATE_PASSWORD} component={CreatePassword} />
-          <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
+        );
+      }
+    }
+    return '';
+  };
+
+  if (isAuthenticated && Object.keys(userInfo).length > 0) {
+    return (
+      <>
+        {generateHeader()}
+        <Switch>
+          {/* Customer */}
+
+          {userInfo && userInfo.role !== 'Customer' ? (
+            <>
+              <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
+              {/* Knowledge Base  */}
+              <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
+              <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
+            </>
+          ) : (
+            ''
+          )}
+          <Route
+            path={PATH_CUSTOMER_DETAILS}
+            exact
+            component={CustomerDetails}
+          />
 
           {/* Contract */}
           <Route path={PATH_AGREEMENT} exact component={Agreement} />
@@ -93,12 +133,7 @@ export default function AuthenticationComponent() {
           <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
           <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
           {/* Account Setup */}
-          <Route path={PATH_AMAZON_ACCOUNT} component={AmazonAccount} />
-          <Route path={PATH_BILLING_DETAILS} component={BillingDetails} />
-
-          {/* Knowledge Base */}
-          <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
-          <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
+          {generateAccountSetup()}
 
           <Route component={PageNotFound} />
         </Switch>

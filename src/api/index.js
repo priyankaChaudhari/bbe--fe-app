@@ -5,6 +5,7 @@ export {
   updateUserInfo,
   updatePassword,
   userCustomerRoleList,
+  updateUserMe,
 } from './AuthApi';
 
 // customer
@@ -29,6 +30,8 @@ export {
   createCredentials,
   updateCredentials,
   deleteCredentials,
+  createAmazonDetails,
+  getAmazonDetails,
 } from './CustomerApi';
 
 // Choices
