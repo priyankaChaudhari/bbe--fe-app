@@ -130,7 +130,7 @@ export default function AuthenticationComponent() {
           />
           <Route path={PATH_COMPANY_DETAIL} component={CompanyDetail} />
           <Route path={PATH_CUSTOMER_ACTIVITY} component={CustomerActivity} />
-          <Route path={PATH_CREATE_PASSWORD} component={CreatePassword} />
+
           <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
 
           {/* Contract */}
