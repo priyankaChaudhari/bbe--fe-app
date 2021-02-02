@@ -9,14 +9,19 @@ import {
   ExchangeIcon,
   AddIcons,
   DefaultUser,
-  ClockIcon,
+  // CopyLinkIcon,
+  // InfoIcons,
+  // ExternalLink,
+  HeartMonitorIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
 } from '../../theme/images/index';
-import Button from '../../common/Button';
-import { GroupUser, WhiteCard } from '../../theme/Global';
 
-export default function CustomerDetails() {
+import { WhiteCard, GroupUser } from '../../theme/Global';
+
+export default function CustomerActivity() {
   return (
-    <>
+    <div>
       <CustomerDetailBanner>
         <div className="banner">
           <img src={BannerImg} alt="" />
@@ -35,7 +40,7 @@ export default function CustomerDetails() {
                       TRX Training
                       <span>Active</span>
                     </div>
-                    <div className=" edit-details edit-brand-details">
+                    <div className="edit-details edit-brand-details">
                       <img src={EditOrangeIcon} alt="" />
                       Edit
                     </div>
@@ -78,6 +83,16 @@ export default function CustomerDetails() {
             <div className="col-4">
               <WhiteCard className="left-border">
                 <ul className="left-details-card">
+                  <li>
+                    <div className="left-details">
+                      <img
+                        className="file-contract"
+                        src={HeartMonitorIcon}
+                        alt="monitor"
+                      />
+                      Performance
+                    </div>
+                  </li>
                   <li>
                     <div className="left-details">
                       <img
@@ -153,129 +168,103 @@ export default function CustomerDetails() {
               </WhiteCard>
             </div>
             <div className="col-8">
-              <Tab>
-                <ul className="tabs">
-                  <li className="active">Active Agreements</li>
-                  <li className="">Past Agreements</li>
-                </ul>
-              </Tab>
-              <WhiteCard className="mt-3">
+              <WhiteCard>
                 <div className="row">
-                  <div className="col-8">
-                    <p className="black-heading-title mt-0 mb-0">
+                  <div className="col-6">
+                    {' '}
+                    <p className="black-heading-title mt-0 mb-4">
                       {' '}
-                      Recurring Contract
-                    </p>
-                    <ul className="recurring-contact">
-                      <li>
-                        <p className="basic-text ">12 month contract</p>
-                      </li>
-                      <li>
-                        <p className="basic-text ">Expires: Mar 20, 2021</p>
-                      </li>
-                      <li>
-                        <div className="days-block">
-                          {' '}
-                          <img
-                            className="clock-icon"
-                            src={ClockIcon}
-                            alt="clock"
-                          />{' '}
-                          96 days
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-4 text-right">
-                    <Button className="btn-transparent ">
-                      {' '}
-                      <img
-                        className="file-contract-icon"
-                        src={FileContract}
-                        alt=""
-                      />
-                      View Contract
-                    </Button>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-
-                <ul className="monthly-retainer">
-                  <li>
-                    <div className="label">Monthly Retainer</div>
-                    $3,000
-                  </li>
-                  <li>
-                    <div className="label">Rev Share %</div>
-                    3%
-                  </li>
-                  <li>
-                    <div className="label">Sales Threshold</div>
-                    $100,000
-                  </li>
-                  <li>
-                    <div className="label">Billing CAP</div>
-                    $9,000
-                  </li>
-                </ul>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-
-                <div className="label">Marketplaces</div>
-                <ul className="selected-list">
-                  <li>Amazon.com (Primary)</li>
-                  <li>Amazon.ca</li>
-                  <li>Amazon.co.uk</li>
-                </ul>
-                <div className="label mt-3">Additional Monthly Services</div>
-                <ul className="selected-list">
-                  <li>Additional Marketplaces (2)</li>
-                  <li>Customer Support</li>
-                  <li>DSP Advertising ($2,000p/m)</li>
-                  <li>DSP Advertising ($2,000p/m)</li>
-                  <li>Inventory Reconciliation</li>
-                  <li>Logistics Management</li>
-                </ul>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-                <div className="label">One Time Services</div>
-                <ul className="selected-list">
-                  <li>A+ Content (7)</li>
-                  <li>Infographics (2)</li>
-                  <li>Listing Copy (12)</li>
-                </ul>
-              </WhiteCard>
-              <WhiteCard className="mt-3">
-                <div className="row">
-                  <div className="col-8">
-                    <p className="black-heading-title mt-0 mb-0">
-                      {' '}
-                      One Time Services Contract
+                      Sales Performance
                     </p>
                   </div>
-                  <div className="col-4 text-right">
-                    <Button className="btn-transparent ">
-                      {' '}
-                      <img
-                        className="file-contract-icon"
-                        src={FileContract}
-                        alt=""
-                      />
-                      View Contract
-                    </Button>
-                  </div>
+                  <div className="col-6" />
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-                <div className="label">One Time Services</div>
-                <ul className="selected-list">
-                  <li>A+ Content (7)</li>
-                  <li>Infographics (2)</li>
-                  <li>Listing Copy (12)</li>
+                <ul className="new-order-chart">
+                  <li>
+                    <div className="chart-name">Traffic</div>
+                    <div className="number-rate">22,496</div>
+                    <div className="vs"> vs 22,368</div>
+                    <div className="perentage-value">
+                      <img src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                    </div>
+                  </li>
+                  <li>
+                    <div className="chart-name">Orders</div>
+                    <div className="number-rate">268</div>
+                    <div className="vs"> vs 261</div>
+                    <div className="perentage-value">
+                      <img src={ArrowUpIcon} alt="arrow-up" /> 2.51%
+                    </div>
+                  </li>
+                  <li>
+                    <div className="chart-name">Conversion</div>
+                    <div className="number-rate">1.22%</div>
+                    <div className="vs"> vs 1.07%</div>
+                    <div className="perentage-value down">
+                      <img
+                        className="red-arrow"
+                        src={ArrowDownIcon}
+                        alt="arrow-up"
+                      />
+                      0.15%
+                    </div>
+                  </li>
+                  <li>
+                    <div className="chart-name">Avg Order Value</div>
+                    <div className="number-rate">$82.64</div>
+                    <div className="vs"> vs $80.90</div>
+                    <div className="perentage-value">
+                      <img src={ArrowUpIcon} alt="arrow-up" />
+                      2.10%
+                    </div>
+                  </li>
+                  <li>
+                    <div className="chart-name">Revenue</div>
+                    <div className="number-rate">$22,147.52</div>
+                    <div className="vs"> vs $21,114.90</div>
+                    <div className="perentage-value">
+                      <img src={ArrowUpIcon} alt="arrow-up" />
+                      4.75%
+                    </div>
+                  </li>
                 </ul>
               </WhiteCard>
+
+              <div className="row mt-3">
+                <div className="col-4">
+                  <WhiteCard className="fix-height">
+                    <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
+                    <div className="speed-rate">$2,681.13</div>
+                    <div className="last-update">Last updated: Dec 31 2020</div>
+                  </WhiteCard>{' '}
+                </div>
+                <div className="col-4">
+                  <WhiteCard className="fix-height">
+                    <p className="black-heading-title mt-0 mb-4">
+                      Inventory Score (IPI)
+                    </p>
+                  </WhiteCard>
+                </div>
+                <div className="col-4">
+                  <WhiteCard className="fix-height">
+                    {' '}
+                    <p className="black-heading-title mt-0 mb-4">
+                      Seller Health
+                    </p>
+                    <div className="seller-health">98%</div>
+                    <div className="last-update">Positive Feedback</div>
+                    <div className="seller-health mt-3">0.07%</div>
+                    <div className="last-update">Order Defect Rate</div>
+                    <div className="seller-health mt-3">0.01%</div>
+                    <div className="last-update">Policy Violations</div>
+                  </WhiteCard>
+                </div>
+              </div>
             </div>
           </div>
         </CustomerBody>
       </CustomerDetailBanner>
-    </>
+    </div>
   );
 }
 
@@ -310,42 +299,5 @@ const CustomerBody = styled.div`
     max-width: 1220px;
     margin: 0 auto;
     width: 100%;
-  }
-`;
-
-const Tab = styled.div`
-  .tabs {
-    list-style-type: none;
-    position: relative;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid ${Theme.gray11};
-
-    li {
-      display: inline-block;
-      margin-right: 60px;
-      padding-bottom: 15px;
-      font-weight: normal;
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
-      font-family: ${Theme.baseFontFamily};
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.a {
-        text-decoration: none;
-      }
-
-      &.active {
-        padding-bottom: 15px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
   }
 `;

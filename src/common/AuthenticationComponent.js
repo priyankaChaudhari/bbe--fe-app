@@ -23,9 +23,16 @@ import {
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_HELLO_SIGN,
+  PATH_COMPANY_DETAIL,
+  PATH_CUSTOMER_ACTIVITY,
 } from '../constants/index';
 
-import { CustomerList, CustomerDetails } from '../components/Customer';
+import {
+  CustomerList,
+  CustomerDetails,
+  CompanyDetail,
+  CustomerActivity,
+} from '../components/Customer';
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
@@ -121,6 +128,10 @@ export default function AuthenticationComponent() {
             exact
             component={CustomerDetails}
           />
+          <Route path={PATH_COMPANY_DETAIL} component={CompanyDetail} />
+          <Route path={PATH_CUSTOMER_ACTIVITY} component={CustomerActivity} />
+          <Route path={PATH_CREATE_PASSWORD} component={CreatePassword} />
+          <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
 
           {/* Contract */}
           <Route path={PATH_AGREEMENT} exact component={Agreement} />

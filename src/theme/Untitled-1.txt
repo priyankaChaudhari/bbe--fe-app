@@ -1,0 +1,190 @@
+<h3 style="text-align: center; margin-top: 3rem!important; margin-bottom: 1.5rem!important; font-size: 32px;
+    font-family: Noah-Bold;
+    margin: 0;
+    color: #000000;
+    text-transform: capitalize;">Service Order / Statement Of Work</h3>
+<p class="long-text " style="color: #000000;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: Arial-Regular;
+}"> This addendum (the "Addendum") is hereby incorporated into the agreement ("The Agreement") between <span style="font-weight: 800;
+    font-family: Arial-bold;">Buy Box Experts ("BBE") and CUSTOMER_NAME ("Client")</span>, collectively "The Parties" and individually a "Party" that was <span style="font-weight: 800;
+    font-family: Arial-bold;"> signed by the Parties on START_DATE.</span> Both Parties hereby agree to incorporate the following terms regarding the delivery of services to their existing Agreement. In the event that any terms between the Agreement and this addendum are in conflict, the terms in this Addendum will prevail, otherwise, the remainder of the Agreement remains in force and applies to this Addendum as if it were part of the original Agreement.<br><br><span style="font-weight: 800;
+    font-family: Arial-bold;">PRICING TERMS AND RATES / SERVICE ORDER</span> <br> The Parties agree to the following pricing terms and payment schedules as listed here and further defined under the Payment Terms section of the Agreement.<br><br><div class=" text-center " style="text-align: center;"><span style="font-weight: 800;
+    font-family: Arial-bold;"> Monthly Retainer </span> </div>Monthly fee for the main Amazon marketplace as a retainer for services. This retainer is billed in advance for the month in which services are to be rendered.<div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;">MONTHLY_RETAINER_AMOUNT</div><div class=" text-center mt-5 mb-3 " style="text-align: center; margin-top: 3rem!important;margin-bottom: 1rem!important;"><span style="font-weight: 800;
+    font-family: Arial-bold;"> Primary Amazon Marketplace</span> </div><div class=" text-center input-contact-value " style="text-align: center;">PRIMARY_MARKETPLACE</div><div class=" text-center mt-5 mb-4 " style="text-align: center; margin-top: 3rem!important;margin-bottom: 1.5rem!important;"><span style="font-weight: 800;
+    font-family: Arial-bold;" >Sales Commission</span><br> Sales billed in arrears for the prior month in which sales were made on the account and calculated as follows:</div>REV_SHARE_TABLE<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span>Standard Services</span><br> The following services will be provided to Client as part of the Monthly Retainer.</div><br><table class=" contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th colspan="3" style="text-align: left; border: 1px solid black;
+    padding: 13px;  ">Service Components</th></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Expert Strategy and Consultation</td><td style="border: 1px solid black;
+    padding: 13px;">Listing Creation</td><td style="border: 1px solid black;
+    padding: 13px;">Reporting</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
+    padding: 13px;">Brand Registry Consultation</td><td style="border: 1px solid black;
+    padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Weekly Call</td><td style="border: 1px solid black;
+    padding: 13px;">Catalog Management and Organization [ASIN_count]</td><td style="border: 1px solid black;
+    padding: 13px;">Promotion Planning and Support</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Listing Optimization</td><td style="border: 1px solid black;
+    padding: 13px;">Seller Performance Consultation</td><td style="border: 1px solid black;
+    padding: 13px;">Advertising Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
+    padding: 13px;">Channel Governance Consultation</td><td style="border: 1px solid black;
+    padding: 13px;"> SELLER_TYPE Account Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Management of an Additional Brand</td><td style="border: 1px solid black;
+    padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
+    padding: 13px;">  &nbsp; </td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Design Optimization</td><td style="border: 1px solid black;
+    padding: 13px;">Content Optimization</td><td style="border: 1px solid black;
+    padding: 13px;">Advanced Channel Governance Support</td></tr></table><div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
+    font-family: Arial-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br>MAP_MONTHLY_SERVICES<br><div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Arial-bold;">Additional One Time Services </span><br> The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br>ONE_TIME_SERVICES<br><div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Arial-bold;">Other Services </span><br> The client will be responsible for and pay directly to Amazon and/or other third-party service providers associated with managing their Amazon account all fees for maintaining their sales on Amazon. These fees may include, but are not limited to, shipping to distribution centers, commission and selling fees, inventory storage costs and agreed upon advertising expense, costs of inventory management software, product review and feedback solicitation (i.e., Amazon VINE), customer service support in languages other than English, re-pricing and other related software or 3PL service, legal fees payable to 3rd party lawyers associated with Channel clean-up and gating, product sampling, test purchases/buys, etc.</div><div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Arial-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><br><table class=" contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="border: 1px solid black;
+    padding: 13px;text-align: left;">Service</th><th style="border: 1px solid black;
+    padding: 13px;text-align: left;">Service Service Type</th></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">A+ Content</td><td style="border: 1px solid black;
+    padding: 13px;">One Time</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Amazon Store</td><td style="border: 1px solid black;
+    padding: 13px;">One Time</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Amazon Brand Style Guide</td><td style="border: 1px solid black;
+    padding: 13px;">One Time</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Logistics Management</td><td style="border: 1px solid black;
+    padding: 13px;">Monthly</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Customer Support</td><td style="border: 1px solid black;
+    padding: 13px;">Monthly</td></tr></table></p>
+
+
+
+
+
+
+
+
+
+    <div class="row mb-5 pb-5"
+        style="display: flex;flex-wrap: wrap;margin-right: 15px;margin-left: 15px;margin-bottom: 3rem!important;padding-bottom: 3rem!important;">
+        <div class="col-6" style="flex: 0 0 50%;max-width: 50%;">
+            <div class="row" style="display: flex;flex-wrap: wrap;margin-right: 15px;margin-left: 15px;">
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Company: </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"><span style="font-weight: 800;font-family: Arial-bold;"> Buy Box Experts </span>
+                    </p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;"">
+                    <p class=" long-text"
+                    style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Signature:
+                    </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"><span style="font-weight: 800;font-family: Arial-bold;"> </span>
+                    </p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"> Printed Name:
+                    </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> Thaddaeus Hay </span>
+                    </p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"> Title:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> Chief Revenue Officer
+                        </span>
+                    </p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Date: </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> 01-29-2021</span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Address: </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> 1172 W 700 N #200 Lindon, UT 84042</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6" style="flex: 0 0 50%;max-width: 50%;">
+            <div class="row" style="display: flex;flex-wrap: wrap;margin-right: 15px;margin-left: 15px;">
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Company:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> CUSTOMER_NAME </span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Signature:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> </span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"> Printed Name:
+                    </p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> </span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"> Title:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;"> </span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Date:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;">12-31-2020 </span></p>
+                </div>
+                <div class="col-4" style="flex: 0 0 25%;max-width: 25%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;">Address:</p>
+                </div>
+                <div class="col-8" style="flex: 0 0 75%;max-width: 75%;">
+                    <p class="long-text"
+                        style="color: #000000;font-size: 19px;line-height: 24px;font-family: Arial-Regular;"><span
+                            style="font-weight: 800;font-family: Arial-bold;">qwerty 1234, </span> <span
+                            style="font-weight: 800;font-family: Arial-bold;">Pune123, </span> <span
+                            style="font-weight: 800;font-family: Arial-bold;">New york,</span> <span
+                            style="font-weight: 800;font-family: Arial-bold;">34221 </span> </p>
+                </div>
+            </div>
+        </div>

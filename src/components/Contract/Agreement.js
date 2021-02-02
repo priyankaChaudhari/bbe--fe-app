@@ -458,9 +458,6 @@ const Paragraph = styled.div`
       padding-left: 5px;
     }
   }
-  &.testing {
-    color: red !important;
-  }
 `;
 
 const Footer = styled.div`
