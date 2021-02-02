@@ -121,296 +121,683 @@ export const BodyWhite = styled.div`
   }
 `;
 
-export const Detail = styled.div`
- margin-top: 15px;
- 
-  .view-details {
-    padding-bottom: 15px;
+// export const Detail = styled.div`
+//  margin-top: 15px;
+
+//   .view-details {
+//     padding-bottom: 15px;
+//     .label {
+//       color: ${Theme.gray30};
+//       font-size: ${Theme.extraSmall};
+//       letter-spacing: 1.13px;
+//       padding-bottom: 0;
+//       font-family: ${Theme.titleFontFamily};
+//       text-transform: uppercase;
+//     }
+
+//     #copyMsg {
+//       position: absolute;
+//       background: ${Theme.black};
+//       padding: 2px 4px;
+//       font-size: ${Theme.extraSmall};
+//       top: 37px;
+//       left: 162px;
+//       border-radius: 3px;
+//       color: ${Theme.white};
+//     }
+
+//     .agreement-service {
+//       color: ${Theme.gray90};
+//       font-size: ${Theme.normal};
+//       text-transform: capitalize;
+//       font-weight:600;
+//       float:left;
+//       line-height: 22px;
+//       max-width: 335px;
+
+//     }
+//     .view-link {
+//       color: ${Theme.orange};
+//       font-family: ${Theme.titleFontFamily};
+//       font-size: 15px;
+//       float:right;
+//       padding: 9px 20px 0 0;
+//       text-decoration: underline;
+//       cursor:pointer;
+//     }
+
+//     .info {
+//       color: ${Theme.gray90};
+//       font-size: ${Theme.normal};
+//       line-height: 22px;
+//       min-height: 25px;
+//       padding-top:5px;
+//       font-weight:600;
+
+//       &.link {
+//         color: ${Theme.orange};
+//         font-family: ${Theme.titleFontFamily};
+//         font-size: 15px;
+//         text-decoration: underline;
+//       }
+
+//       ul {
+//         list-style-type:none;
+//         padding:0;
+//         margin:0;
+
+//         li{
+//          margin-right:10px;
+//           display:inline-block;
+//           &:last-child {
+//             margin-right:0;
+//           }
+
+//           .social-media {
+//             width:16px;
+//           }
+//         }
+//       }
+//     }
+//     .card-img {
+//       vertical-align:bottom;
+//       width:20px;
+//     }
+//   }
+
+//   .heading{
+//     color: ${Theme.gray30};
+//     letter-spacing: 1.13px;
+//     text-transform: uppercase;
+//     font-family: ${Theme.titleFontFamily};
+//     font-size: ${Theme.extraSmall};
+//   }
+
+//   .cont-info {
+//     font-size: 15px;
+//     color: ${Theme.gray90};
+
+//     img {
+//       vertical-align: bottom;
+//       width: 16px;
+//       margin-right: 4px;
+//     }
+//   }
+
+//   .no-contact {
+//     font-size: 16px;
+//     color:${Theme.gray90};
+
+//     img {
+//       vertical-align: middle;
+//       width: 35px;
+//       margin-right: 12px;
+//     }
+//   }
+//   .contact-user {
+//     float-left;
+
+//     img {
+//      border-radius: 100%;
+//      width: 48px;
+//      height: 48px;
+//       float: left;
+//       margin-right:10px;
+//     }
+
+//     .user-name {
+//       font-size: ${Theme.medium};
+//       line-height: 20px;
+//       color:${Theme.gray90};
+//     }
+//     span {
+//       font-size: ${Theme.small};
+//       color: ${Theme.gray35};
+//     }
+//   }
+
+//   .attachment {
+//     float:left;
+//      padding:10px;
+//      width: 235px;
+//      border: 1px solid ${Theme.white};
+
+//    .attach-file{
+//       width: 42px;
+//       float:left;
+//     }
+
+//     .document {
+//       float:left;
+//       margin-left: 10px;
+//       .doc-file{
+//         color: ${Theme.gray90};
+//         font-size: 17px;
+//       }
+//        .download {
+//           width: 18px;
+//           display:none;
+//         }
+
+//         span {
+//           font-size:13px;
+//         }
+//     }
+
+//     &:hover {
+//       box-shadow: ${Theme.commonShadow};
+//       border: 1px solid ${Theme.gray9};
+
+//       .download {
+//         width: 0px;
+//         display: block;
+//         margin-top: -17px;
+//         padding-left: 45px;
+//         float: right;
+
+//           img {
+//             width:25px;
+//          }
+//       }
+//     }
+//     &:focus {
+//       box-shadow: ${Theme.commonShadow};
+//       border: 1px solid ${Theme.gray9};
+
+//       .download {
+//         width: 0px;
+//         display: block;
+//         margin-top: -17px;
+//         padding-left: 30px;
+//         float: right;
+
+//           img {
+//             width:25px;
+//             cursor:pointer;
+//           }
+//       }
+//     }
+//   }
+
+//   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
+//     margin-top: 25px;
+//   .view-details {
+//     padding-bottom: 15px;
+//     .label {
+//         font-size: ${Theme.extraSmallRes};
+//     }
+//      .agreement-service {
+//      font-size: ${Theme.normalRes};
+//      max-width: 435px;
+//     }
+//     .view-link {
+//        font-size: ${Theme.normalRes};
+//     }
+
+//     .info {
+//        font-size: ${Theme.normalRes};
+
+//       &.link {
+//        font-size: ${Theme.normalRes};
+//       }
+//     }
+//   }
+//   .heading{
+//     font-size: ${Theme.extraSmallRes};
+//   }
+
+//   .cont-info {
+//      font-size: ${Theme.normalRes};
+//   }
+//   .contact-user {
+
+//     .user-name {
+//       font-size: ${Theme.mediumRes};
+//     }
+//     span {
+//       font-size: ${Theme.smallRes};
+//     }
+//   }
+
+//   .attachment {
+//     float:left;
+//      padding:10px;
+//      width: 300px;
+//      border: 1px solid ${Theme.white};
+
+//    .attach-file{
+//       width: 42px;
+//       float:left;
+//     }
+
+//     .document {
+//       float:left;
+//       margin-left: 10px;
+//       .doc-file{
+//         color: ${Theme.gray90};
+//         font-size: ${Theme.mediumRes};
+//       }
+//        .download {
+//           width: 18px;
+//           display:none;
+//         }
+
+//         span {
+//            font-size: ${Theme.smallRes};
+//         }
+//     }
+
+//     &:hover {
+//       box-shadow: ${Theme.commonShadow};
+//       border: 1px solid ${Theme.gray9};
+
+//       .download {
+//         width: 0px;
+//         display: block;
+//         margin-top: -17px;
+//         padding-left: 75px;
+
+//           img {
+//             width:28px;
+//          }
+//       }
+//     }
+//   }
+// `;
+
+export const WhiteCard = styled.div`
+  background-color:${Theme.white};
+  border-radius: 15px;
+  padding: 25px;
+  position: relative;
+
+
+&.fix-height {
+    flex-wrap: wrap;
+    flex: initial;
+    height: 100%;
+  }
+  &.customer-brand-details {
+    // position: absolute;
+    z-index: 99999;
+    top: -30px;
+    width: 100%;
+  }
+
+  
+
+  &.left-border {
+    padding: 25px 25px 25px 0;
+  }
+  .copy-info {
+    position: relative;
+    .copy-text {
+      display: none;
+    }
+
     .label {
-      color: ${Theme.gray30};
-      font-size: ${Theme.extraSmall};
-      letter-spacing: 1.13px;
-      padding-bottom: 0;
-      font-family: ${Theme.titleFontFamily};
+      color: ${Theme.gray50};
       text-transform: uppercase;
-    }
-    
-    #copyMsg {
-      position: absolute;
-      background: ${Theme.black};
-      padding: 2px 4px;
-      font-size: ${Theme.extraSmall};
-      top: 37px;
-      left: 162px;
-      border-radius: 3px;
-      color: ${Theme.white};
-    }
-
-    .agreement-service {
-      color: ${Theme.gray90};
-      font-size: ${Theme.normal};
-      text-transform: capitalize;
-      font-weight:600;
-      float:left;
       line-height: 22px;
-      max-width: 335px;
-      
-    }
-    .view-link {
-      color: ${Theme.orange};
       font-family: ${Theme.titleFontFamily};
-      font-size: 15px;
-      float:right;
-      padding: 9px 20px 0 0;
-      text-decoration: underline;
-      cursor:pointer;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+    .label-info {
+      color: ${Theme.black};
+      font-size: ${Theme.normal};
     }
 
-    .info {
-      color: ${Theme.gray90};
-      font-size: ${Theme.normal};
-      line-height: 22px;
-      min-height: 25px;
-      padding-top:5px;
-      font-weight:600;
-
-      &.link {
-        color: ${Theme.orange};
-        font-family: ${Theme.titleFontFamily};
-        font-size: 15px;
-        text-decoration: underline;
-      }
-
-      ul {
-        list-style-type:none;
-        padding:0;
-        margin:0;
-      
-
-        li{
-         margin-right:10px;
-          display:inline-block;
-          &:last-child {
-            margin-right:0;
-          }
-
-
-          .social-media {
-            width:16px;
-          }
+    &:hover {
+      cursor: pointer;
+      .copy-text {
+        display: block;
+        position: absolute;
+        right: 0px;
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.gray85};
+        cursor: pointer;
+        top: 10px;
+        img {
+          width: 15px;
+          margin-right: 4px;
         }
       }
     }
-    .card-img {
-      vertical-align:bottom;
-      width:20px;
+  }
+  .label {
+    color: ${Theme.gray50};
+    text-transform: uppercase;
+    line-height: 22px;
+    font-family: ${Theme.titleFontFamily};
+    font-size: ${Theme.verySmall};
+    margin-bottom: 3px;
+    .info-icon {
+      vertical-align: middle;
+      width: 14px;
+      margin-left: 8px;
+      cursor: pointer;
     }
   }
-
-    
-  .heading{
-    color: ${Theme.gray30};
-    letter-spacing: 1.13px;
-    text-transform: uppercase;
-    font-family: ${Theme.titleFontFamily};
-    font-size: ${Theme.extraSmall};
+  .label-info {
+    color: ${Theme.black};
+    font-size: ${Theme.normal};
   }
-   
 
-  .cont-info {
-    font-size: 15px;
+  .phone-number {
+    color: ${Theme.gray85};
+    font-size: ${Theme.extraNormal};
+    margin-top: 4px;
+  }
+
+  .brand-name {
     color: ${Theme.gray90};
+    font-size: 32px;
+    font-weight: 500;
 
+    span {
+      background: ${Theme.darkGreen};
+      border-radius: 19px;
+      padding: 3px 15px;
+      color: ${Theme.gray6};
+      font-size: ${Theme.extraNormal};
+      margin-left: 15px;
+    }
+  }
+  .brand-logo {
+    border: 8px solid ${Theme.gray6};
+    border-radius: 20px;
+    margin-top: -65px;
+    max-width: 170px;
+    height: 170px;
+    margin-left: 50px;
+  }
+  // . {
+  //   position: absolute;
+  //   right: 23px;
+  //   font-size: 14px;
+  //   color: #171725;
 
+  //   img {
+  //     width: 16px;
+  //     margin-right: 4px;
+  //   }
+  // }
+
+  .edit-details {
+    position: absolute;
+    right: 23px;
+    font-size: ${Theme.extraNormal};
+    color ${Theme.gray85};
+    top: 20px;
+
+    &.edit-brand-details {
+      top: -8px;
+    }
     img {
-      vertical-align: bottom;
       width: 16px;
       margin-right: 4px;
     }
   }
 
-  .no-contact {
-    font-size: 16px;
-    color:${Theme.gray90};
+  .brand-details {
+    padding: 0;
+    margin-top: 10px;
+    list-style-type: none;
 
-    img {
-      vertical-align: middle;
-      width: 35px;
-      margin-right: 12px;
-    }
-  }
-  .contact-user {
-    float-left;
+    li {
+      display: inline-block;
+      font-size: ${Theme.normal};
+      margin-left: 40px;
+      color: ${Theme.black};
 
-    img {
-     border-radius: 100%;
-     width: 48px;
-     height: 48px;
-      float: left;
-      margin-right:10px;
-    }
-
-    .user-name {
-      font-size: ${Theme.medium};
-      line-height: 20px;
-      color:${Theme.gray90};
-    }
-    span {
-      font-size: ${Theme.small};
-      color: ${Theme.gray35};
-    }
-  }
-
-  .attachment {
-    float:left;
-     padding:10px;
-     width: 235px;
-     border: 1px solid ${Theme.white};
-
-   .attach-file{
-      width: 42px;
-      float:left;
-    }
-   
-
-    .document {
-      float:left;
-      margin-left: 10px;
-      .doc-file{
-        color: ${Theme.gray90};
-        font-size: 17px;   
+      &:first-child {
+        margin-left: 0;
       }
-       .download {
-          width: 18px;
-          display:none;
-        }
+      .brand-label {
+        color: ${Theme.gray50};
 
         span {
-          font-size:13px;
+          margin-left: 10px;
+          color: ${Theme.black};
         }
-    }
-
-    &:hover {
-      box-shadow: ${Theme.commonShadow};
-      border: 1px solid ${Theme.gray9};
-
-      .download {
-        width: 0px;
-        display: block;
-        margin-top: -17px;
-        padding-left: 45px;
-        float: right;
-
-          img {
-            width:25px;
-         }
       }
     }
-    &:focus {
-      box-shadow: ${Theme.commonShadow};
-      border: 1px solid ${Theme.gray9};
+  }
+  .left-details-card {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
 
-      .download {
-        width: 0px;
-        display: block;
-        margin-top: -17px;
-        padding-left: 30px;
-        float: right;
+    li {
+      margin-bottom: 23px;
 
-          img {
-            width:25px;
-            cursor:pointer;
+      .left-details {
+        color: ${Theme.black};
+        padding: 0 0px 0px 25px;
+        border-left: 3px solid  ${Theme.white};
+
+        img {
+          width: 24px;
+          margin-right: 15px;
+          vertical-align: middle;
+
+          &.file-contract {
+            width: 28px;
           }
+        }
+        &:hover {
+          border-left: 3px solid ${Theme.orange};
+          cursor: pointer;
+          font-family: ${Theme.titleFontFamily};
+        }
+      }
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
 
-  @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
-    margin-top: 25px;
-  .view-details {
-    padding-bottom: 15px;
-    .label { 
-        font-size: ${Theme.extraSmallRes};
-    }
-     .agreement-service {
-     font-size: ${Theme.normalRes};
-     max-width: 435px;
-    }
-    .view-link {
-       font-size: ${Theme.normalRes};
-    }
+  .add-new-tab {
+    font-size: ${Theme.extraNormal};
+    color: ${Theme.gray85};
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    cursor: pointer;
 
-    .info {
-       font-size: ${Theme.normalRes};
+    img {
+      width: 11px;
+    }
+  }
 
-      &.link {  
-       font-size: ${Theme.normalRes};
+  .add-more-people {
+    background-size: 100%;
+    display: inline-block;
+    vertical-align: top;
+
+    img {
+      border-radius: 50%;
+      width: 40px;
+      margin-left: -7px;
+      height: 40px;
+    }
+  }
+
+  .recurring-contact {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+      margin-right: 15px;
+
+      .days-block {
+        background: ${Theme.lighterOrange};
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: ${Theme.orange};
+        font-size:${Theme.extraNormal};
+
+        .clock-icon {
+          width: 14px;
+          margin-right: 5px;
+          vertical-align: text-top;
+        }
       }
     }
   }
-  .heading{
-    font-size: ${Theme.extraSmallRes};
-  }
-   
-  .cont-info {
-     font-size: ${Theme.normalRes};
-  }
-  .contact-user {
+  .monthly-retainer {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
 
-    .user-name {
-      font-size: ${Theme.mediumRes};
-    }
-    span {
-      font-size: ${Theme.smallRes};
-    }
-  }
+    li {
+      display: inline-block;
+      margin-right: 70px;
+      color: ${Theme.black};
+      font-size: ${Theme.normal};
+      font-weight: 500;
 
-  
-  .attachment {
-    float:left;
-     padding:10px;
-     width: 300px;
-     border: 1px solid ${Theme.white};
-
-   .attach-file{
-      width: 42px;
-      float:left;
-    }
-   
-
-    .document {
-      float:left;
-      margin-left: 10px;
-      .doc-file{
-        color: ${Theme.gray90};
-        font-size: ${Theme.mediumRes};
+      .label {
+        color: ${Theme.gray50};
+        text-transform: uppercase;
+        line-height: 22px;
+        font-family: ${Theme.titleFontFamily};
+        font-size: ${Theme.verySmall};
+        margin-bottom: 3px;
       }
-       .download {
-          width: 18px;
-          display:none;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .selected-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      background:${Theme.gray8};
+      color: ${Theme.gray85};
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 7px;
+    }
+  }
+
+  &.activity-card {
+    min-height:530px;
+  }
+
+  .new-order-chart {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li{
+      display: inline-block;
+      background-color: #FFFFFF;
+      border: 1px solid #D5D8E1;
+      border-radius: 8px;
+      width: 140px;
+      padding:13px;
+      margin-right:10px;
+
+      .number-rate {
+        color:#333333;
+        font-size:26px;
+        padding-top:15px;
+      }
+      .chart-name {
+        color:#556178;
+        font-size:11px;
+        text-transform: uppercase;
+        font-family: ${Theme.titleFontFamily};
+      }
+      .vs {
+        color:#556178;
+        font-size:16px;  
+      }
+      .perentage-value {
+        color:#407B00 ;
+        font-size:15px;
+        margin-top:13px;
+
+        &.down {
+           color:#D60000;
+        }
+        .red-arrow{
+          width:14px;
+          transform: rotate(180deg);
         }
 
-        span {
-           font-size: ${Theme.smallRes};
-        }
-    }
+        img{width:14px;}
+      }
 
-    &:hover {
-      box-shadow: ${Theme.commonShadow};
-      border: 1px solid ${Theme.gray9};
-
-      .download {
-        width: 0px;
-        display: block;
-        margin-top: -17px;
-        padding-left: 75px;
-
-          img {
-            width:28px;
-         }
+      &:last-child{
+        margin-right:0;
       }
     }
+
+  }
+
+  .speed-rate {
+    font-size:36px;
+    color: ${Theme.black};
+  }
+
+  .last-update {
+    color: #556178;
+    font-size: 14px;
+  }
+  .seller-health {
+    color:#556178;
+    font-size:24px;
   }
 `;
 
+export const GroupUser = styled.div`
+  .activity-user {
+    font-size: ${Theme.normal};
+    color: ${Theme.black};
+    font-weight: 500;
+    line-height: 16px;
+
+    span {
+      color: ${Theme.gray35};
+      font-weight: 500;
+
+      &.font-bold {
+        font-weight: 600;
+        color: ${Theme.black};
+      }
+    }
+  }
+  .default-user-activity {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
+    margin-top: -2px;
+  }
+
+  .time-date {
+    color: ${Theme.gray50};
+    font-size: ${Theme.extraNormal};
+    font-weight: 500;
+    text-align: left;
+  }
+  .user-email-address {
+    color: ${Theme.gray85};
+    text-align: left;
+    font-size: ${Theme.normal};
+  }
+`;
 export default global;

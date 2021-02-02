@@ -63,7 +63,7 @@ import CompanyDetailsIcon from './company-details.svg';
 import LockFinish from './lock-finish.svg';
 import PdfDownload from './icons/pdf-download.png';
 import VideoCall from './icons/video-call.png';
-import InfoIcons from './icons/info.svg';
+import InfoIcons from './icons/info-icon.svg';
 import RightCircle from './icons/check-circle.svg';
 import BilingDetails from './Billing Icon.svg';
 import AccountSetupIcon from './Account Setup Complete Icon.svg';
@@ -94,6 +94,17 @@ import AmazonIcon from './icons/amazon.svg';
 import BoxesIcon from './icons/boxes.png';
 import GraphIcon from './icons/graph.svg';
 import ArrowUp from './icons/arrow-up.png';
+import BannerImg from './banner-img.png';
+import EditOrangeIcon from './icons/edit-orange-icon.svg';
+import FileContract from './icons/file-contract.png';
+import Organization from './icons/organization.png';
+import ExchangeIcon from './icons/exchange-icon.png';
+import ClockIcon from './icons/clock-icon.svg';
+import CopyLinkIcon from './icons/copy-link-orange-icon.png';
+import ExternalLink from './icons/external-link-icon.svg';
+import HeartMonitorIcon from './icons/heart-monitor-icon.png';
+import ArrowUpIcon from './icons/arrow-up-green.png';
+import ArrowDownIcon from './icons/arrow-down-red.png';
 
 export {
   BannerBg,
@@ -192,4 +203,15 @@ export {
   BoxesIcon,
   GraphIcon,
   ArrowUp,
+  BannerImg,
+  EditOrangeIcon,
+  FileContract,
+  Organization,
+  ExchangeIcon,
+  ClockIcon,
+  CopyLinkIcon,
+  ExternalLink,
+  HeartMonitorIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
 };
