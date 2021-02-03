@@ -180,7 +180,7 @@ export default function BillingDetails() {
         />
       ) : (
         <>
-          <LoadingBar color="#FF5933" progress="100" />
+          <LoadingBar color="#FF5933" progress="99.9" />
 
           {!successMsg ? (
             <InnerContainer>

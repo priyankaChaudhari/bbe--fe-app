@@ -32,6 +32,8 @@ export {
   deleteCredentials,
   createAmazonDetails,
   getAmazonDetails,
+  updateAmazonDetails,
+  deleteAmazonMarketplace,
 } from './CustomerApi';
 
 // Choices

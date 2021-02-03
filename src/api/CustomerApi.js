@@ -11,6 +11,7 @@ import {
   API_CUSTOMER,
   API_CUSTOMER_CONTRACT,
   API_CUSTOMER_MEMBER,
+  API_DELETE_MARKETPLACE,
   API_DOCUMENTS,
 } from '../constants/ApiConstants';
 
@@ -305,6 +306,31 @@ export async function createAmazonDetails(data) {
 export async function getAmazonDetails() {
   const result = await axiosInstance
     .get(API_AMAZON_DETAILS)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function updateAmazonDetails(id, data) {
+  const result = await axiosInstance
+    .patch(`${API_AMAZON_DETAILS + id}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function deleteAmazonMarketplace(merchant, marketplace) {
+  const params = { merchant_id: merchant, marketplace_id: marketplace };
+  const result = await axiosInstance
+    .post(API_DELETE_MARKETPLACE, '', { params })
     .then((response) => {
       return response;
     })
