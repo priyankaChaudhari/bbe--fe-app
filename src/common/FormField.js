@@ -19,11 +19,11 @@ const FormField = styled.div`
     position: absolute;
     background: ${Theme.lightOrange};
     color: ${Theme.orange};
-    right: 20px;
+    right: 724px;
     border-radius: 4px;
     font-size: ${Theme.small};
     padding: 7px 10px;
-    top: 43px;
+    top: 42px;
     font-weight:bold;
     cursor: pointer;
 
@@ -140,6 +140,10 @@ const FormField = styled.div`
     cursor: pointer;
     top: 0px;
     margin-left: 10px;
+
+    &.amazon {
+      position: initial
+    }
   }
   .phone-input-info {
     position: absolute;
