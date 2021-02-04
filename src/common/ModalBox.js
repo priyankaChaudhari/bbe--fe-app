@@ -194,6 +194,13 @@ const ModalBox = styled.div`
         }
        
       }
+      .customer-company-profile {
+        border: 8px solid ${Theme.gray6};
+        border-radius: 10px;
+        width: 100px;
+        height: 100px;
+        margin-left: 10px;
+      }
 
       .drop-down {
         color: ${Theme.gray90};

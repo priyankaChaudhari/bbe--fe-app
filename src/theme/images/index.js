@@ -105,6 +105,11 @@ import ExternalLink from './icons/external-link-icon.svg';
 import HeartMonitorIcon from './icons/heart-monitor-icon.png';
 import ArrowUpIcon from './icons/arrow-up-green.png';
 import ArrowDownIcon from './icons/arrow-down-red.png';
+import RecurringIcon from './icons/recurring-contact.svg';
+import ServiceIcon from './icons/service-contact.svg';
+import LinkedinIcon from './icons/linkedin-icon.svg';
+import InstagramIcon from './icons/instagram-icon.svg';
+import TwitterIcon from './icons/twitter-icon.svg';
 
 export {
   BannerBg,
@@ -214,4 +219,9 @@ export {
   HeartMonitorIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  RecurringIcon,
+  ServiceIcon,
+  LinkedinIcon,
+  InstagramIcon,
+  TwitterIcon,
 };

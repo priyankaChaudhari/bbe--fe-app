@@ -28,57 +28,58 @@ export default function CustomerActivity() {
         </div>
 
         <CustomerBody>
-          <div className="row">
-            <div className="col-12">
-              <WhiteCard className="customer-brand-details">
-                <div className="row">
-                  <div className="col-3">
-                    <div className="brand-logo" />
-                  </div>
-                  <div className="col-9">
-                    <div className="brand-name">
-                      TRX Training
-                      <span>Active</span>
-                    </div>
-                    <div className="edit-details edit-brand-details">
-                      <img src={EditOrangeIcon} alt="" />
-                      Edit
-                    </div>
+          <WhiteCard className="customer-brand-details mb-n2">
+            <div className="row">
+              <div className="col-lg-3 col-md-12">
+                <div className="brand-logo" />
+              </div>
+              <div className="col-lg-9 col-md-12 ">
+                <div className="brand-name mb-2">
+                  TRX Training
+                  <span>Active</span>
+                </div>
+                <div className=" edit-details edit-brand-details ">
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
 
-                    <ul className="brand-details">
-                      <li className="label-info">
-                        1660 Pacific Ave, San Francisco, <br />
-                        CA, United States
-                      </li>
-                      <li className="label-info">
-                        <div className="brand-label">
-                          Category
-                          <span>Health_Wellness_And_Fitness</span>
-                        </div>
-                        <div className="brand-label">
-                          Website
-                          <span>
-                            {' '}
-                            <a href="*">trxtraining.com</a>
-                          </span>
-                        </div>
-                      </li>
-                      <li className="label-info">
-                        <div className="brand-label">
-                          Annual Revenue
-                          <span>$50,000,000</span>
-                        </div>
-                        <div className="brand-label">
-                          Company Size
-                          <span> 200</span>
-                        </div>
-                      </li>
-                    </ul>
+                <div className="row">
+                  <div className="col-lg-4 col-12">
+                    <div className="company-label-info text-left">
+                      1660 Pacific Ave, San Francisco, CA, United States
+                    </div>
+                  </div>
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="company-label-info">
+                      <div className="brand-label">
+                        Category
+                        <span>Health_Wellness_And_Fitness</span>
+                      </div>
+                      <div className="brand-label">
+                        Website
+                        <span>
+                          {' '}
+                          <a href="*">trxtraining.com</a>
+                        </span>
+                      </div>
+                    </div>
+                  </div>{' '}
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="company-label-info">
+                      <div className="brand-label">
+                        Annual Revenue
+                        <span>$50,000,000</span>
+                      </div>
+                      <div className="brand-label">
+                        Company Size
+                        <span> 200</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </WhiteCard>
+              </div>
             </div>
-          </div>
+          </WhiteCard>
           <div className="row">
             <div className="col-4">
               <WhiteCard className="left-border">

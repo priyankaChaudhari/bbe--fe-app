@@ -38,12 +38,14 @@ const Theme = {
   gray90: '#2E384D',
   gray85: '#171725',
   gray50: '#171725',
+  gray40: '#556178',
   gray10: '#E0E7FF',
   gray9: '#dee2ed',
   gray8: '#F4F6FC',
   gray7: '#e4e8f0',
   gray6: '#fafafb',
   gray11: '#e0e6e8',
+  gray5: '#EFF2FF',
 
   /* Colors */
   baseColor: '#FF5933',
