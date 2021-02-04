@@ -20,6 +20,8 @@ export default function GetInitialName({ userInfo, property, type }) {
       className={
         type === 'list'
           ? ` avatarName dropdown-avartName ${property}`
+          : type === 'team'
+          ? 'avatarName team-avatarName'
           : `avatarName ${property}`
       }>
       {getInitials(userInfo, type)}

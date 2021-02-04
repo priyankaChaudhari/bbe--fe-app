@@ -7,8 +7,6 @@ export const PATH_RESET_PASSWORD = '/set-password';
 // Customer
 export const PATH_CUSTOMER_LIST = '/customer';
 export const PATH_CUSTOMER_DETAILS = `${PATH_CUSTOMER_LIST}/:id`;
-export const PATH_COMPANY_DETAIL = '/company-detail';
-export const PATH_CUSTOMER_ACTIVITY = '/customer-activity';
 
 // Details
 export const PATH_ACCOUNT_DETAILS = '/customer-account/:id';

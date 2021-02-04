@@ -23,16 +23,9 @@ import {
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_HELLO_SIGN,
-  PATH_COMPANY_DETAIL,
-  PATH_CUSTOMER_ACTIVITY,
 } from '../constants/index';
 
-import {
-  CustomerList,
-  CustomerDetails,
-  CompanyDetail,
-  CustomerActivity,
-} from '../components/Customer';
+import { CustomerList } from '../components/Customer';
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
@@ -51,6 +44,7 @@ import {
   BillingDetails,
 } from '../components/AccountSetup';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
+import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -103,7 +97,7 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_CUSTOMER_DETAILS}
             exact
-            component={CustomerDetails}
+            component={CustomerMainContainer}
           />
         );
       }
@@ -126,11 +120,8 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_CUSTOMER_DETAILS}
             exact
-            component={CustomerDetails}
+            component={CustomerMainContainer}
           />
-          <Route path={PATH_COMPANY_DETAIL} component={CompanyDetail} />
-          <Route path={PATH_CUSTOMER_ACTIVITY} component={CustomerActivity} />
-
           <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
 
           {/* Contract */}
