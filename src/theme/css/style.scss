@@ -927,6 +927,13 @@ div {
     height: 32px;
     padding-top: 5px;
   }
+
+  &.team-avatarName {
+    margin-left: -10px !important;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
 
 .react-calendar__month-view__days__day--weekend {

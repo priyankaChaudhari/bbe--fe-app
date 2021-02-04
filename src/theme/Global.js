@@ -551,6 +551,7 @@ export const WhiteCard = styled.div`
     padding: 0;
     margin: 0;
     list-style-type: none;
+    
 
     li {
       margin-bottom: 23px;
@@ -574,6 +575,12 @@ export const WhiteCard = styled.div`
           cursor: pointer;
           font-family: ${Theme.titleFontFamily};
         }
+        &.active {
+          border-left: 3px solid ${Theme.orange};
+          cursor: pointer;
+          font-family: ${Theme.titleFontFamily};
+        }
+         
       }
       &:last-child {
         margin-bottom: 0;

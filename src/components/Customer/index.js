@@ -1,6 +1,13 @@
-import CustomerDetails from './CustomerDetails';
 import CustomerList from './CustomerList';
 import CompanyDetail from './CompanyDetail';
-import CustomerActivity from './CustomerActivity';
+import Activity from './Activity';
+import AgreementDetails from './AgreementDetails';
+import CompanyPerformance from './CompanyPerformance';
 
-export { CustomerDetails, CustomerList, CompanyDetail, CustomerActivity };
+export {
+  CustomerList,
+  CompanyDetail,
+  Activity,
+  AgreementDetails,
+  CompanyPerformance,
+};
