@@ -419,7 +419,7 @@ export const WhiteCard = styled.div`
   }
   &.customer-brand-details {
     // position: absolute;
-    z-index: 99999;
+    z-index:2;
     top: -30px;
     width: 100%;
   }
@@ -512,17 +512,6 @@ export const WhiteCard = styled.div`
     height: 170px;
     margin-left: 50px;
   }
-  // . {
-  //   position: absolute;
-  //   right: 23px;
-  //   font-size: 14px;
-  //   color: #171725;
-
-  //   img {
-  //     width: 16px;
-  //     margin-right: 4px;
-  //   }
-  // }
 
   .edit-details {
     position: absolute;
@@ -530,6 +519,7 @@ export const WhiteCard = styled.div`
     font-size: ${Theme.extraNormal};
     color ${Theme.gray85};
     top: 20px;
+    cursor:pointer;
 
     &.edit-brand-details {
       top: -8px;
@@ -540,29 +530,22 @@ export const WhiteCard = styled.div`
     }
   }
 
-  .brand-details {
-    padding: 0;
-    margin-top: 10px;
-    list-style-type: none;
+  .company-label-info {
+     font-size: ${Theme.normal};
+     margin-left: 40px;
+     color: ${Theme.black};
 
-    li {
-      display: inline-block;
-      font-size: ${Theme.normal};
-      margin-left: 40px;
-      color: ${Theme.black};
+     &:first-child {
+         margin-left: 0;
+     }
 
-      &:first-child {
-        margin-left: 0;
-      }
-      .brand-label {
-        color: ${Theme.gray50};
-
-        span {
-          margin-left: 10px;
+     .brand-label { 
+       color: ${Theme.gray40};
+        span { 
+          margin-left: 15px;
           color: ${Theme.black};
         }
       }
-    }
   }
   .left-details-card {
     padding: 0;
@@ -595,8 +578,12 @@ export const WhiteCard = styled.div`
       &:last-child {
         margin-bottom: 0;
       }
+
+      
     }
   }
+
+  
 
   .add-new-tab {
     font-size: ${Theme.extraNormal};
@@ -715,13 +702,13 @@ export const WhiteCard = styled.div`
         padding-top:15px;
       }
       .chart-name {
-        color:#556178;
+        color:${Theme.gray40};
         font-size:11px;
         text-transform: uppercase;
         font-family: ${Theme.titleFontFamily};
       }
       .vs {
-        color:#556178;
+        color:${Theme.gray40};
         font-size:16px;  
       }
       .perentage-value {
@@ -753,13 +740,74 @@ export const WhiteCard = styled.div`
   }
 
   .last-update {
-    color: #556178;
+    color: ${Theme.gray40};
     font-size: 14px;
   }
   .seller-health {
-    color:#556178;
+    color${Theme.gray40};
     font-size:24px;
   }
+
+  .solid-icon {
+    margin-right: 10px;
+    vertical-align: middle;
+    float: left;
+  }
+
+  .service-icon {
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  .social-media-icons {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li{
+      display:inline-block;
+      vertical-align: middle;
+      margin-right:3px;
+
+      img{
+        width:25px;
+      }
+     
+    }
+  }
+@media only screen and (max-width: 991px) {
+
+  .brand-logo {
+    border-radius: 10px;
+    margin-top: -93px;
+    max-width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+  } 
+   .label-info {
+     margin-left: 40px;
+     margin-top:10px;
+
+     &:first-child {
+         margin-left: 0;
+     }
+
+     .brand-label { 
+       margin-top:10px;
+        span { 
+          margin-left: 15px;
+        }
+      }
+   }
+   .edit-details {
+
+      &.edit-brand-details {
+        top: -25px;
+      }
+   }
+  }
+
 `;
 
 export const GroupUser = styled.div`
@@ -789,7 +837,7 @@ export const GroupUser = styled.div`
   }
 
   .time-date {
-    color: ${Theme.gray50};
+    color: ${Theme.gray40};
     font-size: ${Theme.extraNormal};
     font-weight: 500;
     text-align: left;
