@@ -10,10 +10,11 @@ export const customerAccountRequestInitiated = () => {
   };
 };
 
-export const customerAccountRequestSuccess = (data) => {
+export const customerAccountRequestSuccess = (data, multipleAgreement) => {
   return {
     type: actionTypes.CUSTOMER_ACCOUNT_REQUEST_SUCCESS,
     payload: data,
+    multipleAgreement,
   };
 };
 
@@ -34,6 +35,7 @@ export const getAccountDetails = (id) => {
         dispatch(
           customerAccountRequestSuccess(
             response.data && response.data.results && response.data.results[0],
+            response.data && response.data.results && response.data.results,
           ),
         );
       })
