@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import NumberFormat from 'react-number-format';
+import dayjs from 'dayjs';
 
 import Theme from '../../theme/Theme';
 import { Button } from '../../common';
@@ -11,129 +15,186 @@ import {
   RecurringIcon,
   ServiceIcon,
 } from '../../theme/images';
+import { PATH_AGREEMENT } from '../../constants';
+import PastAgreement from './PastAgreement';
 
-export default function AgreementDetails() {
+export default function AgreementDetails({ agreement, id }) {
+  const [viewComponent, setViewComponent] = useState('current');
+
+  const agreementOptions = [
+    { key: 'monthly_retainer', label: 'Monthly Retainer' },
+    { key: 'rev_share', label: 'Rev Share' },
+    { key: 'sales_threshold', label: 'Sales Threshold' },
+    { key: 'billing_cap', label: 'Billing Cap' },
+  ];
   return (
     <>
       <div className="col-lg-8 col-12">
         <Tab>
           <ul className="tabs">
-            <li className="active">Active Agreements</li>
-            <li className="">Past Agreements</li>
+            <li
+              className={viewComponent === 'current' ? 'active' : ''}
+              onClick={() => setViewComponent('current')}
+              role="presentation">
+              Active Agreements
+            </li>
+            <li
+              className={viewComponent === 'past' ? 'active' : ''}
+              onClick={() => setViewComponent('past')}
+              role="presentation">
+              Past Agreements
+            </li>
           </ul>
         </Tab>
-        <WhiteCard className="mt-3">
-          <div className="row">
-            <div className="col-lg-9 col-md-8 col-12">
-              <p className="black-heading-title mt-0 mb-0">
-                <img className="solid-icon " src={RecurringIcon} alt="" />
-                Recurring Contract
-              </p>
+        {viewComponent === 'current' ? (
+          <WhiteCard className="mt-3">
+            <div className="row">
+              <div className="col-lg-9 col-md-8 col-12">
+                <p className="black-heading-title mt-0 mb-0">
+                  <img
+                    className="solid-icon "
+                    src={
+                      agreement && agreement.contract_type === 'One Time'
+                        ? ServiceIcon
+                        : RecurringIcon
+                    }
+                    alt=""
+                  />
+                  {agreement && agreement.contract_type === 'One Time'
+                    ? 'One Time Services Contract'
+                    : 'Recurring Contract'}
+                </p>
 
-              <ul className="recurring-contact mb-2">
-                <li>
-                  <p className="basic-text ">12 month contract</p>
-                </li>
-                <li>
-                  <p className="basic-text ">Expires: Mar 20, 2021</p>
-                </li>
-                <li>
-                  <div className="days-block">
+                <ul className="recurring-contact mb-2">
+                  <li>
+                    <p className="basic-text ">
+                      {agreement && agreement.length && agreement.length.label}{' '}
+                      contract
+                    </p>
+                  </li>
+                  {agreement && agreement.end_date ? (
+                    <li>
+                      <p className="basic-text ">
+                        Expires:
+                        {dayjs(agreement.end_date).format('MMM DD, YYYY')}
+                      </p>
+                    </li>
+                  ) : (
+                    ''
+                  )}
+                  {agreement && agreement.end_date ? (
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  ) : (
+                    ''
+                  )}
+                </ul>
+              </div>
+              <div className="clear-fix" />
+              <div className="col-lg-3 col-md-4 col-12 text-right">
+                <Link to={PATH_AGREEMENT.replace(':id', id)}>
+                  <Button className="btn-transparent w-100">
                     {' '}
                     <img
-                      className="clock-icon"
-                      src={ClockIcon}
-                      alt="clock"
-                    />{' '}
-                    96 days
-                  </div>
+                      className="file-contract-icon"
+                      src={FileContract}
+                      alt=""
+                    />
+                    View Contract
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="straight-line horizontal-line pt-3 mb-3" />
+
+            <ul className="monthly-retainer">
+              {agreementOptions.map((item) => (
+                <li key={item.key}>
+                  <div className="label">{item.label}</div>
+                  {agreement && agreement[item.key] ? (
+                    <NumberFormat
+                      displayType="text"
+                      value={agreement[item.key].label || agreement[item.key]}
+                      prefix={item.key === 'rev_share' ? '' : '$'}
+                      suffix={item.key === 'rev_share' ? '%' : ''}
+                    />
+                  ) : (
+                    '0'
+                  )}
                 </li>
-              </ul>
-            </div>
-            <div className="clear-fix" />
-            <div className="col-lg-3 col-md-4 col-12 text-right">
-              <Button className="btn-transparent w-100 ">
-                {' '}
-                <img className="file-contract-icon" src={FileContract} alt="" />
-                View Contract
-              </Button>
-            </div>
-          </div>
-          <div className="straight-line horizontal-line pt-3 mb-3" />
-
-          <ul className="monthly-retainer">
-            <li>
-              <div className="label">Monthly Retainer</div>
-              $3,000
-            </li>
-            <li>
-              <div className="label">Rev Share %</div>
-              3%
-            </li>
-            <li>
-              <div className="label">Sales Threshold</div>
-              $100,000
-            </li>
-            <li>
-              <div className="label">Billing CAP</div>
-              $9,000
-            </li>
-          </ul>
-          <div className="straight-line horizontal-line pt-3 mb-3" />
-
-          <div className="label">Marketplaces</div>
-          <ul className="selected-list">
-            <li>Amazon.com (Primary)</li>
-            <li>Amazon.ca</li>
-            <li>Amazon.co.uk</li>
-          </ul>
-          <div className="label mt-3">Additional Monthly Services</div>
-          <ul className="selected-list">
-            <li>Additional Marketplaces (2)</li>
-            <li>Customer Support</li>
-            <li>DSP Advertising ($2,000p/m)</li>
-            <li>DSP Advertising ($2,000p/m)</li>
-            <li>Inventory Reconciliation</li>
-            <li>Logistics Management</li>
-          </ul>
-          <div className="straight-line horizontal-line pt-3 mb-3" />
-          <div className="label">One Time Services</div>
-          <ul className="selected-list">
-            <li>A+ Content (7)</li>
-            <li>Infographics (2)</li>
-            <li>Listing Copy (12)</li>
-          </ul>
-        </WhiteCard>
-        <WhiteCard className="mt-3">
-          <div className="row">
-            <div className="col-lg-9 col-md-8 col-12">
-              <p className="black-heading-title mt-0 mb-0">
-                <img className="service-icon mb-2" src={ServiceIcon} alt="" />
-                One Time Services Contract
-              </p>
-            </div>
-            <div className="col-lg-3 col-md-4 col-12 text-right">
-              <Button className="btn-transparent w-100  ">
-                {' '}
-                <img className="file-contract-icon" src={FileContract} alt="" />
-                View Contract
-              </Button>
-            </div>
-          </div>
-          <div className="straight-line horizontal-line pt-3 mb-3" />
-          <div className="label">One Time Services</div>
-
-          <ul className="selected-list">
-            <li>A+ Content (7)</li>
-            <li>Infographics (2)</li>
-            <li>Listing Copy (12)</li>
-          </ul>
-          <div className="clear-fix" />
-        </WhiteCard>
+              ))}
+            </ul>
+            <div className="straight-line horizontal-line pt-3 mb-3" />
+            {agreement && agreement.contract_type === 'recurring' ? (
+              <>
+                <div className="label">Marketplaces</div>
+                <ul className="selected-list">
+                  {agreement && agreement.additional_marketplaces
+                    ? agreement.additional_marketplaces.map((item) => (
+                        <li key={item.id}>
+                          {item.name || ''} {item.is_primary ? '(Primary)' : ''}
+                        </li>
+                      ))
+                    : 'No Marketplaces added.'}
+                </ul>
+                <div className="label mt-3">Additional Monthly Services</div>
+                <ul className="selected-list">
+                  {agreement && agreement.additional_monthly_services
+                    ? agreement.additional_monthly_services.map((item) => (
+                        <li key={item.id}>
+                          {(item && item.service && item.service.name) || ''}
+                        </li>
+                      ))
+                    : 'No Additional Monthly services added.'}
+                </ul>
+                <div className="straight-line horizontal-line pt-3 mb-3" />
+              </>
+            ) : (
+              ''
+            )}
+            <div className="label">One Time Services</div>
+            <ul className="selected-list">
+              {agreement && agreement.additional_one_time_services
+                ? agreement.additional_one_time_services.map((item) => (
+                    <li key={item.id}>
+                      {(item && item.service && item.service.name) || ''} (
+                      {(item && item.quantity) || ''})
+                    </li>
+                  ))
+                : 'No One Time services added.'}
+            </ul>
+          </WhiteCard>
+        ) : (
+          <PastAgreement agreement={agreement} id={id} />
+        )}
       </div>
     </>
   );
 }
+
+AgreementDetails.propTypes = {
+  id: PropTypes.string.isRequired,
+  agreement: PropTypes.shape({
+    id: PropTypes.string,
+    contract_type: PropTypes.string,
+    length: PropTypes.shape({
+      label: PropTypes.string,
+    }),
+    end_date: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
+    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+};
 
 const Tab = styled.div`
   .tabs {

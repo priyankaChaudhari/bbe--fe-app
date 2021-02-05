@@ -19,7 +19,6 @@ import {
   DefaultUser,
   CloseIcon,
   CompanyDefaultUser,
-  HeartMonitorIcon,
 } from '../../theme/images/index';
 import Button from '../../common/Button';
 import { GroupUser, WhiteCard } from '../../theme/Global';
@@ -190,9 +189,7 @@ export default function CustomerMainContainer() {
                 <div className="col-lg-3 col-md-12">
                   <div className="brand-logo">
                     {' '}
-                    {!customer &&
-                    customer.documents &&
-                    customer.documents[0] ? (
+                    {customer && customer.documents && customer.documents[0] ? (
                       <img
                         src={Object.values(customer.documents[0])}
                         alt="company-logo"
@@ -327,7 +324,7 @@ export default function CustomerMainContainer() {
                       </div>
                     </li>
 
-                    <li
+                    {/* <li
                       onClick={() => setViewComponent('performance')}
                       role="presentation">
                       <div
@@ -341,7 +338,7 @@ export default function CustomerMainContainer() {
                         />
                         Performance
                       </div>
-                    </li>
+                    </li> */}
                     <li
                       onClick={() => setViewComponent('activity')}
                       role="presentation">
@@ -449,7 +446,7 @@ export default function CustomerMainContainer() {
                 </WhiteCard>
               </div>
               {viewComponent === 'agreement' ? (
-                <AgreementDetails />
+                <AgreementDetails agreement={agreement} id={id} />
               ) : viewComponent === 'company' ? (
                 <CompanyDetail
                   customer={customer}

@@ -5,6 +5,7 @@ const initialState = {
   data: {},
   error: null,
   accountData: {},
+  multipleAgreement: [],
 };
 
 const accountStateReducer = (state = initialState, action) => {
@@ -21,6 +22,7 @@ const accountStateReducer = (state = initialState, action) => {
         isLoading: false,
         data: action.payload,
         error: null,
+        multipleAgreement: action.multipleAgreement,
       };
     case actionTypes.CUSTOMER_ACCOUNT_REQUEST_FAIL:
       return {
