@@ -39,9 +39,14 @@ const DropDownSelect = styled.div`
           cursor: pointer;
         }
       }
+      .css-tlfecz-indicatorContainer {
+        .css-6q0nyr-Svg {
+          color: ${Theme.black} !important;
+        }
+      }
 
       &:active {
-        background: ${Theme.gray90} !important;
+        // background: ${Theme.gray90} !important;
       }
     }
 
@@ -51,7 +56,7 @@ const DropDownSelect = styled.div`
       font-size: ${Theme.textFontSize};
       color: ${Theme.white};
       padding: 0 5px 0 5px;
-      background: ${Theme.gray90} !important;
+      // background: ${Theme.gray90} !important;
       box-shadow: none;
       outline: none;
 
@@ -87,30 +92,30 @@ const DropDownSelect = styled.div`
 
       .css-1hb7zxy-IndicatorsContainer {
         // background: ${Theme.gray90};
-        color: ${Theme.white};
+        color: ${Theme.black};
 
         .css-1gtu0rj-indicatorContainer {
           padding: 4px;
-          color: ${Theme.white} !important;
-          background: ${Theme.gray90}!important;
+          color: ${Theme.black} !important;
+          // background: ${Theme.gray90}!important;
 
           .css-6q0nyr-Svg {
-            color: ${Theme.white} !important;
+            color: ${Theme.black} !important;
           }
 
           &:hover {
-            color: ${Theme.white};
+            color: ${Theme.black};
           }
         }
         .css-tlfecz-indicatorContainer {
-          color: ${Theme.white} !important;
+          color: ${Theme.black} !important;
         }
       }
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.textFontSize};
         padding: 4px;
-        color: ${Theme.white};
+        color: ${Theme.black};
       }
     }
 
