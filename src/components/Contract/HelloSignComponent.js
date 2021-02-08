@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { PATH_LOGIN } from '../../constants/index';
 import { transactionalSignUp } from '../../api/index';
 import { PageLoader } from '../../common';
-import Header from '../../common/Header';
+// import Header from '../../common/Header';
 import Theme from '../../theme/Theme';
 
 function HelloSignComponent() {
@@ -24,7 +24,6 @@ function HelloSignComponent() {
     transactionalSignUp({
       request_id: params.key,
     }).then((res) => {
-      console.log(res);
       if (res && res.status === 400) {
         history.push(PATH_LOGIN);
       } else {
@@ -32,13 +31,11 @@ function HelloSignComponent() {
           skipDomainVerification: true,
         });
 
-        client.on('finish', (data) => {
-          console.log('!!!! finish', data);
+        client.on('finish', () => {
           history.push(PATH_LOGIN);
         });
 
-        client.on('close', (data) => {
-          console.log('!!!!', data);
+        client.on('close', () => {
           history.push(PATH_LOGIN);
         });
       }
@@ -51,7 +48,7 @@ function HelloSignComponent() {
         <PageLoader color="#FF5933" type="page" />
       ) : (
         <>
-          <Header />
+          {/* <Header /> */}
 
           <Footer className="sticky">
             {' '}

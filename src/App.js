@@ -7,10 +7,12 @@ import {
   PATH_ROOT,
   PATH_RESET_PASSWORD,
   PATH_CREATE_PASSWORD,
+  PATH_HELLO_SIGN,
 } from './constants/index';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
 import { CreatePassword } from './components/AccountSetup';
+import { HelloSignComponent } from './components/Contract';
 
 export default function App() {
   return (
@@ -21,6 +23,7 @@ export default function App() {
         <Route path={PATH_FORGOT_PASSWORD} component={ForgotPassword} />
         <Route path={PATH_RESET_PASSWORD} component={ResetPassword} />
         <Route path={PATH_CREATE_PASSWORD} component={CreatePassword} />
+        <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
 
         {/*  Default */}
         <Route path={PATH_ROOT} component={AuthenticationComponent} />

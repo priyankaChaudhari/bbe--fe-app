@@ -38,6 +38,7 @@ import { getAccountDetails } from '../../store/actions/accountState';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import RequestSignature from './RequestSignature';
+import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 
 export default function Addendum() {
   const dispatch = useDispatch();
@@ -47,12 +48,21 @@ export default function Addendum() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const details = useSelector((state) => state.accountState.data);
+  const userInfo = useSelector((state) => state.userState.userInfo);
   const loader = useSelector((state) => state.accountState.isLoading);
   const [editorState, setEditorState] = useState(null);
   const [contentState, setContentState] = useState(null);
   const [newAddendumData, setNewAddendum] = useState(null);
   const [showEditor, setShowEditor] = useState(false);
   const [pdfData, setPDFData] = useState('');
+  const [
+    notIncludedOneTimeServices,
+    sendNotIncludedOneTimeServToAdd,
+  ] = useState([]);
+  const [
+    notIncludedMonthlyServices,
+    sendNotIncludedMonthlyServToAdd,
+  ] = useState([]);
 
   useEffect(() => {
     // dispatch(getCustomerDetails(id));
@@ -89,7 +99,13 @@ export default function Addendum() {
       if (editorState === null) {
         let contentBlock;
 
-        if (addendum.data.results[0]) {
+        if (
+          addendum &&
+          addendum.data &&
+          addendum.data.results &&
+          addendum.data.results[0] &&
+          addendum.data.results[0].addendum
+        ) {
           contentBlock = htmlToDraft(
             addendum &&
               addendum.data &&
@@ -202,14 +218,16 @@ export default function Addendum() {
     border-color: inherit;"><th style="text-align: left;border: 1px solid black;
     padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
     padding: 13px;">Description</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;"> Rev Share %</th><th> Sales Threshold</th>
+    padding: 13px;"> Rev Share %</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;"> Sales Threshold</th>
       </tr><tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;"><td style="border: 1px solid black;
     padding: 13px;">% Of Incremental Sales</td>
       <td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td style="border: 1px solid black;
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
+    padding: 13px;"> REVENUE_SHARE </td><td style="border: 1px solid black;
     padding: 13px;">REV_THRESHOLD</td></tr></table>`;
     }
     return `<table class="contact-list"  style="width: 100%;
@@ -228,7 +246,7 @@ export default function Addendum() {
     padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
   };
 
-  const mapMonthlyServices = (key, label) => {
+  const mapMonthlyServices = (key) => {
     if (details && details[key]) {
       const fields = [];
       for (const item of details[key]) {
@@ -237,52 +255,156 @@ export default function Addendum() {
             (item.service && item.service.name !== undefined) ||
             item.name !== undefined
           ) {
-            fields.push(
-              `<tr>
-            <td style="border: 1px solid black;
-    padding: 13px;">${
-      item.service ? item.service.name : item && item.name
-    }</td><td style="border: 1px solid black;
-    padding: 13px;">$ ${
-      item.service
-        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : item.fee
-        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : ''
-    } /month</td></tr>`,
-            );
+            if (
+              item.service.name !== 'DSP Advertising' &&
+              item.service.name !== 'Inventory Reconciliation'
+            ) {
+              fields.push(
+                `<tr>
+                <td style="border: 1px solid black;padding: 13px;">${
+                  item.service ? item.service.name : item && item.name
+                }</td>
+                <td style="border: 1px solid black;padding: 13px;">$ ${
+                  item.service
+                    ? item.service.fee
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : item.fee
+                    ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : ''
+                } /month
+                </td>
+                </tr>`,
+              );
+            }
           }
         } else {
           fields.push(
             `<tr>
-                <td style="border: 1px solid black;
-    padding: 13px;">${
-      item && item.quantity
-        ? item.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : 0
-    }</td>
-            <td style="border: 1px solid black;
-    padding: 13px;">${
-      item.service ? item.service.name : item && item.name
-    }</td><td style="border: 1px solid black;
-    padding: 13px;">$ ${
-      item.service
-        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : item.fee
-        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : ''
-    } /month</td>
-            <td style="border: 1px solid black;
-    padding: 13px;">$ ${(item.quantity * item.service.fee)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
+                <td style="border: 1px solid black;padding: 13px;">${
+                  item && item.quantity
+                    ? item.quantity
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : 0
+                }</td>
+            <td style="border: 1px solid black;padding: 13px;">${
+              item.service ? item.service.name : item && item.name
+            }</td>
+            <td style="border: 1px solid black;padding: 13px;">$ ${
+              item.service &&
+              item.service.fee &&
+              item.service.name !== 'Amazon Store Package Custom'
+                ? item.service.fee
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : item.custom_amazon_store_price
+                ? item.custom_amazon_store_price
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : ''
+            } /month
+            </td>
+            <td style="border: 1px solid black;padding: 13px;">$ ${(item.service
+              .name !== 'Amazon Store Package Custom'
+              ? item.quantity * item.service.fee
+              : item.quantity * item.custom_amazon_store_price
+            )
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              </td>
             </tr>`,
           );
         }
       }
-      return fields;
+      // return null;
+
+      return fields.length ? fields.toString().replaceAll(',', '') : '';
     }
-    return `Enter ${label}.`;
+    return '';
+    // return `Enter ${label}.`;
+  };
+
+  const mapAdditionalMarketPlaces = () => {
+    const fields = [];
+    if (details && details.additional_marketplaces) {
+      for (const item of details.additional_marketplaces) {
+        fields.push(
+          `<tr>
+      <td style="border: 1px solid black;padding: 13px;">${
+        item.service ? item.service.name : item && item.name
+      }</td>
+                    <td style="border: 1px solid black;padding: 13px;">$ ${
+                      item.service
+                        ? item.service.fee
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : item.fee
+                        ? item.fee
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : ''
+                    } /month
+                    </td>
+      </tr>`,
+        );
+      }
+    }
+    // if (formData && formData.additional_marketplaces) {
+    //   for (const item of formData.additional_marketplaces) {
+    //     fields.push(
+    //       `<tr>
+    //   <td style="border: 1px solid black;padding: 13px;">${item.label}</td>
+    //                 <td style="border: 1px solid black;padding: 13px;">$
+    //                   -
+    //                 </td>
+    //   </tr>`,
+    //     );
+    //   }
+    // }
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
+
+    // return '';
+  };
+
+  const mapVariableMonthlyService = () => {
+    const fields = [
+      `<tr ><td colspan="2" style ="text-align: center; border: 1px solid black;padding: 13px;">
+                  Variable Monthly Services</td>
+                  </tr>`,
+    ];
+    if (details && details.additional_monthly_services) {
+      for (const item of details.additional_monthly_services) {
+        if (item.service.name === 'DSP Advertising') {
+          fields.push(
+            `<tr>
+                 <td style="border: 1px solid black;padding: 13px;">${
+                   item.service ? item.service.name : item && item.name
+                 }
+                  </td>
+                  <td style="border: 1px solid black;padding: 13px;">
+                  Included
+                  </td>
+                </tr>`,
+          );
+        }
+        if (item.service.name === 'Inventory Reconciliation') {
+          fields.push(
+            `<tr>
+                 <td style="border: 1px solid black;padding: 13px;">${
+                   item.service ? item.service.name : item && item.name
+                 }</td>
+                    <td style="border: 1px solid black;padding: 13px;"> 
+                  25% of recovered $s
+                  </td>
+                    </tr>`,
+          );
+        }
+      }
+
+      return fields.length > 1 ? fields.toString().replaceAll(',', '') : '';
+    }
+    return '';
   };
 
   const mapServiceTotal = (key) => {
@@ -306,6 +428,60 @@ export default function Addendum() {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
+  const showMonthlyServiceTable = () => {
+    if (
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length
+    ) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
+    font-family: Arial-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br><table class="contact-list " style="width: 100%;
+    border-collapse: collapse;><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service Fee</th></tr>${mapMonthlyServices(
+      'additional_monthly_services',
+      'Monthly Services',
+    )} ${mapAdditionalMarketPlaces()}<tr><td class="total-service" style="border: 1px solid black;padding: 13px;"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
+        'additional_monthly_services',
+      )}
+                              </td></tr>
+                              ${mapVariableMonthlyService()}
+                                </table>`;
+    }
+    return '';
+  };
+
+  const showOneTimeServiceTable = () => {
+    if (
+      details &&
+      details.additional_one_time_services &&
+      details.additional_one_time_services.length
+    ) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br><table class="contact-list " style="width: 100%;
+    border-collapse: collapse;
+"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
+                              </td></tr>
+                                </table>`;
+    }
+    return '';
+  };
+
   const getAgreementAccorType = (index) => {
     if (data && details && details.contract_type === 'one time') {
       return (
@@ -319,6 +495,31 @@ export default function Addendum() {
       data.recurring_service_agreement &&
       data.recurring_service_agreement[index]
     );
+  };
+
+  const displayNotIncludedServices = () => {
+    const fields = [];
+    for (const item of notIncludedMonthlyServices) {
+      fields.push(
+        `<tr>
+          <td style="border: 1px solid black;padding: 13px;"> ${
+            item.label ? item.label : 'N/A'
+          }</td>
+          <td style="border: 1px solid black;padding: 13px;"> ${' Monthly'}</td>
+         </tr>`,
+      );
+    }
+    for (const item of notIncludedOneTimeServices) {
+      fields.push(
+        `<tr>
+          <td style="border: 1px solid black;padding: 13px;"> ${
+            item.label ? item.label : 'N/A'
+          }</td>
+          <td style="border: 1px solid black;padding: 13px;"> ${'One Time'}</td>
+         </tr>`,
+      );
+    }
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
   const createAgreementDoc = () => {
@@ -363,11 +564,10 @@ export default function Addendum() {
         `${mapServiceTotal('additional_one_time_services')}`,
       );
 
-    const agreementSignatureData = getAgreementAccorType(1)
-      .replace(
-        'CUSTOMER_NAME',
-        mapDefaultValues('contract_company_name', 'Customer Name'),
-      )
+    const agreementSignatureData = AgreementSign.replace(
+      'CUSTOMER_NAME',
+      mapDefaultValues('contract_company_name', 'Customer Name'),
+    )
       .replace('AGREEMENT_DATE', mapDefaultValues('start_date', 'Start Date'))
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
       .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
@@ -406,71 +606,19 @@ export default function Addendum() {
           'PRIMARY_MARKETPLACE',
           mapDefaultValues('primary_marketplace', 'Primary Marketplace'),
         )
+
+        .replace('MAP_MONTHLY_SERVICES', showMonthlyServiceTable())
+        .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
         .replace(
-          'MAP_MONTHLY_SERVICES',
-          `<table class="contact-list" style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service Fee</th></tr>${mapMonthlyServices(
-      'additional_monthly_services',
-      'Monthly Services',
-    )}${mapMonthlyServices(
-            'additional_marketplaces',
-          )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_monthly_services',
-    )}
-                              </td></tr>
-                                </table>`,
-        )
-        .replace(
-          'ONE_TIME_SERVICES',
-          `<table class="contact-list" style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
-                                </table>`,
-        )
-        .replace(
-          'ONE_TIME_SERVICE_TABLE',
-          `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
-                                </table>`,
+          'ADDITIONAL_SERVICES_NOT_INCLUDED',
+          `<table class="contact-list " style="width: 100%;border-collapse: collapse;">
+                                <tr>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
+                                  </tr>
+                                  ${displayNotIncludedServices()}
+                                  </table>
+                                  `,
         );
 
     const addendumData =
@@ -485,16 +633,15 @@ export default function Addendum() {
           mapDefaultValues('start_date', 'Start Date'),
         );
 
-    const newAddendumAddedData = newAddendumData && newAddendumData.addendum;
-    const addendumSignatureData =
-      data.addendum &&
-      data.addendum[1]
-        .replace(
-          'CUSTOMER_NAME',
-          mapDefaultValues('contract_company_name', 'Customer Name'),
-        )
-        .replace('AGREEMENT_DATE', mapDefaultValues('start_date', 'Start Date'))
-        .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
+    const newAddendumAddedData =
+      newAddendumData && newAddendumData.addendum
+        ? newAddendumData.addendum
+        : '';
+
+    const addendumSignatureData = AddendumSign.replace(
+      'CUSTOMER_NAME',
+      mapDefaultValues('contract_company_name', 'Customer Name'),
+    ).replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
     // createAgreement({ contract_data: finalAgreement }).then(() => {
@@ -515,7 +662,7 @@ export default function Addendum() {
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
           onEditorStateChange={onEditorStateChange}
-          placeholder="Add the points you would like to edit in the Standard Agreement"
+          placeholder="   Add the points you would like to edit in the Standard Agreement"
           toolbar={{
             options: [
               'inline',
@@ -575,18 +722,25 @@ export default function Addendum() {
     );
 
     if (
-      rev < 3 &&
-      contractTermLength < 12 &&
-      details &&
-      details.contract_status &&
-      details.contract_status.value !== 'pending contract approval'
+      (rev < 3 || contractTermLength < 12) &&
+      !(userInfo && userInfo.role === 'Team Manager - TAM')
+      // details &&
+      // details.contract_status &&
+      // details.contract_status.value !== 'pending contract approval'
     ) {
       return true;
     }
     return false;
   };
 
-  return (
+  return isLoading.loader && isLoading.type === 'page' ? (
+    <PageLoader
+      className="modal-loader"
+      color="#FF5933"
+      type="page"
+      width={40}
+    />
+  ) : (
     <>
       {checkPermission() ? (
         <>
@@ -596,76 +750,64 @@ export default function Addendum() {
                 <div className="text-container ">
                   {/* <h3 className="mt-5 mb-4 text-center">Addendum</h3> */}
 
-                  {isLoading.loader && isLoading.type === 'page' ? (
-                    <PageLoader
-                      className="modal-loader"
-                      color="#FF5933"
-                      type="page"
-                      width={40}
+                  <Paragraph>
+                    <p
+                      className="long-text"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.addendum &&
+                          data.addendum[0]
+                            .replace(
+                              'CUSTOMER_NAME',
+                              mapDefaultValues(
+                                'contract_company_name',
+                                'Customer Name',
+                              ),
+                            )
+                            .replace(
+                              'AGREEMENT_DATE',
+                              mapDefaultValues('start_date', 'Start Date'),
+                            ),
+                      }}
                     />
-                  ) : (
-                    <Paragraph>
+                    {newAddendumData && newAddendumData.id && !showEditor
+                      ? ''
+                      : displayEditor()}
+                    {showEditor ? (
+                      ''
+                    ) : (
                       <p
                         className="long-text"
                         dangerouslySetInnerHTML={{
-                          __html:
-                            data.addendum &&
-                            data.addendum[0]
-                              .replace(
-                                'CUSTOMER_NAME',
-                                mapDefaultValues(
-                                  'contract_company_name',
-                                  'Customer Name',
-                                ),
-                              )
-                              .replace(
-                                'AGREEMENT_DATE',
-                                mapDefaultValues('start_date', 'Start Date'),
-                              ),
+                          __html: newAddendumData && newAddendumData.addendum,
                         }}
                       />
-                      {newAddendumData && newAddendumData.id && !showEditor
-                        ? ''
-                        : displayEditor()}
-                      {showEditor ? (
-                        ''
-                      ) : (
-                        <p
-                          className="long-text"
-                          dangerouslySetInnerHTML={{
-                            __html: newAddendumData && newAddendumData.addendum,
-                          }}
-                        />
-                      )}
+                    )}
 
-                      <p
-                        className="long-text"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            data.addendum &&
-                            data.addendum[1]
-                              .replace(
-                                'CUSTOMER_NAME',
-                                mapDefaultValues(
-                                  'contract_company_name',
-                                  'Customer Name',
-                                ),
-                              )
-                              .replace(
-                                'AGREEMENT_DATE',
-                                mapDefaultValues('start_date', 'Start Date'),
-                              )
-                              .replace(
-                                'BBE_DATE',
-                                mapDefaultValues(
-                                  'current_date',
-                                  'Current Date',
-                                ),
+                    <p
+                      className="long-text"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.addendum &&
+                          data.addendum[1]
+                            .replace(
+                              'CUSTOMER_NAME',
+                              mapDefaultValues(
+                                'contract_company_name',
+                                'Customer Name',
                               ),
-                        }}
-                      />
-                    </Paragraph>
-                  )}
+                            )
+                            .replace(
+                              'AGREEMENT_DATE',
+                              mapDefaultValues('start_date', 'Start Date'),
+                            )
+                            .replace(
+                              'BBE_DATE',
+                              mapDefaultValues('current_date', 'Current Date'),
+                            ),
+                      }}
+                    />
+                  </Paragraph>
                 </div>
               </div>
             </div>
@@ -679,6 +821,8 @@ export default function Addendum() {
               onEditAddendum={onEditAddendum}
               setShowEditor={setShowEditor}
               setNewAddendum={setNewAddendum}
+              sendNotIncludedOneTimeServToAdd={sendNotIncludedOneTimeServToAdd}
+              sendNotIncludedMonthlyServToAdd={sendNotIncludedMonthlyServToAdd}
             />
           </div>
           {isLoading.loader && isLoading.type === 'page' ? (
@@ -707,13 +851,25 @@ export default function Addendum() {
                         <Button
                           className="btn-primary on-boarding w-320 mt-3 mr-5"
                           onClick={() => {
+                            createAgreementDoc();
                             setParams('request-approve');
                             setShowModal(true);
                           }}>
                           Request Approval
                         </Button>
+                      ) : // params && params.step === 'request-signature' ? (
+                      userInfo && userInfo.role === 'Team Manager - TAM' ? (
+                        <Button
+                          className="btn-primary on-boarding w-320 mt-3 mr-5"
+                          onClick={() => {
+                            // sendRequestSign();
+                            createAgreementDoc();
+                            setParams('select-contact');
+                            setShowModal(true);
+                          }}>
+                          Approve and Request Signature
+                        </Button>
                       ) : (
-                        // params && params.step === 'request-signature' ? (
                         <Button
                           className="btn-primary on-boarding w-320 mt-3 mr-5"
                           onClick={() => {

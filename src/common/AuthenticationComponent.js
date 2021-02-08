@@ -22,7 +22,6 @@ import {
   PATH_DSP_ADDENDUM,
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
-  PATH_HELLO_SIGN,
   PATH_COMPANY_DETAIL,
   PATH_CUSTOMER_ACTIVITY,
   PATH_CUSTOMER_LIST_TABLET,
@@ -47,7 +46,7 @@ import {
   OneTimeAgreement,
   ServicesAmendment,
   DSPAddendum,
-  HelloSignComponent,
+  // HelloSignComponent,
 } from '../components/Contract';
 import {
   CompanyDetails,
@@ -146,7 +145,7 @@ export default function AuthenticationComponent() {
           <Route path={PATH_ONE_TIME_AGREEMENT} component={OneTimeAgreement} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
           <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
-          <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
+          {/* <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} /> */}
 
           {/* Account Setup */}
           {generateAccountSetup()}
