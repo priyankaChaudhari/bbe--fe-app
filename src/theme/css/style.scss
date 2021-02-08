@@ -1046,3 +1046,13 @@ div {
   position: absolute;
   left: 40%;
 }
+
+.blinkSelectedField {
+  animation: blinker 1s linear infinite;
+  color: #ff5933;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
