@@ -11,7 +11,5 @@ export {
   Activity,
   AgreementDetails,
   CompanyPerformance,
-  CustomerList,
-  CompanyDetail,
   CustomerListTablet,
 };

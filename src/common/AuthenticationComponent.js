@@ -22,20 +22,10 @@ import {
   PATH_DSP_ADDENDUM,
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
-  PATH_COMPANY_DETAIL,
-  PATH_CUSTOMER_ACTIVITY,
   PATH_CUSTOMER_LIST_TABLET,
 } from '../constants/index';
 
-import { CustomerList } from '../components/Customer';
-
-import {
-  CustomerList,
-  CustomerDetails,
-  CompanyDetail,
-  CustomerActivity,
-  CustomerListTablet,
-} from '../components/Customer';
+import { CustomerList, CustomerListTablet } from '../components/Customer';
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
