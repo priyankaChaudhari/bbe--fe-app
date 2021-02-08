@@ -57,6 +57,11 @@ export default function Agreement() {
     message: '',
   });
 
+  const clearSuccessMessage = () => {
+    history.location.state.message = '';
+    history.replace(history.location.pathname);
+  };
+
   useEffect(() => {
     if (
       history &&
@@ -64,13 +69,17 @@ export default function Agreement() {
       history.location.state &&
       history.location.state.message
     ) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
       setShowSuccessContact({
         show: true,
         message: history.location.state.message,
       });
-      history.location.state.message = '';
-      history.replace(history.location.pathname);
+      setTimeout(clearSuccessMessage(), 100000);
     }
+
     dispatch(getAccountDetails(id));
     agreementTemplate().then((response) => {
       setIsLoading({ loader: true, type: 'page' });
@@ -94,9 +103,11 @@ export default function Agreement() {
       return `Enter ${label}.`;
     }
     if (formData[key] === undefined || formData[key] === '') {
-      // if (key === 'company_name') {
-      //   return customerData && customerData[key];
-      // }
+      if (key === 'contract_company_name') {
+        return details && details[key]
+          ? details && details[key]
+          : `Enter ${label}.`;
+      }
       if (key === 'length') {
         return details && details.length.label;
       }
@@ -153,7 +164,7 @@ export default function Agreement() {
       data.recurring_service_agreement[index]
     );
   };
-  const mapMonthlyServices = (key, label) => {
+  const mapMonthlyServices = (key) => {
     if (details && details[key]) {
       const fields = [];
       for (const item of details[key]) {
@@ -205,9 +216,11 @@ export default function Agreement() {
           );
         }
       }
-      return fields;
+      // return fields;
+      return fields.length ? fields.toString().replaceAll(',', '') : '';
     }
-    return `Enter ${label}.`;
+    return '';
+    // return `Enter ${label}.`;
   };
 
   const mapServiceTotal = (key) => {
@@ -231,7 +244,14 @@ export default function Agreement() {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
-  return (
+  return isLoading.loader && isLoading.type === 'page' ? (
+    <PageLoader
+      className="modal-loader"
+      color="#FF5933"
+      type="page"
+      width={40}
+    />
+  ) : (
     <div>
       {checkPermission() ? (
         <>
@@ -263,81 +283,12 @@ export default function Agreement() {
                     </div>
                   </p>
                   {/* <h3 className="mt-5 mb-4 text-center"> Service Agreement </h3> */}
-                  {isLoading.loader && isLoading.type === 'page' ? (
-                    <PageLoader
-                      className="modal-loader"
-                      color="#FF5933"
-                      type="page"
-                      width={40}
-                    />
-                  ) : (
-                    <Paragraph>
-                      <p className="mb-4 long-text ">
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: getAgreementAccorType(0)
-                              .replace(
-                                'CUSTOMER_NAME',
-                                mapDefaultValues(
-                                  'contract_company_name',
-                                  'Customer Name',
-                                ),
-                              )
-                              .replace(
-                                'START_DATE',
-                                mapDefaultValues('start_date', 'Start Date'),
-                              )
-                              .replace(
-                                'CUSTOMER_ADDRESS',
-                                mapDefaultValues('address', 'Address, '),
-                              )
-                              .replace(
-                                'CUSTOMER_CITY',
-                                mapDefaultValues('city', 'City, '),
-                              )
-                              .replace(
-                                'CUSTOMER_STATE',
-                                mapDefaultValues('state', 'State, '),
-                              )
-                              .replace(
-                                'CUSTOMER_POSTAL',
-                                mapDefaultValues('zip_code', 'Postal Code, '),
-                              )
-                              .replace(
-                                'AGREEMENT_LENGTH',
-                                mapDefaultValues('length', 'Contract Length'),
-                              )
-                              .replace(
-                                'ONE_TIME_SERVICE_TABLE',
-                                `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
-                                </table>`,
-                              )
-                              .replace(
-                                'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-                                `${mapServiceTotal(
-                                  'additional_one_time_services',
-                                )}`,
-                              ),
-                          }}
-                        />
-                      </p>
-                      <p
-                        className="long-text"
+
+                  <Paragraph>
+                    <p className="mb-4 long-text ">
+                      <div
                         dangerouslySetInnerHTML={{
-                          __html: getAgreementAccorType(1)
+                          __html: getAgreementAccorType(0)
                             .replace(
                               'CUSTOMER_NAME',
                               mapDefaultValues(
@@ -346,7 +297,7 @@ export default function Agreement() {
                               ),
                             )
                             .replace(
-                              'AGREEMENT_DATE',
+                              'START_DATE',
                               mapDefaultValues('start_date', 'Start Date'),
                             )
                             .replace(
@@ -366,13 +317,74 @@ export default function Agreement() {
                               mapDefaultValues('zip_code', 'Postal Code, '),
                             )
                             .replace(
-                              'BBE_DATE',
-                              mapDefaultValues('current_date', 'Current Date'),
+                              'AGREEMENT_LENGTH',
+                              mapDefaultValues('length', 'Contract Length'),
+                            )
+                            .replace(
+                              'ONE_TIME_SERVICE_TABLE',
+                              `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+    padding: 13px; font-weight: 800;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
+                              </td></tr>
+                                </table>`,
+                            )
+                            .replace(
+                              'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+                              `${mapServiceTotal(
+                                'additional_one_time_services',
+                              )}`,
                             ),
                         }}
                       />
-                    </Paragraph>
-                  )}
+                    </p>
+                    <p
+                      className="long-text"
+                      dangerouslySetInnerHTML={{
+                        __html: getAgreementAccorType(1)
+                          .replace(
+                            'CUSTOMER_NAME',
+                            mapDefaultValues(
+                              'contract_company_name',
+                              'Customer Name',
+                            ),
+                          )
+                          .replace(
+                            'AGREEMENT_DATE',
+                            mapDefaultValues('start_date', 'Start Date'),
+                          )
+                          .replace(
+                            'CUSTOMER_ADDRESS',
+                            mapDefaultValues('address', 'Address, '),
+                          )
+                          .replace(
+                            'CUSTOMER_CITY',
+                            mapDefaultValues('city', 'City, '),
+                          )
+                          .replace(
+                            'CUSTOMER_STATE',
+                            mapDefaultValues('state', 'State, '),
+                          )
+                          .replace(
+                            'CUSTOMER_POSTAL',
+                            mapDefaultValues('zip_code', 'Postal Code, '),
+                          )
+                          .replace(
+                            'BBE_DATE',
+                            mapDefaultValues('current_date', 'Current Date'),
+                          ),
+                      }}
+                    />
+                  </Paragraph>
                 </div>
               </div>
             </div>
@@ -457,6 +469,9 @@ const Paragraph = styled.div`
       margin-bottom: 17px;
       padding-left: 5px;
     }
+  }
+  &.testing {
+    color: red !important;
   }
 `;
 

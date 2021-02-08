@@ -1,8 +1,13 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { ArrowIcons } from '../../theme/images';
+import AgreementSidePanel from '../../common/AgreementSidePanel';
 
 export default function ServicesAmendment() {
+  const location = useLocation();
+  const id = location.pathname.split('/')[2];
+
   return (
     <div>
       <div className="on-boarding-container">
@@ -190,6 +195,7 @@ export default function ServicesAmendment() {
           </div>
         </div>
       </div>
+      <AgreementSidePanel id={id} />
     </div>
   );
 }

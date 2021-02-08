@@ -282,6 +282,26 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
     });
   };
 
+  const mapValue = (key) => {
+    if (key === 'printed_name') {
+      return `${
+        selectedContact && selectedContact.first_name
+          ? selectedContact.first_name
+          : ''
+      } ${
+        selectedContact && selectedContact.last_name
+          ? selectedContact.last_name
+          : ''
+      } `;
+    }
+    if (key === 'customer_role') {
+      return `${
+        selectedContact && selectedContact.role ? selectedContact.role : ''
+      }`;
+    }
+    return '';
+  };
+
   const sendRequestApproval = () => {
     const requestApprovalData = {
       ...approvalNote,
@@ -289,7 +309,9 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
       contract: agreementData.id,
       primary_email: 'thay@buyboxexperts.com',
       contract_status: 'pending contract approval',
-      contract_data: pdfData,
+      contract_data: pdfData
+        .replaceAll('PRINTED_NAME', mapValue('printed_name'))
+        .replace('CUSTOMER_ROLE', mapValue('customer_role')),
     };
     setIsLoading({ loader: true, type: 'button' });
     createTransactionData(requestApprovalData).then(
@@ -319,7 +341,9 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
       contract: agreementData.id,
       to: selectedContact && selectedContact.email,
       cc: ccEmails,
-      contract_data: pdfData,
+      contract_data: pdfData
+        .replaceAll('PRINTED_NAME', mapValue('printed_name'))
+        .replace('CUSTOMER_ROLE', mapValue('customer_role')),
     };
     createContractDesign(contractData).then((res) => {
       setIsLoading({ loader: false, type: 'button' });
@@ -380,8 +404,7 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
       setShowModal(false);
     });
 
-    client.on('close', (data) => {
-      console.log('The document has been signed!', data);
+    client.on('close', () => {
       setShowModal(false);
     });
   };

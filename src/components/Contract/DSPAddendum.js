@@ -57,6 +57,7 @@ export default function DSPAddendum() {
 
     return details && details[key];
   };
+
   const mapDspDetails = () => {
     return `<tr>
         <td style="border: 1px solid black;
@@ -66,7 +67,7 @@ export default function DSPAddendum() {
         <td
           style="border: 1px solid black;
     padding: 13px;">
-          [dsp_monthly_ad_budget]
+    ${details && details.dsp_fee}
         </td>
       </tr>`;
   };
@@ -74,15 +75,18 @@ export default function DSPAddendum() {
   const mapBudgetBreakdownTable = () => {
     return `<tr>
         <td style="border: 1px solid black;
-    padding: 13px;">[dsp_monthly_ad_budget]</td>
+    padding: 13px;">  ${details && details.dsp_fee}
+</td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
-          [dsp_monthly_ad_budget]
+              ${details && details.dsp_fee}
+
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
-          [dsp_monthly_ad_budget]
+              ${details && details.dsp_fee}
+
         </td>
       </tr>`;
   };
