@@ -11,10 +11,6 @@ import {
   CopyLinkIcon,
   InfoIcons,
   ExternalLink,
-  LinkedinIcon,
-  InstagramIcon,
-  TwitterIcon,
-  LeftArrowIcon,
 } from '../../theme/images/index';
 import { WhiteCard, GroupUser } from '../../theme/Global';
 import {
@@ -48,78 +44,8 @@ export default function CompanyDetail({ customer, amazonDetails, seller }) {
 
   return (
     <>
-      <BackBtn className="d-lg-none d-block">
-        <div className="back-btn-link  ">
-          {' '}
-          <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back to all
-          customers
-        </div>
-      </BackBtn>
-      <CustomerDetailBanner>
-        <div className="banner">
-          <div className="inner" />
-          <div className="back-btn-link d-lg-block d-none">
-            {' '}
-            <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back to
-            all customers
-          </div>
-        </div>
-
-        <CustomerBody>
-          <WhiteCard className="customer-brand-details mb-n2">
-            <div className="row">
-              <div className="col-lg-3 col-md-12">
-                <div className="brand-logo" />
-              </div>
-              <div className="col-lg-9 col-md-12 ">
-                <div className="brand-name mb-2">
-                  TRX Training
-                  <span>Active</span>
-                </div>
-                <div className=" edit-details edit-brand-details ">
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
-
-                <div className="row">
-                  <div className="col-lg-4 col-12">
-                    <div className="company-label-info text-left">
-                      1660 Pacific Ave, San Francisco, CA, United States
-                    </div>
-                  </div>
-                  <div className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="company-label-info">
-                      <div className="brand-label">
-                        Category
-                        <span>Health_Wellness_And_Fitness</span>
-                      </div>
-                      <div className="brand-label">
-                        Website
-                        <span>
-                          {' '}
-                          <a href="*">trxtraining.com</a>
-                        </span>
-                      </div>
-                    </div>
-                  </div>{' '}
-                  <div className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="company-label-info">
-                      <div className="brand-label">
-                        Annual Revenue
-                        <span>$50,000,000</span>
-                      </div>
-                      <div className="brand-label">
-                        Company Size
-                        <span> 200</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </WhiteCard>
-            <div className="col-lg-8 col-12">
-              <WhiteCard>
+      <div className="col-lg-8 col-12">
+        <WhiteCard>
           <div className="row">
             <div className="col-10">
               <span className="black-heading-title mt-0">
@@ -294,100 +220,3 @@ CompanyDetail.propTypes = {
   amazonDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
   seller: PropTypes.string.isRequired,
 };
-const CustomerDetailBanner = styled.div`
-  background: ${Theme.gray6};
-  .banner {
-    height: 307px;
-    padding-left: 62px;
-    background-image: url(${BannerImg});
-    background-position: top;
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100%;
-
-    .inner {
-      background: rgb(14 14 14 / 28%);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-      position: relative;
-    }
-  }
-
-  .back-btn-link {
-    background: ${Theme.white};
-    border-radius: 23px;
-    padding: 13px;
-    color: ${Theme.gray85};
-    position: absolute;
-    margin-left: 74px;
-    top: 109px;
-
-    .left-arrow {
-      width: 18px;
-      margin-right: 3px;
-      vertical-align: bottom;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    .banner {
-      padding-left: 0;
-    }
-  }
-`;
-
-const BackBtn = styled.div`
-  color: ${Theme.black};
-  padding: 20px;
-  font-size: ${Theme.normal};
-  font-weight: 700;
-  img {
-    vertical-align: middle;
-    width: 19px;
-    margin-right: 6px;
-  }
-`;
-const CustomerBody = styled.div`
-  max-width: 1220px;
-  margin: 0 auto;
-  width: 100%;
-
-  .customer-body-container {
-    max-width: 1220px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  .customeer-dropdown-select {
-    color: ${Theme.black};
-    padding: 0 0px 0px 25px;
-    background-color: ${Theme.white};
-    border-radius: 8px;
-    width: 100%;
-    padding: 13px;
-    border-left: 3px solid ${Theme.orange};
-    font-size: 16px;
-    font-weight: bold;
-    height: 55px;
-    border-right: none;
-    border-top: none;
-    border-bottom: none;
-
-    &:focus {
-      outline: none;
-    }
-
-    select {
-      background: red;
-      width: 140px;
-      height: 35px;
-      border: 1px solid #ccc;
-      font-size: 18px;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    padding: 0 20px;
-  }
-`;
