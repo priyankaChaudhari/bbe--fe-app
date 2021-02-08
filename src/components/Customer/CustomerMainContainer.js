@@ -20,15 +20,14 @@ import {
   CloseIcon,
   CompanyDefaultUser,
 } from '../../theme/images/index';
-import Button from '../../common/Button';
 import { GroupUser, WhiteCard } from '../../theme/Global';
-import { ModalBox, FormField, PageLoader, GetInitialName } from '../../common';
+import { ModalBox, PageLoader, GetInitialName } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
   getCustomerDetails,
 } from '../../store/actions/customerState';
-import { AgreementDetails, CompanyDetail } from './index';
+import { AgreementDetails, CompanyDetail, EditAccountDetails } from './index';
 import CompanyPerformance from './CompanyPerformance';
 import Activity from './Activity';
 import {
@@ -102,10 +101,12 @@ export default function CustomerMainContainer() {
   );
 
   const getAmazon = useCallback(() => {
-    getAmazonDetails().then((res) => {
-      setAmazonDetails(res && res.data && res.data.results);
+    getAmazonDetails(id).then((res) => {
+      setAmazonDetails(
+        res && res.data && res.data.results && res.data.results[0],
+      );
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     dispatch(getAccountDetails(id));
@@ -456,6 +457,7 @@ export default function CustomerMainContainer() {
                     agreement.seller_type &&
                     agreement.seller_type.value
                   }
+                  id={id}
                 />
               ) : viewComponent === 'performance' ? (
                 <CompanyPerformance />
@@ -519,96 +521,11 @@ export default function CustomerMainContainer() {
           role="presentation"
         />
         <ModalBox>
-          <div className="modal-body">
-            <h4>Edit Company Details</h4>
-            <div className="body-content mt-3">
-              <div className="row">
-                <div className="col-3">
-                  <div className="customer-company-profile" />
-                </div>
-                <div className="col-9">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Company Name
-                      <br />
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-                <div className="col-12">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Description
-                      <br />
-                      <textarea
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-                <div className="col-6">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Category
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-                <div className="col-6">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Website
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-                <div className="col-6">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Annual Revenue
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-                <div className="col-6">
-                  <FormField className="mt-3">
-                    <label htmlFor="emailAddress">
-                      Company Size
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder=" Recurring"
-                      />
-                    </label>
-                  </FormField>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="footer-line " />
-          <div className="modal-footer">
-            <Button className=" btn-primary mr-4">Save Changes</Button>
-
-            <Button className=" btn-borderless">Discard Changes</Button>
-          </div>
+          <EditAccountDetails
+            agreement={agreement}
+            customer={customer}
+            setShowModal={setShowModal}
+          />
         </ModalBox>
       </Modal>
     </>

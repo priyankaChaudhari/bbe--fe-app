@@ -285,18 +285,11 @@ export const awsDetails = [
 
 export const editCompanyFields = [
   {
-    key: 'contract_company_name',
-    label: 'Company name',
-    property: 'col-md-9',
-  },
-  {
     key: 'description',
     label: 'Description',
     type: 'textarea',
     property: 'col-md-12',
   },
-  { key: 'website', label: 'Website', property: 'col-md-6' },
-  { key: 'phone_number', label: 'Phone', property: 'col-md-6', type: 'text' },
 
   {
     key: 'country',
@@ -323,9 +316,11 @@ export const editCompanyFields = [
   {
     key: 'zip_code',
     label: 'Post code',
-    property: 'col-md-12',
+    property: 'col-md-6',
     type: 'number',
   },
+  { key: 'brand', label: 'Brands', property: 'col-md-6' },
+  { key: 'phone_number', label: 'Phone', property: 'col-md-12', type: 'text' },
   {
     key: 'social',
     label: 'Social',
@@ -340,19 +335,62 @@ export const editCompanyFields = [
       { key: 'pinterest', item: PinterestIcon, label: 'Pinterest' },
     ],
   },
+
+  { key: 'merchant_id', label: 'Merchant ID', property: 'col-md-6' },
+  { key: 'marketplace_id', label: 'Marketplace ID', property: 'col-md-6' },
+];
+
+export const editAccountFields = [
+  {
+    key: 'contract_company_name',
+    label: 'Company Name',
+    property: 'col-12',
+    type: 'text',
+    level: 'agreement',
+  },
+  { key: 'website', label: 'Website', type: 'text', property: 'col-md-6' },
+  {
+    key: 'country',
+    label: 'Country',
+    type: 'choice',
+    property: 'col-md-6',
+  },
+  {
+    key: 'address',
+    label: 'Address',
+    property: 'col-12',
+    type: 'text',
+    level: 'agreement',
+  },
+  {
+    key: 'city',
+    label: 'City',
+    type: 'text',
+    property: 'col-md-6',
+    level: 'agreement',
+  },
+  {
+    key: 'state',
+    label: 'State',
+    type: 'text',
+    property: 'col-md-6',
+    level: 'agreement',
+  },
+
+  {
+    key: 'zip_code',
+    label: 'Postal Code',
+    property: 'col-md-6',
+    type: 'number',
+    level: 'agreement',
+  },
   {
     key: 'category',
     label: 'Category',
-    property: 'col-md-6',
     type: 'choice',
+    property: 'col-md-6',
   },
-  {
-    key: 'number_of_employees',
-    label: '# of Employees',
 
-    type: 'number',
-    property: 'col-md-6 ',
-  },
   {
     key: 'annual_revenue',
     label: 'Annual Revenue',
@@ -360,79 +398,11 @@ export const editCompanyFields = [
     property: 'col-md-6',
   },
 
-  { key: 'brand', label: 'Brands', property: 'col-md-6' },
-];
-
-export const editAccountFields = [
   {
-    key: 'contract_type',
-    label: 'Agreement Type',
-    property: 'col-12 ',
-    type: 'choice',
-  },
-  {
-    key: 'start_date',
-    label: 'Agreement Start Date',
-    type: 'date',
-    property: 'col-md-12',
-  },
-  {
-    key: 'one_time_deal_amount',
-    label: 'One time deal amount',
-    type: 'number-currency',
+    key: 'number_of_employees',
+    label: 'Company Size',
     property: 'col-md-6',
-  },
-  {
-    key: 'rev_share',
-    label: 'Rev Share %',
-    type: 'choice',
-    property: 'col-md-6',
-  },
-  {
-    key: 'length',
-    label: 'Agreement Length',
-    property: 'col-md-6',
-    type: 'choice',
-  },
-  {
-    key: 'monthly_retainer',
-    label: 'Monthly Retainer',
-    type: 'number-currency',
-    property: 'col-md-6',
-  },
-
-  { key: 'channel', label: 'Channel', type: 'choice', property: 'col-md-6' },
-
-  {
-    key: 'dsp_fee',
-    label: 'DSP Monthly AD Budget',
-    type: 'number-currency',
-    property: 'col-md-6',
-  },
-
-  {
-    key: 'sales_threshold',
-    label: 'Sales Threshold',
-    property: 'col-md-6',
-    type: 'number-currency',
-  },
-  {
-    key: 'seller_type',
-    label: 'Seller type',
-    type: 'choice',
-    property: 'col-md-6',
-  },
-  {
-    key: 'additional_one_time_services',
-    label: 'Additional One-time services',
-    type: 'multichoice',
-    property: 'col-md-12',
-  },
-  {
-    key: 'additional_monthly_services',
-    label: 'Additional Monthly services',
-    type: 'multichoice',
-    property: 'col-md-12',
+    type: 'number',
   },
 ];
 

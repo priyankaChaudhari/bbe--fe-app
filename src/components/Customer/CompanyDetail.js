@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
+import Modal from 'react-modal';
 
 import {
   EditOrangeIcon,
@@ -11,6 +12,7 @@ import {
   CopyLinkIcon,
   InfoIcons,
   ExternalLink,
+  CloseIcon,
 } from '../../theme/images/index';
 import { WhiteCard, GroupUser } from '../../theme/Global';
 import {
@@ -18,9 +20,26 @@ import {
   AmazonMarketplaceDetails,
 } from '../../constants/FieldConstants';
 import { GetInitialName } from '../../common';
+import EditCompanyDetails from './EditAccountDetails';
 
-export default function CompanyDetail({ customer, amazonDetails, seller }) {
+export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
   const contactInfo = useSelector((state) => state.customerState.contactData);
+  const [showModal, setShowModal] = useState({ modal: false, type: '' });
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      minHeight: '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   const generateSocialIcon = (item) => {
     const fields = [];
@@ -63,7 +82,10 @@ export default function CompanyDetail({ customer, amazonDetails, seller }) {
               </span>
             </div>
           </div>
-          <div className=" edit-details">
+          <div
+            className=" edit-details"
+            onClick={() => setShowModal({ modal: true, type: 'description' })}
+            role="presentation">
             <img src={EditOrangeIcon} alt="" />
             Edit
           </div>
@@ -76,7 +98,10 @@ export default function CompanyDetail({ customer, amazonDetails, seller }) {
               <p className="no-result-found">
                 {(customer && customer.brand) || 'No brands added'}
               </p>
-              <div className="edit-details">
+              <div
+                className="edit-details"
+                onClick={() => setShowModal({ modal: true, type: 'brand' })}
+                role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
@@ -84,7 +109,10 @@ export default function CompanyDetail({ customer, amazonDetails, seller }) {
 
             <WhiteCard className="mt-3">
               <p className="black-heading-title mt-0">Contact Info</p>
-              <div className="edit-details">
+              <div
+                className="edit-details"
+                onClick={() => setShowModal({ modal: true, type: 'social' })}
+                role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
@@ -206,11 +234,33 @@ export default function CompanyDetail({ customer, amazonDetails, seller }) {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={showModal.modal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Add team modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowModal({ modal: false })}
+          role="presentation"
+        />
+        <EditCompanyDetails
+          setShowModal={setShowModal}
+          id={id}
+          customer={customer}
+          showModal={showModal}
+          amazonDetails={amazonDetails}
+        />
+      </Modal>
     </>
   );
 }
 
 CompanyDetail.propTypes = {
+  id: PropTypes.string.isRequired,
   customer: PropTypes.shape({
     id: PropTypes.string,
     description: PropTypes.string,

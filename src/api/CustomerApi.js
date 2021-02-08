@@ -303,9 +303,10 @@ export async function createAmazonDetails(data) {
   return result;
 }
 
-export async function getAmazonDetails() {
+export async function getAmazonDetails(customer) {
+  const params = { customer };
   const result = await axiosInstance
-    .get(API_AMAZON_DETAILS)
+    .get(API_AMAZON_DETAILS, { params })
     .then((response) => {
       return response;
     })
@@ -315,9 +316,10 @@ export async function getAmazonDetails() {
   return result;
 }
 
-export async function updateAmazonDetails(id, data) {
+export async function updateAmazonDetails(id, data, customer) {
+  const params = { customer };
   const result = await axiosInstance
-    .patch(`${API_AMAZON_DETAILS + id}/`, data)
+    .patch(`${API_AMAZON_DETAILS + id}/`, data, { params })
     .then((response) => {
       return response;
     })
