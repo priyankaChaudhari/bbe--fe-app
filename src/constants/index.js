@@ -6,6 +6,7 @@ export const PATH_RESET_PASSWORD = '/set-password';
 
 // Customer
 export const PATH_CUSTOMER_LIST = '/customer';
+export const PATH_CUSTOMER_LIST_TABLET = '/customer-tablet';
 export const PATH_CUSTOMER_DETAILS = `${PATH_CUSTOMER_LIST}/:id`;
 
 // Details

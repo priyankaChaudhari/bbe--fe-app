@@ -436,7 +436,7 @@ export const WhiteCard = styled.div`
     }
 
     .label {
-      color: ${Theme.gray50};
+      color: ${Theme.gray40};
       text-transform: uppercase;
       line-height: 22px;
       font-family: ${Theme.titleFontFamily};
@@ -466,7 +466,7 @@ export const WhiteCard = styled.div`
     }
   }
   .label {
-    color: ${Theme.gray50};
+    color: ${Theme.gray40};
     text-transform: uppercase;
     line-height: 22px;
     font-family: ${Theme.titleFontFamily};
@@ -584,13 +584,10 @@ export const WhiteCard = styled.div`
       }
       &:last-child {
         margin-bottom: 0;
-      }
-
-      
+      }      
     }
   }
 
-  
 
   .add-new-tab {
     font-size: ${Theme.extraNormal};
@@ -655,7 +652,7 @@ export const WhiteCard = styled.div`
       font-weight: 500;
 
       .label {
-        color: ${Theme.gray50};
+        color: ${Theme.gray40};
         text-transform: uppercase;
         line-height: 22px;
         font-family: ${Theme.titleFontFamily};
@@ -696,7 +693,7 @@ export const WhiteCard = styled.div`
 
     li{
       display: inline-block;
-      background-color: #FFFFFF;
+      background-color: ${Theme.white};
       border: 1px solid #D5D8E1;
       border-radius: 8px;
       width: 140px;
@@ -704,7 +701,7 @@ export const WhiteCard = styled.div`
       margin-right:10px;
 
       .number-rate {
-        color:#333333;
+        color: ${Theme.gray80};
         font-size:26px;
         padding-top:15px;
       }
@@ -716,7 +713,7 @@ export const WhiteCard = styled.div`
       }
       .vs {
         color:${Theme.gray40};
-        font-size:16px;  
+        font-size: ${Theme.extraMedium};
       }
       .perentage-value {
         color:#407B00 ;
@@ -724,14 +721,16 @@ export const WhiteCard = styled.div`
         margin-top:13px;
 
         &.down {
-           color:#D60000;
+          color: ${Theme.darkRed};
         }
         .red-arrow{
           width:14px;
           transform: rotate(180deg);
         }
 
-        img{width:14px;}
+        img {
+          width:14px;
+        }
       }
 
       &:last-child{
@@ -742,17 +741,17 @@ export const WhiteCard = styled.div`
   }
 
   .speed-rate {
-    font-size:36px;
+    font-size: ${Theme.primaryTitleFontSize}; 
     color: ${Theme.black};
   }
 
   .last-update {
     color: ${Theme.gray40};
-    font-size: 14px;
+    font-size: ${Theme.extraNormal}; 
   }
   .seller-health {
     color${Theme.gray40};
-    font-size:24px;
+    font-size: ${Theme.secondaryTitleFontSize}; 
   }
 
   .solid-icon {
@@ -792,12 +791,12 @@ export const WhiteCard = styled.div`
     margin-bottom: 15px;
     margin-left: 20px;
   } 
-   .label-info {
+   .company-label-info {
      margin-left: 40px;
      margin-top:10px;
 
      &:first-child {
-         margin-left: 0;
+        margin-left: 0;
      }
 
      .brand-label { 

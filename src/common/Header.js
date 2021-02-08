@@ -452,10 +452,6 @@ const MainHeader = styled.div`
     display: none;
   }
 
-  // .header-user-profile {
-  //   display: table-cell;
-  // }
-
   .right-nav {
     padding: 0;
     margin: 0;
@@ -685,37 +681,6 @@ const MainHeader = styled.div`
     display: block;
   }
 
-  // @media only screen and (max-width: 768px) {
-  //   .logo {
-  //     width: 150px;
-
-  //     span {
-  //       position: absolute;
-  //       left: 174px;
-  //       top: 10px;
-  //       font-size: ${Theme.small};
-  //       font-weight: bold;
-  //       color: ${Theme.black};
-  //       font-family: ${Theme.titleFontFamily};
-  //     }
-  //   }
-
-  //   .header-user-profile {
-  //     text-align: left;
-  //   }
-  // }
-
-  // @media only screen and (max-width: 360px) {
-  //   .logo {
-  //     width: 120px;
-
-  //     span {
-  //       top: 10px;
-  //       left: 142px;
-  //     }
-  //   }
-  // }
-
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     .logo {
       width: 220px;
@@ -760,17 +725,6 @@ const MainHeader = styled.div`
         }
       }
     }
-    // .dropdown {
-    //   .header-profile {
-    //     width: 50px;
-    //     height: 50px;
-
-    //     .profile-pic {
-    //       width: 50px;
-    //       height: 50px;
-    //     }
-    //   }
-    // }
 
     .dropdown-content {
       li {

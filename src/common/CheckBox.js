@@ -5,7 +5,7 @@ const CheckBox = styled.div`
   .container {
     display: block;
     position: relative;
-    padding-left: 35px;
+    padding-left: 30px;
     margin-bottom: 12px;
     cursor: pointer;
     color: ${Theme.gray90};
@@ -14,6 +14,11 @@ const CheckBox = styled.div`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    &.customer-pannel {
+      color: #171725;
+      font-size: 14px;
+    }
 
     &.term-condition {
       font-size: ${Theme.extraSmall};
@@ -43,19 +48,20 @@ const CheckBox = styled.div`
     top: 0;
     left: 0;
     border-radius: 4px;
-    width: 24px;
-    height: 24px;
-    background-color: rgba(224, 231, 255, 0.2);
-    border: 1px solid ${Theme.gray9};
+    width: 20px;
+    height: 20px;
+    border: 1px solid ${Theme.gray35};
   }
 
   .container:hover input ~ .checkmark {
     background-color: rgba(224, 231, 255, 0.2);
-    border: 1px solid ${Theme.gray9};
+    // border: 1px solid ${Theme.gray9};
   }
 
   .container input:checked ~ .checkmark {
-    background-color: rgba(224, 231, 255, 0.2);
+    background-color: ${Theme.orange};
+    color: white;
+    border: none;
   }
 
   .checkmark:after {
@@ -69,11 +75,11 @@ const CheckBox = styled.div`
   }
 
   .container .checkmark:after {
-    left: 9px;
+    left: 6px;
     top: 3px;
     width: 6px;
-    height: 12px;
-    border: solid ${Theme.gray35};
+    height: 11px;
+    border: solid ${Theme.white};
     border-width: 0 2px 2px 0;
 
     -webkit-transform: rotate(45deg);

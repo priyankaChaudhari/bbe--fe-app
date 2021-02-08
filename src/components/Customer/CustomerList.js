@@ -1,813 +1,867 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
-import Select, { components } from 'react-select';
-import queryString from 'query-string';
-import Slider from 'react-slick';
-import NumberFormat from 'react-number-format';
-import ReactTooltip from 'react-tooltip';
-
+import Select from 'react-select';
+import Theme from '../../theme/Theme';
 import {
-  InputSearchWithRadius,
+  CheckBox,
   DropDownSelect,
+  InputSearchWithRadius,
   Table,
-  PageLoader,
-  CommonPagination,
 } from '../../common';
 import {
-  getCustomerList,
-  getGrowthStrategist,
-  getStatus,
-} from '../../api/index';
-import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
-import {
-  SearchIcons,
   DefaultUser,
-  whiteCross,
-  CompanyDefaultUser,
-  SortDownIcon,
-  WhiteSortDown,
-  InfoIcon,
+  SearchIcon,
+  ClockIcon,
+  ArrowUpIcon,
+  SliderHIcon,
+  ArrowDownIcon,
+  CloseIcon,
 } from '../../theme/images/index';
-import {
-  dataHeaders,
-  sliderSettings,
-  sortOptions,
-} from '../../constants/FieldConstants';
-import GetInitialName from '../../common/GetInitialName';
-import NoRecordFound from '../../common/NoRecordFound';
+import CustomerListTablet from './CustomerListTablet';
 
 export default function CustomerList() {
-  const history = useHistory();
-  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [data, setData] = useState([]);
-  const userInfo = useSelector((state) => state.userState.userInfo);
-  const [status, setStatus] = useState([]);
-  const [count, setCount] = useState(null);
-  const [pageNumber, setPageNumber] = useState();
-  const [selectedFilter, setSelectedFilter] = useState({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedValue, setSelectedValue] = useState({
-    status: null,
-    tier: null,
-    contract_type: null,
-    user: null,
-    'order-by': null,
-  });
-  const [clearFilter, setClearFilter] = useState(true);
-  const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
-
-  const { Option, DropdownIndicator, SingleValue } = components;
-
-  const IconOption = (props) => (
-    <Option {...props}>
-      {props.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={props.data.icon}
-          alt="user"
-          style={{
-            borderRadius: 50,
-            marginRight: '9px',
-            height: '32px',
-          }}
-        />
-      ) : (
-        <GetInitialName
-          userInfo={props.data.label}
-          type="list"
-          property="mr-2"
-        />
-      )}{' '}
-      {props.data.label}
-    </Option>
-  );
-
-  const IconSingleOption = (props) => (
-    <SingleValue {...props}>
-      {props.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={props.data.icon}
-          alt="user"
-          style={{ borderRadius: 50, width: '32px', marginBottom: '-11px' }}
-        />
-      ) : (
-        <GetInitialName userInfo={props.data.label} type="list" property="" />
-      )}{' '}
-      &nbsp;
-      <span style={{ lineHeight: 4 }}>{props.data.label}</span>
-    </SingleValue>
-  );
-
-  const CustomDropdownIndicator = (props) => {
-    return (
-      <DropdownIndicator {...props}>
-        <img src={SortDownIcon} alt="sort" style={{ width: '78%' }} />
-      </DropdownIndicator>
-    );
-  };
-
-  const CustomWhiteDropdownIndicator = (props) => {
-    return (
-      <DropdownIndicator {...props}>
-        <img src={WhiteSortDown} alt="sort" style={{ width: '78%' }} />
-      </DropdownIndicator>
-    );
-  };
-
-  const getSelectComponents = (key) => {
-    if (key === 'user') {
-      return {
-        Option: IconOption,
-        SingleValue: IconSingleOption,
-        DropdownIndicator:
-          selectedValue[key] === null
-            ? CustomDropdownIndicator
-            : CustomWhiteDropdownIndicator,
-      };
-    }
-    return {
-      DropdownIndicator:
-        selectedValue[key] === null
-          ? CustomDropdownIndicator
-          : CustomWhiteDropdownIndicator,
-    };
-  };
-
-  const contractChoices = [
-    { value: 'All', label: 'All' },
-    { value: 'recurring', label: 'Recurring' },
-    { value: 'one time', label: 'One Time' },
+  const options = [
+    { value: ' Performance', label: 'Performance' },
+    { value: 'Contract Details', label: 'Contract Details' },
   ];
 
-  const dropdownDetails = [
-    {
-      key: 'status',
-      choices: status,
-      placeholder: 'Status',
-      width: 'w-30 ',
-    },
-    {
-      key: 'contract_type',
-      choices: contractChoices,
-      placeholder: 'Contract type',
-      width: 'w-30',
-    },
-    {
-      key: 'user',
-      choices: brandGrowthStrategist,
-      placeholder: 'Brand Growth Strategist',
-      width: 'w-50  ',
-    },
-  ];
-
-  const tableInfoWithIcon = (tableData, header) => {
-    return (
-      <>
-        <span>
-          {header.key === 'brand_growth_strategist' &&
-          !(tableData[header.key] && tableData[header.key].profile_photo) ? (
-            <>
-              {(tableData[header.key].first_name === '' &&
-                tableData[header.key].last_name === '') ||
-              tableData[header.key].length === 0 ? (
-                ''
-              ) : (
-                <GetInitialName
-                  userInfo={tableData[header.key]}
-                  property="mr-2"
-                />
-              )}
-            </>
-          ) : (
-            <img
-              src={
-                header.key === 'contract_company_name'
-                  ? tableData.documents &&
-                    tableData.documents[0] &&
-                    Object.values(tableData.documents[0])
-                    ? Object.values(tableData.documents[0])[0]
-                    : CompanyDefaultUser
-                  : header.key === 'brand_growth_strategist'
-                  ? (tableData[header.key] &&
-                      tableData[header.key].profile_photo) ||
-                    DefaultUser
-                  : DefaultUser
-              }
-              alt="user-pic"
-              className="user-picture mr-2"
-            />
-          )}
-        </span>
-        <span>
-          <div
-            className="company-name "
-            style={{
-              marginTop: !(
-                tableData[header.key] && tableData[header.key].profile_photo
-              )
-                ? '10px'
-                : '',
-            }}>
-            {header.level === 'contract'
-              ? tableData.contract && tableData.contract[header.key]
-              : header.key === 'brand_growth_strategist'
-              ? `${tableData[header.key].first_name || ''} ${
-                  tableData[header.key].last_name || ''
-                }`
-              : tableData[header.key] || ' '}
-          </div>
-          {header.key === 'company_name' ? (
-            <div className="sub-address">
-              {tableData.contract && tableData.contract.city
-                ? `${tableData.contract.city},`
-                : ''}{' '}
-              {tableData.contract && tableData.contract.state
-                ? `${tableData.contract.state},`
-                : ''}
-              {(tableData.country && tableData.country.label) || ''}
-            </div>
-          ) : null}
-        </span>
-      </>
-    );
-  };
-
-  const numericTableInfo = (tableData, header) => {
-    return (
-      <NumberFormat
-        value={
-          (header.level === 'contract'
-            ? tableData.contract && tableData.contract[header.key]
-            : tableData[header.key]) || 0
-        }
-        displayType="text"
-        thousandSeparator
-        prefix={header.type === 'number-currency' ? '$' : ''}
-        suffix={header.type === 'number-percent' ? '%' : ''}
-      />
-    );
-  };
-
-  const formatTableData = (tableData, type) => {
-    const fields = [];
-    fields.push(
-      <React.Fragment key={tableData.id}>
-        {dataHeaders
-          .filter((sec) => sec.section === type)
-          .map((header) => (
-            <td
-              key={header.key}
-              style={{
-                textTransform: 'capitalize',
-                display: header.key === 'brand_growth_strategist' ? 'flex' : '',
-                minHeight: '68px',
-              }}
-              className={type === 2 ? 'firstChildCss' : ''}>
-              {header.type === 'icon' ? (
-                <>{tableInfoWithIcon(tableData, header)}</>
-              ) : header.type && header.type.includes('number') ? (
-                <>{numericTableInfo(tableData, header)}</>
-              ) : (
-                <>
-                  {(header.level === 'contract'
-                    ? tableData.contract && tableData.contract[header.key]
-                    : tableData[header.key]) || ' '}
-                </>
-              )}
-            </td>
-          ))}
-      </React.Fragment>,
-    );
-    return fields;
-  };
-
-  const customerList = useCallback(
-    (currentPage) => {
-      // setBrandGrowthStrategist([]);
-      setIsLoading({ loader: true, type: 'page' });
-      getCustomerList(currentPage, selectedFilter, searchQuery).then(
-        (response) => {
-          setData(response && response.data && response.data.results);
-          setPageNumber(currentPage);
-          setCount(response && response.data && response.data.count);
-          setIsLoading({ loader: false, type: 'page' });
-        },
-      );
-    },
-    [selectedFilter, searchQuery],
-  );
-
-  const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    const stringified = queryString.stringify({
-      page: currentPage,
-    });
-    history.push({
-      pathname: `${PATH_CUSTOMER_LIST}`,
-      search: `${stringified}`,
-    });
-    customerList(currentPage, selectedFilter, searchQuery);
-  };
-
-  useEffect(() => {
-    getStatus().then((statusResponse) => {
-      statusResponse.data.unshift({ value: 'All', label: 'All' });
-      setStatus(statusResponse.data);
-    });
-
-    getGrowthStrategist().then((gs) => {
-      if (gs && gs.data) {
-        for (const brand of gs.data) {
-          setBrandGrowthStrategist((prev) => [
-            ...prev,
-            {
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
-            },
-          ]);
-        }
-      }
-    });
-    customerList(1, selectedFilter, searchQuery);
-  }, [customerList, searchQuery, selectedFilter]);
-
-  const cancelFilters = (key) => {
-    const filter = { ...selectedFilter };
-    delete filter[key];
-    setSelectedValue({ ...selectedValue, [key]: null });
-    setSelectedFilter(filter);
-    setClearFilter(true);
-    history.push(PATH_CUSTOMER_LIST);
-    setIsLoading({ loader: true, type: 'page' });
-    getCustomerList(1, filter, searchQuery).then((response) => {
-      setData(response.data && response.data.results);
-      setPageNumber(pageNumber);
-      setCount(response && response.data && response.data.count);
-      setIsLoading({ loader: false, type: 'page' });
-    });
-    if (key === 'user') setBrandGrowthStrategist([]);
-  };
-
-  const handleFilters = (event, key) => {
-    setClearFilter(false);
-    if (event.value === 'All' || event.value === '-created_at') {
-      cancelFilters(key);
-    } else {
-      setSelectedValue({ ...selectedValue, [key]: event });
-      setSelectedFilter({ ...selectedFilter, [key]: event.value });
-      setIsLoading({ loader: true, type: 'page' });
-
-      getCustomerList(
-        '',
-        { ...selectedFilter, [key]: event.value },
-        searchQuery,
-      ).then((response) => {
-        setData(response.data && response.data.results);
-        setPageNumber(pageNumber);
-        setCount(response && response.data && response.data.count);
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    }
-  };
-
-  const handleSearch = () => {
-    customerList(pageNumber, selectedFilter, searchQuery);
-  };
-
-  const generateTable = (type) => {
-    return (
-      <Table>
-        <tbody>
-          <tr className="table-header">
-            {dataHeaders
-              .filter((sec) => sec.section === type)
-              .map((header) => (
-                <th
-                  key={header.key}
-                  width={header.width}
-                  className={type === 2 ? 'firstChildCss' : ''}>
-                  {header.name}
-                </th>
-              ))}
-          </tr>
-          {data &&
-            data.map((item) => (
-              <tr
-                className="cursor "
-                key={item.id}
-                onClick={() =>
-                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-                }>
-                {formatTableData(item, type)}
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-    );
-  };
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   return (
-    <BodyGray>
-      <div className="container">
-        <div className="row ">
-          <div className="col-md-7 col-12 ">
-            <h5 style={{ textTransform: 'capitalize' }}>
-              {' '}
-              Welcome, {userInfo.first_name} {userInfo.last_name}
-            </h5>
-            <p className="mt-1 small-para">
-              Below you can find the BBE customer data
-            </p>
+    <CustomerListPage>
+      <div className="row">
+        <div className="col-lg-2 col-12 ">
+          {' '}
+          <p className="black-heading-title ml-3 "> Customers</p>
+          <div className=" mb-3 d-lg-none d-block ">
+            <label
+              className="filter-slider mt-4 "
+              htmlFor="tabletmenu-check"
+              id="responsive-button">
+              <img src={SliderHIcon} alt="Menu Lines" />
+              Filter
+            </label>
           </div>
-          <div className="col-md-5 col-12 text-right ">
-            <InputSearchWithRadius className="w-50">
-              <input
-                className="form-control search-filter"
-                placeholder="Search"
-                onChange={(event) => setSearchQuery(event.target.value)}
-                onKeyPress={(event) => {
-                  if (event.key === 'Enter') {
-                    handleSearch();
-                  }
-                }}
-                value={searchQuery || ''}
-              />
-              <img
-                src={SearchIcons}
-                alt="search"
-                className="search-input-icon"
-              />
-
-              <img
-                src={InfoIcon}
-                alt="search"
-                data-tip="Search by Company Name, Contact First, Last Name or Email"
-                data-for="info"
-                className="info-icon"
-              />
-              <ReactTooltip id="info" aria-haspopup="true" />
-            </InputSearchWithRadius>
-            <div className="clear-fix" />
-          </div>
+          <MobileLeftSidebar>
+            <input type="checkbox" id="tabletmenu-check" />
+            <div id="ifp-sidebar-responsive">
+              <SideContent>
+                <p className="black-heading-title mt-0 mb-4">
+                  {' '}
+                  Filter Customers
+                </p>
+                <label
+                  htmlFor="tabletmenu-check"
+                  className="close-icon d-xl-none d-block">
+                  <img width="25px" src={CloseIcon} alt="cross" />
+                </label>
+                <div className="label">Brand Strategist</div>
+                <DropDownSelect>
+                  <Select options={options} />
+                </DropDownSelect>{' '}
+                <div className="label mt-4">Status</div>
+                <div className="unselected ">Unselect all</div>
+                <div className="clear-fix" />
+                <ul className="check-box-list">
+                  <li>
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Active
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                  <li>
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        At Risk
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                  <li>
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Pending Cancellation
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                  <li>
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Inactive
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                </ul>
+                <div className="label mt-4">Contract Type</div>
+                <div className="unselected ">Unselect all</div>
+                <div className="clear-fix" />
+                <ul className="check-box-list">
+                  <li>
+                    {' '}
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Recurring
+                        <input type="checkbox" id="2" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                  <li>
+                    {' '}
+                    <CheckBox>
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        One Time
+                        <input type="checkbox" id="3" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                </ul>
+              </SideContent>
+            </div>
+            <div className="straight-line horizontal-line" />
+          </MobileLeftSidebar>
         </div>
 
-        <NavShap>
-          <div className="row">
-            <div className="col-md-8">
-              <ul className="nav-drop-down">
-                {dropdownDetails.map((item) => (
-                  <li
-                    className={
-                      item.key === 'status' &&
-                      selectedValue.status &&
-                      selectedValue.status.value === 'pending cancellation'
-                        ? `${item.width} mb-2 full-width`
-                        : `${item.width} mb-2`
-                    }
-                    key={item.key}>
-                    <DropDownSelect>
-                      <Select
-                        classNamePrefix="react-select"
-                        className="active"
-                        placeholder={item.placeholder}
-                        options={item.choices}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            width: brandGrowthStrategist ? '105%' : '100%',
-                            borderRadius: '18px',
-                            border: '1px solid #dee2ed',
-                            padding: '0 5px 0 5px',
-                            fontSize: '16px',
-                            color: 'white',
-                            background:
-                              selectedValue[item.key] === null
-                                ? '#f9faff'
-                                : '#2e384d',
-                          }),
+        <div className="col-lg-6 col-md-6 col-12 col-8 mt-2 mb-2">
+          <InputSearchWithRadius>
+            <input
+              className=" form-control search-filter"
+              placeholder="Search"
+            />
 
-                          option: (provided, state) => {
-                            return {
-                              ...provided,
-                              color: state.isSelected ? '#FF5933' : '#2E384D',
-                              background: 'white',
-
-                              ':hover': {
-                                background: '#F9FAFF',
-                                cursor: 'pointer',
-                              },
-
-                              ':first-of-type': {
-                                color:
-                                  item.key !== 'user' &&
-                                  selectedValue[item.key] === null
-                                    ? '#FF5933'
-                                    : '',
-                              },
-                            };
-                          },
-                          singleValue: (provided) => {
-                            const left =
-                              selectedValue.user !== null && item.key === 'user'
-                                ? '-2px'
-                                : '';
-                            const color =
-                              selectedValue[item.key] === null
-                                ? '#2e384d'
-                                : 'white';
-
-                            return { ...provided, color, left };
-                          },
-                          dropdownIndicator: (base) => ({
-                            ...base,
-                            color:
-                              selectedValue[item.key] === null
-                                ? '#2e384d'
-                                : '#ffff',
-                          }),
-                        }}
-                        theme={(theme) => ({
-                          ...theme,
-                          colors: {
-                            ...theme.colors,
-                            neutral50: '#2e384d',
-                          },
-                        })}
-                        onChange={(event) => handleFilters(event, item.key)}
-                        value={
-                          clearFilter && selectedValue[item.key] === null
-                            ? null
-                            : selectedValue[item.key]
-                        }
-                        components={getSelectComponents(item.key)}
-                        componentsValue={
-                          item.key === 'user' ? { Option: IconOption } : ''
-                        }
-                      />
-                      {selectedValue.user !== null && item.key === 'user' ? (
-                        <img
-                          onClick={() => cancelFilters(item.key)}
-                          src={whiteCross}
-                          alt="remove"
-                          role="presentation"
-                          className="remove-icon cursor"
-                        />
-                      ) : (
-                        ''
-                      )}
-                    </DropDownSelect>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="col-md-4 text-right">
-              <ul className="nav-drop-down">
-                <li className="w-40 ">
-                  <DropDownSelect>
-                    <Select
-                      classNamePrefix="react-select"
-                      placeholder="Sort"
-                      options={sortOptions}
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          borderRadius: '18px',
-                          border: '1px solid #dee2ed',
-                          padding: '0 5px 0 5px',
-                          fontSize: '16px',
-                          color: 'white',
-                          background:
-                            selectedValue['order-by'] === null
-                              ? '#f9faff'
-                              : '#2e384d',
-                        }),
-
-                        option: (provided, state) => {
-                          return {
-                            ...provided,
-                            color: state.isSelected ? '#FF5933' : '#2E384D',
-                            background: 'white',
-
-                            ':hover': {
-                              background: '#F9FAFF',
-                              cursor: 'pointer',
-                            },
-                            ':first-of-type': {
-                              color:
-                                selectedValue['order-by'] === null
-                                  ? '#FF5933'
-                                  : '',
-                            },
-                          };
-                        },
-
-                        singleValue: (provided) => {
-                          const color =
-                            selectedValue['order-by'] === null
-                              ? '#2e384d'
-                              : 'white';
-                          return { ...provided, color };
-                        },
-                        dropdownIndicator: (base) => ({
-                          ...base,
-                          color:
-                            selectedValue['order-by'] === null
-                              ? '#2e384d'
-                              : '#ffff',
-                        }),
-                      }}
-                      theme={(theme) => ({
-                        ...theme,
-                        colors: {
-                          ...theme.colors,
-                          neutral50: '#2e384d',
-                        },
-                      })}
-                      onChange={(event) => handleFilters(event, 'order-by')}
-                      value={
-                        clearFilter && selectedValue['order-by'] === null
-                          ? null
-                          : selectedValue['order-by']
-                      }
-                      components={getSelectComponents('order-by')}
-                    />
-                  </DropDownSelect>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </NavShap>
-        <div className="row">
-          <div className="col-12">
-            {isLoading.loader && isLoading.type === 'page' ? (
-              <PageLoader color="#FF5933" type="page" />
-            ) : (
-              <div>
-                {data && data.length === 0 ? (
-                  <NoRecordFound />
-                ) : (
-                  <>
-                    <Slider {...sliderSettings}>
-                      <div className="table-responsive">{generateTable(1)}</div>
-                      <div className="table-responsive ">
-                        {generateTable(2)}
-                      </div>
-                    </Slider>
-
-                    <CommonPagination
-                      count={count}
-                      pageNumber={pageNumber}
-                      handlePageChange={handlePageChange}
-                    />
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+            <img src={SearchIcon} alt="search" className="search-input-icon" />
+          </InputSearchWithRadius>
+        </div>
+        <div className="col-lg-2 col-md-3 col-6  mt-2 mb-2">
+          <DropDownSelect>
+            <Select options={options} />
+          </DropDownSelect>{' '}
+        </div>
+        <div className="col-lg-2 col-md-3  col-6  mt-2 mb-2">
+          <DropDownSelect>
+            <Select options={options} />
+          </DropDownSelect>{' '}
         </div>
       </div>
-    </BodyGray>
+
+      <div className="straight-line horizontal-line" />
+      <CustomerLeftPannel className="d-none d-lg-block">
+        <div className="label">Brand Strategist</div>
+        <DropDownSelect>
+          <Select options={options} />
+        </DropDownSelect>{' '}
+        <div className="label mt-4">Status</div>
+        <div className="unselected ">Unselect all</div>
+        <div className="clear-fix" />
+        <ul className="check-box-list">
+          <li>
+            <CheckBox>
+              <label
+                className="container customer-pannel"
+                htmlFor="contract-copy-check">
+                Active
+                <input type="checkbox" id="contract-copy-check" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label
+                className="container customer-pannel"
+                htmlFor="contract-copy-check">
+                At Risk
+                <input type="checkbox" id="contract-copy-check" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label
+                className="container customer-pannel"
+                htmlFor="contract-copy-check">
+                Pending Cancellation
+                <input type="checkbox" id="contract-copy-check" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label
+                className="container customer-pannel"
+                htmlFor="contract-copy-check">
+                Inactive
+                <input type="checkbox" id="contract-copy-check" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+        </ul>
+        <div className="label mt-4">Contract Type</div>
+        <div className="unselected ">Unselect all</div>
+        <div className="clear-fix" />
+        <ul className="check-box-list">
+          <li>
+            {' '}
+            <CheckBox>
+              <label className="container customer-pannel" htmlFor="2">
+                Recurring
+                <input type="checkbox" id="2" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            {' '}
+            <CheckBox>
+              <label className="container customer-pannel" htmlFor="3">
+                One Time
+                <input type="checkbox" id="3" />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          </li>
+        </ul>
+      </CustomerLeftPannel>
+
+      {isDesktop ? (
+        <div className="table-part">
+          <Table>
+            <tbody>
+              <tr className="table-header">
+                <th className="text-center ">Customer</th>
+                <th>Contract</th>
+                <th>Retainer</th>
+                <th>Rev. Share</th>
+                <th>Brand Strategist</th>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+              <tr>
+                <td width="20%">
+                  <img className="company-logo" src={DefaultUser} alt="logo" />
+
+                  <div className="company-name">Viking Farmer</div>
+                  <div className="status">Active</div>
+                </td>
+                <td width="40%">
+                  <p className="black-heading-title mt-0 mb-0">
+                    {' '}
+                    Recurring Contract
+                  </p>
+                  <ul className="recurring-contact mb-2">
+                    <li>
+                      <p className="basic-text ">12 month contract</p>
+                    </li>
+                    <li>
+                      <p className="basic-text "> Expires: Mar 20, 2021</p>
+                    </li>
+                    <li>
+                      <div className="days-block">
+                        {' '}
+                        <img
+                          className="clock-icon"
+                          src={ClockIcon}
+                          alt="clock"
+                        />{' '}
+                        96 days
+                      </div>
+                    </li>
+                  </ul>
+                </td>
+                <td width="10%">
+                  $3,000
+                  <div className="increase-rate">
+                    <img width="14px" src={ArrowUpIcon} alt="arrow-up" /> 0.51%
+                  </div>
+                </td>
+                <td width="10%">
+                  3%{' '}
+                  <div className="decrease-rate">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                    0.15%
+                  </div>
+                </td>
+                <td width="20%">
+                  <img
+                    className="user-profile-circle"
+                    src={DefaultUser}
+                    alt="user"
+                  />
+                  <div className="user-name"> Anton</div>
+                  <div className="user-name"> Brownstein</div>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+      ) : (
+        <CustomerListTablet />
+      )}
+    </CustomerListPage>
   );
 }
 
-const BodyGray = styled.div`
-  background-color: #fafafb;
-  min-height: 91%;
-  padding-top: 25px;
+const CustomerListPage = styled.div`
+  padding-left: 62px;
+
+  .table-part {
+    padding-left: 290px;
+    height: 550px;
+    overflow: auto;
+  }
+
+  @media only screen and (max-width: 991px) {
+    padding-left: 10px;
+    .filter-slider {
+      border: 1px solid #8798ad;
+      padding: 8px 15px;
+      border-radius: 25px;
+      color: #000000;
+      font-size: 15px;
+      float: right;
+      top: -16px;
+      right: 40px;
+      position: absolute;
+      margin-top: -94px;
+      font-weight: 600;
+
+      img {
+        width: 16px;
+        margin-right: 7px;
+        vertical-align: text-top;
+      }
+    }
+  }
 `;
 
-const NavShap = styled.div`
-  .nav-drop-down {
+const CustomerLeftPannel = styled.div`
+  max-width: 290px;
+  height: 80%;
+  position: absolute;
+  top: 127px;
+  width: 100%;
+  left: 62px;
+  padding: 15px;
+  border-right: 1px solid ${Theme.gray5};
+
+  .label {
+    color: ${Theme.gray40};
+    text-transform: uppercase;
+    line-height: 22px;
+    font-family: ${Theme.titleFontFamily};
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
+  .check-box-list {
+    list-style-type: none;
     padding: 0;
     marging: 0;
 
     li {
-      list-style-type: none;
-      display: inline-block;
-      margin-right: 25px;
+      color: #171725;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+  }
 
-      &:last-child {
-        margin-right: 0;
+  .unselected {
+    color: #556178;
+    font-size: 14px;
+    float: right;
+    margin-top: -19px;
+    cursor: pointer;
+  }
+  @media only screen and (max-width: 991px) {
+    dispaly: none;
+  }
+`;
+const MobileLeftSidebar = styled.div`
+  display: none;
+  #tabletmenu-check {
+    display: none;
+  }
+
+  @media only screen and (max-width: 991px) {
+    background-color: ${Theme['$base-color']};
+    display: block;
+    #responsive-button {
+      display: block;
+      position: absolute;
+      left: 0px;
+      top: 43px;
+      z-index: 999;
+      .menu-icon {
+        width: 24px;
+        margin-top: -52px;
+        margin-left: -20px;
       }
+    }
+    #ifp-sidebar-responsive {
+      display: none;
+      height: 100%;
+      position: absolute;
+      z-index: 999;
+      top: 0px;
+      left: 0;
+      .close-icon {
+        color: ${Theme['$a-white']};
+        font-size: ${Theme['$base-f-size-res']};
+        font-family: ${Theme['$title-font-family']};
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        z-index: 999;
 
-      &.full-width {
-        max-width: 195px !important;
-      }
-
-      &.w-10 {
-        max-width: 80px;
-        width: 100%;
-        position: relative;
-
-        .remove-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-
-        .cross-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-      }
-      &.w-20 {
-        max-width: 93px;
-        width: 100%;
-        position: relative;
-
-        .remove-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-        .cross-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-      }
-      &.w-30 {
-        max-width: 160px;
-        width: 100%;
-        position: relative;
-
-        .remove-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-        .cross-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
+        img {
+          width: 18px;
+          margin-top: 8px;
         }
       }
-      &.w-40 {
-        max-width: 170px;
-        width: 100%;
-        position: relative;
-
-        .remove-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-        .cross-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-      }
-      &.w-50 {
-        max-width: 215px;
-        width: 100%;
-        position: relative;
-
-        .remove-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-        .cross-icon {
-          position: absolute;
-          top: 14px;
-          right: 30px;
-          width: 12px;
-        }
-      }
+    }
+    #tabletmenu-check:checked ~ #ifp-sidebar-responsive {
+      display: block;
+    }
+    #mobilemenu-close:checked ~ #ifp-sidebar-responsive {
+      display: none;
+    }
+    .content-header {
+      padding: 30px 30px 10px !important;
     }
   }
   @media only screen and (max-width: 768px) {
-    .d-inline-block {
-      float: left;
+    #responsive-button {
+      .menu-icon {
+        width: 24px;
+        margin-top: -16px;
+        position: absolute;
+        margin-left: -20px;
+      }
+    }
+  }
+`;
+
+const SideContent = styled.div`
+  @media (max-width: 991px) {
+    width: 300px;
+    min-height: 100%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    background: white;
+    padding: 15px;
+    box-shadow: ${Theme.commonShadow};
+
+    .label {
+      color: ${Theme.gray40};
+      text-transform: uppercase;
+      line-height: 22px;
+      font-family: ${Theme.titleFontFamily};
+      font-size: 11px;
+      margin-bottom: 3px;
     }
 
-    li {
-      &.w-40 {
-        margin-bottom: 10px;
-        float: left;
+    .check-box-list {
+      list-style-type: none;
+      padding: 0;
+      marging: 0;
+
+      li {
+        color: #171725;
+        font-size: 14px;
+        margin-bottom: 15px;
       }
+    }
+
+    .unselected {
+      color: #556178;
+      font-size: 14px;
+      float: right;
+      margin-top: -19px;
+      cursor: pointer;
     }
   }
 `;

@@ -2,7 +2,7 @@ const Theme = {
   /* Theme Base color */
   white: '#ffffff',
   red: '#b00011',
-  darkRed: '#8E4E4E',
+  darkRed: '#D60000',
   pink: '#fe0b62',
   yellow: '#f7c137',
   orange: '#FF5933',
@@ -37,15 +37,16 @@ const Theme = {
 
   gray90: '#2E384D',
   gray85: '#171725',
-  gray50: '#171725',
+  gray80: '#333333',
   gray40: '#556178',
+  gray35: '#8798AD',
   gray10: '#E0E7FF',
   gray9: '#dee2ed',
   gray8: '#F4F6FC',
   gray7: '#e4e8f0',
   gray6: '#fafafb',
   gray11: '#e0e6e8',
-  gray5: '#EFF2FF',
+  gray5: '#E2E2EA',
 
   /* Colors */
   baseColor: '#FF5933',
