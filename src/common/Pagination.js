@@ -15,7 +15,7 @@ export default function CommonPagination({
     <div>
       <PaginationStyled>
         <Pagination
-          style={{ float: 'right', marginLeft: marginStyle || '' }}
+          style={{ marginLeft: marginStyle || '' }}
           className="p-2 mt-2"
           showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total}`}
           total={count}
@@ -46,29 +46,32 @@ CommonPagination.propTypes = {
 
 const PaginationStyled = styled.div`
   ul.rc-pagination {
+    text-align: end;
+    .rc-pagination-total-text {
+      float: left;
+    }
     li {
       margin-bottom: 10px;
+
       &.rc-pagination-item {
         display: inline-block;
-
+        border: none;
         a {
-          color: ${Theme.gray90};
+          color: ${Theme.black};
         }
 
         &.rc-pagination-item-active {
           font-weight: 500;
-          background: ${Theme.baseColor};
-          border-color: ${Theme.baseColor};
+          border: none;
           a {
-            color: ${Theme.white};
+            color: ${Theme.orange};
           }
         }
+
         &:hover {
           font-weight: 500;
-          background: ${Theme.baseColor};
-          border-color: ${Theme.baseColor};
           a {
-            color: ${Theme.white};
+            color: ${Theme.orange};
           }
         }
       }

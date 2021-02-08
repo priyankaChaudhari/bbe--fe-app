@@ -412,16 +412,26 @@ export const WhiteCard = styled.div`
   position: relative;
 
 
-&.fix-height {
+  .black-heading-title {
+    font-size: $text-f-size;
+    color: $black-color;
+    font-family: $base-font-family;
+    font-weight: 600;
+  }
+
+ &.fix-height {
     flex-wrap: wrap;
     flex: initial;
     height: 100%;
   }
   &.customer-brand-details {
-    // position: absolute;
-    z-index:2;
     top: -30px;
     width: 100%;
+  }
+
+  .company-contract-height {
+   max-height: 145px;
+    overflow:auto;
   }
 
   
@@ -429,6 +439,8 @@ export const WhiteCard = styled.div`
   &.left-border {
     padding: 25px 25px 25px 0;
   }
+  
+
   .copy-info {
     position: relative;
     .copy-text {
@@ -505,12 +517,30 @@ export const WhiteCard = styled.div`
     }
   }
   .brand-logo {
+     position:relative;
+      
+    img {
     border: 8px solid ${Theme.gray6};
     border-radius: 20px;
     margin-top: -65px;
     max-width: 170px;
     height: 170px;
     margin-left: 50px;
+    }
+    .edit-profile-picture {
+    background: #f0f2fc;
+    border-radius: 18px;
+    border: 3px solid white;
+    position: absolute;
+    left:0;
+    top: 132px;
+    width:50px;
+    height:50px;
+    padding: 5px;
+    cursor:pointer;
+  }
+  
+   
   }
 
   .edit-details {
@@ -536,7 +566,7 @@ export const WhiteCard = styled.div`
      color: ${Theme.black};
 
      &:first-child {
-         margin-left: 0;
+        margin-left: 0;
      }
 
      .brand-label { 
@@ -544,6 +574,7 @@ export const WhiteCard = styled.div`
         span { 
           margin-left: 15px;
           color: ${Theme.black};
+          word-break: break-word;
         }
       }
   }

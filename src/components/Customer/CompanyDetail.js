@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
@@ -67,9 +66,7 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
         <WhiteCard>
           <div className="row">
             <div className="col-10">
-              <span className="black-heading-title mt-0">
-                Company Description
-              </span>
+              <span className="black-heading-title ">Company Description</span>
               <span className="normal-text">
                 {' '}
                 <ReadMoreAndLess
@@ -92,7 +89,7 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
         </WhiteCard>
 
         <div className="row mt-3">
-          <div className="col-6">
+          <div className="col-lg-6 col-md-6 col-12">
             <WhiteCard>
               <p className="black-heading-title mt-0">Brands</p>
               <p className="no-result-found">
@@ -126,26 +123,31 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
                 {SocialIcons.map((item) => generateSocialIcon(item))}
               </ul>
             </WhiteCard>
-            <WhiteCard className="mt-3">
+            <WhiteCard className=" mt-3">
               <p className="black-heading-title mt-0 ">Company Contacts</p>
               <div className="edit-details">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
-              {contactInfo && contactInfo.length === 0
-                ? 'No Record found.'
-                : contactInfo.map((item) => (
-                    <GroupUser key={item.id}>
-                      <GetInitialName userInfo={item} />
-                      <div className="activity-user">
-                        {item.first_name || ' '} {item.last_name || ' '}
-                      </div>
-                      <div className="user-email-address">
-                        {item.email || ' '}
-                      </div>
-                      <div className="clear-fix" />
-                    </GroupUser>
-                  ))}
+              <div className="company-contract-height">
+                {contactInfo && contactInfo.length === 0
+                  ? 'No Record found.'
+                  : contactInfo.map((item) => (
+                      <GroupUser key={item.id} className="mb-3">
+                        <GetInitialName
+                          userInfo={item}
+                          property="float-left mr-3 "
+                        />
+                        <div className="activity-user">
+                          {item.first_name || ' '} {item.last_name || ' '}
+                        </div>
+                        <div className="user-email-address">
+                          {item.email || ' '}
+                        </div>
+                        <div className="clear-fix" />
+                      </GroupUser>
+                    ))}
+              </div>
             </WhiteCard>
           </div>
           <div className="col-lg-6 col-md-6 col-12">

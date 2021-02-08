@@ -50,22 +50,22 @@ export default function AgreementDetails({ agreement, id }) {
           <WhiteCard className="mt-3">
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
+                <img
+                  className="solid-icon mt-1 "
+                  src={
+                    agreement && agreement.contract_type === 'One Time'
+                      ? ServiceIcon
+                      : RecurringIcon
+                  }
+                  alt=""
+                />
                 <p className="black-heading-title mt-0 mb-0">
-                  <img
-                    className="solid-icon "
-                    src={
-                      agreement && agreement.contract_type === 'One Time'
-                        ? ServiceIcon
-                        : RecurringIcon
-                    }
-                    alt=""
-                  />
                   {agreement && agreement.contract_type === 'One Time'
                     ? 'One Time Services Contract'
                     : 'Recurring Contract'}
                 </p>
 
-                <ul className="recurring-contact mb-2">
+                <ul className="recurring-contact mt-n2">
                   <li>
                     <p className="basic-text ">
                       {agreement && agreement.length && agreement.length.label}{' '}

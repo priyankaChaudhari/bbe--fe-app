@@ -31,7 +31,7 @@ export default function PastAgreement({ id }) {
                     <p className="black-heading-title mt-0 mb-0">
                       {' '}
                       <img
-                        className="solid-icon"
+                        className="solid-icon mt-1"
                         src={
                           item && item.contract_type === 'One Time'
                             ? ServiceIcon
@@ -43,7 +43,7 @@ export default function PastAgreement({ id }) {
                         ? 'One Time Services Contract'
                         : 'Recurring Contract'}
                     </p>
-                    <ul className="recurring-contact mb-2">
+                    <ul className="recurring-contact mb-2 mt-n2">
                       <li>
                         <p className="basic-text ">
                           {item && item.length && item.length.label} contract

@@ -745,71 +745,67 @@ export default function Addendum() {
       {checkPermission() ? (
         <>
           <div className="on-boarding-container">
-            <div className="row">
-              <div className="col-10 mb-5 pb-5">
-                <div className="text-container ">
-                  {/* <h3 className="mt-5 mb-4 text-center">Addendum</h3> */}
+            <div className="text-container mt-5">
+              {/* <h3 className="mt-5 mb-4 text-center">Addendum</h3> */}
 
-                  <Paragraph>
-                    <p
-                      className="long-text"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          data.addendum &&
-                          data.addendum[0]
-                            .replace(
-                              'CUSTOMER_NAME',
-                              mapDefaultValues(
-                                'contract_company_name',
-                                'Customer Name',
-                              ),
-                            )
-                            .replace(
-                              'AGREEMENT_DATE',
-                              mapDefaultValues('start_date', 'Start Date'),
-                            ),
-                      }}
-                    />
-                    {newAddendumData && newAddendumData.id && !showEditor
-                      ? ''
-                      : displayEditor()}
-                    {showEditor ? (
-                      ''
-                    ) : (
-                      <p
-                        className="long-text"
-                        dangerouslySetInnerHTML={{
-                          __html: newAddendumData && newAddendumData.addendum,
-                        }}
-                      />
-                    )}
+              <Paragraph>
+                <p
+                  className="long-text"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      data.addendum &&
+                      data.addendum[0]
+                        .replace(
+                          'CUSTOMER_NAME',
+                          mapDefaultValues(
+                            'contract_company_name',
+                            'Customer Name',
+                          ),
+                        )
+                        .replace(
+                          'AGREEMENT_DATE',
+                          mapDefaultValues('start_date', 'Start Date'),
+                        ),
+                  }}
+                />
+                {newAddendumData && newAddendumData.id && !showEditor
+                  ? ''
+                  : displayEditor()}
+                {showEditor ? (
+                  ''
+                ) : (
+                  <p
+                    className="long-text"
+                    dangerouslySetInnerHTML={{
+                      __html: newAddendumData && newAddendumData.addendum,
+                    }}
+                  />
+                )}
 
-                    <p
-                      className="long-text"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          data.addendum &&
-                          data.addendum[1]
-                            .replace(
-                              'CUSTOMER_NAME',
-                              mapDefaultValues(
-                                'contract_company_name',
-                                'Customer Name',
-                              ),
-                            )
-                            .replace(
-                              'AGREEMENT_DATE',
-                              mapDefaultValues('start_date', 'Start Date'),
-                            )
-                            .replace(
-                              'BBE_DATE',
-                              mapDefaultValues('current_date', 'Current Date'),
-                            ),
-                      }}
-                    />
-                  </Paragraph>
-                </div>
-              </div>
+                <p
+                  className="long-text"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      data.addendum &&
+                      data.addendum[1]
+                        .replace(
+                          'CUSTOMER_NAME',
+                          mapDefaultValues(
+                            'contract_company_name',
+                            'Customer Name',
+                          ),
+                        )
+                        .replace(
+                          'AGREEMENT_DATE',
+                          mapDefaultValues('start_date', 'Start Date'),
+                        )
+                        .replace(
+                          'BBE_DATE',
+                          mapDefaultValues('current_date', 'Current Date'),
+                        ),
+                  }}
+                />
+              </Paragraph>
             </div>
 
             <AgreementSidePanel
@@ -975,7 +971,7 @@ const Paragraph = styled.div`
 `;
 
 const Footer = styled.div`
-  border: 1px solid ${Theme.gray15};
+  border: 1px solid ${Theme.gray6};
   bottom: 0;
   width: 100%;
   background: #fff;

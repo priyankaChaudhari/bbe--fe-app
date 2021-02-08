@@ -152,6 +152,7 @@ const Button = styled.button`
     background: transparent;
     color: ${Theme.orange};
     font-size: ${Theme.Small};
+    cursor: pointer;
 
     .add-new-icon {
       vertical-align: top;
