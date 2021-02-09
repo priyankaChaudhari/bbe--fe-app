@@ -232,6 +232,7 @@ export default function EditAccountDetails({
 
 EditAccountDetails.defaultProps = {
   id: '',
+  agreement: {},
 };
 
 EditAccountDetails.propTypes = {
@@ -242,5 +243,5 @@ EditAccountDetails.propTypes = {
   }).isRequired,
   agreement: PropTypes.shape({
     id: PropTypes.string,
-  }).isRequired,
+  }),
 };

@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -29,7 +29,12 @@ import {
   getContactDetails,
   getCustomerDetails,
 } from '../../store/actions/customerState';
-import { AgreementDetails, CompanyDetail, EditAccountDetails } from './index';
+import {
+  AgreementDetails,
+  CompanyDetail,
+  CustomerStatus,
+  EditAccountDetails,
+} from './index';
 import CompanyPerformance from './CompanyPerformance';
 import Activity from './Activity';
 import {
@@ -39,6 +44,7 @@ import {
   getDocumentList,
 } from '../../api';
 import { AddTeamMember, EditTeamMember } from '../Team/index';
+import { PATH_CUSTOMER_LIST } from '../../constants';
 
 const customStyles = {
   content: {
@@ -77,7 +83,16 @@ export default function CustomerMainContainer() {
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
   const [amazonDetails, setAmazonDetails] = useState([]);
-  console.log(showSuccessMsg);
+  const [statusModal, setStatusModal] = useState({
+    show: false,
+    type: '',
+  });
+
+  let statusActions = [
+    { value: 'active', label: 'Activate' },
+    { value: 'at risk', label: 'Place at risk' },
+    { value: 'inactive', label: 'Inactivate' },
+  ];
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -86,6 +101,7 @@ export default function CustomerMainContainer() {
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
+  console.log(showSuccessMsg);
 
   const getActivityLogInfo = useCallback(
     (currentPage) => {
@@ -177,6 +193,42 @@ export default function CustomerMainContainer() {
     getActivityLogInfo(currentPage);
   };
 
+  const checkStatus = () => {
+    if (customer && customer.status) {
+      statusActions = statusActions.filter(
+        (op) => op.value !== customer.status.value,
+      );
+    }
+  };
+
+  const checkStatusColor = () => {
+    if (customer && customer.status) {
+      if (customer.status.value === 'inactive') {
+        return 'dropdown company-status inactive';
+      }
+      if (customer.status.value === 'pending cancellation') {
+        return 'dropdown company-status pending';
+      }
+      if (customer.status.value === 'at risk') {
+        return 'dropdown company-status risk';
+      }
+      return 'dropdown company-status';
+    }
+    return '';
+  };
+
+  // window.addEventListener('click', (e) => {
+  //   console.log(e.target);
+  //   if (
+  //     document.getElementById('clickbox') &&
+  //     document.getElementById('clickbox').contains(e.target)
+  //   ) {
+  //     setShowDropDown(true);
+  //   } else {
+  //     setShowDropDown(false);
+  //   }
+  // });
+
   return (
     <>
       {loader || (isLoading.loader && isLoading.type === 'page') ? (
@@ -185,9 +237,11 @@ export default function CustomerMainContainer() {
         <>
           <BackBtn className="d-lg-none d-block ">
             <div className="back-btn-link  ">
-              {' '}
-              <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back to
-              all customers
+              <Link to={PATH_CUSTOMER_LIST}>
+                {' '}
+                <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
+                to all customers
+              </Link>
             </div>
           </BackBtn>
           <CustomerDetailBanner>
@@ -226,28 +280,41 @@ export default function CustomerMainContainer() {
                       /> */}
                     </div>
                   </div>
-                  <div className="col-lg-9 col-md-12 ">
+                  <div className="col-lg-9 col-md-12">
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
                     </span>
                     <span
-                      className="dropdown company-status "
+                      id="clickbox"
+                      className={checkStatusColor()}
                       onClick={() => {
                         setShowDropDown(!showDropDown);
                         setShowSuccessMsg({ show: false });
                       }}
                       role="presentation">
-                      <span id="clickbox">
-                        Active <img src={ExpandArrowIcon} alt="aarow-down" />
-                        <ul
-                          className="dropdown-content-status"
-                          style={{ display: showDropDown ? 'block' : 'none' }}>
-                          <li role="presentation">Pending</li>
-                          <li role="presentation">Inactive</li>
-                          <li role="presentation"> Risk</li>
-                        </ul>
-                      </span>
+                      {customer && customer.status && customer.status.label}
+                      <img src={ExpandArrowIcon} alt="aarow-down" />
                     </span>
+                    <ul
+                      id="clickbox"
+                      className="dropdown-content-status"
+                      style={{ display: showDropDown ? 'block' : 'none' }}>
+                      {checkStatus()}
+
+                      {statusActions.map((item) => (
+                        <li
+                          role="presentation"
+                          onClick={() =>
+                            setStatusModal({
+                              show: true,
+                              type: item.value,
+                            })
+                          }
+                          key={item.value}>
+                          {item.label}
+                        </li>
+                      ))}
+                    </ul>
 
                     <div
                       className=" edit-details edit-brand-details "
@@ -524,33 +591,6 @@ export default function CustomerMainContainer() {
                   />
                 )}
               </div>
-              {viewComponent === 'agreement' ? (
-                <AgreementDetails agreement={agreement} id={id} />
-              ) : viewComponent === 'company' ? (
-                <CompanyDetail
-                  customer={customer}
-                  amazonDetails={amazonDetails}
-                  seller={
-                    agreement &&
-                    agreement.seller_type &&
-                    agreement.seller_type.value
-                  }
-                  id={id}
-                />
-              ) : viewComponent === 'performance' ? (
-                <CompanyPerformance />
-              ) : (
-                <Activity
-                  activityData={activityData}
-                  getActivityInitials={getActivityInitials}
-                  activityDetail={activityDetail}
-                  isLoading={isLoading}
-                  images={images}
-                  handlePageChange={handlePageChange}
-                  count={activityCount}
-                  pageNumber={pageNumber || 1}
-                />
-              )}
             </CustomerBody>
           </CustomerDetailBanner>
         </>
@@ -605,6 +645,26 @@ export default function CustomerMainContainer() {
             setShowModal={setShowModal}
           />
         </ModalBox>
+      </Modal>
+      <Modal
+        isOpen={statusModal.show}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Status modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setStatusModal({ ...statusModal, show: false })}
+          role="presentation"
+        />
+        <CustomerStatus
+          type={statusModal.type}
+          setStatusModal={setStatusModal}
+          id={id}
+          status={customer && customer.status && customer.status.value}
+          setShowSuccessMsg={setShowSuccessMsg}
+        />
       </Modal>
     </>
   );
