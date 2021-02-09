@@ -26,7 +26,7 @@ export default function Activity({
             <>
               <p className="black-heading-title mt-0 mb-4"> Recent Activity</p>
               {activityData.map((item) => (
-                <GroupUser className="mt-4" key={Math.random()}>
+                <GroupUser className="mb-2" key={Math.random()}>
                   {images.find((op) => op.entity_id === item.user_id) &&
                   images.find((op) => op.entity_id === item.user_id)
                     .presigned_url ? (

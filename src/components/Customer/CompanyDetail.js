@@ -162,7 +162,8 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
                   <div className="copy-info" key={market.key}>
                     <div className="label mt-3">{market.label || ''}</div>
                     <div className="label-info">
-                      {amazonDetails[market.key] || `No ${market.label}.`}
+                      {(amazonDetails && amazonDetails[market.key]) ||
+                        `No ${market.label}.`}
                     </div>
 
                     <div
@@ -186,7 +187,8 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
                       <img className="info-icon" src={InfoIcons} alt="" />
                     </div>
                     <div className="label-info">
-                      {amazonDetails[item.key] || `No ${item.label}.`}
+                      {(amazonDetails && amazonDetails[item.key]) ||
+                        `No ${item.label}.`}
                     </div>
                     {/* <div className="phone-number">+1 592 559 2950</div> */}
                     <div className="straight-line horizontal-line pt-3 mb-3" />
