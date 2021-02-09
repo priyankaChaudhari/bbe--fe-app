@@ -22,7 +22,7 @@ const Theme = {
   // gray90: '#2E384D',
   // gray80: '#333333',
   // gray70: '#8097B1',
-  // gray60: '#69707F',
+
   // gray35: '#8798AD',
   // gray30: ' #b0bac9',
   // gray25: '#BFC5D2',
@@ -34,7 +34,7 @@ const Theme = {
   // gray7: '#e4e8f0',
   // gray6: '#fafafb',
   // gray5: '#EFF2FF',
-
+  gray60: '#69707F',
   gray90: '#2E384D',
   gray85: '#171725',
   gray80: '#333333',

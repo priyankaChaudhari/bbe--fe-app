@@ -24,6 +24,7 @@ export default function EditAccountDetails({
   customer,
   agreement,
   setShowModal,
+  setDocumentImage,
 }) {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
@@ -173,7 +174,11 @@ export default function EditAccountDetails({
                 src={EditIcons}
                 alt="edit"
               /> */}
-            <CropUploadImage type="customer" />
+            <CropUploadImage
+              type="customer"
+              id={customer.id}
+              setDocumentImage={setDocumentImage}
+            />
 
             {editAccountFields.map((item) => (
               <div className={item.property} key={item.key}>
@@ -232,6 +237,8 @@ export default function EditAccountDetails({
 
 EditAccountDetails.defaultProps = {
   id: '',
+  agreement: {},
+  setDocumentImage: [],
 };
 
 EditAccountDetails.propTypes = {
@@ -242,5 +249,6 @@ EditAccountDetails.propTypes = {
   }).isRequired,
   agreement: PropTypes.shape({
     id: PropTypes.string,
-  }).isRequired,
+  }),
+  setDocumentImage: PropTypes.arrayOf(PropTypes.object),
 };

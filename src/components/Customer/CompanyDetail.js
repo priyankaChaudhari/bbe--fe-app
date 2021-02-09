@@ -19,11 +19,12 @@ import {
   AmazonMarketplaceDetails,
 } from '../../constants/FieldConstants';
 import { GetInitialName } from '../../common';
-import EditCompanyDetails from './EditAccountDetails';
+import EditCompanyDetails from './EditCompanyDetails';
 
 export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
   const contactInfo = useSelector((state) => state.customerState.contactData);
-  const [showModal, setShowModal] = useState({ modal: false, type: '' });
+  // const [showModal, setShowModal] = useState({ modal: false, type: '' });
+  const [showModal, setShowModal] = useState(false);
 
   const customStyles = {
     content: {
@@ -81,13 +82,12 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
           </div>
           <div
             className=" edit-details"
-            onClick={() => setShowModal({ modal: true, type: 'description' })}
+            onClick={() => setShowModal(true)}
             role="presentation">
             <img src={EditOrangeIcon} alt="" />
             Edit
           </div>
         </WhiteCard>
-
         <div className="row mt-3">
           <div className="col-lg-6 col-md-6 col-12">
             <WhiteCard>
@@ -97,7 +97,7 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
               </p>
               <div
                 className="edit-details"
-                onClick={() => setShowModal({ modal: true, type: 'brand' })}
+                onClick={() => setShowModal(true)}
                 role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
@@ -108,7 +108,7 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
               <p className="black-heading-title mt-0">Contact Info</p>
               <div
                 className="edit-details"
-                onClick={() => setShowModal({ modal: true, type: 'social' })}
+                onClick={() => setShowModal(true)}
                 role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
@@ -153,7 +153,10 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
           <div className="col-lg-6 col-md-6 col-12">
             <WhiteCard>
               <p className="black-heading-title mt-0 ">Amazon Credentials</p>
-              <div className="edit-details">
+              <div
+                className="edit-details"
+                onClick={() => setShowModal(true)}
+                role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
@@ -237,40 +240,44 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
             </WhiteCard>
           </div>
         </div>
+        <Modal
+          isOpen={showModal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <img
+            src={CloseIcon}
+            alt="close"
+            className="float-right cursor cross-icon"
+            onClick={() => setShowModal(false)}
+            role="presentation"
+          />
+          <EditCompanyDetails
+            setShowModal={setShowModal}
+            id={id}
+            customer={customer}
+            showModal={showModal}
+            amazonDetails={amazonDetails}
+          />
+        </Modal>
       </div>
-
-      <Modal
-        isOpen={showModal.modal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Add team modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowModal({ modal: false })}
-          role="presentation"
-        />
-        <EditCompanyDetails
-          setShowModal={setShowModal}
-          id={id}
-          customer={customer}
-          showModal={showModal}
-          amazonDetails={amazonDetails}
-        />
-      </Modal>
     </>
   );
 }
 
+CompanyDetail.defaultProps = {
+  id: '',
+  amazonDetails: [],
+};
+
 CompanyDetail.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   customer: PropTypes.shape({
     id: PropTypes.string,
     description: PropTypes.string,
     brand: PropTypes.string,
     phone_number: PropTypes.string,
   }).isRequired,
-  amazonDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
+  amazonDetails: PropTypes.arrayOf(PropTypes.object),
   seller: PropTypes.string.isRequired,
 };

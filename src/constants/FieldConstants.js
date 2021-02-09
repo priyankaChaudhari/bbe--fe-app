@@ -290,35 +290,6 @@ export const editCompanyFields = [
     type: 'textarea',
     property: 'col-md-12',
   },
-
-  {
-    key: 'country',
-    label: 'Country',
-    property: 'col-md-6',
-    type: 'choice',
-  },
-  { key: 'timezone', label: 'Time Zone', property: 'col-md-6 ' },
-  {
-    key: 'address',
-    label: 'Address',
-    property: 'col-md-12',
-  },
-  {
-    key: 'city',
-    label: 'City',
-    property: 'col-md-6 ',
-  },
-  {
-    key: 'state',
-    label: 'State',
-    property: 'col-md-6',
-  },
-  {
-    key: 'zip_code',
-    label: 'Post code',
-    property: 'col-md-6',
-    type: 'number',
-  },
   { key: 'brand', label: 'Brands', property: 'col-md-6' },
   { key: 'phone_number', label: 'Phone', property: 'col-md-12', type: 'text' },
   {

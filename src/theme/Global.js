@@ -519,6 +519,17 @@ export const WhiteCard = styled.div`
       cursor:pointer;
       position:relative;
 
+    &.inactive {
+      background-color: ${Theme.gray60};
+    }
+    &.pending {
+      background-color: ${Theme.yellow};
+      color: ${Theme.black};
+    }
+    &.risk {
+      background-color: #d63649;
+    }
+
       img{
         vertical-align: middle;
         width: 17px;

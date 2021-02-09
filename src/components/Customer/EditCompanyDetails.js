@@ -1,10 +1,9 @@
 /* eslint-disable no-lonely-if */
 /* eslint jsx-a11y/label-has-associated-control: ["error", { assert: "either" } ] */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
@@ -23,17 +22,13 @@ import {
   // AddIcons,
   DefaultUser,
   SaveIcon,
-  SortDownIcon,
   AddNewIcons,
   TrashIcons,
   NoContactIcon,
   InfoIcon,
 } from '../../theme/images/index';
-import InputSelect from '../../common/InputSelect';
 import {
   updateCustomerDetails,
-  getCategories,
-  getCountry,
   updateContactInfo,
   createContactInfo,
   deleteContactInfo,
@@ -53,16 +48,12 @@ export default function EditCompanyDetails({
   setShowModal,
   id,
   setShowSuccessMsg,
-  showModal,
   amazonDetails,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [countries, setCountries] = useState([]);
   const [apiError, setApiError] = useState({});
-  const [disableState, setDisableState] = useState(true);
   const [formData, setFormData] = useState({});
-  const [categories, setCategories] = useState([]);
   const detail = useSelector((state) => state.customerState.data);
   const [contactFormData, setContactFormData] = useState({});
   const [contactApiError, setContactApiError] = useState({});
@@ -84,38 +75,6 @@ export default function EditCompanyDetails({
   const contactInfo = useSelector((state) => state.customerState.contactData);
   const loader = useSelector((state) => state.customerState.isLoading);
   const agreement = useSelector((state) => state.accountState.data);
-
-  const CustomDropdownIndicator = (props) => {
-    return (
-      <components.DropdownIndicator {...props}>
-        <img src={SortDownIcon} alt="sort" style={{ width: '78%' }} />
-      </components.DropdownIndicator>
-    );
-  };
-
-  useEffect(() => {
-    setShowSuccessMsg({ show: false });
-    setIsLoading({ loader: true, type: 'page' });
-    getCountry().then((response) => {
-      setCountries(response.data);
-    });
-    getCategories().then((category) => {
-      setCategories(category.data);
-    });
-
-    setIsLoading({ loader: false, type: 'page' });
-  }, [detail, id, setShowSuccessMsg]);
-
-  const handleSelectChange = (event, key) => {
-    setShowBtn(true);
-    setDisableState(false);
-    setFormData({ ...formData, [key]: event.value });
-
-    setApiError({
-      ...apiError,
-      [key]: '',
-    });
-  };
 
   const clearSocialURL = (key) => {
     setIsLoading({ loader: true, type: 'page' });
@@ -284,38 +243,7 @@ export default function EditCompanyDetails({
     );
   };
 
-  const generateDropdown = (item) => {
-    return (
-      <Select
-        classNamePrefix="react-select"
-        options={item.key === 'country' ? countries : categories}
-        styles={{
-          option: (provided, state) => {
-            return {
-              ...provided,
-              color: state.isSelected ? '#FF5933' : '#2E384D',
-              background: 'white',
-
-              ':hover': {
-                background: '#F9FAFF',
-                cursor: 'pointer',
-              },
-            };
-          },
-        }}
-        name={item.key}
-        onChange={(event) => handleSelectChange(event, item.key)}
-        defaultValue={detail && detail[item.key]}
-        isDisabled={item.key === 'state' && disableState}
-        components={{ DropdownIndicator: CustomDropdownIndicator }}
-      />
-    );
-  };
-
   const generateHTML = (item) => {
-    if (item.type === 'choice') {
-      return <InputSelect>{generateDropdown(item)}</InputSelect>;
-    }
     if (item.type === 'textarea') {
       return generateTextArea(item);
     }
@@ -368,12 +296,12 @@ export default function EditCompanyDetails({
       updateAccountDetails(agreement.id, formData).then((res) => {
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
-          setDisableState(true);
+
           setApiError(res && res.data);
           setShowModal(true);
         } else if (res && res.status === 200) {
           setIsLoading({ loader: false, type: 'button' });
-          setDisableState(true);
+
           dispatch(getAccountDetails(detail.id));
           dispatch(getCustomerDetails(detail.id));
           setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
@@ -385,13 +313,13 @@ export default function EditCompanyDetails({
     updateCustomerDetails(detail.id, formData).then((response) => {
       if (response && response.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-        setDisableState(true);
+
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
         dispatch(getCustomerDetails(detail.id));
-        setDisableState(true);
+
         setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
         setShowModal(false);
       }
@@ -705,15 +633,6 @@ export default function EditCompanyDetails({
     return fields;
   };
 
-  $(`#${showModal.type}`).click(() => {
-    $(`#${showModal.type}`).animate(
-      {
-        scrollTop: $(`#${showModal.type}`).offset().top,
-      },
-      2000,
-    );
-  });
-
   return (
     <ModalBox>
       <div className="modal-body ">
@@ -742,13 +661,7 @@ export default function EditCompanyDetails({
                 {item.type !== 'social' ? (
                   <div className={item.property} id={item.key}>
                     <FormField className="mt-3">
-                      <label
-                        htmlFor={item.id}
-                        className={
-                          showModal.type === item.key
-                            ? 'blinkSelectedField'
-                            : ''
-                        }>
+                      <label htmlFor={item.id}>
                         {item.label}
                         <br />
                         {generateHTML(item)}
@@ -854,7 +767,6 @@ export default function EditCompanyDetails({
 EditCompanyDetails.defaultProps = {
   id: '',
   setShowSuccessMsg: () => {},
-  showModal: false,
 };
 
 EditCompanyDetails.propTypes = {
@@ -862,7 +774,4 @@ EditCompanyDetails.propTypes = {
   id: PropTypes.string,
   setShowSuccessMsg: PropTypes.func,
   amazonDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
-  showModal: PropTypes.shape({
-    type: PropTypes.bool,
-  }),
 };
