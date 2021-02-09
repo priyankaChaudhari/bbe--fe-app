@@ -21,6 +21,7 @@ import {
   CompanyDefaultUser,
   EditIcons,
   LeftArrowIcon,
+  ExpandArrowIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import { ModalBox, PageLoader, GetInitialName } from '../../common';
@@ -57,6 +58,7 @@ const customStyles = {
 
 export default function CustomerMainContainer() {
   const { id } = useParams();
+  const [showDropDown, setShowDropDown] = useState(false);
   const dispatch = useDispatch();
   const agreement = useSelector((state) => state.accountState.data);
   const loader = useSelector((state) => state.accountState.isLoading);
@@ -226,10 +228,28 @@ export default function CustomerMainContainer() {
                     </div>
                   </div>
                   <div className="col-lg-9 col-md-12 ">
-                    <div className="brand-name mb-2">
+                    <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
-                      <span>Active</span>
-                    </div>
+                    </span>
+                    <span
+                      className="dropdown company-status "
+                      onClick={() => {
+                        setShowDropDown(!showDropDown);
+                        setShowSuccessMsg({ show: false });
+                      }}
+                      role="presentation">
+                      <span id="clickbox">
+                        Active <img src={ExpandArrowIcon} alt="aarow-down" />
+                      </span>
+                    </span>
+                    <ul
+                      className="dropdown-content-status"
+                      style={{ display: showDropDown ? 'block' : 'none' }}>
+                      <li role="presentation">Pending</li>
+                      <li role="presentation">Inactive</li>
+                      <li role="presentation"> Risk</li>
+                    </ul>
+
                     <div
                       className=" edit-details edit-brand-details "
                       onClick={() => setShowModal(true)}
@@ -238,7 +258,7 @@ export default function CustomerMainContainer() {
                       Edit
                     </div>
 
-                    <div className="row">
+                    <div className="row mt-2">
                       <div className="col-lg-4 col-12">
                         <div className="company-label-info text-left">
                           {agreement && agreement.address
@@ -323,7 +343,7 @@ export default function CustomerMainContainer() {
 
               <div className="row">
                 <div className="col-lg-4 col-12">
-                  <WhiteCard className="left-border order-2 order-lg-1 d-lg-block d-none">
+                  <WhiteCard className="left-border order-2 order-lg-1 d-lg-block d-none mb-3">
                     <ul className="left-details-card">
                       <li
                         onClick={() => setViewComponent('company')}

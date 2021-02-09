@@ -507,15 +507,56 @@ export const WhiteCard = styled.div`
     font-size: 32px;
     font-weight: 500;
 
-    span {
+  
+  }
+   .company-status {
       background: ${Theme.darkGreen};
       border-radius: 19px;
-      padding: 3px 15px;
+      padding: 3px 10px;
       color: ${Theme.gray6};
       font-size: ${Theme.extraNormal};
       margin-left: 15px;
+      cursor:pointer;
+
+      img{
+        vertical-align: middle;
+        width: 17px;
+        margin-left: 4px;
+        margin-bottom:2px;
+      }
     }
-  }
+
+    .dropdown-content-status {
+    
+      display: none;
+      position: absolute;
+      width: 220px;
+      box-shadow: ${Theme.commonShadow};
+      padding: 0px;
+      z-index: 999999;
+      text-align: left;
+      background: ${Theme.white};
+      border: 1px solid ${Theme.gray9};
+      border-radius:8px;
+      margin-top: 8px;
+      margin-left: 211px;
+
+      li {
+        list-style-type: none;
+        padding-bottom: 10px;
+        font-size: ${Theme.normal};
+        color: ${Theme.gray90};
+        padding: 15px ;
+        cursor: pointer;
+        width: 100%;
+        text-align:left;
+
+        &:hover {
+          background: ${Theme.gray8};
+        }
+      }
+  
+    }
   .brand-logo {
      position:relative;
       
