@@ -20,11 +20,11 @@ const InputSelect = styled.div`
 
     .css-g1d714-ValueContainer {
       color: ${Theme.gray30};
-      font-size: 13px;
+      font-size: 15px;
 
       .css-1wa3eu0-placeholder {
         color: ${Theme.gray30};
-        font-size: 13px;
+        font-size: 15px;
         text-transform: none;
       }
     }
@@ -40,6 +40,7 @@ const InputSelect = styled.div`
     background-color: rgba(224, 231, 255, 0.2);
     border: 1px solid ${Theme.gray10} !important;
     outline: none;
+    font-size: 15px;
   }
 `;
 

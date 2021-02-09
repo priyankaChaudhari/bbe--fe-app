@@ -74,7 +74,10 @@ export default function AuthenticationComponent() {
     )
       return (
         <>
-          <Header />
+          <div className="common-header-sticky">
+            <Header />
+          </div>
+
           <LeftSideBar />
         </>
       );

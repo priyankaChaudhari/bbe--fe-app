@@ -41,13 +41,14 @@ body {
   background-color: $white-color;
   height: 100%;
   margin: 0;
-  padding-top: 70px;
 
   // @media only screen and (max-width: 1920px) {
   //   font-size: $medium-f-size;
   // }
 }
-
+.common-header-sticky {
+  padding-top: 70px;
+}
 .container-fluid {
   height: 100%;
 }
@@ -998,8 +999,8 @@ div {
 }
 
 .text-container {
-  padding-right: 320px;
-  padding-left: 75px;
+  padding-right: 360px;
+  padding-left: 120px;
 
   @media only screen and (min-width: 1500px) {
     padding-right: 450px;

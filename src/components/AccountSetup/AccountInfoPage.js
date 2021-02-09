@@ -42,12 +42,12 @@ export default function AccountInfoPage({
   };
 
   return (
-    <div>
+    <>
       <AccountModal>
         <div className="modal-container" />
       </AccountModal>
       {generateHTML()}
-    </div>
+    </>
   );
 }
 
@@ -71,13 +71,14 @@ const AccountModal = styled.div`
 
 const BackgroundBlack = styled.div`
   background: url(${blackBg});
-  height: 100%;
+  height: 100vh;
   .logo {
     position: relative;
     width: 100%;
     max-width: 330px;
     margin: 0 auto;
-    padding: 20px 0 30px 0;
+    padding: 20px 75px 30px 0;
+
     .header-logo {
       width: 185px;
       display: inline-table;

@@ -345,11 +345,11 @@ const UpdateProfile = styled.div`
   }
 
     .edit-account {
+        top: 134px;
         width: 45px;
         height: 45px;
         position: absolute;
-        bottom: -11px;
-        left: 102px;
+        left: 98px;
         padding: 10px;
         border-radius: 50%;
         background: white;
@@ -401,7 +401,6 @@ const UpdateProfile = styled.div`
       top: 0;
       height: 100%;
       font-size: 24px;
-      // width: 100%;
     }
   }
 

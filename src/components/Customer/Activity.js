@@ -40,7 +40,7 @@ export default function Activity({
                       alt="pic"
                     />
                   ) : (
-                    <div className="avatarName">
+                    <div className="avatarName float-left mr-3">
                       {getActivityInitials(item.message)}
                     </div>
                   )}

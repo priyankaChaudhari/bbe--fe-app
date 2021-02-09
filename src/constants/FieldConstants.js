@@ -344,7 +344,7 @@ export const editAccountFields = [
   {
     key: 'contract_company_name',
     label: 'Company Name',
-    property: 'col-12',
+    property: 'col-9',
     type: 'text',
     level: 'agreement',
   },

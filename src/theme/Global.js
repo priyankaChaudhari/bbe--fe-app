@@ -517,6 +517,7 @@ export const WhiteCard = styled.div`
       font-size: ${Theme.extraNormal};
       margin-left: 15px;
       cursor:pointer;
+      position:relative;
 
       img{
         vertical-align: middle;
@@ -533,19 +534,19 @@ export const WhiteCard = styled.div`
       width: 220px;
       box-shadow: ${Theme.commonShadow};
       padding: 0px;
-      z-index: 999999;
+      z-index:2;
       text-align: left;
       background: ${Theme.white};
       border: 1px solid ${Theme.gray9};
       border-radius:8px;
       margin-top: 8px;
-      margin-left: 211px;
+      left: 20px;
 
       li {
         list-style-type: none;
         padding-bottom: 10px;
-        font-size: ${Theme.normal};
-        color: ${Theme.gray90};
+        font-size: ${Theme.extraMedium};
+        color: ${Theme.black};
         padding: 15px ;
         cursor: pointer;
         width: 100%;
@@ -561,27 +562,13 @@ export const WhiteCard = styled.div`
      position:relative;
       
     img {
-    border: 8px solid ${Theme.gray6};
-    border-radius: 20px;
-    margin-top: -65px;
-    max-width: 170px;
-    height: 170px;
-    margin-left: 50px;
+      border: 8px solid ${Theme.gray6};
+      border-radius: 20px;
+      margin-top: -65px;
+      max-width: 170px;
+      height: 170px;
+      margin-left: 50px;
     }
-    .edit-profile-picture {
-    background: #f0f2fc;
-    border-radius: 18px;
-    border: 3px solid white;
-    position: absolute;
-    left:0;
-    top: 132px;
-    width:50px;
-    height:50px;
-    padding: 5px;
-    cursor:pointer;
-  }
-  
-   
   }
 
   .edit-details {
@@ -894,7 +881,10 @@ export const GroupUser = styled.div`
     color: ${Theme.black};
     font-weight: 500;
     line-height: 16px;
-
+    overflow-wrap: break-word;
+    text-align: left;
+    float: left;
+    width: 80%;
     span {
       color: ${Theme.gray35};
       font-weight: 500;
@@ -910,7 +900,7 @@ export const GroupUser = styled.div`
     height: 42px;
     border-radius: 50%;
     float: left;
-    margin-right: 10px;
+    margin-right: 15px;
     margin-top: -2px;
   }
 
@@ -919,6 +909,7 @@ export const GroupUser = styled.div`
     font-size: ${Theme.extraNormal};
     font-weight: 500;
     text-align: left;
+    overflow-wrap: break-word;
   }
   .user-email-address {
     color: ${Theme.gray85};

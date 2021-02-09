@@ -112,6 +112,7 @@ import InstagramIcon from './icons/instagram-icon.svg';
 import TwitterIcon from './icons/twitter-icon.svg';
 import SliderHIcon from './icons/slider-h-icon.png';
 import ExpandArrowIcon from './icons/expand-arrow-icon.png';
+import GreyBannerBg from './grey-bg.jpg';
 
 export {
   BannerBg,
@@ -228,4 +229,5 @@ export {
   TwitterIcon,
   SliderHIcon,
   ExpandArrowIcon,
+  GreyBannerBg,
 };

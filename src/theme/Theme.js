@@ -40,6 +40,7 @@ const Theme = {
   gray80: '#333333',
   gray40: '#556178',
   gray35: '#8798AD',
+  gray25: '#BFC5D2',
   gray10: '#E0E7FF',
   gray9: '#dee2ed',
   gray8: '#F4F6FC',
