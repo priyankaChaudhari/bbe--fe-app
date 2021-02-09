@@ -179,43 +179,45 @@ export default function ContactDetails({ contactInfo, userInfo }) {
 
           <p className="account-steps">Step 2 of 4</p>
           <h3 className="page-heading mb-4">Company’s contacts</h3>
-          {contactInfo &&
-            contactInfo.map((item) => (
-              <GreyCard key={item.id} className="mt-4">
-                <div className="contact-user-name capitalize">
-                  {item.first_name} {item.last_name}
-                </div>
-                <span className="user-details capitalize"> {item.role}</span>
-                <img
-                  className="delete-contact cursor"
-                  src={TrashIcons}
-                  alt="delete"
-                  role="presentation"
-                  onClick={() => deleteContact(item.id)}
-                />
-                <img
-                  className="edit-contact cursor"
-                  src={EditFileIcons}
-                  alt="edit"
-                  role="presentation"
-                  onClick={() => editContact(item.id)}
-                />
-                <div className="row mt-2">
-                  <div className="col-6 ">
-                    <span className="user-details">
-                      <img src={EmailIcon} alt="email" />
-                      {item.email}
-                    </span>
+          <div className="company-contact-height">
+            {contactInfo &&
+              contactInfo.map((item) => (
+                <GreyCard key={item.id} className="mt-4">
+                  <div className="contact-user-name capitalize">
+                    {item.first_name} {item.last_name}
                   </div>
-                  <div className="col-6">
-                    <span className="user-details">
-                      <img src={PhoneIcon} alt="email" />
-                      {item.phone_number}
-                    </span>
+                  <span className="user-details capitalize"> {item.role}</span>
+                  <img
+                    className="delete-contact cursor"
+                    src={TrashIcons}
+                    alt="delete"
+                    role="presentation"
+                    onClick={() => deleteContact(item.id)}
+                  />
+                  <img
+                    className="edit-contact cursor"
+                    src={EditFileIcons}
+                    alt="edit"
+                    role="presentation"
+                    onClick={() => editContact(item.id)}
+                  />
+                  <div className="row mt-2">
+                    <div className="col-6 ">
+                      <span className="user-details">
+                        <img src={EmailIcon} alt="email" />
+                        {item.email}
+                      </span>
+                    </div>
+                    <div className="col-6">
+                      <span className="user-details">
+                        <img src={PhoneIcon} alt="email" />
+                        {item.phone_number}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </GreyCard>
-            ))}
+                </GreyCard>
+              ))}
+          </div>
           <Button
             className="btn-add-contact"
             onClick={() => {

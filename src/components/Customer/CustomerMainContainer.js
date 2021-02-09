@@ -10,7 +10,6 @@ import ReactTooltip from 'react-tooltip';
 
 import Theme from '../../theme/Theme';
 import {
-  BannerImg,
   EditOrangeIcon,
   FileContract,
   Organization,
@@ -19,9 +18,9 @@ import {
   DefaultUser,
   CloseIcon,
   CompanyDefaultUser,
-  EditIcons,
   LeftArrowIcon,
   ExpandArrowIcon,
+  GreyBannerBg,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import { ModalBox, PageLoader, GetInitialName } from '../../common';
@@ -220,11 +219,11 @@ export default function CustomerMainContainer() {
                           alt="company-logo"
                         />
                       )}
-                      <img
+                      {/* <img
                         className="edit-profile-picture"
                         src={EditIcons}
                         alt="edit"
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="col-lg-9 col-md-12 ">
@@ -240,15 +239,15 @@ export default function CustomerMainContainer() {
                       role="presentation">
                       <span id="clickbox">
                         Active <img src={ExpandArrowIcon} alt="aarow-down" />
+                        <ul
+                          className="dropdown-content-status"
+                          style={{ display: showDropDown ? 'block' : 'none' }}>
+                          <li role="presentation">Pending</li>
+                          <li role="presentation">Inactive</li>
+                          <li role="presentation"> Risk</li>
+                        </ul>
                       </span>
                     </span>
-                    <ul
-                      className="dropdown-content-status"
-                      style={{ display: showDropDown ? 'block' : 'none' }}>
-                      <li role="presentation">Pending</li>
-                      <li role="presentation">Inactive</li>
-                      <li role="presentation"> Risk</li>
-                    </ul>
 
                     <div
                       className=" edit-details edit-brand-details "
@@ -343,7 +342,7 @@ export default function CustomerMainContainer() {
 
               <div className="row">
                 <div className="col-lg-4 col-12">
-                  <WhiteCard className="left-border order-2 order-lg-1 d-lg-block d-none mb-3">
+                  <WhiteCard className="left-border  d-lg-block d-none mb-3">
                     <ul className="left-details-card">
                       <li
                         onClick={() => setViewComponent('company')}
@@ -400,7 +399,7 @@ export default function CustomerMainContainer() {
                       </li>
                     </ul>
                   </WhiteCard>
-                  <select className="customeer-dropdown-select d-lg-none d-block mb-3">
+                  <select className="customeer-dropdown-select d-lg-none d-block mb-3 order-3 ">
                     <option> Agreements</option>
                     <option> Company Details</option>
                     <option> Activity</option>
@@ -616,14 +615,14 @@ const CustomerDetailBanner = styled.div`
   .banner {
     height: 307px;
     padding-left: 62px;
-    background-image: url(${BannerImg});
+    background-image: url(${GreyBannerBg});
     background-position: top;
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
 
     .inner {
-      background: rgb(14 14 14 / 28%);
+      // background: rgb(14 14 14 / 28%);
       height: 100%;
       top: 0;
       max-width: 100%;

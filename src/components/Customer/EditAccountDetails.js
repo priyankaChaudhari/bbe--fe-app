@@ -18,6 +18,7 @@ import { editAccountFields } from '../../constants/FieldConstants';
 import { SortDownIcon } from '../../theme/images';
 import { getCustomerDetails } from '../../store/actions/customerState';
 import { getAccountDetails } from '../../store/actions/accountState';
+import CropUploadImage from '../../common/CropUploadImage';
 
 export default function EditAccountDetails({
   customer,
@@ -167,6 +168,13 @@ export default function EditAccountDetails({
         <h4>Edit Company Details</h4>
         <div className="body-content mt-2">
           <div className="row">
+            {/* <img
+                className="edit-profile-picture"
+                src={EditIcons}
+                alt="edit"
+              /> */}
+            <CropUploadImage type="customer" />
+
             {editAccountFields.map((item) => (
               <div className={item.property} key={item.key}>
                 <FormField className="mt-3">

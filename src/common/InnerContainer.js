@@ -49,6 +49,8 @@ const InnerContainer = styled.div`
       cursor: pointer;
       font-size: 13px;
       color: ${Theme.orange};
+      font-weight: 300;
+      font-family: ${Theme.baseFontFamily};
 
       &.watch-video {
         font-size: 13px;
@@ -89,38 +91,10 @@ const InnerContainer = styled.div`
       }
     }
   }
-  // .gray-card {
-  //   padding: 15px;
-  //   background: #f4f6fc;
-  //   position: relative;
-  //   .contact-user-name {
-  //     font-size: 17px;
-  //     color: ${Theme.gray90};
-  //   }
-
-  //   .user-details {
-  //     color: #8798ad;
-  //     font-size: 13px;
-
-  //     img {
-  //       width: 15px;
-  //       vertical-align: middle;
-  //       margin-right: 10px;
-  //     }
-  //   }
-  //   .delete-contact {
-  //     position: absolute;
-  //     width: 16px;
-  //     top: 15px;
-  //     right: 20px;
-  //   }
-  //   .edit-contact {
-  //     position: absolute;
-  //     top: 14px;
-  //     right: 50px;
-  //     width: 14px;
-  //   }
-  // }
+  .company-contact-height {
+    height: 420px;
+    overflow: auto;
+  }
 
   @media only screen and (max-width: 768px) {
     &.white-card-container {

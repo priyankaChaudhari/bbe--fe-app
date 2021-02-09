@@ -178,9 +178,12 @@ const ModalBox = styled.div`
       }
 
       .profile-photo {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
+        border: 8px solid #fafafb;
+          border-radius: 10px;
+          width: 120px;
+          height: 120px;
+          margin-left: 10px;
+          position: relative;
       }
 
       span {
@@ -197,10 +200,24 @@ const ModalBox = styled.div`
       .customer-company-profile {
         border: 8px solid ${Theme.gray6};
         border-radius: 10px;
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         margin-left: 10px;
-      }
+        position:relative;
+
+         .edit-profile-picture {
+            background: #f0f2fc;
+            border-radius: 18px;
+            border: 3px solid white;
+            position: absolute;
+            right: -25px;
+            top: 79px;
+            width:50px;
+            height:50px;
+            padding: 9px;
+            cursor:pointer;
+          }
+       }
 
       .drop-down {
         color: ${Theme.gray90};
