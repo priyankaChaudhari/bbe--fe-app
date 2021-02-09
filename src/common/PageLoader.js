@@ -19,7 +19,7 @@ const PageLoaderWrapper = styled.div`
 
   &.sidebar-loader {
     left: unset;
-    right: -65px;
+    right: 65px;
 
     svg {
       width: 40px;

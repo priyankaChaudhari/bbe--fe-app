@@ -97,111 +97,101 @@ export default function DSPAddendum() {
       {checkPermission() ? (
         <div>
           <div className="on-boarding-container">
-            <div className="row">
-              <div className="col-10 mb-5 pb-5">
-                <div className="text-container ">
-                  {/* <h3 className="mt-5 mb-4 text-center">
+            <div className="text-container ">
+              {/* <h3 className="mt-5 mb-4 text-center">
                 Amazon Demand Side Platform (DSP) Service Addendum
               </h3> */}
-                  {isLoading.loader && isLoading.type === 'page' ? (
-                    <PageLoader
-                      className="modal-loader"
-                      color="#FF5933"
-                      type="page"
-                      width={40}
-                    />
-                  ) : (
-                    <Paragraph>
-                      <>
-                        <p className="long-text">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                data.dsp_addendum &&
-                                data.dsp_addendum[0]
-                                  .replace(
-                                    'CUSTOMER_NAME',
-                                    mapDefaultValues(
-                                      'contract_company_name',
-                                      'Customer Name',
-                                    ),
-                                  )
-                                  .replace(
-                                    'START_DATE',
-                                    mapDefaultValues(
-                                      'start_date',
-                                      'Start Date',
-                                    ),
-                                  )
-                                  .replace(
-                                    'DSP_DETAIL_TABLE',
-                                    `<table class="contact-list " style="width: 100%;
+              {isLoading.loader && isLoading.type === 'page' ? (
+                <PageLoader
+                  className="modal-loader"
+                  color="#FF5933"
+                  type="page"
+                  width={40}
+                />
+              ) : (
+                <Paragraph>
+                  <>
+                    <p className="long-text">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            data.dsp_addendum &&
+                            data.dsp_addendum[0]
+                              .replace(
+                                'CUSTOMER_NAME',
+                                mapDefaultValues(
+                                  'contract_company_name',
+                                  'Customer Name',
+                                ),
+                              )
+                              .replace(
+                                'START_DATE',
+                                mapDefaultValues('start_date', 'Start Date'),
+                              )
+                              .replace(
+                                'DSP_DETAIL_TABLE',
+                                `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
-                                  )
-                                  .replace(
-                                    'BUDGET_BREAKDOWN_TABLE',
-                                    `<table class="contact-list " style="width: 100%;
+                              )
+                              .replace(
+                                'BUDGET_BREAKDOWN_TABLE',
+                                `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Jan 16, 2021 - Feb 28, 2021</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">March 2021</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">April 2021</th></tr>${mapBudgetBreakdownTable()}</table>`,
-                                  ),
-                            }}
-                          />
-                        </p>
-                        <p
-                          className="long-text"
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              data.dsp_addendum &&
-                              data.dsp_addendum[1]
-                                .replace(
-                                  'CUSTOMER_NAME',
-                                  mapDefaultValues(
-                                    'contract_company_name',
-                                    'Customer Name',
-                                  ),
-                                )
-                                .replace(
-                                  'AGREEMENT_DATE',
-                                  mapDefaultValues('start_date', 'Start Date'),
-                                )
-                                .replace(
-                                  'BBE_DATE',
-                                  mapDefaultValues(
-                                    'current_date',
-                                    'Current Date',
-                                  ),
-                                ),
-                            // .replace(
-                            //   'CUSTOMER_ADDRESS',
-                            //   mapDefaultValues('address', 'Address, '),
-                            // )
-                            // .replace(
-                            //   'CUSTOMER_CITY',
-                            //   mapDefaultValues('city', 'City, '),
-                            // )
-                            // .replace(
-                            //   'CUSTOMER_STATE',
-                            //   mapDefaultValues('state', 'State, '),
-                            // )
-                            // .replace(
-                            //   'CUSTOMER_POSTAL',
-                            //   mapDefaultValues('zip_code', 'Postal Code, '),
-                            // )
-                            // .replace(
-                            //   'BBE_DATE',
-                            //   mapDefaultValues('current_date', 'Current Date'),
-                            // ),
-                          }}
-                        />
-                      </>
-                    </Paragraph>
-                  )}
-                </div>
-              </div>
+                              ),
+                        }}
+                      />
+                    </p>
+                    <p
+                      className="long-text"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          data.dsp_addendum &&
+                          data.dsp_addendum[1]
+                            .replace(
+                              'CUSTOMER_NAME',
+                              mapDefaultValues(
+                                'contract_company_name',
+                                'Customer Name',
+                              ),
+                            )
+                            .replace(
+                              'AGREEMENT_DATE',
+                              mapDefaultValues('start_date', 'Start Date'),
+                            )
+                            .replace(
+                              'BBE_DATE',
+                              mapDefaultValues('current_date', 'Current Date'),
+                            ),
+                        // .replace(
+                        //   'CUSTOMER_ADDRESS',
+                        //   mapDefaultValues('address', 'Address, '),
+                        // )
+                        // .replace(
+                        //   'CUSTOMER_CITY',
+                        //   mapDefaultValues('city', 'City, '),
+                        // )
+                        // .replace(
+                        //   'CUSTOMER_STATE',
+                        //   mapDefaultValues('state', 'State, '),
+                        // )
+                        // .replace(
+                        //   'CUSTOMER_POSTAL',
+                        //   mapDefaultValues('zip_code', 'Postal Code, '),
+                        // )
+                        // .replace(
+                        //   'BBE_DATE',
+                        //   mapDefaultValues('current_date', 'Current Date'),
+                        // ),
+                      }}
+                    />
+                  </>
+                </Paragraph>
+              )}
             </div>
           </div>
           <AgreementSidePanel

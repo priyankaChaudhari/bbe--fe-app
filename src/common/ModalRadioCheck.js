@@ -8,6 +8,11 @@ const ModalRadioCheck = styled.div`
   padding: 14px;
   position: relative;
   border-radius: 8px;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom:0;
+  }
 
 }
 .contact-billing {
@@ -63,7 +68,7 @@ const ModalRadioCheck = styled.div`
 
   .checkmark {
     position: absolute;
-    top: 0;
+    top: 4px;
     left: 0;
     height: 16px;
     width: 16px;
@@ -71,11 +76,6 @@ const ModalRadioCheck = styled.div`
     border: 1px solid ${Theme.gray9};
     border-radius: 50%;
   }
-
-
-  // .radio-container:hover input ~ .checkmark {
-  //   background-color: ${Theme.white};
-  // }
 
   .radio-container input:checked ~ .checkmark {
     background-color: ${Theme.baseColor};

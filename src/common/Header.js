@@ -433,7 +433,10 @@ const MainHeader = styled.div`
   height: 70px;
   border-bottom: 1px solid ${Theme.gray7};
   padding-top: 15px;
-
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  top: 0;
   .logo {
     width: 170px;
     margin-top: 5px;
@@ -648,17 +651,17 @@ const MainHeader = styled.div`
   }
 
   @media only screen and (max-width: 991px) {
-    height: 82px;
+    height: 70px;
     padding-top: 13px;
 
     .logo {
       margin-left: 66px;
-      margin-top: 15px;
+      margin-top: 9px;
       width: 185px;
 
       span {
         left: 275px;
-        top: 24px;
+        top: 16px;
       }
     }
     .suggest-box {
@@ -756,7 +759,8 @@ const MobileSidebar = styled.div`
       z-index: 999;
       .menu-icon {
         width: 24px;
-        margin-top: -52px;
+        margin-top: -16px;
+        position: fixed;
         margin-left: -20px;
       }
     }
@@ -796,7 +800,7 @@ const MobileSidebar = styled.div`
       .menu-icon {
         width: 24px;
         margin-top: -16px;
-        position: absolute;
+        position: fixed;
         margin-left: -20px;
       }
     }
@@ -806,8 +810,8 @@ const MobileSidebar = styled.div`
 const SideContents = styled.div`
   @media (max-width: 991px) {
     max-width: 64px;
-    position: absolute;
-    top: 80px;
+    position: fixed;
+    top: 70px;
     left: 0;
     min-height: 100%;
     background: ${Theme.gray6};

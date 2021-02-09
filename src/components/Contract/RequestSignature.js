@@ -560,36 +560,38 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
         ''
       )}
       {params && params.step === 'select-contact' ? (
-        <div className="modal-body on-boarding">
-          <h4 className="on-boarding mb-4">Select contact</h4>
-          {isLoading.loader && isLoading.type === 'page' ? (
-            <PageLoader
-              className="modal-loader"
-              color="#FF5933"
-              type="page"
-              width={40}
-            />
-          ) : (
-            <div className="body-content">
-              {displayContact()}
+        <>
+          <div className="modal-body on-boarding">
+            <h4 className="on-boarding mb-4">Select contact</h4>
+            {isLoading.loader && isLoading.type === 'page' ? (
+              <PageLoader
+                className="modal-loader"
+                color="#FF5933"
+                type="page"
+                width={40}
+              />
+            ) : (
+              <div className="body-content">
+                {displayContact()}
 
-              <div
-                className="add-new-contact mt-3"
-                role="presentation"
-                onClick={() => {
-                  setFormData({});
-                  setParams('add-new-contact');
-                }}>
-                {' '}
-                <img
-                  className="mr-2 add-new-icon "
-                  src={AddNewIcons}
-                  alt="email"
-                />
-                Add New Contact
+                <Button
+                  className="btn-add-contact mt-3"
+                  role="presentation"
+                  onClick={() => {
+                    setFormData({});
+                    setParams('add-new-contact');
+                  }}>
+                  {' '}
+                  <img
+                    className="mr-2 add-new-icon "
+                    src={AddNewIcons}
+                    alt="email"
+                  />
+                  Add New Contact
+                </Button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
           <div className="footer-line " />
 
           <div
@@ -609,7 +611,7 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
               )}
             </Button>
           </div>
-        </div>
+        </>
       ) : (
         ''
       )}

@@ -1075,7 +1075,7 @@ export default function AgreementSidePanel({
         {/* {editContractFlag ? ( */}
         <>
           <div
-            className="collapse-btn mt-4"
+            className="collapse-btn mt-3"
             role="presentation"
             type="button"
             onClick={() => {
@@ -1565,12 +1565,13 @@ const SidePanel = styled.div`
   // width: 335px;
    min-width: 60px;
   max-width: 345px;
-  position: absolute;
-  top: 80px;
+  position: fixed;
+  top: 71px;
   right: 0;
-  min-height: 100%;
+  height: 100%;
   background: ${Theme.white};
   border-left: 1px solid ${Theme.gray7};
+  overflow:auto;
 
 .green-check-select {
   width:16px;
@@ -1613,7 +1614,7 @@ const SidePanel = styled.div`
   
 .add-market-place {
   font-size: 12px;
-  color:#FF5933;
+  color:${Theme.orange};
   
 }
 
@@ -1713,15 +1714,13 @@ const SidePanel = styled.div`
           margin-right: 10px;
         }
 
-       
-
         .time-date {
           color:${Theme.gray35};
           font-size: ${Theme.small};
           font-weight: 500;
           text-align: left;
         }
-         .pdf-download{
+         .pdf-download {
           width:33px;
           height:33px;
           margin-left: 10px;
@@ -1749,6 +1748,7 @@ const SidePanel = styled.div`
 
   
    @media only screen and (max-width: 991px) { 
+     top: 70px;
    input[data-function*='swipe'] {
     position: absolute;
     opacity: 0;

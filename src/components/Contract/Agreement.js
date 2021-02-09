@@ -256,73 +256,71 @@ export default function Agreement() {
       {checkPermission() ? (
         <>
           <div className="on-boarding-container">
-            <div className="row">
-              <div className=" col-10">
-                <div className="text-container ">
-                  <p className="m-0 p-0 mt-2">
-                    {' '}
-                    <Link
-                      to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                      className="link">
-                      <img
-                        src={ArrowIcons}
-                        alt="aarow-back"
-                        className="arrow-icon mt-3"
-                      />
-                      Back to Customer Details
-                    </Link>
-                    <div className="success-msg">
-                      {showSuccessContact.show ? (
-                        <SuccessMsg
-                          property=" "
-                          message={showSuccessContact.message}
-                        />
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  </p>
-                  {/* <h3 className="mt-5 mb-4 text-center"> Service Agreement </h3> */}
+            <div className="text-container ">
+              <p className="m-0 p-0 mt-2">
+                {' '}
+                <Link
+                  to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                  className="link">
+                  <img
+                    src={ArrowIcons}
+                    alt="aarow-back"
+                    className="arrow-icon mt-3"
+                  />
+                  Back to Customer Details
+                </Link>
+                <div className="success-msg">
+                  {showSuccessContact.show ? (
+                    <SuccessMsg
+                      property=" "
+                      message={showSuccessContact.message}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </div>
+              </p>
+              {/* <h3 className="mt-5 mb-4 text-center"> Service Agreement </h3> */}
 
-                  <Paragraph>
-                    <p className="mb-4 long-text ">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: getAgreementAccorType(0)
-                            .replace(
-                              'CUSTOMER_NAME',
-                              mapDefaultValues(
-                                'contract_company_name',
-                                'Customer Name',
-                              ),
-                            )
-                            .replace(
-                              'START_DATE',
-                              mapDefaultValues('start_date', 'Start Date'),
-                            )
-                            .replace(
-                              'CUSTOMER_ADDRESS',
-                              mapDefaultValues('address', 'Address, '),
-                            )
-                            .replace(
-                              'CUSTOMER_CITY',
-                              mapDefaultValues('city', 'City, '),
-                            )
-                            .replace(
-                              'CUSTOMER_STATE',
-                              mapDefaultValues('state', 'State, '),
-                            )
-                            .replace(
-                              'CUSTOMER_POSTAL',
-                              mapDefaultValues('zip_code', 'Postal Code, '),
-                            )
-                            .replace(
-                              'AGREEMENT_LENGTH',
-                              mapDefaultValues('length', 'Contract Length'),
-                            )
-                            .replace(
-                              'ONE_TIME_SERVICE_TABLE',
-                              `<table class="contact-list " style="width: 100%;
+              <Paragraph>
+                <p className="mb-4 long-text ">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: getAgreementAccorType(0)
+                        .replace(
+                          'CUSTOMER_NAME',
+                          mapDefaultValues(
+                            'contract_company_name',
+                            'Customer Name',
+                          ),
+                        )
+                        .replace(
+                          'START_DATE',
+                          mapDefaultValues('start_date', 'Start Date'),
+                        )
+                        .replace(
+                          'CUSTOMER_ADDRESS',
+                          mapDefaultValues('address', 'Address, '),
+                        )
+                        .replace(
+                          'CUSTOMER_CITY',
+                          mapDefaultValues('city', 'City, '),
+                        )
+                        .replace(
+                          'CUSTOMER_STATE',
+                          mapDefaultValues('state', 'State, '),
+                        )
+                        .replace(
+                          'CUSTOMER_POSTAL',
+                          mapDefaultValues('zip_code', 'Postal Code, '),
+                        )
+                        .replace(
+                          'AGREEMENT_LENGTH',
+                          mapDefaultValues('length', 'Contract Length'),
+                        )
+                        .replace(
+                          'ONE_TIME_SERVICE_TABLE',
+                          `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
@@ -337,56 +335,52 @@ export default function Agreement() {
     )}
                               </td></tr>
                                 </table>`,
-                            )
-                            .replace(
-                              'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-                              `${mapServiceTotal(
-                                'additional_one_time_services',
-                              )}`,
-                            ),
-                        }}
-                      />
-                    </p>
-                    <p
-                      className="long-text"
-                      dangerouslySetInnerHTML={{
-                        __html: getAgreementAccorType(1)
-                          .replace(
-                            'CUSTOMER_NAME',
-                            mapDefaultValues(
-                              'contract_company_name',
-                              'Customer Name',
-                            ),
-                          )
-                          .replace(
-                            'AGREEMENT_DATE',
-                            mapDefaultValues('start_date', 'Start Date'),
-                          )
-                          .replace(
-                            'CUSTOMER_ADDRESS',
-                            mapDefaultValues('address', 'Address, '),
-                          )
-                          .replace(
-                            'CUSTOMER_CITY',
-                            mapDefaultValues('city', 'City, '),
-                          )
-                          .replace(
-                            'CUSTOMER_STATE',
-                            mapDefaultValues('state', 'State, '),
-                          )
-                          .replace(
-                            'CUSTOMER_POSTAL',
-                            mapDefaultValues('zip_code', 'Postal Code, '),
-                          )
-                          .replace(
-                            'BBE_DATE',
-                            mapDefaultValues('current_date', 'Current Date'),
-                          ),
-                      }}
-                    />
-                  </Paragraph>
-                </div>
-              </div>
+                        )
+                        .replace(
+                          'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+                          `${mapServiceTotal('additional_one_time_services')}`,
+                        ),
+                    }}
+                  />
+                </p>
+                <p
+                  className="long-text"
+                  dangerouslySetInnerHTML={{
+                    __html: getAgreementAccorType(1)
+                      .replace(
+                        'CUSTOMER_NAME',
+                        mapDefaultValues(
+                          'contract_company_name',
+                          'Customer Name',
+                        ),
+                      )
+                      .replace(
+                        'AGREEMENT_DATE',
+                        mapDefaultValues('start_date', 'Start Date'),
+                      )
+                      .replace(
+                        'CUSTOMER_ADDRESS',
+                        mapDefaultValues('address', 'Address, '),
+                      )
+                      .replace(
+                        'CUSTOMER_CITY',
+                        mapDefaultValues('city', 'City, '),
+                      )
+                      .replace(
+                        'CUSTOMER_STATE',
+                        mapDefaultValues('state', 'State, '),
+                      )
+                      .replace(
+                        'CUSTOMER_POSTAL',
+                        mapDefaultValues('zip_code', 'Postal Code, '),
+                      )
+                      .replace(
+                        'BBE_DATE',
+                        mapDefaultValues('current_date', 'Current Date'),
+                      ),
+                  }}
+                />
+              </Paragraph>
             </div>
           </div>
           <AgreementSidePanel

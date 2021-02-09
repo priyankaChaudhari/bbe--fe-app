@@ -521,75 +521,70 @@ export default function Statement() {
       {checkPermission() ? (
         <>
           <div className="on-boarding-container">
-            <div className="row">
-              <div className="col-10 mb-5 pb-5">
-                <div className="text-container ">
-                  {/* <h3 className="mt-5 mb-4 text-center">
+            <div className="text-container ">
+              {/* <h3 className="mt-5 mb-4 text-center">
                     Service Order / Statement of Work{' '}
                   </h3> */}
 
-                  <Paragraph>
-                    {' '}
-                    <p
-                      className="long-text"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          data.statement_of_work &&
-                          data.statement_of_work[0]
-                            .replace(
-                              'CUSTOMER_NAME',
-                              mapDefaultValues(
-                                'contract_company_name',
-                                'Customer Name',
-                              ),
-                            )
-                            .replace(
-                              'START_DATE',
-                              mapDefaultValues('start_date', 'Start Date'),
-                            )
-                            .replace(
-                              'MONTHLY_RETAINER_AMOUNT',
-                              mapDefaultValues(
-                                'monthly_retainer',
-                                'Monthly Retainer',
-                                'number-currency',
-                              ),
-                            )
-                            .replace('REV_SHARE_TABLE', showRevTable())
-                            .replace(
-                              'REVENUE_SHARE',
-                              mapDefaultValues('rev_share', 'Rev Share'),
-                            )
-                            .replace(
-                              'REV_THRESHOLD',
-                              mapDefaultValues(
-                                'sales_threshold',
-                                'Rev Threshold',
-                                'number-currency',
-                              ),
-                            )
-                            .replace(
-                              'SELLER_TYPE',
-                              mapDefaultValues('seller_type', 'Seller Type'),
-                            )
-                            .replace(
-                              'PRIMARY_MARKETPLACE',
-                              mapDefaultValues(
-                                'primary_marketplace',
-                                'Primary Marketplace',
-                              ),
-                            )
-                            .replace(
-                              'MAP_MONTHLY_SERVICES',
-                              showMonthlyServiceTable(),
-                            )
-                            .replace(
-                              'ONE_TIME_SERVICES',
-                              showOneTimeServiceTable(),
-                            )
-                            .replace(
-                              'ADDITIONAL_SERVICES_NOT_INCLUDED',
-                              `<table class="contact-list " style="width: 100%;border-collapse: collapse;">
+              <Paragraph>
+                {' '}
+                <p
+                  className="long-text"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      data.statement_of_work &&
+                      data.statement_of_work[0]
+                        .replace(
+                          'CUSTOMER_NAME',
+                          mapDefaultValues(
+                            'contract_company_name',
+                            'Customer Name',
+                          ),
+                        )
+                        .replace(
+                          'START_DATE',
+                          mapDefaultValues('start_date', 'Start Date'),
+                        )
+                        .replace(
+                          'MONTHLY_RETAINER_AMOUNT',
+                          mapDefaultValues(
+                            'monthly_retainer',
+                            'Monthly Retainer',
+                            'number-currency',
+                          ),
+                        )
+                        .replace('REV_SHARE_TABLE', showRevTable())
+                        .replace(
+                          'REVENUE_SHARE',
+                          mapDefaultValues('rev_share', 'Rev Share'),
+                        )
+                        .replace(
+                          'REV_THRESHOLD',
+                          mapDefaultValues(
+                            'sales_threshold',
+                            'Rev Threshold',
+                            'number-currency',
+                          ),
+                        )
+                        .replace(
+                          'SELLER_TYPE',
+                          mapDefaultValues('seller_type', 'Seller Type'),
+                        )
+                        .replace(
+                          'PRIMARY_MARKETPLACE',
+                          mapDefaultValues(
+                            'primary_marketplace',
+                            'Primary Marketplace',
+                          ),
+                        )
+                        .replace(
+                          'MAP_MONTHLY_SERVICES',
+                          showMonthlyServiceTable(),
+                        )
+                        .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
+                        .replace(
+                          'ADDITIONAL_SERVICES_NOT_INCLUDED',
+                          `<table class="contact-list " style="width: 100%;border-collapse: collapse;">
                                 <tr>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
@@ -597,15 +592,13 @@ export default function Statement() {
                                   ${displayNotIncludedServices()}
                                   </table>
                                   `,
-                            ),
-                      }}
-                      // <tr><td>DSP Advertising</td><td>15% of [DSP Monthly Ad Budget]</td></tr>
-                      //         <tr><td>Inventory Reconciliation</td><td>25% of recovered $(s)</td></tr>
-                      //         <tr><td class="total-service"> Totals are variable</td><td class="total-service text-right">&nbsp; </td></tr>
-                    />
-                  </Paragraph>
-                </div>
-              </div>
+                        ),
+                  }}
+                  // <tr><td>DSP Advertising</td><td>15% of [DSP Monthly Ad Budget]</td></tr>
+                  //         <tr><td>Inventory Reconciliation</td><td>25% of recovered $(s)</td></tr>
+                  //         <tr><td class="total-service"> Totals are variable</td><td class="total-service text-right">&nbsp; </td></tr>
+                />
+              </Paragraph>
             </div>
           </div>
 

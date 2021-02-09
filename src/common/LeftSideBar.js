@@ -53,7 +53,7 @@ export default function LeftSideBar() {
 
 const LeftSideBars = styled.div`
   max-width: 64px;
-  position: absolute;
+  position: fixed;
   top: 70px;
   left: 0;
   height: 90%;
