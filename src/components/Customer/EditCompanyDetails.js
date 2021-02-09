@@ -767,7 +767,6 @@ export default function EditCompanyDetails({
 EditCompanyDetails.defaultProps = {
   id: '',
   setShowSuccessMsg: () => {},
-  showModal: false,
 };
 
 EditCompanyDetails.propTypes = {
@@ -775,7 +774,4 @@ EditCompanyDetails.propTypes = {
   id: PropTypes.string,
   setShowSuccessMsg: PropTypes.func,
   amazonDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
-  showModal: PropTypes.shape({
-    type: PropTypes.bool,
-  }),
 };

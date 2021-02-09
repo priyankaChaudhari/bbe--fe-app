@@ -643,6 +643,7 @@ export default function CustomerMainContainer() {
             agreement={agreement}
             customer={customer}
             setShowModal={setShowModal}
+            setDocumentImage={customer.documents}
           />
         </ModalBox>
       </Modal>
