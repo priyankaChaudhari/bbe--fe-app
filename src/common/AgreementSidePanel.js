@@ -28,6 +28,8 @@ import {
   // PdfDownload,
   CloseIcon,
   SaveIcon,
+  PlusIcon,
+  MinusIcon,
   // AlarmBellIcon,
 } from '../theme/images/index';
 // import DefaultUser from '../theme/images/index';
@@ -60,6 +62,7 @@ import {
   // updateAdditionalServices,
 } from '../api';
 import InputSelect from './InputSelect';
+import CheckBox from './CheckBox';
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 import { getAccountDetails } from '../store/actions/accountState';
@@ -925,7 +928,7 @@ export default function AgreementSidePanel({
             field &&
             field.service &&
             field.service.name === 'Amazon Store Package Custom'
-              ? 'col-4 mt-1'
+              ? 'col-4 mt-1 pr-0'
               : 'col-7 mt-1'
           }>
           <Select
@@ -1321,6 +1324,199 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
+                  <li>
+                    <FormField>
+                      <label htmlFor="additional_one_time_services" />
+                      Additional Monthly Services
+                    </FormField>
+
+                    <CheckBox className="gray-check mt-3">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Customer Service
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+
+                    <CheckBox className="gray-check mt-2">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Logistics Management
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                    <CheckBox className="gray-check mt-2">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Inventory Reconciliation
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                    <CheckBox className="gray-check mt-2">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        DSP Advertising
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                    <CheckBox className="gray-check mt-2">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="contract-copy-check">
+                        Additional Marketplaces
+                        <input type="checkbox" id="contract-copy-check" />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                  <li>
+                    <FormField>
+                      <label htmlFor="additional_one_time_services" />
+                      Additional One-Time Services
+                    </FormField>
+                    <div className="row mt-3">
+                      <div className="col-7">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            A+ Content
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div className="col-7 mt-2">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Infographics
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div className="col-7 mt-2">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Amazon Brand Style Guide
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div className="col-7 mt-2">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Product Insert
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div className="col-7 mt-2">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Listing Copy
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div className="col-7 mt-2">
+                        {' '}
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Amazon Store
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </div>
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                    </div>
+                  </li>
 
                   {/* <li>
                   <Button
@@ -1648,6 +1844,7 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
   // width: 335px;
    min-width: 60px;
+   padding-bottom:200px;
   max-width: 345px;
   position: fixed;
   top: 71px;
@@ -1744,6 +1941,40 @@ const SidePanel = styled.div`
           font-size:12px;
           color: #b0bac9;
           font-weight: bold;
+        }
+
+        .increment {
+           border: 1px solid #DFE7FF;
+            border-radius:  8px 0 0 8px ;
+            width: 32px;
+           background: ${Theme.gray5};
+           cursor:pointer;
+
+           .plus-icon{
+             width:10px;
+           }
+
+           &:focus{
+             outline:none;
+           }
+        }
+        .decrement {
+           border: 1px solid #DFE7FF;
+            border-radius: 0 8px 8px 0;
+            width: 32px;
+           background: ${Theme.gray5};
+           cursor:pointer;
+
+           .minus-icon {
+              width:10px;
+           }
+             &:focus{
+             outline:none;
+           }
+        }
+        .max-min-number {
+          width:20px;
+           border: 1px solid #DFE7FF;
         }
     }
 } 

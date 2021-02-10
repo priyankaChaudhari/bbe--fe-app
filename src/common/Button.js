@@ -89,7 +89,7 @@ const Button = styled.button`
     border: none;
     background: transparent;
     text-decoration: underline;
-
+    font-weight: bold;
     &:focus {
       outline: none;
     }

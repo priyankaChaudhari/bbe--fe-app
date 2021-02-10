@@ -2,6 +2,46 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const CheckBox = styled.div`
+  &.gray-check {
+    .container {
+      padding-left: 20px;
+      &.customer-pannel {
+        color: ${Theme.gray90};
+        font-size: 13px;
+      }
+    }
+    .container input:checked ~ .checkmark {
+      background-color: rgba(224, 231, 255, 0.2);
+      border: 1px solid ${Theme.gray9};
+    }
+    .container .checkmark:after {
+      left: 4px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid ${Theme.gray35};
+      border-width: 0 2px 2px 0;
+      border: 1px soloid #e0e7ff;
+
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    .container:hover input ~ .checkmark {
+      background-color: rgba(224, 231, 255, 0.2);
+      border: 1px solid ${Theme.gray9};
+    }
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 4px;
+      width: 16px;
+      height: 16px;
+      border: 1px solid ${Theme.gray9};
+    }
+  }
+
   .container {
     display: block;
     position: relative;

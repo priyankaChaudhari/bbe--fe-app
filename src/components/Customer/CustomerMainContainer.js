@@ -294,27 +294,28 @@ export default function CustomerMainContainer() {
                       role="presentation">
                       {customer && customer.status && customer.status.label}
                       <img src={ExpandArrowIcon} alt="aarow-down" />
-                    </span>
-                    <ul
-                      id="clickbox"
-                      className="dropdown-content-status"
-                      style={{ display: showDropDown ? 'block' : 'none' }}>
-                      {checkStatus()}
 
-                      {statusActions.map((item) => (
-                        <li
-                          role="presentation"
-                          onClick={() =>
-                            setStatusModal({
-                              show: true,
-                              type: item.value,
-                            })
-                          }
-                          key={item.value}>
-                          {item.label}
-                        </li>
-                      ))}
-                    </ul>
+                      <ul
+                        id="clickbox"
+                        className="dropdown-content-status"
+                        style={{ display: showDropDown ? 'block' : 'none' }}>
+                        {checkStatus()}
+
+                        {statusActions.map((item) => (
+                          <li
+                            role="presentation"
+                            onClick={() =>
+                              setStatusModal({
+                                show: true,
+                                type: item.value,
+                              })
+                            }
+                            key={item.value}>
+                            {item.label}
+                          </li>
+                        ))}
+                      </ul>
+                    </span>
 
                     <div
                       className=" edit-details edit-brand-details "

@@ -47,7 +47,8 @@ const Theme = {
   gray7: '#e4e8f0',
   gray6: '#fafafb',
   gray11: '#e0e6e8',
-  gray5: '#E2E2EA',
+  gray5: '#EFF2FF',
+  gray4: '#E2E2EA',
 
   /* Colors */
   baseColor: '#FF5933',

@@ -24,7 +24,7 @@ import {
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, ArrowIcons } from '../../theme/images';
+import { CloseIcon, ArrowIcons, OrangeChecked } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 
 import {
@@ -986,60 +986,64 @@ export default function ContractContainer() {
         onEditAddendum={onEditAddendum}
       />
       {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
-        <Footer className="sticky">
-          <div className="container">
-            <Button
-              className="btn-primary on-boarding w-320 mt-3 mr-5"
-              onClick={() => nextStep()}>
-              Save Changes
-            </Button>
+        <div className="mt-5 pt-5">
+          <Footer className="sticky mt-5">
+            <div className="container">
+              <Button
+                className="light-orange  on-boarding  mt-3 mr-5"
+                onClick={() => nextStep()}>
+                <img src={OrangeChecked} alt="checked" /> Save Changes
+              </Button>
 
-            <Button
-              className="btn-primary on-boarding w-320 mt-3 mr-5"
-              onClick={() => discardAgreementChanges()}>
-              Discard Changes
-            </Button>
-          </div>
-        </Footer>
+              <Button
+                className="btn-borderless on-boarding  mt-3 mr-5"
+                onClick={() => discardAgreementChanges()}>
+                Discard Changes
+              </Button>
+            </div>
+          </Footer>
+        </div>
       ) : details &&
         details.steps_completed &&
         details.steps_completed.agreement &&
         details.steps_completed.statement ? (
-        <Footer className="sticky">
-          <div className="container">
-            {checkApprovalCondition() ? (
-              <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5"
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('request-approve');
-                  setShowModal(true);
-                }}>
-                Request Approval
-              </Button>
-            ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
-              <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5"
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Approve and Request Signature
-              </Button>
-            ) : (
-              <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5"
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Request Signature
-              </Button>
-            )}
-          </div>
-        </Footer>
+        <div className="mt-5 pt-5">
+          <Footer className="sticky">
+            <div className="container">
+              {checkApprovalCondition() ? (
+                <Button
+                  className="btn-primary on-boarding w-320 mt-3 mr-5"
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('request-approve');
+                    setShowModal(true);
+                  }}>
+                  Request Approval
+                </Button>
+              ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
+                <Button
+                  className="btn-primary on-boarding w-320 mt-3 mr-5"
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('select-contact');
+                    setShowModal(true);
+                  }}>
+                  Approve and Request Signature
+                </Button>
+              ) : (
+                <Button
+                  className="btn-primary on-boarding w-320 mt-3 mr-5"
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('select-contact');
+                    setShowModal(true);
+                  }}>
+                  Request Signature
+                </Button>
+              )}
+            </div>
+          </Footer>
+        </div>
       ) : (
         ''
       )}
@@ -1070,7 +1074,7 @@ export default function ContractContainer() {
 }
 
 const Footer = styled.div`
-  border: 1px solid ${Theme.gray15};
+  border: 1px solid ${Theme.gray7};
   bottom: 0;
   width: 100%;
   background: #fff;

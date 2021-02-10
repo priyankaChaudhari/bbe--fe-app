@@ -94,6 +94,11 @@ const InnerContainer = styled.div`
   .company-contact-height {
     height: 420px;
     overflow: auto;
+
+    &.form-field {
+      height: 235px;
+      overflow: auto;
+    }
   }
 
   @media only screen and (max-width: 768px) {
