@@ -22,6 +22,7 @@ import {
   InfoIcons,
   AmazonIcon,
   CloseIcon,
+  SmallCloseIcon,
   AddNewIcons,
   RightCircle,
 } from '../../theme/images/index';
@@ -203,9 +204,9 @@ export default function AmazonAccount() {
                     ''
                   ) : (
                     <img
-                      src={CloseIcon}
+                      src={SmallCloseIcon}
                       alt="close"
-                      className="float-right cursor cross-icon"
+                      className="float-right cursor remove-field-icon"
                       onClick={() =>
                         removeMarketplace(
                           typeof market === 'object' ? index : market,
@@ -296,6 +297,7 @@ export default function AmazonAccount() {
                         />
                         Watch the tutorial
                       </span>
+
                       {botDetails.map((item) => (
                         <FormField className="mt-4" key={item.key}>
                           <label htmlFor="emailAddress">
@@ -316,22 +318,21 @@ export default function AmazonAccount() {
                               role="presentation"
                             />
                             <ReactTooltip id={item.key} aria-haspopup="true" />
-
-                            <input
-                              className="form-control info-tool"
-                              type="text"
-                              readOnly
-                              defaultValue={data && data[item.key]}
-                            />
                           </label>
+                          <input
+                            className="form-control info-tool"
+                            type="text"
+                            readOnly
+                            defaultValue={data && data[item.key]}
+                          />
                           <div
                             className="copy-link"
-                            style={{
-                              top:
-                                item.key === 'data_bots_email'
-                                  ? '512px'
-                                  : '412px',
-                            }}
+                            // style={{
+                            //   top:
+                            //     item.key === 'data_bots_email'
+                            //       ? '512px'
+                            //       : '412px',
+                            // }}
                             onClick={() => copy(data && data[item.key])}
                             role="presentation">
                             Copy Email
@@ -385,33 +386,35 @@ export default function AmazonAccount() {
                         />
                         Watch the tutorial
                       </span>
+                      <div className="company-contact-height form-field">
+                        <FormField className="mt-4">
+                          <label htmlFor="merchant_id">
+                            Merchant ID
+                            <input
+                              className="form-control info-tool"
+                              type="text"
+                              defaultValue={data && data.merchant_id}
+                              name="merchant_id"
+                              onChange={(event) => {
+                                setFormData({
+                                  ...formData,
+                                  [event.target.name]: event.target.value,
+                                });
+                                setApiError({
+                                  ...apiError,
+                                  merchant_id: '',
+                                });
+                              }}
+                            />
+                          </label>
+                          <ErrorMsg>
+                            {apiError && apiError.merchant_id}
+                          </ErrorMsg>
+                        </FormField>
 
-                      <FormField className="mt-4">
-                        <label htmlFor="merchant_id">
-                          Merchant ID
-                          <input
-                            className="form-control info-tool"
-                            type="text"
-                            defaultValue={data && data.merchant_id}
-                            name="merchant_id"
-                            onChange={(event) => {
-                              setFormData({
-                                ...formData,
-                                [event.target.name]: event.target.value,
-                              });
-                              setApiError({
-                                ...apiError,
-                                merchant_id: '',
-                              });
-                            }}
-                          />
-                        </label>
-                        <ErrorMsg>{apiError && apiError.merchant_id}</ErrorMsg>
-                      </FormField>
-
-                      {generateMarketplace(data && data.marketplace_id)}
-                      {generateMarketplace(marketplaceData)}
-
+                        {generateMarketplace(data && data.marketplace_id)}
+                        {generateMarketplace(marketplaceData)}
+                      </div>
                       <Button
                         className="btn-add-contact"
                         onClick={() => addMarketplace()}>

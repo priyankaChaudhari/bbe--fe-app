@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const FormField = styled.div`
+  position:relative;
 
   label {
     color: ${Theme.gray30};
@@ -19,11 +20,15 @@ const FormField = styled.div`
     position: absolute;
     background: ${Theme.lightOrange};
     color: ${Theme.orange};
-    right: 724px;
+   
     border-radius: 4px;
     font-size: ${Theme.small};
     padding: 7px 10px;
-    top: 42px;
+    right: 4px;
+    border-radius: 4px;
+    font-size: 13px;
+    padding: 7px 10px;
+    top: 44px;
     font-weight:bold;
     cursor: pointer;
 
@@ -32,6 +37,13 @@ const FormField = styled.div`
      right:30px;
     }
 }
+
+  .remove-field-icon {
+    background: ${Theme.gray5};
+    width: 18px;
+    padding: 4px;
+    border-radius:50%;
+  }
   
 
   .form-control  {
