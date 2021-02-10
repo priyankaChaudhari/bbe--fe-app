@@ -97,11 +97,11 @@ export default function AgreementSidePanel({
     dspAddendum: false,
     amendment: false,
   });
-  // const [showSection, setShowCollpase] = useState({
-  //   agreement: false,
-  //   statement: false,
-  //   addendum: false,
-  // });
+  const [showSection, setShowCollpase] = useState({
+    addendum: false,
+    dspAddendum: false,
+    amendment: false,
+  });
   const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -1075,10 +1075,9 @@ export default function AgreementSidePanel({
     setFormData({ ...formData, additional_one_time_services: list });
     // setNewOneTime([...formData,]);
   };
-  // const handleShowCollapse = (event, section) => {
-  //   console.log(event.target.checked);
-  //   setShowCollpase({ ...showSection, section: event.target.checked });
-  // };
+  const handleShowCollapse = (event, section) => {
+    setShowCollpase({ ...showSection, [section]: event.target.checked });
+  };
 
   return (
     <SidePanel>
@@ -1551,7 +1550,11 @@ export default function AgreementSidePanel({
           </Collapse>
           <div className="straight-line sidepanel " />
           <div
-            className="collapse-btn "
+            className={
+              showSection && showSection.addendum
+                ? 'collapse-btn '
+                : 'collapse-btn disabled'
+            }
             role="presentation"
             type="button"
             onClick={() => {
@@ -1561,15 +1564,15 @@ export default function AgreementSidePanel({
             <img className="service-agre" src={CreateAddendum} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
             <div className="clear-fix" />
-            {/* <div>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  onClick={(event) => handleShowCollapse(event, 'addendum')}
-                />
-                <span className="slider round" />
-              </label>
-            </div> */}
+          </div>
+          <div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                onClick={(event) => handleShowCollapse(event, 'addendum')}
+              />
+              <span className="slider round" />
+            </label>
           </div>
           <Collapse isOpened={openCollapse.addendum}>
             <ul className="collapse-inner">
@@ -1614,7 +1617,11 @@ export default function AgreementSidePanel({
           </Collapse>
           <div className="straight-line sidepanel " />
           <div
-            className="collapse-btn   "
+            className={
+              showSection && showSection.dspAddendum
+                ? 'collapse-btn   '
+                : 'collapse-btn  disabled '
+            }
             role="presentation"
             type="button"
             onClick={() => {
@@ -1637,7 +1644,15 @@ export default function AgreementSidePanel({
             </h4>
             <div className="clear-fix" />
           </div>
-
+          <div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                onClick={(event) => handleShowCollapse(event, 'dspAddendum')}
+              />
+              <span className="slider round" />
+            </label>
+          </div>
           <Collapse isOpened={openCollapse.dspAddendum}>
             <ul className="collapse-inner">
               <li>DSP</li>
@@ -1646,7 +1661,11 @@ export default function AgreementSidePanel({
 
           <div className="straight-line sidepanel " />
           <div
-            className="collapse-btn   "
+            className={
+              showSection && showSection.amendment
+                ? 'collapse-btn   '
+                : 'collapse-btn  disabled '
+            }
             role="presentation"
             type="button"
             onClick={() => {
@@ -1669,7 +1688,15 @@ export default function AgreementSidePanel({
             </h4>
             <div className="clear-fix" />
           </div>
-
+          <div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                onClick={(event) => handleShowCollapse(event, 'amendment')}
+              />
+              <span className="slider round" />
+            </label>
+          </div>
           <Collapse isOpened={openCollapse.amendment}>
             <ul className="collapse-inner">
               <li>One time Amendment</li>
