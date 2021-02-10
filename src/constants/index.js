@@ -13,6 +13,7 @@ export const PATH_CUSTOMER_DETAILS = `${PATH_CUSTOMER_LIST}/:id`;
 export const PATH_ACCOUNT_DETAILS = '/customer-account/:id';
 
 // Contract
+// export const PATH_CONTRACT = `${PATH_CUSTOMER_DETAILS}/agreement`;
 export const PATH_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/agreement`;
 export const PATH_STATEMENT = `${PATH_CUSTOMER_DETAILS}/statement`;
 export const PATH_ADDENDUM = `${PATH_CUSTOMER_DETAILS}/addendum`;

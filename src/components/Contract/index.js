@@ -6,6 +6,7 @@ import OneTimeAgreement from './OneTimeAgreement';
 import DSPAddendum from './DSPAddendum';
 import AdditionalServices from './AdditionalServices';
 import HelloSignComponent from './HelloSignComponent';
+import ContractContainer from './ContractContainer';
 
 export {
   Agreement,
@@ -15,5 +16,6 @@ export {
   OneTimeAgreement,
   DSPAddendum,
   AdditionalServices,
+  ContractContainer,
   HelloSignComponent,
 };
