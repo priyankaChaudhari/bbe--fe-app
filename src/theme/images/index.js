@@ -113,6 +113,9 @@ import TwitterIcon from './icons/twitter-icon.svg';
 import SliderHIcon from './icons/slider-h-icon.png';
 import ExpandArrowIcon from './icons/expand-arrow-icon.png';
 import GreyBannerBg from './grey-bg.jpg';
+import OrangeChecked from './icons/orange-solid-checked.svg';
+import PlusIcon from './icons/plus-icon.svg';
+import MinusIcon from './icons/minus-icon.png';
 
 export {
   BannerBg,
@@ -230,4 +233,7 @@ export {
   SliderHIcon,
   ExpandArrowIcon,
   GreyBannerBg,
+  OrangeChecked,
+  PlusIcon,
+  MinusIcon,
 };
