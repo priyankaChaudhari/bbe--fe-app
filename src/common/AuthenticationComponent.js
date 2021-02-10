@@ -34,8 +34,8 @@ import {
   // Agreement,
   // Statement,
   // OneTimeAgreement,
-  ServicesAmendment,
-  DSPAddendum,
+  // ServicesAmendment,
+  // DSPAddendum,
   ContractContainer,
   // HelloSignComponent,
 } from '../components/Contract';
@@ -138,8 +138,8 @@ export default function AuthenticationComponent() {
           <Route path={PATH_STATEMENT} exact component={ContractContainer} />
           <Route path={PATH_ADDENDUM} exact component={ContractContainer} />
           <Route path={PATH_ONE_TIME_AGREEMENT} component={ContractContainer} />
-          <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
-          <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
+          <Route path={PATH_SERVICE_AMENDMENT} component={ContractContainer} />
+          <Route path={PATH_DSP_ADDENDUM} component={ContractContainer} />
           {/* <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} /> */}
 
           {/* Account Setup */}
