@@ -1549,25 +1549,28 @@ export default function AgreementSidePanel({
             )}
           </Collapse>
           <div className="straight-line sidepanel " />
-          <div>
-            <div
-              className={
-                showSection && showSection.addendum
-                  ? 'collapse-btn '
-                  : 'collapse-btn disabled'
-              }
-              role="presentation"
-              type="button"
-              onClick={() => {
-                setOpenCollapse({ addendum: !openCollapse.addendum });
-                history.push(PATH_ADDENDUM.replace(':id', id));
-              }}>
-              <img className="service-agre" src={CreateAddendum} alt="pdf" />
-              <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
-              <div className="clear-fix" />
+          <div className="row">
+            <div className="col-10">
+              {' '}
+              <div
+                className={
+                  showSection && showSection.addendum
+                    ? 'collapse-btn '
+                    : 'collapse-btn disabled'
+                }
+                role="presentation"
+                type="button"
+                onClick={() => {
+                  setOpenCollapse({ addendum: !openCollapse.addendum });
+                  history.push(PATH_ADDENDUM.replace(':id', id));
+                }}>
+                <img className="service-agre" src={CreateAddendum} alt="pdf" />
+                <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
+                <div className="clear-fix" />
+              </div>
             </div>
-            <div>
-              <label className="switch">
+            <div className="col-2 pl-0">
+              <label className="switch mt-3">
                 <input
                   type="checkbox"
                   onClick={(event) => handleShowCollapse(event, 'addendum')}
@@ -1576,6 +1579,7 @@ export default function AgreementSidePanel({
               </label>
             </div>
           </div>
+
           <Collapse isOpened={openCollapse.addendum}>
             <ul className="collapse-inner">
               <li>
@@ -1618,22 +1622,24 @@ export default function AgreementSidePanel({
             </ul>
           </Collapse>
           <div className="straight-line sidepanel " />
-          <div
-            className={
-              showSection && showSection.dspAddendum
-                ? 'collapse-btn   '
-                : 'collapse-btn  disabled '
-            }
-            role="presentation"
-            type="button"
-            onClick={() => {
-              setOpenCollapse({ dspAddendum: !openCollapse.dspAddendum });
-              history.push(PATH_DSP_ADDENDUM.replace(':id', id));
-            }}>
-            <img className="service-agre" src={CreateAddendum} alt="pdf" />
-            <h4 className="sendar-details mt-1 ml-5">
-              DSP Addendum{' '}
-              {/* {agreementData.steps_completed &&
+          <div className="row mr-3">
+            <div className="col-10">
+              <div
+                className={
+                  showSection && showSection.dspAddendum
+                    ? 'collapse-btn   '
+                    : 'collapse-btn  disabled '
+                }
+                role="presentation"
+                type="button"
+                onClick={() => {
+                  setOpenCollapse({ dspAddendum: !openCollapse.dspAddendum });
+                  history.push(PATH_DSP_ADDENDUM.replace(':id', id));
+                }}>
+                <img className="service-agre" src={CreateAddendum} alt="pdf" />
+                <h4 className="sendar-details mt-1 ml-5">
+                  DSP Addendum{' '}
+                  {/* {agreementData.steps_completed &&
               agreementData.steps_completed.dspAddendum ? (
                 <img
                   className="green-check-select ml-4"
@@ -1643,17 +1649,19 @@ export default function AgreementSidePanel({
               ) : (
                 ''
               )} */}
-            </h4>
-            <div className="clear-fix" />
-          </div>
-          <div>
-            <label className="switch">
-              <input
-                type="checkbox"
-                onClick={(event) => handleShowCollapse(event, 'dspAddendum')}
-              />
-              <span className="slider round" />
-            </label>
+                </h4>
+                <div className="clear-fix" />
+              </div>
+            </div>
+            <div className="col-2 p-0">
+              <label className="switch mt-3">
+                <input
+                  type="checkbox"
+                  onClick={(event) => handleShowCollapse(event, 'dspAddendum')}
+                />
+                <span className="slider round" />
+              </label>
+            </div>
           </div>
           <Collapse isOpened={openCollapse.dspAddendum}>
             <ul className="collapse-inner">
@@ -1662,22 +1670,24 @@ export default function AgreementSidePanel({
           </Collapse>
 
           <div className="straight-line sidepanel " />
-          <div
-            className={
-              showSection && showSection.amendment
-                ? 'collapse-btn   '
-                : 'collapse-btn  disabled '
-            }
-            role="presentation"
-            type="button"
-            onClick={() => {
-              setOpenCollapse({ dspAddendum: !openCollapse.amendment });
-              history.push(PATH_SERVICE_AMENDMENT.replace(':id', id));
-            }}>
-            <img className="service-agre" src={CreateAddendum} alt="pdf" />
-            <h4 className="sendar-details mt-1 ml-5">
-              One time Amendment{' '}
-              {/* {agreementData.steps_completed &&
+          <div className="row">
+            <div className="col-10 ">
+              <div
+                className={
+                  showSection && showSection.amendment
+                    ? 'collapse-btn   '
+                    : 'collapse-btn  disabled '
+                }
+                role="presentation"
+                type="button"
+                onClick={() => {
+                  setOpenCollapse({ dspAddendum: !openCollapse.amendment });
+                  history.push(PATH_SERVICE_AMENDMENT.replace(':id', id));
+                }}>
+                <img className="service-agre" src={CreateAddendum} alt="pdf" />
+                <h4 className="sendar-details mt-1 ml-5">
+                  One time Amendment{' '}
+                  {/* {agreementData.steps_completed &&
               agreementData.steps_completed.dspAddendum ? (
                 <img
                   className="green-check-select ml-4"
@@ -1687,17 +1697,19 @@ export default function AgreementSidePanel({
               ) : (
                 ''
               )} */}
-            </h4>
-            <div className="clear-fix" />
-          </div>
-          <div>
-            <label className="switch">
-              <input
-                type="checkbox"
-                onClick={(event) => handleShowCollapse(event, 'amendment')}
-              />
-              <span className="slider round" />
-            </label>
+                </h4>
+                <div className="clear-fix" />
+              </div>
+            </div>
+            <div className="col-2 p-0">
+              <label className="switch mt-3">
+                <input
+                  type="checkbox"
+                  onClick={(event) => handleShowCollapse(event, 'amendment')}
+                />
+                <span className="slider round" />
+              </label>
+            </div>
           </div>
           <Collapse isOpened={openCollapse.amendment}>
             <ul className="collapse-inner">
