@@ -474,11 +474,11 @@ export const StatementDetails = [
     label: 'Sales Threshold (Optional)',
     type: 'number-currency',
   },
-  {
-    key: 'dsp_fee',
-    label: 'DSP Budget',
-    type: 'number-currency',
-  },
+  // {
+  //   key: 'dsp_fee',
+  //   label: 'DSP Budget',
+  //   type: 'number-currency',
+  // },
   {
     key: 'additional_monthly_services',
     label: 'Additional Monthly services',

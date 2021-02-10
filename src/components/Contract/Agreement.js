@@ -1,99 +1,11 @@
 /* eslint-disable react/no-danger */
 
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import queryString from 'query-string';
+import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 
-import Modal from 'react-modal';
-
-import { PATH_CUSTOMER_DETAILS } from '../../constants';
-import AgreementSidePanel from '../../common/AgreementSidePanel';
-import { agreementTemplate } from '../../api/AgreementApi';
-import {
-  PageLoader,
-  PageNotFound,
-  SuccessMsg,
-  Button,
-  ModalBox,
-} from '../../common';
-import { CloseIcon, AlarmBellIcon, ArrowIcons } from '../../theme/images';
-import Theme from '../../theme/Theme';
-
-import { getAccountDetails } from '../../store/actions/accountState';
-import RequestSignature from './RequestSignature';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    minHeight: '200px',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-export default function Agreement() {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const history = useHistory();
-  const id = location.pathname.split('/')[2];
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [formData, setFormData] = useState({});
-  const details = useSelector((state) => state.accountState.data);
-  const loader = useSelector((state) => state.accountState.isLoading);
-  const [showModal, setShowModal] = useState(false);
-  const [editContractFlag, setEditContractFlag] = useState(true);
-
-  const [showSuccessContact, setShowSuccessContact] = useState({
-    show: false,
-    message: '',
-  });
-
-  const clearSuccessMessage = () => {
-    history.location.state.message = '';
-    history.replace(history.location.pathname);
-  };
-
-  useEffect(() => {
-    if (
-      history &&
-      history.location &&
-      history.location.state &&
-      history.location.state.message
-    ) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-      setShowSuccessContact({
-        show: true,
-        message: history.location.state.message,
-      });
-      setTimeout(clearSuccessMessage(), 100000);
-    }
-
-    dispatch(getAccountDetails(id));
-    agreementTemplate().then((response) => {
-      setIsLoading({ loader: true, type: 'page' });
-      setData(
-        response &&
-          response.data &&
-          response.data.results &&
-          response.data.results[0],
-      );
-      setIsLoading({ loader: false, type: 'page' });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, id]);
-
+export default function Agreement({ formData, details, templateData }) {
   const mapDefaultValues = (key, label) => {
     if (
       (formData[key] === undefined || formData[key] === '') &&
@@ -117,51 +29,24 @@ export default function Agreement() {
       if (key === 'current_date') {
         return dayjs(Date()).format('MM-DD-YYYY');
       }
-
       return details && details[key];
     }
 
     return formData[key];
   };
 
-  const checkPermission = () => {
-    if (
-      details &&
-      details.contract_status &&
-      (details.contract_status !== null || details.contract_status !== '')
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  const setParams = (param) => {
-    const stringified =
-      queryString &&
-      queryString.stringify({
-        step: param,
-      });
-    history.push({
-      pathname: `${history.location.pathname}`,
-      search: `${stringified}`,
-    });
-  };
-
-  const enableEditContract = () => {
-    setEditContractFlag(true);
-  };
   const getAgreementAccorType = (index) => {
     if (details && details.contract_type === 'one time') {
       return (
-        data &&
-        data.one_time_service_agreement &&
-        data.one_time_service_agreement[index]
+        templateData &&
+        templateData.one_time_service_agreement &&
+        templateData.one_time_service_agreement[index]
       );
     }
     return (
-      data &&
-      data.recurring_service_agreement &&
-      data.recurring_service_agreement[index]
+      templateData &&
+      templateData.recurring_service_agreement &&
+      templateData.recurring_service_agreement[index]
     );
   };
   const mapMonthlyServices = (key) => {
@@ -216,11 +101,9 @@ export default function Agreement() {
           );
         }
       }
-      // return fields;
       return fields.length ? fields.toString().replaceAll(',', '') : '';
     }
     return '';
-    // return `Enter ${label}.`;
   };
 
   const mapServiceTotal = (key) => {
@@ -244,216 +127,149 @@ export default function Agreement() {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
-  return isLoading.loader && isLoading.type === 'page' ? (
-    <PageLoader
-      className="modal-loader"
-      color="#FF5933"
-      type="page"
-      width={40}
-    />
-  ) : (
-    <div>
-      {checkPermission() ? (
-        <>
-          <div className="on-boarding-container">
-            <div className="text-container ">
-              <p className="m-0 p-0 mt-2">
-                {' '}
-                <Link
-                  to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                  className="link">
-                  <img
-                    src={ArrowIcons}
-                    alt="aarow-back"
-                    className="arrow-icon mt-3"
-                  />
-                  Back to Customer Details
-                </Link>
-                <div className="success-msg">
-                  {showSuccessContact.show ? (
-                    <SuccessMsg
-                      property=" "
-                      message={showSuccessContact.message}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
-              </p>
-              {/* <h3 className="mt-5 mb-4 text-center"> Service Agreement </h3> */}
-
-              <Paragraph>
-                <p className="mb-4 long-text ">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: getAgreementAccorType(0)
-                        .replace(
-                          'CUSTOMER_NAME',
-                          mapDefaultValues(
-                            'contract_company_name',
-                            'Customer Name',
-                          ),
-                        )
-                        .replace(
-                          'START_DATE',
-                          mapDefaultValues('start_date', 'Start Date'),
-                        )
-                        .replace(
-                          'CUSTOMER_ADDRESS',
-                          mapDefaultValues('address', 'Address, '),
-                        )
-                        .replace(
-                          'CUSTOMER_CITY',
-                          mapDefaultValues('city', 'City, '),
-                        )
-                        .replace(
-                          'CUSTOMER_STATE',
-                          mapDefaultValues('state', 'State, '),
-                        )
-                        .replace(
-                          'CUSTOMER_POSTAL',
-                          mapDefaultValues('zip_code', 'Postal Code, '),
-                        )
-                        .replace(
-                          'AGREEMENT_LENGTH',
-                          mapDefaultValues('length', 'Contract Length'),
-                        )
-                        .replace(
-                          'ONE_TIME_SERVICE_TABLE',
-                          `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
+  return (
+    <>
+      <Paragraph>
+        <p className="mb-4 long-text ">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: getAgreementAccorType(0)
+                .replace(
+                  'CUSTOMER_NAME',
+                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                )
+                .replace(
+                  'START_DATE',
+                  mapDefaultValues('start_date', 'Start Date'),
+                )
+                .replace(
+                  'CUSTOMER_ADDRESS',
+                  mapDefaultValues('address', 'Address, '),
+                )
+                .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+                .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+                .replace(
+                  'CUSTOMER_POSTAL',
+                  mapDefaultValues('zip_code', 'Postal Code, '),
+                )
+                .replace(
+                  'AGREEMENT_LENGTH',
+                  mapDefaultValues('length', 'Contract Length'),
+                )
+                .replace(
+                  'ONE_TIME_SERVICE_TABLE',
+                  `<table class="contact-list " style="width: 100%;
+                              border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+                              padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
+                              padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
+                              padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
+                              padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+                                'additional_one_time_services',
+                                'One Time Services',
+                              )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
+                              padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
+                              padding: 13px; font-weight: 800;">${mapServiceTotal(
+                                'additional_one_time_services',
+                              )}
                               </td></tr>
                                 </table>`,
-                        )
-                        .replace(
-                          'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-                          `${mapServiceTotal('additional_one_time_services')}`,
-                        ),
-                    }}
-                  />
-                </p>
-                <p
-                  className="long-text"
-                  dangerouslySetInnerHTML={{
-                    __html: getAgreementAccorType(1)
-                      .replace(
-                        'CUSTOMER_NAME',
-                        mapDefaultValues(
-                          'contract_company_name',
-                          'Customer Name',
-                        ),
-                      )
-                      .replace(
-                        'AGREEMENT_DATE',
-                        mapDefaultValues('start_date', 'Start Date'),
-                      )
-                      .replace(
-                        'CUSTOMER_ADDRESS',
-                        mapDefaultValues('address', 'Address, '),
-                      )
-                      .replace(
-                        'CUSTOMER_CITY',
-                        mapDefaultValues('city', 'City, '),
-                      )
-                      .replace(
-                        'CUSTOMER_STATE',
-                        mapDefaultValues('state', 'State, '),
-                      )
-                      .replace(
-                        'CUSTOMER_POSTAL',
-                        mapDefaultValues('zip_code', 'Postal Code, '),
-                      )
-                      .replace(
-                        'BBE_DATE',
-                        mapDefaultValues('current_date', 'Current Date'),
-                      ),
-                  }}
-                />
-              </Paragraph>
-            </div>
-          </div>
-          <AgreementSidePanel
-            id={id}
-            setFormData={setFormData}
-            formData={formData}
-            loader={loader}
-            agreementData={details}
-            editContractFlag={editContractFlag}
-            setEditContractFlag={setEditContractFlag}
-          />{' '}
-          {(details &&
-            details.contract_status &&
-            details.contract_status.value === 'pending contract approval') ||
-          (details &&
-            details.contract_status &&
-            details.contract_status.value === 'pending contract signature') ? (
-            <Footer className="sticky">
-              <div className="container">
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5 w-100 sticky-btn-primary sidepanel"
-                  onClick={() => enableEditContract()}>
-                  Edit Contract{' '}
-                </Button>
-                {details &&
-                details.contract_status &&
-                details.contract_status.value !==
-                  'pending contract signature' ? (
-                  <Button
-                    className="light-orange on-boarding w-320 mt-3 mr-5 w-100 sticky-btn "
-                    onClick={() => {
-                      setParams('send-remainder');
-                      setShowModal(true);
-                    }}>
-                    <img src={AlarmBellIcon} alt="alarm" />
-                    Send Reminder
-                  </Button>
-                ) : (
-                  ''
-                )}
-              </div>
-            </Footer>
-          ) : (
-            ''
-          )}
-        </>
-      ) : (
-        <PageNotFound />
-      )}
-
-      <Modal
-        isOpen={showModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
-          role="presentation"
-        />
-        <ModalBox>
-          <RequestSignature
-            id={id}
-            agreementData={details}
-            setShowModal={setShowModal}
+                )
+                .replace(
+                  'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+                  `${mapServiceTotal('additional_one_time_services')}`,
+                ),
+            }}
           />
-        </ModalBox>
-      </Modal>
-    </div>
+        </p>
+        <p
+          className="long-text"
+          dangerouslySetInnerHTML={{
+            __html: getAgreementAccorType(1)
+              .replace(
+                'CUSTOMER_NAME',
+                mapDefaultValues('contract_company_name', 'Customer Name'),
+              )
+              .replace(
+                'AGREEMENT_DATE',
+                mapDefaultValues('start_date', 'Start Date'),
+              )
+              .replace(
+                'CUSTOMER_ADDRESS',
+                mapDefaultValues('address', 'Address, '),
+              )
+              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+              .replace(
+                'CUSTOMER_POSTAL',
+                mapDefaultValues('zip_code', 'Postal Code, '),
+              )
+              .replace(
+                'BBE_DATE',
+                mapDefaultValues('current_date', 'Current Date'),
+              ),
+          }}
+        />
+      </Paragraph>
+    </>
   );
 }
+
+Agreement.defaultProps = {
+  formData: {},
+  details: {},
+  templateData: {},
+};
+
+Agreement.propTypes = {
+  details: PropTypes.shape({
+    length: PropTypes.shape({ label: PropTypes.string }),
+    contract_type: PropTypes.string,
+    total_fee: PropTypes.shape({
+      additional_marketplaces: PropTypes.number,
+      monthly_service: PropTypes.number,
+      onetime_service: PropTypes.number,
+    }),
+    primary_marketplace: PropTypes.shape({
+      fee: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
+    additional_marketplaces: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.shape({
+          name: PropTypes.string,
+          fee: PropTypes.number,
+        }),
+      }),
+    ),
+    additional_one_time_services: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.shape({
+          name: PropTypes.string,
+          fee: PropTypes.number,
+        }),
+      }),
+    ),
+    additional_monthly_services: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.shape({
+          name: PropTypes.string,
+          fee: PropTypes.number,
+        }),
+      }),
+    ),
+  }),
+  formData: PropTypes.shape({
+    length: PropTypes.string,
+    sales_threshold: PropTypes.string,
+  }),
+  templateData: PropTypes.shape({
+    addendum: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+    statement_of_work: PropTypes.string,
+    one_time_service_agreement: PropTypes.arrayOf(PropTypes.string),
+    recurring_service_agreement: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
 
 const Paragraph = styled.div`
   .first-sub-category {
@@ -466,26 +282,5 @@ const Paragraph = styled.div`
   }
   &.testing {
     color: red !important;
-  }
-`;
-
-const Footer = styled.div`
-  border: 1px solid ${Theme.gray15};
-  bottom: 0;
-  width: 100%;
-  background: #fff;
-  box-shadow: ${Theme.boxShadow};
-  position: fixed;
-  min-height: 80px;
-
-  .w-320 {
-    float: left;
-    max-width: 320px;
-    width: 100%;
-  }
-
-  p {
-    float: left;
-    margin-top: 30px;
   }
 `;

@@ -30,12 +30,13 @@ import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import {
-  Addendum,
-  Agreement,
-  Statement,
-  OneTimeAgreement,
+  // Addendum,
+  // Agreement,
+  // Statement,
+  // OneTimeAgreement,
   ServicesAmendment,
   DSPAddendum,
+  ContractContainer,
   // HelloSignComponent,
 } from '../components/Contract';
 import {
@@ -132,10 +133,11 @@ export default function AuthenticationComponent() {
           <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
 
           {/* Contract */}
-          <Route path={PATH_AGREEMENT} exact component={Agreement} />
-          <Route path={PATH_STATEMENT} exact component={Statement} />
-          <Route path={PATH_ADDENDUM} exact component={Addendum} />
-          <Route path={PATH_ONE_TIME_AGREEMENT} component={OneTimeAgreement} />
+          <Route path={PATH_AGREEMENT} exact component={ContractContainer} />
+          {/* <Route path={PATH_AGREEMENT} exact component={Agreement} /> */}
+          <Route path={PATH_STATEMENT} exact component={ContractContainer} />
+          <Route path={PATH_ADDENDUM} exact component={ContractContainer} />
+          <Route path={PATH_ONE_TIME_AGREEMENT} component={ContractContainer} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ServicesAmendment} />
           <Route path={PATH_DSP_ADDENDUM} component={DSPAddendum} />
           {/* <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} /> */}

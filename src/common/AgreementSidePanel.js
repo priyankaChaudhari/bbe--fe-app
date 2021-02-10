@@ -73,6 +73,7 @@ export default function AgreementSidePanel({
   // accountURL,
   newAddendumData,
   onEditAddendum,
+
   // editContractFlag,
   // setEditContractFlag,
   setShowEditor,
@@ -81,6 +82,8 @@ export default function AgreementSidePanel({
   setNotIncludedMonthlyServices,
   sendNotIncludedOneTimeServToAdd,
   sendNotIncludedMonthlyServToAdd,
+  saveError,
+  showFooter,
 }) {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -91,6 +94,11 @@ export default function AgreementSidePanel({
     dspAddendum: false,
     amendment: false,
   });
+  // const [showSection, setShowCollpase] = useState({
+  //   agreement: false,
+  //   statement: false,
+  //   addendum: false,
+  // });
   const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -163,6 +171,7 @@ export default function AgreementSidePanel({
       result = options;
     }
     func(result);
+
     if (setNotIncludedOneTimeServices) {
       setNotIncludedOneTimeServices(result);
     }
@@ -172,6 +181,7 @@ export default function AgreementSidePanel({
   };
 
   useEffect(() => {
+    // console.log(agreementData, ' in useeffcect of side');
     getLength().then((len) => {
       setAccountLength(len.data);
     });
@@ -217,18 +227,19 @@ export default function AgreementSidePanel({
       }
     });
 
-    if (history.location.pathname.includes('agreement'))
-      setOpenCollapse({ agreement: true });
-    if (history.location.pathname.includes('statement'))
-      setOpenCollapse({ statement: true });
-    if (history.location.pathname.includes('addendum'))
-      setOpenCollapse({ addendum: true });
-    if (history.location.pathname.includes('dsp-addendum'))
-      setOpenCollapse({ dspAddendum: true });
-    if (history.location.pathname.includes('service-amendment'))
-      setOpenCollapse({ amendment: true });
+    // if (history.location.pathname.includes('agreement'))
+    //   setOpenCollapse({ agreement: true });
+    // if (history.location.pathname.includes('statement'))
+    //   setOpenCollapse({ statement: true });
+    // if (history.location.pathname.includes('addendum'))
+    //   setOpenCollapse({ addendum: true });
+    // if (history.location.pathname.includes('dsp-addendum'))
+    //   setOpenCollapse({ dspAddendum: true });
+    // if (history.location.pathname.includes('service-amendment'))
+    //   setOpenCollapse({ amendment: true });
     // if (agreementData && agreementData.additional_one_time_services === null)
     //   setNewOneTime([{ service: {}, quantity: '' }]);
+
     if (
       (agreementData && agreementData.additional_one_time_services) ||
       (agreementData && agreementData.sales_threshold)
@@ -240,21 +251,34 @@ export default function AgreementSidePanel({
         sales_threshold: agreementData && agreementData.sales_threshold,
       });
     }
-    // if (agreementData && agreementData.sales_threshold) {
-    //   setFormData({
-    //     ...formData,
-    //     sales_threshold: agreementData && agreementData.sales_threshold,
-    //   });
-    // }
-    // else {
-    //   setFormData({
-    //     ...formData,
-    //     additional_one_time_services: [{ service: {}, quantity: '' }],
-    //   });
-    // }
-  }, [StatementDetails]);
+  }, []);
+
+  useEffect(() => {
+    if (
+      agreementData &&
+      agreementData.additional_monthly_services &&
+      agreementData.additional_monthly_services.length &&
+      monthlyService
+    ) {
+      getMonthlyServiceOptions(monthlyService);
+    }
+    if (
+      agreementData &&
+      agreementData.additional_one_time_services &&
+      agreementData.additional_one_time_services.length &&
+      oneTimeService
+    ) {
+      fetchUncommonOptions(
+        oneTimeService,
+        agreementData.additional_one_time_services,
+        setOneTimeService,
+      );
+    }
+    return () => {};
+  }, [agreementData]);
 
   const handleChange = (event, key, type, val) => {
+    showFooter(true);
     // setShowSaveIcon(true);
     // if (key === 'additional_one_time_services') {
     //   setFormData({ ...formData, additional_one_time_services: event.value });
@@ -704,11 +728,11 @@ export default function AgreementSidePanel({
         // for (const service of formData.additional_one_time_services) {
         //   saveAdditionalOneTimeService(service, service.id);
         // }
-
-        formData.additional_one_time_services.forEach((service, index) =>
-          saveAdditionalOneTimeService(service, service.id, index),
-        );
-
+        if (formData.additional_one_time_services) {
+          formData.additional_one_time_services.forEach((service, index) =>
+            saveAdditionalOneTimeService(service, service.id, index),
+          );
+        }
         const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
         for (const val of num) {
           if (formData && formData[val]) {
@@ -879,6 +903,7 @@ export default function AgreementSidePanel({
   // };
 
   const handleOneTimeService = (event, index, field, type) => {
+    showFooter(true);
     const list = [...formData.additional_one_time_services];
     if (type === 'quantity') {
       list[index][type] = event.target.value;
@@ -934,6 +959,7 @@ export default function AgreementSidePanel({
           />
           <ErrorMsg>
             {apiError && apiError.service && apiError.service[0]}
+            {saveError && saveError.service && saveError.service[0]}
           </ErrorMsg>
         </div>
         <div className="col-3">
@@ -950,6 +976,7 @@ export default function AgreementSidePanel({
           />
           <ErrorMsg>
             {apiError && apiError.quantity && apiError.quantity[0]}
+            {saveError && saveError.quantity && saveError.quantity[0]}
           </ErrorMsg>
         </div>
         {field &&
@@ -969,6 +996,7 @@ export default function AgreementSidePanel({
             />
             <ErrorMsg>
               {apiError && apiError.quantity && apiError.quantity[0]}
+              {saveError && saveError.quantity && saveError.quantity[0]}
             </ErrorMsg>
           </div>
         ) : (
@@ -1044,6 +1072,10 @@ export default function AgreementSidePanel({
     setFormData({ ...formData, additional_one_time_services: list });
     // setNewOneTime([...formData,]);
   };
+  // const handleShowCollapse = (event, section) => {
+  //   console.log(event.target.checked);
+  //   setShowCollpase({ ...showSection, section: event.target.checked });
+  // };
 
   return (
     <SidePanel>
@@ -1100,7 +1132,7 @@ export default function AgreementSidePanel({
           </div>
           <Collapse isOpened={openCollapse.agreement}>
             {loader ? (
-              ''
+              <PageLoader component="activityLog" color="#FF5933" type="page" />
             ) : (
               <ul className="collapse-inner">
                 {AgreementDetails.map((item) => (
@@ -1114,10 +1146,46 @@ export default function AgreementSidePanel({
                         {apiError &&
                           apiError[item.key] &&
                           apiError[item.key][0]}
+                        {saveError &&
+                          saveError[item.key] &&
+                          saveError[item.key][0]}
                       </ErrorMsg>
                     </FormField>
                   </li>
                 ))}
+                {/* {agreementData && agreementData.contract_type === 'one time' ? (
+                  <>
+                    <li>
+                      <FormField>
+                        <label htmlFor="additional_one_time_services">
+                          <div className="row">
+                            <div className="col-10">
+                              Additional One Time Services
+                            </div>
+                          </div>
+                          {generateOneTimeService(
+                            'additional_one_time_services',
+                          )}
+                        </label>
+                      </FormField>
+                    </li>
+                    {oneTimeService && oneTimeService.length ? (
+                      <li>
+                        <div
+                          className="add-market-place cursor float-right"
+                          onClick={() => addNewService()}
+                          role="presentation">
+                          {' '}
+                          + Add Additional One Time Services
+                        </div>
+                      </li>
+                    ) : (
+                      ''
+                    )}
+                  </>
+                ) : (
+                  ''
+                )} */}
                 <li>
                   <Button
                     className="btn-primary sidepanel mt-2 mb-3 w-100"
@@ -1297,6 +1365,15 @@ export default function AgreementSidePanel({
             <img className="service-agre" src={CreateAddendum} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
             <div className="clear-fix" />
+            {/* <div>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  onClick={(event) => handleShowCollapse(event, 'addendum')}
+                />
+                <span className="slider round" />
+              </label>
+            </div> */}
           </div>
           <Collapse isOpened={openCollapse.addendum}>
             <ul className="collapse-inner">
@@ -1517,6 +1594,8 @@ AgreementSidePanel.defaultProps = {
   setNotIncludedMonthlyServices: () => {},
   sendNotIncludedOneTimeServToAdd: () => {},
   sendNotIncludedMonthlyServToAdd: () => {},
+  saveError: {},
+  showFooter: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -1528,8 +1607,8 @@ AgreementSidePanel.propTypes = {
     company_name: PropTypes.string,
     primary_marketplace: PropTypes.string,
     additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
-    additional_monthly_services: PropTypes.arrayOf(PropTypes.array),
-    additional_one_time_services: PropTypes.arrayOf(PropTypes.array),
+    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
     quantity: PropTypes.number,
   }),
   agreementData: PropTypes.shape({
@@ -1559,6 +1638,11 @@ AgreementSidePanel.propTypes = {
   setNotIncludedMonthlyServices: PropTypes.func,
   sendNotIncludedOneTimeServToAdd: PropTypes.func,
   sendNotIncludedMonthlyServToAdd: PropTypes.func,
+  saveError: PropTypes.shape({
+    quantity: PropTypes.arrayOf(PropTypes.string),
+    service: PropTypes.arrayOf(PropTypes.string),
+  }),
+  showFooter: PropTypes.func,
 };
 
 const SidePanel = styled.div`
