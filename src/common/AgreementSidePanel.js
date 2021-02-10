@@ -28,8 +28,8 @@ import {
   // PdfDownload,
   CloseIcon,
   SaveIcon,
-  PlusIcon,
-  MinusIcon,
+  // PlusIcon,
+  // MinusIcon,
   // AlarmBellIcon,
 } from '../theme/images/index';
 // import DefaultUser from '../theme/images/index';
@@ -62,7 +62,7 @@ import {
   // updateAdditionalServices,
 } from '../api';
 import InputSelect from './InputSelect';
-import CheckBox from './CheckBox';
+// import CheckBox from './CheckBox';
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 import { getAccountDetails } from '../store/actions/accountState';
@@ -1323,7 +1323,7 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
-                  <li>
+                  {/* <li>
                     <FormField>
                       <label htmlFor="additional_one_time_services" />
                       Additional Monthly Services
@@ -1515,7 +1515,7 @@ export default function AgreementSidePanel({
                         </button>
                       </div>
                     </div>
-                  </li>
+                  </li> */}
 
                   {/* <li>
                   <Button
@@ -1549,30 +1549,32 @@ export default function AgreementSidePanel({
             )}
           </Collapse>
           <div className="straight-line sidepanel " />
-          <div
-            className={
-              showSection && showSection.addendum
-                ? 'collapse-btn '
-                : 'collapse-btn disabled'
-            }
-            role="presentation"
-            type="button"
-            onClick={() => {
-              setOpenCollapse({ addendum: !openCollapse.addendum });
-              history.push(PATH_ADDENDUM.replace(':id', id));
-            }}>
-            <img className="service-agre" src={CreateAddendum} alt="pdf" />
-            <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
-            <div className="clear-fix" />
-          </div>
           <div>
-            <label className="switch">
-              <input
-                type="checkbox"
-                onClick={(event) => handleShowCollapse(event, 'addendum')}
-              />
-              <span className="slider round" />
-            </label>
+            <div
+              className={
+                showSection && showSection.addendum
+                  ? 'collapse-btn '
+                  : 'collapse-btn disabled'
+              }
+              role="presentation"
+              type="button"
+              onClick={() => {
+                setOpenCollapse({ addendum: !openCollapse.addendum });
+                history.push(PATH_ADDENDUM.replace(':id', id));
+              }}>
+              <img className="service-agre" src={CreateAddendum} alt="pdf" />
+              <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
+              <div className="clear-fix" />
+            </div>
+            <div>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  onClick={(event) => handleShowCollapse(event, 'addendum')}
+                />
+                <span className="slider round" />
+              </label>
+            </div>
           </div>
           <Collapse isOpened={openCollapse.addendum}>
             <ul className="collapse-inner">
