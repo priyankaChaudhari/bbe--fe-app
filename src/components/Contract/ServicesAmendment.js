@@ -1,194 +1,275 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import { ArrowIcons } from '../../theme/images';
-import AgreementSidePanel from '../../common/AgreementSidePanel';
+/* eslint-disable react/no-danger */
 
-export default function ServicesAmendment() {
-  const location = useLocation();
-  const id = location.pathname.split('/')[2];
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+import dayjs from 'dayjs';
+
+export default function ServicesAmendment({ formData, details, templateData }) {
+  const mapDefaultValues = (key, label, type) => {
+    if (key === 'contract_company_name') {
+      return details && details[key]
+        ? details && details[key]
+        : `Enter ${label}.`;
+    }
+    if (key === 'length') {
+      return details && details.length.label;
+    }
+    if (key === 'primary_marketplace') {
+      return (
+        details &&
+        details.primary_marketplace &&
+        details.primary_marketplace.name
+      );
+    }
+    if (key === 'start_date') {
+      return details && dayjs(details[key]).format('MM-DD-YYYY');
+    }
+    if (key === 'current_date') {
+      return dayjs(Date()).format('MM-DD-YYYY');
+    }
+
+    if (type && type.includes('number')) {
+      return `${type === 'number-currency' ? '$' : '%'} ${
+        details && details[key]
+          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : ''
+      }`;
+    }
+    return key === 'rev_share' || key === 'seller_type'
+      ? details && details[key] && details[key].label
+      : details && details[key];
+  };
+
+  const mapServiceTotal = (key) => {
+    if (key === 'additional_one_time_services') {
+      return `$ ${
+        details && details.total_fee.onetime_service
+          ? details.total_fee.onetime_service
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : 0
+      }`;
+    }
+    const market = details.total_fee.additional_marketplaces
+      ? details.total_fee.additional_marketplaces
+      : 0;
+    const month = details.total_fee.monthly_service
+      ? details.total_fee.monthly_service
+      : 0;
+
+    return `$ ${(market + month)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
+
+  const mapMonthlyServices = (key) => {
+    const fields = [];
+    if (key !== 'additional_one_time_services') {
+      if (details && details[key]) {
+        for (const item of details[key]) {
+          if (
+            (item.service && item.service.name !== undefined) ||
+            item.name !== undefined
+          ) {
+            if (
+              item.service.name !== 'DSP Advertising' &&
+              item.service.name !== 'Inventory Reconciliation'
+            ) {
+              fields.push(
+                `<tr>
+                <td style="border: 1px solid black;padding: 13px;">${
+                  item.service ? item.service.name : item && item.name
+                }</td>
+                <td style="border: 1px solid black;padding: 13px;">$ ${
+                  item.service
+                    ? item.service.fee
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : item.fee
+                    ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : ''
+                } /month
+                </td>
+                </tr>`,
+              );
+            }
+          }
+        }
+      }
+    } else if (formData && formData.additional_one_time_services) {
+      formData.additional_one_time_services.forEach((service) => {
+        return fields.push(
+          `<tr>
+                  <td style="border: 1px solid black;padding: 13px;">${
+                    service.quantity
+                      ? service.quantity
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : 0
+                  }</td>
+                  
+                   <td style="border: 1px solid black;padding: 13px;">${
+                     service.service && service.service.name
+                       ? service.service.name
+                       : ''
+                   }
+      </td>
+      ${
+        service.service && service.service.fee
+          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.service &&
+            service.service.fee &&
+            service.service.name !== 'Amazon Store Package Custom'
+              ? service.service.fee
+              : service.custom_amazon_store_price
+              ? service.custom_amazon_store_price
+              : ''
+            )
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+        </td>
+        `
+          : `<td>Yet to save</td>`
+      }
+
+      ${
+        service.service.name !== 'Amazon Store Package Custom'
+          ? service.quantity && service.service && service.service.fee
+            ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
+              service.service &&
+              service.service.fee
+                ? service.quantity * service.service.fee
+                : ''
+              )
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </td>`
+            : `<td>Yet to save</td>`
+          : service.quantity && service.custom_amazon_store_price
+          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
+            service.custom_amazon_store_price
+              ? service.quantity * service.custom_amazon_store_price
+              : ''
+            )
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </td>`
+          : `<td>Yet to save</td>`
+      }
+         
+                  
+                  </tr>`,
+        );
+      });
+    }
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
+  };
+
+  const showOneTimeServiceTable = () => {
+    if (
+      (details &&
+        details.additional_one_time_services &&
+        details.additional_one_time_services.length) ||
+      (formData &&
+        formData.additional_one_time_services &&
+        formData.additional_one_time_services.length)
+    ) {
+      return `<table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
+        'additional_one_time_services',
+        'One Time Services',
+      )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
+        'additional_one_time_services',
+      )}
+                              </td></tr>
+                                </table>`;
+    }
+    return '';
+  };
 
   return (
     <div>
-      <div className="on-boarding-container">
-        <div className="text-container ">
-          <p className="m-0 p-0 mt-2">
-            {' '}
-            <div className="link">
-              <img
-                src={ArrowIcons}
-                alt="aarow-back"
-                className="arrow-icon mt-3"
-              />
-              Back to Customer Details
-            </div>
-          </p>
-          <h3 className="mt-5 mb-4 text-center">
-            Additional One Time Services Amendment
-          </h3>
-          <Paragraph>
-            <p className="long-text ">
-              This addendum (the “Addendum”) is hereby incorporated into the
-              agreement (“The Agreement”) between{' '}
-              <span>Buy Box Experts (“BBE”) and CUSTOMER_NAME (“Client”)</span>,
-              collectively “The Parties” and individually a “Party”that was{' '}
-              <span> signed by the Parties on AGREEMENT_DATE.</span> Both
-              Parties hereby agree to incorporate the following terms regarding
-              the delivery of services to their existing Agreement. In the event
-              that any terms between the Agreement and this addendum are in
-              conflict, the terms in this Addendum will prevail, otherwise, the
-              remainder of the Agreement remains in force and applies to this
-              Addendum as if it were part of the original Agreement.
-              <br />
-              <br />
-              <table className="contact-list">
-                <tr>
-                  <th>Qty.</th>
-                  <th>Service</th>
-                  <th> Fee</th>
-                  <th>Total</th>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>A+ Content</td>
-                  <td>$600</td>
-                  <td>$600</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Amazon Store [type]</td>
-                  <td>$1,500</td>
-                  <td>$1,500</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>Infographics</td>
-                  <td>$200</td>
-                  <td>$2,000</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Listing Copy</td>
-                  <td>$300</td>
-                  <td>$1,500</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Product Insert</td>
-                  <td>$150</td>
-                  <td>$300</td>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>Amazon Brand Style Guide</td>
-                  <td>$750</td>
-                  <td>$750</td>
-                </tr>
-                <tr>
-                  <td className="total-service" colSpan="3">
-                    {' '}
-                    Total
-                  </td>
-                  <td className="total-service text-right">$6,650</td>
-                </tr>
-              </table>
-              <br />
-              <br />
-              Except as set forth in this Amendment, the Agreement is unaffected
-              and shall continue in full force and effect in accordance with its
-              terms. If there is a conflict between this amendment and the
-              Agreement or any earlier amendment, the terms of this amendment
-              will prevail and the newly signed contract will stand.
-              <br />
-              <br />
-              <span>IN WITNESS WHEREOF</span>, the undersigned have executed and
-              delivered this Agreement.
-              <br />
-              <div className="row">
-                <div className="col-6 mt-4">
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Company:{' '}
-                      <span className="input-field">Buy Box Experts</span>
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Signature:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Printed Name:
-                      <span className="input-field">Thaddaeus Hay </span>
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Title:
-                      <span className="input-field">Chief Revenue Officer</span>
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Date:
-                      <span className="input-field">[current_date]</span>
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Address:
-                      <span className="input-field">1172 W 700 N #200</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-6 mt-4">
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Company: <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Signature:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Printed Name:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Title:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Date:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                  <div className="refer-agreement">
-                    <div className="label">
-                      Address:
-                      <span className="input-field" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </p>
-          </Paragraph>
-        </div>
-      </div>
-      <AgreementSidePanel id={id} />
+      <Paragraph>
+        <p
+          className="long-text"
+          dangerouslySetInnerHTML={{
+            __html:
+              templateData.amendment &&
+              templateData.amendment[0]
+                .replace(
+                  'CUSTOMER_NAME',
+                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                )
+                .replace(
+                  'START_DATE',
+                  mapDefaultValues('start_date', 'Start Date'),
+                )
+                .replace('ONE_TIME_SERVICE_TABLE', showOneTimeServiceTable()),
+          }}
+        />
+        <p
+          className="long-text"
+          dangerouslySetInnerHTML={{
+            __html:
+              templateData.amendment &&
+              templateData.amendment[1]
+                .replace(
+                  'CUSTOMER_NAME',
+                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                )
+                .replace(
+                  'AGREEMENT_DATE',
+                  mapDefaultValues('start_date', 'Start Date'),
+                )
+                .replace(
+                  'BBE_DATE',
+                  mapDefaultValues('current_date', 'Current Date'),
+                ),
+          }}
+        />
+      </Paragraph>
+
+      {/* <AgreementSidePanel id={id} /> */}
     </div>
   );
 }
+
+ServicesAmendment.defaultProps = {
+  details: {},
+  formData: {},
+  templateData: {},
+};
+
+ServicesAmendment.propTypes = {
+  formData: PropTypes.shape({
+    additional_one_time_services: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.string,
+      }),
+    ),
+  }),
+  details: PropTypes.shape({
+    length: PropTypes.string,
+    primary_marketplace: PropTypes.shape({
+      fee: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
+    total_fee: PropTypes.shape({
+      onetime_service: PropTypes.number,
+      additional_marketplaces: PropTypes.number,
+      monthly_service: PropTypes.number,
+    }),
+    additional_one_time_services: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.string,
+      }),
+    ),
+  }),
+  templateData: PropTypes.shape({
+    amendment: PropTypes.arrayOf(PropTypes.string),
+  }),
+};
 
 const Paragraph = styled.div`
   .summary {

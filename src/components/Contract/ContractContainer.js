@@ -928,7 +928,7 @@ export default function ContractContainer() {
                   )}
                 </div>
                 <div>
-                  {history.location.pathname.includes('addendum') ? (
+                  {history.location.pathname.split('/')[3] === 'addendum' ? (
                     <Addendum
                       formData={formData}
                       details={details}
@@ -946,15 +946,24 @@ export default function ContractContainer() {
                   )}
                 </div>{' '}
                 <div>
-                  {history.location.pathname.includes('dsp-addendum') ? (
-                    <DSPAddendum />
+                  {history.location.pathname.split('/')[3] ===
+                  'dsp-addendum' ? (
+                    <DSPAddendum
+                      formData={formData}
+                      details={details}
+                      templateData={data}
+                    />
                   ) : (
                     ''
                   )}
                 </div>{' '}
                 <div>
                   {history.location.pathname.includes('service-amendment') ? (
-                    <ServicesAmendment />
+                    <ServicesAmendment
+                      formData={formData}
+                      details={details}
+                      templateData={data}
+                    />
                   ) : (
                     ''
                   )}

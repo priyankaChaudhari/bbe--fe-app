@@ -79,8 +79,9 @@ export async function deleteMarketplace(id, key) {
 }
 
 export async function createAdditionalServices(data) {
+  const params = { expand: '~all' };
   const result = await axiosInstance
-    .post(API_ADDITIONAL_SERVICES, data)
+    .post(API_ADDITIONAL_SERVICES, data, { params })
     .then((response) => {
       return response;
     })

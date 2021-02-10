@@ -38,8 +38,8 @@ import {
   PATH_ADDENDUM,
   PATH_AGREEMENT,
   PATH_STATEMENT,
-  // PATH_DSP_ADDENDUM,
-  // PATH_SERVICE_AMENDMENT,
+  PATH_DSP_ADDENDUM,
+  PATH_SERVICE_AMENDMENT,
 } from '../constants';
 import {
   AgreementDetails,
@@ -1551,7 +1551,7 @@ export default function AgreementSidePanel({
           </Collapse>
           <div className="straight-line sidepanel " />
           <div
-            className="collapse-btn  "
+            className="collapse-btn "
             role="presentation"
             type="button"
             onClick={() => {
@@ -1613,8 +1613,8 @@ export default function AgreementSidePanel({
             </ul>
           </Collapse>
           <div className="straight-line sidepanel " />
-          {/* <div
-            className="collapse-btn  "
+          <div
+            className="collapse-btn   "
             role="presentation"
             type="button"
             onClick={() => {
@@ -1624,7 +1624,7 @@ export default function AgreementSidePanel({
             <img className="service-agre" src={CreateAddendum} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">
               DSP Addendum{' '}
-              {agreementData.steps_completed &&
+              {/* {agreementData.steps_completed &&
               agreementData.steps_completed.dspAddendum ? (
                 <img
                   className="green-check-select ml-4"
@@ -1633,56 +1633,48 @@ export default function AgreementSidePanel({
                 />
               ) : (
                 ''
-              )}
+              )} */}
             </h4>
             <div className="clear-fix" />
           </div>
 
           <Collapse isOpened={openCollapse.dspAddendum}>
             <ul className="collapse-inner">
-              <li>
-                <p className="small-para contract mt-0">
-                  Want to make changes to the contract? Create Addendum to the
-                  contract.
-                </p> */}
-          {/* {newAddendumData && newAddendumData.id ? (
-                  <Button
-                    className=" btn-transparent sidepanel mt-3 mb-3 w-100"
-                    onClick={() => onEditAddendum()}>
-                    <img
-                      className="edit-folder-icon mr-2"
-                      src={EditFileIcons}
-                      alt="edit "
-                    />
-                    Edit Addendum
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      className={
-                        (newAddendumData &&
-                          !Object.keys(newAddendumData).length) ||
-                        (newAddendumData &&
-                          newAddendumData.addendum &&
-                          newAddendumData.addendum.includes('<p></p>'))
-                          ? ' btn-gray sidepanel on-boarding mt-3 mb-3 w-100 disabled'
-                          : 'btn-primary sidepanel on-boarding mt-3 mb-3 w-100  '
-                      }
-                      onClick={() => nextStep('final')}>
-                      Save Addendum
-                    </Button>
-                    <Button className="btn-transparent sidepanel on-boarding mt-3 mb-3 w-100">
-                      Cancel
-                    </Button>
-                  </>
-                )} */}
-          {/* </li>
+              <li>DSP</li>
             </ul>
           </Collapse>
-        </>
-        {/* ) : (
-          ''
-        )} */}
+
+          <div className="straight-line sidepanel " />
+          <div
+            className="collapse-btn   "
+            role="presentation"
+            type="button"
+            onClick={() => {
+              setOpenCollapse({ dspAddendum: !openCollapse.amendment });
+              history.push(PATH_SERVICE_AMENDMENT.replace(':id', id));
+            }}>
+            <img className="service-agre" src={CreateAddendum} alt="pdf" />
+            <h4 className="sendar-details mt-1 ml-5">
+              One time Amendment{' '}
+              {/* {agreementData.steps_completed &&
+              agreementData.steps_completed.dspAddendum ? (
+                <img
+                  className="green-check-select ml-4"
+                  src={GreenCheck}
+                  alt="right-check"
+                />
+              ) : (
+                ''
+              )} */}
+            </h4>
+            <div className="clear-fix" />
+          </div>
+
+          <Collapse isOpened={openCollapse.amendment}>
+            <ul className="collapse-inner">
+              <li>One time Amendment</li>
+            </ul>
+          </Collapse>
 
           {/* <p className="gray-text">
         The Contract has been sent for review and signature to the client on
