@@ -29,6 +29,18 @@
   src: url('../fonts//arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff');
 }
 
+@font-face {
+  font-family: 'Helvetica-Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/Helvetica-Font/Helvetica.ttf');
+}
+@font-face {
+  font-family: 'Helvetica-bold';
+  font-style: normal;
+  font-weight: bold;
+  src: url('../fonts/Helvetica-Font//Helvetica-Bold.ttf');
+}
 html,
 #root {
   height: 100%;
@@ -273,7 +285,6 @@ p {
     color: $black-color;
     font-size: $text-f-size;
     line-height: 24px;
-    font-family: $regulartext-font-family;
   }
 
   &.text-detail {
@@ -1019,6 +1030,7 @@ div {
 .text-container {
   padding-right: 360px;
   padding-left: 120px;
+  font-family: $contact-regular-font-family;
 
   @media only screen and (min-width: 1500px) {
     padding-right: 450px;
