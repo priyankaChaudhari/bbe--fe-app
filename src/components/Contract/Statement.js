@@ -37,6 +37,7 @@ export default function Statement({
             : `Enter ${label}.`
         }`;
       }
+
       return key === 'rev_share' || key === 'seller_type'
         ? details && details[key] && details[key].label
         : details && details[key];
@@ -137,8 +138,8 @@ export default function Statement({
 
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
-    if (details && details.additional_marketplaces) {
-      for (const item of details.additional_marketplaces) {
+    if (formData && formData.additional_marketplaces) {
+      for (const item of formData.additional_marketplaces) {
         fields.push(
           `<tr>
       <td style="border: 1px solid black;padding: 13px;">${
@@ -188,8 +189,8 @@ export default function Statement({
   const mapMonthlyServices = (key) => {
     const fields = [];
     if (key !== 'additional_one_time_services') {
-      if (details && details[key]) {
-        for (const item of details[key]) {
+      if (formData && formData[key]) {
+        for (const item of formData[key]) {
           if (
             (item.service && item.service.name !== undefined) ||
             item.name !== undefined
@@ -438,6 +439,11 @@ Statement.propTypes = {
   formData: PropTypes.shape({
     length: PropTypes.string,
     sales_threshold: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.string,
+      }),
+    ),
     additional_one_time_services: PropTypes.arrayOf(
       PropTypes.shape({
         service: PropTypes.string,

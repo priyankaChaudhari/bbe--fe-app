@@ -83,6 +83,17 @@ export default function ContractContainer() {
     show: false,
     message: '',
   });
+  const [showSection, setShowCollpase] = useState({
+    addendum: false,
+    dspAddendum: false,
+    amendment: false,
+  });
+
+  const executeScroll = (eleId) => {
+    const element = document.getElementById(eleId);
+    const y = element.getBoundingClientRect().top + window.pageYOffset + -150;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  };
 
   const checkPermission = () => {
     if (
@@ -150,6 +161,9 @@ export default function ContractContainer() {
         ...formData,
         additional_one_time_services:
           details && details.additional_one_time_services,
+        additional_marketplaces: details && details.additional_marketplaces,
+        additional_monthly_services:
+          details && details.additional_monthly_services,
         sales_threshold: details && details.sales_threshold,
       });
     }
@@ -180,7 +194,7 @@ export default function ContractContainer() {
     setIsLoading({ loader: true, type: 'page' });
     if (serviceId) {
       updateAdditionalServices(serviceId, oneTimeServiceData).then((res) => {
-        dispatch(getAccountDetails(id));
+        // dispatch(getAccountDetails(id));
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'page' });
           setApiError(res && res.data);
@@ -193,7 +207,7 @@ export default function ContractContainer() {
       });
     } else {
       createAdditionalServices(oneTimeServiceData).then((res) => {
-        dispatch(getAccountDetails(id));
+        // dispatch(getAccountDetails(id));
 
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'page' });
@@ -221,152 +235,208 @@ export default function ContractContainer() {
   const nextStep = () => {
     showFooter(false);
 
-    if (history.location.pathname.includes('agreement')) {
-      if (formData && Object.keys(formData).length) {
-        if (formData && formData.start_date) {
-          formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
-        }
-        setIsLoading({ loader: true, type: 'page' });
-        const agreementData = {
-          ...formData,
-          steps_completed: {
-            ...details.steps_completed,
-            agreement: true,
-          },
-        };
-        updateAccountDetails(details.id, agreementData).then((response) => {
-          if (response && response.status === 400) {
-            setIsLoading({ loader: false, type: 'page' });
-            setApiError(response && response.data);
-          } else if (response && response.status === 200) {
-            dispatch(getAccountDetails(id));
-            setIsLoading({ loader: false, type: 'page' });
-            setFormData({});
-          }
-        });
-      } else {
-        const stepsCompletedData = {
-          steps_completed: {
-            ...details.steps_completed,
-            agreement: true,
-          },
-        };
-        updateAccountDetails(details.id, stepsCompletedData).then(
-          (response) => {
-            if (response && response.status === 200) {
-              dispatch(getAccountDetails(id));
-            }
-          },
-        );
+    // if (history.location.pathname.includes('agreement')) {
+
+    if (formData && Object.keys(formData).length) {
+      // for start date
+      if (formData && formData.start_date) {
+        formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
       }
-    }
 
-    if (history.location.pathname.includes('statement')) {
-      if (formData && Object.keys(formData).length) {
-        setIsLoading({ loader: true, type: 'button' });
+      setIsLoading({ loader: true, type: 'button' });
 
-        if (formData && formData.primary_marketplace) {
-          const statementData = {
-            id:
-              (details &&
-                details.primary_marketplace &&
-                details.primary_marketplace.id) ||
-              '',
-            contract: details.id,
-            name: formData && formData.primary_marketplace,
-            is_primary: true,
-          };
-          if (details.primary_marketplace && details.primary_marketplace.id) {
-            updateMarketplace(
-              details.primary_marketplace.id,
-              statementData,
-            ).then((res) => {
+      // for primary market place
+      if (formData && formData.primary_marketplace) {
+        const statementData = {
+          id:
+            (details &&
+              details.primary_marketplace &&
+              details.primary_marketplace.id) ||
+            '',
+          contract: details.id,
+          name: formData && formData.primary_marketplace,
+          is_primary: true,
+        };
+        if (details.primary_marketplace && details.primary_marketplace.id) {
+          updateMarketplace(details.primary_marketplace.id, statementData).then(
+            (res) => {
               if (res && res.status === 200) {
                 setIsLoading({ loader: false, type: 'button' });
               }
               if (res && res.status === 400) {
                 setApiError(res && res.data);
               }
-            });
-          } else {
-            createMarketplace(statementData).then((res) => {
-              if (res && res.status === 201) {
-                setIsLoading({ loader: false, type: 'button' });
-              }
-            });
-          }
-        }
-
-        if (formData.additional_one_time_services) {
-          formData.additional_one_time_services.forEach((service, index) =>
-            saveAdditionalOneTimeService(service, service.id, index),
+            },
           );
+        } else {
+          createMarketplace(statementData).then((res) => {
+            if (res && res.status === 201) {
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
         }
-        const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
-        for (const val of num) {
-          if (formData && formData[val]) {
-            formData[val] = formData[val].substring(1).replace(/,/g, '');
-          }
-        }
-        const detail = {
-          ...formData,
-          steps_completed: {
-            ...details.steps_completed,
-            agreement: true,
-            statement: true,
-          },
-        };
-        updateAccountDetails(details.id, detail).then((response) => {
-          if (response && response.status === 400) {
-            setIsLoading({ loader: false, type: 'button' });
-            setApiError(response && response.data);
-            setFormData({});
-          } else if (response && response.status === 200) {
-            dispatch(getAccountDetails(id));
-            setIsLoading({ loader: false, type: 'button' });
-            setFormData({});
-          }
-        });
-      } else {
-        setIsLoading({ loader: true, type: 'button' });
-        const stepData = {
-          steps_completed: { agreement: true, statement: true },
-        };
-        updateAccountDetails(details.id, stepData).then((response) => {
-          if (response && response.status === 200) {
-            dispatch(getAccountDetails(id));
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
       }
-    }
-    if (history.location.pathname.includes('addendum')) {
-      if (newAddendumData.id) {
-        setIsLoading({ loader: true, type: 'page' });
 
-        updateAddendum(newAddendumData.id, {
-          addendum: newAddendumData.addendum,
-        }).then(() => {
-          setIsLoading({ loader: false, type: 'page' });
+      // for additional one time service
+      if (formData.additional_one_time_services) {
+        formData.additional_one_time_services.forEach((service, index) =>
+          saveAdditionalOneTimeService(service, service.id, index),
+        );
+      }
+
+      // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
+      const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
+      for (const val of num) {
+        if (formData && formData[val]) {
+          formData[val] = formData[val].substring(1).replace(/,/g, '');
+        }
+      }
+      const detail = {
+        ...formData,
+        steps_completed: {
+          ...details.steps_completed,
+          agreement: true,
+          statement: true,
+        },
+      };
+
+      updateAccountDetails(details.id, detail).then((response) => {
+        if (response && response.status === 400) {
+          setIsLoading({ loader: false, type: 'button' });
+          setApiError(response && response.data);
+          setFormData({});
+        } else if (response && response.status === 200) {
+          dispatch(getAccountDetails(id));
+          setIsLoading({ loader: false, type: 'button' });
+          setFormData({});
+        }
+      });
+    } else {
+      const stepsCompletedData = {
+        steps_completed: {
+          ...details.steps_completed,
+          agreement: true,
+          statement: true,
+        },
+      };
+      setIsLoading({ loader: true, type: 'button' });
+
+      updateAccountDetails(details.id, stepsCompletedData).then((response) => {
+        setIsLoading({ loader: false, type: 'button' });
+
+        if (response && response.status === 200) {
+          dispatch(getAccountDetails(id));
+        }
+      });
+    }
+    // }
+
+    // if (history.location.pathname.includes('statement')) {
+    // if (formData && Object.keys(formData).length) {
+    //   setIsLoading({ loader: true, type: 'button' });
+
+    // if (formData && formData.primary_marketplace) {
+    //   const statementData = {
+    //     id:
+    //       (details &&
+    //         details.primary_marketplace &&
+    //         details.primary_marketplace.id) ||
+    //       '',
+    //     contract: details.id,
+    //     name: formData && formData.primary_marketplace,
+    //     is_primary: true,
+    //   };
+    //   if (details.primary_marketplace && details.primary_marketplace.id) {
+    //     updateMarketplace(details.primary_marketplace.id, statementData).then(
+    //       (res) => {
+    //         if (res && res.status === 200) {
+    //           setIsLoading({ loader: false, type: 'button' });
+    //         }
+    //         if (res && res.status === 400) {
+    //           setApiError(res && res.data);
+    //         }
+    //       },
+    //     );
+    //   } else {
+    //     createMarketplace(statementData).then((res) => {
+    //       if (res && res.status === 201) {
+    //         setIsLoading({ loader: false, type: 'button' });
+    //       }
+    //     });
+    //   }
+    // }
+
+    // if (formData.additional_one_time_services) {
+    //   formData.additional_one_time_services.forEach((service, index) =>
+    //     saveAdditionalOneTimeService(service, service.id, index),
+    //   );
+    // }
+    // const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
+    // for (const val of num) {
+    //   if (formData && formData[val]) {
+    //     formData[val] = formData[val].substring(1).replace(/,/g, '');
+    //   }
+    // }
+    // const detail = {
+    //   ...formData,
+    //   steps_completed: {
+    //     ...details.steps_completed,
+    //     agreement: true,
+    //     statement: true,
+    //   },
+    // };
+    // updateAccountDetails(details.id, detail).then((response) => {
+    //   if (response && response.status === 400) {
+    //     setIsLoading({ loader: false, type: 'button' });
+    //     setApiError(response && response.data);
+    //     setFormData({});
+    //   } else if (response && response.status === 200) {
+    //     dispatch(getAccountDetails(id));
+    //     setIsLoading({ loader: false, type: 'button' });
+    //     setFormData({});
+    //   }
+    // });
+    // } else {
+    //   setIsLoading({ loader: true, type: 'button' });
+    //   const stepData = {
+    //     steps_completed: { agreement: true, statement: true },
+    //   };
+    //   updateAccountDetails(details.id, stepData).then((response) => {
+    //     if (response && response.status === 200) {
+    //       dispatch(getAccountDetails(id));
+    //       setIsLoading({ loader: false, type: 'button' });
+    //     }
+    //   });
+    // }
+    // }
+
+    // if (history.location.pathname.includes('addendum')) {
+    if (newAddendumData.id) {
+      setIsLoading({ loader: true, type: 'page' });
+
+      updateAddendum(newAddendumData.id, {
+        addendum: newAddendumData.addendum,
+      }).then(() => {
+        setIsLoading({ loader: false, type: 'page' });
+        setShowEditor(false);
+      });
+    } else {
+      const addendumData = {
+        customer_id: id,
+        addendum: newAddendumData && newAddendumData.addendum,
+        contract: details.id,
+      };
+      setIsLoading({ loader: true, type: 'page' });
+
+      createAddendum(addendumData).then((res) => {
+        setIsLoading({ loader: false, type: 'page' });
+        if (res && res.status === 201) {
+          setNewAddendum(res && res.data);
           setShowEditor(false);
-        });
-      } else {
-        const addendumData = {
-          customer_id: id,
-          addendum: newAddendumData && newAddendumData.addendum,
-          contract: details.id,
-        };
-        setIsLoading({ loader: true, type: 'page' });
-
-        createAddendum(addendumData).then((res) => {
-          setIsLoading({ loader: false, type: 'page' });
-          if (res && res.status === 201) {
-            setNewAddendum(res && res.data);
-            setShowEditor(false);
-          }
-        });
-      }
+        }
+      });
     }
+    // }
   };
 
   const discardAgreementChanges = () => {
@@ -905,36 +975,46 @@ export default function ContractContainer() {
                     </div>
                   </p>
                 </div>
-              </div>
-              <div className="text-container ">
-                <div>
-                  {history.location.pathname.includes('agreement') &&
-                  details ? (
-                    <Agreement
+                <div id="agreement">
+                  {/* {history.location.pathname.includes('agreement') &&
+                  details ? ( */}
+                  <Agreement
+                    // myRef={myRef}
+                    formData={formData}
+                    details={details}
+                    templateData={data}
+                  />
+                  {/* ) : (
+                    ''
+                  )} */}
+                </div>
+                <div id="statement">
+                  {/* {history.location.pathname.includes('statement') &&
+                  details ? ( */}
+                  <Statement
+                    formData={formData}
+                    details={details}
+                    templateData={data}
+                    notIncludedOneTimeServices={notIncludedOneTimeServices}
+                    notIncludedMonthlyServices={notIncludedMonthlyServices}
+                  />
+                  {/* ) : (
+                    ''
+                  )} */}
+                </div>
+                {showSection.dspAddendum ? (
+                  <div id="dspAddendum">
+                    <DSPAddendum
                       formData={formData}
                       details={details}
                       templateData={data}
                     />
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div>
-                  {history.location.pathname.includes('statement') &&
-                  details ? (
-                    <Statement
-                      formData={formData}
-                      details={details}
-                      templateData={data}
-                      notIncludedOneTimeServices={notIncludedOneTimeServices}
-                      notIncludedMonthlyServices={notIncludedMonthlyServices}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div>
-                  {history.location.pathname.split('/')[3] === 'addendum' ? (
+                  </div>
+                ) : (
+                  ''
+                )}
+                {showSection.addendum ? (
+                  <div id="addendum">
                     <Addendum
                       formData={formData}
                       details={details}
@@ -947,33 +1027,22 @@ export default function ContractContainer() {
                       setShowEditor={setShowEditor}
                       onEditAddendum={onEditAddendum}
                     />
-                  ) : (
-                    ''
-                  )}
-                </div>{' '}
-                <div>
-                  {history.location.pathname.split('/')[3] ===
-                  'dsp-addendum' ? (
-                    <DSPAddendum
-                      formData={formData}
-                      details={details}
-                      templateData={data}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>{' '}
-                <div>
-                  {history.location.pathname.includes('service-amendment') ? (
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                {showSection.amendment ? (
+                  <div id="amendment">
                     <ServicesAmendment
                       formData={formData}
                       details={details}
                       templateData={data}
                     />
-                  ) : (
-                    ''
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </>
@@ -1000,6 +1069,9 @@ export default function ContractContainer() {
         setShowEditor={setShowEditor}
         onEditAddendum={onEditAddendum}
         setApiError={setApiError}
+        executeScroll={executeScroll}
+        showSection={showSection}
+        setShowCollpase={setShowCollpase}
       />
       {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">

@@ -491,6 +491,14 @@ export const StatementDetails = [
   // },
 ];
 
+export const DSPAddendumDetails = [
+  {
+    key: 'dsp_fee',
+    label: 'DSP Budget',
+    type: 'number-currency',
+  },
+];
+
 export const collectionDetails = [
   {
     key: '3rd Party Tools',

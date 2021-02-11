@@ -23,46 +23,30 @@ import {
   EditFileIcons,
   ActivityLogIcon,
   ActivityOpenIcon,
-  // CompanyDefaultUser,
   GreenCheck,
-  // PdfDownload,
   CloseIcon,
   SaveIcon,
-  // PlusIcon,
-  // MinusIcon,
-  // AlarmBellIcon,
 } from '../theme/images/index';
-// import DefaultUser from '../theme/images/index';
 import { Button, FormField } from './index';
-import {
-  PATH_ADDENDUM,
-  PATH_AGREEMENT,
-  PATH_STATEMENT,
-  PATH_DSP_ADDENDUM,
-  PATH_SERVICE_AMENDMENT,
-} from '../constants';
+
 import {
   AgreementDetails,
   StatementDetails,
+  DSPAddendumDetails,
 } from '../constants/FieldConstants';
 import {
   getLength,
   updateAccountDetails,
   getRevenueShare,
   getMarketplaces,
-  createMarketplace,
-  // updateMarketplace,
   deleteMarketplace,
   createAdditionalServices,
   updateAdditionalServices,
   getMonthlyService,
   getOneTimeService,
   createAddendum,
-  // getAddendum,
-  // updateAdditionalServices,
 } from '../api';
 import InputSelect from './InputSelect';
-// import CheckBox from './CheckBox';
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 import { getAccountDetails } from '../store/actions/accountState';
@@ -73,12 +57,8 @@ export default function AgreementSidePanel({
   formData,
   agreementData,
   loader,
-  // accountURL,
   newAddendumData,
   onEditAddendum,
-
-  // editContractFlag,
-  // setEditContractFlag,
   setShowEditor,
   setNewAddendum,
   setNotIncludedOneTimeServices,
@@ -88,6 +68,9 @@ export default function AgreementSidePanel({
   apiError,
   showFooter,
   setApiError,
+  executeScroll,
+  showSection,
+  setShowCollpase,
 }) {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -98,15 +81,10 @@ export default function AgreementSidePanel({
     dspAddendum: false,
     amendment: false,
   });
-  const [showSection, setShowCollpase] = useState({
-    addendum: false,
-    dspAddendum: false,
-    amendment: false,
-  });
+
   const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
-  // const [apiError, setApiError] = useState({});
   const [revShare, setRevShare] = useState([]);
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
@@ -115,9 +93,6 @@ export default function AgreementSidePanel({
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
-  // const [newOneTime, setNewOneTime] = useState([]);
-  // const [showSaveIcon, setShowSaveIcon] = useState(false);
-  // const [showEditor, setShowEditor] = useState(false);
 
   const getMonthlyServiceOptions = (services) => {
     if (
@@ -185,7 +160,6 @@ export default function AgreementSidePanel({
   };
 
   useEffect(() => {
-    // console.log(agreementData, ' in useeffcect of side');
     getLength().then((len) => {
       setAccountLength(len.data);
     });
@@ -231,19 +205,6 @@ export default function AgreementSidePanel({
       }
     });
 
-    // if (history.location.pathname.includes('agreement'))
-    //   setOpenCollapse({ agreement: true });
-    // if (history.location.pathname.includes('statement'))
-    //   setOpenCollapse({ statement: true });
-    // if (history.location.pathname.includes('addendum'))
-    //   setOpenCollapse({ addendum: true });
-    // if (history.location.pathname.includes('dsp-addendum'))
-    //   setOpenCollapse({ dspAddendum: true });
-    // if (history.location.pathname.includes('service-amendment'))
-    //   setOpenCollapse({ amendment: true });
-    // if (agreementData && agreementData.additional_one_time_services === null)
-    //   setNewOneTime([{ service: {}, quantity: '' }]);
-
     if (
       (agreementData && agreementData.additional_one_time_services) ||
       (agreementData && agreementData.sales_threshold)
@@ -281,12 +242,9 @@ export default function AgreementSidePanel({
     return () => {};
   }, [agreementData]);
 
-  const handleChange = (event, key, type, val) => {
+  const handleChange = (event, key, type) => {
     showFooter(true);
-    // setShowSaveIcon(true);
-    // if (key === 'additional_one_time_services') {
-    //   setFormData({ ...formData, additional_one_time_services: event.value });
-    // }
+
     if (type === 'date') {
       setStartDate(event);
       setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
@@ -297,121 +255,120 @@ export default function AgreementSidePanel({
         );
       }
       setFormData({ ...formData, [key]: event.value });
-      // if (key === 'additional_one_time_services') {
-      //   setFormData({ ...formData, [key]: event });
-      // }
     } else if (type === 'qty') {
       setFormData({ ...formData, quantity: event.target.value });
     } else if (type === 'multichoice') {
-      if (val.action === 'remove-value') {
-        if (agreementData[key] !== null) {
-          for (const del of agreementData[key]) {
-            if (
-              del.id !== undefined &&
-              (key === 'additional_monthly_services'
-                ? del.service.name
-                : del.name) === val.removedValue.label
-            ) {
-              setIsLoading({ loader: true, type: 'page' });
-              deleteMarketplace(del.id, key).then(() => {
-                dispatch(getAccountDetails(id));
-                setIsLoading({ loader: false, type: 'page' });
-              });
-            }
-          }
-          if (key === 'additional_monthly_services') {
-            const list = [...monthlyService];
-            if (list.every((item) => item.value !== val.removedValue.value)) {
-              list.push(val.removedValue);
-            }
-            setMonthlyService(list);
-            setNotIncludedMonthlyServices(list);
-            if (sendNotIncludedMonthlyServToAdd) {
-              sendNotIncludedMonthlyServToAdd(monthlyService);
-            }
-          }
-          //  setNotIncludedServices([...oneTimeService, ...list])
-        }
-      }
-      if (val.action === 'select-option') {
-        if (key === 'additional_monthly_services') {
-          const montlyserviceData = [];
-          montlyserviceData.push({
-            contract: agreementData.id,
-            name: val.option.label,
-            service: val.option.value,
-          });
+      setFormData({ ...formData, [key]: event });
+      // if (val.action === 'remove-value') {
+      //   if (agreementData[key] !== null) {
+      //     for (const del of agreementData[key]) {
+      //       if (
+      //         del.id !== undefined &&
+      //         (key === 'additional_monthly_services'
+      //           ? del.service.name
+      //           : del.name) === val.removedValue.label
+      //       ) {
+      //         setIsLoading({ loader: true, type: 'page' });
+      //         deleteMarketplace(del.id, key).then(() => {
+      //           dispatch(getAccountDetails(id));
+      //           setIsLoading({ loader: false, type: 'page' });
+      //         });
+      //       }
+      //     }
+      //     if (key === 'additional_monthly_services') {
+      //       const list = [...monthlyService];
+      //       if (list.every((item) => item.value !== val.removedValue.value)) {
+      //         list.push(val.removedValue);
+      //       }
+      //       setMonthlyService(list);
+      //       setNotIncludedMonthlyServices(list);
+      //       if (sendNotIncludedMonthlyServToAdd) {
+      //         sendNotIncludedMonthlyServToAdd(monthlyService);
+      //       }
+      //     }
+      //     //  setNotIncludedServices([...oneTimeService, ...list])
+      //   }
+      // }
 
-          createAdditionalServices(montlyserviceData).then((res) => {
-            if (res && res.status === 400) {
-              setIsLoading({ loader: false, type: 'button' });
-            }
-            if (res && res.status === 201) {
-              dispatch(getAccountDetails(id));
+      // if (val.action === 'select-option') {
+      //   if (key === 'additional_monthly_services') {
+      //     const montlyserviceData = [];
+      //     montlyserviceData.push({
+      //       contract: agreementData.id,
+      //       name: val.option.label,
+      //       service: val.option.value,
+      //     });
 
-              const list = monthlyService.filter(
-                (item) => item.value !== res.data[0].service,
-              );
-              setMonthlyService(list);
-              setNotIncludedMonthlyServices(list);
-              if (sendNotIncludedMonthlyServToAdd) {
-                sendNotIncludedMonthlyServToAdd(monthlyService);
-              }
-            }
-          });
-        }
+      //     createAdditionalServices(montlyserviceData).then((res) => {
+      //       if (res && res.status === 400) {
+      //         setIsLoading({ loader: false, type: 'button' });
+      //       }
+      //       if (res && res.status === 201) {
+      //         dispatch(getAccountDetails(id));
 
-        if (key === 'additional_marketplaces') {
-          const marketPlaceData = [];
-          // for (const market of formData.additional_marketplaces) {
-          marketPlaceData.push({
-            contract: agreementData.id,
-            is_primary: false,
-            name: val.option.label,
-          });
-          setIsLoading({ loader: true, type: 'page' });
+      //         const list = monthlyService.filter(
+      //           (item) => item.value !== res.data[0].service,
+      //         );
+      //         setMonthlyService(list);
+      //         setNotIncludedMonthlyServices(list);
+      //         if (sendNotIncludedMonthlyServToAdd) {
+      //           sendNotIncludedMonthlyServToAdd(monthlyService);
+      //         }
+      //       }
+      //     });
+      //   }
 
-          // }
-          createMarketplace(marketPlaceData).then((res) => {
-            setIsLoading({ loader: false, type: 'page' });
-            if (res && res.status === 201) {
-              dispatch(getAccountDetails(id));
+      //   if (key === 'additional_marketplaces') {
+      //     const marketPlaceData = [];
+      //     // for (const market of formData.additional_marketplaces) {
+      //     marketPlaceData.push({
+      //       contract: agreementData.id,
+      //       is_primary: false,
+      //       name: val.option.label,
+      //     });
+      //     setIsLoading({ loader: true, type: 'page' });
 
-              // setOpenCollapse({ ...openCollapse, addendum: true });
-              // history.push(PATH_ADDENDUM.replace(':id', id));
-            }
-          });
-        }
+      //     // }
+      //     createMarketplace(marketPlaceData).then((res) => {
+      //       setIsLoading({ loader: false, type: 'page' });
+      //       if (res && res.status === 201) {
+      //         dispatch(getAccountDetails(id));
 
-        if (agreementData && agreementData[key] && agreementData[key].length) {
-          const multi = [].concat(
-            event.filter((obj1) =>
-              agreementData[key].every(
-                (obj2) => obj1.label !== (obj2.name || obj2.service.name),
-              ),
-            ),
-            agreementData[key].filter((obj2) =>
-              event.every(
-                (obj1) => (obj2.name || obj2.service.name) !== obj1.label,
-              ),
-            ),
-          );
+      //         // setOpenCollapse({ ...openCollapse, addendum: true });
+      //         // history.push(PATH_ADDENDUM.replace(':id', id));
+      //       }
+      //     });
+      //   }
 
-          setFormData({
-            ...formData,
-            [key]: multi,
-          });
-        } else {
-          const multi = [];
-          for (const market of event) {
-            multi.push({ value: market.value, label: market.label });
-          }
-          setFormData({
-            ...formData,
-            [key]: multi,
-          });
-        }
-      }
+      //   if (agreementData && agreementData[key] && agreementData[key].length) {
+      //     const multi = [].concat(
+      //       event.filter((obj1) =>
+      //         agreementData[key].every(
+      //           (obj2) => obj1.label !== (obj2.name || obj2.service.name),
+      //         ),
+      //       ),
+      //       agreementData[key].filter((obj2) =>
+      //         event.every(
+      //           (obj1) => (obj2.name || obj2.service.name) !== obj1.label,
+      //         ),
+      //       ),
+      //     );
+
+      //     setFormData({
+      //       ...formData,
+      //       [key]: multi,
+      //     });
+      //   } else {
+      //     const multi = [];
+      //     for (const market of event) {
+      //       multi.push({ value: market.value, label: market.label });
+      //     }
+      //     setFormData({
+      //       ...formData,
+      //       [key]: multi,
+      //     });
+      //   }
+      // }
     } else {
       if (event.target.name === 'zip_code') {
         setFormData({
@@ -509,7 +466,7 @@ export default function AgreementSidePanel({
           format={item.key === 'zip_code' ? '##########' : null}
           name={item.key}
           className="form-control"
-          defaultValue={agreementData[item.key]}
+          value={agreementData[item.key]}
           placeholder={item.label}
           prefix={item.type === 'number-currency' ? '$' : ''}
           suffix={item.type === 'number-percent' ? '%' : ''}
@@ -618,183 +575,13 @@ export default function AgreementSidePanel({
   const nextStep = (key) => {
     if (key === 'statement') {
       setOpenCollapse({ agreement: false, statement: true });
-      history.push(PATH_STATEMENT.replace(':id', id));
-      // if (formData && Object.keys(formData).length) {
-      //   if (formData && formData.start_date) {
-      //     formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
-      //   }
-      //   setIsLoading({ loader: true, type: 'button' });
-      //   const data = {
-      //     ...formData,
-      //     steps_completed: {
-      //       ...agreementData.steps_completed,
-      //       agreement: true,
-      //     },
-      //   };
-      //   updateAccountDetails(agreementData.id, data).then((response) => {
-      //     if (response && response.status === 400) {
-      //       setIsLoading({ loader: false, type: 'button' });
-      //       setApiError(response && response.data);
-      //     } else if (response && response.status === 200) {
-      //       setOpenCollapse({ agreement: false, statement: true });
-      //       history.push(PATH_STATEMENT.replace(':id', id));
-      //       setIsLoading({ loader: false, type: 'button' });
-      //     }
-      //   });
-      // } else {
-      //   const data = {
-      //     steps_completed: {
-      //       ...agreementData.steps_completed,
-      //       agreement: true,
-      //     },
-      //   };
-      //   updateAccountDetails(agreementData.id, data).then((response) => {
-      //     if (response && response.status === 200) {
-      //       setOpenCollapse({ agreement: false, statement: true });
-      //     }
-      //   });
-      //   history.push(PATH_STATEMENT.replace(':id', id));
-      // }
+      executeScroll('statement');
     }
     if (key === 'addendum') {
-      setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
-      history.push(PATH_ADDENDUM.replace(':id', id));
-      // if (formData && Object.keys(formData).length) {
-      //   setIsLoading({ loader: true, type: 'button' });
-      //   // if (formData && formData.additional_monthly_services) {
-      //   //   const multi = [];
-      //   //   for (const market of formData.additional_monthly_services) {
-      //   //     multi.push({
-      //   //       contract: agreementData.id,
-      //   //       name: market.label,
-      //   //       service: market.value,
-      //   //     });
-      //   //   }
-
-      //   //   createAdditionalServices(multi).then((res) => {
-      //   //     if (res && res.status === 400) {
-      //   //       setIsLoading({ loader: false, type: 'button' });
-      //   //     }
-      //   //     if (res && res.status === 201) {
-      //   //       setOpenCollapse({ ...openCollapse, addendum: true });
-      //   //     }
-      //   //   });
-      //   // }
-      //   if (formData && formData.primary_marketplace) {
-      //     const data = {
-      //       id:
-      //         (agreementData &&
-      //           agreementData.primary_marketplace &&
-      //           agreementData.primary_marketplace.id) ||
-      //         '',
-      //       contract: agreementData.id,
-      //       name: formData && formData.primary_marketplace,
-      //       is_primary: true,
-      //     };
-      //     if (
-      //       agreementData.primary_marketplace &&
-      //       agreementData.primary_marketplace.id
-      //     ) {
-      //       updateMarketplace(agreementData.primary_marketplace.id, data).then(
-      //         (res) => {
-      //           if (res && res.status === 200) {
-      //             setOpenCollapse({ ...openCollapse, addendum: true });
-      //             history.push(PATH_ADDENDUM.replace(':id', id));
-      //             setIsLoading({ loader: false, type: 'button' });
-      //           }
-      //           if (res && res.status === 400) {
-      //             setIsLoading({ loader: false, type: 'button' });
-      //             setApiError(res && res.data);
-      //           }
-      //         },
-      //       );
-      //     } else {
-      //       createMarketplace(data).then((res) => {
-      //         if (res && res.status === 201) {
-      //           setOpenCollapse({ ...openCollapse, addendum: true });
-      //           history.push(PATH_ADDENDUM.replace(':id', id));
-      //           setIsLoading({ loader: false, type: 'button' });
-      //         }
-      //         if (res && res.status === 400) {
-      //           setIsLoading({ loader: false, type: 'button' });
-      //           setApiError(res && res.data);
-      //         }
-      //       });
-      //     }
-      //   }
-
-      //   // if (formData && formData.additional_marketplaces) {
-      //   //   const multi = [];
-      //   //   for (const market of formData.additional_marketplaces) {
-      //   //     multi.push({
-      //   //       contract: agreementData.id,
-      //   //       is_primary: false,
-      //   //       name: market.value,
-      //   //     });
-      //   //   }
-      //   //   createMarketplace(multi).then((res) => {
-      //   //     if (res && res.status === 201) {
-      //   //       setOpenCollapse({ ...openCollapse, addendum: true });
-      //   //       history.push(PATH_ADDENDUM.replace(':id', id));
-      //   //       setIsLoading({ loader: false, type: 'button' });
-      //   //     }
-      //   //   });
-      //   // }
-
-      //   // for (const service of formData.additional_one_time_services) {
-      //   //   saveAdditionalOneTimeService(service, service.id);
-      //   // }
-      //   if (formData.additional_one_time_services) {
-      //     formData.additional_one_time_services.forEach((service, index) =>
-      //       saveAdditionalOneTimeService(service, service.id, index),
-      //     );
-      //   }
-      //   const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
-      //   for (const val of num) {
-      //     if (formData && formData[val]) {
-      //       formData[val] = formData[val].substring(1).replace(/,/g, '');
-      //     }
-      //   }
-      //   const detail = {
-      //     ...formData,
-      //     steps_completed: {
-      //       ...agreementData.steps_completed,
-      //       agreement: true,
-      //       statement: true,
-      //     },
-      //   };
-      //   updateAccountDetails(agreementData.id, detail).then((response) => {
-      //     if (response && response.status === 400) {
-      //       setIsLoading({ loader: false, type: 'button' });
-      //       setApiError(response && response.data);
-      //     } else if (response && response.status === 200) {
-      //       setOpenCollapse({
-      //         agreement: false,
-      //         statement: false,
-      //         addendum: true,
-      //       });
-      //       history.push(PATH_ADDENDUM.replace(':id', id));
-      //       setIsLoading({ loader: false, type: 'button' });
-      //     }
-      //   });
-      // } else {
-      //   setIsLoading({ loader: true, type: 'button' });
-      //   const data = {
-      //     steps_completed: { agreement: true, statement: true },
-      //   };
-      //   updateAccountDetails(agreementData.id, data).then((response) => {
-      //     if (response && response.status === 200) {
-      //       setOpenCollapse({
-      //         agreement: false,
-      //         statement: false,
-      //         addendum: true,
-      //       });
-      //       history.push(PATH_ADDENDUM.replace(':id', id));
-      //       setIsLoading({ loader: false, type: 'button' });
-      //     }
-      //   });
-      //   history.push(PATH_STATEMENT.replace(':id', id));
-      // }
+      if (showSection.addendum) {
+        setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
+        executeScroll('addendum');
+      }
     }
     if (key === 'final') {
       if (newAddendumData) {
@@ -834,11 +621,6 @@ export default function AgreementSidePanel({
             // setEditContractFlag(false);
           }
         });
-        // setOpenCollapse({
-        //   agreement: false,
-        //   statement: false,
-        //   addendum: false,
-        // });
 
         const stringified = queryString.stringify({
           step: 'select-contact',
@@ -871,52 +653,13 @@ export default function AgreementSidePanel({
         if (sendNotIncludedOneTimeServToAdd) {
           sendNotIncludedOneTimeServToAdd(oneTimeService);
         }
-        //  setNotIncludedServices([...list, ...monthlyService])
-
-        // setOneTimeService([...oneTimeService, ...field]);
       });
     } else {
       const list = [...formData.additional_one_time_services];
       list.pop();
       setFormData({ ...formData, additional_one_time_services: list });
-      // newOneTime.pop();
-      // setNewOneTime([...newOneTime]);
-      // delete formData.additional_one_time_services;
-      // delete formData.quantity;
-      // setFormData({ ...formData });
     }
   };
-
-  // const deleteOneTime = (index) => {
-  //   if (index && index.includes('AS')) {
-  //     deleteMarketplace(index, 'additional_one_time_services').then(() => {
-  //       accountURL();
-  //       setShowSaveIcon(false);
-  //     });
-  //   } else {
-  //     const list = [...newOneTime];
-  //     list.splice(index, 1);
-  //     setNewOneTime(list);
-  //   }
-  // };
-
-  // const saveOneTime = () => {
-  //   const multi = {
-  //     contract: agreementData.id,
-  //     service: formData.additional_one_time_services,
-  //     quantity: formData.quantity,
-  //   };
-
-  //   createAdditionalServices(multi).then((res) => {
-  //     if (res && res.status === 400) {
-  //       setIsLoading({ loader: false, type: 'button' });
-  //     }
-  //     if (res && res.status === 201) {
-  //       accountURL();
-  //       setShowSaveIcon(false);
-  //     }
-  //   });
-  // };
 
   const handleOneTimeService = (event, index, field, type) => {
     showFooter(true);
@@ -968,14 +711,12 @@ export default function AgreementSidePanel({
             options={oneTimeService}
             name={field}
             isDisabled={field && field.id}
-            onChange={
-              (event) => handleOneTimeService(event, index, field, 'service')
-              // handleChange(event, 'additional_one_time_services', 'choice')
+            onChange={(event) =>
+              handleOneTimeService(event, index, field, 'service')
             }
           />
           <ErrorMsg>
             {apiError && apiError.service && apiError.service[0]}
-            {/* {saveError && saveError.service && saveError.service[0]} */}
           </ErrorMsg>
         </div>
         <div className="col-3">
@@ -983,16 +724,13 @@ export default function AgreementSidePanel({
             name="quantity"
             className="form-control"
             placeholder="Qty"
-            onChange={
-              (event) => handleOneTimeService(event, index, field, 'quantity')
-              //  handleChange(event, key, 'quantity')
+            onChange={(event) =>
+              handleOneTimeService(event, index, field, 'quantity')
             }
             defaultValue={(field && field.quantity) || ''}
-            // thousandSeparator
           />
           <ErrorMsg>
             {apiError && apiError.quantity && apiError.quantity[0]}
-            {/* {saveError && saveError.quantity && saveError.quantity[0]} */}
           </ErrorMsg>
         </div>
         {field &&
@@ -1003,16 +741,13 @@ export default function AgreementSidePanel({
               name="custom_amazon_store_price"
               className="form-control"
               placeholder="Fee"
-              onChange={
-                (event) => handleOneTimeService(event, index, field, 'fee')
-                //  handleChange(event, key, 'quantity')
+              onChange={(event) =>
+                handleOneTimeService(event, index, field, 'fee')
               }
               defaultValue={(field && field.custom_amazon_store_price) || ''}
-              // thousandSeparator
             />
             <ErrorMsg>
               {apiError && apiError.quantity && apiError.quantity[0]}
-              {/* {saveError && saveError.quantity && saveError.quantity[0]} */}
             </ErrorMsg>
           </div>
         ) : (
@@ -1026,9 +761,7 @@ export default function AgreementSidePanel({
             onClick={() => deleteOneTimeService(field, key)}
             role="presentation"
           />
-          {/* {field && field.id ? (
-            ''
-          ) : ( */}
+
           {((field && field.service && field.service.name) ||
             (field &&
               field.additional_services &&
@@ -1047,7 +780,6 @@ export default function AgreementSidePanel({
           ) : (
             ''
           )}
-          {/* )} */}
         </div>
       </div>
     );
@@ -1067,15 +799,7 @@ export default function AgreementSidePanel({
         );
       });
     }
-    // if (agreementData && agreementData[key] && agreementData[key].length) {
-    //   agreementData[key].forEach((field, index) => {
-    //     fields.push(generateOneTimeHTML(field, key, index));
-    //   });
-    // }
-    // if (newOneTime && newOneTime.length !== 0)
-    //   newOneTime.forEach((field, index) => {
-    //     fields.push(generateOneTimeHTML(field, key, index));
-    //   });
+
     return fields;
   };
 
@@ -1086,7 +810,6 @@ export default function AgreementSidePanel({
     }
     list.push({ service: {}, quantity: '' });
     setFormData({ ...formData, additional_one_time_services: list });
-    // setNewOneTime([...formData,]);
   };
   const handleShowCollapse = (event, section) => {
     setShowCollpase({ ...showSection, [section]: event.target.checked });
@@ -1119,15 +842,14 @@ export default function AgreementSidePanel({
         </div>
       </label>
       <div className="sidebar">
-        {/* {editContractFlag ? ( */}
         <>
           <div
             className="collapse-btn mt-3"
             role="presentation"
             type="button"
             onClick={() => {
+              executeScroll('agreement');
               setOpenCollapse({ agreement: !openCollapse.agreement });
-              history.push(PATH_AGREEMENT.replace(':id', id));
             }}>
             <img className="service-agre" src={ServiceAgreement} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">
@@ -1163,46 +885,11 @@ export default function AgreementSidePanel({
                         {apiError &&
                           apiError[item.key] &&
                           apiError[item.key][0]}
-                        {/* {saveError &&
-                          saveError[item.key] &&
-                          saveError[item.key][0]} */}
                       </ErrorMsg>
                     </FormField>
                   </li>
                 ))}
-                {/* {agreementData && agreementData.contract_type === 'one time' ? (
-                  <>
-                    <li>
-                      <FormField>
-                        <label htmlFor="additional_one_time_services">
-                          <div className="row">
-                            <div className="col-10">
-                              Additional One Time Services
-                            </div>
-                          </div>
-                          {generateOneTimeService(
-                            'additional_one_time_services',
-                          )}
-                        </label>
-                      </FormField>
-                    </li>
-                    {oneTimeService && oneTimeService.length ? (
-                      <li>
-                        <div
-                          className="add-market-place cursor float-right"
-                          onClick={() => addNewService()}
-                          role="presentation">
-                          {' '}
-                          + Add Additional One Time Services
-                        </div>
-                      </li>
-                    ) : (
-                      ''
-                    )}
-                  </>
-                ) : (
-                  ''
-                )} */}
+
                 <li>
                   <Button
                     className="btn-primary sidepanel mt-2 mb-3 w-100"
@@ -1224,8 +911,8 @@ export default function AgreementSidePanel({
             role="presentation"
             type="button"
             onClick={() => {
+              executeScroll('statement');
               setOpenCollapse({ statement: !openCollapse.statement });
-              history.push(PATH_STATEMENT.replace(':id', id));
             }}>
             <img className="service-agre" src={StatementWork} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">
@@ -1264,9 +951,6 @@ export default function AgreementSidePanel({
                                 {apiError &&
                                   apiError[item.key] &&
                                   apiError[item.key][0]}
-                                {/* {saveError &&
-                                  saveError[item.key] &&
-                                  saveError[item.key][0]} */}
                               </ErrorMsg>
                             </FormField>
                           </li>
@@ -1327,7 +1011,6 @@ export default function AgreementSidePanel({
                           <div className="col-10">
                             Additional One Time Services
                           </div>
-                          {/* <div className="col-3">Quantity</div> */}
                         </div>
                         {generateOneTimeService('additional_one_time_services')}
                       </label>
@@ -1346,211 +1029,6 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
-                  {/* <li>
-                    <FormField>
-                      <label htmlFor="additional_one_time_services" />
-                      Additional Monthly Services
-                    </FormField>
-
-                    <CheckBox className="gray-check mt-3">
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Customer Service
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-
-                    <CheckBox className="gray-check mt-2">
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Logistics Management
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                    <CheckBox className="gray-check mt-2">
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Inventory Reconciliation
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                    <CheckBox className="gray-check mt-2">
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        DSP Advertising
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                    <CheckBox className="gray-check mt-2">
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Additional Marketplaces
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                  <li>
-                    <FormField>
-                      <label htmlFor="additional_one_time_services" />
-                      Additional One-Time Services
-                    </FormField>
-                    <div className="row mt-3">
-                      <div className="col-7">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            A+ Content
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Infographics
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Amazon Brand Style Guide
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Product Insert
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Listing Copy
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Amazon Store
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
-                          {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
-                    </div>
-                  </li> */}
-
-                  {/* <li>
-                  <Button
-                    className="btn-primary on-boarding sidepanel mt-2 mb-3 w-100"
-                    onClick={() => nextStep('addendum')}>
-                    {isLoading.loader && isLoading.type === 'button' ? (
-                      <PageLoader color="#fff" type="button" />
-                    ) : (
-                      'Proceed to Next Section'
-                    )}
-                  </Button>
-                </li> */}
 
                   <li>
                     <Button
@@ -1584,8 +1062,8 @@ export default function AgreementSidePanel({
                 role="presentation"
                 type="button"
                 onClick={() => {
+                  executeScroll('addendum');
                   setOpenCollapse({ addendum: !openCollapse.addendum });
-                  history.push(PATH_ADDENDUM.replace(':id', id));
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
                 <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
@@ -1656,23 +1134,11 @@ export default function AgreementSidePanel({
                 role="presentation"
                 type="button"
                 onClick={() => {
+                  executeScroll('dspAddendum');
                   setOpenCollapse({ dspAddendum: !openCollapse.dspAddendum });
-                  history.push(PATH_DSP_ADDENDUM.replace(':id', id));
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
-                <h4 className="sendar-details mt-1 ml-5">
-                  DSP Addendum{' '}
-                  {/* {agreementData.steps_completed &&
-              agreementData.steps_completed.dspAddendum ? (
-                <img
-                  className="green-check-select ml-4"
-                  src={GreenCheck}
-                  alt="right-check"
-                />
-              ) : (
-                ''
-              )} */}
-                </h4>
+                <h4 className="sendar-details mt-1 ml-5">DSP Addendum </h4>
                 <div className="clear-fix" />
               </div>
             </div>
@@ -1687,7 +1153,21 @@ export default function AgreementSidePanel({
             </div>
           </div>
           <Collapse isOpened={openCollapse.dspAddendum}>
-            <ul className="collapse-inner">{/* <li>DSP</li> */}</ul>
+            <ul className="collapse-inner">
+              {DSPAddendumDetails.map((item) => (
+                <li key={item.key}>
+                  <FormField>
+                    <label htmlFor={item.key}>
+                      {item.label}
+                      {generateHTML(item)}
+                    </label>
+                    <ErrorMsg>
+                      {apiError && apiError[item.key] && apiError[item.key][0]}
+                    </ErrorMsg>
+                  </FormField>
+                </li>
+              ))}
+            </ul>
           </Collapse>
 
           <div className="straight-line sidepanel " />
@@ -1702,22 +1182,12 @@ export default function AgreementSidePanel({
                 role="presentation"
                 type="button"
                 onClick={() => {
-                  setOpenCollapse({ dspAddendum: !openCollapse.amendment });
-                  history.push(PATH_SERVICE_AMENDMENT.replace(':id', id));
+                  executeScroll('amendment');
+                  setOpenCollapse({ amendment: !openCollapse.amendment });
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
                 <h4 className="sendar-details mt-1 ml-5">
                   One time Amendment{' '}
-                  {/* {agreementData.steps_completed &&
-              agreementData.steps_completed.dspAddendum ? (
-                <img
-                  className="green-check-select ml-4"
-                  src={GreenCheck}
-                  alt="right-check"
-                />
-              ) : (
-                ''
-              )} */}
                 </h4>
                 <div className="clear-fix" />
               </div>
@@ -1732,11 +1202,7 @@ export default function AgreementSidePanel({
               </label>
             </div>
           </div>
-          <Collapse isOpened={openCollapse.amendment}>
-            <ul className="collapse-inner">
-              <li>One time Amendment</li>
-            </ul>
-          </Collapse>
+          <Collapse isOpened={openCollapse.amendment} />
 
           {/* <p className="gray-text">
         The Contract has been sent for review and signature to the client on
@@ -1847,6 +1313,9 @@ AgreementSidePanel.defaultProps = {
   apiError: {},
   showFooter: () => {},
   setApiError: () => {},
+  executeScroll: () => {},
+  showSection: {},
+  setShowCollpase: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -1895,6 +1364,15 @@ AgreementSidePanel.propTypes = {
   }),
   showFooter: PropTypes.func,
   setApiError: PropTypes.func,
+  executeScroll: PropTypes.func,
+  showSection: PropTypes.shape(
+    PropTypes.shape({
+      addendum: PropTypes.bool,
+      dspAddendum: PropTypes.bool,
+      amendment: PropTypes.bool,
+    }),
+  ),
+  setShowCollpase: PropTypes.func,
 };
 
 const SidePanel = styled.div`
