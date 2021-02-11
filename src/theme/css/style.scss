@@ -1032,6 +1032,12 @@ div {
   padding-left: 120px;
   font-family: $contact-regular-font-family;
 
+  .sticky {
+    position: fixed;
+    background-color: $white-color;
+    padding: 10px 0;
+    width: 100%;
+  }
   @media only screen and (min-width: 1500px) {
     padding-right: 450px;
   }
