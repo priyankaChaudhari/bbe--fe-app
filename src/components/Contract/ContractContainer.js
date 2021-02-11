@@ -78,7 +78,7 @@ export default function ContractContainer() {
   const [notIncludedMonthlyServices, setNotIncludedMonthlyServices] = useState(
     [],
   );
-  const [saveError, setApiError] = useState({});
+  const [apiError, setApiError] = useState({});
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
     message: '',
@@ -320,9 +320,11 @@ export default function ContractContainer() {
           if (response && response.status === 400) {
             setIsLoading({ loader: false, type: 'button' });
             setApiError(response && response.data);
+            setFormData({});
           } else if (response && response.status === 200) {
             dispatch(getAccountDetails(id));
             setIsLoading({ loader: false, type: 'button' });
+            setFormData({});
           }
         });
       } else {
@@ -982,7 +984,7 @@ export default function ContractContainer() {
         setFormData={setFormData}
         formData={formData}
         loader={loader}
-        saveError={saveError}
+        apiError={apiError}
         agreementData={details}
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
@@ -993,6 +995,7 @@ export default function ContractContainer() {
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         onEditAddendum={onEditAddendum}
+        setApiError={setApiError}
       />
       {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">

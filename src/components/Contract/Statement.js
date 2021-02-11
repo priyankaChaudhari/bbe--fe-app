@@ -106,7 +106,11 @@ export default function Statement({
                  }
                   </td>
                   <td style="border: 1px solid black;padding: 13px;">
-                  Included
+                  ${
+                    item.service && item.service.dsp_text
+                      ? item.service.dsp_text
+                      : 'Included'
+                  }
                   </td>
                 </tr>`,
           );
@@ -118,7 +122,8 @@ export default function Statement({
                    item.service ? item.service.name : item && item.name
                  }</td>
                     <td style="border: 1px solid black;padding: 13px;"> 
-                  25% of recovered $s
+                    25% of recovered $s
+                    
                   </td>
                     </tr>`,
           );

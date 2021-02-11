@@ -51,7 +51,7 @@ import {
   getRevenueShare,
   getMarketplaces,
   createMarketplace,
-  updateMarketplace,
+  // updateMarketplace,
   deleteMarketplace,
   createAdditionalServices,
   updateAdditionalServices,
@@ -85,8 +85,9 @@ export default function AgreementSidePanel({
   setNotIncludedMonthlyServices,
   sendNotIncludedOneTimeServToAdd,
   sendNotIncludedMonthlyServToAdd,
-  saveError,
+  apiError,
   showFooter,
+  setApiError,
 }) {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -105,7 +106,7 @@ export default function AgreementSidePanel({
   const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
-  const [apiError, setApiError] = useState({});
+  // const [apiError, setApiError] = useState({});
   const [revShare, setRevShare] = useState([]);
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
@@ -616,172 +617,184 @@ export default function AgreementSidePanel({
 
   const nextStep = (key) => {
     if (key === 'statement') {
-      if (formData && Object.keys(formData).length) {
-        if (formData && formData.start_date) {
-          formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
-        }
-        setIsLoading({ loader: true, type: 'button' });
-        const data = {
-          ...formData,
-          steps_completed: {
-            ...agreementData.steps_completed,
-            agreement: true,
-          },
-        };
-        updateAccountDetails(agreementData.id, data).then((response) => {
-          if (response && response.status === 400) {
-            setIsLoading({ loader: false, type: 'button' });
-            setApiError(response && response.data);
-          } else if (response && response.status === 200) {
-            setOpenCollapse({ agreement: false, statement: true });
-            history.push(PATH_STATEMENT.replace(':id', id));
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
-      } else {
-        const data = {
-          steps_completed: {
-            ...agreementData.steps_completed,
-            agreement: true,
-          },
-        };
-        updateAccountDetails(agreementData.id, data).then((response) => {
-          if (response && response.status === 200) {
-            setOpenCollapse({ agreement: false, statement: true });
-          }
-        });
-        history.push(PATH_STATEMENT.replace(':id', id));
-      }
+      setOpenCollapse({ agreement: false, statement: true });
+      history.push(PATH_STATEMENT.replace(':id', id));
+      // if (formData && Object.keys(formData).length) {
+      //   if (formData && formData.start_date) {
+      //     formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
+      //   }
+      //   setIsLoading({ loader: true, type: 'button' });
+      //   const data = {
+      //     ...formData,
+      //     steps_completed: {
+      //       ...agreementData.steps_completed,
+      //       agreement: true,
+      //     },
+      //   };
+      //   updateAccountDetails(agreementData.id, data).then((response) => {
+      //     if (response && response.status === 400) {
+      //       setIsLoading({ loader: false, type: 'button' });
+      //       setApiError(response && response.data);
+      //     } else if (response && response.status === 200) {
+      //       setOpenCollapse({ agreement: false, statement: true });
+      //       history.push(PATH_STATEMENT.replace(':id', id));
+      //       setIsLoading({ loader: false, type: 'button' });
+      //     }
+      //   });
+      // } else {
+      //   const data = {
+      //     steps_completed: {
+      //       ...agreementData.steps_completed,
+      //       agreement: true,
+      //     },
+      //   };
+      //   updateAccountDetails(agreementData.id, data).then((response) => {
+      //     if (response && response.status === 200) {
+      //       setOpenCollapse({ agreement: false, statement: true });
+      //     }
+      //   });
+      //   history.push(PATH_STATEMENT.replace(':id', id));
+      // }
     }
     if (key === 'addendum') {
-      if (formData && Object.keys(formData).length) {
-        setIsLoading({ loader: true, type: 'button' });
-        // if (formData && formData.additional_monthly_services) {
-        //   const multi = [];
-        //   for (const market of formData.additional_monthly_services) {
-        //     multi.push({
-        //       contract: agreementData.id,
-        //       name: market.label,
-        //       service: market.value,
-        //     });
-        //   }
+      setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
+      history.push(PATH_ADDENDUM.replace(':id', id));
+      // if (formData && Object.keys(formData).length) {
+      //   setIsLoading({ loader: true, type: 'button' });
+      //   // if (formData && formData.additional_monthly_services) {
+      //   //   const multi = [];
+      //   //   for (const market of formData.additional_monthly_services) {
+      //   //     multi.push({
+      //   //       contract: agreementData.id,
+      //   //       name: market.label,
+      //   //       service: market.value,
+      //   //     });
+      //   //   }
 
-        //   createAdditionalServices(multi).then((res) => {
-        //     if (res && res.status === 400) {
-        //       setIsLoading({ loader: false, type: 'button' });
-        //     }
-        //     if (res && res.status === 201) {
-        //       setOpenCollapse({ ...openCollapse, addendum: true });
-        //     }
-        //   });
-        // }
-        if (formData && formData.primary_marketplace) {
-          const data = {
-            id:
-              (agreementData &&
-                agreementData.primary_marketplace &&
-                agreementData.primary_marketplace.id) ||
-              '',
-            contract: agreementData.id,
-            name: formData && formData.primary_marketplace,
-            is_primary: true,
-          };
-          if (
-            agreementData.primary_marketplace &&
-            agreementData.primary_marketplace.id
-          ) {
-            updateMarketplace(agreementData.primary_marketplace.id, data).then(
-              (res) => {
-                if (res && res.status === 200) {
-                  setOpenCollapse({ ...openCollapse, addendum: true });
-                  history.push(PATH_ADDENDUM.replace(':id', id));
-                  setIsLoading({ loader: false, type: 'button' });
-                }
-              },
-            );
-          } else {
-            createMarketplace(data).then((res) => {
-              if (res && res.status === 201) {
-                setOpenCollapse({ ...openCollapse, addendum: true });
-                history.push(PATH_ADDENDUM.replace(':id', id));
-                setIsLoading({ loader: false, type: 'button' });
-              }
-            });
-          }
-        }
+      //   //   createAdditionalServices(multi).then((res) => {
+      //   //     if (res && res.status === 400) {
+      //   //       setIsLoading({ loader: false, type: 'button' });
+      //   //     }
+      //   //     if (res && res.status === 201) {
+      //   //       setOpenCollapse({ ...openCollapse, addendum: true });
+      //   //     }
+      //   //   });
+      //   // }
+      //   if (formData && formData.primary_marketplace) {
+      //     const data = {
+      //       id:
+      //         (agreementData &&
+      //           agreementData.primary_marketplace &&
+      //           agreementData.primary_marketplace.id) ||
+      //         '',
+      //       contract: agreementData.id,
+      //       name: formData && formData.primary_marketplace,
+      //       is_primary: true,
+      //     };
+      //     if (
+      //       agreementData.primary_marketplace &&
+      //       agreementData.primary_marketplace.id
+      //     ) {
+      //       updateMarketplace(agreementData.primary_marketplace.id, data).then(
+      //         (res) => {
+      //           if (res && res.status === 200) {
+      //             setOpenCollapse({ ...openCollapse, addendum: true });
+      //             history.push(PATH_ADDENDUM.replace(':id', id));
+      //             setIsLoading({ loader: false, type: 'button' });
+      //           }
+      //           if (res && res.status === 400) {
+      //             setIsLoading({ loader: false, type: 'button' });
+      //             setApiError(res && res.data);
+      //           }
+      //         },
+      //       );
+      //     } else {
+      //       createMarketplace(data).then((res) => {
+      //         if (res && res.status === 201) {
+      //           setOpenCollapse({ ...openCollapse, addendum: true });
+      //           history.push(PATH_ADDENDUM.replace(':id', id));
+      //           setIsLoading({ loader: false, type: 'button' });
+      //         }
+      //         if (res && res.status === 400) {
+      //           setIsLoading({ loader: false, type: 'button' });
+      //           setApiError(res && res.data);
+      //         }
+      //       });
+      //     }
+      //   }
 
-        // if (formData && formData.additional_marketplaces) {
-        //   const multi = [];
-        //   for (const market of formData.additional_marketplaces) {
-        //     multi.push({
-        //       contract: agreementData.id,
-        //       is_primary: false,
-        //       name: market.value,
-        //     });
-        //   }
-        //   createMarketplace(multi).then((res) => {
-        //     if (res && res.status === 201) {
-        //       setOpenCollapse({ ...openCollapse, addendum: true });
-        //       history.push(PATH_ADDENDUM.replace(':id', id));
-        //       setIsLoading({ loader: false, type: 'button' });
-        //     }
-        //   });
-        // }
+      //   // if (formData && formData.additional_marketplaces) {
+      //   //   const multi = [];
+      //   //   for (const market of formData.additional_marketplaces) {
+      //   //     multi.push({
+      //   //       contract: agreementData.id,
+      //   //       is_primary: false,
+      //   //       name: market.value,
+      //   //     });
+      //   //   }
+      //   //   createMarketplace(multi).then((res) => {
+      //   //     if (res && res.status === 201) {
+      //   //       setOpenCollapse({ ...openCollapse, addendum: true });
+      //   //       history.push(PATH_ADDENDUM.replace(':id', id));
+      //   //       setIsLoading({ loader: false, type: 'button' });
+      //   //     }
+      //   //   });
+      //   // }
 
-        // for (const service of formData.additional_one_time_services) {
-        //   saveAdditionalOneTimeService(service, service.id);
-        // }
-        if (formData.additional_one_time_services) {
-          formData.additional_one_time_services.forEach((service, index) =>
-            saveAdditionalOneTimeService(service, service.id, index),
-          );
-        }
-        const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
-        for (const val of num) {
-          if (formData && formData[val]) {
-            formData[val] = formData[val].substring(1).replace(/,/g, '');
-          }
-        }
-        const detail = {
-          ...formData,
-          steps_completed: {
-            ...agreementData.steps_completed,
-            agreement: true,
-            statement: true,
-          },
-        };
-        updateAccountDetails(agreementData.id, detail).then((response) => {
-          if (response && response.status === 400) {
-            setIsLoading({ loader: false, type: 'button' });
-            setApiError(response && response.data);
-          } else if (response && response.status === 200) {
-            setOpenCollapse({
-              agreement: false,
-              statement: false,
-              addendum: true,
-            });
-            history.push(PATH_ADDENDUM.replace(':id', id));
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
-      } else {
-        setIsLoading({ loader: true, type: 'button' });
-        const data = {
-          steps_completed: { agreement: true, statement: true },
-        };
-        updateAccountDetails(agreementData.id, data).then((response) => {
-          if (response && response.status === 200) {
-            setOpenCollapse({
-              agreement: false,
-              statement: false,
-              addendum: true,
-            });
-            history.push(PATH_ADDENDUM.replace(':id', id));
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
-        history.push(PATH_STATEMENT.replace(':id', id));
-      }
+      //   // for (const service of formData.additional_one_time_services) {
+      //   //   saveAdditionalOneTimeService(service, service.id);
+      //   // }
+      //   if (formData.additional_one_time_services) {
+      //     formData.additional_one_time_services.forEach((service, index) =>
+      //       saveAdditionalOneTimeService(service, service.id, index),
+      //     );
+      //   }
+      //   const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
+      //   for (const val of num) {
+      //     if (formData && formData[val]) {
+      //       formData[val] = formData[val].substring(1).replace(/,/g, '');
+      //     }
+      //   }
+      //   const detail = {
+      //     ...formData,
+      //     steps_completed: {
+      //       ...agreementData.steps_completed,
+      //       agreement: true,
+      //       statement: true,
+      //     },
+      //   };
+      //   updateAccountDetails(agreementData.id, detail).then((response) => {
+      //     if (response && response.status === 400) {
+      //       setIsLoading({ loader: false, type: 'button' });
+      //       setApiError(response && response.data);
+      //     } else if (response && response.status === 200) {
+      //       setOpenCollapse({
+      //         agreement: false,
+      //         statement: false,
+      //         addendum: true,
+      //       });
+      //       history.push(PATH_ADDENDUM.replace(':id', id));
+      //       setIsLoading({ loader: false, type: 'button' });
+      //     }
+      //   });
+      // } else {
+      //   setIsLoading({ loader: true, type: 'button' });
+      //   const data = {
+      //     steps_completed: { agreement: true, statement: true },
+      //   };
+      //   updateAccountDetails(agreementData.id, data).then((response) => {
+      //     if (response && response.status === 200) {
+      //       setOpenCollapse({
+      //         agreement: false,
+      //         statement: false,
+      //         addendum: true,
+      //       });
+      //       history.push(PATH_ADDENDUM.replace(':id', id));
+      //       setIsLoading({ loader: false, type: 'button' });
+      //     }
+      //   });
+      //   history.push(PATH_STATEMENT.replace(':id', id));
+      // }
     }
     if (key === 'final') {
       if (newAddendumData) {
@@ -962,7 +975,7 @@ export default function AgreementSidePanel({
           />
           <ErrorMsg>
             {apiError && apiError.service && apiError.service[0]}
-            {saveError && saveError.service && saveError.service[0]}
+            {/* {saveError && saveError.service && saveError.service[0]} */}
           </ErrorMsg>
         </div>
         <div className="col-3">
@@ -979,7 +992,7 @@ export default function AgreementSidePanel({
           />
           <ErrorMsg>
             {apiError && apiError.quantity && apiError.quantity[0]}
-            {saveError && saveError.quantity && saveError.quantity[0]}
+            {/* {saveError && saveError.quantity && saveError.quantity[0]} */}
           </ErrorMsg>
         </div>
         {field &&
@@ -999,7 +1012,7 @@ export default function AgreementSidePanel({
             />
             <ErrorMsg>
               {apiError && apiError.quantity && apiError.quantity[0]}
-              {saveError && saveError.quantity && saveError.quantity[0]}
+              {/* {saveError && saveError.quantity && saveError.quantity[0]} */}
             </ErrorMsg>
           </div>
         ) : (
@@ -1118,7 +1131,9 @@ export default function AgreementSidePanel({
             }}>
             <img className="service-agre" src={ServiceAgreement} alt="pdf" />
             <h4 className="sendar-details mt-1 ml-5">
-              Service Agreement{' '}
+              {agreementData && agreementData.contract_type === 'one time'
+                ? 'One Time Service Agreement'
+                : 'Service Agreement'}
               {agreementData.steps_completed &&
               agreementData.steps_completed.agreement ? (
                 <img
@@ -1148,9 +1163,9 @@ export default function AgreementSidePanel({
                         {apiError &&
                           apiError[item.key] &&
                           apiError[item.key][0]}
-                        {saveError &&
+                        {/* {saveError &&
                           saveError[item.key] &&
-                          saveError[item.key][0]}
+                          saveError[item.key][0]} */}
                       </ErrorMsg>
                     </FormField>
                   </li>
@@ -1245,6 +1260,14 @@ export default function AgreementSidePanel({
                                 {item.label}
                                 {generateHTML(item)}
                               </label>
+                              <ErrorMsg>
+                                {apiError &&
+                                  apiError[item.key] &&
+                                  apiError[item.key][0]}
+                                {/* {saveError &&
+                                  saveError[item.key] &&
+                                  saveError[item.key][0]} */}
+                              </ErrorMsg>
                             </FormField>
                           </li>
 
@@ -1664,9 +1687,7 @@ export default function AgreementSidePanel({
             </div>
           </div>
           <Collapse isOpened={openCollapse.dspAddendum}>
-            <ul className="collapse-inner">
-              <li>DSP</li>
-            </ul>
+            <ul className="collapse-inner">{/* <li>DSP</li> */}</ul>
           </Collapse>
 
           <div className="straight-line sidepanel " />
@@ -1823,8 +1844,9 @@ AgreementSidePanel.defaultProps = {
   setNotIncludedMonthlyServices: () => {},
   sendNotIncludedOneTimeServToAdd: () => {},
   sendNotIncludedMonthlyServToAdd: () => {},
-  saveError: {},
+  apiError: {},
   showFooter: () => {},
+  setApiError: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -1867,11 +1889,12 @@ AgreementSidePanel.propTypes = {
   setNotIncludedMonthlyServices: PropTypes.func,
   sendNotIncludedOneTimeServToAdd: PropTypes.func,
   sendNotIncludedMonthlyServToAdd: PropTypes.func,
-  saveError: PropTypes.shape({
+  apiError: PropTypes.shape({
     quantity: PropTypes.arrayOf(PropTypes.string),
     service: PropTypes.arrayOf(PropTypes.string),
   }),
   showFooter: PropTypes.func,
+  setApiError: PropTypes.func,
 };
 
 const SidePanel = styled.div`
