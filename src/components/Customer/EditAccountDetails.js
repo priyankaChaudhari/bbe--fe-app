@@ -94,12 +94,26 @@ export default function EditAccountDetails({
 
   const handleChange = (event, key) => {
     setShowBtn(true);
-    setFormData({ ...formData, [key]: event.target.value });
+    if (key === 'annual_revenue') {
+      setFormData({
+        ...formData,
+        [key]: event.target.value.substring(1).replace(/,/g, ''),
+      });
+    } else if (key === 'number_of_employees') {
+      setFormData({
+        ...formData,
+        [key]: event.target.value.substring(0).replace(/,/g, ''),
+      });
+    } else {
+      setFormData({ ...formData, [key]: event.target.value });
+    }
     setApiError({
       ...apiError,
       [event.target.name]: '',
     });
   };
+
+  console.log(formData);
 
   const generateNumberFormat = (item) => {
     return (

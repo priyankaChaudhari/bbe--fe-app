@@ -46,6 +46,7 @@ import {
 } from '../components/AccountSetup';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
+// import NewCustomerList from '../components/Customer/NewCustomerList';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(

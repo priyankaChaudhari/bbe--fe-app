@@ -125,7 +125,10 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
             </WhiteCard>
             <WhiteCard className=" mt-3">
               <p className="black-heading-title mt-0 ">Company Contacts</p>
-              <div className="edit-details">
+              <div
+                className="edit-details"
+                onClick={() => setShowModal(true)}
+                role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
