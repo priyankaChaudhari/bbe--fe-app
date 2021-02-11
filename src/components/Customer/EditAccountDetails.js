@@ -113,8 +113,6 @@ export default function EditAccountDetails({
     });
   };
 
-  console.log(formData);
-
   const generateNumberFormat = (item) => {
     return (
       <NumberFormat
