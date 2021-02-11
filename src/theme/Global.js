@@ -408,7 +408,7 @@ export const BodyWhite = styled.div`
 export const WhiteCard = styled.div`
   background-color:${Theme.white};
   border-radius: 15px;
-  padding: 25px;
+  padding:  15px 20px ;
   position: relative;
 
 
@@ -515,6 +515,7 @@ export const WhiteCard = styled.div`
       padding: 3px 10px;
       color: ${Theme.gray6};
       font-size: ${Theme.extraNormal};
+      vertical-align: text-top;
       margin-left: 15px;
       cursor:pointer;
       position:relative;
@@ -576,7 +577,7 @@ export const WhiteCard = styled.div`
       border: 8px solid ${Theme.gray6};
       border-radius: 20px;
       margin-top: -65px;
-      max-width: 170px;
+      width: 170px;
       height: 170px;
       margin-left: 50px;
     }
@@ -587,7 +588,7 @@ export const WhiteCard = styled.div`
     right: 23px;
     font-size: ${Theme.extraNormal};
     color ${Theme.gray85};
-    top: 20px;
+    top: 28px;
     cursor:pointer;
 
     &.edit-brand-details {
@@ -610,11 +611,14 @@ export const WhiteCard = styled.div`
 
      .brand-label { 
        color: ${Theme.gray40};
+       margin-bottom: 3px;
         span { 
           margin-left: 15px;
           color: ${Theme.black};
           word-break: break-word;
         }
+
+        
       }
   }
   .left-details-card {
@@ -854,12 +858,15 @@ export const WhiteCard = styled.div`
 @media only screen and (max-width: 991px) {
 
   .brand-logo {
+    img{
     border-radius: 10px;
     margin-top: -93px;
-    max-width: 100px;
+    width: 100px;
     height: 100px;
     margin-bottom: 15px;
     margin-left: 20px;
+    }
+   
   } 
    .company-label-info {
      margin-left: 40px;

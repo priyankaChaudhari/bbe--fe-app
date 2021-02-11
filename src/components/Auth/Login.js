@@ -4,8 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import Theme from '../../theme/Theme';
-import { BannerBg, Logo } from '../../theme/images/index';
+import { BannerBg, NextLogo } from '../../theme/images/index';
 // import GoogleIcons from '../../theme/images/icons/google.svg';
 import {
   Button,
@@ -49,7 +48,7 @@ export default function Login() {
           <div className="col-lg-6 pl-0 pr-0 h-100">
             <div className="inner-form">
               <div className="logo">
-                <img src={Logo} alt="logo " /> <span> CENTRAL</span>
+                <img src={NextLogo} alt="logo " />
               </div>
               {forgotPasswordMsg ? (
                 <SuccessMsg message="We have emailed you a reset link, please check your email." />
@@ -180,19 +179,10 @@ const FormContainer = styled.div`
     vertical-align: middle;
 
     .logo {
-      width: 190px;
-      display: inline-table;
-      padding: 35px 0 100px 0;
-
-      span {
-        position: absolute;
-        top: 46px;
-        margin-left: 6px;
-
-        font-size: 16px;
-        font-weight: bold;
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
+      img {
+        width: 160px;
+        display: inline-table;
+        padding: 40px 0 100px 0;
       }
     }
     .sub-text {

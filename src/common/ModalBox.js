@@ -160,8 +160,8 @@ const ModalBox = styled.div`
 
       .trash {
         position: absolute;
-        top: 28px;
-        right: 23px;
+        top: 11px;
+        right: 13px;
         width: 16px;
       }
 

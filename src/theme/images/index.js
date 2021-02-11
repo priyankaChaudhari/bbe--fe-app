@@ -116,6 +116,7 @@ import GreyBannerBg from './grey-bg.jpg';
 import OrangeChecked from './icons/orange-solid-checked.svg';
 import PlusIcon from './icons/plus-icon.svg';
 import MinusIcon from './icons/minus-icon.png';
+import NextLogo from './new-logo.png';
 
 export {
   BannerBg,
@@ -236,4 +237,5 @@ export {
   OrangeChecked,
   PlusIcon,
   MinusIcon,
+  NextLogo,
 };

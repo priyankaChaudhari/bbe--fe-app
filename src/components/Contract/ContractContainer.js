@@ -1002,7 +1002,7 @@ export default function ContractContainer() {
           <Footer className="sticky mt-5">
             <div className="container">
               <Button
-                className="light-orange  on-boarding  mt-3 mr-5"
+                className="light-orange  on-boarding  mt-3 mr-5 ml-5"
                 onClick={() => nextStep()}>
                 <img src={OrangeChecked} alt="checked" /> Save Changes
               </Button>
@@ -1020,40 +1020,38 @@ export default function ContractContainer() {
         details.steps_completed.agreement &&
         details.steps_completed.statement ? (
         <div className="mt-5 pt-5">
-          <Footer className="sticky">
-            <div className="container">
-              {checkApprovalCondition() ? (
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => {
-                    createAgreementDoc();
-                    setParams('request-approve');
-                    setShowModal(true);
-                  }}>
-                  Request Approval
-                </Button>
-              ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => {
-                    createAgreementDoc();
-                    setParams('select-contact');
-                    setShowModal(true);
-                  }}>
-                  Approve and Request Signature
-                </Button>
-              ) : (
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-5"
-                  onClick={() => {
-                    createAgreementDoc();
-                    setParams('select-contact');
-                    setShowModal(true);
-                  }}>
-                  Request Signature
-                </Button>
-              )}
-            </div>
+          <Footer className="sticky pl-5">
+            {checkApprovalCondition() ? (
+              <Button
+                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5 "
+                onClick={() => {
+                  createAgreementDoc();
+                  setParams('request-approve');
+                  setShowModal(true);
+                }}>
+                Request Approval
+              </Button>
+            ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
+              <Button
+                className="btn-primary on-boarding w-320 mt-3 mr-5"
+                onClick={() => {
+                  createAgreementDoc();
+                  setParams('select-contact');
+                  setShowModal(true);
+                }}>
+                Approve and Request Signature
+              </Button>
+            ) : (
+              <Button
+                className="btn-primary on-boarding w-320 mt-3 mr-5"
+                onClick={() => {
+                  createAgreementDoc();
+                  setParams('select-contact');
+                  setShowModal(true);
+                }}>
+                Request Signature
+              </Button>
+            )}
           </Footer>
         </div>
       ) : (

@@ -159,18 +159,18 @@ const FormField = styled.div`
   }
   .phone-input-info {
     position: absolute;
-    top: 54px;
-    right: 22px;
+    top: 37px;
+    right: 13px;
   }
   .contact-input-info {
     position: absolute;
-    top: 27px;
-    left: 190px;
+    top: 12px;
+    left: 180px;
   }
   .profilephone-input-info {
     position: absolute;
-    top:130px;
-    right: 22px;
+    top: 106px;
+    right: 15px;
   }
   
 `;

@@ -771,6 +771,11 @@ const CustomerBody = styled.div`
     margin: 0 auto;
     width: 100%;
   }
+  @media only screen and (min-width: 1920px) {
+    max-width: 80% !important;
+    margin: 0 auto;
+    width: 100%;
+  }
 `;
 const BackBtn = styled.div`
   color: ${Theme.black};

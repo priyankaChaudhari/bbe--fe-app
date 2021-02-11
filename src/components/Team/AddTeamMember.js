@@ -351,7 +351,7 @@ export default function AddTeamMember({
       {(showBtn && !isLoading.loader && isLoading.type === 'page') ||
       (isLoading.loader && isLoading.type === 'button') ? (
         <>
-          <div className="footer-line mt-5 " />
+          <div className="footer-line  " />
           <div className="modal-footer">
             <Button
               className=" btn-primary mr-4"
