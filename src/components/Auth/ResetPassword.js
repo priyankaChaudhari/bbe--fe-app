@@ -140,12 +140,15 @@ export default function ResetPassword() {
                         errors.confirm_password &&
                         errors.confirm_password.message}
                     </ErrorMsg>
-                    <ErrorMsg>
-                      {(apiError &&
-                        apiError.password &&
-                        apiError.password[0]) ||
-                        (apiError && apiError.key && apiError.key[0])}
-                    </ErrorMsg>
+                    <ErrorMsg
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          (apiError &&
+                            apiError.password &&
+                            apiError.password[0]) ||
+                          (apiError && apiError.key && apiError.key[0]),
+                      }}
+                    />
                     <Button className="btn btn-primary w-100 mt-5">
                       {isLoading.loader && isLoading.type === 'button' ? (
                         <PageLoader color="#FFF" type="button" />
