@@ -179,6 +179,11 @@ const GrayBody = styled.div`
       max-width: 1434px;
     }
   }
+  @media only screen and (min-width: 1700px) and (min-width: 1920px) {
+    .graycontainer {
+      max-width: 90%;
+    }
+  }
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     .graycontainer {
       max-width: 1534px;

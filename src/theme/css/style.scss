@@ -73,6 +73,12 @@ body {
     width: 100% !important;
     margin: 0 auto !important;
   }
+  @media only screen and (min-width: 1920px) {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding-left: 75px !important;
+  }
+
   @media only screen and (min-width: 991px) and (max-width: 1400px) {
     padding-left: 75px !important;
   }
@@ -126,7 +132,7 @@ h1 {
       background-color: #d63649;
     }
   }
-  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
+  @media only screen and (min-width: 1700px) {
     font-size: $large-title-f-size-res;
   }
 }
@@ -924,7 +930,7 @@ div {
   cursor: pointer;
 }
 .checkbox label:hover::before {
-  background-color: #ff5933;
+  background-color: $orange-color;
   opacity: 0.800000011920929;
 }
 
@@ -943,10 +949,11 @@ div {
   height: 40px;
   border: 1px solid #ffe5df;
   background: #ffe5df;
-  color: #ff5933;
+  color: $black-color;
   text-transform: Uppercase;
   display: inline-block;
-  padding-top: 10px;
+  padding-top: 9px;
+  font-size: $extra-medium-f-size;
 
   &.dropdown-avartName {
     width: 32px;

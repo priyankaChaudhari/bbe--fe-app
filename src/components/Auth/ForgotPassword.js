@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
-import Theme from '../../theme/Theme';
-import { Logo, BannerBg, ArrowIcons } from '../../theme/images/index';
+import { NextLogo, BannerBg, ArrowIcons } from '../../theme/images/index';
 import { Button, FormField, ErrorMsg, PageLoader } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { getEmail } from '../../api/index';
@@ -46,7 +45,7 @@ export default function ForgotPassword() {
             <div className="col-lg-6 pl-0 pr-0 h-100">
               <div className="inner-form">
                 <div className="logo">
-                  <img src={Logo} alt="logo " /> <span> CENTRAL</span>
+                  <img src={NextLogo} alt="logo " />
                 </div>
                 <Link className="link" to={PATH_LOGIN}>
                   <p className="small-para">
@@ -126,18 +125,10 @@ const FormContainer = styled.div`
     vertical-align: middle;
 
     .logo {
-      width: 190px;
-      padding: 35px 0 100px 0;
-      display: inline-table;
-
-      span {
-        position: absolute;
-        top: 46px;
-        margin-left: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
+      img {
+        width: 160px;
+        display: inline-table;
+        padding: 40px 0 100px 0;
       }
     }
     .arrow-icon {

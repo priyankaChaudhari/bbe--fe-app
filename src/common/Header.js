@@ -11,7 +11,7 @@ import $ from 'jquery';
 
 import Theme from '../theme/Theme';
 import {
-  Logo,
+  NextLogo,
   EditIcons,
   LogOutIcons,
   CloseIcon,
@@ -117,7 +117,7 @@ export default function Header() {
           <div className="row">
             <div className="col-6 ">
               <div className="logo">
-                <img src={Logo} alt="logo " /> <span> CENTRAL</span>
+                <img src={NextLogo} alt="logo " />
               </div>
               <img className="logo-mobile-view" src={LogoMobileView} alt="" />
             </div>
@@ -438,17 +438,8 @@ const MainHeader = styled.div`
   z-index: 2;
   top: 0;
   .logo {
-    width: 170px;
-    margin-top: 5px;
-
-    span {
-      position: absolute;
-      top: 14px;
-      left: 195px;
-      font-size: ${Theme.textFontSize};
-      font-weight: bold;
-      color: ${Theme.black};
-      font-family: ${Theme.titleFontFamily};
+    img {
+      width: 90px;
     }
   }
   .logo-mobile-view {
