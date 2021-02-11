@@ -880,29 +880,33 @@ export default function ContractContainer() {
           <>
             <div className="on-boarding-container">
               <div className="text-container ">
-                <p className="m-0 p-0 mt-2">
-                  {' '}
-                  <Link
-                    to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                    className="link">
-                    <img
-                      src={ArrowIcons}
-                      alt="aarow-back"
-                      className="arrow-icon mt-3"
-                    />
-                    Back to Customer Details
-                  </Link>
-                  <div className="success-msg">
-                    {showSuccessContact.show ? (
-                      <SuccessMsg
-                        property=" "
-                        message={showSuccessContact.message}
-                      />
-                    ) : (
-                      ''
-                    )}
+                <div className="row">
+                  <div className="col-12">
+                    <p className="m-0 sticky">
+                      {' '}
+                      <Link
+                        to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                        className="link">
+                        <img
+                          src={ArrowIcons}
+                          alt="aarow-back"
+                          className="arrow-icon mt-3"
+                        />
+                        Back to Customer Details
+                      </Link>
+                      <div className="success-msg">
+                        {showSuccessContact.show ? (
+                          <SuccessMsg
+                            property=" "
+                            message={showSuccessContact.message}
+                          />
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </p>
                   </div>
-                </p>
+                </div>
                 <div>
                   {history.location.pathname.includes('agreement') &&
                   details ? (
@@ -999,7 +1003,7 @@ export default function ContractContainer() {
       />
       {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">
-          <Footer className="sticky mt-5">
+          <Footer className=" mt-5">
             <div className="container">
               <Button
                 className="light-orange  on-boarding  mt-3 mr-5 ml-5"
@@ -1020,7 +1024,7 @@ export default function ContractContainer() {
         details.steps_completed.agreement &&
         details.steps_completed.statement ? (
         <div className="mt-5 pt-5">
-          <Footer className="sticky pl-5">
+          <Footer className=" pl-5">
             {checkApprovalCondition() ? (
               <Button
                 className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5 "
@@ -1033,7 +1037,7 @@ export default function ContractContainer() {
               </Button>
             ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5"
+                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5"
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1043,7 +1047,7 @@ export default function ContractContainer() {
               </Button>
             ) : (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5"
+                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5"
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
