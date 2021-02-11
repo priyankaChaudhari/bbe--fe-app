@@ -66,6 +66,14 @@ const InputSearchWithRadius = styled.div`
       max-width: 280px;
       float: left;
     }
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+      search-input-icon {
+        position: absolute;
+        left: 15px;
+        top: 7px;
+        width: 18px;
+      }
+    }
   }
 `;
 
