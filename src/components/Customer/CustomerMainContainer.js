@@ -247,11 +247,13 @@ export default function CustomerMainContainer() {
           <CustomerDetailBanner>
             <div className="banner">
               <div className="inner" />
-              <div className="back-btn-link d-lg-block d-none">
-                {' '}
-                <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
-                to all customers
-              </div>
+              <Link to={PATH_CUSTOMER_LIST}>
+                <div className="back-btn-link d-lg-block d-none">
+                  {' '}
+                  <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
+                  to all customers
+                </div>
+              </Link>
             </div>
             <CustomerBody>
               <WhiteCard className="customer-brand-details mb-n2">
