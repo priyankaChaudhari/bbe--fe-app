@@ -43,7 +43,22 @@ const InputSearchWithRadius = styled.div`
     left: 15px;
     top: 11px;
     width: 18px;
+
+    ::i-block-chrome,
+    .search-input-icon {
+      top: 14px;
+    }
   }
+
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .search-input-icon {
+      position: absolute;
+      left: 15px;
+      top: 14px;
+      width: 18px;
+    }
+  }
+
   .info-icon {
     right: 16px;
     position: absolute;
@@ -65,6 +80,11 @@ const InputSearchWithRadius = styled.div`
     &.w-50 {
       max-width: 280px;
       float: left;
+    }
+
+    ::i-block-chrome,
+    .search-input-icon {
+      top: 14px;
     }
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
       .search-input-icon {
