@@ -67,10 +67,10 @@ const InputSearchWithRadius = styled.div`
       float: left;
     }
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
-      search-input-icon {
+      .search-input-icon {
         position: absolute;
         left: 15px;
-        top: 7px;
+        top: 14px;
         width: 18px;
       }
     }
