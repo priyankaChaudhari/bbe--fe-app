@@ -28,6 +28,9 @@ const InputSelect = styled.div`
         text-transform: none;
       }
     }
+    .css-1hwfws3 {
+      font-size: 15px;
+    }
 
     &:hover {
       border: 1px solid ${Theme.gray10};

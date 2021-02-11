@@ -67,6 +67,10 @@ export default function EditAccountDetails({
         classNamePrefix="react-select"
         options={item.key === 'country' ? countries : categories}
         styles={{
+          menuPortal: (base) => ({
+            ...base,
+            zIndex: 9999,
+          }),
           option: (provided, state) => {
             return {
               ...provided,
