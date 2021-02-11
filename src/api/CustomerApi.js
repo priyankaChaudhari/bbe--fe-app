@@ -15,7 +15,7 @@ import {
   API_DOCUMENTS,
 } from '../constants/ApiConstants';
 
-export async function getCustomerList(pageNumber, filterOptions, searchQuery) {
+export async function getCustomerList(pageNumber, searchQuery, filterOptions) {
   let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     q: searchQuery,

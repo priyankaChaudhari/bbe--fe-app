@@ -25,7 +25,7 @@ import {
   PATH_CUSTOMER_LIST_TABLET,
 } from '../constants/index';
 
-import { CustomerList, CustomerListTablet } from '../components/Customer';
+import { CustomerListTablet } from '../components/Customer';
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
@@ -46,7 +46,7 @@ import {
 } from '../components/AccountSetup';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
-// import NewCustomerList from '../components/Customer/NewCustomerList';
+import NewCustomerList from '../components/Customer/NewCustomerList';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -118,7 +118,11 @@ export default function AuthenticationComponent() {
           {/* Customer */}
 
           {userInfo && userInfo.role !== 'Customer' ? (
-            <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
+            <Route
+              path={PATH_CUSTOMER_LIST}
+              exact
+              component={NewCustomerList}
+            />
           ) : (
             ''
           )}
