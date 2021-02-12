@@ -99,6 +99,15 @@ body {
 .on-boarding-container {
   width: 100% !important;
   margin: 0 auto !important;
+
+  .sticky {
+    position: fixed;
+    background-color: $white-color;
+    padding: 10px 0px 18px 50px;
+    margin-left: 65px !important;
+    width: 100%;
+    border-bottom: 1px solid $gray-5;
+  }
 }
 
 // .inner-container {
@@ -524,6 +533,18 @@ a {
   text-decoration: none;
   cursor: pointer;
   text-transform: none;
+}
+
+.back-link {
+  color: $gray-90;
+  font-size: $small-f-size;
+  font-weight: 600;
+
+  .arrow-back-icon {
+    width: 15px;
+    margin-right: 8px;
+    vertical-align: bottom;
+  }
 }
 
 .table-responsive {
@@ -1032,12 +1053,6 @@ div {
   padding-left: 120px;
   font-family: $contact-regular-font-family;
 
-  .sticky {
-    position: fixed;
-    background-color: $white-color;
-    padding: 10px 0;
-    width: 100%;
-  }
   @media only screen and (min-width: 1500px) {
     padding-right: 450px;
   }

@@ -355,17 +355,18 @@ export default function CustomerMainContainer() {
                       </div>
                       <div className="col-lg-4 col-md-6 col-sm-12">
                         <div className="company-label-info">
-                          <div className="brand-label">
+                          {' '}
+                          <div className="brand-label ">
                             Category
                             <span>
                               {customer &&
                                 customer.category &&
                                 customer.category.label}
                             </span>
-                          </div>
-                          <div className="brand-label">
+                          </div>{' '}
+                          <div className="brand-label ">
                             Website
-                            <span>
+                            <span className="ml-4">
                               <a
                                 href={
                                   customer &&
@@ -397,9 +398,10 @@ export default function CustomerMainContainer() {
                               prefix="$"
                             />
                           </div>
-                          <div className="brand-label">
+
+                          <div className="brand-label ">
                             Company Size
-                            <span>
+                            <span className="ml-4">
                               {customer && customer.number_of_employees}
                             </span>
                           </div>

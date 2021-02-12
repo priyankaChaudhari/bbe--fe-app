@@ -515,8 +515,8 @@ export const WhiteCard = styled.div`
       padding: 3px 10px;
       color: ${Theme.gray6};
       font-size: ${Theme.extraNormal};
-      vertical-align: text-top;
       margin-left: 15px;
+      top: -5px;
       cursor:pointer;
       position:relative;
 
@@ -592,11 +592,12 @@ export const WhiteCard = styled.div`
     cursor:pointer;
 
     &.edit-brand-details {
-      top: -8px;
+      top:7px;
     }
     img {
       width: 16px;
       margin-right: 4px;
+      vertical-align: text-top;
     }
   }
 
@@ -604,6 +605,7 @@ export const WhiteCard = styled.div`
      font-size: ${Theme.normal};
      margin-left: 40px;
      color: ${Theme.black};
+     line-height: 22px;
 
      &:first-child {
         margin-left: 0;
@@ -611,9 +613,9 @@ export const WhiteCard = styled.div`
 
      .brand-label { 
        color: ${Theme.gray40};
-       margin-bottom: 3px;
+      //  margin-bottom: 4px;
         span { 
-          margin-left: 15px;
+          margin-left: 13px;
           color: ${Theme.black};
           word-break: break-word;
         }
