@@ -127,7 +127,7 @@ export default function CustomerStatus({
             Add Note
             <br />
             <textarea
-              className="form-control"
+              className="form-control text-area"
               rows="3"
               placeholder="Add a note"
               onChange={(date) => handleChange(date, 'note')}
