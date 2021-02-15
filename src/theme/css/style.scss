@@ -58,6 +58,16 @@ body {
   //   font-size: $medium-f-size;
   // }
 }
+
+#outerContainer {
+  #innerContainer {
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 70px;
+    position: relative;
+  }
+}
 .common-header-sticky {
   padding-top: 70px;
 }
@@ -103,6 +113,7 @@ body {
   .sticky {
     position: fixed;
     background-color: $white-color;
+    z-index: 2;
     padding: 10px 0px 18px 50px;
     margin-left: 65px !important;
     width: 100%;
@@ -843,6 +854,23 @@ div {
     color: $white-color;
     font-size: 11px;
   }
+}
+
+#outerContainer {
+  #innerContainer {
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 70px;
+    position: relative;
+  }
+}
+#innerContainer {
+  margin-bottom: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 70px;
+  position: relative;
 }
 
 .react-datepicker-wrapper {

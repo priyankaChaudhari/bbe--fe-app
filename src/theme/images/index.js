@@ -118,6 +118,7 @@ import PlusIcon from './icons/plus-icon.svg';
 import MinusIcon from './icons/minus-icon.png';
 import NextLogo from './new-logo.png';
 import BackArrowIcon from './icons/back-arrow-back.png';
+import DigitalSignature from './Digital-Sig.png';
 
 export {
   BannerBg,
@@ -240,4 +241,5 @@ export {
   MinusIcon,
   NextLogo,
   BackArrowIcon,
+  DigitalSignature,
 };
