@@ -1,6 +1,6 @@
 /* eslint no-shadow: "off" */
-
 import axiosInstance from '../../axios';
+import { PATH_CUSTOMER_LIST } from '../../constants';
 import { API_CONTACT, API_CUSTOMER } from '../../constants/ApiConstants';
 import * as actionTypes from './actionTypes';
 
@@ -18,6 +18,9 @@ export const customerRequestSuccess = (data) => {
 };
 
 export const customerRequestFail = (error) => {
+  if (error && error.response && error.response.status === 404) {
+    window.location.href = PATH_CUSTOMER_LIST;
+  }
   return {
     type: actionTypes.CUSTOMER_REQUEST_FAIL,
     error,

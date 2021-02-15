@@ -21,7 +21,13 @@ import {
 import { GetInitialName } from '../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 
-export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
+export default function CompanyDetail({
+  customer,
+  amazonDetails,
+  seller,
+  id,
+  getAmazon,
+}) {
   const contactInfo = useSelector((state) => state.customerState.contactData);
   // const [showModal, setShowModal] = useState({ modal: false, type: '' });
   const [showModal, setShowModal] = useState(false);
@@ -261,6 +267,7 @@ export default function CompanyDetail({ customer, amazonDetails, seller, id }) {
             customer={customer}
             showModal={showModal}
             amazonDetails={amazonDetails}
+            getAmazon={getAmazon}
           />
         </Modal>
       </div>
@@ -281,6 +288,7 @@ CompanyDetail.propTypes = {
     brand: PropTypes.string,
     phone_number: PropTypes.string,
   }).isRequired,
-  amazonDetails: PropTypes.arrayOf(PropTypes.object),
+  amazonDetails: PropTypes.arrayOf(PropTypes.array),
   seller: PropTypes.string.isRequired,
+  getAmazon: PropTypes.func.isRequired,
 };

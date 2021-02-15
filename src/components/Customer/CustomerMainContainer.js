@@ -87,6 +87,7 @@ export default function CustomerMainContainer() {
     show: false,
     type: '',
   });
+  const [memberCount, setMemberCount] = useState(null);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -98,6 +99,7 @@ export default function CustomerMainContainer() {
     setIsLoading({ loader: true, type: 'page' });
     getCustomerMembers(id).then((member) => {
       setMemberData(member && member.data && member.data.results);
+      setMemberCount(member && member.data && member.data.count);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
@@ -475,7 +477,26 @@ export default function CustomerMainContainer() {
                   <WhiteCard className="mb-3 order-1 order-lg-2">
                     <p className="black-heading-title mt-0 mb-4">
                       {' '}
-                      Team Members ({memberData && memberData.length})
+                      Team Members (
+                      {memberCount &&
+                        (memberCount > 10 ? (
+                          <u
+                            className="link-video watch-video cursor"
+                            onClick={() =>
+                              setShowMemberList({
+                                show: true,
+                                add: false,
+                                modal: true,
+                              })
+                            }
+                            role="presentation"
+                            title="See more...">
+                            {memberCount}
+                          </u>
+                        ) : (
+                          memberCount
+                        ))}
+                      )
                     </p>
                     <div
                       className="add-new-tab"
@@ -546,8 +567,10 @@ export default function CustomerMainContainer() {
                           <img
                             src={
                               isLoading.loader && isLoading.type === 'page'
-                                ? ''
-                                : DefaultUser
+                                ? DefaultUser
+                                : images.find(
+                                    (op) => op.entity_id === item.user_id,
+                                  ).presigned_url
                             }
                             className="default-user-activity"
                             alt="pic"
@@ -573,6 +596,7 @@ export default function CustomerMainContainer() {
                   <AgreementDetails agreement={agreement} id={id} />
                 ) : viewComponent === 'company' ? (
                   <CompanyDetail
+                    id={id}
                     customer={customer}
                     amazonDetails={amazonDetails}
                     seller={
@@ -580,6 +604,7 @@ export default function CustomerMainContainer() {
                       agreement.seller_type &&
                       agreement.seller_type.value
                     }
+                    getAmazon={getAmazon}
                   />
                 ) : viewComponent === 'performance' ? (
                   <CompanyPerformance />

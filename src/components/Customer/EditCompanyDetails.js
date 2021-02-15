@@ -49,6 +49,7 @@ export default function EditCompanyDetails({
   id,
   setShowSuccessMsg,
   amazonDetails,
+  getAmazon,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -259,12 +260,15 @@ export default function EditCompanyDetails({
     if (formData && (formData.merchant_id || formData.marketplace_id)) {
       const amazon = {
         ...formData,
-        marketplace_id: [formData.marketplace_id],
+        marketplace_id: formData.marketplace_id
+          ? [formData.marketplace_id]
+          : amazonDetails.marketplace_id,
         customer: id,
       };
       if (amazonDetails && amazonDetails.id) {
         updateAmazonDetails(amazonDetails.id, amazon, id).then((res) => {
           if (res && res.status === 200) {
+            getAmazon();
             setIsLoading({ loader: false, type: 'button' });
           }
           if (res && res.status === 400) {
@@ -275,6 +279,7 @@ export default function EditCompanyDetails({
       } else {
         createAmazonDetails(amazon).then((market) => {
           if (market && market.status === 201) {
+            getAmazon();
             setIsLoading({ loader: false, type: 'button' });
           }
           if (market && market.status === 400) {
@@ -301,7 +306,6 @@ export default function EditCompanyDetails({
           setShowModal(true);
         } else if (res && res.status === 200) {
           setIsLoading({ loader: false, type: 'button' });
-
           dispatch(getAccountDetails(detail.id));
           dispatch(getCustomerDetails(detail.id));
           setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
@@ -773,5 +777,6 @@ EditCompanyDetails.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   id: PropTypes.string,
   setShowSuccessMsg: PropTypes.func,
-  amazonDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
+  amazonDetails: PropTypes.arrayOf(PropTypes.array).isRequired,
+  getAmazon: PropTypes.func.isRequired,
 };

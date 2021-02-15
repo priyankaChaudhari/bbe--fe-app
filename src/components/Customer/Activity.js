@@ -34,7 +34,8 @@ export default function Activity({
                       src={
                         isLoading.loader && isLoading.type === 'page'
                           ? DefaultUser
-                          : DefaultUser
+                          : images.find((op) => op.entity_id === item.user_id)
+                              .presigned_url
                       }
                       className="default-user-activity"
                       alt="pic"
