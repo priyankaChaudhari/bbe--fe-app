@@ -12,7 +12,7 @@ import {
   updateCustomerDetails,
 } from '../../api';
 
-import { Button, FormField, PageLoader } from '../../common';
+import { Button, ErrorMsg, FormField, PageLoader } from '../../common';
 import InputSelect from '../../common/InputSelect';
 import { editAccountFields } from '../../constants/FieldConstants';
 import { SortDownIcon } from '../../theme/images';
@@ -219,6 +219,7 @@ export default function EditAccountDetails({
                         onChange={(event) => handleChange(event, item.key)}
                       />
                     )}
+                    <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
                   </label>
                 </FormField>
               </div>

@@ -290,7 +290,7 @@ export const editCompanyFields = [
     type: 'textarea',
     property: 'col-md-12',
   },
-  { key: 'brand', label: 'Brands', property: 'col-md-6' },
+  { key: 'brand', label: 'Brands', property: 'col-md-12' },
   { key: 'phone_number', label: 'Phone', property: 'col-md-12', type: 'text' },
   {
     key: 'social',
