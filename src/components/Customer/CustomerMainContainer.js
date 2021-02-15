@@ -748,6 +748,7 @@ const CustomerBody = styled.div`
   max-width: 1220px;
   margin: 0 auto;
   width: 100%;
+  padding-left: 65px;
 
   .customer-body-container {
     max-width: 1220px;

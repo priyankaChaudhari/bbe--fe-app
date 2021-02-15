@@ -1240,13 +1240,13 @@ export default function ContractContainer() {
           <Footer className=" mt-5">
             <div className="container">
               <Button
-                className="light-orange  on-boarding  mt-3 mr-5 ml-5"
+                className="light-orange  on-boarding  mt-3 mr-3 "
                 onClick={() => nextStep()}>
                 <img src={OrangeChecked} alt="checked" /> Save Changes
               </Button>
 
               <Button
-                className="btn-borderless on-boarding  mt-3 mr-5"
+                className="btn-borderless on-boarding  mt-3 mr-3"
                 onClick={() =>
                   setShowDiscardModal({
                     ...showDiscardModal,
@@ -1264,10 +1264,10 @@ export default function ContractContainer() {
         details.steps_completed.agreement &&
         details.steps_completed.statement ? (
         <div className="mt-5 pt-5">
-          <Footer className=" pl-5">
+          <Footer>
             {checkApprovalCondition() ? (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5 "
+                className="btn-primary on-boarding w-320 mt-3 mr-3  "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('request-approve');
@@ -1277,7 +1277,7 @@ export default function ContractContainer() {
               </Button>
             ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5"
+                className="btn-primary on-boarding w-320 mt-3 mr-3 "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1287,7 +1287,7 @@ export default function ContractContainer() {
               </Button>
             ) : (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5"
+                className="btn-primary on-boarding w-320 mt-3 mr-3 "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1344,30 +1344,28 @@ export default function ContractContainer() {
           role="presentation"
         />
         <ModalBox>
-          <div className="step1-your">
-            <div className="container pt-3">
-              <div className="row">
-                <div className="col-12 text-center">
-                  <h4>
-                    Do you want to discard the changes? Your changes will be
-                    lost if you do.
-                  </h4>
-                  <Button
-                    onClick={() => discardAgreementChanges('Yes')}
-                    type="button"
-                    className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5">
-                    Yes
-                  </Button>
-                  <Button
-                    onClick={() => discardAgreementChanges('No')}
-                    type="button"
-                    className="btn on-boarding w-320 mt-3 mr-5 ml-5 ">
-                    No
-                  </Button>
+          <div className="modal-body pt-5">
+            <div className="alert-msg mb-4 ">
+              <span>
+                Do you want to discard the changes? Your changes will be lost if
+                you do.
+              </span>
+            </div>
+            <div className="text-center mb-3">
+              <Button
+                onClick={() => discardAgreementChanges('Yes')}
+                type="button"
+                className="btn-primary on-boarding w-50  mr-5 ">
+                Yes
+              </Button>
+              <Button
+                onClick={() => discardAgreementChanges('No')}
+                type="button"
+                className="btn-transparent w-50 ">
+                No
+              </Button>
 
-                  {/* </Link> */}
-                </div>
-              </div>
+              {/* </Link> */}
             </div>
           </div>
         </ModalBox>
@@ -1384,6 +1382,7 @@ const Footer = styled.div`
   box-shadow: ${Theme.boxShadow};
   position: fixed;
   min-height: 80px;
+  padding-left: 90px;
 
   .w-320 {
     float: left;
@@ -1394,5 +1393,9 @@ const Footer = styled.div`
   p {
     float: left;
     margin-top: 30px;
+  }
+
+  @media only screen and (max-width: 540px) {
+    padding-left: 20px;
   }
 `;

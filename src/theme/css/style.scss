@@ -119,6 +119,13 @@ body {
     width: 100%;
     border-bottom: 1px solid $gray-5;
   }
+
+  @media only screen and (max-width: 991px) {
+    .sticky {
+      padding-left: 10px;
+      margin-left: 0 !important;
+    }
+  }
 }
 
 // .inner-container {
@@ -1090,7 +1097,7 @@ div {
     padding-right: 450px;
   }
   @media only screen and (max-width: 991px) {
-    padding-right: 50px;
+    padding-right: 90px;
     padding-left: 10px;
   }
 }
