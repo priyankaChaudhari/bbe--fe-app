@@ -524,6 +524,10 @@ a {
     vertical-align: middle;
     margin-left: 7px;
   }
+  &.back-customer-list {
+    color: $black-color !important;
+    font-size: 15px;
+  }
 }
 
 .link {
@@ -539,11 +543,12 @@ a {
   color: $gray-90;
   font-size: $small-f-size;
   font-weight: 600;
+  cursor: pointer;
 
   .arrow-back-icon {
     width: 15px;
     margin-right: 8px;
-    vertical-align: bottom;
+    vertical-align: text-bottom;
   }
 }
 

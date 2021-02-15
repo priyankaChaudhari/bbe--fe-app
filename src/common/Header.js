@@ -19,7 +19,6 @@ import {
   // ActiveNotificationBell,
   // CompanyDefaultUser,
   LightBulb,
-  LogoMobileView,
   UserGroupIcon,
   ReadBookIcon,
   MenuIcon,
@@ -119,7 +118,7 @@ export default function Header() {
               <div className="logo">
                 <img src={NextLogo} alt="logo " />
               </div>
-              <img className="logo-mobile-view" src={LogoMobileView} alt="" />
+              <img className="logo-mobile-view" src={NextLogo} alt="" />
             </div>
             <div className="col-6 text-right">
               <div className="">
@@ -647,7 +646,7 @@ const MainHeader = styled.div`
 
     .logo {
       margin-left: 66px;
-      margin-top: 9px;
+      margin-top: 2px;
       width: 185px;
 
       span {
@@ -666,7 +665,8 @@ const MainHeader = styled.div`
 
     .logo-mobile-view {
       display: block;
-      width: 85px;
+      width: 80px;
+      margin-top: 4px;
       margin-left: 60px;
     }
   }

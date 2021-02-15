@@ -68,7 +68,7 @@ const FormField = styled.div`
     }
 
     &.extra-space {
-       padding: 4px 25px 4px 10px ;
+       padding: 4px 27px 4px 10px ;
     }
 
     &.w-80 {
@@ -160,7 +160,7 @@ const FormField = styled.div`
   .phone-input-info {
     position: absolute;
     top: 37px;
-    right: 13px;
+    right: 10px;
   }
   .contact-input-info {
     position: absolute;
