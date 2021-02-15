@@ -64,6 +64,7 @@ const Button = styled.button`
       width: 15px;
       margin-right: 5px;
     }
+
     &.on-boarding {
       padding: 10px 30px;
     }
@@ -174,6 +175,9 @@ const Button = styled.button`
     &:focus {
       outline: none;
     }
+  }
+  &.w-50 {
+    width: 160px;
   }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {

@@ -109,7 +109,7 @@ const ModalBox = styled.div`
     .alert-msg {
       color: ${Theme.gray90};
       font-size: ${Theme.medium};
-      max-width: 295px;
+      max-width: 310px;
       text-align: center;
       font-weight: 600;
       margin: 0 auto;
