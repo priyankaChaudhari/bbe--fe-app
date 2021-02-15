@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import queryString from 'query-string';
 import styled from 'styled-components';
@@ -31,11 +31,13 @@ import {
   updateAccountDetails,
   createMarketplace,
   updateMarketplace,
-  createAdditionalServices,
-  updateAdditionalServices,
+  // createAdditionalServices,
+  // updateAdditionalServices,
   createAddendum,
   getAddendum,
   updateAddendum,
+  createMarketplaceBulk,
+  createAdditionalServiceBulk,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 
@@ -62,12 +64,19 @@ export default function ContractContainer() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [formData, setFormData] = useState({});
+  const [originalData, setOriginalData] = useState({});
+  const [updatedFormData, setUpdatedFormData] = useState({});
   const details = useSelector((state) => state.accountState.data);
   const loader = useSelector((state) => state.accountState.isLoading);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showModal, setShowModal] = useState(false);
+  const [showDiscardModal, setShowDiscardModal] = useState({
+    clickedBtn: '',
+    show: false,
+  });
+
   const [editContractFlag, setEditContractFlag] = useState(true);
-  const [oneTimeService, setOneTimeService] = useState([]);
+  // const [oneTimeService, setOneTimeService] = useState([]);
   const [isFooter, showFooter] = useState(false);
   const [newAddendumData, setNewAddendum] = useState(null);
   const [showEditor, setShowEditor] = useState(false);
@@ -78,20 +87,32 @@ export default function ContractContainer() {
   const [notIncludedMonthlyServices, setNotIncludedMonthlyServices] = useState(
     [],
   );
+  const [additionalMonthlyServices, setMonthlyAdditionalServices] = useState(
+    [],
+  );
+  const [additionalMarketplacesData, setAdditionalMarketplace] = useState({});
+  const [additionalOnetimeServices, setAdditionalOnetimeServices] = useState(
+    [],
+  );
+
   const [apiError, setApiError] = useState({});
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
     message: '',
   });
   const [showSection, setShowCollpase] = useState({
-    addendum: false,
+    addendum: true,
     dspAddendum: false,
     amendment: false,
   });
+  // const [successMsg, setSuccessMsg] = useState('');
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
-    const y = element.getBoundingClientRect().top + window.pageYOffset + -150;
+    const y =
+      element &&
+      element.getBoundingClientRect() &&
+      element.getBoundingClientRect().top + window.pageYOffset + -150;
     window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
@@ -107,28 +128,13 @@ export default function ContractContainer() {
   };
 
   const clearSuccessMessage = () => {
-    history.location.state.message = '';
-    history.replace(history.location.pathname);
+    // history.location.state.message = '';
+    // history.push(history.location.pathname);
+    setShowSuccessContact({ show: false, message: '' });
+    // setTimeout(setShowSuccessContact({ show: false, message: '' }), 50000);
   };
 
   useEffect(() => {
-    if (
-      history &&
-      history.location &&
-      history.location.state &&
-      history.location.state.message
-    ) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-      setShowSuccessContact({
-        show: true,
-        message: history.location.state.message,
-      });
-      setTimeout(clearSuccessMessage(), 100000);
-    }
-
     dispatch(getAccountDetails(id));
     agreementTemplate().then((response) => {
       setIsLoading({ loader: true, type: 'page' });
@@ -149,104 +155,193 @@ export default function ContractContainer() {
           addendum.data.results[0],
       );
     });
+
+    if (
+      history &&
+      history.location &&
+      history.location.state &&
+      history.location.state.message
+    ) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      // setShowSuccessContact({
+      //   show: true,
+      //   message: history.location.state.message,
+      // });
+
+      // setTimeout(clearSuccessMessage(), 50000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
   useEffect(() => {
+    // if (
+    //   (details && details.additional_one_time_services) ||
+    //   (details && details.additional_marketplaces) ||
+    //   (details && details.additional_monthly_services) ||
+    //   (details && details.sales_threshold)
+    // ) {
+    //   setFormData({
+    //     ...formData,
+    //     additional_one_time_services:
+    //       details && details.additional_one_time_services,
+    //     additional_marketplaces: details && details.additional_marketplaces,
+    //     additional_monthly_services:
+    //       details && details.additional_monthly_services,
+    //     sales_threshold: details && details.sales_threshold,
+    //   });
+    if (details) {
+      setFormData({ ...formData, ...details });
+      setOriginalData({ ...formData, ...details });
+    }
     if (
-      (details && details.additional_one_time_services) ||
-      (details && details.sales_threshold)
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length
     ) {
-      setFormData({
-        ...formData,
-        additional_one_time_services:
-          details && details.additional_one_time_services,
-        additional_marketplaces: details && details.additional_marketplaces,
-        additional_monthly_services:
-          details && details.additional_monthly_services,
-        sales_threshold: details && details.sales_threshold,
+      setMonthlyAdditionalServices({
+        create: [...details.additional_monthly_services],
+        delete: [],
+      });
+    } else {
+      setMonthlyAdditionalServices({
+        create: [],
+        delete: [],
       });
     }
+    if (
+      details &&
+      details.additional_marketplaces &&
+      details.additional_marketplaces.length
+    ) {
+      setAdditionalMarketplace({
+        create: [...details.additional_marketplaces],
+        delete: [],
+      });
+    } else {
+      setAdditionalMarketplace({
+        create: [],
+        delete: [],
+      });
+    }
+    if (
+      details &&
+      details.additional_one_time_services &&
+      details.additional_one_time_services.length
+    ) {
+      setAdditionalOnetimeServices({
+        create: [...details.additional_one_time_services],
+        update: [...details.additional_one_time_services],
+        delete: [],
+      });
+    } else {
+      setAdditionalOnetimeServices({
+        create: [],
+        update: [],
+        delete: [],
+      });
+    }
+    if (
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length &&
+      details.additional_monthly_services.find(
+        (item) => item.service.name === 'DSP Advertising',
+      )
+    ) {
+      setShowCollpase({ ...showSection, dspAddendum: true });
+    } else {
+      setShowCollpase({ ...showSection, dspAddendum: false });
+    }
+    // }
+    // }
+
+    setTimeout(clearSuccessMessage(), 50000);
+
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [details]);
+  }, [details, setShowSuccessContact]);
 
   const onEditAddendum = () => {
     setShowEditor(true);
   };
 
-  const saveAdditionalOneTimeService = (field, serviceId, index) => {
-    const oneTimeServiceData = {
-      name: (field && field.service && field.service).name
-        ? field.service.name
-        : '',
-      service: (field && field.service && field.service).id
-        ? field.service.id
-        : field.service,
-      quantity: field && field.quantity,
-      contract: details.id,
-    };
-    if (field && field.service && field.service.name) {
-      oneTimeServiceData.custom_amazon_store_price =
-        field && field.custom_amazon_store_price;
-    }
+  // const saveAdditionalOneTimeService = (field, serviceId, index) => {
+  //   const oneTimeServiceData = {
+  //     name: (field && field.service && field.service).name
+  //       ? field.service.name
+  //       : '',
+  //     service: (field && field.service && field.service).id
+  //       ? field.service.id
+  //       : field.service,
+  //     quantity: field && field.quantity,
+  //     contract: details.id,
+  //   };
+  //   if (field && field.service && field.service.name) {
+  //     oneTimeServiceData.custom_amazon_store_price =
+  //       field && field.custom_amazon_store_price;
+  //   }
 
-    setIsLoading({ loader: true, type: 'page' });
-    if (serviceId) {
-      updateAdditionalServices(serviceId, oneTimeServiceData).then((res) => {
-        // dispatch(getAccountDetails(id));
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'page' });
-          setApiError(res && res.data);
-        }
-        if (res && res.status === 200) {
-          // console.log("res", res.data);
-        }
+  //   setIsLoading({ loader: true, type: 'page' });
+  //   if (serviceId) {
+  //     updateAdditionalServices(serviceId, oneTimeServiceData).then((res) => {
+  //       // dispatch(getAccountDetails(id));
+  //       if (res && res.status === 400) {
+  //         setIsLoading({ loader: false, type: 'page' });
+  //         setApiError(res && res.data);
+  //       }
+  //       if (res && res.status === 200) {
+  //         // console.log("res", res.data);
+  //       }
 
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    } else {
-      createAdditionalServices(oneTimeServiceData).then((res) => {
-        // dispatch(getAccountDetails(id));
+  //       setIsLoading({ loader: false, type: 'page' });
+  //     });
+  //   } else {
+  //     createAdditionalServices(oneTimeServiceData).then((res) => {
+  //       // dispatch(getAccountDetails(id));
 
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'page' });
-          setApiError(res && res.data);
-        }
-        if (res && res.status === 201) {
-          const originalList = [...formData.additional_one_time_services];
-          originalList[index] = res.data;
-          setFormData({
-            ...formData,
-            additional_one_time_services: originalList,
-          });
+  //       if (res && res.status === 400) {
+  //         setIsLoading({ loader: false, type: 'page' });
+  //         setApiError(res && res.data);
+  //       }
+  //       if (res && res.status === 201) {
+  //         const originalList = [...formData.additional_one_time_services];
+  //         originalList[index] = res.data;
+  //         setFormData({
+  //           ...formData,
+  //           additional_one_time_services: originalList,
+  //         });
 
-          const list = oneTimeService.filter(
-            (item) => item.value !== res.data.service.id,
-          );
-          setOneTimeService(list);
-          setNotIncludedOneTimeServices(list);
-        }
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    }
-  };
+  //         const list = oneTimeService.filter(
+  //           (item) => item.value !== res.data.service.id,
+  //         );
+  //         setOneTimeService(list);
+  //         setNotIncludedOneTimeServices(list);
+  //       }
+  //       setIsLoading({ loader: false, type: 'page' });
+  //     });
+  //   }
+  // };
 
   const nextStep = () => {
     showFooter(false);
 
     // if (history.location.pathname.includes('agreement')) {
 
-    if (formData && Object.keys(formData).length) {
+    if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
-      if (formData && formData.start_date) {
-        formData.start_date = dayjs(formData.start_date).format('YYYY-MM-DD');
+      if (updatedFormData && updatedFormData.start_date) {
+        updatedFormData.start_date = dayjs(updatedFormData.start_date).format(
+          'YYYY-MM-DD',
+        );
       }
 
       setIsLoading({ loader: true, type: 'button' });
 
       // for primary market place
-      if (formData && formData.primary_marketplace) {
+      if (updatedFormData && updatedFormData.primary_marketplace) {
         const statementData = {
           id:
             (details &&
@@ -254,7 +349,7 @@ export default function ContractContainer() {
               details.primary_marketplace.id) ||
             '',
           contract: details.id,
-          name: formData && formData.primary_marketplace,
+          name: updatedFormData && updatedFormData.primary_marketplace,
           is_primary: true,
         };
         if (details.primary_marketplace && details.primary_marketplace.id) {
@@ -277,22 +372,44 @@ export default function ContractContainer() {
         }
       }
 
-      // for additional one time service
-      if (formData.additional_one_time_services) {
-        formData.additional_one_time_services.forEach((service, index) =>
-          saveAdditionalOneTimeService(service, service.id, index),
+      // for additionL MARKETPLACE
+      if (updatedFormData.additional_marketplaces) {
+        createMarketplaceBulk(updatedFormData.additional_marketplaces).then(
+          () => {
+            // console.log('on success of marketplace bulk update', res);
+          },
         );
+      }
+
+      // for additionL service
+      if (updatedFormData.additional_monthly_services) {
+        createAdditionalServiceBulk(
+          updatedFormData.additional_monthly_services,
+        ).then(() => {
+          // console.log('on success of additional service bulk update', res);
+        });
+      }
+
+      // for additional one time service
+      if (updatedFormData.additional_one_time_services) {
+        createAdditionalServiceBulk(
+          updatedFormData.additional_one_time_services,
+        ).then(() => {
+          // console.log('on success of additional service bulk update', res);
+        });
       }
 
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
       const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
       for (const val of num) {
-        if (formData && formData[val]) {
-          formData[val] = formData[val].substring(1).replace(/,/g, '');
+        if (updatedFormData && updatedFormData[val]) {
+          updatedFormData[val] = updatedFormData[val]
+            .substring(1)
+            .replace(/,/g, '');
         }
       }
       const detail = {
-        ...formData,
+        ...updatedFormData,
         steps_completed: {
           ...details.steps_completed,
           agreement: true,
@@ -304,11 +421,12 @@ export default function ContractContainer() {
         if (response && response.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
           setApiError(response && response.data);
-          setFormData({});
+          // setFormData({});
         } else if (response && response.status === 200) {
           dispatch(getAccountDetails(id));
           setIsLoading({ loader: false, type: 'button' });
-          setFormData({});
+          setFormData(response && response.data);
+          setUpdatedFormData({});
         }
       });
     } else {
@@ -439,13 +557,26 @@ export default function ContractContainer() {
     // }
   };
 
-  const discardAgreementChanges = () => {
-    setFormData({});
-    showFooter(false);
-    if (history.location.pathname.includes('addendum')) {
-      setShowEditor(false);
-    } else {
-      dispatch(getAccountDetails(id));
+  const discardAgreementChanges = (flag) => {
+    if (flag === 'No') {
+      setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
+      if (showDiscardModal.clickedBtn === 'back') {
+        // console.log("!!!")
+      }
+    }
+
+    if (flag === 'Yes') {
+      setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
+      if (showDiscardModal.clickedBtn === 'back') {
+        history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+      }
+      setFormData({});
+      showFooter(false);
+      if (history.location.pathname.includes('addendum')) {
+        setShowEditor(false);
+      } else {
+        dispatch(getAccountDetails(id));
+      }
     }
   };
 
@@ -936,6 +1067,18 @@ export default function ContractContainer() {
     });
   };
 
+  const onClickOfBackToCustomerDetail = () => {
+    if (isFooter) {
+      setShowDiscardModal({
+        ...showDiscardModal,
+        show: true,
+        clickedBtn: 'back',
+      });
+    } else {
+      history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+    }
+  };
+
   return (
     <>
       {isLoading.loader && isLoading.type === 'page' ? (
@@ -949,37 +1092,42 @@ export default function ContractContainer() {
         details ? (
           <>
             <div className="on-boarding-container">
-              <div className="row">
-                <div className="col-12 ">
-                  <p className="m-0 sticky">
-                    {' '}
-                    <Link
-                      to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                      className="back-link">
-                      <img
-                        src={BackArrowIcon}
-                        alt="aarow-back"
-                        className="arrow-back-icon mt-3"
-                      />
-                      Back to Customer Details
-                    </Link>
-                    <div className="success-msg">
-                      {showSuccessContact.show ? (
-                        <SuccessMsg
-                          property=" "
-                          message={showSuccessContact.message}
+              <div className="text-container ">
+                <div className="row">
+                  <div className="col-12">
+                    <p className="m-0 sticky">
+                      {' '}
+                      <div
+                        onClick={() => onClickOfBackToCustomerDetail()}
+                        role="presentation"
+                        // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                        className="link">
+                        <img
+                          src={ArrowIcons}
+                          alt="aarow-back"
+                          className="arrow-icon mt-3"
                         />
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  </p>
+                        Back to Customer Details
+                      </div>
+                      <div className="success-msg">
+                        {showSuccessContact.show ? (
+                          <SuccessMsg
+                            property=" "
+                            message={showSuccessContact.message}
+                          />
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </p>
+                  </div>
                 </div>
                 <div id="agreement">
                   {/* {history.location.pathname.includes('agreement') &&
                   details ? ( */}
                   <Agreement
                     // myRef={myRef}
+
                     formData={formData}
                     details={details}
                     templateData={data}
@@ -1072,6 +1220,15 @@ export default function ContractContainer() {
         executeScroll={executeScroll}
         showSection={showSection}
         setShowCollpase={setShowCollpase}
+        updatedFormData={updatedFormData}
+        setUpdatedFormData={setUpdatedFormData}
+        additionalMonthlyServices={additionalMonthlyServices}
+        setMonthlyAdditionalServices={setMonthlyAdditionalServices}
+        originalData={originalData}
+        additionalMarketplacesData={additionalMarketplacesData}
+        setAdditionalMarketplace={setAdditionalMarketplace}
+        additionalOnetimeServices={additionalOnetimeServices}
+        setAdditionalOnetimeServices={setAdditionalOnetimeServices}
       />
       {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">
@@ -1085,7 +1242,13 @@ export default function ContractContainer() {
 
               <Button
                 className="btn-borderless on-boarding  mt-3 mr-5"
-                onClick={() => discardAgreementChanges()}>
+                onClick={() =>
+                  setShowDiscardModal({
+                    ...showDiscardModal,
+                    show: true,
+                    clickedBtn: 'discard',
+                  })
+                }>
                 Discard Changes
               </Button>
             </div>
@@ -1152,7 +1315,56 @@ export default function ContractContainer() {
             agreementData={details}
             setShowModal={setShowModal}
             pdfData={pdfData}
+            setShowSuccessContact={setShowSuccessContact}
           />
+        </ModalBox>
+      </Modal>
+
+      <Modal
+        isOpen={showDiscardModal.show}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() =>
+            setShowDiscardModal({
+              ...showDiscardModal,
+              show: false,
+              clickedBtn: '',
+            })
+          }
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="step1-your">
+            <div className="container pt-3">
+              <div className="row">
+                <div className="col-12 text-center">
+                  <h4>
+                    Do you want to discard the changes? Your changes will be
+                    lost if you do.
+                  </h4>
+                  <Button
+                    onClick={() => discardAgreementChanges('Yes')}
+                    type="button"
+                    className="btn-primary on-boarding w-320 mt-3 mr-5 ml-5">
+                    Yes
+                  </Button>
+                  <Button
+                    onClick={() => discardAgreementChanges('No')}
+                    type="button"
+                    className="btn on-boarding w-320 mt-3 mr-5 ml-5 ">
+                    No
+                  </Button>
+
+                  {/* </Link> */}
+                </div>
+              </div>
+            </div>
+          </div>
         </ModalBox>
       </Modal>
     </>

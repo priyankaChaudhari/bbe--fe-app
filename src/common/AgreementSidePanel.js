@@ -5,7 +5,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
@@ -24,8 +23,8 @@ import {
   ActivityLogIcon,
   ActivityOpenIcon,
   GreenCheck,
-  CloseIcon,
-  SaveIcon,
+  MinusIcon,
+  PlusIcon,
 } from '../theme/images/index';
 import { Button, FormField } from './index';
 
@@ -39,9 +38,6 @@ import {
   updateAccountDetails,
   getRevenueShare,
   getMarketplaces,
-  deleteMarketplace,
-  createAdditionalServices,
-  updateAdditionalServices,
   getMonthlyService,
   getOneTimeService,
   createAddendum,
@@ -49,7 +45,8 @@ import {
 import InputSelect from './InputSelect';
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
-import { getAccountDetails } from '../store/actions/accountState';
+// import { getAccountDetails } from '../store/actions/accountState';
+import CheckBox from './CheckBox';
 
 export default function AgreementSidePanel({
   id,
@@ -61,18 +58,26 @@ export default function AgreementSidePanel({
   onEditAddendum,
   setShowEditor,
   setNewAddendum,
-  setNotIncludedOneTimeServices,
-  setNotIncludedMonthlyServices,
-  sendNotIncludedOneTimeServToAdd,
-  sendNotIncludedMonthlyServToAdd,
+  // setNotIncludedOneTimeServices,
+  // setNotIncludedMonthlyServices,
+  // sendNotIncludedOneTimeServToAdd,
+  // sendNotIncludedMonthlyServToAdd,
   apiError,
   showFooter,
   setApiError,
   executeScroll,
   showSection,
   setShowCollpase,
+  updatedFormData,
+  setUpdatedFormData,
+  additionalMonthlyServices,
+  setMonthlyAdditionalServices,
+  originalData,
+  additionalMarketplacesData,
+  setAdditionalMarketplace,
+  additionalOnetimeServices,
+  setAdditionalOnetimeServices,
 }) {
-  const dispatch = useDispatch();
   const history = useHistory();
   const [openCollapse, setOpenCollapse] = useState({
     agreement: false,
@@ -94,70 +99,70 @@ export default function AgreementSidePanel({
     false,
   );
 
-  const getMonthlyServiceOptions = (services) => {
-    if (
-      agreementData &&
-      agreementData.additional_monthly_services &&
-      agreementData.additional_monthly_services.length
-    ) {
-      if (services && services.length) {
-        const result = [];
-        for (const option of services) {
-          let isFound = true;
-          for (const service of agreementData.additional_monthly_services) {
-            if (service.service.id !== option.value) {
-              isFound = false;
-            } else {
-              isFound = true;
-              break;
-            }
-          }
-          if (isFound === false) {
-            result.push(option);
-          }
-        }
+  // const getMonthlyServiceOptions = (services) => {
+  //   if (
+  //     agreementData &&
+  //     agreementData.additional_monthly_services &&
+  //     agreementData.additional_monthly_services.length
+  //   ) {
+  //     if (services && services.length) {
+  //       const result = [];
+  //       for (const option of services) {
+  //         let isFound = true;
+  //         for (const service of agreementData.additional_monthly_services) {
+  //           if (service.service.id !== option.value) {
+  //             isFound = false;
+  //           } else {
+  //             isFound = true;
+  //             break;
+  //           }
+  //         }
+  //         if (isFound === false) {
+  //           result.push(option);
+  //         }
+  //       }
 
-        setMonthlyService(result);
-        if (setNotIncludedMonthlyServices) {
-          setNotIncludedMonthlyServices(result);
-        }
-        if (sendNotIncludedMonthlyServToAdd) {
-          sendNotIncludedMonthlyServToAdd(result);
-        }
-      }
-    }
-  };
+  //       setMonthlyService(result);
+  //       if (setNotIncludedMonthlyServices) {
+  //         setNotIncludedMonthlyServices(result);
+  //       }
+  //       if (sendNotIncludedMonthlyServToAdd) {
+  //         sendNotIncludedMonthlyServToAdd(result);
+  //       }
+  //     }
+  //   }
+  // };
 
-  const fetchUncommonOptions = (options, alreadySelected, func) => {
-    let result = [];
-    if (alreadySelected) {
-      for (const option of options) {
-        let isFound = true;
-        for (const service of alreadySelected) {
-          if (service.service.id !== option.value) {
-            isFound = false;
-          } else {
-            isFound = true;
-            break;
-          }
-        }
+  // const fetchUncommonOptions = (options, alreadySelected, func) => {
+  //   let result = [];
+  //   if (alreadySelected) {
+  //     for (const option of options) {
+  //       let isFound = true;
+  //       for (const service of alreadySelected) {
+  //         if (service.service.id !== option.value) {
+  //           isFound = false;
+  //         } else {
+  //           isFound = true;
+  //           break;
+  //         }
+  //       }
 
-        if (isFound === false) {
-          result.push(option);
-        }
-      }
-    } else {
-      result = options;
-    }
-    func(result);
+  //       if (isFound === false) {
+  //         result.push(option);
+  //       }
+  //     }
+  //   } else {
+  //     result = options;
+  //   }
+  //   func(result);
 
-    if (setNotIncludedOneTimeServices) {
-      setNotIncludedOneTimeServices(result);
-    }
-    if (sendNotIncludedOneTimeServToAdd) {
-      sendNotIncludedOneTimeServToAdd(result);
-    }
-  };
+  //   if (setNotIncludedOneTimeServices) {
+  //     setNotIncludedOneTimeServices(result);
+  //   }
+  //   if (sendNotIncludedOneTimeServToAdd) {
+  //     sendNotIncludedOneTimeServToAdd(result);
+  //   }
+  // };
 
   useEffect(() => {
     getLength().then((len) => {
@@ -170,23 +175,23 @@ export default function AgreementSidePanel({
     getMonthlyService().then((res) => {
       setMonthlyService(res.data);
 
-      if (
-        agreementData &&
-        agreementData.additional_monthly_services &&
-        agreementData.additional_monthly_services.length
-      ) {
-        getMonthlyServiceOptions(res.data);
-      }
+      // if (
+      //   agreementData &&
+      //   agreementData.additional_monthly_services &&
+      //   agreementData.additional_monthly_services.length
+      // ) {
+      //   getMonthlyServiceOptions(res.data);
+      // }
     });
 
     getOneTimeService().then((r) => {
       setOneTimeService(r && r.data);
 
-      fetchUncommonOptions(
-        r.data,
-        agreementData.additional_one_time_services,
-        setOneTimeService,
-      );
+      // fetchUncommonOptions(
+      //   r.data,
+      //   agreementData.additional_one_time_services,
+      //   setOneTimeService,
+      // );
     });
     getMarketplaces().then((market) => {
       setMarketPlaces(market.data);
@@ -204,50 +209,41 @@ export default function AgreementSidePanel({
         setAdditionalMarketplaces(market.data);
       }
     });
-
-    if (
-      (agreementData && agreementData.additional_one_time_services) ||
-      (agreementData && agreementData.sales_threshold)
-    ) {
-      setFormData({
-        ...formData,
-        additional_one_time_services:
-          agreementData && agreementData.additional_one_time_services,
-        sales_threshold: agreementData && agreementData.sales_threshold,
-      });
-    }
   }, []);
 
   useEffect(() => {
-    if (
-      agreementData &&
-      agreementData.additional_monthly_services &&
-      agreementData.additional_monthly_services.length &&
-      monthlyService
-    ) {
-      getMonthlyServiceOptions(monthlyService);
-    }
-    if (
-      agreementData &&
-      agreementData.additional_one_time_services &&
-      agreementData.additional_one_time_services.length &&
-      oneTimeService
-    ) {
-      fetchUncommonOptions(
-        oneTimeService,
-        agreementData.additional_one_time_services,
-        setOneTimeService,
-      );
-    }
-    return () => {};
+    // if (
+    //   agreementData &&
+    //   agreementData.additional_monthly_services &&
+    //   agreementData.additional_monthly_services.length &&
+    //   monthlyService
+    // ) {
+    //   getMonthlyServiceOptions(monthlyService);
+    // }
+    // if (
+    //   agreementData &&
+    //   agreementData.additional_one_time_services &&
+    //   agreementData.additional_one_time_services.length &&
+    //   oneTimeService
+    // ) {
+    //   fetchUncommonOptions(
+    //     oneTimeService,
+    //     agreementData.additional_one_time_services,
+    //     setOneTimeService,
+    //   );
+    // }
+    // return () => {};
   }, [agreementData]);
 
-  const handleChange = (event, key, type) => {
+  const handleChange = (event, key, type, val) => {
     showFooter(true);
-
     if (type === 'date') {
       setStartDate(event);
       setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
+      setUpdatedFormData({
+        ...updatedFormData,
+        [key]: dayjs(event).format('MM-DD-YYYY'),
+      });
     } else if (type === 'choice') {
       if (key === 'primary_marketplace') {
         setAdditionalMarketplaces(
@@ -255,10 +251,146 @@ export default function AgreementSidePanel({
         );
       }
       setFormData({ ...formData, [key]: event.value });
+      setUpdatedFormData({ ...updatedFormData, [key]: event.value });
     } else if (type === 'qty') {
       setFormData({ ...formData, quantity: event.target.value });
+      setUpdatedFormData({ ...updatedFormData, quantity: event.target.value });
     } else if (type === 'multichoice') {
-      setFormData({ ...formData, [key]: event });
+      // setFormData({ ...formData, [key]: event });
+      // setUpdatedFormData({ ...updatedFormData, [key]: event });
+
+      if (val.action === 'select-option') {
+        const itemInFormData =
+          originalData &&
+          originalData.additional_marketplaces &&
+          originalData.additional_marketplaces.length &&
+          originalData.additional_marketplaces.find(
+            (item) => item && item.name === val.option.value,
+          );
+
+        // checked whether checked item present in newly created list
+        if (
+          additionalMarketplacesData &&
+          additionalMarketplacesData.create &&
+          additionalMarketplacesData.create.length
+        ) {
+          if (
+            additionalMarketplacesData &&
+            additionalMarketplacesData.create &&
+            additionalMarketplacesData.create.find(
+              (item) =>
+                item.name
+                  ? item.name === val.option.value
+                  : item.value === val.option.value,
+              // item.name === val.option.value,
+            )
+          ) {
+            // if checked item is already present in newly created list then don't do anything
+          } else {
+            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+
+            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+            if (itemInFormData) {
+              additionalMarketplacesData.create.push(itemInFormData);
+              const list = formData.additional_marketplaces;
+              list.push(itemInFormData);
+              setFormData({
+                ...formData,
+                additional_marketplaces: list,
+              });
+
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_marketplaces: additionalMarketplacesData,
+              });
+            }
+            // else we create dict as BE required for new item and we push that in newly created list
+            else {
+              additionalMarketplacesData.create.push({
+                name: val.option.value,
+                contract_id: originalData && originalData.id,
+              });
+
+              const list = formData.additional_marketplaces;
+              list.push({
+                name: val.option.value,
+                contract_id: originalData && originalData.id,
+              });
+              setFormData({
+                ...formData,
+                additional_marketplaces: list,
+              });
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_marketplaces: additionalMarketplacesData,
+              });
+            }
+
+            // here we fnally update state variable
+            setAdditionalMarketplace({
+              ...additionalMarketplacesData,
+            });
+          }
+        }
+
+        // suppose checked item present in original formData then we have to remove its id from newly created delete list.
+
+        if (itemInFormData) {
+          const updatedDeleteList = additionalMarketplacesData.delete.filter(
+            (item) => item !== itemInFormData.id,
+          );
+          additionalMarketplacesData.delete = updatedDeleteList;
+        }
+
+        setAdditionalMarketplace({
+          ...additionalMarketplacesData,
+        });
+      }
+      if (val.action === 'remove-value') {
+        const itemInFormData =
+          originalData &&
+          originalData.additional_marketplaces &&
+          originalData.additional_marketplaces.length &&
+          originalData.additional_marketplaces.find(
+            (item) => item && item.name === val.removedValue.value,
+          );
+
+        // if unchecked item found in original list then add its id to newly created delte list
+        if (itemInFormData && itemInFormData.id) {
+          additionalMarketplacesData.delete.push(itemInFormData.id);
+        }
+
+        // now we filter newly created list with removed unchecked item from it
+        const updatedCreateList = additionalMarketplacesData.create.filter(
+          (item) =>
+            item.name
+              ? item.name !== val.removedValue.value
+              : item.value !== val.removedValue.value,
+        );
+
+        additionalMarketplacesData.create = updatedCreateList;
+
+        const list = formData.additional_marketplaces;
+        const deletedUncheckedItemList = list.filter((item) =>
+          item.name
+            ? item.name !== val.removedValue.value
+            : item.value !== val.removedValue.value,
+        );
+
+        setFormData({
+          ...formData,
+          additional_marketplaces: deletedUncheckedItemList,
+        });
+
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_marketplaces: additionalMarketplacesData,
+        });
+
+        setAdditionalMarketplace({
+          ...additionalMarketplacesData,
+        });
+      }
       // if (val.action === 'remove-value') {
       //   if (agreementData[key] !== null) {
       //     for (const del of agreementData[key]) {
@@ -375,8 +507,290 @@ export default function AgreementSidePanel({
           ...formData,
           [event.target.name]: event.target.value.trim(),
         });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: event.target.value.trim(),
+        });
+      } else if (key === 'additional_monthly_services') {
+        const itemInFormData =
+          originalData &&
+          originalData.additional_monthly_services &&
+          originalData.additional_monthly_services.length &&
+          originalData.additional_monthly_services.find(
+            (item) =>
+              item && item.service && item.service.name === event.target.name,
+          );
+
+        // if item checked
+        if (event.target.checked) {
+          if (event.target.name === 'DSP Advertising') {
+            setShowCollpase({ ...showSection, dspAddendum: true });
+          }
+          if (
+            additionalMonthlyServices &&
+            additionalMonthlyServices.create &&
+            additionalMonthlyServices.create.length
+          ) {
+            // checked whether checked item present in newly created list
+            if (
+              additionalMonthlyServices &&
+              additionalMonthlyServices.create &&
+              additionalMonthlyServices.create.length &&
+              additionalMonthlyServices.create.find((item) =>
+                item.name
+                  ? item.name === event.target.name
+                  : item.service.name === event.target.name,
+              )
+            ) {
+              // if checked item is already present in newly created list then don't do anything
+            } else {
+              // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+
+              // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+              if (itemInFormData) {
+                additionalMonthlyServices.create.push(itemInFormData);
+                const list = formData.additional_monthly_services;
+                list.push(itemInFormData);
+                setFormData({
+                  ...formData,
+                  additional_monthly_services: list,
+                });
+
+                setUpdatedFormData({
+                  ...updatedFormData,
+                  additional_monthly_services: additionalMonthlyServices,
+                });
+              }
+              // else we create dict as BE required for new item and we push that in newly created list
+              else {
+                additionalMonthlyServices.create.push({
+                  name: event.target.name,
+                  service_id: val.value,
+                  contract_id: originalData && originalData.id,
+                });
+
+                const list = formData.additional_monthly_services;
+                list.push({
+                  name: event.target.name,
+                  service_id: val.value,
+                  contract_id: originalData && originalData.id,
+                });
+                setFormData({
+                  ...formData,
+                  additional_monthly_services: list,
+                });
+                setUpdatedFormData({
+                  ...updatedFormData,
+                  additional_monthly_services: additionalMonthlyServices,
+                });
+              }
+
+              // here we fnally update state variable
+              setMonthlyAdditionalServices({
+                ...additionalMonthlyServices,
+              });
+            }
+          }
+
+          // suppose checked item present in original formData then we have to remove its id from newly created delete list.
+
+          if (itemInFormData) {
+            const updatedDeleteList = additionalMonthlyServices.delete.filter(
+              (item) => item !== itemInFormData.id,
+            );
+            additionalMonthlyServices.delete = updatedDeleteList;
+          }
+
+          setMonthlyAdditionalServices({
+            ...additionalMonthlyServices,
+          });
+        }
+        // if item unchecked or removed
+        else {
+          if (event.target.name === 'DSP Advertising') {
+            setShowCollpase({ ...showSection, dspAddendum: false });
+          }
+
+          // if unchecked item found in original list then add its id to newly created delte list
+          if (itemInFormData) {
+            additionalMonthlyServices.delete.push(itemInFormData.id);
+          }
+
+          // now we filter newly created list with removed unchecked item from it
+          const updatedCreateList = additionalMonthlyServices.create.filter(
+            (item) =>
+              item.name
+                ? item.name !== event.target.name
+                : item.service.name !== event.target.name,
+          );
+
+          additionalMonthlyServices.create = updatedCreateList;
+
+          const list = formData.additional_monthly_services;
+          const deletedUncheckedItemList = list.filter((item) =>
+            item.name
+              ? item.name !== event.target.name
+              : item.service.name !== event.target.name,
+          );
+
+          setFormData({
+            ...formData,
+            additional_monthly_services: deletedUncheckedItemList,
+          });
+
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_monthly_services: additionalMonthlyServices,
+          });
+
+          setMonthlyAdditionalServices({
+            ...additionalMonthlyServices,
+          });
+        }
+      } else if (key === 'additional_one_time_services') {
+        const itemInFormData =
+          originalData &&
+          originalData.additional_one_time_services &&
+          originalData.additional_one_time_services.length &&
+          originalData.additional_one_time_services.find(
+            (item) =>
+              item && item.service && item.service.name === event.target.name,
+          );
+        // if item checked
+        if (event.target.checked) {
+          // if (
+          //   additionalOnetimeServices &&
+          //   additionalOnetimeServices.create &&
+          //   additionalOnetimeServices.create.length
+          // ) {
+          // checked whether checked item present in newly created list
+          if (
+            additionalOnetimeServices &&
+            additionalOnetimeServices.create &&
+            additionalOnetimeServices.create.length &&
+            additionalOnetimeServices.create.find((item) =>
+              item.name
+                ? item.name === event.target.name
+                : item.service.name === event.target.name,
+            )
+          ) {
+            // if checked item is already present in newly created list then don't do anything
+          } else {
+            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+
+            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+            if (itemInFormData) {
+              additionalOnetimeServices.create.push(itemInFormData);
+              const list = formData.additional_one_time_services;
+              list.push(itemInFormData);
+              setFormData({
+                ...formData,
+                additional_one_time_services: list,
+              });
+
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_one_time_services: additionalOnetimeServices,
+              });
+            }
+            // else we create dict as BE required for new item and we push that in newly created list
+            else {
+              // if (
+              //   additionalOnetimeServices &&
+              //   additionalOnetimeServices.create
+              // ) {
+
+              additionalOnetimeServices.create.push({
+                name: event.target.name,
+                service_id: val.value,
+                contract_id: originalData && originalData.id,
+                quantity: 10,
+              });
+              // }
+              let list = formData.additional_one_time_services;
+              if (!list) {
+                list = [];
+              }
+              list.push({
+                name: event.target.name,
+                service_id: val.value,
+                contract_id: originalData && originalData.id,
+                quantity: 10,
+              });
+              setFormData({
+                ...formData,
+                additional_one_time_services: list,
+              });
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_one_time_services: additionalOnetimeServices,
+              });
+            }
+
+            // here we fnally update state variable
+            setAdditionalOnetimeServices({
+              ...additionalOnetimeServices,
+            });
+          }
+          // }
+
+          // suppose checked item present in original formData then we have to remove its id from newly created delete list.
+
+          if (itemInFormData) {
+            const updatedDeleteList = additionalOnetimeServices.delete.filter(
+              (item) => item !== itemInFormData.id,
+            );
+            additionalOnetimeServices.delete = updatedDeleteList;
+          }
+
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+          });
+        }
+        // if item unchecked or removed
+        else {
+          // if unchecked item found in original list then add its id to newly created delte list
+          if (itemInFormData) {
+            additionalOnetimeServices.delete.push(itemInFormData.id);
+          }
+
+          // now we filter newly created list with removed unchecked item from it
+          const updatedCreateList = additionalOnetimeServices.create.filter(
+            (item) =>
+              item.name
+                ? item.name !== event.target.name
+                : item.service.name !== event.target.name,
+          );
+
+          additionalOnetimeServices.create = updatedCreateList;
+
+          const list = formData.additional_one_time_services;
+          const deletedUncheckedItemList = list.filter((item) =>
+            item.name
+              ? item.name !== event.target.name
+              : item.service.name !== event.target.name,
+          );
+
+          setFormData({
+            ...formData,
+            additional_one_time_services: deletedUncheckedItemList,
+          });
+
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_one_time_services: additionalOnetimeServices,
+          });
+
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+          });
+        }
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: event.target.value,
+        });
       }
       setApiError({
         ...apiError,
@@ -466,8 +880,8 @@ export default function AgreementSidePanel({
           format={item.key === 'zip_code' ? '##########' : null}
           name={item.key}
           className="form-control"
-          value={agreementData[item.key]}
-          placeholder={item.label}
+          defaultValue={agreementData[item.key]}
+          placeholder={item.placeholder ? item.placeholder : item.label}
           prefix={item.type === 'number-currency' ? '$' : ''}
           suffix={item.type === 'number-percent' ? '%' : ''}
           onChange={(event) => handleChange(event, item.key)}
@@ -489,6 +903,7 @@ export default function AgreementSidePanel({
           onChange={(date) => handleChange(date, 'start_date', 'date')}
           format="MM-dd-yyyy"
           clearIcon={null}
+          placeholder={item.placeholder ? item.placeholder : item.label}
         />
       );
     }
@@ -502,74 +917,13 @@ export default function AgreementSidePanel({
       <input
         className="form-control"
         type="text"
-        placeholder={item.label}
+        placeholder={item.placeholder ? item.placeholder : item.label}
         onChange={(event) => handleChange(event, item.key)}
         name={item.key}
         defaultValue={agreementData[item.key]}
       />
     );
-  };
-
-  const saveAdditionalOneTimeService = (field, serviceId, index) => {
-    const data = {
-      name: (field && field.service && field.service).name
-        ? field.service.name
-        : '',
-      service: (field && field.service && field.service).id
-        ? field.service.id
-        : field.service,
-      quantity: field && field.quantity,
-      contract: agreementData.id,
-    };
-    if (field && field.service && field.service.name) {
-      data.custom_amazon_store_price = field && field.custom_amazon_store_price;
-    }
-
-    setIsLoading({ loader: true, type: 'page' });
-    if (serviceId) {
-      updateAdditionalServices(serviceId, data).then((res) => {
-        dispatch(getAccountDetails(id));
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'page' });
-          setApiError(res && res.data);
-        }
-        if (res && res.status === 200) {
-          // setOpenCollapse({ ...openCollapse, addendum: true });
-        }
-
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    } else {
-      createAdditionalServices(data).then((res) => {
-        dispatch(getAccountDetails(id));
-
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'page' });
-          setApiError(res && res.data);
-        }
-        if (res && res.status === 201) {
-          // setOpenCollapse({ ...openCollapse, addendum: true });
-
-          const originalList = [...formData.additional_one_time_services];
-          originalList[index] = res.data;
-          setFormData({
-            ...formData,
-            additional_one_time_services: originalList,
-          });
-
-          const list = oneTimeService.filter(
-            (item) => item.value !== res.data.service.id,
-          );
-          setOneTimeService(list);
-          setNotIncludedOneTimeServices(list);
-          if (sendNotIncludedOneTimeServToAdd) {
-            sendNotIncludedOneTimeServToAdd(oneTimeService);
-          }
-          //  setNotIncludedServices([...list, ...monthlyService])
-        }
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    }
+    // }
   };
 
   const nextStep = (key) => {
@@ -578,10 +932,10 @@ export default function AgreementSidePanel({
       executeScroll('statement');
     }
     if (key === 'addendum') {
-      if (showSection.addendum) {
-        setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
-        executeScroll('addendum');
-      }
+      // if (showSection.addendum) {
+      setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
+      executeScroll('addendum');
+      // }
     }
     if (key === 'final') {
       if (newAddendumData) {
@@ -633,186 +987,20 @@ export default function AgreementSidePanel({
     }
   };
 
-  const deleteOneTimeService = (field, key) => {
-    if (field.id) {
-      setIsLoading({ loader: true, type: 'page' });
-      deleteMarketplace(field.id, key).then(() => {
-        dispatch(getAccountDetails(id));
-        setIsLoading({ loader: false, type: 'page' });
-
-        const originalList = [...formData.additional_one_time_services];
-        const updatedList = originalList.filter((item) => item.id !== field.id);
-        setFormData({ ...formData, additional_one_time_services: updatedList });
-
-        const list = [...oneTimeService];
-        const data = { label: field.service.name, value: field.service.id };
-        list.push(data);
-        setOneTimeService(list);
-
-        setNotIncludedOneTimeServices(list);
-        if (sendNotIncludedOneTimeServToAdd) {
-          sendNotIncludedOneTimeServToAdd(oneTimeService);
-        }
-      });
-    } else {
-      const list = [...formData.additional_one_time_services];
-      list.pop();
-      setFormData({ ...formData, additional_one_time_services: list });
-    }
-  };
-
-  const handleOneTimeService = (event, index, field, type) => {
-    showFooter(true);
-    const list = [...formData.additional_one_time_services];
-    if (type === 'quantity') {
-      list[index][type] = event.target.value;
-    } else if (type === 'service') {
-      const service = { id: event.value, name: event.label };
-      list[index][type] = { ...list[index], ...service };
-    } else if (type === 'fee') {
-      list[index] = { ...list[index], [event.target.name]: event.target.value };
-    }
-
-    setFormData({ ...formData, additional_one_time_services: list });
-  };
-
-  const generateOneTimeHTML = (field, key, index) => {
-    return (
-      <div className="row">
-        <div
-          className={
-            field &&
-            field.service &&
-            field.service.name === 'Amazon Store Package Custom'
-              ? 'col-4 mt-1 pr-0'
-              : 'col-7 mt-1'
-          }>
-          <Select
-            classNamePrefix="react-select"
-            placeholder="Select"
-            defaultValue={{
-              label:
-                field && field.service && field.service.name
-                  ? field.service.name
-                  : field &&
-                    field.additional_services &&
-                    field.additional_services.label
-                  ? field.additional_services.label
-                  : '',
-              value:
-                field && field.service && field.service.name
-                  ? field.service.name
-                  : field &&
-                    field.additional_services &&
-                    field.additional_services.label
-                  ? field.additional_services.label
-                  : '',
-            }}
-            options={oneTimeService}
-            name={field}
-            isDisabled={field && field.id}
-            onChange={(event) =>
-              handleOneTimeService(event, index, field, 'service')
-            }
-          />
-          <ErrorMsg>
-            {apiError && apiError.service && apiError.service[0]}
-          </ErrorMsg>
-        </div>
-        <div className="col-3">
-          <NumberFormat
-            name="quantity"
-            className="form-control"
-            placeholder="Qty"
-            onChange={(event) =>
-              handleOneTimeService(event, index, field, 'quantity')
-            }
-            defaultValue={(field && field.quantity) || ''}
-          />
-          <ErrorMsg>
-            {apiError && apiError.quantity && apiError.quantity[0]}
-          </ErrorMsg>
-        </div>
-        {field &&
-        field.service &&
-        field.service.name === 'Amazon Store Package Custom' ? (
-          <div className="col-3">
-            <NumberFormat
-              name="custom_amazon_store_price"
-              className="form-control"
-              placeholder="Fee"
-              onChange={(event) =>
-                handleOneTimeService(event, index, field, 'fee')
-              }
-              defaultValue={(field && field.custom_amazon_store_price) || ''}
-            />
-            <ErrorMsg>
-              {apiError && apiError.quantity && apiError.quantity[0]}
-            </ErrorMsg>
-          </div>
-        ) : (
-          ''
-        )}
-        <div className="col-2">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="cursor cross-icon one-time mr-2"
-            onClick={() => deleteOneTimeService(field, key)}
-            role="presentation"
-          />
-
-          {((field && field.service && field.service.name) ||
-            (field &&
-              field.additional_services &&
-              field.additional_services.label)) &&
-          field &&
-          field.quantity ? (
-            <img
-              className="one-time save cursor"
-              src={SaveIcon}
-              alt="save"
-              role="presentation"
-              onClick={() =>
-                saveAdditionalOneTimeService(field, field && field.id, index)
-              }
-            />
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const generateOneTimeService = () => {
-    const fields = [];
-
+  const mapQuantity = (oneTimeServiceData) => {
     if (
       formData &&
       formData.additional_one_time_services &&
       formData.additional_one_time_services.length
     ) {
-      formData.additional_one_time_services.forEach((field, index) => {
-        fields.push(
-          generateOneTimeHTML(field, 'additional_one_time_services', index),
-        );
+      formData.additional_one_time_services.map((item) => {
+        if (item.service && item.service.id === oneTimeServiceData.value) {
+          return item.quantity;
+        }
+        return '';
       });
     }
-
-    return fields;
-  };
-
-  const addNewService = () => {
-    let list = [];
-    if (formData.additional_one_time_services) {
-      list = [...formData.additional_one_time_services];
-    }
-    list.push({ service: {}, quantity: '' });
-    setFormData({ ...formData, additional_one_time_services: list });
-  };
-  const handleShowCollapse = (event, section) => {
-    setShowCollpase({ ...showSection, [section]: event.target.checked });
+    return '';
   };
 
   return (
@@ -874,21 +1062,41 @@ export default function AgreementSidePanel({
               <PageLoader component="activityLog" color="#FF5933" type="page" />
             ) : (
               <ul className="collapse-inner">
-                {AgreementDetails.map((item) => (
-                  <li key={item.key}>
-                    <FormField>
-                      <label htmlFor={item.key}>
-                        {item.label}
-                        {generateHTML(item)}
-                      </label>
-                      <ErrorMsg>
-                        {apiError &&
-                          apiError[item.key] &&
-                          apiError[item.key][0]}
-                      </ErrorMsg>
-                    </FormField>
-                  </li>
-                ))}
+                {AgreementDetails.map((item) =>
+                  item.key !== 'contract_address' ? (
+                    <li key={item.key}>
+                      <FormField>
+                        <label htmlFor={item.key}>
+                          {item.label}
+                          {generateHTML(item)}
+                        </label>
+                        <ErrorMsg>
+                          {apiError &&
+                            apiError[item.key] &&
+                            apiError[item.key][0]}
+                        </ErrorMsg>
+                      </FormField>
+                    </li>
+                  ) : (
+                    <li key={item.key}>
+                      <FormField>
+                        <label>{item.label}</label>
+                        {item.sections.map((subFields) => (
+                          <React.Fragment key={subFields.key}>
+                            <label htmlFor={subFields.key}>
+                              {generateHTML(subFields)}
+                            </label>
+                            <ErrorMsg>
+                              {apiError &&
+                                apiError[item.key] &&
+                                apiError[item.key][0]}
+                            </ErrorMsg>
+                          </React.Fragment>
+                        ))}
+                      </FormField>
+                    </li>
+                  ),
+                )}
 
                 <li>
                   <Button
@@ -938,97 +1146,214 @@ export default function AgreementSidePanel({
                 <ul className="collapse-inner">
                   {StatementDetails.map((item) => (
                     <React.Fragment key={item.key}>
-                      {item.key !== 'additional_marketplaces' &&
-                      item.key !== 'additional_one_time_services' ? (
-                        <>
-                          <li>
-                            <FormField>
-                              <label htmlFor={item.key}>
-                                {item.label}
-                                {generateHTML(item)}
-                              </label>
-                              <ErrorMsg>
-                                {apiError &&
-                                  apiError[item.key] &&
-                                  apiError[item.key][0]}
-                              </ErrorMsg>
-                            </FormField>
-                          </li>
-
-                          {!showAdditionalMarketplace &&
-                          item.key === 'primary_marketplace' &&
-                          agreementData &&
-                          agreementData.additional_marketplaces === null ? (
-                            <li>
-                              <div
-                                className="add-market-place cursor float-right"
-                                onClick={() =>
-                                  setShowAdditionalMarketplace(true)
-                                }
-                                role="presentation">
-                                {' '}
-                                + Add Marketplace Channel
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {showAdditionalMarketplace ||
-                          (agreementData &&
-                            agreementData.additional_marketplaces &&
-                            agreementData.additional_marketplaces.length &&
-                            item.key !== 'additional_one_time_services') ? (
-                            <li>
-                              {isLoading.loader && isLoading.type === 'page' ? (
-                                <PageLoader
-                                  component="activityLog"
-                                  color="#FF5933"
-                                  type="page"
-                                />
-                              ) : (
-                                <FormField>
-                                  <label htmlFor={item.key}>
-                                    {item.label}
-                                    {generateHTML(item)}
-                                  </label>
-                                </FormField>
-                              )}
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      )}
+                      <>
+                        <li>
+                          <FormField>
+                            <label htmlFor={item.key}>
+                              {item.label}
+                              {generateHTML(item)}
+                            </label>
+                            <ErrorMsg>
+                              {apiError &&
+                                apiError[item.key] &&
+                                apiError[item.key][0]}
+                            </ErrorMsg>
+                          </FormField>
+                        </li>
+                      </>
                     </React.Fragment>
                   ))}
                   <li>
                     <FormField>
                       <label htmlFor="additional_one_time_services">
-                        <div className="row">
-                          <div className="col-10">
-                            Additional One Time Services
-                          </div>
-                        </div>
-                        {generateOneTimeService('additional_one_time_services')}
+                        Additional Monthly Services
                       </label>
                     </FormField>
+                    {monthlyService &&
+                      monthlyService.map((serviceData) => (
+                        <CheckBox
+                          className="gray-check mt-3"
+                          key={serviceData && serviceData.value}>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor={serviceData.value}>
+                            {serviceData.label}
+                            <input
+                              type="checkbox"
+                              name={serviceData.label}
+                              id={serviceData.value}
+                              onClick={(event) =>
+                                handleChange(
+                                  event,
+                                  'additional_monthly_services',
+                                  'checkbox',
+                                  serviceData,
+                                )
+                              }
+                              defaultChecked={
+                                formData &&
+                                formData.additional_monthly_services &&
+                                formData.additional_monthly_services.length &&
+                                formData.additional_monthly_services.find(
+                                  (item) =>
+                                    item.service &&
+                                    item.service.id === serviceData.value,
+                                )
+                              }
+                            />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      ))}
+
+                    <CheckBox className="gray-check mt-2">
+                      <label
+                        className="container customer-pannel"
+                        htmlFor="additional_marketplaces">
+                        Additional Marketplaces
+                        <input
+                          type="checkbox"
+                          id="additional_marketplaces"
+                          onClick={(event) =>
+                            setShowAdditionalMarketplace(event.target.checked)
+                          }
+                          checked={
+                            formData &&
+                            formData.additional_marketplaces &&
+                            formData.additional_marketplaces.length
+                          }
+                        />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+
+                    {showAdditionalMarketplace ||
+                    (formData &&
+                      formData.additional_marketplaces &&
+                      formData.additional_marketplaces.length) ? (
+                      <li>
+                        <FormField>
+                          {generateHTML({
+                            key: 'additional_marketplaces',
+                            label: 'Additional Market Places',
+                            type: 'multichoice',
+                          })}
+                        </FormField>
+                      </li>
+                    ) : (
+                      ''
+                    )}
                   </li>
-                  {oneTimeService && oneTimeService.length ? (
-                    <li>
-                      <div
-                        className="add-market-place cursor float-right"
-                        onClick={() => addNewService()}
-                        role="presentation">
+                  <li>
+                    <FormField>
+                      <label htmlFor="additional_one_time_services">
+                        Additional One-Time Services
+                      </label>
+                    </FormField>
+                    <div className="row mt-3">
+                      {oneTimeService &&
+                        oneTimeService.map((oneTimeServiceData) =>
+                          !oneTimeServiceData.label.includes('Amazon Store') ? (
+                            <React.Fragment key={oneTimeServiceData.value}>
+                              <div className="col-7 mt-2">
+                                {' '}
+                                <CheckBox className="gray-check">
+                                  <label
+                                    className="container customer-pannel"
+                                    htmlFor={oneTimeServiceData.value}>
+                                    {oneTimeServiceData.label}
+                                    <input
+                                      type="checkbox"
+                                      name={oneTimeServiceData.label}
+                                      id={oneTimeServiceData.value}
+                                      onClick={(event) =>
+                                        handleChange(
+                                          event,
+                                          'additional_one_time_services',
+                                          'checkbox',
+                                          oneTimeServiceData,
+                                        )
+                                      }
+                                      defaultChecked={
+                                        formData &&
+                                        formData.additional_one_time_services &&
+                                        formData.additional_one_time_services
+                                          .length &&
+                                        formData.additional_one_time_services.find(
+                                          (item) =>
+                                            item.service &&
+                                            item.service.id ===
+                                              oneTimeServiceData.value,
+                                        )
+                                      }
+                                    />
+                                    <span className="checkmark" />
+                                  </label>
+                                </CheckBox>
+                              </div>
+                              <div className="col-5 mt-2">
+                                <button type="button" className="increment">
+                                  <img
+                                    className="plus-icon"
+                                    src={PlusIcon}
+                                    alt=""
+                                  />
+                                </button>
+
+                                <NumberFormat
+                                  name={oneTimeServiceData.label}
+                                  className="form-control max-min-number"
+                                  defaultValue={mapQuantity(oneTimeServiceData)}
+                                  id={oneTimeServiceData.value}
+                                  onChange={(event) =>
+                                    handleChange(
+                                      event,
+                                      'additional_one_time_services',
+                                      'quantity',
+                                      oneTimeServiceData,
+                                    )
+                                  }
+                                />
+
+                                <button type="button" className="decrement">
+                                  {' '}
+                                  <img
+                                    className="minus-icon"
+                                    src={MinusIcon}
+                                    alt=""
+                                  />
+                                </button>
+                              </div>
+                            </React.Fragment>
+                          ) : (
+                            ''
+                          ),
+                        )}
+
+                      <div className="col-7 mt-2">
                         {' '}
-                        + Add Additional One Time Services
+                        <CheckBox className="gray-check">
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Amazon Store
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
                       </div>
-                    </li>
-                  ) : (
-                    ''
-                  )}
+                      <div className="col-5 mt-2">
+                        <button type="button" className="increment">
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                        <input className="max-min-number" type="number" />
+                        <button type="button" className="decrement">
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
+                      </div>
+                    </div>
+                  </li>
 
                   <li>
                     <Button
@@ -1049,7 +1374,62 @@ export default function AgreementSidePanel({
               </>
             )}
           </Collapse>
+          {showSection && showSection.dspAddendum ? (
+            <>
+              <div className="straight-line sidepanel " />
+              <div className="row mr-3">
+                <div className="col-10">
+                  <div
+                    className={
+                      showSection && showSection.dspAddendum
+                        ? 'collapse-btn   '
+                        : 'collapse-btn  disabled '
+                    }
+                    role="presentation"
+                    type="button"
+                    onClick={() => {
+                      executeScroll('dspAddendum');
+                      setOpenCollapse({
+                        dspAddendum: !openCollapse.dspAddendum,
+                      });
+                    }}>
+                    <img
+                      className="service-agre"
+                      src={CreateAddendum}
+                      alt="pdf"
+                    />
+                    <h4 className="sendar-details mt-1 ml-5">
+                      DSP Advertising
+                    </h4>
+                    <div className="clear-fix" />
+                  </div>
+                </div>
+              </div>
+              <Collapse isOpened={openCollapse.dspAddendum}>
+                <ul className="collapse-inner">
+                  {DSPAddendumDetails.map((item) => (
+                    <li key={item.key}>
+                      <FormField>
+                        <label htmlFor={item.key}>
+                          {item.label}
+                          {generateHTML(item)}
+                        </label>
+                        <ErrorMsg>
+                          {apiError &&
+                            apiError[item.key] &&
+                            apiError[item.key][0]}
+                        </ErrorMsg>
+                      </FormField>
+                    </li>
+                  ))}
+                </ul>
+              </Collapse>
+            </>
+          ) : (
+            ''
+          )}
           <div className="straight-line sidepanel " />
+
           <div className="row">
             <div className="col-10">
               {' '}
@@ -1070,15 +1450,15 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
             </div>
-            <div className="col-2 pl-0">
+            {/* {/* <div className="col-2 pl-0">
               <label className="switch mt-3">
                 <input
                   type="checkbox"
                   onClick={(event) => handleShowCollapse(event, 'addendum')}
                 />
                 <span className="slider round" />
-              </label>
-            </div>
+              </label> 
+            </div> */}
           </div>
 
           <Collapse isOpened={openCollapse.addendum}>
@@ -1122,54 +1502,8 @@ export default function AgreementSidePanel({
               </li>
             </ul>
           </Collapse>
-          <div className="straight-line sidepanel " />
-          <div className="row mr-3">
-            <div className="col-10">
-              <div
-                className={
-                  showSection && showSection.dspAddendum
-                    ? 'collapse-btn   '
-                    : 'collapse-btn  disabled '
-                }
-                role="presentation"
-                type="button"
-                onClick={() => {
-                  executeScroll('dspAddendum');
-                  setOpenCollapse({ dspAddendum: !openCollapse.dspAddendum });
-                }}>
-                <img className="service-agre" src={CreateAddendum} alt="pdf" />
-                <h4 className="sendar-details mt-1 ml-5">DSP Addendum </h4>
-                <div className="clear-fix" />
-              </div>
-            </div>
-            <div className="col-2 p-0">
-              <label className="switch mt-3">
-                <input
-                  type="checkbox"
-                  onClick={(event) => handleShowCollapse(event, 'dspAddendum')}
-                />
-                <span className="slider round" />
-              </label>
-            </div>
-          </div>
-          <Collapse isOpened={openCollapse.dspAddendum}>
-            <ul className="collapse-inner">
-              {DSPAddendumDetails.map((item) => (
-                <li key={item.key}>
-                  <FormField>
-                    <label htmlFor={item.key}>
-                      {item.label}
-                      {generateHTML(item)}
-                    </label>
-                    <ErrorMsg>
-                      {apiError && apiError[item.key] && apiError[item.key][0]}
-                    </ErrorMsg>
-                  </FormField>
-                </li>
-              ))}
-            </ul>
-          </Collapse>
 
+          {/* 
           <div className="straight-line sidepanel " />
           <div className="row">
             <div className="col-10 ">
@@ -1192,17 +1526,9 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
             </div>
-            <div className="col-2 p-0">
-              <label className="switch mt-3">
-                <input
-                  type="checkbox"
-                  onClick={(event) => handleShowCollapse(event, 'amendment')}
-                />
-                <span className="slider round" />
-              </label>
-            </div>
+          
           </div>
-          <Collapse isOpened={openCollapse.amendment} />
+          <Collapse isOpened={openCollapse.amendment} /> */}
 
           {/* <p className="gray-text">
         The Contract has been sent for review and signature to the client on
@@ -1306,16 +1632,25 @@ AgreementSidePanel.defaultProps = {
   onEditAddendum: () => {},
   setShowEditor: () => {},
   setNewAddendum: () => {},
-  setNotIncludedOneTimeServices: () => {},
-  setNotIncludedMonthlyServices: () => {},
-  sendNotIncludedOneTimeServToAdd: () => {},
-  sendNotIncludedMonthlyServToAdd: () => {},
+  // setNotIncludedOneTimeServices: () => {},
+  // setNotIncludedMonthlyServices: () => {},
+  // sendNotIncludedOneTimeServToAdd: () => {},
+  // sendNotIncludedMonthlyServToAdd: () => {},
   apiError: {},
   showFooter: () => {},
   setApiError: () => {},
   executeScroll: () => {},
   showSection: {},
   setShowCollpase: () => {},
+  updatedFormData: {},
+  setUpdatedFormData: () => {},
+  additionalMonthlyServices: [],
+  setMonthlyAdditionalServices: () => {},
+  originalData: {},
+  additionalMarketplacesData: [],
+  setAdditionalMarketplace: () => {},
+  additionalOnetimeServices: [],
+  setAdditionalOnetimeServices: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -1354,10 +1689,10 @@ AgreementSidePanel.propTypes = {
   onEditAddendum: PropTypes.func,
   setShowEditor: PropTypes.func,
   setNewAddendum: PropTypes.func,
-  setNotIncludedOneTimeServices: PropTypes.func,
-  setNotIncludedMonthlyServices: PropTypes.func,
-  sendNotIncludedOneTimeServToAdd: PropTypes.func,
-  sendNotIncludedMonthlyServToAdd: PropTypes.func,
+  // setNotIncludedOneTimeServices: PropTypes.func,
+  // setNotIncludedMonthlyServices: PropTypes.func,
+  // sendNotIncludedOneTimeServToAdd: PropTypes.func,
+  // sendNotIncludedMonthlyServToAdd: PropTypes.func,
   apiError: PropTypes.shape({
     quantity: PropTypes.arrayOf(PropTypes.string),
     service: PropTypes.arrayOf(PropTypes.string),
@@ -1365,14 +1700,40 @@ AgreementSidePanel.propTypes = {
   showFooter: PropTypes.func,
   setApiError: PropTypes.func,
   executeScroll: PropTypes.func,
-  showSection: PropTypes.shape(
-    PropTypes.shape({
-      addendum: PropTypes.bool,
-      dspAddendum: PropTypes.bool,
-      amendment: PropTypes.bool,
-    }),
-  ),
+  showSection: PropTypes.shape({
+    addendum: PropTypes.bool,
+    dspAddendum: PropTypes.bool,
+    amendment: PropTypes.bool,
+  }),
   setShowCollpase: PropTypes.func,
+  updatedFormData: PropTypes.shape({
+    additional_services: PropTypes.arrayOf(PropTypes.array),
+    start_date: PropTypes.string,
+    company_name: PropTypes.string,
+    primary_marketplace: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
+    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+    quantity: PropTypes.number,
+  }),
+  setUpdatedFormData: PropTypes.func,
+  additionalMonthlyServices: PropTypes.arrayOf(PropTypes.object),
+  setMonthlyAdditionalServices: PropTypes.func,
+  originalData: PropTypes.shape({
+    id: PropTypes.string,
+    additional_services: PropTypes.arrayOf(PropTypes.array),
+    start_date: PropTypes.string,
+    company_name: PropTypes.string,
+    primary_marketplace: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
+    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+    quantity: PropTypes.number,
+  }),
+  additionalMarketplacesData: PropTypes.arrayOf(PropTypes.object),
+  setAdditionalMarketplace: PropTypes.func,
+  additionalOnetimeServices: PropTypes.arrayOf(PropTypes.object),
+  setAdditionalOnetimeServices: PropTypes.func,
 };
 
 const SidePanel = styled.div`
@@ -1507,7 +1868,7 @@ const SidePanel = styled.div`
            }
         }
         .max-min-number {
-          width:20px;
+          width:40px;
            border: 1px solid #DFE7FF;
         }
     }

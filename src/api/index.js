@@ -73,6 +73,8 @@ export {
   createContractDesign,
   transactionalSignUp,
   getTransactionData,
+  createAdditionalServiceBulk,
+  createMarketplaceBulk,
 } from './AgreementApi';
 
 // Knowledge Base

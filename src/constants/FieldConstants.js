@@ -415,36 +415,49 @@ export const AgreementDetails = [
     key: 'contract_company_name',
     label: 'Customer Name',
     type: 'text',
+    placeholder: 'Enter Customer Name',
   },
   {
     key: 'start_date',
     label: 'Contract Start Date',
     type: 'date',
+    placeholder: 'Select Date',
   },
   {
     key: 'length',
     label: 'Contract Length',
     type: 'choice',
+    placeholder: 'Select Contract Length',
   },
   {
-    key: 'address',
-    label: 'Address',
-    type: 'text',
-  },
-  {
-    key: 'city',
-    label: 'City',
-    type: 'text',
-  },
-  {
-    key: 'state',
-    label: 'State',
-    type: 'text',
-  },
-  {
-    key: 'zip_code',
-    label: '  Postcode',
-    type: 'number',
+    key: 'contract_address',
+    label: 'Contract Address',
+    sections: [
+      {
+        key: 'address',
+        // label: 'Address',
+        type: 'text',
+        placeholder: 'Enter Address',
+      },
+      {
+        key: 'city',
+        // label: 'City',
+        type: 'text',
+        placeholder: 'Enter State',
+      },
+      {
+        key: 'state',
+        // label: 'State',
+        type: 'text',
+        placeholder: 'Enter City',
+      },
+      {
+        key: 'zip_code',
+        // label: '  Postcode',
+        type: 'number',
+        placeholder: 'Enter Postcode',
+      },
+    ],
   },
 ];
 
@@ -453,37 +466,41 @@ export const StatementDetails = [
     key: 'monthly_retainer',
     label: 'Monthly Retainer',
     type: 'number-currency',
+    placeholder: 'Enter Monthly Retainer',
   },
   {
     key: 'primary_marketplace',
-    label: 'Market Places',
+    label: 'Primary MarketPlace',
     type: 'choice',
+    placeholder: 'Select Primary Marketplace',
   },
-  {
-    key: 'additional_marketplaces',
-    label: 'Additional Market Places',
-    type: 'multichoice',
-  },
+  // {
+  //   key: 'additional_marketplaces',
+  //   label: 'Additional Market Places',
+  //   type: 'multichoice',
+  // },
   {
     key: 'rev_share',
     label: 'Revenue Share',
     type: 'choice',
+    placeholder: 'Select Revenue Share',
   },
   {
     key: 'sales_threshold',
-    label: 'Sales Threshold (Optional)',
+    label: 'REVENUE THRESHOLD',
     type: 'number-currency',
+    placeholder: 'Enter Revenue Threshold (Optional)',
   },
   // {
   //   key: 'dsp_fee',
   //   label: 'DSP Budget',
   //   type: 'number-currency',
   // },
-  {
-    key: 'additional_monthly_services',
-    label: 'Additional Monthly services',
-    type: 'multichoice',
-  },
+  // {
+  //   key: 'additional_monthly_services',
+  //   label: 'Additional Monthly services',
+  //   type: 'multichoice',
+  // },
   // {
   //   key: 'additional_one_time_services',
   //   label: 'Additional One-time services',

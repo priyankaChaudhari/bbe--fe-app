@@ -10,6 +10,8 @@ import {
   API_TRANSACTION_DATA,
   API_CONTRACT_DESIGN,
   API_TRANSACTIONAL_SIGN_URL,
+  API_MARKETPLACE_BULK_UPDATE,
+  API_ADDITIONAL_SERVICE_BULK_UPDATE,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -71,6 +73,32 @@ export async function deleteMarketplace(id, key) {
     .delete(`${value + id}/`)
     .then(() => {
       return '';
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function createMarketplaceBulk(data) {
+  const params = { expand: '~all' };
+  const result = await axiosInstance
+    .post(API_MARKETPLACE_BULK_UPDATE, data, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function createAdditionalServiceBulk(data) {
+  const params = { expand: '~all' };
+  const result = await axiosInstance
+    .post(API_ADDITIONAL_SERVICE_BULK_UPDATE, data, { params })
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       return error.response;
