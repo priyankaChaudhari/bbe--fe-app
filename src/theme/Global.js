@@ -849,10 +849,10 @@ export const WhiteCard = styled.div`
     li{
       display:inline-block;
       vertical-align: middle;
-      margin-right:3px;
+      margin-right: 8px;
 
       img{
-        width:25px;
+        width:23px;
       }
      
     }
