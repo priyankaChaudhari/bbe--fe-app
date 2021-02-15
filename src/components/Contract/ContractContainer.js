@@ -24,7 +24,12 @@ import {
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, BackArrowIcon, OrangeChecked } from '../../theme/images';
+import {
+  CloseIcon,
+  // BackArrowIcon,
+  OrangeChecked,
+  ArrowIcons,
+} from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 
 import {
