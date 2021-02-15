@@ -606,6 +606,7 @@ export const WhiteCard = styled.div`
      margin-left: 40px;
      color: ${Theme.black};
      line-height: 22px;
+     
 
      &:first-child {
         margin-left: 0;
@@ -613,15 +614,22 @@ export const WhiteCard = styled.div`
 
      .brand-label { 
        color: ${Theme.gray40};
-      //  margin-bottom: 4px;
-        span { 
+       float:left;
+      }
+       span { 
           margin-left: 13px;
           color: ${Theme.black};
+          float:left;
           word-break: break-word;
+          max-width: 153px;
+          width:100%;
+
+          &.mid-width {
+            max-width:180px;
+            width:100%;
+          }
         }
 
-        
-      }
   }
   .left-details-card {
     padding: 0;

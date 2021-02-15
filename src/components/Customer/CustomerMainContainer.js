@@ -356,57 +356,48 @@ export default function CustomerMainContainer() {
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-6 col-sm-12">
-                        <div className="company-label-info">
+                        <div className="company-label-info ">
                           {' '}
-                          <div className="brand-label ">
-                            Category
-                            <span>
-                              {customer &&
-                                customer.category &&
-                                customer.category.label}
-                            </span>
-                          </div>{' '}
-                          <div className="brand-label ">
-                            Website
-                            <span className="ml-4">
-                              <a
-                                href={
-                                  customer &&
-                                  customer.website &&
-                                  customer.website.includes('http')
-                                    ? customer && customer.website
-                                    : `http://www.${
-                                        customer && customer.website
-                                      }`
-                                }
-                                target="_blank"
-                                rel=" noopener noreferrer">
-                                {customer && customer.website}
-                              </a>
-                            </span>
-                          </div>
+                          <div className="brand-label ">Category</div>
+                          <span className="mid-width">
+                            {customer &&
+                              customer.category &&
+                              customer.category.label}
+                          </span>
+                          <div className="brand-label ">Website</div>
+                          <span className="ml-4 mid-width">
+                            <a
+                              href={
+                                customer &&
+                                customer.website &&
+                                customer.website.includes('http')
+                                  ? customer && customer.website
+                                  : `http://www.${customer && customer.website}`
+                              }
+                              target="_blank"
+                              rel=" noopener noreferrer">
+                              {customer && customer.website}
+                            </a>
+                          </span>
                         </div>
                       </div>{' '}
                       <div className="col-lg-4 col-md-6 col-sm-12">
                         <div className="company-label-info">
-                          <div className="brand-label">
-                            Annual Revenue
-                            <NumberFormat
-                              displayType="text"
-                              thousandSeparator
-                              value={
-                                (customer && customer.annual_revenue) || null
-                              }
-                              prefix="$"
-                            />
-                          </div>
+                          <div className="brand-label">Annual Revenue</div>
+                          <NumberFormat
+                            displayType="text"
+                            thousandSeparator
+                            value={
+                              (customer && customer.annual_revenue) || null
+                            }
+                            prefix="$"
+                          />
+                          <div className="clear-fix" />
 
-                          <div className="brand-label ">
-                            Company Size
-                            <span className="ml-4">
-                              {customer && customer.number_of_employees}
-                            </span>
-                          </div>
+                          <div className="brand-label ">Company Size</div>
+                          <span className="ml-4">
+                            {customer && customer.number_of_employees}
+                          </span>
                         </div>
                       </div>
                     </div>
