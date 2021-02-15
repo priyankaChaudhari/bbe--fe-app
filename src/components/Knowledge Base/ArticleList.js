@@ -181,7 +181,28 @@ const GrayBody = styled.div`
   }
   @media only screen and (min-width: 1700px) and (min-width: 1920px) {
     .graycontainer {
-      max-width: 90%;
+      max-width: 85%;
+      .article-card {
+        background-color: ${Theme.white};
+        border-radius: 12px;
+        max-width: 100%;
+        flex-wrap: wrap;
+        flex: initial;
+        height: 100%;
+        text-align: center;
+        padding: 20px;
+
+        .article-card-icon {
+          width: 80px;
+          margin-bottom: 10px;
+        }
+        p {
+          font-size: 18px;
+        }
+        h6 {
+          font-size: 24px;
+        }
+      }
     }
   }
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
