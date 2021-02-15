@@ -269,69 +269,72 @@ export default function AgreementSidePanel({
           );
 
         // checked whether checked item present in newly created list
+        // if (
+        //   additionalMarketplacesData &&
+        //   additionalMarketplacesData.create &&
+        //   additionalMarketplacesData.create.length
+        // ) {
         if (
           additionalMarketplacesData &&
           additionalMarketplacesData.create &&
-          additionalMarketplacesData.create.length
+          additionalMarketplacesData.create.find(
+            (item) =>
+              item.name
+                ? item.name === val.option.value
+                : item.value === val.option.value,
+            // item.name === val.option.value,
+          )
         ) {
-          if (
-            additionalMarketplacesData &&
-            additionalMarketplacesData.create &&
-            additionalMarketplacesData.create.find(
-              (item) =>
-                item.name
-                  ? item.name === val.option.value
-                  : item.value === val.option.value,
-              // item.name === val.option.value,
-            )
-          ) {
-            // if checked item is already present in newly created list then don't do anything
-          } else {
-            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+          // if checked item is already present in newly created list then don't do anything
+        } else {
+          // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
 
-            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-            if (itemInFormData) {
-              additionalMarketplacesData.create.push(itemInFormData);
-              const list = formData.additional_marketplaces;
-              list.push(itemInFormData);
-              setFormData({
-                ...formData,
-                additional_marketplaces: list,
-              });
+          // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+          if (itemInFormData) {
+            additionalMarketplacesData.create.push(itemInFormData);
+            const list = formData.additional_marketplaces;
+            list.push(itemInFormData);
+            setFormData({
+              ...formData,
+              additional_marketplaces: list,
+            });
 
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_marketplaces: additionalMarketplacesData,
-              });
-            }
-            // else we create dict as BE required for new item and we push that in newly created list
-            else {
-              additionalMarketplacesData.create.push({
-                name: val.option.value,
-                contract_id: originalData && originalData.id,
-              });
-
-              const list = formData.additional_marketplaces;
-              list.push({
-                name: val.option.value,
-                contract_id: originalData && originalData.id,
-              });
-              setFormData({
-                ...formData,
-                additional_marketplaces: list,
-              });
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_marketplaces: additionalMarketplacesData,
-              });
-            }
-
-            // here we fnally update state variable
-            setAdditionalMarketplace({
-              ...additionalMarketplacesData,
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_marketplaces: additionalMarketplacesData,
             });
           }
+          // else we create dict as BE required for new item and we push that in newly created list
+          else {
+            additionalMarketplacesData.create.push({
+              name: val.option.value,
+              contract_id: originalData && originalData.id,
+            });
+
+            let list = formData.additional_marketplaces;
+            if (!list) {
+              list = [];
+            }
+            list.push({
+              name: val.option.value,
+              contract_id: originalData && originalData.id,
+            });
+            setFormData({
+              ...formData,
+              additional_marketplaces: list,
+            });
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_marketplaces: additionalMarketplacesData,
+            });
+          }
+
+          // here we fnally update state variable
+          setAdditionalMarketplace({
+            ...additionalMarketplacesData,
+          });
         }
+        // }
 
         // suppose checked item present in original formData then we have to remove its id from newly created delete list.
 
@@ -391,116 +394,6 @@ export default function AgreementSidePanel({
           ...additionalMarketplacesData,
         });
       }
-      // if (val.action === 'remove-value') {
-      //   if (agreementData[key] !== null) {
-      //     for (const del of agreementData[key]) {
-      //       if (
-      //         del.id !== undefined &&
-      //         (key === 'additional_monthly_services'
-      //           ? del.service.name
-      //           : del.name) === val.removedValue.label
-      //       ) {
-      //         setIsLoading({ loader: true, type: 'page' });
-      //         deleteMarketplace(del.id, key).then(() => {
-      //           dispatch(getAccountDetails(id));
-      //           setIsLoading({ loader: false, type: 'page' });
-      //         });
-      //       }
-      //     }
-      //     if (key === 'additional_monthly_services') {
-      //       const list = [...monthlyService];
-      //       if (list.every((item) => item.value !== val.removedValue.value)) {
-      //         list.push(val.removedValue);
-      //       }
-      //       setMonthlyService(list);
-      //       setNotIncludedMonthlyServices(list);
-      //       if (sendNotIncludedMonthlyServToAdd) {
-      //         sendNotIncludedMonthlyServToAdd(monthlyService);
-      //       }
-      //     }
-      //     //  setNotIncludedServices([...oneTimeService, ...list])
-      //   }
-      // }
-
-      // if (val.action === 'select-option') {
-      //   if (key === 'additional_monthly_services') {
-      //     const montlyserviceData = [];
-      //     montlyserviceData.push({
-      //       contract: agreementData.id,
-      //       name: val.option.label,
-      //       service: val.option.value,
-      //     });
-
-      //     createAdditionalServices(montlyserviceData).then((res) => {
-      //       if (res && res.status === 400) {
-      //         setIsLoading({ loader: false, type: 'button' });
-      //       }
-      //       if (res && res.status === 201) {
-      //         dispatch(getAccountDetails(id));
-
-      //         const list = monthlyService.filter(
-      //           (item) => item.value !== res.data[0].service,
-      //         );
-      //         setMonthlyService(list);
-      //         setNotIncludedMonthlyServices(list);
-      //         if (sendNotIncludedMonthlyServToAdd) {
-      //           sendNotIncludedMonthlyServToAdd(monthlyService);
-      //         }
-      //       }
-      //     });
-      //   }
-
-      //   if (key === 'additional_marketplaces') {
-      //     const marketPlaceData = [];
-      //     // for (const market of formData.additional_marketplaces) {
-      //     marketPlaceData.push({
-      //       contract: agreementData.id,
-      //       is_primary: false,
-      //       name: val.option.label,
-      //     });
-      //     setIsLoading({ loader: true, type: 'page' });
-
-      //     // }
-      //     createMarketplace(marketPlaceData).then((res) => {
-      //       setIsLoading({ loader: false, type: 'page' });
-      //       if (res && res.status === 201) {
-      //         dispatch(getAccountDetails(id));
-
-      //         // setOpenCollapse({ ...openCollapse, addendum: true });
-      //         // history.push(PATH_ADDENDUM.replace(':id', id));
-      //       }
-      //     });
-      //   }
-
-      //   if (agreementData && agreementData[key] && agreementData[key].length) {
-      //     const multi = [].concat(
-      //       event.filter((obj1) =>
-      //         agreementData[key].every(
-      //           (obj2) => obj1.label !== (obj2.name || obj2.service.name),
-      //         ),
-      //       ),
-      //       agreementData[key].filter((obj2) =>
-      //         event.every(
-      //           (obj1) => (obj2.name || obj2.service.name) !== obj1.label,
-      //         ),
-      //       ),
-      //     );
-
-      //     setFormData({
-      //       ...formData,
-      //       [key]: multi,
-      //     });
-      //   } else {
-      //     const multi = [];
-      //     for (const market of event) {
-      //       multi.push({ value: market.value, label: market.label });
-      //     }
-      //     setFormData({
-      //       ...formData,
-      //       [key]: multi,
-      //     });
-      //   }
-      // }
     } else {
       if (event.target.name === 'zip_code') {
         setFormData({
@@ -526,71 +419,74 @@ export default function AgreementSidePanel({
           if (event.target.name === 'DSP Advertising') {
             setShowCollpase({ ...showSection, dspAddendum: true });
           }
+          // if (
+          //   additionalMonthlyServices &&
+          //   additionalMonthlyServices.create &&
+          //   additionalMonthlyServices.create.length
+          // ) {
+          // checked whether checked item present in newly created list
           if (
             additionalMonthlyServices &&
             additionalMonthlyServices.create &&
-            additionalMonthlyServices.create.length
+            additionalMonthlyServices.create.length &&
+            additionalMonthlyServices.create.find((item) =>
+              item.name
+                ? item.name === event.target.name
+                : item.service.name === event.target.name,
+            )
           ) {
-            // checked whether checked item present in newly created list
-            if (
-              additionalMonthlyServices &&
-              additionalMonthlyServices.create &&
-              additionalMonthlyServices.create.length &&
-              additionalMonthlyServices.create.find((item) =>
-                item.name
-                  ? item.name === event.target.name
-                  : item.service.name === event.target.name,
-              )
-            ) {
-              // if checked item is already present in newly created list then don't do anything
-            } else {
-              // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+            // if checked item is already present in newly created list then don't do anything
+          } else {
+            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
 
-              // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-              if (itemInFormData) {
-                additionalMonthlyServices.create.push(itemInFormData);
-                const list = formData.additional_monthly_services;
-                list.push(itemInFormData);
-                setFormData({
-                  ...formData,
-                  additional_monthly_services: list,
-                });
+            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+            if (itemInFormData) {
+              additionalMonthlyServices.create.push(itemInFormData);
+              const list = formData.additional_monthly_services;
+              list.push(itemInFormData);
+              setFormData({
+                ...formData,
+                additional_monthly_services: list,
+              });
 
-                setUpdatedFormData({
-                  ...updatedFormData,
-                  additional_monthly_services: additionalMonthlyServices,
-                });
-              }
-              // else we create dict as BE required for new item and we push that in newly created list
-              else {
-                additionalMonthlyServices.create.push({
-                  name: event.target.name,
-                  service_id: val.value,
-                  contract_id: originalData && originalData.id,
-                });
-
-                const list = formData.additional_monthly_services;
-                list.push({
-                  name: event.target.name,
-                  service_id: val.value,
-                  contract_id: originalData && originalData.id,
-                });
-                setFormData({
-                  ...formData,
-                  additional_monthly_services: list,
-                });
-                setUpdatedFormData({
-                  ...updatedFormData,
-                  additional_monthly_services: additionalMonthlyServices,
-                });
-              }
-
-              // here we fnally update state variable
-              setMonthlyAdditionalServices({
-                ...additionalMonthlyServices,
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_monthly_services: additionalMonthlyServices,
               });
             }
+            // else we create dict as BE required for new item and we push that in newly created list
+            else {
+              additionalMonthlyServices.create.push({
+                name: event.target.name,
+                service_id: val.value,
+                contract_id: originalData && originalData.id,
+              });
+
+              let list = formData.additional_monthly_services;
+              if (!list) {
+                list = [];
+              }
+              list.push({
+                name: event.target.name,
+                service_id: val.value,
+                contract_id: originalData && originalData.id,
+              });
+              setFormData({
+                ...formData,
+                additional_monthly_services: list,
+              });
+              setUpdatedFormData({
+                ...updatedFormData,
+                additional_monthly_services: additionalMonthlyServices,
+              });
+            }
+
+            // here we fnally update state variable
+            setMonthlyAdditionalServices({
+              ...additionalMonthlyServices,
+            });
           }
+          // }
 
           // suppose checked item present in original formData then we have to remove its id from newly created delete list.
 
