@@ -5,16 +5,26 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
-export default function DSPAddendum({ details, templateData }) {
-  const mapDefaultValues = (key) => {
-    if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM-DD-YYYY');
-    }
-    if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
-    }
+export default function DSPAddendum({ formData, details, templateData }) {
+  const mapDefaultValues = (key, label, type) => {
+    if (formData[key] === undefined || formData[key] === '') {
+      if (key === 'start_date') {
+        return details && dayjs(details[key]).format('MM-DD-YYYY');
+      }
+      if (key === 'current_date') {
+        return dayjs(Date()).format('MM-DD-YYYY');
+      }
+      if (type && type.includes('number')) {
+        return `${type === 'number-currency' ? '$' : '%'} ${
+          details && details[key]
+            ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            : `Enter ${label}.`
+        }`;
+      }
 
-    return details && details[key];
+      return details && details[key];
+    }
+    return formData[key];
   };
 
   const mapDspDetails = () => {
@@ -26,7 +36,7 @@ export default function DSPAddendum({ details, templateData }) {
         <td
           style="border: 1px solid black;
     padding: 13px;">
-    ${details && details.dsp_fee}
+    DSP_FEE
         </td>
       </tr>`;
   };
@@ -34,17 +44,17 @@ export default function DSPAddendum({ details, templateData }) {
   const mapBudgetBreakdownTable = () => {
     return `<tr>
         <td style="border: 1px solid black;
-    padding: 13px;">  ${details && details.dsp_fee}
+    padding: 13px;">  DSP_FEE
 </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
-              ${details && details.dsp_fee}
+              DSP_FEE
 
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
-              ${details && details.dsp_fee}
+             DSP_FEE
 
         </td>
       </tr>`;
@@ -67,6 +77,7 @@ export default function DSPAddendum({ details, templateData }) {
                         'Customer Name',
                       ),
                     )
+
                     .replace(
                       'START_DATE',
                       mapDefaultValues('start_date', 'Start Date'),
@@ -85,6 +96,10 @@ export default function DSPAddendum({ details, templateData }) {
     padding: 13px;">Jan 16, 2021 - Feb 28, 2021</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">March 2021</th><th style="text-align: left; border: 1px solid black;
     padding: 13px;">April 2021</th></tr>${mapBudgetBreakdownTable()}</table>`,
+                    )
+                    .replaceAll(
+                      'DSP_FEE',
+                      mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
                     ),
               }}
             />
@@ -118,12 +133,16 @@ export default function DSPAddendum({ details, templateData }) {
 DSPAddendum.defaultProps = {
   details: {},
   templateData: {},
+  formData: {},
 };
 
 DSPAddendum.propTypes = {
   details: PropTypes.shape({
     dsp_fee: PropTypes.string,
     start_date: PropTypes.string,
+  }),
+  formData: PropTypes.shape({
+    dsp_fee: PropTypes.string,
   }),
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),

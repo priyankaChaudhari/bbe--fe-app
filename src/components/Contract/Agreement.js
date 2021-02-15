@@ -7,31 +7,43 @@ import PropTypes from 'prop-types';
 
 export default function Agreement({ formData, details, templateData }) {
   const mapDefaultValues = (key, label) => {
-    if (
-      (formData[key] === undefined || formData[key] === '') &&
-      details &&
-      Object.keys(details).length === 0
-    ) {
-      return `Enter ${label}.`;
-    }
+    // if (formData[key] === undefined || formData[key] === '') {
+    //   if (key === 'contract_company_name') {
+    //     return details && details[key]
+    //       ? details && details[key]
+    //       : `Enter ${label}.`;
+    //   }
+    //   if (key === 'length') {
+    //     return details && details.length.label;
+    //   }
+    //   if (key === 'start_date') {
+    //     return details && dayjs(details[key]).format('MM-DD-YYYY');
+    //   }
+    //   if (key === 'current_date') {
+    //     return dayjs(Date()).format('MM-DD-YYYY');
+    //   }
+    //   return details && details[key];
+    // }
     if (formData[key] === undefined || formData[key] === '') {
-      if (key === 'contract_company_name') {
-        return details && details[key]
-          ? details && details[key]
-          : `Enter ${label}.`;
-      }
-      if (key === 'length') {
-        return details && details.length.label;
-      }
-      if (key === 'start_date') {
-        return details && dayjs(details[key]).format('MM-DD-YYYY');
-      }
-      if (key === 'current_date') {
-        return dayjs(Date()).format('MM-DD-YYYY');
-      }
-      return details && details[key];
+      return `Enter ${label}`;
     }
 
+    if (key === 'contract_company_name') {
+      return formData && formData[key]
+        ? formData && formData[key]
+        : `Enter ${label}`;
+    }
+    if (key === 'length') {
+      return formData && formData.length.label
+        ? formData.length.label
+        : formData.length;
+    }
+    if (key === 'start_date') {
+      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+    }
+    if (key === 'current_date') {
+      return dayjs(Date()).format('MM-DD-YYYY');
+    }
     return formData[key];
   };
 
@@ -94,7 +106,11 @@ export default function Agreement({ formData, details, templateData }) {
         : ''
     } /month</td>
             <td style="border: 1px solid black;
-    padding: 13px;">$ ${(item.quantity * item.service.fee)
+    padding: 13px;">$ ${(
+      item.quantity * item &&
+      item.service &&
+      item.service.fee
+    )
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
             </tr>`,
@@ -144,13 +160,13 @@ export default function Agreement({ formData, details, templateData }) {
                 )
                 .replace(
                   'CUSTOMER_ADDRESS',
-                  mapDefaultValues('address', 'Address, '),
+                  mapDefaultValues('address', 'Address'),
                 )
-                .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-                .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+                .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+                .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
                 .replace(
                   'CUSTOMER_POSTAL',
-                  mapDefaultValues('zip_code', 'Postal Code, '),
+                  mapDefaultValues('zip_code', 'Postal Code'),
                 )
                 .replace(
                   'AGREEMENT_LENGTH',
@@ -195,13 +211,13 @@ export default function Agreement({ formData, details, templateData }) {
               )
               .replace(
                 'CUSTOMER_ADDRESS',
-                mapDefaultValues('address', 'Address, '),
+                mapDefaultValues('address', 'Address'),
               )
-              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
               .replace(
                 'CUSTOMER_POSTAL',
-                mapDefaultValues('zip_code', 'Postal Code, '),
+                mapDefaultValues('zip_code', 'Postal Code'),
               )
               .replace(
                 'BBE_DATE',

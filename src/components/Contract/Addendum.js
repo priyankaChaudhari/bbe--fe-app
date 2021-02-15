@@ -40,7 +40,7 @@ export default function Addendum({
     if (editorState === null) {
       let contentBlock;
 
-      if (newAddendumData.addendum) {
+      if (newAddendumData && newAddendumData.addendum) {
         contentBlock = htmlToDraft(newAddendumData.addendum);
       } else {
         contentBlock = htmlToDraft('<p></p>');

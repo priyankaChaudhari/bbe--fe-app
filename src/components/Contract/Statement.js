@@ -17,41 +17,75 @@ export default function Statement({
 }) {
   const mapDefaultValues = (key, label, type) => {
     if (formData[key] === undefined || formData[key] === '') {
-      if (key === 'start_date') {
-        return details && dayjs(details[key]).format('MM-DD-YYYY');
-      }
-      if (key === 'primary_marketplace') {
-        if (details && details.primary_marketplace) {
-          return (
-            details &&
-            details.primary_marketplace &&
-            details.primary_marketplace.name
-          );
-        }
-        return `Enter ${label}.`;
-      }
-      if (type && type.includes('number')) {
-        return `${type === 'number-currency' ? '$' : '%'} ${
-          details && details[key]
-            ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            : `Enter ${label}.`
-        }`;
-      }
-      return key === 'rev_share' || key === 'seller_type'
-        ? details && details[key] && details[key].label
-        : details && details[key];
-    }
-    if (
-      formData[key] === undefined ||
-      formData[key] === '' ||
-      formData[key] === null ||
-      (details && Object.keys(details).length === 0)
-    ) {
-      return `Enter ${label}.`;
+      return `Enter ${label}`;
     }
 
-    return formData[key];
+    if (key === 'start_date') {
+      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+    }
+    if (key === 'primary_marketplace') {
+      if (formData && formData.primary_marketplace) {
+        return formData &&
+          formData.primary_marketplace &&
+          formData.primary_marketplace.name
+          ? formData.primary_marketplace.name
+          : formData.primary_marketplace;
+      }
+      return `Enter ${label}.`;
+    }
+    if (type && type.includes('number')) {
+      // ${type === 'number-currency' ? '$' : '%'}
+      return ` ${
+        formData && formData[key]
+          ? formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : `Enter ${label}.`
+      }`;
+    }
+
+    return key === 'rev_share' || key === 'seller_type'
+      ? formData && formData[key] && formData[key].label
+        ? formData[key].label
+        : formData[key]
+      : formData && formData[key];
   };
+
+  // if (formData[key] === undefined || formData[key] === '') {
+  //   if (key === 'start_date') {
+  //     return details && dayjs(details[key]).format('MM-DD-YYYY');
+  //   }
+  //   if (key === 'primary_marketplace') {
+  //     if (details && details.primary_marketplace) {
+  //       return (
+  //         details &&
+  //         details.primary_marketplace &&
+  //         details.primary_marketplace.name
+  //       );
+  //     }
+  //     return `Enter ${label}.`;
+  //   }
+  //   if (type && type.includes('number')) {
+  //     return `${type === 'number-currency' ? '$' : '%'} ${
+  //       details && details[key]
+  //         ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  //         : `Enter ${label}.`
+  //     }`;
+  //   }
+
+  //   return key === 'rev_share' || key === 'seller_type'
+  //     ? details && details[key] && details[key].label
+  //     : details && details[key];
+  // }
+  // if (
+  //   formData[key] === undefined ||
+  //   formData[key] === '' ||
+  //   formData[key] === null ||
+  //   (details && Object.keys(details).length === 0)
+  // ) {
+  //   return `Enter ${label}.`;
+  // }
+
+  // return formData[key];
+  // };
 
   const showRevTable = () => {
     if (formData && formData.sales_threshold) {
@@ -96,9 +130,13 @@ export default function Statement({
                   Variable Monthly Services</td>
                   </tr>`,
     ];
-    if (details && details.additional_monthly_services) {
-      for (const item of details.additional_monthly_services) {
-        if (item.service.name === 'DSP Advertising') {
+    if (formData && formData.additional_monthly_services) {
+      for (const item of formData.additional_monthly_services) {
+        if (
+          item.name
+            ? item.name === 'DSP Advertising'
+            : item.service.name === 'DSP Advertising'
+        ) {
           fields.push(
             `<tr>
                  <td style="border: 1px solid black;padding: 13px;">${
@@ -115,7 +153,11 @@ export default function Statement({
                 </tr>`,
           );
         }
-        if (item.service.name === 'Inventory Reconciliation') {
+        if (
+          item.name
+            ? item.name === 'Inventory Reconciliation'
+            : item.service.name === 'Inventory Reconciliation'
+        ) {
           fields.push(
             `<tr>
                  <td style="border: 1px solid black;padding: 13px;">${
@@ -137,8 +179,8 @@ export default function Statement({
 
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
-    if (details && details.additional_marketplaces) {
-      for (const item of details.additional_marketplaces) {
+    if (formData && formData.additional_marketplaces) {
+      for (const item of formData.additional_marketplaces) {
         fields.push(
           `<tr>
       <td style="border: 1px solid black;padding: 13px;">${
@@ -188,15 +230,19 @@ export default function Statement({
   const mapMonthlyServices = (key) => {
     const fields = [];
     if (key !== 'additional_one_time_services') {
-      if (details && details[key]) {
-        for (const item of details[key]) {
+      if (formData && formData[key]) {
+        for (const item of formData[key]) {
           if (
             (item.service && item.service.name !== undefined) ||
             item.name !== undefined
           ) {
             if (
-              item.service.name !== 'DSP Advertising' &&
-              item.service.name !== 'Inventory Reconciliation'
+              (item.name
+                ? item.name !== 'DSP Advertising'
+                : item.service.name !== 'DSP Advertising') &&
+              (item.name
+                ? item.name !== 'Inventory Reconciliation'
+                : item.service.name !== 'Inventory Reconciliation')
             ) {
               fields.push(
                 `<tr>
@@ -255,7 +301,11 @@ export default function Statement({
       }
 
       ${
-        service.service.name !== 'Amazon Store Package Custom'
+        (
+          service.name
+            ? service.name !== 'Amazon Store Package Custom'
+            : service.service.name !== 'Amazon Store Package Custom'
+        )
           ? service.quantity && service.service && service.service.fee
             ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
               service.service &&
@@ -438,7 +488,22 @@ Statement.propTypes = {
   formData: PropTypes.shape({
     length: PropTypes.string,
     sales_threshold: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.string,
+      }),
+    ),
     additional_one_time_services: PropTypes.arrayOf(
+      PropTypes.shape({
+        service: PropTypes.string,
+      }),
+    ),
+    primary_marketplace: PropTypes.shape({
+      fee: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
+    additional_monthly_services: PropTypes.arrayOf(
       PropTypes.shape({
         service: PropTypes.string,
       }),

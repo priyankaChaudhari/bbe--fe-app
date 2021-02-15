@@ -25,7 +25,10 @@ export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';
 export const API_AGREEMENT_DETAILS = '/contract-details/';
 export const API_MARKETPLACE = '/marketplaces/';
+export const API_MARKETPLACE_BULK_UPDATE = `${API_MARKETPLACE}bulk-update/`;
 export const API_ADDITIONAL_SERVICES = '/additional-services/';
+export const API_ADDITIONAL_SERVICE_BULK_UPDATE = `${API_ADDITIONAL_SERVICES}bulk-update/`;
+
 export const API_SERVICE_TYPE = '/type-of-services/';
 
 // Knowledge Base
