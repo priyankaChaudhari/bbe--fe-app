@@ -3,7 +3,8 @@ import Theme from '../theme/Theme';
 
 const ErrorMsg = styled.div`
   color: ${Theme.red};
-  font-size: ${Theme.small};
+  font-size: ${Theme.extraSmall};
+  text-transform: lowercase;
   padding: 0;
   margin: 0 0 0 0;
 
@@ -11,7 +12,7 @@ const ErrorMsg = styled.div`
     text-transform: lowercase;
     text-decoration: underline;
     color: ${Theme.red};
-    font-size: ${Theme.small};
+    font-size: ${Theme.extraSmall};
   }
 `;
 export default ErrorMsg;
