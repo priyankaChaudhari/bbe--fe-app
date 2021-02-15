@@ -363,6 +363,7 @@ export default function CustomerMainContainer() {
                               customer.category &&
                               customer.category.label}
                           </span>
+                          <div className="clear-fix" />
                           <div className="brand-label ">Website</div>
                           <span className="ml-4 mid-width">
                             <a
@@ -378,6 +379,7 @@ export default function CustomerMainContainer() {
                               {customer && customer.website}
                             </a>
                           </span>
+                          <div className="clear-fix" />
                         </div>
                       </div>{' '}
                       <div className="col-lg-4 col-md-6 col-sm-12">
@@ -397,6 +399,7 @@ export default function CustomerMainContainer() {
                           <span className="ml-4">
                             {customer && customer.number_of_employees}
                           </span>
+                          <div className="clear-fix" />
                         </div>
                       </div>
                     </div>

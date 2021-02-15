@@ -322,6 +322,7 @@ CropUploadImage.propTypes = {
 };
 
 const UpdateProfile = styled.div`
+ position: relative;
   .update-profile {
     position: relative;
 
@@ -345,7 +346,7 @@ const UpdateProfile = styled.div`
   }
 
     .edit-account {
-        top: 134px;
+        bottom: 5px;
         width: 45px;
         height: 45px;
         position: absolute;

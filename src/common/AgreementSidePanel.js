@@ -1705,7 +1705,8 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
   // width: 335px;
    min-width: 60px;
-   padding-bottom:200px;
+  z-index: 2;
+  padding-bottom:200px;
   max-width: 345px;
   position: fixed;
   top: 71px;
