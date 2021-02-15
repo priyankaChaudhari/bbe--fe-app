@@ -211,29 +211,29 @@ export default function AgreementSidePanel({
     });
   }, []);
 
-  useEffect(() => {
-    // if (
-    //   agreementData &&
-    //   agreementData.additional_monthly_services &&
-    //   agreementData.additional_monthly_services.length &&
-    //   monthlyService
-    // ) {
-    //   getMonthlyServiceOptions(monthlyService);
-    // }
-    // if (
-    //   agreementData &&
-    //   agreementData.additional_one_time_services &&
-    //   agreementData.additional_one_time_services.length &&
-    //   oneTimeService
-    // ) {
-    //   fetchUncommonOptions(
-    //     oneTimeService,
-    //     agreementData.additional_one_time_services,
-    //     setOneTimeService,
-    //   );
-    // }
-    // return () => {};
-  }, [agreementData]);
+  // useEffect(() => {
+  //   // if (
+  //   //   agreementData &&
+  //   //   agreementData.additional_monthly_services &&
+  //   //   agreementData.additional_monthly_services.length &&
+  //   //   monthlyService
+  //   // ) {
+  //   //   getMonthlyServiceOptions(monthlyService);
+  //   // }
+  //   // if (
+  //   //   agreementData &&
+  //   //   agreementData.additional_one_time_services &&
+  //   //   agreementData.additional_one_time_services.length &&
+  //   //   oneTimeService
+  //   // ) {
+  //   //   fetchUncommonOptions(
+  //   //     oneTimeService,
+  //   //     agreementData.additional_one_time_services,
+  //   //     setOneTimeService,
+  //   //   );
+  //   // }
+  //   // return () => {};
+  // }, [agreementData]);
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
@@ -552,6 +552,11 @@ export default function AgreementSidePanel({
             (item) =>
               item && item.service && item.service.name === event.target.name,
           );
+
+        // if(type === 'quantity') {
+
+        // }
+
         // if item checked
         if (event.target.checked) {
           // if (
@@ -600,7 +605,7 @@ export default function AgreementSidePanel({
                 name: event.target.name,
                 service_id: val.value,
                 contract_id: originalData && originalData.id,
-                quantity: 10,
+                quantity: 0,
               });
               // }
               let list = formData.additional_one_time_services;
@@ -611,7 +616,7 @@ export default function AgreementSidePanel({
                 name: event.target.name,
                 service_id: val.value,
                 contract_id: originalData && originalData.id,
-                quantity: 10,
+                quantity: 0,
               });
               setFormData({
                 ...formData,
@@ -883,20 +888,34 @@ export default function AgreementSidePanel({
     }
   };
 
-  const mapQuantity = (oneTimeServiceData) => {
+  const changeQuantity = (oneTimeServiceData, flag) => {
     if (
       formData &&
       formData.additional_one_time_services &&
       formData.additional_one_time_services.length
     ) {
-      formData.additional_one_time_services.map((item) => {
-        if (item.service && item.service.id === oneTimeServiceData.value) {
-          return item.quantity;
-        }
-        return '';
+      const changedService = formData.additional_one_time_services.filter(
+        (item) => {
+          if (
+            item.service_id
+              ? item.service_id === oneTimeServiceData.value
+              : item.service && item.service.id === oneTimeServiceData.value
+          ) {
+            if (flag === 'add') {
+              item.quantity += 1;
+            }
+            if (flag === 'minus') {
+              item.quantity -= 1;
+            }
+          }
+          return item;
+        },
+      );
+      setFormData({
+        ...formData,
+        additional_one_time_services: changedService,
       });
     }
-    return '';
   };
 
   return (
@@ -1187,39 +1206,90 @@ export default function AgreementSidePanel({
                                   </label>
                                 </CheckBox>
                               </div>
-                              <div className="col-5 mt-2">
-                                <button type="button" className="increment">
-                                  <img
-                                    className="plus-icon"
-                                    src={PlusIcon}
-                                    alt=""
-                                  />
-                                </button>
+                              {formData &&
+                              formData.additional_one_time_services &&
+                              formData.additional_one_time_services.length &&
+                              formData.additional_one_time_services.find(
+                                (item) =>
+                                  item.service_id
+                                    ? item.service_id ===
+                                      oneTimeServiceData.value
+                                    : item.service &&
+                                      item.service.id ===
+                                        oneTimeServiceData.value,
+                              ) ? (
+                                <div className="col-5 mt-2">
+                                  <button
+                                    type="button"
+                                    className="increment"
+                                    onClick={(event) => {
+                                      changeQuantity(oneTimeServiceData, 'add');
+                                      handleChange(
+                                        event,
+                                        'additional_one_time_services',
+                                        'quantity',
+                                        oneTimeServiceData,
+                                      );
+                                    }}>
+                                    <img
+                                      className="plus-icon"
+                                      src={PlusIcon}
+                                      alt=""
+                                    />
+                                  </button>
 
-                                <NumberFormat
-                                  name={oneTimeServiceData.label}
-                                  className="form-control max-min-number"
-                                  defaultValue={mapQuantity(oneTimeServiceData)}
-                                  id={oneTimeServiceData.value}
-                                  onChange={(event) =>
-                                    handleChange(
-                                      event,
-                                      'additional_one_time_services',
-                                      'quantity',
-                                      oneTimeServiceData,
-                                    )
-                                  }
-                                />
-
-                                <button type="button" className="decrement">
-                                  {' '}
-                                  <img
-                                    className="minus-icon"
-                                    src={MinusIcon}
-                                    alt=""
+                                  <NumberFormat
+                                    name={oneTimeServiceData.label}
+                                    className="form-control max-min-number"
+                                    value={
+                                      formData.additional_one_time_services.find(
+                                        (item) =>
+                                          item.service_id
+                                            ? item.service_id ===
+                                              oneTimeServiceData.value
+                                            : item.service &&
+                                              item.service.id ===
+                                                oneTimeServiceData.value,
+                                      ).quantity
+                                    }
+                                    id={oneTimeServiceData.value}
+                                    readOnly
+                                    // onChange={(event) =>
+                                    //   handleChange(
+                                    //     event,
+                                    //     'additional_one_time_services',
+                                    //     'quantity',
+                                    //     oneTimeServiceData,
+                                    //   )
+                                    // }
                                   />
-                                </button>
-                              </div>
+
+                                  <button
+                                    type="button"
+                                    className="decrement"
+                                    onClick={(event) => {
+                                      changeQuantity(
+                                        oneTimeServiceData,
+                                        'minus',
+                                      );
+                                      handleChange(
+                                        event,
+                                        'additional_one_time_services',
+                                        'quantity',
+                                        oneTimeServiceData,
+                                      );
+                                    }}>
+                                    {' '}
+                                    <img
+                                      className="minus-icon"
+                                      src={MinusIcon}
+                                      alt=""
+                                    />
+                                  </button>
+                                </div>
+                              ) : (
+                                ''
+                              )}
                             </React.Fragment>
                           ) : (
                             ''
