@@ -205,7 +205,7 @@ export default function EditCompanyDetails({
     return (
       <>
         <input
-          className="form-control"
+          className="form-control extra-space"
           type="text"
           name={item.key}
           placeholder={item.label}

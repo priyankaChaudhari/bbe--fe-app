@@ -21,6 +21,7 @@ import {
   LeftArrowIcon,
   ExpandArrowIcon,
   GreyBannerBg,
+  BackArrowIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import { ModalBox, PageLoader, GetInitialName } from '../../common';
@@ -238,13 +239,11 @@ export default function CustomerMainContainer() {
       ) : (
         <>
           <BackBtn className="d-lg-none d-block ">
-            <div className="back-btn-link  ">
-              <Link to={PATH_CUSTOMER_LIST}>
-                {' '}
-                <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
-                to all customers
-              </Link>
-            </div>
+            <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
+              {' '}
+              <img className="left-arrow" src={BackArrowIcon} alt="" /> Back to
+              all customers
+            </Link>
           </BackBtn>
           <CustomerDetailBanner>
             <div className="banner">
@@ -252,8 +251,8 @@ export default function CustomerMainContainer() {
               <Link to={PATH_CUSTOMER_LIST}>
                 <div className="back-btn-link d-lg-block d-none">
                   {' '}
-                  <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
-                  to all customers
+                  <img className="left-arrow" src={LeftArrowIcon} alt="" />
+                  Back to all customers
                 </div>
               </Link>
             </div>
@@ -706,7 +705,6 @@ const CustomerDetailBanner = styled.div`
     width: 100%;
 
     .inner {
-      // background: rgb(14 14 14 / 28%);
       height: 100%;
       top: 0;
       max-width: 100%;

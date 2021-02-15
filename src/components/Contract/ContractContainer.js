@@ -28,7 +28,7 @@ import {
   CloseIcon,
   // BackArrowIcon,
   OrangeChecked,
-  ArrowIcons,
+  LeftArrowIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 
@@ -1097,36 +1097,36 @@ export default function ContractContainer() {
         details ? (
           <>
             <div className="on-boarding-container">
-              <div className="text-container ">
-                <div className="row">
-                  <div className="col-12">
-                    <p className="m-0 sticky">
-                      {' '}
-                      <div
-                        onClick={() => onClickOfBackToCustomerDetail()}
-                        role="presentation"
-                        // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                        className="link">
-                        <img
-                          src={ArrowIcons}
-                          alt="aarow-back"
-                          className="arrow-icon mt-3"
+              <div className="row">
+                <div className="col-12">
+                  <p className="m-0 sticky">
+                    {' '}
+                    <div
+                      onClick={() => onClickOfBackToCustomerDetail()}
+                      role="presentation"
+                      // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                      className="back-link">
+                      <img
+                        src={LeftArrowIcon}
+                        alt="aarow-back"
+                        className="arrow-back-icon mt-3"
+                      />
+                      Back to Customer Details
+                    </div>
+                    <div className="success-msg">
+                      {showSuccessContact.show ? (
+                        <SuccessMsg
+                          property=" "
+                          message={showSuccessContact.message}
                         />
-                        Back to Customer Details
-                      </div>
-                      <div className="success-msg">
-                        {showSuccessContact.show ? (
-                          <SuccessMsg
-                            property=" "
-                            message={showSuccessContact.message}
-                          />
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    </p>
-                  </div>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </p>
                 </div>
+              </div>
+              <div className="text-container ">
                 <div id="agreement">
                   {/* {history.location.pathname.includes('agreement') &&
                   details ? ( */}
