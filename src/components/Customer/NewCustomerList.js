@@ -227,6 +227,14 @@ export default function NewCustomerList() {
     }
   };
 
+  // const countDays = (item) => {
+  //   const date1 = new Date();
+  //   const date2 = new Date(item && item.end_date);
+  //   const diffTime = Math.abs(date2 - date1);
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //   return diffDays;
+  // };
+
   const generateDropdown = (item) => {
     return (
       <>
@@ -707,7 +715,14 @@ export default function NewCustomerList() {
             </div>
           </div>
         ) : (
-          <CustomerListTablet />
+          <CustomerListTablet
+            data={data}
+            history={history}
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+            isLoading={isLoading}
+          />
         )}
       </>
     </CustomerListPage>

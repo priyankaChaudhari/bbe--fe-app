@@ -21,7 +21,6 @@ export default function CommonPagination({
           total={count}
           current={pageNumber}
           hideOnSinglePage
-          showLessItems
           onChange={(event) => handlePageChange(event)}
           locale="en_US"
         />
