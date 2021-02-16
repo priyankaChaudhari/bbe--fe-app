@@ -79,7 +79,7 @@ export default function PastAgreement({ id }) {
                         pathname: PATH_AGREEMENT.replace(':id', id),
                         state: item.id,
                       }}>
-                      <Button className="btn-transparent ">
+                      <Button className="btn-transparent view-contract ">
                         {' '}
                         <img
                           className="file-contract-icon"

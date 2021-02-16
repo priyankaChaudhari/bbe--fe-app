@@ -119,17 +119,6 @@ body {
   }
 }
 
-// .inner-container {
-//   max-width: 950px;
-//   width: 100%;
-//   margin: 0px auto;
-
-//   @media only screen and (max-width: 1249px) {
-//     width: 90% !important;
-//     max-width: 100% !important;
-//   }
-// }
-
 h1 {
   font-size: $large-title-f-size;
   font-family: $title-font-family;
@@ -862,13 +851,6 @@ div {
     margin-top: 70px;
     position: relative;
   }
-}
-#innerContainer {
-  margin-bottom: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  margin-top: 70px;
-  position: relative;
 }
 
 .react-datepicker-wrapper {
