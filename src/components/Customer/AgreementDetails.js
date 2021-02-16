@@ -27,6 +27,15 @@ export default function AgreementDetails({ agreement, id }) {
     { key: 'sales_threshold', label: 'Sales Threshold' },
     { key: 'billing_cap', label: 'Billing Cap' },
   ];
+
+  const countDays = () => {
+    const date1 = new Date();
+    const date2 = new Date(agreement && agreement.end_date);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -91,7 +100,7 @@ export default function AgreementDetails({ agreement, id }) {
                           src={ClockIcon}
                           alt="clock"
                         />{' '}
-                        96 days
+                        {countDays()}
                       </div>
                     </li>
                   ) : (

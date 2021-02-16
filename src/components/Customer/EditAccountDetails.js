@@ -64,6 +64,7 @@ export default function EditAccountDetails({
   const generateDropdown = (item) => {
     return (
       <Select
+        menuPlacement={item.key === 'category' ? 'top' : 'bottom'}
         classNamePrefix="react-select"
         options={item.key === 'country' ? countries : categories}
         styles={{
