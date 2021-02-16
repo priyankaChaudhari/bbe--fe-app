@@ -186,18 +186,23 @@ export default function Statement({
       <td style="border: 1px solid black;padding: 13px;">${
         item.service ? item.service.name : item && item.name
       }</td>
-                    <td style="border: 1px solid black;padding: 13px;">$ ${
-                      item.service
-                        ? item.service.fee
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        : item.fee
-                        ? item.fee
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        : ''
-                    } /month
-                    </td>
+
+      ${
+        item && item.fee
+          ? `<td style="border: 1px solid black;padding: 13px;">
+            $ ${
+              item.service
+                ? item.service.fee
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : item.fee
+                ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : ''
+            }
+            /month
+          </td>`
+          : `<td>Yet to save</td>`
+      }
       </tr>`,
         );
       }
@@ -249,16 +254,22 @@ export default function Statement({
                 <td style="border: 1px solid black;padding: 13px;">${
                   item.service ? item.service.name : item && item.name
                 }</td>
-                <td style="border: 1px solid black;padding: 13px;">$ ${
-                  item.service
-                    ? item.service.fee
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : item.fee
-                    ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : ''
-                } /month
-                </td>
+                ${
+                  item.service && item.service.fee
+                    ? `<td style="border: 1px solid black;padding: 13px;">$ ${
+                        item.service
+                          ? item.service.fee
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          : item.fee
+                          ? item.fee
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          : ''
+                      } /month
+                </td>`
+                    : `<td>Yet to save</td>`
+                }
                 </tr>`,
               );
             }
@@ -340,10 +351,20 @@ export default function Statement({
   };
 
   const showMonthlyServiceTable = () => {
+    console.log(details, formData);
     if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length
+      // (details &&
+      //   details.additional_monthly_services &&
+      //   details.additional_monthly_services.length) ||
+      // (details &&
+      //   details.additional_marketplaces &&
+      //   details.additional_marketplaces.length) ||
+      (formData &&
+        formData.additional_monthly_services &&
+        formData.additional_monthly_services.length) ||
+      (formData &&
+        formData.additional_marketplaces &&
+        formData.additional_marketplaces.length)
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
     font-family: Arial-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br><table class="contact-list "><tr><th>Service</th><th>Service Fee</th></tr>${mapMonthlyServices(
