@@ -1024,9 +1024,10 @@ div {
   color: $black-color;
   text-transform: Uppercase;
   display: inline-block;
-  padding-top: 9px;
   font-size: $extra-medium-f-size;
   font-weight: 600;
+  padding-top: 10px;
+  margin-top: -2px;
 
   &.dropdown-avartName {
     width: 32px;
