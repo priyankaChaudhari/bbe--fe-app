@@ -21,6 +21,7 @@ import {
   PageLoader,
   Table,
   ModalRadioCheck,
+  Button,
 } from '../../common';
 import {
   SearchIcon,
@@ -477,7 +478,7 @@ export default function NewCustomerList() {
       </div>
 
       <CustomerLeftPannel className="d-none d-lg-block">
-        <div className="label">Brand Strategist</div>
+        <div className="label mt-2 mb-2">Brand Strategist</div>
         <DropDownSelect className="w-250">
           {generateDropdown('user')}
         </DropDownSelect>{' '}
@@ -555,6 +556,7 @@ export default function NewCustomerList() {
             </ModalRadioCheck>
           </li>
         </ul>
+        <Button className="light-orange w-90  btn-apply">Apply</Button>
       </CustomerLeftPannel>
       <>
         {isDesktop ? (
@@ -688,7 +690,7 @@ export default function NewCustomerList() {
               )}
             </div>
 
-            <div className="">
+            <div className="fotter-sticky">
               <div className="straight-line horizontal-line" />
               <CommonPagination
                 count={count}
@@ -728,13 +730,13 @@ const CustomerListPage = styled.div`
     margin-top: 12px;
   }
 
-  // .fotter-sticky {
-  //   position: fixed;
-  //   bottom: 0;
-  //   width: 78%;
-  //   background: white;
-  //   padding-right: 30px;
-  // }
+  .fotter-sticky {
+    position: fixed;
+    bottom: 0;
+    left: 353px;
+    right: 0;
+    background: white;
+  }
 
   @media only screen and (max-width: 991px) {
     padding-left: 10px;
@@ -768,8 +770,8 @@ const CustomerListPage = styled.div`
 
 const CustomerLeftPannel = styled.div`
   max-width: 290px;
-  height: 80%;
-  position: fixed;
+  height: 100%;
+  position: absolute;
   top: 130px;
   width: 100%;
   left: 62px;
@@ -788,10 +790,10 @@ const CustomerLeftPannel = styled.div`
   .check-box-list {
     list-style-type: none;
     padding: 0;
-    marging: 0;
+    margin: 10px 0 5px 0;
 
     li {
-      color: #171725;
+      color: ${Theme.gray85};
       font-size: 14px;
       margin-bottom: 15px;
     }
@@ -803,6 +805,12 @@ const CustomerLeftPannel = styled.div`
     float: right;
     margin-top: -19px;
     cursor: pointer;
+  }
+
+  .btn-apply {
+    color: ${Theme.white};
+    bottom: 20px;
+    position: fixed;
   }
   @media only screen and (max-width: 991px) {
     dispaly: none;
@@ -897,10 +905,10 @@ const SideContent = styled.div`
     .check-box-list {
       list-style-type: none;
       padding: 0;
-      marging: 0;
+      margin: 0;
 
       li {
-        color: #171725;
+        color: ${Theme.gray85};
         font-size: 14px;
         margin-bottom: 15px;
       }
