@@ -228,7 +228,7 @@ export default function Header() {
                           id="clickbox"
                           className="header-profile"
                           style={{
-                            paddingTop: profilePic ? '' : '11px',
+                            paddingTop: profilePic ? '' : '',
                           }}>
                           {profilePic ? (
                             <img
@@ -453,7 +453,7 @@ const MainHeader = styled.div`
     li {
       vertical-align: middle;
       display: inline-block;
-      margin-right: 18px;
+      margin-right: 15px;
 
       &:last-child {
         margin-right: 0px;
@@ -463,7 +463,7 @@ const MainHeader = styled.div`
         position: relative;
 
         .light-bulb-icon {
-          width: 45px;
+          width: 42px;
         }
       }
     }
