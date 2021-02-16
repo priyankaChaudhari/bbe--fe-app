@@ -587,7 +587,14 @@ export default function NewCustomerList() {
                           <td width="25%">
                             <img
                               className="company-logo"
-                              src={CompanyDefaultUser}
+                              src={
+                                item &&
+                                item.documents &&
+                                item.documents[0] &&
+                                Object.values(item.documents[0])
+                                  ? Object.values(item.documents[0])[0]
+                                  : CompanyDefaultUser
+                              }
                               alt="logo"
                             />
 

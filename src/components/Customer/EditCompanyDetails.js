@@ -620,9 +620,26 @@ export default function EditCompanyDetails({
                         </>
 
                         <ErrorMsg>
-                          {contactApiError &&
-                            contactApiError.phone_number &&
-                            contactApiError.phone_number[0]}
+                          {checkChange[item.id] ? (
+                            <ErrorMsg>
+                              {item.id &&
+                                contactApiError &&
+                                contactApiError.phone_number &&
+                                contactApiError.phone_number[0]}
+                            </ErrorMsg>
+                          ) : (
+                            ''
+                          )}
+                          {checkChange[i] && !item.id ? (
+                            <ErrorMsg>
+                              {id &&
+                                contactApiError &&
+                                contactApiError.phone_number &&
+                                contactApiError.phone_number[0]}
+                            </ErrorMsg>
+                          ) : (
+                            ''
+                          )}
                         </ErrorMsg>
                       </FormField>
                     </div>

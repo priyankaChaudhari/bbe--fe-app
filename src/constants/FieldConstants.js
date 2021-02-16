@@ -356,10 +356,10 @@ export const editAccountFields = [
     level: 'agreement',
   },
   {
-    key: 'category',
-    label: 'Category',
-    type: 'choice',
+    key: 'number_of_employees',
+    label: 'Company Size',
     property: 'col-md-6',
+    type: 'number',
   },
 
   {
@@ -368,12 +368,11 @@ export const editAccountFields = [
     type: 'number-currency',
     property: 'col-md-6',
   },
-
   {
-    key: 'number_of_employees',
-    label: 'Company Size',
+    key: 'category',
+    label: 'Category',
+    type: 'choice',
     property: 'col-md-6',
-    type: 'number',
   },
 ];
 
