@@ -278,7 +278,7 @@ export default function CustomerMainContainer() {
                       }}
                       role="presentation">
                       {customer && customer.status && customer.status.label}
-                      <img src={ExpandArrowIcon} alt="aarow-down" />,
+                      <img src={ExpandArrowIcon} alt="aarow-down" />
                       <ul
                         id="clickbox"
                         className="dropdown-content-status"

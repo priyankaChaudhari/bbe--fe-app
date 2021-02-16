@@ -84,7 +84,6 @@ export default function ArticleList() {
 
 const GrayBody = styled.div`
   background: ${Theme.gray6};
-  min-height: 100%;
 
   .graycontainer {
     max-width: 1334px;
