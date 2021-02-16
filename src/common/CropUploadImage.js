@@ -378,12 +378,10 @@ const UpdateProfile = styled.div`
   .edit-profile-pic {
     width: 25px;
     height: 25px;
-
     bottom: 3px;
-    right: 22px;
+    bottom: -6px;
     position: absolute;
-    top: 90px;
-    left: 54px;
+    left: 31px;
     padding: 4px;
     border-radius: 50%;
     background: white;

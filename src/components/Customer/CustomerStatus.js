@@ -146,7 +146,7 @@ export default function CustomerStatus({
         </Button>
         <Button
           type="button"
-          className="btn-transparent"
+          className="btn-transparent w-25"
           onClick={() => setStatusModal(false)}>
           Cancel
         </Button>
