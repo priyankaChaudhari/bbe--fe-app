@@ -947,7 +947,7 @@ export default function AgreementSidePanel({
       <div className="sidebar">
         <>
           <div
-            className="collapse-btn mt-3"
+            className="collapse-btn "
             role="presentation"
             type="button"
             onClick={() => {
@@ -1763,7 +1763,7 @@ const SidePanel = styled.div`
 
 .collapse-btn {
   width:100%;
-  padding:15px;
+  padding: 17px;
   cursor:pointer;
 
  

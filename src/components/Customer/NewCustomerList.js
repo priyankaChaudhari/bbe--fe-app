@@ -20,6 +20,7 @@ import {
   InputSearchWithRadius,
   PageLoader,
   Table,
+  ModalRadioCheck,
 } from '../../common';
 import {
   SearchIcon,
@@ -315,162 +316,171 @@ export default function NewCustomerList() {
 
   return (
     <CustomerListPage>
-      <div className="row">
-        <div className="col-lg-2 col-12 ">
-          {' '}
-          <p className="black-heading-title ml-3 "> Customers</p>
-          <div className=" mb-3 d-lg-none d-block ">
-            <label
-              className="filter-slider mt-4 "
-              htmlFor="tabletmenu-check"
-              id="responsive-button">
-              <img src={SliderHIcon} alt="Menu Lines" />
-              Filter
-            </label>
-          </div>
-          <MobileLeftSidebar>
-            <input type="checkbox" id="tabletmenu-check" />
-            <div id="ifp-sidebar-responsive">
-              <SideContent>
-                <p className="black-heading-title mt-0 mb-4">
-                  {' '}
-                  Filter Customers
-                </p>
-                <label
-                  htmlFor="tabletmenu-check"
-                  className="close-icon d-xl-none d-block">
-                  <img width="25px" src={CloseIcon} alt="cross" />
-                </label>
-                <div className="label">Brand Strategist</div>
-                <DropDownSelect>
-                  {generateDropdown('brandgrowth')}
-                </DropDownSelect>
-                <div className="label mt-4">Status</div>
-                <div className="unselected ">Unselect all</div>
-                <div className="clear-fix" />
-                <ul className="check-box-list">
-                  <li>
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Active
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                  <li>
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        At Risk
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                  <li>
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Pending Cancellation
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                  <li>
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Inactive
-                        <input type="checkbox" id="contract-copy-check" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                </ul>
-                <div className="label mt-4">Contract Type</div>
-                <div className="unselected ">Unselect all</div>
-                <div className="clear-fix" />
-                <ul className="check-box-list">
-                  <li>
-                    {' '}
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        Recurring
-                        <input type="checkbox" id="2" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                  <li>
-                    {' '}
-                    <CheckBox>
-                      <label
-                        className="container customer-pannel"
-                        htmlFor="contract-copy-check">
-                        One Time
-                        <input type="checkbox" id="3" />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  </li>
-                </ul>
-              </SideContent>
+      <div className="customer-list-header-sticky">
+        <div className="row">
+          <div className="col-lg-3 col-12 ">
+            {' '}
+            <p className="black-heading-title ml-3 "> Customers</p>
+            <div className=" mb-3 d-lg-none d-block ">
+              <label
+                className="filter-slider mt-4 "
+                htmlFor="tabletmenu-check"
+                id="responsive-button">
+                <img src={SliderHIcon} alt="Menu Lines" />
+                Filter
+              </label>
             </div>
-            <div className="straight-line horizontal-line" />
-          </MobileLeftSidebar>
-        </div>
+            <MobileLeftSidebar>
+              <input type="checkbox" id="tabletmenu-check" />
+              <div id="ifp-sidebar-responsive">
+                <SideContent>
+                  <p className="black-heading-title mt-0 mb-4">
+                    {' '}
+                    Filter Customers
+                  </p>
+                  <label
+                    htmlFor="tabletmenu-check"
+                    className="close-icon d-xl-none d-block">
+                    <img width="25px" src={CloseIcon} alt="cross" />
+                  </label>
+                  <div className="label">Brand Strategist</div>
+                  <DropDownSelect>
+                    {generateDropdown('brandgrowth')}
+                  </DropDownSelect>
+                  <div className="label mt-4">Status</div>
+                  <div className="unselected ">Unselect all</div>
+                  <div className="clear-fix" />
+                  <ul className="check-box-list">
+                    <li>
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          Active
+                          <input type="checkbox" id="contract-copy-check" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                    <li>
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          At Risk
+                          <input type="checkbox" id="contract-copy-check" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                    <li>
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          Pending Cancellation
+                          <input type="checkbox" id="contract-copy-check" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                    <li>
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          Inactive
+                          <input type="checkbox" id="contract-copy-check" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                  </ul>
+                  <div className="label mt-4">Contract Type</div>
+                  <div className="unselected ">Unselect all</div>
+                  <div className="clear-fix" />
+                  <ul className="check-box-list">
+                    <li>
+                      {' '}
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          Recurring
+                          <input type="checkbox" id="2" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                    <li>
+                      {' '}
+                      <CheckBox>
+                        <label
+                          className="container customer-pannel"
+                          htmlFor="contract-copy-check">
+                          One Time
+                          <input type="checkbox" id="3" />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
+                    </li>
+                  </ul>
+                </SideContent>
+              </div>
+              <div className="straight-line horizontal-line" />
+            </MobileLeftSidebar>
+          </div>
 
-        <div className="col-lg-6 col-md-6 col-12 col-8 mt-2 mb-2">
-          <InputSearchWithRadius>
-            <input
-              className=" form-control search-filter"
-              placeholder="Search"
-              onChange={(event) => setSearchQuery(event.target.value)}
-              onKeyPress={(event) => {
-                if (event.key === 'Enter') {
-                  handleSearch();
-                }
-              }}
-              value={searchQuery || ''}
-            />
+          <div className="col-lg-5 col-md-5 col-12 col-8  mb-2 pr-lg-2">
+            <InputSearchWithRadius className="customer-list-header">
+              <input
+                className=" form-control search-filter"
+                placeholder="Search"
+                onChange={(event) => setSearchQuery(event.target.value)}
+                onKeyPress={(event) => {
+                  if (event.key === 'Enter') {
+                    handleSearch();
+                  }
+                }}
+                value={searchQuery || ''}
+              />
 
-            <img
-              src={InfoIcon}
-              alt="search cursor"
-              data-tip="Search by Company Name, Contact First, Last Name or Email"
-              data-for="info"
-              className="info-icon"
-            />
-            <ReactTooltip id="info" aria-haspopup="true" />
+              <img
+                src={InfoIcon}
+                alt="search cursor"
+                data-tip="Search by Company Name, Contact First, Last Name or Email"
+                data-for="info"
+                className="info-icon"
+              />
+              <ReactTooltip id="info" aria-haspopup="true" />
 
-            <img src={SearchIcon} alt="search" className="search-input-icon" />
-          </InputSearchWithRadius>
+              <img
+                src={SearchIcon}
+                alt="search"
+                className="search-input-icon"
+              />
+            </InputSearchWithRadius>
+          </div>
+          <div className="col-lg-2 col-md-3 col-6   mb-2 pl-lg-0 pr-lg-2">
+            <DropDownSelect className="customer-list-header">
+              <Select options={options} />
+            </DropDownSelect>{' '}
+          </div>
+          <div className="col-lg-2 col-md-3  col-6   mb-2 pl-lg-0">
+            <DropDownSelect className="customer-list-header">
+              <Select options={options} />
+            </DropDownSelect>{' '}
+          </div>
         </div>
-        <div className="col-lg-2 col-md-3 col-6  mt-2 mb-2">
-          <DropDownSelect>
-            <Select options={options} />
-          </DropDownSelect>{' '}
-        </div>
-        <div className="col-lg-2 col-md-3  col-6  mt-2 mb-2">
-          <DropDownSelect>
-            <Select options={options} />
-          </DropDownSelect>{' '}
-        </div>
+        <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
+        <div className="straight-line horizontal-line  d-lg-none d-block" />
       </div>
 
-      <div className="straight-line horizontal-line" />
       <CustomerLeftPannel className="d-none d-lg-block">
         <div className="label">Brand Strategist</div>
-        <DropDownSelect>{generateDropdown('user')}</DropDownSelect>{' '}
+        <DropDownSelect className="w-250">
+          {generateDropdown('user')}
+        </DropDownSelect>{' '}
         <div className="label mt-4">Status</div>
         <div className="unselected ">Unselect all</div>
         <div className="clear-fix" />
@@ -526,182 +536,222 @@ export default function NewCustomerList() {
         <ul className="check-box-list">
           <li>
             {' '}
-            <CheckBox>
-              <label className="container customer-pannel" htmlFor="2">
+            <ModalRadioCheck>
+              <label className="radio-container customer-list" htmlFor="234">
                 Recurring
-                <input type="checkbox" id="2" />
+                <input type="radio" name="radio" id="234" />
                 <span className="checkmark" />
               </label>
-            </CheckBox>
+            </ModalRadioCheck>
           </li>
           <li>
             {' '}
-            <CheckBox>
-              <label className="container customer-pannel" htmlFor="3">
+            <ModalRadioCheck>
+              <label className="radio-container customer-list" htmlFor="234">
                 One Time
-                <input type="checkbox" id="3" />
+                <input type="radio" name="radio" id="234" />
                 <span className="checkmark" />
               </label>
-            </CheckBox>
+            </ModalRadioCheck>
           </li>
         </ul>
       </CustomerLeftPannel>
-
-      {isDesktop ? (
-        <div className="table-part">
-          {isLoading.loader && isLoading.type === 'page' ? (
-            <PageLoader color="#FF5933" type="page" />
-          ) : (
-            <Table>
-              <tbody>
-                <tr className="table-header">
-                  <th className="text-center ">Customer</th>
-                  <th>Contract</th>
-                  <th>Retainer</th>
-                  <th>Rev. Share</th>
-                  <th>Brand Strategist</th>
-                </tr>
-                {data &&
-                  data.map((item) => (
-                    <tr
-                      className="cursor"
-                      key={Math.random()}
-                      onClick={() =>
-                        history.push(
-                          PATH_CUSTOMER_DETAILS.replace(':id', item.id),
-                        )
-                      }>
-                      <td width="20%">
-                        <img
-                          className="company-logo"
-                          src={CompanyDefaultUser}
-                          alt="logo"
-                        />
-
-                        <div className="company-name">
-                          {item &&
-                            item.contract &&
-                            item.contract.contract_company_name}
-                        </div>
-                        <div
-                          className="status"
-                          style={{ textTransform: 'capitalize' }}>
-                          {item && item.status}
-                        </div>
-                      </td>
-                      <td width="40%">
-                        <p
-                          className="black-heading-title mt-0 mb-0"
-                          style={{ textTransform: 'capitalize' }}>
-                          {' '}
-                          {item &&
-                            item.contract &&
-                            item.contract.contract_type}{' '}
-                          Contract
-                        </p>
-                        <ul className="recurring-contact mb-2">
-                          <li>
-                            <p className="basic-text ">
-                              {item && item.contract && item.contract.length}
-                            </p>
-                          </li>
-                          <li>
-                            <p className="basic-text ">
-                              {' '}
-                              Expires: Mar 20, 2021
-                            </p>
-                          </li>
-                          <li>
-                            <div className="days-block">
-                              {' '}
-                              <img
-                                className="clock-icon"
-                                src={ClockIcon}
-                                alt="clock"
-                              />{' '}
-                              96 days
-                            </div>
-                          </li>
-                        </ul>
-                      </td>
-                      <td width="10%">
-                        ${' '}
-                        {item &&
-                          item.contract &&
-                          item.contract.monthly_retainer &&
-                          item.contract.monthly_retainer
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      </td>
-                      <td width="10%">
-                        {item && item.contract && item.contract.rev_share} %
-                      </td>
-                      <td width="20%">
-                        {item &&
-                        item.brand_growth_strategist &&
-                        item.brand_growth_strategist.length !== 0 ? (
-                          <>
-                            {item.brand_growth_strategist.profile_photo ? (
-                              <img
-                                className="user-profile-circle"
-                                src={item.brand_growth_strategist.profile_photo}
-                                alt="user"
-                              />
-                            ) : (
-                              <GetInitialName
-                                userInfo={item.brand_growth_strategist}
-                              />
-                            )}
-                          </>
-                        ) : (
-                          ''
-                        )}
-                        <div className="user-name">
-                          {item &&
-                            item.brand_growth_strategist &&
-                            item.brand_growth_strategist.first_name}{' '}
-                          {item &&
-                            item.brand_growth_strategist &&
-                            item.brand_growth_strategist.last_name}
-                        </div>
-                      </td>
+      <>
+        {isDesktop ? (
+          <div className="table-container">
+            <div className="table-part">
+              {isLoading.loader && isLoading.type === 'page' ? (
+                <PageLoader color="#FF5933" type="page" />
+              ) : (
+                <Table>
+                  <tbody>
+                    <tr className="table-header">
+                      <th className="customer-header">Customer</th>
+                      <th>Contract</th>
+                      <th>Retainer</th>
+                      <th>Rev. Share</th>
+                      <th>Brand Strategist</th>
                     </tr>
-                  ))}
-              </tbody>
-            </Table>
-          )}
-        </div>
-      ) : (
-        <CustomerListTablet />
-      )}
-      <CommonPagination
-        count={count}
-        pageNumber={pageNumber}
-        handlePageChange={handlePageChange}
-      />
+                    {data &&
+                      data.map((item) => (
+                        <tr
+                          className="cursor"
+                          key={Math.random()}
+                          onClick={() =>
+                            history.push(
+                              PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                            )
+                          }>
+                          <td width="25%">
+                            <img
+                              className="company-logo"
+                              src={CompanyDefaultUser}
+                              alt="logo"
+                            />
+
+                            <div className="company-name">
+                              {item &&
+                                item.contract &&
+                                item.contract.contract_company_name}
+                            </div>
+                            <div
+                              className="status"
+                              style={{ textTransform: 'capitalize' }}>
+                              {item && item.status}
+                            </div>
+                          </td>
+                          <td width="35%">
+                            <p
+                              className="black-heading-title mt-0 mb-0"
+                              style={{ textTransform: 'capitalize' }}>
+                              {' '}
+                              {item &&
+                                item.contract &&
+                                item.contract.contract_type}{' '}
+                              Contract
+                            </p>
+                            <ul className="recurring-contact mb-2 mt-n2">
+                              <li>
+                                <p className="basic-text ">
+                                  {item &&
+                                    item.contract &&
+                                    item.contract.length}
+                                </p>
+                              </li>
+                              <li>
+                                <p className="basic-text ">
+                                  {' '}
+                                  Expires: Mar 20, 2021
+                                </p>
+                              </li>
+                              <li>
+                                <div className="days-block">
+                                  {' '}
+                                  <img
+                                    className="clock-icon"
+                                    src={ClockIcon}
+                                    alt="clock"
+                                  />{' '}
+                                  96 days
+                                </div>
+                              </li>
+                            </ul>
+                          </td>
+                          <td width="10%">
+                            ${' '}
+                            {item &&
+                              item.contract &&
+                              item.contract.monthly_retainer &&
+                              item.contract.monthly_retainer
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          </td>
+                          <td width="10%">
+                            {item && item.contract && item.contract.rev_share} %
+                          </td>
+                          <td width="20%">
+                            {item &&
+                            item.brand_growth_strategist &&
+                            item.brand_growth_strategist.length !== 0 ? (
+                              <>
+                                {item.brand_growth_strategist.profile_photo ? (
+                                  <img
+                                    className="user-profile-circle"
+                                    src={
+                                      item.brand_growth_strategist.profile_photo
+                                    }
+                                    alt="user"
+                                  />
+                                ) : (
+                                  <GetInitialName
+                                    property="float-left mr-3"
+                                    userInfo={item.brand_growth_strategist}
+                                  />
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                            <div className="user-name">
+                              {item &&
+                                item.brand_growth_strategist &&
+                                item.brand_growth_strategist.first_name}{' '}
+                              {item &&
+                                item.brand_growth_strategist &&
+                                item.brand_growth_strategist.last_name}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </Table>
+              )}
+            </div>
+
+            <div className="">
+              <div className="straight-line horizontal-line" />
+              <CommonPagination
+                count={count}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            </div>
+          </div>
+        ) : (
+          <CustomerListTablet />
+        )}
+      </>
     </CustomerListPage>
   );
 }
 
 const CustomerListPage = styled.div`
   padding-left: 62px;
+  .table-container {
+    padding-left: 290px;
+  }
+
+  .customer-list-header-sticky {
+    position: fixed;
+    left: 62px;
+    right: 0;
+    z-index: 2;
+    background-color: ${Theme.white};
+  }
 
   .table-part {
-    padding-left: 290px;
-    height: 550px;
+    // min-height: 560px;
+    padding-top: 68px;
     overflow: auto;
   }
+  .customer-list-header {
+    margin-top: 12px;
+  }
+
+  // .fotter-sticky {
+  //   position: fixed;
+  //   bottom: 0;
+  //   width: 78%;
+  //   background: white;
+  //   padding-right: 30px;
+  // }
 
   @media only screen and (max-width: 991px) {
     padding-left: 10px;
+
+    .customer-list-header-sticky {
+      left: 0;
+      right: 0;
+    }
+
     .filter-slider {
       border: 1px solid #8798ad;
       padding: 8px 15px;
       border-radius: 25px;
-      color: #000000;
+      color: ${Theme.black};
       font-size: 15px;
       float: right;
-      top: -16px;
+      top: -7px;
       right: 40px;
       position: absolute;
       margin-top: -94px;
@@ -719,8 +769,8 @@ const CustomerListPage = styled.div`
 const CustomerLeftPannel = styled.div`
   max-width: 290px;
   height: 80%;
-  position: absolute;
-  top: 127px;
+  position: fixed;
+  top: 130px;
   width: 100%;
   left: 62px;
   padding: 15px;

@@ -11,6 +11,7 @@ const ErrorMsg = styled.div`
   a {
     text-transform: lowercase;
     text-decoration: underline;
+    display: block;
     color: ${Theme.red};
     font-size: ${Theme.extraSmall};
   }

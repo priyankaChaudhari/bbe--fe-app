@@ -128,6 +128,7 @@ export default function CustomerListTablet() {
 const CustomerListTabletView = styled.div`
   background: ${Theme.gray6};
   height: 100%;
+  padding-top: 130px;
 
   .black-heading-title {
     font-size: 14px;
@@ -180,5 +181,8 @@ const CustomerListTabletView = styled.div`
       transform: rotate(180deg);
       vertical-align: middle;
     }
+  }
+  @media (max-width: 991px) {
+    padding-top: 180px;
   }
 `;

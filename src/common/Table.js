@@ -8,7 +8,6 @@ const Table = styled.table`
     width: 100%;
     overflow-x: auto;
     tr {
-      margin-bottom: 7px;
       text-align: left;
       background: ${Theme.white};
       border: 1px solid rgba(46, 91, 255, 0.08);
@@ -32,11 +31,15 @@ const Table = styled.table`
           &.firstChildCss:first-child {
             padding-left: 45px;
           }
+
+          &.customer-header {
+            padding-left: 66px;
+          }
         }
       }
 
       td {
-        padding: 15px 10px;
+        padding: 5px 10px;
         font-size: ${Theme.normal};
         vertical-align: middle;
         position: relative;
@@ -66,6 +69,7 @@ const Table = styled.table`
         }
         .user-name {
           font-weight: 300;
+          margin-top: 7px;
         }
         .increase-rate {
           color: #407b00;

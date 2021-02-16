@@ -33,6 +33,11 @@ const ModalRadioCheck = styled.div`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    &.customer-list {
+     color:${Theme.gray85};
+     font-size: 14px;
+    }
   }
 
   .delete-contact {
