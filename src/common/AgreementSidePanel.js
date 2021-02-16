@@ -651,21 +651,21 @@ export default function AgreementSidePanel({
         ) {
           selectedData.push(itemInOriginalData);
         } else if (event.label === 'Custom') {
-            selectedData.push({
-              name: `Amazon Store Package ${  event.label}`,
-              quantity: 1,
-              service_id: event.value,
-              contract_id: originalData && originalData.id,
-              // custom_amazon_store_price: 0,
-            });
-          } else {
-            selectedData.push({
-              name: `Amazon Store Package ${  event.label}`,
-              quantity: 1,
-              service_id: event.value,
-              contract_id: originalData && originalData.id,
-            });
-          }
+          selectedData.push({
+            name: `Amazon Store Package ${event.label}`,
+            quantity: 1,
+            service_id: event.value,
+            contract_id: originalData && originalData.id,
+            // custom_amazon_store_price: 0,
+          });
+        } else {
+          selectedData.push({
+            name: `Amazon Store Package ${event.label}`,
+            quantity: 1,
+            service_id: event.value,
+            contract_id: originalData && originalData.id,
+          });
+        }
 
         setFormData({
           ...formData,
@@ -2414,7 +2414,8 @@ const SidePanel = styled.div`
 
         .increment {
            border: 1px solid #DFE7FF;
-            border-radius:  8px 0 0 8px ;
+            border-radius: 0 8px 8px 0;
+
             width: 32px;
            background: ${Theme.gray5};
            cursor:pointer;
@@ -2429,7 +2430,8 @@ const SidePanel = styled.div`
         }
         .decrement {
            border: 1px solid #DFE7FF;
-            border-radius: 0 8px 8px 0;
+            border-radius:  8px 0 0 8px ;
+
             width: 32px;
            background: ${Theme.gray5};
            cursor:pointer;
