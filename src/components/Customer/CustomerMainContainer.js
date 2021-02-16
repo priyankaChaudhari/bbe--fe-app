@@ -71,7 +71,7 @@ export default function CustomerMainContainer() {
   const customer = useSelector((state) => state.customerState.data);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
-  const [viewComponent, setViewComponent] = useState('company');
+  const [viewComponent, setViewComponent] = useState('agreement');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -220,18 +220,6 @@ export default function CustomerMainContainer() {
     return '';
   };
 
-  // window.addEventListener('click', (e) => {
-  //   console.log(e.target);
-  //   if (
-  //     document.getElementById('clickbox') &&
-  //     document.getElementById('clickbox').contains(e.target)
-  //   ) {
-  //     setShowDropDown(true);
-  //   } else {
-  //     setShowDropDown(false);
-  //   }
-  // });
-
   return (
     <>
       {loader || (isLoading.loader && isLoading.type === 'page') ? (
@@ -276,11 +264,6 @@ export default function CustomerMainContainer() {
                           alt="company-logo"
                         />
                       )}
-                      {/* <img
-                        className="edit-profile-picture"
-                        src={EditIcons}
-                        alt="edit"
-                      /> */}
                     </div>
                   </div>
                   <div className="col-lg-9 col-md-12 ">
@@ -288,7 +271,6 @@ export default function CustomerMainContainer() {
                       {agreement && agreement.contract_company_name}
                     </span>
                     <span
-                      id="clickbox"
                       className={checkStatusColor()}
                       onClick={() => {
                         setShowDropDown(!showDropDown);
@@ -296,8 +278,7 @@ export default function CustomerMainContainer() {
                       }}
                       role="presentation">
                       {customer && customer.status && customer.status.label}
-                      <img src={ExpandArrowIcon} alt="aarow-down" />
-
+                      <img src={ExpandArrowIcon} alt="aarow-down" />,
                       <ul
                         id="clickbox"
                         className="dropdown-content-status"
@@ -412,17 +393,6 @@ export default function CustomerMainContainer() {
                   <WhiteCard className="left-border  d-lg-block d-none mb-3">
                     <ul className="left-details-card">
                       <li
-                        onClick={() => setViewComponent('company')}
-                        role="presentation">
-                        <div
-                          className={`left-details ${
-                            viewComponent === 'company' ? 'active' : ''
-                          }`}>
-                          <img src={Organization} alt="" />
-                          Company Details
-                        </div>
-                      </li>
-                      <li
                         onClick={() => setViewComponent('agreement')}
                         role="presentation">
                         <div
@@ -435,6 +405,17 @@ export default function CustomerMainContainer() {
                             alt=""
                           />
                           Agreements
+                        </div>
+                      </li>
+                      <li
+                        onClick={() => setViewComponent('company')}
+                        role="presentation">
+                        <div
+                          className={`left-details ${
+                            viewComponent === 'company' ? 'active' : ''
+                          }`}>
+                          <img src={Organization} alt="" />
+                          Company Details
                         </div>
                       </li>
 

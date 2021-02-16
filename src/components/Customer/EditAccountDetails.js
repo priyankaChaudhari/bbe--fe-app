@@ -92,6 +92,7 @@ export default function EditAccountDetails({
             : customer && customer[item.key]
         }
         components={{ DropdownIndicator: CustomDropdownIndicator }}
+        menuPortalTarget={document.body}
       />
     );
   };
@@ -185,11 +186,6 @@ export default function EditAccountDetails({
         <h4>Edit Company Details</h4>
         <div className="body-content mt-2">
           <div className="row">
-            {/* <img
-                className="edit-profile-picture"
-                src={EditIcons}
-                alt="edit"
-              /> */}
             <CropUploadImage
               type="customer"
               id={customer.id}
@@ -197,7 +193,7 @@ export default function EditAccountDetails({
             />
 
             {editAccountFields.map((item) => (
-              <div className={item.property} key={item.key}>
+              <div className={item.property} key={item.key} id="scroll-error">
                 <FormField className="mt-3">
                   <label htmlFor="emailAddress">
                     {item.label}
