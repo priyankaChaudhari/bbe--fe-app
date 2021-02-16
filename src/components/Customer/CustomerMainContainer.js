@@ -236,6 +236,8 @@ export default function CustomerMainContainer() {
           <CustomerDetailBanner>
             <div className="banner">
               <div className="inner" />
+            </div>
+            <CustomerBody>
               <Link to={PATH_CUSTOMER_LIST}>
                 <div className="back-btn-link d-lg-block d-none">
                   {' '}
@@ -243,8 +245,6 @@ export default function CustomerMainContainer() {
                   Back to all customers
                 </div>
               </Link>
-            </div>
-            <CustomerBody>
               <WhiteCard className="customer-brand-details mb-n2">
                 <div className="row">
                   <div className="col-lg-3 col-md-12 pr-0">
@@ -695,22 +695,6 @@ const CustomerDetailBanner = styled.div`
       padding: 0 20px;
     }
   }
-  .back-btn-link {
-    background: ${Theme.white};
-    border-radius: 23px;
-    padding: 13px;
-    color: ${Theme.gray85};
-    position: absolute;
-    margin-left: 74px;
-    top: 109px;
-    cursor: pointer;
-
-    .left-arrow {
-      width: 18px;
-      margin-right: 3px;
-      vertical-align: bottom;
-    }
-  }
 
   @media only screen and (max-width: 991px) {
     .banner {
@@ -730,6 +714,21 @@ const CustomerBody = styled.div`
   margin: 0 auto;
   width: 100%;
   padding-left: 65px;
+  .back-btn-link {
+    background: ${Theme.white};
+    border-radius: 23px;
+    padding: 13px;
+    color: ${Theme.gray85};
+    position: absolute;
+    top: 109px;
+    cursor: pointer;
+
+    .left-arrow {
+      width: 18px;
+      margin-right: 3px;
+      vertical-align: bottom;
+    }
+  }
 
   .customer-body-container {
     max-width: 1220px;

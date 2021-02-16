@@ -102,7 +102,7 @@ export default function AgreementDetails({ agreement, id }) {
               <div className="clear-fix" />
               <div className="col-lg-3 col-md-4 col-12 text-right">
                 <Link to={PATH_AGREEMENT.replace(':id', id)}>
-                  <Button className="btn-transparent w-100">
+                  <Button className="btn-transparent w-100 view-contract">
                     {' '}
                     <img
                       className="file-contract-icon"

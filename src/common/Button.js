@@ -57,7 +57,10 @@ const Button = styled.button`
     border: 1px solid ${Theme.gray35};
     color: ${Theme.black};
     font-weight: 700;
-    font-size: 14px;
+
+    &.view-contract {
+      font-size: ${Theme.extraNormal};
+    }
 
     .file-contract-icon {
       vertical-align: text-top;
