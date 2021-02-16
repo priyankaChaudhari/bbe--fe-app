@@ -57,7 +57,7 @@ const LeftSideBars = styled.div`
   top: 70px;
   left: 0;
   height: 90%;
-  background: ${Theme.gray6};
+  background: ${Theme.white};
   border-right: 1px solid ${Theme.gray7};
   .side-bar-icon {
     list-style-type: none;

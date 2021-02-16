@@ -14,6 +14,10 @@ const DropDownSelect = styled.div`
     float: left;
   }
 
+  &.w-250 {
+    width: 250px;
+  }
+
   .css-2b097c-container {
     width: 100%;
     color: ${Theme.gray90} !important;

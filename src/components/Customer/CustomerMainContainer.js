@@ -259,7 +259,7 @@ export default function CustomerMainContainer() {
             <CustomerBody>
               <WhiteCard className="customer-brand-details mb-n2">
                 <div className="row">
-                  <div className="col-lg-3 col-md-12">
+                  <div className="col-lg-3 col-md-12 pr-0">
                     <div className="brand-logo">
                       {' '}
                       {customer &&
@@ -283,7 +283,7 @@ export default function CustomerMainContainer() {
                       /> */}
                     </div>
                   </div>
-                  <div className="col-lg-9 col-md-12">
+                  <div className="col-lg-9 col-md-12 ">
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
                     </span>
