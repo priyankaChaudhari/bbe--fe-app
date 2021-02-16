@@ -140,6 +140,9 @@ const Button = styled.button`
       margin-right: 10px;
     }
 
+    &.w-90 {
+      width: 260px;
+    }
     &:focus {
       outline: none;
     }
