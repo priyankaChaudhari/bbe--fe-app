@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
+/* eslint array-callback-return: "error" */
 
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -98,6 +99,10 @@ export default function AgreementSidePanel({
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
+  const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
+  const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
+  const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
+  const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
   // const getMonthlyServiceOptions = (services) => {
   //   if (
@@ -187,6 +192,30 @@ export default function AgreementSidePanel({
     getOneTimeService().then((r) => {
       setOneTimeService(r && r.data);
 
+      if (r && r.data) {
+        const result = [];
+        r.data.forEach((item) => {
+          if (item.label.includes('Amazon Store Package')) {
+            result.push({ value: item.value, label: item.label });
+          }
+        });
+        const list = result.filter((item) =>
+          item.label.includes('Amazon Store Package'),
+        );
+        list.filter((item) => {
+          const serviceName = item.label.split(' ')[3];
+          item.label = serviceName;
+          return item;
+        });
+
+        setAmazonStoreOptions(list);
+      }
+      // const AmazonStoreOptions = [
+      //   { label: 'Basic', value: 'basic' },
+      //   { label: 'Plus', value: 'plus' },
+      //   { label: 'Custom', value: 'custom' },
+      // ];
+
       // fetchUncommonOptions(
       //   r.data,
       //   agreementData.additional_one_time_services,
@@ -211,29 +240,47 @@ export default function AgreementSidePanel({
     });
   }, []);
 
-  // useEffect(() => {
-  //   // if (
-  //   //   agreementData &&
-  //   //   agreementData.additional_monthly_services &&
-  //   //   agreementData.additional_monthly_services.length &&
-  //   //   monthlyService
-  //   // ) {
-  //   //   getMonthlyServiceOptions(monthlyService);
-  //   // }
-  //   // if (
-  //   //   agreementData &&
-  //   //   agreementData.additional_one_time_services &&
-  //   //   agreementData.additional_one_time_services.length &&
-  //   //   oneTimeService
-  //   // ) {
-  //   //   fetchUncommonOptions(
-  //   //     oneTimeService,
-  //   //     agreementData.additional_one_time_services,
-  //   //     setOneTimeService,
-  //   //   );
-  //   // }
-  //   // return () => {};
-  // }, [agreementData]);
+  useEffect(() => {
+    if (agreementData && agreementData.additional_one_time_services) {
+      const serviceData =
+        agreementData &&
+        agreementData.additional_one_time_services &&
+        agreementData.additional_one_time_services.length &&
+        agreementData.additional_one_time_services.find(
+          (item) =>
+            item.service && item.service.name.includes('Amazon Store Package'),
+        );
+      if (serviceData) {
+        setShowAmazonPlanDropdown(true);
+        const serviceName = serviceData.service.name.split(' ')[3];
+        if (serviceName === 'Custom') {
+          setAmazonStoreCustom(true);
+        }
+      }
+      setSelectedAmazonStorePackService(serviceData);
+    }
+    // if (
+    //   agreementData &&
+    //   agreementData.additional_monthly_services &&
+    //   agreementData.additional_monthly_services.length &&
+    //   monthlyService
+    // ) {
+    //   getMonthlyServiceOptions(monthlyService);
+    // }
+    // if (
+    //   agreementData &&
+    //   agreementData.additional_one_time_services &&
+    //   agreementData.additional_one_time_services.length &&
+    //   oneTimeService
+    // ) {
+    //   fetchUncommonOptions(
+    //     oneTimeService,
+    //     agreementData.additional_one_time_services,
+    //     setOneTimeService,
+    //   );
+    // }
+    // return () => {};
+  }, [agreementData]);
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
@@ -394,6 +441,538 @@ export default function AgreementSidePanel({
           ...additionalMarketplacesData,
         });
       }
+    } else if (key === 'additional_monthly_services') {
+      const itemInFormData =
+        originalData &&
+        originalData.additional_monthly_services &&
+        originalData.additional_monthly_services.length &&
+        originalData.additional_monthly_services.find(
+          (item) =>
+            item && item.service && item.service.name === event.target.name,
+        );
+
+      // if item checked
+      if (event.target.checked) {
+        if (event.target.name === 'DSP Advertising') {
+          setShowCollpase({ ...showSection, dspAddendum: true });
+        }
+        // if (
+        //   additionalMonthlyServices &&
+        //   additionalMonthlyServices.create &&
+        //   additionalMonthlyServices.create.length
+        // ) {
+        // checked whether checked item present in newly created list
+        if (
+          additionalMonthlyServices &&
+          additionalMonthlyServices.create &&
+          additionalMonthlyServices.create.length &&
+          additionalMonthlyServices.create.find((item) =>
+            item.name
+              ? item.name === event.target.name
+              : item.service.name === event.target.name,
+          )
+        ) {
+          // if checked item is already present in newly created list then don't do anything
+        } else {
+          // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+
+          // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+          if (itemInFormData) {
+            additionalMonthlyServices.create.push(itemInFormData);
+            const list = formData.additional_monthly_services;
+            list.push(itemInFormData);
+            setFormData({
+              ...formData,
+              additional_monthly_services: list,
+            });
+
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_monthly_services: additionalMonthlyServices,
+            });
+          }
+          // else we create dict as BE required for new item and we push that in newly created list
+          else {
+            additionalMonthlyServices.create.push({
+              name: event.target.name,
+              service_id: val.value,
+              contract_id: originalData && originalData.id,
+            });
+
+            let list = formData.additional_monthly_services;
+            if (!list) {
+              list = [];
+            }
+            list.push({
+              name: event.target.name,
+              service_id: val.value,
+              contract_id: originalData && originalData.id,
+            });
+            setFormData({
+              ...formData,
+              additional_monthly_services: list,
+            });
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_monthly_services: additionalMonthlyServices,
+            });
+          }
+
+          // here we fnally update state variable
+          setMonthlyAdditionalServices({
+            ...additionalMonthlyServices,
+          });
+        }
+        // }
+
+        // suppose checked item present in original formData then we have to remove its id from newly created delete list.
+
+        if (itemInFormData) {
+          const updatedDeleteList = additionalMonthlyServices.delete.filter(
+            (item) => item !== itemInFormData.id,
+          );
+          additionalMonthlyServices.delete = updatedDeleteList;
+        }
+
+        setMonthlyAdditionalServices({
+          ...additionalMonthlyServices,
+        });
+      }
+      // if item unchecked or removed
+      else {
+        if (event.target.name === 'DSP Advertising') {
+          setShowCollpase({ ...showSection, dspAddendum: false });
+        }
+
+        // if unchecked item found in original list then add its id to newly created delte list
+        if (itemInFormData) {
+          additionalMonthlyServices.delete.push(itemInFormData.id);
+        }
+
+        // now we filter newly created list with removed unchecked item from it
+        const updatedCreateList = additionalMonthlyServices.create.filter(
+          (item) =>
+            item.name
+              ? item.name !== event.target.name
+              : item.service.name !== event.target.name,
+        );
+
+        additionalMonthlyServices.create = updatedCreateList;
+
+        const list = formData.additional_monthly_services;
+        const deletedUncheckedItemList = list.filter((item) =>
+          item.name
+            ? item.name !== event.target.name
+            : item.service.name !== event.target.name,
+        );
+
+        setFormData({
+          ...formData,
+          additional_monthly_services: deletedUncheckedItemList,
+        });
+
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_monthly_services: additionalMonthlyServices,
+        });
+
+        setMonthlyAdditionalServices({
+          ...additionalMonthlyServices,
+        });
+      }
+    } else if (key === 'amazon_store_package') {
+      if (type === 'quantity') {
+        const selectedData =
+          additionalOnetimeServices &&
+          additionalOnetimeServices.create &&
+          additionalOnetimeServices.create.length &&
+          additionalOnetimeServices.create.filter((item) => {
+            if (
+              item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service.name.includes('Amazon Store Package')
+            ) {
+              item.quantity = event.target.value;
+            }
+            return item;
+          });
+
+        if (selectedData) {
+          setFormData({
+            ...formData,
+            additional_one_time_services: selectedData,
+          });
+
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+            create: selectedData,
+          });
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_one_time_services: {
+              ...additionalOnetimeServices,
+              create: selectedData,
+            },
+          });
+        }
+      }
+
+      if (type === 'dropdown') {
+        const selectedData =
+          additionalOnetimeServices &&
+          additionalOnetimeServices.create &&
+          additionalOnetimeServices.create.length &&
+          additionalOnetimeServices.create.filter((item) => {
+            if (
+              !(item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service.name.includes('Amazon Store Package'))
+            ) {
+              return item;
+              //  item.quantity = event.target.value;
+            }
+            return false;
+          });
+
+        const itemInOriginalData =
+          originalData &&
+          originalData.additional_one_time_services &&
+          originalData.additional_one_time_services.length &&
+          originalData.additional_one_time_services.find((item) =>
+            item.name
+              ? item.name.includes('Amazon Store Package')
+              : item.service.name.includes('Amazon Store Package'),
+          );
+
+        if (
+          itemInOriginalData &&
+          itemInOriginalData.service &&
+          itemInOriginalData.service.name.includes(event.label)
+        ) {
+          selectedData.push(itemInOriginalData);
+        } else if (event.label === 'Custom') {
+            selectedData.push({
+              name: `Amazon Store Package ${  event.label}`,
+              quantity: 1,
+              service_id: event.value,
+              contract_id: originalData && originalData.id,
+              // custom_amazon_store_price: 0,
+            });
+          } else {
+            selectedData.push({
+              name: `Amazon Store Package ${  event.label}`,
+              quantity: 1,
+              service_id: event.value,
+              contract_id: originalData && originalData.id,
+            });
+          }
+
+        setFormData({
+          ...formData,
+          additional_one_time_services: selectedData,
+        });
+
+        additionalOnetimeServices.create = selectedData;
+
+        setAdditionalOnetimeServices({
+          ...additionalOnetimeServices,
+        });
+
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_one_time_services: {
+            ...additionalOnetimeServices,
+            create: selectedData,
+          },
+        });
+
+        if (
+          itemInOriginalData &&
+          itemInOriginalData.service &&
+          itemInOriginalData.service.name.includes(event.label)
+        ) {
+          if (
+            additionalOnetimeServices.delete.find(
+              (item) => item === itemInOriginalData.id,
+            )
+          ) {
+            const list = additionalOnetimeServices.delete.filter(
+              (item) => item !== itemInOriginalData.id,
+            );
+            additionalOnetimeServices.delete = list;
+          }
+        } else if (itemInOriginalData) {
+          if (
+            additionalOnetimeServices.delete.find(
+              (item) => item === itemInOriginalData.id,
+            )
+          ) {
+            // console
+          } else {
+            additionalOnetimeServices.delete.push(itemInOriginalData.id);
+          }
+        }
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_one_time_services: {
+            ...additionalOnetimeServices,
+          },
+        });
+        setAdditionalOnetimeServices({
+          ...additionalOnetimeServices,
+        });
+      }
+
+      if (type === 'custom_amazon_store_price') {
+        const itemInList =
+          additionalOnetimeServices &&
+          additionalOnetimeServices.create &&
+          additionalOnetimeServices.create.length &&
+          additionalOnetimeServices.create.find((item) =>
+            item.name
+              ? item.name.includes('Amazon Store Package')
+              : item.service.name.includes('Amazon Store Package'),
+          );
+        if (itemInList) {
+          itemInList[event.target.name] = event.target.value;
+        }
+
+        setFormData({
+          ...formData,
+          additional_one_time_services: additionalOnetimeServices.create,
+        });
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_one_time_services: {
+            ...additionalOnetimeServices,
+          },
+        });
+        setAdditionalOnetimeServices({
+          ...additionalOnetimeServices,
+        });
+      }
+
+      if (type === 'checkbox') {
+        if (event.target.checked) {
+          const itemInOriginalData =
+            originalData &&
+            originalData.additional_one_time_services &&
+            originalData.additional_one_time_services.length &&
+            originalData.additional_one_time_services.find((item) =>
+              item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service.name.includes('Amazon Store Package'),
+            );
+
+          if (itemInOriginalData) {
+            additionalOnetimeServices.create.push(itemInOriginalData);
+            const list = additionalOnetimeServices.delete.filter(
+              (item) => item !== itemInOriginalData.id,
+            );
+            additionalOnetimeServices.delete = list;
+          }
+        } else {
+          const itemInList =
+            additionalOnetimeServices &&
+            additionalOnetimeServices.create &&
+            additionalOnetimeServices.create.length &&
+            additionalOnetimeServices.create.find((item) =>
+              item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service.name.includes('Amazon Store Package'),
+            );
+          if (itemInList) {
+            const removedEle =
+              additionalOnetimeServices &&
+              additionalOnetimeServices.create &&
+              additionalOnetimeServices.create.length &&
+              additionalOnetimeServices.create.filter((item) =>
+                item.name
+                  ? item.name !== itemInList.service.name
+                  : item.service.name !== itemInList.service.name,
+              );
+
+            additionalOnetimeServices.create = removedEle;
+            additionalOnetimeServices.delete.push(itemInList.id);
+          }
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_one_time_services: {
+              ...additionalOnetimeServices,
+            },
+          });
+
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+          });
+        }
+      }
+    } else if (key === 'additional_one_time_services') {
+      let itemInFormData = {};
+
+      itemInFormData =
+        originalData &&
+        originalData.additional_one_time_services &&
+        originalData.additional_one_time_services.length &&
+        originalData.additional_one_time_services.find(
+          (item) =>
+            item && item.service && item.service.name === event.target.name,
+        );
+
+      if (type === 'quantity') {
+        const selectedItem =
+          additionalOnetimeServices &&
+          additionalOnetimeServices.create &&
+          additionalOnetimeServices.create.length &&
+          additionalOnetimeServices.create.filter((item) => {
+            if (
+              item.name
+                ? item.name === event.target.name
+                : item.service.name === event.target.name
+            ) {
+              item.quantity = event.target.value;
+            }
+            return item;
+          });
+
+        if (selectedItem) {
+          setFormData({
+            ...formData,
+            additional_one_time_services: selectedItem,
+          });
+
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_one_time_services: additionalOnetimeServices,
+          });
+        }
+      }
+      // if item checked
+      else if (event.target.checked) {
+        // checked whether checked item present in newly created list
+
+        if (
+          additionalOnetimeServices &&
+          additionalOnetimeServices.create &&
+          additionalOnetimeServices.create.length &&
+          additionalOnetimeServices.create.find((item) =>
+            item.name
+              ? item.name === event.target.name
+              : item.service.name === event.target.name,
+          )
+        ) {
+          // if checked item is already present in newly created list then don't do anything
+        } else {
+          // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
+
+          // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
+          if (itemInFormData) {
+            additionalOnetimeServices.create.push(itemInFormData);
+            const list = formData.additional_one_time_services;
+            list.push(itemInFormData);
+            setFormData({
+              ...formData,
+              additional_one_time_services: list,
+            });
+
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_one_time_services: additionalOnetimeServices,
+            });
+          }
+          // else we create dict as BE required for new item and we push that in newly created list
+          else {
+            // if (
+            //   additionalOnetimeServices &&
+            //   additionalOnetimeServices.create
+            // ) {
+
+            additionalOnetimeServices.create.push({
+              name: event.target.name,
+              service_id: val.value,
+              contract_id: originalData && originalData.id,
+              quantity: 1,
+            });
+            // }
+            let list = formData.additional_one_time_services;
+            if (!list) {
+              list = [];
+            }
+            list.push({
+              name: event.target.name,
+              service_id: val.value,
+              contract_id: originalData && originalData.id,
+              quantity: 1,
+            });
+            setFormData({
+              ...formData,
+              additional_one_time_services: list,
+            });
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_one_time_services: additionalOnetimeServices,
+            });
+          }
+
+          // here we fnally update state variable
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+          });
+        }
+        // }
+
+        // suppose checked item present in original formData then we have to remove its id from newly created delete list.
+
+        if (itemInFormData) {
+          const updatedDeleteList = additionalOnetimeServices.delete.filter(
+            (item) => item !== itemInFormData.id,
+          );
+          additionalOnetimeServices.delete = updatedDeleteList;
+        }
+
+        setAdditionalOnetimeServices({
+          ...additionalOnetimeServices,
+        });
+      }
+      // if item unchecked or removed
+      else {
+        // if unchecked item found in original list then add its id to newly created delte list
+        if (itemInFormData) {
+          additionalOnetimeServices.delete.push(itemInFormData.id);
+        }
+
+        // now we filter newly created list with removed unchecked item from it
+        const updatedCreateList = additionalOnetimeServices.create.filter(
+          (item) =>
+            item.name
+              ? item.name !== event.target.name
+              : item.service.name !== event.target.name,
+        );
+
+        additionalOnetimeServices.create = updatedCreateList;
+
+        const list = formData.additional_one_time_services;
+        const deletedUncheckedItemList = list.filter((item) =>
+          item.name
+            ? item.name !== event.target.name
+            : item.service.name !== event.target.name,
+        );
+
+        setFormData({
+          ...formData,
+          additional_one_time_services: deletedUncheckedItemList,
+        });
+
+        setUpdatedFormData({
+          ...updatedFormData,
+          additional_one_time_services: additionalOnetimeServices,
+        });
+
+        setAdditionalOnetimeServices({
+          ...additionalOnetimeServices,
+        });
+      }
+      // }
     } else {
       if (event.target.name === 'zip_code') {
         setFormData({
@@ -404,288 +983,6 @@ export default function AgreementSidePanel({
           ...updatedFormData,
           [event.target.name]: event.target.value.trim(),
         });
-      } else if (key === 'additional_monthly_services') {
-        const itemInFormData =
-          originalData &&
-          originalData.additional_monthly_services &&
-          originalData.additional_monthly_services.length &&
-          originalData.additional_monthly_services.find(
-            (item) =>
-              item && item.service && item.service.name === event.target.name,
-          );
-
-        // if item checked
-        if (event.target.checked) {
-          if (event.target.name === 'DSP Advertising') {
-            setShowCollpase({ ...showSection, dspAddendum: true });
-          }
-          // if (
-          //   additionalMonthlyServices &&
-          //   additionalMonthlyServices.create &&
-          //   additionalMonthlyServices.create.length
-          // ) {
-          // checked whether checked item present in newly created list
-          if (
-            additionalMonthlyServices &&
-            additionalMonthlyServices.create &&
-            additionalMonthlyServices.create.length &&
-            additionalMonthlyServices.create.find((item) =>
-              item.name
-                ? item.name === event.target.name
-                : item.service.name === event.target.name,
-            )
-          ) {
-            // if checked item is already present in newly created list then don't do anything
-          } else {
-            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
-
-            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-            if (itemInFormData) {
-              additionalMonthlyServices.create.push(itemInFormData);
-              const list = formData.additional_monthly_services;
-              list.push(itemInFormData);
-              setFormData({
-                ...formData,
-                additional_monthly_services: list,
-              });
-
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_monthly_services: additionalMonthlyServices,
-              });
-            }
-            // else we create dict as BE required for new item and we push that in newly created list
-            else {
-              additionalMonthlyServices.create.push({
-                name: event.target.name,
-                service_id: val.value,
-                contract_id: originalData && originalData.id,
-              });
-
-              let list = formData.additional_monthly_services;
-              if (!list) {
-                list = [];
-              }
-              list.push({
-                name: event.target.name,
-                service_id: val.value,
-                contract_id: originalData && originalData.id,
-              });
-              setFormData({
-                ...formData,
-                additional_monthly_services: list,
-              });
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_monthly_services: additionalMonthlyServices,
-              });
-            }
-
-            // here we fnally update state variable
-            setMonthlyAdditionalServices({
-              ...additionalMonthlyServices,
-            });
-          }
-          // }
-
-          // suppose checked item present in original formData then we have to remove its id from newly created delete list.
-
-          if (itemInFormData) {
-            const updatedDeleteList = additionalMonthlyServices.delete.filter(
-              (item) => item !== itemInFormData.id,
-            );
-            additionalMonthlyServices.delete = updatedDeleteList;
-          }
-
-          setMonthlyAdditionalServices({
-            ...additionalMonthlyServices,
-          });
-        }
-        // if item unchecked or removed
-        else {
-          if (event.target.name === 'DSP Advertising') {
-            setShowCollpase({ ...showSection, dspAddendum: false });
-          }
-
-          // if unchecked item found in original list then add its id to newly created delte list
-          if (itemInFormData) {
-            additionalMonthlyServices.delete.push(itemInFormData.id);
-          }
-
-          // now we filter newly created list with removed unchecked item from it
-          const updatedCreateList = additionalMonthlyServices.create.filter(
-            (item) =>
-              item.name
-                ? item.name !== event.target.name
-                : item.service.name !== event.target.name,
-          );
-
-          additionalMonthlyServices.create = updatedCreateList;
-
-          const list = formData.additional_monthly_services;
-          const deletedUncheckedItemList = list.filter((item) =>
-            item.name
-              ? item.name !== event.target.name
-              : item.service.name !== event.target.name,
-          );
-
-          setFormData({
-            ...formData,
-            additional_monthly_services: deletedUncheckedItemList,
-          });
-
-          setUpdatedFormData({
-            ...updatedFormData,
-            additional_monthly_services: additionalMonthlyServices,
-          });
-
-          setMonthlyAdditionalServices({
-            ...additionalMonthlyServices,
-          });
-        }
-      } else if (key === 'additional_one_time_services') {
-        const itemInFormData =
-          originalData &&
-          originalData.additional_one_time_services &&
-          originalData.additional_one_time_services.length &&
-          originalData.additional_one_time_services.find(
-            (item) =>
-              item && item.service && item.service.name === event.target.name,
-          );
-
-        // if(type === 'quantity') {
-
-        // }
-
-        // if item checked
-        if (event.target.checked) {
-          // if (
-          //   additionalOnetimeServices &&
-          //   additionalOnetimeServices.create &&
-          //   additionalOnetimeServices.create.length
-          // ) {
-          // checked whether checked item present in newly created list
-          if (
-            additionalOnetimeServices &&
-            additionalOnetimeServices.create &&
-            additionalOnetimeServices.create.length &&
-            additionalOnetimeServices.create.find((item) =>
-              item.name
-                ? item.name === event.target.name
-                : item.service.name === event.target.name,
-            )
-          ) {
-            // if checked item is already present in newly created list then don't do anything
-          } else {
-            // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
-
-            // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-            if (itemInFormData) {
-              additionalOnetimeServices.create.push(itemInFormData);
-              const list = formData.additional_one_time_services;
-              list.push(itemInFormData);
-              setFormData({
-                ...formData,
-                additional_one_time_services: list,
-              });
-
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_one_time_services: additionalOnetimeServices,
-              });
-            }
-            // else we create dict as BE required for new item and we push that in newly created list
-            else {
-              // if (
-              //   additionalOnetimeServices &&
-              //   additionalOnetimeServices.create
-              // ) {
-
-              additionalOnetimeServices.create.push({
-                name: event.target.name,
-                service_id: val.value,
-                contract_id: originalData && originalData.id,
-                quantity: 0,
-              });
-              // }
-              let list = formData.additional_one_time_services;
-              if (!list) {
-                list = [];
-              }
-              list.push({
-                name: event.target.name,
-                service_id: val.value,
-                contract_id: originalData && originalData.id,
-                quantity: 0,
-              });
-              setFormData({
-                ...formData,
-                additional_one_time_services: list,
-              });
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_one_time_services: additionalOnetimeServices,
-              });
-            }
-
-            // here we fnally update state variable
-            setAdditionalOnetimeServices({
-              ...additionalOnetimeServices,
-            });
-          }
-          // }
-
-          // suppose checked item present in original formData then we have to remove its id from newly created delete list.
-
-          if (itemInFormData) {
-            const updatedDeleteList = additionalOnetimeServices.delete.filter(
-              (item) => item !== itemInFormData.id,
-            );
-            additionalOnetimeServices.delete = updatedDeleteList;
-          }
-
-          setAdditionalOnetimeServices({
-            ...additionalOnetimeServices,
-          });
-        }
-        // if item unchecked or removed
-        else {
-          // if unchecked item found in original list then add its id to newly created delte list
-          if (itemInFormData) {
-            additionalOnetimeServices.delete.push(itemInFormData.id);
-          }
-
-          // now we filter newly created list with removed unchecked item from it
-          const updatedCreateList = additionalOnetimeServices.create.filter(
-            (item) =>
-              item.name
-                ? item.name !== event.target.name
-                : item.service.name !== event.target.name,
-          );
-
-          additionalOnetimeServices.create = updatedCreateList;
-
-          const list = formData.additional_one_time_services;
-          const deletedUncheckedItemList = list.filter((item) =>
-            item.name
-              ? item.name !== event.target.name
-              : item.service.name !== event.target.name,
-          );
-
-          setFormData({
-            ...formData,
-            additional_one_time_services: deletedUncheckedItemList,
-          });
-
-          setUpdatedFormData({
-            ...updatedFormData,
-            additional_one_time_services: additionalOnetimeServices,
-          });
-
-          setAdditionalOnetimeServices({
-            ...additionalOnetimeServices,
-          });
-        }
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
         setUpdatedFormData({
@@ -905,7 +1202,9 @@ export default function AgreementSidePanel({
               item.quantity += 1;
             }
             if (flag === 'minus') {
-              item.quantity -= 1;
+              if (item.quantity > 1) {
+                item.quantity -= 1;
+              }
             }
           }
           return item;
@@ -916,6 +1215,126 @@ export default function AgreementSidePanel({
         additional_one_time_services: changedService,
       });
     }
+  };
+
+  const handleAmazonServiceQuantity = (flag) => {
+    showFooter(true);
+    if (flag === 'add') {
+      setSelectedAmazonStorePackService({
+        ...amazonService,
+        quantity: amazonService.quantity + 1,
+      });
+
+      const serviceData =
+        formData &&
+        formData.additional_one_time_services &&
+        formData.additional_one_time_services.length &&
+        formData.additional_one_time_services.find(
+          (item) =>
+            item.service &&
+            item.service.name.includes(
+              amazonService.name ? amazonService.name : 'Amazon Store Package',
+            ),
+        );
+      if (serviceData) {
+        serviceData.quantity = amazonService.quantity + 1;
+      }
+
+      const updatedData =
+        additionalOnetimeServices &&
+        additionalOnetimeServices.additional_one_time_services &&
+        additionalOnetimeServices.additional_one_time_services.create &&
+        additionalOnetimeServices.additional_one_time_services.create.find(
+          (item) =>
+            item.service &&
+            item.service.name.includes(
+              amazonService.name ? amazonService.name : 'Amazon Store Package',
+            ),
+        );
+      if (updatedData) {
+        additionalOnetimeServices.quantity = amazonService.quantity + 1;
+      }
+
+      setUpdatedFormData({
+        ...updatedFormData,
+        additional_one_time_services: additionalOnetimeServices,
+      });
+    }
+
+    if (flag === 'minus') {
+      setSelectedAmazonStorePackService({
+        ...amazonService,
+        quantity: amazonService.quantity - 1,
+      });
+
+      const serviceData =
+        formData &&
+        formData.additional_one_time_services &&
+        formData.additional_one_time_services.length &&
+        formData.additional_one_time_services.find(
+          (item) =>
+            item.service &&
+            item.service.name.includes(
+              amazonService.name ? amazonService.name : 'Amazon Store Package',
+            ),
+        );
+
+      if (serviceData) {
+        serviceData.quantity = amazonService.quantity - 1;
+      }
+
+      const updatedData =
+        additionalOnetimeServices &&
+        additionalOnetimeServices.additional_one_time_services &&
+        additionalOnetimeServices.additional_one_time_services.create &&
+        additionalOnetimeServices.additional_one_time_services.create.find(
+          (item) =>
+            item.service &&
+            item.service.name.includes(
+              amazonService.name ? amazonService.name : 'Amazon Store Package',
+            ),
+        );
+      if (updatedData) {
+        updatedData.quantity = amazonService.quantity + 1;
+      }
+
+      setUpdatedFormData({
+        ...updatedFormData,
+        additional_one_time_services: additionalOnetimeServices,
+      });
+    }
+  };
+
+  const handleAmazonPlanChange = (event) => {
+    if (event.label === 'Custom') {
+      setAmazonStoreCustom(true);
+    } else {
+      setAmazonStoreCustom(false);
+    }
+  };
+
+  const setDefaultAmazonPlanValue = () => {
+    const serviceData =
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find(
+        (item) =>
+          item.service && item.service.name.includes('Amazon Store Package'),
+      );
+
+    if (serviceData) {
+      const serviceName = serviceData.service.name.split(' ')[3];
+
+      return {
+        value: serviceData.service.id,
+        label: serviceName,
+      };
+    }
+    return {
+      value: '',
+      label: '',
+    };
   };
 
   return (
@@ -1168,7 +1587,9 @@ export default function AgreementSidePanel({
                     <div className="row mt-3">
                       {oneTimeService &&
                         oneTimeService.map((oneTimeServiceData) =>
-                          !oneTimeServiceData.label.includes('Amazon Store') ? (
+                          !oneTimeServiceData.label.includes(
+                            'Amazon Store Package',
+                          ) ? (
                             <React.Fragment key={oneTimeServiceData.value}>
                               <div className="col-7 mt-2">
                                 {' '}
@@ -1221,51 +1642,6 @@ export default function AgreementSidePanel({
                                 <div className="col-5 mt-2">
                                   <button
                                     type="button"
-                                    className="increment"
-                                    onClick={(event) => {
-                                      changeQuantity(oneTimeServiceData, 'add');
-                                      handleChange(
-                                        event,
-                                        'additional_one_time_services',
-                                        'quantity',
-                                        oneTimeServiceData,
-                                      );
-                                    }}>
-                                    <img
-                                      className="plus-icon"
-                                      src={PlusIcon}
-                                      alt=""
-                                    />
-                                  </button>
-
-                                  <NumberFormat
-                                    name={oneTimeServiceData.label}
-                                    className="form-control max-min-number"
-                                    value={
-                                      formData.additional_one_time_services.find(
-                                        (item) =>
-                                          item.service_id
-                                            ? item.service_id ===
-                                              oneTimeServiceData.value
-                                            : item.service &&
-                                              item.service.id ===
-                                                oneTimeServiceData.value,
-                                      ).quantity
-                                    }
-                                    id={oneTimeServiceData.value}
-                                    readOnly
-                                    // onChange={(event) =>
-                                    //   handleChange(
-                                    //     event,
-                                    //     'additional_one_time_services',
-                                    //     'quantity',
-                                    //     oneTimeServiceData,
-                                    //   )
-                                    // }
-                                  />
-
-                                  <button
-                                    type="button"
                                     className="decrement"
                                     onClick={(event) => {
                                       changeQuantity(
@@ -1286,6 +1662,50 @@ export default function AgreementSidePanel({
                                       alt=""
                                     />
                                   </button>
+
+                                  <NumberFormat
+                                    name={oneTimeServiceData.label}
+                                    className="form-control max-min-number"
+                                    value={
+                                      formData.additional_one_time_services.find(
+                                        (item) =>
+                                          item.service_id
+                                            ? item.service_id ===
+                                              oneTimeServiceData.value
+                                            : item.service &&
+                                              item.service.id ===
+                                                oneTimeServiceData.value,
+                                      ).quantity
+                                    }
+                                    id={oneTimeServiceData.value}
+                                    onChange={(event) =>
+                                      handleChange(
+                                        event,
+                                        'additional_one_time_services',
+                                        'quantity',
+                                        oneTimeServiceData,
+                                      )
+                                    }
+                                  />
+
+                                  <button
+                                    type="button"
+                                    className="increment"
+                                    onClick={(event) => {
+                                      changeQuantity(oneTimeServiceData, 'add');
+                                      handleChange(
+                                        event,
+                                        'additional_one_time_services',
+                                        'quantity',
+                                        oneTimeServiceData,
+                                      );
+                                    }}>
+                                    <img
+                                      className="plus-icon"
+                                      src={PlusIcon}
+                                      alt=""
+                                    />
+                                  </button>
                                 </div>
                               ) : (
                                 ''
@@ -1295,29 +1715,216 @@ export default function AgreementSidePanel({
                             ''
                           ),
                         )}
-
-                      <div className="col-7 mt-2">
-                        {' '}
-                        <CheckBox className="gray-check">
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Amazon Store
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div>
-                      <div className="col-5 mt-2">
-                        <button type="button" className="increment">
-                          <img className="plus-icon" src={PlusIcon} alt="" />
-                        </button>
-                        <input className="max-min-number" type="number" />
-                        <button type="button" className="decrement">
+                      <>
+                        <div className="col-7 mt-2">
                           {' '}
-                          <img className="minus-icon" src={MinusIcon} alt="" />
-                        </button>
-                      </div>
+                          <CheckBox className="gray-check">
+                            <label
+                              className="container customer-pannel"
+                              htmlFor="contract-copy-check">
+                              Amazon Store
+                              <input
+                                type="checkbox"
+                                id="contract-copy-check"
+                                onClick={(event) => {
+                                  setShowAmazonPlanDropdown(
+                                    event.target.checked,
+                                  );
+
+                                  handleChange(
+                                    event,
+                                    'amazon_store_package',
+                                    'checkbox',
+                                    amazonService,
+                                  );
+                                }}
+                                defaultChecked={
+                                  agreementData &&
+                                  agreementData.additional_one_time_services &&
+                                  agreementData.additional_one_time_services
+                                    .length &&
+                                  agreementData.additional_one_time_services.find(
+                                    (item) =>
+                                      item.service &&
+                                      item.service.name.includes(
+                                        'Amazon Store Package',
+                                      ),
+                                  )
+                                }
+                              />
+                              <span className="checkmark" />
+                            </label>
+                          </CheckBox>
+                        </div>
+                        {showAmazonPlanDropdown ? (
+                          <div className="col-5 mt-2">
+                            <button
+                              type="button"
+                              className="decrement"
+                              onClick={(event) => {
+                                handleAmazonServiceQuantity('minus');
+                                handleChange(
+                                  event,
+                                  'amazon_store_package',
+                                  'quantity',
+                                  amazonService,
+                                );
+                              }}>
+                              {' '}
+                              <img
+                                className="minus-icon"
+                                src={MinusIcon}
+                                alt=""
+                              />
+                            </button>
+
+                            <NumberFormat
+                              name="amazon service"
+                              className="form-control max-min-number"
+                              value={
+                                formData &&
+                                formData.additional_one_time_services &&
+                                formData.additional_one_time_services.length &&
+                                formData.additional_one_time_services.find(
+                                  (item) =>
+                                    item.name
+                                      ? item.name.includes(
+                                          'Amazon Store Package',
+                                        )
+                                      : item.service &&
+                                        item.service.name.includes(
+                                          'Amazon Store Package',
+                                        ),
+                                )
+                                  ? formData &&
+                                    formData.additional_one_time_services &&
+                                    formData.additional_one_time_services
+                                      .length &&
+                                    formData.additional_one_time_services.find(
+                                      (item) =>
+                                        item.name
+                                          ? item.name.includes(
+                                              'Amazon Store Package',
+                                            )
+                                          : item.service &&
+                                            item.service.name.includes(
+                                              'Amazon Store Package',
+                                            ),
+                                    ).quantity
+                                  : ''
+                              }
+                              // id={
+                              //   amazonService.name
+                              //     ? amazonService.name
+                              //     : amazonService.service.name
+                              // }
+                              onChange={(event) =>
+                                handleChange(
+                                  event,
+                                  'amazon_store_package',
+                                  'quantity',
+                                  amazonService,
+                                )
+                              }
+                            />
+
+                            <button
+                              type="button"
+                              className="increment"
+                              onClick={(event) => {
+                                handleAmazonServiceQuantity('add');
+                                handleChange(
+                                  event,
+                                  'amazon_store_package',
+                                  'quantity',
+                                  amazonService,
+                                );
+                              }}>
+                              <img
+                                className="plus-icon"
+                                src={PlusIcon}
+                                alt=""
+                              />
+                            </button>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                        {showAmazonPlanDropdown ? (
+                          <>
+                            <InputSelect>
+                              <Select
+                                classNamePrefix="react-select"
+                                defaultValue={setDefaultAmazonPlanValue()}
+                                options={AmazonStoreOptions}
+                                name="amazon_store_plan"
+                                onChange={(event) => {
+                                  handleAmazonPlanChange(event);
+                                  handleChange(
+                                    event,
+                                    'amazon_store_package',
+                                    'dropdown',
+                                  );
+                                }}
+                              />
+                            </InputSelect>
+                            {amazonStoreCustom ? (
+                              <FormField>
+                                <input
+                                  className="form-control"
+                                  type="text"
+                                  value={
+                                    formData &&
+                                    formData.additional_one_time_services &&
+                                    formData.additional_one_time_services
+                                      .length &&
+                                    formData.additional_one_time_services.find(
+                                      (item) =>
+                                        item.name
+                                          ? item.name.includes(
+                                              'Amazon Store Package',
+                                            )
+                                          : item.service &&
+                                            item.service.name.includes(
+                                              'Amazon Store Package',
+                                            ),
+                                    )
+                                      ? formData &&
+                                        formData.additional_one_time_services &&
+                                        formData.additional_one_time_services
+                                          .length &&
+                                        formData.additional_one_time_services.find(
+                                          (item) =>
+                                            item.name
+                                              ? item.name.includes(
+                                                  'Amazon Store Package',
+                                                )
+                                              : item.service &&
+                                                item.service.name.includes(
+                                                  'Amazon Store Package',
+                                                ),
+                                        ).custom_amazon_store_price
+                                      : ''
+                                  }
+                                  placeholder="Enter Custom Store Price"
+                                  name="custom_amazon_store_price"
+                                  onChange={(event) =>
+                                    handleChange(
+                                      event,
+                                      'amazon_store_package',
+                                      'custom_amazon_store_price',
+                                    )
+                                  }
+                                />
+                              </FormField>
+                            ) : (
+                              ''
+                            )}
+                          </>
+                        ) : (
+                          ''
+                        )}
+                      </>
                     </div>
                   </li>
 

@@ -278,7 +278,9 @@ export default function Statement({
                   }</td>
                   
                    <td style="border: 1px solid black;padding: 13px;">${
-                     service.service && service.service.name
+                     service.name
+                       ? service.name
+                       : service.service && service.service.name
                        ? service.service.name
                        : ''
                    }
