@@ -126,7 +126,7 @@ const ModalBox = styled.div`
     }
 
     .body-content {
-      max-height: 520px;
+      max-height: 530px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;

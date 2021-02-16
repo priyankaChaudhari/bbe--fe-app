@@ -621,11 +621,12 @@ export const WhiteCard = styled.div`
           color: ${Theme.black};
           float:left;
           word-break: break-word;
-          max-width: 153px;
+          max-width: 123px;
+       
           width:100%;
 
           &.mid-width {
-            max-width:180px;
+            max-width:170px;
             width:100%;
           }
         }
@@ -865,6 +866,50 @@ export const WhiteCard = styled.div`
      
     }
   }
+  @media only screen and (min-width: 1920px) {
+    .company-label-info {
+        margin-left: 40px;
+        margin-top:10px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+          span { 
+              margin-left: 15px;
+              max-width: 210px;
+            
+
+              &.mid-width {
+                max-width: 250px;
+                width:100%;
+              }
+            }   
+      }
+
+  }
+  @media only screen and (max-width: 1150px) {
+     .company-label-info {
+        margin-left: 40px;
+        margin-top:10px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+          span { 
+              margin-left: 15px;
+              max-width: 70px;
+            
+
+              &.mid-width {
+                max-width: 70px;
+                width:100%;
+              }
+            }   
+      }
+
+  }
 @media only screen and (max-width: 991px) {
 
   .brand-logo {
@@ -888,11 +933,21 @@ export const WhiteCard = styled.div`
 
      .brand-label { 
        margin-top:10px;
-        span { 
-          margin-left: 15px;
-        }
+       
       }
+       span { 
+          margin-left: 15px;
+          max-width: 210px;
+          margin-top: 10px;
+         
+
+          &.mid-width {
+            max-width:230px;
+            width:100%;
+          }
+        }   
    }
+     
    .edit-details {
 
       &.edit-brand-details {

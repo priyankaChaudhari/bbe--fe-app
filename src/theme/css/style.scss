@@ -1019,13 +1019,14 @@ div {
   text-align: center;
   width: 40px;
   height: 40px;
-  border: 1px solid #ffe5df;
-  background: #ffe5df;
+  border: 1px solid $light-orange;
+  background: $light-orange;
   color: $black-color;
   text-transform: Uppercase;
   display: inline-block;
   padding-top: 9px;
   font-size: $extra-medium-f-size;
+  font-weight: 600;
 
   &.dropdown-avartName {
     width: 32px;

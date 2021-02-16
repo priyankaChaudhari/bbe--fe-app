@@ -260,7 +260,7 @@ export default function EditTeamMember({
                   </Button>
                   <Button
                     type="button"
-                    className="btn-transparent"
+                    className="btn-transparent w-25"
                     onClick={() => {
                       setRemoveMember({ ...removeMember, show: false });
                       setShowSuccessMsg(false);
