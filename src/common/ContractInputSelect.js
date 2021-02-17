@@ -47,6 +47,7 @@ const ContractInputSelect = styled.div`
         .css-1gtu0rj-indicatorContainer {
           padding: 4px;
         }
+
     }
     .css-1uccc91-singleValue {
       font-size: ${Theme.small};
