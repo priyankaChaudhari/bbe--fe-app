@@ -351,7 +351,6 @@ export default function Statement({
   };
 
   const showMonthlyServiceTable = () => {
-    console.log(details, formData);
     if (
       // (details &&
       //   details.additional_monthly_services &&
