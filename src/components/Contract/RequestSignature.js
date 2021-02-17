@@ -32,9 +32,16 @@ import {
 
 import { getContactDetails } from '../../store/actions/customerState';
 
-import { PATH_AGREEMENT } from '../../constants';
+// import { PATH_AGREEMENT } from '../../constants';
 
-function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
+function RequestSignature({
+  id,
+  agreementData,
+  setShowModal,
+  pdfData,
+  setShowSuccessContact,
+  clearSuccessMessage,
+}) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
   const dispatch = useDispatch();
@@ -314,6 +321,7 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
         .replace('CUSTOMER_ROLE', mapValue('customer_role')),
     };
     setIsLoading({ loader: true, type: 'button' });
+
     createTransactionData(requestApprovalData).then(
       // updateAccountDetails(agreementData.id, requestApprovalData).then(
       (response) => {
@@ -323,11 +331,15 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
         } else if (response && response.status === 201) {
           // setOpenCollapse({ agreement: false, statement: true });
 
-          history.push({
-            pathname: PATH_AGREEMENT.replace(':id', id),
-            state: { message: 'Approval Requested!' },
-          });
           setShowModal(false);
+          setShowSuccessContact({ message: 'Approval Requested!', show: true });
+          setTimeout(() => clearSuccessMessage(), 800);
+
+          // history.push({
+          //   pathname: PATH_AGREEMENT.replace(':id', id),
+          //   state: { message: 'Approval Requested!' },
+          // });
+          // setShowModal(false);
           setIsLoading({ loader: false, type: 'button' });
         }
       },
@@ -394,10 +406,16 @@ function RequestSignature({ id, agreementData, setShowModal, pdfData }) {
         } else if (response && response.status === 201) {
           // setOpenCollapse({ agreement: false, statement: true });
 
-          history.push({
-            pathname: PATH_AGREEMENT.replace(':id', id),
-            state: { message: 'Signature Requested Successfully' },
+          setShowSuccessContact({
+            message: 'Signature Requested Successfully!',
+            show: true,
           });
+          setTimeout(() => clearSuccessMessage(), 800);
+
+          // history.push({
+          //   pathname: PATH_AGREEMENT.replace(':id', id),
+          //   state: { message: 'Signature Requested Successfully' },
+          // });
           setIsLoading({ loader: false, type: 'button' });
         }
       });
@@ -681,6 +699,8 @@ RequestSignature.defaultProps = {
   agreementData: {},
   setShowModal: () => {},
   pdfData: '',
+  setShowSuccessContact: () => {},
+  clearSuccessMessage: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -700,4 +720,6 @@ RequestSignature.propTypes = {
   }),
   setShowModal: PropTypes.func,
   pdfData: PropTypes.string,
+  setShowSuccessContact: PropTypes.func,
+  clearSuccessMessage: PropTypes.func,
 };

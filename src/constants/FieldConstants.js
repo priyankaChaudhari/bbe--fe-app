@@ -509,9 +509,24 @@ export const StatementDetails = [
 
 export const DSPAddendumDetails = [
   {
+    key: 'start_date',
+    label: 'Start Date',
+    type: 'date',
+    placeholder: 'Enter Start Date',
+    info:
+      'The advertising start date is auto populated based on the contract start date and amended to fall on the 1st or 16th of the month.',
+  },
+  {
     key: 'dsp_fee',
-    label: 'DSP Budget',
+    label: 'Monthly Ad Budget',
     type: 'number-currency',
+    placeholder: 'Enter budget',
+  },
+  {
+    key: 'length',
+    label: 'INITIAL PERIOD (MONTHS)',
+    type: 'choice',
+    placeholder: 'Select Period',
   },
 ];
 

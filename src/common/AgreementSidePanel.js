@@ -268,6 +268,13 @@ export default function AgreementSidePanel({
       agreementData.additional_monthly_services,
       'monthly_service',
     );
+    if (
+      agreementData &&
+      agreementData.additional_marketplaces &&
+      agreementData.additional_marketplaces.length
+    ) {
+      setShowAdditionalMarketplace(true);
+    }
     // }
     // if (
     //   agreementData &&
@@ -312,6 +319,50 @@ export default function AgreementSidePanel({
     } else if (type === 'qty') {
       setFormData({ ...formData, quantity: event.target.value });
       setUpdatedFormData({ ...updatedFormData, quantity: event.target.value });
+    } else if (key === 'additional_marketplaces_checkbox') {
+      if (event.target.checked) {
+        if (
+          originalData &&
+          originalData.additional_marketplaces &&
+          originalData.additional_marketplaces.length
+        ) {
+          additionalMarketplacesData.create =
+            originalData.additional_marketplaces;
+          additionalMarketplacesData.delete = [];
+
+          setFormData({
+            ...formData,
+            additional_marketplaces: additionalMarketplacesData.create,
+          });
+        }
+      } else {
+        const itemsToBeDelete =
+          additionalMarketplacesData &&
+          additionalMarketplacesData.create &&
+          additionalMarketplacesData.create.length &&
+          additionalMarketplacesData.create.filter((item) => {
+            if (item.id) {
+              return item;
+            }
+            return null;
+          });
+
+        additionalMarketplacesData.delete = itemsToBeDelete;
+        additionalMarketplacesData.create = [];
+
+        setFormData({
+          ...formData,
+          additional_marketplaces: [],
+        });
+      }
+
+      setUpdatedFormData({
+        ...updatedFormData,
+        additional_marketplaces: additionalMarketplacesData,
+      });
+      setAdditionalMarketplace({
+        ...additionalMarketplacesData,
+      });
     } else if (type === 'multichoice') {
       // setFormData({ ...formData, [key]: event });
       // setUpdatedFormData({ ...updatedFormData, [key]: event });
@@ -324,7 +375,6 @@ export default function AgreementSidePanel({
           originalData.additional_marketplaces.find(
             (item) => item && item.name === val.option.value,
           );
-
         // checked whether checked item present in newly created list
         // if (
         //   additionalMarketplacesData &&
@@ -367,18 +417,17 @@ export default function AgreementSidePanel({
               name: val.option.value,
               contract_id: originalData && originalData.id,
             });
-
-            let list = formData.additional_marketplaces;
-            if (!list) {
-              list = [];
-            }
-            list.push({
-              name: val.option.value,
-              contract_id: originalData && originalData.id,
-            });
+            // let list = formData.additional_marketplaces;
+            // if (!list) {
+            //   list = [];
+            // }
+            // list.push({
+            //   name: val.option.value,
+            //   contract_id: originalData && originalData.id,
+            // });
             setFormData({
               ...formData,
-              additional_marketplaces: list,
+              additional_marketplaces: additionalMarketplacesData.create,
             });
             setUpdatedFormData({
               ...updatedFormData,
@@ -1075,6 +1124,7 @@ export default function AgreementSidePanel({
     return (
       <Select
         classNamePrefix="react-select"
+        // styles={customStyles}
         options={getOptions(item.key, 'multi')}
         isMulti
         name={item.key}
@@ -1091,6 +1141,7 @@ export default function AgreementSidePanel({
     return (
       <Select
         classNamePrefix="react-select"
+        // styles={customStyles}
         defaultValue={
           item.key === 'primary_marketplace'
             ? agreementData.primary_marketplace &&
@@ -1169,7 +1220,12 @@ export default function AgreementSidePanel({
     }
     if (key === 'addendum') {
       // if (showSection.addendum) {
-      setOpenCollapse({ ...openCollapse, statement: false, addendum: true });
+      setOpenCollapse({
+        ...openCollapse,
+        statement: false,
+        dspAddendum: false,
+        addendum: true,
+      });
       executeScroll('addendum');
       // }
     }
@@ -1555,9 +1611,21 @@ export default function AgreementSidePanel({
                         <input
                           type="checkbox"
                           id="additional_marketplaces"
-                          onClick={(event) =>
-                            setShowAdditionalMarketplace(event.target.checked)
-                          }
+                          onClick={(event) => {
+                            setShowAdditionalMarketplace(event.target.checked);
+                            handleChange(
+                              event,
+                              'additional_marketplaces_checkbox',
+                              'checkbox',
+                            );
+                          }}
+                          // checked={
+                          //   formData &&
+                          //   formData.additional_marketplaces &&
+                          //   formData.additional_marketplaces.length
+                          //     ? true
+                          //     : false
+                          // }
                           defaultChecked={
                             formData &&
                             formData.additional_marketplaces &&
@@ -1568,10 +1636,7 @@ export default function AgreementSidePanel({
                       </label>
                     </CheckBox>
 
-                    {showAdditionalMarketplace ||
-                    (formData &&
-                      formData.additional_marketplaces &&
-                      formData.additional_marketplaces.length) ? (
+                    {showAdditionalMarketplace ? (
                       <li>
                         <FormField>
                           {generateHTML({
@@ -1862,6 +1927,7 @@ export default function AgreementSidePanel({
                             <InputSelect>
                               <Select
                                 classNamePrefix="react-select"
+                                // styles={customStyles}
                                 defaultValue={setDefaultAmazonPlanValue()}
                                 options={AmazonStoreOptions}
                                 name="amazon_store_plan"
@@ -1993,6 +2059,7 @@ export default function AgreementSidePanel({
                         <label htmlFor={item.key}>
                           {item.label}
                           {generateHTML(item)}
+                          {item.info ? item.info : ''}
                         </label>
                         <ErrorMsg>
                           {apiError &&
@@ -2002,6 +2069,21 @@ export default function AgreementSidePanel({
                       </FormField>
                     </li>
                   ))}
+                  <li>
+                    <Button
+                      className={
+                        formData.additional_one_time_services
+                          ? 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
+                          : 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
+                      }
+                      onClick={() => nextStep('addendum')}>
+                      {isLoading.loader && isLoading.type === 'button' ? (
+                        <PageLoader color="#fff" type="button" />
+                      ) : (
+                        'Proceed to Next Section'
+                      )}
+                    </Button>
+                  </li>
                 </ul>
               </Collapse>
             </>
