@@ -1327,7 +1327,7 @@ const Footer = styled.div`
   position: fixed;
   min-height: 80px;
   padding-left: 90px;
-
+  z-index: 2;
   .w-320 {
     float: left;
     max-width: 320px;

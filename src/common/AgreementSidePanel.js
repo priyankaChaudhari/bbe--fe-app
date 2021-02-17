@@ -1956,9 +1956,9 @@ export default function AgreementSidePanel({
                               />
                             </ContractInputSelect>
                             {amazonStoreCustom ? (
-                              <ContractFormField>
+                              <ContractFormField className="w-100 mt-1">
                                 <input
-                                  className="form-control"
+                                  className="form-control "
                                   type="text"
                                   value={
                                     formData &&
@@ -2074,15 +2074,15 @@ export default function AgreementSidePanel({
                             apiError[item.key][0]}
                         </ErrorMsg>
                       </ContractFormField>
-                      {item.info ? item.info : ''}
+                      <p className="m-0"> {item.info ? item.info : ''}</p>
                     </li>
                   ))}
                   <li>
                     <Button
                       className={
                         formData.additional_one_time_services
-                          ? 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
-                          : 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
+                          ? 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
+                          : 'btn-primary btn-next-section  mt-1 mb-3 w-100 '
                       }
                       onClick={() => nextStep('addendum')}>
                       {isLoading.loader && isLoading.type === 'button' ? (
@@ -2398,17 +2398,17 @@ AgreementSidePanel.propTypes = {
 };
 
 const SidePanel = styled.div`
-   min-width: 60px;
-  z-index: 2;
-  // padding-bottom:200px;
-  max-width: 380px;
-  position: fixed;
-  top: 71px;
-  right: 0;
-  height: 100%;
-  background: ${Theme.white};
-  border-left: 1px solid ${Theme.gray7};
-  overflow-y:auto;
+    min-width: 60px;
+    z-index: 2;
+    padding-bottom:200px;
+    max-width: 380px;
+    position: fixed;
+    top: 71px;
+    right: 0;
+    height: 100%;
+    background: ${Theme.white};
+    border-left: 1px solid ${Theme.gray7};
+    overflow-y:auto;
 
 .green-check-select {
   width:16px;
@@ -2457,7 +2457,7 @@ const SidePanel = styled.div`
 
 .collapse-btn {
   width:100%;
-  padding: 17px;
+  padding: 13px;
   cursor:pointer;
 
  
@@ -2519,6 +2519,7 @@ const SidePanel = styled.div`
             border-radius:  8px 0 0 8px ;
             width: 32px;
             background: ${Theme.gray5};
+            font-family: ${Theme.titleFontFamily};
             cursor:pointer;
 
            .minus-icon {
@@ -2532,16 +2533,18 @@ const SidePanel = styled.div`
           width: 32px;
           border: 1px solid #DFE7FF;
           font-size: 14px;
+          font-family: ${Theme.titleFontFamily};
           text-align: center;
         }
-    }
-} 
+
+     }
+   } 
 .activity-log {
     font-size: ${Theme.extraSmall};
     padding:20px 20px 0 20px;
     letter-spacing: 1.13px;
     color: ${Theme.gray30};
-    font-weight:bold;
+    font-weight: bold;
     text-transform: uppercase;
   }
   .current-agreement-title {
