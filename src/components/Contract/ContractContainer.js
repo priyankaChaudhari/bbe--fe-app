@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 // import queryString from 'query-string';
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -311,32 +312,41 @@ export default function ContractContainer() {
           });
         }
       }
+      let additionalMarketplacesResponse = null;
+      let additionalMonthlyResponse = null;
+      let additionalOneTimeResponse = null;
+      let AccountResponse = null;
 
       // for additionL MARKETPLACE
       if (updatedFormData.additional_marketplaces) {
-        createMarketplaceBulk(updatedFormData.additional_marketplaces).then(
-          () => {
-            // console.log('on success of marketplace bulk update', res);
-          },
+        additionalMarketplacesResponse = createMarketplaceBulk(
+          updatedFormData.additional_marketplaces,
         );
+        //  .then(
+        //     () => {
+        //       // console.log('on success of marketplace bulk update', res);
+        //     },
+        // );
       }
 
       // for additionL service
       if (updatedFormData.additional_monthly_services) {
-        createAdditionalServiceBulk(
+        additionalMonthlyResponse = createAdditionalServiceBulk(
           updatedFormData.additional_monthly_services,
-        ).then(() => {
-          // console.log('on success of additional service bulk update', res);
-        });
+        );
+        // .then(() => {
+        //   // console.log('on success of additional service bulk update', res);
+        // });
       }
 
       // for additional one time service
       if (updatedFormData.additional_one_time_services) {
-        createAdditionalServiceBulk(
+        additionalOneTimeResponse = createAdditionalServiceBulk(
           updatedFormData.additional_one_time_services,
-        ).then(() => {
-          // console.log('on success of additional service bulk update', res);
-        });
+        );
+        // .then(() => {
+        //   // console.log('on success of additional service bulk update', res);
+        // });
       }
 
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
@@ -357,18 +367,43 @@ export default function ContractContainer() {
         },
       };
 
-      updateAccountDetails(details.id, detail).then((response) => {
-        if (response && response.status === 400) {
-          setIsLoading({ loader: false, type: 'button' });
-          setApiError(response && response.data);
-          // setFormData({});
-        } else if (response && response.status === 200) {
-          dispatch(getAccountDetails(id));
-          setIsLoading({ loader: false, type: 'button' });
-          setFormData(response && response.data);
-          setUpdatedFormData({});
-        }
-      });
+      AccountResponse = updateAccountDetails(details.id, detail);
+
+      axios
+        .all([
+          additionalMarketplacesResponse,
+          additionalMonthlyResponse,
+          additionalOneTimeResponse,
+          AccountResponse,
+        ])
+        .then(
+          axios.spread(() => {
+            // ...responses
+            // const responseOne = responses[0];
+            // const responseTwo = responses[1];
+            // const responesThree = responses[2];
+            // const responesfour = responses[3];
+
+            // use/access the results
+            dispatch(getAccountDetails(id));
+          }),
+        )
+        .catch(() => {
+          // react on errors.
+        });
+
+      //  .then((response) => {
+      //     if (response && response.status === 400) {
+      //       setIsLoading({ loader: false, type: 'button' });
+      //       setApiError(response && response.data);
+      //       // setFormData({});
+      //     } else if (response && response.status === 200) {
+      //       setTimeout(() => dispatch(getAccountDetails(id)), 800);
+      //       setIsLoading({ loader: false, type: 'button' });
+      //       setFormData(response && response.data);
+      //       setUpdatedFormData({});
+      //     }
+      //   });
     } else {
       const stepsCompletedData = {
         steps_completed: {
@@ -387,88 +422,7 @@ export default function ContractContainer() {
         }
       });
     }
-    // }
 
-    // if (history.location.pathname.includes('statement')) {
-    // if (formData && Object.keys(formData).length) {
-    //   setIsLoading({ loader: true, type: 'button' });
-
-    // if (formData && formData.primary_marketplace) {
-    //   const statementData = {
-    //     id:
-    //       (details &&
-    //         details.primary_marketplace &&
-    //         details.primary_marketplace.id) ||
-    //       '',
-    //     contract: details.id,
-    //     name: formData && formData.primary_marketplace,
-    //     is_primary: true,
-    //   };
-    //   if (details.primary_marketplace && details.primary_marketplace.id) {
-    //     updateMarketplace(details.primary_marketplace.id, statementData).then(
-    //       (res) => {
-    //         if (res && res.status === 200) {
-    //           setIsLoading({ loader: false, type: 'button' });
-    //         }
-    //         if (res && res.status === 400) {
-    //           setApiError(res && res.data);
-    //         }
-    //       },
-    //     );
-    //   } else {
-    //     createMarketplace(statementData).then((res) => {
-    //       if (res && res.status === 201) {
-    //         setIsLoading({ loader: false, type: 'button' });
-    //       }
-    //     });
-    //   }
-    // }
-
-    // if (formData.additional_one_time_services) {
-    //   formData.additional_one_time_services.forEach((service, index) =>
-    //     saveAdditionalOneTimeService(service, service.id, index),
-    //   );
-    // }
-    // const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
-    // for (const val of num) {
-    //   if (formData && formData[val]) {
-    //     formData[val] = formData[val].substring(1).replace(/,/g, '');
-    //   }
-    // }
-    // const detail = {
-    //   ...formData,
-    //   steps_completed: {
-    //     ...details.steps_completed,
-    //     agreement: true,
-    //     statement: true,
-    //   },
-    // };
-    // updateAccountDetails(details.id, detail).then((response) => {
-    //   if (response && response.status === 400) {
-    //     setIsLoading({ loader: false, type: 'button' });
-    //     setApiError(response && response.data);
-    //     setFormData({});
-    //   } else if (response && response.status === 200) {
-    //     dispatch(getAccountDetails(id));
-    //     setIsLoading({ loader: false, type: 'button' });
-    //     setFormData({});
-    //   }
-    // });
-    // } else {
-    //   setIsLoading({ loader: true, type: 'button' });
-    //   const stepData = {
-    //     steps_completed: { agreement: true, statement: true },
-    //   };
-    //   updateAccountDetails(details.id, stepData).then((response) => {
-    //     if (response && response.status === 200) {
-    //       dispatch(getAccountDetails(id));
-    //       setIsLoading({ loader: false, type: 'button' });
-    //     }
-    //   });
-    // }
-    // }
-
-    // if (history.location.pathname.includes('addendum')) {
     if (newAddendumData.id) {
       setIsLoading({ loader: true, type: 'page' });
 

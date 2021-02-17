@@ -221,19 +221,7 @@ export default function AgreementSidePanel({
     });
     getMarketplaces().then((market) => {
       setMarketPlaces(market.data);
-      if (
-        agreementData &&
-        agreementData.primary_marketplace &&
-        agreementData.primary_marketplace.name
-      ) {
-        setAdditionalMarketplaces(
-          market.data.filter(
-            (op) => op.value !== agreementData.primary_marketplace.name,
-          ),
-        );
-      } else {
-        setAdditionalMarketplaces(market.data);
-      }
+      setAdditionalMarketplaces(market.data);
     });
   }, []);
 
@@ -276,28 +264,20 @@ export default function AgreementSidePanel({
     ) {
       setShowAdditionalMarketplace(true);
     }
-    // }
-    // if (
-    //   agreementData &&
-    //   agreementData.additional_monthly_services &&
-    //   agreementData.additional_monthly_services.length &&
-    //   monthlyService
-    // ) {
-    //   getMonthlyServiceOptions(monthlyService);
-    // }
-    // if (
-    //   agreementData &&
-    //   agreementData.additional_one_time_services &&
-    //   agreementData.additional_one_time_services.length &&
-    //   oneTimeService
-    // ) {
-    //   fetchUncommonOptions(
-    //     oneTimeService,
-    //     agreementData.additional_one_time_services,
-    //     setOneTimeService,
-    //   );
-    // }
-    // return () => {};
+
+    if (
+      agreementData &&
+      agreementData.primary_marketplace &&
+      agreementData.primary_marketplace.name
+    ) {
+      setAdditionalMarketplaces(
+        marketPlaces.filter(
+          (op) => op.value !== agreementData.primary_marketplace.name,
+        ),
+      );
+    } else {
+      setAdditionalMarketplaces(marketPlaces);
+    }
   }, [agreementData]);
 
   const handleChange = (event, key, type, val) => {
@@ -369,6 +349,9 @@ export default function AgreementSidePanel({
       // setUpdatedFormData({ ...updatedFormData, [key]: event });
 
       if (val.action === 'select-option') {
+        setMarketPlaces(
+          additionalMarketplaces.filter((op) => op.value !== val.option.value),
+        );
         const itemInFormData =
           originalData &&
           originalData.additional_marketplaces &&
@@ -1092,6 +1075,10 @@ export default function AgreementSidePanel({
         [event.target.name]: '',
       });
     }
+    setApiError({
+      ...apiError,
+      non_field_errors: '',
+    });
   };
 
   const mapSelectValues = (item) => {
@@ -1477,10 +1464,8 @@ export default function AgreementSidePanel({
                   item.key !== 'contract_address' ? (
                     <li key={item.key}>
                       <ContractFormField>
-                        <label htmlFor={item.key}>
-                          {item.label}
-                          {generateHTML(item)}
-                        </label>
+                        <label htmlFor={item.key}>{item.label}</label>
+                        {generateHTML(item)}
                         <ErrorMsg>
                           {apiError &&
                             apiError[item.key] &&
@@ -1554,16 +1539,25 @@ export default function AgreementSidePanel({
               <PageLoader component="activityLog" color="#FF5933" type="page" />
             ) : (
               <>
+                {apiError &&
+                apiError.non_field_errors &&
+                apiError.non_field_errors[0] ? (
+                  <ErrorMsg>
+                    {apiError &&
+                      apiError.non_field_errors &&
+                      apiError.non_field_errors[0]}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
                 <ul className="collapse-inner">
                   {StatementDetails.map((item) => (
                     <React.Fragment key={item.key}>
                       <>
                         <li>
                           <ContractFormField>
-                            <label htmlFor={item.key}>
-                              {item.label}
-                              {generateHTML(item)}
-                            </label>
+                            <label htmlFor={item.key}>{item.label}</label>
+                            {generateHTML(item)}
                             <ErrorMsg>
                               {apiError &&
                                 apiError[item.key] &&
@@ -2357,6 +2351,7 @@ AgreementSidePanel.propTypes = {
   apiError: PropTypes.shape({
     quantity: PropTypes.arrayOf(PropTypes.string),
     service: PropTypes.arrayOf(PropTypes.string),
+    non_field_errors: PropTypes.arrayOf(PropTypes.string),
   }),
   showFooter: PropTypes.func,
   setApiError: PropTypes.func,
