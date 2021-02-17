@@ -9,6 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import queryString from 'query-string';
+import dayjs from 'dayjs';
 
 import ReactTooltip from 'react-tooltip';
 import Theme from '../../theme/Theme';
@@ -29,14 +30,15 @@ import {
   SliderHIcon,
   CloseIcon,
   CompanyDefaultUser,
-  SortDownIcon,
-  WhiteSortDown,
   whiteCross,
   InfoIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import { getCustomerList, getGrowthStrategist } from '../../api';
+import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
 import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
+import { sortOptions } from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
   const history = useHistory();
@@ -49,21 +51,29 @@ export default function NewCustomerList() {
 
   // const userInfo = useSelector((state) => state.userState.userInfo);
   const isDesktop = useMediaQuery({ minWidth: 992 });
-  const { Option, DropdownIndicator, SingleValue } = components;
+  const { Option, MultiValue } = components;
   const [selectedFilter, setSelectedFilter] = useState({});
   const [clearFilter, setClearFilter] = useState(true);
+  const [status, setStatus] = useState([]);
+  const [enableBtn, setEnableBtn] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState({
-    status: null,
-    tier: null,
-    contract_type: null,
-    user: null,
+    view: null,
     'order-by': null,
   });
 
+  const [filters, setFilters] = useState([]);
+  const [showPerformance, setShowPerformance] = useState(false);
+
   const options = [
-    { value: ' Performance', label: 'Performance' },
-    { value: 'Contract Details', label: 'Contract Details' },
+    { value: 'performance', label: 'Performance' },
+    { value: 'contract_details', label: 'Contract Details' },
+  ];
+
+  const contractChoices = [
+    { value: 'any', label: 'Any' },
+    { value: 'recurring', label: 'Recurring' },
+    { value: 'one time', label: 'One Time' },
   ];
 
   const IconOption = (props) => (
@@ -90,7 +100,7 @@ export default function NewCustomerList() {
     </Option>
   );
   const IconSingleOption = (props) => (
-    <SingleValue {...props}>
+    <MultiValue {...props}>
       {props.data.icon ? (
         <img
           className="drop-down-user"
@@ -103,58 +113,38 @@ export default function NewCustomerList() {
       )}{' '}
       &nbsp;
       <span style={{ lineHeight: 4 }}>{props.data.label}</span>
-    </SingleValue>
+    </MultiValue>
   );
-
-  const CustomDropdownIndicator = (props) => {
-    return (
-      <DropdownIndicator {...props}>
-        <img src={SortDownIcon} alt="sort" style={{ width: '78%' }} />
-      </DropdownIndicator>
-    );
-  };
-
-  const CustomWhiteDropdownIndicator = (props) => {
-    return (
-      <DropdownIndicator {...props}>
-        <img src={WhiteSortDown} alt="sort" style={{ width: '78%' }} />
-      </DropdownIndicator>
-    );
-  };
 
   const getSelectComponents = (key) => {
     if (key === 'user') {
       return {
         Option: IconOption,
-        SingleValue: IconSingleOption,
-        DropdownIndicator:
-          selectedValue[key] === null
-            ? CustomDropdownIndicator
-            : CustomWhiteDropdownIndicator,
+        MultiValue: IconSingleOption,
       };
     }
-    return {
-      DropdownIndicator:
-        selectedValue[key] === null
-          ? CustomDropdownIndicator
-          : CustomWhiteDropdownIndicator,
-    };
+    return '';
   };
 
   const customerList = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'page' });
-      getCustomerList(currentPage, searchQuery).then((response) => {
-        setData(response && response.data && response.data.results);
-        setPageNumber(currentPage);
-        setCount(response && response.data && response.data.count);
-        setIsLoading({ loader: false, type: 'page' });
-      });
+      getCustomerList(currentPage, selectedValue, searchQuery).then(
+        (response) => {
+          setData(response && response.data && response.data.results);
+          setPageNumber(currentPage);
+          setCount(response && response.data && response.data.count);
+          setIsLoading({ loader: false, type: 'page' });
+        },
+      );
     },
-    [searchQuery],
+    [searchQuery, selectedValue],
   );
 
   useEffect(() => {
+    getStatus().then((statusResponse) => {
+      setStatus(statusResponse.data);
+    });
     getGrowthStrategist().then((gs) => {
       if (gs && gs.data) {
         for (const brand of gs.data) {
@@ -185,7 +175,7 @@ export default function NewCustomerList() {
       pathname: `${PATH_CUSTOMER_LIST}`,
       search: `${stringified}`,
     });
-    customerList(currentPage, searchQuery);
+    customerList(currentPage, selectedValue, searchQuery);
   };
 
   const cancelFilters = (key) => {
@@ -205,35 +195,49 @@ export default function NewCustomerList() {
     if (key === 'user') setBrandGrowthStrategist([]);
   };
 
-  const handleFilters = (event, key) => {
-    setClearFilter(false);
-    if (event.value === 'All' || event.value === '-created_at') {
-      cancelFilters(key);
-    } else {
-      setSelectedValue({ ...selectedValue, [key]: event });
-      setSelectedFilter({ ...selectedFilter, [key]: event.value });
-      setIsLoading({ loader: true, type: 'page' });
-
-      getCustomerList(
-        '',
-        { ...selectedFilter, [key]: event.value },
-        searchQuery,
-      ).then((response) => {
-        setData(response.data && response.data.results);
-        setPageNumber(pageNumber);
-        setCount(response && response.data && response.data.count);
-        setIsLoading({ loader: false, type: 'page' });
+  const handleFilters = (event, key, type) => {
+    setEnableBtn(true);
+    if (type === 'status') {
+      setFilters([...filters, { status: event.target.name }]);
+    }
+    if (type === 'brand') {
+      setFilters([...filters, { user: event.value }]);
+    }
+    if (type === 'radio') {
+      const list = [...filters];
+      list.filter((el) => {
+        return Object.keys(el) !== 'contract_type';
       });
+      setFilters([...list, { contract_type: key.value }]);
     }
   };
 
-  // const countDays = (item) => {
-  //   const date1 = new Date();
-  //   const date2 = new Date(item && item.end_date);
-  //   const diffTime = Math.abs(date2 - date1);
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  //   return diffDays;
-  // };
+  const countDays = (item) => {
+    const date1 = new Date();
+    const date2 = new Date(item && item.contract && item.contract.end_date);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const handleSearch = (event, type) => {
+    if (type === 'view') {
+      if (event.value === 'performance') {
+        setShowPerformance(true);
+      } else {
+        setShowPerformance(false);
+      }
+    }
+    if (type === 'sort') {
+      setSelectedValue({ ...selectedValue, 'order-by': event.value });
+      customerList(pageNumber, event.value, searchQuery);
+    }
+    if (type === 'search') {
+      setTimeout(() => {
+        customerList(pageNumber, selectedValue, event.target.value);
+      }, 1000);
+    }
+  };
 
   const generateDropdown = (item) => {
     return (
@@ -241,68 +245,37 @@ export default function NewCustomerList() {
         <Select
           classNamePrefix="react-select"
           className="active"
-          placeholder="Select"
-          options={brandGrowthStrategist}
-          styles={{
-            control: (base) => ({
-              ...base,
-              width: brandGrowthStrategist ? '105%' : '100%',
-              borderRadius: '18px',
-              border: '1px solid #dee2ed',
-              padding: '0 5px 0 5px',
-              fontSize: '16px',
-              color: 'white',
-              background: selectedValue[item] === null ? '#f9faff' : '#2e384d',
-            }),
-
-            option: (provided, state) => {
-              return {
-                ...provided,
-                color: state.isSelected ? '#FF5933' : '#2E384D',
-                background: 'white',
-
-                ':hover': {
-                  background: '#F9FAFF',
-                  cursor: 'pointer',
-                },
-
-                ':first-of-type': {
-                  color:
-                    item !== 'user' && selectedValue[item] === null
-                      ? '#FF5933'
-                      : '',
-                },
-              };
-            },
-            singleValue: (provided) => {
-              const left =
-                selectedValue !== null && item === 'user' ? '-2px' : '';
-              const color = selectedValue[item] === null ? '#2e384d' : 'white';
-
-              return { ...provided, color, left };
-            },
-            dropdownIndicator: (base) => ({
-              ...base,
-              color: selectedValue[item] === null ? '#2e384d' : '#ffff',
-            }),
-          }}
-          theme={(theme) => ({
-            ...theme,
-            colors: {
-              ...theme.colors,
-              neutral50: '#2e384d',
-            },
-          })}
-          onChange={(event) => handleFilters(event, item)}
-          value={
-            clearFilter && selectedValue[item] === null
-              ? null
-              : selectedValue[item]
+          placeholder={
+            item === 'user'
+              ? 'Any'
+              : item === 'sort'
+              ? 'Sort by: Recently Added'
+              : 'View: Contract Details'
           }
+          options={
+            item === 'user'
+              ? brandGrowthStrategist
+              : item === 'sort'
+              ? sortOptions
+              : options
+          }
+          onChange={(event) =>
+            item === 'user'
+              ? handleFilters(event, item, 'brand')
+              : handleSearch(event, item === 'sort' ? 'sort' : 'view')
+          }
+          value={
+            item === 'user'
+              ? filters.user
+              : clearFilter && selectedValue[item.key] === null
+              ? null
+              : selectedValue[item.key]
+          }
+          isMulti={item === 'user'}
           components={getSelectComponents(item)}
-          componentsValue={item.key === 'user' ? { Option: IconOption } : ''}
+          componentsValue={item === 'user' ? { Option: IconOption } : ''}
         />
-        {selectedValue.user !== null && item === 'user' ? (
+        {item === 'user' ? (
           <img
             onClick={() => cancelFilters(item)}
             src={whiteCross}
@@ -315,12 +288,6 @@ export default function NewCustomerList() {
         )}
       </>
     );
-  };
-
-  const handleSearch = () => {
-    setTimeout(() => {
-      customerList(pageNumber, selectedFilter, searchQuery);
-    }, 1000);
   };
 
   return (
@@ -353,9 +320,7 @@ export default function NewCustomerList() {
                     <img width="25px" src={CloseIcon} alt="cross" />
                   </label>
                   <div className="label">Brand Strategist</div>
-                  <DropDownSelect>
-                    {generateDropdown('brandgrowth')}
-                  </DropDownSelect>
+                  <DropDownSelect>{generateDropdown('user')}</DropDownSelect>
                   <div className="label mt-4">Status</div>
                   <div className="unselected ">Unselect all</div>
                   <div className="clear-fix" />
@@ -448,7 +413,7 @@ export default function NewCustomerList() {
                 onChange={(event) => setSearchQuery(event.target.value)}
                 onKeyPress={(event) => {
                   if (event.key === 'Enter') {
-                    handleSearch();
+                    handleSearch(event, 'search');
                   }
                 }}
                 value={searchQuery || ''}
@@ -472,12 +437,12 @@ export default function NewCustomerList() {
           </div>
           <div className="col-lg-2 col-md-3 col-6   mb-2 pl-lg-0 pr-lg-2">
             <DropDownSelect className="customer-list-header">
-              <Select options={options} />
+              {generateDropdown('sort')}
             </DropDownSelect>{' '}
           </div>
           <div className="col-lg-2 col-md-3  col-6   mb-2 pl-lg-0">
             <DropDownSelect className="customer-list-header">
-              <Select options={options} />
+              {generateDropdown('detail')}
             </DropDownSelect>{' '}
           </div>
         </div>
@@ -494,77 +459,58 @@ export default function NewCustomerList() {
         <div className="unselected ">Unselect all</div>
         <div className="clear-fix" />
         <ul className="check-box-list">
-          <li>
-            <CheckBox>
-              <label
-                className="container customer-pannel"
-                htmlFor="contract-copy-check">
-                Active
-                <input type="checkbox" id="contract-copy-check" />
-                <span className="checkmark" />
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label
-                className="container customer-pannel"
-                htmlFor="contract-copy-check">
-                At Risk
-                <input type="checkbox" id="contract-copy-check" />
-                <span className="checkmark" />
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label
-                className="container customer-pannel"
-                htmlFor="contract-copy-check">
-                Pending Cancellation
-                <input type="checkbox" id="contract-copy-check" />
-                <span className="checkmark" />
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label
-                className="container customer-pannel"
-                htmlFor="contract-copy-check">
-                Inactive
-                <input type="checkbox" id="contract-copy-check" />
-                <span className="checkmark" />
-              </label>
-            </CheckBox>
-          </li>
+          {status &&
+            status.map((item) => (
+              <li key={item.value}>
+                <CheckBox>
+                  <label
+                    className="container customer-pannel"
+                    htmlFor={item.value}>
+                    {item.label}
+                    <input
+                      type="checkbox"
+                      id={item.value}
+                      name={item.value}
+                      onChange={(event) => handleFilters(event, item, 'status')}
+                    />
+                    <span className="checkmark" />
+                  </label>
+                </CheckBox>
+              </li>
+            ))}
         </ul>
         <div className="label mt-4">Contract Type</div>
-        <div className="unselected ">Unselect all</div>
         <div className="clear-fix" />
         <ul className="check-box-list">
-          <li>
-            {' '}
-            <ModalRadioCheck>
-              <label className="radio-container customer-list" htmlFor="234">
-                Recurring
-                <input type="radio" name="radio" id="234" />
-                <span className="checkmark" />
-              </label>
-            </ModalRadioCheck>
-          </li>
-          <li>
-            {' '}
-            <ModalRadioCheck>
-              <label className="radio-container customer-list" htmlFor="234">
-                One Time
-                <input type="radio" name="radio" id="234" />
-                <span className="checkmark" />
-              </label>
-            </ModalRadioCheck>
-          </li>
+          {contractChoices.map((item) => (
+            <li key={item.value}>
+              {' '}
+              <ModalRadioCheck>
+                <label
+                  className="radio-container customer-list"
+                  htmlFor={item.value}>
+                  {item.label}
+                  <input
+                    type="radio"
+                    name="radio"
+                    id={item.value}
+                    onChange={(event) => handleFilters(event, item, 'radio')}
+                  />
+                  <span className="checkmark" />
+                </label>
+              </ModalRadioCheck>
+            </li>
+          ))}
         </ul>
-        <Button className="light-orange w-90  btn-apply">Apply</Button>
+        <Button
+          className={
+            enableBtn
+              ? 'light-orange  w-90 btn-apply'
+              : 'light-orange w-90 btn-apply disabled'
+          }
+          disabled={!enableBtn}>
+          Apply
+        </Button>
       </CustomerLeftPannel>
       <>
         {isDesktop ? (
@@ -577,9 +523,10 @@ export default function NewCustomerList() {
                   <tbody>
                     <tr className="table-header">
                       <th className="customer-header">Customer</th>
-                      <th>Contract</th>
-                      <th>Retainer</th>
-                      <th>Rev. Share</th>
+                      <th>{showPerformance ? 'Revenue' : 'Contract'}</th>
+                      <th>{showPerformance ? 'Units Sold' : 'Retainer'}</th>
+                      <th>{showPerformance ? 'Traffic' : 'Rev. Share'}</th>
+                      {showPerformance ? <th>Conversion</th> : null}
                       <th>Brand Strategist</th>
                     </tr>
                     {data &&
@@ -617,55 +564,140 @@ export default function NewCustomerList() {
                               {item && item.status}
                             </div>
                           </td>
-                          <td width="35%">
-                            <p
-                              className="black-heading-title mt-0 mb-0"
-                              style={{ textTransform: 'capitalize' }}>
-                              {' '}
-                              {item &&
-                                item.contract &&
-                                item.contract.contract_type}{' '}
-                              Contract
-                            </p>
-                            <ul className="recurring-contact mb-2 mt-n2">
-                              <li>
-                                <p className="basic-text ">
+                          <td width={showPerformance ? '10%' : '35%'}>
+                            {showPerformance ? (
+                              <>
+                                ${' '}
+                                {item &&
+                                  item.contract &&
+                                  item.contract.rev_share}
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <p
+                                  className="black-heading-title mt-0 mb-0"
+                                  style={{ textTransform: 'capitalize' }}>
+                                  {' '}
                                   {item &&
                                     item.contract &&
-                                    item.contract.length}
+                                    item.contract.contract_type}{' '}
+                                  Contract
                                 </p>
-                              </li>
-                              <li>
-                                <p className="basic-text ">
-                                  {' '}
-                                  Expires: Mar 20, 2021
-                                </p>
-                              </li>
-                              <li>
-                                <div className="days-block">
-                                  {' '}
+                                <ul className="recurring-contact mb-2 mt-n2">
+                                  <li>
+                                    <p className="basic-text ">
+                                      {item &&
+                                        item.contract &&
+                                        item.contract.length}
+                                    </p>
+                                  </li>
+                                  {item &&
+                                  item.contract &&
+                                  item.contract.end_date ? (
+                                    <li>
+                                      <p className="basic-text ">
+                                        {' '}
+                                        Expires:{' '}
+                                        {dayjs(item.contract.end_date).format(
+                                          'MMM DD, YYYY',
+                                        )}
+                                      </p>
+                                    </li>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {item &&
+                                  item.contract &&
+                                  item.contract.end_date ? (
+                                    <li>
+                                      <div className="days-block">
+                                        {' '}
+                                        <img
+                                          className="clock-icon"
+                                          src={ClockIcon}
+                                          alt="clock"
+                                        />{' '}
+                                        {countDays(item)}
+                                      </div>
+                                    </li>
+                                  ) : (
+                                    ''
+                                  )}
+                                </ul>
+                              </>
+                            )}
+                          </td>
+                          <td width="10%">
+                            {showPerformance ? (
+                              <>
+                                12
+                                <div className="increase-rate">
                                   <img
-                                    className="clock-icon"
-                                    src={ClockIcon}
-                                    alt="clock"
-                                  />{' '}
-                                  96 days
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
                                 </div>
-                              </li>
-                            </ul>
+                              </>
+                            ) : (
+                              <>
+                                ${' '}
+                                {item &&
+                                  item.contract &&
+                                  item.contract.monthly_retainer &&
+                                  item.contract.monthly_retainer
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                              </>
+                            )}
                           </td>
                           <td width="10%">
-                            ${' '}
-                            {item &&
-                              item.contract &&
-                              item.contract.monthly_retainer &&
-                              item.contract.monthly_retainer
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            {showPerformance ? (
+                              <>
+                                12,234
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                {item &&
+                                  item.contract &&
+                                  item.contract.rev_share}{' '}
+                                %
+                              </>
+                            )}
                           </td>
-                          <td width="10%">
-                            {item && item.contract && item.contract.rev_share} %
-                          </td>
+                          {showPerformance ? (
+                            <td width="10%">
+                              23.4%
+                              <div className="decrease-rate">
+                                <img
+                                  className="red-arrow"
+                                  src={ArrowDownIcon}
+                                  alt="arrow-up"
+                                />
+                                0.15%
+                              </div>{' '}
+                            </td>
+                          ) : null}
                           <td width="20%">
                             {item &&
                             item.brand_growth_strategist &&
@@ -722,6 +754,7 @@ export default function NewCustomerList() {
             pageNumber={pageNumber}
             handlePageChange={handlePageChange}
             isLoading={isLoading}
+            showPerformance={showPerformance}
           />
         )}
       </>

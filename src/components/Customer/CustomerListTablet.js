@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
@@ -23,7 +24,16 @@ export default function CustomerListTablet({
   pageNumber,
   handlePageChange,
   isLoading,
+  showPerformance,
 }) {
+  const countDays = (item) => {
+    const date1 = new Date();
+    const date2 = new Date(item && item.contract && item.contract.end_date);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   return (
     <CustomerListTabletView>
       <div className="row cursor">
@@ -65,78 +75,164 @@ export default function CustomerListTablet({
                   </div>
                   <div className="clear-fix" />
                   <div className="straight-line horizontal-line pt-3 mb-3" />
-                  <p
-                    className="black-heading-title mt-0 mb-0"
-                    style={{ textTransform: 'capitalize' }}>
-                    <img
-                      className="solid-icon "
-                      src={
-                        item &&
-                        item.contract &&
-                        item.contract.contract_type === 'recurring'
-                          ? RecurringIcon
-                          : ServiceIcon
-                      }
-                      alt=""
-                    />
-                    {item.contract && item.contract.contract_type} Contract
-                  </p>
-                  <ul className="recurring-contact mb-2">
-                    <li>
-                      <p className="basic-text ">
-                        {' '}
-                        {item && item.contract && item.contract.length} contract
-                      </p>
-                    </li>
-                    <li>
-                      <p className="basic-text "> Expires: Mar 20, 2021</p>
-                    </li>
-                    <li>
-                      <div className="days-block">
-                        {' '}
+                  {showPerformance ? (
+                    <div className="row">
+                      <div className="col-6 pb-2">
+                        <div className="label">Revenue</div>
+                        <div className="label-info ">
+                          {item && item.contract && item.contract.rev_share} %
+                          <span className="decrease-rate ml-1">
+                            {' '}
+                            <img
+                              className="red-arrow"
+                              src={ArrowDownIcon}
+                              alt="arrow-up"
+                            />
+                            0.15%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-6 pb-2">
+                        <div className="label">Units Sold</div>
+                        <div className="label-info ">
+                          {item && item.contract && item.contract.rev_share} %
+                          <span className="decrease-rate ml-1">
+                            {' '}
+                            <img
+                              className="red-arrow"
+                              src={ArrowDownIcon}
+                              alt="arrow-up"
+                            />
+                            0.15%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p
+                        className="black-heading-title mt-0 mb-0"
+                        style={{ textTransform: 'capitalize' }}>
                         <img
-                          className="clock-icon"
-                          src={ClockIcon}
-                          alt="clock"
-                        />{' '}
-                        96 days
-                      </div>
-                    </li>
-                  </ul>
-                  <div className="straight-line horizontal-line pt-3 mb-3" />
+                          className="solid-icon "
+                          src={
+                            item &&
+                            item.contract &&
+                            item.contract.contract_type === 'recurring'
+                              ? RecurringIcon
+                              : ServiceIcon
+                          }
+                          alt=""
+                        />
+                        {item.contract && item.contract.contract_type} Contract
+                      </p>
+                      <ul className="recurring-contact mb-2">
+                        <li>
+                          <p className="basic-text ">
+                            {' '}
+                            {item && item.contract && item.contract.length}{' '}
+                            contract
+                          </p>
+                        </li>
+                        {item && item.contract && item.contract.end_date ? (
+                          <li>
+                            <p className="basic-text ">
+                              {' '}
+                              Expires:{' '}
+                              {dayjs(item.contract.end_date).format(
+                                'MMM DD, YYYY',
+                              )}
+                            </p>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+                        {item && item.contract && item.contract.end_date ? (
+                          <li>
+                            <div className="days-block">
+                              {' '}
+                              <img
+                                className="clock-icon"
+                                src={ClockIcon}
+                                alt="clock"
+                              />{' '}
+                              {countDays(item)}
+                            </div>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+                      </ul>
+                    </>
+                  )}
+
+                  {!showPerformance ? (
+                    <div className="straight-line horizontal-line pt-3 mb-3" />
+                  ) : (
+                    ''
+                  )}
                   <div className="row">
-                    <div className="col-6">
-                      {' '}
-                      <div className="label">Monthly Retainer</div>
-                      <div className="label-info">
-                        ${' '}
-                        {item &&
-                          item.contract &&
-                          item.contract.monthly_retainer &&
-                          item.contract.monthly_retainer
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        <span className="increase-rate ml-1">
-                          <img width="14px" src={ArrowUpIcon} alt="arrow-up" />{' '}
-                          0.51%
-                        </span>
+                    {showPerformance ? (
+                      <div className="col-6">
+                        <div className="label">Traffic</div>
+                        <div className="label-info">
+                          23,234
+                          <span className="increase-rate ml-1">
+                            <img
+                              width="14px"
+                              src={ArrowUpIcon}
+                              alt="arrow-up"
+                            />{' '}
+                            0.51%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="label">Rev Share %</div>
-                      <div className="label-info ">
-                        {item && item.contract && item.contract.rev_share} %
-                        <span className="decrease-rate ml-1">
-                          {' '}
-                          <img
-                            className="red-arrow"
-                            src={ArrowDownIcon}
-                            alt="arrow-up"
-                          />
-                          0.15%
-                        </span>
+                    ) : (
+                      <>
+                        <div className="col-6">
+                          <div className="label">Monthly Retainer</div>
+                          <div className="label-info">
+                            ${' '}
+                            {item &&
+                              item.contract &&
+                              item.contract.monthly_retainer &&
+                              item.contract.monthly_retainer
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {showPerformance ? (
+                      <div className="col-6">
+                        <div className="label">Conversion</div>
+                        <div className="label-info">
+                          23.4%
+                          <span className="decrease-rate ml-1">
+                            {' '}
+                            <img
+                              className="red-arrow"
+                              src={ArrowDownIcon}
+                              alt="arrow-up"
+                            />
+                            0.15%
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="col-6">
+                        <div className="label">Rev Share %</div>
+                        <div className="label-info ">
+                          {item && item.contract && item.contract.rev_share} %
+                        </div>
+                      </div>
+                    )}
+                    {showPerformance ? (
+                      <div className="straight-line horizontal-line pt-3 mb-3" />
+                    ) : (
+                      ''
+                    )}
                     <div className="col-12 mt-3">
                       <div className="label">Brand Strategist</div>
                       <div className="label-info">
@@ -172,6 +268,7 @@ CustomerListTablet.defaultProps = {
   count: null,
   pageNumber: 1,
   handlePageChange: () => {},
+  showPerformance: false,
 };
 
 CustomerListTablet.propTypes = {
@@ -187,6 +284,7 @@ CustomerListTablet.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
+  showPerformance: PropTypes.bool,
 };
 
 const CustomerListTabletView = styled.div`
