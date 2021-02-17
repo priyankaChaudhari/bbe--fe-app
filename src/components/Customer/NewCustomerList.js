@@ -505,7 +505,7 @@ export default function NewCustomerList() {
         <Button
           className={
             enableBtn
-              ? 'light-orange  w-90 btn-apply'
+              ? 'btn-primary  w-90 btn-apply'
               : 'light-orange w-90 btn-apply disabled'
           }
           disabled={!enableBtn}>

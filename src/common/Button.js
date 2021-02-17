@@ -147,9 +147,6 @@ const Button = styled.button`
       margin-right: 10px;
     }
 
-    &.w-90 {
-      width: 260px;
-    }
     &:focus {
       outline: none;
     }
@@ -191,6 +188,9 @@ const Button = styled.button`
   }
   &.w-25 {
     width: 130px;
+  }
+  &.w-90 {
+    width: 260px;
   }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
