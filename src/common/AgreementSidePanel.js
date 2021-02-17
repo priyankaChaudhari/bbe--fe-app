@@ -1382,16 +1382,21 @@ export default function AgreementSidePanel({
       formData &&
       formData.additional_one_time_services &&
       formData.additional_one_time_services.length &&
-      formData.additional_one_time_services.find(
-        (item) =>
-          item.service && item.service.name.includes('Amazon Store Package'),
+      formData.additional_one_time_services.find((item) =>
+        item.name
+          ? item.name.includes('Amazon Store Package')
+          : item.service && item.service.name.includes('Amazon Store Package'),
       );
 
     if (serviceData) {
-      const serviceName = serviceData.service.name.split(' ')[3];
+      const serviceName = serviceData.name
+        ? serviceData.name.split(' ')[3]
+        : serviceData.service.name.split(' ')[3];
 
       return {
-        value: serviceData.service.id,
+        value: serviceData.service_id
+          ? serviceData.service_id
+          : serviceData.service.id,
         label: serviceName,
       };
     }
