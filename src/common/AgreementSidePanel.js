@@ -1219,6 +1219,15 @@ export default function AgreementSidePanel({
       setOpenCollapse({ agreement: false, statement: true });
       executeScroll('statement');
     }
+    if (key === 'dspAddendum') {
+      setOpenCollapse({
+        ...openCollapse,
+        statement: false,
+        dspAddendum: true,
+        addendum: false,
+      });
+      executeScroll('dspAddendum');
+    }
     if (key === 'addendum') {
       // if (showSection.addendum) {
       setOpenCollapse({
@@ -2021,7 +2030,11 @@ export default function AgreementSidePanel({
                           ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
                           : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                       }
-                      onClick={() => nextStep('addendum')}>
+                      onClick={() =>
+                        showSection && showSection.dspAddendum
+                          ? nextStep('dspAddendum')
+                          : nextStep('addendum')
+                      }>
                       {isLoading.loader && isLoading.type === 'button' ? (
                         <PageLoader color="#fff" type="button" />
                       ) : (
