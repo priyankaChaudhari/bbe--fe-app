@@ -60,7 +60,7 @@ export default function AgreementDetails({ agreement, id }) {
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
                 <img
-                  className="solid-icon mt-1 "
+                  className="solid-icon  "
                   src={
                     agreement && agreement.contract_type === 'One Time'
                       ? ServiceIcon
@@ -74,7 +74,7 @@ export default function AgreementDetails({ agreement, id }) {
                     : 'Recurring Contract'}
                 </p>
 
-                <ul className="recurring-contact mt-n2">
+                <ul className="recurring-contact ">
                   <li>
                     <p className="basic-text ">
                       {agreement && agreement.length && agreement.length.label}{' '}

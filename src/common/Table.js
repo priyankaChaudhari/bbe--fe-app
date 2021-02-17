@@ -4,6 +4,7 @@ import Theme from '../theme/Theme';
 const Table = styled.table`
   width: 100%;
   border-spacing: 0;
+  height: 100vh;
 
   tbody {
     width: 100%;
