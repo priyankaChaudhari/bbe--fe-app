@@ -59,8 +59,8 @@ export default function AgreementSidePanel({
   onEditAddendum,
   setShowEditor,
   setNewAddendum,
-  // setNotIncludedOneTimeServices,
-  // setNotIncludedMonthlyServices,
+  setNotIncludedOneTimeServices,
+  setNotIncludedMonthlyServices,
   // sendNotIncludedOneTimeServToAdd,
   // sendNotIncludedMonthlyServToAdd,
   apiError,
@@ -138,36 +138,43 @@ export default function AgreementSidePanel({
   //   }
   // };
 
-  // const fetchUncommonOptions = (options, alreadySelected, func) => {
-  //   let result = [];
-  //   if (alreadySelected) {
-  //     for (const option of options) {
-  //       let isFound = true;
-  //       for (const service of alreadySelected) {
-  //         if (service.service.id !== option.value) {
-  //           isFound = false;
-  //         } else {
-  //           isFound = true;
-  //           break;
-  //         }
-  //       }
+  const fetchUncommonOptions = (options, alreadySelected, type) => {
+    let result = [];
+    if (alreadySelected && alreadySelected.length) {
+      for (const option of options) {
+        let isFound = true;
+        for (const service of alreadySelected) {
+          if (
+            service && service.service && service.service.id
+              ? service.service.id !== option.value
+              : service.service_id !== option.value
+          ) {
+            isFound = false;
+          } else {
+            isFound = true;
+            break;
+          }
+        }
 
-  //       if (isFound === false) {
-  //         result.push(option);
-  //       }
-  //     }
-  //   } else {
-  //     result = options;
-  //   }
-  //   func(result);
-
-  //   if (setNotIncludedOneTimeServices) {
-  //     setNotIncludedOneTimeServices(result);
-  //   }
-  //   if (sendNotIncludedOneTimeServToAdd) {
-  //     sendNotIncludedOneTimeServToAdd(result);
-  //   }
-  // };
+        if (isFound === false) {
+          result.push(option);
+        }
+      }
+    } else {
+      result = options;
+    }
+    // func(result);
+    if (type === 'one_time_service') {
+      if (setNotIncludedOneTimeServices) {
+        setNotIncludedOneTimeServices(result);
+      }
+    }
+    if (type === 'monthly_service') {
+      if (setNotIncludedMonthlyServices) {
+        setNotIncludedMonthlyServices(result);
+      }
+    }
+  };
 
   useEffect(() => {
     getLength().then((len) => {
@@ -210,17 +217,6 @@ export default function AgreementSidePanel({
 
         setAmazonStoreOptions(list);
       }
-      // const AmazonStoreOptions = [
-      //   { label: 'Basic', value: 'basic' },
-      //   { label: 'Plus', value: 'plus' },
-      //   { label: 'Custom', value: 'custom' },
-      // ];
-
-      // fetchUncommonOptions(
-      //   r.data,
-      //   agreementData.additional_one_time_services,
-      //   setOneTimeService,
-      // );
     });
     getMarketplaces().then((market) => {
       setMarketPlaces(market.data);
@@ -241,24 +237,38 @@ export default function AgreementSidePanel({
   }, []);
 
   useEffect(() => {
-    if (agreementData && agreementData.additional_one_time_services) {
-      const serviceData =
-        agreementData &&
-        agreementData.additional_one_time_services &&
-        agreementData.additional_one_time_services.length &&
-        agreementData.additional_one_time_services.find(
-          (item) =>
-            item.service && item.service.name.includes('Amazon Store Package'),
-        );
-      if (serviceData) {
-        setShowAmazonPlanDropdown(true);
-        const serviceName = serviceData.service.name.split(' ')[3];
-        if (serviceName === 'Custom') {
-          setAmazonStoreCustom(true);
-        }
+    // if (agreementData && agreementData.additional_one_time_services) {
+    fetchUncommonOptions(
+      oneTimeService,
+      agreementData.additional_one_time_services,
+      'one_time_service',
+    );
+
+    const serviceData =
+      agreementData &&
+      agreementData.additional_one_time_services &&
+      agreementData.additional_one_time_services.length &&
+      agreementData.additional_one_time_services.find(
+        (item) =>
+          item.service && item.service.name.includes('Amazon Store Package'),
+      );
+    if (serviceData) {
+      setShowAmazonPlanDropdown(true);
+      const serviceName = serviceData.service.name.split(' ')[3];
+      if (serviceName === 'Custom') {
+        setAmazonStoreCustom(true);
       }
-      setSelectedAmazonStorePackService(serviceData);
     }
+    setSelectedAmazonStorePackService(serviceData);
+    // }
+
+    // if (agreementData && agreementData.additional_monthly_services) {
+    fetchUncommonOptions(
+      monthlyService,
+      agreementData.additional_monthly_services,
+      'monthly_service',
+    );
+    // }
     // if (
     //   agreementData &&
     //   agreementData.additional_monthly_services &&
@@ -537,6 +547,11 @@ export default function AgreementSidePanel({
         setMonthlyAdditionalServices({
           ...additionalMonthlyServices,
         });
+        fetchUncommonOptions(
+          monthlyService,
+          additionalMonthlyServices.create,
+          'monthly_service',
+        );
       }
       // if item unchecked or removed
       else {
@@ -579,6 +594,11 @@ export default function AgreementSidePanel({
         setMonthlyAdditionalServices({
           ...additionalMonthlyServices,
         });
+        fetchUncommonOptions(
+          monthlyService,
+          additionalMonthlyServices.create,
+          'monthly_service',
+        );
       }
     } else if (key === 'amazon_store_package') {
       if (type === 'quantity') {
@@ -592,7 +612,11 @@ export default function AgreementSidePanel({
                 ? item.name.includes('Amazon Store Package')
                 : item.service.name.includes('Amazon Store Package')
             ) {
-              item.quantity = event.target.value;
+              if (event.target.value) {
+                item.quantity = parseInt(event.target.value, 10);
+              } else {
+                item.quantity = 1;
+              }
             }
             return item;
           });
@@ -830,7 +854,11 @@ export default function AgreementSidePanel({
                 ? item.name === event.target.name
                 : item.service.name === event.target.name
             ) {
-              item.quantity = event.target.value;
+              if (event.target.value) {
+                item.quantity = parseInt(event.target.value, 10);
+              } else {
+                item.quantity = 1;
+              }
             }
             return item;
           });
@@ -933,6 +961,11 @@ export default function AgreementSidePanel({
         setAdditionalOnetimeServices({
           ...additionalOnetimeServices,
         });
+        fetchUncommonOptions(
+          oneTimeService,
+          additionalOnetimeServices.create,
+          'one_time_service',
+        );
       }
       // if item unchecked or removed
       else {
@@ -972,6 +1005,11 @@ export default function AgreementSidePanel({
           ...additionalOnetimeServices,
         });
       }
+      fetchUncommonOptions(
+        oneTimeService,
+        additionalOnetimeServices.create,
+        'one_time_service',
+      );
       // }
     } else {
       if (event.target.name === 'zip_code') {
@@ -1184,7 +1222,6 @@ export default function AgreementSidePanel({
       }
     }
   };
-
   const changeQuantity = (oneTimeServiceData, flag) => {
     if (
       formData &&
@@ -1198,18 +1235,25 @@ export default function AgreementSidePanel({
               ? item.service_id === oneTimeServiceData.value
               : item.service && item.service.id === oneTimeServiceData.value
           ) {
+            let quantity = 0;
+            if (item.quantity) {
+              quantity = parseInt(item.quantity, 10);
+            }
             if (flag === 'add') {
-              item.quantity += 1;
+              quantity += 1;
+              item.quantity = quantity;
             }
             if (flag === 'minus') {
-              if (item.quantity > 1) {
-                item.quantity -= 1;
+              if (quantity > 1) {
+                quantity -= 1;
+                item.quantity = quantity;
               }
             }
           }
           return item;
         },
       );
+
       setFormData({
         ...formData,
         additional_one_time_services: changedService,
@@ -1219,90 +1263,53 @@ export default function AgreementSidePanel({
 
   const handleAmazonServiceQuantity = (flag) => {
     showFooter(true);
-    if (flag === 'add') {
-      setSelectedAmazonStorePackService({
-        ...amazonService,
-        quantity: amazonService.quantity + 1,
+    // if (flag === 'add') {
+    const selectedData =
+      additionalOnetimeServices &&
+      additionalOnetimeServices.create &&
+      additionalOnetimeServices.create.length &&
+      additionalOnetimeServices.create.filter((item) => {
+        if (
+          item.name
+            ? item.name.includes('Amazon Store Package')
+            : item.service.name.includes('Amazon Store Package')
+        ) {
+          let itemQuantity = 0;
+          if (item.quantity) {
+            itemQuantity = parseInt(item.quantity, 10);
+          }
+
+          if (flag === 'add') {
+            item.quantity = itemQuantity + 1;
+          }
+          if (flag === 'minus') {
+            if (itemQuantity > 1) {
+              item.quantity = itemQuantity - 1;
+            }
+          }
+        }
+        return item;
       });
 
-      const serviceData =
-        formData &&
-        formData.additional_one_time_services &&
-        formData.additional_one_time_services.length &&
-        formData.additional_one_time_services.find(
-          (item) =>
-            item.service &&
-            item.service.name.includes(
-              amazonService.name ? amazonService.name : 'Amazon Store Package',
-            ),
-        );
-      if (serviceData) {
-        serviceData.quantity = amazonService.quantity + 1;
-      }
+    if (selectedData) {
+      setFormData({
+        ...formData,
+        additional_one_time_services: selectedData,
+      });
 
-      const updatedData =
-        additionalOnetimeServices &&
-        additionalOnetimeServices.additional_one_time_services &&
-        additionalOnetimeServices.additional_one_time_services.create &&
-        additionalOnetimeServices.additional_one_time_services.create.find(
-          (item) =>
-            item.service &&
-            item.service.name.includes(
-              amazonService.name ? amazonService.name : 'Amazon Store Package',
-            ),
-        );
-      if (updatedData) {
-        additionalOnetimeServices.quantity = amazonService.quantity + 1;
-      }
-
+      setAdditionalOnetimeServices({
+        ...additionalOnetimeServices,
+        create: selectedData,
+      });
       setUpdatedFormData({
         ...updatedFormData,
-        additional_one_time_services: additionalOnetimeServices,
+        additional_one_time_services: {
+          ...additionalOnetimeServices,
+          create: selectedData,
+        },
       });
     }
-
-    if (flag === 'minus') {
-      setSelectedAmazonStorePackService({
-        ...amazonService,
-        quantity: amazonService.quantity - 1,
-      });
-
-      const serviceData =
-        formData &&
-        formData.additional_one_time_services &&
-        formData.additional_one_time_services.length &&
-        formData.additional_one_time_services.find(
-          (item) =>
-            item.service &&
-            item.service.name.includes(
-              amazonService.name ? amazonService.name : 'Amazon Store Package',
-            ),
-        );
-
-      if (serviceData) {
-        serviceData.quantity = amazonService.quantity - 1;
-      }
-
-      const updatedData =
-        additionalOnetimeServices &&
-        additionalOnetimeServices.additional_one_time_services &&
-        additionalOnetimeServices.additional_one_time_services.create &&
-        additionalOnetimeServices.additional_one_time_services.create.find(
-          (item) =>
-            item.service &&
-            item.service.name.includes(
-              amazonService.name ? amazonService.name : 'Amazon Store Package',
-            ),
-        );
-      if (updatedData) {
-        updatedData.quantity = amazonService.quantity + 1;
-      }
-
-      setUpdatedFormData({
-        ...updatedFormData,
-        additional_one_time_services: additionalOnetimeServices,
-      });
-    }
+    // }
   };
 
   const handleAmazonPlanChange = (event) => {
@@ -1551,7 +1558,7 @@ export default function AgreementSidePanel({
                           onClick={(event) =>
                             setShowAdditionalMarketplace(event.target.checked)
                           }
-                          checked={
+                          defaultChecked={
                             formData &&
                             formData.additional_marketplaces &&
                             formData.additional_marketplaces.length
@@ -1643,17 +1650,17 @@ export default function AgreementSidePanel({
                                   <button
                                     type="button"
                                     className="decrement"
-                                    onClick={(event) => {
+                                    onClick={() => {
                                       changeQuantity(
                                         oneTimeServiceData,
                                         'minus',
                                       );
-                                      handleChange(
-                                        event,
-                                        'additional_one_time_services',
-                                        'quantity',
-                                        oneTimeServiceData,
-                                      );
+                                      // handleChange(
+                                      //   event,
+                                      //   'additional_one_time_services',
+                                      //   'quantity',
+                                      //   oneTimeServiceData,
+                                      // );
                                     }}>
                                     {' '}
                                     <img
@@ -1691,14 +1698,14 @@ export default function AgreementSidePanel({
                                   <button
                                     type="button"
                                     className="increment"
-                                    onClick={(event) => {
+                                    onClick={() => {
                                       changeQuantity(oneTimeServiceData, 'add');
-                                      handleChange(
-                                        event,
-                                        'additional_one_time_services',
-                                        'quantity',
-                                        oneTimeServiceData,
-                                      );
+                                      // handleChange(
+                                      //   event,
+                                      //   'additional_one_time_services',
+                                      //   'quantity',
+                                      //   oneTimeServiceData,
+                                      // );
                                     }}>
                                     <img
                                       className="plus-icon"
@@ -1761,14 +1768,14 @@ export default function AgreementSidePanel({
                             <button
                               type="button"
                               className="decrement"
-                              onClick={(event) => {
+                              onClick={() => {
                                 handleAmazonServiceQuantity('minus');
-                                handleChange(
-                                  event,
-                                  'amazon_store_package',
-                                  'quantity',
-                                  amazonService,
-                                );
+                                // handleChange(
+                                //   event,
+                                //   'amazon_store_package',
+                                //   'quantity',
+                                //   amazonService,
+                                // );
                               }}>
                               {' '}
                               <img
@@ -1831,14 +1838,14 @@ export default function AgreementSidePanel({
                             <button
                               type="button"
                               className="increment"
-                              onClick={(event) => {
+                              onClick={() => {
                                 handleAmazonServiceQuantity('add');
-                                handleChange(
-                                  event,
-                                  'amazon_store_package',
-                                  'quantity',
-                                  amazonService,
-                                );
+                                // handleChange(
+                                //   event,
+                                //   'amazon_store_package',
+                                //   'quantity',
+                                //   amazonService,
+                                // );
                               }}>
                               <img
                                 className="plus-icon"
@@ -2205,8 +2212,8 @@ AgreementSidePanel.defaultProps = {
   onEditAddendum: () => {},
   setShowEditor: () => {},
   setNewAddendum: () => {},
-  // setNotIncludedOneTimeServices: () => {},
-  // setNotIncludedMonthlyServices: () => {},
+  setNotIncludedOneTimeServices: () => {},
+  setNotIncludedMonthlyServices: () => {},
   // sendNotIncludedOneTimeServToAdd: () => {},
   // sendNotIncludedMonthlyServToAdd: () => {},
   apiError: {},
@@ -2262,8 +2269,8 @@ AgreementSidePanel.propTypes = {
   onEditAddendum: PropTypes.func,
   setShowEditor: PropTypes.func,
   setNewAddendum: PropTypes.func,
-  // setNotIncludedOneTimeServices: PropTypes.func,
-  // setNotIncludedMonthlyServices: PropTypes.func,
+  setNotIncludedOneTimeServices: PropTypes.func,
+  setNotIncludedMonthlyServices: PropTypes.func,
   // sendNotIncludedOneTimeServToAdd: PropTypes.func,
   // sendNotIncludedMonthlyServToAdd: PropTypes.func,
   apiError: PropTypes.shape({
