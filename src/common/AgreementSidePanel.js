@@ -2076,10 +2076,8 @@ export default function AgreementSidePanel({
                   {DSPAddendumDetails.map((item) => (
                     <li key={item.key}>
                       <ContractFormField>
-                        <label htmlFor={item.key}>
-                          {item.label}
-                          {generateHTML(item)}
-                        </label>
+                        <label htmlFor={item.key}>{item.label}</label>
+                        {generateHTML(item)}
                         <ErrorMsg>
                           {apiError &&
                             apiError[item.key] &&
