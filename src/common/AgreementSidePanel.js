@@ -26,8 +26,9 @@ import {
   GreenCheck,
   MinusIcon,
   PlusIcon,
+  Advertise,
 } from '../theme/images/index';
-import { Button, FormField } from './index';
+import { Button, ContractFormField } from './index';
 
 import {
   AgreementDetails,
@@ -43,7 +44,7 @@ import {
   getOneTimeService,
   createAddendum,
 } from '../api';
-import InputSelect from './InputSelect';
+import ContractInputSelect from './ContractInputSelect';
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 // import { getAccountDetails } from '../store/actions/accountState';
@@ -1195,10 +1196,14 @@ export default function AgreementSidePanel({
       );
     }
     if (item.type === 'choice') {
-      return <InputSelect>{generateDropdown(item)}</InputSelect>;
+      return (
+        <ContractInputSelect>{generateDropdown(item)}</ContractInputSelect>
+      );
     }
     if (item && item.type === 'multichoice') {
-      return <InputSelect>{generateMultiChoice(item)}</InputSelect>;
+      return (
+        <ContractInputSelect>{generateMultiChoice(item)}</ContractInputSelect>
+      );
     }
     return (
       <input
@@ -1462,7 +1467,7 @@ export default function AgreementSidePanel({
                 {AgreementDetails.map((item) =>
                   item.key !== 'contract_address' ? (
                     <li key={item.key}>
-                      <FormField>
+                      <ContractFormField>
                         <label htmlFor={item.key}>
                           {item.label}
                           {generateHTML(item)}
@@ -1472,11 +1477,11 @@ export default function AgreementSidePanel({
                             apiError[item.key] &&
                             apiError[item.key][0]}
                         </ErrorMsg>
-                      </FormField>
+                      </ContractFormField>
                     </li>
                   ) : (
                     <li key={item.key}>
-                      <FormField>
+                      <ContractFormField>
                         <label>{item.label}</label>
                         {item.sections.map((subFields) => (
                           <React.Fragment key={subFields.key}>
@@ -1490,14 +1495,14 @@ export default function AgreementSidePanel({
                             </ErrorMsg>
                           </React.Fragment>
                         ))}
-                      </FormField>
+                      </ContractFormField>
                     </li>
                   ),
                 )}
 
                 <li>
                   <Button
-                    className="btn-primary sidepanel mt-2 mb-3 w-100"
+                    className="btn-primary sidepanel btn-next-section mt-2 mb-3 w-100"
                     onClick={() => nextStep('statement')}>
                     {' '}
                     {isLoading.loader && isLoading.type === 'button' ? (
@@ -1545,7 +1550,7 @@ export default function AgreementSidePanel({
                     <React.Fragment key={item.key}>
                       <>
                         <li>
-                          <FormField>
+                          <ContractFormField>
                             <label htmlFor={item.key}>
                               {item.label}
                               {generateHTML(item)}
@@ -1555,21 +1560,21 @@ export default function AgreementSidePanel({
                                 apiError[item.key] &&
                                 apiError[item.key][0]}
                             </ErrorMsg>
-                          </FormField>
+                          </ContractFormField>
                         </li>
                       </>
                     </React.Fragment>
                   ))}
                   <li>
-                    <FormField>
-                      <label htmlFor="additional_one_time_services">
+                    <ContractFormField className="mb-3">
+                      <label htmlFor="additional_one_time_services ">
                         Additional Monthly Services
                       </label>
-                    </FormField>
+                    </ContractFormField>
                     {monthlyService &&
                       monthlyService.map((serviceData) => (
                         <CheckBox
-                          className="gray-check mt-3"
+                          className="gray-check "
                           key={serviceData && serviceData.value}>
                           <label
                             className="container customer-pannel"
@@ -1603,7 +1608,7 @@ export default function AgreementSidePanel({
                         </CheckBox>
                       ))}
 
-                    <CheckBox className="gray-check mt-2">
+                    <CheckBox className="gray-check ">
                       <label
                         className="container customer-pannel"
                         htmlFor="additional_marketplaces">
@@ -1637,33 +1642,33 @@ export default function AgreementSidePanel({
                     </CheckBox>
 
                     {showAdditionalMarketplace ? (
-                      <li>
-                        <FormField>
+                      <>
+                        <ContractFormField>
                           {generateHTML({
                             key: 'additional_marketplaces',
                             label: 'Additional Market Places',
                             type: 'multichoice',
                           })}
-                        </FormField>
-                      </li>
+                        </ContractFormField>
+                      </>
                     ) : (
                       ''
                     )}
                   </li>
                   <li>
-                    <FormField>
+                    <ContractFormField className="mb-3">
                       <label htmlFor="additional_one_time_services">
                         Additional One-Time Services
                       </label>
-                    </FormField>
-                    <div className="row mt-3">
+                    </ContractFormField>
+                    <div className="row">
                       {oneTimeService &&
                         oneTimeService.map((oneTimeServiceData) =>
                           !oneTimeServiceData.label.includes(
                             'Amazon Store Package',
                           ) ? (
                             <React.Fragment key={oneTimeServiceData.value}>
-                              <div className="col-7 mt-2">
+                              <div className="col-7 ">
                                 {' '}
                                 <CheckBox className="gray-check">
                                   <label
@@ -1711,7 +1716,7 @@ export default function AgreementSidePanel({
                                       item.service.id ===
                                         oneTimeServiceData.value,
                               ) ? (
-                                <div className="col-5 mt-2">
+                                <div className="col-5 pl-0">
                                   <button
                                     type="button"
                                     className="decrement"
@@ -1788,7 +1793,7 @@ export default function AgreementSidePanel({
                           ),
                         )}
                       <>
-                        <div className="col-7 mt-2">
+                        <div className="col-7 ">
                           {' '}
                           <CheckBox className="gray-check">
                             <label
@@ -1829,7 +1834,7 @@ export default function AgreementSidePanel({
                           </CheckBox>
                         </div>
                         {showAmazonPlanDropdown ? (
-                          <div className="col-5 mt-2">
+                          <div className="col-5 pl-0">
                             <button
                               type="button"
                               className="decrement"
@@ -1924,7 +1929,7 @@ export default function AgreementSidePanel({
                         )}
                         {showAmazonPlanDropdown ? (
                           <>
-                            <InputSelect>
+                            <ContractInputSelect>
                               <Select
                                 classNamePrefix="react-select"
                                 // styles={customStyles}
@@ -1940,9 +1945,9 @@ export default function AgreementSidePanel({
                                   );
                                 }}
                               />
-                            </InputSelect>
+                            </ContractInputSelect>
                             {amazonStoreCustom ? (
-                              <FormField>
+                              <ContractFormField>
                                 <input
                                   className="form-control"
                                   type="text"
@@ -1989,7 +1994,7 @@ export default function AgreementSidePanel({
                                     )
                                   }
                                 />
-                              </FormField>
+                              </ContractFormField>
                             ) : (
                               ''
                             )}
@@ -2005,8 +2010,8 @@ export default function AgreementSidePanel({
                     <Button
                       className={
                         formData.additional_one_time_services
-                          ? 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
-                          : 'btn-primary on-boarding sidepanel mt-2 mb-3 w-100 '
+                          ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
+                          : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                       }
                       onClick={() => nextStep('addendum')}>
                       {isLoading.loader && isLoading.type === 'button' ? (
@@ -2023,39 +2028,33 @@ export default function AgreementSidePanel({
           {showSection && showSection.dspAddendum ? (
             <>
               <div className="straight-line sidepanel " />
-              <div className="row mr-3">
-                <div className="col-10">
-                  <div
-                    className={
-                      showSection && showSection.dspAddendum
-                        ? 'collapse-btn   '
-                        : 'collapse-btn  disabled '
-                    }
-                    role="presentation"
-                    type="button"
-                    onClick={() => {
-                      executeScroll('dspAddendum');
-                      setOpenCollapse({
-                        dspAddendum: !openCollapse.dspAddendum,
-                      });
-                    }}>
-                    <img
-                      className="service-agre"
-                      src={CreateAddendum}
-                      alt="pdf"
-                    />
-                    <h4 className="sendar-details mt-1 ml-5">
-                      DSP Advertising
-                    </h4>
-                    <div className="clear-fix" />
-                  </div>
-                </div>
+              {/* <div className="row mr-3">
+                <div className="col-10"> */}
+              <div
+                className={
+                  showSection && showSection.dspAddendum
+                    ? 'collapse-btn   '
+                    : 'collapse-btn  disabled '
+                }
+                role="presentation"
+                type="button"
+                onClick={() => {
+                  executeScroll('dspAddendum');
+                  setOpenCollapse({
+                    dspAddendum: !openCollapse.dspAddendum,
+                  });
+                }}>
+                <img className="service-agre" src={Advertise} alt="pdf" />
+                <h4 className="sendar-details mt-2 ml-5">DSP Advertising</h4>
+                <div className="clear-fix" />
               </div>
+              {/* </div>
+              </div> */}
               <Collapse isOpened={openCollapse.dspAddendum}>
                 <ul className="collapse-inner">
                   {DSPAddendumDetails.map((item) => (
                     <li key={item.key}>
-                      <FormField>
+                      <ContractFormField>
                         <label htmlFor={item.key}>
                           {item.label}
                           {generateHTML(item)}
@@ -2066,7 +2065,7 @@ export default function AgreementSidePanel({
                             apiError[item.key] &&
                             apiError[item.key][0]}
                         </ErrorMsg>
-                      </FormField>
+                      </ContractFormField>
                     </li>
                   ))}
                   <li>
@@ -2090,29 +2089,24 @@ export default function AgreementSidePanel({
           ) : (
             ''
           )}
-          <div className="straight-line sidepanel " />
-
-          <div className="row">
-            <div className="col-10">
-              {' '}
-              <div
-                className={
-                  showSection && showSection.addendum
-                    ? 'collapse-btn '
-                    : 'collapse-btn disabled'
-                }
-                role="presentation"
-                type="button"
-                onClick={() => {
-                  executeScroll('addendum');
-                  setOpenCollapse({ addendum: !openCollapse.addendum });
-                }}>
-                <img className="service-agre" src={CreateAddendum} alt="pdf" />
-                <h4 className="sendar-details mt-1 ml-5">Create Addendum </h4>
-                <div className="clear-fix" />
-              </div>
-            </div>
-            {/* {/* <div className="col-2 pl-0">
+          <div className="straight-line sidepanel " />{' '}
+          <div
+            className={
+              showSection && showSection.addendum
+                ? 'collapse-btn '
+                : 'collapse-btn disabled'
+            }
+            role="presentation"
+            type="button"
+            onClick={() => {
+              executeScroll('addendum');
+              setOpenCollapse({ addendum: !openCollapse.addendum });
+            }}>
+            <img className="service-agre" src={CreateAddendum} alt="pdf" />
+            <h4 className="sendar-details mt-2 ml-5">Create Addendum </h4>
+            <div className="clear-fix" />
+          </div>
+          {/* {/* <div className="col-2 pl-0">
               <label className="switch mt-3">
                 <input
                   type="checkbox"
@@ -2121,8 +2115,6 @@ export default function AgreementSidePanel({
                 <span className="slider round" />
               </label> 
             </div> */}
-          </div>
-
           <Collapse isOpened={openCollapse.addendum}>
             <ul className="collapse-inner">
               <li>
@@ -2164,7 +2156,6 @@ export default function AgreementSidePanel({
               </li>
             </ul>
           </Collapse>
-
           {/* 
           <div className="straight-line sidepanel " />
           <div className="row">
@@ -2191,7 +2182,6 @@ export default function AgreementSidePanel({
           
           </div>
           <Collapse isOpened={openCollapse.amendment} /> */}
-
           {/* <p className="gray-text">
         The Contract has been sent for review and signature to the client on
           08/10/2020.
@@ -2399,18 +2389,17 @@ AgreementSidePanel.propTypes = {
 };
 
 const SidePanel = styled.div`
-  // width: 335px;
    min-width: 60px;
   z-index: 2;
-  padding-bottom:200px;
-  max-width: 345px;
+  // padding-bottom:200px;
+  max-width: 380px;
   position: fixed;
   top: 71px;
   right: 0;
   height: 100%;
   background: ${Theme.white};
   border-left: 1px solid ${Theme.gray7};
-  overflow:auto;
+  overflow-y:auto;
 
 .green-check-select {
   width:16px;
@@ -2504,10 +2493,9 @@ const SidePanel = styled.div`
         .increment {
            border: 1px solid #DFE7FF;
             border-radius: 0 8px 8px 0;
-
             width: 32px;
-           background: ${Theme.gray5};
-           cursor:pointer;
+            background: ${Theme.gray5};
+            cursor:pointer;
 
            .plus-icon{
              width:10px;
@@ -2520,10 +2508,9 @@ const SidePanel = styled.div`
         .decrement {
            border: 1px solid #DFE7FF;
             border-radius:  8px 0 0 8px ;
-
             width: 32px;
-           background: ${Theme.gray5};
-           cursor:pointer;
+            background: ${Theme.gray5};
+            cursor:pointer;
 
            .minus-icon {
               width:10px;
@@ -2533,8 +2520,10 @@ const SidePanel = styled.div`
            }
         }
         .max-min-number {
-          width:40px;
-           border: 1px solid #DFE7FF;
+          width: 32px;
+          border: 1px solid #DFE7FF;
+          font-size: 14px;
+          text-align: center;
         }
     }
 } 
@@ -2663,7 +2652,7 @@ const SidePanel = styled.div`
     display: none;
   }
   input[data-function*='swipe']:checked ~ .sidebar .menu li {
-    width: 70%;
+    width: 100%;
   }
  
   }
@@ -2674,7 +2663,7 @@ const SidePanel = styled.div`
         .menu {
           li{
             .activity-user {
-              max-width: 320px;
+              max-width: 335px;
           }
         }
     }

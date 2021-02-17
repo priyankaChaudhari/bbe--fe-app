@@ -3,6 +3,7 @@ import Theme from '../theme/Theme';
 
 const CheckBox = styled.div`
   &.gray-check {
+    margin-bottom: 12px;
     .container {
       padding-left: 20px;
       &.customer-pannel {
