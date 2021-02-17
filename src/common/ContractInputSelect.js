@@ -19,6 +19,7 @@ const ContractInputSelect = styled.div`
       margin-top: 5px;
       min-height: 32px !important;
       font-size: color: ${Theme.small};
+      font-weight:600;
 
         .css-g1d714-ValueContainer {
           color: ${Theme.gray35};
@@ -43,6 +44,7 @@ const ContractInputSelect = styled.div`
         border: 1px solid ${Theme.gray10} !important;
         outline: none;
         font-size: ${Theme.small};
+         font-weight:600;
 
         .css-1gtu0rj-indicatorContainer {
           padding: 4px;
@@ -51,6 +53,7 @@ const ContractInputSelect = styled.div`
     }
     .css-1uccc91-singleValue {
       font-size: ${Theme.small};
+       font-weight:600;
     }
     .css-1wa3eu0-placeholder {
       font-size: ${Theme.small};

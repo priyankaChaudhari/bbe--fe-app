@@ -128,7 +128,7 @@ const LeftSideBars = styled.div`
     }
   }
   @media only screen and (min-width: 1500px) {
-    height: 92%;
+    height: 94%;
   }
   @media (max-width: 991px) {
     display: none;
