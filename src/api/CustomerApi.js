@@ -15,20 +15,13 @@ import {
   API_DOCUMENTS,
 } from '../constants/ApiConstants';
 
-export async function getCustomerList(pageNumber, searchQuery, filterOptions) {
-  let params = {
+export async function getCustomerList(pageNumber, filterOptions, searchQuery) {
+  const params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     q: searchQuery,
+    'order-by': filterOptions['order-by'],
   };
 
-  for (const option in filterOptions) {
-    // if (Object.prototype.hasOwnProperty.call(filterOptions, option)) {
-    params = {
-      ...params,
-      [option]: filterOptions[option],
-    };
-    //  }
-  }
   const result = await axiosInstance
     .get(API_CUSTOMER, { params })
     .then((response) => {
