@@ -1071,6 +1071,15 @@ export default function AgreementSidePanel({
           ...updatedFormData,
           [event.target.name]: event.target.value.trim(),
         });
+      } else if (event.target.value.includes('$')) {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.value.slice(1),
+        });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: event.target.value.slice(1),
+        });
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
         setUpdatedFormData({
@@ -2058,7 +2067,6 @@ export default function AgreementSidePanel({
                         <label htmlFor={item.key}>
                           {item.label}
                           {generateHTML(item)}
-                          {item.info ? item.info : ''}
                         </label>
                         <ErrorMsg>
                           {apiError &&
@@ -2066,6 +2074,7 @@ export default function AgreementSidePanel({
                             apiError[item.key][0]}
                         </ErrorMsg>
                       </ContractFormField>
+                      {item.info ? item.info : ''}
                     </li>
                   ))}
                   <li>

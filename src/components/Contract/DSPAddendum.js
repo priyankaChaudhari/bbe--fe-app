@@ -17,7 +17,7 @@ export default function DSPAddendum({ formData, details, templateData }) {
       if (type && type.includes('number')) {
         return `${type === 'number-currency' ? '$' : '%'} ${
           details && details[key]
-            ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            ? `${details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
             : `Enter ${label}.`
         }`;
       }
@@ -36,7 +36,7 @@ export default function DSPAddendum({ formData, details, templateData }) {
         <td
           style="border: 1px solid black;
     padding: 13px;">
-    DSP_FEE
+    $ DSP_FEE
         </td>
       </tr>`;
   };
@@ -44,17 +44,17 @@ export default function DSPAddendum({ formData, details, templateData }) {
   const mapBudgetBreakdownTable = () => {
     return `<tr>
         <td style="border: 1px solid black;
-    padding: 13px;">  DSP_FEE
+    padding: 13px;"> $ DSP_FEE
 </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
-              DSP_FEE
+              $ DSP_FEE
 
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
-             DSP_FEE
+             $ DSP_FEE
 
         </td>
       </tr>`;

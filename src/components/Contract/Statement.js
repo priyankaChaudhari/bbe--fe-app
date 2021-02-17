@@ -35,9 +35,9 @@ export default function Statement({
     }
     if (type && type.includes('number')) {
       // ${type === 'number-currency' ? '$' : '%'}
-      return ` ${
+      return `${type === 'number-currency' ? '$' : '%'} ${
         formData && formData[key]
-          ? formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `Enter ${label}.`
       }`;
     }
