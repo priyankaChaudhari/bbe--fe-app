@@ -592,7 +592,7 @@ export default function NewCustomerList() {
                                     item.contract.contract_type}{' '}
                                   Contract
                                 </p>
-                                <ul className="recurring-contact mb-2 mt-n2">
+                                <ul className="recurring-contact ">
                                   <li>
                                     <p className="basic-text ">
                                       {item &&
@@ -787,6 +787,7 @@ const CustomerListPage = styled.div`
     &.w-80 {
       float: right;
       max-width: 632px;
+      margin-bottom: 10px;
     }
   }
 

@@ -3,10 +3,11 @@ import Theme from '../theme/Theme';
 
 const Table = styled.table`
   width: 100%;
+  border-spacing: 0;
 
   tbody {
     width: 100%;
-    overflow-x: auto;
+
     tr {
       text-align: left;
       background: ${Theme.white};
@@ -39,13 +40,17 @@ const Table = styled.table`
       }
 
       td {
-        padding: 5px 10px;
+        padding: 20px 10px 0px 10px;
         font-size: ${Theme.normal};
         vertical-align: middle;
         position: relative;
         color: ${Theme.black};
         font-size: ${Theme.normal};
         font-weight: 600;
+
+        .brand-logo-name {
+          // min-height: 57px;
+        }
 
         .company-logo {
           border-radius: 10px;
@@ -99,6 +104,10 @@ const Table = styled.table`
             display: inline-block;
             margin-right: 10px;
             font-weight: 300;
+
+            &.black-heading-title {
+              min-height: 0 !important;
+            }
 
             .days-block {
               background: ${Theme.lighterOrange};
