@@ -294,7 +294,7 @@ export default function NewCustomerList() {
     <CustomerListPage>
       <div className="customer-list-header-sticky">
         <div className="row">
-          <div className="col-lg-3 col-12 ">
+          <div className="col-lg-2 col-12 ">
             {' '}
             <p className="black-heading-title ml-3 "> Customers</p>
             <div className=" mb-3 d-lg-none d-block ">
@@ -405,8 +405,8 @@ export default function NewCustomerList() {
             </MobileLeftSidebar>
           </div>
 
-          <div className="col-lg-5 col-md-5 col-12 col-8  mb-2 pr-lg-2">
-            <InputSearchWithRadius className="customer-list-header">
+          <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-lg-2">
+            <InputSearchWithRadius className="customer-list-header w-80">
               <input
                 className=" form-control search-filter"
                 placeholder="Search"
@@ -592,7 +592,7 @@ export default function NewCustomerList() {
                                     item.contract.contract_type}{' '}
                                   Contract
                                 </p>
-                                <ul className="recurring-contact mb-2 mt-n2">
+                                <ul className="recurring-contact ">
                                   <li>
                                     <p className="basic-text ">
                                       {item &&
@@ -783,6 +783,12 @@ const CustomerListPage = styled.div`
   }
   .customer-list-header {
     margin-top: 12px;
+
+    &.w-80 {
+      float: right;
+      max-width: 632px;
+      margin-bottom: 10px;
+    }
   }
 
   .fotter-sticky {
