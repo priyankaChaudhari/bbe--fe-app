@@ -119,6 +119,7 @@ import MinusIcon from './icons/minus-icon.png';
 import NextLogo from './new-logo.png';
 import BackArrowIcon from './icons/back-arrow-back.png';
 import DigitalSignature from './Digital-Sig.png';
+import Advertise from './icons/dsp-advertise.png';
 
 export {
   BannerBg,
@@ -242,4 +243,5 @@ export {
   NextLogo,
   BackArrowIcon,
   DigitalSignature,
+  Advertise,
 };

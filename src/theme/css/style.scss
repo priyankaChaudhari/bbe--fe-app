@@ -106,7 +106,7 @@ body {
     background-color: $white-color;
     z-index: 2;
     padding: 10px 0px 18px 50px;
-    margin-left: 65px !important;
+    margin-left: 62px !important;
     width: 100%;
     border-bottom: 1px solid $gray-5;
   }
@@ -1057,7 +1057,7 @@ div {
   height: 200px !important;
 }
 .ReactCollapse--content {
-  max-width: 300px;
+  max-width: 335px;
 
   @media only screen and (min-width: 1500px) {
     max-width: 380px;

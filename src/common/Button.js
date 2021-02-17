@@ -17,6 +17,10 @@ const Button = styled.button`
       padding: 10px 15px;
     }
 
+    &.btn-next-section {
+      padding: 5px 15px;
+    }
+
     &:hover {
       color: ${Theme.white};
       background-color: ${Theme.secondaryColor};

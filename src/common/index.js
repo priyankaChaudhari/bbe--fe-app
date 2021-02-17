@@ -21,6 +21,8 @@ import ModalRadioCheck from './ModalRadioCheck';
 import InnerContainer from './InnerContainer';
 import GreyCard from './GreyCard';
 import InputSearchWithRadius from './InputSearchWithRadius';
+import ContractFormField from './ContractFormField';
+import ContractInputSelect from './ContractInputSelect';
 // import EditorContainer from './EditorContainer';
 
 export {
@@ -48,4 +50,6 @@ export {
   GreyCard,
   InputSearchWithRadius,
   // EditorContainer,
+  ContractFormField,
+  ContractInputSelect,
 };
