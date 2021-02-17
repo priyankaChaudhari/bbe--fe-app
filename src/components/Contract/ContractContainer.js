@@ -110,7 +110,6 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
-  // const [successMsg, setSuccessMsg] = useState('');
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -133,10 +132,7 @@ export default function ContractContainer() {
   };
 
   const clearSuccessMessage = () => {
-    // history.location.state.message = '';
-    // history.push(history.location.pathname);
     setShowSuccessContact({ show: false, message: '' });
-    // setTimeout(setShowSuccessContact({ show: false, message: '' }), 50000);
   };
 
   useEffect(() => {
@@ -260,10 +256,6 @@ export default function ContractContainer() {
     } else {
       setShowCollpase({ ...showSection, dspAddendum: false });
     }
-    // }
-    // }
-
-    setTimeout(clearSuccessMessage(), 50000);
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -272,63 +264,6 @@ export default function ContractContainer() {
   const onEditAddendum = () => {
     setShowEditor(true);
   };
-
-  // const saveAdditionalOneTimeService = (field, serviceId, index) => {
-  //   const oneTimeServiceData = {
-  //     name: (field && field.service && field.service).name
-  //       ? field.service.name
-  //       : '',
-  //     service: (field && field.service && field.service).id
-  //       ? field.service.id
-  //       : field.service,
-  //     quantity: field && field.quantity,
-  //     contract: details.id,
-  //   };
-  //   if (field && field.service && field.service.name) {
-  //     oneTimeServiceData.custom_amazon_store_price =
-  //       field && field.custom_amazon_store_price;
-  //   }
-
-  //   setIsLoading({ loader: true, type: 'page' });
-  //   if (serviceId) {
-  //     updateAdditionalServices(serviceId, oneTimeServiceData).then((res) => {
-  //       // dispatch(getAccountDetails(id));
-  //       if (res && res.status === 400) {
-  //         setIsLoading({ loader: false, type: 'page' });
-  //         setApiError(res && res.data);
-  //       }
-  //       if (res && res.status === 200) {
-  //         // console.log("res", res.data);
-  //       }
-
-  //       setIsLoading({ loader: false, type: 'page' });
-  //     });
-  //   } else {
-  //     createAdditionalServices(oneTimeServiceData).then((res) => {
-  //       // dispatch(getAccountDetails(id));
-
-  //       if (res && res.status === 400) {
-  //         setIsLoading({ loader: false, type: 'page' });
-  //         setApiError(res && res.data);
-  //       }
-  //       if (res && res.status === 201) {
-  //         const originalList = [...formData.additional_one_time_services];
-  //         originalList[index] = res.data;
-  //         setFormData({
-  //           ...formData,
-  //           additional_one_time_services: originalList,
-  //         });
-
-  //         const list = oneTimeService.filter(
-  //           (item) => item.value !== res.data.service.id,
-  //         );
-  //         setOneTimeService(list);
-  //         setNotIncludedOneTimeServices(list);
-  //       }
-  //       setIsLoading({ loader: false, type: 'page' });
-  //     });
-  //   }
-  // };
 
   const nextStep = () => {
     showFooter(false);
@@ -1256,6 +1191,13 @@ export default function ContractContainer() {
                 }>
                 Discard Changes
               </Button>
+              {updatedFormData && Object.keys(updatedFormData).length ? (
+                <span>
+                  {Object.keys(updatedFormData).length} unsaved changes.
+                </span>
+              ) : (
+                ''
+              )}
             </div>
           </Footer>
         </div>
@@ -1296,6 +1238,7 @@ export default function ContractContainer() {
                 Request Signature
               </Button>
             )}
+            <p>Last updated by You on Dec 1, 4:18 PM</p>
           </Footer>
         </div>
       ) : (
@@ -1321,6 +1264,7 @@ export default function ContractContainer() {
             setShowModal={setShowModal}
             pdfData={pdfData}
             setShowSuccessContact={setShowSuccessContact}
+            clearSuccessMessage={clearSuccessMessage}
           />
         </ModalBox>
       </Modal>
