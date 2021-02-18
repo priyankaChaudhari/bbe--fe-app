@@ -386,20 +386,18 @@ export default function ContractContainer() {
             const responesThree = responses[2];
             const responesfour = responses[3];
 
-            if (
-              responseOne &&
-              responseOne.status === 200 &&
-              responseTwo &&
-              responseTwo.status === 200 &&
-              responesThree &&
-              responesThree.status === 200 &&
-              responesfour &&
-              responesfour.status === 200
-            ) {
-              // use/access the results
-              setUpdatedFormData({});
-              dispatch(getAccountDetails(id));
-            }
+            // if (
+            //   responseOne &&
+            //   responseOne.status === 200 &&
+            //   responseTwo &&
+            //   responseTwo.status === 200 &&
+            //   responesThree &&
+            //   responesThree.status === 200 &&
+            //   responesfour &&
+            //   responesfour.status === 200
+            // ) {
+
+            // }
 
             if (responseOne && responseOne.status === 400) {
               setApiError({
@@ -425,6 +423,10 @@ export default function ContractContainer() {
                 ...responesfour.data,
               });
             }
+
+            // use/access the results
+            setUpdatedFormData({});
+            dispatch(getAccountDetails(id));
           }),
         )
         .catch({
