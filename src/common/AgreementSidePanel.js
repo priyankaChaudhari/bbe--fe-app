@@ -1294,6 +1294,8 @@ export default function AgreementSidePanel({
     }
   };
   const changeQuantity = (oneTimeServiceData, flag) => {
+    showFooter(true);
+
     if (
       formData &&
       formData.additional_one_time_services &&
@@ -1328,11 +1330,6 @@ export default function AgreementSidePanel({
       setFormData({
         ...formData,
         additional_one_time_services: changedService,
-      });
-
-      setAdditionalOnetimeServices({
-        ...additionalOnetimeServices,
-        create: changedService,
       });
       setUpdatedFormData({
         ...updatedFormData,
