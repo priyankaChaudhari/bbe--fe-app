@@ -1512,7 +1512,7 @@ export default function AgreementSidePanel({
 
                 <li>
                   <Button
-                    className="btn-primary sidepanel btn-next-section mt-2 mb-3 w-100"
+                    className="btn-primary on-boarding sidepanel  mt-2 mb-3 w-100"
                     onClick={() => nextStep('statement')}>
                     {' '}
                     {isLoading.loader && isLoading.type === 'button' ? (
@@ -2029,8 +2029,8 @@ export default function AgreementSidePanel({
                     <Button
                       className={
                         formData.additional_one_time_services
-                          ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
-                          : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
+                          ? 'btn-primary on-boarding  sidepanel  mt-1 mb-3 w-100 '
+                          : 'btn-primary on-boarding sidepanel mt-1 mb-3 w-100 '
                       }
                       onClick={() =>
                         showSection && showSection.dspAddendum
@@ -2093,8 +2093,8 @@ export default function AgreementSidePanel({
                     <Button
                       className={
                         formData.additional_one_time_services
-                          ? 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
-                          : 'btn-primary btn-next-section  mt-1 mb-3 w-100 '
+                          ? 'btn-primary on-boarding sidepanel mt-1 mb-3 w-100 '
+                          : 'btn-primary on-boarding  mt-1 mb-3 w-100 '
                       }
                       onClick={() => nextStep('addendum')}>
                       {isLoading.loader && isLoading.type === 'button' ? (

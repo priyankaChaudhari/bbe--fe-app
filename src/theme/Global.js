@@ -956,6 +956,25 @@ export const WhiteCard = styled.div`
    }
   }
 
+   @media only screen and (max-width: 407px) {
+   .company-label-info {
+     margin-left: 40px;
+     margin-top:10px;
+
+      span { 
+        margin-left: 15px;
+        max-width: 117px;
+        margin-top: 10px;
+        
+
+        &.mid-width {
+          max-width: 157px;
+          width:100%;
+        }
+      }   
+    }
+   }
+
 `;
 
 export const GroupUser = styled.div`

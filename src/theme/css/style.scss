@@ -1117,6 +1117,10 @@ div {
   top: 18px;
   position: absolute;
   left: 40%;
+
+  &.contract {
+    left: 30%;
+  }
 }
 
 .blinkSelectedField {

@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const Button = styled.button`
   cursor: pointer;
   padding: 11px 10px;
-  font-family: ${Theme.baseFontFamily};
+  font-family: ${Theme.titleFontFamily};
   font-size: ${Theme.normal};
 
   &.btn-primary {
@@ -15,10 +15,6 @@ const Button = styled.button`
 
     &.on-boarding {
       padding: 10px 15px;
-    }
-
-    &.btn-next-section {
-      padding: 5px 15px;
     }
 
     &:hover {

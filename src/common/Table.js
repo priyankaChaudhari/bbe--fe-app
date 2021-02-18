@@ -4,7 +4,6 @@ import Theme from '../theme/Theme';
 const Table = styled.table`
   width: 100%;
   border-spacing: 0;
-  height: 100vh;
 
   tbody {
     width: 100%;
@@ -19,20 +18,19 @@ const Table = styled.table`
 
       &.table-header {
         box-shadow: none;
-
         width: 100%;
 
         th {
           font-family: ${Theme.baseFontFamily};
           color: ${Theme.gray40};
-          padding: 15px 10px;
           text-transform: uppercase;
           font-size: 11px;
           border-bottom: 1px solid ${Theme.gray5};
+          padding: 10px;
 
-          &.firstChildCss:first-child {
-            padding-left: 45px;
-          }
+          // &.firstChildCss:first-child {
+          //   padding-left: 45px;
+          // }
 
           &.customer-header {
             padding-left: 66px;
@@ -41,17 +39,13 @@ const Table = styled.table`
       }
 
       td {
-        padding: 20px 10px 0px 10px;
+        padding: 20px 10px 3px 10px;
         font-size: ${Theme.normal};
         vertical-align: middle;
         position: relative;
         color: ${Theme.black};
         font-size: ${Theme.normal};
         font-weight: 600;
-
-        .brand-logo-name {
-          // min-height: 57px;
-        }
 
         .company-logo {
           border-radius: 10px;
