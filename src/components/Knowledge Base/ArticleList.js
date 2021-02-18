@@ -84,7 +84,6 @@ export default function ArticleList() {
 
 const GrayBody = styled.div`
   background: ${Theme.gray6};
-  // height: 100%;
 
   .graycontainer {
     max-width: 1334px;
@@ -181,7 +180,7 @@ const GrayBody = styled.div`
     }
   }
   @media only screen and (min-width: 1700px) and (min-width: 1920px) {
-    // height: 100%;
+    height: 100%;
     .graycontainer {
       max-width: 85%;
       .article-card {
