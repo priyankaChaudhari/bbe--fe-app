@@ -284,12 +284,18 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
-    setApiError({
-      ...apiError,
-      non_field_errors: '',
-      amazon_store_package_custom: '',
-    });
-
+    if (apiError.amazon_store_package_custom) {
+      setApiError({
+        ...apiError,
+        amazon_store_package_custom: '',
+      });
+    }
+    if (apiError.non_field_errors) {
+      setApiError({
+        ...apiError,
+        non_field_errors: '',
+      });
+    }
     if (type === 'date') {
       setStartDate(event);
       setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
@@ -2056,8 +2062,7 @@ export default function AgreementSidePanel({
                                     <ErrorMsg>
                                       {apiError &&
                                         apiError.amazon_store_package_custom &&
-                                        apiError.amazon_store_package_custom &&
-                                        apiError.amazon_store_package_custom[0]}
+                                        apiError.amazon_store_package_custom}
                                     </ErrorMsg>
                                   </ContractFormField>
                                 ) : (
