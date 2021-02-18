@@ -354,7 +354,7 @@ export default function ContractContainer() {
       for (const val of num) {
         if (updatedFormData && updatedFormData[val]) {
           updatedFormData[val] = updatedFormData[val]
-            .substring(1)
+            // .substring(1)
             .replace(/,/g, '');
         }
       }
@@ -386,6 +386,7 @@ export default function ContractContainer() {
 
             // use/access the results
             dispatch(getAccountDetails(id));
+            setUpdatedFormData({});
           }),
         )
         .catch(() => {
@@ -545,6 +546,20 @@ export default function ContractContainer() {
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
     through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
     padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
+  };
+
+  // <img style="width:120px; margin-top: -5px;" src="/static/media/Digital-Sig.633ece57.png" alt="sig"/>
+  const mapThadSignImg = () => {
+    const signImg = `<p style="margin:0" class="long-text">
+        <span style="font-weight: 300;font-family: Helvetica-Regular;">
+          <img
+            style="width:120px; margin-top: -5px;"
+            src = '/static/media/Digital-Sig.633ece57.png'
+            alt="sig"
+          />
+        </span>
+      </p>`;
+    return signImg;
   };
 
   const mapMonthlyServices = (key) => {
@@ -861,7 +876,8 @@ export default function ContractContainer() {
       .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
       .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
       .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
-      .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
+      .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
+      .replace('THAD_SIGN', mapThadSignImg());
 
     const statmentData =
       data.statement_of_work &&

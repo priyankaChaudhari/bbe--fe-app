@@ -142,7 +142,18 @@ export default function Agreement({ formData, details, templateData }) {
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
-
+  const mapThadSignImg = () => {
+    const data = `<p style="margin:0" class="long-text">
+        <span style="font-weight: 300;font-family: Helvetica-Regular;">
+          <img
+            style="width:120px; margin-top: -5px;"
+            src = '/static/media/Digital-Sig.633ece57.png'
+            alt="sig"
+          />
+        </span>
+      </p>`;
+    return data;
+  };
   return (
     <>
       <Paragraph>
@@ -222,7 +233,8 @@ export default function Agreement({ formData, details, templateData }) {
               .replace(
                 'BBE_DATE',
                 mapDefaultValues('current_date', 'Current Date'),
-              ),
+              )
+              .replace('THAD_SIGN', mapThadSignImg()),
           }}
         />
       </Paragraph>

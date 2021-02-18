@@ -282,6 +282,7 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
+
     if (type === 'date') {
       setStartDate(event);
       setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
@@ -1055,13 +1056,14 @@ export default function AgreementSidePanel({
           [event.target.name]: event.target.value.trim(),
         });
       } else if (event.target.value.includes('$')) {
+        const value = event.target.value.slice(1);
         setFormData({
           ...formData,
-          [event.target.name]: event.target.value.slice(1),
+          [event.target.name]: value,
         });
         setUpdatedFormData({
           ...updatedFormData,
-          [event.target.name]: event.target.value.slice(1),
+          [event.target.name]: value,
         });
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
