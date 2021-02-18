@@ -1018,7 +1018,7 @@ export default function ContractContainer() {
                       />
                       Back to Customer Details
                     </div>
-                    <div className="success-msg">
+                    <div className="success-msg-pop-up contract">
                       {showSuccessContact.show ? (
                         <SuccessMsg
                           property=" "

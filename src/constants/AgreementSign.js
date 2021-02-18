@@ -3,13 +3,13 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
         line-height: 24px;
         font-family: Arial-Regular;"><span style="font-weight: 800;
         font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
-    </p> <table>
+    </p> <table style="width:100%">
         <tr style="height: 30px; vertical-align: top">
-            <td>Comapny:</td>
-            <td style="font-weight: 700;">Buy Box Experts</td>
+            <td style="width:19%">Comapny:</td>
+            <td width:50% style="font-weight: 700; "width:31%;">Buy Box Experts</td>
             <td > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td>Comapny:</td>
-                <td style="font-weight: 700;">CUSTOMER_NAME</td>
+                <td style="width:19%">Comapny:</td>
+                <td style="font-weight: 700; "width:31%;">CUSTOMER_NAME</td>
         </tr>
          <tr style="height: 30px; vertical-align: top">
             <td>Signature:</td>
@@ -19,16 +19,16 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
             <td style="font-weight: 700;"></td>
         </tr>
         <tr style="height: 30px; vertical-align: top">
-            <td>
+            <td width:50%>
                 Printed Name:
             </td>
-            <td style="font-weight: 700;" >
+            <td width:50% style="font-weight: 700;" >
                 Thaddaeus Hay
             </td>
             <td></td>
-            <td>
+            <td width:50%>
                 Printed Name:
-            </td>
+            </td width:50%>
             <td style="font-weight: 700;">
                 PRINTED_NAME
             </td>
@@ -67,12 +67,12 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
         font-family: Arial-Regular;"><span style="font-weight: 800;
         font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
     </p>
-    <table><tr style="height: 30px; vertical-align: top">
-            <td>Comapny:</td>
-            <td style="font-weight: 700;">Buy Box Experts</td>
-            <td > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td>Comapny:</td>
-                <td style="font-weight: 700;">CUSTOMER_NAME</td>
+    <table style="width:100%"><tr style="height: 30px; vertical-align: top">
+            <td  style="width:19%">Comapny:</td>
+            <td style="font-weight: 700; "width:31%;">Buy Box Experts</td>
+            <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</td>
+                <td   style="width:19%">Comapny:</td>
+                <td  style="font-weight: 700;"width:31%">CUSTOMER_NAME</td>
         </tr>
          <tr style="height: 30px; vertical-align: top">
             <td>Signature:</td>
