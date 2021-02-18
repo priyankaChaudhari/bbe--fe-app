@@ -29,6 +29,7 @@ import {
   createContractDesign,
   createTransactionData,
 } from '../../api/index';
+import { getAccountDetails } from '../../store/actions/accountState';
 
 import { getContactDetails } from '../../store/actions/customerState';
 
@@ -57,6 +58,8 @@ function RequestSignature({
   const [sendContractCopy, setSendContractCopy] = useState(false);
   const [contractDesignData, setContractDesignData] = useState(null);
   const [showHelloSignPage, setShowHelloSign] = useState(true);
+  const [reminderMailData, setReminderMailData] = useState({});
+
   const contactFields = [
     {
       key: 'first_name',
@@ -411,6 +414,7 @@ function RequestSignature({
             show: true,
           });
           setTimeout(() => clearSuccessMessage(), 800);
+          dispatch(getAccountDetails(id));
 
           // history.push({
           //   pathname: PATH_AGREEMENT.replace(':id', id),
@@ -426,6 +430,17 @@ function RequestSignature({
       setShowModal(false);
     });
   };
+  const handleChangeForReminder = (event, key) => {
+    if (key === 'send_contract_copy') {
+      setReminderMailData({ ...reminderMailData, [key]: event.target.checked });
+    } else {
+      setReminderMailData({
+        ...reminderMailData,
+        [event.target.name]: event.target.value,
+      });
+    }
+  };
+
   return (
     <>
       {params && params.step === 'verify-document' ? (
@@ -550,20 +565,35 @@ function RequestSignature({
                     className="container contract-sign"
                     htmlFor="contract-copy">
                     Send me a copy of the contract
-                    <input type="checkbox" id="contract-copy" />
+                    <input
+                      type="checkbox"
+                      id="contract-copy"
+                      name="send_contract_copy"
+                      onChange={(event) =>
+                        handleChangeForReminder(event, 'send_contract_copy')
+                      }
+                    />
                     <span className="checkmark" />
                   </label>
                 </CheckBox>
               </div>
             </div>
             <FormField className="mt-3">
-              <input className="form-control" type="text" />
+              <input
+                className="form-control"
+                type="text"
+                name="subject"
+                defaultValue="Reminder: You have contract signature pending"
+                onChange={(event) => handleChangeForReminder(event, 'subject')}
+              />
             </FormField>
             <FormField className="mt-3">
               <textarea
                 className="form-control"
                 type="text"
+                name="note"
                 placeholder="Add personal note to recipient"
+                onChange={(event) => handleChangeForReminder(event, 'note')}
               />
             </FormField>
           </div>
