@@ -103,6 +103,7 @@ export default function ContractContainer() {
   );
 
   const [apiError, setApiError] = useState({});
+
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
     message: '',
@@ -119,8 +120,8 @@ export default function ContractContainer() {
       element &&
       element.getBoundingClientRect() &&
       element.getBoundingClientRect().top + window.pageYOffset + -150;
-    window.scrollTo({ top: y });
-    // window.scrollTo({ top: y, behavior: 'smooth' });
+    // window.scrollTo({ top: y });
+    window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
   const checkPermission = () => {
@@ -385,46 +386,45 @@ export default function ContractContainer() {
             const responesThree = responses[2];
             const responesfour = responses[3];
 
+            if (
+              responseOne &&
+              responseOne.status === 200 &&
+              responseTwo &&
+              responseTwo.status === 200 &&
+              responesThree &&
+              responesThree.status === 200 &&
+              responesfour &&
+              responesfour.status === 200
+            ) {
+              // use/access the results
+              setUpdatedFormData({});
+              dispatch(getAccountDetails(id));
+            }
+
             if (responseOne && responseOne.status === 400) {
               setApiError({
                 ...apiError,
-                ...(responseOne && responseOne.data),
-                ...(responseTwo && responseTwo.data),
-                ...(responesThree && responesThree.data),
-                ...(responesfour && responesfour.data),
+                ...responseOne.data,
               });
             }
             if (responseTwo && responseTwo.status === 400) {
               setApiError({
                 ...apiError,
-                ...(responseOne && responseOne.data),
-                ...(responseTwo && responseTwo.data),
-                ...(responesThree && responesThree.data),
-                ...(responesfour && responesfour.data),
+                ...responseTwo.data,
               });
             }
             if (responesThree && responesThree.status === 400) {
               setApiError({
                 ...apiError,
-                ...(responseOne && responseOne.data),
-                ...(responseTwo && responseTwo.data),
-                ...(responesThree && responesThree.data),
-                ...(responesfour && responesfour.data),
+                ...responesThree.data,
               });
             }
             if (responesfour && responesfour.status === 400) {
               setApiError({
                 ...apiError,
-                ...(responseOne && responseOne.data),
-                ...(responseTwo && responseTwo.data),
-                ...(responesThree && responesThree.data),
-                ...(responesfour && responesfour.data),
+                ...responesfour.data,
               });
             }
-
-            // use/access the results
-            dispatch(getAccountDetails(id));
-            setUpdatedFormData({});
           }),
         )
         .catch({
@@ -1414,23 +1414,20 @@ export default function ContractContainer() {
         <ModalBox>
           <div className="modal-body pt-5">
             <div className="alert-msg mb-4 ">
-              <span>
-                Do you want to discard the changes? Your changes will be lost if
-                you do.
-              </span>
+              <span>Are you sure you want to discard all the changes?</span>
             </div>
             <div className="text-center mb-3">
               <Button
-                onClick={() => discardAgreementChanges('Yes')}
-                type="button"
-                className="btn-primary on-boarding w-50  mr-5 ">
-                Yes
-              </Button>
-              <Button
                 onClick={() => discardAgreementChanges('No')}
                 type="button"
-                className="btn-transparent w-50 ">
-                No
+                className="btn-primary on-boarding  mr-5">
+                Keep Editing
+              </Button>
+              <Button
+                onClick={() => discardAgreementChanges('Yes')}
+                type="button"
+                className=" btn-transparent ">
+                Discard Changes
               </Button>
 
               {/* </Link> */}
