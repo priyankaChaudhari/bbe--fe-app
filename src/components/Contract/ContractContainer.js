@@ -32,7 +32,7 @@ import {
   LeftArrowIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
-
+import { THAD_SIGN_IMG } from '../../constants/ThadSignImg';
 import {
   updateAccountDetails,
   createMarketplace,
@@ -118,7 +118,8 @@ export default function ContractContainer() {
       element &&
       element.getBoundingClientRect() &&
       element.getBoundingClientRect().top + window.pageYOffset + -150;
-    window.scrollTo({ top: y, behavior: 'smooth' });
+    window.scrollTo({ top: y });
+    // window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
   const checkPermission = () => {
@@ -300,7 +301,7 @@ export default function ContractContainer() {
                 setIsLoading({ loader: false, type: 'button' });
               }
               if (res && res.status === 400) {
-                setApiError(res && res.data);
+                setApiError({ ...apiError, ...(res && res.data) });
               }
             },
           );
@@ -377,20 +378,56 @@ export default function ContractContainer() {
           AccountResponse,
         ])
         .then(
-          axios.spread(() => {
-            // ...responses
-            // const responseOne = responses[0];
-            // const responseTwo = responses[1];
-            // const responesThree = responses[2];
-            // const responesfour = responses[3];
+          axios.spread((...responses) => {
+            const responseOne = responses[0];
+            const responseTwo = responses[1];
+            const responesThree = responses[2];
+            const responesfour = responses[3];
+
+            if (responseOne && responseOne.status === 400) {
+              setApiError({
+                ...apiError,
+                ...(responseOne && responseOne.data),
+                ...(responseTwo && responseTwo.data),
+                ...(responesThree && responesThree.data),
+                ...(responesfour && responesfour.data),
+              });
+            }
+            if (responseTwo && responseTwo.status === 400) {
+              setApiError({
+                ...apiError,
+                ...(responseOne && responseOne.data),
+                ...(responseTwo && responseTwo.data),
+                ...(responesThree && responesThree.data),
+                ...(responesfour && responesfour.data),
+              });
+            }
+            if (responesThree && responesThree.status === 400) {
+              setApiError({
+                ...apiError,
+                ...(responseOne && responseOne.data),
+                ...(responseTwo && responseTwo.data),
+                ...(responesThree && responesThree.data),
+                ...(responesfour && responesfour.data),
+              });
+            }
+            if (responesfour && responesfour.status === 400) {
+              setApiError({
+                ...apiError,
+                ...(responseOne && responseOne.data),
+                ...(responseTwo && responseTwo.data),
+                ...(responesThree && responesThree.data),
+                ...(responesfour && responesfour.data),
+              });
+            }
 
             // use/access the results
             dispatch(getAccountDetails(id));
             setUpdatedFormData({});
           }),
         )
-        .catch(() => {
-          // react on errors.
+        .catch({
+          // console.log("error")
         });
 
       //  .then((response) => {
@@ -461,6 +498,7 @@ export default function ContractContainer() {
     }
 
     if (flag === 'Yes') {
+      setUpdatedFormData({});
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
       if (showDiscardModal.clickedBtn === 'back') {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
@@ -549,17 +587,24 @@ export default function ContractContainer() {
   };
 
   // <img style="width:120px; margin-top: -5px;" src="/static/media/Digital-Sig.633ece57.png" alt="sig"/>
+  // <p style="margin:0" class="long-text">
+  //       <span style="font-weight: 300;font-family: Helvetica-Regular;">
+  //         <img
+  //           style="width:120px; margin-top: -5px;"
+  //           src = '/static/media/Digital-Sig.633ece57.png'
+  //           alt="sig"
+  //         />
+  //       </span>
+  //     </p>`
   const mapThadSignImg = () => {
-    const signImg = `<p style="margin:0" class="long-text">
-        <span style="font-weight: 300;font-family: Helvetica-Regular;">
-          <img
-            style="width:120px; margin-top: -5px;"
-            src = '/static/media/Digital-Sig.633ece57.png'
-            alt="sig"
-          />
-        </span>
-      </p>`;
-    return signImg;
+    // const signImg = `
+    // <p style="margin:0" class="long-text">
+    //     <span style="font-weight: 300;font-family: Helvetica-Regular;">
+    //      <img src='./thad_sig.png' alt='thad-sig'><br>
+    //     </span>
+    //   </p>`;
+    // return signImg;
+    return THAD_SIGN_IMG;
   };
 
   const mapMonthlyServices = (key) => {
@@ -825,6 +870,53 @@ export default function ContractContainer() {
     return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
+  //   const mapDspDetails = () => {
+  //     return `<tr>
+  //         <td style="border: 1px solid black;
+  //     padding: 13px;">
+  //           ${details && dayjs(details.start_date).format('MM-DD-YYYY')}
+  //         </td>
+  //         <td
+  //           style="border: 1px solid black;
+  //     padding: 13px;">
+  //      DSP_FEE
+  //         </td>
+  //       </tr>`;
+  //   };
+
+  //   const mapBudgetBreakdownTable = () => {
+  //     return `<tr>
+  //         <td style="border: 1px solid black;
+  //     padding: 13px;">  DSP_FEE
+  // </td>
+  //         <td
+  //           style="border: 1px solid black;
+  //     padding: 13px;">
+  //                DSP_FEE
+
+  //         </td><td
+  //           style="border: 1px solid black;
+  //     padding: 13px;">
+  //               DSP_FEE
+
+  //         </td>
+  //       </tr>`;
+  //   };
+
+  const onEditcontract = () => {
+    const dataToUpdate = {
+      contract_status: 'pending contract',
+    };
+    setIsLoading({ loader: true, type: 'button' });
+
+    updateAccountDetails(details.id, dataToUpdate).then((response) => {
+      setIsLoading({ loader: false, type: 'button' });
+
+      if (response && response.status === 200) {
+        dispatch(getAccountDetails(id));
+      }
+    });
+  };
   const createAgreementDoc = () => {
     const agreementData = getAgreementAccorType(0)
       .replace(
@@ -925,6 +1017,37 @@ export default function ContractContainer() {
                                   `,
         );
 
+    // const dspAddendum =
+    //   showSection && showSection.dspAddendum
+    //     ? data.dsp_addendum &&
+    //       data.dsp_addendum[0]
+    //         .replace(
+    //           'CUSTOMER_NAME',
+    //           mapDefaultValues('contract_company_name', 'Customer Name'),
+    //         )
+
+    //         .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+    //         .replace(
+    //           'DSP_DETAIL_TABLE',
+    //           `<table class="contact-list " style="width: 100%;
+    // border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    // padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
+    // padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+    //         )
+    //         .replace(
+    //           'BUDGET_BREAKDOWN_TABLE',
+    //           `<table class="contact-list " style="width: 100%;
+    // border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    // padding: 13px;">Jan 16, 2021 - Feb 28, 2021</th><th style="text-align: left; border: 1px solid black;
+    // padding: 13px;">March 2021</th><th style="text-align: left; border: 1px solid black;
+    // padding: 13px;">April 2021</th></tr>${mapBudgetBreakdownTable()}</table>`,
+    //         )
+    //         .replaceAll(
+    //           'DSP_FEE',
+    //           mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+    //         )
+    //     : '';
+
     const addendumData =
       data.addendum &&
       data.addendum[0]
@@ -945,7 +1068,10 @@ export default function ContractContainer() {
     const addendumSignatureData = AddendumSign.replace(
       'CUSTOMER_NAME',
       mapDefaultValues('contract_company_name', 'Customer Name'),
-    ).replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'));
+    )
+      .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
+      .replace('THAD_SIGN', mapThadSignImg());
+
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
   };
@@ -1110,6 +1236,7 @@ export default function ContractContainer() {
       ) : (
         <PageNotFound />
       )}
+
       <AgreementSidePanel
         id={id}
         setFormData={setFormData}
@@ -1140,7 +1267,35 @@ export default function ContractContainer() {
         additionalOnetimeServices={additionalOnetimeServices}
         setAdditionalOnetimeServices={setAdditionalOnetimeServices}
       />
-      {isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
+
+      {details &&
+      details.contract_status &&
+      details.contract_status.value === 'pending contract signature' ? (
+        <Footer className=" mt-5">
+          <div className="container">
+            <Button
+              className="btn-primary w-50 sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
+              onClick={() => onEditcontract()}>
+              <img src={OrangeChecked} alt="checked" /> Edit Contract
+            </Button>
+            <Button
+              className="light-orange w-50 sticky-btn   mt-3 mr-3 on-boarding"
+              onClick={() => {
+                setParams('send-remainder');
+                setShowModal(true);
+              }}>
+              Send Reminder
+            </Button>
+            {updatedFormData && Object.keys(updatedFormData).length ? (
+              <span>
+                {Object.keys(updatedFormData).length} unsaved changes.
+              </span>
+            ) : (
+              ''
+            )}
+          </div>
+        </Footer>
+      ) : isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">
           <Footer className=" mt-5">
             <div className="container">
@@ -1238,7 +1393,6 @@ export default function ContractContainer() {
           />
         </ModalBox>
       </Modal>
-
       <Modal
         isOpen={showDiscardModal.show}
         style={customStyles}

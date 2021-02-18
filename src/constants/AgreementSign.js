@@ -13,7 +13,7 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
         </tr>
          <tr style="height: 30px; vertical-align: top">
             <td>Signature:</td>
-            <td style="font-weight: 700;" ></td>
+            <td style="font-weight: 700;" > THAD_SIGN</td>
             <td></td>
             <td>Signature:</td>
             <td style="font-weight: 700;"></td>
@@ -76,7 +76,7 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
         </tr>
          <tr style="height: 30px; vertical-align: top">
             <td>Signature:</td>
-            <td style="font-weight: 700;" ></td>
+            <td style="font-weight: 700;" >THAD_SIGN</td>
             <td></td>
             <td>Signature:</td>
             <td style="font-weight: 700;"></td>

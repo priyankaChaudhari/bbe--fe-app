@@ -5,25 +5,26 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
-export default function DSPAddendum({ formData, details, templateData }) {
+export default function DSPAddendum({ formData, templateData }) {
   const mapDefaultValues = (key, label, type) => {
     if (formData[key] === undefined || formData[key] === '') {
-      if (key === 'start_date') {
-        return details && dayjs(details[key]).format('MM-DD-YYYY');
-      }
-      if (key === 'current_date') {
-        return dayjs(Date()).format('MM-DD-YYYY');
-      }
-      if (type && type.includes('number')) {
-        return `${type === 'number-currency' ? '$' : '%'} ${
-          details && details[key]
-            ? `${details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `Enter ${label}.`
-        }`;
-      }
-
-      return details && details[key];
+      return `Enter ${label}`;
     }
+    if (key === 'start_date') {
+      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+    }
+    if (key === 'current_date') {
+      return dayjs(Date()).format('MM-DD-YYYY');
+    }
+    if (type && type.includes('number')) {
+      return `${type === 'number-currency' ? '$' : '%'} ${
+        formData && formData[key]
+          ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+          : `Enter ${label}.`
+      }`;
+    }
+
+    // return details && details[key];
     return formData[key];
   };
 
@@ -31,12 +32,12 @@ export default function DSPAddendum({ formData, details, templateData }) {
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
-          ${details && dayjs(details.start_date).format('MM-DD-YYYY')}
+          ${formData && dayjs(formData.start_date).format('MM-DD-YYYY')}
         </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
-    $ DSP_FEE
+     DSP_FEE
         </td>
       </tr>`;
   };
@@ -44,17 +45,17 @@ export default function DSPAddendum({ formData, details, templateData }) {
   const mapBudgetBreakdownTable = () => {
     return `<tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> $ DSP_FEE
+    padding: 13px;">  DSP_FEE
 </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
-              $ DSP_FEE
+               DSP_FEE
 
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
-             $ DSP_FEE
+              DSP_FEE
 
         </td>
       </tr>`;
@@ -131,18 +132,14 @@ export default function DSPAddendum({ formData, details, templateData }) {
 }
 
 DSPAddendum.defaultProps = {
-  details: {},
   templateData: {},
   formData: {},
 };
 
 DSPAddendum.propTypes = {
-  details: PropTypes.shape({
-    dsp_fee: PropTypes.string,
-    start_date: PropTypes.string,
-  }),
   formData: PropTypes.shape({
     dsp_fee: PropTypes.string,
+    start_date: PropTypes.string,
   }),
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),
