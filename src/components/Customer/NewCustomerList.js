@@ -567,10 +567,11 @@ export default function NewCustomerList() {
                           <td width={showPerformance ? '10%' : '35%'}>
                             {showPerformance ? (
                               <>
-                                ${' '}
                                 {item &&
-                                  item.contract &&
-                                  item.contract.rev_share}
+                                item.contract &&
+                                item.contract.rev_share
+                                  ? `$ ${item.contract.rev_share}`
+                                  : ''}
                                 <div className="increase-rate">
                                   <img
                                     className="red-arrow"
@@ -588,9 +589,10 @@ export default function NewCustomerList() {
                                   style={{ textTransform: 'capitalize' }}>
                                   {' '}
                                   {item &&
-                                    item.contract &&
-                                    item.contract.contract_type}{' '}
-                                  Contract
+                                  item.contract &&
+                                  item.contract.contract_type
+                                    ? `${item.contract.contract_type} Contract`
+                                    : ''}
                                 </p>
                                 <ul className="recurring-contact ">
                                   <li>
@@ -626,7 +628,7 @@ export default function NewCustomerList() {
                                           src={ClockIcon}
                                           alt="clock"
                                         />{' '}
-                                        {countDays(item)}
+                                        {countDays(item)} days
                                       </div>
                                     </li>
                                   ) : (
@@ -652,13 +654,13 @@ export default function NewCustomerList() {
                               </>
                             ) : (
                               <>
-                                ${' '}
                                 {item &&
-                                  item.contract &&
-                                  item.contract.monthly_retainer &&
-                                  item.contract.monthly_retainer
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                item.contract &&
+                                item.contract.monthly_retainer
+                                  ? `$ ${item.contract.monthly_retainer
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                  : ''}
                               </>
                             )}
                           </td>
@@ -679,9 +681,10 @@ export default function NewCustomerList() {
                             ) : (
                               <>
                                 {item &&
-                                  item.contract &&
-                                  item.contract.rev_share}{' '}
-                                %
+                                item.contract &&
+                                item.contract.rev_share
+                                  ? `${item.contract.rev_share} %`
+                                  : ''}
                               </>
                             )}
                           </td>
