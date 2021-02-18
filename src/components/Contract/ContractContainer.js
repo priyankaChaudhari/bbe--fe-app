@@ -32,7 +32,7 @@ import {
   LeftArrowIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
-import { THAD_SIGN_IMG } from '../../constants/ThadSignImg';
+import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
   updateAccountDetails,
   createMarketplace,
@@ -1286,13 +1286,13 @@ export default function ContractContainer() {
               }}>
               Send Reminder
             </Button>
-            {updatedFormData && Object.keys(updatedFormData).length ? (
+            {/* {updatedFormData && Object.keys(updatedFormData).length ? (
               <span>
                 {Object.keys(updatedFormData).length} unsaved changes.
               </span>
             ) : (
               ''
-            )}
+            )} */}
           </div>
         </Footer>
       ) : isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (

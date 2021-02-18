@@ -24,14 +24,15 @@ export default function Agreement({ formData, details, templateData }) {
     //   }
     //   return details && details[key];
     // }
+
     if (formData[key] === undefined || formData[key] === '') {
-      return `Enter ${label}`;
+      return key === 'contract_company_name' ? `Client Name` : `Enter ${label}`;
     }
 
     if (key === 'contract_company_name') {
       return formData && formData[key]
         ? formData && formData[key]
-        : `Enter ${label}`;
+        : `Client Name`;
     }
     if (key === 'length') {
       return formData && formData.length.label
