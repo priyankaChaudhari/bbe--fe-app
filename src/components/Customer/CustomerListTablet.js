@@ -298,7 +298,7 @@ const CustomerListTabletView = styled.div`
   padding-top: 130px;
 
   .black-heading-title {
-    font-size: 14px;
+    font-size: ${Theme.extraNormal};
   }
   .solid-icon {
     width: 36px;
@@ -320,20 +320,20 @@ const CustomerListTabletView = styled.div`
     vertical-align: middle;
     position: relative;
     color: ${Theme.black};
-    font-size: 18px;
+    font-size: ${Theme.title};
     font-weight: 600;
   }
 
   .status {
-    color: #171725;
-    font-size: 14px;
+    color: ${Theme.gray85};
+    font-size: ${Theme.extraNormal};
   }
   .label-info {
     font-weight: 600;
   }
   .increase-rate {
     color: #407b00;
-    font-size: 14px;
+    font-size: ${Theme.extraNormal};
     font-weight: 300;
     img {
       vertical-align: bottom;
@@ -350,6 +350,9 @@ const CustomerListTabletView = styled.div`
     }
   }
   @media (max-width: 991px) {
-    padding-top: 180px;
+    padding-top: 145px;
+  }
+  @media (max-width: 768px) {
+    padding-top: 190px;
   }
 `;

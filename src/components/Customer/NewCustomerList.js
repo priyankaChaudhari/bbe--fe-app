@@ -296,10 +296,10 @@ export default function NewCustomerList() {
         <div className="row">
           <div className="col-lg-2 col-12 ">
             {' '}
-            <p className="black-heading-title ml-3 mt-4"> Customers</p>
+            <p className="black-heading-title ml-3 mt-lg-4 mt-3"> Customers</p>
             <div className=" mb-3 d-lg-none d-block ">
               <label
-                className="filter-slider mt-4 "
+                className="filter-slider mt-3 "
                 htmlFor="tabletmenu-check"
                 id="responsive-button">
                 <img src={SliderHIcon} alt="Menu Lines" />
@@ -405,7 +405,7 @@ export default function NewCustomerList() {
             </MobileLeftSidebar>
           </div>
 
-          <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-lg-2">
+          <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-md-2">
             <InputSearchWithRadius className="customer-list-header w-80">
               <input
                 className=" form-control search-filter"
@@ -435,12 +435,12 @@ export default function NewCustomerList() {
               />
             </InputSearchWithRadius>
           </div>
-          <div className="col-lg-2 col-md-3 col-6   mb-2 pl-lg-0 pr-lg-2">
+          <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
             <DropDownSelect className="customer-list-header">
               {generateDropdown('sort')}
             </DropDownSelect>{' '}
           </div>
-          <div className="col-lg-2 col-md-3  col-6   mb-2 pl-lg-0">
+          <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
             <DropDownSelect className="customer-list-header">
               {generateDropdown('detail')}
             </DropDownSelect>{' '}
@@ -785,13 +785,16 @@ const CustomerListPage = styled.div`
     // min-height: 560px;
     padding-top: 68px;
     overflow: auto;
+    min-height: 892px;
+    position: relative;
   }
   .customer-list-header {
     margin-top: 12px;
 
     &.w-80 {
       float: right;
-      max-width: 632px;
+
+      width: 92%;
       margin-bottom: 10px;
     }
   }
@@ -803,13 +806,27 @@ const CustomerListPage = styled.div`
     right: 0;
     background: white;
   }
-
+  @media only screen and (min-width: 1600px) {
+    .customer-list-header {
+      &.w-80 {
+        width: 97%;
+        margin-bottom: 10px;
+      }
+    }
+  }
   @media only screen and (max-width: 991px) {
     padding-left: 10px;
 
     .customer-list-header-sticky {
       left: 0;
       right: 0;
+      padding: 0 15px;
+    }
+    .customer-list-header {
+      &.w-80 {
+        width: 100%;
+        margin-bottom: 10px;
+      }
     }
 
     .filter-slider {
