@@ -451,8 +451,15 @@ export default function CustomerMainContainer() {
                       </li>
                     </ul>
                   </WhiteCard>
+                  <select
+                    className="customeer-dropdown-select d-lg-none d-block mb-3 "
+                    onChange={(event) => setViewComponent(event.target.value)}>
+                    <option value="company">Company Details</option>
+                    <option value="agreement">Agreements</option>
+                    <option value="activity">Activity</option>
+                  </select>
 
-                  <WhiteCard className="mb-3 order-1 order-lg-2">
+                  <WhiteCard className="mb-3">
                     <p className="black-heading-title mt-0 mb-4">
                       {' '}
                       Team Members (
@@ -527,13 +534,7 @@ export default function CustomerMainContainer() {
                       </React.Fragment>
                     ))}
                   </WhiteCard>
-                  <select
-                    className="customeer-dropdown-select d-lg-none d-block mb-3 order-3"
-                    onChange={(event) => setViewComponent(event.target.value)}>
-                    <option value="company">Company Details</option>
-                    <option value="agreement">Agreements</option>
-                    <option value="activity">Activity</option>
-                  </select>
+
                   <WhiteCard className="mb-3 d-none d-lg-block">
                     <p className="black-heading-title mt-0 mb-4">
                       {' '}

@@ -919,7 +919,7 @@ export const WhiteCard = styled.div`
     width: 100px;
     height: 100px;
     margin-bottom: 15px;
-    margin-left: 20px;
+    margin-left: 5px;
     }
    
   } 
@@ -962,7 +962,7 @@ export const WhiteCard = styled.div`
      margin-top:10px;
 
       span { 
-        margin-left: 15px;
+        margin-left: 5px;
         max-width: 117px;
         margin-top: 10px;
         

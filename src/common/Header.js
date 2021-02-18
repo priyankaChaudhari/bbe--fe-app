@@ -804,7 +804,7 @@ const SideContents = styled.div`
     position: fixed;
     top: 70px;
     left: 0;
-    min-height: 100%;
+    height: 100%;
     background: ${Theme.gray6};
     border-right: 1px solid ${Theme.gray7};
 
