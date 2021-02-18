@@ -124,14 +124,17 @@ export default function CustomerListTablet({
                           }
                           alt=""
                         />
-                        {item.contract && item.contract.contract_type} Contract
+                        {item.contract &&
+                        item.contract &&
+                        item.contract.contract_type
+                          ? `${item.contract.contract_type} Contract`
+                          : ''}
                       </p>
                       <ul className="recurring-contact mb-2">
                         <li>
                           <p className="basic-text ">
                             {' '}
-                            {item && item.contract && item.contract.length}{' '}
-                            contract
+                            {item && item.contract && item.contract.length}
                           </p>
                         </li>
                         {item && item.contract && item.contract.end_date ? (
@@ -156,7 +159,7 @@ export default function CustomerListTablet({
                                 src={ClockIcon}
                                 alt="clock"
                               />{' '}
-                              {countDays(item)}
+                              {countDays(item)} days
                             </div>
                           </li>
                         ) : (
@@ -192,13 +195,13 @@ export default function CustomerListTablet({
                         <div className="col-6">
                           <div className="label">Monthly Retainer</div>
                           <div className="label-info">
-                            ${' '}
                             {item &&
-                              item.contract &&
-                              item.contract.monthly_retainer &&
-                              item.contract.monthly_retainer
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            item.contract &&
+                            item.contract.monthly_retainer
+                              ? `$ ${item.contract.monthly_retainer
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : ''}
                           </div>
                         </div>
                       </>
@@ -224,7 +227,9 @@ export default function CustomerListTablet({
                       <div className="col-6">
                         <div className="label">Rev Share %</div>
                         <div className="label-info ">
-                          {item && item.contract && item.contract.rev_share} %
+                          {item && item.contract && item.contract.rev_share
+                            ? `${item.contract.rev_share} %`
+                            : ''}
                         </div>
                       </div>
                     )}
