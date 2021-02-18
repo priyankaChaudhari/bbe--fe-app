@@ -296,7 +296,7 @@ export default function NewCustomerList() {
         <div className="row">
           <div className="col-lg-2 col-12 ">
             {' '}
-            <p className="black-heading-title ml-3 "> Customers</p>
+            <p className="black-heading-title ml-3 mt-4"> Customers</p>
             <div className=" mb-3 d-lg-none d-block ">
               <label
                 className="filter-slider mt-4 "
@@ -519,218 +519,225 @@ export default function NewCustomerList() {
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader color="#FF5933" type="page" />
               ) : (
-                <Table className="table-scroll">
-                  <tr className="table-header">
-                    <th className="customer-header">Customer</th>
-                    <th>{showPerformance ? 'Revenue' : 'Contract'}</th>
-                    <th>{showPerformance ? 'Units Sold' : 'Retainer'}</th>
-                    <th>{showPerformance ? 'Traffic' : 'Rev. Share'}</th>
-                    {showPerformance ? <th>Conversion</th> : null}
-                    <th>Brand Strategist</th>
-                  </tr>
+                <Table>
+                  <thead>
+                    <tr className="table-header">
+                      <th className="customer-header">Customer</th>
+                      <th>{showPerformance ? 'Revenue' : 'Contract'}</th>
+                      <th>{showPerformance ? 'Units Sold' : 'Retainer'}</th>
+                      <th>{showPerformance ? 'Traffic' : 'Rev. Share'}</th>
+                      {showPerformance ? <th>Conversion</th> : null}
+                      <th>Brand Strategist</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data &&
+                      data.map((item) => (
+                        <tr
+                          className="cursor"
+                          key={Math.random()}
+                          onClick={() =>
+                            history.push(
+                              PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                            )
+                          }>
+                          <td width="25%">
+                            <img
+                              className="company-logo"
+                              src={
+                                item &&
+                                item.documents &&
+                                item.documents[0] &&
+                                Object.values(item.documents[0])
+                                  ? Object.values(item.documents[0])[0]
+                                  : CompanyDefaultUser
+                              }
+                              alt="logo"
+                            />
 
-                  {data &&
-                    data.map((item) => (
-                      <tr
-                        className="cursor"
-                        key={Math.random()}
-                        onClick={() =>
-                          history.push(
-                            PATH_CUSTOMER_DETAILS.replace(':id', item.id),
-                          )
-                        }>
-                        <td width="25%">
-                          <img
-                            className="company-logo"
-                            src={
-                              item &&
-                              item.documents &&
-                              item.documents[0] &&
-                              Object.values(item.documents[0])
-                                ? Object.values(item.documents[0])[0]
-                                : CompanyDefaultUser
-                            }
-                            alt="logo"
-                          />
-
-                          <div className="company-name">
-                            {item &&
-                              item.contract &&
-                              item.contract.contract_company_name}
-                          </div>
-                          <div
-                            className="status"
-                            style={{ textTransform: 'capitalize' }}>
-                            {item && item.status}
-                          </div>
-                        </td>
-                        <td width={showPerformance ? '10%' : '35%'}>
-                          {showPerformance ? (
-                            <>
-                              {item && item.contract && item.contract.rev_share
-                                ? `$ ${item.contract.rev_share}`
-                                : ''}
-                              <div className="increase-rate">
-                                <img
-                                  className="red-arrow"
-                                  src={ArrowUpIcon}
-                                  width="14px"
-                                  alt="arrow-up"
-                                />
-                                0.15%
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <p
-                                className="black-heading-title mt-0 mb-0"
-                                style={{ textTransform: 'capitalize' }}>
-                                {' '}
+                            <div className="company-name">
+                              {item &&
+                                item.contract &&
+                                item.contract.contract_company_name}
+                            </div>
+                            <div
+                              className="status"
+                              style={{ textTransform: 'capitalize' }}>
+                              {item && item.status}
+                            </div>
+                          </td>
+                          <td width={showPerformance ? '10%' : '35%'}>
+                            {showPerformance ? (
+                              <>
                                 {item &&
                                 item.contract &&
-                                item.contract.contract_type
-                                  ? `${item.contract.contract_type} Contract`
+                                item.contract.rev_share
+                                  ? `$ ${item.contract.rev_share}`
                                   : ''}
-                              </p>
-                              <ul className="recurring-contact ">
-                                <li>
-                                  <p className="basic-text ">
-                                    {item &&
-                                      item.contract &&
-                                      item.contract.length}
-                                  </p>
-                                </li>
-                                {item &&
-                                item.contract &&
-                                item.contract.end_date ? (
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <p
+                                  className="black-heading-title mt-0 mb-0"
+                                  style={{ textTransform: 'capitalize' }}>
+                                  {' '}
+                                  {item &&
+                                  item.contract &&
+                                  item.contract.contract_type
+                                    ? `${item.contract.contract_type} Contract`
+                                    : ''}
+                                </p>
+                                <ul className="recurring-contact ">
                                   <li>
                                     <p className="basic-text ">
-                                      {' '}
-                                      Expires:{' '}
-                                      {dayjs(item.contract.end_date).format(
-                                        'MMM DD, YYYY',
-                                      )}
+                                      {item &&
+                                        item.contract &&
+                                        item.contract.length}
                                     </p>
                                   </li>
-                                ) : (
-                                  ''
-                                )}
+                                  {item &&
+                                  item.contract &&
+                                  item.contract.end_date ? (
+                                    <li>
+                                      <p className="basic-text ">
+                                        {' '}
+                                        Expires:{' '}
+                                        {dayjs(item.contract.end_date).format(
+                                          'MMM DD, YYYY',
+                                        )}
+                                      </p>
+                                    </li>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {item &&
+                                  item.contract &&
+                                  item.contract.end_date ? (
+                                    <li>
+                                      <div className="days-block">
+                                        {' '}
+                                        <img
+                                          className="clock-icon"
+                                          src={ClockIcon}
+                                          alt="clock"
+                                        />{' '}
+                                        {countDays(item)} days
+                                      </div>
+                                    </li>
+                                  ) : (
+                                    ''
+                                  )}
+                                </ul>
+                              </>
+                            )}
+                          </td>
+                          <td width="10%">
+                            {showPerformance ? (
+                              <>
+                                12
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            ) : (
+                              <>
                                 {item &&
                                 item.contract &&
-                                item.contract.end_date ? (
-                                  <li>
-                                    <div className="days-block">
-                                      {' '}
-                                      <img
-                                        className="clock-icon"
-                                        src={ClockIcon}
-                                        alt="clock"
-                                      />{' '}
-                                      {countDays(item)} days
-                                    </div>
-                                  </li>
-                                ) : (
-                                  ''
-                                )}
-                              </ul>
-                            </>
-                          )}
-                        </td>
-                        <td width="10%">
-                          {showPerformance ? (
-                            <>
-                              12
-                              <div className="increase-rate">
-                                <img
-                                  className="red-arrow"
-                                  src={ArrowUpIcon}
-                                  width="14px"
-                                  alt="arrow-up"
-                                />
-                                0.15%
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              {item &&
-                              item.contract &&
-                              item.contract.monthly_retainer
-                                ? `$ ${item.contract.monthly_retainer
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                                : ''}
-                            </>
-                          )}
-                        </td>
-                        <td width="10%">
-                          {showPerformance ? (
-                            <>
-                              12,234
-                              <div className="increase-rate">
-                                <img
-                                  className="red-arrow"
-                                  src={ArrowUpIcon}
-                                  width="14px"
-                                  alt="arrow-up"
-                                />
-                                0.15%
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              {item && item.contract && item.contract.rev_share
-                                ? `${item.contract.rev_share} %`
-                                : ''}
-                            </>
-                          )}
-                        </td>
-                        {showPerformance ? (
-                          <td width="10%">
-                            23.4%
-                            <div className="decrease-rate">
-                              <img
-                                className="red-arrow"
-                                src={ArrowDownIcon}
-                                alt="arrow-up"
-                              />
-                              0.15%
-                            </div>{' '}
+                                item.contract.monthly_retainer
+                                  ? `$ ${item.contract.monthly_retainer
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                  : ''}
+                              </>
+                            )}
                           </td>
-                        ) : null}
-                        <td width="20%">
-                          {item &&
-                          item.brand_growth_strategist &&
-                          item.brand_growth_strategist.length !== 0 ? (
-                            <>
-                              {item.brand_growth_strategist.profile_photo ? (
+                          <td width="10%">
+                            {showPerformance ? (
+                              <>
+                                12,234
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                {item &&
+                                item.contract &&
+                                item.contract.rev_share
+                                  ? `${item.contract.rev_share} %`
+                                  : ''}
+                              </>
+                            )}
+                          </td>
+                          {showPerformance ? (
+                            <td width="10%">
+                              23.4%
+                              <div className="decrease-rate">
                                 <img
-                                  className="user-profile-circle"
-                                  src={
-                                    item.brand_growth_strategist.profile_photo
-                                  }
-                                  alt="user"
+                                  className="red-arrow"
+                                  src={ArrowDownIcon}
+                                  alt="arrow-up"
                                 />
-                              ) : (
-                                <GetInitialName
-                                  property="float-left mr-3"
-                                  userInfo={item.brand_growth_strategist}
-                                />
-                              )}
-                            </>
-                          ) : (
-                            ''
-                          )}
-                          <div className="user-name">
+                                0.15%
+                              </div>{' '}
+                            </td>
+                          ) : null}
+                          <td width="20%">
                             {item &&
-                              item.brand_growth_strategist &&
-                              item.brand_growth_strategist.first_name}{' '}
-                            {item &&
-                              item.brand_growth_strategist &&
-                              item.brand_growth_strategist.last_name}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                            item.brand_growth_strategist &&
+                            item.brand_growth_strategist.length !== 0 ? (
+                              <>
+                                {item.brand_growth_strategist.profile_photo ? (
+                                  <img
+                                    className="user-profile-circle"
+                                    src={
+                                      item.brand_growth_strategist.profile_photo
+                                    }
+                                    alt="user"
+                                  />
+                                ) : (
+                                  <GetInitialName
+                                    property="float-left mr-3"
+                                    userInfo={item.brand_growth_strategist}
+                                  />
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                            <div className="user-name">
+                              {item &&
+                                item.brand_growth_strategist &&
+                                item.brand_growth_strategist.first_name}{' '}
+                              {item &&
+                                item.brand_growth_strategist &&
+                                item.brand_growth_strategist.last_name}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
                 </Table>
               )}
             </div>

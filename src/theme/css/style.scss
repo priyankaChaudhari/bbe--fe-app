@@ -69,6 +69,18 @@ body {
 .m-signer-mobile {
   max-width: 2000px !important;
 }
+
+.is-desktop .m-signer-mobile {
+  width: 75%;
+  height: 100%;
+  max-width: 1160px !important;
+}
+.src-hellospa-components-signature-request-document__pageContainer--1wZjX {
+  max-width: 1160px !important;
+}
+.x-hellosign-embedded__iframe {
+  width: 100% !important;
+}
 .DraftEditor-editorContainer {
   padding: 0 10px;
 }

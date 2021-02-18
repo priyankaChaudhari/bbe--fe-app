@@ -30,6 +30,7 @@ import {
   // BackArrowIcon,
   OrangeChecked,
   LeftArrowIcon,
+  AlarmBellIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
@@ -1271,19 +1272,20 @@ export default function ContractContainer() {
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending contract signature' ? (
-        <Footer className=" mt-5">
-          <div className="container">
+        <div className="mt-5 pt-5">
+          <Footer className=" mt-5 ">
             <Button
-              className="btn-primary w-50 sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
+              className="btn-primary w-320 sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
               onClick={() => onEditcontract()}>
-              <img src={OrangeChecked} alt="checked" /> Edit Contract
+              Edit Contract
             </Button>
             <Button
-              className="light-orange w-50 sticky-btn   mt-3 mr-3 on-boarding"
+              className="light-orange w-320 sticky-btn   mt-3 mr-3 on-boarding"
               onClick={() => {
                 setParams('send-remainder');
                 setShowModal(true);
               }}>
+              <img src={AlarmBellIcon} alt="alarm" />
               Send Reminder
             </Button>
             {/* {updatedFormData && Object.keys(updatedFormData).length ? (
@@ -1293,37 +1295,35 @@ export default function ContractContainer() {
             ) : (
               ''
             )} */}
-          </div>
-        </Footer>
+          </Footer>
+        </div>
       ) : isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
         <div className="mt-5 pt-5">
           <Footer className=" mt-5">
-            <div className="container">
-              <Button
-                className="light-orange  on-boarding  mt-3 mr-3 "
-                onClick={() => nextStep()}>
-                <img src={OrangeChecked} alt="checked" /> Save Changes
-              </Button>
+            <Button
+              className="light-orange  on-boarding  mt-3 mr-3 "
+              onClick={() => nextStep()}>
+              <img src={OrangeChecked} alt="checked" /> Save Changes
+            </Button>
 
-              <Button
-                className="btn-borderless on-boarding  mt-3 mr-3"
-                onClick={() =>
-                  setShowDiscardModal({
-                    ...showDiscardModal,
-                    show: true,
-                    clickedBtn: 'discard',
-                  })
-                }>
-                Discard Changes
-              </Button>
-              {updatedFormData && Object.keys(updatedFormData).length ? (
-                <span>
-                  {Object.keys(updatedFormData).length} unsaved changes.
-                </span>
-              ) : (
-                ''
-              )}
-            </div>
+            <Button
+              className="btn-borderless on-boarding  mt-3 mr-3"
+              onClick={() =>
+                setShowDiscardModal({
+                  ...showDiscardModal,
+                  show: true,
+                  clickedBtn: 'discard',
+                })
+              }>
+              Discard Changes
+            </Button>
+            {updatedFormData && Object.keys(updatedFormData).length ? (
+              <span>
+                {Object.keys(updatedFormData).length} unsaved changes.
+              </span>
+            ) : (
+              ''
+            )}
           </Footer>
         </div>
       ) : details &&

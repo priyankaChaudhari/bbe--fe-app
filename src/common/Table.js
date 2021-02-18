@@ -23,7 +23,6 @@ const Table = styled.table`
         font-size: 11px;
         border-bottom: 1px solid ${Theme.gray5};
         padding: 10px;
-        position: sticky !important;
 
         // &.firstChildCss:first-child {
         //   padding-left: 45px;
