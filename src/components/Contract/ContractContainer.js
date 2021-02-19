@@ -103,6 +103,16 @@ export default function ContractContainer() {
   );
 
   const [apiError, setApiError] = useState({});
+  const [additionalMarketplaceError, setAdditionalMarketplaceError] = useState(
+    {},
+  );
+  const [additionalMonthlySerError, setAdditionalMonthlySerError] = useState(
+    {},
+  );
+  const [additionalOnetimeSerError, setAdditionalOnetimeSerError] = useState(
+    {},
+  );
+  const [contractError, setContractError] = useState({});
 
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
@@ -269,6 +279,14 @@ export default function ContractContainer() {
     setShowEditor(true);
   };
 
+  // console.log(
+  //   additionalMarketplaceError,
+  //   additionalMonthlySerError,
+  //   additionalOnetimeSerError,
+  //   contractError,
+  //   apiError,
+  // );
+
   const nextStep = () => {
     showFooter(false);
 
@@ -381,53 +399,60 @@ export default function ContractContainer() {
         ])
         .then(
           axios.spread((...responses) => {
-            const responseOne = responses[0];
-            const responseTwo = responses[1];
-            const responesThree = responses[2];
-            const responesfour = responses[3];
+            const additionalMarketplaceRes = responses[0];
+            const additionalMonthlySerRes = responses[1];
+            const additionalOneTimeServRes = responses[2];
+            const contractRes = responses[3];
 
-            // if (
-            //   responseOne &&
-            //   responseOne.status === 200 &&
-            //   responseTwo &&
-            //   responseTwo.status === 200 &&
-            //   responesThree &&
-            //   responesThree.status === 200 &&
-            //   responesfour &&
-            //   responesfour.status === 200
-            // ) {
+            if (
+              additionalMarketplaceRes &&
+              additionalMarketplaceRes.status === 200 &&
+              additionalMonthlySerRes &&
+              additionalMonthlySerRes.status === 200 &&
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.status === 200 &&
+              contractRes &&
+              contractRes.status === 200
+            ) {
+              // use/access the results
 
-            // }
-
-            if (responseOne && responseOne.status === 400) {
-              setApiError({
-                ...apiError,
-                ...responseOne.data,
-              });
-            }
-            if (responseTwo && responseTwo.status === 400) {
-              setApiError({
-                ...apiError,
-                ...responseTwo.data,
-              });
-            }
-            if (responesThree && responesThree.status === 400) {
-              setApiError({
-                ...apiError,
-                ...responesThree.data,
-              });
-            }
-            if (responesfour && responesfour.status === 400) {
-              setApiError({
-                ...apiError,
-                ...responesfour.data,
-              });
+              setUpdatedFormData({});
+              dispatch(getAccountDetails(id));
             }
 
-            // use/access the results
-
-            setUpdatedFormData({});
-            dispatch(getAccountDetails(id));
+            if (
+              additionalMarketplaceRes &&
+              additionalMarketplaceRes.status === 400
+            ) {
+              setAdditionalMarketplaceError({
+                ...additionalMarketplaceError,
+                ...additionalMarketplaceRes.data,
+              });
+            }
+            if (
+              additionalMonthlySerRes &&
+              additionalMonthlySerRes.status === 400
+            ) {
+              setAdditionalMonthlySerError({
+                ...additionalMonthlySerError,
+                ...additionalMonthlySerRes.data,
+              });
+            }
+            if (
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.status === 400
+            ) {
+              setAdditionalOnetimeSerError({
+                ...additionalOnetimeSerError,
+                ...additionalOneTimeServRes.data,
+              });
+            }
+            if (contractRes && contractRes.status === 400) {
+              setContractError({
+                ...contractError,
+                ...contractRes.data,
+              });
+            }
           }),
         )
         .catch({
@@ -1275,6 +1300,18 @@ export default function ContractContainer() {
         setAdditionalMarketplace={setAdditionalMarketplace}
         additionalOnetimeServices={additionalOnetimeServices}
         setAdditionalOnetimeServices={setAdditionalOnetimeServices}
+        notIncludedOneTimeServices={notIncludedOneTimeServices}
+        // setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
+        notIncludedMonthlyServices={notIncludedMonthlyServices}
+        // setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
+        additionalMarketplaceError={additionalMarketplaceError}
+        setAdditionalMarketplaceError={setAdditionalMarketplaceError}
+        additionalMonthlySerError={additionalMonthlySerError}
+        setAdditionalMonthlySerError={setAdditionalMonthlySerError}
+        additionalOnetimeSerError={additionalOnetimeSerError}
+        setAdditionalOnetimeSerError={setAdditionalOnetimeSerError}
+        contractError={contractError}
+        setContractError={setContractError}
       />
 
       {details &&
