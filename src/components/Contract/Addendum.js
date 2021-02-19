@@ -23,6 +23,8 @@ export default function Addendum({
   setNewAddendum,
   showEditor,
   setShowEditor,
+  setUpdatedFormData,
+  updatedFormData,
 }) {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -60,6 +62,7 @@ export default function Addendum({
     const info = draftToHtml(convertToRaw(content));
     const updatedAddendumm = { ...newAddendumData, addendum: info };
     setNewAddendum(updatedAddendumm);
+    setUpdatedFormData({ ...updatedFormData, addendum: info });
   };
 
   const mapDefaultValues = (key, label, type) => {
@@ -192,6 +195,8 @@ Addendum.defaultProps = {
   setNewAddendum: () => {},
   setShowEditor: () => {},
   showEditor: () => {},
+  setUpdatedFormData: () => {},
+  updatedFormData: {},
 };
 
 Addendum.propTypes = {
@@ -213,6 +218,17 @@ Addendum.propTypes = {
   setNewAddendum: PropTypes.func,
   showEditor: PropTypes.func,
   setShowEditor: PropTypes.func,
+  setUpdatedFormData: PropTypes.func,
+  updatedFormData: PropTypes.shape({
+    additional_services: PropTypes.arrayOf(PropTypes.array),
+    start_date: PropTypes.string,
+    company_name: PropTypes.string,
+    primary_marketplace: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
+    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+    quantity: PropTypes.number,
+  }),
 };
 
 const Paragraph = styled.div`

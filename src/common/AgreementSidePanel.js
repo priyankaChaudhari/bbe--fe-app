@@ -292,10 +292,13 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
-    if (additionalOnetimeSerError.amazon_store_package_custom) {
+    if (
+      additionalOnetimeSerError.custom_amazon_store_price &&
+      key === 'amazon_store_package'
+    ) {
       setAdditionalOnetimeSerError({
         ...additionalOnetimeSerError,
-        amazon_store_package_custom: '',
+        custom_amazon_store_price: '',
       });
     }
     if (apiError.non_field_errors) {
@@ -1098,32 +1101,30 @@ export default function AgreementSidePanel({
         ...apiError,
         [event.target.name]: '',
       });
-      if(additionalMarketplaceError) {
+      if (additionalMarketplaceError) {
         setAdditionalMarketplaceError({
           ...additionalMarketplaceError,
           [event.target.name]: '',
-        })
-       }
-       if(additionalMonthlySerError) {
-
-         setAdditionalMonthlySerError({
-           ...additionalMonthlySerError,
-           [event.target.name]: '',
-          })
-        }
-        if(additionalOnetimeSerError) {
-          setAdditionalOnetimeSerError({
-            ...additionalOnetimeSerError,
-            [event.target.name]: '',
-          })
-        }
-        if(contractError) {
-          
-          setContractError({
-            ...contractError,
-            [event.target.name]: '',
-          })
-        }
+        });
+      }
+      if (additionalMonthlySerError) {
+        setAdditionalMonthlySerError({
+          ...additionalMonthlySerError,
+          [event.target.name]: '',
+        });
+      }
+      if (additionalOnetimeSerError) {
+        setAdditionalOnetimeSerError({
+          ...additionalOnetimeSerError,
+          [event.target.name]: '',
+        });
+      }
+      if (contractError) {
+        setContractError({
+          ...contractError,
+          [event.target.name]: '',
+        });
+      }
     }
   };
 
@@ -2437,13 +2438,13 @@ AgreementSidePanel.defaultProps = {
   setAdditionalMarketplace: () => {},
   additionalOnetimeServices: [],
   setAdditionalOnetimeServices: () => {},
-  additionalMarketplaceError:{},
+  additionalMarketplaceError: {},
   setAdditionalMarketplaceError: () => {},
-  additionalMonthlySerError:{},
+  additionalMonthlySerError: {},
   setAdditionalMonthlySerError: () => {},
-  additionalOnetimeSerError:{},
+  additionalOnetimeSerError: {},
   setAdditionalOnetimeSerError: () => {},
-  contractError:{},
+  contractError: {},
   setContractError: () => {},
 };
 
@@ -2534,13 +2535,13 @@ AgreementSidePanel.propTypes = {
   setAdditionalMarketplace: PropTypes.func,
   additionalOnetimeServices: PropTypes.arrayOf(PropTypes.object),
   setAdditionalOnetimeServices: PropTypes.func,
-  additionalMarketplaceError: PropTypes.shape(PropTypes.object ),
+  additionalMarketplaceError: PropTypes.shape(PropTypes.object),
   setAdditionalMarketplaceError: PropTypes.func,
-  additionalMonthlySerError: PropTypes.shape(PropTypes.object ),
+  additionalMonthlySerError: PropTypes.shape(PropTypes.object),
   setAdditionalMonthlySerError: PropTypes.func,
   additionalOnetimeSerError: PropTypes.shape(PropTypes.object),
   setAdditionalOnetimeSerError: PropTypes.func,
-  contractError: PropTypes.shape(PropTypes.object ),  
+  contractError: PropTypes.shape(PropTypes.object),
   setContractError: PropTypes.func,
 };
 
