@@ -425,6 +425,7 @@ export default function ContractContainer() {
             }
 
             // use/access the results
+
             setUpdatedFormData({});
             dispatch(getAccountDetails(id));
           }),
@@ -921,23 +922,28 @@ export default function ContractContainer() {
     });
   };
   const createAgreementDoc = () => {
-    const agreementData = getAgreementAccorType(0)
-      .replace(
-        'CUSTOMER_NAME',
-        mapDefaultValues('contract_company_name', 'Customer Name'),
-      )
-      .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
-      .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
-      .replace(
-        'AGREEMENT_LENGTH',
-        mapDefaultValues('length', 'Contract Length'),
-      )
-      .replace(
-        'ONE_TIME_SERVICE_TABLE',
-        `<table class="contact-list " style="width: 100%;
+    const agreementData = getAgreementAccorType(0);
+    if (agreementData) {
+      agreementData
+        .replace(
+          'CUSTOMER_NAME',
+          mapDefaultValues('contract_company_name', 'Customer Name'),
+        )
+        .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+        .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
+        .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+        .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+        .replace(
+          'CUSTOMER_POSTAL',
+          mapDefaultValues('zip_code', 'Postal Code, '),
+        )
+        .replace(
+          'AGREEMENT_LENGTH',
+          mapDefaultValues('length', 'Contract Length'),
+        )
+        .replace(
+          'ONE_TIME_SERVICE_TABLE',
+          `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;"><th style="text-align: left; border: 1px solid black;
@@ -956,12 +962,12 @@ export default function ContractContainer() {
     )}
                               </td></tr>
                                 </table>`,
-      )
-      .replace(
-        'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-        `${mapServiceTotal('additional_one_time_services')}`,
-      );
-
+        )
+        .replace(
+          'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+          `${mapServiceTotal('additional_one_time_services')}`,
+        );
+    }
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',
       mapDefaultValues('contract_company_name', 'Customer Name'),
