@@ -226,7 +226,7 @@ export default function AgreementSidePanel({
       setAdditionalMarketplaces(market.data);
     });
   }, []);
-
+  // console.log("!!!")
   useEffect(() => {
     // if (agreementData && agreementData.additional_one_time_services) {
     fetchUncommonOptions(
