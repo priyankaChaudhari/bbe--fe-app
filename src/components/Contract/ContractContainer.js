@@ -86,6 +86,8 @@ export default function ContractContainer() {
   // const [oneTimeService, setOneTimeService] = useState([]);
   const [isFooter, showFooter] = useState(false);
   const [newAddendumData, setNewAddendum] = useState(null);
+  const [originalAddendumData, setOriginalAddendumData] = useState(null);
+
   const [showEditor, setShowEditor] = useState(false);
   const [pdfData, setPDFData] = useState('');
   const [notIncludedOneTimeServices, setNotIncludedOneTimeServices] = useState(
@@ -164,6 +166,12 @@ export default function ContractContainer() {
 
     getAddendum({ customer_id: id }).then((addendum) => {
       setNewAddendum(
+        addendum &&
+          addendum.data &&
+          addendum.data.results &&
+          addendum.data.results[0],
+      );
+      setOriginalAddendumData(
         addendum &&
           addendum.data &&
           addendum.data.results &&
@@ -279,18 +287,15 @@ export default function ContractContainer() {
     setShowEditor(true);
   };
 
-  // console.log(
-  //   additionalMarketplaceError,
-  //   additionalMonthlySerError,
-  //   additionalOnetimeSerError,
-  //   contractError,
-  //   apiError,
-  // );
-
   const nextStep = () => {
-    showFooter(false);
-
     // if (history.location.pathname.includes('agreement')) {
+
+    let additionalMarketplacesApi = null;
+    let additionalMonthlyApi = null;
+    let additionalOneTimeApi = null;
+    let AccountApi = null;
+    let primaryMarketPlaceApi = null;
+    let AddendumApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
@@ -315,59 +320,34 @@ export default function ContractContainer() {
           is_primary: true,
         };
         if (details.primary_marketplace && details.primary_marketplace.id) {
-          updateMarketplace(details.primary_marketplace.id, statementData).then(
-            (res) => {
-              if (res && res.status === 200) {
-                setIsLoading({ loader: false, type: 'button' });
-              }
-              if (res && res.status === 400) {
-                setApiError({ ...apiError, ...(res && res.data) });
-              }
-            },
+          primaryMarketPlaceApi = updateMarketplace(
+            details.primary_marketplace.id,
+            statementData,
           );
         } else {
-          createMarketplace(statementData).then((res) => {
-            if (res && res.status === 201) {
-              setIsLoading({ loader: false, type: 'button' });
-            }
-          });
+          primaryMarketPlaceApi = createMarketplace(statementData);
         }
       }
-      let additionalMarketplacesResponse = null;
-      let additionalMonthlyResponse = null;
-      let additionalOneTimeResponse = null;
-      let AccountResponse = null;
 
       // for additionL MARKETPLACE
       if (updatedFormData.additional_marketplaces) {
-        additionalMarketplacesResponse = createMarketplaceBulk(
+        additionalMarketplacesApi = createMarketplaceBulk(
           updatedFormData.additional_marketplaces,
         );
-        //  .then(
-        //     () => {
-        //       // console.log('on success of marketplace bulk update', res);
-        //     },
-        // );
       }
 
       // for additionL service
       if (updatedFormData.additional_monthly_services) {
-        additionalMonthlyResponse = createAdditionalServiceBulk(
+        additionalMonthlyApi = createAdditionalServiceBulk(
           updatedFormData.additional_monthly_services,
         );
-        // .then(() => {
-        //   // console.log('on success of additional service bulk update', res);
-        // });
       }
 
       // for additional one time service
       if (updatedFormData.additional_one_time_services) {
-        additionalOneTimeResponse = createAdditionalServiceBulk(
+        additionalOneTimeApi = createAdditionalServiceBulk(
           updatedFormData.additional_one_time_services,
         );
-        // .then(() => {
-        //   // console.log('on success of additional service bulk update', res);
-        // });
       }
 
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
@@ -388,14 +368,44 @@ export default function ContractContainer() {
         },
       };
 
-      AccountResponse = updateAccountDetails(details.id, detail);
+      AccountApi = updateAccountDetails(details.id, detail);
+
+      if (newAddendumData.id) {
+        //  setIsLoading({ loader: true, type: 'page' });
+
+        AddendumApi = updateAddendum(newAddendumData.id, {
+          addendum: newAddendumData.addendum,
+        });
+        //  .then(() => {
+        //    setIsLoading({ loader: false, type: 'page' });
+        //    setShowEditor(false);
+        //  });
+      } else {
+        const addendumData = {
+          customer_id: id,
+          addendum: newAddendumData && newAddendumData.addendum,
+          contract: details.id,
+        };
+        //  setIsLoading({ loader: true, type: 'page' });
+
+        AddendumApi = createAddendum(addendumData);
+        // .then((res) => {
+        //    setIsLoading({ loader: false, type: 'page' });
+        //    if (res && res.status === 201) {
+        //      setNewAddendum(res && res.data);
+        //      setShowEditor(false);
+        //    }
+        //  });
+      }
 
       axios
         .all([
-          additionalMarketplacesResponse,
-          additionalMonthlyResponse,
-          additionalOneTimeResponse,
-          AccountResponse,
+          additionalMarketplacesApi,
+          additionalMonthlyApi,
+          additionalOneTimeApi,
+          AccountApi,
+          primaryMarketPlaceApi,
+          AddendumApi,
         ])
         .then(
           axios.spread((...responses) => {
@@ -403,6 +413,8 @@ export default function ContractContainer() {
             const additionalMonthlySerRes = responses[1];
             const additionalOneTimeServRes = responses[2];
             const contractRes = responses[3];
+            const primaryMarketplaceRes = responses[4];
+            const addendumRes = responses[5];
 
             if (
               additionalMarketplaceRes &&
@@ -412,13 +424,92 @@ export default function ContractContainer() {
               additionalOneTimeServRes &&
               additionalOneTimeServRes.status === 200 &&
               contractRes &&
-              contractRes.status === 200
+              contractRes.status === 200 &&
+              primaryMarketplaceRes &&
+              primaryMarketplaceRes.status === 200 &&
+              addendumRes &&
+              addendumRes.status === 200
             ) {
               // use/access the results
-
+              showFooter(false);
               setUpdatedFormData({});
               dispatch(getAccountDetails(id));
             }
+
+            if (
+              additionalMarketplaceRes &&
+              additionalMarketplaceRes.status === 200
+            ) {
+              if (updatedFormData && updatedFormData.additional_marketplaces) {
+                delete updatedFormData.additional_marketplaces;
+              }
+            }
+            if (
+              additionalMonthlySerRes &&
+              additionalMonthlySerRes.status === 200
+            ) {
+              if (
+                updatedFormData &&
+                updatedFormData.additional_monthly_services
+              ) {
+                delete updatedFormData.additional_monthly_services;
+              }
+            }
+            if (
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.status === 200
+            ) {
+              if (
+                updatedFormData &&
+                updatedFormData.additional_one_time_services
+              ) {
+                delete updatedFormData.additional_one_time_services;
+              }
+            }
+            if (
+              (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
+              (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
+            ) {
+              if (updatedFormData && updatedFormData.primary_marketplace) {
+                delete updatedFormData.primary_marketplace;
+              }
+            }
+
+            if (
+              (addendumRes && addendumRes.status === 200) ||
+              (addendumRes && addendumRes.status === 201)
+            ) {
+              if (addendumRes && addendumRes.status === 201) {
+                setNewAddendum(addendumRes && addendumRes.data);
+              }
+              setOriginalAddendumData(addendumRes && addendumRes.data);
+              setShowEditor(false);
+              if (updatedFormData && updatedFormData.addendum) {
+                delete updatedFormData.addendum;
+              }
+            }
+
+            if (contractRes && contractRes.status === 200) {
+              const updatedKeys = Object.keys(updatedFormData);
+              if (updatedKeys && updatedKeys.length) {
+                const fieldsToDeleteList = updatedKeys
+                  .filter((item) => item !== 'additional_one_time_services')
+                  .filter((item) => item !== 'additional_monthly_services')
+                  .filter((item) => item !== 'additional_marketplaces')
+                  .filter((item) => item !== 'primary_marketplace')
+                  .filter((item) => item !== 'addendum');
+                // fieldsToDeleteList.map(item => delete updatedFormData.item)
+                for (const item of fieldsToDeleteList) {
+                  delete updatedFormData[item];
+                }
+              }
+            }
+
+            if (!Object.keys(updatedFormData).length) {
+              showFooter(false);
+              dispatch(getAccountDetails(id));
+            }
+            setUpdatedFormData({ ...updatedFormData });
 
             if (
               additionalMarketplaceRes &&
@@ -451,6 +542,12 @@ export default function ContractContainer() {
               setContractError({
                 ...contractError,
                 ...contractRes.data,
+              });
+            }
+            if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
+              setApiError({
+                ...apiError,
+                ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
               });
             }
           }),
@@ -490,31 +587,6 @@ export default function ContractContainer() {
       });
     }
 
-    if (newAddendumData.id) {
-      setIsLoading({ loader: true, type: 'page' });
-
-      updateAddendum(newAddendumData.id, {
-        addendum: newAddendumData.addendum,
-      }).then(() => {
-        setIsLoading({ loader: false, type: 'page' });
-        setShowEditor(false);
-      });
-    } else {
-      const addendumData = {
-        customer_id: id,
-        addendum: newAddendumData && newAddendumData.addendum,
-        contract: details.id,
-      };
-      setIsLoading({ loader: true, type: 'page' });
-
-      createAddendum(addendumData).then((res) => {
-        setIsLoading({ loader: false, type: 'page' });
-        if (res && res.status === 201) {
-          setNewAddendum(res && res.data);
-          setShowEditor(false);
-        }
-      });
-    }
     // }
   };
 
@@ -534,11 +606,15 @@ export default function ContractContainer() {
       }
       setFormData({});
       showFooter(false);
-      if (history.location.pathname.includes('addendum')) {
-        setShowEditor(false);
-      } else {
-        dispatch(getAccountDetails(id));
-      }
+      setShowEditor(false);
+      setNewAddendum(originalAddendumData);
+      dispatch(getAccountDetails(id));
+
+      // if (history.location.pathname.includes('addendum')) {
+      //   setShowEditor(false);
+      // } else {
+      //   dispatch(getAccountDetails(id));
+      // }
     }
   };
 
@@ -1244,6 +1320,8 @@ export default function ContractContainer() {
                       showEditor={showEditor}
                       setShowEditor={setShowEditor}
                       onEditAddendum={onEditAddendum}
+                      setUpdatedFormData={setUpdatedFormData}
+                      updatedFormData={updatedFormData}
                     />
                   </div>
                 ) : (
