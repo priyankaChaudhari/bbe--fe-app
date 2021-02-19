@@ -1180,7 +1180,6 @@ export default function AgreementSidePanel({
       />
     );
   };
-
   const generateDropdown = (item) => {
     return (
       <Select
@@ -1583,13 +1582,12 @@ export default function AgreementSidePanel({
               </div>
               <Collapse isOpened={openCollapse.agreement}>
                 {loader ? (
-                  ''
+                  <PageLoader
+                    component="activityLog"
+                    color="#FF5933"
+                    type="page"
+                  />
                 ) : (
-                  //   <PageLoader
-                  //     component="activityLog"
-                  //     color="#FF5933"
-                  //     type="page"
-                  //   />
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
@@ -2163,12 +2161,11 @@ export default function AgreementSidePanel({
                 )}
               </Collapse>
               {loader || (isLoading.loader && isLoading.type === 'page') ? (
-                //   <PageLoader
-                //     component="activityLog"
-                //     color="#FF5933"
-                //     type="page"
-                //   />
-                ''
+                <PageLoader
+                  component="activityLog"
+                  color="#FF5933"
+                  type="page"
+                />
               ) : showSection && showSection.dspAddendum ? (
                 <>
                   <div className="straight-line sidepanel " />
