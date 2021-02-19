@@ -37,6 +37,9 @@ const DropDownSelect = styled.div`
         .cross-icon {
           display: none;
         }
+        .css-1wa3eu0-placeholder {
+          color: ${Theme.black};
+        }
 
         .remove-icon {
           display: block;
@@ -75,19 +78,19 @@ const DropDownSelect = styled.div`
       }
 
       .css-1wa3eu0-placeholder {
-        color: ${Theme.white};
+        color: #000000;
       }
 
-      .css-g1d714-ValueContainer {
-        padding: 1px 20px 1px 5px;
+      // .css-g1d714-ValueContainer {
+      //   padding: 1px 20px 1px 5px;
 
-        .css-1wa3eu0-placeholder {
-          font-size: ${Theme.textFontSize};
-          color: ${Theme.gray90} !important;
-          width: 100%;
-          text-align: left;
-        }
-      }
+      //   .css-1wa3eu0-placeholder {
+      //     font-size: ${Theme.textFontSize};
+      //     color: ${Theme.black} !important;
+      //     width: 100%;
+      //     text-align: left;
+      //   }
+      // }
 
       // .css-1hb7zxy-IndicatorsContainer {
       //   // background: ${Theme.gray90};
