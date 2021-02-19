@@ -2540,7 +2540,7 @@ AgreementSidePanel.propTypes = {
   setAdditionalMonthlySerError: PropTypes.func,
   additionalOnetimeSerError: PropTypes.shape(PropTypes.object),
   setAdditionalOnetimeSerError: PropTypes.func,
-  contractError: PropTypes.shape(PropTypes.object ),
+  contractError: PropTypes.shape(PropTypes.object ),  
   setContractError: PropTypes.func,
 };
 
