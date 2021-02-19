@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const Table = styled.table`
-  overflow: auto;
+  position: relative;
   width: 100%;
 
   tr {
@@ -23,10 +23,6 @@ const Table = styled.table`
         font-size: 11px;
         border-bottom: 1px solid ${Theme.gray5};
         padding: 10px;
-
-        // &.firstChildCss:first-child {
-        //   padding-left: 45px;
-        // }
 
         &.customer-header {
           padding-left: 66px;

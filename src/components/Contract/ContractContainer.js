@@ -1443,20 +1443,7 @@ export default function ContractContainer() {
         style={customStyles}
         ariaHideApp={false}
         contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() =>
-            setShowDiscardModal({
-              ...showDiscardModal,
-              show: false,
-              clickedBtn: '',
-            })
-          }
-          role="presentation"
-        />
-        <ModalBox>
+        <ModalBox className="small-alert-modal">
           <div className="modal-body pt-5">
             <div className="alert-msg mb-4 ">
               <span>Are you sure you want to discard all the changes?</span>
@@ -1465,13 +1452,13 @@ export default function ContractContainer() {
               <Button
                 onClick={() => discardAgreementChanges('No')}
                 type="button"
-                className="btn-primary on-boarding  mr-5">
+                className="btn-primary on-boarding  mr-3">
                 Keep Editing
               </Button>
               <Button
                 onClick={() => discardAgreementChanges('Yes')}
                 type="button"
-                className=" btn-transparent ">
+                className=" btn-transparent on-boarding">
                 Discard Changes
               </Button>
 

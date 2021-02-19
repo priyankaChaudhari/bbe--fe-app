@@ -296,8 +296,8 @@ export default function NewCustomerList() {
         <div className="row">
           <div className="col-lg-2 col-12 ">
             {' '}
-            <p className="black-heading-title ml-3 mt-lg-4 mt-3"> Customers</p>
-            <div className=" mb-3 d-lg-none d-block ">
+            <p className="black-heading-title ml-3 pt-1"> Customers</p>
+            <div className=" mb-3  d-lg-none d-block ">
               <label
                 className="filter-slider mt-3 "
                 htmlFor="tabletmenu-check"
@@ -401,7 +401,7 @@ export default function NewCustomerList() {
                   </ul>
                 </SideContent>
               </div>
-              <div className="straight-line horizontal-line" />
+              <div className="straight-line horizontal-line mb-2" />
             </MobileLeftSidebar>
           </div>
 
@@ -742,7 +742,7 @@ export default function NewCustomerList() {
               )}
             </div>
 
-            <div className="fotter-sticky">
+            <div className="footer-sticky">
               <div className="straight-line horizontal-line" />
               <CommonPagination
                 count={count}
@@ -777,7 +777,7 @@ const CustomerListPage = styled.div`
     position: fixed;
     left: 62px;
     right: 0;
-    z-index: 2;
+    z-index: 1;
     background-color: ${Theme.white};
   }
 
@@ -789,31 +789,35 @@ const CustomerListPage = styled.div`
     position: relative;
   }
   .customer-list-header {
-    margin-top: 12px;
-
+    margin: 10px 0;
     &.w-80 {
       float: right;
-
       width: 92%;
-      margin-bottom: 10px;
     }
   }
 
-  .fotter-sticky {
+  .footer-sticky {
     position: fixed;
     bottom: 0;
     left: 353px;
     right: 0;
     background: white;
   }
+  @media only screen and (min-width: 1920px) {
+    .customer-list-header {
+      &.w-80 {
+        width: 106% !important;
+      }
+    }
+  }
   @media only screen and (min-width: 1600px) {
     .customer-list-header {
       &.w-80 {
         width: 97%;
-        margin-bottom: 10px;
       }
     }
   }
+
   @media only screen and (max-width: 991px) {
     padding-left: 10px;
 
@@ -825,7 +829,6 @@ const CustomerListPage = styled.div`
     .customer-list-header {
       &.w-80 {
         width: 100%;
-        margin-bottom: 10px;
       }
     }
 
@@ -847,6 +850,13 @@ const CustomerListPage = styled.div`
         margin-right: 7px;
         vertical-align: text-top;
       }
+    }
+  }
+  @media only screen and (max-width: 991px) {
+    padding-left: 10px;
+
+    .customer-list-header {
+      margin: 5px 0;
     }
   }
 `;
