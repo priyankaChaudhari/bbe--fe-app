@@ -72,6 +72,7 @@ export default function PageLoader({
           top: component === 'member' ? '120px' : '',
           left: component === 'social' ? '110px' : '',
           width: component === 'activityLog' ? '120px' : '',
+          right: component === 'agreement' ? '14%' : '',
         }}>
         <Loader type="Bars" color={color} height={height} width={pageWidth} />
       </PageLoaderWrapper>

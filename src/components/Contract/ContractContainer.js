@@ -63,6 +63,20 @@ const customStyles = {
   },
 };
 
+const customStylesForAlert = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '450px ',
+    width: '100% ',
+    minHeight: '200px',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 export default function ContractContainer() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -415,6 +429,7 @@ export default function ContractContainer() {
             const contractRes = responses[3];
             const primaryMarketplaceRes = responses[4];
             const addendumRes = responses[5];
+            setIsLoading({ loader: false, type: 'button' });
 
             if (
               additionalMarketplaceRes &&
@@ -1227,12 +1242,13 @@ export default function ContractContainer() {
 
   return (
     <>
-      {isLoading.loader && isLoading.type === 'page' ? (
+      {loader || (isLoading.loader && isLoading.type === 'page') ? (
         <PageLoader
           className="modal-loader"
           color="#FF5933"
           type="page"
           width={40}
+          component="agreement"
         />
       ) : checkPermission() ? (
         details ? (
@@ -1426,7 +1442,14 @@ export default function ContractContainer() {
             <Button
               className="light-orange  on-boarding  mt-3 mr-3 "
               onClick={() => nextStep()}>
-              <img src={OrangeChecked} alt="checked" /> Save Changes
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                <>
+                  <img src={OrangeChecked} alt="checked" />
+                  Save Changes
+                </>
+              )}
             </Button>
 
             <Button
@@ -1518,7 +1541,7 @@ export default function ContractContainer() {
       </Modal>
       <Modal
         isOpen={showDiscardModal.show}
-        style={customStyles}
+        style={customStylesForAlert}
         ariaHideApp={false}
         contentLabel="Edit modal">
         <ModalBox className="small-alert-modal">

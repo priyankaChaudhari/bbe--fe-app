@@ -25,7 +25,19 @@ export default function Agreement({ formData, details, templateData }) {
     //   return details && details[key];
     // }
 
-    if (formData[key] === undefined || formData[key] === '') {
+    // if (
+    //   (formData['city'] === null || formData['city'] === '') &&
+    //   (formData['address'] === null || formData['address'] === '') &&
+    //   (formData['state'] === null || formData['state'] === '') &&
+    //   (formData['zip_code'] === null || formData['zip_code'] === '')
+    // ) {
+    //   return 'Enter Location';
+    // }
+    if (
+      formData[key] === undefined ||
+      formData[key] === '' ||
+      formData[key] === null
+    ) {
       return key === 'contract_company_name' ? `Client Name` : `Enter ${label}`;
     }
 
