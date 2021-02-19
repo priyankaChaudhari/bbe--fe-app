@@ -1480,11 +1480,11 @@ export default function AgreementSidePanel({
         </ErrorMsg>
       );
     }
-    if (item === 'amazon_store_package_custom') {
+    if (item === 'custom_amazon_store_price') {
       return (
         <ErrorMsg>
           {additionalOnetimeSerError &&
-            additionalOnetimeSerError.amazon_store_package_custom}
+            additionalOnetimeSerError.custom_amazon_store_price}
         </ErrorMsg>
       );
     }
@@ -1667,11 +1667,6 @@ export default function AgreementSidePanel({
                   ''
                 ) : (
                   <>
-                    {apiError &&
-                    apiError.non_field_errors &&
-                    apiError.non_field_errors[0]
-                      ? displayError('non_field_errors')
-                      : ''}
                     <ul className="collapse-inner">
                       {StatementDetails.map((item) => (
                         <React.Fragment key={item.key}>
@@ -1681,6 +1676,12 @@ export default function AgreementSidePanel({
                                 <label htmlFor={item.key}>{item.label}</label>
                                 {generateHTML(item)}
                                 {displayError(item)}
+                                {item.key === 'primary_marketplace' &&
+                                apiError &&
+                                apiError.non_field_errors &&
+                                apiError.non_field_errors[0]
+                                  ? displayError('non_field_errors')
+                                  : ''}
                               </ContractFormField>
                             </li>
                           </>
