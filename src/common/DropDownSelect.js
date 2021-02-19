@@ -29,10 +29,10 @@ const DropDownSelect = styled.div`
       border-radius: 18px;
       color: ${Theme.gray90};
       font-size: ${Theme.textFontSize};
-      padding: 0 5px 0 5px;
+      padding: 1px 5px 1px 5px;
 
       .css-g1d714-ValueContainer {
-        padding: 0 20px 0 5px;
+        padding: 1px 20px 1px 5px;
 
         .cross-icon {
           display: none;
@@ -48,10 +48,6 @@ const DropDownSelect = styled.div`
           color: ${Theme.black} !important;
         }
       }
-
-      &:active {
-        // background: ${Theme.gray90} !important;
-      }
     }
 
     .css-1pahdxg-control {
@@ -59,8 +55,7 @@ const DropDownSelect = styled.div`
       border-radius: 18px;
       font-size: ${Theme.textFontSize};
       color: ${Theme.white};
-      padding: 0 5px 0 5px;
-      // background: ${Theme.gray90} !important;
+      padding: 1px 5px 1px 5px;
       box-shadow: none;
       outline: none;
 
@@ -84,7 +79,7 @@ const DropDownSelect = styled.div`
       }
 
       .css-g1d714-ValueContainer {
-        padding: 0 20px 0 5px;
+        padding: 1px 20px 1px 5px;
 
         .css-1wa3eu0-placeholder {
           font-size: ${Theme.textFontSize};
@@ -94,27 +89,27 @@ const DropDownSelect = styled.div`
         }
       }
 
-      .css-1hb7zxy-IndicatorsContainer {
-        // background: ${Theme.gray90};
-        color: ${Theme.black};
+      // .css-1hb7zxy-IndicatorsContainer {
+      //   // background: ${Theme.gray90};
+      //   color: ${Theme.black};
 
-        .css-1gtu0rj-indicatorContainer {
-          padding: 4px;
-          color: ${Theme.black} !important;
-          // background: ${Theme.gray90}!important;
+      //   .css-1gtu0rj-indicatorContainer {
+      //     padding: 4px;
+      //     color: ${Theme.black} !important;
+      //     // background: ${Theme.gray90}!important;
 
-          .css-6q0nyr-Svg {
-            color: ${Theme.black} !important;
-          }
+      //     .css-6q0nyr-Svg {
+      //       color: ${Theme.black} !important;
+      //     }
 
-          &:hover {
-            color: ${Theme.black};
-          }
-        }
-        .css-tlfecz-indicatorContainer {
-          color: ${Theme.black} !important;
-        }
-      }
+      //     &:hover {
+      //       color: ${Theme.black};
+      //     }
+      //   }
+      //   .css-tlfecz-indicatorContainer {
+      //     color: ${Theme.black} !important;
+      //   }
+      // }
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.textFontSize};

@@ -21,7 +21,7 @@ const InputSearchWithRadius = styled.div`
     min-height: 40px;
     border-radius: 12px;
     font-size: ${Theme.normal};
-    background-color: #f9faff;
+    background-color: ${Theme.gray15};
     color: #333333;
     border: 1px solid ${Theme.gray9};
     border-radius: 20px;

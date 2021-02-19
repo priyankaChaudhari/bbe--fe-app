@@ -213,6 +213,7 @@ export default function Header() {
                       id="idea"
                       aria-haspopup="true"
                       place="bottom"
+                      effect="solid"
                     />
                   </li>
                   <li>

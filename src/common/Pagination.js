@@ -48,6 +48,8 @@ const PaginationStyled = styled.div`
     text-align: end;
     .rc-pagination-total-text {
       float: left;
+      color: ${Theme.gray85};
+      margin-left: 10px;
     }
     li {
       margin-bottom: 10px;
@@ -74,6 +76,20 @@ const PaginationStyled = styled.div`
           }
         }
       }
+    }
+    .rc-pagination-prev button,
+    .rc-pagination-next button {
+      .rc-pagination-next button:after {
+        font-size: 22px !important;
+      }
+    }
+    .rc-pagination-next button:after {
+      font-size: 15px !important;
+    }
+    .rc-pagination-prev button:after {
+      content: '‹';
+      display: block;
+      font-size: 15px !important;
     }
   }
 `;

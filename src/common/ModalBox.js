@@ -7,6 +7,12 @@ const ModalBox = styled.div`
   margin: 0 auto;
   border-radius:10px;
 
+  &.small-alert-modal {
+    max-width: 450px !important;
+    width:100%;
+    margin: 0 auto;
+  }
+
   .modal-body {
     &.on-boarding {
       padding-bottom: 10px;

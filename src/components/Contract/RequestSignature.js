@@ -513,25 +513,27 @@ function RequestSignature({
         ''
       )}
       {params && params.step === 'request-approve' ? (
-        <div className="modal-body on-boarding">
-          <h4 className="on-boarding mb-4">Request Approval</h4>
-          <div className="edit-profile-text float-left mb-4">
-            <GetInitialName property="mr-3" />
-            <div className="name-email">
-              <div className="team-member-name">Thaddeus Hay</div>
-              <span> thay@buyboxexperts.com</span>
+        <>
+          <div className="modal-body on-boarding">
+            <h4 className="on-boarding mb-4">Request Approval</h4>
+            <div className="edit-profile-text float-left mb-4">
+              <GetInitialName property="mr-3" />
+              <div className="name-email">
+                <div className="team-member-name">Thaddeus Hay</div>
+                <span> thay@buyboxexperts.com</span>
+              </div>
             </div>
-          </div>
 
-          <FormField>
-            <textarea
-              className="form-control"
-              type="text"
-              placeholder="Add personal note to recipient"
-              name="note"
-              onChange={(event) => onRequestApprovalChange(event)}
-            />
-          </FormField>
+            <FormField>
+              <textarea
+                className="form-control"
+                type="text"
+                placeholder="Add personal note to recipient"
+                name="note"
+                onChange={(event) => onRequestApprovalChange(event)}
+              />
+            </FormField>
+          </div>
           <div className="footer-line " />
           <div className=" col-12  modal-footer">
             <Button
@@ -540,7 +542,7 @@ function RequestSignature({
               Request Approval
             </Button>
           </div>
-        </div>
+        </>
       ) : (
         ''
       )}

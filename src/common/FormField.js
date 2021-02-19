@@ -61,6 +61,12 @@ const FormField = styled.div`
     font-size:  ${Theme.normal};
     font-weight: 600;
 
+     &::placeholder {
+      color: ${Theme.gray30};
+      font-weight: 500;
+      font-size: color: ${Theme.normal};
+    }
+
     
 
     &.info-tool{
@@ -75,11 +81,7 @@ const FormField = styled.div`
       width: 85%;
       
     }
-    &::placeholder {
-      color: ${Theme.gray30};
-      font-weight: 500;
-      font-size: color: ${Theme.normal};
-    }
+   
 
     &:focus {
       outline: none;
