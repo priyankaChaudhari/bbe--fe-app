@@ -2125,9 +2125,7 @@ export default function AgreementSidePanel({
                                         )
                                       }
                                     />
-                                    {displayError(
-                                      'amazon_store_package_custom',
-                                    )}
+                                    {displayError('custom_amazon_store_price')}
                                   </ContractFormField>
                                 ) : (
                                   ''
