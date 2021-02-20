@@ -49,7 +49,6 @@ const PaginationStyled = styled.div`
     .rc-pagination-total-text {
       float: left;
       color: ${Theme.gray85};
-      margin-left: 10px;
     }
     li {
       margin-bottom: 10px;

@@ -204,6 +204,7 @@ export default function Header() {
                           src={LightBulb}
                           alt=""
                         />
+                        Share an idea
                       </div>
                       {/* <span>
                         <div className="notify" />
@@ -462,9 +463,16 @@ const MainHeader = styled.div`
 
       .suggest-box {
         position: relative;
-
+        border-radius: 20px;
+        max-width: 135px;
+        background: #eef3f5;
+        padding: 11px 13px;
+        font-size: 15px;
+        color: #2e384d;
         .light-bulb-icon {
-          width: 42px;
+          width: 20px;
+          margin-right: 4px;
+          vertical-align: bottom;
         }
       }
     }
