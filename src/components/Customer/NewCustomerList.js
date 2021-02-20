@@ -293,157 +293,159 @@ export default function NewCustomerList() {
   return (
     <CustomerListPage>
       <div className="customer-list-header-sticky">
-        <div className="row">
-          <div className="col-lg-2 col-12 ">
-            {' '}
-            <p className="black-heading-title ml-3 pt-1"> Customers</p>
-            <div className=" mb-3  d-lg-none d-block ">
-              <label
-                className="filter-slider mt-3 "
-                htmlFor="tabletmenu-check"
-                id="responsive-button">
-                <img src={SliderHIcon} alt="Menu Lines" />
-                Filter
-              </label>
-            </div>
-            <MobileLeftSidebar>
-              <input type="checkbox" id="tabletmenu-check" />
-              <div id="ifp-sidebar-responsive">
-                <SideContent>
-                  <p className="black-heading-title mt-0 mb-4">
-                    {' '}
-                    Filter Customers
-                  </p>
-                  <label
-                    htmlFor="tabletmenu-check"
-                    className="close-icon d-xl-none d-block">
-                    <img width="25px" src={CloseIcon} alt="cross" />
-                  </label>
-                  <div className="label">Brand Strategist</div>
-                  <DropDownSelect>{generateDropdown('user')}</DropDownSelect>
-                  <div className="label mt-4">Status</div>
-                  <div className="unselected ">Unselect all</div>
-                  <div className="clear-fix" />
-                  <ul className="check-box-list">
-                    <li>
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          Active
-                          <input type="checkbox" id="contract-copy-check" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                    <li>
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          At Risk
-                          <input type="checkbox" id="contract-copy-check" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                    <li>
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          Pending Cancellation
-                          <input type="checkbox" id="contract-copy-check" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                    <li>
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          Inactive
-                          <input type="checkbox" id="contract-copy-check" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                  </ul>
-                  <div className="label mt-4">Contract Type</div>
-                  <div className="unselected ">Unselect all</div>
-                  <div className="clear-fix" />
-                  <ul className="check-box-list">
-                    <li>
-                      {' '}
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          Recurring
-                          <input type="checkbox" id="2" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                    <li>
-                      {' '}
-                      <CheckBox>
-                        <label
-                          className="container customer-pannel"
-                          htmlFor="contract-copy-check">
-                          One Time
-                          <input type="checkbox" id="3" />
-                          <span className="checkmark" />
-                        </label>
-                      </CheckBox>
-                    </li>
-                  </ul>
-                </SideContent>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-2 col-12 ">
+              {' '}
+              <p className="black-heading-title ml-3 pt-1"> Customers</p>
+              <div className=" mb-3  d-lg-none d-block ">
+                <label
+                  className="filter-slider mt-3 "
+                  htmlFor="tabletmenu-check"
+                  id="responsive-button">
+                  <img src={SliderHIcon} alt="Menu Lines" />
+                  Filter
+                </label>
               </div>
-              <div className="straight-line horizontal-line mb-2" />
-            </MobileLeftSidebar>
-          </div>
+              <MobileLeftSidebar>
+                <input type="checkbox" id="tabletmenu-check" />
+                <div id="ifp-sidebar-responsive">
+                  <SideContent>
+                    <p className="black-heading-title mt-0 mb-4">
+                      {' '}
+                      Filter Customers
+                    </p>
+                    <label
+                      htmlFor="tabletmenu-check"
+                      className="close-icon d-xl-none d-block">
+                      <img width="25px" src={CloseIcon} alt="cross" />
+                    </label>
+                    <div className="label">Brand Strategist</div>
+                    <DropDownSelect>{generateDropdown('user')}</DropDownSelect>
+                    <div className="label mt-4">Status</div>
+                    <div className="unselected ">Unselect all</div>
+                    <div className="clear-fix" />
+                    <ul className="check-box-list">
+                      <li>
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Active
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                      <li>
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            At Risk
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                      <li>
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Pending Cancellation
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                      <li>
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Inactive
+                            <input type="checkbox" id="contract-copy-check" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                    </ul>
+                    <div className="label mt-4">Contract Type</div>
+                    <div className="unselected ">Unselect all</div>
+                    <div className="clear-fix" />
+                    <ul className="check-box-list">
+                      <li>
+                        {' '}
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            Recurring
+                            <input type="checkbox" id="2" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                      <li>
+                        {' '}
+                        <CheckBox>
+                          <label
+                            className="container customer-pannel"
+                            htmlFor="contract-copy-check">
+                            One Time
+                            <input type="checkbox" id="3" />
+                            <span className="checkmark" />
+                          </label>
+                        </CheckBox>
+                      </li>
+                    </ul>
+                  </SideContent>
+                </div>
+                <div className="straight-line horizontal-line mb-2" />
+              </MobileLeftSidebar>
+            </div>
 
-          <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-md-2">
-            <InputSearchWithRadius className="customer-list-header w-80">
-              <input
-                className=" form-control search-filter"
-                placeholder="Search"
-                onChange={(event) => setSearchQuery(event.target.value)}
-                onKeyPress={(event) => {
-                  if (event.key === 'Enter') {
-                    handleSearch(event, 'search');
-                  }
-                }}
-                value={searchQuery || ''}
-              />
+            <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-md-2">
+              <InputSearchWithRadius className="customer-list-header w-80">
+                <input
+                  className=" form-control search-filter"
+                  placeholder="Search"
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                      handleSearch(event, 'search');
+                    }
+                  }}
+                  value={searchQuery || ''}
+                />
 
-              <img
-                src={InfoIcon}
-                alt="search cursor"
-                data-tip="Search by Company Name, Contact First, Last Name or Email"
-                data-for="info"
-                className="info-icon"
-              />
-              <ReactTooltip id="info" aria-haspopup="true" />
+                <img
+                  src={InfoIcon}
+                  alt="search cursor"
+                  data-tip="Search by Company Name, Contact First, Last Name or Email"
+                  data-for="info"
+                  className="info-icon"
+                />
+                <ReactTooltip id="info" aria-haspopup="true" />
 
-              <img
-                src={SearchIcon}
-                alt="search"
-                className="search-input-icon"
-              />
-            </InputSearchWithRadius>
-          </div>
-          <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
-            <DropDownSelect className="customer-list-header">
-              {generateDropdown('sort')}
-            </DropDownSelect>{' '}
-          </div>
-          <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
-            <DropDownSelect className="customer-list-header">
-              {generateDropdown('detail')}
-            </DropDownSelect>{' '}
+                <img
+                  src={SearchIcon}
+                  alt="search"
+                  className="search-input-icon"
+                />
+              </InputSearchWithRadius>
+            </div>
+            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
+            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('detail')}
+              </DropDownSelect>{' '}
+            </div>
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
@@ -744,11 +746,13 @@ export default function NewCustomerList() {
 
             <div className="footer-sticky">
               <div className="straight-line horizontal-line" />
-              <CommonPagination
-                count={count}
-                pageNumber={pageNumber}
-                handlePageChange={handlePageChange}
-              />
+              <div className="container-fluid">
+                <CommonPagination
+                  count={count}
+                  pageNumber={pageNumber}
+                  handlePageChange={handlePageChange}
+                />
+              </div>
             </div>
           </div>
         ) : (

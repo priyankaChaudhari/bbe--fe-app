@@ -56,7 +56,7 @@ export default function ArticleList() {
                     ''
                   ) : (
                     <div
-                      className="col-lg-3 col-md-4 col-sm-6 col-6 mt-3"
+                      className="col-lg-3 col-md-4 col-sm-6 col-6 mt-3 card-gap"
                       key={item.id}>
                       <div
                         className="article-card cursor"
@@ -107,6 +107,9 @@ const GrayBody = styled.div`
     }
   }
 
+  .card-gap {
+    margin-bottom: 30px;
+  }
   .small-para {
     color: ${Theme.gray90};
     font-size: ${Theme.extraMedium};

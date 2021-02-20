@@ -542,6 +542,7 @@ a {
   font-size: $small-f-size;
   font-weight: 600;
   cursor: pointer;
+  max-width: 180px;
 
   .arrow-back-icon {
     width: 15px;
