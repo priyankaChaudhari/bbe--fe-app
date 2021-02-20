@@ -48,7 +48,7 @@ export default function ArticleList() {
           {isLoading.loader && isLoading.type === 'page' ? (
             <PageLoader color="#FF5933" type="page" width={40} />
           ) : (
-            <div className="row">
+            <div className="row mt-5">
               {data.map((item) => (
                 <React.Fragment key={item.id}>
                   {(item.cards === 0 && item.boards === 0) ||
@@ -56,7 +56,7 @@ export default function ArticleList() {
                     ''
                   ) : (
                     <div
-                      className="col-lg-3 col-md-4 col-sm-6 col-6 mt-3 card-gap"
+                      className="col-lg-3 col-md-4 col-sm-6 col-6  card-gap"
                       key={item.id}>
                       <div
                         className="article-card cursor"
@@ -94,7 +94,7 @@ const GrayBody = styled.div`
   .article-card {
     background-color: ${Theme.white};
     border-radius: 12px;
-    max-width: 306px;
+    // max-width: 306px;
     flex-wrap: wrap;
     flex: initial;
     height: 100%;
