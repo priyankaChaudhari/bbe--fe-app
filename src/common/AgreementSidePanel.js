@@ -2684,8 +2684,10 @@ const SidePanel = styled.div`
            border: 1px solid #D5D8E1;
             border-radius: 0 2px 2px 0;
             width: 26px;
+            height: 26px;
             padding 4px;
             background: ${Theme.gray8};
+            vertical-align: bottom;
             cursor: pointer;
 
            .plus-icon{
@@ -2700,6 +2702,8 @@ const SidePanel = styled.div`
            border: 1px solid #D5D8E1;
             border-radius: 2px 0 0 2px;
             width: 26px;
+            height: 26px;
+            vertical-align: bottom;
             padding: 4px;
             background: ${Theme.gray8};
             font-family: ${Theme.titleFontFamily};
@@ -2715,6 +2719,7 @@ const SidePanel = styled.div`
         .max-min-number {
           width: 26px;
           border: 1px solid #D5D8E1;
+          vertical-align: bottom;
           color: ${Theme.black};
           height: 26px;
           font-size: 14px;
