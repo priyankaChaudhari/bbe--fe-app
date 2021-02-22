@@ -197,8 +197,9 @@ export default function NewCustomerList() {
     if (key === 'user') setBrandGrowthStrategist([]);
   };
 
-  const handleFilters = (event, key, type) => {
+  const handleFilters = (event, key, type, action) => {
     if (type === 'status') {
+      console.log(key);
       if (
         event.target.checked &&
         filters.status.indexOf(event.target.name) === -1
@@ -216,10 +217,25 @@ export default function NewCustomerList() {
     }
 
     if (type === 'brand') {
+      if (action.action === 'clear') {
+        setFilters({
+          ...filters,
+          user: [],
+        });
+      }
+      if (action.action === 'remove-value') {
+        const list = filters.user.filter(
+          (op) => op !== action.removedValue.value,
+        );
+        setFilters({
+          ...filters,
+          user: list,
+        });
+      }
       if (event && event.length) {
         const list = [...filters.user];
         for (const bgs of event) {
-          if (list.indexOf(bgs) === -1) list.push(bgs.value);
+          if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
         }
         setFilters({
           ...filters,
@@ -284,9 +300,9 @@ export default function NewCustomerList() {
               ? sortOptions
               : options
           }
-          onChange={(event) =>
+          onChange={(event, action) =>
             item === 'user'
-              ? handleFilters(event, item, 'brand')
+              ? handleFilters(event, item, 'brand', action)
               : handleSearch(event, item === 'sort' ? 'sort' : 'view')
           }
           defaultValue={
@@ -350,56 +366,64 @@ export default function NewCustomerList() {
                     <div className="label mt-4">Status</div>
                     <div className="unselected ">Unselect all</div>
                     <div className="clear-fix" />
-                    <ul className="check-box-list">
-                      {status &&
-                        status.map((item) => (
-                          <li key={item.value} id="myCheckbox">
-                            <CheckBox>
+                    {!isDesktop ? (
+                      <ul className="check-box-list">
+                        {status &&
+                          status.map((item) => (
+                            <li key={item.value} id="myCheckbox">
+                              <CheckBox>
+                                <label
+                                  id="myCheckbox"
+                                  className="container customer-pannel"
+                                  htmlFor={item.value}>
+                                  {item.label}
+                                  <input
+                                    type="checkbox"
+                                    id={item.value}
+                                    name={item.value}
+                                    onChange={(event) =>
+                                      handleFilters(event, item, 'status')
+                                    }
+                                  />
+                                  <span className="checkmark" />
+                                </label>
+                              </CheckBox>
+                            </li>
+                          ))}
+                      </ul>
+                    ) : (
+                      ''
+                    )}
+                    <div className="label mt-4">Contract Type</div>
+                    <div className="clear-fix" />
+                    {!isDesktop ? (
+                      <ul className="check-box-list">
+                        {contractChoices.map((item) => (
+                          <li key={item.value}>
+                            {' '}
+                            <ModalRadioCheck>
                               <label
-                                id="myCheckbox"
-                                className="check-container customer-pannel"
+                                className="radio-container customer-list"
                                 htmlFor={item.value}>
                                 {item.label}
                                 <input
-                                  type="checkbox"
+                                  type="radio"
+                                  name="radio"
                                   id={item.value}
-                                  name={item.value}
+                                  value={item.value}
                                   onChange={(event) =>
-                                    handleFilters(event, item, 'status')
+                                    handleFilters(event, item, 'radio')
                                   }
                                 />
                                 <span className="checkmark" />
                               </label>
-                            </CheckBox>
+                            </ModalRadioCheck>
                           </li>
                         ))}
-                    </ul>
-                    <div className="label mt-4">Contract Type</div>
-                    <div className="clear-fix" />
-                    <ul className="check-box-list">
-                      {contractChoices.map((item) => (
-                        <li key={item.value}>
-                          {' '}
-                          <ModalRadioCheck>
-                            <label
-                              className="radio-container customer-list"
-                              htmlFor={item.value}>
-                              {item.label}
-                              <input
-                                type="radio"
-                                name="radio"
-                                id={item.value}
-                                value={item.value}
-                                onChange={(event) =>
-                                  handleFilters(event, item, 'radio')
-                                }
-                              />
-                              <span className="checkmark" />
-                            </label>
-                          </ModalRadioCheck>
-                        </li>
-                      ))}
-                    </ul>
+                      </ul>
+                    ) : (
+                      ''
+                    )}
                   </SideContent>
                 </div>
                 <div className="straight-line horizontal-line mb-2" />

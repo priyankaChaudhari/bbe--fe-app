@@ -17,7 +17,9 @@ export default function CommonPagination({
         <Pagination
           style={{ marginLeft: marginStyle || '' }}
           className="p-2 mt-2"
-          showTotal={(total, range) => `${range[0]} - ${range[1]} of ${total}`}
+          showTotal={(total, range) =>
+            `${range[0]} - ${range[1]} of ${total} items`
+          }
           total={count}
           current={pageNumber}
           hideOnSinglePage
