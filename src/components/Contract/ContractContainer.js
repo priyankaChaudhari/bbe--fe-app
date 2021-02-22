@@ -1243,6 +1243,14 @@ export default function ContractContainer() {
   return (
     <>
       {loader || (isLoading.loader && isLoading.type === 'page') ? (
+        // <div className="page-is-loading">
+        //   <div className="loader-outer">
+        //     <PageLoader
+        //       color="#FF5933"
+        //       width={40}
+        //       />
+        //   </div>
+        // </div>
         <PageLoader
           className="modal-loader"
           color="#FF5933"
@@ -1364,7 +1372,16 @@ export default function ContractContainer() {
       ) : (
         <PageNotFound />
       )}
-
+      {/* {loader ? (
+        <div className="page-is-loading">
+          <div className="loader-outer">
+            <PageLoader  
+              color="#FF5933"
+              width={40}
+              />
+          </div>
+        </div>
+      ) : ( */}
       <AgreementSidePanel
         id={id}
         setFormData={setFormData}
@@ -1407,7 +1424,7 @@ export default function ContractContainer() {
         contractError={contractError}
         setContractError={setContractError}
       />
-
+      {/* )} */}
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending contract signature' ? (

@@ -1,11 +1,56 @@
 /* eslint-disable react/no-danger */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
 export default function DSPAddendum({ formData, templateData }) {
+  const [calculatedDate, setCalculatedDate] = useState('');
+  const [firstMonthDate, setFirstMonthDate] = useState('');
+  const [secondMonthDate, setSecondMonthDate] = useState('');
+  const [thirdMonthDate, setThirdMonthDate] = useState('');
+  const [endMonthDate, setEndDate] = useState('');
+
+  function addDays(theDate, days) {
+    return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
+  }
+
+  useEffect(() => {
+    const calculateDate = addDays(
+      new Date(formData && formData.start_date),
+      10,
+    );
+
+    setCalculatedDate(dayjs(calculateDate).format('MM-DD-YYYY'));
+    let startDate = '';
+    let lastDate = '';
+    const d = new Date(calculateDate);
+    if (calculateDate.getDate() > 15) {
+      startDate = d.setMonth(d.getMonth() + 1, 1);
+      const first = new Date(startDate);
+      setFirstMonthDate(first);
+      lastDate = first;
+      setEndDate(first);
+    } else {
+      startDate = d.setMonth(d.getMonth(), 16);
+      const first = new Date(startDate);
+      setFirstMonthDate(first);
+      const endDate = new Date(first.getFullYear(), first.getMonth() + 2, 0);
+      lastDate = endDate;
+      setEndDate(endDate);
+    }
+    const date = new Date(lastDate);
+    const third = date.setMonth(date.getMonth() + 1);
+    setSecondMonthDate(new Date(third));
+
+    const fourth = date.setMonth(date.getMonth() + 1);
+
+    setThirdMonthDate(new Date(fourth));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const mapDefaultValues = (key, label, type) => {
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
@@ -32,7 +77,7 @@ export default function DSPAddendum({ formData, templateData }) {
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
-          ${formData && dayjs(formData.start_date).format('MM-DD-YYYY')}
+          ${calculatedDate}
         </td>
         <td
           style="border: 1px solid black;
@@ -42,11 +87,37 @@ export default function DSPAddendum({ formData, templateData }) {
       </tr>`;
   };
 
+  const displayFirstMonthFee = () => {
+    if (firstMonthDate && new Date(firstMonthDate).getDay() !== 1) {
+      if (formData && formData.dsp_fee) {
+        const fee = parseInt(formData && formData.dsp_fee, 10);
+        const FinalFee = fee + fee / 2;
+        return `$ ${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      }
+    }
+    return formData && formData.dsp_fee;
+  };
+
   const mapBudgetBreakdownTable = () => {
-    return `<tr>
+    return `
+    
+    
+    <table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
+      new Date(firstMonthDate).getDay() !== 1 ? '-' : ''
+    } ${
+      new Date(firstMonthDate).getDay() !== 1
+        ? dayjs(endMonthDate).format('MMM D, YYYY')
+        : ''
+    } </th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(secondMonthDate).format(
+      'MMMM YYYY',
+    )}</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
+    <tr>
         <td style="border: 1px solid black;
-    padding: 13px;">  DSP_FEE
-</td>
+    padding: 13px;"> ${displayFirstMonthFee()}</td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
@@ -58,7 +129,9 @@ export default function DSPAddendum({ formData, templateData }) {
               DSP_FEE
 
         </td>
-      </tr>`;
+      </tr>
+      
+      </table>`;
   };
 
   return (
@@ -92,11 +165,7 @@ export default function DSPAddendum({ formData, templateData }) {
                     )
                     .replace(
                       'BUDGET_BREAKDOWN_TABLE',
-                      `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Jan 16, 2021 - Feb 28, 2021</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">March 2021</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">April 2021</th></tr>${mapBudgetBreakdownTable()}</table>`,
+                      `${mapBudgetBreakdownTable()}`,
                     )
                     .replaceAll(
                       'DSP_FEE',

@@ -24,15 +24,16 @@ export default function Agreement({ formData, details, templateData }) {
     //   }
     //   return details && details[key];
     // }
+    // console.log( formData['city'] , formData['address'], formData['state'], formData['zip_code'], formData)
+    //     if (
+    //       (formData['city'] === '') &&
+    //       (  formData['address'] === '') &&
+    //       ( formData['state'] === '') &&
+    //       ( formData['zip_code'] === '')
+    //     ) {
+    //       return 'Enter Location';
+    //     }
 
-    // if (
-    //   (formData['city'] === null || formData['city'] === '') &&
-    //   (formData['address'] === null || formData['address'] === '') &&
-    //   (formData['state'] === null || formData['state'] === '') &&
-    //   (formData['zip_code'] === null || formData['zip_code'] === '')
-    // ) {
-    //   return 'Enter Location';
-    // }
     if (
       formData[key] === undefined ||
       formData[key] === '' ||

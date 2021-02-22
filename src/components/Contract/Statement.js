@@ -2,6 +2,7 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
+/* eslint no-useless-escape: "error" */
 
 import React from 'react';
 import styled from 'styled-components';
