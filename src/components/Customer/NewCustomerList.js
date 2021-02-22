@@ -22,7 +22,6 @@ import {
   PageLoader,
   Table,
   ModalRadioCheck,
-  Button,
 } from '../../common';
 import {
   SearchIcon,
@@ -55,14 +54,17 @@ export default function NewCustomerList() {
   const [selectedFilter, setSelectedFilter] = useState({});
   const [clearFilter, setClearFilter] = useState(true);
   const [status, setStatus] = useState([]);
-  const [enableBtn, setEnableBtn] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState({
     view: null,
     'order-by': null,
   });
 
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState({
+    status: [],
+    user: [],
+    contract_type: [],
+  });
   const [showPerformance, setShowPerformance] = useState(false);
 
   const options = [
@@ -71,7 +73,7 @@ export default function NewCustomerList() {
   ];
 
   const contractChoices = [
-    { value: 'any', label: 'Any' },
+    { value: '', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
   ];
@@ -129,7 +131,7 @@ export default function NewCustomerList() {
   const customerList = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'page' });
-      getCustomerList(currentPage, selectedValue, searchQuery).then(
+      getCustomerList(currentPage, selectedValue, filters, searchQuery).then(
         (response) => {
           setData(response && response.data && response.data.results);
           setPageNumber(currentPage);
@@ -138,7 +140,7 @@ export default function NewCustomerList() {
         },
       );
     },
-    [searchQuery, selectedValue],
+    [searchQuery, selectedValue, filters],
   );
 
   useEffect(() => {
@@ -175,7 +177,7 @@ export default function NewCustomerList() {
       pathname: `${PATH_CUSTOMER_LIST}`,
       search: `${stringified}`,
     });
-    customerList(currentPage, selectedValue, searchQuery);
+    customerList(currentPage, selectedValue, filters, searchQuery);
   };
 
   const cancelFilters = (key) => {
@@ -196,19 +198,42 @@ export default function NewCustomerList() {
   };
 
   const handleFilters = (event, key, type) => {
-    setEnableBtn(true);
     if (type === 'status') {
-      setFilters([...filters, { status: event.target.name }]);
+      if (
+        event.target.checked &&
+        filters.status.indexOf(event.target.name) === -1
+      ) {
+        setFilters({
+          ...filters,
+          status: [...filters.status, event.target.name],
+        });
+      } else {
+        setFilters({
+          ...filters,
+          status: filters.status.filter((op) => op !== event.target.name),
+        });
+      }
     }
+
     if (type === 'brand') {
-      setFilters([...filters, { user: event.value }]);
+      if (event && event.length) {
+        const list = [...filters.user];
+        for (const bgs of event) {
+          if (list.indexOf(bgs) === -1) list.push(bgs.value);
+        }
+        setFilters({
+          ...filters,
+          user: list,
+        });
+      }
     }
     if (type === 'radio') {
-      const list = [...filters];
-      list.filter((el) => {
-        return Object.keys(el) !== 'contract_type';
-      });
-      setFilters([...list, { contract_type: key.value }]);
+      if (event.target.checked) {
+        setFilters({
+          ...filters,
+          contract_type: event.target.value,
+        });
+      }
     }
   };
 
@@ -264,7 +289,7 @@ export default function NewCustomerList() {
               ? handleFilters(event, item, 'brand')
               : handleSearch(event, item === 'sort' ? 'sort' : 'view')
           }
-          value={
+          defaultValue={
             item === 'user'
               ? filters.user
               : clearFilter && selectedValue[item.key] === null
@@ -300,7 +325,7 @@ export default function NewCustomerList() {
               <p className="black-heading-title ml-3 pt-1"> Customers</p>
               <div className=" mb-3  d-lg-none d-block ">
                 <label
-                  className="filter-slider mt-3 "
+                  className="filter-slider mt-3 cursor "
                   htmlFor="tabletmenu-check"
                   id="responsive-button">
                   <img src={SliderHIcon} alt="Menu Lines" />
@@ -317,7 +342,7 @@ export default function NewCustomerList() {
                     </p>
                     <label
                       htmlFor="tabletmenu-check"
-                      className="close-icon d-xl-none d-block">
+                      className="close-icon d-xl-none d-block cursor">
                       <img width="25px" src={CloseIcon} alt="cross" />
                     </label>
                     <div className="label">Brand Strategist</div>
@@ -326,79 +351,54 @@ export default function NewCustomerList() {
                     <div className="unselected ">Unselect all</div>
                     <div className="clear-fix" />
                     <ul className="check-box-list">
-                      <li>
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Active
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
-                      <li>
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            At Risk
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
-                      <li>
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Pending Cancellation
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
-                      <li>
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Inactive
-                            <input type="checkbox" id="contract-copy-check" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
+                      {status &&
+                        status.map((item) => (
+                          <li key={item.value} id="myCheckbox">
+                            <CheckBox>
+                              <label
+                                id="myCheckbox"
+                                className="container customer-pannel"
+                                htmlFor={item.value}>
+                                {item.label}
+                                <input
+                                  type="checkbox"
+                                  id={item.value}
+                                  name={item.value}
+                                  onChange={(event) =>
+                                    handleFilters(event, item, 'status')
+                                  }
+                                />
+                                <span className="checkmark" />
+                              </label>
+                            </CheckBox>
+                          </li>
+                        ))}
                     </ul>
                     <div className="label mt-4">Contract Type</div>
-                    <div className="unselected ">Unselect all</div>
                     <div className="clear-fix" />
                     <ul className="check-box-list">
-                      <li>
-                        {' '}
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            Recurring
-                            <input type="checkbox" id="2" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
-                      <li>
-                        {' '}
-                        <CheckBox>
-                          <label
-                            className="container customer-pannel"
-                            htmlFor="contract-copy-check">
-                            One Time
-                            <input type="checkbox" id="3" />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </li>
+                      {contractChoices.map((item) => (
+                        <li key={item.value}>
+                          {' '}
+                          <ModalRadioCheck>
+                            <label
+                              className="radio-container customer-list"
+                              htmlFor={item.value}>
+                              {item.label}
+                              <input
+                                type="radio"
+                                name="radio"
+                                id={item.value}
+                                value={item.value}
+                                onChange={(event) =>
+                                  handleFilters(event, item, 'radio')
+                                }
+                              />
+                              <span className="checkmark" />
+                            </label>
+                          </ModalRadioCheck>
+                        </li>
+                      ))}
                     </ul>
                   </SideContent>
                 </div>
@@ -458,14 +458,22 @@ export default function NewCustomerList() {
           {generateDropdown('user')}
         </DropDownSelect>{' '}
         <div className="label mt-4">Status</div>
-        <div className="unselected ">Unselect all</div>
+        <div
+          className="unselected"
+          onClick={(event) =>
+            handleFilters(event, ['active', 'at risk'], 'status')
+          }
+          role="presentation">
+          Unselect all
+        </div>
         <div className="clear-fix" />
         <ul className="check-box-list">
           {status &&
             status.map((item) => (
-              <li key={item.value}>
+              <li key={item.value} id="myCheckbox">
                 <CheckBox>
                   <label
+                    id="myCheckbox"
                     className="container customer-pannel"
                     htmlFor={item.value}>
                     {item.label}
@@ -496,6 +504,7 @@ export default function NewCustomerList() {
                     type="radio"
                     name="radio"
                     id={item.value}
+                    value={item.value}
                     onChange={(event) => handleFilters(event, item, 'radio')}
                   />
                   <span className="checkmark" />
@@ -504,15 +513,6 @@ export default function NewCustomerList() {
             </li>
           ))}
         </ul>
-        <Button
-          className={
-            enableBtn
-              ? 'btn-primary  w-90 btn-apply'
-              : 'light-orange w-90 btn-apply disabled'
-          }
-          disabled={!enableBtn}>
-          Apply
-        </Button>
       </CustomerLeftPannel>
       <>
         {isDesktop ? (
@@ -533,7 +533,9 @@ export default function NewCustomerList() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
+                    {data && data.length === 0 ? (
+                      <p className="text-center">No record found.</p>
+                    ) : (
                       data.map((item) => (
                         <tr
                           className="cursor"
@@ -738,7 +740,8 @@ export default function NewCustomerList() {
                             </div>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    )}
                   </tbody>
                 </Table>
               )}

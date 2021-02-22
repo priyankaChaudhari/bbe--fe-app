@@ -15,15 +15,47 @@ import {
   API_DOCUMENTS,
 } from '../constants/ApiConstants';
 
-export async function getCustomerList(pageNumber, filterOptions, searchQuery) {
+export async function getCustomerList(
+  pageNumber,
+  sort,
+  filterOptions,
+  searchQuery,
+) {
   const params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     q: searchQuery,
-    'order-by': filterOptions['order-by'],
+    'order-by': sort['order-by'],
   };
 
+  let statusParams = {};
+  if (filterOptions && filterOptions.status && filterOptions.status.length) {
+    statusParams = queryString.stringify({ status: filterOptions.status });
+  }
+  let bgsParams = {};
+  if (filterOptions && filterOptions.user && filterOptions.user.length) {
+    bgsParams = queryString.stringify({ user: filterOptions.user });
+  }
+
+  let contract = {};
+  if (
+    filterOptions &&
+    filterOptions.contract_type &&
+    filterOptions.contract_type.length
+  ) {
+    contract = queryString.stringify({
+      contract_type: filterOptions.contract_type,
+    });
+  }
+
   const result = await axiosInstance
-    .get(API_CUSTOMER, { params })
+    .get(
+      `${API_CUSTOMER}?${
+        statusParams && statusParams.length ? statusParams : ''
+      }${bgsParams && bgsParams.length ? `&${bgsParams}` : ''}${
+        contract && contract.length ? `&${contract}` : ''
+      }`,
+      { params },
+    )
     .then((response) => {
       return response;
     })
