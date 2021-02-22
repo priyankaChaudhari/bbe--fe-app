@@ -90,14 +90,14 @@ export default function Statement({
 
   const showRevTable = () => {
     if (formData && formData.sales_threshold) {
-      return `<table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
+      return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
       </tr><tr><td>% Of Incremental Sales</td>
       <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td>REV_THRESHOLD</td></tr></table>`;
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td>REV_THRESHOLD</td></tr></table> </div>`;
     }
-    return `<table class="contact-list"><tr><th>Type</th><th>Description</th>
+    return `<div class="table-responsive"> <table class="contact-list"><tr><th>Type</th><th>Description</th>
     <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td> REVENUE_SHARE</td></tr></table>`;
+    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td> REVENUE_SHARE</td></tr></table></div>`;
   };
 
   const displayNotIncludedServices = () => {
@@ -367,7 +367,7 @@ export default function Statement({
         formData.additional_marketplaces.length)
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
-    font-family: Arial-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br><table class="contact-list "><tr><th>Service</th><th>Service Fee</th></tr>${mapMonthlyServices(
+    font-family: Arial-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br> <div class="table-responsive"><table class="contact-list "><tr><th>Service</th><th>Service Fee</th></tr>${mapMonthlyServices(
       'additional_monthly_services',
       'Monthly Services',
     )} ${mapAdditionalMarketPlaces()}<tr><td class="total-service"> Total</td><td class="total-service text-right">${mapServiceTotal(
@@ -375,7 +375,7 @@ export default function Statement({
       )}
                               </td></tr>
                               ${mapVariableMonthlyService()}
-                                </table>`;
+                                </table></div>`;
     }
     return '';
   };
@@ -390,14 +390,14 @@ export default function Statement({
         formData.additional_one_time_services.length)
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br><table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
+    font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br> <div class="table-responsive"><table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
       'additional_one_time_services',
       'One Time Services',
     )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
         'additional_one_time_services',
       )}
                               </td></tr>
-                                </table>`;
+                                </table></div>`;
     }
     return '';
   };
@@ -456,13 +456,13 @@ export default function Statement({
                 .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
                 .replace(
                   'ADDITIONAL_SERVICES_NOT_INCLUDED',
-                  `<table class="contact-list " style="width: 100%;border-collapse: collapse;">
+                  `<div class="table-responsive"> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
                                 <tr>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
                                   </tr>
                                   ${displayNotIncludedServices()}
-                                  </table>
+                                  </table></div>
                                   `,
                 ),
           }}

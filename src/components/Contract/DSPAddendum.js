@@ -102,7 +102,7 @@ export default function DSPAddendum({ formData, templateData }) {
     return `
     
     
-    <table class="contact-list " style="width: 100%;
+    <div class="table-responsive">  <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
       new Date(firstMonthDate).getDay() !== 1 ? '-' : ''
@@ -131,7 +131,7 @@ export default function DSPAddendum({ formData, templateData }) {
         </td>
       </tr>
       
-      </table>`;
+      </table></div>`;
   };
 
   return (
@@ -158,10 +158,10 @@ export default function DSPAddendum({ formData, templateData }) {
                     )
                     .replace(
                       'DSP_DETAIL_TABLE',
-                      `<table class="contact-list " style="width: 100%;
+                      `<div class="table-responsive"> <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table><div/>`,
                     )
                     .replace(
                       'BUDGET_BREAKDOWN_TABLE',

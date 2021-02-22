@@ -1289,6 +1289,12 @@ export default function ContractContainer() {
                       )}
                     </div>
                   </p>
+                  <ContractTab className="d-lg-none d-block">
+                    <ul className="tabs">
+                      <li>Edit Fields</li>
+                      <li>View Contract</li>
+                    </ul>
+                  </ContractTab>
                 </div>
               </div>
               <div className="text-container ">
@@ -1428,7 +1434,7 @@ export default function ContractContainer() {
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending contract signature' ? (
-        <div className="mt-5 pt-5">
+        <div className="mt-4 pt-5">
           <Footer className=" mt-5 ">
             <Button
               className="btn-primary w-320 sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
@@ -1454,7 +1460,7 @@ export default function ContractContainer() {
           </Footer>
         </div>
       ) : isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
-        <div className="mt-5 pt-5">
+        <div className="mt-4 pt-5">
           <Footer className=" mt-5">
             <Button
               className="light-orange  on-boarding  mt-3 mr-3 "
@@ -1493,7 +1499,7 @@ export default function ContractContainer() {
         details.steps_completed &&
         details.steps_completed.agreement &&
         details.steps_completed.statement ? (
-        <div className="mt-5 pt-5">
+        <div className="mt-4 pt-5">
           <Footer>
             {checkApprovalCondition() ? (
               <Button
@@ -1593,7 +1599,7 @@ const Footer = styled.div`
   border: 1px solid ${Theme.gray7};
   bottom: 0;
   width: 100%;
-  background: #fff;
+  background: ${Theme.white};
   box-shadow: ${Theme.boxShadow};
   position: fixed;
   min-height: 80px;
@@ -1612,5 +1618,45 @@ const Footer = styled.div`
 
   @media only screen and (max-width: 540px) {
     padding-left: 20px;
+  }
+`;
+
+const ContractTab = styled.div`
+  background: #fafafb;
+  padding-top: 60px;
+  position: fixed;
+  width: 100%;
+
+  .tabs {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    border-bottom: 1px solid ${Theme.gray5};
+
+    li {
+      display: inline-block;
+      color: #000000;
+      font-size: 15px;
+      padding: 20px 40px;
+      cursor: pointer;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:hover {
+        padding-bottom: 18px;
+        border-bottom: 2px solid ${Theme.orange};
+        color: ${Theme.black};
+        font-family: ${Theme.titleFontFamily};
+      }
+
+      &.active {
+        padding-bottom: 18px;
+        border-bottom: 2px solid ${Theme.orange};
+        color: ${Theme.black};
+        font-family: ${Theme.titleFontFamily};
+      }
+    }
   }
 `;

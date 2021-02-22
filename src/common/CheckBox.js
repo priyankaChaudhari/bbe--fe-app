@@ -2,48 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const CheckBox = styled.div`
-  &.gray-check {
-    margin-bottom: 12px;
-    .container {
-      padding-left: 20px;
-      &.customer-pannel {
-        color: ${Theme.gray90};
-        font-size: 13px;
-      }
-    }
-    .container input:checked ~ .checkmark {
-      background-color: rgba(224, 231, 255, 0.2);
-      border: 1px solid ${Theme.gray9};
-    }
-    .container .checkmark:after {
-      left: 4px;
-      top: 2px;
-      width: 5px;
-      height: 9px;
-      border: solid ${Theme.gray35};
-      border-width: 0 2px 2px 0;
-      border: 1px soloid #e0e7ff;
-
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
-    .container:hover input ~ .checkmark {
-      background-color: rgba(224, 231, 255, 0.2);
-      border: 1px solid ${Theme.gray9};
-    }
-    .checkmark {
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-radius: 4px;
-      width: 16px;
-      height: 16px;
-      border: 1px solid ${Theme.gray9};
-    }
-  }
-
-  .container {
+  .check-container {
     display: block;
     position: relative;
     padding-left: 30px;
@@ -76,7 +35,7 @@ const CheckBox = styled.div`
     }
   }
 
-  .container input {
+  .check-container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -94,12 +53,12 @@ const CheckBox = styled.div`
     border: 1px solid ${Theme.gray35};
   }
 
-  .container:hover input ~ .checkmark {
+  .check-container:hover input ~ .checkmark {
     background-color: rgba(224, 231, 255, 0.2);
     // border: 1px solid ${Theme.gray9};
   }
 
-  .container input:checked ~ .checkmark {
+  .check-container input:checked ~ .checkmark {
     background-color: ${Theme.orange};
     color: white;
     border: none;
@@ -111,11 +70,11 @@ const CheckBox = styled.div`
     display: none;
   }
 
-  .container input:checked ~ .checkmark:after {
+  .check-container input:checked ~ .checkmark:after {
     display: block;
   }
 
-  .container .checkmark:after {
+  .check-container .checkmark:after {
     left: 6px;
     top: 3px;
     width: 6px;
