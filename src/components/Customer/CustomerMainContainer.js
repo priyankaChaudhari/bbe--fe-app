@@ -604,80 +604,79 @@ export default function CustomerMainContainer() {
               </div>
             </CustomerBody>
           </CustomerDetailBanner>
+          <Modal
+            isOpen={showMemberList.modal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Add team modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() =>
+                setShowMemberList({ show: false, add: false, mnodal: false })
+              }
+              role="presentation"
+            />
+            {showMemberList.add ? (
+              <AddTeamMember
+                id={id}
+                getCustomerMemberList={getCustomerMemberList}
+                setShowMemberList={setShowMemberList}
+                setShowSuccessMsg={setShowSuccessMsg}
+              />
+            ) : (
+              <EditTeamMember
+                id={id}
+                getCustomerMemberList={getCustomerMemberList}
+                setShowMemberList={setShowMemberList}
+                showMemberList={showMemberList}
+              />
+            )}
+          </Modal>
+          <Modal
+            isOpen={showModal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setShowModal(false)}
+              role="presentation"
+            />
+            <ModalBox>
+              <EditAccountDetails
+                agreement={agreement}
+                customer={customer}
+                setShowModal={setShowModal}
+                setDocumentImage={customer.documents}
+              />
+            </ModalBox>
+          </Modal>
+          <Modal
+            isOpen={statusModal.show}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Status modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setStatusModal({ ...statusModal, show: false })}
+              role="presentation"
+            />
+            <CustomerStatus
+              type={statusModal.type}
+              setStatusModal={setStatusModal}
+              id={id}
+              status={customer && customer.status && customer.status.value}
+              setShowSuccessMsg={setShowSuccessMsg}
+            />
+          </Modal>
         </>
       )}
-
-      <Modal
-        isOpen={showMemberList.modal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Add team modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() =>
-            setShowMemberList({ show: false, add: false, mnodal: false })
-          }
-          role="presentation"
-        />
-        {showMemberList.add ? (
-          <AddTeamMember
-            id={id}
-            getCustomerMemberList={getCustomerMemberList}
-            setShowMemberList={setShowMemberList}
-            setShowSuccessMsg={setShowSuccessMsg}
-          />
-        ) : (
-          <EditTeamMember
-            id={id}
-            getCustomerMemberList={getCustomerMemberList}
-            setShowMemberList={setShowMemberList}
-            showMemberList={showMemberList}
-          />
-        )}
-      </Modal>
-      <Modal
-        isOpen={showModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
-          role="presentation"
-        />
-        <ModalBox>
-          <EditAccountDetails
-            agreement={agreement}
-            customer={customer}
-            setShowModal={setShowModal}
-            setDocumentImage={customer.documents}
-          />
-        </ModalBox>
-      </Modal>
-      <Modal
-        isOpen={statusModal.show}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Status modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setStatusModal({ ...statusModal, show: false })}
-          role="presentation"
-        />
-        <CustomerStatus
-          type={statusModal.type}
-          setStatusModal={setStatusModal}
-          id={id}
-          status={customer && customer.status && customer.status.value}
-          setShowSuccessMsg={setShowSuccessMsg}
-        />
-      </Modal>
     </>
   );
 }

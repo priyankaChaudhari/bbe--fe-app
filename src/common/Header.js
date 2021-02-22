@@ -115,7 +115,10 @@ export default function Header() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-6 ">
-              <div className="logo">
+              <div
+                className="logo cursor"
+                onClick={() => history.push(PATH_CUSTOMER_LIST)}
+                role="presentation">
                 <img src={NextLogo} alt="logo " />
               </div>
               <img className="logo-mobile-view" src={NextLogo} alt="" />
