@@ -199,7 +199,6 @@ export default function NewCustomerList() {
 
   const handleFilters = (event, key, type, action) => {
     if (type === 'status') {
-      console.log(key);
       if (
         event.target.checked &&
         filters.status.indexOf(event.target.name) === -1
@@ -374,7 +373,7 @@ export default function NewCustomerList() {
                               <CheckBox>
                                 <label
                                   id="myCheckbox"
-                                  className="container customer-pannel"
+                                  className="check-container customer-pannel"
                                   htmlFor={item.value}>
                                   {item.label}
                                   <input
@@ -498,7 +497,7 @@ export default function NewCustomerList() {
                 <CheckBox>
                   <label
                     id="myCheckbox"
-                    className="container customer-pannel"
+                    className="check-container customer-pannel"
                     htmlFor={item.value}>
                     {item.label}
                     <input
