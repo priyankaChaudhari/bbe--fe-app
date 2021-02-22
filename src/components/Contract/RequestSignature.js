@@ -462,7 +462,7 @@ function RequestSignature({
               <div className="col-6">
                 <CheckBox>
                   <label
-                    className="container contract-sign"
+                    className="check-container contract-sign"
                     htmlFor="contract-copy-check">
                     Send me a copy of the contract
                     <input
@@ -564,7 +564,7 @@ function RequestSignature({
               <div className="col-6">
                 <CheckBox>
                   <label
-                    className="container contract-sign"
+                    className="check-container contract-sign"
                     htmlFor="contract-copy">
                     Send me a copy of the contract
                     <input

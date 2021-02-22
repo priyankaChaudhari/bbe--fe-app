@@ -25,13 +25,7 @@ import {
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import {
-  CloseIcon,
-  // BackArrowIcon,
-  OrangeChecked,
-  LeftArrowIcon,
-  AlarmBellIcon,
-} from '../../theme/images';
+import { CloseIcon, LeftArrowIcon } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -71,7 +65,6 @@ const customStylesForAlert = {
     bottom: 'auto',
     maxWidth: '450px ',
     width: '100% ',
-    minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -1437,17 +1430,16 @@ export default function ContractContainer() {
         <div className="mt-4 pt-5">
           <Footer className=" mt-5 ">
             <Button
-              className="btn-primary w-320 sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
+              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
               onClick={() => onEditcontract()}>
               Edit Contract
             </Button>
             <Button
-              className="light-orange w-320 sticky-btn   mt-3 mr-3 on-boarding"
+              className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
               onClick={() => {
                 setParams('send-remainder');
                 setShowModal(true);
               }}>
-              <img src={AlarmBellIcon} alt="alarm" />
               Send Reminder
             </Button>
             {/* {updatedFormData && Object.keys(updatedFormData).length ? (
@@ -1468,15 +1460,12 @@ export default function ContractContainer() {
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
               ) : (
-                <>
-                  <img src={OrangeChecked} alt="checked" />
-                  Save Changes
-                </>
+                <>Save Changes</>
               )}
             </Button>
 
             <Button
-              className="btn-borderless on-boarding  mt-3 mr-3"
+              className="btn-borderless contract-btn on-boarding  mt-3 mr-3"
               onClick={() =>
                 setShowDiscardModal({
                   ...showDiscardModal,
@@ -1523,7 +1512,7 @@ export default function ContractContainer() {
               </Button>
             ) : (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-3 "
+                className="btn-primary on-boarding  mt-3 mr-3 "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1532,7 +1521,9 @@ export default function ContractContainer() {
                 Request Signature
               </Button>
             )}
-            <p>Last updated by You on Dec 1, 4:18 PM</p>
+            <span className="last-update">
+              Last updated by You on Dec 1, 4:18 PM
+            </span>
           </Footer>
         </div>
       ) : (
@@ -1568,7 +1559,7 @@ export default function ContractContainer() {
         ariaHideApp={false}
         contentLabel="Edit modal">
         <ModalBox className="small-alert-modal">
-          <div className="modal-body pt-5">
+          <div className="modal-body pt-4">
             <div className="alert-msg mb-4 ">
               <span>Are you sure you want to discard all the changes?</span>
             </div>
@@ -1611,9 +1602,11 @@ const Footer = styled.div`
     width: 100%;
   }
 
-  p {
-    float: left;
+  .last-update {
     margin-top: 30px;
+    color: ${Theme.gray40};
+    margin-left: 20px;
+    font-size: ${Theme.extraNormal};
   }
 
   @media only screen and (max-width: 540px) {

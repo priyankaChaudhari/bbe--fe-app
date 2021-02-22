@@ -13,10 +13,6 @@ const Button = styled.button`
     border: 1px solid ${Theme.baseColor};
     width: 200px;
 
-    &.on-boarding {
-      padding: 10px 15px;
-    }
-
     &:hover {
       color: ${Theme.white};
       background-color: ${Theme.secondaryColor};
@@ -68,9 +64,6 @@ const Button = styled.button`
       margin-right: 5px;
     }
 
-    &.on-boarding {
-      padding: 10px 30px;
-    }
     &:focus {
       outline: none;
     }
@@ -92,8 +85,12 @@ const Button = styled.button`
     color: ${Theme.gray90};
     border: none;
     background: transparent;
-    text-decoration: underline;
     font-weight: bold;
+
+    &.contract-btn {
+      color: ${Theme.black};
+    }
+
     &:focus {
       outline: none;
     }
@@ -136,6 +133,7 @@ const Button = styled.button`
 
     &.on-boarding {
       padding: 10px 30px;
+      width: 200px;
     }
     img {
       vertical-align: bottom;
@@ -187,6 +185,11 @@ const Button = styled.button`
   }
   &.w-90 {
     width: 260px;
+  }
+
+  &.on-boarding {
+    padding: 9px 15px;
+    min-height: 40px;
   }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
