@@ -357,7 +357,7 @@ export default function NewCustomerList() {
                             <CheckBox>
                               <label
                                 id="myCheckbox"
-                                className="container customer-pannel"
+                                className="check-container customer-pannel"
                                 htmlFor={item.value}>
                                 {item.label}
                                 <input

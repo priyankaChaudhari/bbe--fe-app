@@ -968,16 +968,28 @@ fieldset {
 }
 
 .text-container {
-  padding-right: 360px;
-  padding-left: 120px;
+  padding-right: 368px;
+  padding-left: 90px;
   font-family: $contact-regular-font-family;
+  padding-top: 60px;
+  background-color: $gray-3;
+
+  #agreement,
+  #statement,
+  #addendum,
+  #dspAddendum {
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
+    margin-top: 35px;
+  }
 
   @media only screen and (min-width: 1500px) {
-    padding-right: 450px;
+    padding-right: 430px;
   }
   @media only screen and (max-width: 991px) {
     padding-right: 90px;
-    padding-left: 10px;
+    padding-left: 30px;
   }
 }
 

@@ -433,7 +433,7 @@ const MainHeader = styled.div`
   background-color: ${Theme.white};
   height: 70px;
   border-bottom: 1px solid ${Theme.gray7};
-  padding-top: 15px;
+  padding-top: 13px;
   position: fixed;
   width: 100%;
   z-index: 2;
@@ -464,15 +464,16 @@ const MainHeader = styled.div`
       .suggest-box {
         position: relative;
         border-radius: 20px;
-        max-width: 135px;
-        background: #eef3f5;
+        max-width: 137px;
+        background: ${Theme.gray3};
         padding: 11px 13px;
         font-size: 15px;
         color: #2e384d;
         .light-bulb-icon {
-          width: 20px;
-          margin-right: 4px;
-          vertical-align: bottom;
+          width: 21px;
+          margin-right: 3px;
+          vertical-align: middle;
+          margin-top: -3px;
         }
       }
     }

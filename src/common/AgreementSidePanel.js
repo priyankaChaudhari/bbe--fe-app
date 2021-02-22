@@ -3,7 +3,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint array-callback-return: "error" */
-/* eslint no-unused-expressions: "error" */
+
+impo/* eslint no-unused-expressions: "error" */
 
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -1594,9 +1595,8 @@ export default function AgreementSidePanel({
                 <img
                   className="service-agre"
                   src={ServiceAgreement}
-                  alt="pdf"
-                />
-                <h4 className="sendar-details mt-1 ml-5">
+                  alt="pdf"/>
+                              <h4 className="sendar-details mt-2 ml-5">
                   {agreementData && agreementData.contract_type === 'one time'
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
@@ -1674,7 +1674,7 @@ export default function AgreementSidePanel({
                   setOpenCollapse({ statement: !openCollapse.statement });
                 }}>
                 <img className="service-agre" src={StatementWork} alt="pdf" />
-                <h4 className="sendar-details mt-1 ml-5">
+                <h4 className="sendar-details mt-2 ml-5">
                   Statement of Work{' '}
                   {agreementData.steps_completed &&
                   agreementData.steps_completed.statement ? (
@@ -1728,10 +1728,9 @@ export default function AgreementSidePanel({
                       {monthlyService &&
                         monthlyService.map((serviceData) => (
                           <CheckBox
-                            className="gray-check "
                             key={serviceData && serviceData.value}>
                             <label
-                              className="container customer-pannel"
+                              className="check-container customer-pannel"
                               htmlFor={serviceData.value}>
                               {serviceData.label}
                               <input
@@ -1762,9 +1761,9 @@ export default function AgreementSidePanel({
                           </CheckBox>
                         ))}
 
-                      <CheckBox className="gray-check ">
+                      <CheckBox>
                         <label
-                          className="container customer-pannel"
+                          className="check-container customer-pannel"
                           htmlFor="additional_marketplaces">
                           Additional Marketplaces
                           <input
@@ -1826,9 +1825,9 @@ export default function AgreementSidePanel({
                               <React.Fragment key={oneTimeServiceData.value}>
                                 <div className="col-7 ">
                                   {' '}
-                                  <CheckBox className="gray-check">
+                                  <CheckBox>
                                     <label
-                                      className="container customer-pannel"
+                                      className="check-container customer-pannel"
                                       htmlFor={oneTimeServiceData.value}>
                                       {oneTimeServiceData.label}
                                       <input
@@ -1954,9 +1953,9 @@ export default function AgreementSidePanel({
                         <>
                           <div className="col-7 ">
                             {' '}
-                            <CheckBox className="gray-check">
+                            <CheckBox>
                               <label
-                                className="container customer-pannel"
+                                className="check-container customer-pannel"
                                 htmlFor="contract-copy-check">
                                 Amazon Store
                                 <input
@@ -2579,9 +2578,9 @@ const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
     padding-bottom:200px;
-    max-width: 380px;
+    width: 340px;
     position: fixed;
-    top: 71px;
+    top: 130px;
     right: 0;
     height: 100%;
     background: ${Theme.white};
@@ -2635,7 +2634,7 @@ const SidePanel = styled.div`
 
 .collapse-btn {
   width:100%;
-  padding: 13px;
+  padding: 16px;
   cursor:pointer;
 
  
@@ -2650,10 +2649,10 @@ const SidePanel = styled.div`
     list-style-type:none;
    
     li {
-        padding:10px 20px;
+        padding: 8px 20px;
 
         &:focus {
-            background:#ffe5df;
+           background: ${Theme.lightOrange};
           
         }
          .small-para {
@@ -2668,51 +2667,61 @@ const SidePanel = styled.div`
         }
 
         .service-heading {
-          text-transform:uppercase;
+          text-transform: uppercase;
           letter-spacing: 1.13px;
           text-transform: uppercase;
           font-family: ${Theme.baseFontFamily};
-          font-size:12px;
-          color: #b0bac9;
+          font-size:${Theme.extraSmall};
+          color: ${Theme.gray30};
           font-weight: bold;
         }
 
         .increment {
-           border: 1px solid #DFE7FF;
-            border-radius: 0 8px 8px 0;
-            width: 32px;
-            background: ${Theme.gray5};
-            cursor:pointer;
+           border: 1px solid #D5D8E1;
+            border-radius: 0 2px 2px 0;
+            width: 26px;
+            padding 4px;
+            background: ${Theme.gray8};
+            cursor: pointer;
 
            .plus-icon{
-             width:10px;
+             width: 10px;
            }
 
            &:focus{
-             outline:none;
+             outline: none;
            }
         }
         .decrement {
-           border: 1px solid #DFE7FF;
-            border-radius:  8px 0 0 8px ;
-            width: 32px;
-            background: ${Theme.gray5};
+           border: 1px solid #D5D8E1;
+            border-radius: 2px 0 0 2px;
+            width: 26px;
+            padding: 4px;
+            background: ${Theme.gray8};
             font-family: ${Theme.titleFontFamily};
             cursor:pointer;
 
            .minus-icon {
-              width:10px;
+              width: 10px;
            }
              &:focus{
              outline:none;
            }
         }
         .max-min-number {
-          width: 32px;
-          border: 1px solid #DFE7FF;
+          width: 26px;
+          border: 1px solid #D5D8E1;
+          color: ${Theme.black};
+          height: 26px;
           font-size: 14px;
           font-family: ${Theme.titleFontFamily};
           text-align: center;
+        }
+
+        .contract-info-date {
+          line-height: 22px;
+          font-size: 14px;
+          color: ${Theme.gray40};
         }
 
      }
@@ -2848,100 +2857,5 @@ const SidePanel = styled.div`
   }
 
    @media only screen and (min-width: 1500px)  {
-     max-width: 400px;
-    .sidebar {
-        .menu {
-          li{
-            .activity-user {
-              max-width: 335px;
-          }
-        }
-    }
-   }
-`;
-
-// const SidePanel = styled.div`
-
-//   width: 335px;
-//   position: absolute;
-//   top: 80px;
-//   right: 0;
-//   min-height: 100%;
-//   z-index: 98;
-//   background: ${Theme.white};
-//   border-left: 1px solid ${Theme.gray7};
-
-//   &.sender-contain {
-//     padding:20px;
-//   }
-
-//   .sendar-details {
-//     color: ${Theme.black};
-//     letter-spacing: 1.21px;
-//   }
-
-//   .sender-profile {
-//     border: 1px solid ${Theme.gray9};
-//     border-radius: 100%;
-//     width: 48px;
-//     height: 48px;
-//   }
-//   .sender-name {
-//     text-transform: capitalize;
-//     color: ${Theme.gray90};
-//     font-size: ${Theme.medium};
-//   }
-
-//   .sticky-btn {
-//     bottom: 100px;
-//     position: absolute;
-//   }
-//   .sticky-btn-primary {
-//     bottom: 170px;
-//     position: absolute;
-//   }
-//   .service-detail {
-//     padding:20px 20px 0 20px;
-//   }
-//   .service-agre {
-//     float: left;
-//   }
-//   h4 .sendar-details {
-//     float: left;
-//     margin: 9px 0px 0px 20px;
-//   }
-
-// }
-//   #collapse-open,
-//   #show,
-//   #hide:target {
-//     display: none;
-
-//   }
-
-//   #hide:target + #show,
-//   #hide:target ~ #collapse-open{
-//     display: inherit;
-//   }
-// .add-market-place {
-//   font-size: 12px;
-//   color:#FF5933;
-// }
-
-// .collapse-btn {
-//   width:100%;
-//   padding:20px;
-//   cursor:pointer;
-
-//   .small-para {
-//     max-width:218px;
-//     width:100%;
-//     margin:0 auto;
-//   }
-
-//   .edit-folder-icon {
-//     vertical-align: text-top;
-//     width: 17px;
-// }
-
-// `;
+     width: 400px;
+0px;
