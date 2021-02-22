@@ -20,7 +20,6 @@ const FormField = styled.div`
     position: absolute;
     background: ${Theme.lightOrange};
     color: ${Theme.orange};
-   
     border-radius: 4px;
     font-size: ${Theme.small};
     padding: 7px 10px;
@@ -44,12 +43,11 @@ const FormField = styled.div`
     padding: 4px;
     border-radius:50%;
   }
-  
 
   .form-control  {
     position:relative;
     color: ${Theme.gray90};
-    border: 1px solid ${Theme.gray10};
+    border: 1px solid ${Theme.gray2};
     border-radius: 5px;
     padding: 4px  10px ;
     display: block;
@@ -67,8 +65,6 @@ const FormField = styled.div`
       font-size: color: ${Theme.normal};
     }
 
-    
-
     &.info-tool{
        margin-top: 20px;
     }
@@ -81,7 +77,6 @@ const FormField = styled.div`
       width: 85%;
       
     }
-   
 
     &:focus {
       outline: none;
@@ -91,7 +86,7 @@ const FormField = styled.div`
    .text-area {
       position:relative;
       color: ${Theme.gray35};
-      border: 1px solid ${Theme.gray10};
+      border: 1px solid ${Theme.gray2};
       border-radius: 5px;
       padding: 4px  10px ;
       display: block;
