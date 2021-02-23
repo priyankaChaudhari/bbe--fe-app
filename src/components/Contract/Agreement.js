@@ -171,35 +171,35 @@ export default function Agreement({ formData, details, templateData }) {
   return (
     <>
       <Paragraph>
-        <p className="mb-4 long-text ">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: getAgreementAccorType(0)
-                .replace(
-                  'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
-                )
-                .replace(
-                  'START_DATE',
-                  mapDefaultValues('start_date', 'Start Date'),
-                )
-                .replace(
-                  'CUSTOMER_ADDRESS',
-                  mapDefaultValues('address', 'Address'),
-                )
-                .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
-                .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
-                .replace(
-                  'CUSTOMER_POSTAL',
-                  mapDefaultValues('zip_code', 'Postal Code'),
-                )
-                .replace(
-                  'AGREEMENT_LENGTH',
-                  mapDefaultValues('length', 'Contract Length'),
-                )
-                .replace(
-                  'ONE_TIME_SERVICE_TABLE',
-                  `<table class="contact-list " style="width: 100%;
+        <p
+          className="mb-4 long-text "
+          dangerouslySetInnerHTML={{
+            __html: getAgreementAccorType(0)
+              .replace(
+                'CUSTOMER_NAME',
+                mapDefaultValues('contract_company_name', 'Customer Name'),
+              )
+              .replace(
+                'START_DATE',
+                mapDefaultValues('start_date', 'Start Date'),
+              )
+              .replace(
+                'CUSTOMER_ADDRESS',
+                mapDefaultValues('address', 'Address'),
+              )
+              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
+              .replace(
+                'CUSTOMER_POSTAL',
+                mapDefaultValues('zip_code', 'Postal Code'),
+              )
+              .replace(
+                'AGREEMENT_LENGTH',
+                mapDefaultValues('length', 'Contract Length'),
+              )
+              .replace(
+                'ONE_TIME_SERVICE_TABLE',
+                `<table class="contact-list " style="width: 100%;
                               border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
                               padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
                               padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
@@ -214,14 +214,14 @@ export default function Agreement({ formData, details, templateData }) {
                               )}
                               </td></tr>
                                 </table>`,
-                )
-                .replace(
-                  'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-                  `${mapServiceTotal('additional_one_time_services')}`,
-                ),
-            }}
-          />
-        </p>
+              )
+              .replace(
+                'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+                `${mapServiceTotal('additional_one_time_services')}`,
+              ),
+          }}
+        />
+
         <p
           className="long-text"
           dangerouslySetInnerHTML={{

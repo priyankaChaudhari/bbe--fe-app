@@ -1,17 +1,24 @@
 /* eslint-disable react/no-danger */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
-export default function DSPAddendum({ formData, templateData }) {
-  const [calculatedDate, setCalculatedDate] = useState('');
-  const [firstMonthDate, setFirstMonthDate] = useState('');
-  const [secondMonthDate, setSecondMonthDate] = useState('');
-  const [thirdMonthDate, setThirdMonthDate] = useState('');
-  const [endMonthDate, setEndDate] = useState('');
-
+export default function DSPAddendum({
+  formData,
+  templateData,
+  calculatedDate,
+  setCalculatedDate,
+  firstMonthDate,
+  setFirstMonthDate,
+  secondMonthDate,
+  setSecondMonthDate,
+  thirdMonthDate,
+  setThirdMonthDate,
+  endMonthDate,
+  setEndDate,
+}) {
   function addDays(theDate, days) {
     return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
   }
@@ -21,11 +28,12 @@ export default function DSPAddendum({ formData, templateData }) {
       new Date(formData && formData.start_date),
       10,
     );
-
     setCalculatedDate(dayjs(calculateDate).format('MM-DD-YYYY'));
+
     let startDate = '';
     let lastDate = '';
     const d = new Date(calculateDate);
+
     if (calculateDate.getDate() > 15) {
       startDate = d.setMonth(d.getMonth() + 1, 1);
       const first = new Date(startDate);
@@ -40,26 +48,24 @@ export default function DSPAddendum({ formData, templateData }) {
       lastDate = endDate;
       setEndDate(endDate);
     }
-    const date = new Date(lastDate);
+    const last = new Date(lastDate);
+    const date = new Date(last.setDate(1));
+
     const third = date.setMonth(date.getMonth() + 1);
     setSecondMonthDate(new Date(third));
 
     const fourth = date.setMonth(date.getMonth() + 1);
-
     setThirdMonthDate(new Date(fourth));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [formData]);
 
   const mapDefaultValues = (key, label, type) => {
-    if (formData[key] === undefined || formData[key] === '') {
-      return `Enter ${label}`;
-    }
     if (key === 'start_date') {
       return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }
     if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
+      return dayjs(new Date()).format('MM-DD-YYYY');
     }
     if (type && type.includes('number')) {
       return `${type === 'number-currency' ? '$' : '%'} ${
@@ -68,7 +74,9 @@ export default function DSPAddendum({ formData, templateData }) {
           : `Enter ${label}.`
       }`;
     }
-
+    if (formData[key] === undefined || formData[key] === '') {
+      return `Enter ${label}`;
+    }
     // return details && details[key];
     return formData[key];
   };
@@ -88,7 +96,7 @@ export default function DSPAddendum({ formData, templateData }) {
   };
 
   const displayFirstMonthFee = () => {
-    if (firstMonthDate && new Date(firstMonthDate).getDay() !== 1) {
+    if (firstMonthDate && new Date(firstMonthDate).getDate() !== 1) {
       if (formData && formData.dsp_fee) {
         const fee = parseInt(formData && formData.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
@@ -105,9 +113,9 @@ export default function DSPAddendum({ formData, templateData }) {
     <div class="table-responsive">  <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
-      new Date(firstMonthDate).getDay() !== 1 ? '-' : ''
+      new Date(firstMonthDate).getDate() !== 1 ? '-' : ''
     } ${
-      new Date(firstMonthDate).getDay() !== 1
+      new Date(firstMonthDate).getDate() !== 1
         ? dayjs(endMonthDate).format('MMM D, YYYY')
         : ''
     } </th><th style="text-align: left; border: 1px solid black;
@@ -117,7 +125,7 @@ export default function DSPAddendum({ formData, templateData }) {
     padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
     <tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> ${displayFirstMonthFee()}</td>
+    padding: 13px;"> $${displayFirstMonthFee()}</td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
@@ -138,42 +146,38 @@ export default function DSPAddendum({ formData, templateData }) {
     <div>
       <Paragraph>
         <>
-          <p className="long-text">
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  templateData.dsp_addendum &&
-                  templateData.dsp_addendum[0]
-                    .replace(
-                      'CUSTOMER_NAME',
-                      mapDefaultValues(
-                        'contract_company_name',
-                        'Customer Name',
-                      ),
-                    )
+          <p
+            className="long-text"
+            dangerouslySetInnerHTML={{
+              __html:
+                templateData.dsp_addendum &&
+                templateData.dsp_addendum[0]
+                  .replace(
+                    'CUSTOMER_NAME',
+                    mapDefaultValues('contract_company_name', 'Customer Name'),
+                  )
 
-                    .replace(
-                      'START_DATE',
-                      mapDefaultValues('start_date', 'Start Date'),
-                    )
-                    .replace(
-                      'DSP_DETAIL_TABLE',
-                      `<div class="table-responsive"> <table class="contact-list " style="width: 100%;
+                  .replace(
+                    'START_DATE',
+                    mapDefaultValues('start_date', 'Start Date'),
+                  )
+                  .replace(
+                    'DSP_DETAIL_TABLE',
+                    `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table><div/>`,
-                    )
-                    .replace(
-                      'BUDGET_BREAKDOWN_TABLE',
-                      `${mapBudgetBreakdownTable()}`,
-                    )
-                    .replaceAll(
-                      'DSP_FEE',
-                      mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
-                    ),
-              }}
-            />
-          </p>
+    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+                  )
+                  .replace(
+                    'BUDGET_BREAKDOWN_TABLE',
+                    `${mapBudgetBreakdownTable()}`,
+                  )
+                  .replaceAll(
+                    'DSP_FEE',
+                    mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+                  ),
+            }}
+          />
           <p
             className="long-text"
             dangerouslySetInnerHTML={{
@@ -203,6 +207,16 @@ export default function DSPAddendum({ formData, templateData }) {
 DSPAddendum.defaultProps = {
   templateData: {},
   formData: {},
+  calculatedDate: '',
+  setCalculatedDate: () => {},
+  firstMonthDate: '',
+  setFirstMonthDate: () => {},
+  secondMonthDate: '',
+  setSecondMonthDate: () => {},
+  thirdMonthDate: '',
+  setThirdMonthDate: () => {},
+  endMonthDate: '',
+  setEndDate: () => {},
 };
 
 DSPAddendum.propTypes = {
@@ -213,6 +227,16 @@ DSPAddendum.propTypes = {
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),
   }),
+  calculatedDate: PropTypes.instanceOf(Date),
+  setCalculatedDate: PropTypes.func,
+  firstMonthDate: PropTypes.instanceOf(Date),
+  setFirstMonthDate: PropTypes.func,
+  secondMonthDate: PropTypes.instanceOf(Date),
+  setSecondMonthDate: PropTypes.func,
+  thirdMonthDate: PropTypes.instanceOf(Date),
+  setThirdMonthDate: PropTypes.func,
+  endMonthDate: PropTypes.instanceOf(Date),
+  setEndDate: PropTypes.func,
 };
 
 const Paragraph = styled.div`
