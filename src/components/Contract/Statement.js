@@ -36,7 +36,7 @@ export default function Statement({
     }
     if (type && type.includes('number')) {
       // ${type === 'number-currency' ? '$' : '%'}
-      return `${type === 'number-currency' ? '$' : '%'} ${
+      return `${type === 'number-currency' ? '$' : '%'}${
         formData && formData[key]
           ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `Enter ${label}.`
@@ -191,7 +191,7 @@ export default function Statement({
       ${
         item && item.fee
           ? `<td style="border: 1px solid black;padding: 13px;">
-            $ ${
+            $${
               item.service
                 ? item.service.fee
                     .toString()
@@ -213,7 +213,7 @@ export default function Statement({
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
-      return `$ ${
+      return `$${
         details && details.total_fee.onetime_service
           ? details.total_fee.onetime_service
               .toString()
@@ -257,7 +257,7 @@ export default function Statement({
                 }</td>
                 ${
                   item.service && item.service.fee
-                    ? `<td style="border: 1px solid black;padding: 13px;">$ ${
+                    ? `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
                           ? item.service.fee
                               .toString()
@@ -299,7 +299,7 @@ export default function Statement({
       </td>
       ${
         service.service && service.service.fee
-          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.service &&
+          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.service &&
             service.service.fee &&
             service.service.name !== 'Amazon Store Package Custom'
               ? service.service.fee
@@ -321,7 +321,7 @@ export default function Statement({
             : service.service.name !== 'Amazon Store Package Custom'
         )
           ? service.quantity && service.service && service.service.fee
-            ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
+            ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
               service.service &&
               service.service.fee
                 ? service.quantity * service.service.fee
@@ -332,7 +332,7 @@ export default function Statement({
           </td>`
             : `<td>Yet to save</td>`
           : service.quantity && service.custom_amazon_store_price
-          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
+          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
             service.custom_amazon_store_price
               ? service.quantity * service.custom_amazon_store_price
               : ''

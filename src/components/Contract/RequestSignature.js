@@ -59,6 +59,7 @@ function RequestSignature({
   const [contractDesignData, setContractDesignData] = useState(null);
   const [showHelloSignPage, setShowHelloSign] = useState(true);
   const [reminderMailData, setReminderMailData] = useState({});
+  const [contactModalName, setModalName] = useState('Add Contact');
 
   const contactFields = [
     {
@@ -200,6 +201,7 @@ function RequestSignature({
             role="presentation"
             onClick={() => {
               setFormData(info);
+              setModalName('Edit Contact');
               setParams('add-new-contact');
             }}
           />
@@ -447,7 +449,12 @@ function RequestSignature({
         <>
           {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
           <div className="modal-body on-boarding">
-            <h4 className="on-boarding mb-4">Request Signature</h4>
+            <h4
+              className="on-boarding mb-4"
+              role="presentation"
+              onClick={() => setParams('select-contact')}>
+              Request Signature
+            </h4>
 
             <div className="row mb-2">
               <div className="col-6">
@@ -669,7 +676,7 @@ function RequestSignature({
       {params && params.step === 'add-new-contact' ? (
         <>
           <div className="modal-body on-boarding">
-            <h4 className="on-boarding mb-2">Add Contact</h4>
+            <h4 className="on-boarding mb-2">{contactModalName}</h4>
 
             <div className="body-content">
               <div className="row">
@@ -698,7 +705,7 @@ function RequestSignature({
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
-                  ' Update Contact'
+                  ' Save Contact'
                 )}
               </Button>
             </div>

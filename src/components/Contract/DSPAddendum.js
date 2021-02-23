@@ -68,7 +68,7 @@ export default function DSPAddendum({
       return dayjs(new Date()).format('MM-DD-YYYY');
     }
     if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'} ${
+      return `${type === 'number-currency' ? '$' : '%'}${
         formData && formData[key]
           ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `Enter ${label}.`
