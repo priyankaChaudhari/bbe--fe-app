@@ -5,10 +5,10 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
         font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
     </p> <table style="width:100%">
         <tr style="height: 30px; vertical-align: top">
-            <td style="width:19%">Comapny:</td>
+            <td style="width:19%">Company:</td>
             <td width:50% style="font-weight: 700; "width:31%;">Buy Box Experts</td>
             <td > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td style="width:19%">Comapny:</td>
+                <td style="width:19%">Company:</td>
                 <td style="font-weight: 700; "width:31%;">CUSTOMER_NAME</td>
         </tr>
          <tr style="height: 30px; vertical-align: top">
@@ -68,10 +68,10 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
         font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
     </p>
     <table style="width:100%"><tr style="height: 30px; vertical-align: top">
-            <td  style="width:19%">Comapny:</td>
+            <td  style="width:19%">Company:</td>
             <td style="font-weight: 700; "width:31%;">Buy Box Experts</td>
             <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</td>
-                <td   style="width:19%">Comapny:</td>
+                <td   style="width:19%">Company:</td>
                 <td  style="font-weight: 700;"width:31%">CUSTOMER_NAME</td>
         </tr>
          <tr style="height: 30px; vertical-align: top">

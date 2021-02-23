@@ -260,6 +260,11 @@ export default function AgreementSidePanel({
   }, []);
 
   useEffect(() => {
+    if (openCollapse.agreement) executeScroll('agreement');
+    if (openCollapse.statement) executeScroll('statement');
+    if (openCollapse.dspAddendum) executeScroll('dspAddendum');
+    if (openCollapse.addendum) executeScroll('addendum');
+
     const serviceData =
       agreementData &&
       agreementData.additional_one_time_services &&
@@ -1645,7 +1650,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('agreement');
-                  setOpenCollapse({ agreement: !openCollapse.agreement });
+                  setOpenCollapse({ agreement: true });
                 }}>
                 <img
                   className="service-agre"
@@ -1726,7 +1731,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('statement');
-                  setOpenCollapse({ statement: !openCollapse.statement });
+                  setOpenCollapse({ statement: true });
                 }}>
                 <img className="service-agre" src={StatementWork} alt="pdf" />
                 <h4 className="sendar-details mt-2 ml-5">
@@ -2270,7 +2275,7 @@ export default function AgreementSidePanel({
                     onClick={() => {
                       executeScroll('dspAddendum');
                       setOpenCollapse({
-                        dspAddendum: !openCollapse.dspAddendum,
+                        dspAddendum: true,
                       });
                     }}>
                     <img className="service-agre" src={Advertise} alt="pdf" />
@@ -2325,7 +2330,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('addendum');
-                  setOpenCollapse({ addendum: !openCollapse.addendum });
+                  setOpenCollapse({ addendum: true });
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
                 <h4 className="sendar-details mt-2 ml-5">Create Addendum </h4>

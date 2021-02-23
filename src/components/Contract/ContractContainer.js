@@ -1083,7 +1083,7 @@ export default function ContractContainer() {
         'CUSTOMER_NAME',
         mapDefaultValues('contract_company_name', 'Customer Name'),
       )
-      .replaceAll('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+      .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
       .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
       .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
