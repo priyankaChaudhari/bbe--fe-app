@@ -124,7 +124,7 @@ body {
     position: fixed;
     background-color: $white-color;
     z-index: 1;
-    padding: 10px 0px 18px 50px;
+    padding: 20px 0px 20px 50px;
     margin-left: 62px !important;
     width: 100%;
     border-bottom: 1px solid $gray-5;
@@ -557,11 +557,11 @@ a {
 }
 
 .back-link {
-  color: $gray-90;
-  font-size: $small-f-size;
+  color: $black-color;
+  font-size: $extra-normal-f-size;
   font-weight: 600;
   cursor: pointer;
-  max-width: 180px;
+  display: contents;
 
   .arrow-back-icon {
     width: 15px;

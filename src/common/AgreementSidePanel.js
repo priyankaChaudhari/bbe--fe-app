@@ -1662,7 +1662,7 @@ export default function AgreementSidePanel({
                   src={ServiceAgreement}
                   alt="pdf"
                 />
-                <h4 className="sendar-details mt-2 ml-5">
+                <h4 className="sendar-details mt-1 ml-5">
                   {agreementData && agreementData.contract_type === 'one time'
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
@@ -1739,7 +1739,7 @@ export default function AgreementSidePanel({
                   setOpenCollapse({ statement: !openCollapse.statement });
                 }}>
                 <img className="service-agre" src={StatementWork} alt="pdf" />
-                <h4 className="sendar-details mt-2 ml-5">
+                <h4 className="sendar-details mt-1 ml-5">
                   Statement of Work{' '}
                   {agreementData.steps_completed &&
                   agreementData.steps_completed.statement ? (

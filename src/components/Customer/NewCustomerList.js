@@ -492,7 +492,7 @@ export default function NewCustomerList() {
                   data-for="info"
                   className="info-icon"
                 />
-                <ReactTooltip id="info" aria-haspopup="true" />
+                <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
 
                 <img
                   src={SearchIcon}

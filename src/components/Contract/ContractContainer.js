@@ -1306,7 +1306,7 @@ export default function ContractContainer() {
                       <img
                         src={LeftArrowIcon}
                         alt="aarow-back"
-                        className="arrow-back-icon mt-3"
+                        className="arrow-back-icon "
                       />
                       Back to Customer Details
                     </div>

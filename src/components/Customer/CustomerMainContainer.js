@@ -283,7 +283,6 @@ export default function CustomerMainContainer() {
                         alt="caret"
                         style={{
                           transform: showDropDown ? 'rotate(180deg)' : '',
-                          width: '25px',
                         }}
                       />
                       <ul
