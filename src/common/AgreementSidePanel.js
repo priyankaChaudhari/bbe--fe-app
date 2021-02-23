@@ -382,9 +382,11 @@ export default function AgreementSidePanel({
             }
             return null;
           });
-
-        additionalMarketplacesData.delete = itemsToBeDelete;
-        additionalMarketplacesData.create = [];
+        if (itemsToBeDelete && itemsToBeDelete.length) {
+          const list = itemsToBeDelete.map((item) => item.id);
+          additionalMarketplacesData.delete = list;
+          additionalMarketplacesData.create = [];
+        }
 
         setFormData({
           ...formData,
@@ -1563,6 +1565,7 @@ export default function AgreementSidePanel({
       label: '',
     };
   };
+
   const displayError = (item) => {
     if (item === 'non_field_errors') {
       return (
@@ -1581,6 +1584,8 @@ export default function AgreementSidePanel({
         </ErrorMsg>
       );
     }
+
+    // console.log(newAddendumData, 'newAddendumData');
     return (
       <>
         <ErrorMsg>
@@ -2353,6 +2358,13 @@ export default function AgreementSidePanel({
                           alt="edit "
                         />
                         Edit Addendum
+                      </Button>
+                    ) : newAddendumData &&
+                      !Object.keys(newAddendumData).length ? (
+                      <Button
+                        className=" sidepanel on-boarding mt-3 mb-3 w-100"
+                        onClick={() => setShowEditor(true)}>
+                        Create Addendum
                       </Button>
                     ) : (
                       <>
