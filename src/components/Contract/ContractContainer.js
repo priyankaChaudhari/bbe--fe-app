@@ -1076,9 +1076,7 @@ export default function ContractContainer() {
     });
   };
   const createAgreementDoc = () => {
-    const agreementData = getAgreementAccorType(0);
-    // if (agreementData) {
-    agreementData
+    const agreementData = getAgreementAccorType(0)
       .replace(
         'CUSTOMER_NAME',
         mapDefaultValues('contract_company_name', 'Customer Name'),
