@@ -519,6 +519,7 @@ export const WhiteCard = styled.div`
       top: -5px;
       cursor:pointer;
       position:relative;
+      
 
     &.inactive {
       background-color: ${Theme.gray60};
@@ -526,6 +527,7 @@ export const WhiteCard = styled.div`
     &.pending {
       background-color: ${Theme.yellow};
       color: ${Theme.black};
+      
     }
     &.risk {
       background-color: #d63649;
@@ -956,6 +958,14 @@ export const WhiteCard = styled.div`
    }
   }
 
+    @media only screen and (max-width: 440px) {        
+       .company-status {
+          display: -webkit-inline-box;
+          margin-left: 0px;
+          margin-top: 10px;
+       }
+    }
+
    @media only screen and (max-width: 407px) {
    .company-label-info {
      margin-left: 40px;
@@ -973,6 +983,7 @@ export const WhiteCard = styled.div`
         }
       }   
     }
+    
    }
 
 `;

@@ -120,6 +120,9 @@ import NextLogo from './new-logo.png';
 import BackArrowIcon from './icons/back-arrow-back.png';
 import DigitalSignature from './Digital-Sig.png';
 import Advertise from './icons/dsp-advertise.png';
+import OrganizationIcon from './icons/organization-icon.png';
+import OrganizationActiveIcon from './icons/organization-active-icon.png';
+import ExpnadArrowBack from './icons/expand-arrow-back.png';
 
 export {
   BannerBg,
@@ -244,4 +247,7 @@ export {
   BackArrowIcon,
   DigitalSignature,
   Advertise,
+  OrganizationIcon,
+  OrganizationActiveIcon,
+  ExpnadArrowBack,
 };

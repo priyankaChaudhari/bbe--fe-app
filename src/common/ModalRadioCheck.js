@@ -42,21 +42,21 @@ const ModalRadioCheck = styled.div`
 
   .delete-contact {
     width: 16px;
-    right: 15px;
+    right: 14px;
     position: absolute;
-    top: 10px;
+    top: 10px; 
   }
   .edit-contact {
-    width: 13px;
-    right: 45px;
+    width: 12px;
+    right: 55px;
     position: absolute;
-    top: 10px;
+    top: 10px
   }
-  .owner-details {
+  span.owner-details {
     font-size: 13px;
-    color: ${Theme.gray35}; !important;
+    color: ${Theme.gray35};
     margin-left: 25px;
-    font-weight: 300 !important;
+    font-weight: 500;
 
     img {
       width: 13px;

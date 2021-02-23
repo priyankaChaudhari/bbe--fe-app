@@ -277,12 +277,8 @@ export default function CustomerMainContainer() {
                         setShowSuccessMsg({ show: false });
                       }}
                       role="presentation">
-                      {customer && customer.status && customer.status.label}
-                      <span>
-                        {' '}
-                        <img src={ExpandArrowIcon} alt="aarow-down" />{' '}
-                      </span>
-
+                      {customer && customer.status && customer.status.label}{' '}
+                      <img src={ExpandArrowIcon} alt="aarow-down" />{' '}
                       <ul
                         id="clickbox"
                         className="dropdown-content-status"

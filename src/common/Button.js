@@ -153,12 +153,13 @@ const Button = styled.button`
     border: none;
     background: transparent;
     color: ${Theme.orange};
-    font-size: ${Theme.Small};
+    font-size: ${Theme.small};
     cursor: pointer;
+    padding: 0;
 
     .add-new-icon {
       vertical-align: top;
-      width: 16px;
+      width: 15px;
     }
 
     &:focus {
@@ -178,7 +179,7 @@ const Button = styled.button`
     }
   }
   &.w-50 {
-    width: 160px;
+    width: 168px;
   }
   &.w-25 {
     width: 130px;

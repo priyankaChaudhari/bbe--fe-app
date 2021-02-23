@@ -618,7 +618,7 @@ function RequestSignature({
       )}
       {params && params.step === 'select-contact' ? (
         <>
-          <div className="modal-body on-boarding">
+          <div className="modal-body ">
             <h4 className="on-boarding mb-4">Select contact</h4>
             {isLoading.loader && isLoading.type === 'page' ? (
               <PageLoader
@@ -632,7 +632,7 @@ function RequestSignature({
                 {displayContact()}
 
                 <Button
-                  className="btn-add-contact mt-3"
+                  className="btn-add-contact mb-4"
                   role="presentation"
                   onClick={() => {
                     setFormData({});
@@ -648,25 +648,23 @@ function RequestSignature({
                 </Button>
               </div>
             )}
-          </div>
-          <div className="footer-line " />
 
-          <div
-            className=" col-12  modal-footer"
-            role="presentation"
-            onClick={() => setParams('verify-document')}>
-            <Button
-              className={
-                selectedContact && selectedContact.id
-                  ? ' btn-primary on-boarding w-100'
-                  : ' btn-primary on-boarding w-100 disabled'
-              }>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Next'
-              )}
-            </Button>
+            <div
+              role="presentation"
+              onClick={() => setParams('verify-document')}>
+              <Button
+                className={
+                  selectedContact && selectedContact.id
+                    ? ' btn-primary on-boarding w-100'
+                    : ' btn-primary on-boarding w-100 disabled'
+                }>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Next'
+                )}
+              </Button>
+            </div>
           </div>
         </>
       ) : (

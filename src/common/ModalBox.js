@@ -8,7 +8,7 @@ const ModalBox = styled.div`
   border-radius:10px;
 
   &.small-alert-modal {
-    max-width: 450px !important;
+    max-width: 435px !important;
     width:100%;
     margin: 0 auto;
   }
@@ -119,6 +119,7 @@ const ModalBox = styled.div`
       text-align: center;
       font-weight: 600;
       margin: 0 auto;
+      padding: 11px 0 20px 0;
     }
 
     .arrow-right {

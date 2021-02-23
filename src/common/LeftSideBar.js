@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom';
 
 import Theme from '../theme/Theme';
 import {
-  UserGroupIcon,
   ReadBookIcon,
   ReadBookIconActive,
-  UserGroupIconActive,
+  OrganizationActiveIcon,
+  OrganizationIcon,
 } from '../theme/images/index';
 import { PATH_ARTICLE_LIST, PATH_CUSTOMER_LIST } from '../constants';
 
@@ -30,8 +30,8 @@ export default function LeftSideBar() {
             }
             role="presentation"
             onClick={() => history.push(PATH_CUSTOMER_LIST)}>
-            <img className="user-group" src={UserGroupIconActive} alt="" />
-            <img className="user-group-active " src={UserGroupIcon} alt="" />
+            <img className="active" src={OrganizationActiveIcon} alt="" />
+            <img className="disactive" src={OrganizationIcon} alt="" />
           </li>
           <li
             className={
@@ -45,6 +45,10 @@ export default function LeftSideBar() {
             <img className="read-book-active" src={ReadBookIconActive} alt="" />
             <img className="read-book" src={ReadBookIcon} alt="" />
           </li>
+          {/* <li>
+            <img className="user-group" src={UserGroupIconActive} alt="" />
+            <img className="user-group-active " src={UserGroupIcon} alt="" />
+          </li> */}
         </ul>
       </LeftSideBars>
     </div>
@@ -65,8 +69,8 @@ const LeftSideBars = styled.div`
     padding: 0;
 
     li {
-      margin: 18px 0;
-      padding: 0 18px;
+      margin: 30px 0;
+      padding: 0 22px 0 17px;
       border-left: 3px solid ${Theme.white};
 
       .read-book-active {
@@ -77,16 +81,16 @@ const LeftSideBars = styled.div`
         display: none;
       }
 
-      .user-group-active {
-        display: block;
-      }
-
-      .user-group {
+      .active {
         display: none;
       }
 
+      .disactive {
+        display: block;
+      }
+
       img {
-        width: 22px;
+        width: 24px;
         cursor: pointer;
       }
 
@@ -100,11 +104,11 @@ const LeftSideBars = styled.div`
           display: none;
         }
 
-        .user-group {
-          display: block;
-        }
-        .user-group-active {
+        .disactive {
           display: none;
+        }
+        .active {
+          display: block;
         }
       }
 
@@ -118,11 +122,11 @@ const LeftSideBars = styled.div`
           display: none;
         }
 
-        .user-group {
-          display: block;
-        }
-        .user-group-active {
+        .disactive {
           display: none;
+        }
+        .active {
+          display: block;
         }
       }
     }
