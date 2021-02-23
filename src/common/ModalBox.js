@@ -13,9 +13,15 @@ const ModalBox = styled.div`
     margin: 0 auto;
   }
 
+  .modal-back-arrow {
+    margin-top: -2px;
+    margin-right: 4px;
+    width: 26px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
   .modal-body {
-    &.on-boarding {
-      padding-bottom: 10px;
 
       .role-selected {
         color: ${Theme.gray90};
@@ -23,9 +29,13 @@ const ModalBox = styled.div`
         font-family: ${Theme.titleFontFamily};
       }
       .signature-request {
-        font-size: ${Theme.medium};
+        font-size: ${Theme.extraSmall};
+        color: ${Theme.gray30};
+      
         .email-address {
           color: ${Theme.gray90};
+          font-size: ${Theme.medium};
+
         }
       }
 
@@ -50,7 +60,7 @@ const ModalBox = styled.div`
           vertical-align: top;
           width: 16px;
         }
-      }
+      
     }
             @media not all and (min-resolution:.001dpcm)
       { @supports (-webkit-appearance:none) {

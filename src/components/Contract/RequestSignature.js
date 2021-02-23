@@ -20,6 +20,7 @@ import {
   EmailIcon,
   PhoneIcon,
   DefaultUser,
+  ExpnadArrowBack,
 } from '../../theme/images';
 
 import {
@@ -445,18 +446,19 @@ function RequestSignature({
       {params && params.step === 'verify-document' ? (
         <>
           {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
-          <div className="modal-body on-boarding">
+          <div className="modal-body ">
             <h4
               className="on-boarding mb-4"
               role="presentation"
               onClick={() => setParams('select-contact')}>
+              <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />{' '}
               Request Signature
             </h4>
 
             <div className="row mb-2">
               <div className="col-6">
                 <div className="signature-request">
-                  To:
+                  TO:
                   <span className="email-address">
                     {' '}
                     {selectedContact && selectedContact.email}
@@ -489,28 +491,28 @@ function RequestSignature({
             </div>
             <div className="row">{displayCCEmails()}</div>
             <Button
-              className="btn-add-contact mt-2 "
+              className="btn-add-contact mt-3 "
               onClick={() => setCCEmails([...ccEmails, {}])}>
               <img
-                className="mr-2 add-new-icon "
+                className="mr-2 add-new-icon  "
                 src={AddNewIcons}
                 alt="add-icon"
               />
               Add CC Email Address
             </Button>
-          </div>
-          <div className="footer-line " />
-          <div className=" col-12  modal-footer">
-            <Button
-              className=" btn-primary on-boarding w-100"
-              onClick={() => verifyDocument()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Request Signature'
-              )}
-              {/* Verify Document */}
-            </Button>
+
+            <div className=" mt-4">
+              <Button
+                className=" btn-primary on-boarding w-100"
+                onClick={() => verifyDocument()}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Request Signature'
+                )}
+                {/* Verify Document */}
+              </Button>
+            </div>
           </div>
         </>
       ) : (
@@ -530,25 +532,26 @@ function RequestSignature({
 
             <FormField>
               <textarea
-                className="form-control"
+                className="form-control "
                 type="text"
+                rows="3"
                 placeholder="Add personal note to recipient"
                 name="note"
                 onChange={(event) => onRequestApprovalChange(event)}
               />
             </FormField>
-          </div>
-          <div className="footer-line " />
-          <div className=" col-12  modal-footer">
-            <Button
-              className=" btn-primary on-boarding w-100"
-              onClick={() => sendRequestApproval()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Request Approval'
-              )}
-            </Button>
+
+            <div className=" mt-4">
+              <Button
+                className=" btn-primary on-boarding w-100"
+                onClick={() => sendRequestApproval()}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Request Approval'
+                )}
+              </Button>
+            </div>
           </div>
         </>
       ) : (
@@ -562,7 +565,7 @@ function RequestSignature({
             <div className="row">
               <div className="col-6">
                 <div className="signature-request">
-                  To:
+                  TO:
                   <span className="email-address">
                     {' '}
                     jenny@ashersapparel.com
@@ -574,7 +577,7 @@ function RequestSignature({
                   <label
                     className="check-container contract-sign"
                     htmlFor="contract-copy">
-                    Send me a copy of the contract
+                    Send me a copy of this Reminder
                     <input
                       type="checkbox"
                       id="contract-copy"
@@ -606,12 +609,12 @@ function RequestSignature({
                 onChange={(event) => handleChangeForReminder(event, 'note')}
               />
             </FormField>
-          </div>
-          <div className="footer-line " />
-          <div className=" col-12  modal-footer">
-            <Button className=" btn-primary on-boarding w-100">
-              Send Reminder
-            </Button>
+
+            <div className=" mt-4">
+              <Button className=" btn-primary on-boarding w-100">
+                Send Reminder
+              </Button>
+            </div>
           </div>
         </>
       ) : (
@@ -633,7 +636,7 @@ function RequestSignature({
                 {displayContact()}
 
                 <Button
-                  className="btn-add-contact mb-4"
+                  className="btn-add-contact"
                   role="presentation"
                   onClick={() => {
                     setFormData({});
@@ -651,13 +654,16 @@ function RequestSignature({
             )}
 
             <div
+              className="mt-4"
               role="presentation"
               onClick={() => setParams('verify-document')}>
               <Button
+                type="button"
+                disabled={!(selectedContact && selectedContact.id)}
                 className={
                   selectedContact && selectedContact.id
                     ? ' btn-primary on-boarding w-100'
-                    : ' btn-primary on-boarding w-100 disabled'
+                    : ' btn-gray on-boarding w-100 btn-disabled '
                 }>
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
@@ -675,7 +681,11 @@ function RequestSignature({
       {params && params.step === 'add-new-contact' ? (
         <>
           <div className="modal-body on-boarding">
-            <h4 className="on-boarding mb-2">{contactModalName}</h4>
+            <h4 className="on-boarding mb-2">
+              {' '}
+              <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />
+              {contactModalName}
+            </h4>
 
             <div className="body-content">
               <div className="row">
@@ -691,39 +701,39 @@ function RequestSignature({
                 </div>
               </div>
             </div>
+
+            {formData && formData.id ? (
+              <div
+                className="mt-4"
+                role="presentation"
+                onClick={() => {
+                  saveContact(formData);
+                }}>
+                <Button className=" btn-primary on-boarding">
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    ' Save Contact'
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div
+                className=" mt-3"
+                role="presentation"
+                onClick={() => {
+                  saveContact();
+                }}>
+                <Button className=" btn-primary on-boarding">
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Add Contact'
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
-          <div className="footer-line " />
-          {formData && formData.id ? (
-            <div
-              className=" col-12  modal-footer"
-              role="presentation"
-              onClick={() => {
-                saveContact(formData);
-              }}>
-              <Button className=" btn-primary on-boarding">
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  ' Save Contact'
-                )}
-              </Button>
-            </div>
-          ) : (
-            <div
-              className=" col-12  modal-footer"
-              role="presentation"
-              onClick={() => {
-                saveContact();
-              }}>
-              <Button className=" btn-primary on-boarding">
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  'Add Contact'
-                )}
-              </Button>
-            </div>
-          )}
         </>
       ) : (
         ''
