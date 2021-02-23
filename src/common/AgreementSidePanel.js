@@ -2653,7 +2653,8 @@ const SidePanel = styled.div`
  
   .sendar-details {
     color: ${Theme.black};
-    letter-spacing: 1.21px;
+    font-size: ${Theme.extraMedium};
+    text-transform: capitalize;
   }
 
   .sender-profile {

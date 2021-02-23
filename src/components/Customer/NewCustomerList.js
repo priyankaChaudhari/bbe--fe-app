@@ -805,7 +805,7 @@ const CustomerListPage = styled.div`
 
   .customer-list-header-sticky {
     position: fixed;
-    left: 62px;
+    left: 64px;
     right: 0;
     z-index: 1;
     background-color: ${Theme.white};

@@ -14,7 +14,7 @@ const InputSelect = styled.div`
 
   .css-yk16xz-control {
     color: ${Theme.gray90};
-    border: 1px solid ${Theme.gray10};
+    border: 1px solid ${Theme.gray2};
     background-color: rgba(224, 231, 255, 0.2);
     margin-top: 5px;
 
@@ -33,7 +33,7 @@ const InputSelect = styled.div`
     }
 
     &:hover {
-      border: 1px solid ${Theme.gray10};
+      border: 1px solid ${Theme.gray2};
     }
   }
 
@@ -41,7 +41,7 @@ const InputSelect = styled.div`
     box-shadow: none;
     margin-top: 5px;
     background-color: rgba(224, 231, 255, 0.2);
-    border: 1px solid ${Theme.gray10} !important;
+    border: 1px solid ${Theme.gray2} !important;
     outline: none;
     font-size: 15px;
   }
