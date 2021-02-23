@@ -144,8 +144,8 @@ export default function ContractContainer() {
       element &&
       element.getBoundingClientRect() &&
       element.getBoundingClientRect().top + window.pageYOffset + -150;
-    // window.scrollTo({ top: y });
-    window.scrollTo({ top: y, behavior: 'smooth' });
+    window.scrollTo({ top: y });
+    // window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
   const checkPermission = () => {
@@ -382,7 +382,7 @@ export default function ContractContainer() {
 
       AccountApi = updateAccountDetails(details.id, detail);
 
-      if (newAddendumData.id) {
+      if (newAddendumData && newAddendumData.id) {
         //  setIsLoading({ loader: true, type: 'page' });
 
         AddendumApi = updateAddendum(newAddendumData.id, {
@@ -1482,7 +1482,11 @@ export default function ContractContainer() {
             <Button
               className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
               onClick={() => onEditcontract()}>
-              Edit Contract
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Edit Contract'
+              )}
             </Button>
             <Button
               className="light-orange sticky-btn   mt-3 mr-3 on-boarding"

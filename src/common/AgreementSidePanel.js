@@ -1650,7 +1650,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('agreement');
-                  setOpenCollapse({ agreement: true });
+                  setOpenCollapse({ agreement: !openCollapse.agreement });
                 }}>
                 <img
                   className="service-agre"
@@ -1731,7 +1731,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('statement');
-                  setOpenCollapse({ statement: true });
+                  setOpenCollapse({ statement: !openCollapse.statement });
                 }}>
                 <img className="service-agre" src={StatementWork} alt="pdf" />
                 <h4 className="sendar-details mt-2 ml-5">
@@ -2275,7 +2275,7 @@ export default function AgreementSidePanel({
                     onClick={() => {
                       executeScroll('dspAddendum');
                       setOpenCollapse({
-                        dspAddendum: true,
+                        dspAddendum: !openCollapse.dspAddendum,
                       });
                     }}>
                     <img className="service-agre" src={Advertise} alt="pdf" />
@@ -2330,7 +2330,7 @@ export default function AgreementSidePanel({
                 type="button"
                 onClick={() => {
                   executeScroll('addendum');
-                  setOpenCollapse({ addendum: true });
+                  setOpenCollapse({ addendum: !openCollapse.addendum });
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
                 <h4 className="sendar-details mt-2 ml-5">Create Addendum </h4>
