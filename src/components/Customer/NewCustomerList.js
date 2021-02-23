@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
+import $ from 'jquery';
 
 import ReactTooltip from 'react-tooltip';
 import Theme from '../../theme/Theme';
@@ -33,6 +34,7 @@ import {
   InfoIcon,
   ArrowDownIcon,
   ArrowUpIcon,
+  CaretUp,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
@@ -73,7 +75,7 @@ export default function NewCustomerList() {
   ];
 
   const contractChoices = [
-    { value: '', label: 'Any' },
+    { value: 'any', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
   ];
@@ -118,14 +120,32 @@ export default function NewCustomerList() {
     </MultiValue>
   );
 
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
   const getSelectComponents = (key) => {
     if (key === 'user') {
       return {
         Option: IconOption,
         MultiValue: IconSingleOption,
+        DropdownIndicator,
       };
     }
-    return '';
+    return DropdownIndicator;
   };
 
   const customerList = useCallback(
@@ -198,7 +218,16 @@ export default function NewCustomerList() {
   };
 
   const handleFilters = (event, key, type, action) => {
-    if (type === 'status') {
+    if (key === 'unselected') {
+      $('.uncheck-all').on('click', () => {
+        $('.checkboxes input:checkbox').prop('checked', false);
+      });
+      setFilters({
+        ...filters,
+        status: [],
+      });
+    }
+    if (type === 'status' && key !== 'unselected') {
       if (
         event.target.checked &&
         filters.status.indexOf(event.target.name) === -1
@@ -246,7 +275,7 @@ export default function NewCustomerList() {
       if (event.target.checked) {
         setFilters({
           ...filters,
-          contract_type: event.target.value,
+          contract_type: event.target.value === 'any' ? [] : event.target.value,
         });
       }
     }
@@ -363,16 +392,22 @@ export default function NewCustomerList() {
                     <div className="label">Brand Strategist</div>
                     <DropDownSelect>{generateDropdown('user')}</DropDownSelect>
                     <div className="label mt-4">Status</div>
-                    <div className="unselected ">Unselect all</div>
+                    <div
+                      className="unselected uncheck-all"
+                      onClick={(event) =>
+                        handleFilters(event, 'unselected', 'status')
+                      }
+                      role="presentation">
+                      Unselect all
+                    </div>
                     <div className="clear-fix" />
                     {!isDesktop ? (
-                      <ul className="check-box-list">
+                      <ul className="check-box-list checkboxes">
                         {status &&
                           status.map((item) => (
-                            <li key={item.value} id="myCheckbox">
+                            <li key={item.value}>
                               <CheckBox>
                                 <label
-                                  id="myCheckbox"
                                   className="check-container customer-pannel"
                                   htmlFor={item.value}>
                                   {item.label}
@@ -382,6 +417,13 @@ export default function NewCustomerList() {
                                     name={item.value}
                                     onChange={(event) =>
                                       handleFilters(event, item, 'status')
+                                    }
+                                    defaultChecked={
+                                      filters.status
+                                        ? filters.status.find(
+                                            (op) => op === item.value,
+                                          )
+                                        : ''
                                     }
                                   />
                                   <span className="checkmark" />
@@ -482,21 +524,18 @@ export default function NewCustomerList() {
         </DropDownSelect>{' '}
         <div className="label mt-4">Status</div>
         <div
-          className="unselected"
-          onClick={(event) =>
-            handleFilters(event, ['active', 'at risk'], 'status')
-          }
+          className="unselected uncheck-all"
+          onClick={(event) => handleFilters(event, 'unselected', 'status')}
           role="presentation">
           Unselect all
         </div>
         <div className="clear-fix" />
-        <ul className="check-box-list">
+        <ul className="check-box-list checkboxes">
           {status &&
             status.map((item) => (
-              <li key={item.value} id="myCheckbox">
+              <li key={item.value}>
                 <CheckBox>
                   <label
-                    id="myCheckbox"
                     className="check-container customer-pannel"
                     htmlFor={item.value}>
                     {item.label}
