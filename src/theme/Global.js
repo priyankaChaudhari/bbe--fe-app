@@ -537,6 +537,7 @@ export const WhiteCard = styled.div`
         vertical-align: middle;
         width: 17px;
         margin-left: 4px;
+        width: 21px;
         margin-bottom:2px;
       }
     }
