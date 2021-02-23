@@ -877,14 +877,32 @@ export default function AgreementSidePanel({
                 ? item.name.includes('Amazon Store Package')
                 : item.service.name.includes('Amazon Store Package'),
             );
+          // console.log('in amazon checked', itemInOriginalData);
 
           if (itemInOriginalData) {
             additionalOnetimeServices.create.push(itemInOriginalData);
+
             const list = additionalOnetimeServices.delete.filter(
               (item) => item !== itemInOriginalData.id,
             );
+
             additionalOnetimeServices.delete = list;
           }
+          setFormData({
+            ...formData,
+            additional_one_time_services: additionalOnetimeServices.create,
+          });
+
+          setUpdatedFormData({
+            ...updatedFormData,
+            additional_one_time_services: {
+              ...additionalOnetimeServices,
+            },
+          });
+
+          setAdditionalOnetimeServices({
+            ...additionalOnetimeServices,
+          });
         } else {
           const itemInList =
             additionalOnetimeServices &&
@@ -902,16 +920,27 @@ export default function AgreementSidePanel({
               additionalOnetimeServices.create.length &&
               additionalOnetimeServices.create.filter((item) =>
                 item.name
-                  ? item.name !== itemInList.name
-                    ? itemInList.name
-                    : itemInList.service.name
-                  : item.service.name !== itemInList.name
-                  ? itemInList.name
-                  : itemInList.service.name,
+                  ? item.name !==
+                    (itemInList.name
+                      ? itemInList.name
+                      : itemInList.service.name)
+                  : item.service.name !==
+                    (itemInList.name
+                      ? itemInList.name
+                      : itemInList.service.name),
               );
-
+            // console.log(removedEle);
             additionalOnetimeServices.create = removedEle;
-            additionalOnetimeServices.delete.push(itemInList.id);
+
+            if (itemInList.id) {
+              additionalOnetimeServices.delete.push(itemInList.id);
+            }
+
+            setFormData({
+              ...formData,
+              additional_one_time_services: additionalOnetimeServices.create,
+            });
+            // additionalOnetimeServices.delete.push(itemInList.id);
           }
           setUpdatedFormData({
             ...updatedFormData,
@@ -990,6 +1019,7 @@ export default function AgreementSidePanel({
           // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
           if (itemInFormData) {
             additionalOnetimeServices.create.push(itemInFormData);
+
             const list = formData.additional_one_time_services;
             list.push(itemInFormData);
             setFormData({
@@ -1001,6 +1031,7 @@ export default function AgreementSidePanel({
               ...updatedFormData,
               additional_one_time_services: additionalOnetimeServices,
             });
+            // console.log('original data found', additionalOnetimeServices);
           }
           // else we create dict as BE required for new item and we push that in newly created list
           else {
@@ -1009,13 +1040,26 @@ export default function AgreementSidePanel({
             //   additionalOnetimeServices.create
             // ) {
 
-            additionalOnetimeServices.create.push({
-              name: event.target.name,
-              service_id: val.value,
-              contract_id: originalData && originalData.id,
-              quantity: 1,
-            });
-            // }
+            if (
+              additionalOnetimeServices &&
+              additionalOnetimeServices.create &&
+              additionalOnetimeServices.create.length &&
+              additionalOnetimeServices.create.find((item) =>
+                item.service_id
+                  ? item.service_id === val.value
+                  : item.service && item.service.id === val.value,
+              )
+            ) {
+              //
+            } else {
+              additionalOnetimeServices.create.push({
+                name: event.target.name,
+                service_id: val.value,
+                contract_id: originalData && originalData.id,
+                quantity: 1,
+              });
+            }
+
             let list = formData.additional_one_time_services;
             if (!list) {
               list = [];
@@ -1026,14 +1070,17 @@ export default function AgreementSidePanel({
               contract_id: originalData && originalData.id,
               quantity: 1,
             });
+
             setFormData({
               ...formData,
               additional_one_time_services: list,
             });
+
             setUpdatedFormData({
               ...updatedFormData,
               additional_one_time_services: additionalOnetimeServices,
             });
+            // console.log('new ele', additionalOnetimeServices);
           }
 
           // here we fnally update state variable
@@ -1055,6 +1102,7 @@ export default function AgreementSidePanel({
         setAdditionalOnetimeServices({
           ...additionalOnetimeServices,
         });
+
         fetchUncommonOptions(
           oneTimeService,
           additionalOnetimeServices.create,
@@ -1099,6 +1147,7 @@ export default function AgreementSidePanel({
           ...additionalOnetimeServices,
         });
       }
+
       fetchUncommonOptions(
         oneTimeService,
         additionalOnetimeServices.create,
@@ -1165,6 +1214,8 @@ export default function AgreementSidePanel({
       }
     }
   };
+
+  // console.log(additionalOnetimeServices, formData, updatedFormData);
 
   const mapSelectValues = (item) => {
     const multi = [];

@@ -132,6 +132,11 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
+  const [calculatedDate, setCalculatedDate] = useState('');
+  const [firstMonthDate, setFirstMonthDate] = useState('');
+  const [secondMonthDate, setSecondMonthDate] = useState('');
+  const [thirdMonthDate, setThirdMonthDate] = useState('');
+  const [endMonthDate, setEndDate] = useState('');
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -597,7 +602,13 @@ export default function ContractContainer() {
 
     // }
   };
-
+  const clearError = () => {
+    setApiError({});
+    setAdditionalMarketplaceError({});
+    setAdditionalMonthlySerError({});
+    setAdditionalOnetimeSerError({});
+    setContractError({});
+  };
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
@@ -616,6 +627,7 @@ export default function ContractContainer() {
       showFooter(false);
       setShowEditor(false);
       setNewAddendum(originalAddendumData);
+      clearError();
       dispatch(getAccountDetails(id));
 
       // if (history.location.pathname.includes('addendum')) {
@@ -627,6 +639,8 @@ export default function ContractContainer() {
   };
 
   const mapDefaultValues = (key, label, type) => {
+    // console.log(key, label, type, details && details[key]);
+
     if (key === 'contract_company_name') {
       return details && details[key]
         ? details && details[key]
@@ -656,10 +670,13 @@ export default function ContractContainer() {
           : ''
       }`;
     }
-    return key === 'rev_share' || key === 'seller_type'
-      ? details && details[key] && details[key].label
-      : details && details[key];
+    const result =
+      key === 'rev_share' || key === 'seller_type'
+        ? details && details[key] && details[key].label
+        : details && details[key];
 
+    // console.log(result);
+    return result;
     // return details && details[key];
   };
 
@@ -983,38 +1000,66 @@ export default function ContractContainer() {
     return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
-  //   const mapDspDetails = () => {
-  //     return `<tr>
-  //         <td style="border: 1px solid black;
-  //     padding: 13px;">
-  //           ${details && dayjs(details.start_date).format('MM-DD-YYYY')}
-  //         </td>
-  //         <td
-  //           style="border: 1px solid black;
-  //     padding: 13px;">
-  //      DSP_FEE
-  //         </td>
-  //       </tr>`;
-  //   };
+  const mapDspDetails = () => {
+    return `<tr>
+        <td style="border: 1px solid black;
+    padding: 13px;">
+          ${calculatedDate}
+        </td>
+        <td
+          style="border: 1px solid black;
+    padding: 13px;">
+     DSP_FEE
+        </td>
+      </tr>`;
+  };
 
-  //   const mapBudgetBreakdownTable = () => {
-  //     return `<tr>
-  //         <td style="border: 1px solid black;
-  //     padding: 13px;">  DSP_FEE
-  // </td>
-  //         <td
-  //           style="border: 1px solid black;
-  //     padding: 13px;">
-  //                DSP_FEE
+  const displayFirstMonthFee = () => {
+    if (firstMonthDate && new Date(firstMonthDate).getDay() !== 1) {
+      if (formData && formData.dsp_fee) {
+        const fee = parseInt(formData && formData.dsp_fee, 10);
+        const FinalFee = fee + fee / 2;
+        return `$ ${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      }
+    }
+    return formData && formData.dsp_fee;
+  };
 
-  //         </td><td
-  //           style="border: 1px solid black;
-  //     padding: 13px;">
-  //               DSP_FEE
+  const mapBudgetBreakdownTable = () => {
+    return `
+    
+    
+    <table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
+      new Date(firstMonthDate).getDay() !== 1 ? '-' : ''
+    } ${
+      new Date(firstMonthDate).getDay() !== 1
+        ? dayjs(endMonthDate).format('MMM D, YYYY')
+        : ''
+    } </th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(secondMonthDate).format(
+      'MMMM YYYY',
+    )}</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
+    <tr>
+        <td style="border: 1px solid black;
+    padding: 13px;"> $${displayFirstMonthFee()}</td>
+        <td
+          style="border: 1px solid black;
+    padding: 13px;">
+               DSP_FEE
 
-  //         </td>
-  //       </tr>`;
-  //   };
+        </td><td
+          style="border: 1px solid black;
+    padding: 13px;">
+              DSP_FEE
+
+        </td>
+      </tr>
+      
+      </table>`;
+  };
 
   const onEditcontract = () => {
     const dataToUpdate = {
@@ -1032,27 +1077,24 @@ export default function ContractContainer() {
   };
   const createAgreementDoc = () => {
     const agreementData = getAgreementAccorType(0);
-    if (agreementData) {
-      agreementData
-        .replace(
-          'CUSTOMER_NAME',
-          mapDefaultValues('contract_company_name', 'Customer Name'),
-        )
-        .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
-        .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-        .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-        .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-        .replace(
-          'CUSTOMER_POSTAL',
-          mapDefaultValues('zip_code', 'Postal Code, '),
-        )
-        .replace(
-          'AGREEMENT_LENGTH',
-          mapDefaultValues('length', 'Contract Length'),
-        )
-        .replace(
-          'ONE_TIME_SERVICE_TABLE',
-          `<table class="contact-list " style="width: 100%;
+    // if (agreementData) {
+    agreementData
+      .replace(
+        'CUSTOMER_NAME',
+        mapDefaultValues('contract_company_name', 'Customer Name'),
+      )
+      .replaceAll('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+      .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
+      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+      .replace(
+        'AGREEMENT_LENGTH',
+        mapDefaultValues('length', 'Contract Length'),
+      )
+      .replace(
+        'ONE_TIME_SERVICE_TABLE',
+        `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;"><th style="text-align: left; border: 1px solid black;
@@ -1071,17 +1113,20 @@ export default function ContractContainer() {
     )}
                               </td></tr>
                                 </table>`,
-        )
-        .replace(
-          'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-          `${mapServiceTotal('additional_one_time_services')}`,
-        );
-    }
+      )
+      .replace(
+        'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+        `${mapServiceTotal('additional_one_time_services')}`,
+      );
+    // }
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',
       mapDefaultValues('contract_company_name', 'Customer Name'),
     )
-      .replace('AGREEMENT_DATE', mapDefaultValues('start_date', 'Start Date'))
+      .replaceAll(
+        'AGREEMENT_DATE',
+        mapDefaultValues('start_date', 'Start Date'),
+      )
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
       .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
       .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
@@ -1096,7 +1141,7 @@ export default function ContractContainer() {
           'CUSTOMER_NAME',
           mapDefaultValues('contract_company_name', 'Customer Name'),
         )
-        .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+        .replaceAll('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace(
           'MONTHLY_RETAINER_AMOUNT',
           mapDefaultValues(
@@ -1135,36 +1180,32 @@ export default function ContractContainer() {
                                   `,
         );
 
-    // const dspAddendum =
-    //   showSection && showSection.dspAddendum
-    //     ? data.dsp_addendum &&
-    //       data.dsp_addendum[0]
-    //         .replace(
-    //           'CUSTOMER_NAME',
-    //           mapDefaultValues('contract_company_name', 'Customer Name'),
-    //         )
+    const dspAddendum =
+      showSection && showSection.dspAddendum
+        ? data.dsp_addendum &&
+          data.dsp_addendum[0]
+            .replace(
+              'CUSTOMER_NAME',
+              mapDefaultValues('contract_company_name', 'Customer Name'),
+            )
 
-    //         .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
-    //         .replace(
-    //           'DSP_DETAIL_TABLE',
-    //           `<table class="contact-list " style="width: 100%;
-    // border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    // padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
-    // padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
-    //         )
-    //         .replace(
-    //           'BUDGET_BREAKDOWN_TABLE',
-    //           `<table class="contact-list " style="width: 100%;
-    // border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    // padding: 13px;">Jan 16, 2021 - Feb 28, 2021</th><th style="text-align: left; border: 1px solid black;
-    // padding: 13px;">March 2021</th><th style="text-align: left; border: 1px solid black;
-    // padding: 13px;">April 2021</th></tr>${mapBudgetBreakdownTable()}</table>`,
-    //         )
-    //         .replaceAll(
-    //           'DSP_FEE',
-    //           mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
-    //         )
-    //     : '';
+            .replaceAll(
+              'START_DATE',
+              mapDefaultValues('start_date', 'Start Date'),
+            )
+            .replace(
+              'DSP_DETAIL_TABLE',
+              `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+            )
+            .replace('BUDGET_BREAKDOWN_TABLE', `${mapBudgetBreakdownTable()}`)
+            .replaceAll(
+              'DSP_FEE',
+              mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+            )
+        : '';
 
     const addendumData =
       data.addendum &&
@@ -1173,7 +1214,7 @@ export default function ContractContainer() {
           'CUSTOMER_NAME',
           mapDefaultValues('contract_company_name', 'Customer Name'),
         )
-        .replace(
+        .replaceAll(
           'AGREEMENT_DATE',
           mapDefaultValues('start_date', 'Start Date'),
         );
@@ -1190,7 +1231,7 @@ export default function ContractContainer() {
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
 
-    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
+    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${dspAddendum} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
   };
 
@@ -1257,7 +1298,7 @@ export default function ContractContainer() {
             <div className="on-boarding-container">
               <div className="row">
                 <div className="col-12">
-                  <p className="m-0 sticky">
+                  <div className="m-0 sticky">
                     {' '}
                     <div
                       onClick={() => onClickOfBackToCustomerDetail()}
@@ -1281,7 +1322,7 @@ export default function ContractContainer() {
                         ''
                       )}
                     </div>
-                  </p>
+                  </div>
                   <ContractTab className="d-lg-none d-block">
                     <ul className="tabs">
                       <li>Edit Fields</li>
@@ -1323,8 +1364,17 @@ export default function ContractContainer() {
                   <div id="dspAddendum">
                     <DSPAddendum
                       formData={formData}
-                      details={details}
                       templateData={data}
+                      calculatedDate={calculatedDate}
+                      setCalculatedDate={setCalculatedDate}
+                      firstMonthDate={firstMonthDate}
+                      setFirstMonthDate={setFirstMonthDate}
+                      secondMonthDate={secondMonthDate}
+                      setSecondMonthDate={setSecondMonthDate}
+                      thirdMonthDate={thirdMonthDate}
+                      setThirdMonthDate={setThirdMonthDate}
+                      endMonthDate={endMonthDate}
+                      setEndDate={setEndDate}
                     />
                   </div>
                 ) : (

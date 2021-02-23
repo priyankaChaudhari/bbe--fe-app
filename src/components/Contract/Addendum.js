@@ -194,7 +194,7 @@ Addendum.defaultProps = {
   newAddendumData: {},
   setNewAddendum: () => {},
   setShowEditor: () => {},
-  showEditor: () => {},
+  showEditor: false,
   setUpdatedFormData: () => {},
   updatedFormData: {},
 };
@@ -209,14 +209,14 @@ Addendum.propTypes = {
     }),
   }),
   templateData: PropTypes.shape({
-    addendum: PropTypes.string,
+    addendum: PropTypes.arrayOf(PropTypes.string),
   }),
   newAddendumData: PropTypes.shape({
     addendum: PropTypes.string,
     id: PropTypes.string,
   }),
   setNewAddendum: PropTypes.func,
-  showEditor: PropTypes.func,
+  showEditor: PropTypes.bool,
   setShowEditor: PropTypes.func,
   setUpdatedFormData: PropTypes.func,
   updatedFormData: PropTypes.shape({
