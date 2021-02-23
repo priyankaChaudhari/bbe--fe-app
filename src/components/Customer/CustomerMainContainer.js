@@ -19,9 +19,9 @@ import {
   CloseIcon,
   CompanyDefaultUser,
   LeftArrowIcon,
-  ExpandArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
+  ExpandArrowIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import { ModalBox, PageLoader, GetInitialName } from '../../common';
@@ -278,7 +278,14 @@ export default function CustomerMainContainer() {
                       }}
                       role="presentation">
                       {customer && customer.status && customer.status.label}{' '}
-                      <img src={ExpandArrowIcon} alt="aarow-down" />{' '}
+                      <img
+                        src={ExpandArrowIcon}
+                        alt="caret"
+                        style={{
+                          transform: showDropDown ? 'rotate(180deg)' : '',
+                          width: '25px',
+                        }}
+                      />
                       <ul
                         id="clickbox"
                         className="dropdown-content-status"

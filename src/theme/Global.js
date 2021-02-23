@@ -958,11 +958,9 @@ export const WhiteCard = styled.div`
    }
   }
 
-    @media only screen and (max-width: 440px) {        
+    @media only screen and (max-width: 460px) {        
        .company-status {
-          display: -webkit-inline-box;
-          margin-left: 0px;
-          margin-top: 10px;
+          white-space: nowrap;
        }
     }
 

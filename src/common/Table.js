@@ -21,7 +21,7 @@ const Table = styled.table`
         color: ${Theme.gray40};
         text-transform: uppercase;
         font-size: 11px;
-        border-bottom: 1px solid ${Theme.gray5};
+        border-bottom: 1px solid ${Theme.gray7};
         padding: 10px;
 
         &.customer-header {
