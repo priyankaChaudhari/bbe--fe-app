@@ -113,7 +113,6 @@ function RequestSignature({
   };
 
   const removeContact = (index) => {
-    // setShowSuccessContact({ show: false, message: '' });
     if (index && index.includes('CT')) {
       setIsLoading({ loader: true, type: 'button' });
 
@@ -121,13 +120,11 @@ function RequestSignature({
         setIsLoading({ loader: false, type: 'button' });
 
         dispatch(getContactDetails(id));
-        // setShowSuccessContact({ show: true, message: 'Contact Removed.' });
       });
     } else {
       const list = [...contactDetails];
       list.splice(index, 1);
       setContactDetails(list);
-      // setShowSuccessContact({ show: true, message: 'Contact Removed.' });
     }
   };
 
@@ -546,7 +543,11 @@ function RequestSignature({
             <Button
               className=" btn-primary on-boarding w-100"
               onClick={() => sendRequestApproval()}>
-              Request Approval
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Request Approval'
+              )}
             </Button>
           </div>
         </>
