@@ -58,6 +58,7 @@ const FormField = styled.div`
     font-family: ${Theme.baseFontFamily};
     font-size:  ${Theme.normal};
     font-weight: 600;
+    resize: vertical;
 
      &::placeholder {
       color: ${Theme.gray30};

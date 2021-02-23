@@ -221,6 +221,7 @@ h4 {
 
   &.on-boarding {
     color: $black-color;
+    letter-spacing: 1.21px;
   }
 }
 
@@ -613,10 +614,10 @@ a {
   cursor: pointer !important;
 }
 
-.btn.disabled,
-.btn:disabled {
+button.disabled,
+button:disabled {
   opacity: 0.45;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
   color: $white-color;
   background-color: $gray-25;
   border-color: $gray-25;
@@ -662,7 +663,7 @@ a {
   padding: 0 !important;
 
   .cross-icon {
-    width: 35px;
+    width: 32px;
     padding: 12px 14px 0 0;
   }
 

@@ -6,6 +6,17 @@ const Button = styled.button`
   padding: 11px 10px;
   font-family: ${Theme.titleFontFamily};
   font-size: ${Theme.normal};
+  pointer-events: all;
+
+  // &:disabled {
+  //   &.btn-primary {
+  //     &.btn-disabled {
+  //       pointer-events: none;
+  //       cursor: not-allowed;
+  //       background: green;
+  //     }
+  //   }
+  // }
 
   &.btn-primary {
     background-color: ${Theme.baseColor};
@@ -23,7 +34,7 @@ const Button = styled.button`
       border: none;
       background-color: ${Theme.secondaryColor};
     }
-    &.disabled {
+    &.btn-disabled {
       background-color: ${Theme.gray25};
       color: ${Theme.white};
       border: ${Theme.gray25};

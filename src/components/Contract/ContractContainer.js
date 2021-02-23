@@ -1478,7 +1478,7 @@ export default function ContractContainer() {
         <div className="mt-4 pt-5">
           <Footer className=" mt-5 ">
             <Button
-              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-3 on-boarding"
+              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
               onClick={() => onEditcontract()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -1544,7 +1544,7 @@ export default function ContractContainer() {
           <Footer>
             {checkApprovalCondition() ? (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-3  "
+                className="btn-primary on-boarding mt-3 mr-3  "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('request-approve');
