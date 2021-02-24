@@ -918,9 +918,23 @@ fieldset {
   margin-top: -2px;
 
   &.dropdown-avartName {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     padding-top: 5px;
+    font-size: 12px;
+
+    span {
+      line-height: 0;
+      /* float: left; */
+      /* display: flex; */
+      /* line-height: 3; */
+      padding-left: 10px;
+      /* margin-top: 38px; */
+      /* top: 4px; */
+      /* padding-top: 47px; */
+      min-height: 0;
+      /* top: 61px; */
+    }
   }
 
   &.team-avatarName {

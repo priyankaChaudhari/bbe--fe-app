@@ -16,6 +16,101 @@ const DropDownSelect = styled.div`
 
   &.w-250 {
     width: 250px;
+
+    .css-1rhbuit-multiValue {
+      background-color: #ffffff;
+      border: 1px solid #8798ad;
+      border-radius: 20px;
+      max-width: 185px;
+    }
+
+    .css-2b097c-container {
+      background-color: ${Theme.gray15};
+
+      .react-select__control--is--focused {
+        padding: 0 !important;
+      }
+      .css-yk16xz-control {
+        padding: 0 !important;
+
+        .css-g1d714-ValueContainer {
+          padding: 0;
+        }
+
+        .css-1wa3eu0-placeholder {
+          padding: 1px 10px 1px 10px;
+        }
+        .css-tlfecz-indicatorContainer {
+          padding: 2px 10px 2px 2px;
+        }
+      }
+
+      .css-1pahdxg-control {
+        background-color: ${Theme.gray15};
+        .css-g1d714-ValueContainer {
+          padding: 0;
+        }
+        .css-1wa3eu0-placeholder {
+          padding: 1px 10px 1px 10px;
+        }
+        .css-1gtu0rj-indicatorContainer {
+          padding: 2px 10px 2px 2px;
+        }
+
+        &:focus {
+          padding: 0;
+        }
+        .react-select__control--is--focused {
+          padding: 0 !important;
+        }
+
+        &.react-select__control--is--focused {
+          padding: 0 !important;
+        }
+        &.react-select__control--menu-is-open {
+          padding: 0 !important;
+        }
+        &.react-select__control {
+          padding: 0 !important;
+        }
+      }
+
+      .css-1uccc91-singleValue {
+        padding: 0 !important;
+      }
+      .css-1wa3eu0-placeholder {
+        padding: 1px 10px 1px 10px;
+      }
+
+      .react-select__menu {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
+      }
+    }
+    .css-12jo7m5 {
+      color: #000000;
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 5px 3px 3px 3px;
+      white-space: nowrap;
+      box-sizing: border-box;
+
+      span {
+        line-height: 0 !important;
+        vertical-align: middle;
+        color: #000000;
+        font-size: 15px;
+      }
+    }
+    .css-xb97g8 {
+      padding-right: 8px;
+      &:hover {
+        background: none;
+        cursor: pointer;
+      }
+    }
   }
 
   .css-2b097c-container {
