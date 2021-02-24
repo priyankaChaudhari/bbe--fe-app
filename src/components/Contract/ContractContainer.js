@@ -1061,26 +1061,36 @@ export default function ContractContainer() {
   };
 
   const displayFirstMonthFee = () => {
-    if (firstMonthDate && new Date(firstMonthDate).getDay() !== 1) {
+    if (firstMonthDate && new Date(firstMonthDate).getDate() !== 1) {
       if (formData && formData.dsp_fee) {
         const fee = parseInt(formData && formData.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
-        return `$ ${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
     }
-    return formData && formData.dsp_fee;
+    // return (
+    if (formData && formData.dsp_fee) {
+      return `$${
+        formData &&
+        formData.dsp_fee &&
+        formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      }`;
+    }
+    return 'Enter Dsp Fee ';
+
+    // );
   };
 
   const mapBudgetBreakdownTable = () => {
     return `
     
     
-    <table class="contact-list " style="width: 100%;
+    <div class="table-responsive">  <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
-      new Date(firstMonthDate).getDay() !== 1 ? '-' : ''
+      new Date(firstMonthDate).getDate() !== 1 ? '-' : ''
     } ${
-      new Date(firstMonthDate).getDay() !== 1
+      new Date(firstMonthDate).getDate() !== 1
         ? dayjs(endMonthDate).format('MMM D, YYYY')
         : ''
     } </th><th style="text-align: left; border: 1px solid black;
@@ -1090,7 +1100,7 @@ export default function ContractContainer() {
     padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
     <tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> $${displayFirstMonthFee()}</td>
+    padding: 13px;"> ${displayFirstMonthFee()}</td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
@@ -1104,7 +1114,7 @@ export default function ContractContainer() {
         </td>
       </tr>
       
-      </table>`;
+      </table></div>`;
   };
 
   const onEditcontract = () => {
@@ -1250,6 +1260,18 @@ export default function ContractContainer() {
               mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
             )
         : '';
+    const dspAddendumSignature =
+      showSection && showSection.dspAddendum
+        ? AddendumSign.replace(
+            'CUSTOMER_NAME',
+            mapDefaultValues('contract_company_name', 'Customer Name'),
+          )
+            .replace(
+              'BBE_DATE',
+              mapDefaultValues('current_date', 'Current Date'),
+            )
+            .replace('THAD_SIGN', mapThadSignImg())
+        : '';
 
     const addendumData =
       data.addendum &&
@@ -1275,7 +1297,7 @@ export default function ContractContainer() {
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
 
-    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${dspAddendum} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
+    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${dspAddendum} ${dspAddendumSignature} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
   };
 
