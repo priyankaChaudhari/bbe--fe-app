@@ -7,8 +7,6 @@
 /* eslint no-unused-expressions: "error" */
 
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import queryString from 'query-string';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import PropTypes from 'prop-types';
@@ -41,7 +39,7 @@ import {
 } from '../constants/FieldConstants';
 import {
   getLength,
-  updateAccountDetails,
+  // updateAccountDetails,
   getRevenueShare,
   getMarketplaces,
   getMonthlyService,
@@ -62,6 +60,7 @@ export default function AgreementSidePanel({
   loader,
   newAddendumData,
   onEditAddendum,
+  showEditor,
   setShowEditor,
   setNewAddendum,
   setNotIncludedOneTimeServices,
@@ -91,8 +90,8 @@ export default function AgreementSidePanel({
   setAdditionalOnetimeSerError,
   contractError,
   setContractError,
+  setOriginalAddendumData,
 }) {
-  const history = useHistory();
   const [openCollapse, setOpenCollapse] = useState({
     agreement: false,
     statement: false,
@@ -116,40 +115,6 @@ export default function AgreementSidePanel({
   const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
-
-  // const getMonthlyServiceOptions = (services) => {
-  //   if (
-  //     agreementData &&
-  //     agreementData.additional_monthly_services &&
-  //     agreementData.additional_monthly_services.length
-  //   ) {
-  //     if (services && services.length) {
-  //       const result = [];
-  //       for (const option of services) {
-  //         let isFound = true;
-  //         for (const service of agreementData.additional_monthly_services) {
-  //           if (service.service.id !== option.value) {
-  //             isFound = false;
-  //           } else {
-  //             isFound = true;
-  //             break;
-  //           }
-  //         }
-  //         if (isFound === false) {
-  //           result.push(option);
-  //         }
-  //       }
-
-  //       setMonthlyService(result);
-  //       if (setNotIncludedMonthlyServices) {
-  //         setNotIncludedMonthlyServices(result);
-  //       }
-  //       if (sendNotIncludedMonthlyServToAdd) {
-  //         sendNotIncludedMonthlyServToAdd(result);
-  //       }
-  //     }
-  //   }
-  // };
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
     let result = [];
@@ -260,10 +225,18 @@ export default function AgreementSidePanel({
   }, []);
 
   useEffect(() => {
-    if (openCollapse.agreement) executeScroll('agreement');
-    if (openCollapse.statement) executeScroll('statement');
-    if (openCollapse.dspAddendum) executeScroll('dspAddendum');
-    if (openCollapse.addendum) executeScroll('addendum');
+    if (openCollapse.agreement) {
+      executeScroll('agreement');
+    }
+    if (openCollapse.statement) {
+      executeScroll('statement');
+    }
+    if (openCollapse.dspAddendum) {
+      executeScroll('dspAddendum');
+    }
+    if (openCollapse.addendum) {
+      executeScroll('addendum');
+    }
 
     const serviceData =
       agreementData &&
@@ -1387,46 +1360,57 @@ export default function AgreementSidePanel({
           customer_id: id,
           addendum: newAddendumData && newAddendumData.addendum,
           contract: agreementData.id,
-          steps_completed: { agreement: true, statement: true, addendum: true },
+          // steps_completed: { agreement: true, statement: true, addendum: true },
         };
-        setIsLoading({ loader: true, type: 'page' });
+        setIsLoading({ loader: true, type: 'button' });
 
         createAddendum(addendumData).then((res) => {
-          setIsLoading({ loader: false, type: 'page' });
-          setNewAddendum(res && res.data);
-        });
-
-        const data = {
-          steps_completed: {
-            ...agreementData.steps_completed,
-            agreement: true,
-            statement: true,
-            addendum: true,
-          },
-        };
-        setIsLoading({ loader: true, type: 'page' });
-
-        updateAccountDetails(agreementData.id, data).then((response) => {
-          setIsLoading({ loader: false, type: 'page' });
-
-          if (response && response.status === 200) {
+          setIsLoading({ loader: false, type: 'button' });
+          if (res && res.status === 201) {
+            setNewAddendum(res && res.data);
             setOpenCollapse({
-              agreement: false,
+              ...openCollapse,
               statement: false,
-              addendum: false,
+              dspAddendum: false,
+              addendum: true,
             });
+            executeScroll('addendum');
             setShowEditor(false);
-            // setEditContractFlag(false);
+            setOriginalAddendumData(res && res.data);
           }
         });
 
-        const stringified = queryString.stringify({
-          step: 'select-contact',
-        });
-        history.push({
-          pathname: `${history.location.pathname}`,
-          search: stringified,
-        });
+        // const data = {
+        //   steps_completed: {
+        //     ...agreementData.steps_completed,
+        //     agreement: true,
+        //     statement: true,
+        //     addendum: true,
+        //   },
+        // };
+        // setIsLoading({ loader: true, type: 'page' });
+
+        // updateAccountDetails(agreementData.id, data).then((response) => {
+        //   setIsLoading({ loader: false, type: 'page' });
+
+        //   if (response && response.status === 200) {
+        //     setOpenCollapse({
+        //       agreement: false,
+        //       statement: false,
+        //       addendum: false,
+        //     });
+        //     setShowEditor(false);
+        //     // setEditContractFlag(false);
+        //   }
+        // });
+
+        // const stringified = queryString.stringify({
+        //   step: 'select-contact',
+        // });
+        // history.push({
+        //   pathname: `${history.location.pathname}`,
+        //   search: stringified,
+        // });
       }
     }
   };
@@ -2359,8 +2343,10 @@ export default function AgreementSidePanel({
                         />
                         Edit Addendum
                       </Button>
-                    ) : newAddendumData &&
-                      !Object.keys(newAddendumData).length ? (
+                    ) : !showEditor &&
+                      !(
+                        newAddendumData && Object.keys(newAddendumData).length
+                      ) ? (
                       <Button
                         className=" sidepanel on-boarding mt-3 mb-3 w-100"
                         onClick={() => setShowEditor(true)}>
@@ -2374,14 +2360,23 @@ export default function AgreementSidePanel({
                               !Object.keys(newAddendumData).length) ||
                             (newAddendumData &&
                               newAddendumData.addendum &&
-                              newAddendumData.addendum.includes('<p></p>'))
+                              newAddendumData.addendum.startsWith('<p></p>'))
                               ? ' btn-gray sidepanel on-boarding mt-3 mb-3 w-100 disabled'
                               : 'btn-primary sidepanel on-boarding mt-3 mb-3 w-100  '
                           }
                           onClick={() => nextStep('final')}>
-                          Save Addendum
+                          {isLoading.loader && isLoading.type === 'button' ? (
+                            <PageLoader color="#fff" type="button" />
+                          ) : (
+                            'Save Addendum'
+                          )}
                         </Button>
-                        <Button className="btn-transparent sidepanel on-boarding mt-3 mb-3 w-100">
+                        <Button
+                          className="btn-transparent sidepanel on-boarding mt-3 mb-3 w-100"
+                          onClick={() => {
+                            setShowEditor(false);
+                            setNewAddendum({});
+                          }}>
                           Cancel
                         </Button>
                       </>
@@ -2508,7 +2503,6 @@ export default function AgreementSidePanel({
     </SidePanel>
   );
 }
-
 AgreementSidePanel.defaultProps = {
   setFormData: () => {},
   formData: {},
@@ -2547,6 +2541,8 @@ AgreementSidePanel.defaultProps = {
   setAdditionalOnetimeSerError: () => {},
   contractError: {},
   setContractError: () => {},
+  setOriginalAddendumData: () => {},
+  showEditor: false,
 };
 
 AgreementSidePanel.propTypes = {
@@ -2644,6 +2640,8 @@ AgreementSidePanel.propTypes = {
   setAdditionalOnetimeSerError: PropTypes.func,
   contractError: PropTypes.shape(PropTypes.object),
   setContractError: PropTypes.func,
+  setOriginalAddendumData: PropTypes.func,
+  showEditor: PropTypes.bool,
 };
 
 const SidePanel = styled.div`

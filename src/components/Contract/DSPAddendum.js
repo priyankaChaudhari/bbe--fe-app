@@ -100,10 +100,14 @@ export default function DSPAddendum({
       if (formData && formData.dsp_fee) {
         const fee = parseInt(formData && formData.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
-        return `$ ${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
     }
-    return formData && formData.dsp_fee;
+    return (
+      formData &&
+      formData.dsp_fee &&
+      formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    );
   };
 
   const mapBudgetBreakdownTable = () => {

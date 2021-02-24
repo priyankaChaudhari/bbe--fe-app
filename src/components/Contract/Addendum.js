@@ -22,9 +22,10 @@ export default function Addendum({
   newAddendumData,
   setNewAddendum,
   showEditor,
-  setShowEditor,
+  // setShowEditor,
   setUpdatedFormData,
   updatedFormData,
+  // showFooter,
 }) {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -33,11 +34,11 @@ export default function Addendum({
   const [contentState, setContentState] = useState(null);
 
   useEffect(() => {
-    if (newAddendumData) {
-      setShowEditor(false);
-    } else {
-      setShowEditor(true);
-    }
+    // if (newAddendumData) {
+    //   setShowEditor(false);
+    // } else {
+    //   setShowEditor(true);
+    // }
 
     if (editorState === null) {
       let contentBlock;
@@ -56,7 +57,14 @@ export default function Addendum({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
+  useEffect(() => {
+    if (!Object.keys(newAddendumData).length) {
+      setEditorState(EditorState.createEmpty());
+    }
+  }, [newAddendumData]);
+
   const onEditorStateChange = (editorData) => {
+    // showFooter(true);
     setEditorState(editorData);
     const content = editorData.getCurrentContent();
     const info = draftToHtml(convertToRaw(content));
@@ -149,9 +157,8 @@ export default function Addendum({
                 ),
           }}
         />
-        {newAddendumData && newAddendumData.id && !showEditor
-          ? ''
-          : displayEditor()}
+        {showEditor ? displayEditor() : ''}
+
         {showEditor ? (
           ''
         ) : (
@@ -193,7 +200,7 @@ Addendum.defaultProps = {
   templateData: {},
   newAddendumData: {},
   setNewAddendum: () => {},
-  setShowEditor: () => {},
+  // setShowEditor: () => {},
   showEditor: false,
   setUpdatedFormData: () => {},
   updatedFormData: {},
@@ -217,7 +224,7 @@ Addendum.propTypes = {
   }),
   setNewAddendum: PropTypes.func,
   showEditor: PropTypes.bool,
-  setShowEditor: PropTypes.func,
+  // setShowEditor: PropTypes.func,
   setUpdatedFormData: PropTypes.func,
   updatedFormData: PropTypes.shape({
     additional_services: PropTypes.arrayOf(PropTypes.array),
