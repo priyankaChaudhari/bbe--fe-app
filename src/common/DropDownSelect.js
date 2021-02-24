@@ -27,18 +27,16 @@ const DropDownSelect = styled.div`
     .css-2b097c-container {
       background-color: ${Theme.gray15};
 
-      .react-select__control--is--focused {
-        padding: 0 !important;
-      }
       .css-yk16xz-control {
         padding: 0 !important;
+        min-height: 40px;
 
         .css-g1d714-ValueContainer {
           padding: 0;
         }
 
         .css-1wa3eu0-placeholder {
-          padding: 1px 10px 1px 10px;
+          padding: 0px 0px 1px 15px;
         }
         .css-tlfecz-indicatorContainer {
           padding: 2px 10px 2px 2px;
@@ -46,12 +44,13 @@ const DropDownSelect = styled.div`
       }
 
       .css-1pahdxg-control {
+        min-height: 40px;
         background-color: ${Theme.gray15};
         .css-g1d714-ValueContainer {
           padding: 0;
         }
         .css-1wa3eu0-placeholder {
-          padding: 1px 10px 1px 10px;
+          padding: 0px 0px 1px 15px;
         }
         .css-1gtu0rj-indicatorContainer {
           padding: 2px 10px 2px 2px;
@@ -75,12 +74,12 @@ const DropDownSelect = styled.div`
         }
       }
 
-      .css-1uccc91-singleValue {
-        padding: 0 !important;
-      }
-      .css-1wa3eu0-placeholder {
-        padding: 1px 10px 1px 10px;
-      }
+      // .css-1uccc91-singleValue {
+      //   padding: 0 !important;
+      // }
+      // .css-1wa3eu0-placeholder {
+      //   padding: 1px 10px 1px 10px;
+      // }
 
       .react-select__menu {
         background-color: #ffffff;
