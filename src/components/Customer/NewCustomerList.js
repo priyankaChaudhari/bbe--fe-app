@@ -110,13 +110,15 @@ export default function NewCustomerList() {
           className="drop-down-user"
           src={props.data.icon}
           alt="user"
-          style={{ borderRadius: 50, width: '32px', marginBottom: '-11px' }}
+          style={{ borderRadius: 50, width: '32px', marginBottom: '' }}
         />
       ) : (
         <GetInitialName userInfo={props.data.label} type="list" property="" />
       )}{' '}
       &nbsp;
-      <span style={{ lineHeight: 4 }}>{props.data.label}</span>
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+      </span>
     </MultiValue>
   );
 
@@ -861,7 +863,7 @@ const CustomerListPage = styled.div`
     margin: 10px 0;
     &.w-80 {
       float: right;
-      width: 93%;
+      width: 94%;
     }
   }
 
