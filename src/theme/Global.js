@@ -408,17 +408,21 @@ export const BodyWhite = styled.div`
 export const WhiteCard = styled.div`
   background-color:${Theme.white};
   border-radius: 15px;
-  padding:  15px 20px ;
+  padding:   20px ;
   position: relative;
 
 
-  .black-heading-title {
-    font-size: $text-f-size;
-    color: $black-color;
-    font-family: $base-font-family;
-    font-weight: 600;
-  }
+  // .black-heading-title {
+  //   font-size: $text-f-size;
+  //   color: $black-color;
+  //   font-family: $base-font-family;
+  //   line-height: 20px;
+  //   font-weight: 600;
+  // }
 
+  // .company-description {
+  //   line-height: 26px;
+  // }
  &.fix-height {
     flex-wrap: wrap;
     flex: initial;
@@ -469,10 +473,11 @@ export const WhiteCard = styled.div`
         font-size: ${Theme.extraNormal};
         color: ${Theme.gray85};
         cursor: pointer;
-        top: 10px;
+        top: 22px;
         img {
-          width: 15px;
+          width: 12px;
           margin-right: 4px;
+          top: 10px;
         }
       }
     }
@@ -591,7 +596,7 @@ export const WhiteCard = styled.div`
     right: 23px;
     font-size: ${Theme.extraNormal};
     color ${Theme.gray85};
-    top: 28px;
+    top: 22px;
     cursor:pointer;
 
     &.edit-brand-details {

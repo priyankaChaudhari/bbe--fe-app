@@ -74,6 +74,9 @@ export default function CompanyDetail({
           <div className="row">
             <div className="col-10">
               <span className="black-heading-title ">Company Description</span>
+              <br />
+              <br />
+
               <span className="normal-text">
                 {' '}
                 <ReadMoreAndLess
