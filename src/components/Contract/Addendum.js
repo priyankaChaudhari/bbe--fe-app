@@ -124,7 +124,7 @@ export default function Addendum({
               'inline',
               'blockType',
               'fontSize',
-              'fontFamily',
+              // 'fontFamily',
               'list',
               'textAlign',
               'colorPicker',
@@ -132,6 +132,9 @@ export default function Addendum({
               'remove',
               'history',
             ],
+            fontFamily: {
+              className: 'bordered-option-classname',
+            },
           }}
         />
       </EditorToll>

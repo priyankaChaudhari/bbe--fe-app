@@ -33,7 +33,6 @@ import {
   // PdfDownload,
 } from '../theme/images/index';
 import { Button, ContractFormField } from './index';
-// console.log("###")
 import {
   AgreementDetails,
   StatementDetails,
@@ -139,11 +138,12 @@ export default function AgreementSidePanel({
         }
 
         if (isFound === false) {
-          if (type === 'monthly_service') {
-            result.push(option);
-          } else if (!option.label.includes('Amazon Store Package')) {
-            result.push(option);
-          }
+          result.push(option);
+          // if (type === 'monthly_service') {
+          //   result.push(option);
+          // } else if (!option.label.includes('Amazon Store Package')) {
+          //   result.push(option);
+          // }
         }
       }
     } else {
@@ -1351,6 +1351,48 @@ export default function AgreementSidePanel({
     // }
   };
 
+  const showRightTick = (section) => {
+    if (section === 'service_agreement') {
+      if (
+        formData &&
+        formData.contract_company_name &&
+        formData.start_date &&
+        formData.length &&
+        formData.address &&
+        formData.state &&
+        formData.city &&
+        formData.zip_code
+      ) {
+        return true;
+      }
+    }
+
+    if (section === 'statement') {
+      if (
+        formData &&
+        formData.monthly_retainer &&
+        formData.primary_marketplace &&
+        formData.rev_share &&
+        formData.sales_threshold
+      ) {
+        return true;
+      }
+    }
+
+    if (section === 'dspAddendum') {
+      if (
+        formData &&
+        formData.start_date &&
+        formData.primary_marketplace &&
+        formData.dsp_fee
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const nextStep = (key) => {
     if (key === 'statement') {
       setOpenCollapse({ agreement: false, statement: true });
@@ -1591,7 +1633,6 @@ export default function AgreementSidePanel({
       );
     }
 
-    // console.log(newAddendumData, 'newAddendumData');
     return (
       <>
         <ErrorMsg>
@@ -1673,8 +1714,7 @@ export default function AgreementSidePanel({
                   {agreementData && agreementData.contract_type === 'one time'
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
-                  {agreementData.steps_completed &&
-                  agreementData.steps_completed.agreement ? (
+                  {showRightTick('service_agreement') ? (
                     <img
                       className="green-check-select"
                       src={GreenCheck}
@@ -1713,7 +1753,7 @@ export default function AgreementSidePanel({
                                 <label htmlFor={subFields.key}>
                                   {generateHTML(subFields)}
                                 </label>
-                                {displayError(item)}
+                                {displayError(subFields)}
                               </React.Fragment>
                             ))}
                           </ContractFormField>
@@ -1748,8 +1788,7 @@ export default function AgreementSidePanel({
                 <img className="service-agre" src={StatementWork} alt="pdf" />
                 <h4 className="sendar-details ">
                   Statement of Work{' '}
-                  {agreementData.steps_completed &&
-                  agreementData.steps_completed.statement ? (
+                  {showRightTick('statement') ? (
                     <img
                       className="green-check-select "
                       src={GreenCheck}
@@ -2292,7 +2331,18 @@ export default function AgreementSidePanel({
                       });
                     }}>
                     <img className="service-agre" src={Advertise} alt="pdf" />
-                    <h4 className="sendar-details ">DSP Advertising</h4>
+                    <h4 className="sendar-details ">
+                      DSP Advertising
+                      {showRightTick('dspAddendum') ? (
+                        <img
+                          className="green-check-select "
+                          src={GreenCheck}
+                          alt="right-check"
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </h4>
                     <div className="clear-fix" />
                   </div>
                   {/* </div>

@@ -61,6 +61,9 @@ export default function DSPAddendum({
   }, [formData]);
 
   const mapDefaultValues = (key, label, type) => {
+    if (formData[key] === undefined || formData[key] === '') {
+      return `Enter ${label}`;
+    }
     if (key === 'start_date') {
       return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }
@@ -68,15 +71,15 @@ export default function DSPAddendum({
       return dayjs(new Date()).format('MM-DD-YYYY');
     }
     if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'}${
+      return `
+      
+      ${type === 'number-currency' ? '$' : '%'}${
         formData && formData[key]
           ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `Enter ${label}.`
       }`;
     }
-    if (formData[key] === undefined || formData[key] === '') {
-      return `Enter ${label}`;
-    }
+
     // return details && details[key];
     return formData[key];
   };
@@ -103,11 +106,17 @@ export default function DSPAddendum({
         return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
     }
-    return (
-      formData &&
-      formData.dsp_fee &&
-      formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    );
+    // return (
+    if (formData && formData.dsp_fee) {
+      return `$${
+        formData &&
+        formData.dsp_fee &&
+        formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      }`;
+    }
+    return 'Enter Dsp Fee ';
+
+    // );
   };
 
   const mapBudgetBreakdownTable = () => {
@@ -129,7 +138,7 @@ export default function DSPAddendum({
     padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
     <tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> $${displayFirstMonthFee()}</td>
+    padding: 13px;"> ${displayFirstMonthFee()}</td>
         <td
           style="border: 1px solid black;
     padding: 13px;">

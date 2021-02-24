@@ -72,6 +72,16 @@ body {
 
 .DraftEditor-editorContainer {
   padding: 0 10px;
+  font-family: $contact-regular-font-family !important;
+  font-weight: 500 !important;
+
+  p span {
+    font-weight: 500 !important;
+  }
+}
+.bordered-option-classname {
+  font-family: $contact-regular-font-family !important;
+  font-weight: 500 !important;
 }
 
 .page-is-loading {

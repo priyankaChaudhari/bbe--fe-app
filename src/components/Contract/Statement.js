@@ -382,12 +382,9 @@ export default function Statement({
 
   const showOneTimeServiceTable = () => {
     if (
-      (details &&
-        details.additional_one_time_services &&
-        details.additional_one_time_services.length) ||
-      (formData &&
-        formData.additional_one_time_services &&
-        formData.additional_one_time_services.length)
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
     font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br> <div class="table-responsive"><table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
