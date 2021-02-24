@@ -57,7 +57,7 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
 </td>
             <td></td>
             <td>Address:</td>
-            <td style="font-weight: 700;">CUSTOMER_ADDRESS, CUSTOMER_CITY, CUSTOMER_STATE, CUSTOMER_POSTAL</td>
+            <td style="font-weight: 700;">CUSTOMER_ADDRESS</td>
         </tr>
     </table>`;
 
