@@ -140,11 +140,19 @@ export default function ContractContainer() {
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
+    // if (eleId !== 'addendum') {
     const y =
       element &&
       element.getBoundingClientRect() &&
       element.getBoundingClientRect().top + window.pageYOffset + -150;
     window.scrollTo({ top: y });
+    // } else {
+    //   const y =
+    //     element &&
+    //     element.getBoundingClientRect() &&
+    //     element.getBoundingClientRect().top + window.pageYOffset + -150;
+    //   window.scrollTo({ top: y });
+    // }
     // window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
@@ -1389,6 +1397,7 @@ export default function ContractContainer() {
                       newAddendumData={newAddendumData}
                       setNewAddendum={setNewAddendum}
                       showEditor={showEditor}
+                      showFooter={showFooter}
                       setShowEditor={setShowEditor}
                       onEditAddendum={onEditAddendum}
                       setUpdatedFormData={setUpdatedFormData}
@@ -1442,6 +1451,7 @@ export default function ContractContainer() {
         setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
         showFooter={showFooter}
         newAddendumData={newAddendumData}
+        setNewAddendum={setNewAddendum}
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         onEditAddendum={onEditAddendum}
@@ -1470,6 +1480,7 @@ export default function ContractContainer() {
         setAdditionalOnetimeSerError={setAdditionalOnetimeSerError}
         contractError={contractError}
         setContractError={setContractError}
+        setOriginalAddendumData={setOriginalAddendumData}
       />
       {/* )} */}
       {details &&
@@ -1503,7 +1514,12 @@ export default function ContractContainer() {
             )} */}
           </Footer>
         </div>
-      ) : isFooter || (newAddendumData && newAddendumData.id && showEditor) ? (
+      ) : isFooter ||
+        (newAddendumData &&
+          newAddendumData.id &&
+          showEditor &&
+          updatedFormData &&
+          updatedFormData.addendum) ? (
         <div className="mt-4 pt-5">
           <Footer className=" mt-5">
             <Button
