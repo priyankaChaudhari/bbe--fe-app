@@ -46,10 +46,13 @@ const Table = styled.table`
         margin-right: 14px;
         float: left;
       }
+      .company-name {
+        min-height: 20px;
+      }
 
       .status {
-        color: #171725;
-        font-size: 14px;
+        color: ${Theme.gray85};
+        font-size: ${Theme.extraNormal};
         font-weight: 300;
       }
       .user-profile-circle {
@@ -64,8 +67,8 @@ const Table = styled.table`
         margin-top: 7px;
       }
       .increase-rate {
-        color: #407b00;
-        font-size: 14px;
+        color: ${Theme.lighterGreen};
+        font-size: ${Theme.extraNormal};
         font-weight: 300;
         img {
           vertical-align: bottom;

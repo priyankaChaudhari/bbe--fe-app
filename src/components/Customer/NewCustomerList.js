@@ -861,7 +861,7 @@ const CustomerListPage = styled.div`
     margin: 10px 0;
     &.w-80 {
       float: right;
-      width: 92%;
+      width: 93%;
     }
   }
 
