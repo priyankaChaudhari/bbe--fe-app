@@ -439,7 +439,7 @@ const MainHeader = styled.div`
   padding-top: 13px;
   position: fixed;
   width: 100%;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   .logo {
     img {
