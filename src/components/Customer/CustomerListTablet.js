@@ -332,7 +332,7 @@ const CustomerListTabletView = styled.div`
     font-weight: 600;
   }
   .increase-rate {
-    color: #407b00;
+    color: ${Theme.lighterGreen};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
     img {

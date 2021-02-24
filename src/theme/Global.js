@@ -804,7 +804,7 @@ export const WhiteCard = styled.div`
         font-size: ${Theme.extraMedium};
       }
       .perentage-value {
-        color:#407B00 ;
+        color: ${Theme.lighterGreen};
         font-size:15px;
         margin-top:13px;
 
