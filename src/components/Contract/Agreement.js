@@ -34,21 +34,13 @@ export default function Agreement({ formData, details, templateData }) {
     //       return 'Enter Location';
     //     }
 
-    if (
-      formData[key] === undefined ||
-      formData[key] === '' ||
-      formData[key] === null
-    ) {
-      return key === 'contract_company_name' ? `Client Name` : `Enter ${label}`;
-    }
-
     if (key === 'contract_company_name') {
       return formData && formData[key]
         ? formData && formData[key]
         : `Client Name`;
     }
     if (key === 'length') {
-      return formData && formData.length.label
+      return formData && formData.length && formData.length.label
         ? formData.length.label
         : formData.length;
     }
@@ -57,6 +49,36 @@ export default function Agreement({ formData, details, templateData }) {
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM-DD-YYYY');
+    }
+    if (key === 'address') {
+      if (
+        formData &&
+        formData.address === '' &&
+        formData &&
+        formData.state === '' &&
+        formData &&
+        formData.city === '' &&
+        formData &&
+        formData.zip_code === ''
+      ) {
+        return `Enter Location`;
+      }
+      return `${formData && formData.address}${
+        formData && formData.address ? ',' : ''
+      }
+      ${formData && formData.state}${formData && formData.state ? ',' : ''}
+      ${formData && formData.city}${formData && formData.city ? ',' : ''}
+      ${formData && formData.zip_code}${
+        formData && formData.zip_code ? ',' : ''
+      }
+      `;
+    }
+    if (
+      formData[key] === undefined ||
+      formData[key] === '' ||
+      formData[key] === null
+    ) {
+      return key === 'contract_company_name' ? `Client Name` : `Enter ${label}`;
     }
     return formData[key];
   };
@@ -187,12 +209,12 @@ export default function Agreement({ formData, details, templateData }) {
                 'CUSTOMER_ADDRESS',
                 mapDefaultValues('address', 'Address'),
               )
-              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
-              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
-              .replace(
-                'CUSTOMER_POSTAL',
-                mapDefaultValues('zip_code', 'Postal Code'),
-              )
+              // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+              // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
+              // .replace(
+              //   'CUSTOMER_POSTAL',
+              //   mapDefaultValues('zip_code', 'Postal Code'),
+              // )
               .replace(
                 'AGREEMENT_LENGTH',
                 mapDefaultValues('length', 'Contract Length'),
@@ -304,6 +326,10 @@ Agreement.propTypes = {
   formData: PropTypes.shape({
     length: PropTypes.string,
     sales_threshold: PropTypes.string,
+    address: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+    zip_code: PropTypes.string,
   }),
   templateData: PropTypes.shape({
     addendum: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
