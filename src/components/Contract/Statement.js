@@ -17,6 +17,12 @@ export default function Statement({
   notIncludedMonthlyServices,
 }) {
   const mapDefaultValues = (key, label, type) => {
+    if (key === 'contract_company_name') {
+      return formData && formData[key]
+        ? formData && formData[key]
+        : `Client Name`;
+    }
+
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
     }

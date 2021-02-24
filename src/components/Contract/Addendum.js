@@ -17,7 +17,8 @@ import Theme from '../../theme/Theme';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 export default function Addendum({
-  details,
+  // details,
+  formData,
   templateData,
   newAddendumData,
   setNewAddendum,
@@ -73,39 +74,44 @@ export default function Addendum({
     setUpdatedFormData({ ...updatedFormData, addendum: info });
   };
 
-  const mapDefaultValues = (key, label, type) => {
+  const mapDefaultValues = (key) => {
+    // if (key === 'contract_company_name') {
+    //   return details && details[key]
+    //     ? details && details[key]
+    //     : `Enter ${label}.`;
+    // }
     if (key === 'contract_company_name') {
-      return details && details[key]
-        ? details && details[key]
-        : `Enter ${label}.`;
+      return formData && formData[key]
+        ? formData && formData[key]
+        : `Client Name`;
     }
-    if (key === 'length') {
-      return details && details.length.label;
-    }
-    if (key === 'primary_marketplace') {
-      return (
-        details &&
-        details.primary_marketplace &&
-        details.primary_marketplace.name
-      );
-    }
+    // if (key === 'length') {
+    //   return details && details.length.label;
+    // }
+    // if (key === 'primary_marketplace') {
+    //   return (
+    //     details &&
+    //     details.primary_marketplace &&
+    //     details.primary_marketplace.name
+    //   );
+    // }
     if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM-DD-YYYY');
+      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM-DD-YYYY');
     }
-
-    if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'} ${
-        details && details[key]
-          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : ''
-      }`;
-    }
-    return key === 'rev_share' || key === 'seller_type'
-      ? details && details[key] && details[key].label
-      : details && details[key];
+    return formData && formData[key];
+    // if (type && type.includes('number')) {
+    //   return `${type === 'number-currency' ? '$' : '%'} ${
+    //     details && details[key]
+    //       ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    //       : ''
+    //   }`;
+    // }
+    // return key === 'rev_share' || key === 'seller_type'
+    //   ? details && details[key] && details[key].label
+    //  details && details[key];
   };
 
   const displayEditor = () => {
@@ -124,7 +130,7 @@ export default function Addendum({
               'inline',
               'blockType',
               'fontSize',
-              // 'fontFamily',
+              'fontFamily',
               'list',
               'textAlign',
               'colorPicker',
@@ -133,7 +139,16 @@ export default function Addendum({
               'history',
             ],
             fontFamily: {
-              className: 'bordered-option-classname',
+              options: [
+                'Arial',
+                'Georgia',
+                'Impact',
+                'Tahoma',
+                'Times New Roman',
+                'Verdana',
+                'Open Sans',
+                'Helvetica-Regular',
+              ],
             },
           }}
         />
@@ -152,12 +167,9 @@ export default function Addendum({
               templateData.addendum[0]
                 .replace(
                   'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                  mapDefaultValues('contract_company_name'),
                 )
-                .replace(
-                  'AGREEMENT_DATE',
-                  mapDefaultValues('start_date', 'Start Date'),
-                ),
+                .replace('AGREEMENT_DATE', mapDefaultValues('start_date')),
           }}
         />
         {showEditor ? displayEditor() : ''}
@@ -181,16 +193,10 @@ export default function Addendum({
               templateData.addendum[1]
                 .replace(
                   'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                  mapDefaultValues('contract_company_name'),
                 )
-                .replace(
-                  'AGREEMENT_DATE',
-                  mapDefaultValues('start_date', 'Start Date'),
-                )
-                .replace(
-                  'BBE_DATE',
-                  mapDefaultValues('current_date', 'Current Date'),
-                ),
+                .replace('AGREEMENT_DATE', mapDefaultValues('start_date'))
+                .replace('BBE_DATE', mapDefaultValues('current_date')),
           }}
         />
       </Paragraph>
@@ -199,7 +205,7 @@ export default function Addendum({
 }
 
 Addendum.defaultProps = {
-  details: {},
+  formData: {},
   templateData: {},
   newAddendumData: {},
   setNewAddendum: () => {},
@@ -210,7 +216,7 @@ Addendum.defaultProps = {
 };
 
 Addendum.propTypes = {
-  details: PropTypes.shape({
+  formData: PropTypes.shape({
     length: PropTypes.string,
     primary_marketplace: PropTypes.shape({
       fee: PropTypes.number,

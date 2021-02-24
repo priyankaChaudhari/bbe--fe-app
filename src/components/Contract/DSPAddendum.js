@@ -64,9 +64,15 @@ export default function DSPAddendum({
     if (key === 'current_date') {
       return dayjs(new Date()).format('MM-DD-YYYY');
     }
+    if (key === 'contract_company_name') {
+      return formData && formData[key]
+        ? formData && formData[key]
+        : `Client Name`;
+    }
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
     }
+
     if (key === 'start_date') {
       return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }

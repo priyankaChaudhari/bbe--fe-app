@@ -665,10 +665,14 @@ export default function ContractContainer() {
     // console.log(key, label, type, details && details[key]);
 
     if (key === 'contract_company_name') {
-      return details && details[key]
-        ? details && details[key]
-        : `Enter ${label}.`;
+      return details && details[key] ? details && details[key] : `Client Name`;
     }
+
+    // if (key === 'contract_company_name') {
+    //   return details && details[key]
+    //     ? details && details[key]
+    //     : `Enter ${label}.`;
+    // }
     if (key === 'length') {
       return details && details.length.label;
     }
@@ -695,25 +699,23 @@ export default function ContractContainer() {
     }
     if (key === 'address') {
       if (
-        formData &&
-        formData.address === '' &&
-        formData &&
-        formData.state === '' &&
-        formData &&
-        formData.city === '' &&
-        formData &&
-        formData.zip_code === ''
+        details &&
+        details.address === '' &&
+        details &&
+        details.state === '' &&
+        details &&
+        details.city === '' &&
+        details &&
+        details.zip_code === ''
       ) {
         return `Enter Location`;
       }
-      return `${formData && formData.address}${
-        formData && formData.address ? ',' : ''
+      return `${details && details.address}${
+        details && details.address ? ',' : ''
       }
-      ${formData && formData.state}${formData && formData.state ? ',' : ''}
-      ${formData && formData.city}${formData && formData.city ? ',' : ''}
-      ${formData && formData.zip_code}${
-        formData && formData.zip_code ? ',' : ''
-      }
+      ${details && details.state}${details && details.state ? ',' : ''}
+      ${details && details.city}${details && details.city ? ',' : ''}
+      ${details && details.zip_code}
       `;
     }
     const result =
@@ -721,6 +723,9 @@ export default function ContractContainer() {
         ? details && details[key] && details[key].label
         : details && details[key];
 
+    if (details[key] === undefined || details[key] === '') {
+      return `Enter ${label}`;
+    }
     // console.log(result);
     return result;
     // return details && details[key];

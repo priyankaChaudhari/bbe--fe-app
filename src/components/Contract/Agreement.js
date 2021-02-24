@@ -68,9 +68,7 @@ export default function Agreement({ formData, details, templateData }) {
       }
       ${formData && formData.state}${formData && formData.state ? ',' : ''}
       ${formData && formData.city}${formData && formData.city ? ',' : ''}
-      ${formData && formData.zip_code}${
-        formData && formData.zip_code ? ',' : ''
-      }
+      ${formData && formData.zip_code}
       `;
     }
     if (
