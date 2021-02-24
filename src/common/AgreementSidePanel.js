@@ -1646,14 +1646,15 @@ export default function AgreementSidePanel({
                   src={ServiceAgreement}
                   alt="pdf"
                 />
-                <h4 className="sendar-details mt-1 ml-5">
+
+                <h4 className="sendar-details ">
                   {agreementData && agreementData.contract_type === 'one time'
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
                   {agreementData.steps_completed &&
                   agreementData.steps_completed.agreement ? (
                     <img
-                      className="green-check-select ml-4"
+                      className="green-check-select"
                       src={GreenCheck}
                       alt="right-check"
                     />
@@ -1723,12 +1724,12 @@ export default function AgreementSidePanel({
                   setOpenCollapse({ statement: !openCollapse.statement });
                 }}>
                 <img className="service-agre" src={StatementWork} alt="pdf" />
-                <h4 className="sendar-details mt-1 ml-5">
+                <h4 className="sendar-details ">
                   Statement of Work{' '}
                   {agreementData.steps_completed &&
                   agreementData.steps_completed.statement ? (
                     <img
-                      className="green-check-select ml-4"
+                      className="green-check-select "
                       src={GreenCheck}
                       alt="right-check"
                     />
@@ -2268,9 +2269,7 @@ export default function AgreementSidePanel({
                       });
                     }}>
                     <img className="service-agre" src={Advertise} alt="pdf" />
-                    <h4 className="sendar-details mt-2 ml-5">
-                      DSP Advertising
-                    </h4>
+                    <h4 className="sendar-details ">DSP Advertising</h4>
                     <div className="clear-fix" />
                   </div>
                   {/* </div>
@@ -2322,7 +2321,7 @@ export default function AgreementSidePanel({
                   setOpenCollapse({ addendum: !openCollapse.addendum });
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
-                <h4 className="sendar-details mt-2 ml-5">Create Addendum </h4>
+                <h4 className="sendar-details ">Create Addendum </h4>
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
@@ -2657,15 +2656,22 @@ const SidePanel = styled.div`
     border-left: 1px solid ${Theme.gray7};
     overflow-y:auto;
 
-.green-check-select {
-  width:16px;
-}
  
+    
   .sendar-details {
     color: ${Theme.black};
     font-size: ${Theme.extraMedium};
     text-transform: capitalize;
+    margin-top: 6px;
+    margin-left: 16px;
+    float: left;
   }
+   .green-check-select {
+     width: 16px;
+     position: absolute;
+     right: 21px;
+     top: 22px;
+   }
 
   .sender-profile {
     border: 1px solid ${Theme.gray9};
@@ -2707,8 +2713,8 @@ const SidePanel = styled.div`
   width:100%;
   padding: 16px;
   cursor:pointer;
+  position: relative;
 
- 
 }
 .collapse-container {
     padding:15px;

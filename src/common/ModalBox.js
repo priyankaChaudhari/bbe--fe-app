@@ -16,6 +16,7 @@ const ModalBox = styled.div`
   .modal-back-arrow {
     margin-top: -2px;
     margin-right: 4px;
+    margin-left: -9px;
     width: 26px;
     vertical-align: middle;
     cursor: pointer;

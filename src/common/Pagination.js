@@ -80,17 +80,37 @@ const PaginationStyled = styled.div`
     }
     .rc-pagination-prev button,
     .rc-pagination-next button {
-      .rc-pagination-next button:after {
-        font-size: 22px !important;
-      }
-    }
+    //   .rc-pagination-next button:after {
+    //     font-size: 22px !important;
+    //   }
+    // }
+    font-size: 18px;
     .rc-pagination-next button:after {
       font-size: 15px !important;
+      color: black;
     }
     .rc-pagination-prev button:after {
       content: '‹';
       display: block;
+      color: black;
       font-size: 15px !important;
     }
+
+    &:hover {
+      border: 1px solid #d9d9d9;
+      color:black;
+    }
   }
+  .rc-pagination-next:focus
+   .rc-pagination-item-link,
+    .rc-pagination-next:hover 
+    .rc-pagination-item-link,
+     .rc-pagination-prev:focus
+      .rc-pagination-item-link, 
+      .rc-pagination-prev:hover 
+      .rc-pagination-item-link {
+         border: 1px solid #d9d9d9;
+         font-size: 18px;
+         color:black;
+      }
 `;
