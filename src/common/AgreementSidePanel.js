@@ -2350,13 +2350,13 @@ export default function AgreementSidePanel({
               <Collapse isOpened={openCollapse.addendum}>
                 <ul className="collapse-inner">
                   <li>
-                    <p className="small-para contract mt-0">
-                      Want to make changes to the contract? Create Addendum to
-                      the contract.
+                    <p className="small-para  mt-0">
+                      [Optional] Document any terms of the contract that are not
+                      covered in the service agreement.
                     </p>
                     {newAddendumData && newAddendumData.id ? (
                       <Button
-                        className=" btn-transparent sidepanel mt-3 mb-3 w-100"
+                        className=" btn-transparent sidepanel mt-1 mb-3 w-100"
                         onClick={() => onEditAddendum()}>
                         <img
                           className="edit-folder-icon mr-2"
@@ -2370,7 +2370,7 @@ export default function AgreementSidePanel({
                         newAddendumData && Object.keys(newAddendumData).length
                       ) ? (
                       <Button
-                        className=" sidepanel on-boarding mt-3 mb-3 w-100"
+                        className=" sidepanel btn-transparent on-boarding mt-1 mb-3 w-100"
                         onClick={() => setShowEditor(true)}>
                         Create Addendum
                       </Button>
@@ -2383,8 +2383,8 @@ export default function AgreementSidePanel({
                             (newAddendumData &&
                               newAddendumData.addendum &&
                               newAddendumData.addendum.startsWith('<p></p>'))
-                              ? ' btn-gray sidepanel on-boarding mt-3 mb-3 w-100 disabled'
-                              : 'btn-primary sidepanel on-boarding mt-3 mb-3 w-100  '
+                              ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
+                              : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
                           }
                           onClick={() => nextStep('final')}>
                           {isLoading.loader && isLoading.type === 'button' ? (
@@ -2394,7 +2394,7 @@ export default function AgreementSidePanel({
                           )}
                         </Button>
                         <Button
-                          className="btn-transparent sidepanel on-boarding mt-3 mb-3 w-100"
+                          className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
                           onClick={() => {
                             setShowEditor(false);
                             setNewAddendum({});
@@ -2772,9 +2772,9 @@ const SidePanel = styled.div`
           
         }
          .small-para {
-          max-width:218px;
-          width:100%;
-          margin:0 auto;
+          font-size: ${Theme.extraNormal};
+          color: ${Theme.gray40};
+          line-height: 22px;
          }
 
         .edit-folder-icon {
