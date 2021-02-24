@@ -596,7 +596,7 @@ const GrayBody = styled.div`
   .graycontainer-fluid {
     width: 98%;
     margin: 0 auto;
-    padding-left: 63px;
+    padding-left: 64px;
   }
   .arrow {
     position: fixed;
