@@ -2420,7 +2420,7 @@ export default function AgreementSidePanel({
                         newAddendumData && Object.keys(newAddendumData).length
                       ) ? (
                       <Button
-                        className=" sidepanel btn-transparent on-boarding mt-1 mb-3 w-100"
+                        className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
                         onClick={() => setShowEditor(true)}>
                         Create Addendum
                       </Button>
