@@ -665,10 +665,14 @@ export default function ContractContainer() {
     // console.log(key, label, type, details && details[key]);
 
     if (key === 'contract_company_name') {
-      return details && details[key]
-        ? details && details[key]
-        : `Enter ${label}.`;
+      return details && details[key] ? details && details[key] : `Client Name`;
     }
+
+    // if (key === 'contract_company_name') {
+    //   return details && details[key]
+    //     ? details && details[key]
+    //     : `Enter ${label}.`;
+    // }
     if (key === 'length') {
       return details && details.length.label;
     }
@@ -686,40 +690,43 @@ export default function ContractContainer() {
       return dayjs(Date()).format('MM-DD-YYYY');
     }
 
-    if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'} ${
-        details && details[key]
-          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : ''
-      }`;
-    }
     if (key === 'address') {
       if (
-        formData &&
-        formData.address === '' &&
-        formData &&
-        formData.state === '' &&
-        formData &&
-        formData.city === '' &&
-        formData &&
-        formData.zip_code === ''
+        details &&
+        details.address === '' &&
+        details &&
+        details.state === '' &&
+        details &&
+        details.city === '' &&
+        details &&
+        details.zip_code === ''
       ) {
         return `Enter Location`;
       }
-      return `${formData && formData.address}${
-        formData && formData.address ? ',' : ''
+      return `${details && details.address}${
+        details && details.address ? ',' : ''
       }
-      ${formData && formData.state}${formData && formData.state ? ',' : ''}
-      ${formData && formData.city}${formData && formData.city ? ',' : ''}
-      ${formData && formData.zip_code}${
-        formData && formData.zip_code ? ',' : ''
-      }
+      ${details && details.state}${details && details.state ? ',' : ''}
+      ${details && details.city}${details && details.city ? ',' : ''}
+      ${details && details.zip_code}
       `;
     }
     const result =
       key === 'rev_share' || key === 'seller_type'
         ? details && details[key] && details[key].label
         : details && details[key];
+
+    if (details[key] === undefined || details[key] === '') {
+      return `Enter ${label}`;
+    }
+
+    if (type && type.includes('number')) {
+      return `${type === 'number-currency' ? '$' : '%'}${
+        details && details[key]
+          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : ''
+      }`;
+    }
 
     // console.log(result);
     return result;
@@ -762,24 +769,7 @@ export default function ContractContainer() {
     padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
   };
 
-  // <img style="width:120px; margin-top: -5px;" src="/static/media/Digital-Sig.633ece57.png" alt="sig"/>
-  // <p style="margin:0" class="long-text">
-  //       <span style="font-weight: 300;font-family: Helvetica-Regular;">
-  //         <img
-  //           style="width:120px; margin-top: -5px;"
-  //           src = '/static/media/Digital-Sig.633ece57.png'
-  //           alt="sig"
-  //         />
-  //       </span>
-  //     </p>`
   const mapThadSignImg = () => {
-    // const signImg = `
-    // <p style="margin:0" class="long-text">
-    //     <span style="font-weight: 300;font-family: Helvetica-Regular;">
-    //      <img src='./thad_sig.png' alt='thad-sig'><br>
-    //     </span>
-    //   </p>`;
-    // return signImg;
     return THAD_SIGN_IMG;
   };
 
@@ -801,7 +791,7 @@ export default function ContractContainer() {
                 <td style="border: 1px solid black;padding: 13px;">${
                   item.service ? item.service.name : item && item.name
                 }</td>
-                <td style="border: 1px solid black;padding: 13px;">$ ${
+                <td style="border: 1px solid black;padding: 13px;">$${
                   item.service
                     ? item.service.fee
                         .toString()
@@ -828,7 +818,7 @@ export default function ContractContainer() {
             <td style="border: 1px solid black;padding: 13px;">${
               item.service ? item.service.name : item && item.name
             }</td>
-            <td style="border: 1px solid black;padding: 13px;">$ ${
+            <td style="border: 1px solid black;padding: 13px;">$${
               item.service &&
               item.service.fee &&
               item.service.name !== 'Amazon Store Package Custom'
@@ -842,7 +832,7 @@ export default function ContractContainer() {
                 : ''
             } /month
             </td>
-            <td style="border: 1px solid black;padding: 13px;">$ ${(item.service
+            <td style="border: 1px solid black;padding: 13px;">$${(item.service
               .name !== 'Amazon Store Package Custom'
               ? item.quantity * item.service.fee
               : item.quantity * item.custom_amazon_store_price
@@ -871,7 +861,7 @@ export default function ContractContainer() {
       <td style="border: 1px solid black;padding: 13px;">${
         item.service ? item.service.name : item && item.name
       }</td>
-                    <td style="border: 1px solid black;padding: 13px;">$ ${
+                    <td style="border: 1px solid black;padding: 13px;">$${
                       item.service
                         ? item.service.fee
                             .toString()
@@ -933,7 +923,7 @@ export default function ContractContainer() {
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
-      return `$ ${
+      return `$${
         details && details.total_fee.onetime_service
           ? details.total_fee.onetime_service
               .toString()
@@ -947,7 +937,7 @@ export default function ContractContainer() {
     const month = details.total_fee.monthly_service
       ? details.total_fee.monthly_service
       : 0;
-    return `$ ${(market + month)
+    return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };

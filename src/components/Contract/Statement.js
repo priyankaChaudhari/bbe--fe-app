@@ -17,6 +17,12 @@ export default function Statement({
   notIncludedMonthlyServices,
 }) {
   const mapDefaultValues = (key, label, type) => {
+    if (key === 'contract_company_name') {
+      return formData && formData[key]
+        ? formData && formData[key]
+        : `Client Name`;
+    }
+
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
     }
@@ -228,7 +234,7 @@ export default function Statement({
       ? details.total_fee.monthly_service
       : 0;
 
-    return `$ ${(market + month)
+    return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
