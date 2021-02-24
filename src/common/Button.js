@@ -75,6 +75,13 @@ const Button = styled.button`
       margin-right: 5px;
     }
 
+    &.on-boarding {
+      padding: 9px 15px;
+      min-height: 40px;
+      border: 2px solid ${Theme.gray35};
+      font-size: 14px;
+    }
+
     &:focus {
       outline: none;
     }
