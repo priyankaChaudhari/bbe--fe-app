@@ -234,7 +234,7 @@ export default function Statement({
       ? details.total_fee.monthly_service
       : 0;
 
-    return `$ ${(market + month)
+    return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };

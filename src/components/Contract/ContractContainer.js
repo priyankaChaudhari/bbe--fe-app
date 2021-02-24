@@ -690,13 +690,6 @@ export default function ContractContainer() {
       return dayjs(Date()).format('MM-DD-YYYY');
     }
 
-    if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'} ${
-        details && details[key]
-          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : ''
-      }`;
-    }
     if (key === 'address') {
       if (
         details &&
@@ -726,6 +719,15 @@ export default function ContractContainer() {
     if (details[key] === undefined || details[key] === '') {
       return `Enter ${label}`;
     }
+
+    if (type && type.includes('number')) {
+      return `${type === 'number-currency' ? '$' : '%'}${
+        details && details[key]
+          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : ''
+      }`;
+    }
+
     // console.log(result);
     return result;
     // return details && details[key];
@@ -767,24 +769,7 @@ export default function ContractContainer() {
     padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
   };
 
-  // <img style="width:120px; margin-top: -5px;" src="/static/media/Digital-Sig.633ece57.png" alt="sig"/>
-  // <p style="margin:0" class="long-text">
-  //       <span style="font-weight: 300;font-family: Helvetica-Regular;">
-  //         <img
-  //           style="width:120px; margin-top: -5px;"
-  //           src = '/static/media/Digital-Sig.633ece57.png'
-  //           alt="sig"
-  //         />
-  //       </span>
-  //     </p>`
   const mapThadSignImg = () => {
-    // const signImg = `
-    // <p style="margin:0" class="long-text">
-    //     <span style="font-weight: 300;font-family: Helvetica-Regular;">
-    //      <img src='./thad_sig.png' alt='thad-sig'><br>
-    //     </span>
-    //   </p>`;
-    // return signImg;
     return THAD_SIGN_IMG;
   };
 
@@ -806,7 +791,7 @@ export default function ContractContainer() {
                 <td style="border: 1px solid black;padding: 13px;">${
                   item.service ? item.service.name : item && item.name
                 }</td>
-                <td style="border: 1px solid black;padding: 13px;">$ ${
+                <td style="border: 1px solid black;padding: 13px;">$${
                   item.service
                     ? item.service.fee
                         .toString()
@@ -833,7 +818,7 @@ export default function ContractContainer() {
             <td style="border: 1px solid black;padding: 13px;">${
               item.service ? item.service.name : item && item.name
             }</td>
-            <td style="border: 1px solid black;padding: 13px;">$ ${
+            <td style="border: 1px solid black;padding: 13px;">$${
               item.service &&
               item.service.fee &&
               item.service.name !== 'Amazon Store Package Custom'
@@ -847,7 +832,7 @@ export default function ContractContainer() {
                 : ''
             } /month
             </td>
-            <td style="border: 1px solid black;padding: 13px;">$ ${(item.service
+            <td style="border: 1px solid black;padding: 13px;">$${(item.service
               .name !== 'Amazon Store Package Custom'
               ? item.quantity * item.service.fee
               : item.quantity * item.custom_amazon_store_price
@@ -876,7 +861,7 @@ export default function ContractContainer() {
       <td style="border: 1px solid black;padding: 13px;">${
         item.service ? item.service.name : item && item.name
       }</td>
-                    <td style="border: 1px solid black;padding: 13px;">$ ${
+                    <td style="border: 1px solid black;padding: 13px;">$${
                       item.service
                         ? item.service.fee
                             .toString()
@@ -938,7 +923,7 @@ export default function ContractContainer() {
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
-      return `$ ${
+      return `$${
         details && details.total_fee.onetime_service
           ? details.total_fee.onetime_service
               .toString()
@@ -952,7 +937,7 @@ export default function ContractContainer() {
     const month = details.total_fee.monthly_service
       ? details.total_fee.monthly_service
       : 0;
-    return `$ ${(market + month)
+    return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
