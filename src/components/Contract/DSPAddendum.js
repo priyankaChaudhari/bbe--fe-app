@@ -61,15 +61,16 @@ export default function DSPAddendum({
   }, [formData]);
 
   const mapDefaultValues = (key, label, type) => {
+    if (key === 'current_date') {
+      return dayjs(new Date()).format('MM-DD-YYYY');
+    }
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
     }
     if (key === 'start_date') {
       return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }
-    if (key === 'current_date') {
-      return dayjs(new Date()).format('MM-DD-YYYY');
-    }
+
     if (type && type.includes('number')) {
       return `
       
