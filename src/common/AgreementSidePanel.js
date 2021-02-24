@@ -3,7 +3,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint array-callback-return: "error" */
-
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint no-unused-expressions: "error" */
 
 import React, { useState, useEffect } from 'react';
@@ -13,7 +14,7 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 
 import Theme from '../theme/Theme';
 import {
@@ -27,6 +28,7 @@ import {
   MinusIcon,
   PlusIcon,
   Advertise,
+  CaretUp,
   // CompanyDefaultUser,
   // PdfDownload,
 } from '../theme/images/index';
@@ -91,14 +93,16 @@ export default function AgreementSidePanel({
   contractError,
   setContractError,
   setOriginalAddendumData,
+  openCollapse,
+  setOpenCollapse,
 }) {
-  const [openCollapse, setOpenCollapse] = useState({
-    agreement: false,
-    statement: false,
-    addendum: false,
-    dspAddendum: false,
-    amendment: false,
-  });
+  // const [openCollapse, setOpenCollapse] = useState({
+  //   agreement: false,
+  //   statement: false,
+  //   addendum: false,
+  //   dspAddendum: false,
+  //   amendment: false,
+  // });
 
   const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
@@ -223,6 +227,23 @@ export default function AgreementSidePanel({
       setAdditionalMarketplaces(market.data);
     });
   }, []);
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
   useEffect(() => {
     if (openCollapse.agreement) {
@@ -1245,6 +1266,7 @@ export default function AgreementSidePanel({
           handleChange(event, item.key, 'multichoice', value)
         }
         defaultValue={mapSelectValues(item)}
+        components={{ DropdownIndicator }}
         isClearable={false}
       />
     );
@@ -1253,7 +1275,6 @@ export default function AgreementSidePanel({
     return (
       <Select
         classNamePrefix="react-select"
-        // styles={customStyles}
         defaultValue={
           item.key === 'primary_marketplace'
             ? agreementData.primary_marketplace &&
@@ -1267,6 +1288,7 @@ export default function AgreementSidePanel({
         }
         options={getOptions(item.key, 'single')}
         name={item.key}
+        components={{ DropdownIndicator }}
         onChange={(event) => handleChange(event, item.key, 'choice')}
       />
     );
@@ -2148,6 +2170,7 @@ export default function AgreementSidePanel({
                                     defaultValue={setDefaultAmazonPlanValue()}
                                     options={AmazonStoreOptions}
                                     name="amazon_store_plan"
+                                    components={{ DropdownIndicator }}
                                     onChange={(event) => {
                                       handleAmazonPlanChange(event);
                                       handleChange(
@@ -2542,6 +2565,14 @@ AgreementSidePanel.defaultProps = {
   setContractError: () => {},
   setOriginalAddendumData: () => {},
   showEditor: false,
+  openCollapse: PropTypes.shape({
+    agreement: false,
+    statement: false,
+    addendum: false,
+    dspAddendum: false,
+    amendment: false,
+  }),
+  setOpenCollapse: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -2641,6 +2672,14 @@ AgreementSidePanel.propTypes = {
   setContractError: PropTypes.func,
   setOriginalAddendumData: PropTypes.func,
   showEditor: PropTypes.bool,
+  openCollapse: PropTypes.shape({
+    agreement: PropTypes.bool,
+    statement: PropTypes.bool,
+    addendum: PropTypes.bool,
+    dspAddendum: PropTypes.bool,
+    amendment: PropTypes.bool,
+  }),
+  setOpenCollapse: PropTypes.func,
 };
 
 const SidePanel = styled.div`

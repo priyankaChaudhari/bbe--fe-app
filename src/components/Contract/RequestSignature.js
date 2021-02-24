@@ -681,7 +681,10 @@ function RequestSignature({
       {params && params.step === 'add-new-contact' ? (
         <>
           <div className="modal-body on-boarding">
-            <h4 className="on-boarding mb-2">
+            <h4
+              className="on-boarding mb-2"
+              role="presentation"
+              onClick={() => setParams('select-contact')}>
               {' '}
               <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />
               {contactModalName}

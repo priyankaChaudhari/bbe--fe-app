@@ -132,6 +132,13 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
+  const [openCollapse, setOpenCollapse] = useState({
+    agreement: false,
+    statement: false,
+    addendum: false,
+    dspAddendum: false,
+    amendment: false,
+  });
   const [calculatedDate, setCalculatedDate] = useState('');
   const [firstMonthDate, setFirstMonthDate] = useState('');
   const [secondMonthDate, setSecondMonthDate] = useState('');
@@ -636,13 +643,21 @@ export default function ContractContainer() {
       setShowEditor(false);
       setNewAddendum(originalAddendumData);
       clearError();
-      dispatch(getAccountDetails(id));
 
-      // if (history.location.pathname.includes('addendum')) {
-      //   setShowEditor(false);
-      // } else {
-      //   dispatch(getAccountDetails(id));
-      // }
+      if (openCollapse.agreement) {
+        executeScroll('agreement');
+      }
+      if (openCollapse.statement) {
+        executeScroll('statement');
+      }
+      if (openCollapse.dspAddendum) {
+        executeScroll('dspAddendum');
+      }
+      if (openCollapse.addendum) {
+        executeScroll('addendum');
+      }
+
+      dispatch(getAccountDetails(id));
     }
   };
 
@@ -677,6 +692,29 @@ export default function ContractContainer() {
           ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           : ''
       }`;
+    }
+    if (key === 'address') {
+      if (
+        formData &&
+        formData.address === '' &&
+        formData &&
+        formData.state === '' &&
+        formData &&
+        formData.city === '' &&
+        formData &&
+        formData.zip_code === ''
+      ) {
+        return `Enter Location`;
+      }
+      return `${formData && formData.address}${
+        formData && formData.address ? ',' : ''
+      }
+      ${formData && formData.state}${formData && formData.state ? ',' : ''}
+      ${formData && formData.city}${formData && formData.city ? ',' : ''}
+      ${formData && formData.zip_code}${
+        formData && formData.zip_code ? ',' : ''
+      }
+      `;
     }
     const result =
       key === 'rev_share' || key === 'seller_type'
@@ -1091,9 +1129,9 @@ export default function ContractContainer() {
       )
       .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+      // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+      // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+      // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
       .replace(
         'AGREEMENT_LENGTH',
         mapDefaultValues('length', 'Contract Length'),
@@ -1134,9 +1172,9 @@ export default function ContractContainer() {
         mapDefaultValues('start_date', 'Start Date'),
       )
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-      .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-      .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-      .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+      // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+      // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+      // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
 
@@ -1481,6 +1519,8 @@ export default function ContractContainer() {
         contractError={contractError}
         setContractError={setContractError}
         setOriginalAddendumData={setOriginalAddendumData}
+        openCollapse={openCollapse}
+        setOpenCollapse={setOpenCollapse}
       />
       {/* )} */}
       {details &&

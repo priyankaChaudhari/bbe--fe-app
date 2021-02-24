@@ -434,25 +434,21 @@ export const AgreementDetails = [
     sections: [
       {
         key: 'address',
-        // label: 'Address',
         type: 'text',
         placeholder: 'Enter Address',
       },
       {
         key: 'city',
-        // label: 'City',
         type: 'text',
         placeholder: 'Enter State',
       },
       {
         key: 'state',
-        // label: 'State',
         type: 'text',
         placeholder: 'Enter City',
       },
       {
         key: 'zip_code',
-        // label: '  Postcode',
         type: 'number',
         placeholder: 'Enter Postcode',
       },
