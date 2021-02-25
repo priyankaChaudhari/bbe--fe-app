@@ -736,12 +736,12 @@ export default function NewCustomerList() {
                             ) : (
                               <>
                                 {item &&
-                                item.daily_facts &&
-                                item.daily_facts.current &&
-                                item.daily_facts.current[0]
-                                  ? `$ ${item.daily_facts.current[0].unit_sold
+                                item.contract &&
+                                item.contract.monthly_retainer
+                                  ? `$ ${item.contract.monthly_retainer
                                       .toString()
-                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                `
                                   : ''}
                               </>
                             )}
