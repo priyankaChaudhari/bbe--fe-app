@@ -34,8 +34,14 @@ export default function DSPAddendum({
     let lastDate = '';
     const d = new Date(calculateDate);
 
-    if (calculateDate.getDate() > 15 || calculateDate.getDate() === 1) {
+    if (calculateDate.getDate() > 16) {
       startDate = d.setMonth(d.getMonth() + 1, 1);
+      const first = new Date(startDate);
+      setFirstMonthDate(first);
+      lastDate = first;
+      setEndDate(first);
+    } else if (calculateDate.getDate() === 1) {
+      startDate = d.setMonth(d.getMonth(), 1);
       const first = new Date(startDate);
       setFirstMonthDate(first);
       lastDate = first;
@@ -61,31 +67,42 @@ export default function DSPAddendum({
   }, [formData]);
 
   const calculateTotalDays = () => {
-    // console.log(firstMonthDate, endMonthDate, secondMonthDate, thirdMonthDate);
-    // const firstMonthdays = new Date(
-    //   new Date(firstMonthDate).getFullYear(),
-    //   new Date(firstMonthDate).getMonth() + 1,
-    //   16,
-    // ).getDate();
-    // let extraDays = 0;
-    // if (new Date(firstMonthDate).getDate() !== 1) {
-    //   extraDays = new Date(
-    //     new Date(endMonthDate).getFullYear(),
-    //     new Date(endMonthDate).getMonth() + 1,
-    //     0,
-    //   ).getDate();
-    // }
-    // const secondMonthdays = new Date(
-    //   new Date(secondMonthDate).getFullYear(),
-    //   new Date(secondMonthDate).getMonth() + 1,
-    //   0,
-    // ).getDate();
-    // const thirdMonthdays = new Date(
-    //   new Date(thirdMonthDate).getFullYear(),
-    //   new Date(thirdMonthDate).getMonth() + 1,
-    //   0,
-    // ).getDate();
-    // console.log(firstMonthdays, secondMonthdays, thirdMonthdays, extraDays);
+    let firstMonthdays = 0;
+    if (new Date(firstMonthDate).getDate() !== 1) {
+      const totalDays = new Date(
+        new Date(firstMonthDate).getFullYear(),
+        new Date(firstMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+      const currentDate = new Date(firstMonthDate).getDate();
+      firstMonthdays = totalDays - currentDate;
+    } else {
+      firstMonthdays = new Date(
+        new Date(firstMonthDate).getFullYear(),
+        new Date(firstMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+    }
+
+    let extraDays = 0;
+    if (new Date(firstMonthDate).getDate() !== 1) {
+      extraDays = new Date(
+        new Date(endMonthDate).getFullYear(),
+        new Date(endMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+    }
+    const secondMonthdays = new Date(
+      new Date(secondMonthDate).getFullYear(),
+      new Date(secondMonthDate).getMonth() + 1,
+      0,
+    ).getDate();
+    const thirdMonthdays = new Date(
+      new Date(thirdMonthDate).getFullYear(),
+      new Date(thirdMonthDate).getMonth() + 1,
+      0,
+    ).getDate();
+    return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
   const mapDefaultValues = (key, label, type) => {
@@ -243,7 +260,7 @@ export default function DSPAddendum({
                     ),
                   )
                   .replace(
-                    'NO_OF_DAYS_BASED_ON_START_DATE',
+                    'NO_OF_DAYS_BASED_ON_DATE',
                     mapDefaultValues(
                       'calculated_no_of_days',
                       'Calculated Days',
