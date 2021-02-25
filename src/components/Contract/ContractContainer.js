@@ -661,6 +661,45 @@ export default function ContractContainer() {
     }
   };
 
+  const calculateTotalDays = () => {
+    let firstMonthdays = 0;
+    if (new Date(firstMonthDate).getDate() !== 1) {
+      const totalDays = new Date(
+        new Date(firstMonthDate).getFullYear(),
+        new Date(firstMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+      const currentDate = new Date(firstMonthDate).getDate();
+      firstMonthdays = totalDays - currentDate;
+    } else {
+      firstMonthdays = new Date(
+        new Date(firstMonthDate).getFullYear(),
+        new Date(firstMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+    }
+
+    let extraDays = 0;
+    if (new Date(firstMonthDate).getDate() !== 1) {
+      extraDays = new Date(
+        new Date(endMonthDate).getFullYear(),
+        new Date(endMonthDate).getMonth() + 1,
+        0,
+      ).getDate();
+    }
+    const secondMonthdays = new Date(
+      new Date(secondMonthDate).getFullYear(),
+      new Date(secondMonthDate).getMonth() + 1,
+      0,
+    ).getDate();
+    const thirdMonthdays = new Date(
+      new Date(thirdMonthDate).getFullYear(),
+      new Date(thirdMonthDate).getMonth() + 1,
+      0,
+    ).getDate();
+    return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+  };
+
   const mapDefaultValues = (key, label, type) => {
     // console.log(key, label, type, details && details[key]);
 
@@ -673,6 +712,14 @@ export default function ContractContainer() {
     //     ? details && details[key]
     //     : `Enter ${label}.`;
     // }
+    if (key === 'length' && label === 'Initial Period') {
+      return (
+        formData &&
+        formData.length &&
+        formData.length.label &&
+        parseInt(formData.length.label, 10)
+      );
+    }
     if (key === 'length') {
       return details && details.length.label;
     }
@@ -688,6 +735,9 @@ export default function ContractContainer() {
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM-DD-YYYY');
+    }
+    if (key === 'calculated_no_of_days') {
+      return calculateTotalDays();
     }
 
     if (key === 'address') {
@@ -1040,7 +1090,7 @@ export default function ContractContainer() {
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
-          ${calculatedDate}
+          ${dayjs(firstMonthDate).format('MM-DD-YYYY')}
         </td>
         <td
           style="border: 1px solid black;
@@ -1245,6 +1295,18 @@ export default function ContractContainer() {
     padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
             )
             .replace('BUDGET_BREAKDOWN_TABLE', `${mapBudgetBreakdownTable()}`)
+            .replaceAll(
+              'CONTRACT_LENGTH',
+              mapDefaultValues('length', 'Initial Period', 'number-currency'),
+            )
+            .replace(
+              'NO_OF_DAYS_BASED_ON_DATE',
+              mapDefaultValues(
+                'calculated_no_of_days',
+                'Calculated Days',
+                'number-currency',
+              ),
+            )
             .replaceAll(
               'DSP_FEE',
               mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
