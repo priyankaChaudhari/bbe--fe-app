@@ -15,13 +15,14 @@ const DropDownSelect = styled.div`
   }
 
   &.w-250 {
-    width: 250px;
+    width: 259px;
 
     .css-1rhbuit-multiValue {
-      background-color: #ffffff;
+      background-color: ${Theme.white};
       border: 1px solid #8798ad;
       border-radius: 20px;
       max-width: 185px;
+      color: black;
     }
 
     .css-2b097c-container {
@@ -56,6 +57,11 @@ const DropDownSelect = styled.div`
           padding: 2px 10px 2px 2px;
         }
 
+        .css-b8ldur-Input {
+          color: ${Theme.black};
+          font-size: 15px;
+        }
+
         &:focus {
           padding: 0;
         }
@@ -88,7 +94,7 @@ const DropDownSelect = styled.div`
       }
     }
     .css-12jo7m5 {
-      color: #000000;
+      color: ${Theme.black};
       font-size: 15px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -99,7 +105,7 @@ const DropDownSelect = styled.div`
       span {
         line-height: 0 !important;
         vertical-align: middle;
-        color: #000000;
+        color: ${Theme.black};
         font-size: 15px;
       }
     }

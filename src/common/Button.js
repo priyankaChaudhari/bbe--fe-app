@@ -61,12 +61,13 @@ const Button = styled.button`
   &.btn-transparent {
     background-color: ${Theme.white};
     padding: 11px 25px;
-    border: 1px solid ${Theme.gray35};
+    border: 1px solid ${Theme.gray25};
     color: ${Theme.black};
     font-weight: 700;
 
     &.view-contract {
       font-size: ${Theme.extraNormal};
+      border: 1px solid ${Theme.gray35};
     }
 
     .file-contract-icon {
@@ -75,7 +76,7 @@ const Button = styled.button`
       margin-right: 5px;
     }
 
-    &.on-boarding {
+    &.create-addendum {
       padding: 9px 15px;
       min-height: 40px;
       border: 2px solid ${Theme.gray35};
