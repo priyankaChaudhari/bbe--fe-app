@@ -20,12 +20,20 @@ export async function getCustomerList(
   sort,
   filterOptions,
   searchQuery,
+  performance,
 ) {
-  const params = {
+  let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     q: searchQuery,
     'order-by': sort['order-by'],
   };
+
+  if (performance) {
+    params = {
+      ...params,
+      daily_facts: '30days',
+    };
+  }
 
   let statusParams = {};
   if (filterOptions && filterOptions.status && filterOptions.status.length) {
