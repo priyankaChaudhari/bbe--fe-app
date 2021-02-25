@@ -19,9 +19,8 @@ const DropDownSelect = styled.div`
 
     .css-1rhbuit-multiValue {
       background-color: ${Theme.white};
-      border: 1px solid #8798ad;
+      border: 1px solid ${Theme.gray35};
       border-radius: 20px;
-      margin-left: -5px;
       max-width: 185px;
       color: black;
     }
@@ -30,11 +29,11 @@ const DropDownSelect = styled.div`
       background-color: ${Theme.gray15};
 
       .css-yk16xz-control {
-        // padding: 0 !important;
+        padding: 0 !important;
         min-height: 40px;
 
         .css-1hwfws3 {
-          padding-left: 10px !important;
+          padding: 0px !important;
         }
 
         .css-g1d714-ValueContainer {
@@ -42,10 +41,14 @@ const DropDownSelect = styled.div`
         }
 
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 7px;
+          padding: 0px 0px 1px 15px;
         }
         .css-tlfecz-indicatorContainer {
           padding: 2px 7px 2px 0px;
+        }
+
+        .react-select-4-input {
+          color: black !important;
         }
       }
 
@@ -53,10 +56,10 @@ const DropDownSelect = styled.div`
         min-height: 40px;
         background-color: ${Theme.gray15};
         .css-g1d714-ValueContainer {
-          // padding: 0;
+          padding: 0;
         }
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 7px;
+          padding: 0px 0px 1px 15px;
         }
         .css-1gtu0rj-indicatorContainer {
           padding: 2px 10px 2px 2px;
@@ -66,7 +69,7 @@ const DropDownSelect = styled.div`
           padding-left: 0;
         }
         .css-1hwfws3 {
-          padding-left: 10px !important;
+          padding: 0px !important;
         }
 
         .css-b8ldur-Input {
