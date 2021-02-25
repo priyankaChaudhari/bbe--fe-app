@@ -73,7 +73,7 @@ const TeamDropDown = styled.div`
   }
 
   .css-26l3qy-menu {
-    z-index: 9999;
+    z-index: 99999 !important;
     right: 20%;
     width: 100%;
     border: 1px solid rgba(46, 91, 255, 0.08);

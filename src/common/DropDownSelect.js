@@ -75,6 +75,7 @@ const DropDownSelect = styled.div`
         .css-b8ldur-Input {
           color: ${Theme.black};
           font-size: 15px;
+          padding-left: 7px;
         }
 
         &:focus {
