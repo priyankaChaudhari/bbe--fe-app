@@ -24,6 +24,7 @@ import {
   Table,
   ModalRadioCheck,
 } from '../../common';
+import NoRecordFound from '../../common/NoRecordFound';
 import {
   SearchIcon,
   ClockIcon,
@@ -603,7 +604,7 @@ export default function NewCustomerList() {
                   </thead>
                   <tbody>
                     {data && data.length === 0 ? (
-                      <p className="text-center">No record found.</p>
+                      <NoRecordFound />
                     ) : (
                       data.map((item) => (
                         <tr

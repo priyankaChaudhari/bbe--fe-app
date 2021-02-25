@@ -32,6 +32,10 @@ const DropDownSelect = styled.div`
         padding: 0 !important;
         min-height: 40px;
 
+        .css-1hwfws3 {
+          padding: 0 !important;
+        }
+
         .css-g1d714-ValueContainer {
           padding: 0;
         }
