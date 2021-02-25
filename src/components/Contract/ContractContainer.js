@@ -1642,7 +1642,8 @@ export default function ContractContainer() {
               </Button>
             )}
             <span className="last-update">
-              Last updated by You on {dayjs(Date()).format('MMM D, h:mm A')}
+              Last updated by You on{' '}
+              {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
             </span>
           </Footer>
         </div>
