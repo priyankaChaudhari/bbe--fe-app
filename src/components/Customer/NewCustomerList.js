@@ -30,7 +30,6 @@ import {
   SliderHIcon,
   CloseIcon,
   CompanyDefaultUser,
-  whiteCross,
   InfoIcon,
   ArrowDownIcon,
   ArrowUpIcon,
@@ -53,8 +52,8 @@ export default function NewCustomerList() {
   // const userInfo = useSelector((state) => state.userState.userInfo);
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, MultiValue } = components;
-  const [selectedFilter, setSelectedFilter] = useState({});
-  const [clearFilter, setClearFilter] = useState(true);
+  // const [selectedFilter, setSelectedFilter] = useState({});
+  // const [clearFilter, setClearFilter] = useState(true);
   const [status, setStatus] = useState([]);
 
   const [selectedValue, setSelectedValue] = useState({
@@ -206,22 +205,22 @@ export default function NewCustomerList() {
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
 
-  const cancelFilters = (key) => {
-    const filter = { ...selectedFilter };
-    delete filter[key];
-    setSelectedValue({ ...selectedValue, [key]: null });
-    setSelectedFilter(filter);
-    setClearFilter(true);
-    history.push(PATH_CUSTOMER_LIST);
-    setIsLoading({ loader: true, type: 'page' });
-    getCustomerList(1, filter, searchQuery).then((response) => {
-      setData(response.data && response.data.results);
-      setPageNumber(pageNumber);
-      setCount(response && response.data && response.data.count);
-      setIsLoading({ loader: false, type: 'page' });
-    });
-    if (key === 'user') setBrandGrowthStrategist([]);
-  };
+  // const cancelFilters = (key) => {
+  //   const filter = { ...selectedFilter };
+  //   delete filter[key];
+  //   setSelectedValue({ ...selectedValue, [key]: null });
+  //   setSelectedFilter(filter);
+  //   setClearFilter(true);
+  //   history.push(PATH_CUSTOMER_LIST);
+  //   setIsLoading({ loader: true, type: 'page' });
+  //   getCustomerList(1, filter, searchQuery).then((response) => {
+  //     setData(response.data && response.data.results);
+  //     setPageNumber(pageNumber);
+  //     setCount(response && response.data && response.data.count);
+  //     setIsLoading({ loader: false, type: 'page' });
+  //   });
+  //   if (key === 'user') setBrandGrowthStrategist([]);
+  // };
 
   const handleFilters = (event, key, type, action) => {
     if (key === 'unselected') {
@@ -355,7 +354,7 @@ export default function NewCustomerList() {
           defaultValue={
             item === 'user'
               ? filters.user
-              : clearFilter && selectedValue[item.key] === null
+              : selectedValue[item.key] === null
               ? null
               : selectedValue[item.key]
           }
@@ -363,17 +362,6 @@ export default function NewCustomerList() {
           components={getSelectComponents(item)}
           componentsValue={item === 'user' ? { Option: IconOption } : ''}
         />
-        {item === 'user' ? (
-          <img
-            onClick={() => cancelFilters(item)}
-            src={whiteCross}
-            alt="remove"
-            role="presentation"
-            className="remove-icon cursor"
-          />
-        ) : (
-          ''
-        )}
       </>
     );
   };

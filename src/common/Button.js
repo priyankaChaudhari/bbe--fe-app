@@ -67,6 +67,7 @@ const Button = styled.button`
 
     &.view-contract {
       font-size: ${Theme.extraNormal};
+      border: 1px solid ${Theme.gray35};
     }
 
     .file-contract-icon {
