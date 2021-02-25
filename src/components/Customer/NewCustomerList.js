@@ -176,19 +176,18 @@ export default function NewCustomerList() {
     });
     getGrowthStrategist().then((gs) => {
       if (gs && gs.data) {
+        const list = [];
         for (const brand of gs.data) {
-          setBrandGrowthStrategist((prev) => [
-            ...prev,
-            {
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
-            },
-          ]);
+          list.push({
+            value: brand.id,
+            label: `${brand.first_name} ${brand.last_name}`,
+            icon:
+              brand.documents &&
+              brand.documents[0] &&
+              Object.values(brand.documents[0]) &&
+              Object.values(brand.documents[0])[0],
+          });
+          setBrandGrowthStrategist(list);
         }
       }
     });
@@ -333,7 +332,7 @@ export default function NewCustomerList() {
       <>
         <Select
           classNamePrefix="react-select"
-          isSearchable={false}
+          // isSearchable={false}
           className="active"
           placeholder={
             item === 'user'
