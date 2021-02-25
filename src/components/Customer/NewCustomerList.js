@@ -153,16 +153,20 @@ export default function NewCustomerList() {
   const customerList = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'page' });
-      getCustomerList(currentPage, selectedValue, filters, searchQuery).then(
-        (response) => {
-          setData(response && response.data && response.data.results);
-          setPageNumber(currentPage);
-          setCount(response && response.data && response.data.count);
-          setIsLoading({ loader: false, type: 'page' });
-        },
-      );
+      getCustomerList(
+        currentPage,
+        selectedValue,
+        filters,
+        searchQuery,
+        showPerformance,
+      ).then((response) => {
+        setData(response && response.data && response.data.results);
+        setPageNumber(currentPage);
+        setCount(response && response.data && response.data.count);
+        setIsLoading({ loader: false, type: 'page' });
+      });
     },
-    [searchQuery, selectedValue, filters],
+    [searchQuery, selectedValue, filters, showPerformance],
   );
 
   useEffect(() => {
@@ -295,17 +299,30 @@ export default function NewCustomerList() {
     if (type === 'view') {
       if (event.value === 'performance') {
         setShowPerformance(true);
+        customerList(pageNumber, selectedValue, filters, searchQuery, true);
       } else {
         setShowPerformance(false);
       }
     }
     if (type === 'sort') {
       setSelectedValue({ ...selectedValue, 'order-by': event.value });
-      customerList(pageNumber, event.value, searchQuery);
+      customerList(
+        pageNumber,
+        event.value,
+        filters,
+        searchQuery,
+        showPerformance,
+      );
     }
     if (type === 'search') {
       setTimeout(() => {
-        customerList(pageNumber, selectedValue, event.target.value);
+        customerList(
+          pageNumber,
+          selectedValue,
+          filters,
+          event.target.value,
+          showPerformance,
+        );
       }, 1000);
     }
   };
@@ -503,16 +520,16 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
+            <div className="col-lg-4 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+            {/* <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('detail')}
               </DropDownSelect>{' '}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
@@ -638,9 +655,10 @@ export default function NewCustomerList() {
                             {showPerformance ? (
                               <>
                                 {item &&
-                                item.contract &&
-                                item.contract.rev_share
-                                  ? `$ ${item.contract.rev_share}`
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current[0]
+                                  ? `$ ${item.daily_facts.current[0].revenue}`
                                   : ''}
                                 <div className="increase-rate">
                                   <img
@@ -711,7 +729,12 @@ export default function NewCustomerList() {
                           <td width="10%">
                             {showPerformance ? (
                               <>
-                                12
+                                {item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current[0]
+                                  ? `$ ${item.daily_facts.current[0].units_sold}`
+                                  : ''}
                                 <div className="increase-rate">
                                   <img
                                     className="red-arrow"
@@ -725,9 +748,10 @@ export default function NewCustomerList() {
                             ) : (
                               <>
                                 {item &&
-                                item.contract &&
-                                item.contract.monthly_retainer
-                                  ? `$ ${item.contract.monthly_retainer
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current[0]
+                                  ? `$ ${item.daily_facts.current[0].unit_sold
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                                   : ''}
