@@ -60,6 +60,34 @@ export default function DSPAddendum({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
+  const calculateTotalDays = () => {
+    // console.log(firstMonthDate, endMonthDate, secondMonthDate, thirdMonthDate);
+    // const firstMonthdays = new Date(
+    //   new Date(firstMonthDate).getFullYear(),
+    //   new Date(firstMonthDate).getMonth() + 1,
+    //   16,
+    // ).getDate();
+    // let extraDays = 0;
+    // if (new Date(firstMonthDate).getDate() !== 1) {
+    //   extraDays = new Date(
+    //     new Date(endMonthDate).getFullYear(),
+    //     new Date(endMonthDate).getMonth() + 1,
+    //     0,
+    //   ).getDate();
+    // }
+    // const secondMonthdays = new Date(
+    //   new Date(secondMonthDate).getFullYear(),
+    //   new Date(secondMonthDate).getMonth() + 1,
+    //   0,
+    // ).getDate();
+    // const thirdMonthdays = new Date(
+    //   new Date(thirdMonthDate).getFullYear(),
+    //   new Date(thirdMonthDate).getMonth() + 1,
+    //   0,
+    // ).getDate();
+    // console.log(firstMonthdays, secondMonthdays, thirdMonthdays, extraDays);
+  };
+
   const mapDefaultValues = (key, label, type) => {
     if (key === 'current_date') {
       return dayjs(new Date()).format('MM-DD-YYYY');
@@ -69,14 +97,28 @@ export default function DSPAddendum({
         ? formData && formData[key]
         : `Client Name`;
     }
-    if (formData[key] === undefined || formData[key] === '') {
+    if (key === 'calculated_no_of_days') {
+      return calculateTotalDays();
+    }
+    if (
+      formData[key] === undefined ||
+      formData[key] === '' ||
+      formData[key] === null
+    ) {
       return `Enter ${label}`;
     }
 
     if (key === 'start_date') {
       return formData && dayjs(formData[key]).format('MM-DD-YYYY');
     }
-
+    if (key === 'length') {
+      return (
+        formData &&
+        formData.length &&
+        formData.length.label &&
+        parseInt(formData.length.label, 10)
+      );
+    }
     if (type && type.includes('number')) {
       return `
       
@@ -193,6 +235,22 @@ export default function DSPAddendum({
                     `${mapBudgetBreakdownTable()}`,
                   )
                   .replaceAll(
+                    'CONTRACT_LENGTH',
+                    mapDefaultValues(
+                      'length',
+                      'Initial Period',
+                      'number-currency',
+                    ),
+                  )
+                  .replace(
+                    'NO_OF_DAYS_BASED_ON_START_DATE',
+                    mapDefaultValues(
+                      'calculated_no_of_days',
+                      'Calculated Days',
+                      'number-currency',
+                    ),
+                  )
+                  .replaceAll(
                     'DSP_FEE',
                     mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
                   ),
@@ -243,6 +301,10 @@ DSPAddendum.propTypes = {
   formData: PropTypes.shape({
     dsp_fee: PropTypes.string,
     start_date: PropTypes.string,
+    length: PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
   }),
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),
