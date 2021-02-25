@@ -63,7 +63,7 @@ const ModalBox = styled.div`
         }
       
     }
-            @media not all and (min-resolution:.001dpcm)
+       @media not all and (min-resolution:.001dpcm)
       { @supports (-webkit-appearance:none) {
 
           .modal-heading{ 
