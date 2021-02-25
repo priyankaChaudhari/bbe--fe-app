@@ -62,6 +62,12 @@ const userStateReducer = (state = initialState, action) => {
         error: null,
         showResetMsg: action.showResetMsg,
       };
+    case actionTypes.SHOW_PROFILE_LOADER:
+      return {
+        ...state,
+        isLoading: action.isLoading,
+        error: null,
+      };
     default:
       return state;
   }
