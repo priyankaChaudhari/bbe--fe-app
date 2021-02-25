@@ -2199,82 +2199,87 @@ export default function AgreementSidePanel({
                             ) : (
                               ''
                             )}
+
                             {showAmazonPlanDropdown ? (
-                              <>
-                                <ContractInputSelect>
-                                  <Select
-                                    classNamePrefix="react-select"
-                                    // styles={customStyles}
-                                    options={AmazonStoreOptions}
-                                    placeholder="Select Plan"
-                                    defaultValue={setDefaultAmazonPlanValue()}
-                                    name="amazon_store_plan"
-                                    components={{ DropdownIndicator }}
-                                    onChange={(event) => {
-                                      handleAmazonPlanChange(event);
-                                      handleChange(
-                                        event,
-                                        'amazon_store_package',
-                                        'dropdown',
-                                      );
-                                    }}
-                                  />
-                                </ContractInputSelect>
-                                {amazonStoreCustom ? (
-                                  <ContractFormField className="w-100 mt-1">
-                                    <input
-                                      className="form-control "
-                                      type="text"
-                                      value={
-                                        formData &&
-                                        formData.additional_one_time_services &&
-                                        formData.additional_one_time_services
-                                          .length &&
-                                        formData.additional_one_time_services.find(
-                                          (item) =>
-                                            item.name
-                                              ? item.name.includes(
-                                                  'Amazon Store Package',
-                                                )
-                                              : item.service &&
-                                                item.service.name.includes(
-                                                  'Amazon Store Package',
-                                                ),
-                                        )
-                                          ? formData &&
-                                            formData.additional_one_time_services &&
-                                            formData
-                                              .additional_one_time_services
-                                              .length &&
-                                            formData.additional_one_time_services.find(
-                                              (item) =>
-                                                item.name
-                                                  ? item.name.includes(
-                                                      'Amazon Store Package',
-                                                    )
-                                                  : item.service &&
-                                                    item.service.name.includes(
-                                                      'Amazon Store Package',
-                                                    ),
-                                            ).custom_amazon_store_price
-                                          : ''
-                                      }
-                                      placeholder="Enter Custom Store Price"
-                                      name="custom_amazon_store_price"
-                                      onChange={(event) =>
+                              <div className="col-12">
+                                <>
+                                  <ContractInputSelect>
+                                    <Select
+                                      classNamePrefix="react-select"
+                                      // styles={customStyles}
+                                      options={AmazonStoreOptions}
+                                      placeholder="Select Plan"
+                                      defaultValue={setDefaultAmazonPlanValue()}
+                                      name="amazon_store_plan"
+                                      components={{ DropdownIndicator }}
+                                      onChange={(event) => {
+                                        handleAmazonPlanChange(event);
                                         handleChange(
                                           event,
                                           'amazon_store_package',
-                                          'custom_amazon_store_price',
-                                        )
-                                      }
+                                          'dropdown',
+                                        );
+                                      }}
                                     />
-                                    {displayError('custom_amazon_store_price')}
-                                  </ContractFormField>
-                                ) : (
-                                  ''
-                                )}
-                              </>
+                                  </ContractInputSelect>
+                                  {amazonStoreCustom ? (
+                                    <ContractFormField className="w-100 mt-1">
+                                      <input
+                                        className="form-control "
+                                        type="text"
+                                        value={
+                                          formData &&
+                                          formData.additional_one_time_services &&
+                                          formData.additional_one_time_services
+                                            .length &&
+                                          formData.additional_one_time_services.find(
+                                            (item) =>
+                                              item.name
+                                                ? item.name.includes(
+                                                    'Amazon Store Package',
+                                                  )
+                                                : item.service &&
+                                                  item.service.name.includes(
+                                                    'Amazon Store Package',
+                                                  ),
+                                          )
+                                            ? formData &&
+                                              formData.additional_one_time_services &&
+                                              formData
+                                                .additional_one_time_services
+                                                .length &&
+                                              formData.additional_one_time_services.find(
+                                                (item) =>
+                                                  item.name
+                                                    ? item.name.includes(
+                                                        'Amazon Store Package',
+                                                      )
+                                                    : item.service &&
+                                                      item.service.name.includes(
+                                                        'Amazon Store Package',
+                                                      ),
+                                              ).custom_amazon_store_price
+                                            : ''
+                                        }
+                                        placeholder="Enter Custom Store Price"
+                                        name="custom_amazon_store_price"
+                                        onChange={(event) =>
+                                          handleChange(
+                                            event,
+                                            'amazon_store_package',
+                                            'custom_amazon_store_price',
+                                          )
+                                        }
+                                      />
+                                      {displayError(
+                                        'custom_amazon_store_price',
+                                      )}
+                                    </ContractFormField>
+                                  ) : (
+                                    ''
+                                  )}
+                                </>
+                              </div>
                             ) : (
                               ''
                             )}
@@ -2735,7 +2740,7 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom:200px;
+    padding-bottom: 250px;
     width: 340px;
     position: fixed;
     top: 130px;
