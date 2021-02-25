@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 export default function DSPAddendum({
   formData,
   templateData,
-  calculatedDate,
+  // calculatedDate,
   setCalculatedDate,
   firstMonthDate,
   setFirstMonthDate,
@@ -34,7 +34,7 @@ export default function DSPAddendum({
     let lastDate = '';
     const d = new Date(calculateDate);
 
-    if (calculateDate.getDate() > 15) {
+    if (calculateDate.getDate() > 15 || calculateDate.getDate() === 1) {
       startDate = d.setMonth(d.getMonth() + 1, 1);
       const first = new Date(startDate);
       setFirstMonthDate(first);
@@ -95,7 +95,7 @@ export default function DSPAddendum({
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
-          ${calculatedDate}
+          ${dayjs(firstMonthDate).format('MM-DD-YYYY')}
         </td>
         <td
           style="border: 1px solid black;
@@ -227,7 +227,7 @@ export default function DSPAddendum({
 DSPAddendum.defaultProps = {
   templateData: {},
   formData: {},
-  calculatedDate: '',
+  // calculatedDate: '',
   setCalculatedDate: () => {},
   firstMonthDate: '',
   setFirstMonthDate: () => {},
@@ -247,7 +247,7 @@ DSPAddendum.propTypes = {
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),
   }),
-  calculatedDate: PropTypes.instanceOf(Date),
+  // calculatedDate: PropTypes.instanceOf(Date),
   setCalculatedDate: PropTypes.func,
   firstMonthDate: PropTypes.instanceOf(Date),
   setFirstMonthDate: PropTypes.func,
