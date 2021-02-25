@@ -171,7 +171,7 @@ export default function ContractContainer() {
     ) {
       return true;
     }
-    return false;
+    return true;
   };
 
   const clearSuccessMessage = () => {
