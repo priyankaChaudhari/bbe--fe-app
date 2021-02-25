@@ -20,7 +20,7 @@ import { Button, PageLoader } from './index';
 import ModalBox from './ModalBox';
 import EditIcons from '../theme/images/icons/edit-icon.svg';
 import { getCustomerDetails } from '../store/actions/customerState';
-import { userMe } from '../store/actions/userState';
+import { showProfileLoader, userMe } from '../store/actions/userState';
 import ErrorMsg from './ErrorMsg';
 
 export default function CropUploadImage({ type, id, setDocumentImage }) {
@@ -116,6 +116,7 @@ export default function CropUploadImage({ type, id, setDocumentImage }) {
             .then(() => {
               if (type === 'user') {
                 dispatch(userMe());
+                dispatch(showProfileLoader(true));
               } else {
                 dispatch(getCustomerDetails(id));
               }

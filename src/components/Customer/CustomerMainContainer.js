@@ -89,6 +89,7 @@ export default function CustomerMainContainer() {
     type: '',
   });
   const [memberCount, setMemberCount] = useState(null);
+  const profileLoader = useSelector((state) => state.userState.isLoading);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -137,7 +138,17 @@ export default function CustomerMainContainer() {
     getCustomerMemberList();
     getActivityLogInfo();
     getAmazon();
-  }, [dispatch, id, getCustomerMemberList, getActivityLogInfo, getAmazon]);
+    if (profileLoader) {
+      getActivityLogInfo();
+    }
+  }, [
+    dispatch,
+    id,
+    getCustomerMemberList,
+    getActivityLogInfo,
+    getAmazon,
+    profileLoader,
+  ]);
 
   const getActivityInitials = (userInfo) => {
     const firstName =
@@ -220,9 +231,17 @@ export default function CustomerMainContainer() {
     return '';
   };
 
+  // $('html').on('click', (event) => {
+  //   if ($(event.target).closest('#clickbox').length === 0) {
+  //     $('#clickbox').hide();
+  //   }
+  // });
+
   return (
     <>
-      {loader || (isLoading.loader && isLoading.type === 'page') ? (
+      {profileLoader ||
+      loader ||
+      (isLoading.loader && isLoading.type === 'page') ? (
         <PageLoader color="#FF5933" type="page" width={20} />
       ) : (
         <>

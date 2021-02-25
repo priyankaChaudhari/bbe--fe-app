@@ -127,3 +127,10 @@ export const showResetPasswordMsg = () => {
     showResetMsg: true,
   };
 };
+
+export const showProfileLoader = (value) => {
+  return {
+    type: actionTypes.SHOW_PROFILE_LOADER,
+    isLoading: value,
+  };
+};
