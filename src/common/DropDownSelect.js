@@ -64,6 +64,9 @@ const DropDownSelect = styled.div`
         &.css-tlfecz-indicatorContainer {
           padding-left: 0;
         }
+        .css-1hwfws3 {
+          padding: 0 !important;
+        }
 
         .css-b8ldur-Input {
           color: ${Theme.black};
@@ -82,6 +85,13 @@ const DropDownSelect = styled.div`
         }
         &.react-select__control--menu-is-open {
           padding: 0 !important;
+
+          .css-1hwfws3 {
+            padding: 0 !important;
+          }
+          &.css-1hwfws3 {
+            padding: 0 !important;
+          }
         }
         &.react-select__control {
           padding: 0 !important;
