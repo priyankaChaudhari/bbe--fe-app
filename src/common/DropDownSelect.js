@@ -40,7 +40,7 @@ const DropDownSelect = styled.div`
           padding: 0px 0px 1px 15px;
         }
         .css-tlfecz-indicatorContainer {
-          padding: 2px 10px 2px 2px;
+          padding: 2px 7px 2px 0px;
         }
       }
 
@@ -55,6 +55,10 @@ const DropDownSelect = styled.div`
         }
         .css-1gtu0rj-indicatorContainer {
           padding: 2px 10px 2px 2px;
+        }
+
+        &.css-tlfecz-indicatorContainer {
+          padding-left: 0;
         }
 
         .css-b8ldur-Input {
