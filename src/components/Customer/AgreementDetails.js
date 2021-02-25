@@ -100,7 +100,7 @@ export default function AgreementDetails({ agreement, id }) {
                           src={ClockIcon}
                           alt="clock"
                         />{' '}
-                        {countDays()}
+                        {countDays()} days
                       </div>
                     </li>
                   ) : (
