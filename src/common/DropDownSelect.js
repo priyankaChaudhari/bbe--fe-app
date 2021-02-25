@@ -21,6 +21,7 @@ const DropDownSelect = styled.div`
       background-color: ${Theme.white};
       border: 1px solid #8798ad;
       border-radius: 20px;
+      margin-left: -5px;
       max-width: 185px;
       color: black;
     }
@@ -29,11 +30,11 @@ const DropDownSelect = styled.div`
       background-color: ${Theme.gray15};
 
       .css-yk16xz-control {
-        padding: 0 !important;
+        // padding: 0 !important;
         min-height: 40px;
 
         .css-1hwfws3 {
-          padding: 0 !important;
+          padding-left: 10px !important;
         }
 
         .css-g1d714-ValueContainer {
@@ -41,7 +42,7 @@ const DropDownSelect = styled.div`
         }
 
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 15px;
+          padding: 0px 0px 1px 7px;
         }
         .css-tlfecz-indicatorContainer {
           padding: 2px 7px 2px 0px;
@@ -52,10 +53,10 @@ const DropDownSelect = styled.div`
         min-height: 40px;
         background-color: ${Theme.gray15};
         .css-g1d714-ValueContainer {
-          padding: 0;
+          // padding: 0;
         }
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 15px;
+          padding: 0px 0px 1px 7px;
         }
         .css-1gtu0rj-indicatorContainer {
           padding: 2px 10px 2px 2px;
@@ -65,7 +66,7 @@ const DropDownSelect = styled.div`
           padding-left: 0;
         }
         .css-1hwfws3 {
-          padding: 0 !important;
+          padding-left: 10px !important;
         }
 
         .css-b8ldur-Input {
@@ -98,15 +99,8 @@ const DropDownSelect = styled.div`
         }
       }
 
-      // .css-1uccc91-singleValue {
-      //   padding: 0 !important;
-      // }
-      // .css-1wa3eu0-placeholder {
-      //   padding: 1px 10px 1px 10px;
-      // }
-
       .react-select__menu {
-        background-color: #ffffff;
+        background-color: ${Theme.white};
         border-radius: 8px;
         box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
       }
@@ -159,10 +153,8 @@ const DropDownSelect = styled.div`
         .css-1wa3eu0-placeholder {
           color: ${Theme.black} !important;
         }
-
-        .remove-icon {
-          display: block;
-          cursor: pointer;
+        .react-select__placeholder {
+          color: ${Theme.black} !important;
         }
       }
       .css-tlfecz-indicatorContainer {
@@ -200,43 +192,10 @@ const DropDownSelect = styled.div`
         color: #000000;
       }
 
-      // .css-g1d714-ValueContainer {
-      //   padding: 1px 20px 1px 5px;
-
-      //   .css-1wa3eu0-placeholder {
-      //     font-size: ${Theme.textFontSize};
-      //     color: ${Theme.black} !important;
-      //     width: 100%;
-      //     text-align: left;
-      //   }
-      // }
-
-      // .css-1hb7zxy-IndicatorsContainer {
-      //   // background: ${Theme.gray90};
-      //   color: ${Theme.black};
-
-      //   .css-1gtu0rj-indicatorContainer {
-      //     padding: 4px;
-      //     color: ${Theme.black} !important;
-      //     // background: ${Theme.gray90}!important;
-
-      //     .css-6q0nyr-Svg {
-      //       color: ${Theme.black} !important;
-      //     }
-
-      //     &:hover {
-      //       color: ${Theme.black};
-      //     }
-      //   }
-      //   .css-tlfecz-indicatorContainer {
-      //     color: ${Theme.black} !important;
-      //   }
-      // }
-
       .css-1uccc91-singleValue {
         font-size: ${Theme.textFontSize};
         padding: 4px;
-        color: ${Theme.black};
+        color: ${Theme.black} !important;
       }
     }
 
@@ -244,73 +203,12 @@ const DropDownSelect = styled.div`
       display: none;
     }
   }
-  .css-1081v0-control {
-    border: none;
-    outline: none;
-    box-shadow: none;
-    &:hover {
-      border: none;
-    }
-  }
-
-  // .css-gcokqo-indicatorContainer:hover {
-  //   color: #ffff;
-  // }
-  // .css-b9nxok-control {
-  //   .css-1wa3eu0-placeholder {
-  //     color: white;
-  //   }
-  // }
-
-  // .css-1g9qasx-control {
-  //   border: 1px solid ${Theme.gray9};
+  // .css-1081v0-control {
+  //   border: none;
   //   outline: none;
   //   box-shadow: none;
   //   &:hover {
-  //     border: 1px solid ${Theme.gray9};
-  //   }
-  // }
-
-  // .css-26l3qy-menu {
-  //   box-shadow: ${Theme.commonShadow};
-
-  //   //width: 226px;
-  //   color: ${Theme.gray90};
-  //   z-index: 9999999;
-  //   text-align: left;
-
-  //   .drop-down-user {
-  //     vertical-align: middle;
-  //   }
-  // }
-
-  // &.mobile-view {
-  //   margin-left: 75px;
-  // }
-
-  // .css-44ry67-control {
-  //   border: 1px solid ${Theme.gray9};
-  //   outline: none;
-  //   box-shadow: none;
-  //   &:hover {
-  //     border: 1px solid ${Theme.gray9};
-  //   }
-  // }
-
-  // .css-1m4laux-control {
-  //   border: 1px solid ${Theme.gray9};
-  //   outline: none;
-  //   box-shadow: none;
-  //   &:hover {
-  //     border: 1px solid ${Theme.gray9};
-  //   }
-  // }
-
-  // @media only screen and (max-width: 768px) {
-  //   &.mobile-view {
-  //     width: 200px;
-  //     margin-bottom: 20px;
-  //     margin-left: 0px;
+  //     border: none;
   //   }
   // }
 `;

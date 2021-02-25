@@ -2205,9 +2205,9 @@ export default function AgreementSidePanel({
                                   <Select
                                     classNamePrefix="react-select"
                                     // styles={customStyles}
+                                    options={AmazonStoreOptions}
                                     placeholder="Select Plan"
                                     defaultValue={setDefaultAmazonPlanValue()}
-                                    options={AmazonStoreOptions}
                                     name="amazon_store_plan"
                                     components={{ DropdownIndicator }}
                                     onChange={(event) => {
