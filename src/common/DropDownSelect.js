@@ -160,6 +160,13 @@ const DropDownSelect = styled.div`
           color: ${Theme.black} !important;
         }
       }
+      .css-1wa3eu0-placeholder {
+        color: ${Theme.black} !important;
+      }
+      .react-select__placeholder {
+        color: ${Theme.black} !important;
+      }
+
       .css-tlfecz-indicatorContainer {
         .css-6q0nyr-Svg {
           color: ${Theme.black} !important;
