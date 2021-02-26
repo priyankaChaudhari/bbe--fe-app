@@ -22,7 +22,7 @@ const Table = styled.table`
         text-transform: uppercase;
         font-size: 11px;
         border-bottom: 1px solid ${Theme.gray7};
-        padding: 10px;
+        padding: 13px;
 
         &.customer-header {
           padding-left: 66px;
