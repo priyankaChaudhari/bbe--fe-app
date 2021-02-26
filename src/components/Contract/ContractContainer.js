@@ -84,6 +84,8 @@ export default function ContractContainer() {
   const loader = useSelector((state) => state.accountState.isLoading);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showModal, setShowModal] = useState(false);
+  const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
+  const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [showDiscardModal, setShowDiscardModal] = useState({
     clickedBtn: '',
     show: false,
@@ -492,6 +494,7 @@ export default function ContractContainer() {
                 updatedFormData.additional_one_time_services
               ) {
                 delete updatedFormData.additional_one_time_services;
+                setAmazonStoreCustom(false);
               }
             }
             if (
@@ -643,7 +646,8 @@ export default function ContractContainer() {
       setShowEditor(false);
       setNewAddendum(originalAddendumData);
       clearError();
-
+      setShowAmazonPlanDropdown(false);
+      setAmazonStoreCustom(false);
       if (openCollapse.agreement) {
         executeScroll('agreement');
       }
@@ -868,20 +872,34 @@ export default function ContractContainer() {
             <td style="border: 1px solid black;padding: 13px;">${
               item.service ? item.service.name : item && item.name
             }</td>
-            <td style="border: 1px solid black;padding: 13px;">$${
-              item.service &&
-              item.service.fee &&
-              item.service.name !== 'Amazon Store Package Custom'
-                ? item.service.fee
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : item.custom_amazon_store_price
-                ? item.custom_amazon_store_price
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : ''
-            } /month
-            </td>
+               ${
+                 (
+                   item.name
+                     ? item.name.includes('Amazon Store Package Custom')
+                     : item.service.name.includes('Amazon Store Package Custom')
+                 )
+                   ? item.custom_amazon_store_price
+                     ? `<td style="border: 1px solid black;padding: 13px;">
+                                $${item.custom_amazon_store_price
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+                               </td>`
+                     : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
+                   : item && item.service && item.service.fee
+                   ? `<td style="border: 1px solid black;padding: 13px;">
+                           $${(item && item.service && item.service.fee
+                             ? item.service.fee
+                             : ''
+                           )
+                             .toString()
+                             .replace(
+                               /\B(?=(\d{3})+(?!\d))/g,
+                               ',',
+                             )} /month </td>`
+                   : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
+               }
+
+     
             <td style="border: 1px solid black;padding: 13px;">$${(item.service
               .name !== 'Amazon Store Package Custom'
               ? item.quantity * item.service.fee
@@ -1046,21 +1064,6 @@ export default function ContractContainer() {
     return '';
   };
 
-  const getAgreementAccorType = (index) => {
-    if (data && details && details.contract_type === 'one time') {
-      return (
-        data &&
-        data.one_time_service_agreement &&
-        data.one_time_service_agreement[index]
-      );
-    }
-    return (
-      data &&
-      data.recurring_service_agreement &&
-      data.recurring_service_agreement[index]
-    );
-  };
-
   const displayNotIncludedServices = () => {
     const fields = [];
     for (const item of notIncludedMonthlyServices) {
@@ -1084,6 +1087,38 @@ export default function ContractContainer() {
       );
     }
     return fields.length ? fields.toString().replaceAll(',', '') : '';
+  };
+
+  const showNotIncludedServicesTable = () => {
+    if (
+      notIncludedMonthlyServices.length ||
+      notIncludedOneTimeServices.length
+    ) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"><br> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
+                                <tr>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
+                                  </tr>
+                                  ${displayNotIncludedServices()}
+                                  </table></div>
+                                  `;
+    }
+    return '';
+  };
+  const getAgreementAccorType = (index) => {
+    if (data && details && details.contract_type === 'one time') {
+      return (
+        data &&
+        data.one_time_service_agreement &&
+        data.one_time_service_agreement[index]
+      );
+    }
+    return (
+      data &&
+      data.recurring_service_agreement &&
+      data.recurring_service_agreement[index]
+    );
   };
 
   const mapDspDetails = () => {
@@ -1264,14 +1299,7 @@ export default function ContractContainer() {
         .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
         .replace(
           'ADDITIONAL_SERVICES_NOT_INCLUDED',
-          `<table class="contact-list " style="width: 100%;border-collapse: collapse;">
-                                <tr>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
-                                  </tr>
-                                  ${displayNotIncludedServices()}
-                                  </table>
-                                  `,
+          showNotIncludedServicesTable(),
         );
 
     const dspAddendum =
@@ -1561,6 +1589,7 @@ export default function ContractContainer() {
         setEditContractFlag={setEditContractFlag}
         setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
         setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
+        notIncludedOneTimeServices={notIncludedOneTimeServices}
         showFooter={showFooter}
         newAddendumData={newAddendumData}
         setNewAddendum={setNewAddendum}
@@ -1580,7 +1609,7 @@ export default function ContractContainer() {
         setAdditionalMarketplace={setAdditionalMarketplace}
         additionalOnetimeServices={additionalOnetimeServices}
         setAdditionalOnetimeServices={setAdditionalOnetimeServices}
-        notIncludedOneTimeServices={notIncludedOneTimeServices}
+        // notIncludedOneTimeServices={notIncludedOneTimeServices}
         // setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
         notIncludedMonthlyServices={notIncludedMonthlyServices}
         // setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
@@ -1595,6 +1624,10 @@ export default function ContractContainer() {
         setOriginalAddendumData={setOriginalAddendumData}
         openCollapse={openCollapse}
         setOpenCollapse={setOpenCollapse}
+        amazonStoreCustom={amazonStoreCustom}
+        setAmazonStoreCustom={setAmazonStoreCustom}
+        showAmazonPlanDropdown={showAmazonPlanDropdown}
+        setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
       />
       {/* )} */}
       {details &&

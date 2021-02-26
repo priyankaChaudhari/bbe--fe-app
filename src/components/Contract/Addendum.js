@@ -59,7 +59,7 @@ export default function Addendum({
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!Object.keys(newAddendumData).length) {
+    if (newAddendumData && !Object.keys(newAddendumData).length) {
       setEditorState(EditorState.createEmpty());
     }
   }, [newAddendumData]);
