@@ -445,7 +445,7 @@ function RequestSignature({
     <>
       {params && params.step === 'verify-document' ? (
         <>
-          {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
+          {/* {contractDesignData && showHelloSignPage ? displayHelloSign() : ''} */}
           <div className="modal-body ">
             <h4
               className="on-boarding mb-4"
@@ -622,6 +622,7 @@ function RequestSignature({
       )}
       {params && params.step === 'select-contact' ? (
         <>
+          {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
           <div className="modal-body ">
             <h4 className="on-boarding mb-4">Select contact</h4>
             {isLoading.loader && isLoading.type === 'page' ? (
@@ -656,7 +657,9 @@ function RequestSignature({
             <div
               className="mt-4"
               role="presentation"
-              onClick={() => setParams('verify-document')}>
+              onClick={() => verifyDocument()}>
+              {/* onClick={() => 
+               setParams('verify-document')}> */}
               <Button
                 type="button"
                 disabled={!(selectedContact && selectedContact.id)}
@@ -668,7 +671,7 @@ function RequestSignature({
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
-                  'Next'
+                  'Request Signature'
                 )}
               </Button>
             </div>
