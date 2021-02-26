@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
+import $ from 'jquery';
 
 import Theme from '../../theme/Theme';
 import {
@@ -231,11 +232,13 @@ export default function CustomerMainContainer() {
     return '';
   };
 
-  // $('html').on('click', (event) => {
-  //   if ($(event.target).closest('#clickbox').length === 0) {
-  //     $('#clickbox').hide();
-  //   }
-  // });
+  $(document).on('click', (e) => {
+    if ($(e.target).is('clickbox')) {
+      setShowDropDown(true);
+    } else {
+      setShowDropDown(false);
+    }
+  });
 
   return (
     <>
