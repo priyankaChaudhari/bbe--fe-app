@@ -287,13 +287,13 @@ export default function Statement({
       formData.additional_one_time_services.forEach((service) => {
         return fields.push(
           `<tr>
-                  <td style="border: 1px solid black;padding: 13px;">${
-                    service.quantity
-                      ? service.quantity
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : 0
-                  }</td>
+              <td style="border: 1px solid black;padding: 13px;">${
+                service.quantity
+                  ? service.quantity
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : 0
+              }</td>
                   
                    <td style="border: 1px solid black;padding: 13px;">${
                      service.name
@@ -302,23 +302,39 @@ export default function Statement({
                        ? service.service.name
                        : ''
                    }
-      </td>
-      ${
-        service.service && service.service.fee
-          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.service &&
-            service.service.fee &&
-            service.service.name !== 'Amazon Store Package Custom'
-              ? service.service.fee
-              : service.custom_amazon_store_price
-              ? service.custom_amazon_store_price
-              : ''
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
-        </td>
-        `
-          : `<td>Yet to save</td>`
-      }
+              </td>
+             
+                  ${
+                    (
+                      service.name
+                        ? service.name.includes('Amazon Store Package Custom')
+                        : service.service.name.includes(
+                            'Amazon Store Package Custom',
+                          )
+                    )
+                      ? service.custom_amazon_store_price
+                        ? `<td>
+                                $${service.custom_amazon_store_price
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+                               </td>`
+                        : `<td>Yet to save</td>`
+                      : service && service.service && service.service.fee
+                      ? `<td>
+                           $${(service && service.service && service.service.fee
+                             ? service.service.fee
+                             : ''
+                           )
+                             .toString()
+                             .replace(
+                               /\B(?=(\d{3})+(?!\d))/g,
+                               ',',
+                             )} /month </td>`
+                      : `<td>Yet to save</td>`
+                  }
+
+     
+     
 
       ${
         (
@@ -405,6 +421,24 @@ export default function Statement({
     return '';
   };
 
+  const showNotIncludedServicesTable = () => {
+    if (
+      notIncludedMonthlyServices.length ||
+      notIncludedOneTimeServices.length
+    ) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
+    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
+                                <tr>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
+                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
+                                  </tr>
+                                  ${displayNotIncludedServices()}
+                                  </table></div>
+                                  `;
+    }
+    return '';
+  };
+
   return (
     <>
       <Paragraph>
@@ -459,14 +493,7 @@ export default function Statement({
                 .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
                 .replace(
                   'ADDITIONAL_SERVICES_NOT_INCLUDED',
-                  `<div class="table-responsive"> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
-                                <tr>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
-                                  </tr>
-                                  ${displayNotIncludedServices()}
-                                  </table></div>
-                                  `,
+                  showNotIncludedServicesTable(),
                 ),
           }}
         />
