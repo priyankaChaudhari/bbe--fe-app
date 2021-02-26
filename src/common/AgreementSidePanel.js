@@ -99,6 +99,8 @@ export default function AgreementSidePanel({
   setAmazonStoreCustom,
   showAmazonPlanDropdown,
   setShowAmazonPlanDropdown,
+  showAdditionalMarketplace,
+  setShowAdditionalMarketplace,
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -116,9 +118,9 @@ export default function AgreementSidePanel({
   const [monthlyService, setMonthlyService] = useState([]);
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
-  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
-    false,
-  );
+  // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
+  //   false,
+  // );
   // const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
   // const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
@@ -2776,6 +2778,8 @@ AgreementSidePanel.defaultProps = {
   setAmazonStoreCustom: () => {},
   showAmazonPlanDropdown: false,
   setShowAmazonPlanDropdown: () => {},
+  showAdditionalMarketplace: false,
+  setShowAdditionalMarketplace: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -2887,6 +2891,8 @@ AgreementSidePanel.propTypes = {
   setAmazonStoreCustom: PropTypes.func,
   showAmazonPlanDropdown: PropTypes.bool,
   setShowAmazonPlanDropdown: PropTypes.func,
+  showAdditionalMarketplace: PropTypes.bool,
+  setShowAdditionalMarketplace: PropTypes.func,
 };
 
 const SidePanel = styled.div`

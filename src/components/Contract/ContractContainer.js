@@ -124,7 +124,9 @@ export default function ContractContainer() {
     {},
   );
   const [contractError, setContractError] = useState({});
-
+  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
+    false,
+  );
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
     message: '',
@@ -663,6 +665,15 @@ export default function ContractContainer() {
         executeScroll('addendum');
       }
 
+      if (
+        details &&
+        details.additional_marketplaces &&
+        details.additional_marketplaces.length
+      ) {
+        setShowAdditionalMarketplace(true);
+      } else {
+        setShowAdditionalMarketplace(false);
+      }
       dispatch(getAccountDetails(id));
     }
   };
@@ -1673,6 +1684,8 @@ export default function ContractContainer() {
         setAmazonStoreCustom={setAmazonStoreCustom}
         showAmazonPlanDropdown={showAmazonPlanDropdown}
         setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
+        showAdditionalMarketplace={showAdditionalMarketplace}
+        setShowAdditionalMarketplace={setShowAdditionalMarketplace}
       />
       {/* )} */}
       {details &&
