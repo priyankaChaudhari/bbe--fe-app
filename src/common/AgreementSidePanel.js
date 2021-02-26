@@ -157,19 +157,17 @@ export default function AgreementSidePanel({
               result.push(option);
             }
           } else if (!option.label.includes('Amazon Store Package')) {
-              result.push(option);
-            } else if (
-                result.find((item) =>
-                  item.label.includes('Amazon Store Package'),
-                )
-              ) {
-                // dfgdfgh
-              } else {
-                result.push({
-                  value: 'Amazon Store Package',
-                  label: 'Amazon Store Package',
-                });
-              }
+            result.push(option);
+          } else if (
+            result.find((item) => item.label.includes('Amazon Store Package'))
+          ) {
+            // dfgdfgh
+          } else {
+            result.push({
+              value: 'Amazon Store Package',
+              label: 'Amazon Store Package',
+            });
+          }
         }
       }
     } else {
@@ -271,7 +269,7 @@ export default function AgreementSidePanel({
     );
   };
 
-  useEffect(() => {
+  const goToSection = () => {
     if (openCollapse.agreement) {
       executeScroll('agreement');
     }
@@ -284,7 +282,9 @@ export default function AgreementSidePanel({
     if (openCollapse.addendum) {
       executeScroll('addendum');
     }
-
+  };
+  useEffect(() => {
+    goToSection();
     const serviceData =
       agreementData &&
       agreementData.additional_one_time_services &&
@@ -1158,47 +1158,47 @@ export default function AgreementSidePanel({
 
           // else we create dict as BE required for new item and we push that in newly created list
           else if (
-              additionalOnetimeServices &&
-              additionalOnetimeServices.create &&
-              additionalOnetimeServices.create.length &&
-              additionalOnetimeServices.create.find((item) =>
-                item.service_id
-                  ? item.service_id === val.value
-                  : item.service && item.service.id === val.value,
-              )
-            ) {
-              //
-            } else {
-              additionalOnetimeServices.create.push({
-                name: event.target.name,
-                service_id: val.value,
-                contract_id: originalData && originalData.id,
-                quantity: 1,
-              });
+            additionalOnetimeServices &&
+            additionalOnetimeServices.create &&
+            additionalOnetimeServices.create.length &&
+            additionalOnetimeServices.create.find((item) =>
+              item.service_id
+                ? item.service_id === val.value
+                : item.service && item.service.id === val.value,
+            )
+          ) {
+            //
+          } else {
+            additionalOnetimeServices.create.push({
+              name: event.target.name,
+              service_id: val.value,
+              contract_id: originalData && originalData.id,
+              quantity: 1,
+            });
 
-              // let list = formData.additional_one_time_services;
-              // if (!list) {
-              //   list = [];
-              // }
-              // console.log(list, "formData vala list of additional 1 time")
-              // list.push({
-              //   name: event.target.name,
-              //   service_id: val.value,
-              //   contract_id: originalData && originalData.id,
-              //   quantity: 1,
-              // });
-              //   console.log(list, "after push data tto list update" ,additionalOnetimeServices.create )
-              setFormData({
-                ...formData,
-                additional_one_time_services: additionalOnetimeServices.create,
-              });
+            // let list = formData.additional_one_time_services;
+            // if (!list) {
+            //   list = [];
+            // }
+            // console.log(list, "formData vala list of additional 1 time")
+            // list.push({
+            //   name: event.target.name,
+            //   service_id: val.value,
+            //   contract_id: originalData && originalData.id,
+            //   quantity: 1,
+            // });
+            //   console.log(list, "after push data tto list update" ,additionalOnetimeServices.create )
+            setFormData({
+              ...formData,
+              additional_one_time_services: additionalOnetimeServices.create,
+            });
 
-              setUpdatedFormData({
-                ...updatedFormData,
-                additional_one_time_services: additionalOnetimeServices,
-              });
-              // console.log('new ele', additionalOnetimeServices);
-            }
+            setUpdatedFormData({
+              ...updatedFormData,
+              additional_one_time_services: additionalOnetimeServices,
+            });
+            // console.log('new ele', additionalOnetimeServices);
+          }
 
           // here we fnally update state variable
           setAdditionalOnetimeServices({
@@ -1510,12 +1510,18 @@ export default function AgreementSidePanel({
 
   const nextStep = (key) => {
     if (key === 'statement') {
-      setOpenCollapse({ agreement: false, statement: true });
+      setOpenCollapse({
+        agreement: false,
+        statement: true,
+        dspAddendum: false,
+        addendum: false,
+      });
       executeScroll('statement');
     }
     if (key === 'dspAddendum') {
       setOpenCollapse({
         ...openCollapse,
+        agreement: false,
         statement: false,
         dspAddendum: true,
         addendum: false,
@@ -1526,6 +1532,7 @@ export default function AgreementSidePanel({
       // if (showSection.addendum) {
       setOpenCollapse({
         ...openCollapse,
+        agreement: false,
         statement: false,
         dspAddendum: false,
         addendum: true,
@@ -1710,7 +1717,10 @@ export default function AgreementSidePanel({
           ? item.name.includes('Amazon Store Package')
           : item.service && item.service.name.includes('Amazon Store Package'),
       );
-    if (serviceData && serviceData.service_id || serviceData && serviceData.service && serviceData.service.id) {
+    if (
+      (serviceData && serviceData.service_id) ||
+      (serviceData && serviceData.service && serviceData.service.id)
+    ) {
       const serviceName = serviceData.name
         ? serviceData.name.split(' ')[3]
         : serviceData.service.name.split(' ')[3];
@@ -1811,6 +1821,7 @@ export default function AgreementSidePanel({
             ''
           ) : (
             <>
+              {goToSection()}
               <div
                 className="collapse-btn "
                 role="presentation"
@@ -2403,9 +2414,22 @@ export default function AgreementSidePanel({
                       <li>
                         <Button
                           className={
-                           formData && formData.additional_one_time_services && formData.additional_one_time_services.length && formData.additional_one_time_services.find(item => item.name === 'Amazon Store Package')
-                              ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 disabled'
+                            formData &&
+                            formData.additional_one_time_services &&
+                            formData.additional_one_time_services.length &&
+                            formData.additional_one_time_services.find(
+                              (item) => item.name === 'Amazon Store Package',
+                            )
+                              ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
                               : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
+                          }
+                          disabled={
+                            formData &&
+                            formData.additional_one_time_services &&
+                            formData.additional_one_time_services.length &&
+                            formData.additional_one_time_services.find(
+                              (item) => item.name === 'Amazon Store Package',
+                            )
                           }
                           onClick={() =>
                             showSection && showSection.dspAddendum
@@ -2432,8 +2456,7 @@ export default function AgreementSidePanel({
               ) : showSection && showSection.dspAddendum ? (
                 <>
                   <div className="straight-line sidepanel " />
-                  {/* <div className="row mr-3">
-                    <div className="col-10"> */}
+
                   <div
                     className={
                       showSection && showSection.dspAddendum
@@ -2463,8 +2486,7 @@ export default function AgreementSidePanel({
                     </h4>
                     <div className="clear-fix" />
                   </div>
-                  {/* </div>
-                  </div> */}
+
                   <Collapse isOpened={openCollapse.dspAddendum}>
                     <ul className="collapse-inner">
                       {DSPAddendumDetails.map((item) => (
@@ -2498,12 +2520,12 @@ export default function AgreementSidePanel({
               ) : (
                 ''
               )}
-              <div className="straight-line sidepanel " />{' '}
+              <div className="straight-line sidepanel " />
               <div
                 className={
                   showSection && showSection.addendum
                     ? 'collapse-btn '
-                    : 'collapse-btn disabled'
+                    : 'collapse-btn '
                 }
                 role="presentation"
                 type="button"
@@ -2516,63 +2538,72 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                <ul className="collapse-inner">
-                  <li>
-                    <p className="small-para  mt-0">
-                      [Optional] Document any terms of the contract that are not
-                      covered in the service agreement.
-                    </p>
-                    {newAddendumData && newAddendumData.id ? (
-                      <Button
-                        className=" btn-transparent sidepanel mt-1 mb-3 w-100"
-                        onClick={() => onEditAddendum()}>
-                        <img
-                          className="edit-folder-icon mr-2"
-                          src={EditFileIcons}
-                          alt="edit "
-                        />
-                        Edit Addendum
-                      </Button>
-                    ) : !showEditor &&
-                      !(
-                        newAddendumData && Object.keys(newAddendumData).length
-                      ) ? (
-                      <Button
-                        className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
-                        onClick={() => setShowEditor(true)}>
-                        Create Addendum
-                      </Button>
-                    ) : (
-                      <>
+                {loader || (isLoading.loader && isLoading.type === 'page') ? (
+                  <PageLoader
+                    component="activityLog"
+                    color="#FF5933"
+                    type="page"
+                  />
+                ) : (
+                  <ul className="collapse-inner">
+                    <li>
+                      <p className="small-para  mt-0">
+                        [Optional] Document any terms of the contract that are
+                        not covered in the service agreement.
+                      </p>
+
+                      {newAddendumData && newAddendumData.id ? (
                         <Button
-                          className={
-                            (newAddendumData &&
-                              !Object.keys(newAddendumData).length) ||
-                            (newAddendumData &&
-                              newAddendumData.addendum &&
-                              newAddendumData.addendum.startsWith('<p></p>'))
-                              ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
-                              : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
-                          }
-                          onClick={() => nextStep('final')}>
-                          {isLoading.loader && isLoading.type === 'button' ? (
-                            <PageLoader color="#fff" type="button" />
-                          ) : (
-                            'Save Addendum'
-                          )}
+                          className=" btn-transparent sidepanel mt-1 mb-3 w-100"
+                          onClick={() => onEditAddendum()}>
+                          <img
+                            className="edit-folder-icon mr-2"
+                            src={EditFileIcons}
+                            alt="edit "
+                          />
+                          Edit Addendum
                         </Button>
+                      ) : !showEditor &&
+                        !(
+                          newAddendumData && Object.keys(newAddendumData).length
+                        ) ? (
                         <Button
-                          className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
-                          onClick={() => {
-                            setShowEditor(false);
-                            setNewAddendum({});
-                          }}>
-                          Cancel
+                          className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
+                          onClick={() => setShowEditor(true)}>
+                          Create Addendum
                         </Button>
-                      </>
-                    )}
-                  </li>
-                </ul>
+                      ) : (
+                        <>
+                          <Button
+                            className={
+                              (newAddendumData &&
+                                !Object.keys(newAddendumData).length) ||
+                              (newAddendumData &&
+                                newAddendumData.addendum &&
+                                newAddendumData.addendum.startsWith('<p></p>'))
+                                ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
+                                : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
+                            }
+                            onClick={() => nextStep('final')}>
+                            {isLoading.loader && isLoading.type === 'button' ? (
+                              <PageLoader color="#fff" type="button" />
+                            ) : (
+                              'Save Addendum'
+                            )}
+                          </Button>
+                          <Button
+                            className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
+                            onClick={() => {
+                              setShowEditor(false);
+                              setNewAddendum({});
+                            }}>
+                            Cancel
+                          </Button>
+                        </>
+                      )}
+                    </li>
+                  </ul>
+                )}
               </Collapse>
             </>
           )}

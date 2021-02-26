@@ -641,6 +641,7 @@ export default function ContractContainer() {
       if (showDiscardModal.clickedBtn === 'back') {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
+
       setFormData({});
       showFooter(false);
       setShowEditor(false);
@@ -648,6 +649,7 @@ export default function ContractContainer() {
       clearError();
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
+
       if (openCollapse.agreement) {
         executeScroll('agreement');
       }
@@ -1192,6 +1194,51 @@ export default function ContractContainer() {
       </table></div>`;
   };
 
+  const showRightTick = (section) => {
+    if (section === 'service_agreement') {
+      if (
+        formData &&
+        formData.contract_company_name &&
+        formData.start_date &&
+        formData.length &&
+        formData.address &&
+        formData.state &&
+        formData.city &&
+        formData.zip_code
+      ) {
+        return true;
+      }
+    }
+
+    if (section === 'statement') {
+      if (
+        formData &&
+        formData.monthly_retainer &&
+        formData.primary_marketplace &&
+        formData.rev_share &&
+        formData.sales_threshold
+      ) {
+        return true;
+      }
+    }
+
+    if (section === 'dspAddendum') {
+      if (showSection && showSection.dspAddendum) {
+        if (
+          formData &&
+          formData.start_date &&
+          formData.primary_marketplace &&
+          formData.dsp_fee
+        ) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const onEditcontract = () => {
     const dataToUpdate = {
       contract_status: 'pending contract',
@@ -1506,6 +1553,7 @@ export default function ContractContainer() {
                     ''
                   )} */}
                 </div>
+
                 {showSection.dspAddendum ? (
                   <div id="dspAddendum">
                     <DSPAddendum
@@ -1526,27 +1574,24 @@ export default function ContractContainer() {
                 ) : (
                   ''
                 )}
-                {showSection.addendum ? (
-                  <div id="addendum">
-                    <Addendum
-                      formData={formData}
-                      details={details}
-                      templateData={data}
-                      notIncludedOneTimeServices={notIncludedOneTimeServices}
-                      notIncludedMonthlyServices={notIncludedMonthlyServices}
-                      newAddendumData={newAddendumData}
-                      setNewAddendum={setNewAddendum}
-                      showEditor={showEditor}
-                      showFooter={showFooter}
-                      setShowEditor={setShowEditor}
-                      onEditAddendum={onEditAddendum}
-                      setUpdatedFormData={setUpdatedFormData}
-                      updatedFormData={updatedFormData}
-                    />
-                  </div>
-                ) : (
-                  ''
-                )}
+
+                <div id="addendum">
+                  <Addendum
+                    formData={formData}
+                    details={details}
+                    templateData={data}
+                    notIncludedOneTimeServices={notIncludedOneTimeServices}
+                    notIncludedMonthlyServices={notIncludedMonthlyServices}
+                    newAddendumData={newAddendumData}
+                    setNewAddendum={setNewAddendum}
+                    showEditor={showEditor}
+                    showFooter={showFooter}
+                    setShowEditor={setShowEditor}
+                    onEditAddendum={onEditAddendum}
+                    setUpdatedFormData={setUpdatedFormData}
+                    updatedFormData={updatedFormData}
+                  />
+                </div>
 
                 {showSection.amendment ? (
                   <div id="amendment">
@@ -1677,8 +1722,16 @@ export default function ContractContainer() {
                 formData.additional_one_time_services.find(
                   (item) => item.name === 'Amazon Store Package',
                 )
-                  ? 'light-orange  on-boarding  mt-3 mr-3 disabled '
+                  ? 'light-orange  on-boarding  mt-3 mr-3  '
                   : 'light-orange  on-boarding  mt-3 mr-3 '
+              }
+              disabled={
+                formData &&
+                formData.additional_one_time_services &&
+                formData.additional_one_time_services.length &&
+                formData.additional_one_time_services.find(
+                  (item) => item.name === 'Amazon Store Package',
+                )
               }
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
@@ -1717,6 +1770,13 @@ export default function ContractContainer() {
             {checkApprovalCondition() ? (
               <Button
                 className="btn-primary on-boarding mt-3 mr-3  "
+                disabled={
+                  !(
+                    showRightTick('service_agreement') &&
+                    showRightTick('statement') &&
+                    showRightTick('dspAddendum')
+                  )
+                }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('request-approve');
@@ -1737,6 +1797,13 @@ export default function ContractContainer() {
             ) : (
               <Button
                 className="btn-primary on-boarding  mt-3 mr-3 "
+                disabled={
+                  !(
+                    showRightTick('service_agreement') &&
+                    showRightTick('statement') &&
+                    showRightTick('dspAddendum')
+                  )
+                }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');

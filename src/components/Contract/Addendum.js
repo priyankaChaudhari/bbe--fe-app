@@ -157,7 +157,7 @@ export default function Addendum({
   };
 
   return (
-    <>
+    <div>
       <Paragraph>
         <p
           className="long-text"
@@ -200,7 +200,7 @@ export default function Addendum({
           }}
         />
       </Paragraph>
-    </>
+    </div>
   );
 }
 
