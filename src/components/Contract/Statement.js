@@ -183,7 +183,10 @@ export default function Statement({
     }
     return '';
   };
-
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
     if (formData && formData.additional_marketplaces) {
@@ -265,14 +268,14 @@ export default function Statement({
                   item.service && item.service.fee
                     ? `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
-                          ? item.service.fee
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          : item.fee
-                          ? item.fee
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          : ''
+                          ? displayNumber(item.service.fee)
+                          : // .toString()
+                          // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          item.fee
+                          ? displayNumber(item.fee)
+                          : // .toString()
+                            // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            ''
                       } /month
                 </td>`
                     : `<td>Yet to save</td>`
@@ -306,30 +309,37 @@ export default function Statement({
              
                   ${
                     (
-                      service.name
+                      service && service.name
                         ? service.name.includes('Amazon Store Package Custom')
-                        : service.service.name.includes(
+                        : service &&
+                          service.service &&
+                          service.service.name.includes(
                             'Amazon Store Package Custom',
                           )
                     )
                       ? service.custom_amazon_store_price
                         ? `<td>
-                                $${service.custom_amazon_store_price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+                                $${
+                                  displayNumber(
+                                    service.custom_amazon_store_price,
+                                  )
+                                  // .toString()
+                                  // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                } /month
                                </td>`
                         : `<td>Yet to save</td>`
                       : service && service.service && service.service.fee
                       ? `<td>
-                           $${(service && service.service && service.service.fee
-                             ? service.service.fee
-                             : ''
-                           )
-                             .toString()
-                             .replace(
-                               /\B(?=(\d{3})+(?!\d))/g,
-                               ',',
-                             )} /month </td>`
+                           $${
+                             service && service.service && service.service.fee
+                               ? displayNumber(service.service.fee)
+                               : ''
+                             //  .toString()
+                             //  .replace(
+                             //    /\B(?=(\d{3})+(?!\d))/g,
+                             //    ',',
+                             //  )
+                           } /month </td>`
                       : `<td>Yet to save</td>`
                   }
 
@@ -338,9 +348,11 @@ export default function Statement({
 
       ${
         (
-          service.name
+          service && service.name
             ? service.name !== 'Amazon Store Package Custom'
-            : service.service.name !== 'Amazon Store Package Custom'
+            : service &&
+              service.service &&
+              service.service.name !== 'Amazon Store Package Custom'
         )
           ? service.quantity && service.service && service.service.fee
             ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
@@ -427,7 +439,7 @@ export default function Statement({
       notIncludedOneTimeServices.length
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
+    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"><br> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
                                 <tr>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
                                   <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>

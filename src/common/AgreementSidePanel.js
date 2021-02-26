@@ -156,9 +156,20 @@ export default function AgreementSidePanel({
             if (!option.label.includes('Amazon Store Package')) {
               result.push(option);
             }
-          } else {
-            result.push(option);
-          }
+          } else if (!option.label.includes('Amazon Store Package')) {
+              result.push(option);
+            } else if (
+                result.find((item) =>
+                  item.label.includes('Amazon Store Package'),
+                )
+              ) {
+                // dfgdfgh
+              } else {
+                result.push({
+                  value: 'Amazon Store Package',
+                  label: 'Amazon Store Package',
+                });
+              }
         }
       }
     } else {
@@ -927,21 +938,21 @@ export default function AgreementSidePanel({
               ...additionalOnetimeServices,
             });
           } else {
-            const defaultVar = oneTimeService.find((item) =>
-              item.label.includes('Amazon Store Package Basic'),
-            );
+            // const defaultVar = oneTimeService.find((item) =>
+            //   item.label.includes('Amazon Store Package Basic'),
+            // );
             additionalOnetimeServices.create.push({
-              name: `Amazon Store Package Basic`,
+              name: `Amazon Store Package`,
               quantity: 1,
-              service_id: defaultVar.value,
+              // service_id: defaultVar.value,
               contract_id: originalData && originalData.id,
             });
 
-            // const list = additionalOnetimeServices.delete.filter(
-            //   (item) => item !== itemInOriginalData.id,
-            // );
+            const list = additionalOnetimeServices.delete.filter(
+              (item) => item !== itemInOriginalData.id,
+            );
 
-            // additionalOnetimeServices.delete = list;
+            additionalOnetimeServices.delete = list;
 
             setFormData({
               ...formData,
@@ -959,13 +970,12 @@ export default function AgreementSidePanel({
               ...additionalOnetimeServices,
             });
           }
-          if (itemInOriginalData) {
-            // remove Amazon Store Package entries from notincludedService
-            const listWithoutAmazonStorePack = notIncludedOneTimeServices.filter(
-              (item) => !item.label.includes('Amazon Store Package'),
-            );
-            setNotIncludedOneTimeServices(listWithoutAmazonStorePack);
-          }
+
+          // remove Amazon Store Package entries from notincludedService
+          const listWithoutAmazonStorePack = notIncludedOneTimeServices.filter(
+            (item) => !item.label.includes('Amazon Store Package'),
+          );
+          setNotIncludedOneTimeServices(listWithoutAmazonStorePack);
         } else {
           const itemInList =
             additionalOnetimeServices &&
@@ -1032,9 +1042,9 @@ export default function AgreementSidePanel({
           }
 
           // add amazon Store package to notIncludedService array
-          const listWithAmazonStorePAck = oneTimeService.filter((item) =>
-            item.label.includes('Amazon Store Package'),
-          );
+          // const listWithAmazonStorePAck = oneTimeService.filter((item) =>
+          //   item.label.includes('Amazon Store Package'),
+          // );
           if (
             notIncludedOneTimeServices.find((item) =>
               item.label.includes('Amazon Store Package'),
@@ -1043,7 +1053,12 @@ export default function AgreementSidePanel({
             // don't do anything
           } else {
             setNotIncludedOneTimeServices(
-              notIncludedOneTimeServices.concat(listWithAmazonStorePAck),
+              notIncludedOneTimeServices.concat([
+                {
+                  value: 'Amazon Store Package',
+                  label: 'Amazon Store Package',
+                },
+              ]),
             );
           }
         }
@@ -1142,8 +1157,7 @@ export default function AgreementSidePanel({
           }
 
           // else we create dict as BE required for new item and we push that in newly created list
-          else {
-            if (
+          else if (
               additionalOnetimeServices &&
               additionalOnetimeServices.create &&
               additionalOnetimeServices.create.length &&
@@ -1185,7 +1199,6 @@ export default function AgreementSidePanel({
               });
               // console.log('new ele', additionalOnetimeServices);
             }
-          }
 
           // here we fnally update state variable
           setAdditionalOnetimeServices({
@@ -1697,8 +1710,7 @@ export default function AgreementSidePanel({
           ? item.name.includes('Amazon Store Package')
           : item.service && item.service.name.includes('Amazon Store Package'),
       );
-
-    if (serviceData) {
+    if (serviceData && serviceData.service_id || serviceData && serviceData.service && serviceData.service.id) {
       const serviceName = serviceData.name
         ? serviceData.name.split(' ')[3]
         : serviceData.service.name.split(' ')[3];
@@ -2391,8 +2403,8 @@ export default function AgreementSidePanel({
                       <li>
                         <Button
                           className={
-                            formData.additional_one_time_services
-                              ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
+                           formData && formData.additional_one_time_services && formData.additional_one_time_services.length && formData.additional_one_time_services.find(item => item.name === 'Amazon Store Package')
+                              ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 disabled'
                               : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                           }
                           onClick={() =>

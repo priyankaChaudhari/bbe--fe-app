@@ -1670,7 +1670,16 @@ export default function ContractContainer() {
         <div className="mt-4 pt-5">
           <Footer className=" mt-5">
             <Button
-              className="light-orange  on-boarding  mt-3 mr-3 "
+              className={
+                formData &&
+                formData.additional_one_time_services &&
+                formData.additional_one_time_services.length &&
+                formData.additional_one_time_services.find(
+                  (item) => item.name === 'Amazon Store Package',
+                )
+                  ? 'light-orange  on-boarding  mt-3 mr-3 disabled '
+                  : 'light-orange  on-boarding  mt-3 mr-3 '
+              }
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
