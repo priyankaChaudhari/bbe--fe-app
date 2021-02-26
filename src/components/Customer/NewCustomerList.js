@@ -266,7 +266,7 @@ export default function NewCustomerList() {
           user: list,
         });
       }
-      if (event && event.length) {
+      if (event && event.length && action.action === 'select-option') {
         const list = [...filters.user];
         for (const bgs of event) {
           if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
