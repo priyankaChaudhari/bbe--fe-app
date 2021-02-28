@@ -29,6 +29,7 @@ import {
   updateContactInfo,
   createContractDesign,
   createTransactionData,
+  sendReminderOfContract,
 } from '../../api/index';
 import { getAccountDetails } from '../../store/actions/accountState';
 
@@ -441,6 +442,13 @@ function RequestSignature({
     }
   };
 
+  const sendReminder = () => {
+    console.log(id);
+    sendReminderOfContract({
+      contract_id: agreementData && agreementData.id,
+    }).then((res) => console.log(res));
+  };
+
   return (
     <>
       {params && params.step === 'verify-document' ? (
@@ -611,7 +619,9 @@ function RequestSignature({
             </FormField>
 
             <div className=" mt-4">
-              <Button className=" btn-primary on-boarding w-100">
+              <Button
+                className=" btn-primary on-boarding w-100"
+                onClick={() => sendReminder()}>
                 Send Reminder
               </Button>
             </div>

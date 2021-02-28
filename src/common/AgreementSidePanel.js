@@ -1497,12 +1497,16 @@ export default function AgreementSidePanel({
     }
 
     if (section === 'dspAddendum') {
-      if (
-        formData &&
-        formData.start_date &&
-        formData.primary_marketplace &&
-        formData.dsp_fee
-      ) {
+      if (showSection && showSection.dspAddendum) {
+        if (
+          formData &&
+          formData.start_date &&
+          formData.primary_marketplace &&
+          formData.dsp_fee
+        ) {
+          return true;
+        }
+      } else {
         return true;
       }
     }
@@ -1892,6 +1896,13 @@ export default function AgreementSidePanel({
                     <li>
                       <Button
                         className="btn-primary sidepanel btn-next-section mt-2 mb-3 w-100"
+                        disabled={
+                          !(
+                            showRightTick('service_agreement') &&
+                            showRightTick('statement') &&
+                            showRightTick('dspAddendum')
+                          )
+                        }
                         onClick={() => nextStep('statement')}>
                         {' '}
                         {isLoading.loader && isLoading.type === 'button' ? (
@@ -2426,11 +2437,16 @@ export default function AgreementSidePanel({
                               : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                           }
                           disabled={
-                            formData &&
-                            formData.additional_one_time_services &&
-                            formData.additional_one_time_services.length &&
-                            formData.additional_one_time_services.find(
-                              (item) => item.name === 'Amazon Store Package',
+                            (formData &&
+                              formData.additional_one_time_services &&
+                              formData.additional_one_time_services.length &&
+                              formData.additional_one_time_services.find(
+                                (item) => item.name === 'Amazon Store Package',
+                              )) ||
+                            !(
+                              showRightTick('service_agreement') &&
+                              showRightTick('statement') &&
+                              showRightTick('dspAddendum')
                             )
                           }
                           onClick={() =>
@@ -2507,6 +2523,13 @@ export default function AgreementSidePanel({
                             formData.additional_one_time_services
                               ? 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                               : 'btn-primary btn-next-section  mt-1 mb-3 w-100 '
+                          }
+                          disabled={
+                            !(
+                              showRightTick('service_agreement') &&
+                              showRightTick('statement') &&
+                              showRightTick('dspAddendum')
+                            )
                           }
                           onClick={() => nextStep('addendum')}>
                           {isLoading.loader && isLoading.type === 'button' ? (
