@@ -29,6 +29,7 @@ import {
   updateContactInfo,
   createContractDesign,
   createTransactionData,
+  sendReminderOfContract,
 } from '../../api/index';
 import { getAccountDetails } from '../../store/actions/accountState';
 
@@ -413,7 +414,8 @@ function RequestSignature({
             message: 'Signature Requested Successfully!',
             show: true,
           });
-          setTimeout(() => clearSuccessMessage(), 800);
+          setTimeout(() => clearSuccessMessage(), 1800);
+
           dispatch(getAccountDetails(id));
 
           // history.push({
@@ -439,6 +441,23 @@ function RequestSignature({
         [event.target.name]: event.target.value,
       });
     }
+  };
+
+  const sendReminder = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    sendReminderOfContract({
+      contract_id: agreementData && agreementData.id,
+    }).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+      if (res && res.status === 200) {
+        setShowModal(false);
+        setShowSuccessContact({
+          message: 'Reminder sent successfully!',
+          show: true,
+        });
+        setTimeout(() => clearSuccessMessage(), 800);
+      }
+    });
   };
 
   return (
@@ -611,8 +630,14 @@ function RequestSignature({
             </FormField>
 
             <div className=" mt-4">
-              <Button className=" btn-primary on-boarding w-100">
-                Send Reminder
+              <Button
+                className=" btn-primary on-boarding w-100"
+                onClick={() => sendReminder()}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Send Reminder'
+                )}
               </Button>
             </div>
           </div>

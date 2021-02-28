@@ -99,6 +99,8 @@ export default function AgreementSidePanel({
   setAmazonStoreCustom,
   showAmazonPlanDropdown,
   setShowAmazonPlanDropdown,
+  showAdditionalMarketplace,
+  setShowAdditionalMarketplace,
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -116,9 +118,9 @@ export default function AgreementSidePanel({
   const [monthlyService, setMonthlyService] = useState([]);
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
-  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
-    false,
-  );
+  // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
+  //   false,
+  // );
   // const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
   // const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
@@ -1495,12 +1497,16 @@ export default function AgreementSidePanel({
     }
 
     if (section === 'dspAddendum') {
-      if (
-        formData &&
-        formData.start_date &&
-        formData.primary_marketplace &&
-        formData.dsp_fee
-      ) {
+      if (showSection && showSection.dspAddendum) {
+        if (
+          formData &&
+          formData.start_date &&
+          formData.primary_marketplace &&
+          formData.dsp_fee
+        ) {
+          return true;
+        }
+      } else {
         return true;
       }
     }
@@ -1890,6 +1896,13 @@ export default function AgreementSidePanel({
                     <li>
                       <Button
                         className="btn-primary sidepanel btn-next-section mt-2 mb-3 w-100"
+                        disabled={
+                          !(
+                            showRightTick('service_agreement') &&
+                            showRightTick('statement') &&
+                            showRightTick('dspAddendum')
+                          )
+                        }
                         onClick={() => nextStep('statement')}>
                         {' '}
                         {isLoading.loader && isLoading.type === 'button' ? (
@@ -2424,11 +2437,16 @@ export default function AgreementSidePanel({
                               : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                           }
                           disabled={
-                            formData &&
-                            formData.additional_one_time_services &&
-                            formData.additional_one_time_services.length &&
-                            formData.additional_one_time_services.find(
-                              (item) => item.name === 'Amazon Store Package',
+                            (formData &&
+                              formData.additional_one_time_services &&
+                              formData.additional_one_time_services.length &&
+                              formData.additional_one_time_services.find(
+                                (item) => item.name === 'Amazon Store Package',
+                              )) ||
+                            !(
+                              showRightTick('service_agreement') &&
+                              showRightTick('statement') &&
+                              showRightTick('dspAddendum')
                             )
                           }
                           onClick={() =>
@@ -2505,6 +2523,13 @@ export default function AgreementSidePanel({
                             formData.additional_one_time_services
                               ? 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
                               : 'btn-primary btn-next-section  mt-1 mb-3 w-100 '
+                          }
+                          disabled={
+                            !(
+                              showRightTick('service_agreement') &&
+                              showRightTick('statement') &&
+                              showRightTick('dspAddendum')
+                            )
                           }
                           onClick={() => nextStep('addendum')}>
                           {isLoading.loader && isLoading.type === 'button' ? (
@@ -2776,6 +2801,8 @@ AgreementSidePanel.defaultProps = {
   setAmazonStoreCustom: () => {},
   showAmazonPlanDropdown: false,
   setShowAmazonPlanDropdown: () => {},
+  showAdditionalMarketplace: false,
+  setShowAdditionalMarketplace: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -2887,6 +2914,8 @@ AgreementSidePanel.propTypes = {
   setAmazonStoreCustom: PropTypes.func,
   showAmazonPlanDropdown: PropTypes.bool,
   setShowAmazonPlanDropdown: PropTypes.func,
+  showAdditionalMarketplace: PropTypes.bool,
+  setShowAdditionalMarketplace: PropTypes.func,
 };
 
 const SidePanel = styled.div`

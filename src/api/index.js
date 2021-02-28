@@ -75,6 +75,7 @@ export {
   getTransactionData,
   createAdditionalServiceBulk,
   createMarketplaceBulk,
+  sendReminderOfContract,
 } from './AgreementApi';
 
 // Knowledge Base

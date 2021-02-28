@@ -124,7 +124,9 @@ export default function ContractContainer() {
     {},
   );
   const [contractError, setContractError] = useState({});
-
+  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
+    false,
+  );
   const [showSuccessContact, setShowSuccessContact] = useState({
     show: false,
     message: '',
@@ -663,6 +665,15 @@ export default function ContractContainer() {
         executeScroll('addendum');
       }
 
+      if (
+        details &&
+        details.additional_marketplaces &&
+        details.additional_marketplaces.length
+      ) {
+        setShowAdditionalMarketplace(true);
+      } else {
+        setShowAdditionalMarketplace(false);
+      }
       dispatch(getAccountDetails(id));
     }
   };
@@ -1673,6 +1684,8 @@ export default function ContractContainer() {
         setAmazonStoreCustom={setAmazonStoreCustom}
         showAmazonPlanDropdown={showAmazonPlanDropdown}
         setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
+        showAdditionalMarketplace={showAdditionalMarketplace}
+        setShowAdditionalMarketplace={setShowAdditionalMarketplace}
       />
       {/* )} */}
       {details &&
@@ -1726,11 +1739,16 @@ export default function ContractContainer() {
                   : 'light-orange  on-boarding  mt-3 mr-3 '
               }
               disabled={
-                formData &&
-                formData.additional_one_time_services &&
-                formData.additional_one_time_services.length &&
-                formData.additional_one_time_services.find(
-                  (item) => item.name === 'Amazon Store Package',
+                (formData &&
+                  formData.additional_one_time_services &&
+                  formData.additional_one_time_services.length &&
+                  formData.additional_one_time_services.find(
+                    (item) => item.name === 'Amazon Store Package',
+                  )) ||
+                !(
+                  showRightTick('service_agreement') &&
+                  showRightTick('statement') &&
+                  showRightTick('dspAddendum')
                 )
               }
               onClick={() => nextStep()}>
@@ -1770,13 +1788,13 @@ export default function ContractContainer() {
             {checkApprovalCondition() ? (
               <Button
                 className="btn-primary on-boarding mt-3 mr-3  "
-                disabled={
-                  !(
-                    showRightTick('service_agreement') &&
-                    showRightTick('statement') &&
-                    showRightTick('dspAddendum')
-                  )
-                }
+                // disabled={
+                //   !(
+                //     showRightTick('service_agreement') &&
+                //     showRightTick('statement') &&
+                //     showRightTick('dspAddendum')
+                //   )
+                // }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('request-approve');
@@ -1797,13 +1815,13 @@ export default function ContractContainer() {
             ) : (
               <Button
                 className="btn-primary on-boarding  mt-3 mr-3 "
-                disabled={
-                  !(
-                    showRightTick('service_agreement') &&
-                    showRightTick('statement') &&
-                    showRightTick('dspAddendum')
-                  )
-                }
+                // disabled={
+                //   !(
+                //     showRightTick('service_agreement') &&
+                //     showRightTick('statement') &&
+                //     showRightTick('dspAddendum')
+                //   )
+                // }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');

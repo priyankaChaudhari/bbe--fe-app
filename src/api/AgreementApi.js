@@ -12,6 +12,7 @@ import {
   API_TRANSACTIONAL_SIGN_URL,
   API_MARKETPLACE_BULK_UPDATE,
   API_ADDITIONAL_SERVICE_BULK_UPDATE,
+  API_SEND_REMINDER,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -230,6 +231,18 @@ export async function createContractDesign(data) {
 export async function transactionalSignUp(data) {
   const result = await axiosInstance
     .get(API_TRANSACTIONAL_SIGN_URL, { params: data })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function sendReminderOfContract(data) {
+  const result = await axiosInstance
+    .get(API_SEND_REMINDER, { params: data })
     .then((response) => {
       return response;
     })
