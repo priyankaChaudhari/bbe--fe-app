@@ -414,7 +414,8 @@ function RequestSignature({
             message: 'Signature Requested Successfully!',
             show: true,
           });
-          setTimeout(() => clearSuccessMessage(), 800);
+          setTimeout(() => clearSuccessMessage(), 1800);
+
           dispatch(getAccountDetails(id));
 
           // history.push({
@@ -443,10 +444,20 @@ function RequestSignature({
   };
 
   const sendReminder = () => {
-    console.log(id);
+    setIsLoading({ loader: true, type: 'button' });
     sendReminderOfContract({
       contract_id: agreementData && agreementData.id,
-    }).then((res) => console.log(res));
+    }).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+      if (res && res.status === 200) {
+        setShowModal(false);
+        setShowSuccessContact({
+          message: 'Reminder sent successfully!',
+          show: true,
+        });
+        setTimeout(() => clearSuccessMessage(), 800);
+      }
+    });
   };
 
   return (
@@ -622,7 +633,11 @@ function RequestSignature({
               <Button
                 className=" btn-primary on-boarding w-100"
                 onClick={() => sendReminder()}>
-                Send Reminder
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Send Reminder'
+                )}
               </Button>
             </div>
           </div>
