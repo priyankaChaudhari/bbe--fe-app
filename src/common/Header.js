@@ -114,7 +114,7 @@ export default function Header() {
       <MainHeader>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-6 ">
+            <div className="col-4 ">
               <div
                 className="logo cursor"
                 onClick={() => history.push(PATH_CUSTOMER_LIST)}
@@ -123,7 +123,7 @@ export default function Header() {
               </div>
               <img className="logo-mobile-view" src={NextLogo} alt="" />
             </div>
-            <div className="col-6 text-right">
+            <div className="col-8 text-right">
               <div className="">
                 <ul className="right-nav">
                   {/* <li>

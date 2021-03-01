@@ -41,7 +41,7 @@ const DropDownSelect = styled.div`
         }
 
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 15px;
+          padding: 0px 0px 1px 10px;
         }
         .css-tlfecz-indicatorContainer {
           padding: 2px 7px 2px 0px;
@@ -59,7 +59,7 @@ const DropDownSelect = styled.div`
           padding: 0;
         }
         .css-1wa3eu0-placeholder {
-          padding: 0px 0px 1px 15px;
+          padding: 0px 0px 1px 10px;
         }
         .css-1gtu0rj-indicatorContainer {
           padding: 2px 10px 2px 2px;
@@ -76,7 +76,7 @@ const DropDownSelect = styled.div`
         .css-1g6gooi {
           color: ${Theme.black};
           font-size: 15px;
-          padding-left: 7px;
+          padding-left: 8px;
         }
 
         &:focus {

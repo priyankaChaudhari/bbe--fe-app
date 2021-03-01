@@ -27,7 +27,7 @@ export default function PastAgreement({ id }) {
             multipleAgreement.map((item) => (
               <WhiteCard className="mt-3" key={item.id}>
                 <div className="row">
-                  <div className="col-8">
+                  <div className="col-lg-9 col-md-8 col-12">
                     <p className="black-heading-title mt-0 mb-0">
                       {' '}
                       <img
@@ -73,13 +73,13 @@ export default function PastAgreement({ id }) {
                       )}
                     </ul>
                   </div>
-                  <div className="col-4 text-right">
+                  <div className="col-lg-3 col-md-4 col-12 text-right">
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id),
                         state: item.id,
                       }}>
-                      <Button className="btn-transparent view-contract ">
+                      <Button className="btn-transparent w-100  view-contract ">
                         {' '}
                         <img
                           className="file-contract-icon"

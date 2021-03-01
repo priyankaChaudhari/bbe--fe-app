@@ -50,7 +50,7 @@ const ModalRadioCheck = styled.div`
     width: 12px;
     right: 55px;
     position: absolute;
-    top: 10px
+    top: 12px
   }
   span.owner-details {
     font-size: 13px;

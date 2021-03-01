@@ -399,7 +399,9 @@ export default function NewCustomerList() {
                       <img width="25px" src={CloseIcon} alt="cross" />
                     </label>
                     <div className="label">Brand Strategist</div>
-                    <DropDownSelect>{generateDropdown('user')}</DropDownSelect>
+                    <DropDownSelect className="w-250">
+                      {generateDropdown('user')}
+                    </DropDownSelect>
                     <div className="label mt-4">Status</div>
                     <div
                       className="unselected uncheck-all"
