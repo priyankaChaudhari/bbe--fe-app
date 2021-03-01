@@ -241,7 +241,7 @@ export default function EditTeamMember({
           ) : (
             <ModalBox>
               <div className="modal-body">
-                <div className="alert-msg mb-5 mt-2">
+                <div className="alert-msg mb-4 mt-2">
                   <span>
                     You&apos;re about to remove {removeMember.name}, are you
                     sure you want to do this?

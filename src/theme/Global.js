@@ -717,6 +717,10 @@ export const WhiteCard = styled.div`
       display: inline-block;
       margin-right: 15px;
 
+      &:last-child {
+        margin-right: 0;
+      }
+
       .days-block {
         background: ${Theme.lighterOrange};
         padding: 5px 10px;
@@ -1001,7 +1005,7 @@ export const GroupUser = styled.div`
     overflow-wrap: break-word;
     text-align: left;
     float: left;
-    width: 80%;
+    width: 79%;
     span {
       color: ${Theme.gray35};
       font-weight: 500;
