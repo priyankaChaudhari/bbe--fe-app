@@ -13,6 +13,7 @@ import {
   API_MARKETPLACE_BULK_UPDATE,
   API_ADDITIONAL_SERVICE_BULK_UPDATE,
   API_SEND_REMINDER,
+  API_SIGNATURE_STATUS,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -243,6 +244,18 @@ export async function transactionalSignUp(data) {
 export async function sendReminderOfContract(data) {
   const result = await axiosInstance
     .get(API_SEND_REMINDER, { params: data })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function checksignatureStatus(data) {
+  const result = await axiosInstance
+    .get(API_SIGNATURE_STATUS, { params: data })
     .then((response) => {
       return response;
     })

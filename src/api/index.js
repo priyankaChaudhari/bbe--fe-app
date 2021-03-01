@@ -76,6 +76,7 @@ export {
   createAdditionalServiceBulk,
   createMarketplaceBulk,
   sendReminderOfContract,
+  checksignatureStatus,
 } from './AgreementApi';
 
 // Knowledge Base

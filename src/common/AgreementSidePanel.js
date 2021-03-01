@@ -1827,7 +1827,7 @@ export default function AgreementSidePanel({
             ''
           ) : (
             <>
-              {goToSection()}
+              {/* {goToSection()} */}
               <div
                 className="collapse-btn "
                 role="presentation"
