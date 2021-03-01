@@ -579,6 +579,19 @@ export default function ContractContainer() {
                 ...additionalOnetimeSerError,
                 ...additionalOneTimeServRes.data,
               });
+
+              if (
+                additionalOneTimeServRes &&
+                additionalOneTimeServRes.data &&
+                Object.values(additionalOneTimeServRes.data) &&
+                Object.values(additionalOneTimeServRes.data).length &&
+                Object.values(additionalOneTimeServRes.data)[0] ===
+                  'Object does not exists'
+              ) {
+                showFooter(false);
+                setUpdatedFormData({});
+                dispatch(getAccountDetails(id));
+              }
             }
             if (contractRes && contractRes.status === 400) {
               setContractError({
