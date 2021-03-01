@@ -29,7 +29,7 @@ export const API_MARKETPLACE_BULK_UPDATE = `${API_MARKETPLACE}bulk-update/`;
 export const API_ADDITIONAL_SERVICES = '/additional-services/';
 export const API_ADDITIONAL_SERVICE_BULK_UPDATE = `${API_ADDITIONAL_SERVICES}bulk-update/`;
 export const API_SEND_REMINDER = `${API_CUSTOMER_CONTRACT}send-reminder/`;
-
+export const API_SIGNATURE_STATUS = `${API_CUSTOMER_CONTRACT}check-signature-status/`;
 export const API_SERVICE_TYPE = '/type-of-services/';
 
 // Knowledge Base

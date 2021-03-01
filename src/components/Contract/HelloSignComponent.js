@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import HelloSign from 'hellosign-embedded';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { PATH_LOGIN } from '../../constants/index';
-import { transactionalSignUp } from '../../api/index';
+import { transactionalSignUp, checksignatureStatus } from '../../api/index';
 import { PageLoader } from '../../common';
 // import Header from '../../common/Header';
-import Theme from '../../theme/Theme';
+// import Theme from '../../theme/Theme';
 
 function HelloSignComponent() {
   const history = useHistory();
@@ -32,6 +32,9 @@ function HelloSignComponent() {
         });
 
         client.on('finish', () => {
+          checksignatureStatus({ request_id: params.key }).then(() => {
+            // console.log(res, ' after check signature status');
+          });
           history.push(PATH_LOGIN);
         });
 
@@ -50,10 +53,10 @@ function HelloSignComponent() {
         <>
           {/* <Header /> */}
 
-          <Footer className="sticky">
+          {/* <Footer className="sticky">
             {' '}
             <p>Last updated by You on Dec 1, 4:18 PM</p>
-          </Footer>
+          </Footer> */}
         </>
       )}
     </div>
@@ -62,23 +65,23 @@ function HelloSignComponent() {
 
 export default HelloSignComponent;
 
-const Footer = styled.div`
-  border: 1px solid ${Theme.gray15};
-  bottom: 0;
-  width: 100%;
-  background: #fff;
-  box-shadow: ${Theme.boxShadow};
-  position: fixed;
-  min-height: 80px;
+// const Footer = styled.div`
+//   border: 1px solid ${Theme.gray15};
+//   bottom: 0;
+//   width: 100%;
+//   background: #fff;
+//   box-shadow: ${Theme.boxShadow};
+//   position: fixed;
+//   min-height: 80px;
 
-  .w-320 {
-    float: left;
-    max-width: 320px;
-    width: 100%;
-  }
+//   .w-320 {
+//     float: left;
+//     max-width: 320px;
+//     width: 100%;
+//   }
 
-  p {
-    float: left;
-    margin-top: 30px;
-  }
-`;
+//   p {
+//     float: left;
+//     margin-top: 30px;
+//   }
+// `;
