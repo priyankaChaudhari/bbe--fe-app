@@ -475,6 +475,15 @@ export default function ContractContainer() {
               if (updatedFormData && updatedFormData.additional_marketplaces) {
                 delete updatedFormData.additional_marketplaces;
               }
+              if (
+                !(
+                  formData &&
+                  formData.additional_marketplace &&
+                  formData.additional_marketplace.length
+                )
+              ) {
+                setShowAdditionalMarketplace(false);
+              }
             }
             if (
               additionalMonthlySerRes &&
@@ -1223,18 +1232,34 @@ export default function ContractContainer() {
 
     if (section === 'statement') {
       if (
-        formData &&
-        formData.monthly_retainer &&
-        formData.primary_marketplace &&
-        formData.rev_share &&
-        formData.sales_threshold
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.includes('one')
+        )
       ) {
-        return true;
-      }
+        if (
+          formData &&
+          formData.monthly_retainer &&
+          formData.primary_marketplace &&
+          formData.rev_share &&
+          formData.sales_threshold
+        ) {
+          return true;
+        }
+      } else return true;
     }
 
     if (section === 'dspAddendum') {
-      if (showSection && showSection.dspAddendum) {
+      if (
+        showSection &&
+        showSection.dspAddendum &&
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.includes('one')
+        )
+      ) {
         if (
           formData &&
           formData.start_date &&
@@ -1435,7 +1460,13 @@ export default function ContractContainer() {
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
 
-    const finalAgreement = `${agreementData} ${agreementSignatureData} ${statmentData} ${dspAddendum} ${dspAddendumSignature} ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
+    const finalAgreement = `${agreementData} ${agreementSignatureData} ${
+      details && details.contract_type.includes('one') ? '' : statmentData
+    } ${details && details.contract_type.includes('one') ? '' : dspAddendum} ${
+      details && details.contract_type.includes('one')
+        ? ''
+        : dspAddendumSignature
+    } ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
     setPDFData(finalAgreement);
   };
 
@@ -1477,7 +1508,6 @@ export default function ContractContainer() {
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
     }
   };
-
   return (
     <>
       {loader || (isLoading.loader && isLoading.type === 'page') ? (
@@ -1550,20 +1580,20 @@ export default function ContractContainer() {
                     ''
                   )} */}
                 </div>
-                <div id="statement">
-                  {/* {history.location.pathname.includes('statement') &&
-                  details ? ( */}
-                  <Statement
-                    formData={formData}
-                    details={details}
-                    templateData={data}
-                    notIncludedOneTimeServices={notIncludedOneTimeServices}
-                    notIncludedMonthlyServices={notIncludedMonthlyServices}
-                  />
-                  {/* ) : (
-                    ''
-                  )} */}
-                </div>
+
+                {details && details.contract_type.includes('one') ? (
+                  ''
+                ) : (
+                  <div id="statement">
+                    <Statement
+                      formData={formData}
+                      details={details}
+                      templateData={data}
+                      notIncludedOneTimeServices={notIncludedOneTimeServices}
+                      notIncludedMonthlyServices={notIncludedMonthlyServices}
+                    />
+                  </div>
+                )}
 
                 {showSection.dspAddendum ? (
                   <div id="dspAddendum">
@@ -1739,7 +1769,12 @@ export default function ContractContainer() {
                   : 'light-orange  on-boarding  mt-3 mr-3 '
               }
               disabled={
-                (formData &&
+                (!(
+                  formData &&
+                  formData.contract_type &&
+                  formData.contract_type.includes('one')
+                ) &&
+                  formData &&
                   formData.additional_one_time_services &&
                   formData.additional_one_time_services.length &&
                   formData.additional_one_time_services.find(
@@ -1779,22 +1814,23 @@ export default function ContractContainer() {
             )}
           </Footer>
         </div>
-      ) : details &&
-        details.steps_completed &&
-        details.steps_completed.agreement &&
-        details.steps_completed.statement ? (
+      ) : (
+        //  details &&
+        //   details.steps_completed &&
+        //   details.steps_completed.agreement &&
+        //   details.steps_completed.statement ?
         <div className="mt-4 pt-5">
           <Footer>
             {checkApprovalCondition() ? (
               <Button
                 className="btn-primary on-boarding mt-3 mr-3  "
-                // disabled={
-                //   !(
-                //     showRightTick('service_agreement') &&
-                //     showRightTick('statement') &&
-                //     showRightTick('dspAddendum')
-                //   )
-                // }
+                disabled={
+                  !(
+                    showRightTick('service_agreement') &&
+                    showRightTick('statement') &&
+                    showRightTick('dspAddendum')
+                  )
+                }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('request-approve');
@@ -1815,13 +1851,13 @@ export default function ContractContainer() {
             ) : (
               <Button
                 className="btn-primary on-boarding  mt-3 mr-3 "
-                // disabled={
-                //   !(
-                //     showRightTick('service_agreement') &&
-                //     showRightTick('statement') &&
-                //     showRightTick('dspAddendum')
-                //   )
-                // }
+                disabled={
+                  !(
+                    showRightTick('service_agreement') &&
+                    showRightTick('statement') &&
+                    showRightTick('dspAddendum')
+                  )
+                }
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1836,10 +1872,9 @@ export default function ContractContainer() {
             </span>
           </Footer>
         </div>
-      ) : (
-        ''
       )}
 
+      {/* // : ( // '' // )} */}
       <Modal
         isOpen={showModal}
         style={customStyles}
@@ -1860,6 +1895,7 @@ export default function ContractContainer() {
             pdfData={pdfData}
             setShowSuccessContact={setShowSuccessContact}
             clearSuccessMessage={clearSuccessMessage}
+            setOpenCollapse={setOpenCollapse}
           />
         </ModalBox>
       </Modal>
