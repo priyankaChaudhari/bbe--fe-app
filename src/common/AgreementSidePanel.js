@@ -1498,7 +1498,7 @@ export default function AgreementSidePanel({
         !(
           formData &&
           formData.contract_type &&
-          formData.contract_type.includes('one')
+          formData.contract_type.toLowerCase().includes('one')
         )
       ) {
         if (
@@ -1520,7 +1520,7 @@ export default function AgreementSidePanel({
         !(
           formData &&
           formData.contract_type &&
-          formData.contract_type.includes('one')
+          formData.contract_type.toLowerCase().includes('one')
         )
       ) {
         if (
@@ -1867,7 +1867,9 @@ export default function AgreementSidePanel({
                 />
 
                 <h4 className="sendar-details ">
-                  {agreementData && agreementData.contract_type === 'one time'
+                  {formData &&
+                  formData.contract_type &&
+                  formData.contract_type.toLowerCase().includes('one')
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
                   {showRightTick('service_agreement') ? (
@@ -1931,7 +1933,9 @@ export default function AgreementSidePanel({
                           nextStep(
                             formData &&
                               formData.contract_type &&
-                              formData.contract_type.includes('one')
+                              formData.contract_type
+                                .toLowerCase()
+                                .includes('one')
                               ? 'addendum'
                               : 'statement',
                           )
@@ -1949,7 +1953,7 @@ export default function AgreementSidePanel({
               </Collapse>
               {formData &&
               formData.contract_type &&
-              formData.contract_type.includes('one') ? (
+              formData.contract_type.toLowerCase().includes('one') ? (
                 ''
               ) : (
                 <>
@@ -2534,7 +2538,7 @@ export default function AgreementSidePanel({
                 !(
                   formData &&
                   formData.contract_type &&
-                  formData.contract_type.includes('one')
+                  formData.contract_type.toLowerCase().includes('one')
                 ) ? (
                 <>
                   <div className="straight-line sidepanel " />

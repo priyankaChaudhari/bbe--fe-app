@@ -39,6 +39,9 @@ function HelloSignComponent() {
         });
 
         client.on('close', () => {
+          checksignatureStatus({ request_id: params.key }).then(() => {
+            // console.log(res, ' after check signature status');
+          });
           history.push(PATH_LOGIN);
         });
       }

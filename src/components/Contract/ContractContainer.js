@@ -1142,7 +1142,11 @@ export default function ContractContainer() {
     return '';
   };
   const getAgreementAccorType = (index) => {
-    if (data && details && details.contract_type === 'one time') {
+    if (
+      data &&
+      details &&
+      details.contract_type.toLowerCase().includes('one')
+    ) {
       return (
         data &&
         data.one_time_service_agreement &&
@@ -1248,7 +1252,7 @@ export default function ContractContainer() {
         !(
           formData &&
           formData.contract_type &&
-          formData.contract_type.includes('one')
+          formData.contract_type.toLowerCase().includes('one')
         )
       ) {
         if (
@@ -1270,7 +1274,7 @@ export default function ContractContainer() {
         !(
           formData &&
           formData.contract_type &&
-          formData.contract_type.includes('one')
+          formData.contract_type.toLowerCase().includes('one')
         )
       ) {
         if (
@@ -1474,9 +1478,15 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      details && details.contract_type.includes('one') ? '' : statmentData
-    } ${details && details.contract_type.includes('one') ? '' : dspAddendum} ${
-      details && details.contract_type.includes('one')
+      details && details.contract_type.toLowerCase().includes('one')
+        ? ''
+        : statmentData
+    } ${
+      details && details.contract_type.toLowerCase().includes('one')
+        ? ''
+        : dspAddendum
+    } ${
+      details && details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
     } ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
@@ -1594,7 +1604,8 @@ export default function ContractContainer() {
                   )} */}
                 </div>
 
-                {details && details.contract_type.includes('one') ? (
+                {details &&
+                details.contract_type.toLowerCase().includes('one') ? (
                   ''
                 ) : (
                   <div id="statement">
@@ -1785,7 +1796,7 @@ export default function ContractContainer() {
                 (!(
                   formData &&
                   formData.contract_type &&
-                  formData.contract_type.includes('one')
+                  formData.contract_type.toLowerCase().includes('one')
                 ) &&
                   formData &&
                   formData.additional_one_time_services &&
