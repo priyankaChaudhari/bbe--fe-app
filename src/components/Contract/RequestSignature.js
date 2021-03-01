@@ -30,6 +30,7 @@ import {
   createContractDesign,
   createTransactionData,
   sendReminderOfContract,
+  getTransactionData,
 } from '../../api/index';
 import { getAccountDetails } from '../../store/actions/accountState';
 
@@ -44,6 +45,7 @@ function RequestSignature({
   pdfData,
   setShowSuccessContact,
   clearSuccessMessage,
+  setOpenCollapse,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -62,6 +64,7 @@ function RequestSignature({
   const [showHelloSignPage, setShowHelloSign] = useState(true);
   const [reminderMailData, setReminderMailData] = useState({});
   const [contactModalName, setModalName] = useState('Add Contact');
+  const [transactionalData, setTransactionalData] = useState(null);
 
   const contactFields = [
     {
@@ -97,6 +100,14 @@ function RequestSignature({
   ];
   useEffect(() => {
     dispatch(getContactDetails(id));
+    if (params && params.step && params.step === 'send-remainder')
+      getTransactionData({
+        contract_id: agreementData && agreementData.id,
+      }).then((res) => {
+        setTransactionalData(
+          res && res.data && res.data.results && res.data.results[0],
+        );
+      });
     setIsLoading({ loader: false, type: 'page' });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -414,8 +425,14 @@ function RequestSignature({
             message: 'Signature Requested Successfully!',
             show: true,
           });
-          setTimeout(() => clearSuccessMessage(), 1800);
-
+          setTimeout(() => clearSuccessMessage(), 2000);
+          setOpenCollapse({
+            agreement: true,
+            statement: false,
+            addendum: false,
+            dspAddendum: false,
+            amendment: false,
+          });
           dispatch(getAccountDetails(id));
 
           // history.push({
@@ -586,8 +603,7 @@ function RequestSignature({
                 <div className="signature-request">
                   TO:
                   <span className="email-address">
-                    {' '}
-                    jenny@ashersapparel.com
+                    {transactionalData && transactionalData.primary_email}
                   </span>{' '}
                 </div>
               </div>
@@ -601,6 +617,10 @@ function RequestSignature({
                       type="checkbox"
                       id="contract-copy"
                       name="send_contract_copy"
+                      defaultChecked={
+                        transactionalData &&
+                        transactionalData.send_contract_copy
+                      }
                       onChange={(event) =>
                         handleChangeForReminder(event, 'send_contract_copy')
                       }
@@ -624,6 +644,7 @@ function RequestSignature({
                 className="form-control"
                 type="text"
                 name="note"
+                defaultValue={transactionalData && transactionalData.note}
                 placeholder="Add personal note to recipient"
                 onChange={(event) => handleChangeForReminder(event, 'note')}
               />
@@ -780,6 +801,7 @@ RequestSignature.defaultProps = {
   pdfData: '',
   setShowSuccessContact: () => {},
   clearSuccessMessage: () => {},
+  setOpenCollapse: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -801,4 +823,5 @@ RequestSignature.propTypes = {
   pdfData: PropTypes.string,
   setShowSuccessContact: PropTypes.func,
   clearSuccessMessage: PropTypes.func,
+  setOpenCollapse: PropTypes.func,
 };

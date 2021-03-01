@@ -563,6 +563,15 @@ export default function AgreementSidePanel({
         setAdditionalMarketplace({
           ...additionalMarketplacesData,
         });
+        // if (
+        //   !(
+        //     formData &&
+        //     formData.additional_marketplace &&
+        //     formData.additional_marketplace.length
+        //   )
+        // ) {
+        //   setShowAdditionalMarketplace(false);
+        // }
       }
     } else if (key === 'additional_monthly_services') {
       const itemInFormData =
@@ -1486,18 +1495,34 @@ export default function AgreementSidePanel({
 
     if (section === 'statement') {
       if (
-        formData &&
-        formData.monthly_retainer &&
-        formData.primary_marketplace &&
-        formData.rev_share &&
-        formData.sales_threshold
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.includes('one')
+        )
       ) {
-        return true;
-      }
+        if (
+          formData &&
+          formData.monthly_retainer &&
+          formData.primary_marketplace &&
+          formData.rev_share &&
+          formData.sales_threshold
+        ) {
+          return true;
+        }
+      } else return true;
     }
 
     if (section === 'dspAddendum') {
-      if (showSection && showSection.dspAddendum) {
+      if (
+        showSection &&
+        showSection.dspAddendum &&
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.includes('one')
+        )
+      ) {
         if (
           formData &&
           formData.start_date &&
@@ -1510,7 +1535,6 @@ export default function AgreementSidePanel({
         return true;
       }
     }
-
     return false;
   };
 
@@ -1903,7 +1927,15 @@ export default function AgreementSidePanel({
                             showRightTick('dspAddendum')
                           )
                         }
-                        onClick={() => nextStep('statement')}>
+                        onClick={() =>
+                          nextStep(
+                            formData &&
+                              formData.contract_type &&
+                              formData.contract_type.includes('one')
+                              ? 'addendum'
+                              : 'statement',
+                          )
+                        }>
                         {' '}
                         {isLoading.loader && isLoading.type === 'button' ? (
                           <PageLoader color="#fff" type="button" />
@@ -1915,376 +1947,378 @@ export default function AgreementSidePanel({
                   </ul>
                 )}
               </Collapse>
-              <div className="straight-line sidepanel " />
-              <div
-                className="collapse-btn"
-                role="presentation"
-                type="button"
-                onClick={() => {
-                  executeScroll('statement');
-                  setOpenCollapse({ statement: !openCollapse.statement });
-                }}>
-                <img className="service-agre" src={StatementWork} alt="pdf" />
-                <h4 className="sendar-details ">
-                  Statement of Work{' '}
-                  {showRightTick('statement') ? (
+              {formData &&
+              formData.contract_type &&
+              formData.contract_type.includes('one') ? (
+                ''
+              ) : (
+                <>
+                  <div className="straight-line sidepanel " />
+                  <div
+                    className="collapse-btn"
+                    role="presentation"
+                    type="button"
+                    onClick={() => {
+                      executeScroll('statement');
+                      setOpenCollapse({ statement: !openCollapse.statement });
+                    }}>
                     <img
-                      className="green-check-select "
-                      src={GreenCheck}
-                      alt="right-check"
+                      className="service-agre"
+                      src={StatementWork}
+                      alt="pdf"
                     />
-                  ) : (
-                    ''
-                  )}
-                </h4>
-                <div className="clear-fix" />
-              </div>
-              <Collapse isOpened={openCollapse.statement}>
-                {loader || (isLoading.loader && isLoading.type === 'page') ? (
-                  <PageLoader
-                    component="activityLog"
-                    color="#FF5933"
-                    type="page"
-                  />
-                ) : (
-                  // ''
-                  <>
-                    <ul className="collapse-inner">
-                      {StatementDetails.map((item) => (
-                        <React.Fragment key={item.key}>
-                          <>
-                            <li>
-                              <ContractFormField>
-                                <label htmlFor={item.key}>{item.label}</label>
-                                {generateHTML(item)}
-                                {displayError(item)}
-                                {item.key === 'primary_marketplace' &&
-                                apiError &&
-                                apiError.non_field_errors &&
-                                apiError.non_field_errors[0]
-                                  ? displayError('non_field_errors')
-                                  : ''}
-                              </ContractFormField>
-                            </li>
-                          </>
-                        </React.Fragment>
-                      ))}
-                      <li>
-                        <ContractFormField className="mb-3">
-                          <label htmlFor="additional_one_time_services ">
-                            Additional Monthly Services
-                          </label>
-                        </ContractFormField>
-                        {monthlyService &&
-                          monthlyService.map((serviceData) => (
-                            <CheckBox key={serviceData && serviceData.value}>
+                    <h4 className="sendar-details ">
+                      Statement of Work{' '}
+                      {showRightTick('statement') ? (
+                        <img
+                          className="green-check-select "
+                          src={GreenCheck}
+                          alt="right-check"
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </h4>
+                    <div className="clear-fix" />
+                  </div>
+                  <Collapse isOpened={openCollapse.statement}>
+                    {loader ||
+                    (isLoading.loader && isLoading.type === 'page') ? (
+                      <PageLoader
+                        component="activityLog"
+                        color="#FF5933"
+                        type="page"
+                      />
+                    ) : (
+                      // ''
+                      <>
+                        <ul className="collapse-inner">
+                          {StatementDetails.map((item) => (
+                            <React.Fragment key={item.key}>
+                              <>
+                                <li>
+                                  <ContractFormField>
+                                    <label htmlFor={item.key}>
+                                      {item.label}
+                                    </label>
+                                    {generateHTML(item)}
+                                    {displayError(item)}
+                                    {item.key === 'primary_marketplace' &&
+                                    apiError &&
+                                    apiError.non_field_errors &&
+                                    apiError.non_field_errors[0]
+                                      ? displayError('non_field_errors')
+                                      : ''}
+                                  </ContractFormField>
+                                </li>
+                              </>
+                            </React.Fragment>
+                          ))}
+                          <li>
+                            <ContractFormField className="mb-3">
+                              <label htmlFor="additional_one_time_services ">
+                                Additional Monthly Services
+                              </label>
+                            </ContractFormField>
+                            {monthlyService &&
+                              monthlyService.map((serviceData) => (
+                                <CheckBox
+                                  key={serviceData && serviceData.value}>
+                                  <label
+                                    className="check-container customer-pannel"
+                                    htmlFor={serviceData.value}>
+                                    {serviceData.label}
+                                    <input
+                                      type="checkbox"
+                                      name={serviceData.label}
+                                      id={serviceData.value}
+                                      onClick={(event) =>
+                                        handleChange(
+                                          event,
+                                          'additional_monthly_services',
+                                          'checkbox',
+                                          serviceData,
+                                        )
+                                      }
+                                      defaultChecked={
+                                        formData &&
+                                        formData.additional_monthly_services &&
+                                        formData.additional_monthly_services
+                                          .length &&
+                                        formData.additional_monthly_services.find(
+                                          (item) =>
+                                            item.service &&
+                                            item.service.id ===
+                                              serviceData.value,
+                                        )
+                                      }
+                                    />
+                                    <span className="checkmark" />
+                                  </label>
+                                </CheckBox>
+                              ))}
+
+                            <CheckBox>
                               <label
                                 className="check-container customer-pannel"
-                                htmlFor={serviceData.value}>
-                                {serviceData.label}
+                                htmlFor="additional_marketplaces">
+                                Additional Marketplaces
                                 <input
                                   type="checkbox"
-                                  name={serviceData.label}
-                                  id={serviceData.value}
-                                  onClick={(event) =>
+                                  id="additional_marketplaces"
+                                  onClick={(event) => {
+                                    setShowAdditionalMarketplace(
+                                      event.target.checked,
+                                    );
                                     handleChange(
                                       event,
-                                      'additional_monthly_services',
+                                      'additional_marketplaces_checkbox',
                                       'checkbox',
-                                      serviceData,
-                                    )
-                                  }
+                                    );
+                                  }}
+                                  // checked={
+                                  //   formData &&
+                                  //   formData.additional_marketplaces &&
+                                  //   formData.additional_marketplaces.length
+                                  //     ? true
+                                  //     : false
+                                  // }
                                   defaultChecked={
                                     formData &&
-                                    formData.additional_monthly_services &&
-                                    formData.additional_monthly_services
-                                      .length &&
-                                    formData.additional_monthly_services.find(
-                                      (item) =>
-                                        item.service &&
-                                        item.service.id === serviceData.value,
-                                    )
+                                    formData.additional_marketplaces &&
+                                    formData.additional_marketplaces.length
                                   }
                                 />
                                 <span className="checkmark" />
                               </label>
                             </CheckBox>
-                          ))}
 
-                        <CheckBox>
-                          <label
-                            className="check-container customer-pannel"
-                            htmlFor="additional_marketplaces">
-                            Additional Marketplaces
-                            <input
-                              type="checkbox"
-                              id="additional_marketplaces"
-                              onClick={(event) => {
-                                setShowAdditionalMarketplace(
-                                  event.target.checked,
-                                );
-                                handleChange(
-                                  event,
-                                  'additional_marketplaces_checkbox',
-                                  'checkbox',
-                                );
-                              }}
-                              // checked={
-                              //   formData &&
-                              //   formData.additional_marketplaces &&
-                              //   formData.additional_marketplaces.length
-                              //     ? true
-                              //     : false
-                              // }
-                              defaultChecked={
-                                formData &&
-                                formData.additional_marketplaces &&
-                                formData.additional_marketplaces.length
-                              }
-                            />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-
-                        {showAdditionalMarketplace ? (
-                          <>
-                            <ContractFormField>
-                              {generateHTML({
-                                key: 'additional_marketplaces',
-                                label: 'Additional Market Places',
-                                type: 'multichoice',
-                              })}
+                            {showAdditionalMarketplace ? (
+                              <>
+                                <ContractFormField>
+                                  {generateHTML({
+                                    key: 'additional_marketplaces',
+                                    label: 'Additional Market Places',
+                                    type: 'multichoice',
+                                  })}
+                                </ContractFormField>
+                              </>
+                            ) : (
+                              ''
+                            )}
+                          </li>
+                          <li>
+                            <ContractFormField className="mb-3">
+                              <label htmlFor="additional_one_time_services">
+                                Additional One-Time Services
+                              </label>
                             </ContractFormField>
-                          </>
-                        ) : (
-                          ''
-                        )}
-                      </li>
-                      <li>
-                        <ContractFormField className="mb-3">
-                          <label htmlFor="additional_one_time_services">
-                            Additional One-Time Services
-                          </label>
-                        </ContractFormField>
-                        <div className="row">
-                          {oneTimeService &&
-                            oneTimeService.map((oneTimeServiceData) =>
-                              !oneTimeServiceData.label.includes(
-                                'Amazon Store Package',
-                              ) ? (
-                                <React.Fragment key={oneTimeServiceData.value}>
-                                  <div className="col-7 ">
-                                    {' '}
-                                    <CheckBox>
-                                      <label
-                                        className="check-container customer-pannel"
-                                        htmlFor={oneTimeServiceData.value}>
-                                        {oneTimeServiceData.label}
-                                        <input
-                                          type="checkbox"
-                                          name={oneTimeServiceData.label}
-                                          id={oneTimeServiceData.value}
-                                          onClick={(event) =>
-                                            handleChange(
-                                              event,
-                                              'additional_one_time_services',
-                                              'checkbox',
-                                              oneTimeServiceData,
-                                            )
-                                          }
-                                          defaultChecked={
-                                            formData &&
-                                            formData.additional_one_time_services &&
-                                            formData
-                                              .additional_one_time_services
-                                              .length &&
-                                            formData.additional_one_time_services.find(
-                                              (item) =>
-                                                item.service &&
-                                                item.service.id ===
-                                                  oneTimeServiceData.value,
-                                            )
-                                          }
-                                        />
-                                        <span className="checkmark" />
-                                      </label>
-                                    </CheckBox>
-                                  </div>
-                                  {formData &&
-                                  formData.additional_one_time_services &&
-                                  formData.additional_one_time_services
-                                    .length &&
-                                  formData.additional_one_time_services.find(
-                                    (item) =>
-                                      item.service_id
-                                        ? item.service_id ===
-                                          oneTimeServiceData.value
-                                        : item.service &&
-                                          item.service.id ===
-                                            oneTimeServiceData.value,
+                            <div className="row">
+                              {oneTimeService &&
+                                oneTimeService.map((oneTimeServiceData) =>
+                                  !oneTimeServiceData.label.includes(
+                                    'Amazon Store Package',
                                   ) ? (
-                                    <div className="col-5 pl-0">
-                                      <button
-                                        type="button"
-                                        className="decrement"
-                                        onClick={() => {
-                                          changeQuantity(
-                                            oneTimeServiceData,
-                                            'minus',
-                                          );
-                                          // handleChange(
-                                          //   event,
-                                          //   'additional_one_time_services',
-                                          //   'quantity',
-                                          //   oneTimeServiceData,
-                                          // );
-                                        }}>
+                                    <React.Fragment
+                                      key={oneTimeServiceData.value}>
+                                      <div className="col-7 ">
                                         {' '}
-                                        <img
-                                          className="minus-icon"
-                                          src={MinusIcon}
-                                          alt=""
-                                        />
-                                      </button>
+                                        <CheckBox>
+                                          <label
+                                            className="check-container customer-pannel"
+                                            htmlFor={oneTimeServiceData.value}>
+                                            {oneTimeServiceData.label}
+                                            <input
+                                              type="checkbox"
+                                              name={oneTimeServiceData.label}
+                                              id={oneTimeServiceData.value}
+                                              onClick={(event) =>
+                                                handleChange(
+                                                  event,
+                                                  'additional_one_time_services',
+                                                  'checkbox',
+                                                  oneTimeServiceData,
+                                                )
+                                              }
+                                              defaultChecked={
+                                                formData &&
+                                                formData.additional_one_time_services &&
+                                                formData
+                                                  .additional_one_time_services
+                                                  .length &&
+                                                formData.additional_one_time_services.find(
+                                                  (item) =>
+                                                    item.service &&
+                                                    item.service.id ===
+                                                      oneTimeServiceData.value,
+                                                )
+                                              }
+                                            />
+                                            <span className="checkmark" />
+                                          </label>
+                                        </CheckBox>
+                                      </div>
+                                      {formData &&
+                                      formData.additional_one_time_services &&
+                                      formData.additional_one_time_services
+                                        .length &&
+                                      formData.additional_one_time_services.find(
+                                        (item) =>
+                                          item.service_id
+                                            ? item.service_id ===
+                                              oneTimeServiceData.value
+                                            : item.service &&
+                                              item.service.id ===
+                                                oneTimeServiceData.value,
+                                      ) ? (
+                                        <div className="col-5 pl-0">
+                                          <button
+                                            type="button"
+                                            className="decrement"
+                                            onClick={() => {
+                                              changeQuantity(
+                                                oneTimeServiceData,
+                                                'minus',
+                                              );
+                                              // handleChange(
+                                              //   event,
+                                              //   'additional_one_time_services',
+                                              //   'quantity',
+                                              //   oneTimeServiceData,
+                                              // );
+                                            }}>
+                                            {' '}
+                                            <img
+                                              className="minus-icon"
+                                              src={MinusIcon}
+                                              alt=""
+                                            />
+                                          </button>
 
-                                      <NumberFormat
-                                        name={oneTimeServiceData.label}
-                                        className="form-control max-min-number"
-                                        value={
-                                          formData.additional_one_time_services.find(
-                                            (item) =>
-                                              item.service_id
-                                                ? item.service_id ===
-                                                  oneTimeServiceData.value
-                                                : item.service &&
-                                                  item.service.id ===
-                                                    oneTimeServiceData.value,
-                                          ).quantity
-                                        }
-                                        id={oneTimeServiceData.value}
-                                        onChange={(event) =>
+                                          <NumberFormat
+                                            name={oneTimeServiceData.label}
+                                            className="form-control max-min-number"
+                                            value={
+                                              formData.additional_one_time_services.find(
+                                                (item) =>
+                                                  item.service_id
+                                                    ? item.service_id ===
+                                                      oneTimeServiceData.value
+                                                    : item.service &&
+                                                      item.service.id ===
+                                                        oneTimeServiceData.value,
+                                              ).quantity
+                                            }
+                                            id={oneTimeServiceData.value}
+                                            onChange={(event) =>
+                                              handleChange(
+                                                event,
+                                                'additional_one_time_services',
+                                                'quantity',
+                                                oneTimeServiceData,
+                                              )
+                                            }
+                                          />
+
+                                          <button
+                                            type="button"
+                                            className="increment"
+                                            onClick={() => {
+                                              changeQuantity(
+                                                oneTimeServiceData,
+                                                'add',
+                                              );
+                                              // handleChange(
+                                              //   event,
+                                              //   'additional_one_time_services',
+                                              //   'quantity',
+                                              //   oneTimeServiceData,
+                                              // );
+                                            }}>
+                                            <img
+                                              className="plus-icon"
+                                              src={PlusIcon}
+                                              alt=""
+                                            />
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </React.Fragment>
+                                  ) : (
+                                    ''
+                                  ),
+                                )}
+                              <>
+                                <div className="col-7 ">
+                                  {' '}
+                                  <CheckBox>
+                                    <label
+                                      className="check-container customer-pannel"
+                                      htmlFor="contract-copy-check">
+                                      Amazon Store
+                                      <input
+                                        type="checkbox"
+                                        id="contract-copy-check"
+                                        onClick={(event) => {
+                                          setShowAmazonPlanDropdown(
+                                            event.target.checked,
+                                          );
+
                                           handleChange(
                                             event,
-                                            'additional_one_time_services',
-                                            'quantity',
-                                            oneTimeServiceData,
+                                            'amazon_store_package',
+                                            'checkbox',
+                                            amazonService,
+                                          );
+                                        }}
+                                        defaultChecked={
+                                          agreementData &&
+                                          agreementData.additional_one_time_services &&
+                                          agreementData
+                                            .additional_one_time_services
+                                            .length &&
+                                          agreementData.additional_one_time_services.find(
+                                            (item) =>
+                                              item.service &&
+                                              item.service.name.includes(
+                                                'Amazon Store Package',
+                                              ),
                                           )
                                         }
                                       />
+                                      <span className="checkmark" />
+                                    </label>
+                                  </CheckBox>
+                                </div>
+                                {showAmazonPlanDropdown ? (
+                                  <div className="col-5 pl-0">
+                                    <button
+                                      type="button"
+                                      className="decrement"
+                                      onClick={() => {
+                                        handleAmazonServiceQuantity('minus');
+                                        // handleChange(
+                                        //   event,
+                                        //   'amazon_store_package',
+                                        //   'quantity',
+                                        //   amazonService,
+                                        // );
+                                      }}>
+                                      {' '}
+                                      <img
+                                        className="minus-icon"
+                                        src={MinusIcon}
+                                        alt=""
+                                      />
+                                    </button>
 
-                                      <button
-                                        type="button"
-                                        className="increment"
-                                        onClick={() => {
-                                          changeQuantity(
-                                            oneTimeServiceData,
-                                            'add',
-                                          );
-                                          // handleChange(
-                                          //   event,
-                                          //   'additional_one_time_services',
-                                          //   'quantity',
-                                          //   oneTimeServiceData,
-                                          // );
-                                        }}>
-                                        <img
-                                          className="plus-icon"
-                                          src={PlusIcon}
-                                          alt=""
-                                        />
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    ''
-                                  )}
-                                </React.Fragment>
-                              ) : (
-                                ''
-                              ),
-                            )}
-                          <>
-                            <div className="col-7 ">
-                              {' '}
-                              <CheckBox>
-                                <label
-                                  className="check-container customer-pannel"
-                                  htmlFor="contract-copy-check">
-                                  Amazon Store
-                                  <input
-                                    type="checkbox"
-                                    id="contract-copy-check"
-                                    onClick={(event) => {
-                                      setShowAmazonPlanDropdown(
-                                        event.target.checked,
-                                      );
-
-                                      handleChange(
-                                        event,
-                                        'amazon_store_package',
-                                        'checkbox',
-                                        amazonService,
-                                      );
-                                    }}
-                                    defaultChecked={
-                                      agreementData &&
-                                      agreementData.additional_one_time_services &&
-                                      agreementData.additional_one_time_services
-                                        .length &&
-                                      agreementData.additional_one_time_services.find(
-                                        (item) =>
-                                          item.service &&
-                                          item.service.name.includes(
-                                            'Amazon Store Package',
-                                          ),
-                                      )
-                                    }
-                                  />
-                                  <span className="checkmark" />
-                                </label>
-                              </CheckBox>
-                            </div>
-                            {showAmazonPlanDropdown ? (
-                              <div className="col-5 pl-0">
-                                <button
-                                  type="button"
-                                  className="decrement"
-                                  onClick={() => {
-                                    handleAmazonServiceQuantity('minus');
-                                    // handleChange(
-                                    //   event,
-                                    //   'amazon_store_package',
-                                    //   'quantity',
-                                    //   amazonService,
-                                    // );
-                                  }}>
-                                  {' '}
-                                  <img
-                                    className="minus-icon"
-                                    src={MinusIcon}
-                                    alt=""
-                                  />
-                                </button>
-
-                                <NumberFormat
-                                  name="amazon service"
-                                  className="form-control max-min-number"
-                                  value={
-                                    formData &&
-                                    formData.additional_one_time_services &&
-                                    formData.additional_one_time_services
-                                      .length &&
-                                    formData.additional_one_time_services.find(
-                                      (item) =>
-                                        item.name
-                                          ? item.name.includes(
-                                              'Amazon Store Package',
-                                            )
-                                          : item.service &&
-                                            item.service.name.includes(
-                                              'Amazon Store Package',
-                                            ),
-                                    )
-                                      ? formData &&
+                                    <NumberFormat
+                                      name="amazon service"
+                                      className="form-control max-min-number"
+                                      value={
+                                        formData &&
                                         formData.additional_one_time_services &&
                                         formData.additional_one_time_services
                                           .length &&
@@ -2298,89 +2332,90 @@ export default function AgreementSidePanel({
                                                 item.service.name.includes(
                                                   'Amazon Store Package',
                                                 ),
-                                        ).quantity
-                                      : ''
-                                  }
-                                  // id={
-                                  //   amazonService.name
-                                  //     ? amazonService.name
-                                  //     : amazonService.service.name
-                                  // }
-                                  onChange={(event) =>
-                                    handleChange(
-                                      event,
-                                      'amazon_store_package',
-                                      'quantity',
-                                      amazonService,
-                                    )
-                                  }
-                                />
-
-                                <button
-                                  type="button"
-                                  className="increment"
-                                  onClick={() => {
-                                    handleAmazonServiceQuantity('add');
-                                    // handleChange(
-                                    //   event,
-                                    //   'amazon_store_package',
-                                    //   'quantity',
-                                    //   amazonService,
-                                    // );
-                                  }}>
-                                  <img
-                                    className="plus-icon"
-                                    src={PlusIcon}
-                                    alt=""
-                                  />
-                                </button>
-                              </div>
-                            ) : (
-                              ''
-                            )}
-                            {showAmazonPlanDropdown ? (
-                              <div className="col-12">
-                                <>
-                                  <ContractInputSelect>
-                                    <Select
-                                      classNamePrefix="react-select"
-                                      defaultValue={setDefaultAmazonPlanValue()}
-                                      options={AmazonStoreOptions}
-                                      name="amazon_store_plan"
-                                      components={{ DropdownIndicator }}
-                                      onChange={(event) => {
-                                        handleAmazonPlanChange(event);
+                                        )
+                                          ? formData &&
+                                            formData.additional_one_time_services &&
+                                            formData
+                                              .additional_one_time_services
+                                              .length &&
+                                            formData.additional_one_time_services.find(
+                                              (item) =>
+                                                item.name
+                                                  ? item.name.includes(
+                                                      'Amazon Store Package',
+                                                    )
+                                                  : item.service &&
+                                                    item.service.name.includes(
+                                                      'Amazon Store Package',
+                                                    ),
+                                            ).quantity
+                                          : ''
+                                      }
+                                      // id={
+                                      //   amazonService.name
+                                      //     ? amazonService.name
+                                      //     : amazonService.service.name
+                                      // }
+                                      onChange={(event) =>
                                         handleChange(
                                           event,
                                           'amazon_store_package',
-                                          'dropdown',
-                                        );
-                                      }}
-                                      placeholder="Select Package"
+                                          'quantity',
+                                          amazonService,
+                                        )
+                                      }
                                     />
-                                  </ContractInputSelect>
-                                  {amazonStoreCustom ? (
-                                    <ContractFormField className="w-100 mt-1">
-                                      <input
-                                        className="form-control "
-                                        type="text"
-                                        value={
-                                          formData &&
-                                          formData.additional_one_time_services &&
-                                          formData.additional_one_time_services
-                                            .length &&
-                                          formData.additional_one_time_services.find(
-                                            (item) =>
-                                              item.name
-                                                ? item.name.includes(
-                                                    'Amazon Store Package',
-                                                  )
-                                                : item.service &&
-                                                  item.service.name.includes(
-                                                    'Amazon Store Package',
-                                                  ),
-                                          )
-                                            ? formData &&
+
+                                    <button
+                                      type="button"
+                                      className="increment"
+                                      onClick={() => {
+                                        handleAmazonServiceQuantity('add');
+                                        // handleChange(
+                                        //   event,
+                                        //   'amazon_store_package',
+                                        //   'quantity',
+                                        //   amazonService,
+                                        // );
+                                      }}>
+                                      <img
+                                        className="plus-icon"
+                                        src={PlusIcon}
+                                        alt=""
+                                      />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  ''
+                                )}
+                                {showAmazonPlanDropdown ? (
+                                  <div className="col-12">
+                                    <>
+                                      <ContractInputSelect>
+                                        <Select
+                                          classNamePrefix="react-select"
+                                          defaultValue={setDefaultAmazonPlanValue()}
+                                          options={AmazonStoreOptions}
+                                          name="amazon_store_plan"
+                                          components={{ DropdownIndicator }}
+                                          onChange={(event) => {
+                                            handleAmazonPlanChange(event);
+                                            handleChange(
+                                              event,
+                                              'amazon_store_package',
+                                              'dropdown',
+                                            );
+                                          }}
+                                          placeholder="Select Package"
+                                        />
+                                      </ContractInputSelect>
+                                      {amazonStoreCustom ? (
+                                        <ContractFormField className="w-100 mt-1">
+                                          <input
+                                            className="form-control "
+                                            type="text"
+                                            value={
+                                              formData &&
                                               formData.additional_one_time_services &&
                                               formData
                                                 .additional_one_time_services
@@ -2395,83 +2430,112 @@ export default function AgreementSidePanel({
                                                       item.service.name.includes(
                                                         'Amazon Store Package',
                                                       ),
-                                              ).custom_amazon_store_price
-                                            : ''
-                                        }
-                                        placeholder="Enter Custom Store Price"
-                                        name="custom_amazon_store_price"
-                                        onChange={(event) =>
-                                          handleChange(
-                                            event,
-                                            'amazon_store_package',
+                                              )
+                                                ? formData &&
+                                                  formData.additional_one_time_services &&
+                                                  formData
+                                                    .additional_one_time_services
+                                                    .length &&
+                                                  formData.additional_one_time_services.find(
+                                                    (item) =>
+                                                      item.name
+                                                        ? item.name.includes(
+                                                            'Amazon Store Package',
+                                                          )
+                                                        : item.service &&
+                                                          item.service.name.includes(
+                                                            'Amazon Store Package',
+                                                          ),
+                                                  ).custom_amazon_store_price
+                                                : ''
+                                            }
+                                            placeholder="Enter Custom Store Price"
+                                            name="custom_amazon_store_price"
+                                            onChange={(event) =>
+                                              handleChange(
+                                                event,
+                                                'amazon_store_package',
+                                                'custom_amazon_store_price',
+                                              )
+                                            }
+                                          />
+                                          {displayError(
                                             'custom_amazon_store_price',
-                                          )
-                                        }
-                                      />
-                                      {displayError(
-                                        'custom_amazon_store_price',
+                                          )}
+                                        </ContractFormField>
+                                      ) : (
+                                        ''
                                       )}
-                                    </ContractFormField>
-                                  ) : (
-                                    ''
-                                  )}
-                                </>
-                              </div>
-                            ) : (
-                              ''
-                            )}
-                          </>
-                        </div>
-                      </li>
+                                    </>
+                                  </div>
+                                ) : (
+                                  ''
+                                )}
+                              </>
+                            </div>
+                          </li>
 
-                      <li>
-                        <Button
-                          className={
-                            formData &&
-                            formData.additional_one_time_services &&
-                            formData.additional_one_time_services.length &&
-                            formData.additional_one_time_services.find(
-                              (item) => item.name === 'Amazon Store Package',
-                            )
-                              ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
-                              : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
-                          }
-                          disabled={
-                            (formData &&
-                              formData.additional_one_time_services &&
-                              formData.additional_one_time_services.length &&
-                              formData.additional_one_time_services.find(
-                                (item) => item.name === 'Amazon Store Package',
-                              )) ||
-                            !(
-                              showRightTick('service_agreement') &&
-                              showRightTick('statement') &&
-                              showRightTick('dspAddendum')
-                            )
-                          }
-                          onClick={() =>
-                            showSection && showSection.dspAddendum
-                              ? nextStep('dspAddendum')
-                              : nextStep('addendum')
-                          }>
-                          {isLoading.loader && isLoading.type === 'button' ? (
-                            <PageLoader color="#fff" type="button" />
-                          ) : (
-                            'Proceed to Next Section'
-                          )}
-                        </Button>
-                      </li>
-                    </ul>
-                  </>
-                )}
-              </Collapse>
+                          <li>
+                            <Button
+                              className={
+                                formData &&
+                                formData.additional_one_time_services &&
+                                formData.additional_one_time_services.length &&
+                                formData.additional_one_time_services.find(
+                                  (item) =>
+                                    item.name === 'Amazon Store Package',
+                                )
+                                  ? 'btn-primary btn-next-section sidepanel  mt-1 mb-3 w-100 '
+                                  : 'btn-primary btn-next-section sidepanel mt-1 mb-3 w-100 '
+                              }
+                              disabled={
+                                (formData &&
+                                  formData.additional_one_time_services &&
+                                  formData.additional_one_time_services
+                                    .length &&
+                                  formData.additional_one_time_services.find(
+                                    (item) =>
+                                      item.name === 'Amazon Store Package',
+                                  )) ||
+                                !(
+                                  showRightTick('service_agreement') &&
+                                  showRightTick('statement') &&
+                                  showRightTick('dspAddendum')
+                                )
+                              }
+                              onClick={() =>
+                                showSection && showSection.dspAddendum
+                                  ? nextStep('dspAddendum')
+                                  : nextStep('addendum')
+                              }>
+                              {isLoading.loader &&
+                              isLoading.type === 'button' ? (
+                                <PageLoader color="#fff" type="button" />
+                              ) : (
+                                'Proceed to Next Section'
+                              )}
+                            </Button>
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </Collapse>
+                </>
+              )}
+
               {loader || (isLoading.loader && isLoading.type === 'page') ? (
                 <PageLoader
                   component="activityLog"
                   color="#FF5933"
                   type="page"
                 />
-              ) : showSection && showSection.dspAddendum ? (
+              ) : showSection &&
+                showSection.dspAddendum &&
+                !(
+                  formData &&
+                  formData.contract_type &&
+                  formData.contract_type.includes('one')
+                ) ? (
                 <>
                   <div className="straight-line sidepanel " />
 
