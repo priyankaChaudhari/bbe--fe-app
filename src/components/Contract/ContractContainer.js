@@ -1149,6 +1149,7 @@ export default function ContractContainer() {
     if (
       data &&
       details &&
+      details.contract_type &&
       details.contract_type.toLowerCase().includes('one')
     ) {
       return (
@@ -1482,15 +1483,21 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      details && details.contract_type.toLowerCase().includes('one')
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
         ? ''
         : statmentData
     } ${
-      details && details.contract_type.toLowerCase().includes('one')
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendum
     } ${
-      details && details.contract_type.toLowerCase().includes('one')
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
     } ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
@@ -1503,7 +1510,11 @@ export default function ContractContainer() {
       details && details.length && details.length.value,
       10,
     );
-    if (details && details.contract_type.toLowerCase().includes('one')) {
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
+    ) {
       if (
         contractTermLength < 12 &&
         !(userInfo && userInfo.role === 'Team Manager - TAM')
@@ -1613,6 +1624,7 @@ export default function ContractContainer() {
                 </div>
 
                 {details &&
+                details.contract_type &&
                 details.contract_type.toLowerCase().includes('one') ? (
                   ''
                 ) : (
