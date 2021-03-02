@@ -187,6 +187,7 @@ export default function Statement({
     const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return res;
   };
+
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
     if (formData && formData.additional_marketplaces) {
