@@ -102,8 +102,7 @@ export default function AgreementSidePanel({
   showAdditionalMarketplace,
   setShowAdditionalMarketplace,
   startDate,
-  setStartDate
-
+  setStartDate,
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -175,16 +174,18 @@ export default function AgreementSidePanel({
           }
         }
       }
-    } else {
+    } else if (type === 'monthly_service') {
       result = options;
-      // if (type === 'monthly_service') {
-      //   result = options;
-      // } else {
-      //   result = options.filter(
-      //     (item) => !item.label.includes('Amazon Store Package'),
-      //   );
-      // }
+    } else {
+      result = options.filter(
+        (item) => !item.label.includes('Amazon Store Package'),
+      );
+      result.push({
+        value: 'Amazon Store Package',
+        label: 'Amazon Store Package',
+      });
     }
+    // }
     // func(result);
     if (type === 'one_time_service') {
       if (setNotIncludedOneTimeServices) {
@@ -289,7 +290,6 @@ export default function AgreementSidePanel({
     }
   };
   useEffect(() => {
-   
     goToSection();
     const serviceData =
       agreementData &&
@@ -1423,7 +1423,7 @@ export default function AgreementSidePanel({
       />
     );
   };
- 
+
   const generateHTML = (item) => {
     if (item.type.includes('number')) {
       return (
@@ -1447,7 +1447,10 @@ export default function AgreementSidePanel({
           id="date"
           value={
             startDate ||
-            ('' || (item.key && agreementData[item.key] && agreementData[item.key] !== null)
+            ('' ||
+            (item.key &&
+              agreementData[item.key] &&
+              agreementData[item.key] !== null)
               ? new Date(agreementData[item.key])
               : '')
           }
@@ -2884,7 +2887,7 @@ AgreementSidePanel.defaultProps = {
   showAdditionalMarketplace: false,
   setShowAdditionalMarketplace: () => {},
   startDate: '',
-  setStartDate: () => {}
+  setStartDate: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -2999,7 +3002,7 @@ AgreementSidePanel.propTypes = {
   showAdditionalMarketplace: PropTypes.bool,
   setShowAdditionalMarketplace: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
-  setStartDate :PropTypes.func
+  setStartDate: PropTypes.func,
 };
 
 const SidePanel = styled.div`
