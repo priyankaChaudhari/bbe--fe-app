@@ -62,7 +62,7 @@ function RequestSignature({
   const [sendContractCopy, setSendContractCopy] = useState(false);
   const [contractDesignData, setContractDesignData] = useState(null);
   const [showHelloSignPage, setShowHelloSign] = useState(true);
-  const [reminderMailData, setReminderMailData] = useState({});
+  // const [reminderMailData, setReminderMailData] = useState({});
   const [contactModalName, setModalName] = useState('Add Contact');
   const [transactionalData, setTransactionalData] = useState(null);
 
@@ -449,16 +449,16 @@ function RequestSignature({
       setShowModal(false);
     });
   };
-  const handleChangeForReminder = (event, key) => {
-    if (key === 'send_contract_copy') {
-      setReminderMailData({ ...reminderMailData, [key]: event.target.checked });
-    } else {
-      setReminderMailData({
-        ...reminderMailData,
-        [event.target.name]: event.target.value,
-      });
-    }
-  };
+  // const handleChangeForReminder = (event, key) => {
+  //   if (key === 'send_contract_copy') {
+  //     setReminderMailData({ ...reminderMailData, [key]: event.target.checked });
+  //   } else {
+  //     setReminderMailData({
+  //       ...reminderMailData,
+  //       [event.target.name]: event.target.value,
+  //     });
+  //   }
+  // };
 
   const sendReminder = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -603,11 +603,13 @@ function RequestSignature({
                 <div className="signature-request">
                   TO:
                   <span className="email-address">
+                    {' '}
                     {transactionalData && transactionalData.primary_email}
                   </span>{' '}
                 </div>
               </div>
-              <div className="col-6">
+            </div>
+            {/* <div className="col-6">
                 <CheckBox>
                   <label
                     className="check-container contract-sign"
@@ -629,8 +631,8 @@ function RequestSignature({
                   </label>
                 </CheckBox>
               </div>
-            </div>
-            <FormField className="mt-3">
+            </div> */}
+            {/* <FormField className="mt-3">
               <input
                 className="form-control"
                 type="text"
@@ -648,7 +650,7 @@ function RequestSignature({
                 placeholder="Add personal note to recipient"
                 onChange={(event) => handleChangeForReminder(event, 'note')}
               />
-            </FormField>
+            </FormField> */}
 
             <div className=" mt-4">
               <Button
