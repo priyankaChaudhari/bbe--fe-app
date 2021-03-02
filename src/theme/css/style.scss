@@ -312,12 +312,8 @@ p {
 
   &.long-text {
     color: $black-color;
-    font-size: $text-f-size !important;
+    font-size: $text-f-size;
     line-height: 24px;
-
-    p {
-      font-size: $text-f-size !important;
-    }
   }
 
   &.text-detail {
@@ -512,7 +508,7 @@ p {
     transform: rotate(45deg);
   }
 
-  @media only screen and (min-width: 1920px) {
+  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size: $small-f-size-res;
 
     &.long-text {
@@ -663,6 +659,7 @@ button:disabled {
   // max-width: 600px !important;
   // width: 100% !important;
   border: 0 !important;
+  border-radius: 1px !important;
   overflow: unset !important;
   padding: 0 !important;
 
@@ -1025,12 +1022,13 @@ fieldset {
 }
 
 .success-msg-pop-up {
-  top: 18px;
-  position: absolute;
-  left: 40%;
+  top: 0px;
+  position: fixed;
+  left: 45%;
+  z-index: 3;
 
   &.contract {
-    left: 30%;
+    left: 45%;
   }
 }
 
