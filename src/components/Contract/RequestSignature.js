@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -599,7 +600,7 @@ function RequestSignature({
             <h4 className="on-boarding mb-4">Send Reminder</h4>
 
             <div className="row">
-              <div className="col-6">
+              <div className="col-12">
                 <div className="signature-request">
                   TO:
                   <span className="email-address">
@@ -608,8 +609,7 @@ function RequestSignature({
                   </span>{' '}
                 </div>
               </div>
-            </div>
-            {/* <div className="col-6">
+              {/* <div className="col-12 mt-4">
                 <CheckBox>
                   <label
                     className="check-container contract-sign"
@@ -630,9 +630,10 @@ function RequestSignature({
                     <span className="checkmark" />
                   </label>
                 </CheckBox>
-              </div>
-            </div> */}
+              </div> */}
+            </div>
             {/* <FormField className="mt-3">
+              <label htmlFor="emailAddress">Email Subject</label>
               <input
                 className="form-control"
                 type="text"
@@ -642,15 +643,34 @@ function RequestSignature({
               />
             </FormField>
             <FormField className="mt-3">
+              <label htmlFor="emailAddress">Personal Note (Optional)</label>
               <textarea
                 className="form-control"
                 type="text"
                 name="note"
                 defaultValue={transactionalData && transactionalData.note}
-                placeholder="Add personal note to recipient"
+                placeholder="Enter optional note"
                 onChange={(event) => handleChangeForReminder(event, 'note')}
               />
             </FormField> */}
+            {/* <div className="automatic-reminder mt-2">
+              <div className="reminder-note">
+                An automatic reminder was sent to the customer 4 hrs ago{' '}
+              </div>
+              <CheckBox>
+                <label
+                  className="check-container contract-sign"
+                  htmlFor="contract-copy ">
+                  I confirm I want to send another reminder email
+                  <input
+                    type="checkbox"
+                    id="contract-copy"
+                    name="send_contract_copy"
+                  />
+                  <span className="checkmark" />
+                </label>
+              </CheckBox>
+            </div> */}
 
             <div className=" mt-4">
               <Button

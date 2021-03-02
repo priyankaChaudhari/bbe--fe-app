@@ -5,7 +5,7 @@ const ModalBox = styled.div`
   max-width: 600px;
   width: 100%;
   margin: 0 auto;
-  border-radius:10px;
+  border-radius: 8px;
 
   &.small-alert-modal {
     max-width: 435px !important;
@@ -30,12 +30,13 @@ const ModalBox = styled.div`
         font-family: ${Theme.titleFontFamily};
       }
       .signature-request {
-        font-size: ${Theme.extraSmall};
-        color: ${Theme.gray30};
+        font-size: ${Theme.verySmall};
+        color: ${Theme.gray40};
+        font-family: ${Theme.titleFontFamily};
       
         .email-address {
-          color: ${Theme.gray90};
-          font-size: ${Theme.medium};
+          color: ${Theme.black};
+          font-size: ${Theme.normal};
 
         }
       }
@@ -309,6 +310,15 @@ const ModalBox = styled.div`
         outline: 1px solid #39f;
       }
     }
+
+    .automatic-reminder {
+      border-radius: 2px;
+      border-radius: 2px;
+      background: #FDF3D7;
+      padding: 10px;
+      color: ${Theme.black};
+      font-size: ${Theme.normal};
+    } 
 
     @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
       &.on-boarding {
