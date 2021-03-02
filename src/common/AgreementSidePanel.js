@@ -101,6 +101,9 @@ export default function AgreementSidePanel({
   setShowAmazonPlanDropdown,
   showAdditionalMarketplace,
   setShowAdditionalMarketplace,
+  startDate,
+  setStartDate
+
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -110,7 +113,7 @@ export default function AgreementSidePanel({
   //   amendment: false,
   // });
 
-  const [startDate, setStartDate] = useState();
+  // const [startDate, setStartDate] = useState();
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
@@ -286,6 +289,7 @@ export default function AgreementSidePanel({
     }
   };
   useEffect(() => {
+   
     goToSection();
     const serviceData =
       agreementData &&
@@ -1419,7 +1423,7 @@ export default function AgreementSidePanel({
       />
     );
   };
-
+ 
   const generateHTML = (item) => {
     if (item.type.includes('number')) {
       return (
@@ -1443,14 +1447,20 @@ export default function AgreementSidePanel({
           id="date"
           value={
             startDate ||
-            ('' || agreementData[item.key]
+            ('' || (item.key && agreementData[item.key] && agreementData[item.key] !== null)
               ? new Date(agreementData[item.key])
               : '')
           }
           onChange={(date) => handleChange(date, 'start_date', 'date')}
-          format="MM-dd-yyyy"
+          format="MM/dd/yyyy"
           clearIcon={null}
-          placeholder={item.placeholder ? item.placeholder : item.label}
+          dayPlaceholder="DD"
+          monthPlaceholder="MM"
+          yearPlaceholder="YYYY"
+          //  formatPlaceholder={{ year: ' y', month: 'M', day: '' }}
+          // formatPlaceholder="wide"
+          placeholderText="Select Date"
+          // {item.placeholder ? item.placeholder : item.label}
         />
       );
     }
@@ -2873,6 +2883,8 @@ AgreementSidePanel.defaultProps = {
   setShowAmazonPlanDropdown: () => {},
   showAdditionalMarketplace: false,
   setShowAdditionalMarketplace: () => {},
+  startDate: '',
+  setStartDate: () => {}
 };
 
 AgreementSidePanel.propTypes = {
@@ -2986,6 +2998,8 @@ AgreementSidePanel.propTypes = {
   setShowAmazonPlanDropdown: PropTypes.func,
   showAdditionalMarketplace: PropTypes.bool,
   setShowAdditionalMarketplace: PropTypes.func,
+  startDate: PropTypes.instanceOf(Date),
+  setStartDate :PropTypes.func
 };
 
 const SidePanel = styled.div`

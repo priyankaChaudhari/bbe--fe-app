@@ -99,6 +99,8 @@ export default function ContractContainer() {
 
   const [showEditor, setShowEditor] = useState(false);
   const [pdfData, setPDFData] = useState('');
+  const [startDate, setStartDate] = useState();
+
   const [notIncludedOneTimeServices, setNotIncludedOneTimeServices] = useState(
     [],
   );
@@ -670,6 +672,7 @@ export default function ContractContainer() {
       // setFormData({});
       showFooter(false);
       setShowEditor(false);
+      setStartDate('');
       setNewAddendum(originalAddendumData);
       clearError();
       setShowAmazonPlanDropdown(false);
@@ -1508,11 +1511,11 @@ export default function ContractContainer() {
         return true;
       }
     } else if (
-        (rev < 3 || contractTermLength < 12) &&
-        !(userInfo && userInfo.role === 'Team Manager - TAM')
-      ) {
-        return true;
-      }
+      (rev < 3 || contractTermLength < 12) &&
+      !(userInfo && userInfo.role === 'Team Manager - TAM')
+    ) {
+      return true;
+    }
     return false;
   };
 
@@ -1748,6 +1751,8 @@ export default function ContractContainer() {
         setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
         showAdditionalMarketplace={showAdditionalMarketplace}
         setShowAdditionalMarketplace={setShowAdditionalMarketplace}
+        startDate={startDate}
+        setStartDate={setStartDate}
       />
       {/* )} */}
       {details &&

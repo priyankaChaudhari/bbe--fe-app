@@ -45,7 +45,9 @@ export default function Agreement({ formData, details, templateData }) {
         : formData.length;
     }
     if (key === 'start_date') {
-      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+      return formData && formData[key] !== null
+        ? formData && dayjs(formData[key]).format('MM/DD/YYYY')
+        : 'Select Date';
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM-DD-YYYY');
@@ -63,12 +65,16 @@ export default function Agreement({ formData, details, templateData }) {
       ) {
         return `Enter Location`;
       }
-      return `${formData && formData.address}${
-        formData && formData.address ? ',' : ''
+      return `${
+        formData && formData.address ? formData && formData.address : ''
+      }${formData && formData.address ? ',' : ''}
+      ${formData && formData.state ? formData && formData.state : ''}${
+        formData && formData.state ? ',' : ''
       }
-      ${formData && formData.state}${formData && formData.state ? ',' : ''}
-      ${formData && formData.city}${formData && formData.city ? ',' : ''}
-      ${formData && formData.zip_code}
+      ${formData && formData.city ? formData && formData.city : ''}${
+        formData && formData.city ? ',' : ''
+      }
+      ${formData && formData.zip_code ? formData && formData.zip_code : ''}
       `;
     }
     if (

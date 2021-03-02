@@ -117,6 +117,13 @@ export default function DSPAddendum({
     if (key === 'calculated_no_of_days') {
       return calculateTotalDays();
     }
+
+    if (key === 'start_date') {
+      return formData && formData[key] !== null
+        ? formData && dayjs(formData[key]).format('MM/DD/YYYY')
+        : 'Select Date';
+    }
+
     if (
       formData[key] === undefined ||
       formData[key] === '' ||
@@ -125,9 +132,6 @@ export default function DSPAddendum({
       return `Enter ${label}`;
     }
 
-    if (key === 'start_date') {
-      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
-    }
     if (key === 'length') {
       return (
         formData &&
