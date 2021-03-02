@@ -156,6 +156,7 @@ export default function ContractContainer() {
       element &&
       element.getBoundingClientRect() &&
       element.getBoundingClientRect().top + window.pageYOffset + -150;
+
     window.scrollTo({ top: y });
     // } else {
     //   const y =
@@ -660,13 +661,13 @@ export default function ContractContainer() {
     }
 
     if (flag === 'Yes') {
-      setUpdatedFormData({});
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
+      setUpdatedFormData({});
       if (showDiscardModal.clickedBtn === 'back') {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
 
-      setFormData({});
+      // setFormData({});
       showFooter(false);
       setShowEditor(false);
       setNewAddendum(originalAddendumData);
@@ -674,18 +675,18 @@ export default function ContractContainer() {
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
 
-      if (openCollapse.agreement) {
-        executeScroll('agreement');
-      }
-      if (openCollapse.statement) {
-        executeScroll('statement');
-      }
-      if (openCollapse.dspAddendum) {
-        executeScroll('dspAddendum');
-      }
-      if (openCollapse.addendum) {
-        executeScroll('addendum');
-      }
+      // if (openCollapse.agreement) {
+      //   executeScroll('agreement');
+      // }
+      // if (openCollapse.statement) {
+      //   executeScroll('statement');
+      // }
+      // if (openCollapse.dspAddendum) {
+      //   executeScroll('dspAddendum');
+      // }
+      // if (openCollapse.addendum) {
+      //   executeScroll('addendum');
+      // }
 
       if (
         details &&

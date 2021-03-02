@@ -70,6 +70,11 @@ body {
   max-width: 2000px !important;
 }
 
+.is-desktop.is-embedded .m-signer-mobile {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .page-is-loading {
   width: 100%;
   height: 100%;
