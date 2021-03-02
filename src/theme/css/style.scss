@@ -69,9 +69,11 @@ body {
 .m-signer-mobile {
   max-width: 2000px !important;
 }
-
 .is-desktop.is-embedded .m-signer-mobile {
   width: 100% !important;
+  max-width: 100% !important;
+}
+.is-desktop .m-signer-mobile {
   max-width: 100% !important;
 }
 
