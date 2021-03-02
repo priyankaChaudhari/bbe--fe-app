@@ -97,7 +97,7 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
             </td>
         </tr>
         
-        <tr style="height: 30px; vertical-align: top">
+        <tr style="height: px; vertical-align: top">
             <td>Date:</td>
             <td style="font-weight: 700;">BBE_DATE</td>
             <td></td>

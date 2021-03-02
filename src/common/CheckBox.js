@@ -10,6 +10,7 @@ const CheckBox = styled.div`
     cursor: pointer;
     color: ${Theme.gray90};
     font-size: ${Theme.normal};
+
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -25,7 +26,7 @@ const CheckBox = styled.div`
     }
 
     &.contract-sign {
-      color: ${Theme.gray35};
+      color: ${Theme.black};
     }
 
     &.additional-place {
@@ -49,12 +50,13 @@ const CheckBox = styled.div`
     left: 0;
     border-radius: 4px;
     width: 20px;
+    background-color: ${Theme.white};
     height: 20px;
     border: 1px solid ${Theme.gray35};
   }
 
   .check-container:hover input ~ .checkmark {
-    background-color: rgba(224, 231, 255, 0.2);
+    background-color: ${Theme.white};
     // border: 1px solid ${Theme.gray9};
   }
 
