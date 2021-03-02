@@ -1924,9 +1924,10 @@ export default function AgreementSidePanel({
                         className="btn-primary sidepanel btn-next-section mt-2 mb-3 w-100"
                         disabled={
                           !(
-                            showRightTick('service_agreement') &&
-                            showRightTick('statement') &&
-                            showRightTick('dspAddendum')
+                            showRightTick('service_agreement')
+                            // &&
+                            // showRightTick('statement') &&
+                            // showRightTick('dspAddendum')
                           )
                         }
                         onClick={() =>
@@ -2502,9 +2503,10 @@ export default function AgreementSidePanel({
                                       item.name === 'Amazon Store Package',
                                   )) ||
                                 !(
-                                  showRightTick('service_agreement') &&
-                                  showRightTick('statement') &&
-                                  showRightTick('dspAddendum')
+                                  // showRightTick('service_agreement') &&
+                                  showRightTick('statement')
+                                  // &&
+                                  // showRightTick('dspAddendum')
                                 )
                               }
                               onClick={() =>
@@ -2594,8 +2596,8 @@ export default function AgreementSidePanel({
                           }
                           disabled={
                             !(
-                              showRightTick('service_agreement') &&
-                              showRightTick('statement') &&
+                              // showRightTick('service_agreement') &&
+                              // showRightTick('statement') &&
                               showRightTick('dspAddendum')
                             )
                           }

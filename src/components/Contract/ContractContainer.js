@@ -1500,12 +1500,19 @@ export default function ContractContainer() {
       details && details.length && details.length.value,
       10,
     );
-    if (
-      (rev < 3 || contractTermLength < 12) &&
-      !(userInfo && userInfo.role === 'Team Manager - TAM')
-    ) {
-      return true;
-    }
+    if (details && details.contract_type.toLowerCase().includes('one')) {
+      if (
+        contractTermLength < 12 &&
+        !(userInfo && userInfo.role === 'Team Manager - TAM')
+      ) {
+        return true;
+      }
+    } else if (
+        (rev < 3 || contractTermLength < 12) &&
+        !(userInfo && userInfo.role === 'Team Manager - TAM')
+      ) {
+        return true;
+      }
     return false;
   };
 

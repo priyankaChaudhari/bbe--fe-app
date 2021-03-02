@@ -82,7 +82,11 @@ export default function Agreement({ formData, details, templateData }) {
   };
 
   const getAgreementAccorType = (index) => {
-    if (details && details.contract_type === 'one time') {
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
+    ) {
       return (
         templateData &&
         templateData.one_time_service_agreement &&
