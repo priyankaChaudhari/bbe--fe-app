@@ -1563,6 +1563,13 @@ export default function ContractContainer() {
       ) : checkPermission() ? (
         details ? (
           <>
+            <div className="success-msg-pop-up contract">
+              {showSuccessContact.show ? (
+                <SuccessMsg property=" " message={showSuccessContact.message} />
+              ) : (
+                ''
+              )}
+            </div>
             <div className="on-boarding-container">
               <div className="row">
                 <div className="col-12">
@@ -1579,16 +1586,6 @@ export default function ContractContainer() {
                         className="arrow-back-icon "
                       />
                       Back to Customer Details
-                    </div>
-                    <div className="success-msg-pop-up contract">
-                      {showSuccessContact.show ? (
-                        <SuccessMsg
-                          property=" "
-                          message={showSuccessContact.message}
-                        />
-                      ) : (
-                        ''
-                      )}
                     </div>
                   </div>
                   <ContractTab className="d-lg-none d-block">

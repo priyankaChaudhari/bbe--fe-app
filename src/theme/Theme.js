@@ -12,7 +12,7 @@ const Theme = {
   teal: '#4acfc6',
   darkTeal: '#2e817b',
   green: ' #33ac2e',
-  lightGreen: '#e7f7e9',
+  lightGreen: '#E5F1E5',
   lighterGreen: '#407b00',
   darkGreen: '#74b035',
   lightBlue: '#d6ebe8',
