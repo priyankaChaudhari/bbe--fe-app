@@ -35,7 +35,6 @@ const SuccessWrapper = styled.div`
   color: ${Theme.green};
   background: ${Theme.lightGreen};
   padding: 9px 20px 11px 20px;
-  border-radius: 4px;
   border-radius: 0 0 4px 4px;
   font-weight: 600;
   text-align: center;
