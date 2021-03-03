@@ -124,9 +124,7 @@ export default function EditTeamMember({
                     <div className="row">
                       <div
                         className={
-                          showSuccessMsg
-                            ? 'col-12 pt-2 pb-2'
-                            : 'col-12 pt-2 pb-2'
+                          showSuccessMsg ? 'col-12 pb-2' : 'col-12 pb-2'
                         }>
                         <h4>Team Members</h4>
                         <div className="success-msg">
