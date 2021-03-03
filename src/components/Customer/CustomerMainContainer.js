@@ -105,6 +105,7 @@ export default function CustomerMainContainer() {
   });
   const [memberCount, setMemberCount] = useState(null);
   const profileLoader = useSelector((state) => state.userState.isLoading);
+  const [teamDeleteModal, setTeamDeleteModal] = useState(false);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -645,7 +646,7 @@ export default function CustomerMainContainer() {
           </CustomerDetailBanner>
           <Modal
             isOpen={showMemberList.modal}
-            style={showMemberList.add ? customStyles : alertCustomStyles}
+            style={teamDeleteModal ? alertCustomStyles : customStyles}
             ariaHideApp={false}
             contentLabel="Add team modal">
             <img
@@ -653,7 +654,7 @@ export default function CustomerMainContainer() {
               alt="close"
               className="float-right cursor cross-icon"
               onClick={() =>
-                setShowMemberList({ show: false, add: false, mnodal: false })
+                setShowMemberList({ show: false, add: false, modal: false })
               }
               role="presentation"
             />
@@ -670,6 +671,7 @@ export default function CustomerMainContainer() {
                 getCustomerMemberList={getCustomerMemberList}
                 setShowMemberList={setShowMemberList}
                 showMemberList={showMemberList}
+                setTeamDeleteModal={setTeamDeleteModal}
               />
             )}
           </Modal>

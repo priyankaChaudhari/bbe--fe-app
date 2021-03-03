@@ -23,6 +23,7 @@ export default function EditTeamMember({
   getCustomerMemberList,
   setShowMemberList,
   showMemberList,
+  setTeamDeleteModal,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [removeMember, setRemoveMember] = useState({
@@ -65,6 +66,7 @@ export default function EditTeamMember({
       getMembers(1);
       setRemoveMember({ id: '', name: '', show: false });
       setShowSuccessMsg(true);
+      setTeamDeleteModal(false);
     });
   };
 
@@ -168,6 +170,7 @@ export default function EditTeamMember({
                                   id: item.id,
                                   name: `${item.user_profile.first_name} ${item.user_profile.last_name}`,
                                 });
+                                setTeamDeleteModal(true);
                               }}
                               role="presentation"
                             />{' '}
@@ -263,6 +266,7 @@ export default function EditTeamMember({
                     className="btn-transparent w-25"
                     onClick={() => {
                       setRemoveMember({ ...removeMember, show: false });
+                      setTeamDeleteModal(false);
                       setShowSuccessMsg(false);
                     }}>
                     Cancel
@@ -282,6 +286,7 @@ EditTeamMember.defaultProps = {
   getCustomerMemberList: () => {},
   setShowMemberList: () => {},
   showMemberList: {},
+  setTeamDeleteModal: () => {},
 };
 
 EditTeamMember.propTypes = {
@@ -292,4 +297,5 @@ EditTeamMember.propTypes = {
     show: PropTypes.bool,
     add: PropTypes.bool,
   }),
+  setTeamDeleteModal: PropTypes.func,
 };
