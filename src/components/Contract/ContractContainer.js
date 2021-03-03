@@ -1074,6 +1074,58 @@ export default function ContractContainer() {
     return '';
   };
 
+  const showOneTimeTable = () => {
+    return `<table
+    class="contact-list "
+    style="width: 100%;
+    border-collapse: collapse;
+">
+    <tr
+      style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;">
+      <th
+        style="text-align: left;border: 1px solid black;
+    padding: 13px;">
+        Quantity
+      </th>
+      <th
+        style="text-align: left;border: 1px solid black;
+    padding: 13px;">
+        Service
+      </th>
+      <th
+        style="text-align: left;border: 1px solid black;
+    padding: 13px;">
+        Service Fee
+      </th>
+      <th
+        style="text-align: left;border: 1px solid black;
+    padding: 13px;">
+        Total Service Fee
+      </th>
+    </tr>
+    ${mapMonthlyServices('additional_one_time_services', 'One Time Services')}
+    <tr
+      style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;">
+      <td
+        class="total-service"
+        colspan="3"
+        style="border: 1px solid black;padding: 13px;">
+        
+        Total
+      </td>
+      <td
+        class="total-service text-right"
+        style="border: 1px solid black;padding: 13px; text-align: right;">
+        ${mapServiceTotal('additional_one_time_services')}
+      </td>
+    </tr>
+  </table>`;
+  };
+
   const showOneTimeServiceTable = () => {
     if (
       details &&
@@ -1081,24 +1133,7 @@ export default function ContractContainer() {
       details.additional_one_time_services.length
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br><table class="contact-list " style="width: 100%;
-    border-collapse: collapse;
-"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
-                                </table>`;
+    font-family: Arial-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br>${showOneTimeTable()}`;
     }
     return '';
   };
@@ -1329,28 +1364,7 @@ export default function ContractContainer() {
           'AGREEMENT_LENGTH',
           mapDefaultValues('length', 'Contract Length'),
         )
-        .replace(
-          'ONE_TIME_SERVICE_TABLE',
-          `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-    padding: 13px; font-weight: 800;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
-                                </table>`,
-        )
+        .replace('ONE_TIME_SERVICE_TABLE', showOneTimeTable())
         .replace(
           'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
           `${mapServiceTotal('additional_one_time_services')}`,
@@ -1642,7 +1656,12 @@ export default function ContractContainer() {
                   </div>
                 )}
 
-                {showSection.dspAddendum ? (
+                {showSection.dspAddendum &&
+                !(
+                  details &&
+                  details.contract_type &&
+                  details.contract_type.toLowerCase().includes('one')
+                ) ? (
                   <div id="dspAddendum">
                     <DSPAddendum
                       formData={formData}

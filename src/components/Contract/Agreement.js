@@ -145,7 +145,7 @@ export default function Agreement({ formData, details, templateData }) {
                           )
                     )
                       ? service.custom_amazon_store_price
-                        ? `<td>
+                        ? `<td style="border: 1px solid black;padding: 13px;">
                                 $${
                                   displayNumber(
                                     service.custom_amazon_store_price,
@@ -154,9 +154,9 @@ export default function Agreement({ formData, details, templateData }) {
                                   // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                                 } /month
                                </td>`
-                        : `<td>Yet to save</td>`
+                        : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                       : service && service.service && service.service.fee
-                      ? `<td>
+                      ? `<td style="border: 1px solid black;padding: 13px;">
                            $${
                              service && service.service && service.service.fee
                                ? displayNumber(service.service.fee)
@@ -167,7 +167,7 @@ export default function Agreement({ formData, details, templateData }) {
                              //    ',',
                              //  )
                            } /month </td>`
-                      : `<td>Yet to save</td>`
+                      : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                   }
 
      
@@ -191,7 +191,7 @@ export default function Agreement({ formData, details, templateData }) {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </td>`
-            : `<td>Yet to save</td>`
+            : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
           : service.quantity && service.custom_amazon_store_price
           ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
             service.custom_amazon_store_price
@@ -201,7 +201,7 @@ export default function Agreement({ formData, details, templateData }) {
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </td>`
-          : `<td>Yet to save</td>`
+          : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
       }
          
                   
@@ -253,14 +253,24 @@ export default function Agreement({ formData, details, templateData }) {
       formData.additional_one_time_services &&
       formData.additional_one_time_services.length
     ) {
-      return `<table class="contact-list " ><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
-        'additional_one_time_services',
-        'One Time Services',
-      )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
-        'additional_one_time_services',
-      )}
+      return `<div class="table-responsive"><table class="contact-list " style="width: 100%;
+    border-collapse: collapse;
+"><tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
+    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
+      'additional_one_time_services',
+      'One Time Services',
+    )}<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
+      'additional_one_time_services',
+    )}
                               </td></tr>
-                                </table>`;
+                                </table></div>`;
     }
     return '';
   };
