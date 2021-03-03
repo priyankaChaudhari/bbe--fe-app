@@ -2236,7 +2236,15 @@ export default function AgreementSidePanel({
                               ))}
                             </ContractFormField>
                           </li>
-                          <li>{displayOneTimeServices()}</li>
+                          {formData &&
+                          formData.contract_type &&
+                          formData.contract_type
+                            .toLowerCase()
+                            .includes('one') ? (
+                            <li>{displayOneTimeServices()}</li>
+                          ) : (
+                            ''
+                          )}
                         </>
                       ),
                     )}
