@@ -25,6 +25,7 @@ export default function EditAccountDetails({
   agreement,
   setShowModal,
   setDocumentImage,
+  getActivityLogInfo,
 }) {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
@@ -162,6 +163,7 @@ export default function EditAccountDetails({
 
           dispatch(getAccountDetails(customer.id));
           dispatch(getCustomerDetails(customer.id));
+          getActivityLogInfo();
           // setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
           setShowModal(false);
         }
@@ -176,6 +178,7 @@ export default function EditAccountDetails({
       } else if (response && response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
         dispatch(getCustomerDetails(customer.id));
+        getActivityLogInfo();
         // setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
         setShowModal(false);
       }
@@ -268,4 +271,5 @@ EditAccountDetails.propTypes = {
     id: PropTypes.string,
   }),
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
+  getActivityLogInfo: PropTypes.func.isRequired,
 };

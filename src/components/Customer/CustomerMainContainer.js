@@ -564,7 +564,7 @@ export default function CustomerMainContainer() {
                       {' '}
                       Recent Activity
                     </p>
-                    {activityData.slice(1, 3).map((item) => (
+                    {activityData.slice(0, 2).map((item) => (
                       <GroupUser key={Math.random()}>
                         {images.find((op) => op.entity_id === item.user_id) &&
                         images.find((op) => op.entity_id === item.user_id)
@@ -610,6 +610,7 @@ export default function CustomerMainContainer() {
                       agreement.seller_type.value
                     }
                     getAmazon={getAmazon}
+                    getActivityLogInfo={getActivityLogInfo}
                   />
                 ) : viewComponent === 'performance' ? (
                   <CompanyPerformance />
@@ -676,6 +677,7 @@ export default function CustomerMainContainer() {
                 customer={customer}
                 setShowModal={setShowModal}
                 setDocumentImage={customer.documents}
+                getActivityLogInfo={getActivityLogInfo}
               />
             </ModalBox>
           </Modal>

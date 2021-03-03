@@ -27,6 +27,7 @@ export default function CompanyDetail({
   seller,
   id,
   getAmazon,
+  getActivityLogInfo,
 }) {
   const contactInfo = useSelector((state) => state.customerState.contactData);
   // const [showModal, setShowModal] = useState({ modal: false, type: '' });
@@ -277,6 +278,7 @@ export default function CompanyDetail({
             showModal={showModal}
             amazonDetails={amazonDetails}
             getAmazon={getAmazon}
+            getActivityLogInfo={getActivityLogInfo}
           />
         </Modal>
       </div>
@@ -300,4 +302,5 @@ CompanyDetail.propTypes = {
   amazonDetails: PropTypes.arrayOf(PropTypes.array),
   seller: PropTypes.string.isRequired,
   getAmazon: PropTypes.func.isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
