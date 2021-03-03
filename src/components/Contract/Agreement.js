@@ -105,70 +105,116 @@ export default function Agreement({ formData, details, templateData }) {
       templateData.recurring_service_agreement[index]
     );
   };
-  const mapMonthlyServices = (key) => {
-    if (details && details[key]) {
-      const fields = [];
-      for (const item of details[key]) {
-        if (key !== 'additional_one_time_services') {
-          if (
-            (item.service && item.service.name !== undefined) ||
-            item.name !== undefined
-          ) {
-            fields.push(
-              `<tr>
-            <td>${
-              item.service ? item.service.name : item && item.name
-            }</td><td>$ ${
-                item.service
-                  ? item.service.fee
+
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
+  const mapMonthlyServices = () => {
+    const fields = [];
+    if (formData && formData.additional_one_time_services) {
+      formData.additional_one_time_services.forEach((service) => {
+        return fields.push(
+          `<tr>
+              <td style="border: 1px solid black;padding: 13px;">${
+                service.quantity
+                  ? service.quantity
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : item.fee
-                  ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : ''
-              } /month</td></tr>`,
-            );
-          }
-        } else {
-          fields.push(
-            `<tr>
-                <td style="border: 1px solid black;
-    padding: 13px;">${
-      item && item.quantity
-        ? item.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : 0
-    }</td>
-            <td style="border: 1px solid black;
-    padding: 13px;">${
-      item.service ? item.service.name : item && item.name
-    }</td><td style="border: 1px solid black;
-    padding: 13px;">$ ${
-      item.service
-        ? item.service.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : item.fee
-        ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        : ''
-    } /month</td>
-            <td style="border: 1px solid black;
-    padding: 13px;">$ ${(
-      item.quantity * item &&
-      item.service &&
-      item.service.fee
-    )
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>
-            </tr>`,
-          );
-        }
+                  : 0
+              }</td>
+                  
+                   <td style="border: 1px solid black;padding: 13px;">${
+                     service.name
+                       ? service.name
+                       : service.service && service.service.name
+                       ? service.service.name
+                       : ''
+                   }
+              </td>
+             
+                  ${
+                    (
+                      service && service.name
+                        ? service.name.includes('Amazon Store Package Custom')
+                        : service &&
+                          service.service &&
+                          service.service.name.includes(
+                            'Amazon Store Package Custom',
+                          )
+                    )
+                      ? service.custom_amazon_store_price
+                        ? `<td>
+                                $${
+                                  displayNumber(
+                                    service.custom_amazon_store_price,
+                                  )
+                                  // .toString()
+                                  // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                } /month
+                               </td>`
+                        : `<td>Yet to save</td>`
+                      : service && service.service && service.service.fee
+                      ? `<td>
+                           $${
+                             service && service.service && service.service.fee
+                               ? displayNumber(service.service.fee)
+                               : ''
+                             //  .toString()
+                             //  .replace(
+                             //    /\B(?=(\d{3})+(?!\d))/g,
+                             //    ',',
+                             //  )
+                           } /month </td>`
+                      : `<td>Yet to save</td>`
+                  }
+
+     
+     
+
+      ${
+        (
+          service && service.name
+            ? service.name !== 'Amazon Store Package Custom'
+            : service &&
+              service.service &&
+              service.service.name !== 'Amazon Store Package Custom'
+        )
+          ? service.quantity && service.service && service.service.fee
+            ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
+              service.service &&
+              service.service.fee
+                ? service.quantity * service.service.fee
+                : ''
+              )
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </td>`
+            : `<td>Yet to save</td>`
+          : service.quantity && service.custom_amazon_store_price
+          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
+            service.custom_amazon_store_price
+              ? service.quantity * service.custom_amazon_store_price
+              : ''
+            )
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </td>`
+          : `<td>Yet to save</td>`
       }
-      return fields.length ? fields.toString().replaceAll(',', '') : '';
+         
+                  
+                  </tr>`,
+        );
+      });
     }
-    return '';
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
-      return `$ ${
+      return `$${
         details && details.total_fee.onetime_service
           ? details.total_fee.onetime_service
               .toString()
@@ -182,10 +228,12 @@ export default function Agreement({ formData, details, templateData }) {
     const month = details.total_fee.monthly_service
       ? details.total_fee.monthly_service
       : 0;
-    return `$ ${(market + month)
+
+    return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
+
   const mapThadSignImg = () => {
     const data = `<p style="margin:0" class="long-text">
         <span style="font-weight: 300;font-family: Helvetica-Regular;">
@@ -198,6 +246,25 @@ export default function Agreement({ formData, details, templateData }) {
       </p>`;
     return data;
   };
+
+  const showOneTimeServiceTable = () => {
+    if (
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length
+    ) {
+      return `<table class="contact-list " ><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
+        'additional_one_time_services',
+        'One Time Services',
+      )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
+        'additional_one_time_services',
+      )}
+                              </td></tr>
+                                </table>`;
+    }
+    return '';
+  };
+
   return (
     <>
       <Paragraph>
@@ -227,24 +294,7 @@ export default function Agreement({ formData, details, templateData }) {
                 'AGREEMENT_LENGTH',
                 mapDefaultValues('length', 'Contract Length'),
               )
-              .replace(
-                'ONE_TIME_SERVICE_TABLE',
-                `<table class="contact-list " style="width: 100%;
-                              border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-                              padding: 13px;">Quantity</th><th style="text-align: left; border: 1px solid black;
-                              padding: 13px;">Service</th><th style="text-align: left; border: 1px solid black;
-                              padding: 13px;">Service Fee</th><th style="text-align: left; border: 1px solid black;
-                              padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-                                'additional_one_time_services',
-                                'One Time Services',
-                              )}<tr><td class="total-service" colspan="3" style="border: 1px solid black;
-                              padding: 13px; font-weight: 800;"> Total</td><td class="total-service text-right" style="border: 1px solid black;
-                              padding: 13px; font-weight: 800;">${mapServiceTotal(
-                                'additional_one_time_services',
-                              )}
-                              </td></tr>
-                                </table>`,
-              )
+              .replace('ONE_TIME_SERVICE_TABLE', showOneTimeServiceTable())
               .replace(
                 'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
                 `${mapServiceTotal('additional_one_time_services')}`,
@@ -338,6 +388,7 @@ Agreement.propTypes = {
     city: PropTypes.string,
     state: PropTypes.string,
     zip_code: PropTypes.string,
+    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
   }),
   templateData: PropTypes.shape({
     addendum: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),

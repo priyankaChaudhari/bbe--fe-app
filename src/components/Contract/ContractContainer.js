@@ -774,7 +774,7 @@ export default function ContractContainer() {
       );
     }
     if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM-DD-YYYY');
+      return details && dayjs(details[key]).format('MM/DD/YYYY');
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM-DD-YYYY');
@@ -1312,23 +1312,26 @@ export default function ContractContainer() {
     });
   };
   const createAgreementDoc = () => {
-    const agreementData = getAgreementAccorType(0)
-      .replace(
-        'CUSTOMER_NAME',
-        mapDefaultValues('contract_company_name', 'Customer Name'),
-      )
-      .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
-      .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-      // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-      // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-      // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
-      .replace(
-        'AGREEMENT_LENGTH',
-        mapDefaultValues('length', 'Contract Length'),
-      )
-      .replace(
-        'ONE_TIME_SERVICE_TABLE',
-        `<table class="contact-list " style="width: 100%;
+    const serviceData = getAgreementAccorType(0);
+    const agreementData =
+      serviceData &&
+      serviceData
+        .replace(
+          'CUSTOMER_NAME',
+          mapDefaultValues('contract_company_name', 'Customer Name'),
+        )
+        .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
+        .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
+        // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
+        // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
+        // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
+        .replace(
+          'AGREEMENT_LENGTH',
+          mapDefaultValues('length', 'Contract Length'),
+        )
+        .replace(
+          'ONE_TIME_SERVICE_TABLE',
+          `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;"><th style="text-align: left; border: 1px solid black;
@@ -1347,11 +1350,11 @@ export default function ContractContainer() {
     )}
                               </td></tr>
                                 </table>`,
-      )
-      .replace(
-        'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-        `${mapServiceTotal('additional_one_time_services')}`,
-      );
+        )
+        .replace(
+          'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+          `${mapServiceTotal('additional_one_time_services')}`,
+        );
     // }
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',
@@ -1778,14 +1781,21 @@ export default function ContractContainer() {
                 'Edit Contract'
               )}
             </Button>
-            <Button
-              className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
-              onClick={() => {
-                setParams('send-remainder');
-                setShowModal(true);
-              }}>
-              Send Reminder
-            </Button>
+            {details &&
+            details.contract_status &&
+            details.contract_status.value &&
+            details.contract_status.value === 'pending contract signature' ? (
+              <Button
+                className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
+                onClick={() => {
+                  setParams('send-remainder');
+                  setShowModal(true);
+                }}>
+                Send Reminder
+              </Button>
+            ) : (
+              ''
+            )}
             {/* {updatedFormData && Object.keys(updatedFormData).length ? (
               <span>
                 {Object.keys(updatedFormData).length} unsaved changes.
