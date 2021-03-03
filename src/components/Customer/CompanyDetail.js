@@ -57,7 +57,15 @@ export default function CompanyDetail({
             href={customer && customer[item.key]}
             rel="noopener noreferrer"
             target="_blank">
-            <img src={item.value} alt="brand" className="social-media" />
+            <img
+              src={item.value}
+              alt="brand"
+              className={
+                item.key === 'instagram' || item.key === 'pinterest'
+                  ? 'social-icon-width'
+                  : 'social-media'
+              }
+            />
           </a>
         </li>,
       );

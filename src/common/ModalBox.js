@@ -7,11 +7,7 @@ const ModalBox = styled.div`
   margin: 0 auto;
   border-radius: 8px;
 
-  &.small-alert-modal {
-    max-width: 435px !important;
-    width:100%;
-    margin: 0 auto;
-  }
+  
 
   .modal-back-arrow {
     margin-top: -2px;
@@ -125,13 +121,11 @@ const ModalBox = styled.div`
     }
 
     .alert-msg {
-      color: ${Theme.gray90};
-      font-size: ${Theme.medium};
-      max-width: 310px;
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
       text-align: center;
-      font-weight: 600;
-      margin: 0 auto;
-      padding: 11px 0 20px 0;
+      font-weight: 500;
+      padding: 11px 0 30px 0;
     }
 
     .arrow-right {

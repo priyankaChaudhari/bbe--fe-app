@@ -61,9 +61,9 @@ const Button = styled.button`
   &.btn-transparent {
     background-color: ${Theme.white};
     padding: 11px 25px;
-    border: 1px solid ${Theme.gray25};
+    border: 1px solid ${Theme.gray35};
     color: ${Theme.black};
-    font-weight: 700;
+    font-weight: 600;
 
     &.view-contract {
       font-size: ${Theme.extraNormal};
@@ -198,7 +198,7 @@ const Button = styled.button`
     }
   }
   &.w-50 {
-    width: 168px;
+    width: 200px;
   }
   &.w-25 {
     width: 130px;
