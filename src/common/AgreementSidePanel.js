@@ -963,11 +963,11 @@ export default function AgreementSidePanel({
               contract_id: originalData && originalData.id,
             });
 
-            const list = additionalOnetimeServices.delete.filter(
-              (item) => item !== itemInOriginalData.id,
-            );
+            // const list = additionalOnetimeServices.delete.filter(
+            //   (item) => item !== itemInOriginalData && itemInOriginalData.id,
+            // );
 
-            additionalOnetimeServices.delete = list;
+            // additionalOnetimeServices.delete = list;
 
             setFormData({
               ...formData,
