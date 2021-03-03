@@ -349,7 +349,7 @@ function RequestSignature({
 
           setShowModal(false);
           setShowSuccessContact({ message: 'Approval Requested!', show: true });
-          setTimeout(() => clearSuccessMessage(), 1500);
+          setTimeout(() => clearSuccessMessage(), 3000);
 
           // history.push({
           //   pathname: PATH_AGREEMENT.replace(':id', id),
@@ -426,7 +426,7 @@ function RequestSignature({
             message: 'Signature Requested Successfully!',
             show: true,
           });
-          setTimeout(() => clearSuccessMessage(), 2000);
+          setTimeout(() => clearSuccessMessage(), 3500);
           setOpenCollapse({
             agreement: true,
             statement: false,
@@ -473,7 +473,7 @@ function RequestSignature({
           message: 'Reminder sent successfully!',
           show: true,
         });
-        setTimeout(() => clearSuccessMessage(), 1500);
+        setTimeout(() => clearSuccessMessage(), 3000);
       }
     });
   };
