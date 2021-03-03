@@ -1887,7 +1887,7 @@ export default function AgreementSidePanel({
                       : item.service &&
                         item.service.id === oneTimeServiceData.value,
                   ) ? (
-                    <div className="col-5 pl-0">
+                    <div className="col-5 pl-0 text-end">
                       <button
                         type="button"
                         className="decrement"
@@ -1986,7 +1986,7 @@ export default function AgreementSidePanel({
               </CheckBox>
             </div>
             {showAmazonPlanDropdown ? (
-              <div className="col-5 pl-0">
+              <div className="col-5 pl-0 text-end">
                 <button
                   type="button"
                   className="decrement"
@@ -3063,6 +3063,10 @@ const SidePanel = styled.div`
           font-size:${Theme.extraSmall};
           color: ${Theme.gray30};
           font-weight: bold;
+        }
+
+        .text-end {
+          text-align: end;
         }
 
         .increment {
