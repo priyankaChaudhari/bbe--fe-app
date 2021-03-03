@@ -48,6 +48,7 @@ export default function EditCompanyDetails({
   setShowSuccessMsg,
   getAmazon,
   customer,
+  getActivityLogInfo,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -250,6 +251,7 @@ export default function EditCompanyDetails({
       }).then((res) => {
         if (res && res.status === 200) {
           getAmazon();
+          getActivityLogInfo();
           setIsLoading({ loader: false, type: 'button' });
         }
         if (res && res.status === 400) {
@@ -270,13 +272,13 @@ export default function EditCompanyDetails({
       updateAccountDetails(agreement.id, formData).then((res) => {
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
-
           setApiError(res && res.data);
           setShowModal(true);
         } else if (res && res.status === 200) {
           setIsLoading({ loader: false, type: 'button' });
           dispatch(getAccountDetails(detail.id));
           dispatch(getCustomerDetails(detail.id));
+          getActivityLogInfo();
           setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
           setShowModal(false);
         }
@@ -286,13 +288,12 @@ export default function EditCompanyDetails({
     updateCustomerDetails(detail.id, formData).then((response) => {
       if (response && response.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
         dispatch(getCustomerDetails(detail.id));
-
+        getActivityLogInfo();
         setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
         setShowModal(false);
       }
@@ -767,4 +768,5 @@ EditCompanyDetails.propTypes = {
   customer: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
