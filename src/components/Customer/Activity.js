@@ -21,7 +21,13 @@ export default function Activity({
       <div className="col-lg-8  col-12 ">
         <WhiteCard className="activity-card">
           {isLoading.loader && isLoading.type === 'activityPage' ? (
-            <PageLoader color="#FF5933" type="page" width={40} height={40} />
+            <PageLoader
+              component="activity"
+              color="#FF5933"
+              type="page"
+              width={40}
+              height={40}
+            />
           ) : (
             <>
               <p className="black-heading-title mt-0 mb-4"> Recent Activity</p>

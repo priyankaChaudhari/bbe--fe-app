@@ -63,7 +63,7 @@ const customStylesForAlert = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '435px ',
+    maxWidth: '474px ',
     width: '100% ',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
@@ -1980,12 +1980,12 @@ export default function ContractContainer() {
         style={customStylesForAlert}
         ariaHideApp={false}
         contentLabel="Edit modal">
-        <ModalBox className="small-alert-modal">
+        <ModalBox>
           <div className="modal-body">
             <div className="alert-msg ">
               <span>Are you sure you want to discard all the changes?</span>
             </div>
-            <div className="text-center mb-3">
+            <div className="text-center pb-2 mb-1">
               <Button
                 onClick={() => discardAgreementChanges('No')}
                 type="button"

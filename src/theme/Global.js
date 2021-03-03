@@ -877,11 +877,21 @@ export const WhiteCard = styled.div`
     li{
       display:inline-block;
       vertical-align: middle;
-      margin-right: 8px;
+      padding-right: 8px;
 
-      img{
-        width:23px;
-      }
+    
+
+        .social-media {
+          width:23px;
+        }
+    
+        .social-icon-width {
+          width: 27px;
+        }
+      
+        &:last-child {
+          padding-right: 0;
+        }
      
     }
   }
