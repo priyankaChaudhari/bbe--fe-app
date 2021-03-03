@@ -7,7 +7,7 @@ import $ from 'jquery';
 import Theme from '../theme/Theme';
 
 export default function SuccessMsg({ message, property }) {
-  $('#success').delay(1500).fadeOut(100);
+  $('#success').delay(3000).fadeOut(100);
 
   return (
     <>
