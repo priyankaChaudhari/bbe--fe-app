@@ -314,6 +314,10 @@ p {
     color: $black-color;
     font-size: $text-f-size;
     line-height: 24px;
+
+    p {
+      font-size: $text-f-size;
+    }
   }
 
   &.text-detail {
