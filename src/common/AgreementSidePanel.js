@@ -2260,7 +2260,7 @@ export default function AgreementSidePanel({
                           formData.contract_type
                             .toLowerCase()
                             .includes('one') ? (
-                            <li>{displayOneTimeServices()}</li>
+                            <>{displayOneTimeServices()}</>
                           ) : (
                             ''
                           )}
