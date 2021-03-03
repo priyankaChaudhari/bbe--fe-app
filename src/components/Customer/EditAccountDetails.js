@@ -123,6 +123,7 @@ export default function EditAccountDetails({
   const generateNumberFormat = (item) => {
     return (
       <NumberFormat
+        allowNegative={false}
         format={item.key === 'zip_code' ? '##########' : null}
         name={item.key}
         className="form-control"
