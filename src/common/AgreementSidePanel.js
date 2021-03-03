@@ -1855,7 +1855,7 @@ export default function AgreementSidePanel({
 
   const displayOneTimeServices = () => {
     return (
-      <>
+      <li>
         <ContractFormField className="mb-3">
           <label htmlFor="additional_one_time_services">
             Additional One-Time Services
@@ -2151,7 +2151,7 @@ export default function AgreementSidePanel({
             )}
           </>
         </div>
-      </>
+      </li>
     );
   };
 
