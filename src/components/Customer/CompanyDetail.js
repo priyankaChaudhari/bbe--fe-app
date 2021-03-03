@@ -177,8 +177,14 @@ export default function CompanyDetail({
                   <div className="copy-info" key={market.key}>
                     <div className="label mt-3">{market.label || ''}</div>
                     <div className="label-info">
-                      {(amazonDetails && amazonDetails[market.key]) ||
-                        `No ${market.label}.`}
+                      {market.key === 'merchant_id' ? (
+                        <>{customer[market.key]}</>
+                      ) : (
+                        <>
+                          {(amazonDetails && amazonDetails[market.key]) ||
+                            `No ${market.label}.`}
+                        </>
+                      )}
                     </div>
 
                     <div

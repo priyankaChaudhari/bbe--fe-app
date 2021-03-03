@@ -332,7 +332,7 @@ export default function NewCustomerList() {
       <>
         <Select
           classNamePrefix="react-select"
-          // isSearchable={false}
+          isClearable={false}
           className="active"
           placeholder={
             item === 'user'

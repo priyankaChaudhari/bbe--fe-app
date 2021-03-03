@@ -33,8 +33,6 @@ import {
   createContactInfo,
   deleteContactInfo,
   updateAccountDetails,
-  updateAmazonDetails,
-  createAmazonDetails,
 } from '../../api/index';
 import { editCompanyFields } from '../../constants/FieldConstants';
 import {
@@ -48,8 +46,8 @@ export default function EditCompanyDetails({
   setShowModal,
   id,
   setShowSuccessMsg,
-  amazonDetails,
   getAmazon,
+  customer,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -196,7 +194,7 @@ export default function EditCompanyDetails({
 
   const mapInputValues = (item) => {
     if (item.key === 'merchant_id' || item.key === 'marketplace_id') {
-      return amazonDetails[item.key];
+      return customer[item.key];
     }
     return (detail && detail[item.key]) || (agreement && agreement[item.key]);
   };
@@ -226,17 +224,6 @@ export default function EditCompanyDetails({
             />
             <ReactTooltip id="phone" aria-haspopup="true" html place="left" />
           </>
-        ) : item.key === 'marketplace_id' ? (
-          <>
-            <img
-              src={InfoIcon}
-              alt="info"
-              data-tip="You can multiple marketplace IDs separting it by commas."
-              data-for="market"
-              className="phone-input-info"
-            />
-            <ReactTooltip id="market" aria-haspopup="true" html place="left" />
-          </>
         ) : (
           ''
         )}
@@ -257,37 +244,19 @@ export default function EditCompanyDetails({
   const saveData = () => {
     setIsLoading({ loader: true, type: 'button' });
 
-    if (formData && (formData.merchant_id || formData.marketplace_id)) {
-      const amazon = {
-        ...formData,
-        marketplace_id: formData.marketplace_id
-          ? [formData.marketplace_id]
-          : amazonDetails.marketplace_id,
-        customer: id,
-      };
-      if (amazonDetails && amazonDetails.id) {
-        updateAmazonDetails(amazonDetails.id, amazon, id).then((res) => {
-          if (res && res.status === 200) {
-            getAmazon();
-            setIsLoading({ loader: false, type: 'button' });
-          }
-          if (res && res.status === 400) {
-            setApiError(res && res.data);
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
-      } else {
-        createAmazonDetails(amazon).then((market) => {
-          if (market && market.status === 201) {
-            getAmazon();
-            setIsLoading({ loader: false, type: 'button' });
-          }
-          if (market && market.status === 400) {
-            setApiError(market && market.data);
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
-      }
+    if (formData && formData.merchant_id) {
+      updateCustomerDetails(customer.id, {
+        merchant_id: formData && formData.merchant_id,
+      }).then((res) => {
+        if (res && res.status === 200) {
+          getAmazon();
+          setIsLoading({ loader: false, type: 'button' });
+        }
+        if (res && res.status === 400) {
+          setApiError(res && res.data);
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
     }
 
     if (
@@ -794,6 +763,8 @@ EditCompanyDetails.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   id: PropTypes.string,
   setShowSuccessMsg: PropTypes.func,
-  amazonDetails: PropTypes.arrayOf(PropTypes.array).isRequired,
   getAmazon: PropTypes.func.isRequired,
+  customer: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
 };
