@@ -774,10 +774,10 @@ export default function ContractContainer() {
       );
     }
     if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM/DD/YYYY');
+      return details && dayjs(details[key]).format('MM / DD / YYYY');
     }
     if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
+      return dayjs(Date()).format('MM / DD / YYYY');
     }
     if (key === 'calculated_no_of_days') {
       return calculateTotalDays();

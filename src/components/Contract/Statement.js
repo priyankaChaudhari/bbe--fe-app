@@ -28,7 +28,7 @@ export default function Statement({
     }
 
     if (key === 'start_date') {
-      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+      return formData && dayjs(formData[key]).format('MM / DD / YYYY');
     }
     if (key === 'primary_marketplace') {
       if (formData && formData.primary_marketplace) {

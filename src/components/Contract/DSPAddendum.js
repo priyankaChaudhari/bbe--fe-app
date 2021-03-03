@@ -107,7 +107,7 @@ export default function DSPAddendum({
 
   const mapDefaultValues = (key, label, type) => {
     if (key === 'current_date') {
-      return dayjs(new Date()).format('MM-DD-YYYY');
+      return dayjs(new Date()).format('MM / DD / YYYY');
     }
     if (key === 'contract_company_name') {
       return formData && formData[key]
@@ -120,7 +120,7 @@ export default function DSPAddendum({
 
     if (key === 'start_date') {
       return formData && formData[key] !== null
-        ? formData && dayjs(formData[key]).format('MM/DD/YYYY')
+        ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
         : 'Select Date';
     }
 

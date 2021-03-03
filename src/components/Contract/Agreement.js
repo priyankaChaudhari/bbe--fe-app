@@ -46,11 +46,11 @@ export default function Agreement({ formData, details, templateData }) {
     }
     if (key === 'start_date') {
       return formData && formData[key] !== null
-        ? formData && dayjs(formData[key]).format('MM/DD/YYYY')
+        ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
         : 'Select Date';
     }
     if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
+      return dayjs(Date()).format('MM / DD / YYYY');
     }
     if (key === 'address') {
       if (

@@ -96,10 +96,10 @@ export default function Addendum({
     //   );
     // }
     if (key === 'start_date') {
-      return formData && dayjs(formData[key]).format('MM-DD-YYYY');
+      return formData && dayjs(formData[key]).format('MM / DD / YYYY');
     }
     if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
+      return dayjs(Date()).format('MM / DD / YYYY');
     }
     return formData && formData[key];
     // if (type && type.includes('number')) {
