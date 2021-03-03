@@ -68,9 +68,9 @@ const alertCustomStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '450px ',
+    maxWidth: '474px ',
     width: '100% ',
-    minHeight: '200px',
+    // minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -649,15 +649,6 @@ export default function CustomerMainContainer() {
             style={teamDeleteModal ? alertCustomStyles : customStyles}
             ariaHideApp={false}
             contentLabel="Add team modal">
-            <img
-              src={CloseIcon}
-              alt="close"
-              className="float-right cursor cross-icon"
-              onClick={() =>
-                setShowMemberList({ show: false, add: false, modal: false })
-              }
-              role="presentation"
-            />
             {showMemberList.add ? (
               <AddTeamMember
                 id={id}

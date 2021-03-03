@@ -10,7 +10,7 @@ import {
   SuccessMsg,
   GetInitialName,
 } from '../../common';
-import { TrashIcons, AddIcons } from '../../theme/images/index';
+import { TrashIcons, AddIcons, CloseIcon } from '../../theme/images/index';
 import AddTeamMember from './AddTeamMember';
 import {
   deleteCustomerMember,
@@ -97,6 +97,19 @@ export default function EditTeamMember({
         <>
           {!removeMember.show ? (
             <ModalBox>
+              <img
+                src={CloseIcon}
+                alt="close"
+                className="float-right cursor cross-icon"
+                onClick={() =>
+                  setShowMemberList({
+                    show: false,
+                    add: false,
+                    modal: false,
+                  })
+                }
+                role="presentation"
+              />
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader
                   className="modal-loader"
@@ -244,13 +257,13 @@ export default function EditTeamMember({
           ) : (
             <ModalBox>
               <div className="modal-body">
-                <div className="alert-msg mb-4 mt-2">
+                <div className="alert-msg   ">
                   <span>
                     You&apos;re about to remove {removeMember.name}, are you
                     sure you want to do this?
                   </span>
                 </div>
-                <div className="text-center">
+                <div className="text-center mb-1 pb-2">
                   <Button
                     type="button"
                     className="btn-primary mr-3"
