@@ -374,7 +374,7 @@ export default function CustomerMainContainer() {
                           </span>
                           <div className="clear-fix" />
                           <div className="brand-label ">Website</div>
-                          <span className="ml-4 mid-width">
+                          <span className=" mid-width website">
                             <a
                               href={
                                 customer &&
@@ -405,7 +405,7 @@ export default function CustomerMainContainer() {
                           <div className="clear-fix" />
 
                           <div className="brand-label ">Company Size</div>
-                          <span className="ml-4">
+                          <span className="company-size">
                             {customer && customer.number_of_employees}
                           </span>
                           <div className="clear-fix" />

@@ -636,7 +636,14 @@ export const WhiteCard = styled.div`
           &.mid-width {
             max-width:170px;
             width:100%;
+
+             &.website {
+                margin-left: 20px;
+              }
           }
+            &.company-size{
+             margin-left: 20px;
+            }
         }
 
   }
@@ -687,7 +694,7 @@ export const WhiteCard = styled.div`
     color: ${Theme.gray85};
     position: absolute;
     right: 20px;
-    top: 25px;
+    top: 20px;
     cursor: pointer;
 
     img {
@@ -895,7 +902,13 @@ export const WhiteCard = styled.div`
               &.mid-width {
                 max-width: 250px;
                 width:100%;
+
+                 &.website {
+                margin-left: 20px;
               }
+              }
+
+              
             }   
       }
 
@@ -917,7 +930,10 @@ export const WhiteCard = styled.div`
               &.mid-width {
                 max-width: 70px;
                 width:100%;
+
+                
               }
+
             }   
       }
 
@@ -945,6 +961,7 @@ export const WhiteCard = styled.div`
 
      .brand-label { 
        margin-top:10px;
+       width: 100px;
        
       }
        span { 
@@ -956,7 +973,11 @@ export const WhiteCard = styled.div`
           &.mid-width {
             max-width:230px;
             width:100%;
+            width: 100px;
+
+            
           }
+        
         }   
    }
      
@@ -986,9 +1007,17 @@ export const WhiteCard = styled.div`
         
 
         &.mid-width {
-          max-width: 157px;
-          width:100%;
+          width: 100px;
+          // width:100%;
+
+           &.website {
+            margin-left: 5px;
+            }
         }
+
+          &.company-size{
+             margin-left: 5px;
+           }
       }   
     }
     
