@@ -1855,7 +1855,7 @@ export default function AgreementSidePanel({
 
   const displayOneTimeServices = () => {
     return (
-      <li>
+      <>
         <ContractFormField className="mb-3">
           <label htmlFor="additional_one_time_services">
             Additional One-Time Services
@@ -2086,75 +2086,72 @@ export default function AgreementSidePanel({
             )}
             {showAmazonPlanDropdown ? (
               <div className="col-12">
-                <>
-                  <ContractInputSelect>
-                    <Select
-                      classNamePrefix="react-select"
-                      defaultValue={setDefaultAmazonPlanValue()}
-                      options={AmazonStoreOptions}
-                      name="amazon_store_plan"
-                      components={{ DropdownIndicator }}
-                      onChange={(event) => {
-                        handleAmazonPlanChange(event);
-                        handleChange(event, 'amazon_store_package', 'dropdown');
-                      }}
-                      placeholder="Select Package"
+                <ContractInputSelect>
+                  <Select
+                    classNamePrefix="react-select"
+                    defaultValue={setDefaultAmazonPlanValue()}
+                    options={AmazonStoreOptions}
+                    name="amazon_store_plan"
+                    components={{ DropdownIndicator }}
+                    onChange={(event) => {
+                      handleAmazonPlanChange(event);
+                      handleChange(event, 'amazon_store_package', 'dropdown');
+                    }}
+                    placeholder="Select Package"
+                  />
+                </ContractInputSelect>
+                {amazonStoreCustom ? (
+                  <ContractFormField className="w-100 mt-1">
+                    <input
+                      className="form-control "
+                      type="text"
+                      value={
+                        formData &&
+                        formData.additional_one_time_services &&
+                        formData.additional_one_time_services.length &&
+                        formData.additional_one_time_services.find((item) =>
+                          item.name
+                            ? item.name.includes('Amazon Store Package')
+                            : item.service &&
+                              item.service.name.includes(
+                                'Amazon Store Package',
+                              ),
+                        )
+                          ? formData &&
+                            formData.additional_one_time_services &&
+                            formData.additional_one_time_services.length &&
+                            formData.additional_one_time_services.find((item) =>
+                              item.name
+                                ? item.name.includes('Amazon Store Package')
+                                : item.service &&
+                                  item.service.name.includes(
+                                    'Amazon Store Package',
+                                  ),
+                            ).custom_amazon_store_price
+                          : ''
+                      }
+                      placeholder="Enter Custom Store Price"
+                      name="custom_amazon_store_price"
+                      onChange={(event) =>
+                        handleChange(
+                          event,
+                          'amazon_store_package',
+                          'custom_amazon_store_price',
+                        )
+                      }
                     />
-                  </ContractInputSelect>
-                  {amazonStoreCustom ? (
-                    <ContractFormField className="w-100 mt-1">
-                      <input
-                        className="form-control "
-                        type="text"
-                        value={
-                          formData &&
-                          formData.additional_one_time_services &&
-                          formData.additional_one_time_services.length &&
-                          formData.additional_one_time_services.find((item) =>
-                            item.name
-                              ? item.name.includes('Amazon Store Package')
-                              : item.service &&
-                                item.service.name.includes(
-                                  'Amazon Store Package',
-                                ),
-                          )
-                            ? formData &&
-                              formData.additional_one_time_services &&
-                              formData.additional_one_time_services.length &&
-                              formData.additional_one_time_services.find(
-                                (item) =>
-                                  item.name
-                                    ? item.name.includes('Amazon Store Package')
-                                    : item.service &&
-                                      item.service.name.includes(
-                                        'Amazon Store Package',
-                                      ),
-                              ).custom_amazon_store_price
-                            : ''
-                        }
-                        placeholder="Enter Custom Store Price"
-                        name="custom_amazon_store_price"
-                        onChange={(event) =>
-                          handleChange(
-                            event,
-                            'amazon_store_package',
-                            'custom_amazon_store_price',
-                          )
-                        }
-                      />
-                      {displayError('custom_amazon_store_price')}
-                    </ContractFormField>
-                  ) : (
-                    ''
-                  )}
-                </>
+                    {displayError('custom_amazon_store_price')}
+                  </ContractFormField>
+                ) : (
+                  ''
+                )}
               </div>
             ) : (
               ''
             )}
           </>
         </div>
-      </li>
+      </>
     );
   };
 
