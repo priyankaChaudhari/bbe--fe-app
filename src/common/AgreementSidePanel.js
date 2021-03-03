@@ -952,6 +952,25 @@ export default function AgreementSidePanel({
             setAdditionalOnetimeServices({
               ...additionalOnetimeServices,
             });
+
+            // if item selected and if it is custom then show price input field else not
+            if (
+              itemInOriginalData && itemInOriginalData.name
+                ? itemInOriginalData &&
+                  itemInOriginalData.name.includes(
+                    'Amazon Store Package Custom',
+                  )
+                : itemInOriginalData &&
+                  itemInOriginalData.service &&
+                  itemInOriginalData.service.name.includes(
+                    'Amazon Store Package Custom',
+                  )
+            ) {
+              setAmazonStoreCustom(true);
+              //
+            } else {
+              setAmazonStoreCustom(false);
+            }
           } else {
             // const defaultVar = oneTimeService.find((item) =>
             //   item.label.includes('Amazon Store Package Basic'),
@@ -984,6 +1003,9 @@ export default function AgreementSidePanel({
             setAdditionalOnetimeServices({
               ...additionalOnetimeServices,
             });
+            // if item not already exist in orginal data then it will be new so dont show custom price input if you choose any amazon service
+            // then custom price input condition will get handle in onchange of drop down of basic ,plus, and custom
+            setAmazonStoreCustom(false);
           }
 
           // remove Amazon Store Package entries from notincludedService
