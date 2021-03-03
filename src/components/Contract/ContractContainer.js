@@ -1844,11 +1844,11 @@ export default function ContractContainer() {
                   : 'light-orange  on-boarding  mt-3 mr-3 '
               }
               disabled={
-                !(
-                  formData &&
-                  formData.contract_type &&
-                  formData.contract_type.toLowerCase().includes('one')
-                ) &&
+                // !(
+                //   formData &&
+                //   formData.contract_type &&
+                //   formData.contract_type.toLowerCase().includes('one')
+                // ) &&
                 formData &&
                 formData.additional_one_time_services &&
                 formData.additional_one_time_services.length &&

@@ -2277,7 +2277,18 @@ export default function AgreementSidePanel({
                             // &&
                             // showRightTick('statement') &&
                             // showRightTick('dspAddendum')
-                          )
+                          ) ||
+                          (formData &&
+                            formData.additional_one_time_services &&
+                            formData.additional_one_time_services.length &&
+                            formData.additional_one_time_services.find(
+                              (item) => item.name === 'Amazon Store Package',
+                            ) &&
+                            formData &&
+                            formData.contract_type &&
+                            formData.contract_type
+                              .toLowerCase()
+                              .includes('one'))
                         }
                         onClick={() =>
                           nextStep(
