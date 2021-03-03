@@ -13,7 +13,7 @@ import {
   Button,
   GetInitialName,
 } from '../../common';
-import { SearchIcons, SortDownIcon } from '../../theme/images/index';
+import { SearchIcons, SortDownIcon, CloseIcon } from '../../theme/images/index';
 import {
   addCustomerMember,
   getRoles,
@@ -215,6 +215,19 @@ export default function AddTeamMember({
 
   return (
     <ModalBox>
+      <img
+        src={CloseIcon}
+        alt="close"
+        className="float-right cursor cross-icon"
+        onClick={() =>
+          setShowMemberList({
+            show: false,
+            add: false,
+            modal: false,
+          })
+        }
+        role="presentation"
+      />
       <div className="modal-body">
         <h4>Add Team Member</h4>
         <div className="body-content mt-3">
