@@ -247,12 +247,9 @@ export default function CustomerMainContainer() {
     return '';
   };
 
-  $(document).on('click', (e) => {
-    if ($(e.target).is('clickbox')) {
-      setShowDropDown(true);
-    } else {
-      setShowDropDown(false);
-    }
+  $(document).on('click', () => {
+    $('#statusbox').hide();
+    $('#arrowbox').css({ transform: showDropDown ? '' : 'rotate(180deg)' });
   });
 
   return (
@@ -316,6 +313,7 @@ export default function CustomerMainContainer() {
                       role="presentation">
                       {customer && customer.status && customer.status.label}{' '}
                       <img
+                        id="arrowbox"
                         src={ExpandArrowIcon}
                         alt="caret"
                         style={{
@@ -323,7 +321,7 @@ export default function CustomerMainContainer() {
                         }}
                       />
                       <ul
-                        id="clickbox"
+                        id="statusbox"
                         className="dropdown-content-status"
                         style={{ display: showDropDown ? 'block' : 'none' }}>
                         {checkStatus()}
@@ -356,24 +354,24 @@ export default function CustomerMainContainer() {
                       <div className="col-lg-4 col-12">
                         <div className="company-label-info text-left">
                           {agreement && agreement.address
-                            ? `${agreement.address},`
-                            : ' '}{' '}
+                            ? `${agreement.address}`
+                            : ''}
                           {agreement && agreement.city
-                            ? `${agreement.city},`
-                            : ' '}{' '}
+                            ? `, ${agreement.city}`
+                            : ''}
                           {agreement && agreement.state && agreement.state.label
-                            ? `${agreement.state.label}, `
+                            ? `, ${agreement.state.label}`
                             : agreement && agreement.state
-                            ? `${agreement.state}, `
+                            ? `, ${agreement.state}`
                             : ''}
                           {agreement && agreement.zip_code
-                            ? `${agreement.zip_code}, `
+                            ? `, ${agreement.zip_code}`
                             : ''}
                           {customer &&
                           customer.country &&
                           customer.country.label
-                            ? customer.country.label
-                            : customer.country
+                            ? `, ${customer.country.label}`
+                            : `, ${customer.country}`
                             ? customer.country
                             : ''}
                         </div>
