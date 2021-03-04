@@ -7,33 +7,6 @@ import PropTypes from 'prop-types';
 
 export default function Agreement({ formData, details, templateData }) {
   const mapDefaultValues = (key, label) => {
-    // if (formData[key] === undefined || formData[key] === '') {
-    //   if (key === 'contract_company_name') {
-    //     return details && details[key]
-    //       ? details && details[key]
-    //       : `Enter ${label}.`;
-    //   }
-    //   if (key === 'length') {
-    //     return details && details.length.label;
-    //   }
-    //   if (key === 'start_date') {
-    //     return details && dayjs(details[key]).format('MM-DD-YYYY');
-    //   }
-    //   if (key === 'current_date') {
-    //     return dayjs(Date()).format('MM-DD-YYYY');
-    //   }
-    //   return details && details[key];
-    // }
-    // console.log( formData['city'] , formData['address'], formData['state'], formData['zip_code'], formData)
-    //     if (
-    //       (formData['city'] === '') &&
-    //       (  formData['address'] === '') &&
-    //       ( formData['state'] === '') &&
-    //       ( formData['zip_code'] === '')
-    //     ) {
-    //       return 'Enter Location';
-    //     }
-
     if (key === 'contract_company_name') {
       return formData && formData[key]
         ? formData && formData[key]
@@ -67,13 +40,26 @@ export default function Agreement({ formData, details, templateData }) {
       }
       return `${
         formData && formData.address ? formData && formData.address : ''
-      }${formData && formData.address ? ',' : ''}
+      }${
+        formData &&
+        formData.address &&
+        ((formData && formData.state) ||
+          (formData && formData.city) ||
+          (formData && formData.zip_code))
+          ? ','
+          : ''
+      }
+       ${formData && formData.city ? formData && formData.city : ''}${
+        formData &&
+        formData.city &&
+        (formData.state || (formData && formData.zip_code))
+          ? ','
+          : ''
+      }
       ${formData && formData.state ? formData && formData.state : ''}${
-        formData && formData.state ? ',' : ''
+        formData && formData.state && formData && formData.zip_code ? ',' : ''
       }
-      ${formData && formData.city ? formData && formData.city : ''}${
-        formData && formData.city ? ',' : ''
-      }
+     
       ${formData && formData.zip_code ? formData && formData.zip_code : ''}
       `;
     }
@@ -281,34 +267,36 @@ export default function Agreement({ formData, details, templateData }) {
         <p
           className="mb-4 long-text "
           dangerouslySetInnerHTML={{
-            __html: getAgreementAccorType(0)
-              .replace(
-                'CUSTOMER_NAME',
-                mapDefaultValues('contract_company_name', 'Customer Name'),
-              )
-              .replace(
-                'START_DATE',
-                mapDefaultValues('start_date', 'Start Date'),
-              )
-              .replace(
-                'CUSTOMER_ADDRESS',
-                mapDefaultValues('address', 'Address'),
-              )
-              // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
-              // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
-              // .replace(
-              //   'CUSTOMER_POSTAL',
-              //   mapDefaultValues('zip_code', 'Postal Code'),
-              // )
-              .replace(
-                'AGREEMENT_LENGTH',
-                mapDefaultValues('length', 'Contract Length'),
-              )
-              .replace('ONE_TIME_SERVICE_TABLE', showOneTimeServiceTable())
-              .replace(
-                'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
-                `${mapServiceTotal('additional_one_time_services')}`,
-              ),
+            __html:
+              getAgreementAccorType(0) &&
+              getAgreementAccorType(0)
+                .replace(
+                  'CUSTOMER_NAME',
+                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                )
+                .replace(
+                  'START_DATE',
+                  mapDefaultValues('start_date', 'Start Date'),
+                )
+                .replace(
+                  'CUSTOMER_ADDRESS',
+                  mapDefaultValues('address', 'Address'),
+                )
+                // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+                // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
+                // .replace(
+                //   'CUSTOMER_POSTAL',
+                //   mapDefaultValues('zip_code', 'Postal Code'),
+                // )
+                .replace(
+                  'AGREEMENT_LENGTH',
+                  mapDefaultValues('length', 'Contract Length'),
+                )
+                .replace('ONE_TIME_SERVICE_TABLE', showOneTimeServiceTable())
+                .replace(
+                  'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
+                  `${mapServiceTotal('additional_one_time_services')}`,
+                ),
           }}
         />
 

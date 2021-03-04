@@ -436,12 +436,12 @@ export const AgreementDetails = [
         placeholder: 'Enter Address',
       },
       {
-        key: 'city',
+        key: 'state',
         type: 'text',
         placeholder: 'Enter State',
       },
       {
-        key: 'state',
+        key: 'city',
         type: 'text',
         placeholder: 'Enter City',
       },
