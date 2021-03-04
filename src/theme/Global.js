@@ -642,7 +642,7 @@ export const WhiteCard = styled.div`
               }
           }
             &.company-size{
-             margin-left: 20px;
+             margin-left: 24px;
             }
         }
 
