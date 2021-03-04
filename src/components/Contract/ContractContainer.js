@@ -1299,8 +1299,9 @@ export default function ContractContainer() {
           formData &&
           formData.monthly_retainer &&
           formData.primary_marketplace &&
-          formData.rev_share &&
-          formData.sales_threshold
+          formData.rev_share
+          // &&
+          // formData.sales_threshold
         ) {
           return true;
         }
