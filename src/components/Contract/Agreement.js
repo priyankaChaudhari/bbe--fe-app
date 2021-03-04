@@ -215,7 +215,7 @@ export default function Agreement({ formData, details, templateData }) {
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details && details.total_fee.onetime_service
+        details && details.total_fee && details.total_fee.onetime_service
           ? details.total_fee.onetime_service
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')

@@ -347,7 +347,6 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
-
     if (
       additionalOnetimeSerError.custom_amazon_store_price &&
       key === 'amazon_store_package'
@@ -1331,6 +1330,15 @@ export default function AgreementSidePanel({
           ...updatedFormData,
           [event.target.name]: value,
         });
+      } else if (
+        event.target.name === 'monthly_retainer' &&
+        event.target.value === ''
+      ) {
+        setFormData({ ...formData, [event.target.name]: null });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: null,
+        });
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
         setUpdatedFormData({
@@ -1338,6 +1346,7 @@ export default function AgreementSidePanel({
           [event.target.name]: event.target.value,
         });
       }
+      // }
       setApiError({
         ...apiError,
         [event.target.name]: '',
@@ -1562,8 +1571,8 @@ export default function AgreementSidePanel({
         if (
           formData &&
           formData.start_date &&
-          formData.primary_marketplace &&
-          formData.dsp_fee
+          formData.dsp_fee &&
+          formData.dsp_length
         ) {
           return true;
         }
