@@ -517,7 +517,7 @@ export const DSPAddendumDetails = [
     placeholder: 'Enter budget',
   },
   {
-    key: 'length',
+    key: 'dsp_length',
     label: 'INITIAL PERIOD (MONTHS)',
     type: 'choice',
     placeholder: 'Select Period',

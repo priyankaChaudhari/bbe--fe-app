@@ -1321,8 +1321,8 @@ export default function ContractContainer() {
         if (
           formData &&
           formData.start_date &&
-          formData.primary_marketplace &&
-          formData.dsp_fee
+          formData.dsp_fee &&
+          formData.dsp_length
         ) {
           return true;
         }
