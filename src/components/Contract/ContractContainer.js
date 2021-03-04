@@ -796,12 +796,27 @@ export default function ContractContainer() {
       ) {
         return `Enter Location`;
       }
-      return `${details && details.address}${
-        details && details.address ? ',' : ''
+      return `${details && details.address ? details && details.address : ''}${
+        details &&
+        details.address &&
+        ((details && details.state) ||
+          (details && details.city) ||
+          (details && details.zip_code))
+          ? ','
+          : ''
       }
-      ${details && details.state}${details && details.state ? ',' : ''}
-      ${details && details.city}${details && details.city ? ',' : ''}
-      ${details && details.zip_code}
+      ${details && details.city ? details && details.city : ''}${
+        details &&
+        details.city &&
+        (details.state || (details && details.zip_code))
+          ? ','
+          : ''
+      }
+      ${details && details.state ? details && details.state : ''}${
+        details && details.state && details && details.zip_code ? ',' : ''
+      }
+      
+      ${details && details.zip_code ? details && details.zip_code : ''}
       `;
     }
     const result =

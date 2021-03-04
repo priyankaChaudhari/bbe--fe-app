@@ -132,13 +132,10 @@ export default function DSPAddendum({
       return `Enter ${label}`;
     }
 
-    if (key === 'length') {
-      return (
-        formData &&
-        formData.length &&
-        formData.length.label &&
-        parseInt(formData.length.label, 10)
-      );
+    if (key === 'dsp_length') {
+      return formData && formData.dsp_length && formData.dsp_length.label
+        ? parseInt(formData.dsp_length.label, 10)
+        : parseInt(formData.dsp_length, 10);
     }
     if (type && type.includes('number')) {
       return `
@@ -258,7 +255,7 @@ export default function DSPAddendum({
                   .replaceAll(
                     'CONTRACT_LENGTH',
                     mapDefaultValues(
-                      'length',
+                      'dsp_length',
                       'Initial Period',
                       'number-currency',
                     ),
@@ -323,6 +320,10 @@ DSPAddendum.propTypes = {
     dsp_fee: PropTypes.string,
     start_date: PropTypes.string,
     length: PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+    dsp_length: PropTypes.shape({
       label: PropTypes.string,
       value: PropTypes.string,
     }),
