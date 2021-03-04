@@ -137,6 +137,13 @@ export default function EditAccountDetails({
         prefix={item.type === 'number-currency' ? '$' : ''}
         onChange={(event) => handleChange(event, item.key)}
         thousandSeparator={item.key !== 'zip_code'}
+        isAllowed={(values) => {
+          const { formattedValue, floatValue } = values;
+          if (floatValue == null) {
+            return formattedValue === '';
+          }
+          return floatValue <= 100000000000000000000000000000000000000000000000;
+        }}
       />
     );
   };
