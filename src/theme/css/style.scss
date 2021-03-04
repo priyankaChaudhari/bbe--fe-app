@@ -63,19 +63,19 @@ body {
   padding-top: 70px;
 }
 
-// .x-hellosign-embedded__modal-content {
-//   max-width: 1500px !important;
-// }
-// .m-signer-mobile {
-//   max-width: 2000px !important;
-// }
-// .is-desktop.is-embedded .m-signer-mobile {
-//   width: 100% !important;
-//   max-width: 100% !important;
-// }
-// .is-desktop .m-signer-mobile {
-//   max-width: 100% !important;
-// }
+.x-hellosign-embedded__modal-content {
+  max-width: 1500px !important;
+}
+.m-signer-mobile {
+  max-width: 2000px !important;
+}
+.is-desktop.is-embedded .m-signer-mobile {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.is-desktop .m-signer-mobile {
+  max-width: 100% !important;
+}
 
 .page-is-loading {
   width: 100%;
