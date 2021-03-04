@@ -2020,7 +2020,6 @@ const Footer = styled.div`
   padding-left: 90px;
   z-index: 2;
   .w-320 {
-    float: left;
     max-width: 320px;
     width: 100%;
   }
