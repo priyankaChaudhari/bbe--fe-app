@@ -885,7 +885,7 @@ const CustomerListPage = styled.div`
 
   .table-part {
     // min-height: 560px;
-    padding-top: 59px;
+    padding-top: 65px;
     overflow: auto;
     min-height: 892px;
     position: relative;
