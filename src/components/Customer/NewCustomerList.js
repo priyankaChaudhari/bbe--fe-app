@@ -52,7 +52,7 @@ export default function NewCustomerList() {
 
   // const userInfo = useSelector((state) => state.userState.userInfo);
   const isDesktop = useMediaQuery({ minWidth: 992 });
-  const { Option, MultiValue } = components;
+  const { Option, MultiValue, SingleValue } = components;
   // const [selectedFilter, setSelectedFilter] = useState({});
   // const [clearFilter, setClearFilter] = useState(true);
   const [status, setStatus] = useState([]);
@@ -122,6 +122,15 @@ export default function NewCustomerList() {
     </MultiValue>
   );
 
+  const SortOption = (props) => (
+    <SingleValue {...props}>
+      Sort by: &nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+      </span>
+    </SingleValue>
+  );
+
   const DropdownIndicator = (props) => {
     return (
       components.DropdownIndicator && (
@@ -145,6 +154,12 @@ export default function NewCustomerList() {
       return {
         Option: IconOption,
         MultiValue: IconSingleOption,
+        DropdownIndicator,
+      };
+    }
+    if (key === 'sort') {
+      return {
+        SingleValue: SortOption,
         DropdownIndicator,
       };
     }
