@@ -1604,124 +1604,94 @@ export default function ContractContainer() {
 
   const viewContract = () => {
     return (
-      <>
-        <div className="success-msg-pop-up contract">
-          {showSuccessContact.show ? (
-            <SuccessMsg property=" " message={showSuccessContact.message} />
-          ) : (
-            ''
-          )}
-        </div>
-        <div className="on-boarding-container">
-          <div className="row">
-            <div className="col-12">
-              <div className="m-0 sticky">
-                {' '}
-                <div
-                  onClick={() => onClickOfBackToCustomerDetail()}
-                  role="presentation"
-                  // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                  className="back-link">
-                  <img
-                    src={LeftArrowIcon}
-                    alt="aarow-back"
-                    className="arrow-back-icon "
-                  />
-                  Back to Customer Details
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="text-container ">
-            <div id="agreement">
-              {/* {history.location.pathname.includes('agreement') &&
+      <div className="text-container ">
+        <div id="agreement">
+          {/* {history.location.pathname.includes('agreement') &&
                   details ? ( */}
-              <Agreement
-                // myRef={myRef}
+          <Agreement
+            // myRef={myRef}
 
-                formData={formData}
-                details={details}
-                templateData={data}
-              />
-              {/* ) : (
+            formData={formData}
+            details={details}
+            templateData={data}
+          />
+          {/* ) : (
                     ''
                   )} */}
-            </div>
-
-            {details &&
-            details.contract_type &&
-            details.contract_type.toLowerCase().includes('one') ? (
-              ''
-            ) : (
-              <div id="statement">
-                <Statement
-                  formData={formData}
-                  details={details}
-                  templateData={data}
-                  notIncludedOneTimeServices={notIncludedOneTimeServices}
-                  notIncludedMonthlyServices={notIncludedMonthlyServices}
-                />
-              </div>
-            )}
-
-            {showSection.dspAddendum &&
-            !(
-              details &&
-              details.contract_type &&
-              details.contract_type.toLowerCase().includes('one')
-            ) ? (
-              <div id="dspAddendum">
-                <DSPAddendum
-                  formData={formData}
-                  templateData={data}
-                  calculatedDate={calculatedDate}
-                  setCalculatedDate={setCalculatedDate}
-                  firstMonthDate={firstMonthDate}
-                  setFirstMonthDate={setFirstMonthDate}
-                  secondMonthDate={secondMonthDate}
-                  setSecondMonthDate={setSecondMonthDate}
-                  thirdMonthDate={thirdMonthDate}
-                  setThirdMonthDate={setThirdMonthDate}
-                  endMonthDate={endMonthDate}
-                  setEndDate={setEndDate}
-                />
-              </div>
-            ) : (
-              ''
-            )}
-
-            <div id="addendum">
-              <Addendum
-                formData={formData}
-                details={details}
-                templateData={data}
-                notIncludedOneTimeServices={notIncludedOneTimeServices}
-                notIncludedMonthlyServices={notIncludedMonthlyServices}
-                newAddendumData={newAddendumData}
-                setNewAddendum={setNewAddendum}
-                showEditor={showEditor}
-                showFooter={showFooter}
-                setShowEditor={setShowEditor}
-                onEditAddendum={onEditAddendum}
-                setUpdatedFormData={setUpdatedFormData}
-                updatedFormData={updatedFormData}
-              />
-            </div>
-
-            {showSection.amendment ? (
-              <div id="amendment">
-                <ServicesAmendment
-                  formData={formData}
-                  details={details}
-                  templateData={data}
-                />
-              </div>
-            ) : (
-              ''
-            )}
-          </div>
         </div>
-      </>
+
+        {details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('one') ? (
+          ''
+        ) : (
+          <div id="statement">
+            <Statement
+              formData={formData}
+              details={details}
+              templateData={data}
+              notIncludedOneTimeServices={notIncludedOneTimeServices}
+              notIncludedMonthlyServices={notIncludedMonthlyServices}
+            />
+          </div>
+        )}
+
+        {showSection.dspAddendum &&
+        !(
+          details &&
+          details.contract_type &&
+          details.contract_type.toLowerCase().includes('one')
+        ) ? (
+          <div id="dspAddendum">
+            <DSPAddendum
+              formData={formData}
+              templateData={data}
+              calculatedDate={calculatedDate}
+              setCalculatedDate={setCalculatedDate}
+              firstMonthDate={firstMonthDate}
+              setFirstMonthDate={setFirstMonthDate}
+              secondMonthDate={secondMonthDate}
+              setSecondMonthDate={setSecondMonthDate}
+              thirdMonthDate={thirdMonthDate}
+              setThirdMonthDate={setThirdMonthDate}
+              endMonthDate={endMonthDate}
+              setEndDate={setEndDate}
+            />
+          </div>
+        ) : (
+          ''
+        )}
+
+        <div id="addendum">
+          <Addendum
+            formData={formData}
+            details={details}
+            templateData={data}
+            notIncludedOneTimeServices={notIncludedOneTimeServices}
+            notIncludedMonthlyServices={notIncludedMonthlyServices}
+            newAddendumData={newAddendumData}
+            setNewAddendum={setNewAddendum}
+            showEditor={showEditor}
+            showFooter={showFooter}
+            setShowEditor={setShowEditor}
+            onEditAddendum={onEditAddendum}
+            setUpdatedFormData={setUpdatedFormData}
+            updatedFormData={updatedFormData}
+          />
+        </div>
+
+        {showSection.amendment ? (
+          <div id="amendment">
+            <ServicesAmendment
+              formData={formData}
+              details={details}
+              templateData={data}
+            />
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
     );
   };
 
@@ -1959,34 +1929,68 @@ export default function ContractContainer() {
             onClick={() => showTabInResponsive('view-contract')}>
             View Contract
           </li>
-          <li
-            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-            role="presentation"
-            onClick={() => showTabInResponsive('edit-fields')}>
-            Edit Fields
-          </li>
+          {formData &&
+          formData.contract_status &&
+          formData.contract_status.value === 'pending contract signature' ? (
+            ''
+          ) : (
+            <li
+              className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+              role="presentation"
+              onClick={() => showTabInResponsive('edit-fields')}>
+              Edit Fields
+            </li>
+          )}
         </ul>
       </ContractTab>
-      {isDesktop ||
-      (isTablet && tabInResponsive === 'view-contract') ||
-      (isMobile && tabInResponsive === 'view-contract') ? (
-        loader || (isLoading.loader && isLoading.type === 'page') ? (
-          <PageLoader
-            className="modal-loader"
-            color="#FF5933"
-            type="page"
-            width={40}
-            component="agreement"
-          />
-        ) : details ? (
-          viewContract()
+
+      <div className="success-msg-pop-up contract">
+        {showSuccessContact.show ? (
+          <SuccessMsg property=" " message={showSuccessContact.message} />
         ) : (
           ''
-        )
-      ) : (
-        ''
-      )}
-
+        )}
+      </div>
+      <div className="on-boarding-container">
+        <div className="row">
+          <div className="col-12">
+            <div className="m-0 sticky">
+              {' '}
+              <div
+                onClick={() => onClickOfBackToCustomerDetail()}
+                role="presentation"
+                // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                className="back-link">
+                <img
+                  src={LeftArrowIcon}
+                  alt="aarow-back"
+                  className="arrow-back-icon "
+                />
+                Back to Customer Details
+              </div>
+            </div>
+          </div>
+        </div>
+        {isDesktop ||
+        (isTablet && tabInResponsive === 'view-contract') ||
+        (isMobile && tabInResponsive === 'view-contract') ? (
+          loader || (isLoading.loader && isLoading.type === 'page') ? (
+            <PageLoader
+              className="modal-loader"
+              color="#FF5933"
+              type="page"
+              width={40}
+              component="agreement"
+            />
+          ) : details ? (
+            viewContract()
+          ) : (
+            ''
+          )
+        ) : (
+          ''
+        )}
+      </div>
       {isDesktop ||
       (isTablet && tabInResponsive === 'edit-fields') ||
       (isMobile && tabInResponsive === 'edit-fields')
