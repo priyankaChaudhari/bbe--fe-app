@@ -22,8 +22,6 @@ import {
   CreateAddendum,
   StatementWork,
   EditFileIcons,
-  ActivityLogIcon,
-  ActivityOpenIcon,
   GreenCheck,
   MinusIcon,
   PlusIcon,
@@ -2167,7 +2165,7 @@ export default function AgreementSidePanel({
 
   return (
     <SidePanel>
-      <input
+      {/* <input
         className="d-lg-none d-md-block"
         data-function="swipe"
         id="swipe"
@@ -2190,7 +2188,7 @@ export default function AgreementSidePanel({
         <div className="activity-icon">
           <img src={ActivityOpenIcon} alt="log-open" />{' '}
         </div>
-      </label>
+      </label> */}
       <div className="sidebar">
         <>
           {formData &&
@@ -3253,50 +3251,61 @@ const SidePanel = styled.div`
   }
 
   
-   @media only screen and (max-width: 991px) { 
-     top: 70px;
-   input[data-function*='swipe'] {
-    position: absolute;
-    opacity: 0;
-  }
-  label[data-function*='swipe'] {
-    padding 30px 0 0 10px;
-    z-index: 1;
-    display: block;
-    width: 42px;
-    font-family: ${Theme.titleFontFamily};
-    height: 42px;
-    text-align: center;
-    cursor: pointer;
-    transform: translate3d(0, 0, 0);
-    transition: transform 0.3s;
-  }
+  //  @media only screen and (max-width: 991px) { 
+  //    top: 70px;
+  //  input[data-function*='swipe'] {
+  //   position: absolute;
+  //   opacity: 0;
+  // }
+  // label[data-function*='swipe'] {
+  //   padding 30px 0 0 10px;
+  //   z-index: 1;
+  //   display: block;
+  //   width: 42px;
+  //   font-family: ${Theme.titleFontFamily};
+  //   height: 42px;
+  //   text-align: center;
+  //   cursor: pointer;
+  //   transform: translate3d(0, 0, 0);
+  //   transition: transform 0.3s;
+  // }
   
-  input[data-function*='swipe']:checked ~ label[data-function*='swipe'] {
-    transform: translate3d(200px, 0, 0);
-  }
-  label[data-function*='swipe']:checked {
-    display: block;
-  }
-  label:nth-child(2) {
-    display: none;
-  }
-  input[data-function*='swipe']:checked ~ label:nth-child(2) {
-    display: block;
-    transform: translate3d(10px, 0px, 0px);
-  }
-  input[data-function*='swipe']:checked ~ label:nth-child(3) {
-    display: none !important;
-  }
+  // input[data-function*='swipe']:checked ~ label[data-function*='swipe'] {
+  //   transform: translate3d(200px, 0, 0);
+  // }
+  // label[data-function*='swipe']:checked {
+  //   display: block;
+  // }
+  // label:nth-child(2) {
+  //   display: none;
+  // }
+  // input[data-function*='swipe']:checked ~ label:nth-child(2) {
+  //   display: block;
+  //   transform: translate3d(10px, 0px, 0px);
+  // }
+  // input[data-function*='swipe']:checked ~ label:nth-child(3) {
+  //   display: none !important;
+  // }
   
-  input[data-function*='swipe']:checked ~ .sidebar {
-    transform: translate3d(0px, 0px, 0px);
-    display: none;
-  }
-  input[data-function*='swipe']:checked ~ .sidebar .menu li {
-    width: 100%;
-  }
+  // input[data-function*='swipe']:checked ~ .sidebar {
+  //   transform: translate3d(0px, 0px, 0px);
+  //   display: none;
+  // }
+  // input[data-function*='swipe']:checked ~ .sidebar .menu li {
+  //   width: 100%;
+  // }
  
+  // }
+
+  @media only screen and (max-width: 991px) {  
+    z-index: 1;
+    padding-bottom: 290px;
+    width: 100%;
+    position: fixed;
+    top: 195px;
+    right: 0;
+    left:0;
+
   }
 
    @media only screen and (min-width: 1500px)  {

@@ -2074,16 +2074,19 @@ const Footer = styled.div`
     margin-left: 20px;
     font-size: ${Theme.extraNormal};
   }
-
+  @media only screen and (max-width: 991px) {
+    padding-left: 17px;
+  }
   @media only screen and (max-width: 540px) {
     padding-left: 20px;
   }
 `;
 
 const ContractTab = styled.div`
-  background: #fafafb;
+  background: ${Theme.gray6};
   padding-top: 60px;
   position: fixed;
+  z-index: 1;
   width: 100%;
 
   .tabs {
@@ -2094,7 +2097,7 @@ const ContractTab = styled.div`
 
     li {
       display: inline-block;
-      color: #000000;
+      color: ${Theme.black};
       font-size: 15px;
       padding: 20px 40px;
       cursor: pointer;
