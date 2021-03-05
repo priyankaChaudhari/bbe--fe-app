@@ -8,16 +8,6 @@ const Button = styled.button`
   font-size: ${Theme.normal};
   pointer-events: all;
 
-  // &:disabled {
-  //   &.btn-primary {
-  //     &.btn-disabled {
-  //       pointer-events: none;
-  //       cursor: not-allowed;
-  //       background: green;
-  //     }
-  //   }
-  // }
-
   &.btn-primary {
     background-color: ${Theme.baseColor};
     color: ${Theme.white};
@@ -216,6 +206,23 @@ const Button = styled.button`
     font-size: ${Theme.normalRes};
     &.btn-add-contact {
       font-size: ${Theme.smallRes};
+    }
+  }
+
+  @media only screen and (max-width: 991px) {
+    &.btn-primary {
+      width: 172px;
+    }
+    &.btn-gray {
+      width: 172px;
+    }
+    &.light-orange {
+      &.on-boarding {
+        width: 172px;
+      }
+    }
+    &.w-50 {
+      width: 172px;
     }
   }
 `;

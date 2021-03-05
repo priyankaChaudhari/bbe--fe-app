@@ -2034,17 +2034,17 @@ export default function ContractContainer() {
             <div className="alert-msg ">
               <span>Are you sure you want to discard all the changes?</span>
             </div>
-            <div className="text-center pb-2 mb-1">
+            <div className="text-center ">
               <Button
                 onClick={() => discardAgreementChanges('No')}
                 type="button"
-                className="btn-primary on-boarding  mr-3">
+                className="btn-primary on-boarding  mr-3 pb-2 mb-1">
                 Keep Editing
               </Button>
               <Button
                 onClick={() => discardAgreementChanges('Yes')}
                 type="button"
-                className=" btn-transparent w-50 on-boarding">
+                className=" btn-transparent w-50 on-boarding pb-2 mb-1">
                 Discard Changes
               </Button>
 
@@ -2103,7 +2103,7 @@ const ContractTab = styled.div`
       display: inline-block;
       color: ${Theme.black};
       font-size: 15px;
-      padding: 20px 40px;
+      padding: 23px 40px;
       cursor: pointer;
 
       &:last-child {
@@ -2118,7 +2118,7 @@ const ContractTab = styled.div`
       }
 
       &.active {
-        padding-bottom: 18px;
+        padding-bottom: 23px;
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};

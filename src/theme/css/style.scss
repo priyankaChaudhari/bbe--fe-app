@@ -977,7 +977,7 @@ fieldset {
   #statement,
   #addendum,
   #dspAddendum {
-    background: #fff;
+    background: $white-color;
     padding: 30px 40px 40px 40px;
     box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
     margin-top: 35px;
@@ -989,6 +989,19 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-right: 20px;
     padding-left: 20px;
+    margin-top: 40px;
+
+    .long-text h3 {
+      font-size: 22px !important;
+    }
+
+    p.long-text {
+      font-size: 14px !important;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    padding-right: 10px;
+    padding-left: 10px;
   }
 }
 
@@ -1009,7 +1022,7 @@ fieldset {
 }
 
 .contract_td {
-  border: 1px solid black;
+  border: 1px solid $black-color;
   padding: 10px;
 }
 

@@ -3302,7 +3302,7 @@ const SidePanel = styled.div`
     padding-bottom: 290px;
     width: 100%;
     position: fixed;
-    top: 195px;
+    top: 200px;
     right: 0;
     left:0;
 
