@@ -15,6 +15,9 @@ const Table = styled.table`
 
     &.table-header {
       box-shadow: none;
+      // display: table;
+      // position: fixed;
+      // width: 75%;
 
       th {
         font-family: ${Theme.baseFontFamily};

@@ -602,6 +602,56 @@ export default function NewCustomerList() {
           ))}
         </ul>
       </CustomerLeftPannel>
+      {/* <div className="table-part">
+        <table>
+          <thead>
+            <tr className="red">
+              <th width="">Name</th>
+              <th width="">Age</th>
+              <th width="">Job</th>
+              <th width="">Color</th>
+              <th width="">URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lorem.</td>
+              <td>Ullam.</td>
+              <td>Vel.</td>
+              <td>At.</td>
+              <td>Quis.</td>
+            </tr>
+            <tr>
+              <td>Lorem.</td>
+              <td>Ullam.</td>
+              <td>Vel.</td>
+              <td>At.</td>
+              <td>Quis.</td>
+            </tr>
+            <tr>
+              <td>Lorem.</td>
+              <td>Ullam.</td>
+              <td>Vel.</td>
+              <td>At.</td>
+              <td>Quis.</td>
+            </tr>
+            <tr>
+              <td>Lorem.</td>
+              <td>Ullam.</td>
+              <td>Vel.</td>
+              <td>At.</td>
+              <td>Quis.</td>
+            </tr>
+            <tr>
+              <td>Lorem.</td>
+              <td>Ullam.</td>
+              <td>Vel.</td>
+              <td>At.</td>
+              <td>Quis.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div> */}
       <>
         {isDesktop ? (
           <div className="table-container">

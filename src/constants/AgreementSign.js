@@ -2,7 +2,7 @@ export const AgreementSign = `<br><br> <p class="long-text " style="color: #0000
         font-size: 19px;
         line-height: 24px;
         font-family: Arial-Regular;"><span style="font-weight: 800;
-        font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
+        font-family: Helvetica-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
     </p> <table style="width:100%">
         <tr style="height: 30px; vertical-align: top">
             <td style="width:19%">Company:</td>
@@ -65,7 +65,7 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
         font-size: 19px;
         line-height: 24px;
         font-family: Arial-Regular;"><span style="font-weight: 800;
-        font-family: Arial-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
+        font-family: Helvetica-bold;"> IN WITNESS WHEREOF,</span> the undersigned have executed and delivered this Agreement.
     </p>
     <table style="width:100%"><tr style="height: 30px; vertical-align: top">
             <td  style="width:19%">Company:</td>

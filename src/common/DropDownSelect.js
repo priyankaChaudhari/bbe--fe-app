@@ -137,15 +137,15 @@ const DropDownSelect = styled.div`
 
   .css-2b097c-container {
     width: 100%;
-    color: ${Theme.gray90} !important;
-    font-size: ${Theme.textFontSize};
+    color: ${Theme.black} !important;
+    font-size: ${Theme.normal};
 
     .css-yk16xz-control {
       background-color: ${Theme.gray15};
       border: 1px solid ${Theme.gray9};
       border-radius: 18px;
       color: ${Theme.black};
-      font-size: ${Theme.textFontSize};
+      font-size: ${Theme.normal};
       padding: 1px 5px 1px 5px;
 
       .css-g1d714-ValueContainer {
@@ -170,6 +170,7 @@ const DropDownSelect = styled.div`
       }
 
       .css-tlfecz-indicatorContainer {
+        padding: 5px;
         .css-6q0nyr-Svg {
           color: ${Theme.black} !important;
         }
@@ -179,7 +180,7 @@ const DropDownSelect = styled.div`
     .css-1pahdxg-control {
       border: 1px solid ${Theme.gray9};
       border-radius: 18px;
-      font-size: ${Theme.textFontSize};
+      font-size: ${Theme.normal};
       color: ${Theme.black};
       padding: 1px 5px 1px 5px;
       box-shadow: none;
@@ -205,7 +206,7 @@ const DropDownSelect = styled.div`
       }
 
       .css-1uccc91-singleValue {
-        font-size: ${Theme.textFontSize};
+        font-size: ${Theme.normal};
         padding: 4px;
         color: ${Theme.black} !important;
       }
