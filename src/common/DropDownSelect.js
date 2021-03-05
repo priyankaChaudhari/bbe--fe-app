@@ -147,6 +147,7 @@ const DropDownSelect = styled.div`
       color: ${Theme.black};
       font-size: ${Theme.normal};
       padding: 1px 5px 1px 5px;
+      min-height: 40px;
 
       .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
@@ -185,6 +186,7 @@ const DropDownSelect = styled.div`
       padding: 1px 5px 1px 5px;
       box-shadow: none;
       outline: none;
+      min-height: 40px;
 
       .css-b8ldur-Input {
         color: ${Theme.white};
@@ -199,6 +201,9 @@ const DropDownSelect = styled.div`
 
       .remove-icon {
         display: none;
+      }
+      .css-1gtu0rj-indicatorContainer {
+        padding: 5px;
       }
 
       .css-1wa3eu0-placeholder {
