@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useMediaQuery } from 'react-responsive';
 // import queryString from 'query-string';
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -17,7 +18,7 @@ import Addendum from './Addendum';
 import Statement from './Statement';
 import {
   PageLoader,
-  PageNotFound,
+  // PageNotFound,
   SuccessMsg,
   Button,
   ModalBox,
@@ -150,6 +151,11 @@ export default function ContractContainer() {
   const [secondMonthDate, setSecondMonthDate] = useState('');
   const [thirdMonthDate, setThirdMonthDate] = useState('');
   const [endMonthDate, setEndDate] = useState('');
+  const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
+
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -170,16 +176,16 @@ export default function ContractContainer() {
     // window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
-  const checkPermission = () => {
-    if (
-      details &&
-      details.contract_status &&
-      (details.contract_status !== null || details.contract_status !== '')
-    ) {
-      return true;
-    }
-    return true;
-  };
+  // const checkPermission = () => {
+  //   if (
+  //     details &&
+  //     details.contract_status &&
+  //     (details.contract_status !== null || details.contract_status !== '')
+  //   ) {
+  //     return true;
+  //   }
+  //   return true;
+  // };
 
   const clearSuccessMessage = () => {
     setShowSuccessContact({ show: false, message: '' });
@@ -1586,166 +1592,141 @@ export default function ContractContainer() {
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
     }
   };
-  return (
-    <>
-      {loader || (isLoading.loader && isLoading.type === 'page') ? (
-        // <div className="page-is-loading">
-        //   <div className="loader-outer">
-        //     <PageLoader
-        //       color="#FF5933"
-        //       width={40}
-        //       />
-        //   </div>
-        // </div>
-        <PageLoader
-          className="modal-loader"
-          color="#FF5933"
-          type="page"
-          width={40}
-          component="agreement"
-        />
-      ) : checkPermission() ? (
-        details ? (
-          <>
-            <div className="success-msg-pop-up contract">
-              {showSuccessContact.show ? (
-                <SuccessMsg property=" " message={showSuccessContact.message} />
-              ) : (
-                ''
-              )}
-            </div>
-            <div className="on-boarding-container">
-              <div className="row">
-                <div className="col-12">
-                  <div className="m-0 sticky">
-                    {' '}
-                    <div
-                      onClick={() => onClickOfBackToCustomerDetail()}
-                      role="presentation"
-                      // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
-                      className="back-link">
-                      <img
-                        src={LeftArrowIcon}
-                        alt="aarow-back"
-                        className="arrow-back-icon "
-                      />
-                      Back to Customer Details
-                    </div>
-                  </div>
-                  <ContractTab className="d-lg-none d-block">
-                    <ul className="tabs">
-                      <li>Edit Fields</li>
-                      <li>View Contract</li>
-                    </ul>
-                  </ContractTab>
+
+  const showTabInResponsive = (section) => {
+    if (section === 'edit-fields') {
+      setShowtabInResponsive('edit-fields');
+    }
+    if (section === 'view-contract') {
+      setShowtabInResponsive('view-contract');
+    }
+  };
+
+  const viewContract = () => {
+    return (
+      <>
+        <div className="success-msg-pop-up contract">
+          {showSuccessContact.show ? (
+            <SuccessMsg property=" " message={showSuccessContact.message} />
+          ) : (
+            ''
+          )}
+        </div>
+        <div className="on-boarding-container">
+          <div className="row">
+            <div className="col-12">
+              <div className="m-0 sticky">
+                {' '}
+                <div
+                  onClick={() => onClickOfBackToCustomerDetail()}
+                  role="presentation"
+                  // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+                  className="back-link">
+                  <img
+                    src={LeftArrowIcon}
+                    alt="aarow-back"
+                    className="arrow-back-icon "
+                  />
+                  Back to Customer Details
                 </div>
               </div>
-              <div className="text-container ">
-                <div id="agreement">
-                  {/* {history.location.pathname.includes('agreement') &&
+            </div>
+          </div>
+          <div className="text-container ">
+            <div id="agreement">
+              {/* {history.location.pathname.includes('agreement') &&
                   details ? ( */}
-                  <Agreement
-                    // myRef={myRef}
+              <Agreement
+                // myRef={myRef}
 
-                    formData={formData}
-                    details={details}
-                    templateData={data}
-                  />
-                  {/* ) : (
+                formData={formData}
+                details={details}
+                templateData={data}
+              />
+              {/* ) : (
                     ''
                   )} */}
-                </div>
-
-                {details &&
-                details.contract_type &&
-                details.contract_type.toLowerCase().includes('one') ? (
-                  ''
-                ) : (
-                  <div id="statement">
-                    <Statement
-                      formData={formData}
-                      details={details}
-                      templateData={data}
-                      notIncludedOneTimeServices={notIncludedOneTimeServices}
-                      notIncludedMonthlyServices={notIncludedMonthlyServices}
-                    />
-                  </div>
-                )}
-
-                {showSection.dspAddendum &&
-                !(
-                  details &&
-                  details.contract_type &&
-                  details.contract_type.toLowerCase().includes('one')
-                ) ? (
-                  <div id="dspAddendum">
-                    <DSPAddendum
-                      formData={formData}
-                      templateData={data}
-                      calculatedDate={calculatedDate}
-                      setCalculatedDate={setCalculatedDate}
-                      firstMonthDate={firstMonthDate}
-                      setFirstMonthDate={setFirstMonthDate}
-                      secondMonthDate={secondMonthDate}
-                      setSecondMonthDate={setSecondMonthDate}
-                      thirdMonthDate={thirdMonthDate}
-                      setThirdMonthDate={setThirdMonthDate}
-                      endMonthDate={endMonthDate}
-                      setEndDate={setEndDate}
-                    />
-                  </div>
-                ) : (
-                  ''
-                )}
-
-                <div id="addendum">
-                  <Addendum
-                    formData={formData}
-                    details={details}
-                    templateData={data}
-                    notIncludedOneTimeServices={notIncludedOneTimeServices}
-                    notIncludedMonthlyServices={notIncludedMonthlyServices}
-                    newAddendumData={newAddendumData}
-                    setNewAddendum={setNewAddendum}
-                    showEditor={showEditor}
-                    showFooter={showFooter}
-                    setShowEditor={setShowEditor}
-                    onEditAddendum={onEditAddendum}
-                    setUpdatedFormData={setUpdatedFormData}
-                    updatedFormData={updatedFormData}
-                  />
-                </div>
-
-                {showSection.amendment ? (
-                  <div id="amendment">
-                    <ServicesAmendment
-                      formData={formData}
-                      details={details}
-                      templateData={data}
-                    />
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
             </div>
-          </>
-        ) : (
-          ''
-        )
-      ) : (
-        <PageNotFound />
-      )}
-      {/* {loader ? (
-        <div className="page-is-loading">
-          <div className="loader-outer">
-            <PageLoader  
-              color="#FF5933"
-              width={40}
+
+            {details &&
+            details.contract_type &&
+            details.contract_type.toLowerCase().includes('one') ? (
+              ''
+            ) : (
+              <div id="statement">
+                <Statement
+                  formData={formData}
+                  details={details}
+                  templateData={data}
+                  notIncludedOneTimeServices={notIncludedOneTimeServices}
+                  notIncludedMonthlyServices={notIncludedMonthlyServices}
+                />
+              </div>
+            )}
+
+            {showSection.dspAddendum &&
+            !(
+              details &&
+              details.contract_type &&
+              details.contract_type.toLowerCase().includes('one')
+            ) ? (
+              <div id="dspAddendum">
+                <DSPAddendum
+                  formData={formData}
+                  templateData={data}
+                  calculatedDate={calculatedDate}
+                  setCalculatedDate={setCalculatedDate}
+                  firstMonthDate={firstMonthDate}
+                  setFirstMonthDate={setFirstMonthDate}
+                  secondMonthDate={secondMonthDate}
+                  setSecondMonthDate={setSecondMonthDate}
+                  thirdMonthDate={thirdMonthDate}
+                  setThirdMonthDate={setThirdMonthDate}
+                  endMonthDate={endMonthDate}
+                  setEndDate={setEndDate}
+                />
+              </div>
+            ) : (
+              ''
+            )}
+
+            <div id="addendum">
+              <Addendum
+                formData={formData}
+                details={details}
+                templateData={data}
+                notIncludedOneTimeServices={notIncludedOneTimeServices}
+                notIncludedMonthlyServices={notIncludedMonthlyServices}
+                newAddendumData={newAddendumData}
+                setNewAddendum={setNewAddendum}
+                showEditor={showEditor}
+                showFooter={showFooter}
+                setShowEditor={setShowEditor}
+                onEditAddendum={onEditAddendum}
+                setUpdatedFormData={setUpdatedFormData}
+                updatedFormData={updatedFormData}
               />
+            </div>
+
+            {showSection.amendment ? (
+              <div id="amendment">
+                <ServicesAmendment
+                  formData={formData}
+                  details={details}
+                  templateData={data}
+                />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </div>
-      ) : ( */}
+      </>
+    );
+  };
+
+  const displayRightSidePanel = () => {
+    return (
       <AgreementSidePanel
         id={id}
         setFormData={setFormData}
@@ -1801,170 +1782,218 @@ export default function ContractContainer() {
         startDate={startDate}
         setStartDate={setStartDate}
       />
-      {/* )} */}
-      {details &&
+    );
+  };
+
+  const displayFooter = () => {
+    return details &&
       details.contract_status &&
       details.contract_status.value === 'pending contract signature' ? (
-        <div className="mt-4 pt-5">
-          <Footer className=" mt-5 ">
-            <Button
-              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
-              onClick={() => onEditcontract()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Edit Contract'
-              )}
-            </Button>
-            {details &&
-            details.contract_status &&
-            details.contract_status.value &&
-            details.contract_status.value === 'pending contract signature' ? (
-              <Button
-                className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
-                onClick={() => {
-                  setParams('send-remainder');
-                  setShowModal(true);
-                }}>
-                Send Reminder
-              </Button>
+      <div className="mt-4 pt-5">
+        <Footer className=" mt-5 ">
+          <Button
+            className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
+            onClick={() => onEditcontract()}>
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
             ) : (
-              ''
+              'Edit Contract'
             )}
-            {/* {updatedFormData && Object.keys(updatedFormData).length ? (
+          </Button>
+          {details &&
+          details.contract_status &&
+          details.contract_status.value &&
+          details.contract_status.value === 'pending contract signature' ? (
+            <Button
+              className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
+              onClick={() => {
+                setParams('send-remainder');
+                setShowModal(true);
+              }}>
+              Send Reminder
+            </Button>
+          ) : (
+            ''
+          )}
+          {/* {updatedFormData && Object.keys(updatedFormData).length ? (
               <span>
                 {Object.keys(updatedFormData).length} unsaved changes.
               </span>
             ) : (
               ''
             )} */}
-          </Footer>
-        </div>
-      ) : isFooter ||
-        (newAddendumData &&
-          newAddendumData.id &&
-          showEditor &&
-          updatedFormData &&
-          updatedFormData.addendum) ? (
-        <div className="mt-4 pt-5">
-          <Footer className=" mt-5">
-            <Button
-              className={
-                formData &&
-                formData.additional_one_time_services &&
-                formData.additional_one_time_services.length &&
-                formData.additional_one_time_services.find(
-                  (item) => item.name === 'Amazon Store Package',
-                )
-                  ? 'light-orange  on-boarding  mt-3 mr-3  '
-                  : 'light-orange  on-boarding  mt-3 mr-3 '
-              }
-              disabled={
-                // !(
-                //   formData &&
-                //   formData.contract_type &&
-                //   formData.contract_type.toLowerCase().includes('one')
-                // ) &&
-                formData &&
-                formData.additional_one_time_services &&
-                formData.additional_one_time_services.length &&
-                formData.additional_one_time_services.find(
-                  (item) => item.name === 'Amazon Store Package',
-                )
-                //    ||
-                // !(
-                //   showRightTick('service_agreement') &&
-                //   showRightTick('statement') &&
-                //   showRightTick('dspAddendum')
-                // )
-              }
-              onClick={() => nextStep()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                <>Save Changes</>
-              )}
-            </Button>
+        </Footer>
+      </div>
+    ) : isFooter ||
+      (newAddendumData &&
+        newAddendumData.id &&
+        showEditor &&
+        updatedFormData &&
+        updatedFormData.addendum) ? (
+      <div className="mt-4 pt-5">
+        <Footer className=" mt-5">
+          <Button
+            className={
+              formData &&
+              formData.additional_one_time_services &&
+              formData.additional_one_time_services.length &&
+              formData.additional_one_time_services.find(
+                (item) => item.name === 'Amazon Store Package',
+              )
+                ? 'light-orange  on-boarding  mt-3 mr-3  '
+                : 'light-orange  on-boarding  mt-3 mr-3 '
+            }
+            disabled={
+              // !(
+              //   formData &&
+              //   formData.contract_type &&
+              //   formData.contract_type.toLowerCase().includes('one')
+              // ) &&
+              formData &&
+              formData.additional_one_time_services &&
+              formData.additional_one_time_services.length &&
+              formData.additional_one_time_services.find(
+                (item) => item.name === 'Amazon Store Package',
+              )
+              //    ||
+              // !(
+              //   showRightTick('service_agreement') &&
+              //   showRightTick('statement') &&
+              //   showRightTick('dspAddendum')
+              // )
+            }
+            onClick={() => nextStep()}>
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              <>Save Changes</>
+            )}
+          </Button>
 
+          <Button
+            className="btn-borderless contract-btn on-boarding  mt-3 mr-3"
+            onClick={() =>
+              setShowDiscardModal({
+                ...showDiscardModal,
+                show: true,
+                clickedBtn: 'discard',
+              })
+            }>
+            Discard Changes
+          </Button>
+          {updatedFormData && Object.keys(updatedFormData).length ? (
+            <span>{Object.keys(updatedFormData).length} unsaved changes.</span>
+          ) : (
+            ''
+          )}
+        </Footer>
+      </div>
+    ) : (
+      //  details &&
+      //   details.steps_completed &&
+      //   details.steps_completed.agreement &&
+      //   details.steps_completed.statement ?
+      <div className="mt-4 pt-5">
+        <Footer>
+          {checkApprovalCondition() ? (
             <Button
-              className="btn-borderless contract-btn on-boarding  mt-3 mr-3"
-              onClick={() =>
-                setShowDiscardModal({
-                  ...showDiscardModal,
-                  show: true,
-                  clickedBtn: 'discard',
-                })
-              }>
-              Discard Changes
+              className="btn-primary on-boarding mt-3 mr-3  "
+              disabled={
+                !(
+                  showRightTick('service_agreement') &&
+                  showRightTick('statement') &&
+                  showRightTick('dspAddendum')
+                )
+              }
+              onClick={() => {
+                createAgreementDoc();
+                setParams('request-approve');
+                setShowModal(true);
+              }}>
+              Request Approval
             </Button>
-            {updatedFormData && Object.keys(updatedFormData).length ? (
-              <span>
-                {Object.keys(updatedFormData).length} unsaved changes.
-              </span>
-            ) : (
-              ''
-            )}
-          </Footer>
-        </div>
+          ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
+            <Button
+              className="btn-primary on-boarding w-320 mt-3 mr-3 "
+              onClick={() => {
+                createAgreementDoc();
+                setParams('select-contact');
+                setShowModal(true);
+              }}>
+              Approve and Request Signature
+            </Button>
+          ) : (
+            <Button
+              className="btn-primary on-boarding  mt-3 mr-3 "
+              disabled={
+                !(
+                  showRightTick('service_agreement') &&
+                  showRightTick('statement') &&
+                  showRightTick('dspAddendum')
+                )
+              }
+              onClick={() => {
+                createAgreementDoc();
+                setParams('select-contact');
+                setShowModal(true);
+              }}>
+              Request Signature
+            </Button>
+          )}
+          <span className="last-update">
+            Last updated by You on{' '}
+            {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
+          </span>
+        </Footer>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <ContractTab className="d-lg-none d-block">
+        <ul className="tabs">
+          <li
+            className={tabInResponsive === 'view-contract' ? 'active' : ''}
+            role="presentation"
+            onClick={() => showTabInResponsive('view-contract')}>
+            View Contract
+          </li>
+          <li
+            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+            role="presentation"
+            onClick={() => showTabInResponsive('edit-fields')}>
+            Edit Fields
+          </li>
+        </ul>
+      </ContractTab>
+      {isDesktop ||
+      (isTablet && tabInResponsive === 'view-contract') ||
+      (isMobile && tabInResponsive === 'view-contract') ? (
+        loader || (isLoading.loader && isLoading.type === 'page') ? (
+          <PageLoader
+            className="modal-loader"
+            color="#FF5933"
+            type="page"
+            width={40}
+            component="agreement"
+          />
+        ) : details ? (
+          viewContract()
+        ) : (
+          ''
+        )
       ) : (
-        //  details &&
-        //   details.steps_completed &&
-        //   details.steps_completed.agreement &&
-        //   details.steps_completed.statement ?
-        <div className="mt-4 pt-5">
-          <Footer>
-            {checkApprovalCondition() ? (
-              <Button
-                className="btn-primary on-boarding mt-3 mr-3  "
-                disabled={
-                  !(
-                    showRightTick('service_agreement') &&
-                    showRightTick('statement') &&
-                    showRightTick('dspAddendum')
-                  )
-                }
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('request-approve');
-                  setShowModal(true);
-                }}>
-                Request Approval
-              </Button>
-            ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
-              <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-3 "
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Approve and Request Signature
-              </Button>
-            ) : (
-              <Button
-                className="btn-primary on-boarding  mt-3 mr-3 "
-                disabled={
-                  !(
-                    showRightTick('service_agreement') &&
-                    showRightTick('statement') &&
-                    showRightTick('dspAddendum')
-                  )
-                }
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Request Signature
-              </Button>
-            )}
-            <span className="last-update">
-              Last updated by You on{' '}
-              {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
-            </span>
-          </Footer>
-        </div>
+        ''
       )}
+
+      {isDesktop ||
+      (isTablet && tabInResponsive === 'edit-fields') ||
+      (isMobile && tabInResponsive === 'edit-fields')
+        ? displayRightSidePanel()
+        : ''}
+
+      {displayFooter()}
 
       {/* // : ( // '' // )} */}
       <Modal
