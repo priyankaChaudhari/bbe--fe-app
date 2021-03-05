@@ -2587,7 +2587,10 @@ export default function AgreementSidePanel({
                             {generateHTML(item)}
                             {displayError(item)}
                           </ContractFormField>
-                          <p className="m-0"> {item.info ? item.info : ''}</p>
+                          <p className="m-0  pt-1 small-para">
+                            {' '}
+                            {item.info ? item.info : ''}
+                          </p>
                         </li>
                       ))}
                       <li>
@@ -3089,6 +3092,8 @@ const SidePanel = styled.div`
           color: ${Theme.gray40};
           line-height: 22px;
          }
+
+         
 
         .edit-folder-icon {
           vertical-align: text-top;
