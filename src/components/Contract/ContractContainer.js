@@ -3,11 +3,15 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
-// import queryString from 'query-string';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
+
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
+import samplePDF from './sample1.pdf';
 import Theme from '../../theme/Theme';
 
 import AgreementSidePanel from '../../common/AgreementSidePanel';
@@ -157,6 +161,17 @@ export default function ContractContainer() {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
+  const [totalPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
+  // const getPdfDocument = () => {
+  //   const pdfFile = details && details.contract_url;
+  //   return pdfFile;
+  // };
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
@@ -1919,7 +1934,83 @@ export default function ContractContainer() {
     );
   };
 
-  return (
+  const changePage = (offset) => {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  };
+
+  const previousPage = () => {
+    changePage(-1);
+  };
+
+  const nextPage = () => {
+    changePage(1);
+  };
+
+  return (details &&
+    details.contract_status &&
+    details.contract_status.value === 'pending account setup') ||
+    (details &&
+      details.contract_status &&
+      details.contract_status.value === 'active') ? (
+    <div className="on-boarding-container">
+      <div className="row">
+        <div className="col-12">
+          <div>
+            <div>
+              <Document
+                file={samplePDF}
+                options={{ workerSrc: 'pdf.worker.js' }}
+                onLoadSuccess={onDocumentLoadSuccess}>
+                {/* {Array.from(new Array(numPages), (el, index) => (
+                  <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                ))} */}
+                <Page pageNumber={pageNumber} />
+              </Document>
+
+              <div>
+                <p>
+                  Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
+                  {totalPages || '--'}
+                </p>
+                <button
+                  type="button"
+                  disabled={pageNumber <= 1}
+                  onClick={previousPage}>
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  disabled={pageNumber >= totalPages}
+                  onClick={nextPage}>
+                  Next
+                </button>
+              </div>
+
+              {/* {numPages
+                ? Array.from(new Array(numPages), (el, index) => (
+                    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+                  ))
+                : ''} */}
+              {/* <p>
+                Page {pageNumber} of {numPages}
+              </p> */}
+
+              {/* <PDFViewer
+                document={{
+                  url: samplePDF,
+                }}
+              />
+              <PdfViewer file={getPdfDocument()} scale={1.3}></PdfViewer>
+
+              {/* {details && details.contract_url && (
+                <iframe src={details.contract_url} />
+              )} */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
     <>
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
