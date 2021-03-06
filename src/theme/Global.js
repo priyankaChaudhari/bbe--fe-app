@@ -984,9 +984,11 @@ export const WhiteCard = styled.div`
             max-width:230px;
             width:100%;
             width: 100px;
-
-            
           }
+
+           &.company-size{
+             margin-left: 18px;
+           }
         
         }   
    }

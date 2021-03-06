@@ -2202,7 +2202,7 @@ const ContractTab = styled.div`
       }
 
       &:hover {
-        padding-bottom: 18px;
+        padding-bottom: 23px;
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
