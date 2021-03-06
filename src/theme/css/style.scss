@@ -1150,7 +1150,11 @@ input:checked + .slider:before {
 .react-pdf__Page__canvas {
   display: block;
   user-select: none;
-  width: 90%;
   margin: 0 auto;
-  height: 100%;
+}
+
+.react-pdf__Page__textContent {
+  box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
