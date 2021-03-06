@@ -135,7 +135,7 @@ body {
 
   @media only screen and (max-width: 991px) {
     .sticky {
-      padding-left: 10px;
+      padding-left: 28px;
       margin-left: 0 !important;
     }
   }
@@ -1003,6 +1003,12 @@ fieldset {
     padding-right: 10px;
     padding-left: 10px;
   }
+
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    @media only screen and (max-width: 991px) {
+      padding-top: 100px;
+    }
+  }
 }
 
 .address {
@@ -1141,24 +1147,10 @@ input:checked + .slider:before {
   }
 }
 
-// table {
-//   text-align: left;
-//   position: relative;
-//   left: 350px;
-//   top: 74px;
-//   border-collapse: collapse;
-// }
-// th,
-// td {
-//   padding: 0.25rem;
-// }
-// tr.red th {
-//   background: red;
-//   color: white;
-// }
-// th {
-//   background: white;
-//   position: fixed;
-
-//   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-// }
+.react-pdf__Page__canvas {
+  display: block;
+  user-select: none;
+  width: 90%;
+  margin: 0 auto;
+  height: 100%;
+}

@@ -1967,23 +1967,25 @@ export default function ContractContainer() {
                 <Page pageNumber={pageNumber} />
               </Document>
 
-              <div>
-                <p>
+              <div className="text-center ">
+                <p className="mb-3">
                   Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
                   {totalPages || '--'}
                 </p>
-                <button
+                <Button
+                  className="btn-gray  w-25  mr-3"
                   type="button"
                   disabled={pageNumber <= 1}
                   onClick={previousPage}>
                   Previous
-                </button>
-                <button
+                </Button>
+                <Button
+                  className="btn-gray w-25 "
                   type="button"
                   disabled={pageNumber >= totalPages}
                   onClick={nextPage}>
                   Next
-                </button>
+                </Button>
               </div>
 
               {/* {numPages
@@ -2202,7 +2204,7 @@ const ContractTab = styled.div`
       }
 
       &:hover {
-        padding-bottom: 18px;
+        padding-bottom: 23px;
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};

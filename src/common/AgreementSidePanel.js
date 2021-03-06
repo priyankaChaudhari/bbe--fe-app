@@ -266,6 +266,7 @@ export default function AgreementSidePanel({
             style={{
               transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
               width: '25px',
+              height: '25px',
             }}
           />
         </components.DropdownIndicator>
