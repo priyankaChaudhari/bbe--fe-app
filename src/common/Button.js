@@ -201,6 +201,9 @@ const Button = styled.button`
     padding: 9px 15px;
     min-height: 40px;
   }
+  &.w-25 {
+    width: 130px;
+  }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size: ${Theme.normalRes};

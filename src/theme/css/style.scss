@@ -1146,3 +1146,11 @@ input:checked + .slider:before {
     font-weight: 300 !important;
   }
 }
+
+.react-pdf__Page__canvas {
+  display: block;
+  user-select: none;
+  width: 90%;
+  margin: 0 auto;
+  height: 100%;
+}
