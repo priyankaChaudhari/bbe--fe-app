@@ -1967,7 +1967,7 @@ export default function ContractContainer() {
                 <Page pageNumber={pageNumber} />
               </Document>
 
-              <div className="text-center ">
+              <div className="text-center mt-4 ">
                 <p className="mb-3">
                   Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
                   {totalPages || '--'}
