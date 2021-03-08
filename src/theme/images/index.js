@@ -124,6 +124,7 @@ import OrganizationIcon from './icons/organization-icon.png';
 import OrganizationActiveIcon from './icons/organization-active-icon.png';
 import ExpnadArrowBack from './icons/expand-arrow-back.png';
 import CaretUp from './icons/caretUp.png';
+import WhiteCaretUp from './icons/whiteCaretUp.png';
 
 export {
   BannerBg,
@@ -252,4 +253,5 @@ export {
   OrganizationActiveIcon,
   ExpnadArrowBack,
   CaretUp,
+  WhiteCaretUp,
 };

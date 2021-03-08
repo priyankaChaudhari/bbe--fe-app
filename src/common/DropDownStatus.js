@@ -16,7 +16,7 @@ const DropDownStatus = styled.div`
     font-size: ${Theme.extraNormal};
 
     .css-yk16xz-control {
-      background-color: #74b035;
+      // background-color: #74b035;
       border: 1px solid ${Theme.gray9};
       border-radius: 18px;
       color: ${Theme.gray6};

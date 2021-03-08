@@ -1,14 +1,15 @@
 /* eslint-disable import/no-cycle */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-// import Select from 'react-select';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import $ from 'jquery';
+import Select, { components } from 'react-select';
 
 import Theme from '../../theme/Theme';
 import {
@@ -23,14 +24,15 @@ import {
   LeftArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
-  ExpandArrowIcon,
+  WhiteCaretUp,
+  CaretUp,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
   ModalBox,
   PageLoader,
   GetInitialName,
-  // DropDownStatus,
+  DropDownStatus,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -85,7 +87,6 @@ const alertCustomStyles = {
 
 export default function CustomerMainContainer() {
   const { id } = useParams();
-  const [showDropDown, setShowDropDown] = useState(false);
   const dispatch = useDispatch();
   const agreement = useSelector((state) => state.accountState.data);
   const loader = useSelector((state) => state.accountState.isLoading);
@@ -118,6 +119,36 @@ export default function CustomerMainContainer() {
     { value: 'at risk', label: 'Place at risk' },
     { value: 'inactive', label: 'Inactivate' },
   ];
+
+  const viewOptions = [
+    { value: 'agreement', label: 'Agreements' },
+    { value: 'company', label: 'Company Details' },
+    { value: 'activity', label: 'Activity' },
+  ];
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={
+              customer &&
+              customer.status &&
+              customer.status.value === 'pending cancellation'
+                ? CaretUp
+                : WhiteCaretUp
+            }
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '15px',
+              height: '15px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -236,31 +267,22 @@ export default function CustomerMainContainer() {
       );
     }
   };
-  // const Status = [
-  //   { label: 'Place At risk', value: 355 },
-  //   { label: 'Deactivate', value: 54 },
-  // ];
 
   const checkStatusColor = () => {
     if (customer && customer.status) {
       if (customer.status.value === 'inactive') {
-        return 'dropdown company-status inactive';
+        return '#69707f';
       }
       if (customer.status.value === 'pending cancellation') {
-        return 'dropdown company-status pending';
+        return '#f7c137';
       }
       if (customer.status.value === 'at risk') {
-        return 'dropdown company-status risk';
+        return '#d63649';
       }
-      return 'dropdown company-status';
+      return '#33ac2e';
     }
     return '';
   };
-
-  $(document).on('click', () => {
-    $('#statusbox').hide();
-    $('#arrowbox').css({ transform: showDropDown ? '' : 'rotate(180deg)' });
-  });
 
   return (
     <>
@@ -314,50 +336,57 @@ export default function CustomerMainContainer() {
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
 
-                      {/* <DropDownStatus>
+                      <DropDownStatus>
+                        {checkStatus()}
                         <Select
+                          isSearchable={false}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              background: checkStatusColor(),
+                              borderRadius: '50px',
+                              width:
+                                customer &&
+                                customer.status &&
+                                customer.status.value === 'pending cancellation'
+                                  ? '150px'
+                                  : customer &&
+                                    customer.status &&
+                                    customer.status.value === 'at risk'
+                                  ? '150px'
+                                  : '100px',
+                              '&:focus': {
+                                borderColor: 'transparent',
+                              },
+                              '&:hover': {
+                                borderColor: 'transparent',
+                              },
+                            }),
+                            singleValue: (provided) => {
+                              const color =
+                                customer &&
+                                customer.status &&
+                                customer.status.value === 'pending cancellation'
+                                  ? '#000'
+                                  : '#fff';
+
+                              return { ...provided, color };
+                            },
+                          }}
                           classNamePrefix="react-select"
-                          options={Status}
+                          options={statusActions}
+                          onChange={(e) =>
+                            setStatusModal({
+                              show: true,
+                              type: e.value,
+                            })
+                          }
+                          defaultValue={customer && customer.status}
+                          components={{
+                            DropdownIndicator,
+                          }}
                         />
                       </DropDownStatus>
-                     */}
-                    </span>
-                    <span
-                      className={checkStatusColor()}
-                      onClick={() => {
-                        setShowDropDown(!showDropDown);
-                        setShowSuccessMsg({ show: false });
-                      }}
-                      role="presentation">
-                      {customer && customer.status && customer.status.label}{' '}
-                      <img
-                        id="arrowbox"
-                        src={ExpandArrowIcon}
-                        alt="caret"
-                        style={{
-                          transform: showDropDown ? 'rotate(180deg)' : '',
-                        }}
-                      />
-                      <ul
-                        id="statusbox"
-                        className="dropdown-content-status"
-                        style={{ display: showDropDown ? 'block' : 'none' }}>
-                        {checkStatus()}
-
-                        {statusActions.map((item) => (
-                          <li
-                            role="presentation"
-                            onClick={() =>
-                              setStatusModal({
-                                show: true,
-                                type: item.value,
-                              })
-                            }
-                            key={item.value}>
-                            {item.label}
-                          </li>
-                        ))}
-                      </ul>
                     </span>
 
                     <div
@@ -505,13 +534,16 @@ export default function CustomerMainContainer() {
                       </li>
                     </ul>
                   </WhiteCard>
-                  <select
+                  <Select
+                    options={viewOptions}
                     className="customeer-dropdown-select d-lg-none d-block mb-3 "
-                    onChange={(event) => setViewComponent(event.target.value)}>
+                    onChange={(event) => setViewComponent(event.value)}
+                  />
+                  {/* <select>
                     <option value="company">Company Details</option>
                     <option value="agreement">Agreements</option>
                     <option value="activity">Activity</option>
-                  </select>
+                  </select> */}
 
                   <WhiteCard className="mb-3">
                     <p className="black-heading-title mt-0 mb-4">
