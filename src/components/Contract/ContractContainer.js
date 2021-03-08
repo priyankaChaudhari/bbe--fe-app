@@ -3,15 +3,15 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
-
-import 'react-pdf/dist/Page/AnnotationLayer.css';
+// import { Document, Page } from 'react-pdf/dist/entry.webpack';
+// import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
-import samplePDF from './sample1.pdf';
+import PdfViewer from '../../common/PdfViewer';
+// import samplePDF from './sample1.pdf';
 import Theme from '../../theme/Theme';
 
 import AgreementSidePanel from '../../common/AgreementSidePanel';
@@ -161,13 +161,13 @@ export default function ContractContainer() {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
-  const [totalPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  // const [totalPages, setNumPages] = useState(null);
+  // const [pageNumber, setPageNumber] = useState(1);
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-    setPageNumber(1);
-  };
+  // const onDocumentLoadSuccess = ({ numPages }) => {
+  //   setNumPages(numPages);
+  //   setPageNumber(1);
+  // };
   // const getPdfDocument = () => {
   //   const pdfFile = details && details.contract_url;
   //   return pdfFile;
@@ -341,7 +341,7 @@ export default function ContractContainer() {
   const onEditAddendum = () => {
     setShowEditor(true);
   };
-
+  console.log(additionalOnetimeSerError);
   const nextStep = () => {
     // if (history.location.pathname.includes('agreement')) {
 
@@ -1934,17 +1934,17 @@ export default function ContractContainer() {
     );
   };
 
-  const changePage = (offset) => {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  };
+  // const changePage = (offset) => {
+  //   setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  // };
 
-  const previousPage = () => {
-    changePage(-1);
-  };
+  // const previousPage = () => {
+  //   changePage(-1);
+  // };
 
-  const nextPage = () => {
-    changePage(1);
-  };
+  // const nextPage = () => {
+  //   changePage(1);
+  // };
 
   return (details &&
     details.contract_status &&
@@ -1955,19 +1955,39 @@ export default function ContractContainer() {
     <div className="on-boarding-container">
       <div className="row">
         <div className="col-12">
+          <div className="m-0 sticky">
+            {' '}
+            <div
+              onClick={() => onClickOfBackToCustomerDetail()}
+              role="presentation"
+              // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
+              className="back-link">
+              <img
+                src={LeftArrowIcon}
+                alt="aarow-back"
+                className="arrow-back-icon "
+              />
+              Back to Customer Details
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12">
           <div>
             <div>
-              <Document
-                file={samplePDF}
+              {/* <Document
+                file={details && details.contract_url}
                 options={{ workerSrc: 'pdf.worker.js' }}
                 onLoadSuccess={onDocumentLoadSuccess}>
-                {/* {Array.from(new Array(numPages), (el, index) => (
+                {Array.from(new Array(totalPages), (el, index) => (
                   <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                ))} */}
-                <Page pageNumber={pageNumber} />
-              </Document>
+                ))}
+                {/* <Page pageNumber={pageNumber} /> 
+              </Document> */}
 
-              <div className="text-center mt-4 ">
+              <PdfViewer pdf={details && details.contract_url} />
+              {/* <div className="text-center mt-4 ">
                 <p className="mb-3">
                   Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
                   {totalPages || '--'}
@@ -1986,7 +2006,7 @@ export default function ContractContainer() {
                   onClick={nextPage}>
                   Next
                 </Button>
-              </div>
+              </div> */}
 
               {/* {numPages
                 ? Array.from(new Array(numPages), (el, index) => (

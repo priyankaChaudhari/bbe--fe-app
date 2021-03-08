@@ -1151,10 +1151,22 @@ input:checked + .slider:before {
   display: block;
   user-select: none;
   margin: 0 auto;
+  padding-top: 60px !important;
 }
 
 .react-pdf__Page__textContent {
-  box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
+  box-shadow: 0 5px 25px 0 rgba(68, 68, 79, 0.1);
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 50px !important;
+}
+
+.react-pdf__message .react-pdf__message--error {
+  text-align: center !important;
+}
+
+.pdf-view {
+  width: 100%;
+  // padding-top: 60px;
+  // background-color: #eef3f5;
+  // padding-left: 90px;
 }
