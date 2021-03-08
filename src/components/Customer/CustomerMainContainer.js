@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+// import Select from 'react-select';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -25,7 +26,12 @@ import {
   ExpandArrowIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
-import { ModalBox, PageLoader, GetInitialName } from '../../common';
+import {
+  ModalBox,
+  PageLoader,
+  GetInitialName,
+  // DropDownStatus,
+} from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
@@ -230,6 +236,10 @@ export default function CustomerMainContainer() {
       );
     }
   };
+  // const Status = [
+  //   { label: 'Place At risk', value: 355 },
+  //   { label: 'Deactivate', value: 54 },
+  // ];
 
   const checkStatusColor = () => {
     if (customer && customer.status) {
@@ -303,6 +313,14 @@ export default function CustomerMainContainer() {
                   <div className="col-lg-9 col-md-12 ">
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
+
+                      {/* <DropDownStatus>
+                        <Select
+                          classNamePrefix="react-select"
+                          options={Status}
+                        />
+                      </DropDownStatus>
+                     */}
                     </span>
                     <span
                       className={checkStatusColor()}
@@ -349,7 +367,6 @@ export default function CustomerMainContainer() {
                       <img src={EditOrangeIcon} alt="" />
                       Edit
                     </div>
-
                     <div className="row mt-2">
                       <div className="col-lg-4 col-12">
                         <div className="company-label-info text-left">
