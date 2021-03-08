@@ -37,7 +37,12 @@ import {
   CaretUp,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
+import {
+  getContractStatus,
+  getCustomerList,
+  getGrowthStrategist,
+  // getStatus,
+} from '../../api';
 import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
 import { sortOptions } from '../../constants/FieldConstants';
 
@@ -186,8 +191,11 @@ export default function NewCustomerList() {
   );
 
   useEffect(() => {
-    getStatus().then((statusResponse) => {
-      setStatus(statusResponse.data);
+    // getStatus().then((statusResponse) => {
+    //   setStatus(statusResponse.data);
+    // });
+    getContractStatus().then((contract) => {
+      setStatus(contract.data);
     });
     getGrowthStrategist().then((gs) => {
       if (gs && gs.data) {
@@ -705,7 +713,9 @@ export default function NewCustomerList() {
                             <div
                               className="status"
                               style={{ textTransform: 'capitalize' }}>
-                              {item && item.status}
+                              {item &&
+                                item.contract &&
+                                item.contract.contract_status}
                             </div>
                           </td>
                           <td width={showPerformance ? '10%' : '35%'}>

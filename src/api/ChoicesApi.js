@@ -185,3 +185,15 @@ export async function getAdditionalServices(type) {
     });
   return result;
 }
+
+export async function getContractStatus() {
+  const result = await axiosInstance
+    .get(`${API_CHOICES}contract-status`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
