@@ -972,6 +972,7 @@ fieldset {
   font-family: $contact-regular-font-family;
   padding-top: 60px;
   background-color: $gray-3;
+  margin-top: 0 !important;
 
   #agreement,
   #statement,
@@ -1150,7 +1151,7 @@ input:checked + .slider:before {
 .react-pdf__Page__canvas {
   display: block;
   user-select: none;
-  margin: 0 auto;
+  margin: 0 auto !important;
 
   // padding-left: 65px !important;
   // width: 100% !important;
