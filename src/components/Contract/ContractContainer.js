@@ -175,10 +175,12 @@ export default function ContractContainer() {
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
+
+    const offset = isDesktop ? -150 : isMobile ? -220 : -220;
     const y =
       element &&
       element.getBoundingClientRect() &&
-      element.getBoundingClientRect().top + window.pageYOffset + -150;
+      element.getBoundingClientRect().top + window.pageYOffset + offset;
 
     window.scrollTo({ top: y });
     // } else {
@@ -351,7 +353,7 @@ export default function ContractContainer() {
     setShowEditor(true);
     if (isTablet || isMobile) {
       showTabInResponsive('view-contract');
-      executeScroll('addendum');
+      setTimeout(() => executeScroll('addendum'), 500);
     }
   };
 
