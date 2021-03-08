@@ -1170,6 +1170,8 @@ input:checked + .slider:before {
   width: 100% !important;
   padding-left: 65px !important;
   background-color: $gray-3 !important;
+  padding-top: 60px !important;
+  padding-bottom: 30px !important;
 
   .react-pdf__Page {
     background-color: $gray-3 !important;
