@@ -1986,57 +1986,7 @@ export default function ContractContainer() {
 
       <div>
         <div>
-          {/* <Document
-                file={details && details.contract_url}
-                options={{ workerSrc: 'pdf.worker.js' }}
-                onLoadSuccess={onDocumentLoadSuccess}>
-                {Array.from(new Array(totalPages), (el, index) => (
-                  <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                ))}
-                {/* <Page pageNumber={pageNumber} /> 
-              </Document> */}
-
           <PdfViewer pdf={details && details.contract_url} />
-          {/* <div className="text-center mt-4 ">
-                <p className="mb-3">
-                  Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
-                  {totalPages || '--'}
-                </p>
-                <Button
-                  className="btn-gray  w-25  mr-3"
-                  type="button"
-                  disabled={pageNumber <= 1}
-                  onClick={previousPage}>
-                  Previous
-                </Button>
-                <Button
-                  className="btn-gray w-25 "
-                  type="button"
-                  disabled={pageNumber >= totalPages}
-                  onClick={nextPage}>
-                  Next
-                </Button>
-              </div> */}
-
-          {/* {numPages
-                ? Array.from(new Array(numPages), (el, index) => (
-                    <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                  ))
-                : ''} */}
-          {/* <p>
-                Page {pageNumber} of {numPages}
-              </p> */}
-
-          {/* <PDFViewer
-                document={{
-                  url: samplePDF,
-                }}
-              />
-              <PdfViewer file={getPdfDocument()} scale={1.3}></PdfViewer>
-
-              {/* {details && details.contract_url && (
-                <iframe src={details.contract_url} />
-              )} */}
         </div>
       </div>
     </div>

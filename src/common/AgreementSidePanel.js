@@ -345,6 +345,7 @@ export default function AgreementSidePanel({
   }, [agreementData]);
 
   const handleChange = (event, key, type, val) => {
+    console.log(event, key, type, val);
     showFooter(true);
     if (
       additionalOnetimeSerError.custom_amazon_store_price &&
@@ -361,7 +362,28 @@ export default function AgreementSidePanel({
         non_field_errors: '',
       });
     }
+    if (type === 'quantity') {
+      const itemFound =
+        additionalOnetimeSerError &&
+        additionalOnetimeSerError.quantity &&
+        additionalOnetimeSerError.quantity.length &&
+        additionalOnetimeSerError.quantity.find(
+          (item) => item.service_id === val.value,
+        );
 
+      if (itemFound) {
+        const updatedQntyError = additionalOnetimeSerError.quantity;
+
+        const list = updatedQntyError.filter(
+          (item) => item.service_id !== itemFound.service_id,
+        );
+
+        setAdditionalOnetimeSerError({
+          ...additionalOnetimeSerError,
+          quantity: list,
+        });
+      }
+    }
     if (type === 'date') {
       setStartDate(event);
       setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
@@ -379,7 +401,10 @@ export default function AgreementSidePanel({
       setUpdatedFormData({ ...updatedFormData, [key]: event.value });
     } else if (type === 'qty') {
       setFormData({ ...formData, quantity: event.target.value });
-      setUpdatedFormData({ ...updatedFormData, quantity: event.target.value });
+      setUpdatedFormData({
+        ...updatedFormData,
+        quantity: event.target.value,
+      });
     } else if (key === 'additional_marketplaces_checkbox') {
       if (event.target.checked) {
         if (
@@ -1861,6 +1886,21 @@ export default function AgreementSidePanel({
     );
     // </>
   };
+  // const getSelectedAmazonStorePackage = () => {
+  //   const selectedAmazonStore =
+  //     formData &&
+  //     formData.additional_one_time_services &&
+  //     formData.additional_one_time_services.length &&
+  //     formData.additional_one_time_services.find((item) =>
+  //       item.name
+  //         ? item.name.includes('Amazon Store Package')
+  //         : item.service && item.service.name.includes('Amazon Store Package'),
+  //     );
+  //   return selectedAmazonStore && selectedAmazonStore.service
+  //     ? selectedAmazonStore.service && selectedAmazonStore.service.id
+  //     : '';
+  // };
+  // console.log(getSelectedAmazonStorePackage());
 
   const displayOneTimeServices = () => {
     return (
@@ -1918,60 +1958,83 @@ export default function AgreementSidePanel({
                       : item.service &&
                         item.service.id === oneTimeServiceData.value,
                   ) ? (
-                    <div className="col-5 pl-0 text-end">
-                      <button
-                        type="button"
-                        className="decrement"
-                        onClick={() => {
-                          changeQuantity(oneTimeServiceData, 'minus');
-                          // handleChange(
-                          //   event,
-                          //   'additional_one_time_services',
-                          //   'quantity',
-                          //   oneTimeServiceData,
-                          // );
-                        }}>
-                        {' '}
-                        <img className="minus-icon" src={MinusIcon} alt="" />
-                      </button>
+                    <>
+                      <div className="col-5 pl-0 text-end">
+                        <button
+                          type="button"
+                          className="decrement"
+                          onClick={() => {
+                            changeQuantity(oneTimeServiceData, 'minus');
+                            // handleChange(
+                            //   event,
+                            //   'additional_one_time_services',
+                            //   'quantity',
+                            //   oneTimeServiceData,
+                            // );
+                          }}>
+                          {' '}
+                          <img className="minus-icon" src={MinusIcon} alt="" />
+                        </button>
 
-                      <NumberFormat
-                        name={oneTimeServiceData.label}
-                        className="form-control max-min-number"
-                        value={
-                          formData.additional_one_time_services.find((item) =>
-                            item.service_id
-                              ? item.service_id === oneTimeServiceData.value
-                              : item.service &&
-                                item.service.id === oneTimeServiceData.value,
-                          ).quantity
-                        }
-                        id={oneTimeServiceData.value}
-                        onChange={(event) =>
-                          handleChange(
-                            event,
-                            'additional_one_time_services',
-                            'quantity',
-                            oneTimeServiceData,
-                          )
-                        }
-                      />
+                        <NumberFormat
+                          name={oneTimeServiceData.label}
+                          className="form-control max-min-number"
+                          value={
+                            formData.additional_one_time_services.find((item) =>
+                              item.service_id
+                                ? item.service_id === oneTimeServiceData.value
+                                : item.service &&
+                                  item.service.id === oneTimeServiceData.value,
+                            ).quantity
+                          }
+                          id={oneTimeServiceData.value}
+                          onChange={(event) =>
+                            handleChange(
+                              event,
+                              'additional_one_time_services',
+                              'quantity',
+                              oneTimeServiceData,
+                            )
+                          }
+                        />
 
-                      <button
-                        type="button"
-                        className="increment"
-                        onClick={() => {
-                          changeQuantity(oneTimeServiceData, 'add');
-                          // handleChange(
-                          //   event,
-                          //   'additional_one_time_services',
-                          //   'quantity',
-                          //   oneTimeServiceData,
-                          // );
-                        }}>
-                        <img className="plus-icon" src={PlusIcon} alt="" />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          className="increment"
+                          onClick={() => {
+                            changeQuantity(oneTimeServiceData, 'add');
+                            // handleChange(
+                            //   event,
+                            //   'additional_one_time_services',
+                            //   'quantity',
+                            //   oneTimeServiceData,
+                            // );
+                          }}>
+                          <img className="plus-icon" src={PlusIcon} alt="" />
+                        </button>
+                      </div>
+                      <div>
+                        {additionalOnetimeSerError &&
+                        additionalOnetimeSerError.quantity &&
+                        additionalOnetimeSerError.quantity.length &&
+                        additionalOnetimeSerError.quantity.find(
+                          (item) =>
+                            item.service_id === oneTimeServiceData.value,
+                        ) ? (
+                          <ErrorMsg>
+                            {additionalOnetimeSerError &&
+                              additionalOnetimeSerError.quantity &&
+                              additionalOnetimeSerError.quantity.length &&
+                              additionalOnetimeSerError.quantity.find(
+                                (item) =>
+                                  item.service_id === oneTimeServiceData.value,
+                              ).error}
+                          </ErrorMsg>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </>
                   ) : (
                     ''
                   )}
@@ -2017,79 +2080,103 @@ export default function AgreementSidePanel({
               </CheckBox>
             </div>
             {showAmazonPlanDropdown ? (
-              <div className="col-5 pl-0 text-end">
-                <button
-                  type="button"
-                  className="decrement"
-                  onClick={() => {
-                    handleAmazonServiceQuantity('minus');
-                    // handleChange(
-                    //   event,
-                    //   'amazon_store_package',
-                    //   'quantity',
-                    //   amazonService,
-                    // );
-                  }}>
-                  {' '}
-                  <img className="minus-icon" src={MinusIcon} alt="" />
-                </button>
+              <>
+                <div className="col-5 pl-0 text-end">
+                  <button
+                    type="button"
+                    className="decrement"
+                    onClick={() => {
+                      handleAmazonServiceQuantity('minus');
+                      // handleChange(
+                      //   event,
+                      //   'amazon_store_package',
+                      //   'quantity',
+                      //   amazonService,
+                      // );
+                    }}>
+                    {' '}
+                    <img className="minus-icon" src={MinusIcon} alt="" />
+                  </button>
 
-                <NumberFormat
-                  name="amazon service"
-                  className="form-control max-min-number"
-                  value={
-                    formData &&
-                    formData.additional_one_time_services &&
-                    formData.additional_one_time_services.length &&
-                    formData.additional_one_time_services.find((item) =>
-                      item.name
-                        ? item.name.includes('Amazon Store Package')
-                        : item.service &&
-                          item.service.name.includes('Amazon Store Package'),
-                    )
-                      ? formData &&
-                        formData.additional_one_time_services &&
-                        formData.additional_one_time_services.length &&
-                        formData.additional_one_time_services.find((item) =>
-                          item.name
-                            ? item.name.includes('Amazon Store Package')
-                            : item.service &&
-                              item.service.name.includes(
-                                'Amazon Store Package',
-                              ),
-                        ).quantity
-                      : ''
-                  }
-                  // id={
-                  //   amazonService.name
-                  //     ? amazonService.name
-                  //     : amazonService.service.name
-                  // }
-                  onChange={(event) =>
-                    handleChange(
-                      event,
-                      'amazon_store_package',
-                      'quantity',
-                      amazonService,
-                    )
-                  }
-                />
+                  <NumberFormat
+                    name="amazon service"
+                    className="form-control max-min-number"
+                    value={
+                      formData &&
+                      formData.additional_one_time_services &&
+                      formData.additional_one_time_services.length &&
+                      formData.additional_one_time_services.find((item) =>
+                        item.name
+                          ? item.name.includes('Amazon Store Package')
+                          : item.service &&
+                            item.service.name.includes('Amazon Store Package'),
+                      )
+                        ? formData &&
+                          formData.additional_one_time_services &&
+                          formData.additional_one_time_services.length &&
+                          formData.additional_one_time_services.find((item) =>
+                            item.name
+                              ? item.name.includes('Amazon Store Package')
+                              : item.service &&
+                                item.service.name.includes(
+                                  'Amazon Store Package',
+                                ),
+                          ).quantity
+                        : ''
+                    }
+                    // id={
+                    //   amazonService.name
+                    //     ? amazonService.name
+                    //     : amazonService.service.name
+                    // }
+                    onChange={(event) =>
+                      handleChange(
+                        event,
+                        'amazon_store_package',
+                        'quantity',
+                        amazonService,
+                      )
+                    }
+                  />
 
-                <button
-                  type="button"
-                  className="increment"
-                  onClick={() => {
-                    handleAmazonServiceQuantity('add');
-                    // handleChange(
-                    //   event,
-                    //   'amazon_store_package',
-                    //   'quantity',
-                    //   amazonService,
-                    // );
-                  }}>
-                  <img className="plus-icon" src={PlusIcon} alt="" />
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    className="increment"
+                    onClick={() => {
+                      handleAmazonServiceQuantity('add');
+                      // handleChange(
+                      //   event,
+                      //   'amazon_store_package',
+                      //   'quantity',
+                      //   amazonService,
+                      // );
+                    }}>
+                    <img className="plus-icon" src={PlusIcon} alt="" />
+                  </button>
+                </div>
+                {/* 
+                <div>
+                  {additionalOnetimeSerError &&
+                  additionalOnetimeSerError.quantity &&
+                  additionalOnetimeSerError.quantity.length &&
+                  additionalOnetimeSerError.quantity.find(
+                    (item) =>
+                      item.service_id === getSelectedAmazonStorePackage(),
+                  ) ? (
+                    <ErrorMsg>
+                      {additionalOnetimeSerError &&
+                        additionalOnetimeSerError.quantity &&
+                        additionalOnetimeSerError.quantity.length &&
+                        additionalOnetimeSerError.quantity.find(
+                          (item) =>
+                            item.service_id === getSelectedAmazonStorePackage(),
+                        ).error}
+                    </ErrorMsg>
+                  ) : (
+                    ''
+                  )}
+                </div> */}
+              </>
             ) : (
               ''
             )}
@@ -2973,7 +3060,9 @@ AgreementSidePanel.propTypes = {
   setAdditionalMarketplaceError: PropTypes.func,
   additionalMonthlySerError: PropTypes.shape(PropTypes.object),
   setAdditionalMonthlySerError: PropTypes.func,
-  additionalOnetimeSerError: PropTypes.shape(PropTypes.object),
+  additionalOnetimeSerError: PropTypes.shape({
+    quantity: PropTypes.number,
+  }),
   setAdditionalOnetimeSerError: PropTypes.func,
   contractError: PropTypes.shape(PropTypes.object),
   setContractError: PropTypes.func,
