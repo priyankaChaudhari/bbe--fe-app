@@ -1171,7 +1171,7 @@ input:checked + .slider:before {
   width: 100% !important;
   padding-left: 65px !important;
   background-color: $gray-3 !important;
-  padding-top: 60px !important;
+  // padding-top: 60px !important;
   padding-bottom: 30px !important;
 
   .react-pdf__Page {
@@ -1187,6 +1187,10 @@ input:checked + .slider:before {
 
     .react-pdf__Page__canvas {
       top: 52% !important;
+    }
+    &:first-child {
+      top: 60px !important;
+      margin-bottom: 93px !important;
     }
   }
 }

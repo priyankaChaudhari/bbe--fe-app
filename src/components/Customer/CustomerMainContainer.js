@@ -141,8 +141,18 @@ export default function CustomerMainContainer() {
             alt="caret"
             style={{
               transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '15px',
-              height: '15px',
+              width:
+                customer &&
+                customer.status &&
+                customer.status.value === 'pending cancellation'
+                  ? '15px'
+                  : '11px',
+              height:
+                customer &&
+                customer.status &&
+                customer.status.value === 'pending cancellation'
+                  ? '15px'
+                  : '11px',
             }}
           />
         </components.DropdownIndicator>
@@ -345,21 +355,26 @@ export default function CustomerMainContainer() {
                               ...base,
                               background: checkStatusColor(),
                               borderRadius: '50px',
+                              minHeight: '24px',
+                              outline: 'none !important',
+                              boxShadow: 'none  !important',
+                              outLine: 'none',
                               width:
                                 customer &&
                                 customer.status &&
                                 customer.status.value === 'pending cancellation'
-                                  ? '150px'
+                                  ? '175px'
                                   : customer &&
                                     customer.status &&
                                     customer.status.value === 'at risk'
-                                  ? '150px'
+                                  ? '100px'
                                   : '100px',
                               '&:focus': {
-                                borderColor: 'transparent',
+                                outline: 'none !important',
+                                boxShadow: 'none  !important',
                               },
                               '&:hover': {
-                                borderColor: 'transparent',
+                                outline: 'none',
                               },
                             }),
                             singleValue: (provided) => {
@@ -534,9 +549,10 @@ export default function CustomerMainContainer() {
                       </li>
                     </ul>
                   </WhiteCard>
+
                   <Select
                     options={viewOptions}
-                    className="customeer-dropdown-select d-lg-none d-block mb-3 "
+                    className="customer-dropdown-select d-lg-none d-block mb-3 "
                     onChange={(event) => setViewComponent(event.value)}
                   />
                   {/* <select>
@@ -819,7 +835,7 @@ const CustomerBody = styled.div`
     margin: 0 auto;
     width: 100%;
   }
-  .customeer-dropdown-select {
+  .customer-dropdown-select {
     color: ${Theme.black};
     padding: 0 0px 0px 25px;
     background-color: ${Theme.white};
@@ -839,12 +855,25 @@ const CustomerBody = styled.div`
       outline: none;
     }
 
-    select {
-      background: red;
-      width: 140px;
-      height: 35px;
-      border: 1px solid #ccc;
-      font-size: 18px;
+    .css-yk16xz-control {
+      border: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+    .css-1pahdxg-control {
+      border: none !important;
+      box-shadow: none !important;
+
+      &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+    }
+
+    .css-1okebmr-indicatorSeparator {
+      display: none;
     }
   }
 

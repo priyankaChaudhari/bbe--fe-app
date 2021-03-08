@@ -2023,7 +2023,7 @@ export default function AgreementSidePanel({
                           <img className="plus-icon" src={PlusIcon} alt="" />
                         </button>
                       </div>
-                      <div>
+                      <div className="col-12 text-left ">
                         {additionalOnetimeSerError &&
                         additionalOnetimeSerError.quantity &&
                         additionalOnetimeSerError.quantity.length &&
@@ -2031,7 +2031,7 @@ export default function AgreementSidePanel({
                           (item) =>
                             item.service_id === oneTimeServiceData.value,
                         ) ? (
-                          <ErrorMsg>
+                          <ErrorMsg className="mb-3">
                             {additionalOnetimeSerError &&
                               additionalOnetimeSerError.quantity &&
                               additionalOnetimeSerError.quantity.length &&
@@ -2165,7 +2165,7 @@ export default function AgreementSidePanel({
                   </button>
                 </div>
 
-                <div>
+                <div className="col-12 text-left">
                   {additionalOnetimeSerError &&
                   additionalOnetimeSerError.quantity &&
                   additionalOnetimeSerError.quantity.length &&
@@ -2173,7 +2173,7 @@ export default function AgreementSidePanel({
                     (item) =>
                       item.service_id === getSelectedAmazonStorePackage(),
                   ) ? (
-                    <ErrorMsg>
+                    <ErrorMsg className="mb-3">
                       {additionalOnetimeSerError &&
                         additionalOnetimeSerError.quantity &&
                         additionalOnetimeSerError.quantity.length &&

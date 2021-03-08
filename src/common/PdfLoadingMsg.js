@@ -18,7 +18,7 @@ export default function PdfLoadingMsg({ type }) {
         ''
       )}
       {type === 'loading' ? (
-        <p className="not-found">Loading Contract Document...</p>
+        <h5 className="not-found">Loading Contract Document...</h5>
       ) : (
         ''
       )}

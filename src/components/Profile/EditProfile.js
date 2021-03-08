@@ -112,13 +112,13 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
                 </span>
               </span>
             </div>
-            <div className="row">
-              <div className="col-md-6">
-                <FormField className="mt-4">
-                  {userDetails
-                    .filter((part) => part.section === 1)
-                    .map((item) => (
-                      <React.Fragment key={item.key}>
+            <div className="row mt-4">
+              {userDetails
+                .filter((part) => part.section === 1)
+                .map((item) => (
+                  <React.Fragment key={item.key}>
+                    <div className="col-md-6">
+                      <FormField className="">
                         {generateHTML(item)}
                         <CheckPhoneNumber name="Phone" />
                         <ErrorMsg>
@@ -131,16 +131,17 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
                             apiError[item.key] &&
                             apiError[item.key][0]}
                         </ErrorMsg>
-                      </React.Fragment>
-                    ))}
-                </FormField>
-              </div>
-              <div className="col-md-6">
-                <FormField className="mt-4">
-                  {userDetails
-                    .filter((part) => part.section === 2)
-                    .map((item) => (
-                      <React.Fragment key={item.key}>
+                      </FormField>
+                    </div>
+                  </React.Fragment>
+                ))}
+
+              {userDetails
+                .filter((part) => part.section === 2)
+                .map((item) => (
+                  <React.Fragment key={item.key}>
+                    <div className="col-md-6">
+                      <FormField className="">
                         {generateHTML(item)}
                         <ErrorMsg>
                           {errors &&
@@ -152,10 +153,10 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
                             apiError[item.key] &&
                             apiError[item.key][0]}
                         </ErrorMsg>
-                      </React.Fragment>
-                    ))}
-                </FormField>
-              </div>
+                      </FormField>
+                    </div>
+                  </React.Fragment>
+                ))}
 
               <Button
                 className={
