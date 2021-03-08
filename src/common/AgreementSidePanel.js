@@ -343,9 +343,33 @@ export default function AgreementSidePanel({
       setAdditionalMarketplaces(marketPlaces);
     }
   }, [agreementData]);
+  const clearOneTimeQntyError = (val) => {
+    const itemFound =
+      additionalOnetimeSerError &&
+      additionalOnetimeSerError.quantity &&
+      additionalOnetimeSerError.quantity.length &&
+      additionalOnetimeSerError.quantity.find((item) =>
+        item.service_id === val.value
+          ? val.value
+          : val && val.service
+          ? val.service.id
+          : '',
+      );
 
+    if (itemFound) {
+      const updatedQntyError = additionalOnetimeSerError.quantity;
+
+      const list = updatedQntyError.filter(
+        (item) => item.service_id !== itemFound.service_id,
+      );
+
+      setAdditionalOnetimeSerError({
+        ...additionalOnetimeSerError,
+        quantity: list,
+      });
+    }
+  };
   const handleChange = (event, key, type, val) => {
-    console.log(event, key, type, val);
     showFooter(true);
     if (
       additionalOnetimeSerError.custom_amazon_store_price &&
@@ -363,26 +387,7 @@ export default function AgreementSidePanel({
       });
     }
     if (type === 'quantity') {
-      const itemFound =
-        additionalOnetimeSerError &&
-        additionalOnetimeSerError.quantity &&
-        additionalOnetimeSerError.quantity.length &&
-        additionalOnetimeSerError.quantity.find(
-          (item) => item.service_id === val.value,
-        );
-
-      if (itemFound) {
-        const updatedQntyError = additionalOnetimeSerError.quantity;
-
-        const list = updatedQntyError.filter(
-          (item) => item.service_id !== itemFound.service_id,
-        );
-
-        setAdditionalOnetimeSerError({
-          ...additionalOnetimeSerError,
-          quantity: list,
-        });
-      }
+      clearOneTimeQntyError(val);
     }
     if (type === 'date') {
       setStartDate(event);
@@ -1702,6 +1707,7 @@ export default function AgreementSidePanel({
   const changeQuantity = (oneTimeServiceData, flag) => {
     showFooter(true);
 
+    clearOneTimeQntyError(oneTimeServiceData);
     if (
       formData &&
       formData.additional_one_time_services &&
@@ -1749,6 +1755,7 @@ export default function AgreementSidePanel({
 
   const handleAmazonServiceQuantity = (flag) => {
     showFooter(true);
+    let amazonStoreItem = {};
     // if (flag === 'add') {
     const selectedData =
       additionalOnetimeServices &&
@@ -1760,6 +1767,7 @@ export default function AgreementSidePanel({
             ? item.name.includes('Amazon Store Package')
             : item.service.name.includes('Amazon Store Package')
         ) {
+          amazonStoreItem = item;
           let itemQuantity = 0;
           if (item.quantity) {
             itemQuantity = parseInt(item.quantity, 10);
@@ -1776,6 +1784,8 @@ export default function AgreementSidePanel({
         }
         return item;
       });
+
+    clearOneTimeQntyError(amazonStoreItem);
 
     if (selectedData) {
       setFormData({
@@ -1886,21 +1896,21 @@ export default function AgreementSidePanel({
     );
     // </>
   };
-  // const getSelectedAmazonStorePackage = () => {
-  //   const selectedAmazonStore =
-  //     formData &&
-  //     formData.additional_one_time_services &&
-  //     formData.additional_one_time_services.length &&
-  //     formData.additional_one_time_services.find((item) =>
-  //       item.name
-  //         ? item.name.includes('Amazon Store Package')
-  //         : item.service && item.service.name.includes('Amazon Store Package'),
-  //     );
-  //   return selectedAmazonStore && selectedAmazonStore.service
-  //     ? selectedAmazonStore.service && selectedAmazonStore.service.id
-  //     : '';
-  // };
-  // console.log(getSelectedAmazonStorePackage());
+
+  const getSelectedAmazonStorePackage = () => {
+    const selectedAmazonStore =
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find((item) =>
+        item.name
+          ? item.name.includes('Amazon Store Package')
+          : item.service && item.service.name.includes('Amazon Store Package'),
+      );
+    return selectedAmazonStore && selectedAmazonStore.service
+      ? selectedAmazonStore.service && selectedAmazonStore.service.id
+      : selectedAmazonStore && selectedAmazonStore.service_id;
+  };
 
   const displayOneTimeServices = () => {
     return (
@@ -2154,7 +2164,7 @@ export default function AgreementSidePanel({
                     <img className="plus-icon" src={PlusIcon} alt="" />
                   </button>
                 </div>
-                {/* 
+
                 <div>
                   {additionalOnetimeSerError &&
                   additionalOnetimeSerError.quantity &&
@@ -2175,7 +2185,7 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
-                </div> */}
+                </div>
               </>
             ) : (
               ''

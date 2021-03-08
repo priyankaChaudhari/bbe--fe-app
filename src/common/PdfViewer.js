@@ -17,7 +17,8 @@ export default function PdfViewer({ pdf }) {
       file={pdf}
       options={{ workerSrc: 'pdf.worker.js' }}
       // error={PageNotFound}
-      error={PdfLoadingMsg}
+      error={() => <PdfLoadingMsg type="error" />}
+      loading={() => <PdfLoadingMsg type="loading" />}
       onLoadSuccess={onDocumentLoadSuccess}>
       {Array.from(new Array(totalPages), (el, index) => (
         <Page
