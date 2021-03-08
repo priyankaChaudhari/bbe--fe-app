@@ -37,7 +37,9 @@ export async function getCustomerList(
 
   let statusParams = {};
   if (filterOptions && filterOptions.status && filterOptions.status.length) {
-    statusParams = queryString.stringify({ status: filterOptions.status });
+    statusParams = queryString.stringify({
+      contract_status: filterOptions.status,
+    });
   }
   let bgsParams = {};
   if (filterOptions && filterOptions.user && filterOptions.user.length) {
