@@ -1972,11 +1972,10 @@ export default function ContractContainer() {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12">
-          <div>
-            <div>
-              {/* <Document
+
+      <div>
+        <div>
+          {/* <Document
                 file={details && details.contract_url}
                 options={{ workerSrc: 'pdf.worker.js' }}
                 onLoadSuccess={onDocumentLoadSuccess}>
@@ -1986,8 +1985,8 @@ export default function ContractContainer() {
                 {/* <Page pageNumber={pageNumber} /> 
               </Document> */}
 
-              <PdfViewer pdf={details && details.contract_url} />
-              {/* <div className="text-center mt-4 ">
+          <PdfViewer pdf={details && details.contract_url} />
+          {/* <div className="text-center mt-4 ">
                 <p className="mb-3">
                   Page {pageNumber || (totalPages ? 1 : '--')} of{' '}
                   {totalPages || '--'}
@@ -2008,16 +2007,16 @@ export default function ContractContainer() {
                 </Button>
               </div> */}
 
-              {/* {numPages
+          {/* {numPages
                 ? Array.from(new Array(numPages), (el, index) => (
                     <Page key={`page_${index + 1}`} pageNumber={index + 1} />
                   ))
                 : ''} */}
-              {/* <p>
+          {/* <p>
                 Page {pageNumber} of {numPages}
               </p> */}
 
-              {/* <PDFViewer
+          {/* <PDFViewer
                 document={{
                   url: samplePDF,
                 }}
@@ -2027,8 +2026,6 @@ export default function ContractContainer() {
               {/* {details && details.contract_url && (
                 <iframe src={details.contract_url} />
               )} */}
-            </div>
-          </div>
         </div>
       </div>
     </div>

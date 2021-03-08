@@ -1151,22 +1151,39 @@ input:checked + .slider:before {
   display: block;
   user-select: none;
   margin: 0 auto;
-  padding-top: 60px !important;
+
+  // padding-left: 65px !important;
+  // width: 100% !important;
+  // top: 52% !important;
 }
 
 .react-pdf__Page__textContent {
-  box-shadow: 0 5px 25px 0 rgba(68, 68, 79, 0.1);
-  margin-top: 10px;
-  margin-bottom: 50px !important;
+  box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
+  margin-bottom: 20px;
+  // top: 52% !important;
 }
-
 .react-pdf__message .react-pdf__message--error {
   text-align: center !important;
 }
 
-.pdf-view {
-  width: 100%;
-  // padding-top: 60px;
-  // background-color: #eef3f5;
-  // padding-left: 90px;
+.react-pdf__Document {
+  width: 100% !important;
+  padding-left: 65px !important;
+  background-color: $gray-3 !important;
+
+  .react-pdf__Page {
+    background-color: $gray-3 !important;
+    margin-top: 35px !important;
+
+    & .pdf-view {
+      margin-top: 35px !important;
+      width: 100% !important;
+      padding-left: 65px !important;
+      background-color: $gray-3 !important;
+    }
+
+    .react-pdf__Page__canvas {
+      top: 52% !important;
+    }
+  }
 }
