@@ -24,6 +24,7 @@ import InputSearchWithRadius from './InputSearchWithRadius';
 import ContractFormField from './ContractFormField';
 import ContractInputSelect from './ContractInputSelect';
 import DropDownStatus from './DropDownStatus';
+import WarningComponent from './WarningComponent';
 // import EditorContainer from './EditorContainer';
 
 export {
@@ -54,4 +55,5 @@ export {
   ContractFormField,
   ContractInputSelect,
   DropDownStatus,
+  WarningComponent,
 };
