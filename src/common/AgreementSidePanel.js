@@ -2208,8 +2208,8 @@ export default function AgreementSidePanel({
                 </ContractInputSelect>
                 {amazonStoreCustom ? (
                   <ContractFormField className="w-100 mt-1">
-                    <input
-                      className="form-control "
+                    <NumberFormat
+                      className="form-control  "
                       type="text"
                       value={
                         formData &&
