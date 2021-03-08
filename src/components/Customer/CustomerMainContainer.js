@@ -359,7 +359,7 @@ export default function CustomerMainContainer() {
                               outline: 'none !important',
                               boxShadow: 'none  !important',
                               outLine: 'none',
-                              width:
+                              maxWidth:
                                 customer &&
                                 customer.status &&
                                 customer.status.value === 'pending cancellation'
@@ -367,8 +367,8 @@ export default function CustomerMainContainer() {
                                   : customer &&
                                     customer.status &&
                                     customer.status.value === 'at risk'
-                                  ? '100px'
-                                  : '100px',
+                                  ? '120px'
+                                  : '120px',
                               '&:focus': {
                                 outline: 'none !important',
                                 boxShadow: 'none  !important',

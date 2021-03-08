@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const DropDownStatus = styled.div`
   width: 100%;
   min-width: 70px;
-  max-width: 88px;
+  max-width: 120px;
   display: inline-flex;
   vertical-align: top;
   margin-left: 20px;
@@ -25,8 +25,9 @@ const DropDownStatus = styled.div`
       .css-1gtu0rj-indicatorContainer {
         padding: 4px 8px;
       }
-
-      &:hover {
+      .css-1wa3eu0-placeholder  {
+          color: ${Theme.gray6};
+      }
         outline: none !important;
         box-shadow: none !important;
         border: none !important;
