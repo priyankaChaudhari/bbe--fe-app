@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const FormField = styled.div`
-  position:relative;
+  position: relative;
 
   label {
     color: ${Theme.gray30};
@@ -167,7 +167,7 @@ const FormField = styled.div`
   }
   .profilephone-input-info {
     position: absolute;
-    bottom: 11px;
+    top: 36px;
     right: 15px;
   }
   
