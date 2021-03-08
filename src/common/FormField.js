@@ -167,7 +167,7 @@ const FormField = styled.div`
   }
   .profilephone-input-info {
     position: absolute;
-    top: 106px;
+    bottom: 11px;
     right: 15px;
   }
   
