@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
+import { pickBy } from 'lodash';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -199,12 +200,29 @@ export default function ArticleDetails() {
             articleData.items[0].items[0].content
         : articleData.items[0].content;
     }
+      //  @Hack (woody): Would be Ideal for the Back-end to give us the section name of an article rather than do this.
+      const section = articleData.items.find(sectionOrArticle => {
+        if (sectionOrArticle.type === 'section') {
+          const article = sectionOrArticle.items?.find( a => a.id === selectedArticle.id)
+          return article
+        }
+        return false
+      })
+      const toSend = pickBy({
+        'event': 'kb-article-content-load',
+        'kb-collection': selectedArticle.collection.name,
+        'kb-board': selectedArticle.boards[0].title,
+        'kb-section': section && section.title,
+        'kb-article': selectedArticle.preferredPhrase,
+      }, v => v !== undefined)
 
-    return ` <h2 class="primary-heading">
-                        ${selectedArticle && selectedArticle.preferredPhrase}
-                      </h2>
+      window.dataLayer.push(toSend)
 
-      ${selectedArticle && selectedArticle.content}`;
+      return ` <h2 class="primary-heading">
+                          ${selectedArticle && selectedArticle.preferredPhrase}
+                        </h2>
+          
+        ${selectedArticle && selectedArticle.content}`;
   };
 
   const getInitials = () => {
