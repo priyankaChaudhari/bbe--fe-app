@@ -2023,7 +2023,7 @@ export default function AgreementSidePanel({
                           <img className="plus-icon" src={PlusIcon} alt="" />
                         </button>
                       </div>
-                      <div>
+                      <div className="col-12 text-right">
                         {additionalOnetimeSerError &&
                         additionalOnetimeSerError.quantity &&
                         additionalOnetimeSerError.quantity.length &&
@@ -2165,7 +2165,7 @@ export default function AgreementSidePanel({
                   </button>
                 </div>
 
-                <div>
+                <div className="col-12 text-right">
                   {additionalOnetimeSerError &&
                   additionalOnetimeSerError.quantity &&
                   additionalOnetimeSerError.quantity.length &&
