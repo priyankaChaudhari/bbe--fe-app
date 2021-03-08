@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import PropTypes from 'prop-types';
-import PageNotFound from './PageNotFound';
+import PdfLoadingMsg from './PdfLoadingMsg';
 
 export default function PdfViewer({ pdf }) {
   const [totalPages, setNumPages] = useState(null);
@@ -16,7 +16,8 @@ export default function PdfViewer({ pdf }) {
     <Document
       file={pdf}
       options={{ workerSrc: 'pdf.worker.js' }}
-      error={PageNotFound}
+      // error={PageNotFound}
+      error={PdfLoadingMsg}
       onLoadSuccess={onDocumentLoadSuccess}>
       {Array.from(new Array(totalPages), (el, index) => (
         <Page
