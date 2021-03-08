@@ -11,12 +11,17 @@ export default function PdfLoadingMsg({ type }) {
       {/* <h5 className="mt-3">Page not found</h5> */}
       {type === 'error' ? (
         <p className="not-found">
-          Please wait while contract document is ready!!
+          Please wait while contract document is being ready!! check this page
+          after few minutes.
         </p>
       ) : (
         ''
       )}
-      {type === 'loading' ? <p className="not-found">Loading pdf...</p> : ''}
+      {type === 'loading' ? (
+        <p className="not-found">Loading Contract Document...</p>
+      ) : (
+        ''
+      )}
     </PageNotFounds>
   );
 }

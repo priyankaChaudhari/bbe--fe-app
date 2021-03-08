@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import HelloSign from 'hellosign-embedded';
 // import styled from 'styled-components';
-import { PATH_LOGIN } from '../../constants/index';
+import { PATH_LOGIN, PATH_WARNING } from '../../constants/index';
 import { transactionalSignUp, checksignatureStatus } from '../../api/index';
 import { PageLoader } from '../../common';
 // import Header from '../../common/Header';
@@ -25,7 +25,10 @@ function HelloSignComponent() {
       request_id: params.key,
     }).then((res) => {
       if (res && res.status === 400) {
-        history.push(PATH_LOGIN);
+        history.push({
+          pathname: PATH_WARNING,
+          state: { error: res && res.data && res.data.request_id },
+        });
       } else {
         client.open(res && res.data && res.data.sign_url, {
           skipDomainVerification: true,
