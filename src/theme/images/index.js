@@ -125,6 +125,7 @@ import OrganizationActiveIcon from './icons/organization-active-icon.png';
 import ExpnadArrowBack from './icons/expand-arrow-back.png';
 import CaretUp from './icons/caretUp.png';
 import WhiteCaretUp from './icons/whiteCaretUp.png';
+import ContractCancel from './cancel-contract.png';
 
 export {
   BannerBg,
@@ -254,4 +255,5 @@ export {
   ExpnadArrowBack,
   CaretUp,
   WhiteCaretUp,
+  ContractCancel,
 };

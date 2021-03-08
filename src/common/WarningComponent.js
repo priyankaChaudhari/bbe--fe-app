@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Theme from '../theme/Theme';
 import ErrorMsg from './ErrorMsg';
+// import ContractCancel from '../theme/images/cancel-contract.png';
 // import PageNotFoundImg from '../theme/images/page-not-found.svg';
 
 export default function WarningComponent() {
@@ -11,10 +12,12 @@ export default function WarningComponent() {
 
   return (
     <PageNotFounds>
-      <ErrorMsg className=" not-found contract-cancel">
+      <ErrorMsg className="  contract-cancel">
         {location && location.state && location.state.error
           ? location && location.state && location.state.error
           : ''}
+        {/* <img className="contract-cancel-img" src={ContractCancel} alt="" />
+        <br /> This contract has been modfied or cancelled */}
       </ErrorMsg>
     </PageNotFounds>
   );
@@ -31,8 +34,16 @@ const PageNotFounds = styled.div`
     text-align: center;
   }
 
-  &.contract-cancel {
+  .contract-cancel {
     text-transform: capitalize;
     color: ${Theme.red};
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .contract-cancel-img {
+    // vertical-align: middle;
+    // margin-right: 15px;
+    margin-bottom: 15px;
   }
 `;
