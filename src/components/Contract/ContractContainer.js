@@ -338,10 +338,23 @@ export default function ContractContainer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details, setShowSuccessContact]);
 
+  const showTabInResponsive = (section) => {
+    if (section === 'edit-fields') {
+      setShowtabInResponsive('edit-fields');
+    }
+    if (section === 'view-contract') {
+      setShowtabInResponsive('view-contract');
+    }
+  };
+
   const onEditAddendum = () => {
     setShowEditor(true);
+    if (isTablet || isMobile) {
+      showTabInResponsive('view-contract');
+      executeScroll('addendum');
+    }
   };
-  console.log(additionalOnetimeSerError);
+
   const nextStep = () => {
     // if (history.location.pathname.includes('agreement')) {
 
@@ -1111,7 +1124,12 @@ export default function ContractContainer() {
   };
 
   const showOneTimeTable = () => {
-    return `<table
+    if (
+      details &&
+      details.additional_one_time_services &&
+      details.additional_one_time_services.length
+    ) {
+      return `<table
     class="contact-list "
     style="width: 100%;
     border-collapse: collapse;
@@ -1160,6 +1178,8 @@ export default function ContractContainer() {
       </td>
     </tr>
   </table>`;
+    }
+    return '';
   };
 
   const showOneTimeServiceTable = () => {
@@ -1605,15 +1625,6 @@ export default function ContractContainer() {
       });
     } else {
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
-    }
-  };
-
-  const showTabInResponsive = (section) => {
-    if (section === 'edit-fields') {
-      setShowtabInResponsive('edit-fields');
-    }
-    if (section === 'view-contract') {
-      setShowtabInResponsive('view-contract');
     }
   };
 
