@@ -3099,7 +3099,7 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom:200px;
+    padding-bottom: 200px;
     width: 340px;
     position: fixed;
     top: 130px;
@@ -3108,6 +3108,9 @@ const SidePanel = styled.div`
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y:auto;
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+       padding-bottom: 200px;
+    }
 
  
     

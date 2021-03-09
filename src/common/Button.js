@@ -50,7 +50,7 @@ const Button = styled.button`
 
   &.btn-transparent {
     background-color: ${Theme.white};
-    padding: 11px 25px;
+    // padding: 11px 25px;
     border: 1px solid ${Theme.gray35};
     color: ${Theme.black};
     font-weight: 600;
