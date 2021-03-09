@@ -1192,6 +1192,9 @@ input:checked + .slider:before {
       margin-bottom: 93px !important;
     }
   }
+  @media only screen and (max-width: 991px) {
+    padding-left: 0px !important;
+  }
 }
 
 #ResumeContainer {
@@ -1216,7 +1219,7 @@ input:checked + .slider:before {
   margin-bottom: 25px;
 }
 
-.PDFPage > canvas {
-  max-width: 100%;
-  height: auto !important;
-}
+// .PDFPage > canvas {
+//   width: 100%;
+//   height: auto !important;
+// }
