@@ -54,12 +54,8 @@ export default function NewCustomerList() {
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
-  // const userInfo = useSelector((state) => state.userState.userInfo);
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, MultiValue, SingleValue } = components;
-  // const [selectedFilter, setSelectedFilter] = useState({});
-  // const [clearFilter, setClearFilter] = useState(true);
   const [status, setStatus] = useState([]);
 
   const [selectedValue, setSelectedValue] = useState({
