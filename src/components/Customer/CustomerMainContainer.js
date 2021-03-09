@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 
 import Theme from '../../theme/Theme';
 import {
@@ -24,15 +24,15 @@ import {
   LeftArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
-  WhiteCaretUp,
-  CaretUp,
+  // WhiteCaretUp,
+  // CaretUp,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
   ModalBox,
   PageLoader,
   GetInitialName,
-  DropDownStatus,
+  // DropDownStatus,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -114,11 +114,11 @@ export default function CustomerMainContainer() {
   const profileLoader = useSelector((state) => state.userState.isLoading);
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
 
-  let statusActions = [
-    { value: 'active', label: 'Activate' },
-    { value: 'at risk', label: 'Place at risk' },
-    { value: 'inactive', label: 'Inactivate' },
-  ];
+  // let statusActions = [
+  //   { value: 'active', label: 'Activate' },
+  //   { value: 'at risk', label: 'Place at risk' },
+  //   { value: 'inactive', label: 'Inactivate' },
+  // ];
 
   const viewOptions = [
     { value: 'agreement', label: 'Agreements' },
@@ -126,39 +126,39 @@ export default function CustomerMainContainer() {
     { value: 'activity', label: 'Activity' },
   ];
 
-  const DropdownIndicator = (props) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={
-              customer &&
-              customer.status &&
-              customer.status.value === 'pending cancellation'
-                ? CaretUp
-                : WhiteCaretUp
-            }
-            alt="caret"
-            style={{
-              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width:
-                customer &&
-                customer.status &&
-                customer.status.value === 'pending cancellation'
-                  ? '15px'
-                  : '11px',
-              height:
-                customer &&
-                customer.status &&
-                customer.status.value === 'pending cancellation'
-                  ? '15px'
-                  : '11px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
+  // const DropdownIndicator = (props) => {
+  //   return (
+  //     components.DropdownIndicator && (
+  //       <components.DropdownIndicator {...props}>
+  //         <img
+  //           src={
+  //             customer &&
+  //             customer.status &&
+  //             customer.status.value === 'pending cancellation'
+  //               ? CaretUp
+  //               : WhiteCaretUp
+  //           }
+  //           alt="caret"
+  //           style={{
+  //             transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+  //             width:
+  //               customer &&
+  //               customer.status &&
+  //               customer.status.value === 'pending cancellation'
+  //                 ? '15px'
+  //                 : '11px',
+  //             height:
+  //               customer &&
+  //               customer.status &&
+  //               customer.status.value === 'pending cancellation'
+  //                 ? '15px'
+  //                 : '11px',
+  //           }}
+  //         />
+  //       </components.DropdownIndicator>
+  //     )
+  //   );
+  // };
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -270,29 +270,29 @@ export default function CustomerMainContainer() {
     getActivityLogInfo(currentPage);
   };
 
-  const checkStatus = () => {
-    if (customer && customer.status) {
-      statusActions = statusActions.filter(
-        (op) => op.value !== customer.status.value,
-      );
-    }
-  };
+  // const checkStatus = () => {
+  //   if (customer && customer.status) {
+  //     statusActions = statusActions.filter(
+  //       (op) => op.value !== customer.status.value,
+  //     );
+  //   }
+  // };
 
-  const checkStatusColor = () => {
-    if (customer && customer.status) {
-      if (customer.status.value === 'inactive') {
-        return '#69707f';
-      }
-      if (customer.status.value === 'pending cancellation') {
-        return '#f7c137';
-      }
-      if (customer.status.value === 'at risk') {
-        return '#d63649';
-      }
-      return '#74B035';
-    }
-    return '';
-  };
+  // const checkStatusColor = () => {
+  //   if (customer && customer.status) {
+  //     if (customer.status.value === 'inactive') {
+  //       return '#69707f';
+  //     }
+  //     if (customer.status.value === 'pending cancellation') {
+  //       return '#f7c137';
+  //     }
+  //     if (customer.status.value === 'at risk') {
+  //       return '#d63649';
+  //     }
+  //     return '#74B035';
+  //   }
+  //   return '';
+  // };
 
   return (
     <>
@@ -346,7 +346,7 @@ export default function CustomerMainContainer() {
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
 
-                      <DropDownStatus>
+                      {/* <DropDownStatus>
                         {checkStatus()}
                         <Select
                           isSearchable={false}
@@ -402,7 +402,12 @@ export default function CustomerMainContainer() {
                             DropdownIndicator,
                           }}
                         />
-                      </DropDownStatus>
+                      </DropDownStatus> */}
+                    </span>
+                    <span className="company-status inactive">
+                      {agreement &&
+                        agreement.contract_status &&
+                        agreement.contract_status.label}
                     </span>
 
                     <div
@@ -842,7 +847,7 @@ const CustomerBody = styled.div`
     background-color: ${Theme.white};
     border-radius: 8px;
     width: 100%;
-    padding: 13px;
+    padding: 10px 0;
     border-left: 3px solid ${Theme.orange};
     color: #000000;
     font-size: 16px;
@@ -875,6 +880,17 @@ const CustomerBody = styled.div`
 
     .css-1okebmr-indicatorSeparator {
       display: none;
+    }
+    .css-26l3qy-menu {
+      margin-top: -1px;
+      border-radius: 4px;
+      border-top: none;
+      padding: 18px 0;
+      border: none;
+      box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
+      font-weight: 500;
     }
   }
 
