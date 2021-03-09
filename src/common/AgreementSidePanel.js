@@ -3108,11 +3108,12 @@ const SidePanel = styled.div`
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y:auto;
+    
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
-       padding-bottom: 200px;
+      .sidebar {
+        padding-bottom: 200px;
+      }
     }
-
- 
     
   .sendar-details {
     color: ${Theme.black};
