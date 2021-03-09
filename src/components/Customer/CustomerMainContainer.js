@@ -168,7 +168,6 @@ export default function CustomerMainContainer() {
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
-  console.log(showSuccessMsg);
 
   const getActivityLogInfo = useCallback(
     (currentPage) => {
@@ -266,6 +265,7 @@ export default function CustomerMainContainer() {
   };
 
   const handlePageChange = (currentPage) => {
+    console.log(showSuccessMsg);
     setPageNumber(currentPage);
     getActivityLogInfo(currentPage);
   };

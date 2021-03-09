@@ -391,10 +391,10 @@ export default function AgreementSidePanel({
     }
     if (type === 'date') {
       setStartDate(event);
-      setFormData({ ...formData, [key]: dayjs(event).format('MM-DD-YYYY') });
+      setFormData({ ...formData, [key]: dayjs(event).format('YYYY-MM-DD') });
       setUpdatedFormData({
         ...updatedFormData,
-        [key]: dayjs(event).format('MM-DD-YYYY'),
+        [key]: dayjs(event).format('YYYY-MM-DD'),
       });
     } else if (type === 'choice') {
       if (key === 'primary_marketplace') {
