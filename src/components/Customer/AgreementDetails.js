@@ -159,11 +159,11 @@ export default function AgreementDetails({ agreement, id }) {
                       agreement.additional_marketplaces === null
                         ? 'No Marketplaces added.'
                         : ''}
-                      <li>
-                        {agreement && agreement.primary_marketplace
-                          ? `${agreement.primary_marketplace.name} (Primary)`
-                          : ''}
-                      </li>
+                      {agreement && agreement.primary_marketplace ? (
+                        <li>{agreement.primary_marketplace.name} (Primary)</li>
+                      ) : (
+                        ''
+                      )}
                       {agreement && agreement.additional_marketplaces
                         ? agreement.additional_marketplaces.map((item) => (
                             <li key={item.id}>
