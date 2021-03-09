@@ -35,19 +35,24 @@ function HelloSignComponent() {
         });
 
         client.on('finish', () => {
-          checksignatureStatus({ request_id: params.key }).then(() => {
+          checksignatureStatus({ request_id: params.key }).then((statusRes) => {
+            if (statusRes && statusRes.status === 200) {
+              window.location.href = 'http://www.buyboxexperts.com/';
+            }
             // console.log(res, ' after check signature status');
           });
           // history.push(PATH_LOGIN);
-          window.location.href = 'http://www.buyboxexperts.com/';
         });
 
         client.on('close', () => {
-          checksignatureStatus({ request_id: params.key }).then(() => {
+          checksignatureStatus({ request_id: params.key }).then((response) => {
             // console.log(res, ' after check signature status');
+            if (response && response.status === 200) {
+              window.location.href = 'http://www.buyboxexperts.com/';
+            }
           });
           // history.push(PATH_LOGIN);
-          window.location.href = 'http://www.buyboxexperts.com/';
+          // window.location.href = 'http://www.buyboxexperts.com/';
         });
       }
     });
