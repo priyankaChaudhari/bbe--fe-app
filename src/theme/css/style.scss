@@ -1171,11 +1171,10 @@ input:checked + .slider:before {
   padding-left: 65px !important;
   background-color: $gray-3 !important;
   // padding-top: 60px !important;
-  padding-bottom: 30px !important;
+  // padding-bottom: 30px !important;
 
   .react-pdf__Page {
     background-color: $gray-3 !important;
-    margin-top: 35px !important;
 
     & .pdf-view {
       margin-top: 35px !important;
@@ -1188,8 +1187,8 @@ input:checked + .slider:before {
       top: 52% !important;
     }
     &:first-child {
-      top: 60px !important;
-      margin-bottom: 93px !important;
+      top: 85px !important;
+      margin-bottom: 112px !important;
     }
   }
   @media only screen and (max-width: 991px) {
@@ -1211,9 +1210,9 @@ input:checked + .slider:before {
   align-items: center;
 }
 
-.PDFPage {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-}
+// .PDFPage {
+//   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+// }
 
 .PDFPageOne {
   margin-bottom: 25px;
