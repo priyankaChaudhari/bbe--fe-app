@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import HelloSign from 'hellosign-embedded';
 // import styled from 'styled-components';
-import { PATH_LOGIN, PATH_WARNING } from '../../constants/index';
+import { PATH_WARNING } from '../../constants/index';
 import { transactionalSignUp, checksignatureStatus } from '../../api/index';
 import { PageLoader } from '../../common';
 // import Header from '../../common/Header';
@@ -38,14 +38,16 @@ function HelloSignComponent() {
           checksignatureStatus({ request_id: params.key }).then(() => {
             // console.log(res, ' after check signature status');
           });
-          history.push(PATH_LOGIN);
+          // history.push(PATH_LOGIN);
+          window.location.href = 'http://www.buyboxexperts.com/';
         });
 
         client.on('close', () => {
           checksignatureStatus({ request_id: params.key }).then(() => {
             // console.log(res, ' after check signature status');
           });
-          history.push(PATH_LOGIN);
+          // history.push(PATH_LOGIN);
+          window.location.href = 'http://www.buyboxexperts.com/';
         });
       }
     });
