@@ -289,7 +289,7 @@ export default function CustomerMainContainer() {
       if (customer.status.value === 'at risk') {
         return '#d63649';
       }
-      return '#33ac2e';
+      return '#74B035';
     }
     return '';
   };
@@ -359,16 +359,17 @@ export default function CustomerMainContainer() {
                               outline: 'none !important',
                               boxShadow: 'none  !important',
                               outLine: 'none',
-                              maxWidth:
+                              cursor: 'pointer',
+                              width:
                                 customer &&
                                 customer.status &&
                                 customer.status.value === 'pending cancellation'
-                                  ? '175px'
+                                  ? '175px !important'
                                   : customer &&
                                     customer.status &&
                                     customer.status.value === 'at risk'
                                   ? '120px'
-                                  : '120px',
+                                  : '88px',
                               '&:focus': {
                                 outline: 'none !important',
                                 boxShadow: 'none  !important',

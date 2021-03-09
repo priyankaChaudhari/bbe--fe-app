@@ -3114,6 +3114,7 @@ const SidePanel = styled.div`
   .sendar-details {
     color: ${Theme.black};
     font-size: ${Theme.extraMedium};
+    font-family: ${Theme.baseFontFamily};
     text-transform: capitalize;
     margin-top: 6px;
     margin-left: 16px;

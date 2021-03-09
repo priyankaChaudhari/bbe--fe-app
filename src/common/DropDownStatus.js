@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const DropDownStatus = styled.div`
-  width: 100%;
-  min-width: 70px;
-  max-width: 120px;
+  // width: 100%;
+  // min-width: 70px;
+  // max-width: 88px;
   display: inline-flex;
   vertical-align: top;
   margin-left: 20px;

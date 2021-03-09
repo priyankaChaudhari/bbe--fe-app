@@ -115,13 +115,13 @@ const FormField = styled.div`
   }
   .hide-icon {
     position: absolute;
-    top: 50px;
-    right: 25px;
+    top: 34px;
+    right: 14px;
   }
   .show-icon {
     position: absolute;
-    top: 50px;
-    right: 25px;
+    top: 34px;
+    right: 14px;
   }
   .hide-icons {
     position: absolute;
