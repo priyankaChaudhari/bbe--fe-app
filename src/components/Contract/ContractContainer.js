@@ -1986,11 +1986,7 @@ export default function ContractContainer() {
         </div>
       </div>
 
-      <div>
-        <div>
-          <PdfViewer pdf={details && details.contract_url} />
-        </div>
-      </div>
+      <PdfViewer pdf={details && details.contract_url} />
     </div>
   ) : (
     <>
