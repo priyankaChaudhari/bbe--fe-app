@@ -3111,7 +3111,7 @@ const SidePanel = styled.div`
     
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
       .sidebar {
-        padding-bottom: 200px;
+        padding-bottom: 300px;
       }
     }
     
