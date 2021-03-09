@@ -303,30 +303,32 @@ export default function Agreement({ formData, details, templateData }) {
         <p
           className="long-text"
           dangerouslySetInnerHTML={{
-            __html: getAgreementAccorType(1)
-              .replace(
-                'CUSTOMER_NAME',
-                mapDefaultValues('contract_company_name', 'Customer Name'),
-              )
-              .replace(
-                'AGREEMENT_DATE',
-                mapDefaultValues('start_date', 'Start Date'),
-              )
-              .replace(
-                'CUSTOMER_ADDRESS',
-                mapDefaultValues('address', 'Address'),
-              )
-              .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
-              .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
-              .replace(
-                'CUSTOMER_POSTAL',
-                mapDefaultValues('zip_code', 'Postal Code'),
-              )
-              .replace(
-                'BBE_DATE',
-                mapDefaultValues('current_date', 'Current Date'),
-              )
-              .replace('THAD_SIGN', mapThadSignImg()),
+            __html:
+              getAgreementAccorType(1) &&
+              getAgreementAccorType(1)
+                .replace(
+                  'CUSTOMER_NAME',
+                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                )
+                .replace(
+                  'AGREEMENT_DATE',
+                  mapDefaultValues('start_date', 'Start Date'),
+                )
+                .replace(
+                  'CUSTOMER_ADDRESS',
+                  mapDefaultValues('address', 'Address'),
+                )
+                .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
+                .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
+                .replace(
+                  'CUSTOMER_POSTAL',
+                  mapDefaultValues('zip_code', 'Postal Code'),
+                )
+                .replace(
+                  'BBE_DATE',
+                  mapDefaultValues('current_date', 'Current Date'),
+                )
+                .replace('THAD_SIGN', mapThadSignImg()),
           }}
         />
       </Paragraph>
