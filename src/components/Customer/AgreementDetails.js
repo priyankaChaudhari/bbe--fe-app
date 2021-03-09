@@ -56,142 +56,159 @@ export default function AgreementDetails({ agreement, id }) {
           </ul>
         </Tab>
         {viewComponent === 'current' ? (
-          <WhiteCard className="mt-3">
-            <div className="row">
-              <div className="col-lg-9 col-md-8 col-12">
-                <img
-                  className="solid-icon  "
-                  src={
-                    agreement && agreement.contract_type === 'One Time'
-                      ? ServiceIcon
-                      : RecurringIcon
-                  }
-                  alt=""
-                />
-                <p className="black-heading-title mt-0 mb-0">
-                  {agreement && agreement.contract_type === 'One Time'
-                    ? 'One Time Services Contract'
-                    : 'Recurring Contract'}
-                </p>
-
-                <ul className="recurring-contact ">
-                  <li>
-                    <p className="basic-text ">
-                      {agreement && agreement.length && agreement.length.label}{' '}
-                      contract
-                    </p>
-                  </li>
-                  {agreement && agreement.end_date ? (
-                    <li>
-                      <p className="basic-text ">
-                        Expires:
-                        {dayjs(agreement.end_date).format('MMM DD, YYYY')}
-                      </p>
-                    </li>
-                  ) : (
-                    ''
-                  )}
-                  {agreement && agreement.end_date ? (
-                    <li>
-                      <div className="days-block">
-                        {' '}
-                        <img
-                          className="clock-icon"
-                          src={ClockIcon}
-                          alt="clock"
-                        />{' '}
-                        {countDays()} days
-                      </div>
-                    </li>
-                  ) : (
-                    ''
-                  )}
-                </ul>
-              </div>
-              <div className="clear-fix" />
-              <div className="col-lg-3 col-md-4 col-12 text-right">
-                <Link to={PATH_AGREEMENT.replace(':id', id)}>
-                  <Button className="btn-transparent w-100 view-contract">
-                    {' '}
+          <>
+            {agreement &&
+            agreement.end_date > dayjs(new Date()).format('YYYY-MM-DD') ? (
+              <WhiteCard className="mt-3">
+                <div className="row">
+                  <div className="col-lg-9 col-md-8 col-12">
                     <img
-                      className="file-contract-icon"
-                      src={FileContract}
+                      className="solid-icon  "
+                      src={
+                        agreement && agreement.contract_type === 'One Time'
+                          ? ServiceIcon
+                          : RecurringIcon
+                      }
                       alt=""
                     />
-                    View Contract
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="straight-line horizontal-line pt-3 mb-3" />
+                    <p className="black-heading-title mt-0 mb-0">
+                      {agreement && agreement.contract_type === 'One Time'
+                        ? 'One Time Services Contract'
+                        : 'Recurring Contract'}
+                    </p>
 
-            <ul className="monthly-retainer">
-              {agreementOptions.map((item) => (
-                <li key={item.key}>
-                  <div className="label">{item.label}</div>
-                  {agreement && agreement[item.key] ? (
-                    <NumberFormat
-                      displayType="text"
-                      value={agreement[item.key].label || agreement[item.key]}
-                      prefix={item.key === 'rev_share' ? '' : '$'}
-                      suffix={item.key === 'rev_share' ? '%' : ''}
-                    />
-                  ) : (
-                    '0'
-                  )}
-                </li>
-              ))}
-            </ul>
-            <div className="straight-line horizontal-line pt-3 mb-3" />
-            {agreement && agreement.contract_type === 'recurring' ? (
-              <>
-                <div className="label">Marketplaces</div>
-                <ul className="selected-list">
-                  {agreement &&
-                  agreement.primary_marketplace === null &&
-                  agreement.additional_marketplaces === null
-                    ? 'No Marketplaces added.'
-                    : ''}
-                  <li>
-                    {agreement && agreement.primary_marketplace
-                      ? `${agreement.primary_marketplace.name} (Primary)`
-                      : ''}
-                  </li>
-                  {agreement && agreement.additional_marketplaces
-                    ? agreement.additional_marketplaces.map((item) => (
-                        <li key={item.id}>
-                          {item.name || ''} {item.is_primary ? '(Primary)' : ''}
+                    <ul className="recurring-contact ">
+                      <li>
+                        <p className="basic-text ">
+                          {agreement &&
+                            agreement.length &&
+                            agreement.length.label}{' '}
+                          contract
+                        </p>
+                      </li>
+                      {agreement && agreement.end_date ? (
+                        <li>
+                          <p className="basic-text ">
+                            Expires:
+                            {dayjs(agreement.end_date).format('MMM DD, YYYY')}
+                          </p>
                         </li>
-                      ))
-                    : ''}
-                </ul>
-                <div className="label mt-3">Additional Monthly Services</div>
-                <ul className="selected-list">
-                  {agreement && agreement.additional_monthly_services
-                    ? agreement.additional_monthly_services.map((item) => (
-                        <li key={item.id}>
-                          {(item && item.service && item.service.name) || ''}
+                      ) : (
+                        ''
+                      )}
+                      {agreement && agreement.end_date ? (
+                        <li>
+                          <div className="days-block">
+                            {' '}
+                            <img
+                              className="clock-icon"
+                              src={ClockIcon}
+                              alt="clock"
+                            />{' '}
+                            {countDays()} days
+                          </div>
                         </li>
-                      ))
-                    : 'No Additional Monthly services added.'}
+                      ) : (
+                        ''
+                      )}
+                    </ul>
+                  </div>
+                  <div className="clear-fix" />
+                  <div className="col-lg-3 col-md-4 col-12 text-right">
+                    <Link to={PATH_AGREEMENT.replace(':id', id)}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Contract
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+                <div className="straight-line horizontal-line pt-3 mb-3" />
+
+                <ul className="monthly-retainer">
+                  {agreementOptions.map((item) => (
+                    <li key={item.key}>
+                      <div className="label">{item.label}</div>
+                      {agreement && agreement[item.key] ? (
+                        <NumberFormat
+                          displayType="text"
+                          value={
+                            agreement[item.key].label || agreement[item.key]
+                          }
+                          prefix={item.key === 'rev_share' ? '' : '$'}
+                          suffix={item.key === 'rev_share' ? '%' : ''}
+                        />
+                      ) : (
+                        '0'
+                      )}
+                    </li>
+                  ))}
                 </ul>
                 <div className="straight-line horizontal-line pt-3 mb-3" />
-              </>
+                {agreement && agreement.contract_type === 'recurring' ? (
+                  <>
+                    <div className="label">Marketplaces</div>
+                    <ul className="selected-list">
+                      {agreement &&
+                      agreement.primary_marketplace === null &&
+                      agreement.additional_marketplaces === null
+                        ? 'No Marketplaces added.'
+                        : ''}
+                      <li>
+                        {agreement && agreement.primary_marketplace
+                          ? `${agreement.primary_marketplace.name} (Primary)`
+                          : ''}
+                      </li>
+                      {agreement && agreement.additional_marketplaces
+                        ? agreement.additional_marketplaces.map((item) => (
+                            <li key={item.id}>
+                              {item.name || ''}{' '}
+                              {item.is_primary ? '(Primary)' : ''}
+                            </li>
+                          ))
+                        : ''}
+                    </ul>
+                    <div className="label mt-3">
+                      Additional Monthly Services
+                    </div>
+                    <ul className="selected-list">
+                      {agreement && agreement.additional_monthly_services
+                        ? agreement.additional_monthly_services.map((item) => (
+                            <li key={item.id}>
+                              {(item && item.service && item.service.name) ||
+                                ''}
+                            </li>
+                          ))
+                        : 'No Additional Monthly services added.'}
+                    </ul>
+                    <div className="straight-line horizontal-line pt-3 mb-3" />
+                  </>
+                ) : (
+                  ''
+                )}
+                <div className="label">One Time Services</div>
+                <ul className="selected-list">
+                  {agreement && agreement.additional_one_time_services
+                    ? agreement.additional_one_time_services.map((item) => (
+                        <li key={item.id}>
+                          {(item && item.service && item.service.name) || ''} (
+                          {(item && item.quantity) || ''})
+                        </li>
+                      ))
+                    : 'No One Time services added.'}
+                </ul>
+              </WhiteCard>
             ) : (
-              ''
+              <WhiteCard className="text-center">
+                No Active Agreements Found.
+              </WhiteCard>
             )}
-            <div className="label">One Time Services</div>
-            <ul className="selected-list">
-              {agreement && agreement.additional_one_time_services
-                ? agreement.additional_one_time_services.map((item) => (
-                    <li key={item.id}>
-                      {(item && item.service && item.service.name) || ''} (
-                      {(item && item.quantity) || ''})
-                    </li>
-                  ))
-                : 'No One Time services added.'}
-            </ul>
-          </WhiteCard>
+          </>
         ) : (
           <PastAgreement agreement={agreement} id={id} />
         )}
