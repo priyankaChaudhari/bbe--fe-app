@@ -147,13 +147,23 @@ export default function AgreementDetails({ agreement, id }) {
               <>
                 <div className="label">Marketplaces</div>
                 <ul className="selected-list">
+                  {agreement &&
+                  agreement.primary_marketplace === null &&
+                  agreement.additional_marketplaces === null
+                    ? 'No Marketplaces added.'
+                    : ''}
+                  <li>
+                    {agreement && agreement.primary_marketplace
+                      ? `${agreement.primary_marketplace.name} (Primary)`
+                      : ''}
+                  </li>
                   {agreement && agreement.additional_marketplaces
                     ? agreement.additional_marketplaces.map((item) => (
                         <li key={item.id}>
                           {item.name || ''} {item.is_primary ? '(Primary)' : ''}
                         </li>
                       ))
-                    : 'No Marketplaces added.'}
+                    : ''}
                 </ul>
                 <div className="label mt-3">Additional Monthly Services</div>
                 <ul className="selected-list">
@@ -202,6 +212,10 @@ AgreementDetails.propTypes = {
     additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
     additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+    primary_marketplace: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
   }).isRequired,
 };
 
