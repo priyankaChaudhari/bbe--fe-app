@@ -2255,6 +2255,13 @@ export default function AgreementSidePanel({
                         )
                       }
                       thousandSeparator
+                      isAllowed={(values) => {
+                        const { formattedValue, floatValue } = values;
+                        if (floatValue == null) {
+                          return formattedValue === '';
+                        }
+                        return floatValue <= 100000000;
+                      }}
                     />
                     {displayError('custom_amazon_store_price')}
                   </ContractFormField>

@@ -218,7 +218,7 @@ export default function Statement({
         );
       }
     }
-    return fields.length ? fields : '';
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
   const mapServiceTotal = (key) => {
@@ -383,7 +383,8 @@ export default function Statement({
         );
       });
     }
-    return fields.length ? fields : '';
+    console.log(fields);
+    return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
   const showMonthlyServiceTable = () => {
