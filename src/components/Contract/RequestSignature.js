@@ -66,6 +66,7 @@ function RequestSignature({
   // const [reminderMailData, setReminderMailData] = useState({});
   const [contactModalName, setModalName] = useState('Add Contact');
   const [transactionalData, setTransactionalData] = useState(null);
+  // const [requestSignatureError, setRequestSignatureError] = useState(null);
 
   const contactFields = [
     {
@@ -150,11 +151,16 @@ function RequestSignature({
 
       updateContactInfo(info && info.id, formData).then((res) => {
         setIsLoading({ loader: false, type: 'button' });
-
         if (res && res.status === 400) {
           setContactApiError(res && res.data);
         }
         if (res && res.status === 200) {
+          if (
+            (selectedContact && selectedContact.id) ===
+            (res && res.data && res.data.id)
+          ) {
+            setSelectedContact(res && res.data);
+          }
           dispatch(getContactDetails(id));
           setParams('select-contact');
         }
@@ -261,6 +267,7 @@ function RequestSignature({
               defaultValue={formData[field.key]}
               onChange={(event) => handleContactChange(event, field)}
             />
+
             <ErrorMsg>
               {contactApiError &&
                 contactApiError[field.key] &&
@@ -379,6 +386,9 @@ function RequestSignature({
       if (res && res.status === 200) {
         setContractDesignData(res && res.data);
       }
+      // if (res && res.status === 400) {
+      //   setRequestSignatureError(res && res.data);
+      // }
     });
   };
 
@@ -491,7 +501,6 @@ function RequestSignature({
               <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />{' '}
               Request Signature
             </h4>
-
             <div className="row mb-2">
               <div className="col-6">
                 <div className="signature-request">
@@ -537,7 +546,10 @@ function RequestSignature({
               />
               Add CC Email Address
             </Button>
-
+            {/* 
+            <ErrorMsg>
+              {requestSignatureError && requestSignatureError.error}
+            </ErrorMsg> */}
             <div className=" mt-4">
               <Button
                 className=" btn-primary on-boarding w-100"

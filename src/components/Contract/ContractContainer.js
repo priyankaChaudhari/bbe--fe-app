@@ -1592,14 +1592,17 @@ export default function ContractContainer() {
       details.contract_type.toLowerCase().includes('one')
     ) {
       if (
-        contractTermLength < 12 &&
-        !(userInfo && userInfo.role === 'Team Manager - TAM')
+        contractTermLength < 12
+        // &&
+        // !(userInfo && userInfo.role === 'Team Manager - TAM')
       ) {
         return true;
       }
     } else if (
-      (rev < 3 || contractTermLength < 12) &&
-      !(userInfo && userInfo.role === 'Team Manager - TAM')
+      rev < 3 ||
+      contractTermLength < 12
+      // &&
+      // !(userInfo && userInfo.role === 'Team Manager - TAM')
     ) {
       return true;
     }
@@ -1634,18 +1637,11 @@ export default function ContractContainer() {
     return (
       <div className="text-container ">
         <div id="agreement">
-          {/* {history.location.pathname.includes('agreement') &&
-                  details ? ( */}
           <Agreement
-            // myRef={myRef}
-
             formData={formData}
             details={details}
             templateData={data}
           />
-          {/* ) : (
-                    ''
-                  )} */}
         </div>
 
         {details &&
@@ -1756,10 +1752,7 @@ export default function ContractContainer() {
         setAdditionalMarketplace={setAdditionalMarketplace}
         additionalOnetimeServices={additionalOnetimeServices}
         setAdditionalOnetimeServices={setAdditionalOnetimeServices}
-        // notIncludedOneTimeServices={notIncludedOneTimeServices}
-        // setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
         notIncludedMonthlyServices={notIncludedMonthlyServices}
-        // setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
         additionalMarketplaceError={additionalMarketplaceError}
         setAdditionalMarketplaceError={setAdditionalMarketplaceError}
         additionalMonthlySerError={additionalMonthlySerError}
@@ -1813,13 +1806,6 @@ export default function ContractContainer() {
           ) : (
             ''
           )}
-          {/* {updatedFormData && Object.keys(updatedFormData).length ? (
-              <span>
-                {Object.keys(updatedFormData).length} unsaved changes.
-              </span>
-            ) : (
-              ''
-            )} */}
         </Footer>
       </div>
     ) : isFooter ||
@@ -1842,23 +1828,12 @@ export default function ContractContainer() {
                 : 'light-orange  on-boarding  mt-3 mr-3 '
             }
             disabled={
-              // !(
-              //   formData &&
-              //   formData.contract_type &&
-              //   formData.contract_type.toLowerCase().includes('one')
-              // ) &&
               formData &&
               formData.additional_one_time_services &&
               formData.additional_one_time_services.length &&
               formData.additional_one_time_services.find(
                 (item) => item.name === 'Amazon Store Package',
               )
-              //    ||
-              // !(
-              //   showRightTick('service_agreement') &&
-              //   showRightTick('statement') &&
-              //   showRightTick('dspAddendum')
-              // )
             }
             onClick={() => nextStep()}>
             {isLoading.loader && isLoading.type === 'button' ? (
@@ -1887,39 +1862,37 @@ export default function ContractContainer() {
         </Footer>
       </div>
     ) : (
-      //  details &&
-      //   details.steps_completed &&
-      //   details.steps_completed.agreement &&
-      //   details.steps_completed.statement ?
       <div className="mt-4 pt-5">
         <Footer>
           {checkApprovalCondition() ? (
-            <Button
-              className="btn-primary on-boarding mt-3 mr-3  "
-              disabled={
-                !(
-                  showRightTick('service_agreement') &&
-                  showRightTick('statement') &&
-                  showRightTick('dspAddendum')
-                )
-              }
-              onClick={() => {
-                createAgreementDoc();
-                setParams('request-approve');
-                setShowModal(true);
-              }}>
-              Request Approval
-            </Button>
-          ) : userInfo && userInfo.role === 'Team Manager - TAM' ? (
-            <Button
-              className="btn-primary on-boarding w-320 mt-3 mr-3 "
-              onClick={() => {
-                createAgreementDoc();
-                setParams('select-contact');
-                setShowModal(true);
-              }}>
-              Approve and Request Signature
-            </Button>
+            userInfo && userInfo.role === 'Team Manager - TAM' ? (
+              <Button
+                className="btn-primary on-boarding w-320 mt-3 mr-3 "
+                onClick={() => {
+                  createAgreementDoc();
+                  setParams('select-contact');
+                  setShowModal(true);
+                }}>
+                Approve and Request Signature
+              </Button>
+            ) : (
+              <Button
+                className="btn-primary on-boarding mt-3 mr-3  "
+                disabled={
+                  !(
+                    showRightTick('service_agreement') &&
+                    showRightTick('statement') &&
+                    showRightTick('dspAddendum')
+                  )
+                }
+                onClick={() => {
+                  createAgreementDoc();
+                  setParams('request-approve');
+                  setShowModal(true);
+                }}>
+                Request Approval
+              </Button>
+            )
           ) : (
             <Button
               className="btn-primary on-boarding  mt-3 mr-3 "
@@ -1947,18 +1920,6 @@ export default function ContractContainer() {
     );
   };
 
-  // const changePage = (offset) => {
-  //   setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  // };
-
-  // const previousPage = () => {
-  //   changePage(-1);
-  // };
-
-  // const nextPage = () => {
-  //   changePage(1);
-  // };
-
   return (details &&
     details.contract_status &&
     details.contract_status.value === 'pending account setup') ||
@@ -1973,7 +1934,6 @@ export default function ContractContainer() {
             <div
               onClick={() => onClickOfBackToCustomerDetail()}
               role="presentation"
-              // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
               className="back-link">
               <img
                 src={LeftArrowIcon}
@@ -2028,7 +1988,6 @@ export default function ContractContainer() {
               <div
                 onClick={() => onClickOfBackToCustomerDetail()}
                 role="presentation"
-                // to={PATH_CUSTOMER_DETAILS.replace(':id', id)}
                 className="back-link">
                 <img
                   src={LeftArrowIcon}

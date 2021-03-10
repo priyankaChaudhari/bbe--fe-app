@@ -369,6 +369,7 @@ export default function AgreementSidePanel({
       });
     }
   };
+
   const handleChange = (event, key, type, val) => {
     showFooter(true);
     if (
@@ -924,8 +925,15 @@ export default function AgreementSidePanel({
               ? item.name.includes('Amazon Store Package')
               : item.service.name.includes('Amazon Store Package'),
           );
+
         if (itemInList) {
-          itemInList[event.target.name] = event.target.value;
+          if (event.target.value && event.target.value.includes('$')) {
+            let value = event.target.value.slice(1);
+            value = value.replace(/,/g, '');
+            itemInList[event.target.name] = value;
+          } else {
+            itemInList[event.target.name] = event.target.value;
+          }
         }
 
         setFormData({
@@ -2211,6 +2219,7 @@ export default function AgreementSidePanel({
                     <NumberFormat
                       className="form-control  "
                       type="text"
+                      prefix="$"
                       value={
                         formData &&
                         formData.additional_one_time_services &&
@@ -2245,6 +2254,7 @@ export default function AgreementSidePanel({
                           'custom_amazon_store_price',
                         )
                       }
+                      thousandSeparator
                     />
                     {displayError('custom_amazon_store_price')}
                   </ContractFormField>
