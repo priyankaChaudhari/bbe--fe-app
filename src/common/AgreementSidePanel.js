@@ -2564,17 +2564,10 @@ export default function AgreementSidePanel({
                                       'checkbox',
                                     );
                                   }}
-                                  // checked={
-                                  //   formData &&
-                                  //   formData.additional_marketplaces &&
-                                  //   formData.additional_marketplaces.length
-                                  //     ? true
-                                  //     : false
-                                  // }
                                   defaultChecked={
-                                    formData &&
-                                    formData.additional_marketplaces &&
-                                    formData.additional_marketplaces.length
+                                    agreementData &&
+                                    agreementData.additional_marketplaces &&
+                                    agreementData.additional_marketplaces.length
                                   }
                                 />
                                 <span className="checkmark" />
