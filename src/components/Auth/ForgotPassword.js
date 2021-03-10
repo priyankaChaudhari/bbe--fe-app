@@ -44,7 +44,10 @@ export default function ForgotPassword() {
           <div className="row h-100">
             <div className="col-lg-6 pl-0 pr-0 h-100">
               <div className="inner-form">
-                <div className="logo">
+                <div
+                  className="logo cursor"
+                  onClick={() => history.push(PATH_LOGIN)}
+                  role="presentation">
                   <img src={NextLogo} alt="logo " />
                 </div>
                 <Link className="link" to={PATH_LOGIN}>

@@ -171,7 +171,7 @@ export default function Statement({
                    item.service ? item.service.name : item && item.name
                  }</td>
                     <td style="border: 1px solid black;padding: 13px;"> 
-                    25% of recovered $s
+                    25% of recovered $<span>&#39;</span>s
                     
                   </td>
                     </tr>`,
@@ -218,7 +218,7 @@ export default function Statement({
         );
       }
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields : '';
   };
 
   const mapServiceTotal = (key) => {
@@ -383,7 +383,7 @@ export default function Statement({
         );
       });
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields : '';
   };
 
   const showMonthlyServiceTable = () => {

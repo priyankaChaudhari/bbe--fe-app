@@ -6,8 +6,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import queryString from 'query-string';
 
-import Theme from '../../theme/Theme';
-import { Logo, BannerBg, ArrowIcons } from '../../theme/images/index';
+import { BannerBg, ArrowIcons, NextLogo } from '../../theme/images/index';
 import { Button, FormField, PageLoader, ErrorMsg } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { resetPassword } from '../../api/index';
@@ -60,8 +59,11 @@ export default function ResetPassword() {
           <div className="row h-100">
             <div className="col-lg-6 pl-0 pr-0 h-100">
               <div className="inner-form">
-                <div className="logo">
-                  <img src={Logo} alt="logo " /> <span> CENTRAL</span>
+                <div
+                  className="logo cursor"
+                  onClick={() => history.push(PATH_LOGIN)}
+                  role="presentation">
+                  <img src={NextLogo} alt="logo " />
                 </div>
                 <Link className="link" to={PATH_LOGIN}>
                   <p className="small-para">
@@ -187,17 +189,10 @@ const FormContainer = styled.div`
     vertical-align: middle;
 
     .logo {
-      width: 190px;
-      padding: 35px 0 45px 0;
-
-      span {
-        position: absolute;
-        top: 46px;
-        margin-left: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
+      img {
+        width: 160px;
+        display: inline-table;
+        padding: 40px 0 100px 0;
       }
     }
     .arrow-icon {
