@@ -58,7 +58,7 @@ export default function AgreementDetails({ agreement, id }) {
         {viewComponent === 'current' ? (
           <>
             {agreement &&
-            agreement.end_date > dayjs(new Date()).format('YYYY-MM-DD') ? (
+            agreement.end_date >= dayjs(new Date()).format('YYYY-MM-DD') ? (
               <WhiteCard className="mt-3">
                 <div className="row">
                   <div className="col-lg-9 col-md-8 col-12">

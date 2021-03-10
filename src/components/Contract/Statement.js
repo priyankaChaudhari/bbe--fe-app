@@ -383,7 +383,6 @@ export default function Statement({
         );
       });
     }
-    console.log(fields);
     return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
