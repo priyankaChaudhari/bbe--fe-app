@@ -130,9 +130,8 @@ export default function Header() {
               />
             </div>
             <div className="col-8 text-right">
-              <div className="">
-                <ul className="right-nav">
-                  {/* <li>
+              <ul className="right-nav">
+                {/* <li>
                     <div
                       className="dropdown"
                       onClick={() => {
@@ -197,15 +196,24 @@ export default function Header() {
                     </div>
                   </li> */}
 
-                  <li
-                    onClick={() => {
-                      setShowArticle(true);
-                      setShowArticleSuccess(false);
-                    }}
-                    role="presentation">
-                    <div id="clickNotification">
+                <li
+                  className=" "
+                  onClick={() => {
+                    setShowArticle(true);
+                    setShowArticleSuccess(false);
+                  }}
+                  role="presentation">
+                  <div id="clickNotification ">
+                    <div
+                      className="suggest-box d-none d-md-block"
+                      data-tip="Got an idea? Share it here."
+                      data-for="idea">
+                      <img className="light-bulb-icon" src={LightBulb} alt="" />
+                      Share an idea
+                    </div>
+                    <div id="clickNotification ">
                       <div
-                        className="suggest-box"
+                        className="suggest-box mobile-view d-block d-md-none"
                         data-tip="Got an idea? Share it here."
                         data-for="idea">
                         <img
@@ -213,64 +221,64 @@ export default function Header() {
                           src={LightBulb}
                           alt=""
                         />
-                        Share an idea
                       </div>
-                      {/* <span>
+                    </div>
+                    {/* <span>
                         <div className="notify" />
                       </span> */}
-                    </div>
-                    <ReactTooltip
-                      id="idea"
-                      aria-haspopup="true"
-                      place="bottom"
-                      effect="solid"
-                    />
-                  </li>
-                  <li>
-                    <div className="header-user-profile">
+                  </div>
+                  <ReactTooltip
+                    id="idea"
+                    aria-haspopup="true"
+                    place="bottom"
+                    effect="solid"
+                  />
+                </li>
+
+                <li>
+                  <div className="header-user-profile">
+                    <div
+                      className="dropdown"
+                      onClick={() => {
+                        setShowDropDown(!showDropDown);
+                        setShowSuccessMsg({ show: false });
+                      }}
+                      role="presentation">
                       <div
-                        className="dropdown"
-                        onClick={() => {
-                          setShowDropDown(!showDropDown);
-                          setShowSuccessMsg({ show: false });
-                        }}
-                        role="presentation">
-                        <div
-                          id="clickbox"
-                          className="header-profile"
-                          style={{
-                            paddingTop: profilePic ? '' : '',
-                          }}>
-                          {profilePic ? (
-                            <img
-                              src={profilePic}
-                              className="profile-pic"
-                              alt="user"
-                            />
-                          ) : (
-                            <div className="avatarName ">{getInitials()}</div>
-                          )}
-                        </div>
-                        <ul
-                          className="dropdown-content"
-                          style={{ display: showDropDown ? 'block' : 'none' }}>
-                          <li
-                            role="presentation"
-                            onClick={() => setShowModal(true)}>
-                            <img src={EditIcons} alt="edit" /> Edit profile
-                          </li>
-                          <li
-                            role="presentation"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => dispatch(logout())}>
-                            <img src={LogOutIcons} alt="logout" /> Log out
-                          </li>
-                        </ul>
+                        id="clickbox"
+                        className="header-profile"
+                        style={{
+                          paddingTop: profilePic ? '' : '',
+                        }}>
+                        {profilePic ? (
+                          <img
+                            src={profilePic}
+                            className="profile-pic"
+                            alt="user"
+                          />
+                        ) : (
+                          <div className="avatarName ">{getInitials()}</div>
+                        )}
                       </div>
+                      <ul
+                        className="dropdown-content"
+                        style={{ display: showDropDown ? 'block' : 'none' }}>
+                        <li
+                          role="presentation"
+                          onClick={() => setShowModal(true)}>
+                          <img src={EditIcons} alt="edit" /> Edit profile
+                        </li>
+                        <li
+                          role="presentation"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => dispatch(logout())}>
+                          <img src={LogOutIcons} alt="logout" /> Log out
+                        </li>
+                      </ul>
                     </div>
-                  </li>
-                </ul>
-              </div>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -463,7 +471,7 @@ const MainHeader = styled.div`
 
     li {
       vertical-align: middle;
-      display: inline-block;
+      display: inline-block !important;
       margin-right: 15px;
 
       &:last-child {
@@ -483,6 +491,12 @@ const MainHeader = styled.div`
           margin-right: 3px;
           vertical-align: middle;
           margin-top: -3px;
+        }
+        &.mobile-view {
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          padding: 10px;
         }
       }
     }

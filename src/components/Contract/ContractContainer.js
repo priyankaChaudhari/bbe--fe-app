@@ -1824,8 +1824,8 @@ export default function ContractContainer() {
               formData.additional_one_time_services.find(
                 (item) => item.name === 'Amazon Store Package',
               )
-                ? 'light-orange  on-boarding  mt-3 mr-3  '
-                : 'light-orange  on-boarding  mt-3 mr-3 '
+                ? 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50 '
+                : 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50'
             }
             disabled={
               formData &&
@@ -1844,7 +1844,7 @@ export default function ContractContainer() {
           </Button>
 
           <Button
-            className="btn-borderless contract-btn on-boarding  mt-3 mr-3"
+            className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50"
             onClick={() =>
               setShowDiscardModal({
                 ...showDiscardModal,
@@ -1855,7 +1855,9 @@ export default function ContractContainer() {
             Discard Changes
           </Button>
           {updatedFormData && Object.keys(updatedFormData).length ? (
-            <span>{Object.keys(updatedFormData).length} unsaved changes.</span>
+            <span className="unsave-changes">
+              {Object.keys(updatedFormData).length} unsaved changes.
+            </span>
           ) : (
             ''
           )}
@@ -1867,7 +1869,7 @@ export default function ContractContainer() {
           {checkApprovalCondition() ? (
             userInfo && userInfo.role === 'Team Manager - TAM' ? (
               <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-3 "
+                className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
                 onClick={() => {
                   createAgreementDoc();
                   setParams('select-contact');
@@ -1877,7 +1879,7 @@ export default function ContractContainer() {
               </Button>
             ) : (
               <Button
-                className="btn-primary on-boarding mt-3 mr-3  "
+                className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
                 disabled={
                   !(
                     showRightTick('service_agreement') &&
@@ -1895,7 +1897,7 @@ export default function ContractContainer() {
             )
           ) : (
             <Button
-              className="btn-primary on-boarding  mt-3 mr-3 "
+              className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
               disabled={
                 !(
                   showRightTick('service_agreement') &&
@@ -1911,7 +1913,7 @@ export default function ContractContainer() {
               Request Signature
             </Button>
           )}
-          <span className="last-update">
+          <span className="last-update ">
             Last updated by You on{' '}
             {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
           </span>
@@ -2108,9 +2110,22 @@ const Footer = styled.div`
   }
   @media only screen and (max-width: 991px) {
     padding-left: 17px;
+    padding-right: 17px;
+    .w-sm-100 {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .w-sm-50 {
+      width: 50% !important;
+      margin-bottom: 10px;
+    }
+    .last-update {
+      margin-top: 20px;
+    }
   }
-  @media only screen and (max-width: 540px) {
-    padding-left: 20px;
+
+  @media only screen and (max-width: 768px) {
+    padding: 0 10px;
   }
 `;
 

@@ -212,22 +212,22 @@ const Button = styled.button`
     }
   }
 
-  @media only screen and (max-width: 991px) {
-    &.btn-primary {
-      width: 172px;
-    }
-    &.btn-gray {
-      width: 172px;
-    }
-    &.light-orange {
-      &.on-boarding {
-        width: 172px;
-      }
-    }
-    &.w-50 {
-      width: 172px;
-    }
-  }
+  // @media only screen and (max-width: 991px) {
+  //   &.btn-primary {
+  //     width: 172px;
+  //   }
+  //   &.btn-gray {
+  //     width: 172px;
+  //   }
+  //   &.light-orange {
+  //     &.on-boarding {
+  //       width: 172px;
+  //     }
+  //   }
+  //   &.w-50 {
+  //     width: 172px;
+  //   }
+  // }
 `;
 
 export default Button;
