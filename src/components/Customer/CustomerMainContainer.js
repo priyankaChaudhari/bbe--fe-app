@@ -24,6 +24,7 @@ import {
   LeftArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
+  HeartMonitorIcon,
   // WhiteCaretUp,
   // CaretUp,
 } from '../../theme/images/index';
@@ -527,21 +528,21 @@ export default function CustomerMainContainer() {
                         </div>
                       </li>
 
-                      {/* <li
-                      onClick={() => setViewComponent('performance')}
-                      role="presentation">
-                      <div
-                        className={`left-details ${
-                          viewComponent === 'performance' ? 'active' : ''
-                        }`}>
-                        <img
-                          className="file-contract"
-                          src={HeartMonitorIcon}
-                          alt="monitor"
-                        />
-                        Performance
-                      </div>
-                    </li> */}
+                      <li
+                        onClick={() => setViewComponent('performance')}
+                        role="presentation">
+                        <div
+                          className={`left-details ${
+                            viewComponent === 'performance' ? 'active' : ''
+                          }`}>
+                          <img
+                            className="file-contract"
+                            src={HeartMonitorIcon}
+                            alt="monitor"
+                          />
+                          Performance
+                        </div>
+                      </li>
                       <li
                         onClick={() => setViewComponent('activity')}
                         role="presentation">

@@ -121,7 +121,11 @@ export default function NewCustomerList() {
 
   const SortOption = (props) => (
     <SingleValue {...props}>
-      Sort by: &nbsp;
+      {props.data.label === 'Performance' ||
+      props.data.label === 'Contract Details'
+        ? 'View:'
+        : 'Sort by:'}
+      &nbsp;
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
@@ -155,6 +159,16 @@ export default function NewCustomerList() {
       };
     }
     if (key === 'sort') {
+      if (isDesktop) {
+        return {
+          SingleValue: SortOption,
+          DropdownIndicator,
+        };
+      }
+      return DropdownIndicator;
+    }
+
+    if (key === 'view') {
       if (isDesktop) {
         return {
           SingleValue: SortOption,
@@ -544,16 +558,16 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-            <div className="col-lg-4 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
+            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            {/* <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
               <DropDownSelect className="customer-list-header">
-                {generateDropdown('detail')}
+                {generateDropdown('view')}
               </DropDownSelect>{' '}
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
