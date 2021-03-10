@@ -3119,7 +3119,7 @@ const SidePanel = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.extraMedium};
     font-family: ${Theme.baseFontFamily};
-    text-transform: capitalize;
+    text-transform: inherit;
     margin-top: 6px;
     margin-left: 16px;
     float: left;
