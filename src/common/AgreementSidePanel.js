@@ -3123,6 +3123,7 @@ const SidePanel = styled.div`
     margin-top: 6px;
     margin-left: 16px;
     float: left;
+    word-spacing: 3px;
   }
    .green-check-select {
      width: 16px;
