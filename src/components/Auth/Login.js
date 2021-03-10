@@ -50,16 +50,20 @@ export default function Login() {
               <div className="logo">
                 <img src={NextLogo} alt="logo " />
               </div>
-              {forgotPasswordMsg ? (
-                <SuccessMsg message="We have emailed you a reset link, please check your email." />
-              ) : (
-                ''
-              )}
-              {resetPasswordMsg ? (
-                <SuccessMsg message="New Password set!" />
-              ) : (
-                ''
-              )}
+              <div className="login-success-msg">
+                {forgotPasswordMsg ? (
+                  <SuccessMsg message="We have emailed you a reset link, please check your email." />
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="login-success-msg">
+                {resetPasswordMsg ? (
+                  <SuccessMsg message="New Password set!" />
+                ) : (
+                  ''
+                )}
+              </div>
               <h2 className="mb-0">Sign in</h2>
 
               <p className="small-para sub-text">
@@ -198,6 +202,16 @@ const FormContainer = styled.div`
       bottom: -2px;
       vertical-align: bottom;
     }
+
+    // .login-success-msg {
+    //   max-width: 364px;
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   right: 0;
+    //   width: 100%;
+    //   margin: 0 auto;
+    // }
   }
 
   @media only screen and (max-width: 991px) {

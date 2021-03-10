@@ -73,7 +73,7 @@ const ModalRadioCheck = styled.div`
 
   .checkmark {
     position: absolute;
-    top: 4px;
+    top: 0px;
     left: 0;
     height: 16px;
     width: 16px;

@@ -76,7 +76,7 @@ export default function ResetPassword() {
                     Back to Sign in
                   </p>
                 </Link>
-                <h2 className="mt-2">Set your Password</h2>
+                <h2 className="mb-0">Set your Password</h2>
                 <p className="small-para">
                   Please enter your password to proceed.{' '}
                 </p>
