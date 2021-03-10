@@ -71,7 +71,7 @@ export default function CustomerListTablet({
                   <div
                     className="status"
                     style={{ textTransform: 'capitalize' }}>
-                    {item && item.status}
+                    {item && item.contract && item.contract.contract_status}
                   </div>
                   <div className="clear-fix" />
                   <div className="straight-line horizontal-line pt-3 mb-3" />

@@ -54,32 +54,28 @@ export default function NewCustomerList() {
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, MultiValue, SingleValue } = components;
   const [status, setStatus] = useState([]);
-
   const [selectedValue, setSelectedValue] = useState({
     view: null,
     'order-by': null,
   });
-
   const [filters, setFilters] = useState({
     status: [],
     user: [],
     contract_type: [],
   });
   const [showPerformance, setShowPerformance] = useState(false);
-
   const options = [
     { value: 'performance', label: 'Performance' },
     { value: 'contract_details', label: 'Contract Details' },
   ];
-
   const contractChoices = [
     { value: 'any', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
   ];
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -159,10 +155,13 @@ export default function NewCustomerList() {
       };
     }
     if (key === 'sort') {
-      return {
-        SingleValue: SortOption,
-        DropdownIndicator,
-      };
+      if (isDesktop) {
+        return {
+          SingleValue: SortOption,
+          DropdownIndicator,
+        };
+      }
+      return DropdownIndicator;
     }
     return DropdownIndicator;
   };
@@ -346,6 +345,26 @@ export default function NewCustomerList() {
     }
   };
 
+  const getSelectPlaceholder = (item) => {
+    if (item === 'user') {
+      return 'Any';
+    }
+
+    if (item === 'sort') {
+      if (isDesktop) {
+        return 'Sort by: Recently Added';
+      }
+      return 'Sort by';
+    }
+    if (item === 'view') {
+      if (isDesktop) {
+        return 'View: Contract Details';
+      }
+      return 'View';
+    }
+    return '';
+  };
+
   const generateDropdown = (item) => {
     return (
       <>
@@ -353,13 +372,7 @@ export default function NewCustomerList() {
           classNamePrefix="react-select"
           isClearable={false}
           className="active"
-          placeholder={
-            item === 'user'
-              ? 'Any'
-              : item === 'sort'
-              ? 'Sort by: Recently Added'
-              : 'View: Contract Details'
-          }
+          placeholder={getSelectPlaceholder(item)}
           options={
             item === 'user'
               ? brandGrowthStrategist

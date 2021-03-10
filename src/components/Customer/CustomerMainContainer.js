@@ -560,12 +560,15 @@ export default function CustomerMainContainer() {
                     options={viewOptions}
                     className="customer-dropdown-select d-lg-none d-block mb-3 "
                     onChange={(event) => setViewComponent(event.value)}
+                    placeholder="Agreements"
+                    theme={(theme) => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        neutral50: '#1A1A1A', // Placeholder color
+                      },
+                    })}
                   />
-                  {/* <select>
-                    <option value="company">Company Details</option>
-                    <option value="agreement">Agreements</option>
-                    <option value="activity">Activity</option>
-                  </select> */}
 
                   <WhiteCard className="mb-3">
                     <p className="black-heading-title mt-0 mb-4">
