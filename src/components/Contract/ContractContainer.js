@@ -1782,30 +1782,32 @@ export default function ContractContainer() {
       details.contract_status.value === 'pending contract signature' ? (
       <div className="mt-4 pt-5">
         <Footer className=" mt-5 ">
-          <Button
-            className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
-            onClick={() => onEditcontract()}>
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#fff" type="button" />
-            ) : (
-              'Edit Contract'
-            )}
-          </Button>
-          {details &&
-          details.contract_status &&
-          details.contract_status.value &&
-          details.contract_status.value === 'pending contract signature' ? (
+          <div className="container-fluid">
             <Button
-              className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
-              onClick={() => {
-                setParams('send-remainder');
-                setShowModal(true);
-              }}>
-              Send Reminder
+              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
+              onClick={() => onEditcontract()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Edit Contract'
+              )}
             </Button>
-          ) : (
-            ''
-          )}
+            {details &&
+            details.contract_status &&
+            details.contract_status.value &&
+            details.contract_status.value === 'pending contract signature' ? (
+              <Button
+                className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
+                onClick={() => {
+                  setParams('send-remainder');
+                  setShowModal(true);
+                }}>
+                Send Reminder
+              </Button>
+            ) : (
+              ''
+            )}
+          </div>
         </Footer>
       </div>
     ) : isFooter ||
@@ -1816,70 +1818,91 @@ export default function ContractContainer() {
         updatedFormData.addendum) ? (
       <div className="mt-4 pt-5">
         <Footer className=" mt-5">
-          <Button
-            className={
-              formData &&
-              formData.additional_one_time_services &&
-              formData.additional_one_time_services.length &&
-              formData.additional_one_time_services.find(
-                (item) => item.name === 'Amazon Store Package',
-              )
-                ? 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50 '
-                : 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50'
-            }
-            disabled={
-              formData &&
-              formData.additional_one_time_services &&
-              formData.additional_one_time_services.length &&
-              formData.additional_one_time_services.find(
-                (item) => item.name === 'Amazon Store Package',
-              )
-            }
-            onClick={() => nextStep()}>
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#fff" type="button" />
-            ) : (
-              <>Save Changes</>
-            )}
-          </Button>
+          <div className="container-fluid">
+            <Button
+              className={
+                formData &&
+                formData.additional_one_time_services &&
+                formData.additional_one_time_services.length &&
+                formData.additional_one_time_services.find(
+                  (item) => item.name === 'Amazon Store Package',
+                )
+                  ? 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50 '
+                  : 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50'
+              }
+              disabled={
+                formData &&
+                formData.additional_one_time_services &&
+                formData.additional_one_time_services.length &&
+                formData.additional_one_time_services.find(
+                  (item) => item.name === 'Amazon Store Package',
+                )
+              }
+              onClick={() => nextStep()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                <>Save Changes</>
+              )}
+            </Button>
 
-          <Button
-            className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50"
-            onClick={() =>
-              setShowDiscardModal({
-                ...showDiscardModal,
-                show: true,
-                clickedBtn: 'discard',
-              })
-            }>
-            Discard Changes
-          </Button>
-          {updatedFormData && Object.keys(updatedFormData).length ? (
-            <span className="unsave-changes">
-              {Object.keys(updatedFormData).length} unsaved changes.
-            </span>
-          ) : (
-            ''
-          )}
+            <Button
+              className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50"
+              onClick={() =>
+                setShowDiscardModal({
+                  ...showDiscardModal,
+                  show: true,
+                  clickedBtn: 'discard',
+                })
+              }>
+              Discard Changes
+            </Button>
+            {updatedFormData && Object.keys(updatedFormData).length ? (
+              <span className="unsave-changes">
+                {Object.keys(updatedFormData).length} unsaved changes.
+              </span>
+            ) : (
+              ''
+            )}
+          </div>
         </Footer>
       </div>
     ) : (
       <div className="mt-4 pt-5">
         <Footer>
-          {checkApprovalCondition() ? (
-            userInfo && userInfo.role === 'Team Manager - TAM' ? (
-              <Button
-                className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Approve and Request Signature
-              </Button>
+          <div className="container-fluid">
+            {checkApprovalCondition() ? (
+              userInfo && userInfo.role === 'Team Manager - TAM' ? (
+                <Button
+                  className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('select-contact');
+                    setShowModal(true);
+                  }}>
+                  Approve and Request Signature
+                </Button>
+              ) : (
+                <Button
+                  className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
+                  disabled={
+                    !(
+                      showRightTick('service_agreement') &&
+                      showRightTick('statement') &&
+                      showRightTick('dspAddendum')
+                    )
+                  }
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('request-approve');
+                    setShowModal(true);
+                  }}>
+                  Request Approval
+                </Button>
+              )
             ) : (
               <Button
-                className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
+                className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
                 disabled={
                   !(
                     showRightTick('service_agreement') &&
@@ -1889,34 +1912,17 @@ export default function ContractContainer() {
                 }
                 onClick={() => {
                   createAgreementDoc();
-                  setParams('request-approve');
+                  setParams('select-contact');
                   setShowModal(true);
                 }}>
-                Request Approval
+                Request Signature
               </Button>
-            )
-          ) : (
-            <Button
-              className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
-              disabled={
-                !(
-                  showRightTick('service_agreement') &&
-                  showRightTick('statement') &&
-                  showRightTick('dspAddendum')
-                )
-              }
-              onClick={() => {
-                createAgreementDoc();
-                setParams('select-contact');
-                setShowModal(true);
-              }}>
-              Request Signature
-            </Button>
-          )}
-          <span className="last-update ">
-            Last updated by You on{' '}
-            {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
-          </span>
+            )}
+            <span className="last-update ">
+              Last updated by You on{' '}
+              {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
+            </span>
+          </div>
         </Footer>
       </div>
     );
@@ -2095,7 +2101,7 @@ const Footer = styled.div`
   box-shadow: ${Theme.boxShadow};
   position: fixed;
   min-height: 80px;
-  padding-left: 90px;
+  padding-left: 78px;
   z-index: 2;
   .w-320 {
     max-width: 320px;
@@ -2109,8 +2115,8 @@ const Footer = styled.div`
     font-size: ${Theme.extraNormal};
   }
   @media only screen and (max-width: 991px) {
-    padding-left: 17px;
-    padding-right: 17px;
+    padding-left: 0px;
+    // padding-right: 17px;
     .w-sm-100 {
       width: 100%;
       margin-bottom: 10px;
@@ -2124,9 +2130,9 @@ const Footer = styled.div`
     }
   }
 
-  @media only screen and (max-width: 768px) {
-    padding: 0 10px;
-  }
+  // @media only screen and (max-width: 768px) {
+  //   padding: 0 10px;
+  // }
 `;
 
 const ContractTab = styled.div`

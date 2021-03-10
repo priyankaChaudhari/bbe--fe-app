@@ -3176,13 +3176,11 @@ const SidePanel = styled.div`
     float: left;
     margin: 9px 0px 0px 20px;
   }
-
 }
   
 .add-market-place {
   font-size: 12px;
   color:${Theme.orange};
-  
 }
 
 .collapse-btn {
@@ -3193,7 +3191,7 @@ const SidePanel = styled.div`
 
 }
 .collapse-container {
-    padding:15px;
+  padding:15px;
 }
 
 .collapse-inner {
@@ -3205,17 +3203,13 @@ const SidePanel = styled.div`
         padding: 8px 20px;
 
         &:focus {
-           background: ${Theme.lightOrange};
-          
+          background: ${Theme.lightOrange};
         }
          .small-para {
           font-size: ${Theme.extraNormal};
           color: ${Theme.gray40};
           line-height: 22px;
          }
-
-         
-
         .edit-folder-icon {
           vertical-align: text-top;
           width: 17px;
