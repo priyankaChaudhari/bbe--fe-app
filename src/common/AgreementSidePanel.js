@@ -372,6 +372,7 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
+
     if (
       additionalOnetimeSerError.custom_amazon_store_price &&
       key === 'amazon_store_package'
@@ -1413,6 +1414,45 @@ export default function AgreementSidePanel({
         });
       }
     }
+    // if (key === 'length' || key === 'rev_share') {
+    //   console.log(event, formData.length, formData.rev_share);
+    //   let rev = formData && formData.rev_share && formData.rev_share.value;
+    //   let contractTermLength = parseInt(
+    //     formData && formData.length && formData.length.value,
+    //     10,
+    //   );
+    //   if (key === 'length') {
+    //     contractTermLength = parseInt(
+    //       event && event.length && event.length.value,
+    //       10,
+    //     );
+    //   }
+    //   if (key === 'rev_share') {
+    //     rev = Number(event && event.rev_share && event.rev_share.value);
+    //   }
+    //   if (
+    //     formData &&
+    //     formData.contract_type &&
+    //     formData.contract_type.toLowerCase().includes('one')
+    //   ) {
+
+    //     if (
+    //       contractTermLength < 12
+    //       // &&
+    //       // !(userInfo && userInfo.role === 'Team Manager - TAM')
+    //     ) {
+    //       return true;
+    //     }
+    //   } else if (
+    //     rev < 3 ||
+    //     contractTermLength < 12
+    //     // &&
+    //     // !(userInfo && userInfo.role === 'Team Manager - TAM')
+    //   ) {
+    //     return true;
+    //   }
+    //   return false;
+    // }
   };
 
   const mapSelectValues = (item) => {
@@ -1953,14 +1993,23 @@ export default function AgreementSidePanel({
                             )
                           }
                           defaultChecked={
-                            formData &&
-                            formData.additional_one_time_services &&
-                            formData.additional_one_time_services.length &&
-                            formData.additional_one_time_services.find(
-                              (item) =>
-                                item.service &&
-                                item.service.id === oneTimeServiceData.value,
-                            )
+                            (formData &&
+                              formData.additional_one_time_services &&
+                              formData.additional_one_time_services.length &&
+                              formData.additional_one_time_services.find(
+                                (item) =>
+                                  item.service &&
+                                  item.service.id === oneTimeServiceData.value,
+                              )) ||
+                            (agreementData &&
+                              agreementData.additional_one_time_services &&
+                              agreementData.additional_one_time_services
+                                .length &&
+                              agreementData.additional_one_time_services.find(
+                                (item) =>
+                                  item.service &&
+                                  item.service.id === oneTimeServiceData.value,
+                              ))
                           }
                         />
                         <span className="checkmark" />
@@ -2529,16 +2578,27 @@ export default function AgreementSidePanel({
                                         )
                                       }
                                       defaultChecked={
-                                        formData &&
-                                        formData.additional_monthly_services &&
-                                        formData.additional_monthly_services
-                                          .length &&
-                                        formData.additional_monthly_services.find(
-                                          (item) =>
-                                            item.service &&
-                                            item.service.id ===
-                                              serviceData.value,
-                                        )
+                                        (formData &&
+                                          formData.additional_monthly_services &&
+                                          formData.additional_monthly_services
+                                            .length &&
+                                          formData.additional_monthly_services.find(
+                                            (item) =>
+                                              item.service &&
+                                              item.service.id ===
+                                                serviceData.value,
+                                          )) ||
+                                        (agreementData &&
+                                          agreementData.additional_monthly_services &&
+                                          agreementData
+                                            .additional_monthly_services
+                                            .length &&
+                                          agreementData.additional_monthly_services.find(
+                                            (item) =>
+                                              item.service &&
+                                              item.service.id ===
+                                                serviceData.value,
+                                          ))
                                       }
                                     />
                                     <span className="checkmark" />

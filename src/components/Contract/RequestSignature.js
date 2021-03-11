@@ -66,7 +66,7 @@ function RequestSignature({
   // const [reminderMailData, setReminderMailData] = useState({});
   const [contactModalName, setModalName] = useState('Add Contact');
   const [transactionalData, setTransactionalData] = useState(null);
-  // const [requestSignatureError, setRequestSignatureError] = useState(null);
+  const [requestSignatureError, setRequestSignatureError] = useState(null);
 
   const contactFields = [
     {
@@ -386,9 +386,9 @@ function RequestSignature({
       if (res && res.status === 200) {
         setContractDesignData(res && res.data);
       }
-      // if (res && res.status === 400) {
-      //   setRequestSignatureError(res && res.data);
-      // }
+      if (res && res.status === 400) {
+        setRequestSignatureError(res && res.data);
+      }
     });
   };
 
@@ -546,10 +546,7 @@ function RequestSignature({
               />
               Add CC Email Address
             </Button>
-            {/* 
-            <ErrorMsg>
-              {requestSignatureError && requestSignatureError.error}
-            </ErrorMsg> */}
+
             <div className=" mt-4">
               <Button
                 className=" btn-primary on-boarding w-100"
@@ -733,7 +730,9 @@ function RequestSignature({
                 </Button>
               </div>
             )}
-
+            <ErrorMsg>
+              {requestSignatureError && requestSignatureError.error}
+            </ErrorMsg>
             <div
               className="mt-4"
               role="presentation"
@@ -795,7 +794,15 @@ function RequestSignature({
                 onClick={() => {
                   saveContact(formData);
                 }}>
-                <Button className=" btn-primary on-boarding">
+                <Button
+                  className=" btn-primary on-boarding"
+                  disabled={
+                    !(
+                      formData.first_name &&
+                      formData.last_name &&
+                      formData.email
+                    )
+                  }>
                   {isLoading.loader && isLoading.type === 'button' ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
@@ -810,7 +817,15 @@ function RequestSignature({
                 onClick={() => {
                   saveContact();
                 }}>
-                <Button className=" btn-primary on-boarding">
+                <Button
+                  className=" btn-primary on-boarding"
+                  disabled={
+                    !(
+                      formData.first_name &&
+                      formData.last_name &&
+                      formData.email
+                    )
+                  }>
                   {isLoading.loader && isLoading.type === 'button' ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
