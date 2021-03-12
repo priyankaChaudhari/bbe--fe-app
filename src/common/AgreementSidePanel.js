@@ -101,6 +101,7 @@ export default function AgreementSidePanel({
   setShowAdditionalMarketplace,
   startDate,
   setStartDate,
+  setShowDiscountModal,
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -1959,14 +1960,26 @@ export default function AgreementSidePanel({
       ? selectedAmazonStore.service && selectedAmazonStore.service.id
       : selectedAmazonStore && selectedAmazonStore.service_id;
   };
-
+  const onAddDiscount = () => {
+    setShowDiscountModal(true);
+    // if (section === 'monthly') {
+    // }
+    // if (section === 'onetime') {
+    // }
+  };
   const displayOneTimeServices = () => {
     return (
       <li>
         <ContractFormField className="mb-3">
           <label htmlFor="additional_one_time_services">
-            Additional One-Time Services
+            One Time Services
           </label>
+          <div
+            className="add-discount"
+            role="presentation"
+            onClick={() => onAddDiscount('monthly')}>
+            Add Discount
+          </div>
         </ContractFormField>
         <div className="row">
           {oneTimeService &&
@@ -2554,8 +2567,14 @@ export default function AgreementSidePanel({
                           <li>
                             <ContractFormField className="mb-3">
                               <label htmlFor="additional_one_time_services ">
-                                Additional Monthly Services
+                                Monthly Services
                               </label>
+                              <div
+                                className="add-discount"
+                                role="presentation"
+                                onClick={() => onAddDiscount('monthly')}>
+                                Add Discount
+                              </div>
                             </ContractFormField>
                             {monthlyService &&
                               monthlyService.map((serviceData) => (
@@ -3334,7 +3353,14 @@ const SidePanel = styled.div`
           font-size: 14px;
           color: ${Theme.gray40};
         }
-
+        .add-discount {
+          color: #FF4817;
+          font-size: 11px;
+          position: absolute;
+          right: 0;
+          top: 4px;
+          cursor: pointer;
+        }
      }
    } 
 .activity-log {

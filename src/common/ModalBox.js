@@ -12,8 +12,8 @@ const ModalBox = styled.div`
   .modal-back-arrow {
     margin-top: -2px;
     margin-right: 4px;
-    margin-left: -9px;
-    width: 26px;
+    margin-left: 0px;
+    width: 15px;
     vertical-align: middle;
     cursor: pointer;
   }
@@ -91,6 +91,17 @@ const ModalBox = styled.div`
           }
       }}
     }
+
+    .apply-discount {
+      list-style-type: none;
+      padding: 0;
+      margin: 0; 
+
+      li{
+        display: inline-block;
+        margin-right: 30px;
+      }
+    }
   }
   
 
@@ -125,7 +136,7 @@ const ModalBox = styled.div`
       font-size: ${Theme.extraMedium};
       text-align: center;
       font-weight: 500;
-      padding: 11px 0 30px 0;
+      padding: 0px 0 30px 0;
     }
 
     .arrow-right {

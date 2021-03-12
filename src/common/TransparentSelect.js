@@ -128,7 +128,7 @@ const TransparentSelect = styled.div`
     margin-left: 70px;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     &.mobile-view {
       width: 200px;
       margin-bottom: 20px;

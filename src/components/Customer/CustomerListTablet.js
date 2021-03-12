@@ -352,7 +352,7 @@ const CustomerListTabletView = styled.div`
   @media (max-width: 991px) {
     padding-top: 145px;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     padding-top: 190px;
   }
 `;

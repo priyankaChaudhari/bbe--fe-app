@@ -1147,7 +1147,7 @@ const MobileLeftSidebar = styled.div`
       padding: 30px 30px 10px !important;
     }
   }
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     #responsive-button {
       .menu-icon {
         width: 24px;

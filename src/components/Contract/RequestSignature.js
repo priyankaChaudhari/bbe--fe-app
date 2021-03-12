@@ -13,6 +13,7 @@ import {
   GetInitialName,
   ModalRadioCheck,
   PageLoader,
+  ContractFormField,
 } from '../../common';
 import {
   AddNewIcons,
@@ -20,8 +21,8 @@ import {
   EditFileIcons,
   EmailIcon,
   PhoneIcon,
-  DefaultUser,
   ExpnadArrowBack,
+  LeftArrowIcon,
 } from '../../theme/images';
 
 import {
@@ -73,19 +74,19 @@ function RequestSignature({
       key: 'first_name',
       type: 'text',
       placeholder: 'First Name',
-      classname: 'col-3 pr-1',
+      classname: 'col-6 ',
     },
     {
       key: 'last_name',
       type: 'text',
       placeholder: 'Last Name',
-      classname: 'col-3 pl-1',
+      classname: 'col-6 ',
     },
     {
       key: 'role',
       type: 'text',
       placeholder: 'Role',
-      classname: 'col-6',
+      classname: 'col-12',
     },
     {
       key: 'email',
@@ -257,23 +258,24 @@ function RequestSignature({
     return contactFields.map((field) => {
       return (
         <div className={field.classname}>
-          {' '}
-          <FormField className="mt-3">
-            <input
-              className="form-control"
-              type={field.type}
-              placeholder={field.placeholder}
-              name={field.key}
-              defaultValue={formData[field.key]}
-              onChange={(event) => handleContactChange(event, field)}
-            />
-
+          <ContractFormField className="mt-3">
+            <label>
+              {field.placeholder}
+              <input
+                className="form-control"
+                type={field.type}
+                placeholder={field.placeholder}
+                name={field.key}
+                defaultValue={formData[field.key]}
+                onChange={(event) => handleContactChange(event, field)}
+              />
+            </label>
             <ErrorMsg>
               {contactApiError &&
                 contactApiError[field.key] &&
                 contactApiError[field.key][0]}
             </ErrorMsg>
-          </FormField>
+          </ContractFormField>
         </div>
       );
     });
@@ -768,23 +770,12 @@ function RequestSignature({
               role="presentation"
               onClick={() => setParams('select-contact')}>
               {' '}
-              <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />
+              <img className="modal-back-arrow" src={LeftArrowIcon} alt="" />
               {contactModalName}
             </h4>
 
             <div className="body-content">
-              <div className="row">
-                <div className="col-2 text-right">
-                  <img
-                    src={DefaultUser}
-                    alt="user"
-                    className="contact-user  mt-4"
-                  />
-                </div>
-                <div className="col-10">
-                  <div className="row">{displayAddNewContactForm()}</div>
-                </div>
-              </div>
+              <div className="row">{displayAddNewContactForm()}</div>
             </div>
 
             {formData && formData.id ? (
@@ -795,7 +786,7 @@ function RequestSignature({
                   saveContact(formData);
                 }}>
                 <Button
-                  className=" btn-primary on-boarding"
+                  className=" btn-primary on-boarding w-100"
                   disabled={
                     !(
                       formData.first_name &&
@@ -812,11 +803,12 @@ function RequestSignature({
               </div>
             ) : (
               <div
-                className=" mt-3"
+                className=" mt-4"
                 role="presentation"
                 onClick={() => {
                   saveContact();
                 }}>
+<<<<<<< HEAD
                 <Button
                   className=" btn-primary on-boarding"
                   disabled={
@@ -826,6 +818,9 @@ function RequestSignature({
                       formData.email
                     )
                   }>
+=======
+                <Button className=" btn-primary on-boarding w-100">
+>>>>>>> PV-627 worked on contract discount page .
                   {isLoading.loader && isLoading.type === 'button' ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (

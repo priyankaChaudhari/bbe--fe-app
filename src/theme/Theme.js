@@ -1,7 +1,7 @@
 const Theme = {
   /* Theme Base color */
   white: '#ffffff',
-  red: '#b00011',
+  red: '#D60000',
   darkRed: '#D60000',
   pink: '#fe0b62',
   yellow: '#f7c137',

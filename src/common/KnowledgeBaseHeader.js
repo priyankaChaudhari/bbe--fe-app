@@ -207,7 +207,7 @@ const Header = styled.div`
       margin-top: 5px;
     }
   }
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     .logo {
       display: none;
     }

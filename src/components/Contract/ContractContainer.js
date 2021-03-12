@@ -26,6 +26,8 @@ import {
   SuccessMsg,
   Button,
   ModalBox,
+  ModalRadioCheck,
+  ContractFormField,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
@@ -98,6 +100,7 @@ export default function ContractContainer() {
 
   const [editContractFlag, setEditContractFlag] = useState(true);
   // const [oneTimeService, setOneTimeService] = useState([]);
+  const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [isFooter, showFooter] = useState(false);
   const [newAddendumData, setNewAddendum] = useState(null);
   const [originalAddendumData, setOriginalAddendumData] = useState(null);
@@ -1772,6 +1775,7 @@ export default function ContractContainer() {
         setShowAdditionalMarketplace={setShowAdditionalMarketplace}
         startDate={startDate}
         setStartDate={setStartDate}
+        setShowDiscountModal={setShowDiscountModal}
       />
     );
   };
@@ -2074,19 +2078,111 @@ export default function ContractContainer() {
               <Button
                 onClick={() => discardAgreementChanges('No')}
                 type="button"
-                className="btn-primary on-boarding  mr-3 pb-2 mb-1">
+                className="btn-primary on-boarding  mr-2 pb-2 mb-1">
                 Keep Editing
               </Button>
               <Button
                 onClick={() => discardAgreementChanges('Yes')}
                 type="button"
-                className=" btn-transparent w-50 on-boarding pb-2 mb-1">
+                className=" btn-transparent w-50 on-boarding ">
                 Discard Changes
               </Button>
 
               {/* </Link> */}
             </div>
           </div>
+        </ModalBox>
+      </Modal>
+      <Modal
+        isOpen={showDiscountModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowDiscountModal(false)}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body ">
+            <h4 className="on-boarding mb-4">Apply Discount</h4>
+            <div className="body-content">
+              <ul className="apply-discount mb-4">
+                <li>
+                  <ModalRadioCheck>
+                    <label
+                      className="radio-container customer-list"
+                      htmlFor="1">
+                      <input type="radio" name="radio" id="1" />
+                      <span className="checkmark" />
+                      None
+                    </label>
+                  </ModalRadioCheck>
+                </li>
+                <li>
+                  <ModalRadioCheck>
+                    <label
+                      className="radio-container customer-list"
+                      htmlFor="1">
+                      <input type="radio" name="radio" id="1" />
+                      <span className="checkmark" />
+                      Fixed Amount ($)
+                    </label>
+                  </ModalRadioCheck>
+                </li>
+                <li>
+                  <ModalRadioCheck>
+                    <label
+                      className="radio-container customer-list"
+                      htmlFor="1">
+                      <input type="radio" name="radio" id="1" />
+                      <span className="checkmark" />
+                      Percentage (%)
+                    </label>
+                  </ModalRadioCheck>
+                </li>
+              </ul>
+              {/* <ContractFormField>
+                <label className="modal-field" htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    <span className="input-icon">$ </span>
+                    <input
+                      className="form-control modal-input-control"
+                      placeholder="Enter amount"
+                      type="text"
+                    />
+                  </div>
+                </label>
+              </ContractFormField> */}
+              <ContractFormField>
+                <label className="modal-field" htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    <input
+                      className="form-control modal-input-control"
+                      placeholder="Enter percentage"
+                      type="text"
+                    />
+                    <span className="input-icon end">%</span>
+                  </div>
+                </label>
+              </ContractFormField>
+              <Button className="btn btn-primary w-100 mt-4 "> Confirm</Button>
+            </div>
+          </div>
+
+          {/* <Discount
+            id={id}
+            agreementData={details}
+            setShowModal={setShowModal}
+            pdfData={pdfData}
+            setShowSuccessContact={setShowSuccessContact}
+            clearSuccessMessage={clearSuccessMessage}
+            setOpenCollapse={setOpenCollapse}
+          /> */}
         </ModalBox>
       </Modal>
     </>
@@ -2130,7 +2226,7 @@ const Footer = styled.div`
     }
   }
 
-  // @media only screen and (max-width: 768px) {
+  // @media only screen and (max-width: 767px) {
   //   padding: 0 10px;
   // }
 `;

@@ -70,7 +70,7 @@ export const BodyWhite = styled.div`
     box-shadow: 0 2px 12px 0 rgba(46, 56, 77, 0.5);
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     .button-modal {
       margin-left: 0;
     }
@@ -79,7 +79,7 @@ export const BodyWhite = styled.div`
   @media only screen and (max-width: 991px) {
     padding: 20px 100px 20px 10px;
   }
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     padding: 20px 100px 20px 10px;
     .brand-title {
       .blue-logo {

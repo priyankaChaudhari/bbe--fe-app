@@ -67,7 +67,7 @@ const InputSearchWithRadius = styled.div`
     text-align: center;
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     &.w-50 {
       max-width: 280px;
       float: left;
