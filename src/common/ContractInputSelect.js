@@ -50,6 +50,11 @@ const ContractInputSelect = styled.div`
         //  border: 1px solid ${Theme.red} ;
         //  background: #FBF2F2;
 
+        &.form-control-error {
+          border: 1px solid ${Theme.red} ;
+          background: #FBF2F2;
+      
+        }
         .css-1gtu0rj-indicatorContainer {
           padding: 4px;
         }

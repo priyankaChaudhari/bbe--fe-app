@@ -78,9 +78,7 @@ const ContractFormField = styled.div`
     font-family: ${Theme.baseFontFamily};
     font-size:  ${Theme.extraNormal};
 
-    // border: 1px solid ${Theme.red} ;
-    // background: #FBF2F2;
-  
+   
     &.extra-space {
        padding: 4px 27px 4px 10px ;
     }
@@ -93,6 +91,12 @@ const ContractFormField = styled.div`
     &:focus {
       outline: none;
       border:1px solid ${Theme.gray25};
+    }
+
+    &.form-control-error {
+     border: 1px solid ${Theme.red} ;
+     background: #FBF2F2;
+  
     }
   }
   
