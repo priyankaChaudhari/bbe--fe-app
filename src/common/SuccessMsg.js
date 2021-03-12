@@ -36,8 +36,9 @@ const SuccessWrapper = styled.div`
   background: ${Theme.lightGreen};
   padding: 9px 20px 11px 20px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
   font-size: ${Theme.small};
+  font-family: ${Theme.baseFontFamily};
   display: inline-block;
 `;

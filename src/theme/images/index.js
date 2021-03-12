@@ -126,6 +126,7 @@ import ExpnadArrowBack from './icons/expand-arrow-back.png';
 import CaretUp from './icons/caretUp.png';
 import WhiteCaretUp from './icons/whiteCaretUp.png';
 import ContractCancel from './cancel-contract.png';
+import RedCross from './icons/red-cross.png';
 
 export {
   BannerBg,
@@ -256,4 +257,5 @@ export {
   CaretUp,
   WhiteCaretUp,
   ContractCancel,
+  RedCross,
 };

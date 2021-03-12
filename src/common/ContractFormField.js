@@ -77,6 +77,9 @@ const ContractFormField = styled.div`
     margin-top: 7px;
     font-family: ${Theme.baseFontFamily};
     font-size:  ${Theme.extraNormal};
+
+    // border: 1px solid ${Theme.red} ;
+    // background: #FBF2F2;
   
     &.extra-space {
        padding: 4px 27px 4px 10px ;

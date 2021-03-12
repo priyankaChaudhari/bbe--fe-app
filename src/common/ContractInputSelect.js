@@ -46,7 +46,9 @@ const ContractInputSelect = styled.div`
         border-radius: 2px;
         outline: none;
         font-size: ${Theme.extraNormal};
-         font-weight:500;
+        font-weight:500;
+        //  border: 1px solid ${Theme.red} ;
+        //  background: #FBF2F2;
 
         .css-1gtu0rj-indicatorContainer {
           padding: 4px;

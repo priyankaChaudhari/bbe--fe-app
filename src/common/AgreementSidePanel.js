@@ -27,6 +27,7 @@ import {
   PlusIcon,
   Advertise,
   CaretUp,
+  RedCross,
   // CompanyDefaultUser,
   // PdfDownload,
 } from '../theme/images/index';
@@ -2437,11 +2438,13 @@ export default function AgreementSidePanel({
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
                   {sectionError && sectionError.agreement ? (
-                    <img
-                      className="green-check-select "
-                      src={PlusIcon}
-                      alt="right-check"
-                    />
+                    <div className="error-bg">
+                      <img
+                        className="red-cross "
+                        src={RedCross}
+                        alt="right-check"
+                      />
+                    </div>
                   ) : showRightTick('service_agreement') ? (
                     <img
                       className="green-check-select"
@@ -2451,7 +2454,7 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
-                  <div>
+                  <div className="error-found">
                     {sectionError && sectionError.agreement
                       ? `${sectionError.agreement} ${
                           sectionError.agreement === 1
@@ -2463,6 +2466,7 @@ export default function AgreementSidePanel({
                   {/* {checkError()} */}
                   {/* {isSectionError ? } */}
                 </h4>
+
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
@@ -2579,8 +2583,8 @@ export default function AgreementSidePanel({
                       Statement of Work{' '}
                       {sectionError && sectionError.statement ? (
                         <img
-                          className="green-check-select "
-                          src={PlusIcon}
+                          className="red-cross"
+                          src={RedCross}
                           alt="right-check"
                         />
                       ) : showRightTick('statement') ? (
@@ -2592,7 +2596,7 @@ export default function AgreementSidePanel({
                       ) : (
                         ''
                       )}
-                      <div>
+                      <div className="error-found">
                         {sectionError && sectionError.statement
                           ? `${sectionError.statement} ${
                               sectionError.statement === 1
@@ -2825,8 +2829,8 @@ export default function AgreementSidePanel({
                       DSP Advertising
                       {sectionError && sectionError.dsp ? (
                         <img
-                          className="green-check-select "
-                          src={PlusIcon}
+                          className="red-cross "
+                          src={RedCross}
                           alt="right-check"
                         />
                       ) : showRightTick('dspAddendum') ? (
@@ -3295,6 +3299,12 @@ const SidePanel = styled.div`
         padding-bottom: 400px;
       }
     }
+    .error-found {
+      color: ${Theme.red};
+      font-size: ${Theme.small};
+      word-spacing: normal;
+      font-weight: 300;
+    }
     
   .sendar-details {
     color: ${Theme.black};
@@ -3312,6 +3322,23 @@ const SidePanel = styled.div`
      right: 21px;
      top: 22px;
    }
+   .error-bg {
+      height: 64px;
+      background: #FBF2F2;
+      right: 0;
+      border-right: 2px solid${Theme.red};
+      z-index: -2;
+      top: 0px;
+      position: absolute;
+      width: 20%;
+
+      .red-cross {
+        width: 16px;
+        position: absolute;
+        right: 21px;
+        top: 25px;
+      }
+}
 
   .sender-profile {
     border: 1px solid ${Theme.gray9};
