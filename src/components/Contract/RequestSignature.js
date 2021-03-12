@@ -808,7 +808,6 @@ function RequestSignature({
                 onClick={() => {
                   saveContact();
                 }}>
-<<<<<<< HEAD
                 <Button
                   className=" btn-primary on-boarding"
                   disabled={
@@ -818,9 +817,6 @@ function RequestSignature({
                       formData.email
                     )
                   }>
-=======
-                <Button className=" btn-primary on-boarding w-100">
->>>>>>> PV-627 worked on contract discount page .
                   {isLoading.loader && isLoading.type === 'button' ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
