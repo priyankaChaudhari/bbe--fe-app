@@ -748,7 +748,7 @@ export default function NewCustomerList() {
                                 item.daily_facts &&
                                 item.daily_facts.current &&
                                 item.daily_facts.current[0]
-                                  ? `$ ${item.daily_facts.current[0].revenue}`
+                                  ? `$${item.daily_facts.current[0].revenue}`
                                   : ''}
                                 <div className="increase-rate">
                                   <img
@@ -823,7 +823,7 @@ export default function NewCustomerList() {
                                 item.daily_facts &&
                                 item.daily_facts.current &&
                                 item.daily_facts.current[0]
-                                  ? `$ ${item.daily_facts.current[0].units_sold}`
+                                  ? `$${item.daily_facts.current[0].units_sold}`
                                   : ''}
                                 <div className="increase-rate">
                                   <img
@@ -840,7 +840,7 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.contract &&
                                 item.contract.monthly_retainer
-                                  ? `$ ${item.contract.monthly_retainer
+                                  ? `$${item.contract.monthly_retainer
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 `

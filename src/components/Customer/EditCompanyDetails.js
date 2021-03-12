@@ -176,6 +176,7 @@ export default function EditCompanyDetails({
     return (
       <NumberFormat
         format={item.key === 'zip_code' ? '##########' : null}
+        decimalScale={2}
         name={item.key}
         className="form-control"
         defaultValue={

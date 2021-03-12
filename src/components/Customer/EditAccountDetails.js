@@ -125,6 +125,7 @@ export default function EditAccountDetails({
     return (
       <NumberFormat
         allowNegative={false}
+        decimalScale={2}
         format={item.key === 'zip_code' ? '##########' : null}
         name={item.key}
         className="form-control"
