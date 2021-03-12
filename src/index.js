@@ -15,6 +15,7 @@ import accountStateReducer from './store/reducers/accountStateReducer';
 import * as serviceWorker from './serviceWorker';
 import './theme/css/style.scss';
 import './theme/css/bootstrap-grid.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 dotenv.config();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

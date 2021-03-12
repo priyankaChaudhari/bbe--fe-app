@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import { FormField, Button, PageLoader, ErrorMsg } from '../../common/index';
@@ -17,7 +18,7 @@ import CropUploadImage from '../../common/CropUploadImage';
 import { InfoIcon } from '../../theme/images';
 import CheckPhoneNumber from '../../common/CheckPhoneNumber';
 
-export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
+export default function EditProfile({ initials, userInfo }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const { register, handleSubmit, errors } = useForm();
@@ -25,7 +26,6 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
   const [showBtn, setShowBtn] = useState(false);
 
   const onSubmit = (data) => {
-    setShowSuccessMsg({ show: false });
     setIsLoading({ loader: true, type: 'button' });
     updateUserInfo(data, userInfo.id).then((response) => {
       if (response && response.status === 400) {
@@ -34,7 +34,7 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
       } else if (response.status === 200) {
         setShowBtn(false);
         setIsLoading({ loader: false, type: 'button' });
-        setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
+        toast.success('Changes Saved!');
         dispatch(userMe());
       }
     });
@@ -173,19 +173,12 @@ export default function EditProfile({ initials, userInfo, setShowSuccessMsg }) {
               </Button>
             </div>
           </form>
-          <EditPassword
-            userInfo={userInfo}
-            setShowSuccessMsg={setShowSuccessMsg}
-          />
+          <EditPassword userInfo={userInfo} />
         </>
       )}
     </FormContainer>
   );
 }
-
-EditProfile.defaultProps = {
-  setShowSuccessMsg: () => {},
-};
 
 EditProfile.propTypes = {
   userInfo: PropTypes.shape({
@@ -193,7 +186,6 @@ EditProfile.propTypes = {
     documents: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   initials: PropTypes.string.isRequired,
-  setShowSuccessMsg: PropTypes.func,
 };
 
 const FormContainer = styled.div`

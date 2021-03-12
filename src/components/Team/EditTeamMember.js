@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import {
   Button,
@@ -58,9 +59,9 @@ export default function EditTeamMember({
 
   const deleteMember = () => {
     setRemoveMember({ ...removeMember, show: true });
-
     setIsLoading({ loader: true, type: 'button' });
     deleteCustomerMember(removeMember.id).then(() => {
+      toast.success('Team Member Removed.');
       setIsLoading({ loader: false, type: 'button' });
       getCustomerMemberList();
       getMembers(1);
@@ -79,6 +80,7 @@ export default function EditTeamMember({
     setIsLoading({ loader: true, type: 'button' });
     updateCustomerMember(formData).then((response) => {
       if (response && response.status === 200) {
+        toast.success('Team Member Updated.');
         setFormData({});
         getMembers(pageNumber);
         setShowBtn(false);

@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
+import { ToastContainer } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import {
@@ -56,6 +57,7 @@ import {
 } from '../../api';
 import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_CUSTOMER_LIST } from '../../constants';
+import 'react-toastify/dist/ReactToastify.css';
 
 const customStyles = {
   content: {
@@ -101,7 +103,6 @@ export default function CustomerMainContainer() {
     modal: false,
   });
   const [memberData, setMemberData] = useState([]);
-  const [showSuccessMsg, setShowSuccessMsg] = useState({});
   const [activityData, setActivityData] = useState([]);
   const [activityCount, setActivityCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
@@ -266,7 +267,6 @@ export default function CustomerMainContainer() {
   };
 
   const handlePageChange = (currentPage) => {
-    console.log(showSuccessMsg);
     setPageNumber(currentPage);
     getActivityLogInfo(currentPage);
   };
@@ -303,6 +303,7 @@ export default function CustomerMainContainer() {
         <PageLoader color="#FF5933" type="page" width={20} />
       ) : (
         <>
+          <ToastContainer position="top-center" autoClose={8000} />
           <BackBtn className="d-lg-none d-block ">
             <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
               {' '}
@@ -314,6 +315,7 @@ export default function CustomerMainContainer() {
             <div className="banner">
               <div className="inner" />
             </div>
+
             <CustomerBody>
               <Link to={PATH_CUSTOMER_LIST}>
                 <div className="back-btn-link d-lg-block d-none">
@@ -322,6 +324,7 @@ export default function CustomerMainContainer() {
                   Back to all customers
                 </div>
               </Link>
+
               <WhiteCard className="customer-brand-details mb-n2">
                 <div className="row">
                   <div className="col-lg-3 col-md-12 pr-0">
@@ -727,7 +730,6 @@ export default function CustomerMainContainer() {
                 id={id}
                 getCustomerMemberList={getCustomerMemberList}
                 setShowMemberList={setShowMemberList}
-                setShowSuccessMsg={setShowSuccessMsg}
               />
             ) : (
               <EditTeamMember
@@ -778,7 +780,6 @@ export default function CustomerMainContainer() {
               setStatusModal={setStatusModal}
               id={id}
               status={customer && customer.status && customer.status.value}
-              setShowSuccessMsg={setShowSuccessMsg}
             />
           </Modal>
         </>

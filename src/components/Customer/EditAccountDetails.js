@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import {
   getCategories,
@@ -25,7 +26,6 @@ export default function EditAccountDetails({
   agreement,
   setShowModal,
   setDocumentImage,
-  getActivityLogInfo,
 }) {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
@@ -163,16 +163,14 @@ export default function EditAccountDetails({
       updateAccountDetails(agreement.id, formData).then((res) => {
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
-
           setApiError(res && res.data);
           setShowModal(true);
         } else if (res && res.status === 200) {
           setIsLoading({ loader: false, type: 'button' });
-
           dispatch(getAccountDetails(customer.id));
           dispatch(getCustomerDetails(customer.id));
-          getActivityLogInfo();
-          // setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
+          // getActivityLogInfo();
+          toast.success('Changes Saved!');
           setShowModal(false);
         }
       });
@@ -185,9 +183,10 @@ export default function EditAccountDetails({
         setShowModal(true);
       } else if (response && response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
+        dispatch(getAccountDetails(customer.id));
         dispatch(getCustomerDetails(customer.id));
-        getActivityLogInfo();
-        // setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
+        // getActivityLogInfo();
+        toast.success('Changes Saved!');
         setShowModal(false);
       }
     });
@@ -279,5 +278,4 @@ EditAccountDetails.propTypes = {
     id: PropTypes.string,
   }),
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
-  getActivityLogInfo: PropTypes.func.isRequired,
 };

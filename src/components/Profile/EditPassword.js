@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import { FormField, Button, ErrorMsg, PageLoader } from '../../common';
@@ -11,7 +12,7 @@ import { userDetails } from '../../constants/FieldConstants';
 import { updatePassword } from '../../api/index';
 import { CloseEyeIcon, smallEyeIcon } from '../../theme/images/index';
 
-export default function EditPassword({ userInfo, setShowSuccessMsg }) {
+export default function EditPassword({ userInfo }) {
   const { register, handleSubmit, errors, watch, reset } = useForm();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [showPassword, setShowPassword] = useState({
@@ -21,7 +22,6 @@ export default function EditPassword({ userInfo, setShowSuccessMsg }) {
   const [apiError, setApiError] = useState({});
 
   const onSubmit = (data) => {
-    setShowSuccessMsg({ show: false });
     setIsLoading({ loader: true, type: 'button' });
     updatePassword(data, userInfo.id).then((response) => {
       if (response.status === 400) {
@@ -29,8 +29,8 @@ export default function EditPassword({ userInfo, setShowSuccessMsg }) {
         setIsLoading({ loader: false, type: 'button' });
       } else if (response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
+        toast.success('Password Updated!');
         reset();
-        setShowSuccessMsg({ show: true, message: 'Password Updated!' });
       }
     });
   };
@@ -168,15 +168,10 @@ export default function EditPassword({ userInfo, setShowSuccessMsg }) {
   );
 }
 
-EditPassword.defaultProps = {
-  setShowSuccessMsg: () => {},
-};
-
 EditPassword.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  setShowSuccessMsg: PropTypes.func,
 };
 
 const FormContainer = styled.div`

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import {
   CommonPagination,
@@ -24,7 +25,6 @@ export default function AddTeamMember({
   id,
   getCustomerMemberList,
   setShowMemberList,
-  setShowSuccessMsg,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
@@ -95,7 +95,6 @@ export default function AddTeamMember({
         role.data.unshift({ value: 'All', label: 'All' });
         setRoles(role && role.data);
       });
-      setShowSuccessMsg({ show: false });
       userCustomerRoleList(
         id,
         currentPage,
@@ -108,7 +107,7 @@ export default function AddTeamMember({
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [id, setShowSuccessMsg, searchQuery, filterDetails.name.value],
+    [id, searchQuery, filterDetails.name.value],
   );
 
   useEffect(() => {
@@ -121,10 +120,7 @@ export default function AddTeamMember({
       if (response && response.status === 200) {
         getCustomerMemberList();
         setIsLoading({ loader: false, type: 'button' });
-        setShowSuccessMsg({
-          show: true,
-          message: `${userRoleId.length} Team Member(s) Added.`,
-        });
+        toast.success(`${userRoleId.length} Team Member(s) Added.`);
         setShowMemberList({ add: false, show: false, modal: false });
       } else {
         setIsLoading({ loader: false, type: 'button' });
@@ -395,13 +391,11 @@ export default function AddTeamMember({
 AddTeamMember.defaultProps = {
   id: '',
   getCustomerMemberList: () => {},
-  setShowSuccessMsg: () => {},
   setShowMemberList: () => {},
 };
 
 AddTeamMember.propTypes = {
   id: PropTypes.string,
   getCustomerMemberList: PropTypes.func,
-  setShowSuccessMsg: PropTypes.func,
   setShowMemberList: PropTypes.func,
 };

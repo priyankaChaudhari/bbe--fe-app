@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
+import { toast } from 'react-toastify';
 
 import {
   FormField,
@@ -15,7 +16,6 @@ import {
   ModalBox,
   PageLoader,
   ErrorMsg,
-  SuccessMsg,
   GetInitialName,
 } from '../../common';
 import {
@@ -45,7 +45,6 @@ import CheckPhoneNumber from '../../common/CheckPhoneNumber';
 export default function EditCompanyDetails({
   setShowModal,
   id,
-  setShowSuccessMsg,
   getAmazon,
   customer,
   getActivityLogInfo,
@@ -68,10 +67,6 @@ export default function EditCompanyDetails({
     twitter: '',
   });
 
-  const [showSuccessContact, setShowSuccessContact] = useState({
-    show: false,
-    message: '',
-  });
   const contactInfo = useSelector((state) => state.customerState.contactData);
   const loader = useSelector((state) => state.customerState.isLoading);
   const agreement = useSelector((state) => state.accountState.data);
@@ -146,7 +141,7 @@ export default function EditCompanyDetails({
                 name={icon.key}
                 className="form-control extra-space"
                 type="text"
-                value={mapIconValues(icon.key)}
+                defaultValue={mapIconValues(icon.key)}
                 onChange={(event) => handleChange(event, icon.key)}
               />
 
@@ -280,7 +275,6 @@ export default function EditCompanyDetails({
           dispatch(getAccountDetails(detail.id));
           dispatch(getCustomerDetails(detail.id));
           getActivityLogInfo();
-          setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
           setShowModal(false);
         }
       });
@@ -292,10 +286,10 @@ export default function EditCompanyDetails({
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
+        toast.success('Changes Saved!');
         setIsLoading({ loader: false, type: 'button' });
         dispatch(getCustomerDetails(detail.id));
         getActivityLogInfo();
-        setShowSuccessMsg({ show: true, message: 'Changes Saved!' });
         setShowModal(false);
       }
     });
@@ -324,17 +318,16 @@ export default function EditCompanyDetails({
   };
 
   const removeContact = (index) => {
-    setShowSuccessContact({ show: false, message: '' });
     if (index && index.includes('CT')) {
       deleteContactInfo(index).then(() => {
+        toast.success('Contact Removed!');
         dispatch(getContactDetails(id));
-        setShowSuccessContact({ show: true, message: 'Contact Removed.' });
       });
     } else {
+      toast.success('Contact Removed!');
       const list = [...contactDetails];
       list.splice(index, 1);
       setContactDetails(list);
-      setShowSuccessContact({ show: true, message: 'Contact Removed.' });
     }
   };
 
@@ -367,18 +360,17 @@ export default function EditCompanyDetails({
   };
 
   const saveContact = (contactId) => {
-    setShowSuccessContact({ show: false, message: '' });
     if (contactDetails && contactDetails.length === 1) {
       createContactInfo(contactDetails[0]).then((responseContact) => {
         if (responseContact && responseContact.status === 400) {
           setContactApiError(responseContact && responseContact.data);
         }
         if (responseContact && responseContact.status === 201) {
+          toast.success('Contact Saved!');
           dispatch(getContactDetails(id));
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
-          setShowSuccessContact({ show: true, message: 'Contact Created.' });
         }
       });
     }
@@ -388,11 +380,11 @@ export default function EditCompanyDetails({
           setContactApiError(res && res.data);
         }
         if (res && res.status === 200) {
+          toast.success('Contact Saved!');
           dispatch(getContactDetails(id));
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
-          setShowSuccessContact({ show: true, message: 'Contact Updated.' });
         }
       });
     }
@@ -629,21 +621,8 @@ export default function EditCompanyDetails({
     <ModalBox>
       <div className="modal-body ">
         <div className="row">
-          <div
-            className={
-              showSuccessContact
-                ? 'col-12 modal-heading '
-                : 'col-12 modal-heading  '
-            }>
+          <div className="col-12 modal-heading">
             <h4>Edit Company Details</h4>
-
-            <div className="success-msg">
-              {showSuccessContact.show ? (
-                <SuccessMsg property="" message={showSuccessContact.message} />
-              ) : (
-                ''
-              )}
-            </div>
           </div>
         </div>
         <div className="body-content mt-3" id="scroll-contact">
@@ -758,13 +737,11 @@ export default function EditCompanyDetails({
 
 EditCompanyDetails.defaultProps = {
   id: '',
-  setShowSuccessMsg: () => {},
 };
 
 EditCompanyDetails.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   id: PropTypes.string,
-  setShowSuccessMsg: PropTypes.func,
   getAmazon: PropTypes.func.isRequired,
   customer: PropTypes.shape({
     id: PropTypes.string,
