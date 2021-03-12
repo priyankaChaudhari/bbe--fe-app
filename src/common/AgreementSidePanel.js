@@ -1552,7 +1552,11 @@ export default function AgreementSidePanel({
   const generateDropdown = (item) => {
     return (
       <Select
-        classNamePrefix={apiError && apiError.primary_marketplace ? "react-select  form-control-error" : "react-select"}
+        classNamePrefix={
+          apiError && apiError[item.key]
+            ? 'react-select  form-control-error'
+            : 'react-select'
+        }
         placeholder={item.placeholder ? item.placeholder : 'Select'}
         defaultValue={
           item.key === 'primary_marketplace'
@@ -1577,8 +1581,11 @@ export default function AgreementSidePanel({
     if (item.type.includes('number')) {
       return (
         <NumberFormat
-          className={contractError && contractError.zip_code ? "form-control form-control-error" : "form-control form-control-error"}
-
+          className={
+            contractError && contractError[item.key]
+              ? 'form-control form-control-error'
+              : 'form-control '
+          }
           format={item.key === 'zip_code' ? '##########' : null}
           name={item.key}
           defaultValue={agreementData[item.key]}
@@ -2321,7 +2328,12 @@ export default function AgreementSidePanel({
                 {amazonStoreCustom ? (
                   <ContractFormField className="w-100 mt-1">
                     <NumberFormat
-                      className="form-control  "
+                      className={
+                        additionalOnetimeSerError &&
+                        additionalOnetimeSerError.custom_amazon_store_price
+                          ? 'form-control form-control-error'
+                          : 'form-control '
+                      }
                       type="text"
                       prefix="$"
                       value={
@@ -2432,27 +2444,33 @@ export default function AgreementSidePanel({
                   alt="pdf"
                 />
 
-                <h4 className={sectionError && sectionError.agreement ? "sendar-details error-container" : "sendar-details"}>
+                <h4
+                  className={
+                    sectionError && sectionError.agreement
+                      ? 'sendar-details error-container'
+                      : 'sendar-details'
+                  }>
                   {formData &&
                   formData.contract_type &&
                   formData.contract_type.toLowerCase().includes('one')
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
                   {sectionError && sectionError.agreement ? (
-                    openCollapse.agreement ? 
+                    openCollapse.agreement ? (
                       <img
                         className="red-cross  "
                         src={RedCross}
                         alt="right-check"
                       />
-                      :
-                    <div className="error-bg">
-                      <img
-                        className="red-cross "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                    </div>
+                    ) : (
+                      <div className="error-bg">
+                        <img
+                          className="red-cross "
+                          src={RedCross}
+                          alt="right-check"
+                        />
+                      </div>
+                    )
                   ) : showRightTick('service_agreement') ? (
                     <img
                       className="green-check-select"
@@ -2590,21 +2608,21 @@ export default function AgreementSidePanel({
                     <h4 className="sendar-details ">
                       Statement of Work{' '}
                       {sectionError && sectionError.statement ? (
-                         openCollapse.statement ? 
-                      <img
-                        className="red-cross  "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                      :
-                    <div className="error-bg">
-                      <img
-                        className="red-cross "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                    </div>
-                       
+                        openCollapse.statement ? (
+                          <img
+                            className="red-cross  "
+                            src={RedCross}
+                            alt="right-check"
+                          />
+                        ) : (
+                          <div className="error-bg">
+                            <img
+                              className="red-cross "
+                              src={RedCross}
+                              alt="right-check"
+                            />
+                          </div>
+                        )
                       ) : showRightTick('statement') ? (
                         <img
                           className="green-check-select "
@@ -2846,22 +2864,21 @@ export default function AgreementSidePanel({
                     <h4 className="sendar-details ">
                       DSP Advertising
                       {sectionError && sectionError.dsp ? (
-
-                         openCollapse.dsp ? 
-                      <img
-                        className="red-cross  "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                      :
-                    <div className="error-bg">
-                      <img
-                        className="red-cross "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                    </div>
-                       
+                        openCollapse.dsp ? (
+                          <img
+                            className="red-cross  "
+                            src={RedCross}
+                            alt="right-check"
+                          />
+                        ) : (
+                          <div className="error-bg">
+                            <img
+                              className="red-cross "
+                              src={RedCross}
+                              alt="right-check"
+                            />
+                          </div>
+                        )
                       ) : showRightTick('dspAddendum') ? (
                         <img
                           className="green-check-select "
