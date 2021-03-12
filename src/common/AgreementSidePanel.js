@@ -102,6 +102,8 @@ export default function AgreementSidePanel({
   startDate,
   setStartDate,
   setShowDiscountModal,
+  sectionError,
+  setSectionError,
 }) {
   // const [openCollapse, setOpenCollapse] = useState({
   //   agreement: false,
@@ -112,6 +114,7 @@ export default function AgreementSidePanel({
   // });
 
   // const [startDate, setStartDate] = useState();
+
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
@@ -289,6 +292,7 @@ export default function AgreementSidePanel({
       executeScroll('addendum');
     }
   };
+
   useEffect(() => {
     goToSection();
     const serviceData =
@@ -373,17 +377,19 @@ export default function AgreementSidePanel({
 
   const handleChange = (event, key, type, val) => {
     showFooter(true);
-
     if (
       additionalOnetimeSerError.custom_amazon_store_price &&
       key === 'amazon_store_package'
     ) {
+      setSectionError({ ...sectionError, statement: 0 });
       setAdditionalOnetimeSerError({
         ...additionalOnetimeSerError,
         custom_amazon_store_price: '',
       });
     }
-    if (apiError.non_field_errors) {
+    if (apiError.non_field_errors && key === 'primary_marketplace') {
+      setSectionError({ ...sectionError, statement: 0 });
+
       setApiError({
         ...apiError,
         non_field_errors: '',
@@ -1386,29 +1392,62 @@ export default function AgreementSidePanel({
         });
       }
       // }
-      setApiError({
-        ...apiError,
-        [event.target.name]: '',
-      });
-      if (additionalMarketplaceError) {
-        setAdditionalMarketplaceError({
-          ...additionalMarketplaceError,
+      if (
+        Object.keys(apiError).includes('non_field_errors') ||
+        Object.keys(apiError).includes(event.target.name)
+      ) {
+        setSectionError({ ...sectionError, statement: 0 });
+
+        setApiError({
+          ...apiError,
           [event.target.name]: '',
         });
       }
-      if (additionalMonthlySerError) {
+      if (
+        additionalMarketplaceError &&
+        Object.keys(additionalMarketplaceError).includes(event.target.name)
+      ) {
+        setSectionError({ ...sectionError, statement: 0 });
+
+        setAdditionalMarketplaceError({
+          ...additionalMarketplaceError,
+          [additionalMarketplaceError]: '',
+        });
+      }
+
+      if (
+        additionalMonthlySerError &&
+        Object.keys(additionalMonthlySerError).includes(event.target.name)
+      ) {
+        setSectionError({ ...sectionError, statement: 0 });
+
         setAdditionalMonthlySerError({
           ...additionalMonthlySerError,
           [event.target.name]: '',
         });
       }
-      if (additionalOnetimeSerError) {
+
+      if (
+        additionalOnetimeSerError &&
+        Object.keys(additionalOnetimeSerError).includes(event.target.name)
+      ) {
+        setSectionError({ ...sectionError, statement: 0 });
+
         setAdditionalOnetimeSerError({
           ...additionalOnetimeSerError,
           [event.target.name]: '',
         });
       }
-      if (contractError) {
+      if (
+        contractError &&
+        Object.keys(contractError).includes(event.target.name)
+      ) {
+        if (event.target.name === 'zip_code') {
+          setSectionError({ ...sectionError, agreement: 0 });
+        }
+        if (event.target.name === 'dsp_fee') {
+          setSectionError({ ...sectionError, dsp: 0 });
+        }
         setContractError({
           ...contractError,
           [event.target.name]: '',
@@ -1546,6 +1585,7 @@ export default function AgreementSidePanel({
           suffix={item.type === 'number-percent' ? '%' : ''}
           onChange={(event) => handleChange(event, item.key)}
           thousandSeparator={item.key !== 'zip_code'}
+          decimalScale={2}
         />
       );
     }
@@ -2324,6 +2364,7 @@ export default function AgreementSidePanel({
                         }
                         return floatValue <= 100000000;
                       }}
+                      decimalScale={2}
                     />
                     {displayError('custom_amazon_store_price')}
                   </ContractFormField>
@@ -2395,7 +2436,13 @@ export default function AgreementSidePanel({
                   formData.contract_type.toLowerCase().includes('one')
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
-                  {showRightTick('service_agreement') ? (
+                  {sectionError && sectionError.agreement ? (
+                    <img
+                      className="green-check-select "
+                      src={PlusIcon}
+                      alt="right-check"
+                    />
+                  ) : showRightTick('service_agreement') ? (
                     <img
                       className="green-check-select"
                       src={GreenCheck}
@@ -2404,6 +2451,17 @@ export default function AgreementSidePanel({
                   ) : (
                     ''
                   )}
+                  <div>
+                    {sectionError && sectionError.agreement
+                      ? `${sectionError.agreement} ${
+                          sectionError.agreement === 1
+                            ? 'error found'
+                            : 'errors found'
+                        }`
+                      : ''}
+                  </div>
+                  {/* {checkError()} */}
+                  {/* {isSectionError ? } */}
                 </h4>
                 <div className="clear-fix" />
               </div>
@@ -2519,7 +2577,13 @@ export default function AgreementSidePanel({
                     />
                     <h4 className="sendar-details ">
                       Statement of Work{' '}
-                      {showRightTick('statement') ? (
+                      {sectionError && sectionError.statement ? (
+                        <img
+                          className="green-check-select "
+                          src={PlusIcon}
+                          alt="right-check"
+                        />
+                      ) : showRightTick('statement') ? (
                         <img
                           className="green-check-select "
                           src={GreenCheck}
@@ -2528,6 +2592,15 @@ export default function AgreementSidePanel({
                       ) : (
                         ''
                       )}
+                      <div>
+                        {sectionError && sectionError.statement
+                          ? `${sectionError.statement} ${
+                              sectionError.statement === 1
+                                ? 'error found'
+                                : 'errors found'
+                            } `
+                          : ''}
+                      </div>
                     </h4>
                     <div className="clear-fix" />
                   </div>
@@ -2750,7 +2823,13 @@ export default function AgreementSidePanel({
                     <img className="service-agre" src={Advertise} alt="pdf" />
                     <h4 className="sendar-details ">
                       DSP Advertising
-                      {showRightTick('dspAddendum') ? (
+                      {sectionError && sectionError.dsp ? (
+                        <img
+                          className="green-check-select "
+                          src={PlusIcon}
+                          alt="right-check"
+                        />
+                      ) : showRightTick('dspAddendum') ? (
                         <img
                           className="green-check-select "
                           src={GreenCheck}
@@ -2759,6 +2838,15 @@ export default function AgreementSidePanel({
                       ) : (
                         ''
                       )}
+                      <div>
+                        {sectionError && sectionError.dsp
+                          ? `${sectionError.dsp} ${
+                              sectionError.dsp === 1
+                                ? 'error found'
+                                : 'errors found'
+                            }`
+                          : ''}
+                      </div>
                     </h4>
                     <div className="clear-fix" />
                   </div>
@@ -3066,6 +3154,8 @@ AgreementSidePanel.defaultProps = {
   setShowAdditionalMarketplace: () => {},
   startDate: '',
   setStartDate: () => {},
+  sectionError: {},
+  setSectionError: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -3183,6 +3273,8 @@ AgreementSidePanel.propTypes = {
   setShowAdditionalMarketplace: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
   setStartDate: PropTypes.func,
+  sectionError: PropTypes.shape(PropTypes.object),
+  setSectionError: PropTypes.func,
 };
 
 const SidePanel = styled.div`

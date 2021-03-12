@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
+import { ToastContainer, toast } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
 // import samplePDF from './sample1.pdf';
 import Theme from '../../theme/Theme';
@@ -124,6 +125,7 @@ export default function ContractContainer() {
   );
 
   const [apiError, setApiError] = useState({});
+  const [sectionError, setSectionError] = useState({});
   const [additionalMarketplaceError, setAdditionalMarketplaceError] = useState(
     {},
   );
@@ -141,6 +143,10 @@ export default function ContractContainer() {
     show: false,
     message: '',
   });
+  // const [showErrorMsg, setShowErrorMSg] = useState({
+  //   show: false,
+  //   message: '',
+  // });
   const [showSection, setShowCollpase] = useState({
     addendum: true,
     dspAddendum: false,
@@ -595,6 +601,24 @@ export default function ContractContainer() {
             }
             setUpdatedFormData({ ...updatedFormData });
 
+            let agreementErrCount = 0;
+            let statementErrCount = 0;
+            let dspErrCount = 0;
+
+            if (
+              (additionalMarketplaceRes &&
+                additionalMarketplaceRes.status === 400) ||
+              (additionalMonthlySerRes &&
+                additionalMonthlySerRes.status === 400) ||
+              (additionalOneTimeServRes &&
+                additionalOneTimeServRes.status === 400) ||
+              (contractRes && contractRes.status === 400) ||
+              (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
+            ) {
+              toast.error(
+                'Changes have not been saved. Please fix errors and try again',
+              );
+            }
             if (
               additionalMarketplaceRes &&
               additionalMarketplaceRes.status === 400
@@ -603,6 +627,11 @@ export default function ContractContainer() {
                 ...additionalMarketplaceError,
                 ...additionalMarketplaceRes.data,
               });
+
+              if (additionalMarketplaceRes.data) {
+                statementErrCount += Object.keys(additionalMarketplaceRes.data)
+                  .length;
+              }
             }
             if (
               additionalMonthlySerRes &&
@@ -612,6 +641,11 @@ export default function ContractContainer() {
                 ...additionalMonthlySerError,
                 ...additionalMonthlySerRes.data,
               });
+
+              if (additionalMonthlySerRes.data) {
+                statementErrCount += Object.keys(additionalMonthlySerRes.data)
+                  .length;
+              }
             }
             if (
               additionalOneTimeServRes &&
@@ -622,6 +656,22 @@ export default function ContractContainer() {
                 ...additionalOneTimeServRes.data,
               });
 
+              if (additionalOneTimeServRes.data) {
+                if (
+                  Object.keys(additionalOneTimeServRes.data).includes(
+                    'quantity',
+                  )
+                ) {
+                  statementErrCount +=
+                    Object.keys(additionalOneTimeServRes.data).length +
+                    Object.keys(additionalOneTimeServRes.data.quantity).length -
+                    1;
+                } else {
+                  statementErrCount += Object.keys(
+                    additionalOneTimeServRes.data,
+                  ).length;
+                }
+              }
               if (
                 additionalOneTimeServRes &&
                 additionalOneTimeServRes.data &&
@@ -640,17 +690,40 @@ export default function ContractContainer() {
                 ...contractError,
                 ...contractRes.data,
               });
+
+              if (contractRes.data) {
+                if (Object.keys(contractRes.data).length)
+                  if (
+                    Object.keys(contractRes.data).includes('monthly_retainer')
+                  )
+                    statementErrCount += 1;
+                if (Object.keys(contractRes.data).includes('zip_code'))
+                  agreementErrCount += 1;
+                if (Object.keys(contractRes.data).includes('dsp_fee'))
+                  dspErrCount += 1;
+              }
             }
             if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
               setApiError({
                 ...apiError,
                 ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
               });
+
+              if (primaryMarketplaceRes.data) {
+                statementErrCount += Object.keys(primaryMarketplaceRes.data)
+                  .length;
+              }
             }
+
+            setSectionError({
+              agreement: agreementErrCount,
+              statement: statementErrCount,
+              dsp: dspErrCount,
+            });
           }),
         )
-        .catch({
-          // console.log("error")
+        .catch(() => {
+          // console.log('error');
         });
 
       //  .then((response) => {
@@ -1776,6 +1849,8 @@ export default function ContractContainer() {
         startDate={startDate}
         setStartDate={setStartDate}
         setShowDiscountModal={setShowDiscountModal}
+        sectionError={sectionError}
+        setSectionError={setSectionError}
       />
     );
   };
@@ -1962,6 +2037,8 @@ export default function ContractContainer() {
     </div>
   ) : (
     <>
+      <ToastContainer position="top-center" autoClose={8000} />
+
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
           <li
@@ -1984,7 +2061,6 @@ export default function ContractContainer() {
           )}
         </ul>
       </ContractTab>
-
       <div className="success-msg-pop-up contract">
         {showSuccessContact.show ? (
           <SuccessMsg property=" " message={showSuccessContact.message} />
@@ -1992,6 +2068,13 @@ export default function ContractContainer() {
           ''
         )}
       </div>
+      {/* <div className="success-msg-pop-up contract">
+        {showErrorMsg.show ? (
+          <SuccessMsg property=" " message={showErrorMsg.message} />
+        ) : (
+          ''
+        )}
+      </div> */}
       <div className="on-boarding-container">
         <div className="row">
           <div className="col-12">
@@ -2036,9 +2119,7 @@ export default function ContractContainer() {
       (isMobile && tabInResponsive === 'edit-fields')
         ? displayRightSidePanel()
         : ''}
-
       {displayFooter()}
-
       {/* // : ( // '' // )} */}
       <Modal
         isOpen={showModal}

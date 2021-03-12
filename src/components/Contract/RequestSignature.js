@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import HelloSign from 'hellosign-embedded';
 import queryString from 'query-string';
+import { toast } from 'react-toastify';
 import {
   Button,
   FormField,
@@ -35,7 +36,6 @@ import {
   getTransactionData,
 } from '../../api/index';
 import { getAccountDetails } from '../../store/actions/accountState';
-
 import { getContactDetails } from '../../store/actions/customerState';
 
 // import { PATH_AGREEMENT } from '../../constants';
@@ -45,8 +45,8 @@ function RequestSignature({
   agreementData,
   setShowModal,
   pdfData,
-  setShowSuccessContact,
-  clearSuccessMessage,
+  // setShowSuccessContact,
+  // clearSuccessMessage,
   setOpenCollapse,
 }) {
   const history = useHistory();
@@ -357,8 +357,9 @@ function RequestSignature({
           // setOpenCollapse({ agreement: false, statement: true });
 
           setShowModal(false);
-          setShowSuccessContact({ message: 'Approval Requested!', show: true });
-          setTimeout(() => clearSuccessMessage(), 3000);
+          toast.success('Approval Requested!');
+          // setShowSuccessContact({ message: 'Approval Requested!', show: true });
+          // setTimeout(() => clearSuccessMessage(), 3000);
 
           // history.push({
           //   pathname: PATH_AGREEMENT.replace(':id', id),
@@ -390,6 +391,7 @@ function RequestSignature({
       }
       if (res && res.status === 400) {
         setRequestSignatureError(res && res.data);
+        setTimeout(() => setRequestSignatureError(''), 3500);
       }
     });
   };
@@ -434,11 +436,13 @@ function RequestSignature({
         } else if (response && response.status === 201) {
           // setOpenCollapse({ agreement: false, statement: true });
 
-          setShowSuccessContact({
-            message: 'Signature Requested Successfully!',
-            show: true,
-          });
-          setTimeout(() => clearSuccessMessage(), 3500);
+          toast.success('Signature Requested Successfully!');
+
+          // setShowSuccessContact({
+          //   message: 'Signature Requested Successfully!',
+          //   show: true,
+          // });
+          // setTimeout(() => clearSuccessMessage(), 3500);
           setOpenCollapse({
             agreement: true,
             statement: false,
@@ -481,11 +485,12 @@ function RequestSignature({
       setIsLoading({ loader: false, type: 'button' });
       if (res && res.status === 200) {
         setShowModal(false);
-        setShowSuccessContact({
-          message: 'Reminder sent successfully!',
-          show: true,
-        });
-        setTimeout(() => clearSuccessMessage(), 3000);
+        toast.success('Reminder sent successfully!');
+        // setShowSuccessContact({
+        //   message: 'Reminder sent successfully!',
+        //   show: true,
+        // });
+        // setTimeout(() => clearSuccessMessage(), 3000);
       }
     });
   };
@@ -839,8 +844,8 @@ RequestSignature.defaultProps = {
   agreementData: {},
   setShowModal: () => {},
   pdfData: '',
-  setShowSuccessContact: () => {},
-  clearSuccessMessage: () => {},
+  // setShowSuccessContact: () => {},
+  // clearSuccessMessage: () => {},
   setOpenCollapse: () => {},
 };
 
@@ -861,7 +866,7 @@ RequestSignature.propTypes = {
   }),
   setShowModal: PropTypes.func,
   pdfData: PropTypes.string,
-  setShowSuccessContact: PropTypes.func,
-  clearSuccessMessage: PropTypes.func,
+  // setShowSuccessContact: PropTypes.func,
+  // clearSuccessMessage: PropTypes.func,
   setOpenCollapse: PropTypes.func,
 };
