@@ -625,7 +625,7 @@ export default function EditCompanyDetails({
             <h4>Edit Company Details</h4>
           </div>
         </div>
-        <div className="body-content mt-3" id="scroll-contact">
+        <div className="body-content mt-1" id="scroll-contact">
           <div className="row">
             {editCompanyFields.map((item) => (
               <React.Fragment key={item.key}>

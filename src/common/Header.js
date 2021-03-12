@@ -197,7 +197,7 @@ export default function Header() {
                   </li> */}
 
                 <li
-                  className=" "
+                  className=" cursor"
                   onClick={() => {
                     setShowArticle(true);
                     setShowArticleSuccess(false);
