@@ -106,16 +106,6 @@ export default function AgreementSidePanel({
   sectionError,
   setSectionError,
 }) {
-  // const [openCollapse, setOpenCollapse] = useState({
-  //   agreement: false,
-  //   statement: false,
-  //   addendum: false,
-  //   dspAddendum: false,
-  //   amendment: false,
-  // });
-
-  // const [startDate, setStartDate] = useState();
-
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
@@ -1455,45 +1445,6 @@ export default function AgreementSidePanel({
         });
       }
     }
-    // if (key === 'length' || key === 'rev_share') {
-    //   console.log(event, formData.length, formData.rev_share);
-    //   let rev = formData && formData.rev_share && formData.rev_share.value;
-    //   let contractTermLength = parseInt(
-    //     formData && formData.length && formData.length.value,
-    //     10,
-    //   );
-    //   if (key === 'length') {
-    //     contractTermLength = parseInt(
-    //       event && event.length && event.length.value,
-    //       10,
-    //     );
-    //   }
-    //   if (key === 'rev_share') {
-    //     rev = Number(event && event.rev_share && event.rev_share.value);
-    //   }
-    //   if (
-    //     formData &&
-    //     formData.contract_type &&
-    //     formData.contract_type.toLowerCase().includes('one')
-    //   ) {
-
-    //     if (
-    //       contractTermLength < 12
-    //       // &&
-    //       // !(userInfo && userInfo.role === 'Team Manager - TAM')
-    //     ) {
-    //       return true;
-    //     }
-    //   } else if (
-    //     rev < 3 ||
-    //     contractTermLength < 12
-    //     // &&
-    //     // !(userInfo && userInfo.role === 'Team Manager - TAM')
-    //   ) {
-    //     return true;
-    //   }
-    //   return false;
-    // }
   };
 
   const mapSelectValues = (item) => {
@@ -1549,6 +1500,7 @@ export default function AgreementSidePanel({
       />
     );
   };
+
   const generateDropdown = (item) => {
     return (
       <Select
@@ -1557,6 +1509,36 @@ export default function AgreementSidePanel({
             ? 'react-select  form-control-error'
             : 'react-select'
         }
+        styles={{
+          control: (base, state) => ({
+            ...base,
+            background:
+              apiError &&
+              apiError.non_field_errors &&
+              apiError.non_field_errors[0] &&
+              item.key === 'primary_marketplace'
+                ? '#FBF2F2'
+                : '#F4F6FC',
+            // match with the menu
+            // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
+            // Overwrittes the different states of border
+            borderColor:
+              apiError &&
+              apiError.non_field_errors &&
+              apiError.non_field_errors[0] &&
+              item.key === 'primary_marketplace'
+                ? '#D63649'
+                : '#D5D8E1',
+
+            // Removes weird border around container
+            boxShadow: state.isFocused ? null : null,
+            '&:hover': {
+              // Overwrittes the different states of border
+              boxShadow: state.isFocused ? null : null,
+              outlineColor: state.isFocused ? null : null,
+            },
+          }),
+        }}
         placeholder={item.placeholder ? item.placeholder : 'Select'}
         defaultValue={
           item.key === 'primary_marketplace'

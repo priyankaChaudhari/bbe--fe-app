@@ -21,14 +21,13 @@ import ServicesAmendment from './ServicesAmendment';
 import DSPAddendum from './DSPAddendum';
 import Addendum from './Addendum';
 import Statement from './Statement';
+import Discount from './Discount';
 import {
   PageLoader,
   // PageNotFound,
   SuccessMsg,
   Button,
   ModalBox,
-  ModalRadioCheck,
-  ContractFormField,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
@@ -2187,75 +2186,7 @@ export default function ContractContainer() {
           role="presentation"
         />
         <ModalBox>
-          <div className="modal-body ">
-            <h4 className="on-boarding mb-4">Apply Discount</h4>
-            <div className="body-content">
-              <ul className="apply-discount mb-4">
-                <li>
-                  <ModalRadioCheck>
-                    <label
-                      className="radio-container customer-list"
-                      htmlFor="1">
-                      <input type="radio" name="radio" id="1" />
-                      <span className="checkmark" />
-                      None
-                    </label>
-                  </ModalRadioCheck>
-                </li>
-                <li>
-                  <ModalRadioCheck>
-                    <label
-                      className="radio-container customer-list"
-                      htmlFor="1">
-                      <input type="radio" name="radio" id="1" />
-                      <span className="checkmark" />
-                      Fixed Amount ($)
-                    </label>
-                  </ModalRadioCheck>
-                </li>
-                <li>
-                  <ModalRadioCheck>
-                    <label
-                      className="radio-container customer-list"
-                      htmlFor="1">
-                      <input type="radio" name="radio" id="1" />
-                      <span className="checkmark" />
-                      Percentage (%)
-                    </label>
-                  </ModalRadioCheck>
-                </li>
-              </ul>
-              {/* <ContractFormField>
-                <label className="modal-field" htmlFor="emailAddress">
-                  Amount
-                  <div className="input-container">
-                    <span className="input-icon">$ </span>
-                    <input
-                      className="form-control modal-input-control"
-                      placeholder="Enter amount"
-                      type="text"
-                    />
-                  </div>
-                </label>
-              </ContractFormField> */}
-              <ContractFormField>
-                <label className="modal-field" htmlFor="emailAddress">
-                  Amount
-                  <div className="input-container">
-                    <input
-                      className="form-control modal-input-control"
-                      placeholder="Enter percentage"
-                      type="text"
-                    />
-                    <span className="input-icon end">%</span>
-                  </div>
-                </label>
-              </ContractFormField>
-              <Button className="btn btn-primary w-100 mt-4 "> Confirm</Button>
-            </div>
-          </div>
-
-          {/* <Discount
+          <Discount
             id={id}
             agreementData={details}
             setShowModal={setShowModal}
@@ -2263,7 +2194,7 @@ export default function ContractContainer() {
             setShowSuccessContact={setShowSuccessContact}
             clearSuccessMessage={clearSuccessMessage}
             setOpenCollapse={setOpenCollapse}
-          /> */}
+          />
         </ModalBox>
       </Modal>
     </>

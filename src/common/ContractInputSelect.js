@@ -32,9 +32,16 @@ const ContractInputSelect = styled.div`
             font-size: color: ${Theme.extraNormal};
             text-transform: none;
           }
+          
           .css-tlfecz-indicatorContainer {
             padding: 4px !important;
           }
+          
+          &.form-control-error {
+          border: 1px solid ${Theme.red} ;
+          background: #FBF2F2;
+      
+        }
       }
 
     .css-1pahdxg-control {
@@ -42,7 +49,7 @@ const ContractInputSelect = styled.div`
         min-height: 40px;
         margin-top: 7px;
         background-color: ${Theme.gray8};
-        border: 1px solid #D5D8E1; !important;
+        border: 1px solid #D5D8E1 !important;
         border-radius: 2px;
         outline: none;
         font-size: ${Theme.extraNormal};
