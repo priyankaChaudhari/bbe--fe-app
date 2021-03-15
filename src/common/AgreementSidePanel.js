@@ -3057,7 +3057,7 @@ export default function AgreementSidePanel({
                     Send Reminder
                   </Button> */}
 
-          {/* <div className="activity-log">Activity Log </div>
+          {/* <div className="activity-log">Contract Activity</div>
           <ul className="menu">
             <li>
               <img className="default-user" src={CompanyDefaultUser} alt="" />
@@ -3525,12 +3525,10 @@ const SidePanel = styled.div`
      }
    } 
 .activity-log {
-    font-size: ${Theme.extraSmall};
+    font-size: ${Theme.extraMedium};
     padding:20px 20px 0 20px;
-    letter-spacing: 1.13px;
-    color: ${Theme.gray30};
-    font-weight: bold;
-    text-transform: uppercase;
+    color: ${Theme.black};
+    font-weight: 600;
   }
   .current-agreement-title {
       padding: 20px;
@@ -3576,7 +3574,7 @@ const SidePanel = styled.div`
         }
 
         .time-date {
-          color:${Theme.gray35};
+          color:${Theme.gray40};
           font-size: ${Theme.small};
           font-weight: 500;
           text-align: left;

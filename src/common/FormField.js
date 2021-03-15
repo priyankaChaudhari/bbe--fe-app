@@ -96,6 +96,10 @@ const FormField = styled.div`
   //   }
   // }
 
+   textarea {
+      min-height: 74px;
+    }
+
   .form-control  {
     position:relative;
     color: ${Theme.gray90};
@@ -153,6 +157,7 @@ const FormField = styled.div`
       border: 1px solid ${Theme.gray2};
       border-radius: 5px;
       padding: 4px  10px ;
+     
       display: block;
       width: 100%;
       background-color: rgba(224, 231, 255, 0.2);
@@ -170,6 +175,7 @@ const FormField = styled.div`
           outline: none;
         }
     } 
+   
 
   .css-14jk2my-container {
     background-color: rgba(224, 231, 255, 0.2);

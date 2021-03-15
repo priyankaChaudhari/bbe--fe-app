@@ -29,6 +29,7 @@ const ContractFormField = styled.div`
       margin-top: 7px;
       height: 40px;
       z-index: 2;
+      font-size: 14px
       text-align: center;
       background: #EAEDF6;
       border-left: 1px solid #D5D8E1;
