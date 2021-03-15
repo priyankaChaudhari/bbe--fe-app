@@ -800,9 +800,11 @@ export const WhiteCard = styled.div`
       background-color: ${Theme.white};
       border: 1px solid #D5D8E1;
       border-radius: 8px;
-      width: 140px;
+      max-width: 170px;
+      width: 100%;
       padding:13px;
       margin-right:10px;
+      cursor: pointer;
 
       .number-rate {
         color: ${Theme.gray80};
@@ -840,22 +842,76 @@ export const WhiteCard = styled.div`
       &:last-child{
         margin-right:0;
       }
+
+      &:hover {
+        border: 1px solid #FF5933;
+      }
     }
 
+  }
+  .days-container {
+    background-color: #FFFFFF;
+    border: 1px solid #D5D8E1;
+    border-radius: 18px;
+    max-width: 240px;
+    float: right;
+
+    .days-tab {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li{
+        color: #556178;
+        padding: 7px 19px;
+        font-size: 14px;
+        display: inline-block;
+        cursor: pointer;
+
+
+        
+
+        &:hover {
+          background-color: #FFFFFF;
+          border: 1px solid #FF5933;
+          border-radius: 18px;
+          color: #FF5933;
+          
+        }
+         &.active {
+            background-color: #FFFFFF;
+            border: 1px solid #FF5933;
+            border-radius: 18px;
+            color: #FF5933;
+        }
+      }
+    }
   }
 
   .speed-rate {
     font-size: ${Theme.primaryTitleFontSize}; 
     color: ${Theme.black};
+    margin-top: 50px;
   }
 
   .last-update {
     color: ${Theme.gray40};
     font-size: ${Theme.extraNormal}; 
+    bottom: 15px;
+    right: 21px;
+    position: absolute;
   }
   .seller-health {
-    color${Theme.gray40};
-    font-size: ${Theme.secondaryTitleFontSize}; 
+    color: ${Theme.gray40};
+    font-size:  ${Theme.primaryTitleFontSize}; 
+
+    &.positive {
+      color: #407B00;
+    }
+  }
+  .seller-update {
+    color: #556178;
+    font-size: 14px;
   }
 
   .solid-icon {
@@ -895,6 +951,8 @@ export const WhiteCard = styled.div`
      
     }
   }
+
+  
   @media only screen and (min-width: 1920px) {
     .company-label-info {
         margin-left: 40px;

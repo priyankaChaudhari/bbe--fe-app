@@ -14,6 +14,11 @@ const DropDownSelect = styled.div`
     float: left;
   }
 
+  &.days-performance {
+    max-width: 259px;
+    text-align: -webkit-right;
+  }
+
   &.w-250 {
     width: 259px;
 

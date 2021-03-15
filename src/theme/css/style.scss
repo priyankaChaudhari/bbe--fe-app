@@ -588,6 +588,7 @@ a {
 
 .text-right {
   text-align: right;
+  text-align: -webkit-right;
 }
 
 .text-left {
@@ -1256,4 +1257,109 @@ input:checked + .slider:before {
   min-width: 100px;
   width: auto !important;
   padding: 0;
+}
+
+g .recharts-cartesian-grid-horizontal {
+  display: none;
+}
+
+g .recharts-cartesian-grid-vertical {
+  border: 1px solid #F1F1F5;
+  stroke-dasharray: 0;
+
+  line {
+    stroke:  #F1F1F5;
+    outline: 1px solid  #F1F1F5;
+  }
+
+}
+g .recharts-cartesian-axis-ticks {
+  color: #556178;
+  font-size: 15px;
+}
+
+g .recharts-layer .recharts-line-dots {
+color: red;
+}
+
+
+
+
+
+// .recharts-wrapper{
+//   .recharts-legend-wrapper{
+//     position: absolute;
+//     width: 100px;
+//     height: auto;
+//     left: 91px;
+//     top: -17px
+//   }
+//   .recharts-legend-icon {
+//     path {
+//       stroke: none;
+//      fill: #BFC5D2; 
+//     }
+   
+//   }
+//   .recharts-legend-item-text {
+//     color: #000000;
+//   }
+// }
+span.recharts-legend-item-text {
+   color: black !important;
+  }
+    .recharts-default-legend {
+      li.recharts-legend-item {
+        display: inline-block;
+        .legend-item-1 {
+          
+          .recharts-surface {
+            width: 20px;
+            height: 20px;
+            path {
+            stroke:#BFC5D2; 
+            }
+
+            span.recharts-legend-item-text {
+              color: black !important;
+            }
+          }
+        }
+        .legend-item-0 {
+              .recharts-surface {
+                path {
+                stroke: red; 
+                }
+              }
+        }
+     }
+  }
+
+.recharts-tooltip-wrapper  {
+  .recharts-default-tooltip{
+    background-color: #2E384D!important;
+    color: #FFFFFF!important;
+    width: 146px!important;
+    min-height: 70px!important;
+    border-radius: 4px;
+  }
+  .recharts-tooltip-label {
+    color: #F4F6FC !important;
+    padding-bottom: 5px;
+    font-size: 11px;
+     text-transform: uppercase;
+     font-family: $title-font-family;
+  }
+
+  .recharts-tooltip-item-list {
+    .recharts-tooltip-item {
+         color: #FFFFFF!important;
+         padding-top:0;
+         font-size: 16px;
+    }
+    .recharts-tooltip-item {
+      color: #BFC5D2!important;
+       padding: 0 !important;
+    }
+  }
 }
