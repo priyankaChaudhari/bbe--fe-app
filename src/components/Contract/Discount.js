@@ -27,7 +27,22 @@ function Discount({
   const [data, setData] = useState({});
   const [apiError, setApiError] = useState('');
 
-  useEffect(() => {});
+  useEffect(() => {
+    if (
+      (formData &&
+        formData.monthly_discount_amount &&
+        formData &&
+        formData.one_time_discount_type !== null) ||
+      (formData &&
+        formData.one_time_discount_amount &&
+        formData &&
+        formData.monthly_discount_type !== null)
+    ) {
+      setShowAmountInput(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData]);
+
   const handleInputChange = (event) => {
     setApiError('');
     if (event.target.name !== 'amount') {
@@ -44,18 +59,25 @@ function Discount({
         setFormData({
           ...formData,
           one_time_discount_type: event.target.value,
+          one_time_discount_amount: null,
         });
         setData({
           ...data,
           one_time_discount_type: event.target.value,
+          one_time_discount_amount: null,
         });
       }
 
       if (discountFlag === 'monthly') {
-        setFormData({ ...formData, monthly_discount_type: event.target.value });
+        setFormData({
+          ...formData,
+          monthly_discount_type: event.target.value,
+          monthly_discount_amount: null,
+        });
         setData({
           ...data,
           monthly_discount_type: event.target.value,
+          monthly_discount_amount: null,
         });
       }
     } else if (event.target.value === 'none') {
@@ -63,26 +85,26 @@ function Discount({
       if (discountFlag === 'one-time') {
         setFormData({
           ...formData,
-          one_time_discount_type: '',
-          one_time_discount_amount: 0,
+          one_time_discount_type: null,
+          one_time_discount_amount: null,
         });
         setData({
           ...data,
-          one_time_discount_type: '',
-          one_time_discount_amount: 0,
+          one_time_discount_type: null,
+          one_time_discount_amount: null,
         });
       }
 
       if (discountFlag === 'monthly') {
         setFormData({
           ...formData,
-          monthly_discount_type: '',
-          monthly_discount_amount: 0,
+          monthly_discount_type: null,
+          monthly_discount_amount: null,
         });
         setData({
           ...data,
-          monthly_discount_type: '',
-          monthly_discount_amount: 0,
+          monthly_discount_type: null,
+          monthly_discount_amount: null,
         });
       }
     }
@@ -128,8 +150,8 @@ function Discount({
     if (discountFlag === 'one-time') {
       if (!(formData && formData.one_time_discount_type)) {
         updateContract({
-          one_time_discount_type: '',
-          one_time_discount_amount: 0,
+          one_time_discount_type: null,
+          one_time_discount_amount: null,
         });
       } else {
         updateContract(data);
@@ -139,8 +161,8 @@ function Discount({
     if (discountFlag === 'monthly') {
       if (!(formData && formData.monthly_discount_type)) {
         updateContract({
-          monthly_discount_type: '',
-          monthly_discount_amount: 0,
+          monthly_discount_type: null,
+          monthly_discount_amount: null,
         });
       } else {
         updateContract(data);
@@ -179,9 +201,21 @@ function Discount({
 
   const setDefaultAmount = () => {
     if (discountFlag === 'one-time') {
+      if (
+        (agreementData && agreementData.one_time_discount_type) ===
+        (formData && formData.one_time_discount_type)
+      ) {
+        return agreementData && agreementData.one_time_discount_amount;
+      }
       return formData && formData.one_time_discount_amount;
     }
     if (discountFlag === 'monthly') {
+      if (
+        (agreementData && agreementData.monthly_discount_type) ===
+        (formData && formData.monthly_discount_type)
+      ) {
+        return agreementData && agreementData.monthly_discount_amount;
+      }
       return formData && formData.monthly_discount_amount;
     }
     return null;
@@ -282,16 +316,13 @@ function Discount({
                 <NumberFormat
                   name="amount"
                   className="form-control modal-input-control"
-                  // defaultValue={agreementData[item.key]}
                   placeholder={
                     selectedDiscountType === 'percentage'
                       ? 'Enter Percentage'
                       : 'Enter Amount'
                   }
-                  // prefix={selectedDiscount === 'fixed-amount' ? '$' : ''}
-                  // suffix={selectedDiscount === 'percentage' ? '%' : ''}
                   onChange={(event) => handleInputChange(event)}
-                  defaultValue={setDefaultAmount()}
+                  value={setDefaultAmount()}
                   thousandSeparator
                 />
                 {selectedDiscountType === 'percentage' ||
@@ -338,6 +369,10 @@ Discount.propTypes = {
   discountFlag: PropTypes.string,
   agreementData: PropTypes.shape({
     id: PropTypes.string,
+    monthly_discount_type: PropTypes.string,
+    one_time_discount_type: PropTypes.string,
+    monthly_discount_amount: PropTypes.string,
+    one_time_discount_amount: PropTypes.string,
   }),
   setShowDiscountModal: PropTypes.func,
   formData: PropTypes.shape({

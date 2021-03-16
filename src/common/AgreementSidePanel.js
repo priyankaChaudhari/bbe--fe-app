@@ -2594,7 +2594,13 @@ export default function AgreementSidePanel({
                       src={StatementWork}
                       alt="pdf"
                     />
-                    <h4 className="sendar-details ">
+
+                    <h4
+                      className={
+                        sectionError && sectionError.statement
+                          ? 'sendar-details error-container'
+                          : 'sendar-details '
+                      }>
                       Statement of Work{' '}
                       {sectionError && sectionError.statement ? (
                         openCollapse.statement ? (
@@ -2854,7 +2860,12 @@ export default function AgreementSidePanel({
                       });
                     }}>
                     <img className="service-agre" src={Advertise} alt="pdf" />
-                    <h4 className="sendar-details ">
+                    <h4
+                      className={
+                        sectionError && sectionError.dsp
+                          ? 'sendar-details error-container '
+                          : 'sendar-details'
+                      }>
                       DSP Advertising
                       {sectionError && sectionError.dsp ? (
                         openCollapse.dsp ? (

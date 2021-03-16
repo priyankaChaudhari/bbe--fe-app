@@ -705,6 +705,7 @@ export default function NewCustomerList() {
                     {data && data.length === 0 ? (
                       <NoRecordFound />
                     ) : (
+                      data &&
                       data.map((item) => (
                         <tr
                           className="cursor"
