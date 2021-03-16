@@ -377,7 +377,6 @@ export default function ContractContainer() {
     let primaryMarketPlaceApi = null;
     let AddendumApi = null;
 
-    setIsEditContract(false);
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
       if (updatedFormData && updatedFormData.start_date) {
@@ -516,6 +515,7 @@ export default function ContractContainer() {
               showFooter(false);
               setUpdatedFormData({});
               dispatch(getAccountDetails(id));
+              setIsEditContract(false);
             }
 
             if (

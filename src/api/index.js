@@ -78,6 +78,7 @@ export {
   createMarketplaceBulk,
   sendReminderOfContract,
   checksignatureStatus,
+  getContractActivityLog,
 } from './AgreementApi';
 
 // Knowledge Base

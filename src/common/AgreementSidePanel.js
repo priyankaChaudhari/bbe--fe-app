@@ -50,7 +50,7 @@ import {
   getMonthlyService,
   getOneTimeService,
   createAddendum,
-  getActivityLog,
+  getContractActivityLog,
   getDocumentList,
   // getAmazonDetails,
   // getCustomerMembers,
@@ -189,9 +189,9 @@ export default function AgreementSidePanel({
     );
   };
 
-  const getActivityLogInfo = useCallback(
+  const getContractActivityLogInfo = useCallback(
     (currentPage) => {
-      getActivityLog(currentPage, id).then((response) => {
+      getContractActivityLog(currentPage, agreementData.id).then((response) => {
         setActivityData(response && response.data && response.data.results);
         getDocumentList().then((picResponse) => {
           setImages(picResponse);
@@ -273,7 +273,7 @@ export default function AgreementSidePanel({
   };
 
   useEffect(() => {
-    getActivityLogInfo();
+    getContractActivityLogInfo();
     getLength().then((len) => {
       setAccountLength(len.data);
     });
