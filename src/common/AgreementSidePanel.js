@@ -3513,11 +3513,11 @@ const SidePanel = styled.div`
       height: 64px;
       background: #FBF2F2;
       right: 0;
-      border-right: 2px solid${Theme.red};
+      border-right: 2px solid #D63649;
       z-index: -2;
       top: 0px;
       position: absolute;
-      width: 20%;
+      width: 70px;
 
       .red-cross {
         width: 16px;

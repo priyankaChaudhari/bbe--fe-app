@@ -881,7 +881,6 @@ export const WhiteCard = styled.div`
 
       li{
         display: inline-block;
-        
       
          label {
             color: ${Theme.gray40};

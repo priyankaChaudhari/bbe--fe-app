@@ -2057,7 +2057,7 @@ export default function ContractContainer() {
               showRightTick('dspAddendum') ? (
               <>
                 <Button
-                  className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
+                  className="btn-primary on-boarding  mt-3 mr-4 w-sm-100"
                   onClick={() => {
                     createAgreementDoc();
                     setParams('select-contact');
@@ -2067,7 +2067,7 @@ export default function ContractContainer() {
                 </Button>
                 {!isEditContract ? (
                   <Button
-                    className="light-orange  on-boarding  mt-3 mr-3 w-sm-100"
+                    className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
                     onClick={() => {
                       setIsEditContract(true);
                     }}>
@@ -2082,7 +2082,7 @@ export default function ContractContainer() {
             ) : !isEditContract ? (
               <>
                 <Button
-                  className="btn-primary  on-boarding  mt-3 mr-3 w-sm-100"
+                  className="btn-primary  on-boarding  mt-3 mr-4 w-sm-100"
                   onClick={() => {
                     setIsEditContract(true);
                   }}>
@@ -2325,8 +2325,11 @@ const Footer = styled.div`
   .last-update {
     margin-top: 30px;
     color: ${Theme.gray40};
-    margin-left: 20px;
     font-size: ${Theme.extraNormal};
+
+    &:first-child {
+      margin-left: 20px;
+    }
   }
   @media only screen and (max-width: 991px) {
     padding-left: 0px;
