@@ -181,10 +181,13 @@ export default function AgreementSidePanel({
     }
     return (
       <>
-        {updatedField[0]}
-        <span>updated {updatedField[1].split(' from ')[0]} from </span>{' '}
-        {updatedField[1].split(' from ')[1].split(' to ')[0]}
-        <span> to </span> {updatedField[1].split(' from ')[1].split(' to ')[1]}
+        {updatedField && updatedField[0]}
+        <span>
+          updated {updatedField && updatedField[1].split(' from ')[0]} from{' '}
+        </span>{' '}
+        {updatedField && updatedField[1].split(' from ')[1].split(' to ')[0]}
+        <span> to </span>{' '}
+        {updatedField && updatedField[1].split(' from ')[1].split(' to ')[1]}
       </>
     );
   };
@@ -470,6 +473,7 @@ export default function AgreementSidePanel({
         non_field_errors: '',
       });
     }
+
     if (type === 'quantity') {
       clearOneTimeQntyError(val);
     }
@@ -1523,6 +1527,7 @@ export default function AgreementSidePanel({
         if (event.target.name === 'dsp_fee') {
           setSectionError({ ...sectionError, dsp: 0 });
         }
+
         setContractError({
           ...contractError,
           [event.target.name]: '',
@@ -2470,6 +2475,15 @@ export default function AgreementSidePanel({
   const changeListOptimization = (key, flag) => {
     showFooter(true);
     let updatedData = 0;
+    if (
+      Object.keys(contractError).includes('content_optimization') ||
+      Object.keys(contractError).includes('design_optimization')
+    ) {
+      setContractError({
+        ...contractError,
+        [key]: '',
+      });
+    }
     if (flag === 'minus') {
       if (formData && formData[key]) {
         updatedData = formData[key] - 1;
@@ -2504,41 +2518,39 @@ export default function AgreementSidePanel({
         </ContractFormField>
         {ListingOptimization.map((field) => {
           return (
-            <div className="row">
-              <div className="col-7 ">
-                <label>{field && field.label}</label>
-              </div>
-              <div className="col-5 pl-0 text-end">
-                <button
-                  type="button"
-                  className="decrement"
-                  onClick={() => changeListOptimization(field.key, 'minus')}>
-                  <img className="minus-icon" src={MinusIcon} alt="" />
-                </button>
+            <>
+              <div className="row">
+                <div className="col-7 ">
+                  <label>{field && field.label}</label>
+                </div>
+                <div className="col-5 pl-0 text-end">
+                  <button
+                    type="button"
+                    className="decrement"
+                    onClick={() => changeListOptimization(field.key, 'minus')}>
+                    <img className="minus-icon" src={MinusIcon} alt="" />
+                  </button>
 
-                <NumberFormat
-                  name={field.key}
-                  className="form-control max-min-number"
-                  value={formData && formData[field.key]}
-                  // id={oneTimeServiceData.value}
-                  // onChange={(event) =>
-                  //   handleChange(
-                  //     event,
-                  //     'additional_one_time_services',
-                  //     'quantity',
-                  //     oneTimeServiceData,
-                  //   )
-                  // }
-                />
+                  <NumberFormat
+                    name={field.key}
+                    className="form-control max-min-number"
+                    value={formData && formData[field.key]}
+                    // id={oneTimeServiceData.value}
+                    onChange={(event) =>
+                      handleChange(event, 'listing_optimization')
+                    }
+                  />
 
-                <button
-                  type="button"
-                  className="increment"
-                  onClick={() => changeListOptimization(field.key, 'plus')}>
-                  <img className="plus-icon" src={PlusIcon} alt="" />
-                </button>
+                  <button
+                    type="button"
+                    className="increment"
+                    onClick={() => changeListOptimization(field.key, 'plus')}>
+                    <img className="plus-icon" src={PlusIcon} alt="" />
+                  </button>
+                </div>
               </div>
-            </div>
+              <div>{displayError(field)}</div>
+            </>
           );
         })}
       </>

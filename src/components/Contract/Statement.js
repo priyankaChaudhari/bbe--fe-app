@@ -253,8 +253,12 @@ export default function Statement({
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                ? details &&
+                  details.total_fee &&
+                  details.total_fee.monthly_service_discount
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : ''
             }
             </td>
          </tr>

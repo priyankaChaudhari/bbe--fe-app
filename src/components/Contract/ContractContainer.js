@@ -694,15 +694,28 @@ export default function ContractContainer() {
               });
 
               if (contractRes.data) {
-                if (Object.keys(contractRes.data).length)
+                if (Object.keys(contractRes.data).length) {
                   if (
                     Object.keys(contractRes.data).includes('monthly_retainer')
                   )
                     statementErrCount += 1;
-                if (Object.keys(contractRes.data).includes('zip_code'))
-                  agreementErrCount += 1;
-                if (Object.keys(contractRes.data).includes('dsp_fee'))
-                  dspErrCount += 1;
+                  if (
+                    Object.keys(contractRes.data).includes(
+                      'content_optimization',
+                    )
+                  )
+                    statementErrCount += 1;
+                  if (
+                    Object.keys(contractRes.data).includes(
+                      'design_optimization',
+                    )
+                  )
+                    statementErrCount += 1;
+                  if (Object.keys(contractRes.data).includes('zip_code'))
+                    agreementErrCount += 1;
+                  if (Object.keys(contractRes.data).includes('dsp_fee'))
+                    dspErrCount += 1;
+                }
               }
             }
             if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
@@ -1183,8 +1196,12 @@ export default function ContractContainer() {
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                ? details &&
+                  details.total_fee &&
+                  details.total_fee.monthly_service_discount
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : ''
             }
             </td>
          </tr>
