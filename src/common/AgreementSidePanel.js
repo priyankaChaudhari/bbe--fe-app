@@ -30,7 +30,6 @@ import {
   CaretUp,
   RedCross,
   DefaultUser,
-  CompanyDefaultUser,
   // FileIcon,
   // CheckFileIcon,
   // EditFileIcon,
@@ -1666,6 +1665,7 @@ export default function AgreementSidePanel({
         <DatePicker
           className="form-control"
           id="date"
+          minDate={new Date()}
           value={
             startDate ||
             ('' ||
@@ -3223,28 +3223,6 @@ export default function AgreementSidePanel({
                     Send Reminder
                   </Button> */}
           {/* <div className="contract-status">Pending Approval</div> */}
-          <div className="activity-log">Contract Activity</div>
-          <ul className="menu">
-            <li>
-              <img className="default-user" src={CompanyDefaultUser} alt="" />
-
-              <div className="activity-user">
-                Kathy requested internal approval of the contract
-                <span> updated the contract </span>
-                <div className="time-date mt-1">10/22/2020 at 11:20AM MST</div>
-              </div>
-              <div className="clear-fix" />
-            </li>
-            <li>
-              <img className="default-user" src={CompanyDefaultUser} alt="" />
-
-              <div className="activity-user">
-                Kathey <span> updated the contract </span>
-                <div className="time-date mt-1">10/22/2020 at 11:20AM MST</div>
-              </div>
-              <div className="clear-fix" />
-            </li>
-          </ul>
 
           {/* <div className=" activity-log current-agreement-title">
             Current Agreement

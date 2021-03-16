@@ -833,6 +833,14 @@ fieldset {
   }
 }
 
+.react-calendar__tile:disabled {
+  color: black;
+}
+
+.react-calendar__navigation button[disabled] {
+  color: black
+}
+
 .croped-img {
   height: 480px;
   width: 560px;
