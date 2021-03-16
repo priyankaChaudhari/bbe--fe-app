@@ -30,6 +30,7 @@ import {
   CaretUp,
   RedCross,
   DefaultUser,
+  CompanyDefaultUser,
 } from '../theme/images/index';
 import { Button, ContractFormField } from './index';
 import {
@@ -3198,14 +3199,15 @@ export default function AgreementSidePanel({
                     <img src={AlarmBellIcon} alt="alarm" />
                     Send Reminder
                   </Button> */}
-
-          {/* <div className="activity-log">Contract Activity</div>
+          <div className="contract-status">Pending Approval</div>
+          <div className="activity-log">Contract Activity</div>
           <ul className="menu">
             <li>
               <img className="default-user" src={CompanyDefaultUser} alt="" />
 
               <div className="activity-user">
-                Kathey <span> updated the contract </span>
+                Kathy requested internal approval of the contract
+                <span> updated the contract </span>
                 <div className="time-date mt-1">10/22/2020 at 11:20AM MST</div>
               </div>
               <div className="clear-fix" />
@@ -3221,7 +3223,7 @@ export default function AgreementSidePanel({
             </li>
           </ul>
 
-          <div className=" activity-log current-agreement-title">
+          {/* <div className=" activity-log current-agreement-title">
             Current Agreement
           </div>
           <ul className="menu">
@@ -3666,6 +3668,13 @@ const SidePanel = styled.div`
         }
      }
    } 
+   .contract-status {
+     color: #171725;
+     font-size: 14px;
+    box-shadow: inset 1px 0 0 0 #E2E2EA;
+    text-align: center;
+    background: #FDF3D7;
+   }
 .activity-log {
     font-size: ${Theme.extraMedium};
     padding:20px 20px 0 20px;
@@ -3717,8 +3726,8 @@ const SidePanel = styled.div`
         }
 
         .default-user {
-          width: 25px;
-          height: 25px;
+          width: 42px;
+          height: 42px;
           border-radius: 50%;
           float: left;
           margin-right: 10px;
