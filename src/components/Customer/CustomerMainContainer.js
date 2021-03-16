@@ -10,7 +10,6 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
-import { ToastContainer } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import {
@@ -303,7 +302,6 @@ export default function CustomerMainContainer() {
         <PageLoader color="#FF5933" type="page" width={20} />
       ) : (
         <>
-          <ToastContainer position="top-center" autoClose={8000} />
           <BackBtn className="d-lg-none d-block ">
             <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
               {' '}

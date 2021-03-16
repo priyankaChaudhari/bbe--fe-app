@@ -8,6 +8,7 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
+import { ToastContainer } from 'react-toastify';
 
 import Theme from '../theme/Theme';
 import {
@@ -111,6 +112,8 @@ export default function Header() {
 
   return (
     <div>
+      <ToastContainer position="top-center" autoClose={5000} />
+
       <MainHeader>
         <div className="container-fluid">
           <div className="row">

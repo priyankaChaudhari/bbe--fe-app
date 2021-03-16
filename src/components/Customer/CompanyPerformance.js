@@ -34,6 +34,7 @@ import { WhiteCard } from '../../theme/Global';
 export default function CompanyPerformance({ agreement }) {
   const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(null);
 
   const data = [
     {
@@ -205,6 +206,7 @@ export default function CompanyPerformance({ agreement }) {
                   components={getSelectComponents()}
                   options={reportOptions}
                   defaultValue={reportOptions[0]}
+                  onChange={(event) => setSelectedValue(event.value)}
                 />
               </DropDownSelect>{' '}
               <div className="clear-fix" />
@@ -258,17 +260,28 @@ export default function CompanyPerformance({ agreement }) {
 
           <div className="days-container mt-3">
             <ul className="days-tab">
-              <li>
+              <li className={selectedValue === 'custom' ? 'disabled' : ''}>
                 {' '}
                 <input
                   className="form-check-input d-none"
                   type="checkbox"
-                  value=""
+                  defaultChecked={
+                    selectedValue === 'week' ||
+                    selectedValue === null ||
+                    selectedValue !== 'custom'
+                  }
                   id="weeklyCheck1"
                 />
                 <label htmlFor="weeklyCheck1">Daily</label>
               </li>
-              <li>
+              <li
+                className={
+                  selectedValue === 'week' ||
+                  selectedValue === null ||
+                  selectedValue === 'custom'
+                    ? 'disabled'
+                    : ''
+                }>
                 <input
                   className="form-check-input d-none"
                   type="checkbox"
@@ -277,7 +290,16 @@ export default function CompanyPerformance({ agreement }) {
                 />
                 <label htmlFor="weeklyCheck2">Weekly</label>
               </li>
-              <li>
+              <li
+                className={
+                  selectedValue === 'week' ||
+                  selectedValue === null ||
+                  selectedValue === 'month' ||
+                  selectedValue === '30days' ||
+                  selectedValue === 'custom'
+                    ? 'disabled'
+                    : ''
+                }>
                 <input
                   className="form-check-input d-none"
                   type="checkbox"
