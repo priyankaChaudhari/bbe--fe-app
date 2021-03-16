@@ -197,7 +197,7 @@ export default function AgreementSidePanel({
         });
       });
     },
-    [isEditContract],
+    [agreementData],
   );
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
@@ -272,7 +272,6 @@ export default function AgreementSidePanel({
   };
 
   useEffect(() => {
-    getContractActivityLogInfo();
     getLength().then((len) => {
       setAccountLength(len.data);
     });
@@ -403,6 +402,10 @@ export default function AgreementSidePanel({
       agreementData.additional_marketplaces.length
     ) {
       setShowAdditionalMarketplace(true);
+    }
+
+    if (agreementData && agreementData.id) {
+      getContractActivityLogInfo();
     }
 
     if (
