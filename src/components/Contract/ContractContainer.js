@@ -780,7 +780,7 @@ export default function ContractContainer() {
       if (showDiscardModal.clickedBtn === 'back') {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
-
+      setSectionError({});
       // setFormData({});
       showFooter(false);
       setShowEditor(false);
