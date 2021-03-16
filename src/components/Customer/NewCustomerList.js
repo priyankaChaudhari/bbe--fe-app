@@ -1050,10 +1050,13 @@ const CustomerLeftPannel = styled.div`
   max-width: 290px;
   height: 100%;
   position: fixed;
+  overflow: auto;
+  // padding-bottom: 200px;
   top: 130px;
   width: 100%;
   left: 62px;
   padding: 15px;
+  padding-bottom: 100px;
   border-right: 1px solid ${Theme.gray5};
 
   .label {

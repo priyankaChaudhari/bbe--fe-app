@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
@@ -96,21 +97,25 @@ export default function CompanyPerformance({ agreement }) {
 
   const filterOption = (props) => (
     <Option {...props}>
-      <span>
-        {props.data.label}
-        <br />
-        {props.data.sub}
-      </span>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {props.data.sub}
+        </div>
+      </div>
     </Option>
   );
 
   const singleFilterOption = (props) => (
     <SingleValue {...props}>
-      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
         {props.data.label}
-        <br />
-        {props.data.sub}
       </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
     </SingleValue>
   );
 
@@ -187,7 +192,7 @@ export default function CompanyPerformance({ agreement }) {
                 Sales Performance
               </p>
             </div>
-            <div className="col-6 text-right mb-4">
+            <div className="col-6  mb-4">
               <DropDownSelect className="days-performance">
                 <Select
                   classNamePrefix="react-select"
@@ -197,6 +202,7 @@ export default function CompanyPerformance({ agreement }) {
                   defaultValue={reportOptions[0]}
                 />
               </DropDownSelect>{' '}
+              <div className="clear-fix" />
             </div>
           </div>
           <ul className="new-order-chart">
@@ -244,15 +250,40 @@ export default function CompanyPerformance({ agreement }) {
               </div>
             </li> */}
           </ul>
-        </WhiteCard>
-        <WhiteCard>
-          <div className="days-container">
+
+          <div className="days-container mt-3">
             <ul className="days-tab">
-              <li className=" active">Daily</li>
-              <li className="disabled">Weekly</li>
-              <li className="disabled">Monthly</li>
+              <li>
+                {' '}
+                <input
+                  className="form-check-input d-none"
+                  type="checkbox"
+                  value=""
+                  id="weeklyCheck1"
+                />
+                <label htmlFor="weeklyCheck1">Daily</label>
+              </li>
+              <li>
+                <input
+                  className="form-check-input d-none"
+                  type="checkbox"
+                  value=""
+                  id="weeklyCheck2"
+                />
+                <label htmlFor="weeklyCheck2">Weekly</label>
+              </li>
+              <li>
+                <input
+                  className="form-check-input d-none"
+                  type="checkbox"
+                  value=""
+                  id="weeklyCheck4"
+                />
+                <label htmlFor="weeklyCheck4">Monthly</label>
+              </li>
             </ul>
           </div>
+          <div className="clear-fix" />
           <LineChart
             width={700}
             height={300}
@@ -261,7 +292,7 @@ export default function CompanyPerformance({ agreement }) {
               top: 40,
               right: 30,
               left: 20,
-              bottom: 5,
+              bottom: 40,
             }}>
             <CartesianGrid strokeDasharray="none" />
             <XAxis dataKey="name" />

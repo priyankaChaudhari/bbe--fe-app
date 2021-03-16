@@ -16,7 +16,7 @@ const DropDownSelect = styled.div`
 
   &.days-performance {
     max-width: 259px;
-    text-align: -webkit-right;
+    float: right;
   }
 
   &.w-250 {

@@ -853,36 +853,42 @@ export const WhiteCard = styled.div`
     background-color: #FFFFFF;
     border: 1px solid #D5D8E1;
     border-radius: 18px;
-    max-width: 240px;
+    max-width: 243px;
     float: right;
 
     .days-tab {
       list-style-type: none;
       padding: 0;
       margin: 0;
-
-      li{
-        color: #556178;
-        padding: 7px 19px;
-        font-size: 14px;
-        display: inline-block;
-        cursor: pointer;
-
-
-        
-
-        &:hover {
-          background-color: #FFFFFF;
+       #weeklyCheck1:checked + label{
+         background-color: #fffff;
           border: 1px solid #FF5933;
           border-radius: 18px;
           color: #FF5933;
-          
         }
-         &.active {
-            background-color: #FFFFFF;
-            border: 1px solid #FF5933;
-            border-radius: 18px;
-            color: #FF5933;
+        #weeklyCheck2:checked + label{
+          background-color: #fffff;
+          border: 1px solid #FF5933;
+          border-radius: 18px;
+          color: #FF5933;
+        }
+        #weeklyCheck4:checked + label{
+         background-color: #fffff;
+          border: 1px solid #FF5933;
+          border-radius: 18px;
+          color: #FF5933;
+        }
+
+      li{
+        display: inline-block;
+         
+        
+         label {
+            color: #556178;
+            padding: 7px 19px;
+            font-size: 14px;
+            display: inline-block;
+            cursor: pointer;
         }
       }
     }
