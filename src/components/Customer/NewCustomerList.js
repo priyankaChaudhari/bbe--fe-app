@@ -579,7 +579,7 @@ export default function NewCustomerList() {
         <DropDownSelect className="w-250">
           {generateDropdown('user')}
         </DropDownSelect>{' '}
-        <div className="label mt-4">Status</div>
+        <div className="label mt-4 pt-2">Status</div>
         <div
           className="unselected uncheck-all"
           onClick={(event) => handleFilters(event, 'unselected', 'status')}
@@ -608,7 +608,7 @@ export default function NewCustomerList() {
               </li>
             ))}
         </ul>
-        <div className="label mt-4">Contract Type</div>
+        <div className="label mt-4 pt-2">Contract Type</div>
         <div className="clear-fix" />
         <ul className="check-box-list">
           {contractChoices.map((item) => (
@@ -632,6 +632,61 @@ export default function NewCustomerList() {
             </li>
           ))}
         </ul>
+        {/* <div className="label mt-4 pt-2">Contract Status</div>
+        <div
+          className="unselected uncheck-all"
+          onClick={(event) => handleFilters(event, 'unselected', 'status')}
+          role="presentation">
+          Unselect all
+        </div>
+        <div className="clear-fix" />
+        <ul className="check-box-list checkboxes">
+          <li>
+            <CheckBox>
+              <label className="check-container customer-pannel">
+                <input type="checkbox" />
+                <span className="checkmark" />
+                Active
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label className="check-container customer-pannel">
+                <input type="checkbox" />
+                <span className="checkmark" />
+                Expiring soon
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label className="check-container customer-pannel">
+                <input type="checkbox" />
+                <span className="checkmark" />
+                Pending Signature
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label className="check-container customer-pannel">
+                <input type="checkbox" />
+                <span className="checkmark" />
+                Pending Approval
+              </label>
+            </CheckBox>
+          </li>
+          <li>
+            <CheckBox>
+              <label className="check-container customer-pannel">
+                <input type="checkbox" />
+                <span className="checkmark" />
+                Pending Contract
+              </label>
+            </CheckBox>
+          </li>
+        </ul> */}
       </CustomerLeftPannel>
       {/* <div className="table-part">
         <table>

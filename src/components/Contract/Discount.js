@@ -362,7 +362,7 @@ function Discount({
                   (discountFlag === 'one-time' &&
                     formData &&
                     formData.one_time_discount_type === 'percentage') ? (
-                    <span className="input-icon">%</span>
+                    <span className="input-icon end">%</span>
                   ) : (
                     ''
                   )}
