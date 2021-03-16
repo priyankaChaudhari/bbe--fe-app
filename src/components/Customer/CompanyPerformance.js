@@ -1,5 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import PropTypes from 'prop-types';
 import {
   LineChart,
   Line,
@@ -12,7 +16,8 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
+
 import {
   // CopyLinkIcon,
   // InfoIcons,
@@ -20,11 +25,15 @@ import {
 
   ArrowUpIcon,
   ArrowDownIcon,
+  CaretUp,
 } from '../../theme/images/index';
 import { DropDownSelect } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 
-export default function CompanyPerformance() {
+export default function CompanyPerformance({ agreement }) {
+  const { Option, SingleValue } = components;
+  const [amazonOptions, setAmazonOptions] = useState([]);
+
   const data = [
     {
       name: 'Jan 8',
@@ -70,13 +79,78 @@ export default function CompanyPerformance() {
     },
   ];
 
-  const pieData = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
+  const pieData = [{ name: 'Group A', value: 12 }];
+  const COLORS = ['#407B00'];
+
+  const reportOptions = [
+    { value: 'week', label: 'This Week', sub: 'vs last week' },
+    { value: 'month', label: 'This Month', sub: 'vs last month' },
+    { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
+    { value: 'yeartoDate', label: 'Year to Date', sub: 'vs previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  const filterOption = (props) => (
+    <Option {...props}>
+      <span>
+        {props.data.label}
+        <br />
+        {props.data.sub}
+      </span>
+    </Option>
+  );
+
+  const singleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+        <br />
+        {props.data.sub}
+      </span>
+    </SingleValue>
+  );
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
+  const getSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropdownIndicator,
+    };
+  };
+
+  useEffect(() => {
+    const list = [];
+    list.push({
+      value: agreement.primary_marketplace.id,
+      label: agreement.primary_marketplace.name,
+    });
+    for (const option of agreement.additional_marketplaces) {
+      list.push({ value: option.id, label: option.name });
+    }
+    setAmazonOptions(list);
+  }, [agreement.additional_marketplaces, agreement.primary_marketplace]);
 
   return (
     <>
@@ -84,7 +158,23 @@ export default function CompanyPerformance() {
         <div className="row">
           <div className="col-12 mb-3">
             <DropDownSelect>
-              <Select classNamePrefix="react-select" className="active" />
+              <Select
+                classNamePrefix="react-select"
+                className="active"
+                options={amazonOptions}
+                placeholder={
+                  amazonOptions && amazonOptions[0] && amazonOptions[0].label
+                }
+                components={{ DropdownIndicator }}
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    neutral50: '#1A1A1A', // Placeholder color
+                  },
+                })}
+                defaultValue={amazonOptions && amazonOptions[0]}
+              />
             </DropDownSelect>{' '}
           </div>
         </div>
@@ -99,7 +189,13 @@ export default function CompanyPerformance() {
             </div>
             <div className="col-6 text-right mb-4">
               <DropDownSelect className="days-performance">
-                <Select classNamePrefix="react-select" className="active" />
+                <Select
+                  classNamePrefix="react-select"
+                  className="active"
+                  components={getSelectComponents()}
+                  options={reportOptions}
+                  defaultValue={reportOptions[0]}
+                />
               </DropDownSelect>{' '}
             </div>
           </div>
@@ -287,3 +383,13 @@ export default function CompanyPerformance() {
     </>
   );
 }
+
+CompanyPerformance.propTypes = {
+  agreement: PropTypes.shape({
+    id: PropTypes.string,
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
+    primary_marketplace: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+};
