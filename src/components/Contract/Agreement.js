@@ -201,8 +201,10 @@ export default function Agreement({ formData, details, templateData }) {
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details && details.total_fee && details.total_fee.onetime_service
-          ? details.total_fee.onetime_service
+        details &&
+        details.total_fee &&
+        details.total_fee.onetime_service_after_discount
+          ? details.total_fee.onetime_service_after_discount
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           : 0
@@ -232,7 +234,55 @@ export default function Agreement({ formData, details, templateData }) {
       </p>`;
     return data;
   };
-
+  const mapOnetimeServiceTotal = () => {
+    return `<tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;">
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Sub-total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">$${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;">
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Discount ${
+              details &&
+              details.one_time_discount_amount &&
+              details &&
+              details.one_time_discount_type === 'percentage'
+                ? `(${details && details.one_time_discount_amount}%)`
+                : ''
+            }</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;"> -$${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr style="display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;">
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;"> $${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service_after_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         `;
+  };
   const showOneTimeServiceTable = () => {
     if (
       formData &&
@@ -250,12 +300,7 @@ export default function Agreement({ formData, details, templateData }) {
     padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
       'additional_one_time_services',
       'One Time Services',
-    )}<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
-      'additional_one_time_services',
-    )}
-                              </td></tr>
+    )}${mapOnetimeServiceTotal()}
                                 </table></div>`;
     }
     return '';
@@ -346,10 +391,14 @@ Agreement.propTypes = {
   details: PropTypes.shape({
     length: PropTypes.shape({ label: PropTypes.string }),
     contract_type: PropTypes.string,
+    one_time_discount_type: PropTypes.string,
+    one_time_discount_amount: PropTypes.number,
     total_fee: PropTypes.shape({
       additional_marketplaces: PropTypes.number,
       monthly_service: PropTypes.number,
       onetime_service: PropTypes.number,
+      onetime_service_after_discount: PropTypes.number,
+      onetime_service_discount: PropTypes.number,
     }),
     primary_marketplace: PropTypes.shape({
       fee: PropTypes.number,

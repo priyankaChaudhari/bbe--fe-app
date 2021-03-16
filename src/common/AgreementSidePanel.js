@@ -105,6 +105,7 @@ export default function AgreementSidePanel({
   setShowDiscountModal,
   sectionError,
   setSectionError,
+  setDiscountFlag,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -113,6 +114,7 @@ export default function AgreementSidePanel({
   const [monthlyService, setMonthlyService] = useState([]);
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
+
   // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
   //   false,
   // );
@@ -1991,7 +1993,8 @@ export default function AgreementSidePanel({
       ? selectedAmazonStore.service && selectedAmazonStore.service.id
       : selectedAmazonStore && selectedAmazonStore.service_id;
   };
-  const onAddDiscount = () => {
+  const onAddDiscount = (flag) => {
+    setDiscountFlag(flag);
     setShowDiscountModal(true);
     // if (section === 'monthly') {
     // }
@@ -2008,8 +2011,12 @@ export default function AgreementSidePanel({
           <div
             className="add-discount"
             role="presentation"
-            onClick={() => onAddDiscount('monthly')}>
-            Add Discount
+            onClick={() => onAddDiscount('one-time')}>
+            {formData &&
+            formData.one_time_discount_amount &&
+            formData.one_time_discount_type
+              ? 'Edit Discount'
+              : 'Add Discount'}
           </div>
         </ContractFormField>
         <div className="row">
@@ -2668,7 +2675,11 @@ export default function AgreementSidePanel({
                                 className="add-discount"
                                 role="presentation"
                                 onClick={() => onAddDiscount('monthly')}>
-                                Add Discount
+                                {formData &&
+                                formData.monthly_discount_amount &&
+                                formData.monthly_discount_type
+                                  ? 'Edit Discount'
+                                  : 'Add Discount'}
                               </div>
                             </ContractFormField>
                             {monthlyService &&

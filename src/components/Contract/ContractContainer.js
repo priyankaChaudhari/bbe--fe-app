@@ -164,6 +164,7 @@ export default function ContractContainer() {
   const [thirdMonthDate, setThirdMonthDate] = useState('');
   const [endMonthDate, setEndDate] = useState('');
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
+  const [discountFlag, setDiscountFlag] = useState('');
 
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
@@ -1154,6 +1155,93 @@ export default function ContractContainer() {
     return '';
   };
 
+  const mapMonthlyServiceTotal = () => {
+    return `<tr>
+            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Sub-total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right">$${
+              details &&
+              details.total_fee &&
+              details.total_fee.monthly_service
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr>
+            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Discount ${
+              details &&
+              details.monthly_discount_amount &&
+              details &&
+              details.monthly_discount_type === 'percentage'
+                ? `(${details && details.monthly_discount_amount}%)`
+                : ''
+            }</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> -$${
+              details &&
+              details.total_fee &&
+              details.total_fee.monthly_service_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr>
+            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> $${
+              details &&
+              details.total_fee &&
+              details.total_fee.monthly_service_after_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         `;
+  };
+
+  const mapOnetimeServiceTotal = () => {
+    return `<tr>
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Sub-total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right">$${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr>
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Discount ${
+              details &&
+              details.one_time_discount_amount &&
+              details &&
+              details.one_time_discount_type === 'percentage'
+                ? `(${details && details.one_time_discount_amount}%)`
+                : ''
+            }</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> -$${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         <tr>
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> $${
+              details &&
+              details.total_fee &&
+              details.total_fee.onetime_service_after_discount
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            </td>
+         </tr>
+         `;
+  };
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
@@ -1190,10 +1278,7 @@ export default function ContractContainer() {
     padding: 13px;">Service Fee</th></tr>${mapMonthlyServices(
       'additional_monthly_services',
       'Monthly Services',
-    )} ${mapAdditionalMarketPlaces()}<tr><td class="total-service" style="border: 1px solid black;padding: 13px;"> Total</td><td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">${mapServiceTotal(
-        'additional_monthly_services',
-      )}
-                              </td></tr>
+    )} ${mapAdditionalMarketPlaces()}${mapMonthlyServiceTotal()}
                               ${mapVariableMonthlyService()}
                                 </table>`;
     }
@@ -1237,23 +1322,7 @@ export default function ContractContainer() {
       </th>
     </tr>
     ${mapMonthlyServices('additional_one_time_services', 'One Time Services')}
-    <tr
-      style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;">
-      <td
-        class="total-service"
-        colspan="3"
-        style="border: 1px solid black;padding: 13px;">
-        
-        Total
-      </td>
-      <td
-        class="total-service text-right"
-        style="border: 1px solid black;padding: 13px; text-align: right;">
-        ${mapServiceTotal('additional_one_time_services')}
-      </td>
-    </tr>
+    ${mapOnetimeServiceTotal()}
   </table>`;
     }
     return '';
@@ -1850,6 +1919,7 @@ export default function ContractContainer() {
         setShowDiscountModal={setShowDiscountModal}
         sectionError={sectionError}
         setSectionError={setSectionError}
+        setDiscountFlag={setDiscountFlag}
       />
     );
   };
@@ -2004,6 +2074,11 @@ export default function ContractContainer() {
         </Footer>
       </div>
     );
+  };
+
+  const closeDiscountModal = () => {
+    setFormData(details);
+    setShowDiscountModal(false);
   };
 
   return (details &&
@@ -2182,18 +2257,21 @@ export default function ContractContainer() {
           src={CloseIcon}
           alt="close"
           className="float-right cursor cross-icon"
-          onClick={() => setShowDiscountModal(false)}
+          onClick={() => closeDiscountModal()}
           role="presentation"
         />
         <ModalBox>
           <Discount
             id={id}
             agreementData={details}
-            setShowModal={setShowModal}
-            pdfData={pdfData}
-            setShowSuccessContact={setShowSuccessContact}
-            clearSuccessMessage={clearSuccessMessage}
-            setOpenCollapse={setOpenCollapse}
+            setShowDiscountModal={setShowDiscountModal}
+            formData={formData}
+            setFormData={setFormData}
+            // pdfData={pdfData}
+            // setShowSuccessContact={setShowSuccessContact}
+            // clearSuccessMessage={clearSuccessMessage}
+            // setOpenCollapse={setOpenCollapse}
+            discountFlag={discountFlag}
           />
         </ModalBox>
       </Modal>
