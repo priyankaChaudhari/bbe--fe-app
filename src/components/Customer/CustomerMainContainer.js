@@ -95,7 +95,7 @@ export default function CustomerMainContainer() {
   const customer = useSelector((state) => state.customerState.data);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
-  const [viewComponent, setViewComponent] = useState('agreement');
+  const [viewComponent, setViewComponent] = useState('performance');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -122,6 +122,7 @@ export default function CustomerMainContainer() {
   ];
 
   const viewOptions = [
+    { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
     { value: 'activity', label: 'Activity' },
@@ -508,6 +509,21 @@ export default function CustomerMainContainer() {
                   <WhiteCard className="left-border  d-lg-block d-none mb-3">
                     <ul className="left-details-card">
                       <li
+                        onClick={() => setViewComponent('performance')}
+                        role="presentation">
+                        <div
+                          className={`left-details ${
+                            viewComponent === 'performance' ? 'active' : ''
+                          }`}>
+                          <img
+                            className="file-contract"
+                            src={HeartMonitorIcon}
+                            alt="monitor"
+                          />
+                          Performance
+                        </div>
+                      </li>
+                      <li
                         onClick={() => setViewComponent('agreement')}
                         role="presentation">
                         <div
@@ -533,22 +549,6 @@ export default function CustomerMainContainer() {
                           Company Details
                         </div>
                       </li>
-
-                      <li
-                        onClick={() => setViewComponent('performance')}
-                        role="presentation">
-                        <div
-                          className={`left-details ${
-                            viewComponent === 'performance' ? 'active' : ''
-                          }`}>
-                          <img
-                            className="file-contract"
-                            src={HeartMonitorIcon}
-                            alt="monitor"
-                          />
-                          Performance
-                        </div>
-                      </li>
                       <li
                         onClick={() => setViewComponent('activity')}
                         role="presentation">
@@ -567,14 +567,7 @@ export default function CustomerMainContainer() {
                     options={viewOptions}
                     className="customer-dropdown-select d-lg-none d-block mb-3 "
                     onChange={(event) => setViewComponent(event.value)}
-                    placeholder="Agreements"
-                    theme={(theme) => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        neutral50: '#1A1A1A', // Placeholder color
-                      },
-                    })}
+                    defaultValue={viewOptions[0]}
                   />
 
                   <WhiteCard className="mb-3">
