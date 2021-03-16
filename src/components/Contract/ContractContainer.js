@@ -32,7 +32,7 @@ import {
 import { getAccountDetails } from '../../store/actions/accountState';
 import { agreementTemplate } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, LeftArrowIcon } from '../../theme/images';
+import { CloseIcon, LeftArrowIcon, InfoIcon } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -97,6 +97,7 @@ export default function ContractContainer() {
     clickedBtn: '',
     show: false,
   });
+  const [isEditContract, setIsEditContract] = useState(false);
 
   const [editContractFlag, setEditContractFlag] = useState(true);
   // const [oneTimeService, setOneTimeService] = useState([]);
@@ -376,6 +377,7 @@ export default function ContractContainer() {
     let primaryMarketPlaceApi = null;
     let AddendumApi = null;
 
+    setIsEditContract(false);
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
       if (updatedFormData && updatedFormData.start_date) {
@@ -814,6 +816,7 @@ export default function ContractContainer() {
       }
       dispatch(getAccountDetails(id));
     }
+    setIsEditContract(false);
   };
 
   const calculateTotalDays = () => {
@@ -1920,6 +1923,7 @@ export default function ContractContainer() {
         sectionError={sectionError}
         setSectionError={setSectionError}
         setDiscountFlag={setDiscountFlag}
+        isEditContract={isEditContract}
       />
     );
   };
@@ -2048,28 +2052,52 @@ export default function ContractContainer() {
                   Request Approval
                 </Button>
               )
-            ) : (
-              <Button
-                className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
-                disabled={
-                  !(
-                    showRightTick('service_agreement') &&
-                    showRightTick('statement') &&
-                    showRightTick('dspAddendum')
-                  )
-                }
-                onClick={() => {
-                  createAgreementDoc();
-                  setParams('select-contact');
-                  setShowModal(true);
-                }}>
-                Request Signature
-              </Button>
-            )}
-            <span className="last-update ">
-              Last updated by You on{' '}
-              {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
-            </span>
+            ) : showRightTick('service_agreement') &&
+              showRightTick('statement') &&
+              showRightTick('dspAddendum') ? (
+              <>
+                <Button
+                  className="btn-primary on-boarding  mt-3 mr-3 w-sm-100"
+                  onClick={() => {
+                    createAgreementDoc();
+                    setParams('select-contact');
+                    setShowModal(true);
+                  }}>
+                  Request Signature
+                </Button>
+                {!isEditContract ? (
+                  <Button
+                    className="light-orange  on-boarding  mt-3 mr-3 w-sm-100"
+                    onClick={() => {
+                      setIsEditContract(true);
+                    }}>
+                    Edit Contract
+                  </Button>
+                ) : null}
+                <span className="last-update ">
+                  Last updated by You on{' '}
+                  {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
+                </span>
+              </>
+            ) : !isEditContract ? (
+              <>
+                <Button
+                  className="btn-primary  on-boarding  mt-3 mr-3 w-sm-100"
+                  onClick={() => {
+                    setIsEditContract(true);
+                  }}>
+                  Edit Contract
+                </Button>
+                <span className="last-update">
+                  <img
+                    src={InfoIcon}
+                    alt="aarow-back"
+                    className="mr-2 align-self-center"
+                  />
+                  This contract is missing mandatory information.
+                </span>
+              </>
+            ) : null}
           </div>
         </Footer>
       </div>

@@ -7,7 +7,8 @@
 /* eslint-disable react/prop-types */
 /* eslint no-unused-expressions: "error" */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import PropTypes from 'prop-types';
@@ -28,8 +29,7 @@ import {
   Advertise,
   CaretUp,
   RedCross,
-  // CompanyDefaultUser,
-  // PdfDownload,
+  DefaultUser,
 } from '../theme/images/index';
 import { Button, ContractFormField } from './index';
 import {
@@ -45,6 +45,10 @@ import {
   getMonthlyService,
   getOneTimeService,
   createAddendum,
+  getActivityLog,
+  getDocumentList,
+  // getAmazonDetails,
+  // getCustomerMembers,
 } from '../api';
 import ContractInputSelect from './ContractInputSelect';
 import PageLoader from './PageLoader';
@@ -106,6 +110,7 @@ export default function AgreementSidePanel({
   sectionError,
   setSectionError,
   setDiscountFlag,
+  isEditContract,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -115,6 +120,7 @@ export default function AgreementSidePanel({
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
 
+  const agreement = useSelector((state) => state.accountState.data);
   // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
   //   false,
   // );
@@ -122,6 +128,73 @@ export default function AgreementSidePanel({
   // const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
+
+  const [activityData, setActivityData] = useState([]);
+  const [images, setImages] = useState([]);
+
+  const getActivityInitials = (userInfo) => {
+    const firstName =
+      (userInfo &&
+        userInfo.split(' ').slice(0, 2) &&
+        userInfo.split(' ').slice(0, 2)[0].charAt(0)) ||
+      '';
+    const lastName =
+      (userInfo &&
+        userInfo.split(' ').slice(0, 2) &&
+        userInfo.split(' ').slice(0, 2)[1].charAt(0)) ||
+      '';
+
+    return firstName + lastName;
+  };
+
+  const activityDetail = (item) => {
+    const newRecord = item.message.includes(
+      'created new record by company name',
+    )
+      ? item.message.split('created new record by company name')
+      : '';
+    const updatedField = item.message.includes('updated')
+      ? item.message.split('updated')
+      : '';
+
+    const deleteRecord = item.message.includes('deleted record')
+      ? item.message.split('deleted record')
+      : '';
+
+    if (newRecord || deleteRecord) {
+      return (
+        <>
+          {newRecord[0] || deleteRecord[0]}
+          <span>
+            {newRecord
+              ? 'created new record by company name'
+              : 'deleted record'}
+          </span>
+          {newRecord[1] || deleteRecord[1]}
+        </>
+      );
+    }
+    return (
+      <>
+        {updatedField[0]}
+        <span>updated {updatedField[1].split(' from ')[0]} from </span>{' '}
+        {updatedField[1].split(' from ')[1].split(' to ')[0]}
+        <span> to </span> {updatedField[1].split(' from ')[1].split(' to ')[1]}
+      </>
+    );
+  };
+
+  const getActivityLogInfo = useCallback(
+    (currentPage) => {
+      getActivityLog(currentPage, id).then((response) => {
+        setActivityData(response && response.data && response.data.results);
+        getDocumentList().then((picResponse) => {
+          setImages(picResponse);
+        });
+      });
+    },
+    [isEditContract],
+  );
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
     let result = [];
@@ -195,6 +268,7 @@ export default function AgreementSidePanel({
   };
 
   useEffect(() => {
+    getActivityLogInfo();
     getLength().then((len) => {
       setAccountLength(len.data);
     });
@@ -2416,7 +2490,7 @@ export default function AgreementSidePanel({
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
             ''
-          ) : (
+          ) : isEditContract ? (
             <>
               {/* {goToSection()} */}
               <div
@@ -3034,6 +3108,52 @@ export default function AgreementSidePanel({
                 )}
               </Collapse>
             </>
+          ) : (
+            <>
+              <div>
+                {agreement &&
+                  agreement.contract_status &&
+                  agreement.contract_status.value}
+              </div>
+              <div className="activity-log">Contract Activity</div>
+              {activityData && activityData.length !== 0 ? (
+                activityData.map((item) => (
+                  <ul className="menu">
+                    <li>
+                      {images.find((op) => op.entity_id === item.user_id) &&
+                      images.find((op) => op.entity_id === item.user_id)
+                        .presigned_url ? (
+                        <img
+                          src={
+                            isLoading.loader && isLoading.type === 'page'
+                              ? DefaultUser
+                              : images.find(
+                                  (op) => op.entity_id === item.user_id,
+                                ).presigned_url
+                          }
+                          className="default-user-activity"
+                          alt="pic"
+                        />
+                      ) : (
+                        <div className="avatarName float-left mr-3">
+                          {getActivityInitials(item.message)}
+                        </div>
+                      )}
+
+                      <div className="activity-user">
+                        {activityDetail(item)}
+                        <div className="time-date mt-1">
+                          {item && item.time ? item.time : ''}
+                        </div>
+                      </div>
+                      <div className="clear-fix" />
+                    </li>
+                  </ul>
+                ))
+              ) : (
+                <div>No Activity Log found.</div>
+              )}
+            </>
           )}
           {/* 
                     <div className="straight-line sidepanel " />
@@ -3571,6 +3691,15 @@ const SidePanel = styled.div`
       
         &:last-child {
           border-bottom:none;
+        }
+
+        .default-user-activity {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          float: left;
+          margin-right: 15px;
+          margin-top: -2px;
         }
 
         .activity-user {
