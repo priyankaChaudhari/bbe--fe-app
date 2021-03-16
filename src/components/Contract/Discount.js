@@ -27,18 +27,53 @@ function Discount({
   const [data, setData] = useState({});
   const [apiError, setApiError] = useState('');
 
+  const setDefaultAmount = (selectedRadioBtn) => {
+    if (discountFlag === 'one-time') {
+      if (
+        (agreementData && agreementData.one_time_discount_type) ===
+        selectedRadioBtn
+      ) {
+        return agreementData && agreementData.one_time_discount_amount;
+      }
+      return null;
+    }
+    if (discountFlag === 'monthly') {
+      if (
+        (agreementData && agreementData.monthly_discount_type) ===
+        selectedRadioBtn
+      ) {
+        return agreementData && agreementData.monthly_discount_amount;
+      }
+      return null;
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (
-      (formData &&
-        formData.monthly_discount_amount &&
-        formData &&
-        formData.one_time_discount_type !== null) ||
-      (formData &&
-        formData.one_time_discount_amount &&
-        formData &&
-        formData.monthly_discount_type !== null)
+      // formData &&
+      // formData.monthly_discount_amount &&
+      discountFlag === 'one-time' &&
+      formData &&
+      formData.one_time_discount_type !== null
+      // formData &&
+      // formData.one_time_discount_amount &&
     ) {
       setShowAmountInput(true);
+    }
+
+    if (
+      discountFlag === 'monthly' &&
+      formData &&
+      formData.monthly_discount_type !== null
+    ) {
+      setShowAmountInput(true);
+    }
+    if (discountFlag === 'one-time') {
+      setSelectedDiscountType(formData && formData.one_time_discount_type);
+    }
+    if (discountFlag === 'monthly') {
+      setSelectedDiscountType(formData && formData.monthly_discount_type);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
@@ -59,12 +94,12 @@ function Discount({
         setFormData({
           ...formData,
           one_time_discount_type: event.target.value,
-          one_time_discount_amount: null,
+          one_time_discount_amount: setDefaultAmount(event.target.value),
         });
         setData({
           ...data,
           one_time_discount_type: event.target.value,
-          one_time_discount_amount: null,
+          one_time_discount_amount: setDefaultAmount(event.target.value),
         });
       }
 
@@ -72,12 +107,12 @@ function Discount({
         setFormData({
           ...formData,
           monthly_discount_type: event.target.value,
-          monthly_discount_amount: null,
+          monthly_discount_amount: setDefaultAmount(event.target.value),
         });
         setData({
           ...data,
           monthly_discount_type: event.target.value,
-          monthly_discount_amount: null,
+          monthly_discount_amount: setDefaultAmount(event.target.value),
         });
       }
     } else if (event.target.value === 'none') {
@@ -199,28 +234,6 @@ function Discount({
     return false;
   };
 
-  const setDefaultAmount = () => {
-    if (discountFlag === 'one-time') {
-      if (
-        (agreementData && agreementData.one_time_discount_type) ===
-        (formData && formData.one_time_discount_type)
-      ) {
-        return agreementData && agreementData.one_time_discount_amount;
-      }
-      return formData && formData.one_time_discount_amount;
-    }
-    if (discountFlag === 'monthly') {
-      if (
-        (agreementData && agreementData.monthly_discount_type) ===
-        (formData && formData.monthly_discount_type)
-      ) {
-        return agreementData && agreementData.monthly_discount_amount;
-      }
-      return formData && formData.monthly_discount_amount;
-    }
-    return null;
-  };
-
   return (
     <div className="modal-body ">
       <h4 className="on-boarding mb-4">Apply Discount</h4>
@@ -289,64 +302,81 @@ function Discount({
             </ModalRadioCheck>
           </li>
         </ul>
+        {/* || (discountFlag === 'monthly' && formData &&
+        formData.monthly_discount_amount) || (discountFlag === 'one-time' &&
+        formData && formData.one_time_discount_amount) */}
+        {selectedDiscountType === 'fixed amount' ? (
+          <ContractFormField>
+            {showAmountInput ? (
+              <label className="modal-field" htmlFor="emailAddress">
+                Amount
+                <div className="input-container">
+                  {selectedDiscountType === 'fixed amount' ||
+                  (discountFlag === 'monthly' &&
+                    formData &&
+                    formData.monthly_discount_type === 'fixed amount') ||
+                  (discountFlag === 'one-time' &&
+                    formData &&
+                    formData.one_time_discount_type === 'fixed amount') ? (
+                    <span className="input-icon">$ </span>
+                  ) : (
+                    ''
+                  )}
 
-        <ContractFormField>
-          {showAmountInput ||
-          (discountFlag === 'monthly' &&
-            formData &&
-            formData.monthly_discount_amount) ||
-          (discountFlag === 'one-time' &&
-            formData &&
-            formData.one_time_discount_amount) ? (
-            <label className="modal-field" htmlFor="emailAddress">
-              Amount
-              <div className="input-container">
-                {selectedDiscountType === 'fixed amount' ||
-                (discountFlag === 'monthly' &&
-                  formData &&
-                  formData.monthly_discount_type === 'fixed amount') ||
-                (discountFlag === 'one-time' &&
-                  formData &&
-                  formData.one_time_discount_type === 'fixed amount') ? (
-                  <span className="input-icon">$ </span>
-                ) : (
-                  ''
-                )}
-
-                <NumberFormat
-                  name="amount"
-                  className="form-control modal-input-control"
-                  placeholder={
-                    selectedDiscountType === 'percentage'
-                      ? 'Enter Percentage'
-                      : 'Enter Amount'
-                  }
-                  onChange={(event) => handleInputChange(event)}
-                  value={setDefaultAmount()}
-                  thousandSeparator
-                />
-                {selectedDiscountType === 'percentage' ||
-                (discountFlag === 'monthly' &&
-                  formData &&
-                  formData.monthly_discount_type === 'percentage') ||
-                (discountFlag === 'one-time' &&
-                  formData &&
-                  formData.one_time_discount_type === 'percentage') ? (
-                  <span className="input-icon">%</span>
-                ) : (
-                  ''
-                )}
-              </div>
-              <ErrorMsg>
-                {apiError && apiError.monthly_discount_amount}
-                {apiError && apiError.one_time_discount_amount}
-              </ErrorMsg>
-            </label>
-          ) : (
-            ''
-          )}
-        </ContractFormField>
-
+                  <NumberFormat
+                    name="amount"
+                    className="form-control modal-input-control"
+                    placeholder="Enter Amount"
+                    onChange={(event) => handleInputChange(event)}
+                    defaultValue={setDefaultAmount(selectedDiscountType)}
+                    thousandSeparator
+                  />
+                </div>
+                <ErrorMsg>
+                  {apiError && apiError.monthly_discount_amount}
+                  {apiError && apiError.one_time_discount_amount}
+                </ErrorMsg>
+              </label>
+            ) : (
+              ''
+            )}
+          </ContractFormField>
+        ) : (
+          <ContractFormField>
+            {showAmountInput ? (
+              <label className="modal-field" htmlFor="emailAddress">
+                Amount
+                <div className="input-container">
+                  <NumberFormat
+                    name="amount"
+                    className="form-control modal-input-control"
+                    placeholder="Enter Percentage"
+                    onChange={(event) => handleInputChange(event)}
+                    defaultValue={setDefaultAmount(selectedDiscountType)}
+                    thousandSeparator
+                  />
+                  {selectedDiscountType === 'percentage' ||
+                  (discountFlag === 'monthly' &&
+                    formData &&
+                    formData.monthly_discount_type === 'percentage') ||
+                  (discountFlag === 'one-time' &&
+                    formData &&
+                    formData.one_time_discount_type === 'percentage') ? (
+                    <span className="input-icon">%</span>
+                  ) : (
+                    ''
+                  )}
+                </div>
+                <ErrorMsg>
+                  {apiError && apiError.monthly_discount_amount}
+                  {apiError && apiError.one_time_discount_amount}
+                </ErrorMsg>
+              </label>
+            ) : (
+              ''
+            )}
+          </ContractFormField>
+        )}
         <Button
           className="btn btn-primary w-100 mt-4 "
           onClick={() => onSubmit()}>
