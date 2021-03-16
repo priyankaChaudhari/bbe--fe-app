@@ -818,7 +818,7 @@ export const WhiteCard = styled.div`
         font-family: ${Theme.titleFontFamily};
       }
       .vs {
-        color:${Theme.gray40};
+        color: ${Theme.gray40};
         font-size: ${Theme.extraMedium};
       }
       .perentage-value {
@@ -844,13 +844,13 @@ export const WhiteCard = styled.div`
       }
 
       &:hover {
-        border: 1px solid #FF5933;
+        border: 1px solid ${Theme.orange};
       }
     }
 
   }
   .days-container {
-    background-color: #FFFFFF;
+    background-color: ${Theme.white};
     border: 1px solid #D5D8E1;
     border-radius: 18px;
     max-width: 243px;
@@ -861,35 +861,35 @@ export const WhiteCard = styled.div`
       padding: 0;
       margin: 0;
        #weeklyCheck1:checked + label{
-         background-color: #fffff;
-          border: 1px solid #FF5933;
+         background-color: ${Theme.white};
+          border: 1px solid ${Theme.orange};
           border-radius: 18px;
-          color: #FF5933;
+          color: ${Theme.orange};
         }
         #weeklyCheck2:checked + label{
-          background-color: #fffff;
-          border: 1px solid #FF5933;
+          background-color:  ${Theme.white};
+          border: 1px solid ${Theme.orange};
           border-radius: 18px;
-          color: #FF5933;
+          color:${Theme.orange};
         }
         #weeklyCheck4:checked + label{
-         background-color: #fffff;
-          border: 1px solid #FF5933;
+          background-color: ${Theme.white};
+          border: 1px solid ${Theme.orange};
           border-radius: 18px;
-          color: #FF5933;
+          color: ${Theme.orange};
         }
 
       li{
         display: inline-block;
-         
         
+      
          label {
-            color: #556178;
+            color: ${Theme.gray40};
             padding: 7px 19px;
             font-size: 14px;
             display: inline-block;
             cursor: pointer;
-        }
+         }
       }
     }
   }
@@ -912,11 +912,11 @@ export const WhiteCard = styled.div`
     font-size:  ${Theme.primaryTitleFontSize}; 
 
     &.positive {
-      color: #407B00;
+      color: ${Theme.lighterGreen};
     }
   }
   .seller-update {
-    color: #556178;
+    color:${Theme.gray40};
     font-size: 14px;
   }
 
@@ -965,27 +965,23 @@ export const WhiteCard = styled.div`
         margin-top:10px;
 
         &:first-child {
-            margin-left: 0;
+          margin-left: 0;
         }
 
-          span { 
-              margin-left: 15px;
-              max-width: 210px;
+        span { 
+            margin-left: 15px;
+            max-width: 210px;
             
+            &.mid-width {
+              max-width: 250px;
+              width:100%;
 
-              &.mid-width {
-                max-width: 250px;
-                width:100%;
-
-                 &.website {
-                margin-left: 20px;
+                &.website {
+                  margin-left: 20px;
               }
-              }
-
-              
-            }   
+            }
+          }   
       }
-
   }
   @media only screen and (max-width: 1150px) {
      .company-label-info {
@@ -993,26 +989,21 @@ export const WhiteCard = styled.div`
         margin-top:10px;
 
         &:first-child {
-            margin-left: 0;
+          margin-left: 0;
         }
 
           span { 
               margin-left: 15px;
               max-width: 70px;
             
-
               &.mid-width {
                 max-width: 70px;
                 width:100%;
-
-                
               }
-
             }   
       }
-
   }
-@media only screen and (max-width: 991px) {
+ @media only screen and (max-width: 991px) {
 
   .brand-logo {
     img{
@@ -1023,7 +1014,6 @@ export const WhiteCard = styled.div`
     margin-bottom: 15px;
     margin-left: 5px;
     }
-   
   } 
    .company-label-info {
      margin-left: 40px;
@@ -1038,32 +1028,30 @@ export const WhiteCard = styled.div`
        width: 100px;
        
       }
-       span { 
-          margin-left: 15px;
-          max-width: 210px;
-          margin-top: 10px;
-         
-
-          &.mid-width {
-            max-width:230px;
-            width:100%;
-            width: 100px;
-          }
-
-           &.company-size{
-             margin-left: 18px;
-           }
+      span { 
+        margin-left: 15px;
+        max-width: 210px;
+        margin-top: 10px;
         
-        }   
+
+        &.mid-width {
+          max-width:230px;
+          width:100%;
+          width: 100px;
+        }
+
+          &.company-size{
+            margin-left: 18px;
+          }
+      }   
    }
      
    .edit-details {
-
       &.edit-brand-details {
         top: -25px;
       }
    }
-  }
+ }
 
     @media only screen and (max-width: 460px) {        
        .company-status {
