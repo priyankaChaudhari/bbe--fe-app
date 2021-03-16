@@ -238,8 +238,8 @@ export default function Agreement({ formData, details, templateData }) {
     return `<tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Sub-total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;">$${
+            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left"> Sub-total</td>
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service
@@ -251,7 +251,7 @@ export default function Agreement({ formData, details, templateData }) {
          <tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Discount ${
+            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px; text-align:left;"> Discount ${
               details &&
               details.one_time_discount_amount &&
               details &&
@@ -259,7 +259,7 @@ export default function Agreement({ formData, details, templateData }) {
                 ? `(${details && details.one_time_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;"> -$${
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px;text-align: right;"> -$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_discount
@@ -271,8 +271,8 @@ export default function Agreement({ formData, details, templateData }) {
          <tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px; text-align:left"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align: right;"> $${
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding-top: 5px; text-align:left"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding-top: 5px; text-align: right;"> $${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_after_discount
@@ -458,5 +458,37 @@ const Paragraph = styled.div`
   }
   &.testing {
     color: red !important;
+  }
+
+  .contact-list table,
+  td,
+  th {
+    border: 1px solid black;
+    padding: 13px;
+
+    .total-service-bordless {
+      font-weight: 500;
+      border-bottom: hidden !important;
+    }
+  }
+
+  tr {
+    .total-service {
+      font-weight: 800;
+    }
+    .total-service-bordless {
+      font-weight: 500;
+      border-bottom: hidden !important;
+      padding: 7px 13px;
+    }
+
+    th {
+      text-align: left;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
   }
 `;

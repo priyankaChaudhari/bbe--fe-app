@@ -133,7 +133,7 @@ export default function Statement({
 
   const mapVariableMonthlyService = () => {
     const fields = [
-      `<tr ><td colspan="2" style ="text-align: center">
+      `<tr ><td class="total-service" colspan="2" style ="text-align: center">
                   Variable Monthly Services</td>
                   </tr>`,
     ];
@@ -230,8 +230,8 @@ export default function Statement({
 
   const mapMonthlyServiceTotal = () => {
     return `<tr>
-            <td class="total-service"> Sub-total</td>
-            <td class="total-service text-right">$${
+            <td class="total-service-bordless"> Sub-total</td>
+            <td class="total-service-bordless text-right">$${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service
@@ -241,7 +241,7 @@ export default function Statement({
             </td>
          </tr>
          <tr>
-            <td class="total-service"> Discount ${
+            <td class="total-service-bordless"> Discount ${
               details &&
               details.monthly_discount_amount &&
               details &&
@@ -249,7 +249,7 @@ export default function Statement({
                 ? `(${details && details.monthly_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right"> -$${
+            <td class="total-service-bordless text-right"> -$${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_discount
@@ -259,8 +259,8 @@ export default function Statement({
             </td>
          </tr>
          <tr>
-            <td class="total-service"> Total</td>
-            <td class="total-service text-right"> $${
+            <td class="total-service" style="padding-top: 5px"> Total</td>
+            <td class="total-service text-right" style="padding-top: 5px;"> $${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_after_discount
@@ -274,8 +274,8 @@ export default function Statement({
 
   const mapOnetimeServiceTotal = () => {
     return `<tr>
-            <td class="total-service" colspan="3"> Sub-total</td>
-            <td class="total-service text-right">$${
+            <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service
@@ -285,7 +285,7 @@ export default function Statement({
             </td>
          </tr>
          <tr>
-            <td class="total-service" colspan="3"> Discount ${
+            <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
               details &&
               details.one_time_discount_amount &&
               details &&
@@ -293,7 +293,7 @@ export default function Statement({
                 ? `(${details && details.one_time_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right"> -$${
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_discount
@@ -303,8 +303,8 @@ export default function Statement({
             </td>
          </tr>
          <tr>
-            <td class="total-service" colspan="3"> Total</td>
-            <td class="total-service text-right"> $${
+            <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
+            <td class="total-service text-right"style="padding-top: 5px "> $${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_after_discount
@@ -705,11 +705,23 @@ const Paragraph = styled.div`
   th {
     border: 1px solid black;
     padding: 13px;
+
+    .total-service-bordless {
+      font-weight: 500;
+      border-bottom: hidden !important;
+    }
   }
+
   tr {
     .total-service {
       font-weight: 800;
     }
+    .total-service-bordless {
+      font-weight: 500;
+      border-bottom: hidden !important;
+      padding: 7px 13px;
+    }
+
     th {
       text-align: left;
     }

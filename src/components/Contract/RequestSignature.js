@@ -814,7 +814,7 @@ function RequestSignature({
                   saveContact();
                 }}>
                 <Button
-                  className=" btn-primary on-boarding"
+                  className=" btn-primary on-boarding w-100"
                   disabled={
                     !(
                       formData.first_name &&

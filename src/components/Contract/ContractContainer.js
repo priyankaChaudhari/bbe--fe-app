@@ -1156,9 +1156,9 @@ export default function ContractContainer() {
   };
 
   const mapMonthlyServiceTotal = () => {
-    return `<tr>
-            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Sub-total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right">$${
+    return `<tr style=" border: 1px solid black;">
+            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
+            <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">$${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service
@@ -1167,8 +1167,8 @@ export default function ContractContainer() {
             }
             </td>
          </tr>
-         <tr>
-            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Discount ${
+         <tr style=" border: 1px solid black;">
+            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Discount ${
               details &&
               details.monthly_discount_amount &&
               details &&
@@ -1176,7 +1176,7 @@ export default function ContractContainer() {
                 ? `(${details && details.monthly_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> -$${
+            <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_discount
@@ -1186,8 +1186,8 @@ export default function ContractContainer() {
             </td>
          </tr>
          <tr>
-            <td class="total-service" style="border: 1px solid black;padding: 13px;"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> $${
+            <td class="total-service" style="border: 1px solid black;padding: 5px 13px"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ; text-align:right"> $${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_after_discount
@@ -1200,9 +1200,9 @@ export default function ContractContainer() {
   };
 
   const mapOnetimeServiceTotal = () => {
-    return `<tr>
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Sub-total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right">$${
+    return `<tr style=" border: 1px solid black;">
+            <td class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service
@@ -1211,8 +1211,8 @@ export default function ContractContainer() {
             }
             </td>
          </tr>
-         <tr>
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Discount ${
+         <tr style=" border: 1px solid black;">
+            <td class="total-service" colspan="3" style="border-bottom: hidden; border-left: 1px solid black;padding: 5px 13px;"> Discount ${
               details &&
               details.one_time_discount_amount &&
               details &&
@@ -1220,7 +1220,7 @@ export default function ContractContainer() {
                 ? `(${details && details.one_time_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> -$${
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_discount
@@ -1230,8 +1230,8 @@ export default function ContractContainer() {
             </td>
          </tr>
          <tr>
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 13px;"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 13px; text-align:right"> $${
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ;"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ; text-align:right"> $${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_after_discount
