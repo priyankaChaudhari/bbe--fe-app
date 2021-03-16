@@ -1057,7 +1057,7 @@ const CustomerLeftPannel = styled.div`
   width: 100%;
   left: 62px;
   padding: 15px;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
   border-right: 1px solid ${Theme.gray5};
 
   .label {

@@ -31,6 +31,10 @@ import {
   RedCross,
   DefaultUser,
   CompanyDefaultUser,
+  // FileIcon,
+  // CheckFileIcon,
+  // EditFileIcon,
+  SignatureIcon,
 } from '../theme/images/index';
 import { Button, ContractFormField } from './index';
 import {
@@ -3111,7 +3115,26 @@ export default function AgreementSidePanel({
             </>
           ) : (
             <>
-              <div>
+              <div className="contract-status pending-contract pending-signature signature">
+                {/* <img className="contract-file-icon" src={FileIcon} alt="" /> */}
+                {/* <img
+                  width="16px"
+                  className="contract-file-icon"
+                  src={CheckFileIcon}
+                  alt=""
+                /> */}
+                {/* <img
+                  width="16px"
+                  className="contract-file-icon"
+                  src={EditFileIcon}
+                  alt=""
+                /> */}
+                <img
+                  width="16px"
+                  className="contract-file-icon"
+                  src={SignatureIcon}
+                  alt=""
+                />
                 {agreement &&
                   agreement.contract_status &&
                   agreement.contract_status.value}
@@ -3152,7 +3175,7 @@ export default function AgreementSidePanel({
                   </ul>
                 ))
               ) : (
-                <div>No Activity Log found.</div>
+                <div className="text-center mt-3">No Activity Log found.</div>
               )}
             </>
           )}
@@ -3199,7 +3222,7 @@ export default function AgreementSidePanel({
                     <img src={AlarmBellIcon} alt="alarm" />
                     Send Reminder
                   </Button> */}
-          <div className="contract-status">Pending Approval</div>
+          {/* <div className="contract-status">Pending Approval</div> */}
           <div className="activity-log">Contract Activity</div>
           <ul className="menu">
             <li>
@@ -3669,15 +3692,35 @@ const SidePanel = styled.div`
      }
    } 
    .contract-status {
-     color: #171725;
-     font-size: 14px;
-    box-shadow: inset 1px 0 0 0 #E2E2EA;
-    text-align: center;
-    background: #FDF3D7;
+      color: ${Theme.gray85};
+      font-size: 14px;
+      border-radius: 2px;
+      text-align: center;
+      background: #FDF3D7;
+      padding: 12px 0;
+      min-height: 40px;
+      margin: 15px 20px 10px 20px;
+
+      &.pending-contract {
+        background: #F4F6FC;
+      }
+      &.pending-signature {
+        background: #FFDED6;
+      }
+      &.signature {
+        background: ${Theme.white};
+        border: 1px solid #D5D8E1;
+      }
    }
-.activity-log {
+
+   .contract-file-icon {
+      vertical-align: bottom;
+      margin-right: 7px;
+   }
+
+  .activity-log {
     font-size: ${Theme.extraMedium};
-    padding:20px 20px 0 20px;
+    padding: 20px 20px 0 20px;
     color: ${Theme.black};
     font-weight: 600;
   }
@@ -3686,7 +3729,7 @@ const SidePanel = styled.div`
       text-transform: uppercase;
       border-bottom: 1px solid ${Theme.gray9};
   }
-.menu{
+  .menu{
      padding:0;
       li {
         color:${Theme.white};
@@ -3756,10 +3799,10 @@ const SidePanel = styled.div`
           }
           
         }
-         &:hover {
-          box-shadow: ${Theme.commonShadow};
-          cursor:pointer;
-        }
+        //  &:hover {
+        //   box-shadow: ${Theme.commonShadow};
+        //   cursor:pointer;
+        // }
       }
 
     }

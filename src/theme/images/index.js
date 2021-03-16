@@ -127,6 +127,10 @@ import CaretUp from './icons/caretUp.png';
 import WhiteCaretUp from './icons/whiteCaretUp.png';
 import ContractCancel from './cancel-contract.png';
 import RedCross from './icons/red-cross.png';
+import FileIcon from './icons/file-icon.png';
+import CheckFileIcon from './icons/check-file.png';
+import EditFileIcon from './icons/edit-file.png';
+import SignatureIcon from './icons/signature.png';
 
 export {
   BannerBg,
@@ -258,4 +262,8 @@ export {
   WhiteCaretUp,
   ContractCancel,
   RedCross,
+  FileIcon,
+  CheckFileIcon,
+  EditFileIcon,
+  SignatureIcon,
 };
