@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import DatePicker from 'react-date-picker';
 
@@ -9,28 +9,27 @@ import dayjs from 'dayjs';
 
 import { Button, ModalBox, FormField, PageLoader } from '../../common';
 import { RightArrowIcon } from '../../theme/images/index';
-import { updateAccountDetails, updateCustomerDetails } from '../../api/index';
+import { updateCustomerDetails } from '../../api/index';
 import { getCustomerDetails } from '../../store/actions/customerState';
 
-export default function CustomerStatus({
-  type,
-  setStatusModal,
-  id,
-  status,
-  setShowSuccessMsg,
-}) {
+export default function CustomerStatus({ type, setStatusModal, customer }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [startDate, setStartDate] = useState(new Date());
   const [formData, setFormData] = useState({});
-  const contract = useSelector((state) => state.accountState.data);
 
   useEffect(() => {
-    // dispatch(getAccountDetails(id));
-    setShowSuccessMsg({
-      show: false,
-    });
-  }, [setShowSuccessMsg]);
+    if (
+      customer &&
+      customer.status &&
+      customer.status.value === 'pending cancellation' &&
+      type === 'inactive'
+    ) {
+      setStartDate(
+        customer && customer.end_date && new Date(customer.end_date),
+      );
+    }
+  }, [customer, type]);
 
   const generateText = () => {
     if (type === 'inactive') {
@@ -67,25 +66,17 @@ export default function CustomerStatus({
     };
 
     setIsLoading({ loader: true, type: 'button' });
-    updateCustomerDetails(id, {
+
+    updateCustomerDetails(customer.id, {
       status: type === 'inactive' ? checkStatus() : type,
+      note: formData && formData.note,
+      end_date: formData && formData.end_date,
     }).then((response) => {
       if (response && response.status === 200) {
-        dispatch(getCustomerDetails(id));
+        dispatch(getCustomerDetails(customer.id));
         setStatusModal({ show: false, type });
-        setShowSuccessMsg({
-          show: true,
-          message: 'Account status Changed.',
-        });
+
         setIsLoading({ loader: false, type: 'button' });
-      }
-      if (formData && Object.keys(formData).length !== 0) {
-        updateAccountDetails(contract.id, formData).then((res) => {
-          if (res && res.status === 200) {
-            setStatusModal({ show: false, type });
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
       }
     });
   };
@@ -110,7 +101,7 @@ export default function CustomerStatus({
                 id="date"
                 value={
                   startDate ||
-                  (contract && contract.end_date && new Date(contract.end_date))
+                  (customer && customer.end_date && new Date(customer.end_date))
                 }
                 onChange={(date) => handleChange(date, 'end_date')}
                 format="MM-dd-yyyy"
@@ -131,7 +122,16 @@ export default function CustomerStatus({
               rows="3"
               placeholder="Add a note"
               onChange={(date) => handleChange(date, 'note')}
-              defaultValue={status === type ? contract && contract.note : null}
+              defaultValue={
+                customer && customer.status && customer.status.value === type
+                  ? customer && customer.note
+                  : customer &&
+                    customer.status &&
+                    customer.status.value === 'pending cancellation' &&
+                    type === 'inactive'
+                  ? customer && customer.note
+                  : null
+              }
             />
           </label>
         </FormField>
@@ -157,15 +157,17 @@ export default function CustomerStatus({
 
 CustomerStatus.defaultProps = {
   type: '',
-  id: '',
-  status: '',
-  setShowSuccessMsg: () => {},
 };
 
 CustomerStatus.propTypes = {
   type: PropTypes.string,
   setStatusModal: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  status: PropTypes.string,
-  setShowSuccessMsg: PropTypes.func,
+  customer: PropTypes.shape({
+    id: PropTypes.string,
+    note: PropTypes.string,
+    end_date: PropTypes.string,
+    status: PropTypes.shape({
+      value: PropTypes.string,
+    }),
+  }).isRequired,
 };

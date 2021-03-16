@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import { ToastContainer } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
@@ -26,15 +26,15 @@ import {
   GreyBannerBg,
   BackArrowIcon,
   HeartMonitorIcon,
-  // WhiteCaretUp,
-  // CaretUp,
+  WhiteCaretUp,
+  CaretUp,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
   ModalBox,
   PageLoader,
   GetInitialName,
-  // DropDownStatus,
+  DropDownStatus,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -116,11 +116,11 @@ export default function CustomerMainContainer() {
   const profileLoader = useSelector((state) => state.userState.isLoading);
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
 
-  // let statusActions = [
-  //   { value: 'active', label: 'Activate' },
-  //   { value: 'at risk', label: 'Place at risk' },
-  //   { value: 'inactive', label: 'Inactivate' },
-  // ];
+  let statusActions = [
+    { value: 'active', label: 'Activate' },
+    { value: 'at risk', label: 'Place at risk' },
+    { value: 'inactive', label: 'Inactivate' },
+  ];
 
   const viewOptions = [
     { value: 'agreement', label: 'Agreements' },
@@ -128,39 +128,39 @@ export default function CustomerMainContainer() {
     { value: 'activity', label: 'Activity' },
   ];
 
-  // const DropdownIndicator = (props) => {
-  //   return (
-  //     components.DropdownIndicator && (
-  //       <components.DropdownIndicator {...props}>
-  //         <img
-  //           src={
-  //             customer &&
-  //             customer.status &&
-  //             customer.status.value === 'pending cancellation'
-  //               ? CaretUp
-  //               : WhiteCaretUp
-  //           }
-  //           alt="caret"
-  //           style={{
-  //             transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-  //             width:
-  //               customer &&
-  //               customer.status &&
-  //               customer.status.value === 'pending cancellation'
-  //                 ? '15px'
-  //                 : '11px',
-  //             height:
-  //               customer &&
-  //               customer.status &&
-  //               customer.status.value === 'pending cancellation'
-  //                 ? '15px'
-  //                 : '11px',
-  //           }}
-  //         />
-  //       </components.DropdownIndicator>
-  //     )
-  //   );
-  // };
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={
+              customer &&
+              customer.status &&
+              customer.status.value === 'pending cancellation'
+                ? CaretUp
+                : WhiteCaretUp
+            }
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width:
+                customer &&
+                customer.status &&
+                customer.status.value === 'pending cancellation'
+                  ? '15px'
+                  : '11px',
+              height:
+                customer &&
+                customer.status &&
+                customer.status.value === 'pending cancellation'
+                  ? '15px'
+                  : '11px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -271,29 +271,29 @@ export default function CustomerMainContainer() {
     getActivityLogInfo(currentPage);
   };
 
-  // const checkStatus = () => {
-  //   if (customer && customer.status) {
-  //     statusActions = statusActions.filter(
-  //       (op) => op.value !== customer.status.value,
-  //     );
-  //   }
-  // };
+  const checkStatus = () => {
+    if (customer && customer.status) {
+      statusActions = statusActions.filter(
+        (op) => op.value !== customer.status.value,
+      );
+    }
+  };
 
-  // const checkStatusColor = () => {
-  //   if (customer && customer.status) {
-  //     if (customer.status.value === 'inactive') {
-  //       return '#69707f';
-  //     }
-  //     if (customer.status.value === 'pending cancellation') {
-  //       return '#f7c137';
-  //     }
-  //     if (customer.status.value === 'at risk') {
-  //       return '#d63649';
-  //     }
-  //     return '#74B035';
-  //   }
-  //   return '';
-  // };
+  const checkStatusColor = () => {
+    if (customer && customer.status) {
+      if (customer.status.value === 'inactive') {
+        return '#69707f';
+      }
+      if (customer.status.value === 'pending cancellation') {
+        return '#f7c137';
+      }
+      if (customer.status.value === 'at risk') {
+        return '#d63649';
+      }
+      return '#74B035';
+    }
+    return '';
+  };
 
   return (
     <>
@@ -350,68 +350,73 @@ export default function CustomerMainContainer() {
                     <span className="brand-name ">
                       {agreement && agreement.contract_company_name}
 
-                      {/* <DropDownStatus>
-                        {checkStatus()}
-                        <Select
-                          isSearchable={false}
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              background: checkStatusColor(),
-                              borderRadius: '50px',
-                              minHeight: '24px',
-                              outline: 'none !important',
-                              boxShadow: 'none  !important',
-                              outLine: 'none',
-                              cursor: 'pointer',
-                              width:
-                                customer &&
-                                customer.status &&
-                                customer.status.value === 'pending cancellation'
-                                  ? '175px !important'
-                                  : customer &&
-                                    customer.status &&
-                                    customer.status.value === 'at risk'
-                                  ? '120px'
-                                  : '88px',
-                              '&:focus': {
+                      {agreement &&
+                      agreement.contract_status &&
+                      agreement.contract_status.label !== 'Active' ? (
+                        <span className="company-status inactive">
+                          {agreement.contract_status.label}
+                        </span>
+                      ) : (
+                        <DropDownStatus>
+                          {checkStatus()}
+                          <Select
+                            isSearchable={false}
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                background: checkStatusColor(),
+                                borderRadius: '50px',
+                                minHeight: '24px',
                                 outline: 'none !important',
                                 boxShadow: 'none  !important',
-                              },
-                              '&:hover': {
-                                outline: 'none',
-                              },
-                            }),
-                            singleValue: (provided) => {
-                              const color =
-                                customer &&
-                                customer.status &&
-                                customer.status.value === 'pending cancellation'
-                                  ? '#000'
-                                  : '#fff';
+                                outLine: 'none',
+                                cursor: 'pointer',
+                                width:
+                                  customer &&
+                                  customer.status &&
+                                  customer.status.value ===
+                                    'pending cancellation'
+                                    ? '175px !important'
+                                    : customer &&
+                                      customer.status &&
+                                      customer.status.value === 'at risk'
+                                    ? '120px'
+                                    : '88px',
+                                '&:focus': {
+                                  outline: 'none !important',
+                                  boxShadow: 'none  !important',
+                                },
+                                '&:hover': {
+                                  outline: 'none',
+                                },
+                              }),
+                              singleValue: (provided) => {
+                                const color =
+                                  customer &&
+                                  customer.status &&
+                                  customer.status.value ===
+                                    'pending cancellation'
+                                    ? '#000'
+                                    : '#fff';
 
-                              return { ...provided, color };
-                            },
-                          }}
-                          classNamePrefix="react-select"
-                          options={statusActions}
-                          onChange={(e) =>
-                            setStatusModal({
-                              show: true,
-                              type: e.value,
-                            })
-                          }
-                          defaultValue={customer && customer.status}
-                          components={{
-                            DropdownIndicator,
-                          }}
-                        />
-                      </DropDownStatus> */}
-                    </span>
-                    <span className="company-status inactive">
-                      {agreement &&
-                        agreement.contract_status &&
-                        agreement.contract_status.label}
+                                return { ...provided, color };
+                              },
+                            }}
+                            classNamePrefix="react-select"
+                            options={statusActions}
+                            onChange={(e) =>
+                              setStatusModal({
+                                show: true,
+                                type: e.value,
+                              })
+                            }
+                            value={customer && customer.status}
+                            components={{
+                              DropdownIndicator,
+                            }}
+                          />
+                        </DropDownStatus>
+                      )}
                     </span>
 
                     <div
@@ -778,8 +783,7 @@ export default function CustomerMainContainer() {
             <CustomerStatus
               type={statusModal.type}
               setStatusModal={setStatusModal}
-              id={id}
-              status={customer && customer.status && customer.status.value}
+              customer={customer}
             />
           </Modal>
         </>

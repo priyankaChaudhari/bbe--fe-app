@@ -148,14 +148,19 @@ export default function CompanyPerformance({ agreement }) {
   useEffect(() => {
     const list = [];
     list.push({
-      value: agreement.primary_marketplace.id,
-      label: agreement.primary_marketplace.name,
+      value: agreement && agreement.primary_marketplace.id,
+      label: agreement && agreement.primary_marketplace.name,
     });
-    for (const option of agreement.additional_marketplaces) {
-      list.push({ value: option.id, label: option.name });
-    }
+    if (agreement && agreement.additional_marketplaces)
+      for (const option of agreement.additional_marketplaces) {
+        list.push({ value: option.id, label: option.name });
+      }
     setAmazonOptions(list);
-  }, [agreement.additional_marketplaces, agreement.primary_marketplace]);
+  }, [
+    agreement.additional_marketplaces,
+    agreement.primary_marketplace,
+    agreement,
+  ]);
 
   return (
     <>
