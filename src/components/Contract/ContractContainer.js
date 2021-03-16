@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
 // import samplePDF from './sample1.pdf';
 import Theme from '../../theme/Theme';
@@ -2139,7 +2139,7 @@ export default function ContractContainer() {
     </div>
   ) : (
     <>
-      <ToastContainer position="top-center" autoClose={8000} />
+      {/* <ToastContainer position="top-center" autoClose={8000} /> */}
 
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
