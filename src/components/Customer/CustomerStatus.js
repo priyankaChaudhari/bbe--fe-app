@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import DatePicker from 'react-date-picker';
+import { toast } from 'react-toastify';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -73,9 +74,9 @@ export default function CustomerStatus({ type, setStatusModal, customer }) {
       end_date: formData && formData.end_date,
     }).then((response) => {
       if (response && response.status === 200) {
+        toast.success('Status Updated!');
         dispatch(getCustomerDetails(customer.id));
         setStatusModal({ show: false, type });
-
         setIsLoading({ loader: false, type: 'button' });
       }
     });

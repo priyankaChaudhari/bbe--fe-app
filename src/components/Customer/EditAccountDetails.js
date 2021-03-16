@@ -26,6 +26,7 @@ export default function EditAccountDetails({
   agreement,
   setShowModal,
   setDocumentImage,
+  getActivityLogInfo,
 }) {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
@@ -169,7 +170,7 @@ export default function EditAccountDetails({
           setIsLoading({ loader: false, type: 'button' });
           dispatch(getAccountDetails(customer.id));
           dispatch(getCustomerDetails(customer.id));
-          // getActivityLogInfo();
+          getActivityLogInfo();
           toast.success('Changes Saved!');
           setShowModal(false);
         }
@@ -185,7 +186,7 @@ export default function EditAccountDetails({
         setIsLoading({ loader: false, type: 'button' });
         dispatch(getAccountDetails(customer.id));
         dispatch(getCustomerDetails(customer.id));
-        // getActivityLogInfo();
+        getActivityLogInfo();
         toast.success('Changes Saved!');
         setShowModal(false);
       }
@@ -278,4 +279,5 @@ EditAccountDetails.propTypes = {
     id: PropTypes.string,
   }),
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
