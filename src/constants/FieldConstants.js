@@ -454,6 +454,16 @@ export const AgreementDetails = [
   },
 ];
 
+export const ListingOptimization = [
+  {
+    key: 'content_optimization',
+    label: 'Content',
+  },
+  {
+    key: 'design_optimization',
+    label: 'Design',
+  },
+];
 export const StatementDetails = [
   {
     key: 'monthly_retainer',
@@ -484,21 +494,6 @@ export const StatementDetails = [
     type: 'number-currency',
     placeholder: 'Enter Revenue Threshold (Optional)',
   },
-  // {
-  //   key: 'dsp_fee',
-  //   label: 'DSP Budget',
-  //   type: 'number-currency',
-  // },
-  // {
-  //   key: 'additional_monthly_services',
-  //   label: 'Additional Monthly services',
-  //   type: 'multichoice',
-  // },
-  // {
-  //   key: 'additional_one_time_services',
-  //   label: 'Additional One-time services',
-  //   type: 'add',
-  // },
 ];
 
 export const DSPAddendumDetails = [

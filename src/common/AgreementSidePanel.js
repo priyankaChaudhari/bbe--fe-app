@@ -40,6 +40,7 @@ import {
   AgreementDetails,
   StatementDetails,
   DSPAddendumDetails,
+  ListingOptimization,
 } from '../constants/FieldConstants';
 import {
   getLength,
@@ -2466,6 +2467,84 @@ export default function AgreementSidePanel({
     );
   };
 
+  const changeListOptimization = (key, flag) => {
+    showFooter(true);
+    let updatedData = 0;
+    if (flag === 'minus') {
+      if (formData && formData[key]) {
+        updatedData = formData[key] - 1;
+      } else {
+        updatedData = 0;
+      }
+    }
+    if (flag === 'plus') {
+      if (formData && formData[key]) {
+        updatedData = formData[key] + 1;
+      } else {
+        updatedData = 1;
+      }
+    }
+    setFormData({
+      ...formData,
+      [key]: updatedData,
+    });
+    setUpdatedFormData({
+      ...updatedFormData,
+      [key]: updatedData,
+    });
+  };
+
+  const displayListingOptimizations = () => {
+    return (
+      <>
+        <ContractFormField className="mb-3">
+          <label htmlFor="additional_one_time_services ">
+            LISTING OPTIMIZATIONS (SKU&apos;S PER MONTH)
+          </label>
+        </ContractFormField>
+        {ListingOptimization.map((field) => {
+          return (
+            <div className="row">
+              <div className="col-7 ">
+                <label>{field && field.label}</label>
+              </div>
+              <div className="col-5 pl-0 text-end">
+                <button
+                  type="button"
+                  className="decrement"
+                  onClick={() => changeListOptimization(field.key, 'minus')}>
+                  <img className="minus-icon" src={MinusIcon} alt="" />
+                </button>
+
+                <NumberFormat
+                  name={field.key}
+                  className="form-control max-min-number"
+                  value={formData && formData[field.key]}
+                  // id={oneTimeServiceData.value}
+                  // onChange={(event) =>
+                  //   handleChange(
+                  //     event,
+                  //     'additional_one_time_services',
+                  //     'quantity',
+                  //     oneTimeServiceData,
+                  //   )
+                  // }
+                />
+
+                <button
+                  type="button"
+                  className="increment"
+                  onClick={() => changeListOptimization(field.key, 'plus')}>
+                  <img className="plus-icon" src={PlusIcon} alt="" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
   return (
     <SidePanel>
       {/* <input
@@ -2754,6 +2833,7 @@ export default function AgreementSidePanel({
                               </>
                             </React.Fragment>
                           ))}
+                          <li>{displayListingOptimizations()}</li>
                           <li>
                             <ContractFormField className="mb-3">
                               <label htmlFor="additional_one_time_services ">

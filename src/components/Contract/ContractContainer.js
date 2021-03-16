@@ -1552,6 +1552,37 @@ export default function ContractContainer() {
       }
     });
   };
+
+  const showStandardServicesTable = () => {
+    return `
+   <div class="table-responsive"><table class=" contact-list " style="width: 100%; overflow:auto;
+    border-collapse: collapse;"><tr><th colspan="3" style="text-align: left; border: 1px solid black;
+    padding: 13px;  ">Service Components</th></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
+    padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
+    padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Listing Optimization - Content <br> SKU's per month: ${
+      details && details.content_optimization
+    }</td><td style="border: 1px solid black;
+    padding: 13px;">Listing Optimization - Design <br> SKU's per month: ${
+      details && details.design_optimization
+    }</td><td style="border: 1px solid black;
+    padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Listing Compliance</td><td style="border: 1px solid black;
+    padding: 13px;">Brand Registry Consultation</td><td style="border: 1px solid black;
+    padding: 13px;">Catalog Management and Organization</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Seller Performance Consultation</td><td style="border: 1px solid black;
+    padding: 13px;">Reporting</td><td style="border: 1px solid black;
+    padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Promotion Planning and Support</td><td style="border: 1px solid black;
+    padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
+    padding: 13px;"> [SELLER_TYPE] Account Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
+    padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
+    padding: 13px;">Channel Governance Consultation</td></tr></table> </div>
+  `;
+  };
+
   const createAgreementDoc = () => {
     const serviceData = getAgreementAccorType(0);
     const agreementData =
@@ -1625,6 +1656,7 @@ export default function ContractContainer() {
 
         .replace('MAP_MONTHLY_SERVICES', showMonthlyServiceTable())
         .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
+        .replace('MAP_STANDARD_SERVICE_TABLE', showStandardServicesTable())
         .replace(
           'ADDITIONAL_SERVICES_NOT_INCLUDED',
           showNotIncludedServicesTable(),
