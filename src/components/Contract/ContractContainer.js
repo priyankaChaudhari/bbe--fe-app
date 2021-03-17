@@ -1135,7 +1135,7 @@ export default function ContractContainer() {
 
   const mapVariableMonthlyService = () => {
     const fields = [
-      `<tr ><td colspan="2" style ="text-align: center; border: 1px solid black;padding: 13px;">
+      `<tr ><td colspan="2" style ="text-align: center; border: 1px solid black;padding: 13px; font-weight: 800">
                   Variable Monthly Services</td>
                   </tr>`,
     ];
@@ -1208,8 +1208,8 @@ export default function ContractContainer() {
             </td>
          </tr>
          <tr>
-            <td class="total-service" style="border: 1px solid black;padding: 5px 13px"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ; text-align:right"> $${
+            <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_after_discount
@@ -1252,8 +1252,8 @@ export default function ContractContainer() {
             </td>
          </tr>
          <tr>
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ;"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ; text-align:right"> $${
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
               details &&
               details.total_fee &&
               details.total_fee.onetime_service_after_discount
@@ -1580,12 +1580,12 @@ export default function ContractContainer() {
     padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Content <br> SKU's per month: ${
+    padding: 13px;">Listing Optimization - Content <br> <span style="font-weight: 800;"> SKU's per month: <span style=" background: #ffe5df;padding: 4px 9px;"> ${
       details && details.content_optimization
-    }</td><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Design <br> SKU's per month: ${
+    } </span></span></td><td style="border: 1px solid black;
+    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> SKU's per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
       details && details.design_optimization
-    }</td><td style="border: 1px solid black;
+    } </span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Listing Compliance</td><td style="border: 1px solid black;
     padding: 13px;">Brand Registry Consultation</td><td style="border: 1px solid black;

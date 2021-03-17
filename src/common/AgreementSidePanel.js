@@ -2519,8 +2519,8 @@ export default function AgreementSidePanel({
         {ListingOptimization.map((field) => {
           return (
             <>
-              <div className="row mb-2">
-                <div className="col-7  ">
+              <div className="row">
+                <div className="col-7 mb-3 ">
                   <label className="listing-optimazation">
                     {field && field.label}
                   </label>
@@ -2550,8 +2550,20 @@ export default function AgreementSidePanel({
                     <img className="plus-icon" src={PlusIcon} alt="" />
                   </button>
                 </div>
+                <div className="col-12">
+                  {contractError &&
+                  contractError[field.key] &&
+                  contractError[field.key][0] ? (
+                    <ErrorMsg className="mb-3">
+                      {contractError &&
+                        contractError[field.key] &&
+                        contractError[field.key][0]}
+                    </ErrorMsg>
+                  ) : (
+                    ''
+                  )}
+                </div>
               </div>
-              <div>{displayError(field)}</div>
             </>
           );
         })}
