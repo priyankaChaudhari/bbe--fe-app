@@ -10,8 +10,8 @@ import PdfLoadingMsg from './PdfLoadingMsg';
 export default function PdfViewer({ pdf }) {
   const [totalPages, setNumPages] = useState(null);
   const isDesktopLarge = useMediaQuery({ minWidth: 1601 });
-  const isDesktop = useMediaQuery({ minWidth: 1300, maxWidth: 1600 });
-  const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1300 });
+  const isDesktop = useMediaQuery({ minWidth: 1331, maxWidth: 1600 });
+  const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1330 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ minWidth: 590, maxWidth: 767 });
   const isMobileView = useMediaQuery({ minWidth: 455, maxWidth: 591 });
@@ -22,13 +22,13 @@ export default function PdfViewer({ pdf }) {
   }
   const giveWidth = () => {
     if (isDesktopLarge) {
-      return 1500;
+      return 1000;
     }
     if (isDesktop) {
-      return 1200;
+      return 900;
     }
     if (isDesktopView) {
-      return 900;
+      return 590;
     }
     if (isTablet) {
       return 600;

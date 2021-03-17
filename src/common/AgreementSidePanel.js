@@ -2635,13 +2635,15 @@ export default function AgreementSidePanel({
             </ul>
           ))
         ) : (
-          <div className="text-center mt-3">No Activity Log found.</div>
+          <div className="ml-4 mt-3">No Activity Log found.</div>
         )}
-        <CommonPagination
-          count={activityCount}
-          pageNumber={pageNumber || 1}
-          handlePageChange={handlePageChange}
-        />
+        <Footer>
+          <CommonPagination
+            count={activityCount}
+            pageNumber={pageNumber || 1}
+            handlePageChange={handlePageChange}
+          />
+        </Footer>
       </>
     );
   };
@@ -3652,11 +3654,11 @@ const SidePanel = styled.div`
     border-left: 1px solid ${Theme.gray7};
     overflow-y:auto;
     
-    @media screen and (-webkit-min-device-pixel-ratio: 0) {
-      .sidebar {
-        padding-bottom: 400px;
-      }
-    }
+    // @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    //   .sidebar {
+    //     padding-bottom: 400px;
+    //   }
+    // }
     .error-found {
       color: ${Theme.red};
       font-size: ${Theme.small};
@@ -4036,4 +4038,14 @@ const SidePanel = styled.div`
    @media only screen and (min-width: 1500px)  {
      width: 400px;
    }
+`;
+
+const Footer = styled.div`
+  // border: 1px solid ${Theme.gray7};
+  // bottom: 79px;
+  // background: ${Theme.white};
+  // box-shadow: ${Theme.boxShadow};
+  // position: fixed;
+  // min-height: 80px;
+  // z-index: 2;
 `;
