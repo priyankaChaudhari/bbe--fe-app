@@ -2161,11 +2161,7 @@ export default function ContractContainer() {
                   {renderEditContractBtn('btn-primary')}
 
                   <span className="last-update">
-                    <img
-                      src={InfoIcon}
-                      alt="aarow-back"
-                      className="mr-2 align-self-center"
-                    />
+                    <img src={InfoIcon} alt="info" className="info-icon" />
                     This contract is missing mandatory information.
                   </span>
                 </>
@@ -2194,11 +2190,7 @@ export default function ContractContainer() {
                 {renderEditContractBtn('btn-primary')}
 
                 <span className="last-update">
-                  <img
-                    src={InfoIcon}
-                    alt="aarow-back"
-                    className="mr-2 align-self-center"
-                  />
+                  <img src={InfoIcon} alt="info" className="info-icon" />
                   This contract is missing mandatory information.
                 </span>
               </>
@@ -2434,6 +2426,12 @@ const Footer = styled.div`
 
     &:first-child {
       margin-left: 20px;
+    }
+
+    .info-icon {
+      vertical-align: text-bottom;
+      width: 16px;
+      margin-right: 8px;
     }
   }
   @media only screen and (max-width: 991px) {
