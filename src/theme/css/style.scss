@@ -963,16 +963,16 @@ fieldset {
 .ck.ck-editor__main > .ck-editor__editable {
   height: 200px !important;
 }
-.ReactCollapse--content {
-  max-width: 335px;
+// .ReactCollapse--content {
+//   max-width: 335px;
 
-  @media only screen and (max-width: 991px) {
-    max-width: 100%;
-  }
-  @media only screen and (min-width: 1500px) {
-    max-width: 380px;
-  }
-}
+//   @media only screen and (max-width: 991px) {
+//     max-width: 100%;
+//   }
+//   @media only screen and (min-width: 1500px) {
+//     max-width: 380px;
+//   }
+// }
 
 .text-container {
   padding-right: 368px;

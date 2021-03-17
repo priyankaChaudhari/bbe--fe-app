@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import queryString from 'query-string';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import $ from 'jquery';
 
 import ReactTooltip from 'react-tooltip';
@@ -27,7 +27,7 @@ import {
 import NoRecordFound from '../../common/NoRecordFound';
 import {
   SearchIcon,
-  ClockIcon,
+  // CountDayClock,
   SliderHIcon,
   CloseIcon,
   CompanyDefaultUser,
@@ -35,6 +35,9 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   CaretUp,
+  EditFileIcon,
+  // FileIcon,
+  // CheckFileIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import {
@@ -319,13 +322,13 @@ export default function NewCustomerList() {
     }
   };
 
-  const countDays = (item) => {
-    const date1 = new Date();
-    const date2 = new Date(item && item.contract && item.contract.end_date);
-    const diffTime = Math.abs(date2 - date1);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
+  // const countDays = (item) => {
+  //   const date1 = new Date();
+  //   const date2 = new Date(item && item.contract && item.contract.end_date);
+  //   const diffTime = Math.abs(date2 - date1);
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //   return diffDays;
+  // };
 
   const handleSearch = (event, type) => {
     if (type === 'view') {
@@ -818,7 +821,7 @@ export default function NewCustomerList() {
                               </>
                             ) : (
                               <>
-                                <p
+                                {/* <p
                                   className="black-heading-title mt-0 mb-0"
                                   style={{ textTransform: 'capitalize' }}>
                                   {' '}
@@ -827,26 +830,39 @@ export default function NewCustomerList() {
                                   item.contract.contract_type
                                     ? `${item.contract.contract_type} Contract`
                                     : ''}
-                                </p>
+                                </p> */}
                                 <ul className="recurring-contact ">
                                   <li>
-                                    <p className="basic-text ">
+                                    {/* <p className="basic-text ">
                                       {item &&
                                         item.contract &&
                                         item.contract.length}
-                                    </p>
+                                    </p> */}
+                                    <div className="recurring-service agreement">
+                                      Recurring Service Agreement
+                                    </div>
                                   </li>
                                   {item &&
                                   item.contract &&
                                   item.contract.end_date ? (
                                     <li>
-                                      <p className="basic-text ">
-                                        {' '}
+                                      {/* <p className="basic-text "> */}
+                                      {/* {' '}
                                         Expires:{' '}
                                         {dayjs(item.contract.end_date).format(
                                           'MMM DD, YYYY',
                                         )}
-                                      </p>
+                                      </p> */}
+                                      <span className="recurring-service edit">
+                                        Recurring Service Agreement
+                                        <span className="edit-file-icon">
+                                          <img
+                                            width="16px"
+                                            src={EditFileIcon}
+                                            alt="edit"
+                                          />{' '}
+                                        </span>
+                                      </span>{' '}
                                     </li>
                                   ) : (
                                     ''
@@ -855,15 +871,38 @@ export default function NewCustomerList() {
                                   item.contract &&
                                   item.contract.end_date ? (
                                     <li>
-                                      <div className="days-block">
-                                        {' '}
-                                        <img
-                                          className="clock-icon"
-                                          src={ClockIcon}
-                                          alt="clock"
-                                        />{' '}
-                                        {countDays(item)} days
-                                      </div>
+                                      {/* <span className="recurring-service count-days">
+                                        Recurring Service Agreement
+                                        <span className="count-days">
+                                          <img
+                                            className="clock-icon"
+                                            src={CountDayClock}
+                                            alt="clock"
+                                          />{' '}
+                                          28 d
+                                        </span>
+                                      </span>{' '} */}
+                                      {/* <span className="recurring-service file-check">
+                                        DSP Addendum
+                                        <span className="file-check-icon">
+                                          <img
+                                            className="clock-icon"
+                                            src={CheckFileIcon}
+                                            alt="check-file"
+                                          />{' '}
+                                        </span>
+                                      </span>{' '} */}
+                                      {/* <span className="recurring-service file">
+                                        DSP Addendum
+                                        <span className="file-icon">
+                                          <img
+                                            className="clock-icon"
+                                            src={FileIcon}
+                                            alt="file"
+                                          />{' '}
+                                        </span>
+                                      </span>{' '} */}
+                                      {/* {countDays(item)} days */}
                                     </li>
                                   ) : (
                                     ''

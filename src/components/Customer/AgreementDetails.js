@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
+import { Collapse } from 'react-collapse';
 
 import Theme from '../../theme/Theme';
 import { Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 import {
+  // ArrowDownIcon,
+  CaretUp,
   ClockIcon,
   FileContract,
   RecurringIcon,
@@ -20,6 +23,7 @@ import PastAgreement from './PastAgreement';
 
 export default function AgreementDetails({ agreement, id }) {
   const [viewComponent, setViewComponent] = useState('current');
+  const [openCollapse, setOpenCollapse] = useState(false);
 
   const agreementOptions = [
     { key: 'monthly_retainer', label: 'Monthly Retainer' },
@@ -59,9 +63,11 @@ export default function AgreementDetails({ agreement, id }) {
           <>
             {agreement &&
             agreement.end_date >= dayjs(new Date()).format('YYYY-MM-DD') ? (
-              <WhiteCard className="mt-3">
+              <WhiteCard
+                className="mt-3"
+                onClick={() => setOpenCollapse(!openCollapse)}>
                 <div className="row">
-                  <div className="col-lg-9 col-md-8 col-12">
+                  <div className="col-lg-8 col-md-7 col-11">
                     <img
                       className="solid-icon  "
                       src={
@@ -113,6 +119,10 @@ export default function AgreementDetails({ agreement, id }) {
                       )}
                     </ul>
                   </div>
+                  <div className="col-1 mt-4">
+                    <img width="24px" className="cursor" src={CaretUp} alt="" />
+                  </div>
+
                   <div className="clear-fix" />
                   <div className="col-lg-3 col-md-4 col-12 text-right">
                     <Link to={PATH_AGREEMENT.replace(':id', id)}>
@@ -128,80 +138,90 @@ export default function AgreementDetails({ agreement, id }) {
                     </Link>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-
-                <ul className="monthly-retainer">
-                  {agreementOptions.map((item) => (
-                    <li key={item.key}>
-                      <div className="label">{item.label}</div>
-                      {agreement && agreement[item.key] ? (
-                        <NumberFormat
-                          displayType="text"
-                          value={
-                            agreement[item.key].label || agreement[item.key]
-                          }
-                          prefix={item.key === 'rev_share' ? '' : '$'}
-                          suffix={item.key === 'rev_share' ? '%' : ''}
-                        />
-                      ) : (
-                        '0'
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
-                {agreement && agreement.contract_type === 'recurring' ? (
-                  <>
-                    <div className="label">Marketplaces</div>
-                    <ul className="selected-list">
-                      {agreement &&
-                      agreement.primary_marketplace === null &&
-                      agreement.additional_marketplaces === null
-                        ? 'No Marketplaces added.'
-                        : ''}
-                      {agreement && agreement.primary_marketplace ? (
-                        <li>{agreement.primary_marketplace.name} (Primary)</li>
-                      ) : (
-                        ''
-                      )}
-                      {agreement && agreement.additional_marketplaces
-                        ? agreement.additional_marketplaces.map((item) => (
-                            <li key={item.id}>
-                              {item.name || ''}{' '}
-                              {item.is_primary ? '(Primary)' : ''}
-                            </li>
-                          ))
-                        : ''}
-                    </ul>
-                    <div className="label mt-3">
-                      Additional Monthly Services
-                    </div>
-                    <ul className="selected-list">
-                      {agreement && agreement.additional_monthly_services
-                        ? agreement.additional_monthly_services.map((item) => (
-                            <li key={item.id}>
-                              {(item && item.service && item.service.name) ||
-                                ''}
-                            </li>
-                          ))
-                        : 'No Additional Monthly services added.'}
+                <CustomerDetailCoppase>
+                  <Collapse isOpened={openCollapse}>
+                    <div className="straight-line horizontal-line pt-3 mb-3" />
+                    <ul className="monthly-retainer">
+                      {agreementOptions.map((item) => (
+                        <li key={item.key}>
+                          <div className="label">{item.label}</div>
+                          {agreement && agreement[item.key] ? (
+                            <NumberFormat
+                              displayType="text"
+                              value={
+                                agreement[item.key].label || agreement[item.key]
+                              }
+                              prefix={item.key === 'rev_share' ? '' : '$'}
+                              suffix={item.key === 'rev_share' ? '%' : ''}
+                            />
+                          ) : (
+                            '0'
+                          )}
+                        </li>
+                      ))}
                     </ul>
                     <div className="straight-line horizontal-line pt-3 mb-3" />
-                  </>
-                ) : (
-                  ''
-                )}
-                <div className="label">One Time Services</div>
-                <ul className="selected-list">
-                  {agreement && agreement.additional_one_time_services
-                    ? agreement.additional_one_time_services.map((item) => (
-                        <li key={item.id}>
-                          {(item && item.service && item.service.name) || ''} (
-                          {(item && item.quantity) || ''})
-                        </li>
-                      ))
-                    : 'No One Time services added.'}
-                </ul>
+                    {agreement && agreement.contract_type === 'recurring' ? (
+                      <>
+                        <div className="label">Marketplaces</div>
+                        <ul className="selected-list">
+                          {agreement &&
+                          agreement.primary_marketplace === null &&
+                          agreement.additional_marketplaces === null
+                            ? 'No Marketplaces added.'
+                            : ''}
+                          {agreement && agreement.primary_marketplace ? (
+                            <li>
+                              {agreement.primary_marketplace.name} (Primary)
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                          {agreement && agreement.additional_marketplaces
+                            ? agreement.additional_marketplaces.map((item) => (
+                                <li key={item.id}>
+                                  {item.name || ''}{' '}
+                                  {item.is_primary ? '(Primary)' : ''}
+                                </li>
+                              ))
+                            : ''}
+                        </ul>
+                        <div className="label mt-3">
+                          Additional Monthly Services
+                        </div>
+                        <ul className="selected-list">
+                          {agreement && agreement.additional_monthly_services
+                            ? agreement.additional_monthly_services.map(
+                                (item) => (
+                                  <li key={item.id}>
+                                    {(item &&
+                                      item.service &&
+                                      item.service.name) ||
+                                      ''}
+                                  </li>
+                                ),
+                              )
+                            : 'No Additional Monthly services added.'}
+                        </ul>
+                        <div className="straight-line horizontal-line pt-3 mb-3" />
+                      </>
+                    ) : (
+                      ''
+                    )}
+                    <div className="label">One Time Services</div>
+                    <ul className="selected-list">
+                      {agreement && agreement.additional_one_time_services
+                        ? agreement.additional_one_time_services.map((item) => (
+                            <li key={item.id}>
+                              {(item && item.service && item.service.name) ||
+                                ''}{' '}
+                              ({(item && item.quantity) || ''})
+                            </li>
+                          ))
+                        : 'No One Time services added.'}
+                    </ul>
+                  </Collapse>
+                </CustomerDetailCoppase>
               </WhiteCard>
             ) : (
               <WhiteCard className="text-center">
@@ -270,5 +290,11 @@ const Tab = styled.div`
         font-family: ${Theme.titleFontFamily};
       }
     }
+  }
+`;
+
+const CustomerDetailCoppase = styled.div`
+  .ReactCollapse--content {
+    width: 100%;
   }
 `;

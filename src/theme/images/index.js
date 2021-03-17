@@ -131,6 +131,7 @@ import FileIcon from './icons/file-icon.png';
 import CheckFileIcon from './icons/check-file.png';
 import EditFileIcon from './icons/edit-file.png';
 import SignatureIcon from './icons/signature.png';
+import CountDayClock from './icons/count-days-clock.svg';
 
 export {
   BannerBg,
@@ -266,4 +267,5 @@ export {
   CheckFileIcon,
   EditFileIcon,
   SignatureIcon,
+  CountDayClock,
 };

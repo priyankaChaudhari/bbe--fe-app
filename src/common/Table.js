@@ -95,7 +95,7 @@ const Table = styled.table`
 
         li {
           display: inline-block;
-          margin-right: 10px;
+          margin-right: 7px;
           font-weight: 300;
 
           &.black-heading-title {
@@ -113,6 +113,85 @@ const Table = styled.table`
               width: 14px;
               margin-right: 5px;
               vertical-align: text-top;
+            }
+          }
+          .recurring-service {
+            border: 1px solid #d5d8e1;
+            border-radius: 5px;
+            border: none;
+            padding: 10px 4px 10px 12px;
+            color: #171725;
+            font-size: 14px;
+
+            &.agreement {
+              border: 1px solid #d5d8e1;
+              padding: 9px 12px;
+              background-color: #ffffff;
+            }
+
+            &.edit {
+              background: #ffded6;
+            }
+
+            &.count-days {
+              background: #fff4ec;
+            }
+
+            &.file-check {
+              background: #fdf3d7;
+            }
+
+            &.file {
+              background: #f4f6fc;
+            }
+          }
+          .edit-file-icon {
+            background: #f6d2c9;
+            padding: 8px 10px;
+            border-radius: 3px;
+            margin-left: -7px;
+            margin-left: 10px;
+
+            img {
+              vertical-align: middle;
+              width: 16px;
+            }
+          }
+          .count-days {
+            background: #ffe6d4;
+            padding: 8px 10px;
+            border-radius: 3px;
+            margin-left: -7px;
+            font-size: 14px;
+            margin-left: 10px;
+
+            img {
+              vertical-align: text-top;
+              width: 14px;
+            }
+          }
+          .file-check-icon {
+            background: #f5e8c3;
+            padding: 8px 10px;
+            border-radius: 3px;
+            margin-left: -7px;
+            font-size: 14px;
+            margin-left: 10px;
+            img {
+              vertical-align: text-top;
+              width: 14px;
+            }
+          }
+          .file-icon {
+            background: #e2e5ef;
+            padding: 8px 10px;
+            border-radius: 3px;
+            margin-left: -7px;
+            font-size: 14px;
+            margin-left: 10px;
+            img {
+              vertical-align: text-top;
+              width: 14px;
             }
           }
         }
