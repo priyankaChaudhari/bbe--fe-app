@@ -307,10 +307,10 @@ export default function Statement({
     padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> SKU's per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
+    padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> SKU&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
       formData && formData.content_optimization
     }</span></span></td><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> SKU's per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
+    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> SKU&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
       formData && formData.design_optimization
     }</span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
