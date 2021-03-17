@@ -10,6 +10,7 @@ export default function CommonPagination({
   pageNumber,
   handlePageChange,
   marginStyle,
+  showLessItems = false,
 }) {
   return (
     <div>
@@ -21,6 +22,7 @@ export default function CommonPagination({
             `${range[0]} - ${range[1]} of ${total} items`
           }
           total={count}
+          showLessItems={showLessItems}
           current={pageNumber}
           hideOnSinglePage
           onChange={(event) => handlePageChange(event)}
@@ -36,6 +38,7 @@ CommonPagination.defaultProps = {
   pageNumber: 1,
   handlePageChange: () => {},
   marginStyle: null,
+  showLessItems: false,
 };
 
 CommonPagination.propTypes = {
@@ -43,6 +46,7 @@ CommonPagination.propTypes = {
   pageNumber: PropTypes.number,
   handlePageChange: PropTypes.func,
   marginStyle: PropTypes.number,
+  showLessItems: PropTypes.bool,
 };
 
 const PaginationStyled = styled.div`

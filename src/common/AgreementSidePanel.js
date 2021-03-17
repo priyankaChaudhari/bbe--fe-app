@@ -141,6 +141,9 @@ export default function AgreementSidePanel({
   const [activityCount, setActivityCount] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
+  const [activityLoader, setActivityLoader] = useState(false);
+  const [isApicalled, setIsApicalled] = useState(false);
+
   const getActivityInitials = (userInfo) => {
     const firstName =
       (userInfo &&
@@ -198,6 +201,7 @@ export default function AgreementSidePanel({
 
   const getContractActivityLogInfo = useCallback(
     (currentPage) => {
+      setActivityLoader(true);
       getContractActivityLog(currentPage, agreementData.id).then((response) => {
         setActivityData(response && response.data && response.data.results);
         setActivityCount(response && response.data && response.data.count);
@@ -205,6 +209,8 @@ export default function AgreementSidePanel({
         getDocumentList().then((picResponse) => {
           setImages(picResponse);
         });
+        setActivityLoader(false);
+        setIsApicalled(true);
       });
     },
     [agreementData],
@@ -2588,7 +2594,6 @@ export default function AgreementSidePanel({
   };
 
   const renderContractActivityPanel = () => {
-    console.log('dataaaaa', activityData);
     return (
       <>
         <div className={`contract-status ${getContractStatusData('class')}`}>
@@ -2601,49 +2606,57 @@ export default function AgreementSidePanel({
           {_.startCase(getContractStatusData('status'))}
         </div>
         <div className="activity-log">Contract Activity</div>
-        {activityData && activityData.length !== 0 ? (
-          activityData.map((item) => (
-            <ul className="menu">
-              <li>
-                {images.find((op) => op.entity_id === item.user_id) &&
-                images.find((op) => op.entity_id === item.user_id)
-                  .presigned_url ? (
-                  <img
-                    src={
-                      isLoading.loader && isLoading.type === 'page'
-                        ? DefaultUser
-                        : images.find((op) => op.entity_id === item.user_id)
-                            .presigned_url
-                    }
-                    className="default-user-activity"
-                    alt="pic"
-                  />
-                ) : (
-                  <div className="avatarName float-left mr-3">
-                    {getActivityInitials(item.message)}
-                  </div>
-                )}
 
-                <div className="activity-user">
-                  {activityDetail(item)}
-                  <div className="time-date mt-1">
-                    {item && item.time ? item.time : ''}
+        {activityLoader === true ? (
+          <PageLoader component="activityLog" color="#FF5933" type="page" />
+        ) : activityData && activityData.length !== 0 ? (
+          <>
+            {activityData.map((item) => (
+              <ul className="menu">
+                <li>
+                  {images.find((op) => op.entity_id === item.user_id) &&
+                  images.find((op) => op.entity_id === item.user_id)
+                    .presigned_url ? (
+                    <img
+                      src={
+                        isLoading.loader && isLoading.type === 'page'
+                          ? DefaultUser
+                          : images.find((op) => op.entity_id === item.user_id)
+                              .presigned_url
+                      }
+                      className="default-user-activity"
+                      alt="pic"
+                    />
+                  ) : (
+                    <div className="avatarName float-left mr-3">
+                      {getActivityInitials(item.message)}
+                    </div>
+                  )}
+
+                  <div className="activity-user">
+                    {activityDetail(item)}
+                    <div className="time-date mt-1">
+                      {item && item.time ? item.time : ''}
+                    </div>
                   </div>
-                </div>
-                <div className="clear-fix" />
-              </li>
-            </ul>
-          ))
-        ) : (
-          <div className="ml-4 mt-3">No Activity Log found.</div>
-        )}
-        <Footer>
-          <CommonPagination
-            count={activityCount}
-            pageNumber={pageNumber || 1}
-            handlePageChange={handlePageChange}
-          />
-        </Footer>
+                  <div className="clear-fix" />
+                </li>
+              </ul>
+            ))}
+            {activityCount > 10 ? (
+              <Footer>
+                <CommonPagination
+                  count={activityCount}
+                  pageNumber={pageNumber || 1}
+                  handlePageChange={handlePageChange}
+                  showLessItems
+                />
+              </Footer>
+            ) : null}
+          </>
+        ) : isApicalled ? (
+          <div className="ml-4 mt-3">No activity log found.</div>
+        ) : null}
       </>
     );
   };
