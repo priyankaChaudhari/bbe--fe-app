@@ -38,8 +38,22 @@ export async function getCustomerList(
   let statusParams = {};
   if (filterOptions && filterOptions.status && filterOptions.status.length) {
     statusParams = queryString.stringify({
-      contract_status: filterOptions.status,
+      status: filterOptions.status,
     });
+  }
+  let contractStatusParams = {};
+  if (
+    filterOptions &&
+    filterOptions.contract_status &&
+    filterOptions.contract_status.length
+  ) {
+    if (filterOptions.contract_status.find((op) => op === 'expiring_soon')) {
+      params = { ...params, expiring_soon: true };
+    } else {
+      contractStatusParams = queryString.stringify({
+        contract_status: filterOptions.contract_status,
+      });
+    }
   }
   let bgsParams = {};
   if (filterOptions && filterOptions.user && filterOptions.user.length) {
@@ -63,6 +77,10 @@ export async function getCustomerList(
         statusParams && statusParams.length ? statusParams : ''
       }${bgsParams && bgsParams.length ? `&${bgsParams}` : ''}${
         contract && contract.length ? `&${contract}` : ''
+      }${
+        contractStatusParams && contractStatusParams.length
+          ? `&${contractStatusParams}`
+          : ''
       }`,
       { params },
     )

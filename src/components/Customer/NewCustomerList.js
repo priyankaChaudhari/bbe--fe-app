@@ -2,14 +2,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useCallback } from 'react';
-// import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import queryString from 'query-string';
-// import dayjs from 'dayjs';
 import $ from 'jquery';
 
 import ReactTooltip from 'react-tooltip';
@@ -43,7 +41,7 @@ import {
   getContractStatus,
   getCustomerList,
   getGrowthStrategist,
-  // getStatus,
+  getStatus,
 } from '../../api';
 import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
 import { sortOptions } from '../../constants/FieldConstants';
@@ -64,6 +62,7 @@ export default function NewCustomerList() {
   });
   const [filters, setFilters] = useState({
     status: [],
+    contract_status: [],
     user: [],
     contract_type: [],
   });
@@ -76,6 +75,13 @@ export default function NewCustomerList() {
     { value: 'any', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
+  ];
+  const contractStatus = [
+    { value: 'active', label: 'Signed' },
+    { value: 'expiring_soon', label: 'Expiring Soon' },
+    { value: 'pending contract signature', label: 'Pending Signature' },
+    { value: 'pending contract approval', label: 'Pending Approval' },
+    { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
 
@@ -202,11 +208,11 @@ export default function NewCustomerList() {
   );
 
   useEffect(() => {
-    // getStatus().then((statusResponse) => {
-    //   setStatus(statusResponse.data);
-    // });
+    getStatus().then((statusResponse) => {
+      setStatus(statusResponse.data);
+    });
     getContractStatus().then((contract) => {
-      setStatus(contract.data);
+      console.log(contract.data);
     });
     getGrowthStrategist().then((gs) => {
       if (gs && gs.data) {
@@ -258,13 +264,22 @@ export default function NewCustomerList() {
   // };
 
   const handleFilters = (event, key, type, action) => {
-    if (key === 'unselected') {
+    if (type === 'status' && key === 'unselected') {
       $('.uncheck-all').on('click', () => {
         $('.checkboxes input:checkbox').prop('checked', false);
       });
       setFilters({
         ...filters,
         status: [],
+      });
+    }
+    if (type === 'contract_status' && key === 'unselected') {
+      $('.uncheck-all').on('click', () => {
+        $('.checkboxes  input:checkbox').prop('checked', false);
+      });
+      setFilters({
+        ...filters,
+        contract_status: [],
       });
     }
     if (type === 'status' && key !== 'unselected') {
@@ -280,6 +295,25 @@ export default function NewCustomerList() {
         setFilters({
           ...filters,
           status: filters.status.filter((op) => op !== event.target.name),
+        });
+      }
+    }
+
+    if (type === 'contract_status' && key !== 'unselected') {
+      if (
+        event.target.checked &&
+        filters.contract_status.indexOf(event.target.name) === -1
+      ) {
+        setFilters({
+          ...filters,
+          contract_status: [...filters.contract_status, event.target.name],
+        });
+      } else {
+        setFilters({
+          ...filters,
+          contract_status: filters.contract_status.filter(
+            (op) => op !== event.target.name,
+          ),
         });
       }
     }
@@ -697,112 +731,45 @@ export default function NewCustomerList() {
             </li>
           ))}
         </ul>
-        {/* <div className="label mt-4 pt-2">Contract Status</div>
+        <div className="label mt-4 pt-2">Contract Status</div>
         <div
           className="unselected uncheck-all"
-          onClick={(event) => handleFilters(event, 'unselected', 'status')}
+          onClick={(event) =>
+            handleFilters(event, 'unselected', 'contract_status')
+          }
           role="presentation">
           Unselect all
         </div>
         <div className="clear-fix" />
-        <ul className="check-box-list checkboxes">
-          <li>
-            <CheckBox>
-              <label className="check-container customer-pannel">
-                <input type="checkbox" />
-                <span className="checkmark" />
-                Active
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label className="check-container customer-pannel">
-                <input type="checkbox" />
-                <span className="checkmark" />
-                Expiring soon
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label className="check-container customer-pannel">
-                <input type="checkbox" />
-                <span className="checkmark" />
-                Pending Signature
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label className="check-container customer-pannel">
-                <input type="checkbox" />
-                <span className="checkmark" />
-                Pending Approval
-              </label>
-            </CheckBox>
-          </li>
-          <li>
-            <CheckBox>
-              <label className="check-container customer-pannel">
-                <input type="checkbox" />
-                <span className="checkmark" />
-                Pending Contract
-              </label>
-            </CheckBox>
-          </li>
-        </ul> */}
+        <ul className="check-box-list checkboxes contract">
+          {contractStatus.map((item) => (
+            <li key={item.value}>
+              <CheckBox>
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor={item.label}>
+                  <input
+                    type="checkbox"
+                    id={item.label}
+                    name={item.value}
+                    onChange={(event) =>
+                      handleFilters(event, item, 'contract_status')
+                    }
+                    defaultChecked={
+                      filters.status
+                        ? filters.status.find((op) => op === item.value)
+                        : ''
+                    }
+                  />
+                  <span className="checkmark" />
+                  {item.label}
+                </label>
+              </CheckBox>
+            </li>
+          ))}
+        </ul>
       </CustomerLeftPannel>
-      {/* <div className="table-part">
-        <table>
-          <thead>
-            <tr className="red">
-              <th width="">Name</th>
-              <th width="">Age</th>
-              <th width="">Job</th>
-              <th width="">Color</th>
-              <th width="">URL</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Lorem.</td>
-              <td>Ullam.</td>
-              <td>Vel.</td>
-              <td>At.</td>
-              <td>Quis.</td>
-            </tr>
-            <tr>
-              <td>Lorem.</td>
-              <td>Ullam.</td>
-              <td>Vel.</td>
-              <td>At.</td>
-              <td>Quis.</td>
-            </tr>
-            <tr>
-              <td>Lorem.</td>
-              <td>Ullam.</td>
-              <td>Vel.</td>
-              <td>At.</td>
-              <td>Quis.</td>
-            </tr>
-            <tr>
-              <td>Lorem.</td>
-              <td>Ullam.</td>
-              <td>Vel.</td>
-              <td>At.</td>
-              <td>Quis.</td>
-            </tr>
-            <tr>
-              <td>Lorem.</td>
-              <td>Ullam.</td>
-              <td>Vel.</td>
-              <td>At.</td>
-              <td>Quis.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div> */}
+
       <>
         {isDesktop ? (
           <div className="table-container">
