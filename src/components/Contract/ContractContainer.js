@@ -1568,6 +1568,7 @@ export default function ContractContainer() {
 
       if (response && response.status === 200) {
         dispatch(getAccountDetails(id));
+        setIsEditContract(true);
       }
     });
   };
@@ -1924,6 +1925,18 @@ export default function ContractContainer() {
     );
   };
 
+  const renderEditContractBtn = (btnClass) => {
+    return (
+      <Button
+        className={`${btnClass} on-boarding  mt-3 mr-4 w-sm-100`}
+        onClick={() => {
+          setIsEditContract(true);
+        }}>
+        Edit Contract
+      </Button>
+    );
+  };
+
   const displayRightSidePanel = () => {
     return (
       <AgreementSidePanel
@@ -2099,15 +2112,9 @@ export default function ContractContainer() {
                     }}>
                     Approve and Request Signature
                   </Button>
-                  {!isEditContract ? (
-                    <Button
-                      className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
-                      onClick={() => {
-                        setIsEditContract(true);
-                      }}>
-                      Edit Contract
-                    </Button>
-                  ) : null}
+                  {!isEditContract
+                    ? renderEditContractBtn('light-orange')
+                    : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
                     {dayjs(details && details.updated_at).format(
@@ -2135,15 +2142,9 @@ export default function ContractContainer() {
                     }}>
                     Request Approval
                   </Button>
-                  {!isEditContract ? (
-                    <Button
-                      className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
-                      onClick={() => {
-                        setIsEditContract(true);
-                      }}>
-                      Edit Contract
-                    </Button>
-                  ) : null}
+                  {!isEditContract
+                    ? renderEditContractBtn('light-orange')
+                    : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
                     {dayjs(details && details.updated_at).format(
@@ -2153,13 +2154,8 @@ export default function ContractContainer() {
                 </>
               ) : (
                 <>
-                  <Button
-                    className="btn-primary  on-boarding  mt-3 mr-4 w-sm-100"
-                    onClick={() => {
-                      setIsEditContract(true);
-                    }}>
-                    Edit Contract
-                  </Button>
+                  {renderEditContractBtn('btn-primary')}
+
                   <span className="last-update">
                     <img
                       src={InfoIcon}
@@ -2183,15 +2179,7 @@ export default function ContractContainer() {
                   }}>
                   Request Signature
                 </Button>
-                {!isEditContract ? (
-                  <Button
-                    className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
-                    onClick={() => {
-                      setIsEditContract(true);
-                    }}>
-                    Edit Contract
-                  </Button>
-                ) : null}
+                {!isEditContract ? renderEditContractBtn('light-orange') : null}
                 <span className="last-update ">
                   Last updated by You on{' '}
                   {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
@@ -2199,13 +2187,8 @@ export default function ContractContainer() {
               </>
             ) : !isEditContract ? (
               <>
-                <Button
-                  className="btn-primary  on-boarding  mt-3 mr-4 w-sm-100"
-                  onClick={() => {
-                    setIsEditContract(true);
-                  }}>
-                  Edit Contract
-                </Button>
+                {renderEditContractBtn('btn-primary')}
+
                 <span className="last-update">
                   <img
                     src={InfoIcon}
@@ -2254,6 +2237,7 @@ export default function ContractContainer() {
       </div>
 
       <PdfViewer pdf={details && details.contract_url} />
+      {displayRightSidePanel()}
     </div>
   ) : (
     <>
@@ -2271,7 +2255,7 @@ export default function ContractContainer() {
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
             '' */}
-          ) : (
+
           <li
             className={tabInResponsive === 'edit-fields' ? 'active' : ''}
             role="presentation"
@@ -2340,7 +2324,6 @@ export default function ContractContainer() {
         ? displayRightSidePanel()
         : ''}
       {displayFooter()}
-      {/* // : ( // '' // )} */}
       <Modal
         isOpen={showModal}
         style={customStyles}

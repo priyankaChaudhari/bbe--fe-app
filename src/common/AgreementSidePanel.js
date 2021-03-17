@@ -138,7 +138,6 @@ export default function AgreementSidePanel({
 
   const [activityData, setActivityData] = useState([]);
   const [images, setImages] = useState([]);
-
   const getActivityInitials = (userInfo) => {
     const firstName =
       (userInfo &&
@@ -2648,11 +2647,12 @@ export default function AgreementSidePanel({
       </label> */}
       <div className="sidebar">
         <>
-          {formData &&
+          {/* {formData &&
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
             ''
-          ) : isEditContract ? (
+          ) :  */}
+          {isEditContract ? (
             <>
               {/* {goToSection()} */}
               <div
