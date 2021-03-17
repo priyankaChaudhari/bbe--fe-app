@@ -2535,14 +2535,14 @@ export default function AgreementSidePanel({
     }
     if (flag === 'minus') {
       if (formData && formData[key]) {
-        updatedData = formData[key] - 1;
+        updatedData = parseInt(formData[key], 10) - 1;
       } else {
         updatedData = 0;
       }
     }
     if (flag === 'plus') {
       if (formData && formData[key]) {
-        updatedData = formData[key] + 1;
+        updatedData = parseInt(formData[key], 10) + 1;
       } else {
         updatedData = 1;
       }
