@@ -35,7 +35,7 @@ import {
   EditFileIcon,
   SignatureIcon,
 } from '../theme/images/index';
-import { Button, ContractFormField , CommonPagination } from './index';
+import { Button, ContractFormField, CommonPagination } from './index';
 import {
   AgreementDetails,
   StatementDetails,
@@ -1583,7 +1583,7 @@ export default function AgreementSidePanel({
     return accountLength;
   };
 
-  const getContractStatus = (type) => {
+  const getContractStatusData = (type) => {
     const status =
       (agreement &&
         agreement.contract_status &&
@@ -1591,32 +1591,50 @@ export default function AgreementSidePanel({
       '';
     let statusClass = '';
     let statusSrc = '';
+    let dispalyStatus = '';
 
     if (status !== '') {
       switch (status) {
         case 'pending contract':
           statusClass = 'pending-contract';
           statusSrc = FileIcon;
+          dispalyStatus = 'Pending Contract';
           break;
 
         case 'pending contract approval':
           statusClass = '';
           statusSrc = CheckFileIcon;
+          dispalyStatus = 'Pending Approval';
           break;
 
         case 'pending contract signature':
           statusClass = 'pending-signature';
           statusSrc = EditFileIcon;
+          dispalyStatus = 'Pending Signature';
           break;
 
-        case 'signature':
+        case 'pending account setup':
           statusClass = 'signature';
           statusSrc = SignatureIcon;
+          dispalyStatus = 'Signed';
+          break;
+
+        case 'active':
+          statusClass = '';
+          statusSrc = '';
+          dispalyStatus = 'Active';
+          break;
+
+        case 'inactive':
+          statusClass = '';
+          statusSrc = '';
+          dispalyStatus = 'Inactive';
           break;
 
         default:
           statusClass = 'pending-contract';
           statusSrc = 'FileIcon';
+          dispalyStatus = 'Signed';
           break;
       }
     }
@@ -1626,6 +1644,9 @@ export default function AgreementSidePanel({
     }
     if (type === 'src') {
       return statusSrc;
+    }
+    if (type === 'status') {
+      return dispalyStatus;
     }
     return '';
   };
@@ -2567,20 +2588,17 @@ export default function AgreementSidePanel({
   };
 
   const renderContractActivityPanel = () => {
+    console.log('dataaaaa', activityData);
     return (
       <>
-        <div className={`contract-status ${getContractStatus('class')}`}>
+        <div className={`contract-status ${getContractStatusData('class')}`}>
           <img
             width="16px"
             className="contract-file-icon"
-            src={getContractStatus('src')}
+            src={getContractStatusData('src')}
             alt=""
           />
-          {_.startCase(
-            agreement &&
-              agreement.contract_status &&
-              agreement.contract_status.value,
-          )}
+          {_.startCase(getContractStatusData('status'))}
         </div>
         <div className="activity-log">Contract Activity</div>
         {activityData && activityData.length !== 0 ? (
