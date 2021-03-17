@@ -31,7 +31,7 @@ export default function PdfViewer({ pdf }) {
       return 590;
     }
     if (isTablet) {
-      return 600;
+      return 750;
     }
 
     if (isMobile) {

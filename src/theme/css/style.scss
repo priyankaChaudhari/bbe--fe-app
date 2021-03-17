@@ -1206,6 +1206,8 @@ input:checked + .slider:before {
   }
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
+    padding-right: 0;
+    margin-top: 50px;
   }
 }
 
