@@ -2212,29 +2212,62 @@ export default function ContractContainer() {
     (details &&
       details.contract_status &&
       details.contract_status.value === 'active') ? (
-    <div className="on-boarding-container">
-      <div className="row">
-        <div className="col-12">
-          <div className="m-0 sticky">
-            {' '}
-            <div
-              onClick={() => onClickOfBackToCustomerDetail()}
-              role="presentation"
-              className="back-link">
-              <img
-                src={LeftArrowIcon}
-                alt="aarow-back"
-                className="arrow-back-icon "
-              />
-              Back to Customer Details
+    <>
+      <ContractTab className="d-lg-none d-block">
+        <ul className="tabs">
+          <li
+            className={tabInResponsive === 'view-contract' ? 'active' : ''}
+            role="presentation"
+            onClick={() => showTabInResponsive('view-contract')}>
+            View Contract
+          </li>
+          {/* {formData &&
+          formData.contract_status &&
+          formData.contract_status.value === 'pending contract signature' ? (
+            '' */}
+
+          <li
+            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+            role="presentation"
+            onClick={() => showTabInResponsive('edit-fields')}>
+            {isEditContract ? 'Edit Fields' : 'Activity'}
+          </li>
+          {/* )} */}
+        </ul>
+      </ContractTab>
+      <div className="on-boarding-container">
+        <div className="row">
+          <div className="col-12">
+            <div className="m-0 sticky">
+              {' '}
+              <div
+                onClick={() => onClickOfBackToCustomerDetail()}
+                role="presentation"
+                className="back-link">
+                <img
+                  src={LeftArrowIcon}
+                  alt="aarow-back"
+                  className="arrow-back-icon "
+                />
+                Back to Customer Details
+              </div>
             </div>
           </div>
         </div>
+        {isDesktop ||
+        (isTablet && tabInResponsive === 'view-contract') ||
+        (isMobile && tabInResponsive === 'view-contract') ? (
+          <PdfViewer pdf={details && details.contract_url} />
+        ) : (
+          ''
+        )}
+        {isDesktop ||
+        (isTablet && tabInResponsive === 'edit-fields') ||
+        (isMobile && tabInResponsive === 'edit-fields')
+          ? displayRightSidePanel()
+          : ''}
       </div>
-
-      <PdfViewer pdf={details && details.contract_url} />
-      {displayRightSidePanel()}
-    </div>
+    </>
   ) : (
     <>
       {/* <ToastContainer position="top-center" autoClose={8000} /> */}
