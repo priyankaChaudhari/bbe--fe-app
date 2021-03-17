@@ -27,17 +27,16 @@ import {
 import NoRecordFound from '../../common/NoRecordFound';
 import {
   SearchIcon,
-  // CountDayClock,
+  CountDayClock,
   SliderHIcon,
   CloseIcon,
   CompanyDefaultUser,
   InfoIcon,
-  ArrowDownIcon,
   ArrowUpIcon,
   CaretUp,
   EditFileIcon,
-  // FileIcon,
-  // CheckFileIcon,
+  CheckFileIcon,
+  FileIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import {
@@ -322,13 +321,13 @@ export default function NewCustomerList() {
     }
   };
 
-  // const countDays = (item) => {
-  //   const date1 = new Date();
-  //   const date2 = new Date(item && item.contract && item.contract.end_date);
-  //   const diffTime = Math.abs(date2 - date1);
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  //   return diffDays;
-  // };
+  const countDays = (item) => {
+    const date1 = new Date();
+    const date2 = new Date(item);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   const handleSearch = (event, type) => {
     if (type === 'view') {
@@ -380,6 +379,69 @@ export default function NewCustomerList() {
       return 'View';
     }
     return '';
+  };
+
+  const generateContractHTML = (type) => {
+    if (type && type.contract_status === 'pending contract') {
+      return (
+        <li>
+          <span className="recurring-service file">
+            {type.contract_type} Service Agreement
+            <span className="file-icon">
+              <img src={FileIcon} alt="file" />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (type && type.contract_status === 'pending contract approval') {
+      return (
+        <li>
+          <span className="recurring-service file-check">
+            {type.contract_type} Service Agreement
+            <span className="file-check-icon">
+              <img
+                className="clock-icon"
+                src={CheckFileIcon}
+                alt="check-file"
+              />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (type && type.contract_status === 'pending contract signature') {
+      return (
+        <li>
+          <span className="recurring-service edit">
+            {type.contract_type} Service Agreement
+            <span className="edit-file-icon">
+              <img width="16px" src={EditFileIcon} alt="edit" />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (countDays(type.end_date) <= 90) {
+      return (
+        <li>
+          <span className="recurring-service count-days">
+            {type.contract_type} Service Agreement
+            <span className="count-days">
+              <img className="clock-icon" src={CountDayClock} alt="clock" />
+              {countDays(type.end_date)}d
+            </span>
+          </span>
+        </li>
+      );
+    }
+    return (
+      <li>
+        <div className="recurring-service agreement">
+          {type.contract_type} Service Agreement
+        </div>
+      </li>
+    );
   };
 
   const generateDropdown = (item) => {
@@ -752,9 +814,11 @@ export default function NewCustomerList() {
                   <thead>
                     <tr className="table-header">
                       <th className="customer-header">Customer</th>
-                      <th>{showPerformance ? 'Revenue' : 'Contract'}</th>
-                      <th>{showPerformance ? 'Units Sold' : 'Retainer'}</th>
-                      <th>{showPerformance ? 'Traffic' : 'Rev. Share'}</th>
+                      <th>
+                        {showPerformance ? 'Revenue' : 'Active Contracts'}
+                      </th>
+                      {showPerformance ? <th>Units Sold</th> : null}
+                      {showPerformance ? <th>Traffic</th> : null}
                       {showPerformance ? <th>Conversion</th> : null}
                       <th>Brand Strategist</th>
                     </tr>
@@ -773,7 +837,7 @@ export default function NewCustomerList() {
                               PATH_CUSTOMER_DETAILS.replace(':id', item.id),
                             )
                           }>
-                          <td width="25%">
+                          <td width={showPerformance ? '20%' : '30%'}>
                             <img
                               className="company-logo"
                               src={
@@ -790,17 +854,16 @@ export default function NewCustomerList() {
                             <div className="company-name">
                               {item &&
                                 item.contract &&
-                                item.contract.contract_company_name}
+                                item.contract[0] &&
+                                item.contract[0].contract_company_name}
                             </div>
                             <div
                               className="status"
                               style={{ textTransform: 'capitalize' }}>
-                              {item &&
-                                item.contract &&
-                                item.contract.contract_status}
+                              {item && item.status}
                             </div>
                           </td>
-                          <td width={showPerformance ? '10%' : '35%'}>
+                          <td width={showPerformance ? '15%' : '50%'}>
                             {showPerformance ? (
                               <>
                                 {item &&
@@ -820,99 +883,21 @@ export default function NewCustomerList() {
                                 </div>
                               </>
                             ) : (
-                              <>
-                                {/* <p
-                                  className="black-heading-title mt-0 mb-0"
-                                  style={{ textTransform: 'capitalize' }}>
-                                  {' '}
-                                  {item &&
+                              <ul
+                                className="recurring-contact"
+                                style={{ textTransform: 'capitalize' }}>
+                                {item &&
                                   item.contract &&
-                                  item.contract.contract_type
-                                    ? `${item.contract.contract_type} Contract`
-                                    : ''}
-                                </p> */}
-                                <ul className="recurring-contact ">
-                                  <li>
-                                    {/* <p className="basic-text ">
-                                      {item &&
-                                        item.contract &&
-                                        item.contract.length}
-                                    </p> */}
-                                    <div className="recurring-service agreement">
-                                      Recurring Service Agreement
-                                    </div>
-                                  </li>
-                                  {item &&
-                                  item.contract &&
-                                  item.contract.end_date ? (
-                                    <li>
-                                      {/* <p className="basic-text "> */}
-                                      {/* {' '}
-                                        Expires:{' '}
-                                        {dayjs(item.contract.end_date).format(
-                                          'MMM DD, YYYY',
-                                        )}
-                                      </p> */}
-                                      <span className="recurring-service edit">
-                                        Recurring Service Agreement
-                                        <span className="edit-file-icon">
-                                          <img
-                                            width="16px"
-                                            src={EditFileIcon}
-                                            alt="edit"
-                                          />{' '}
-                                        </span>
-                                      </span>{' '}
-                                    </li>
-                                  ) : (
-                                    ''
-                                  )}
-                                  {item &&
-                                  item.contract &&
-                                  item.contract.end_date ? (
-                                    <li>
-                                      {/* <span className="recurring-service count-days">
-                                        Recurring Service Agreement
-                                        <span className="count-days">
-                                          <img
-                                            className="clock-icon"
-                                            src={CountDayClock}
-                                            alt="clock"
-                                          />{' '}
-                                          28 d
-                                        </span>
-                                      </span>{' '} */}
-                                      {/* <span className="recurring-service file-check">
-                                        DSP Addendum
-                                        <span className="file-check-icon">
-                                          <img
-                                            className="clock-icon"
-                                            src={CheckFileIcon}
-                                            alt="check-file"
-                                          />{' '}
-                                        </span>
-                                      </span>{' '} */}
-                                      {/* <span className="recurring-service file">
-                                        DSP Addendum
-                                        <span className="file-icon">
-                                          <img
-                                            className="clock-icon"
-                                            src={FileIcon}
-                                            alt="file"
-                                          />{' '}
-                                        </span>
-                                      </span>{' '} */}
-                                      {/* {countDays(item)} days */}
-                                    </li>
-                                  ) : (
-                                    ''
-                                  )}
-                                </ul>
-                              </>
+                                  item.contract.map((type) => (
+                                    <React.Fragment key={Math.random()}>
+                                      {generateContractHTML(type)}
+                                    </React.Fragment>
+                                  ))}
+                              </ul>
                             )}
                           </td>
-                          <td width="10%">
-                            {showPerformance ? (
+                          {showPerformance ? (
+                            <td width="15%">
                               <>
                                 {item &&
                                 item.daily_facts &&
@@ -930,23 +915,17 @@ export default function NewCustomerList() {
                                   0.15%
                                 </div>
                               </>
-                            ) : (
+                            </td>
+                          ) : null}
+                          {showPerformance ? (
+                            <td width="15%">
                               <>
                                 {item &&
-                                item.contract &&
-                                item.contract.monthly_retainer
-                                  ? `$${item.contract.monthly_retainer
-                                      .toString()
-                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                `
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current[0]
+                                  ? `$${item.daily_facts.current[0].units_sold}`
                                   : ''}
-                              </>
-                            )}
-                          </td>
-                          <td width="10%">
-                            {showPerformance ? (
-                              <>
-                                12,234
                                 <div className="increase-rate">
                                   <img
                                     className="red-arrow"
@@ -957,29 +936,30 @@ export default function NewCustomerList() {
                                   0.15%
                                 </div>
                               </>
-                            ) : (
-                              <>
-                                {item &&
-                                item.contract &&
-                                item.contract.rev_share
-                                  ? `${item.contract.rev_share} %`
-                                  : ''}
-                              </>
-                            )}
-                          </td>
-                          {showPerformance ? (
-                            <td width="10%">
-                              23.4%
-                              <div className="decrease-rate">
-                                <img
-                                  className="red-arrow"
-                                  src={ArrowDownIcon}
-                                  alt="arrow-up"
-                                />
-                                0.15%
-                              </div>{' '}
                             </td>
                           ) : null}
+                          {showPerformance ? (
+                            <td width="15%">
+                              <>
+                                {item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current[0]
+                                  ? `$${item.daily_facts.current[0].units_sold}`
+                                  : ''}
+                                <div className="increase-rate">
+                                  <img
+                                    className="red-arrow"
+                                    src={ArrowUpIcon}
+                                    width="14px"
+                                    alt="arrow-up"
+                                  />
+                                  0.15%
+                                </div>
+                              </>
+                            </td>
+                          ) : null}
+
                           <td width="20%">
                             {item &&
                             item.brand_growth_strategist &&

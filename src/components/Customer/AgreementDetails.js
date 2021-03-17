@@ -67,7 +67,7 @@ export default function AgreementDetails({ agreement, id }) {
                 className="mt-3"
                 onClick={() => setOpenCollapse(!openCollapse)}>
                 <div className="row">
-                  <div className="col-lg-8 col-md-7 col-11">
+                  <div className="col-lg-9 col-md-8 col-12">
                     <img
                       className="solid-icon  "
                       src={
@@ -119,9 +119,6 @@ export default function AgreementDetails({ agreement, id }) {
                       )}
                     </ul>
                   </div>
-                  <div className="col-1 mt-4">
-                    <img width="24px" className="cursor" src={CaretUp} alt="" />
-                  </div>
 
                   <div className="clear-fix" />
                   <div className="col-lg-3 col-md-4 col-12 text-right">
@@ -138,9 +135,12 @@ export default function AgreementDetails({ agreement, id }) {
                     </Link>
                   </div>
                 </div>
+                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="text-center">
+                  <img width="26px" className="cursor" src={CaretUp} alt="" />
+                </div>
                 <CustomerDetailCoppase>
                   <Collapse isOpened={openCollapse}>
-                    <div className="straight-line horizontal-line pt-3 mb-3" />
                     <ul className="monthly-retainer">
                       {agreementOptions.map((item) => (
                         <li key={item.key}>

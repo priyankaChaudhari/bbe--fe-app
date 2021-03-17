@@ -149,8 +149,14 @@ export default function CompanyPerformance({ agreement }) {
   useEffect(() => {
     const list = [];
     list.push({
-      value: agreement && agreement.primary_marketplace.id,
-      label: agreement && agreement.primary_marketplace.name,
+      value:
+        agreement &&
+        agreement.primary_marketplace &&
+        agreement.primary_marketplace.id,
+      label:
+        agreement &&
+        agreement.primary_marketplace &&
+        agreement.primary_marketplace.name,
     });
     if (agreement && agreement.additional_marketplaces)
       for (const option of agreement.additional_marketplaces) {
