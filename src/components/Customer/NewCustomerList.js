@@ -461,7 +461,7 @@ export default function NewCustomerList() {
         <li>
           <span className="recurring-service count-days">
             {type.contract_type} Service Agreement
-            <span className="count-days">
+            <span className="count-clock-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
             </span>

@@ -104,19 +104,19 @@ const Table = styled.table`
             min-height: 0 !important;
           }
 
-          .days-block {
-            background: ${Theme.lighterOrange};
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: ${Theme.orange};
-            font-size: ${Theme.extraNormal};
+          // .days-block {
+          //   background: ${Theme.lighterOrange};
+          //   padding: 5px 10px;
+          //   border-radius: 5px;
+          //   color: ${Theme.orange};
+          //   font-size: ${Theme.extraNormal};
 
-            .clock-icon {
-              width: 14px;
-              margin-right: 5px;
-              vertical-align: text-top;
-            }
-          }
+          //   .clock-icon {
+          //     width: 14px;
+          //     margin-right: 5px;
+          //     vertical-align: text-top;
+          //   }
+          // }
           .recurring-service {
             border: 1px solid #d5d8e1;
             border-radius: 5px;
@@ -159,7 +159,7 @@ const Table = styled.table`
               width: 16px;
             }
           }
-          .count-days {
+          .count-clock-icon {
             background: #ffe6d4;
             padding: 8px 10px;
             border-radius: 3px;
