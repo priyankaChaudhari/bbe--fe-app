@@ -2519,9 +2519,11 @@ export default function AgreementSidePanel({
         {ListingOptimization.map((field) => {
           return (
             <>
-              <div className="row">
-                <div className="col-7 ">
-                  <label>{field && field.label}</label>
+              <div className="row mb-2">
+                <div className="col-7  ">
+                  <label className="listing-optimazation">
+                    {field && field.label}
+                  </label>
                 </div>
                 <div className="col-5 pl-0 text-end">
                   <button
@@ -3696,6 +3698,10 @@ const SidePanel = styled.div`
           font-size:${Theme.extraSmall};
           color: ${Theme.gray30};
           font-weight: bold;
+        }
+        .listing-optimazation {
+          color:  ${Theme.gray85};
+          font-size: ${Theme.extraNormal};
         }
 
         .text-end {
