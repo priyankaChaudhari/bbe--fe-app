@@ -308,35 +308,37 @@ function Discount({
         {selectedDiscountType === 'fixed amount' ? (
           <ContractFormField>
             {showAmountInput ? (
-              <label className="modal-field" htmlFor="emailAddress">
-                Amount
-                <div className="input-container">
-                  {selectedDiscountType === 'fixed amount' ||
-                  (discountFlag === 'monthly' &&
-                    formData &&
-                    formData.monthly_discount_type === 'fixed amount') ||
-                  (discountFlag === 'one-time' &&
-                    formData &&
-                    formData.one_time_discount_type === 'fixed amount') ? (
-                    <span className="input-icon">$ </span>
-                  ) : (
-                    ''
-                  )}
+              <>
+                <label className="modal-field" htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    {selectedDiscountType === 'fixed amount' ||
+                    (discountFlag === 'monthly' &&
+                      formData &&
+                      formData.monthly_discount_type === 'fixed amount') ||
+                    (discountFlag === 'one-time' &&
+                      formData &&
+                      formData.one_time_discount_type === 'fixed amount') ? (
+                      <span className="input-icon">$ </span>
+                    ) : (
+                      ''
+                    )}
 
-                  <NumberFormat
-                    name="amount"
-                    className="form-control modal-input-control"
-                    placeholder="Enter Amount"
-                    onChange={(event) => handleInputChange(event)}
-                    defaultValue={setDefaultAmount(selectedDiscountType)}
-                    thousandSeparator
-                  />
-                </div>
+                    <NumberFormat
+                      name="amount"
+                      className="form-control modal-input-control"
+                      placeholder="Enter Amount"
+                      onChange={(event) => handleInputChange(event)}
+                      defaultValue={setDefaultAmount(selectedDiscountType)}
+                      thousandSeparator
+                    />
+                  </div>
+                </label>
                 <ErrorMsg>
                   {apiError && apiError.monthly_discount_amount}
                   {apiError && apiError.one_time_discount_amount}
                 </ErrorMsg>
-              </label>
+              </>
             ) : (
               ''
             )}
@@ -344,34 +346,36 @@ function Discount({
         ) : (
           <ContractFormField>
             {showAmountInput ? (
-              <label className="modal-field" htmlFor="emailAddress">
-                Amount
-                <div className="input-container">
-                  <NumberFormat
-                    name="amount"
-                    className="form-control modal-input-control"
-                    placeholder="Enter Percentage"
-                    onChange={(event) => handleInputChange(event)}
-                    defaultValue={setDefaultAmount(selectedDiscountType)}
-                    thousandSeparator
-                  />
-                  {selectedDiscountType === 'percentage' ||
-                  (discountFlag === 'monthly' &&
-                    formData &&
-                    formData.monthly_discount_type === 'percentage') ||
-                  (discountFlag === 'one-time' &&
-                    formData &&
-                    formData.one_time_discount_type === 'percentage') ? (
-                    <span className="input-icon end">%</span>
-                  ) : (
-                    ''
-                  )}
-                </div>
+              <>
+                <label className="modal-field" htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    <NumberFormat
+                      name="amount"
+                      className="form-control modal-input-control"
+                      placeholder="Enter Percentage"
+                      onChange={(event) => handleInputChange(event)}
+                      defaultValue={setDefaultAmount(selectedDiscountType)}
+                      thousandSeparator
+                    />
+                    {selectedDiscountType === 'percentage' ||
+                    (discountFlag === 'monthly' &&
+                      formData &&
+                      formData.monthly_discount_type === 'percentage') ||
+                    (discountFlag === 'one-time' &&
+                      formData &&
+                      formData.one_time_discount_type === 'percentage') ? (
+                      <span className="input-icon end">%</span>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </label>
                 <ErrorMsg>
                   {apiError && apiError.monthly_discount_amount}
                   {apiError && apiError.one_time_discount_amount}
                 </ErrorMsg>
-              </label>
+              </>
             ) : (
               ''
             )}

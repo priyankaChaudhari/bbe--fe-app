@@ -1614,7 +1614,8 @@ export default function AgreementSidePanel({
 
     if (type === 'class') {
       return statusClass;
-    } if (type === 'src') {
+    }
+    if (type === 'src') {
       return statusSrc;
     }
     return '';

@@ -454,7 +454,7 @@ export default function ContractContainer() {
         //  setIsLoading({ loader: true, type: 'page' });
 
         AddendumApi = updateAddendum(newAddendumData.id, {
-          addendum: newAddendumData.addendum,
+          addendum: newAddendumData && newAddendumData.addendum,
         });
         //  .then(() => {
         //    setIsLoading({ loader: false, type: 'page' });
@@ -1774,7 +1774,14 @@ export default function ContractContainer() {
       details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
-    } ${addendumData} ${newAddendumAddedData} ${addendumSignatureData}`;
+    } ${
+      newAddendumAddedData
+        ? // ? newAddendumAddedData.startsWith('<p></p>')
+          //   ? ''
+          addendumData + newAddendumAddedData + addendumSignatureData
+        : ''
+    } `;
+
     setPDFData(finalAgreement);
   };
 
@@ -2040,6 +2047,12 @@ export default function ContractContainer() {
                 formData.additional_one_time_services.find(
                   (item) => item.name === 'Amazon Store Package',
                 )
+                //   ||
+                // (newAddendumData &&
+                //   newAddendumData.addendum &&
+                //   newAddendumData.addendum) ===
+                //   `<p></p>
+                //   `
               }
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
