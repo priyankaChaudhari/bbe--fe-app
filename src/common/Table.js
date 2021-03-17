@@ -41,6 +41,7 @@ const Table = styled.table`
       color: ${Theme.black};
       font-size: ${Theme.normal};
       font-weight: 600;
+      vertical-align: top;
 
       .company-logo {
         border-radius: 10px;
@@ -97,6 +98,7 @@ const Table = styled.table`
           display: inline-block;
           margin-right: 7px;
           font-weight: 300;
+          margin-bottom: 16px;
 
           &.black-heading-title {
             min-height: 0 !important;
