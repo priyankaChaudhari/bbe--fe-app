@@ -2585,7 +2585,7 @@ export default function AgreementSidePanel({
                   <NumberFormat
                     name={field.key}
                     className="form-control max-min-number"
-                    value={formData && formData[field.key]}
+                    value={(formData && formData[field.key]) || 0}
                     // id={oneTimeServiceData.value}
                     onChange={(event) =>
                       handleChange(event, 'listing_optimization')

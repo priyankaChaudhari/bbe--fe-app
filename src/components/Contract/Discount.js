@@ -331,6 +331,7 @@ function Discount({
                       onChange={(event) => handleInputChange(event)}
                       defaultValue={setDefaultAmount(selectedDiscountType)}
                       thousandSeparator
+                      allowNegative={false}
                     />
                   </div>
                 </label>
@@ -357,6 +358,7 @@ function Discount({
                       onChange={(event) => handleInputChange(event)}
                       defaultValue={setDefaultAmount(selectedDiscountType)}
                       thousandSeparator
+                      allowNegative={false}
                     />
                     {selectedDiscountType === 'percentage' ||
                     (discountFlag === 'monthly' &&

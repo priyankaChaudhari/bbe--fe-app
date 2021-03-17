@@ -1776,9 +1776,9 @@ export default function ContractContainer() {
         : dspAddendumSignature
     } ${
       newAddendumAddedData
-        ? // ? newAddendumAddedData.startsWith('<p></p>')
-          //   ? ''
-          addendumData + newAddendumAddedData + addendumSignatureData
+        ? newAddendumAddedData.length <= 7
+          ? ''
+          : addendumData + newAddendumAddedData + addendumSignatureData
         : ''
     } `;
 
