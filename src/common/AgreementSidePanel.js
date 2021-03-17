@@ -30,9 +30,9 @@ import {
   CaretUp,
   RedCross,
   DefaultUser,
-  // FileIcon,
-  // CheckFileIcon,
-  // EditFileIcon,
+  FileIcon,
+  CheckFileIcon,
+  EditFileIcon,
   SignatureIcon,
 } from '../theme/images/index';
 import { Button, ContractFormField } from './index';
@@ -60,6 +60,8 @@ import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 // import { getAccountDetails } from '../store/actions/accountState';
 import CheckBox from './CheckBox';
+
+const _ = require('lodash');
 
 export default function AgreementSidePanel({
   id,
@@ -1570,6 +1572,52 @@ export default function AgreementSidePanel({
     if (key === 'primary_marketplace') return marketPlaces;
     if (key === 'additional_one_time_services') return oneTimeService;
     return accountLength;
+  };
+
+  const getContractStatus = (type) => {
+    const status =
+      (agreement &&
+        agreement.contract_status &&
+        agreement.contract_status.value) ||
+      '';
+    let statusClass = '';
+    let statusSrc = '';
+
+    if (status !== '') {
+      switch (status) {
+        case 'pending contract':
+          statusClass = 'pending-contract';
+          statusSrc = FileIcon;
+          break;
+
+        case 'pending contract approval':
+          statusClass = '';
+          statusSrc = CheckFileIcon;
+          break;
+
+        case 'pending contract signature':
+          statusClass = 'pending-signature';
+          statusSrc = EditFileIcon;
+          break;
+
+        case 'signature':
+          statusClass = 'signature';
+          statusSrc = SignatureIcon;
+          break;
+
+        default:
+          statusClass = 'pending-contract';
+          statusSrc = 'FileIcon';
+          break;
+      }
+    }
+
+    if (type === 'class') {
+      return statusClass;
+    } if (type === 'src') {
+      return statusSrc;
+    }
+    return '';
   };
 
   const generateMultiChoice = (item) => {
@@ -3224,29 +3272,18 @@ export default function AgreementSidePanel({
             </>
           ) : (
             <>
-              <div className="contract-status pending-contract pending-signature signature">
-                {/* <img className="contract-file-icon" src={FileIcon} alt="" /> */}
-                {/* <img
-                  width="16px"
-                  className="contract-file-icon"
-                  src={CheckFileIcon}
-                  alt=""
-                /> */}
-                {/* <img
-                  width="16px"
-                  className="contract-file-icon"
-                  src={EditFileIcon}
-                  alt=""
-                /> */}
+              <div className={`contract-status ${getContractStatus('class')}`}>
                 <img
                   width="16px"
                   className="contract-file-icon"
-                  src={SignatureIcon}
+                  src={getContractStatus('src')}
                   alt=""
                 />
-                {agreement &&
-                  agreement.contract_status &&
-                  agreement.contract_status.value}
+                {_.startCase(
+                  agreement &&
+                    agreement.contract_status &&
+                    agreement.contract_status.value,
+                )}
               </div>
               <div className="activity-log">Contract Activity</div>
               {activityData && activityData.length !== 0 ? (

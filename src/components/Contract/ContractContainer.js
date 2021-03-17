@@ -2076,15 +2076,32 @@ export default function ContractContainer() {
           <div className="container-fluid">
             {checkApprovalCondition() ? (
               userInfo && userInfo.role === 'Team Manager - TAM' ? (
-                <Button
-                  className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
-                  onClick={() => {
-                    createAgreementDoc();
-                    setParams('select-contact');
-                    setShowModal(true);
-                  }}>
-                  Approve and Request Signature
-                </Button>
+                <>
+                  <Button
+                    className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
+                    onClick={() => {
+                      createAgreementDoc();
+                      setParams('select-contact');
+                      setShowModal(true);
+                    }}>
+                    Approve and Request Signature
+                  </Button>
+                  {!isEditContract ? (
+                    <Button
+                      className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
+                      onClick={() => {
+                        setIsEditContract(true);
+                      }}>
+                      Edit Contract
+                    </Button>
+                  ) : null}
+                  <span className="last-update ">
+                    Last updated by You on{' '}
+                    {dayjs(details && details.updated_at).format(
+                      'MMM D, h:mm A',
+                    )}
+                  </span>
+                </>
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
@@ -2237,18 +2254,18 @@ export default function ContractContainer() {
             onClick={() => showTabInResponsive('view-contract')}>
             View Contract
           </li>
-          {formData &&
+          {/* {formData &&
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
-            ''
+            '' */}
           ) : (
-            <li
-              className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-              role="presentation"
-              onClick={() => showTabInResponsive('edit-fields')}>
-              {isEditContract ? 'Edit Fields' : 'Activity'}
-            </li>
-          )}
+          <li
+            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+            role="presentation"
+            onClick={() => showTabInResponsive('edit-fields')}>
+            {isEditContract ? 'Edit Fields' : 'Activity'}
+          </li>
+          {/* )} */}
         </ul>
       </ContractTab>
       <div className="success-msg-pop-up contract">
