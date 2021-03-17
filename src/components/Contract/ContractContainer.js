@@ -513,6 +513,7 @@ export default function ContractContainer() {
             ) {
               // use/access the results
               showFooter(false);
+              setIsEditContract(false);
               setUpdatedFormData({});
               dispatch(getAccountDetails(id));
               setIsEditContract(false);
@@ -599,6 +600,7 @@ export default function ContractContainer() {
 
             if (!Object.keys(updatedFormData).length) {
               showFooter(false);
+              setIsEditContract(false);
               dispatch(getAccountDetails(id));
             }
             setUpdatedFormData({ ...updatedFormData });
@@ -683,6 +685,7 @@ export default function ContractContainer() {
                   'Object does not exists'
               ) {
                 showFooter(false);
+                setIsEditContract(false);
                 setUpdatedFormData({});
                 dispatch(getAccountDetails(id));
               }
@@ -798,6 +801,7 @@ export default function ContractContainer() {
       setSectionError({});
       // setFormData({});
       showFooter(false);
+      setIsEditContract(false);
       setShowEditor(false);
       setStartDate('');
       setNewAddendum(originalAddendumData);
@@ -963,8 +967,6 @@ export default function ContractContainer() {
           : ''
       }`;
     }
-
-    // console.log(result);
     return result;
     // return details && details[key];
   };
@@ -2083,23 +2085,60 @@ export default function ContractContainer() {
                   }}>
                   Approve and Request Signature
                 </Button>
+              ) : showRightTick('service_agreement') &&
+                showRightTick('statement') &&
+                showRightTick('dspAddendum') ? (
+                <>
+                  <Button
+                    className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
+                    disabled={
+                      !(
+                        showRightTick('service_agreement') &&
+                        showRightTick('statement') &&
+                        showRightTick('dspAddendum')
+                      )
+                    }
+                    onClick={() => {
+                      createAgreementDoc();
+                      setParams('request-approve');
+                      setShowModal(true);
+                    }}>
+                    Request Approval
+                  </Button>
+                  {!isEditContract ? (
+                    <Button
+                      className="light-orange  on-boarding  mt-3 mr-4 w-sm-100"
+                      onClick={() => {
+                        setIsEditContract(true);
+                      }}>
+                      Edit Contract
+                    </Button>
+                  ) : null}
+                  <span className="last-update ">
+                    Last updated by You on{' '}
+                    {dayjs(details && details.updated_at).format(
+                      'MMM D, h:mm A',
+                    )}
+                  </span>
+                </>
               ) : (
-                <Button
-                  className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
-                  disabled={
-                    !(
-                      showRightTick('service_agreement') &&
-                      showRightTick('statement') &&
-                      showRightTick('dspAddendum')
-                    )
-                  }
-                  onClick={() => {
-                    createAgreementDoc();
-                    setParams('request-approve');
-                    setShowModal(true);
-                  }}>
-                  Request Approval
-                </Button>
+                <>
+                  <Button
+                    className="btn-primary  on-boarding  mt-3 mr-4 w-sm-100"
+                    onClick={() => {
+                      setIsEditContract(true);
+                    }}>
+                    Edit Contract
+                  </Button>
+                  <span className="last-update">
+                    <img
+                      src={InfoIcon}
+                      alt="aarow-back"
+                      className="mr-2 align-self-center"
+                    />
+                    This contract is missing mandatory information.
+                  </span>
+                </>
               )
             ) : showRightTick('service_agreement') &&
               showRightTick('statement') &&
@@ -2207,7 +2246,7 @@ export default function ContractContainer() {
               className={tabInResponsive === 'edit-fields' ? 'active' : ''}
               role="presentation"
               onClick={() => showTabInResponsive('edit-fields')}>
-              Edit Fields
+              {isEditContract ? 'Edit Fields' : 'Activity'}
             </li>
           )}
         </ul>
