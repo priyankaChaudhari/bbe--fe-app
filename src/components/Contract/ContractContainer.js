@@ -2156,7 +2156,7 @@ export default function ContractContainer() {
                     )}
                   </span>
                 </>
-              ) : (
+              ) : !isEditContract ? (
                 <>
                   {renderEditContractBtn('btn-primary')}
 
@@ -2165,6 +2165,12 @@ export default function ContractContainer() {
                     This contract is missing mandatory information.
                   </span>
                 </>
+              ) : (
+                <Button
+                  className="btn-primary on-boarding  mt-3 mr-4 w-sm-100"
+                  disabled>
+                  Request Approval
+                </Button>
               )
             ) : showRightTick('service_agreement') &&
               showRightTick('statement') &&
@@ -2194,7 +2200,13 @@ export default function ContractContainer() {
                   This contract is missing mandatory information.
                 </span>
               </>
-            ) : null}
+            ) : (
+              <Button
+                className="btn-primary on-boarding  mt-3 mr-4 w-sm-100"
+                disabled>
+                Request Signature
+              </Button>
+            )}
           </div>
         </Footer>
       </div>
