@@ -35,7 +35,7 @@ import {
   EditFileIcon,
   SignatureIcon,
 } from '../theme/images/index';
-import { Button, ContractFormField } from './index';
+import { Button, ContractFormField , CommonPagination } from './index';
 import {
   AgreementDetails,
   StatementDetails,
@@ -56,6 +56,7 @@ import {
   // getCustomerMembers,
 } from '../api';
 import ContractInputSelect from './ContractInputSelect';
+
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
 // import { getAccountDetails } from '../store/actions/accountState';
@@ -137,6 +138,8 @@ export default function AgreementSidePanel({
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
   const [activityData, setActivityData] = useState([]);
+  const [activityCount, setActivityCount] = useState([]);
+  const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
   const getActivityInitials = (userInfo) => {
     const firstName =
@@ -197,6 +200,8 @@ export default function AgreementSidePanel({
     (currentPage) => {
       getContractActivityLog(currentPage, agreementData.id).then((response) => {
         setActivityData(response && response.data && response.data.results);
+        setActivityCount(response && response.data && response.data.count);
+        setPageNumber(currentPage);
         getDocumentList().then((picResponse) => {
           setImages(picResponse);
         });
@@ -204,6 +209,11 @@ export default function AgreementSidePanel({
     },
     [agreementData],
   );
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContractActivityLogInfo(currentPage);
+  };
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
     let result = [];
@@ -2556,6 +2566,68 @@ export default function AgreementSidePanel({
     });
   };
 
+  const renderContractActivityPanel = () => {
+    return (
+      <>
+        <div className={`contract-status ${getContractStatus('class')}`}>
+          <img
+            width="16px"
+            className="contract-file-icon"
+            src={getContractStatus('src')}
+            alt=""
+          />
+          {_.startCase(
+            agreement &&
+              agreement.contract_status &&
+              agreement.contract_status.value,
+          )}
+        </div>
+        <div className="activity-log">Contract Activity</div>
+        {activityData && activityData.length !== 0 ? (
+          activityData.map((item) => (
+            <ul className="menu">
+              <li>
+                {images.find((op) => op.entity_id === item.user_id) &&
+                images.find((op) => op.entity_id === item.user_id)
+                  .presigned_url ? (
+                  <img
+                    src={
+                      isLoading.loader && isLoading.type === 'page'
+                        ? DefaultUser
+                        : images.find((op) => op.entity_id === item.user_id)
+                            .presigned_url
+                    }
+                    className="default-user-activity"
+                    alt="pic"
+                  />
+                ) : (
+                  <div className="avatarName float-left mr-3">
+                    {getActivityInitials(item.message)}
+                  </div>
+                )}
+
+                <div className="activity-user">
+                  {activityDetail(item)}
+                  <div className="time-date mt-1">
+                    {item && item.time ? item.time : ''}
+                  </div>
+                </div>
+                <div className="clear-fix" />
+              </li>
+            </ul>
+          ))
+        ) : (
+          <div className="text-center mt-3">No Activity Log found.</div>
+        )}
+        <CommonPagination
+          count={activityCount}
+          pageNumber={pageNumber || 1}
+          handlePageChange={handlePageChange}
+        />
+      </>
+    );
+  };
+
   const displayListingOptimizations = () => {
     return (
       <>
@@ -3272,59 +3344,7 @@ export default function AgreementSidePanel({
               </Collapse>
             </>
           ) : (
-            <>
-              <div className={`contract-status ${getContractStatus('class')}`}>
-                <img
-                  width="16px"
-                  className="contract-file-icon"
-                  src={getContractStatus('src')}
-                  alt=""
-                />
-                {_.startCase(
-                  agreement &&
-                    agreement.contract_status &&
-                    agreement.contract_status.value,
-                )}
-              </div>
-              <div className="activity-log">Contract Activity</div>
-              {activityData && activityData.length !== 0 ? (
-                activityData.map((item) => (
-                  <ul className="menu">
-                    <li>
-                      {images.find((op) => op.entity_id === item.user_id) &&
-                      images.find((op) => op.entity_id === item.user_id)
-                        .presigned_url ? (
-                        <img
-                          src={
-                            isLoading.loader && isLoading.type === 'page'
-                              ? DefaultUser
-                              : images.find(
-                                  (op) => op.entity_id === item.user_id,
-                                ).presigned_url
-                          }
-                          className="default-user-activity"
-                          alt="pic"
-                        />
-                      ) : (
-                        <div className="avatarName float-left mr-3">
-                          {getActivityInitials(item.message)}
-                        </div>
-                      )}
-
-                      <div className="activity-user">
-                        {activityDetail(item)}
-                        <div className="time-date mt-1">
-                          {item && item.time ? item.time : ''}
-                        </div>
-                      </div>
-                      <div className="clear-fix" />
-                    </li>
-                  </ul>
-                ))
-              ) : (
-                <div className="text-center mt-3">No Activity Log found.</div>
-              )}
-            </>
+            renderContractActivityPanel()
           )}
           {/* 
                     <div className="straight-line sidepanel " />
