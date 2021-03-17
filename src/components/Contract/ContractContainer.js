@@ -1173,16 +1173,46 @@ export default function ContractContainer() {
     return '';
   };
 
+  const mapMonthlyServiceDisocuntTotal = () => {
+    const market = details.total_fee.additional_marketplaces
+      ? details.total_fee.additional_marketplaces
+      : 0;
+    const month = details.total_fee.monthly_service_after_discount
+      ? details.total_fee.monthly_service_after_discount
+      : 0;
+
+    return `$${(market + month)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
+
+  const mapServiceTotal = (key) => {
+    if (key === 'additional_one_time_services') {
+      return `$${
+        details && details.total_fee.onetime_service
+          ? details.total_fee.onetime_service
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : 0
+      }`;
+    }
+    const market = details.total_fee.additional_marketplaces
+      ? details.total_fee.additional_marketplaces
+      : 0;
+    const month = details.total_fee.monthly_service
+      ? details.total_fee.monthly_service
+      : 0;
+    return `$${(market + month)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
+
   const mapMonthlyServiceTotal = () => {
     return `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
-            <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">$${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">${mapServiceTotal(
+              'additional_monthly_services',
+            )}
             </td>
          </tr>
          <tr style=" border: 1px solid black;">
@@ -1209,13 +1239,7 @@ export default function ContractContainer() {
          </tr>
          <tr>
             <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service_after_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> ${mapMonthlyServiceDisocuntTotal()}
             </td>
          </tr>
          `;
@@ -1263,26 +1287,6 @@ export default function ContractContainer() {
             </td>
          </tr>
          `;
-  };
-  const mapServiceTotal = (key) => {
-    if (key === 'additional_one_time_services') {
-      return `$${
-        details && details.total_fee.onetime_service
-          ? details.total_fee.onetime_service
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : 0
-      }`;
-    }
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service
-      ? details.total_fee.monthly_service
-      : 0;
-    return `$${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
   const showMonthlyServiceTable = () => {

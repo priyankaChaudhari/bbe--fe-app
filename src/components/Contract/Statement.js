@@ -228,16 +228,46 @@ export default function Statement({
   //     )}
   //                             </td></tr>`
 
+  const mapServiceTotal = (key) => {
+    if (key === 'additional_one_time_services') {
+      return `$${
+        details && details.total_fee.onetime_service
+          ? details.total_fee.onetime_service
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          : 0
+      }`;
+    }
+    const market = details.total_fee.additional_marketplaces
+      ? details.total_fee.additional_marketplaces
+      : 0;
+    const month = details.total_fee.monthly_service
+      ? details.total_fee.monthly_service
+      : 0;
+
+    return `$${(market + month)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
+
+  const mapMonthlyServiceDisocuntTotal = () => {
+    const market = details.total_fee.additional_marketplaces
+      ? details.total_fee.additional_marketplaces
+      : 0;
+    const month = details.total_fee.monthly_service_after_discount
+      ? details.total_fee.monthly_service_after_discount
+      : 0;
+
+    return `$${(market + month)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
   const mapMonthlyServiceTotal = () => {
     return `<tr>
             <td class="total-service-bordless"> Sub-total</td>
-            <td class="total-service-bordless text-right">$${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service-bordless text-right">${mapServiceTotal(
+              'additional_monthly_servces',
+            )}
             </td>
          </tr>
          <tr>
@@ -264,13 +294,7 @@ export default function Statement({
          </tr>
          <tr>
             <td class="total-service" style="padding-top: 5px"> Total</td>
-            <td class="total-service text-right" style="padding-top: 5px;"> $${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service_after_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="padding-top: 5px;"> ${mapMonthlyServiceDisocuntTotal()}
             </td>
          </tr>
          `;
@@ -347,28 +371,6 @@ export default function Statement({
          </tr>
          `;
   };
-
-  // const mapServiceTotal = (key) => {
-  //   if (key === 'additional_one_time_services') {
-  //     return `$${
-  //       details && details.total_fee.onetime_service
-  //         ? details.total_fee.onetime_service
-  //             .toString()
-  //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  //         : 0
-  //     }`;
-  //   }
-  //   const market = details.total_fee.additional_marketplaces
-  //     ? details.total_fee.additional_marketplaces
-  //     : 0;
-  //   const month = details.total_fee.monthly_service
-  //     ? details.total_fee.monthly_service
-  //     : 0;
-
-  //   return `$${(market + month)
-  //     .toString()
-  //     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  // };
 
   const mapMonthlyServices = (key) => {
     const fields = [];
