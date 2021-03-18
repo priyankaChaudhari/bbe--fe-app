@@ -2083,6 +2083,7 @@ export default function ContractContainer() {
                       createAgreementDoc();
                       setParams('select-contact');
                       setShowModal(true);
+                      setIsEditContract(false);
                     }}>
                     Approve and Request Signature
                   </Button>
@@ -2152,6 +2153,7 @@ export default function ContractContainer() {
                     createAgreementDoc();
                     setParams('select-contact');
                     setShowModal(true);
+                    setIsEditContract(false);
                   }}>
                   Request Signature
                 </Button>

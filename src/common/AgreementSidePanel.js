@@ -172,6 +172,10 @@ export default function AgreementSidePanel({
       ? item.message.split('deleted record')
       : '';
 
+    const requestRecord = item.message.includes('requested for')
+      ? item.message.split('requested for')
+      : '';
+
     if (newRecord || deleteRecord) {
       return (
         <>
@@ -185,6 +189,17 @@ export default function AgreementSidePanel({
         </>
       );
     }
+
+    if (requestRecord) {
+      return (
+        <>
+          {requestRecord && requestRecord[0]}
+          <span>requested for</span>
+          {requestRecord && requestRecord[1]}
+        </>
+      );
+    }
+
     return (
       <>
         {updatedField && updatedField[0]}
