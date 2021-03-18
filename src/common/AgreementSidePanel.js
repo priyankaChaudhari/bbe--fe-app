@@ -2666,7 +2666,7 @@ export default function AgreementSidePanel({
       <>
         <ContractFormField className="mb-3">
           <label htmlFor="additional_one_time_services ">
-            LISTING OPTIMIZATIONS (SKU&rsquo;S PER MONTH)
+            LISTING OPTIMIZATIONS (ASIN&rsquo;s PER MONTH)
           </label>
         </ContractFormField>
         {ListingOptimization.map((field) => {
