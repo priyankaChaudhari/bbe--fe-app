@@ -860,19 +860,19 @@ export const WhiteCard = styled.div`
       list-style-type: none;
       padding: 0;
       margin: 0;
-       #weeklyCheck1:checked + label{
+       #daysCheck:checked + label{
          background-color: ${Theme.white};
           border: 1px solid ${Theme.orange};
           border-radius: 18px;
           color: ${Theme.orange};
         }
-        #weeklyCheck2:checked + label{
+        #weeklyCheck:checked + label{
           background-color:  ${Theme.white};
           border: 1px solid ${Theme.orange};
           border-radius: 18px;
           color:${Theme.orange};
         }
-        #weeklyCheck4:checked + label{
+        #monthlyCheck:checked + label{
           background-color: ${Theme.white};
           border: 1px solid ${Theme.orange};
           border-radius: 18px;

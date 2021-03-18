@@ -269,16 +269,17 @@ export default function CompanyPerformance({ agreement }) {
               <li className={selectedValue === 'custom' ? 'disabled' : ''}>
                 {' '}
                 <input
-                  className="form-check-input d-none"
-                  type="checkbox"
+                  className="d-none"
+                  type="radio"
                   defaultChecked={
                     selectedValue === 'week' ||
                     selectedValue === null ||
                     selectedValue !== 'custom'
                   }
-                  id="weeklyCheck1"
+                  id="daysCheck"
+                  name="flexRadioDefault"
                 />
-                <label htmlFor="weeklyCheck1">Daily</label>
+                <label htmlFor="daysCheck">Daily</label>
               </li>
               <li
                 className={
@@ -289,12 +290,13 @@ export default function CompanyPerformance({ agreement }) {
                     : ''
                 }>
                 <input
-                  className="form-check-input d-none"
-                  type="checkbox"
+                  className="d-none"
+                  type="radio"
                   value=""
-                  id="weeklyCheck2"
+                  id="weeklyCheck"
+                  name="flexRadioDefault"
                 />
-                <label htmlFor="weeklyCheck2">Weekly</label>
+                <label htmlFor="weeklyCheck">Weekly</label>
               </li>
               <li
                 className={
@@ -307,14 +309,43 @@ export default function CompanyPerformance({ agreement }) {
                     : ''
                 }>
                 <input
-                  className="form-check-input d-none"
-                  type="checkbox"
+                  className=" d-none"
+                  type="radio"
                   value=""
-                  id="weeklyCheck4"
+                  id="monthlyCheck"
+                  name="flexRadioDefault"
                 />
-                <label htmlFor="weeklyCheck4">Monthly</label>
+                <label htmlFor="monthlyCheck">Monthly</label>
               </li>
             </ul>
+            {/* <ul className="days-tab">
+              <li>
+                {' '}
+                <input
+                  className="form-check-input "
+                  type="radio"
+                  id="weeklyCheck"
+                  name="flexRadioDefault"
+                />
+                <label htmlFor="weeklyCheck">Daily</label>
+                <input
+                  className="form-check-input "
+                  type="radio"
+                  value=""
+                  name="flexRadioDefault"
+                  id="weeklyCheck1"
+                />
+                <label htmlFor="weeklyCheck1">Weekly</label>
+                <input
+                  className="form-check-input "
+                  type="radio"
+                  value=""
+                  name="flexRadioDefault"
+                  id="weeklyCheck2"
+                />
+                <label htmlFor="weeklyCheck2">Monthly</label>
+              </li>
+            </ul> */}
           </div>
           <div className="clear-fix" />
           <LineChart
