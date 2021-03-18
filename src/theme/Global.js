@@ -799,7 +799,7 @@ export const WhiteCard = styled.div`
     li{
       display: inline-block;
       background-color: ${Theme.white};
-      border: 1px solid #D5D8E1;
+      border: 1px solid ${Theme.gray45};
       border-radius: 8px;
       max-width: 170px;
       width: 100%;
@@ -852,7 +852,7 @@ export const WhiteCard = styled.div`
   }
   .days-container {
     background-color: ${Theme.white};
-    border: 1px solid #D5D8E1;
+    border: 1px solid ${Theme.gray45};
     border-radius: 18px;
     max-width: 243px;
     float: right;

@@ -141,13 +141,12 @@ const FormField = styled.div`
      &.modal-input-control {
       position:relative;
       color: #556178;
-      border: 1px solid #D5D8E1};
+      border: 1px solid ${Theme.gray45};
       border-radius: 2px;
       height: 40px;
-      background-color: #F4F6FC;
+      background-color: ${Theme.gray8};
       font-family: ${Theme.baseFontFamily};
       font-size:  ${Theme.normal};
-     
     }
   }
 

@@ -319,7 +319,7 @@ const ModalBox = styled.div`
     .automatic-reminder {
       border-radius: 2px;
       border-radius: 2px;
-      background: #FDF3D7;
+      background:${Theme.extraLightYellow};
       padding: 10px;
       color: ${Theme.black};
       font-size: ${Theme.normal};

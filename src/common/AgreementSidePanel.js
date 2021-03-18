@@ -2621,7 +2621,7 @@ export default function AgreementSidePanel({
             ) : null}
           </>
         ) : isApicalled ? (
-          <div className="ml-4 mt-3">No activity log found.</div>
+          <div className="ml-2 mt-3">No activity log found.</div>
         ) : null}
       </>
     );
@@ -3695,7 +3695,7 @@ const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
     padding-bottom: 200px;
-    width: 340px;
+    width: 335px;
     position: fixed;
     top: 130px;
     right: 0;
@@ -3703,6 +3703,10 @@ const SidePanel = styled.div`
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y:auto;
+    
+    .sidebar {
+      width: 335px;
+    }
     
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
     //   .sidebar {
@@ -3849,7 +3853,7 @@ const SidePanel = styled.div`
         }
 
         .increment {
-           border: 1px solid #D5D8E1;
+           border: 1px solid ${Theme.gray45};
             border-radius: 0 2px 2px 0;
             width: 26px;
             height: 26px;
@@ -3867,7 +3871,7 @@ const SidePanel = styled.div`
            }
         }
         .decrement {
-           border: 1px solid #D5D8E1;
+           border: 1px solid ${Theme.gray45};
             border-radius: 2px 0 0 2px;
             width: 26px;
             height: 26px;
@@ -3886,7 +3890,7 @@ const SidePanel = styled.div`
         }
         .max-min-number {
           width: 26px;
-          border: 1px solid #D5D8E1;
+          border: 1px solid ${Theme.gray45};
           vertical-align: bottom;
           color: ${Theme.black};
           height: 26px;
@@ -3915,20 +3919,20 @@ const SidePanel = styled.div`
       font-size: 14px;
       border-radius: 2px;
       text-align: center;
-      background: #FDF3D7;
+      background: ${Theme.extraLightYellow};
       padding: 12px 0;
       min-height: 40px;
-      margin: 15px 20px 10px 20px;
+      margin: 10px;
 
       &.pending-contract {
-        background: #F4F6FC;
+        background: ${Theme.gray8};
       }
       &.pending-signature {
         background: #FFDED6;
       }
       &.signature {
         background: ${Theme.white};
-        border: 1px solid #D5D8E1;
+        border: 1px solid ${Theme.gray45};
       }
    }
 
@@ -3939,7 +3943,7 @@ const SidePanel = styled.div`
 
   .activity-log {
     font-size: ${Theme.extraMedium};
-    padding: 20px 20px 0 20px;
+    padding: 20px 20px 0 15px;
     color: ${Theme.black};
     font-weight: 600;
   }
@@ -3958,7 +3962,7 @@ const SidePanel = styled.div`
         list-style: none;
         display: flex;
         text-decoration: none;
-        padding: 10px 0px 15px 25px;
+        padding: 10px 0px 15px 15px;
       
         &:last-child {
           border-bottom:none;

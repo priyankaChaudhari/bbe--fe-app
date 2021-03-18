@@ -368,36 +368,36 @@ const CustomerListTabletView = styled.div`
       margin-bottom: 6px;
 
       .recurring-service {
-        border: 1px solid #d5d8e1;
+        border: 1px solid ${Theme.gray45};
         border-radius: 5px;
         border: none;
         padding: 10px 4px 10px 12px;
-        color: #171725;
+        color: ${Theme.gray85};
         font-size: 14px;
         // flex-wrap: wrap;
         // flex: initial;
         // height: 100%;
 
         &.agreement {
-          border: 1px solid #d5d8e1;
+          border: 1px solid ${Theme.gray45};
           padding: 9px 12px;
           background-color: ${Theme.white};
         }
 
         &.edit {
-          background: #ffded6;
+          background: ${Theme.lightPink};
         }
 
         &.count-days {
-          background: #fff4ec;
+          background: ${Theme.lighterOrange};
         }
 
         &.file-check {
-          background: #fdf3d7;
+          background: ${Theme.extraLightYellow};
         }
 
         &.file {
-          background: #f4f6fc;
+          background: ${Theme.gray8};
         }
 
         .active-contract-icon {
@@ -407,7 +407,7 @@ const CustomerListTabletView = styled.div`
           font-size: 14px;
 
           &.edit-file-icon {
-            background: #f6d2c9;
+            background: ${Theme.pink};
 
             img {
               vertical-align: middle;
@@ -415,23 +415,24 @@ const CustomerListTabletView = styled.div`
             }
           }
           &.count-clock-icon {
-            background: #ffe6d4;
+            background: ${Theme.extraLighOrange};
             margin-left: 10px;
 
             img {
               vertical-align: text-top;
               width: 14px;
+              margin-right: 3px;
             }
           }
           &.file-check-icon {
-            background: #f5e8c3;
+            background: ${Theme.lightYellow};
             img {
               vertical-align: text-top;
               width: 13px;
             }
           }
           &.file-icon {
-            background: #e2e5ef;
+            background: ${Theme.gray12};
 
             img {
               vertical-align: text-top;

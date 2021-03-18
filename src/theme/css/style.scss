@@ -305,7 +305,7 @@ p {
   }
 
   &.no-result-found {
-    color: $gray-50;
+    color: $gray-40;
     font-size: $base-f-size;
   }
 
@@ -838,7 +838,7 @@ fieldset {
 }
 
 .react-calendar__navigation button[disabled] {
-  color: black
+  color: black;
 }
 
 .croped-img {
@@ -1278,14 +1278,13 @@ g .recharts-cartesian-grid-horizontal {
 }
 
 g .recharts-cartesian-grid-vertical {
-  border: 1px solid #F1F1F5;
+  border: 1px solid #f1f1f5;
   stroke-dasharray: 0;
 
   line {
-    stroke:  #F1F1F5;
-    outline: 1px solid  #F1F1F5;
+    stroke: #f1f1f5;
+    outline: 1px solid #f1f1f5;
   }
-
 }
 g .recharts-cartesian-axis-ticks {
   color: #556178;
@@ -1293,12 +1292,8 @@ g .recharts-cartesian-axis-ticks {
 }
 
 g .recharts-layer .recharts-line-dots {
-color: red;
+  color: red;
 }
-
-
-
-
 
 // .recharts-wrapper{
 //   .recharts-legend-wrapper{
@@ -1311,75 +1306,74 @@ color: red;
 //   .recharts-legend-icon {
 //     path {
 //       stroke: none;
-//      fill: #BFC5D2; 
+//      fill: #BFC5D2;
 //     }
-   
+
 //   }
 //   .recharts-legend-item-text {
 //     color: #000000;
 //   }
 // }
 span.recharts-legend-item-text {
-   color: black !important;
-  }
-    .recharts-default-legend {
-      li.recharts-legend-item {
-        display: inline-block;
-        .legend-item-1 {
-          
-          .recharts-surface {
-            width: 20px;
-            height: 20px;
-            path {
-            stroke:#BFC5D2; 
-            }
-
-            span.recharts-legend-item-text {
-              color: black !important;
-            }
-          }
+  color: black !important;
+}
+.recharts-default-legend {
+  li.recharts-legend-item {
+    display: inline-block;
+    .legend-item-1 {
+      .recharts-surface {
+        width: 20px;
+        height: 20px;
+        path {
+          stroke: #bfc5d2;
         }
-        .legend-item-0 {
-              .recharts-surface {
-                path {
-                stroke: red; 
-                }
-              }
-        }
-     }
-  }
 
-.recharts-tooltip-wrapper  {
-  .recharts-default-tooltip{
-    background-color: #2E384D!important;
-    color: #FFFFFF!important;
-    width: 146px!important;
-    min-height: 70px!important;
+        span.recharts-legend-item-text {
+          color: black !important;
+        }
+      }
+    }
+    .legend-item-0 {
+      .recharts-surface {
+        path {
+          stroke: red;
+        }
+      }
+    }
+  }
+}
+
+.recharts-tooltip-wrapper {
+  .recharts-default-tooltip {
+    background-color: #2e384d !important;
+    color: #ffffff !important;
+    width: 146px !important;
+    min-height: 70px !important;
     border-radius: 4px;
   }
   .recharts-tooltip-label {
-    color: #F4F6FC !important;
+    color: #f4f6fc !important;
     padding-bottom: 5px;
     font-size: 11px;
-     text-transform: uppercase;
-     font-family: $title-font-family;
+    text-transform: uppercase;
+    font-family: $title-font-family;
   }
 
   .recharts-tooltip-item-list {
     .recharts-tooltip-item {
-         color: #FFFFFF!important;
-         padding-top:0;
-         font-size: 16px;
+      color: #ffffff !important;
+      padding-top: 0;
+      font-size: 16px;
     }
     .recharts-tooltip-item {
-      color: #BFC5D2!important;
-       padding: 0 !important;
+      color: #bfc5d2 !important;
+      padding: 0 !important;
     }
   }
 }
 
 .total-service-bordless {
-      font-weight: 500;
-      border-bottom: hidden !important;
-      padding: 7px 13px;
-    }
+  font-weight: 500;
+  border-bottom: hidden !important;
+  padding: 7px 13px;
+}

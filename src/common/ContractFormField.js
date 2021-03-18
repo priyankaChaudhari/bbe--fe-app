@@ -32,15 +32,15 @@ const ContractFormField = styled.div`
       font-size: 14px;
       text-align: center;
       background: #EAEDF6;
-      border-left: 1px solid #D5D8E1;
-      border-top: 1px solid #D5D8E1 !important;
-      border-bottom: 1px solid #D5D8E1;
+      border-left: 1px solid ${Theme.gray45};
+      border-top: 1px solid ${Theme.gray45} !important;
+      border-bottom: 1px solid ${Theme.gray45};
 
       &.end {
         border-left: 0;
-        border-right 1px solid #D5D8E1;
-        border-top: 1px solid #D5D8E1 !important;
-        border-bottom: 1px solid #D5D8E1;
+        border-right 1px solid ${Theme.gray45};
+        border-top: 1px solid ${Theme.gray45} !important;
+        border-bottom: 1px solid ${Theme.gray45};
         border-radius: 0px 2px 2px 0;
       }
    
@@ -49,7 +49,7 @@ const ContractFormField = styled.div`
     //   width: 100%;
     //   height: 40px!important;
     //   background-color: #F4F6FC;
-    //   border: 1px solid #D5D8E1!important;
+    //   border: 1px solid ${Theme.gray45}!important;
     //   border-radius: 2px !important;
     //   margin-top: 7px;
     //   outline: none;
@@ -68,7 +68,7 @@ const ContractFormField = styled.div`
   .form-control  {
     position:relative;
     color: ${Theme.gray85};
-    border: 1px solid #D5D8E1;
+    border: 1px solid ${Theme.gray45};
     border-radius: 2px;
     padding: 5px  10px ;
     display: block;

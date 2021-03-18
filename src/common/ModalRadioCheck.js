@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const ModalRadioCheck = styled.div`
 
 &.gray-bg {
-  background: #f4f6fc;
+  background:${Theme.gray8};
   padding: 14px;
   position: relative;
   border-radius: 8px;
