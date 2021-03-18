@@ -2782,6 +2782,99 @@ export default function AgreementSidePanel({
                   }>
                   {formData &&
                   formData.contract_type &&
+                  formData.contract_type.toLowerCase().includes('one') ? (
+                    <>
+                      One Time Service Agreement
+                      {sectionError &&
+                      (sectionError.agreement || sectionError.statement) ? (
+                        openCollapse.agreement ? (
+                          <img
+                            className="red-cross  "
+                            src={RedCross}
+                            alt="right-check"
+                          />
+                        ) : (
+                          <div className="error-bg">
+                            <img
+                              className="red-cross "
+                              src={RedCross}
+                              alt="right-check"
+                            />
+                          </div>
+                        )
+                      ) : showRightTick('service_agreement') ? (
+                        <img
+                          className="green-check-select"
+                          src={GreenCheck}
+                          alt="right-check"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      <div className="error-found">
+                        {sectionError &&
+                        (sectionError.agreement || sectionError.statement)
+                          ? `${
+                              sectionError.agreement + sectionError.statement
+                            } ${
+                              sectionError.agreement +
+                                sectionError.statement ===
+                              1
+                                ? 'error found'
+                                : 'errors found'
+                            }`
+                          : ''}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      Service Agreement
+                      {sectionError && sectionError.agreement ? (
+                        openCollapse.agreement ? (
+                          <img
+                            className="red-cross  "
+                            src={RedCross}
+                            alt="right-check"
+                          />
+                        ) : (
+                          <div className="error-bg">
+                            <img
+                              className="red-cross "
+                              src={RedCross}
+                              alt="right-check"
+                            />
+                          </div>
+                        )
+                      ) : showRightTick('service_agreement') ? (
+                        <img
+                          className="green-check-select"
+                          src={GreenCheck}
+                          alt="right-check"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      <div className="error-found">
+                        {sectionError && sectionError.agreement
+                          ? `${sectionError.agreement} ${
+                              sectionError.agreement === 1
+                                ? 'error found'
+                                : 'errors found'
+                            }`
+                          : ''}
+                      </div>
+                    </>
+                  )}
+                </h4>
+
+                {/* <h4
+                  className={
+                    sectionError && sectionError.agreement
+                      ? 'sendar-details error-container'
+                      : 'sendar-details'
+                  }>
+                  {formData &&
+                  formData.contract_type &&
                   formData.contract_type.toLowerCase().includes('one')
                     ? 'One Time Service Agreement'
                     : 'Service Agreement'}
@@ -2819,9 +2912,9 @@ export default function AgreementSidePanel({
                         }`
                       : ''}
                   </div>
-                  {/* {checkError()} */}
-                  {/* {isSectionError ? } */}
-                </h4>
+                  {/* {checkError()} *
+                  {/* {isSectionError ? } 
+                </h4> */}
 
                 <div className="clear-fix" />
               </div>
