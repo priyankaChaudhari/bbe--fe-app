@@ -258,18 +258,14 @@ export default function NewCustomerList() {
 
   const handleFilters = (event, key, type, action) => {
     if (type === 'status' && key === 'unselected') {
-      $('.uncheck-all').on('click', () => {
-        $('.checkboxes input:checkbox').prop('checked', false);
-      });
+      $('.checkboxes input:checkbox').prop('checked', false);
       setFilters({
         ...filters,
         status: [],
       });
     }
     if (type === 'contract_status' && key === 'unselected') {
-      $('.uncheck-all-contract').on('click', () => {
-        $('.checkboxes-contract  input:checkbox').prop('checked', false);
-      });
+      $('.checkboxes-contract  input:checkbox').prop('checked', false);
       setFilters({
         ...filters,
         contract_status: [],
