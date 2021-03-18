@@ -35,6 +35,7 @@ import {
   EditFileIcon,
   CheckFileIcon,
   FileIcon,
+  ArrowDownIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
@@ -501,6 +502,40 @@ export default function NewCustomerList() {
     );
   };
 
+  const calculatePercentage = (current, previous) => {
+    if (current && previous) {
+      const diff = current - previous;
+      const mean = diff / previous;
+      const percentage = mean * 100;
+
+      if (percentage.toString().includes('-')) {
+        return (
+          <>
+            <span className="decrease-rate ml-1">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {percentage
+                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
+            </span>
+          </>
+        );
+      }
+      return (
+        <div className="increase-rate">
+          <img
+            className="red-arrow"
+            src={ArrowUpIcon}
+            width="14px"
+            alt="arrow-up"
+          />
+          {percentage ? `${percentage.toFixed(2)} %` : ''}
+        </div>
+      );
+    }
+    return '';
+  };
+
   return (
     <CustomerListPage>
       <div className="customer-list-header-sticky">
@@ -879,18 +914,18 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.daily_facts &&
                                 item.daily_facts.current &&
-                                item.daily_facts.current[0]
-                                  ? `$${item.daily_facts.current[0].revenue}`
-                                  : ''}
-                                <div className="increase-rate">
-                                  <img
-                                    className="red-arrow"
-                                    src={ArrowUpIcon}
-                                    width="14px"
-                                    alt="arrow-up"
-                                  />
-                                  0.15%
-                                </div>
+                                item.daily_facts.current[0] &&
+                                item.daily_facts.current[0].revenue ? (
+                                  <>
+                                    {item.daily_facts.current[0].revenue}
+                                    {calculatePercentage(
+                                      item.daily_facts.current[0].revenue,
+                                      item.daily_facts.previous[0].revenue,
+                                    )}
+                                  </>
+                                ) : (
+                                  ''
+                                )}
                               </>
                             ) : (
                               <ul
@@ -912,18 +947,18 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.daily_facts &&
                                 item.daily_facts.current &&
-                                item.daily_facts.current[0]
-                                  ? `$${item.daily_facts.current[0].units_sold}`
-                                  : ''}
-                                <div className="increase-rate">
-                                  <img
-                                    className="red-arrow"
-                                    src={ArrowUpIcon}
-                                    width="14px"
-                                    alt="arrow-up"
-                                  />
-                                  0.15%
-                                </div>
+                                item.daily_facts.current[0] &&
+                                item.daily_facts.current[0].units_sold ? (
+                                  <>
+                                    {item.daily_facts.current[0].units_sold}
+                                    {calculatePercentage(
+                                      item.daily_facts.current[0].units_sold,
+                                      item.daily_facts.previous[0].units_sold,
+                                    )}
+                                  </>
+                                ) : (
+                                  ''
+                                )}
                               </>
                             </td>
                           ) : null}
@@ -933,18 +968,18 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.daily_facts &&
                                 item.daily_facts.current &&
-                                item.daily_facts.current[0]
-                                  ? `$${item.daily_facts.current[0].units_sold}`
-                                  : ''}
-                                <div className="increase-rate">
-                                  <img
-                                    className="red-arrow"
-                                    src={ArrowUpIcon}
-                                    width="14px"
-                                    alt="arrow-up"
-                                  />
-                                  0.15%
-                                </div>
+                                item.daily_facts.current[0] &&
+                                item.daily_facts.current[0].traffic ? (
+                                  <>
+                                    {item.daily_facts.current[0].traffic}
+                                    {calculatePercentage(
+                                      item.daily_facts.current[0].traffic,
+                                      item.daily_facts.previous[0].traffic,
+                                    )}
+                                  </>
+                                ) : (
+                                  ''
+                                )}
                               </>
                             </td>
                           ) : null}
@@ -954,18 +989,18 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.daily_facts &&
                                 item.daily_facts.current &&
-                                item.daily_facts.current[0]
-                                  ? `$${item.daily_facts.current[0].units_sold}`
-                                  : ''}
-                                <div className="increase-rate">
-                                  <img
-                                    className="red-arrow"
-                                    src={ArrowUpIcon}
-                                    width="14px"
-                                    alt="arrow-up"
-                                  />
-                                  0.15%
-                                </div>
+                                item.daily_facts.current[0] &&
+                                item.daily_facts.current[0].conversion ? (
+                                  <>
+                                    {item.daily_facts.current[0].conversion}
+                                    {calculatePercentage(
+                                      item.daily_facts.current[0].conversion,
+                                      item.daily_facts.previous[0].conversion,
+                                    )}
+                                  </>
+                                ) : (
+                                  ''
+                                )}
                               </>
                             </td>
                           ) : null}

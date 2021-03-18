@@ -97,6 +97,40 @@ export default function CustomerListTablet({
     );
   };
 
+  const calculatePercentage = (current, previous) => {
+    if (current && previous) {
+      const diff = current - previous;
+      const mean = diff / previous;
+      const percentage = mean * 100;
+
+      if (percentage.toString().includes('-')) {
+        return (
+          <>
+            <span className="decrease-rate ml-1">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {percentage
+                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
+            </span>
+          </>
+        );
+      }
+      return (
+        <div className="increase-rate">
+          <img
+            className="red-arrow"
+            src={ArrowUpIcon}
+            width="14px"
+            alt="arrow-up"
+          />
+          {percentage ? `${percentage.toFixed(2)} %` : ''}
+        </div>
+      );
+    }
+    return '';
+  };
+
   return (
     <CustomerListTabletView>
       <div className="row cursor">
@@ -144,31 +178,45 @@ export default function CustomerListTablet({
                       <div className="col-6 pb-2">
                         <div className="label">Revenue</div>
                         <div className="label-info ">
-                          {item && item.contract && item.contract.rev_share} %
-                          <span className="decrease-rate ml-1">
-                            {' '}
-                            <img
-                              className="red-arrow"
-                              src={ArrowDownIcon}
-                              alt="arrow-up"
-                            />
-                            0.15%
-                          </span>
+                          <>
+                            {item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].revenue ? (
+                              <>
+                                {item.daily_facts.current[0].revenue}
+                                {calculatePercentage(
+                                  item.daily_facts.current[0].revenue,
+                                  item.daily_facts.previous[0].revenue,
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                          </>
                         </div>
                       </div>
                       <div className="col-6 pb-2">
                         <div className="label">Units Sold</div>
                         <div className="label-info ">
-                          {item && item.contract && item.contract.rev_share} %
-                          <span className="decrease-rate ml-1">
-                            {' '}
-                            <img
-                              className="red-arrow"
-                              src={ArrowDownIcon}
-                              alt="arrow-up"
-                            />
-                            0.15%
-                          </span>
+                          <>
+                            {item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].units_sold ? (
+                              <>
+                                {item.daily_facts.current[0].units_sold}
+                                {calculatePercentage(
+                                  item.daily_facts.current[0].units_sold,
+                                  item.daily_facts.previous[0].units_sold,
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                          </>
                         </div>
                       </div>
                     </div>
@@ -194,15 +242,23 @@ export default function CustomerListTablet({
                       <div className="col-6">
                         <div className="label">Traffic</div>
                         <div className="label-info">
-                          23,234
-                          <span className="increase-rate ml-1">
-                            <img
-                              width="14px"
-                              src={ArrowUpIcon}
-                              alt="arrow-up"
-                            />{' '}
-                            0.51%
-                          </span>
+                          <>
+                            {item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].traffic ? (
+                              <>
+                                {item.daily_facts.current[0].traffic}
+                                {calculatePercentage(
+                                  item.daily_facts.current[0].traffic,
+                                  item.daily_facts.previous[0].traffic,
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                          </>
                         </div>
                       </div>
                     ) : (
@@ -213,16 +269,23 @@ export default function CustomerListTablet({
                       <div className="col-6">
                         <div className="label">Conversion</div>
                         <div className="label-info">
-                          23.4%
-                          <span className="decrease-rate ml-1">
-                            {' '}
-                            <img
-                              className="red-arrow"
-                              src={ArrowDownIcon}
-                              alt="arrow-up"
-                            />
-                            0.15%
-                          </span>
+                          <>
+                            {item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].conversion ? (
+                              <>
+                                {item.daily_facts.current[0].conversion}
+                                {calculatePercentage(
+                                  item.daily_facts.current[0].conversion,
+                                  item.daily_facts.previous[0].conversion,
+                                )}
+                              </>
+                            ) : (
+                              ''
+                            )}
+                          </>
                         </div>
                       </div>
                     ) : (

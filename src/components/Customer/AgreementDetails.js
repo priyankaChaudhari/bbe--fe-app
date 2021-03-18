@@ -57,14 +57,17 @@ export default function AgreementDetails({ agreements, id }) {
               <img
                 className="solid-icon  "
                 src={
-                  agreement && agreement.contract_type === 'One Time'
+                  (agreement && agreement.contract_type === 'One Time') ||
+                  (agreement && agreement.contract_type === 'one time') ||
+                  (agreement && agreement.contract_type === 'One time')
                     ? ServiceIcon
                     : RecurringIcon
                 }
                 alt=""
               />
               <p className="black-heading-title mt-0 mb-0">
-                {agreement && agreement.contract_type === 'One Time'
+                {(agreement && agreement.contract_type === 'One Time') ||
+                (agreement && agreement.contract_type === 'one time')
                   ? 'One Time Services Contract'
                   : 'Recurring Contract'}
               </p>
@@ -86,7 +89,9 @@ export default function AgreementDetails({ agreements, id }) {
                 ) : (
                   ''
                 )}
-                {agreement && agreement.end_date ? (
+                {agreement &&
+                agreement.end_date &&
+                countDays(agreement && agreement.end_date) <= 90 ? (
                   <li>
                     <div className="days-block">
                       {' '}
