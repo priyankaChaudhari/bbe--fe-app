@@ -24,14 +24,20 @@ export async function getCustomerList(
 ) {
   let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-    q: searchQuery,
     'order-by': sort['order-by'],
   };
+
+  if (searchQuery) {
+    params = {
+      ...params,
+      q: searchQuery,
+    };
+  }
 
   if (performance) {
     params = {
       ...params,
-      daily_facts: '30days',
+      daily_facts: 'week',
     };
   }
 

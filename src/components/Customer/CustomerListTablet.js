@@ -2,17 +2,17 @@ import React from 'react';
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
 import {
-  ClockIcon,
-  RecurringIcon,
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
-  ServiceIcon,
+  CheckFileIcon,
+  EditFileIcon,
+  CountDayClock,
+  FileIcon,
 } from '../../theme/images/index';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader } from '../../common';
@@ -32,6 +32,69 @@ export default function CustomerListTablet({
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  };
+
+  const generateContractHTML = (type) => {
+    if (type && type.contract_status === 'pending contract') {
+      return (
+        <li>
+          <span className="recurring-service file">
+            {type.contract_type} Service Agreement
+            <span className="file-icon">
+              <img src={FileIcon} alt="file" />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (type && type.contract_status === 'pending contract approval') {
+      return (
+        <li>
+          <span className="recurring-service file-check">
+            {type.contract_type} Service Agreement
+            <span className="file-check-icon">
+              <img
+                className="clock-icon"
+                src={CheckFileIcon}
+                alt="check-file"
+              />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (type && type.contract_status === 'pending contract signature') {
+      return (
+        <li>
+          <span className="recurring-service edit">
+            {type.contract_type} Service Agreement
+            <span className="edit-file-icon">
+              <img width="16px" src={EditFileIcon} alt="edit" />{' '}
+            </span>
+          </span>
+        </li>
+      );
+    }
+    if (countDays(type.end_date) <= 90) {
+      return (
+        <li>
+          <span className="recurring-service count-days">
+            {type.contract_type} Service Agreement
+            <span className="count-clock-icon">
+              <img className="clock-icon" src={CountDayClock} alt="clock" />
+              {countDays(type.end_date)}d
+            </span>
+          </span>
+        </li>
+      );
+    }
+    return (
+      <li>
+        <div className="recurring-service agreement">
+          {type.contract_type} Service Agreement
+        </div>
+      </li>
+    );
   };
 
   return (
@@ -66,12 +129,13 @@ export default function CustomerListTablet({
                   <div className="company-name">
                     {item &&
                       item.contract &&
-                      item.contract.contract_company_name}
+                      item.contract[0] &&
+                      item.contract[0].contract_company_name}
                   </div>
                   <div
                     className="status"
                     style={{ textTransform: 'capitalize' }}>
-                    {item && item.contract && item.contract.contract_status}
+                    {item && item.status}
                   </div>
                   <div className="clear-fix" />
                   <div className="straight-line horizontal-line pt-3 mb-3" />
@@ -110,61 +174,16 @@ export default function CustomerListTablet({
                     </div>
                   ) : (
                     <>
-                      <p
-                        className="black-heading-title mt-0 mb-0"
+                      <ul
+                        className="recurring-contact"
                         style={{ textTransform: 'capitalize' }}>
-                        <img
-                          className="solid-icon "
-                          src={
-                            item &&
-                            item.contract &&
-                            item.contract.contract_type === 'recurring'
-                              ? RecurringIcon
-                              : ServiceIcon
-                          }
-                          alt=""
-                        />
-                        {item.contract &&
-                        item.contract &&
-                        item.contract.contract_type
-                          ? `${item.contract.contract_type} Contract`
-                          : ''}
-                      </p>
-                      <ul className="recurring-contact mb-2">
-                        <li>
-                          <p className="basic-text ">
-                            {' '}
-                            {item && item.contract && item.contract.length}
-                          </p>
-                        </li>
-                        {item && item.contract && item.contract.end_date ? (
-                          <li>
-                            <p className="basic-text ">
-                              {' '}
-                              Expires:{' '}
-                              {dayjs(item.contract.end_date).format(
-                                'MMM DD, YYYY',
-                              )}
-                            </p>
-                          </li>
-                        ) : (
-                          ''
-                        )}
-                        {item && item.contract && item.contract.end_date ? (
-                          <li>
-                            <div className="days-block">
-                              {' '}
-                              <img
-                                className="clock-icon"
-                                src={ClockIcon}
-                                alt="clock"
-                              />{' '}
-                              {countDays(item)} days
-                            </div>
-                          </li>
-                        ) : (
-                          ''
-                        )}
+                        {item &&
+                          item.contract &&
+                          item.contract.map((type) => (
+                            <React.Fragment key={Math.random()}>
+                              {generateContractHTML(type)}
+                            </React.Fragment>
+                          ))}
                       </ul>
                     </>
                   )}
@@ -191,20 +210,7 @@ export default function CustomerListTablet({
                         </div>
                       </div>
                     ) : (
-                      <>
-                        <div className="col-6">
-                          <div className="label">Monthly Retainer</div>
-                          <div className="label-info">
-                            {item &&
-                            item.contract &&
-                            item.contract.monthly_retainer
-                              ? `$ ${item.contract.monthly_retainer
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : ''}
-                          </div>
-                        </div>
-                      </>
+                      ''
                     )}
 
                     {showPerformance ? (
@@ -224,14 +230,7 @@ export default function CustomerListTablet({
                         </div>
                       </div>
                     ) : (
-                      <div className="col-6">
-                        <div className="label">Rev Share %</div>
-                        <div className="label-info ">
-                          {item && item.contract && item.contract.rev_share
-                            ? `${item.contract.rev_share} %`
-                            : ''}
-                        </div>
-                      </div>
+                      ''
                     )}
                     {showPerformance ? (
                       <div className="straight-line horizontal-line pt-3 mb-3" />

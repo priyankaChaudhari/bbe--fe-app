@@ -37,12 +37,7 @@ import {
   FileIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import {
-  getContractStatus,
-  getCustomerList,
-  getGrowthStrategist,
-  getStatus,
-} from '../../api';
+import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
 import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
 import { sortOptions } from '../../constants/FieldConstants';
 
@@ -210,9 +205,6 @@ export default function NewCustomerList() {
   useEffect(() => {
     getStatus().then((statusResponse) => {
       setStatus(statusResponse.data);
-    });
-    getContractStatus().then((contract) => {
-      console.log(contract.data);
     });
     getGrowthStrategist().then((gs) => {
       if (gs && gs.data) {
@@ -618,6 +610,61 @@ export default function NewCustomerList() {
                           </li>
                         ))}
                       </ul>
+                    ) : (
+                      ''
+                    )}
+                    <div className="label mt-4">Contract Status</div>
+                    <div className="clear-fix" />
+                    {!isDesktop ? (
+                      <>
+                        {' '}
+                        <div
+                          className="unselected uncheck-all"
+                          onClick={(event) =>
+                            handleFilters(
+                              event,
+                              'unselected',
+                              'contract_status',
+                            )
+                          }
+                          role="presentation">
+                          Unselect all
+                        </div>
+                        <div className="clear-fix" />
+                        <ul className="check-box-list checkboxes contract">
+                          {contractStatus.map((item) => (
+                            <li key={item.value}>
+                              <CheckBox>
+                                <label
+                                  className="check-container customer-pannel"
+                                  htmlFor={item.label}>
+                                  <input
+                                    type="checkbox"
+                                    id={item.label}
+                                    name={item.value}
+                                    onChange={(event) =>
+                                      handleFilters(
+                                        event,
+                                        item,
+                                        'contract_status',
+                                      )
+                                    }
+                                    defaultChecked={
+                                      filters.status
+                                        ? filters.status.find(
+                                            (op) => op === item.value,
+                                          )
+                                        : ''
+                                    }
+                                  />
+                                  <span className="checkmark" />
+                                  {item.label}
+                                </label>
+                              </CheckBox>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
                     ) : (
                       ''
                     )}
