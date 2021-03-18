@@ -35,9 +35,11 @@ export default function AgreementDetails({ agreements, id }) {
     { key: 'billing_cap', label: 'Billing Cap' },
   ];
 
-  useEffect(() => {}, [multipleAgreement]);
-
-  // console.log(openCollapse);
+  useEffect(() => {
+    if (multipleAgreement && multipleAgreement[0]) {
+      setOpenCollapse([{ [multipleAgreement[0].id]: true }]);
+    }
+  }, [multipleAgreement]);
 
   const countDays = (value) => {
     const date1 = new Date();
@@ -130,14 +132,7 @@ export default function AgreementDetails({ agreements, id }) {
           </div>
           <span
             className="cursor"
-            onClick={() =>
-              setOpenCollapse([
-                ...openCollapse,
-                {
-                  [agreement.id]: !openCollapse.find((op) => op[agreement.id]),
-                },
-              ])
-            }
+            onClick={() => setOpenCollapse([{ [agreement.id]: true }])}
             role="presentation">
             <div className="straight-line horizontal-line pt-3 mb-3" />
             <div className="text-center">
