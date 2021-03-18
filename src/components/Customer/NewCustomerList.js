@@ -267,8 +267,8 @@ export default function NewCustomerList() {
       });
     }
     if (type === 'contract_status' && key === 'unselected') {
-      $('.uncheck-all').on('click', () => {
-        $('.checkboxes  input:checkbox').prop('checked', false);
+      $('.uncheck-all-contract').on('click', () => {
+        $('.checkboxes-contract  input:checkbox').prop('checked', false);
       });
       setFilters({
         ...filters,
@@ -570,7 +570,7 @@ export default function NewCustomerList() {
                     <DropDownSelect className="w-250">
                       {generateDropdown('user')}
                     </DropDownSelect>
-                    <div className="label mt-4">Status</div>
+                    <div className="label mt-4">Customer Status</div>
                     <div
                       className="unselected uncheck-all"
                       onClick={(event) =>
@@ -650,7 +650,7 @@ export default function NewCustomerList() {
                       <>
                         {' '}
                         <div
-                          className="unselected uncheck-all"
+                          className="unselected uncheck-all-contract"
                           onClick={(event) =>
                             handleFilters(
                               event,
@@ -662,7 +662,7 @@ export default function NewCustomerList() {
                           Unselect all
                         </div>
                         <div className="clear-fix" />
-                        <ul className="check-box-list checkboxes contract">
+                        <ul className="check-box-list checkboxes-contract">
                           {contractStatus.map((item) => (
                             <li key={item.value}>
                               <CheckBox>
@@ -672,7 +672,11 @@ export default function NewCustomerList() {
                                   <input
                                     type="checkbox"
                                     id={item.label}
-                                    name={item.value}
+                                    name={
+                                      item.value === 'active'
+                                        ? 'signed'
+                                        : item.value
+                                    }
                                     onChange={(event) =>
                                       handleFilters(
                                         event,
@@ -681,8 +685,8 @@ export default function NewCustomerList() {
                                       )
                                     }
                                     defaultChecked={
-                                      filters.status
-                                        ? filters.status.find(
+                                      filters.contract_status
+                                        ? filters.contract_status.find(
                                             (op) => op === item.value,
                                           )
                                         : ''
@@ -756,7 +760,7 @@ export default function NewCustomerList() {
         <DropDownSelect className="w-250">
           {generateDropdown('user')}
         </DropDownSelect>{' '}
-        <div className="label mt-4 pt-2">Status</div>
+        <div className="label mt-4 pt-2">Customer Status</div>
         <div
           className="unselected uncheck-all"
           onClick={(event) => handleFilters(event, 'unselected', 'status')}
@@ -811,7 +815,7 @@ export default function NewCustomerList() {
         </ul>
         <div className="label mt-4 pt-2">Contract Status</div>
         <div
-          className="unselected uncheck-all"
+          className="unselected uncheck-all-contract"
           onClick={(event) =>
             handleFilters(event, 'unselected', 'contract_status')
           }
@@ -819,7 +823,7 @@ export default function NewCustomerList() {
           Unselect all
         </div>
         <div className="clear-fix" />
-        <ul className="check-box-list checkboxes contract">
+        <ul className="check-box-list checkboxes-contract">
           {contractStatus.map((item) => (
             <li key={item.value}>
               <CheckBox>
@@ -829,13 +833,15 @@ export default function NewCustomerList() {
                   <input
                     type="checkbox"
                     id={item.label}
-                    name={item.value}
+                    name={item.value === 'active' ? 'signed' : item.value}
                     onChange={(event) =>
                       handleFilters(event, item, 'contract_status')
                     }
                     defaultChecked={
                       filters.status
-                        ? filters.status.find((op) => op === item.value)
+                        ? filters.contract_status.find(
+                            (op) => op === item.value,
+                          )
                         : ''
                     }
                   />

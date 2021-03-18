@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable guard-for-in */
 
 import queryString from 'query-string';
@@ -56,6 +57,11 @@ export async function getCustomerList(
     if (filterOptions.contract_status.find((op) => op === 'expiring_soon')) {
       params = { ...params, expiring_soon: true };
     } else {
+      const index = filterOptions.contract_status.indexOf('signed');
+
+      if (index !== -1) {
+        filterOptions.contract_status[index] = 'active';
+      }
       contractStatusParams = queryString.stringify({
         contract_status: filterOptions.contract_status,
       });
