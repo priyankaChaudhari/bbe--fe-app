@@ -35,11 +35,10 @@ const Table = styled.table`
 
     td {
       padding: 20px 10px 3px 10px;
-      font-size: ${Theme.normal};
       vertical-align: middle;
       position: relative;
       color: ${Theme.black};
-      font-size: ${Theme.normal};
+      font-size: ${Theme.extraMedium};
       font-weight: 600;
       vertical-align: top;
 
@@ -74,6 +73,7 @@ const Table = styled.table`
         color: ${Theme.lighterGreen};
         font-size: ${Theme.extraNormal};
         font-weight: 300;
+        margin-left: -2px;
         img {
           vertical-align: bottom;
         }
@@ -86,6 +86,7 @@ const Table = styled.table`
           width: 14px;
           transform: rotate(180deg);
           vertical-align: middle;
+          margin-left: -2px;
         }
       }
 

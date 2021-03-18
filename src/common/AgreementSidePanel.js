@@ -4106,6 +4106,10 @@ const SidePanel = styled.div`
 
    @media only screen and (min-width: 1500px)  {
      width: 400px;
+     .sidebar {
+      width: 400px;
+    }
+    
    }
 `;
 

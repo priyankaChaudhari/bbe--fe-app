@@ -511,7 +511,8 @@ export default function NewCustomerList() {
       if (percentage.toString().includes('-')) {
         return (
           <>
-            <span className="decrease-rate ml-1">
+            <br />
+            <span className="decrease-rate">
               {' '}
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {percentage
@@ -522,15 +523,18 @@ export default function NewCustomerList() {
         );
       }
       return (
-        <div className="increase-rate">
-          <img
-            className="red-arrow"
-            src={ArrowUpIcon}
-            width="14px"
-            alt="arrow-up"
-          />
-          {percentage ? `${percentage.toFixed(2)} %` : ''}
-        </div>
+        <>
+          <br />
+          <div className="increase-rate">
+            <img
+              className="red-arrow"
+              src={ArrowUpIcon}
+              width="14px"
+              alt="arrow-up"
+            />
+            {percentage ? `${percentage.toFixed(2)} %` : ''}
+          </div>
+        </>
       );
     }
     return '';

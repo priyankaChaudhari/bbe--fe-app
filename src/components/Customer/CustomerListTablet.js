@@ -172,7 +172,7 @@ export default function CustomerListTablet({
                     {item && item.status}
                   </div>
                   <div className="clear-fix" />
-                  <div className=" pt-4 " />
+                  <div className=" straight-line horizontal-line pt-3 mb-3 " />
                   {showPerformance ? (
                     <div className="row">
                       <div className="col-6 pb-2">
@@ -186,6 +186,7 @@ export default function CustomerListTablet({
                             item.daily_facts.current[0].revenue ? (
                               <>
                                 {item.daily_facts.current[0].revenue}
+
                                 {calculatePercentage(
                                   item.daily_facts.current[0].revenue,
                                   item.daily_facts.previous[0].revenue,
@@ -236,7 +237,11 @@ export default function CustomerListTablet({
                     </>
                   )}
 
-                  {!showPerformance ? <div className=" " /> : ''}
+                  {!showPerformance ? (
+                    <div className=" straight-line horizontal-line pt-3" />
+                  ) : (
+                    ''
+                  )}
                   <div className="row">
                     {showPerformance ? (
                       <div className="col-6">
@@ -292,7 +297,7 @@ export default function CustomerListTablet({
                       ''
                     )}
                     {showPerformance ? (
-                      <div className="straight-line horizontal-line pt-3 mb-3" />
+                      <div className="straight-line horizontal-line pt-3 " />
                     ) : (
                       ''
                     )}
