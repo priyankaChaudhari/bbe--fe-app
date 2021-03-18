@@ -94,12 +94,13 @@ export default function PastAgreement({ id }) {
                     </div>
                   </WhiteCard>
                 ) : (
-                  <WhiteCard className="text-center">
-                    No Past Agreements Found.
-                  </WhiteCard>
+                  ''
                 )}
               </React.Fragment>
             ))}
+          <WhiteCard className="text-center">
+            No Past Agreements Found.
+          </WhiteCard>
         </div>
       ) : (
         <WhiteCard className="text-center">No Past Agreements Found.</WhiteCard>
