@@ -53,46 +53,10 @@ export default function Statement({
       ? formData && formData[key] && formData[key].label
         ? formData[key].label
         : formData[key]
+        ? formData[key]
+        : `Enter ${label}`
       : formData && formData[key];
   };
-
-  // if (formData[key] === undefined || formData[key] === '') {
-  //   if (key === 'start_date') {
-  //     return details && dayjs(details[key]).format('MM-DD-YYYY');
-  //   }
-  //   if (key === 'primary_marketplace') {
-  //     if (details && details.primary_marketplace) {
-  //       return (
-  //         details &&
-  //         details.primary_marketplace &&
-  //         details.primary_marketplace.name
-  //       );
-  //     }
-  //     return `Enter ${label}.`;
-  //   }
-  //   if (type && type.includes('number')) {
-  //     return `${type === 'number-currency' ? '$' : '%'} ${
-  //       details && details[key]
-  //         ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  //         : `Enter ${label}.`
-  //     }`;
-  //   }
-
-  //   return key === 'rev_share' || key === 'seller_type'
-  //     ? details && details[key] && details[key].label
-  //     : details && details[key];
-  // }
-  // if (
-  //   formData[key] === undefined ||
-  //   formData[key] === '' ||
-  //   formData[key] === null ||
-  //   (details && Object.keys(details).length === 0)
-  // ) {
-  //   return `Enter ${label}.`;
-  // }
-
-  // return formData[key];
-  // };
 
   const showRevTable = () => {
     if (formData && formData.sales_threshold) {
@@ -262,15 +226,23 @@ export default function Statement({
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
+
   const mapMonthlyServiceTotal = () => {
-    return `<tr>
+    return `
+    ${
+      details && details.total_fee && details.total_fee.monthly_service_discount
+        ? `<tr>
             <td class="total-service-bordless"> Sub-total</td>
             <td class="total-service-bordless text-right">${mapServiceTotal(
               'additional_monthly_servces',
             )}
             </td>
-         </tr>
-         <tr>
+         </tr>`
+        : ''
+    }
+    ${
+      details && details.total_fee && details.total_fee.monthly_service_discount
+        ? `<tr>
             <td class="total-service-bordless"> Discount ${
               details &&
               details.monthly_discount_amount &&
@@ -288,10 +260,13 @@ export default function Statement({
                   details.total_fee.monthly_service_discount
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : ''
+                : 0
             }
             </td>
-         </tr>
+         </tr>`
+        : ''
+    }
+
          <tr>
             <td class="total-service" style="padding-top: 5px"> Total</td>
             <td class="total-service text-right" style="padding-top: 5px;"> ${mapMonthlyServiceDisocuntTotal()}
@@ -299,6 +274,7 @@ export default function Statement({
          </tr>
          `;
   };
+
   const showStandardServicesTable = () => {
     return `
    <div class="table-responsive"><table class=" contact-list " style="width: 100%; overflow:auto;
@@ -326,14 +302,20 @@ export default function Statement({
     padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Promotion Planning and Support</td><td style="border: 1px solid black;
     padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
-    padding: 13px;"> [SELLER_TYPE] Account Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;"> [${mapDefaultValues(
+      'seller_type',
+      'Seller Type',
+    )}] Account Management</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
     padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
     padding: 13px;">Channel Governance Consultation</td></tr></table> </div>
   `;
   };
   const mapOnetimeServiceTotal = () => {
-    return `<tr>
+    return `
+    ${
+      details && details.total_fee && details.total_fee.onetime_service_discount
+        ? `<tr>
             <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
             <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${
               details &&
@@ -343,8 +325,14 @@ export default function Statement({
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
-         <tr>
+         </tr>`
+        : ''
+    }
+         ${
+           details &&
+           details.total_fee &&
+           details.total_fee.onetime_service_discount
+             ? `<tr>
             <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
               details &&
               details.one_time_discount_amount &&
@@ -361,7 +349,10 @@ export default function Statement({
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
+         </tr>`
+             : ''
+         }
+         
          <tr>
             <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
             <td class="total-service text-right"style="padding-top: 5px "> $${
@@ -621,10 +612,10 @@ export default function Statement({
                     'number-currency',
                   ),
                 )
-                .replace(
-                  'SELLER_TYPE',
-                  mapDefaultValues('seller_type', 'Seller Type'),
-                )
+                // .replace(
+                //   'SELLER_TYPE',
+                //   mapDefaultValues('seller_type', 'Seller Type'),
+                // )
                 .replace(
                   'PRIMARY_MARKETPLACE',
                   mapDefaultValues(

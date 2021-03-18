@@ -42,6 +42,18 @@ export async function agreementDetails(id) {
   return result;
 }
 
+export async function getcontract(id) {
+  const result = await axiosInstance
+    .get(`${API_CUSTOMER_CONTRACT + id}/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function createMarketplace(data) {
   const result = await axiosInstance
     .post(API_MARKETPLACE, data)

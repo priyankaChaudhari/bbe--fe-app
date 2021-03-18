@@ -8,7 +8,6 @@
 /* eslint no-unused-expressions: "error" */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import PropTypes from 'prop-types';
@@ -128,7 +127,7 @@ export default function AgreementSidePanel({
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
 
-  const agreement = useSelector((state) => state.accountState.data);
+  // const agreement = useSelector((state) => state.accountState.data);
   // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
   //   false,
   // );
@@ -1591,9 +1590,9 @@ export default function AgreementSidePanel({
 
   const getContractStatusData = (type) => {
     const status =
-      (agreement &&
-        agreement.contract_status &&
-        agreement.contract_status.value) ||
+      (agreementData &&
+        agreementData.contract_status &&
+        agreementData.contract_status.value) ||
       '';
     let statusClass = '';
     let statusSrc = '';
@@ -1905,7 +1904,6 @@ export default function AgreementSidePanel({
           customer_id: id,
           addendum: newAddendumData && newAddendumData.addendum,
           contract: agreementData.id,
-          // steps_completed: { agreement: true, statement: true, addendum: true },
         };
         setIsLoading({ loader: true, type: 'button' });
 
@@ -1924,38 +1922,6 @@ export default function AgreementSidePanel({
             setOriginalAddendumData(res && res.data);
           }
         });
-
-        // const data = {
-        //   steps_completed: {
-        //     ...agreementData.steps_completed,
-        //     agreement: true,
-        //     statement: true,
-        //     addendum: true,
-        //   },
-        // };
-        // setIsLoading({ loader: true, type: 'page' });
-
-        // updateAccountDetails(agreementData.id, data).then((response) => {
-        //   setIsLoading({ loader: false, type: 'page' });
-
-        //   if (response && response.status === 200) {
-        //     setOpenCollapse({
-        //       agreement: false,
-        //       statement: false,
-        //       addendum: false,
-        //     });
-        //     setShowEditor(false);
-        //     // setEditContractFlag(false);
-        //   }
-        // });
-
-        // const stringified = queryString.stringify({
-        //   step: 'select-contact',
-        // });
-        // history.push({
-        //   pathname: `${history.location.pathname}`,
-        //   search: stringified,
-        // });
       }
     }
   };
@@ -2726,30 +2692,6 @@ export default function AgreementSidePanel({
 
   return (
     <SidePanel>
-      {/* <input
-        className="d-lg-none d-md-block"
-        data-function="swipe"
-        id="swipe"
-        type="checkbox"
-        defaultChecked
-      />
-      <label className="d-lg-none" data-function="swipe" htmlFor="swipe">
-        <div className="activity-icon">
-          <img
-            data-tip="View Activity Log"
-            src={ActivityLogIcon}
-            alt="log-close"
-          />{' '}
-        </div>
-      </label>
-      <label
-        className="d-lg-none  d-md-block"
-        data-function="swipe"
-        htmlFor="swipe">
-        <div className="activity-icon">
-          <img src={ActivityOpenIcon} alt="log-open" />{' '}
-        </div>
-      </label> */}
       <div className="sidebar">
         <>
           {/* {formData &&
@@ -2759,7 +2701,6 @@ export default function AgreementSidePanel({
           ) :  */}
           {isEditContract ? (
             <>
-              {/* {goToSection()} */}
               <div
                 className="collapse-btn "
                 role="presentation"
@@ -3074,8 +3015,9 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ||
-                    (isLoading.loader && isLoading.type === 'page') ? (
+                    {loader ? (
+                      //  ||
+                      // (isLoading.loader && isLoading.type === 'page')
                       <PageLoader
                         component="activityLog"
                         color="#FF5933"
@@ -3264,7 +3206,8 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader || (isLoading.loader && isLoading.type === 'page') ? (
+              {loader ? (
+                //  || (isLoading.loader && isLoading.type === 'page')
                 <PageLoader
                   component="activityLog"
                   color="#FF5933"
@@ -3401,7 +3344,8 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader || (isLoading.loader && isLoading.type === 'page') ? (
+                {loader ? (
+                  // || (isLoading.loader && isLoading.type === 'page')
                   <PageLoader
                     component="activityLog"
                     color="#FF5933"

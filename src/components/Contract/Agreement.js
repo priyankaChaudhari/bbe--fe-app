@@ -27,14 +27,14 @@ export default function Agreement({ formData, details, templateData }) {
     }
     if (key === 'address') {
       if (
-        formData &&
-        formData.address === '' &&
-        formData &&
-        formData.state === '' &&
-        formData &&
-        formData.city === '' &&
-        formData &&
-        formData.zip_code === ''
+        ((formData && formData.address === '') ||
+          (formData && formData.address === null)) &&
+        ((formData && formData.state === '') ||
+          (formData && formData.state === null)) &&
+        ((formData && formData.city === '') ||
+          (formData && formData.city === null)) &&
+        ((formData && formData.zip_code === '') ||
+          (formData && formData.zip_code === null))
       ) {
         return `Enter Location`;
       }

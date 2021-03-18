@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import NumberFormat from 'react-number-format';
@@ -8,24 +7,23 @@ import {
   ModalRadioCheck,
   ContractFormField,
   ErrorMsg,
+  PageLoader,
 } from '../../common';
 import { updateAccountDetails } from '../../api';
-import { getAccountDetails } from '../../store/actions/accountState';
 
 function Discount({
-  id,
   discountFlag,
   agreementData,
   setShowDiscountModal,
   formData,
   setFormData,
+  getContractDetails,
 }) {
-  const dispatch = useDispatch();
-
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
   const [data, setData] = useState({});
   const [apiError, setApiError] = useState('');
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
 
   const setDefaultAmount = (selectedRadioBtn) => {
     if (discountFlag === 'one-time') {
@@ -51,13 +49,9 @@ function Discount({
 
   useEffect(() => {
     if (
-      // formData &&
-      // formData.monthly_discount_amount &&
       discountFlag === 'one-time' &&
       formData &&
       formData.one_time_discount_type !== null
-      // formData &&
-      // formData.one_time_discount_amount &&
     ) {
       setShowAmountInput(true);
     }
@@ -169,10 +163,15 @@ function Discount({
   };
 
   const updateContract = (contractData) => {
+    setIsLoading({ loader: true, type: 'button' });
+
     updateAccountDetails(agreementData.id, contractData).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+
       if (res && res.status === 200) {
         setShowDiscountModal(false);
-        dispatch(getAccountDetails(id));
+        // dispatch(getAccountDetails(id));
+        getContractDetails();
       }
       if (res && res.status === 400) {
         setShowDiscountModal(true);
@@ -386,8 +385,11 @@ function Discount({
         <Button
           className="btn btn-primary w-100 mt-4 "
           onClick={() => onSubmit()}>
-          {' '}
-          Confirm
+          {isLoading.loader && isLoading.type === 'button' ? (
+            <PageLoader color="#fff" type="button" />
+          ) : (
+            'Confirm'
+          )}
         </Button>
       </div>
     </div>
@@ -399,9 +401,9 @@ Discount.defaultProps = {
   setShowDiscountModal: () => {},
   formData: {},
   setFormData: () => {},
+  getContractDetails: () => {},
 };
 Discount.propTypes = {
-  id: PropTypes.string.isRequired,
   discountFlag: PropTypes.string,
   agreementData: PropTypes.shape({
     id: PropTypes.string,
@@ -418,6 +420,7 @@ Discount.propTypes = {
     one_time_discount_amount: PropTypes.string,
   }),
   setFormData: PropTypes.func,
+  getContractDetails: PropTypes.func,
 };
 
 export default Discount;

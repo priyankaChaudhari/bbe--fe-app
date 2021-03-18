@@ -29,8 +29,8 @@ import {
   Button,
   ModalBox,
 } from '../../common';
-import { getAccountDetails } from '../../store/actions/accountState';
-import { agreementTemplate } from '../../api/AgreementApi';
+// import { getAccountDetails } from '../../store/actions/accountState';
+import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, LeftArrowIcon, InfoIcon } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -87,8 +87,8 @@ export default function ContractContainer() {
   const [formData, setFormData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [updatedFormData, setUpdatedFormData] = useState({});
-  const details = useSelector((state) => state.accountState.data);
-  const loader = useSelector((state) => state.accountState.isLoading);
+  // const details = useSelector((state) => state.accountState.data);
+  // const loader = useSelector((state) => state.accountState.isLoading);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showModal, setShowModal] = useState(false);
   const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
@@ -98,9 +98,9 @@ export default function ContractContainer() {
     show: false,
   });
   const [isEditContract, setIsEditContract] = useState(false);
+  const [details, setDetails] = useState({});
 
   const [editContractFlag, setEditContractFlag] = useState(true);
-  // const [oneTimeService, setOneTimeService] = useState([]);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [isFooter, showFooter] = useState(false);
   const [newAddendumData, setNewAddendum] = useState(null);
@@ -143,10 +143,7 @@ export default function ContractContainer() {
     show: false,
     message: '',
   });
-  // const [showErrorMsg, setShowErrorMSg] = useState({
-  //   show: false,
-  //   message: '',
-  // });
+
   const [showSection, setShowCollpase] = useState({
     addendum: true,
     dspAddendum: false,
@@ -171,17 +168,6 @@ export default function ContractContainer() {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
-  // const [totalPages, setNumPages] = useState(null);
-  // const [pageNumber, setPageNumber] = useState(1);
-
-  // const onDocumentLoadSuccess = ({ numPages }) => {
-  //   setNumPages(numPages);
-  //   setPageNumber(1);
-  // };
-  // const getPdfDocument = () => {
-  //   const pdfFile = details && details.contract_url;
-  //   return pdfFile;
-  // };
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
@@ -193,41 +179,37 @@ export default function ContractContainer() {
       element.getBoundingClientRect().top + window.pageYOffset + offset;
 
     window.scrollTo({ top: y });
-    // } else {
-    //   const y =
-    //     element &&
-    //     element.getBoundingClientRect() &&
-    //     element.getBoundingClientRect().top + window.pageYOffset + -150;
-    //   window.scrollTo({ top: y });
-    // }
-    // window.scrollTo({ top: y, behavior: 'smooth' });
   };
-
-  // const checkPermission = () => {
-  //   if (
-  //     details &&
-  //     details.contract_status &&
-  //     (details.contract_status !== null || details.contract_status !== '')
-  //   ) {
-  //     return true;
-  //   }
-  //   return true;
-  // };
 
   const clearSuccessMessage = () => {
     setShowSuccessContact({ show: false, message: '' });
   };
 
+  const getContractDetails = () => {
+    setIsLoading({ loader: true, type: 'page' });
+
+    getcontract(location.state).then((res) => {
+      setIsLoading({ loader: false, type: 'page' });
+
+      if (res && res.status === 200) {
+        setDetails(res && res.data);
+      }
+    });
+  };
+
   useEffect(() => {
-    dispatch(getAccountDetails(id));
+    // dispatch(getAccountDetails(id));
+
     agreementTemplate().then((response) => {
-      setIsLoading({ loader: true, type: 'page' });
+      // setIsLoading({ loader: true, type: 'page' });
       setData(
         response &&
           response.data &&
           response.data.results &&
           response.data.results[0],
       );
+      getContractDetails();
+
       setIsLoading({ loader: false, type: 'page' });
     });
 
@@ -246,42 +228,10 @@ export default function ContractContainer() {
       );
     });
 
-    if (
-      history &&
-      history.location &&
-      history.location.state &&
-      history.location.state.message
-    ) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-      // setShowSuccessContact({
-      //   show: true,
-      //   message: history.location.state.message,
-      // });
-
-      // setTimeout(clearSuccessMessage(), 50000);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
   useEffect(() => {
-    // if (
-    //   (details && details.additional_one_time_services) ||
-    //   (details && details.additional_marketplaces) ||
-    //   (details && details.additional_monthly_services) ||
-    //   (details && details.sales_threshold)
-    // ) {
-    //   setFormData({
-    //     ...formData,
-    //     additional_one_time_services:
-    //       details && details.additional_one_time_services,
-    //     additional_marketplaces: details && details.additional_marketplaces,
-    //     additional_monthly_services:
-    //       details && details.additional_monthly_services,
-    //     sales_threshold: details && details.sales_threshold,
-    //   });
     if (details) {
       setFormData({ ...formData, ...details });
       setOriginalData({ ...formData, ...details });
@@ -441,11 +391,11 @@ export default function ContractContainer() {
       }
       const detail = {
         ...updatedFormData,
-        steps_completed: {
-          ...details.steps_completed,
-          agreement: true,
-          statement: true,
-        },
+        // steps_completed: {
+        //   ...details.steps_completed,
+        //   agreement: true,
+        //   statement: true,
+        // },
       };
 
       AccountApi = updateAccountDetails(details.id, detail);
@@ -515,7 +465,8 @@ export default function ContractContainer() {
               showFooter(false);
               setIsEditContract(false);
               setUpdatedFormData({});
-              dispatch(getAccountDetails(id));
+              // dispatch(getAccountDetails(id));
+              getContractDetails();
               setIsEditContract(false);
             }
 
@@ -601,7 +552,8 @@ export default function ContractContainer() {
             if (!Object.keys(updatedFormData).length) {
               showFooter(false);
               setIsEditContract(false);
-              dispatch(getAccountDetails(id));
+              // dispatch(getAccountDetails(id));
+              getContractDetails();
             }
             setUpdatedFormData({ ...updatedFormData });
 
@@ -687,7 +639,8 @@ export default function ContractContainer() {
                 showFooter(false);
                 setIsEditContract(false);
                 setUpdatedFormData({});
-                dispatch(getAccountDetails(id));
+                // dispatch(getAccountDetails(id));
+                getContractDetails();
               }
             }
             if (contractRes && contractRes.status === 400) {
@@ -756,24 +709,27 @@ export default function ContractContainer() {
       //       setUpdatedFormData({});
       //     }
       //   });
-    } else {
-      const stepsCompletedData = {
-        steps_completed: {
-          ...details.steps_completed,
-          agreement: true,
-          statement: true,
-        },
-      };
-      setIsLoading({ loader: true, type: 'button' });
-
-      updateAccountDetails(details.id, stepsCompletedData).then((response) => {
-        setIsLoading({ loader: false, type: 'button' });
-
-        if (response && response.status === 200) {
-          dispatch(getAccountDetails(id));
-        }
-      });
     }
+
+    // else {
+    //   const stepsCompletedData = {
+    //     steps_completed: {
+    //       ...details.steps_completed,
+    //       agreement: true,
+    //       statement: true,
+    //     },
+    //   };
+    //   setIsLoading({ loader: true, type: 'button' });
+
+    //   updateAccountDetails(details.id, stepsCompletedData).then((response) => {
+    //     setIsLoading({ loader: false, type: 'button' });
+
+    //     if (response && response.status === 200) {
+    //       // dispatch(getAccountDetails(id));
+    //       getContractDetails();
+    //     }
+    //   });
+    // }
 
     // }
   };
@@ -809,19 +765,6 @@ export default function ContractContainer() {
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
 
-      // if (openCollapse.agreement) {
-      //   executeScroll('agreement');
-      // }
-      // if (openCollapse.statement) {
-      //   executeScroll('statement');
-      // }
-      // if (openCollapse.dspAddendum) {
-      //   executeScroll('dspAddendum');
-      // }
-      // if (openCollapse.addendum) {
-      //   executeScroll('addendum');
-      // }
-
       if (
         details &&
         details.additional_marketplaces &&
@@ -831,7 +774,8 @@ export default function ContractContainer() {
       } else {
         setShowAdditionalMarketplace(false);
       }
-      dispatch(getAccountDetails(id));
+      // dispatch(getAccountDetails(id));
+      getContractDetails();
     }
     setIsEditContract(false);
   };
@@ -917,14 +861,14 @@ export default function ContractContainer() {
 
     if (key === 'address') {
       if (
-        details &&
-        details.address === '' &&
-        details &&
-        details.state === '' &&
-        details &&
-        details.city === '' &&
-        details &&
-        details.zip_code === ''
+        ((formData && formData.address === '') ||
+          (formData && formData.address === null)) &&
+        ((formData && formData.state === '') ||
+          (formData && formData.state === null)) &&
+        ((formData && formData.city === '') ||
+          (formData && formData.city === null)) &&
+        ((formData && formData.zip_code === '') ||
+          (formData && formData.zip_code === null))
       ) {
         return `Enter Location`;
       }
@@ -1208,14 +1152,21 @@ export default function ContractContainer() {
   };
 
   const mapMonthlyServiceTotal = () => {
-    return `<tr style=" border: 1px solid black;">
+    return `
+    ${
+      details && details.total_fee && details.total_fee.monthly_service_discount
+        ? `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
             <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">${mapServiceTotal(
               'additional_monthly_services',
             )}
             </td>
-         </tr>
-         <tr style=" border: 1px solid black;">
+         </tr>`
+        : ''
+    }
+    ${
+      details && details.total_fee && details.total_fee.monthly_service_discount
+        ? `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Discount ${
               details &&
               details.monthly_discount_amount &&
@@ -1233,10 +1184,12 @@ export default function ContractContainer() {
                   details.total_fee.monthly_service_discount
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : ''
+                : 0
             }
             </td>
-         </tr>
+         </tr>`
+        : ''
+    }
          <tr>
             <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> ${mapMonthlyServiceDisocuntTotal()}
@@ -1246,7 +1199,10 @@ export default function ContractContainer() {
   };
 
   const mapOnetimeServiceTotal = () => {
-    return `<tr style=" border: 1px solid black;">
+    return `
+    ${
+      details && details.total_fee && details.total_fee.onetime_service_discount
+        ? `<tr style=" border: 1px solid black;">
             <td class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
             <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${
               details &&
@@ -1256,8 +1212,14 @@ export default function ContractContainer() {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
-         <tr style=" border: 1px solid black;">
+         </tr>`
+        : ''
+    }
+       ${
+         details &&
+         details.total_fee &&
+         details.total_fee.onetime_service_discount
+           ? `<tr style=" border: 1px solid black;">
             <td class="total-service" colspan="3" style="border-bottom: hidden; border-left: 1px solid black;padding: 5px 13px;"> Discount ${
               details &&
               details.one_time_discount_amount &&
@@ -1274,7 +1236,10 @@ export default function ContractContainer() {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
+         </tr>`
+           : ''
+       }
+         
          <tr>
             <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
@@ -1571,7 +1536,8 @@ export default function ContractContainer() {
       setIsLoading({ loader: false, type: 'button' });
 
       if (response && response.status === 200) {
-        dispatch(getAccountDetails(id));
+        // dispatch(getAccountDetails(id));
+        getContractDetails();
         setIsEditContract(true);
       }
     });
@@ -1951,8 +1917,8 @@ export default function ContractContainer() {
         id={id}
         setFormData={setFormData}
         formData={formData}
-        loader={loader}
         apiError={apiError}
+        loader={isLoading.loader}
         agreementData={details}
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
@@ -2218,7 +2184,7 @@ export default function ContractContainer() {
   };
 
   const closeDiscountModal = () => {
-    setFormData(details);
+    getContractDetails();
     setShowDiscountModal(false);
   };
 
@@ -2346,7 +2312,7 @@ export default function ContractContainer() {
         {isDesktop ||
         (isTablet && tabInResponsive === 'view-contract') ||
         (isMobile && tabInResponsive === 'view-contract') ? (
-          loader || (isLoading.loader && isLoading.type === 'page') ? (
+          isLoading.loader && isLoading.type === 'page' ? (
             <PageLoader
               className="modal-loader"
               color="#FF5933"
@@ -2436,16 +2402,12 @@ export default function ContractContainer() {
         />
         <ModalBox>
           <Discount
-            id={id}
             agreementData={details}
             setShowDiscountModal={setShowDiscountModal}
             formData={formData}
             setFormData={setFormData}
-            // pdfData={pdfData}
-            // setShowSuccessContact={setShowSuccessContact}
-            // clearSuccessMessage={clearSuccessMessage}
-            // setOpenCollapse={setOpenCollapse}
             discountFlag={discountFlag}
+            getContractDetails={getContractDetails}
           />
         </ModalBox>
       </Modal>
