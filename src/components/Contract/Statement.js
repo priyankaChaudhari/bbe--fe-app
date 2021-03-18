@@ -309,9 +309,13 @@ export default function Statement({
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
       formData && formData.content_optimization
+        ? formData && formData.content_optimization
+        : 0
     }</span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
       formData && formData.design_optimization
+        ? formData && formData.design_optimization
+        : 0
     }</span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Listing Compliance</td><td style="border: 1px solid black;
