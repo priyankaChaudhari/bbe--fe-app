@@ -235,7 +235,10 @@ export default function Agreement({ formData, details, templateData }) {
     return data;
   };
   const mapOnetimeServiceTotal = () => {
-    return `<tr style="display: table-row;
+    return `
+    ${
+      details && details.total_fee && details.total_fee.onetime_service_discount
+        ? `<tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
             <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left"> Sub-total</td>
@@ -247,8 +250,14 @@ export default function Agreement({ formData, details, templateData }) {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
-         <tr style="display: table-row;
+         </tr>`
+        : ''
+    }
+        ${
+          details &&
+          details.total_fee &&
+          details.total_fee.onetime_service_discount
+            ? `<tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
             <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px; text-align:left;"> Discount ${
@@ -267,7 +276,9 @@ export default function Agreement({ formData, details, templateData }) {
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
             </td>
-         </tr>
+         </tr>`
+            : ''
+        }
          <tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
