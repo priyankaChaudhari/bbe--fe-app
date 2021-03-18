@@ -98,7 +98,7 @@ const Table = styled.table`
           display: inline-block;
           margin-right: 7px;
           font-weight: 300;
-          margin-bottom: 16px;
+          margin-bottom: 6px;
 
           &.black-heading-title {
             min-height: 0 !important;
@@ -128,7 +128,7 @@ const Table = styled.table`
             &.agreement {
               border: 1px solid #d5d8e1;
               padding: 9px 12px;
-              background-color: #ffffff;
+              background-color: ${Theme.white};
             }
 
             &.edit {
@@ -181,7 +181,7 @@ const Table = styled.table`
             margin-left: 10px;
             img {
               vertical-align: text-top;
-              width: 14px;
+              width: 13px;
             }
           }
           .file-icon {
@@ -189,7 +189,7 @@ const Table = styled.table`
             padding: 8px 10px;
             border-radius: 3px;
             margin-left: -7px;
-            font-size: 14px;
+            font-size: 15px;
             margin-left: 10px;
             img {
               vertical-align: text-top;

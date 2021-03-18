@@ -411,19 +411,19 @@ export default function NewCustomerList() {
     if (type && type.contract_status === 'pending contract') {
       return (
         <li>
-          <span className="recurring-service file">
+          <div className="recurring-service file">
             {type.contract_type} Service Agreement
             <span className="file-icon">
               <img src={FileIcon} alt="file" />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li>
-          <span className="recurring-service file-check">
+          <div className="recurring-service file-check">
             {type.contract_type} Service Agreement
             <span className="file-check-icon">
               <img
@@ -432,32 +432,32 @@ export default function NewCustomerList() {
                 alt="check-file"
               />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li>
-          <span className="recurring-service edit">
+          <div className="recurring-service edit">
             {type.contract_type} Service Agreement
             <span className="edit-file-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (countDays(type.end_date) <= 90) {
       return (
         <li>
-          <span className="recurring-service count-days">
+          <div className="recurring-service count-days">
             {type.contract_type} Service Agreement
             <span className="count-clock-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
             </span>
-          </span>
+          </div>
         </li>
       );
     }
@@ -851,7 +851,7 @@ export default function NewCustomerList() {
                               PATH_CUSTOMER_DETAILS.replace(':id', item.id),
                             )
                           }>
-                          <td width={showPerformance ? '20%' : '30%'}>
+                          <td width={showPerformance ? '20%' : '25%'}>
                             <img
                               className="company-logo"
                               src={
@@ -877,7 +877,7 @@ export default function NewCustomerList() {
                               {item && item.status}
                             </div>
                           </td>
-                          <td width={showPerformance ? '15%' : '50%'}>
+                          <td width={showPerformance ? '15%' : '60%'}>
                             {showPerformance ? (
                               <>
                                 {item &&
@@ -974,7 +974,7 @@ export default function NewCustomerList() {
                             </td>
                           ) : null}
 
-                          <td width="20%">
+                          <td width="15%">
                             {item &&
                             item.brand_growth_strategist &&
                             item.brand_growth_strategist.length !== 0 ? (
@@ -1060,6 +1060,9 @@ const CustomerListPage = styled.div`
     padding-top: 65px;
     overflow: auto;
     min-height: 892px;
+    height: 100%;
+
+    padding-bottom: 69px;
     position: relative;
   }
   .customer-list-header {
