@@ -132,7 +132,13 @@ export default function AgreementDetails({ agreements, id }) {
           </div>
           <span
             className="cursor"
-            onClick={() => setOpenCollapse([{ [agreement.id]: true }])}
+            onClick={() =>
+              setOpenCollapse([
+                {
+                  [agreement.id]: !openCollapse.find((op) => op[agreement.id]),
+                },
+              ])
+            }
             role="presentation">
             <div className="straight-line horizontal-line pt-3 mb-3" />
             <div className="text-center">
