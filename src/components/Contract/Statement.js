@@ -302,10 +302,15 @@ export default function Statement({
     padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Promotion Planning and Support</td><td style="border: 1px solid black;
     padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
-    padding: 13px;"> [${mapDefaultValues(
-      'seller_type',
-      'Seller Type',
-    )}] Account Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;"> ${
+      formData && formData.seller_type && formData.seller_type.label
+        ? [
+            formData && formData.seller_type && formData.seller_type.label
+              ? formData && formData.seller_type && formData.seller_type.label
+              : formData && formData.seller_type && formData.seller_type,
+          ]
+        : ''
+    } Account Management</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
     padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
     padding: 13px;">Channel Governance Consultation</td></tr></table> </div>
@@ -698,6 +703,10 @@ Statement.propTypes = {
         service: PropTypes.string,
       }),
     ),
+    seller_type: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
     primary_marketplace: PropTypes.shape({
       fee: PropTypes.number,
       name: PropTypes.string,

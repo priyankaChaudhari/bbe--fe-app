@@ -1575,7 +1575,16 @@ export default function ContractContainer() {
     padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Promotion Planning and Support</td><td style="border: 1px solid black;
     padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
-    padding: 13px;"> [SELLER_TYPE] Account Management</td></tr><tr><td style="border: 1px solid black;
+    padding: 13px;"> 
+    ${
+      details && details.seller_type && details.seller_type.label
+        ? [
+            details && details.seller_type && details.seller_type.label
+              ? details && details.seller_type && details.seller_type.label
+              : details && details.seller_type && details.seller_type,
+          ]
+        : ''
+    } Account Management</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
     padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
     padding: 13px;">Channel Governance Consultation</td></tr></table> </div>
