@@ -35,6 +35,7 @@ export default function EditAccountDetails({
   const [apiError, setApiError] = useState({});
   const [showBtn, setShowBtn] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [showMsg, setShowMsg] = useState(false);
 
   const CustomDropdownIndicator = (props) => {
     return (
@@ -167,11 +168,12 @@ export default function EditAccountDetails({
           setApiError(res && res.data);
           setShowModal(true);
         } else if (res && res.status === 200) {
+          setShowMsg(true);
           setIsLoading({ loader: false, type: 'button' });
           dispatch(getAccountDetails(customer.id));
           dispatch(getCustomerDetails(customer.id));
           getActivityLogInfo();
-          toast.success('Changes Saved!');
+          if (showMsg) toast.success('Changes Saved!');
           setShowModal(false);
         }
       });
@@ -187,7 +189,9 @@ export default function EditAccountDetails({
         dispatch(getAccountDetails(customer.id));
         dispatch(getCustomerDetails(customer.id));
         getActivityLogInfo();
-        toast.success('Changes Saved!');
+        if (!showMsg) {
+          toast.success('Changes Saved!');
+        }
         setShowModal(false);
       }
     });

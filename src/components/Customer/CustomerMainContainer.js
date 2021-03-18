@@ -95,7 +95,7 @@ export default function CustomerMainContainer() {
   const customer = useSelector((state) => state.customerState.data);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
-  const [viewComponent, setViewComponent] = useState('agreement');
+  const [viewComponent, setViewComponent] = useState('performance');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
