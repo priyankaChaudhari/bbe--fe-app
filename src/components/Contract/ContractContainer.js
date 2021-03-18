@@ -163,6 +163,7 @@ export default function ContractContainer() {
   const [endMonthDate, setEndDate] = useState('');
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
   const [discountFlag, setDiscountFlag] = useState('');
+  const [contractID, setContractID] = useState('');
 
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
@@ -185,10 +186,14 @@ export default function ContractContainer() {
     setShowSuccessContact({ show: false, message: '' });
   };
 
+  if (contractID === '' && contractID !== undefined) {
+    setContractID(location.state);
+  }
+
   const getContractDetails = () => {
     setIsLoading({ loader: true, type: 'page' });
 
-    getcontract(location.state).then((res) => {
+    getcontract(contractID).then((res) => {
       setIsLoading({ loader: false, type: 'page' });
 
       if (res && res.status === 200) {
