@@ -146,54 +146,45 @@ const Table = styled.table`
             &.file {
               background: #f4f6fc;
             }
-          }
-          .edit-file-icon {
-            background: #f6d2c9;
-            padding: 8px 10px;
-            border-radius: 3px;
-            margin-left: -7px;
-            margin-left: 10px;
 
-            img {
-              vertical-align: middle;
-              width: 16px;
-            }
-          }
-          .count-clock-icon {
-            background: #ffe6d4;
-            padding: 8px 10px;
-            border-radius: 3px;
-            margin-left: -7px;
-            font-size: 14px;
-            margin-left: 10px;
+            .active-contract-icon {
+              padding: 8px 10px;
+              border-radius: 3px;
+              margin-left: 10px;
+              font-size: 14px;
 
-            img {
-              vertical-align: text-top;
-              width: 14px;
-            }
-          }
-          .file-check-icon {
-            background: #f5e8c3;
-            padding: 8px 10px;
-            border-radius: 3px;
-            margin-left: -7px;
-            font-size: 14px;
-            margin-left: 10px;
-            img {
-              vertical-align: text-top;
-              width: 13px;
-            }
-          }
-          .file-icon {
-            background: #e2e5ef;
-            padding: 8px 10px;
-            border-radius: 3px;
-            margin-left: -7px;
-            font-size: 15px;
-            margin-left: 10px;
-            img {
-              vertical-align: text-top;
-              width: 14px;
+              &.edit-file-icon {
+                background: #f6d2c9;
+
+                img {
+                  vertical-align: middle;
+                  width: 16px;
+                }
+              }
+              &.count-clock-icon {
+                background: #ffe6d4;
+                margin-left: 10px;
+
+                img {
+                  vertical-align: text-top;
+                  width: 14px;
+                }
+              }
+              &.file-check-icon {
+                background: #f5e8c3;
+                img {
+                  vertical-align: text-top;
+                  width: 13px;
+                }
+              }
+              &.file-icon {
+                background: #e2e5ef;
+
+                img {
+                  vertical-align: text-top;
+                  width: 14px;
+                }
+              }
             }
           }
         }

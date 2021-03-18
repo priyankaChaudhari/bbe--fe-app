@@ -38,53 +38,53 @@ export default function CustomerListTablet({
     if (type && type.contract_status === 'pending contract') {
       return (
         <li>
-          <span className="recurring-service file">
+          <div className="recurring-service file">
             {type.contract_type} Service Agreement
-            <span className="file-icon">
+            <span className=" active-contract-icon file-icon">
               <img src={FileIcon} alt="file" />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li>
-          <span className="recurring-service file-check">
+          <div className="recurring-service file-check">
             {type.contract_type} Service Agreement
-            <span className="file-check-icon">
+            <span className=" active-contract-icon file-check-icon">
               <img
                 className="clock-icon"
                 src={CheckFileIcon}
                 alt="check-file"
               />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li>
-          <span className="recurring-service edit">
+          <div className="recurring-service edit">
             {type.contract_type} Service Agreement
-            <span className="edit-file-icon">
+            <span className=" active-contract-icon edit-file-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
-          </span>
+          </div>
         </li>
       );
     }
     if (countDays(type.end_date) <= 90) {
       return (
         <li>
-          <span className="recurring-service count-days">
+          <div className="recurring-service count-days">
             {type.contract_type} Service Agreement
-            <span className="count-clock-icon">
+            <span className=" active-contract-icon count-clock-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
             </span>
-          </span>
+          </div>
         </li>
       );
     }
@@ -138,7 +138,7 @@ export default function CustomerListTablet({
                     {item && item.status}
                   </div>
                   <div className="clear-fix" />
-                  <div className="straight-line horizontal-line pt-3 mb-3" />
+                  <div className=" pt-4 " />
                   {showPerformance ? (
                     <div className="row">
                       <div className="col-6 pb-2">
@@ -188,11 +188,7 @@ export default function CustomerListTablet({
                     </>
                   )}
 
-                  {!showPerformance ? (
-                    <div className="straight-line horizontal-line pt-3 mb-3" />
-                  ) : (
-                    ''
-                  )}
+                  {!showPerformance ? <div className=" " /> : ''}
                   <div className="row">
                     {showPerformance ? (
                       <div className="col-6">
@@ -305,7 +301,82 @@ const CustomerListTabletView = styled.div`
   }
   .recurring-contact {
     li {
-      margin-right: 5px;
+      margin-right: 7px;
+      margin-bottom: 6px;
+
+      .recurring-service {
+        border: 1px solid #d5d8e1;
+        border-radius: 5px;
+        border: none;
+        padding: 10px 4px 10px 12px;
+        color: #171725;
+        font-size: 14px;
+        // flex-wrap: wrap;
+        // flex: initial;
+        // height: 100%;
+
+        &.agreement {
+          border: 1px solid #d5d8e1;
+          padding: 9px 12px;
+          background-color: ${Theme.white};
+        }
+
+        &.edit {
+          background: #ffded6;
+        }
+
+        &.count-days {
+          background: #fff4ec;
+        }
+
+        &.file-check {
+          background: #fdf3d7;
+        }
+
+        &.file {
+          background: #f4f6fc;
+        }
+
+        .active-contract-icon {
+          padding: 8px 10px;
+          border-radius: 3px;
+          margin-left: 10px;
+          font-size: 14px;
+
+          &.edit-file-icon {
+            background: #f6d2c9;
+
+            img {
+              vertical-align: middle;
+              width: 16px;
+            }
+          }
+          &.count-clock-icon {
+            background: #ffe6d4;
+            margin-left: 10px;
+
+            img {
+              vertical-align: text-top;
+              width: 14px;
+            }
+          }
+          &.file-check-icon {
+            background: #f5e8c3;
+            img {
+              vertical-align: text-top;
+              width: 13px;
+            }
+          }
+          &.file-icon {
+            background: #e2e5ef;
+
+            img {
+              vertical-align: text-top;
+              width: 14px;
+            }
+          }
+        }
+      }
     }
   }
   .company-logo {

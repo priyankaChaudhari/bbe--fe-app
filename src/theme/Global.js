@@ -410,6 +410,7 @@ export const WhiteCard = styled.div`
   border-radius: 15px;
   padding:   20px ;
   position: relative;
+  
 
 
   // .black-heading-title {
