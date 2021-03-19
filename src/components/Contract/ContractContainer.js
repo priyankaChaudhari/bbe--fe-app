@@ -192,14 +192,16 @@ export default function ContractContainer() {
 
   const getContractDetails = () => {
     setIsLoading({ loader: true, type: 'page' });
-    if (contractID) {
-      getcontract(contractID).then((res) => {
-        setIsLoading({ loader: false, type: 'page' });
+    if (contractID || localStorage.getItem('agreementID')) {
+      getcontract(contractID || localStorage.getItem('agreementID')).then(
+        (res) => {
+          setIsLoading({ loader: false, type: 'page' });
 
-        if (res && res.status === 200) {
-          setDetails(res && res.data);
-        }
-      });
+          if (res && res.status === 200) {
+            setDetails(res && res.data);
+          }
+        },
+      );
     } else {
       const path = location.pathname.slice(
         0,
@@ -2376,6 +2378,7 @@ export default function ContractContainer() {
             // setShowSuccessContact={setShowSuccessContact}
             // clearSuccessMessage={clearSuccessMessage}
             setOpenCollapse={setOpenCollapse}
+            getContractDetails={getContractDetails}
           />
         </ModalBox>
       </Modal>

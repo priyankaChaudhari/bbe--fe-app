@@ -35,7 +35,7 @@ import {
   sendReminderOfContract,
   getTransactionData,
 } from '../../api/index';
-import { getAccountDetails } from '../../store/actions/accountState';
+// import { getAccountDetails } from '../../store/actions/accountState';
 import { getContactDetails } from '../../store/actions/customerState';
 
 // import { PATH_AGREEMENT } from '../../constants';
@@ -48,6 +48,7 @@ function RequestSignature({
   // setShowSuccessContact,
   // clearSuccessMessage,
   setOpenCollapse,
+  getContractDetails,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -450,7 +451,8 @@ function RequestSignature({
             dspAddendum: false,
             amendment: false,
           });
-          dispatch(getAccountDetails(id));
+          getContractDetails();
+          // dispatch(getAccountDetails(id));
 
           // history.push({
           //   pathname: PATH_AGREEMENT.replace(':id', id),
@@ -847,6 +849,7 @@ RequestSignature.defaultProps = {
   // setShowSuccessContact: () => {},
   // clearSuccessMessage: () => {},
   setOpenCollapse: () => {},
+  getContractDetails: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -869,4 +872,5 @@ RequestSignature.propTypes = {
   // setShowSuccessContact: PropTypes.func,
   // clearSuccessMessage: PropTypes.func,
   setOpenCollapse: PropTypes.func,
+  getContractDetails: PropTypes.func,
 };

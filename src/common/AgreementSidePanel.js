@@ -490,13 +490,19 @@ export default function AgreementSidePanel({
       additionalOnetimeSerError.custom_amazon_store_price &&
       key === 'amazon_store_package'
     ) {
-      setSectionError({ ...sectionError, statement: 0 });
+      setSectionError({
+        ...sectionError,
+        statement: sectionError.statement ? sectionError.statement - 1 : 0,
+      });
       if (
         formData &&
         formData.contract_type &&
         formData.contract_type.toLowerCase().includes('one')
       ) {
-        setSectionError({ ...sectionError, agreement: 0 });
+        setSectionError({
+          ...sectionError,
+          agreement: sectionError.agreement ? sectionError.agreement - 1 : 0,
+        });
       }
       setAdditionalOnetimeSerError({
         ...additionalOnetimeSerError,
@@ -504,7 +510,10 @@ export default function AgreementSidePanel({
       });
     }
     if (apiError.non_field_errors && key === 'primary_marketplace') {
-      setSectionError({ ...sectionError, statement: 0 });
+      setSectionError({
+        ...sectionError,
+        statement: sectionError.statement ? sectionError.statement - 1 : 0,
+      });
 
       setApiError({
         ...apiError,
@@ -513,13 +522,19 @@ export default function AgreementSidePanel({
     }
 
     if (type === 'quantity') {
-      setSectionError({ ...sectionError, statement: 0 });
+      setSectionError({
+        ...sectionError,
+        statement: sectionError.statement ? sectionError.statement - 1 : 0,
+      });
       if (
         formData &&
         formData.contract_type &&
         formData.contract_type.toLowerCase().includes('one')
       ) {
-        setSectionError({ ...sectionError, agreement: 0 });
+        setSectionError({
+          ...sectionError,
+          agreement: sectionError.agreement ? sectionError.agreement : 0,
+        });
       }
       clearOneTimeQntyError(val);
     }
@@ -1521,7 +1536,10 @@ export default function AgreementSidePanel({
         Object.keys(apiError).includes('non_field_errors') ||
         Object.keys(apiError).includes(event.target.name)
       ) {
-        setSectionError({ ...sectionError, statement: 0 });
+        setSectionError({
+          ...sectionError,
+          statement: sectionError.statement ? sectionError.statement - 1 : 0,
+        });
 
         setApiError({
           ...apiError,
@@ -1532,7 +1550,10 @@ export default function AgreementSidePanel({
         additionalMarketplaceError &&
         Object.keys(additionalMarketplaceError).includes(event.target.name)
       ) {
-        setSectionError({ ...sectionError, statement: 0 });
+        setSectionError({
+          ...sectionError,
+          statement: sectionError.statement ? sectionError.statement - 1 : 0,
+        });
 
         setAdditionalMarketplaceError({
           ...additionalMarketplaceError,
@@ -1544,7 +1565,10 @@ export default function AgreementSidePanel({
         additionalMonthlySerError &&
         Object.keys(additionalMonthlySerError).includes(event.target.name)
       ) {
-        setSectionError({ ...sectionError, statement: 0 });
+        setSectionError({
+          ...sectionError,
+          statement: sectionError.statement ? sectionError.statement - 1 : 0,
+        });
 
         setAdditionalMonthlySerError({
           ...additionalMonthlySerError,
@@ -1556,7 +1580,10 @@ export default function AgreementSidePanel({
         additionalOnetimeSerError &&
         Object.keys(additionalOnetimeSerError).includes(event.target.name)
       ) {
-        setSectionError({ ...sectionError, statement: 0 });
+        setSectionError({
+          ...sectionError,
+          statement: sectionError.statement ? sectionError.statement - 1 : 0,
+        });
 
         setAdditionalOnetimeSerError({
           ...additionalOnetimeSerError,
@@ -1568,10 +1595,16 @@ export default function AgreementSidePanel({
         Object.keys(contractError).includes(event.target.name)
       ) {
         if (event.target.name === 'zip_code') {
-          setSectionError({ ...sectionError, agreement: 0 });
+          setSectionError({
+            ...sectionError,
+            agreement: sectionError.agreement ? sectionError.agreement - 1 : 0,
+          });
         }
         if (event.target.name === 'dsp_fee') {
-          setSectionError({ ...sectionError, dsp: 0 });
+          setSectionError({
+            ...sectionError,
+            dsp: sectionError.dsp ? sectionError.dsp - 1 : 0,
+          });
         }
 
         setContractError({
@@ -1980,8 +2013,10 @@ export default function AgreementSidePanel({
               quantity = parseInt(item.quantity, 10);
             }
             if (flag === 'add') {
-              quantity += 1;
-              item.quantity = quantity;
+              if (quantity < 999) {
+                quantity += 1;
+                item.quantity = quantity;
+              }
             }
             if (flag === 'minus') {
               if (quantity > 1) {
@@ -2180,6 +2215,29 @@ export default function AgreementSidePanel({
     // if (section === 'onetime') {
     // }
   };
+  const checkDisableCondition = () => {
+    return formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find((item) =>
+        item.name
+          ? item.name.includes('Amazon Store Package')
+          : item.service && item.service.name.includes('Amazon Store Package'),
+      )
+      ? parseInt(
+          formData &&
+            formData.additional_one_time_services &&
+            formData.additional_one_time_services.length &&
+            formData.additional_one_time_services.find((item) =>
+              item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service &&
+                  item.service.name.includes('Amazon Store Package'),
+            ).quantity,
+          10,
+        ) === 999
+      : false;
+  };
   const displayOneTimeServices = () => {
     return (
       <li>
@@ -2293,11 +2351,39 @@ export default function AgreementSidePanel({
                               oneTimeServiceData,
                             )
                           }
+                          isAllowed={(values) => {
+                            const { formattedValue, floatValue } = values;
+                            if (floatValue == null) {
+                              return formattedValue === '';
+                            }
+                            return floatValue <= 999;
+                          }}
                         />
 
                         <button
                           type="button"
                           className="increment"
+                          disabled={
+                            formData.additional_one_time_services.find((item) =>
+                              item.service_id
+                                ? item.service_id === oneTimeServiceData.value
+                                : item.service &&
+                                  item.service.id === oneTimeServiceData.value,
+                            ).quantity
+                              ? parseInt(
+                                  formData.additional_one_time_services.find(
+                                    (item) =>
+                                      item.service_id
+                                        ? item.service_id ===
+                                          oneTimeServiceData.value
+                                        : item.service &&
+                                          item.service.id ===
+                                            oneTimeServiceData.value,
+                                  ).quantity,
+                                  10,
+                                ) === 999
+                              : false
+                          }
                           onClick={() => {
                             changeQuantity(oneTimeServiceData, 'add');
                             // handleChange(
@@ -2435,11 +2521,19 @@ export default function AgreementSidePanel({
                         amazonService,
                       )
                     }
+                    isAllowed={(values) => {
+                      const { formattedValue, floatValue } = values;
+                      if (floatValue == null) {
+                        return formattedValue === '';
+                      }
+                      return floatValue <= 999;
+                    }}
                   />
 
                   <button
                     type="button"
                     className="increment"
+                    disabled={checkDisableCondition()}
                     onClick={() => {
                       handleAmazonServiceQuantity('add');
                       // handleChange(
@@ -2566,6 +2660,8 @@ export default function AgreementSidePanel({
 
   const changeListOptimization = (key, flag) => {
     showFooter(true);
+    setSectionError({ ...sectionError, statement: 0 });
+
     let updatedData = 0;
     if (
       Object.keys(contractError).includes('content_optimization') ||
@@ -2585,7 +2681,9 @@ export default function AgreementSidePanel({
     }
     if (flag === 'plus') {
       if (formData && formData[key]) {
-        updatedData = parseInt(formData[key], 10) + 1;
+        if (parseInt(formData[key], 10) < 20) {
+          updatedData = parseInt(formData[key], 10) + 1;
+        }
       } else {
         updatedData = 1;
       }
@@ -2701,11 +2799,23 @@ export default function AgreementSidePanel({
                     onChange={(event) =>
                       handleChange(event, 'listing_optimization')
                     }
+                    isAllowed={(values) => {
+                      const { formattedValue, floatValue } = values;
+                      if (floatValue == null) {
+                        return formattedValue === '';
+                      }
+                      return floatValue <= 20;
+                    }}
                   />
 
                   <button
                     type="button"
                     className="increment"
+                    disabled={
+                      formData &&
+                      formData[field.key] &&
+                      parseInt(formData[field.key], 10) === 20
+                    }
                     onClick={() => changeListOptimization(field.key, 'plus')}>
                     <img className="plus-icon" src={PlusIcon} alt="" />
                   </button>

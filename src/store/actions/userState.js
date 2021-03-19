@@ -77,6 +77,7 @@ export const userMeSuccess = (data) => {
 
 export const clearToken = () => {
   localStorage.removeItem('token');
+  localStorage.removeItem('agreementID');
   window.location.href = PATH_LOGIN;
 };
 

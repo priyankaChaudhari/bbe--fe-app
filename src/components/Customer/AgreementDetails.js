@@ -112,7 +112,10 @@ export default function AgreementDetails({ agreements, id }) {
             </div>
 
             <div className="clear-fix" />
-            <div className="col-lg-3 col-md-4 col-12 text-right">
+            <div
+              className="col-lg-3 col-md-4 col-12 text-right"
+              role="presentation"
+              onClick={() => localStorage.setItem('agreementID', agreement.id)}>
               <Link
                 to={{
                   pathname: PATH_AGREEMENT.replace(':id', id),
