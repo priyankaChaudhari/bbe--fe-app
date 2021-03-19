@@ -2353,13 +2353,14 @@ export default function AgreementSidePanel({
                       );
                     }}
                     defaultChecked={
-                      agreementData &&
-                      agreementData.additional_one_time_services &&
-                      agreementData.additional_one_time_services.length &&
-                      agreementData.additional_one_time_services.find(
-                        (item) =>
-                          item.service &&
-                          item.service.name.includes('Amazon Store Package'),
+                      formData &&
+                      formData.additional_one_time_services &&
+                      formData.additional_one_time_services.length &&
+                      formData.additional_one_time_services.find((item) =>
+                        item.name
+                          ? item.name.includes('Amazon Store Package')
+                          : item.service &&
+                            item.service.name.includes('Amazon Store Package'),
                       )
                     }
                   />
