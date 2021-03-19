@@ -132,6 +132,8 @@ import CheckFileIcon from './icons/check-file.png';
 import EditFileIcon from './icons/edit-file.png';
 import SignatureIcon from './icons/signature.png';
 import CountDayClock from './icons/count-days-clock.svg';
+import SpeedometerActive from './icons/speedometer-icon.png';
+import Speedometer from './icons/speedometer-icon-disactive.png';
 
 export {
   BannerBg,
@@ -268,4 +270,6 @@ export {
   EditFileIcon,
   SignatureIcon,
   CountDayClock,
+  SpeedometerActive,
+  Speedometer,
 };

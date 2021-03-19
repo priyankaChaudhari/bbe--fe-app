@@ -413,17 +413,7 @@ export const WhiteCard = styled.div`
   
 
 
-  // .black-heading-title {
-  //   font-size: $text-f-size;
-  //   color: $black-color;
-  //   font-family: $base-font-family;
-  //   line-height: 20px;
-  //   font-weight: 600;
-  // }
-
-  // .company-description {
-  //   line-height: 26px;
-  // }
+  
  &.fix-height {
     flex-wrap: wrap;
     flex: initial;
@@ -439,13 +429,10 @@ export const WhiteCard = styled.div`
     overflow:auto;
   }
 
-  
-
   &.left-border {
     padding: 25px 25px 25px 0;
   }
   
-
   .copy-info {
     position: relative;
     .copy-text {
@@ -607,6 +594,24 @@ export const WhiteCard = styled.div`
       width: 16px;
       margin-right: 4px;
       vertical-align: text-top;
+    }
+  }
+  .increase-rate {
+    color: ${Theme.lighterGreen};
+    font-size: ${Theme.extraNormal};
+    font-weight: 300;
+    img {
+      vertical-align: bottom;
+    }
+  }
+  .decrease-rate {
+    color: ${Theme.darkRed};
+    font-size: ${Theme.extraNormal};
+    font-weight: 300;
+    .red-arrow {
+      width: 14px;
+      transform: rotate(180deg);
+      vertical-align: middle;
     }
   }
 

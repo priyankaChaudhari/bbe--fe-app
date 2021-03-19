@@ -33,4 +33,7 @@ export const PATH_BILLING_DETAILS = `${PATH_ACCOUNT_SETUP}billing-details`;
 export const PATH_ARTICLE_LIST = '/collections/';
 export const PATH_ARTICLE_DETAILS = `${PATH_ARTICLE_LIST}:id/`;
 
+// Brand Partner
+export const PATH_DASHBOARD = '/dashboard/';
+
 export const PATH_WARNING = '/warning/';
