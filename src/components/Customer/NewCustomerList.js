@@ -405,6 +405,19 @@ export default function NewCustomerList() {
   };
 
   const generateContractHTML = (type) => {
+    if (countDays(type.end_date) <= 90) {
+      return (
+        <li>
+          <div className="recurring-service count-days">
+            {type.contract_type} Service Agreement
+            <span className="count-clock-icon active-contract-icon">
+              <img className="clock-icon" src={CountDayClock} alt="clock" />
+              {countDays(type.end_date)}d
+            </span>
+          </div>
+        </li>
+      );
+    }
     if (type && type.contract_status === 'pending contract') {
       return (
         <li>
@@ -436,19 +449,6 @@ export default function NewCustomerList() {
             {type.contract_type} Service Agreement
             <span className="edit-file-icon  active-contract-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
-            </span>
-          </div>
-        </li>
-      );
-    }
-    if (countDays(type.end_date) <= 90) {
-      return (
-        <li>
-          <div className="recurring-service count-days">
-            {type.contract_type} Service Agreement
-            <span className="count-clock-icon active-contract-icon">
-              <img className="clock-icon" src={CountDayClock} alt="clock" />
-              {countDays(type.end_date)}d
             </span>
           </div>
         </li>
