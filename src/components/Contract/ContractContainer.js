@@ -25,7 +25,7 @@ import Discount from './Discount';
 import {
   PageLoader,
   // PageNotFound,
-  SuccessMsg,
+  // SuccessMsg,
   Button,
   ModalBox,
 } from '../../common';
@@ -139,10 +139,10 @@ export default function ContractContainer() {
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
-  const [showSuccessContact, setShowSuccessContact] = useState({
-    show: false,
-    message: '',
-  });
+  // const [showSuccessContact, setShowSuccessContact] = useState({
+  //   show: false,
+  //   message: '',
+  // });
 
   const [showSection, setShowCollpase] = useState({
     addendum: true,
@@ -182,9 +182,9 @@ export default function ContractContainer() {
     window.scrollTo({ top: y });
   };
 
-  const clearSuccessMessage = () => {
-    setShowSuccessContact({ show: false, message: '' });
-  };
+  // const clearSuccessMessage = () => {
+  //   setShowSuccessContact({ show: false, message: '' });
+  // };
 
   if (contractID === '' && contractID !== undefined) {
     setContractID(location.state);
@@ -303,7 +303,7 @@ export default function ContractContainer() {
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [details, setShowSuccessContact]);
+  }, [details]);
 
   const showTabInResponsive = (section) => {
     if (section === 'edit-fields') {
@@ -1809,9 +1809,11 @@ export default function ContractContainer() {
       queryString.stringify({
         step: param,
       });
+
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
+      // state: `${location.state}`
     });
   };
 
@@ -2292,13 +2294,13 @@ export default function ContractContainer() {
           {/* )} */}
         </ul>
       </ContractTab>
-      <div className="success-msg-pop-up contract">
+      {/* <div className="success-msg-pop-up contract">
         {showSuccessContact.show ? (
           <SuccessMsg property=" " message={showSuccessContact.message} />
         ) : (
           ''
         )}
-      </div>
+      </div> */}
       {/* <div className="success-msg-pop-up contract">
         {showErrorMsg.show ? (
           <SuccessMsg property=" " message={showErrorMsg.message} />
@@ -2369,8 +2371,8 @@ export default function ContractContainer() {
             agreementData={details}
             setShowModal={setShowModal}
             pdfData={pdfData}
-            setShowSuccessContact={setShowSuccessContact}
-            clearSuccessMessage={clearSuccessMessage}
+            // setShowSuccessContact={setShowSuccessContact}
+            // clearSuccessMessage={clearSuccessMessage}
             setOpenCollapse={setOpenCollapse}
           />
         </ModalBox>

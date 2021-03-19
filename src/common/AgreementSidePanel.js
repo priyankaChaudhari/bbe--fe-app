@@ -491,6 +491,13 @@ export default function AgreementSidePanel({
       key === 'amazon_store_package'
     ) {
       setSectionError({ ...sectionError, statement: 0 });
+      if (
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        setSectionError({ ...sectionError, agreement: 0 });
+      }
       setAdditionalOnetimeSerError({
         ...additionalOnetimeSerError,
         custom_amazon_store_price: '',
@@ -506,6 +513,14 @@ export default function AgreementSidePanel({
     }
 
     if (type === 'quantity') {
+      setSectionError({ ...sectionError, statement: 0 });
+      if (
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        setSectionError({ ...sectionError, agreement: 0 });
+      }
       clearOneTimeQntyError(val);
     }
     if (type === 'date') {
@@ -1569,12 +1584,8 @@ export default function AgreementSidePanel({
 
   const mapSelectValues = (item) => {
     const multi = [];
-    if (
-      agreementData &&
-      agreementData[item.key] &&
-      agreementData[item.key].length
-    ) {
-      for (const month of agreementData[item.key]) {
+    if (formData && formData[item.key] && formData[item.key].length) {
+      for (const month of formData[item.key]) {
         multi.push({
           label:
             item.key === 'additional_marketplaces'
@@ -1588,7 +1599,7 @@ export default function AgreementSidePanel({
       }
       return multi;
     }
-    return agreementData && agreementData[item.key];
+    return formData && formData[item.key];
   };
 
   const getOptions = (key, type) => {
@@ -1730,14 +1741,13 @@ export default function AgreementSidePanel({
         placeholder={item.placeholder ? item.placeholder : 'Select'}
         defaultValue={
           item.key === 'primary_marketplace'
-            ? agreementData.primary_marketplace &&
-              agreementData.primary_marketplace.name
+            ? formData.primary_marketplace && formData.primary_marketplace.name
               ? {
-                  value: agreementData.primary_marketplace.name,
-                  label: agreementData.primary_marketplace.name,
+                  value: formData.primary_marketplace.name,
+                  label: formData.primary_marketplace.name,
                 }
               : ''
-            : agreementData[item.key]
+            : formData[item.key]
         }
         options={getOptions(item.key, 'single')}
         name={item.key}
@@ -1758,7 +1768,7 @@ export default function AgreementSidePanel({
           }
           format={item.key === 'zip_code' ? '##########' : null}
           name={item.key}
-          defaultValue={agreementData[item.key]}
+          defaultValue={formData[item.key]}
           placeholder={item.placeholder ? item.placeholder : item.label}
           prefix={item.type === 'number-currency' ? '$' : ''}
           suffix={item.type === 'number-percent' ? '%' : ''}
@@ -1777,10 +1787,8 @@ export default function AgreementSidePanel({
           value={
             startDate ||
             ('' ||
-            (item.key &&
-              agreementData[item.key] &&
-              agreementData[item.key] !== null)
-              ? new Date(agreementData[item.key])
+            (item.key && formData[item.key] && formData[item.key] !== null)
+              ? new Date(formData[item.key])
               : '')
           }
           onChange={(date) => handleChange(date, 'start_date', 'date')}
@@ -1813,7 +1821,7 @@ export default function AgreementSidePanel({
         placeholder={item.placeholder ? item.placeholder : item.label}
         onChange={(event) => handleChange(event, item.key)}
         name={item.key}
-        defaultValue={agreementData[item.key]}
+        defaultValue={formData[item.key]}
       />
     );
     // }
@@ -1942,6 +1950,14 @@ export default function AgreementSidePanel({
   };
   const changeQuantity = (oneTimeServiceData, flag) => {
     showFooter(true);
+    setSectionError({ ...sectionError, statement: 0 });
+    if (
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('one')
+    ) {
+      setSectionError({ ...sectionError, agreement: 0 });
+    }
 
     clearOneTimeQntyError(oneTimeServiceData);
     if (
