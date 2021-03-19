@@ -195,7 +195,8 @@ export default function Agreement({ formData, details, templateData }) {
         );
       });
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    // return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   const mapServiceTotal = (key) => {

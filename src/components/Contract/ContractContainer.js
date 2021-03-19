@@ -1047,7 +1047,8 @@ export default function ContractContainer() {
       }
       // return null;
 
-      return fields.length ? fields.toString().replaceAll(',', '') : '';
+      // return fields.length ? fields.toString().replaceAll(',', '') : '';
+      return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
     }
     return '';
     // return `Enter ${label}.`;
@@ -1079,7 +1080,8 @@ export default function ContractContainer() {
       }
     }
 
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    // return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   const mapVariableMonthlyService = () => {

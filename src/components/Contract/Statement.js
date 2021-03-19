@@ -182,7 +182,8 @@ export default function Statement({
         );
       }
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    // return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   // <tr>
@@ -512,7 +513,8 @@ export default function Statement({
         );
       });
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    // return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   const showMonthlyServiceTable = () => {
