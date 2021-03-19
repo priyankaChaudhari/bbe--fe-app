@@ -3905,7 +3905,7 @@ const SidePanel = styled.div`
    .error-bg {
       height: 64px;
       background: #FBF2F2;
-      right: 0;
+      right: 7px;
       border-right: 2px solid #D63649;
       z-index: -2;
       top: 0px;
