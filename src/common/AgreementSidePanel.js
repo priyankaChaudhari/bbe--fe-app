@@ -2868,7 +2868,8 @@ export default function AgreementSidePanel({
 
                 <h4
                   className={
-                    sectionError && sectionError.agreement
+                    (sectionError && sectionError.agreement) ||
+                    sectionError.statement
                       ? 'sendar-details error-container'
                       : 'sendar-details'
                   }>
