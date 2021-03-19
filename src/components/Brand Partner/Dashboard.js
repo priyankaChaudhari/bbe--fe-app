@@ -52,9 +52,9 @@ export default function Dashboard() {
 
                 <div className="company-name">TRX Training</div>
                 <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
-                  <div className="col-12">
+                  <div className="col-12 pt-1 pb-1">
                     <img className="solid-icon " src={RecurringIcon} alt="" />
                     <p className="black-heading-title mt-0 mb-0">Recurring</p>
 
@@ -69,7 +69,7 @@ export default function Dashboard() {
                     </ul>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
                   <div className="col-6">
                     <div className="card-label">Revenue</div>
@@ -83,11 +83,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">$22,147.52</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Units Sold</div>
                     <div className="increase-rate">
@@ -100,11 +100,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">268</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
 
                   <div className="col-6">
                     <div className="card-label">Traffic</div>
@@ -118,12 +118,12 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">22,496</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
 
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Conversion</div>
                     <div className="decrease-rate">
@@ -135,7 +135,7 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
+                  <div className="col-6 text-right">
                     <div className="sold-price">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
@@ -150,9 +150,9 @@ export default function Dashboard() {
 
                 <div className="company-name">TRX Training</div>
                 <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
-                  <div className="col-12">
+                  <div className="col-12 pt-1 pb-1">
                     <img className="solid-icon " src={RecurringIcon} alt="" />
                     <p className="black-heading-title mt-0 mb-0">Recurring</p>
 
@@ -167,7 +167,7 @@ export default function Dashboard() {
                     </ul>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing" />
                 <div className="row">
                   <div className="col-6">
                     <div className="card-label">Revenue</div>
@@ -181,11 +181,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">$22,147.52</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Units Sold</div>
                     <div className="increase-rate">
@@ -198,11 +198,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">268</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
 
                   <div className="col-6">
                     <div className="card-label">Traffic</div>
@@ -216,12 +216,12 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">22,496</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
 
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Conversion</div>
                     <div className="decrease-rate">
@@ -233,7 +233,7 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
+                  <div className="col-6 text-right">
                     <div className="sold-price">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
@@ -248,9 +248,9 @@ export default function Dashboard() {
 
                 <div className="company-name">TRX Training</div>
                 <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
-                  <div className="col-12">
+                  <div className="col-12 pt-1 pb-1">
                     <img className="solid-icon " src={RecurringIcon} alt="" />
                     <p className="black-heading-title mt-0 mb-0">Recurring</p>
 
@@ -265,7 +265,7 @@ export default function Dashboard() {
                     </ul>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing" />
                 <div className="row">
                   <div className="col-6">
                     <div className="card-label">Revenue</div>
@@ -279,11 +279,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">$22,147.52</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Units Sold</div>
                     <div className="increase-rate">
@@ -296,11 +296,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">268</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
 
                   <div className="col-6">
                     <div className="card-label">Traffic</div>
@@ -314,12 +314,12 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">22,496</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
 
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Conversion</div>
                     <div className="decrease-rate">
@@ -331,7 +331,7 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
+                  <div className="col-6 text-right">
                     <div className="sold-price">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
@@ -346,9 +346,9 @@ export default function Dashboard() {
 
                 <div className="company-name">TRX Training</div>
                 <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
-                  <div className="col-12">
+                  <div className="col-12 pt-1 pb-1">
                     <img className="solid-icon " src={RecurringIcon} alt="" />
                     <p className="black-heading-title mt-0 mb-0">Recurring</p>
 
@@ -363,7 +363,7 @@ export default function Dashboard() {
                     </ul>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing" />
                 <div className="row">
                   <div className="col-6">
                     <div className="card-label">Revenue</div>
@@ -377,11 +377,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">$22,147.52</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Units Sold</div>
                     <div className="increase-rate">
@@ -394,11 +394,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">268</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
 
                   <div className="col-6">
                     <div className="card-label">Traffic</div>
@@ -412,12 +412,12 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">22,496</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
 
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Conversion</div>
                     <div className="decrease-rate">
@@ -429,7 +429,7 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
+                  <div className="col-6 text-right">
                     <div className="sold-price">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
@@ -444,9 +444,9 @@ export default function Dashboard() {
 
                 <div className="company-name">TRX Training</div>
                 <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing " />
                 <div className="row">
-                  <div className="col-12">
+                  <div className="col-12 pt-1 pb-1">
                     <img className="solid-icon " src={RecurringIcon} alt="" />
                     <p className="black-heading-title mt-0 mb-0">Recurring</p>
 
@@ -461,7 +461,7 @@ export default function Dashboard() {
                     </ul>
                   </div>
                 </div>
-                <div className="straight-line horizontal-line pt-3 mb-3" />
+                <div className="straight-line horizontal-line spacing" />
                 <div className="row">
                   <div className="col-6">
                     <div className="card-label">Revenue</div>
@@ -475,11 +475,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">$22,147.52</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Units Sold</div>
                     <div className="increase-rate">
@@ -492,11 +492,11 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">268</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
                     <div className="vs">vs 247</div>
                   </div>
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
 
                   <div className="col-6">
                     <div className="card-label">Traffic</div>
@@ -510,12 +510,12 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
-                  <div className="col-6">
-                    <div className="sold-price">22,496</div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
 
-                  <div className="straight-line horizontal-line pt-2 mb-3" />
+                  <div className="straight-line horizontal-line spacing" />
                   <div className="col-6">
                     <div className="card-label">Conversion</div>
                     <div className="decrease-rate">
@@ -527,7 +527,105 @@ export default function Dashboard() {
                       4.75%
                     </div>
                   </div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price">22,496</div>
+                    <div className="vs">vs 22,368</div>
+                  </div>
+                </div>
+              </WhiteCard>
+            </div>
+            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
+              <WhiteCard>
+                <div className="company-logo">
+                  <img className="company-logo" src={Logo} alt="logo" />
+                </div>
+
+                <div className="company-name">TRX Training</div>
+                <div className="status">Health_Wellness_And_Fitness</div>
+                <div className="straight-line horizontal-line spacing " />
+                <div className="row">
+                  <div className="col-12 pt-1 pb-1">
+                    <img className="solid-icon " src={RecurringIcon} alt="" />
+                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
+
+                    <ul className="recurring-contact ">
+                      <li>
+                        <p className="basic-text ">12 months</p>
+                      </li>
+
+                      <li>
+                        <p className="basic-text ">Started Mar 21, 2020</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="straight-line horizontal-line spacing" />
+                <div className="row">
                   <div className="col-6">
+                    <div className="card-label">Revenue</div>
+                    <div className="increase-rate">
+                      <img
+                        className="red-arrow"
+                        src={ArrowUpIcon}
+                        width="14px"
+                        alt="arrow-up"
+                      />
+                      4.75%
+                    </div>
+                  </div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">$22,147.52</div>
+                    <div className="vs">vs 247</div>
+                  </div>
+                  <div className="straight-line horizontal-line spacing" />
+                  <div className="col-6">
+                    <div className="card-label">Units Sold</div>
+                    <div className="increase-rate">
+                      <img
+                        className="red-arrow"
+                        src={ArrowUpIcon}
+                        width="14px"
+                        alt="arrow-up"
+                      />
+                      4.75%
+                    </div>
+                  </div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">268</div>
+                    <div className="vs">vs 247</div>
+                  </div>
+                  <div className="straight-line horizontal-line spacing" />
+
+                  <div className="col-6">
+                    <div className="card-label">Traffic</div>
+                    <div className="increase-rate">
+                      <img
+                        className="red-arrow"
+                        src={ArrowUpIcon}
+                        width="14px"
+                        alt="arrow-up"
+                      />
+                      4.75%
+                    </div>
+                  </div>
+                  <div className="col-6 text-right">
+                    <div className="sold-price ">22,496</div>
+                    <div className="vs">vs 22,368</div>
+                  </div>
+
+                  <div className="straight-line horizontal-line spacing" />
+                  <div className="col-6">
+                    <div className="card-label">Conversion</div>
+                    <div className="decrease-rate">
+                      <img
+                        className="red-arrow"
+                        src={ArrowDownIcon}
+                        alt="arrow-up"
+                      />
+                      4.75%
+                    </div>
+                  </div>
+                  <div className="col-6 text-right">
                     <div className="sold-price">22,496</div>
                     <div className="vs">vs 22,368</div>
                   </div>
@@ -638,6 +736,9 @@ const DashboardCard = styled.div`
     .vs {
       color: #556178;
       font-size: 15px;
+    }
+    .spacing {
+      margin: 9px 0 9px 0;
     }
   }
   @media only screen and (max-width: 991px) {
