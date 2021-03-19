@@ -635,7 +635,7 @@ export default function NewCustomerList() {
                                     handleFilters(event, item, 'radio')
                                   }
                                 />
-                                <span className="checkmark" />
+                                <span className="checkmark checkmark-customer-list" />
                               </label>
                             </ModalRadioCheck>
                           </li>
@@ -807,7 +807,7 @@ export default function NewCustomerList() {
                     value={item.value}
                     onChange={(event) => handleFilters(event, item, 'radio')}
                   />
-                  <span className="checkmark" />
+                  <span className="checkmark checkmark-customer-list" />
                 </label>
               </ModalRadioCheck>
             </li>

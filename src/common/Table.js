@@ -69,6 +69,10 @@ const Table = styled.table`
         font-weight: 300;
         margin-top: 7px;
       }
+      .user-email {
+        font-size: 15px;
+        font-weight: 300;
+      }
       .increase-rate {
         color: ${Theme.lighterGreen};
         font-size: ${Theme.extraNormal};
@@ -188,6 +192,21 @@ const Table = styled.table`
                 }
               }
             }
+          }
+        }
+      }
+      .brand-partner {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        li {
+          display: inline-block;
+          margin-right: 3px;
+
+          .brand-logo {
+            width: 33px;
+            height: 33px;
+            border-radius: 50%;
           }
         }
       }

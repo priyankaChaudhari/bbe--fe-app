@@ -1,3 +1,4 @@
 import Dashboard from './Dashboard';
+import TeamMember from './TeamMember';
 
-export default Dashboard;
+export { Dashboard, TeamMember };

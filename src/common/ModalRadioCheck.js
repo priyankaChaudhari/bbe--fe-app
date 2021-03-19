@@ -38,6 +38,10 @@ const ModalRadioCheck = styled.div`
      color:${Theme.gray85};
      font-size: 14px;
     }
+   .checkmark-customer-list {
+     top: 0px;  
+   }
+    
   }
 
   .delete-contact {
@@ -73,7 +77,7 @@ const ModalRadioCheck = styled.div`
 
   .checkmark {
     position: absolute;
-    top: 0px;
+    top: 3px;
     left: 0;
     height: 16px;
     width: 16px;
