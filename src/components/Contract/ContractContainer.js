@@ -285,13 +285,11 @@ export default function ContractContainer() {
     ) {
       setAdditionalOnetimeServices({
         create: [...details.additional_one_time_services],
-        update: [...details.additional_one_time_services],
         delete: [],
       });
     } else {
       setAdditionalOnetimeServices({
         create: [],
-        update: [],
         delete: [],
       });
     }
