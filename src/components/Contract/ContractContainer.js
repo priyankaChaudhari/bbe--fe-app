@@ -1193,7 +1193,7 @@ export default function ContractContainer() {
     }
          <tr>
             <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> ${
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_after_discount

@@ -257,7 +257,7 @@ export default function Statement({
 
          <tr>
             <td class="total-service" style="padding-top: 5px"> Total</td>
-            <td class="total-service text-right" style="padding-top: 5px;"> ${
+            <td class="total-service text-right" style="padding-top: 5px;"> $${
               details &&
               details.total_fee &&
               details.total_fee.monthly_service_after_discount
