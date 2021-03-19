@@ -3422,7 +3422,7 @@ export default function AgreementSidePanel({
                       ) : (
                         ''
                       )}
-                      <div>
+                      <div className="error-found">
                         {sectionError && sectionError.dsp
                           ? `${sectionError.dsp} ${
                               sectionError.dsp === 1
