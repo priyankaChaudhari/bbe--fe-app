@@ -215,19 +215,6 @@ export default function Statement({
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
-  const mapMonthlyServiceDisocuntTotal = () => {
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service_after_discount
-      ? details.total_fee.monthly_service_after_discount
-      : 0;
-
-    return `$${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  };
-
   const mapMonthlyServiceTotal = () => {
     return `
     ${
@@ -270,7 +257,15 @@ export default function Statement({
 
          <tr>
             <td class="total-service" style="padding-top: 5px"> Total</td>
-            <td class="total-service text-right" style="padding-top: 5px;"> ${mapMonthlyServiceDisocuntTotal()}
+            <td class="total-service text-right" style="padding-top: 5px;"> ${
+              details &&
+              details.total_fee &&
+              details.total_fee.monthly_service_after_discount
+                ? details.total_fee.monthly_service_after_discount
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0
+            }
             </td>
          </tr>
          `;

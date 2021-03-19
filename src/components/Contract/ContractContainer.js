@@ -1124,19 +1124,6 @@ export default function ContractContainer() {
     return '';
   };
 
-  const mapMonthlyServiceDisocuntTotal = () => {
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service_after_discount
-      ? details.total_fee.monthly_service_after_discount
-      : 0;
-
-    return `$${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  };
-
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
@@ -1199,7 +1186,15 @@ export default function ContractContainer() {
     }
          <tr>
             <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> ${mapMonthlyServiceDisocuntTotal()}
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> ${
+              details &&
+              details.total_fee &&
+              details.total_fee.monthly_service_after_discount
+                ? details.total_fee.monthly_service_after_discount
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0
+            }
             </td>
          </tr>
          `;

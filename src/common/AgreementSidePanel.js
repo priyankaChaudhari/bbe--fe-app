@@ -1746,7 +1746,10 @@ export default function AgreementSidePanel({
                   value: formData.primary_marketplace.name,
                   label: formData.primary_marketplace.name,
                 }
-              : ''
+              : {
+                  value: formData.primary_marketplace,
+                  label: formData.primary_marketplace,
+                }
             : formData[item.key]
         }
         options={getOptions(item.key, 'single')}
@@ -2099,7 +2102,13 @@ export default function AgreementSidePanel({
     //   label: '',
     // };
   };
-
+  // console.log(
+  //   apiError,
+  //   contractError,
+  //   additionalOnetimeSerError,
+  //   additionalMonthlySerError,
+  //   additionalMarketplaceError,
+  // );
   const displayError = (item) => {
     if (item === 'non_field_errors') {
       return (
