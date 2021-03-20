@@ -233,9 +233,8 @@ export default function EditAccountDetails({
                         onChange={(event) => handleChange(event, item.key)}
                       />
                     )}
-
-                    <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
                   </label>
+                  <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
                 </FormField>
               </div>
             ))}

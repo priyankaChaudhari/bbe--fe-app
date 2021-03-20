@@ -25,6 +25,7 @@ import ContractFormField from './ContractFormField';
 import ContractInputSelect from './ContractInputSelect';
 import DropDownStatus from './DropDownStatus';
 import WarningComponent from './WarningComponent';
+import ActionDropDown from './ActionDropDown';
 // import EditorContainer from './EditorContainer';
 
 export {
@@ -56,4 +57,5 @@ export {
   ContractInputSelect,
   DropDownStatus,
   WarningComponent,
+  ActionDropDown,
 };

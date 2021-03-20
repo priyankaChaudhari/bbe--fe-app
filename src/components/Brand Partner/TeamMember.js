@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
-import { DropDownSelect, InputSearchWithRadius, Table } from '../../common';
+import {
+  DropDownSelect,
+  InputSearchWithRadius,
+  Table,
+  ActionDropDown,
+} from '../../common';
 // import Theme from '../../theme/Theme';
 
 import {
@@ -125,11 +130,12 @@ export default function TeamMember() {
                     </li>
                   </ul>
                 </td>
-                {/* <td>
-                   <ActionDropDown>
-
-                   </ActionDropDown>
-                </td> */}
+                <td>
+                  <ActionDropDown>
+                    {' '}
+                    <Select classNamePrefix="react-select" className="active" />
+                  </ActionDropDown>
+                </td>
               </tr>
             </tbody>
           </Table>
