@@ -114,23 +114,19 @@ const TeamDropDown = styled.div`
   .css-jddzik-control {
     max-width: 100%;
 
-    // .css-b8ldur-Input {
-    //   border-bottom: 2px solid red !important;
-    //   width: 100%;
-    //   text-align: left;
-    // }
+    .filter-cross {
+      position: absolute;
+      top: 14px;
+      right: 42px;
+      width: 12px;
+    }
   }
-
-  // .css-1laao21-a11yText {
-  //   border-bottom: 2px solid red !important;
-  // }
-
-  .filter-cross {
-    position: absolute;
-    top: 14px;
-    right: 42px;
-    width: 12px;
-}
+  .css-26l3qy-menu {
+    z-index: 99999 !important;
+    right: 20%;
+    width: 320px;
+    border: 1px solid rgba(46, 91, 255, 0.08);
+    box-shadow: ${Theme.commonShadow};
   }
 `;
 

@@ -226,14 +226,6 @@ const DropDownSelect = styled.div`
       display: none;
     }
   }
-  // .css-1081v0-control {
-  //   border: none;
-  //   outline: none;
-  //   box-shadow: none;
-  //   &:hover {
-  //     border: none;
-  //   }
-  // }
 `;
 
 export default DropDownSelect;

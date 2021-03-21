@@ -2,10 +2,16 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const ActionDropDown = styled.div`
+  &.w-150 {
+    width: 150px;
+  }
   .css-2b097c-container {
     width: 100%;
     color: ${Theme.gray85} !important;
     font-size: ${Theme.normal};
+    font-weight: 300;
+
+    font-family: ${Theme.baseFontFamily};
 
     .css-yk16xz-control {
       background-color: #f4f6fc;
@@ -13,21 +19,25 @@ const ActionDropDown = styled.div`
       border-radius: 2px;
       color: ${Theme.gray85};
       font-size: ${Theme.normal};
+      font-weight: 300px;
       padding: 1px 5px 1px 5px;
       min-height: 40px;
 
       .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
         color: ${Theme.gray85} !important;
+        font-weight: 300px;
 
         .cross-icon {
           display: none;
         }
         .css-1wa3eu0-placeholder {
           color: ${Theme.gray85} !important;
+          font-weight: 300px;
         }
         .react-select__placeholder {
           color: ${Theme.gray85} !important;
+          font-weight: 300px !important;
         }
       }
       .css-1wa3eu0-placeholder {
@@ -55,6 +65,7 @@ const ActionDropDown = styled.div`
       box-shadow: none;
       outline: none;
       min-height: 40px;
+      font-weight: 300px;
 
       .css-b8ldur-Input {
         color: ${Theme.white};

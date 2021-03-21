@@ -6,8 +6,9 @@ import {
   InputSearchWithRadius,
   Table,
   ActionDropDown,
+  CommonPagination,
 } from '../../common';
-// import Theme from '../../theme/Theme';
+import Theme from '../../theme/Theme';
 
 import {
   InfoIcon,
@@ -130,15 +131,421 @@ export default function TeamMember() {
                     </li>
                   </ul>
                 </td>
-                <td>
-                  <ActionDropDown>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
                     {' '}
-                    <Select classNamePrefix="react-select" className="active" />
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
+                  </ActionDropDown>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {' '}
+                  <img
+                    className="company-logo"
+                    src={CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="company-name">Wilhelm Dowall </div>
+                  <div
+                    className="status"
+                    style={{ textTransform: 'capitalize' }}>
+                    Brand Growth Strategist
+                  </div>
+                </td>
+                <td>
+                  {' '}
+                  <div className="user-email">
+                    wdowall@buyboxexperts.com
+                  </div>{' '}
+                </td>
+                <td>
+                  <ul className="brand-partner">
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                    <li>
+                      <img
+                        className="brand-logo"
+                        src={CompanyDefaultUser}
+                        alt="brand"
+                      />
+                    </li>
+                    <li>
+                      <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    </li>
+                  </ul>
+                </td>
+                <td className="text-right">
+                  <ActionDropDown className="w-150">
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="Actions"
+                      className="active"
+                    />
                   </ActionDropDown>
                 </td>
               </tr>
             </tbody>
           </Table>
+        </div>
+        <div className="footer-sticky">
+          <div className="straight-line horizontal-line" />
+          <div className="container-fluid">
+            <CommonPagination />
+          </div>
         </div>
       </div>
     </BrandPartnerTeamMember>
@@ -166,5 +573,27 @@ const BrandPartnerTeamMember = styled.div`
         margin-right: 0;
       }
     }
+  }
+  .dashboard-header-sticky {
+    position: fixed;
+    left: 64px;
+    right: 0;
+    z-index: 1;
+    background-color: ${Theme.white};
+  }
+  .table-part {
+    padding-top: 65px;
+    overflow: auto;
+    min-height: 892px;
+    height: 100%;
+    padding-bottom: 69px;
+    position: relative;
+  }
+  .footer-sticky {
+    position: fixed;
+    bottom: 0;
+    left: 353px;
+    right: 0;
+    background: white;
   }
 `;
