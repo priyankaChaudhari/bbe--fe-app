@@ -9,7 +9,15 @@ export default function UnauthorizedHeader() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 text-center">
-            <img className="logo" src={NextLogo} alt="logo" />
+            <img
+              role="presentation"
+              onClick={() => {
+                window.location.href = 'http://www.buyboxexperts.com/';
+              }}
+              className="logo"
+              src={NextLogo}
+              alt="logo"
+            />
           </div>
         </div>
       </div>
@@ -28,5 +36,6 @@ const HeaderVoided = styled.div`
   top: 0;
   .logo {
     width: 90px;
+    cursor: pointer;
   }
 `;

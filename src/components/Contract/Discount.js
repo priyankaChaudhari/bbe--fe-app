@@ -364,6 +364,13 @@ function Discount({
                       defaultValue={setDefaultAmount(selectedDiscountType)}
                       thousandSeparator
                       allowNegative={false}
+                      isAllowed={(values) => {
+                        const { formattedValue, floatValue } = values;
+                        if (floatValue == null) {
+                          return formattedValue === '';
+                        }
+                        return floatValue <= 100;
+                      }}
                     />
                     {selectedDiscountType === 'percentage' ||
                     (discountFlag === 'monthly' &&

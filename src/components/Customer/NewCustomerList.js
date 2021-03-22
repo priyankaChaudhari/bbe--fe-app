@@ -9,8 +9,8 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import queryString from 'query-string';
 import $ from 'jquery';
-
 import ReactTooltip from 'react-tooltip';
+
 import Theme from '../../theme/Theme';
 import {
   CheckBox,
@@ -407,7 +407,7 @@ export default function NewCustomerList() {
   const generateContractHTML = (type) => {
     if (countDays(type.end_date) <= 90) {
       return (
-        <li>
+        <li data-tip={type.contract_status}>
           <div className="recurring-service count-days">
             {type.contract_type} Service Agreement
             <span className="count-clock-icon active-contract-icon">
@@ -420,7 +420,9 @@ export default function NewCustomerList() {
     }
     if (type && type.contract_status === 'pending contract') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file">
             {type.contract_type} Service Agreement
             <span className=" active-contract-icon file-icon">
@@ -432,7 +434,9 @@ export default function NewCustomerList() {
     }
     if (type && type.contract_status === 'pending contract approval') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file-check">
             {type.contract_type} Service Agreement
             <span className=" active-contract-icon file-check-icon ">
@@ -444,7 +448,9 @@ export default function NewCustomerList() {
     }
     if (type && type.contract_status === 'pending contract signature') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service edit">
             {type.contract_type} Service Agreement
             <span className="edit-file-icon  active-contract-icon">
@@ -455,7 +461,9 @@ export default function NewCustomerList() {
       );
     }
     return (
-      <li>
+      <li
+        data-tip={type.contract_status}
+        style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
           {type.contract_type} Service Agreement
         </div>
@@ -672,11 +680,7 @@ export default function NewCustomerList() {
                                   <input
                                     type="checkbox"
                                     id={item.label}
-                                    name={
-                                      item.value === 'active'
-                                        ? 'signed'
-                                        : item.value
-                                    }
+                                    name={item.value}
                                     onChange={(event) =>
                                       handleFilters(
                                         event,
@@ -833,7 +837,7 @@ export default function NewCustomerList() {
                   <input
                     type="checkbox"
                     id={item.label}
-                    name={item.value === 'active' ? 'signed' : item.value}
+                    name={item.value}
                     onChange={(event) =>
                       handleFilters(event, item, 'contract_status')
                     }
@@ -941,6 +945,7 @@ export default function NewCustomerList() {
                                   item.contract &&
                                   item.contract.map((type) => (
                                     <React.Fragment key={Math.random()}>
+                                      <ReactTooltip />
                                       {generateContractHTML(type)}
                                     </React.Fragment>
                                   ))}

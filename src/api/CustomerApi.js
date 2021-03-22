@@ -58,20 +58,10 @@ export async function getCustomerList(
     if (expiry.find((op) => op === 'expiring_soon')) {
       params = { ...params, expiring_soon: true };
     }
-    const list = filterOptions.contract_status;
-    if (list.find((op) => op !== 'expiring_soon')) {
-      const index1 = list.indexOf('expiring_soon');
-      if (index1 > -1) {
-        list.splice(index1, 1);
-      }
-      const index = filterOptions.contract_status.indexOf('signed');
-      if (index !== -1) {
-        filterOptions.contract_status[index] = 'active';
-      }
-      contractStatusParams = queryString.stringify({
-        contract_status: filterOptions.contract_status,
-      });
-    }
+
+    contractStatusParams = queryString.stringify({
+      contract_status: filterOptions.contract_status,
+    });
   }
   let bgsParams = {};
   if (filterOptions && filterOptions.user && filterOptions.user.length) {

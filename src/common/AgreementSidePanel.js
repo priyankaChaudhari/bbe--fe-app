@@ -144,6 +144,11 @@ export default function AgreementSidePanel({
   const [isApicalled, setIsApicalled] = useState(false);
 
   const getActivityInitials = (userInfo) => {
+    console.log(userInfo);
+
+    if (userInfo && userInfo === 'Contract initiated') {
+      return 'SU';
+    }
     const firstName =
       (userInfo &&
         userInfo.split(' ').slice(0, 2) &&
@@ -158,59 +163,142 @@ export default function AgreementSidePanel({
     return firstName + lastName;
   };
 
+  // const activityDetail = (item) => {
+  //   const newRecord = item.message.includes(
+  //     'created new record by company name',
+  //   )
+  //     ? item.message.split('created new record by company name')
+  //     : '';
+  //   const updatedField = item.message.includes('updated')
+  //     ? item.message.split('updated')
+  //     : '';
+
+  //   const deleteRecord = item.message.includes('deleted record')
+  //     ? item.message.split('deleted record')
+  //     : '';
+
+  //   const requestRecord = item.message.includes('requested for')
+  //     ? item.message.split('requested for')
+  //     : '';
+
+  //   if (newRecord || deleteRecord) {
+  //     return (
+  //       <>
+  //         {newRecord[0] || deleteRecord[0]}
+  //         <span>
+  //           {newRecord
+  //             ? 'created new record by company name'
+  //             : 'deleted record'}
+  //         </span>
+  //         {newRecord[1] || deleteRecord[1]}
+  //       </>
+  //     );
+  //   }
+
+  //   if (requestRecord) {
+  //     return (
+  //       <>
+  //         {requestRecord && requestRecord[0]}
+  //         <span>requested for</span>
+  //         {requestRecord && requestRecord[1]}
+  //       </>
+  //     );
+  //   }
+
+  //   return (
+  //     <>
+  //       {updatedField && updatedField[0]}
+  //       <span>
+  //         updated {updatedField && updatedField[1].split(' from ')[0]} from{' '}
+  //       </span>{' '}
+  //       {updatedField && updatedField[1].split(' from ')[1].split(' to ')[0]}
+  //       <span> to </span>{' '}
+  //       {updatedField && updatedField[1].split(' from ')[1].split(' to ')[1]}
+  //     </>
+  //   );
+  // };
+
   const activityDetail = (item) => {
-    const newRecord = item.message.includes(
-      'created new record by company name',
-    )
-      ? item.message.split('created new record by company name')
-      : '';
-    const updatedField = item.message.includes('updated')
-      ? item.message.split('updated')
-      : '';
-
-    const deleteRecord = item.message.includes('deleted record')
-      ? item.message.split('deleted record')
-      : '';
-
-    const requestRecord = item.message.includes('requested for')
-      ? item.message.split('requested for')
-      : '';
-
-    if (newRecord || deleteRecord) {
+    let activityMessage = '';
+    if (item.message.includes('created new record by company name')) {
+      activityMessage = item.message.split(
+        'created new record by company name',
+      );
       return (
         <>
-          {newRecord[0] || deleteRecord[0]}
+          {activityMessage[0]}
+          <span>created new record by company name</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+    if (item.message.includes('deleted record')) {
+      activityMessage = item.message.split('deleted record');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>deleted record</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+    if (item.message.includes('updated')) {
+      activityMessage = item.message.split('updated');
+      if (
+        item.message.includes('fee') ||
+        item.message.includes('discount amount') ||
+        item.message.includes('monthly retainer') ||
+        item.message.includes('sales threshold')
+      ) {
+        return (
+          <>
+            {activityMessage && activityMessage[0]}
+            <span>
+              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+              from{' '}
+            </span>{' '}
+            {activityMessage &&
+              activityMessage[1]
+                .split(' from ')[1]
+                .split(' to ')[0]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            <span> to </span>{' '}
+            {activityMessage &&
+              activityMessage[1]
+                .split(' from ')[1]
+                .split(' to ')[1]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </>
+        );
+      }
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
           <span>
-            {newRecord
-              ? 'created new record by company name'
-              : 'deleted record'}
-          </span>
-          {newRecord[1] || deleteRecord[1]}
+            updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+            from{' '}
+          </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          <span> to </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[1]}
         </>
       );
     }
-
-    if (requestRecord) {
+    if (item.message.includes('requested for')) {
+      activityMessage = item.message.split('requested for');
       return (
         <>
-          {requestRecord && requestRecord[0]}
+          {activityMessage && activityMessage[0]}
           <span>requested for</span>
-          {requestRecord && requestRecord[1]}
+          {activityMessage && activityMessage[1]}
         </>
       );
     }
-
-    return (
-      <>
-        {updatedField && updatedField[0]}
-        <span>
-          updated {updatedField && updatedField[1].split(' from ')[0]} from{' '}
-        </span>{' '}
-        {updatedField && updatedField[1].split(' from ')[1].split(' to ')[0]}
-        <span> to </span>{' '}
-        {updatedField && updatedField[1].split(' from ')[1].split(' to ')[1]}
-      </>
-    );
+    return item && item.message ? item.message : '';
   };
 
   const getContractActivityLogInfo = useCallback(
@@ -3864,7 +3952,7 @@ const SidePanel = styled.div`
     overflow-y:auto;
     
     .sidebar {
-      width: 335px;
+      /* width: 335px; */
     }
     
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
