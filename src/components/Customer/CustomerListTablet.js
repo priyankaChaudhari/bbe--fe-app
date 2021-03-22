@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
@@ -35,9 +36,26 @@ export default function CustomerListTablet({
   };
 
   const generateContractHTML = (type) => {
+    if (countDays(type.end_date) <= 90) {
+      return (
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
+          <div className="recurring-service count-days">
+            {type.contract_type} Service Agreement
+            <span className=" active-contract-icon count-clock-icon">
+              <img className="clock-icon" src={CountDayClock} alt="clock" />
+              {countDays(type.end_date)}d
+            </span>
+          </div>
+        </li>
+      );
+    }
     if (type && type.contract_status === 'pending contract') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file">
             {type.contract_type} Service Agreement
             <span className=" active-contract-icon file-icon">
@@ -49,7 +67,9 @@ export default function CustomerListTablet({
     }
     if (type && type.contract_status === 'pending contract approval') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file-check">
             {type.contract_type} Service Agreement
             <span className=" active-contract-icon file-check-icon">
@@ -65,7 +85,9 @@ export default function CustomerListTablet({
     }
     if (type && type.contract_status === 'pending contract signature') {
       return (
-        <li>
+        <li
+          data-tip={type.contract_status}
+          style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service edit">
             {type.contract_type} Service Agreement
             <span className=" active-contract-icon edit-file-icon">
@@ -75,21 +97,10 @@ export default function CustomerListTablet({
         </li>
       );
     }
-    if (countDays(type.end_date) <= 90) {
-      return (
-        <li>
-          <div className="recurring-service count-days">
-            {type.contract_type} Service Agreement
-            <span className=" active-contract-icon count-clock-icon">
-              <img className="clock-icon" src={CountDayClock} alt="clock" />
-              {countDays(type.end_date)}d
-            </span>
-          </div>
-        </li>
-      );
-    }
     return (
-      <li>
+      <li
+        data-tip={type.contract_status}
+        style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
           {type.contract_type} Service Agreement
         </div>
@@ -230,6 +241,7 @@ export default function CustomerListTablet({
                           item.contract &&
                           item.contract.map((type) => (
                             <React.Fragment key={Math.random()}>
+                              <ReactTooltip />
                               {generateContractHTML(type)}
                             </React.Fragment>
                           ))}
