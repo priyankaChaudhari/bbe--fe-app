@@ -24,7 +24,7 @@ import {
   LeftArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
-  // HeartMonitorIcon,
+  HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
 } from '../../theme/images/index';
@@ -508,7 +508,7 @@ export default function CustomerMainContainer() {
                 <div className="col-lg-4 col-12">
                   <WhiteCard className="left-border  d-lg-block d-none mb-3">
                     <ul className="left-details-card">
-                      {/* <li
+                      <li
                         onClick={() => setViewComponent('performance')}
                         role="presentation">
                         <div
@@ -522,7 +522,7 @@ export default function CustomerMainContainer() {
                           />
                           Performance
                         </div>
-                      </li> */}
+                      </li>
                       <li
                         onClick={() => setViewComponent('agreement')}
                         role="presentation">

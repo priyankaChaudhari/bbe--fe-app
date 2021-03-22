@@ -844,9 +844,14 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-            <div className="col-lg-4 col-md-6 col-12   mb-2 pl-md-0 pr-lg-2">
+            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
+            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
           </div>
