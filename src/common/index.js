@@ -27,6 +27,7 @@ import DropDownStatus from './DropDownStatus';
 import WarningComponent from './WarningComponent';
 import ActionDropDown from './ActionDropDown';
 // import EditorContainer from './EditorContainer';
+import UnauthorizedHeader from './UnauthorizedHeader';
 
 export {
   Button,
@@ -58,4 +59,5 @@ export {
   DropDownStatus,
   WarningComponent,
   ActionDropDown,
+  UnauthorizedHeader,
 };

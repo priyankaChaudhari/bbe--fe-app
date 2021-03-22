@@ -38,3 +38,5 @@ export const PATH_DASHBOARD = '/dashboard/';
 export const PATH_TEAM_MEMBER = '/team-member/';
 
 export const PATH_WARNING = '/warning/';
+
+export const PATH_UNAUTHORIZED_HEADER = '/unauthorized-header/';
