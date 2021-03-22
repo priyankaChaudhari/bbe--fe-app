@@ -22,6 +22,7 @@ export async function getCustomerList(
   filterOptions,
   searchQuery,
   performance,
+  showExpireSoon,
 ) {
   let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
@@ -59,9 +60,21 @@ export async function getCustomerList(
       params = { ...params, expiring_soon: true };
     }
 
+    const list = filterOptions.contract_status;
+    const index1 = list.indexOf('expiring_soon');
+    if (index1 > -1) {
+      list.splice(index1, 1);
+    }
+    const index = filterOptions.contract_status.indexOf('signed');
+    if (index !== -1) {
+      filterOptions.contract_status[index] = 'active';
+    }
     contractStatusParams = queryString.stringify({
       contract_status: filterOptions.contract_status,
     });
+    if (showExpireSoon) {
+      filterOptions.contract_status.push('expiring_soon');
+    }
   }
   let bgsParams = {};
   if (filterOptions && filterOptions.user && filterOptions.user.length) {
