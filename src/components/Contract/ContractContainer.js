@@ -2471,13 +2471,14 @@ export default function ContractContainer() {
         contentLabel="Edit modal">
         <ModalBox>
           <div className="modal-body">
-            <div className="alert-msg ">
+            <div className="alert-msg edit ">
               Making any edits to this contract will void the version of the
               contract that&apos;s out for signature.
+              <div className="sure-to-proceed">
+                Are you sure you want to proceed?
+              </div>
             </div>
-            <div className="alert-msg ">
-              <span>Are you sure you want to proceed?</span>
-            </div>
+
             <div className="text-center ">
               <Button
                 onClick={() => editAgreementChanges('Yes')}
