@@ -2869,7 +2869,10 @@ export default function AgreementSidePanel({
                 <h4
                   className={
                     (sectionError && sectionError.agreement) ||
-                    sectionError.statement
+                    (sectionError.statement &&
+                      formData &&
+                      formData.contract_type &&
+                      formData.contract_type.toLowerCase().includes('one'))
                       ? 'sendar-details error-container'
                       : 'sendar-details'
                   }>
