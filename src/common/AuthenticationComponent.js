@@ -23,8 +23,8 @@ import {
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
-  // PATH_DASHBOARD,
-  // PATH_TEAM_MEMBER,
+  PATH_DASHBOARD,
+  PATH_TEAM_MEMBER,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -49,7 +49,7 @@ import {
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
-// import { Dashboard, TeamMember } from '../components/Brand Partner';
+import { Dashboard, TeamMember } from '../components/Brand Partner';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -166,8 +166,8 @@ export default function AuthenticationComponent() {
           )}
 
           {/* Brand Partner */}
-          {/* <Route path={PATH_DASHBOARD} component={Dashboard} />
-          <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
+          <Route path={PATH_DASHBOARD} component={Dashboard} />
+          <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
 
           <Route component={PageNotFound} />
         </Switch>

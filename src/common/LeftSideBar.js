@@ -9,10 +9,14 @@ import {
   ReadBookIconActive,
   OrganizationActiveIcon,
   OrganizationIcon,
-  // SpeedometerActive,
-  // Speedometer,
+  SpeedometerActive,
+  Speedometer,
 } from '../theme/images/index';
-import { PATH_ARTICLE_LIST, PATH_CUSTOMER_LIST } from '../constants';
+import {
+  PATH_ARTICLE_LIST,
+  PATH_CUSTOMER_LIST,
+  PATH_DASHBOARD,
+} from '../constants';
 
 export default function LeftSideBar() {
   const history = useHistory();
@@ -21,7 +25,7 @@ export default function LeftSideBar() {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {/* <li>
+          <li role="presentation" onClick={() => history.push(PATH_DASHBOARD)}>
             {' '}
             <img
               width="32px"
@@ -35,7 +39,7 @@ export default function LeftSideBar() {
               src={Speedometer}
               alt=""
             />
-          </li> */}
+          </li>
           <li
             className={
               !(
