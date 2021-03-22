@@ -23,6 +23,7 @@ export default function Dashboard() {
                 Brand Partner Dashboard
               </p>
             </div>
+            <div className="straight-line horizontal-line spacing d-md-none d-sm-block" />
             <div className="col-md-9 col-sm-12 text-md-right text-sm-left  mb-2 ">
               <ul className="partner-select">
                 <li className="partner">
@@ -654,22 +655,57 @@ const BrandPartnerDashboard = styled.div`
   .text-sm-left {
     dispaly: none;
   }
+  .dashboard-header-sticky {
+    position: fixed;
+    left: 64px;
+    right: 0;
+    z-index: 1;
+    background-color: ${Theme.white};
+  }
+  @media only screen and (max-width: 700px) {
+    .partner-select {
+      li {
+        width: 335px;
 
-  @media only screen and (max-width: 576px) {
+        &.partner {
+          width: 335px;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 768px) {
     .text-md-right {
       dispaly: none;
     }
     .text-sm-left {
       text-align: left;
     }
+    .partner-select {
+      list-style-type: none;
+      text-align: left;
+
+      li {
+        width: 335px;
+
+        &.partner {
+          width: 335px;
+        }
+      }
+    }
   }
   @media only screen and (max-width: 991px) {
     padding-left: 0;
+
+    .dashboard-header-sticky {
+      left: 0;
+    }
   }
 `;
 
 const DashboardCard = styled.div`
-  background: #fafafb;
+  background: ${Theme.gray6};
+  padding-top: 70px;
 
   .dashboard-body {
     max-width: 1334px;
@@ -708,25 +744,28 @@ const DashboardCard = styled.div`
       font-size: 14px;
     }
     .card-label {
-      color: #556178;
-      font-size: 11px;
+      color: ${Theme.gray40};
+      font-size: ${Theme.verySmall};
       font-family: ${Theme.titleFontFamil};
       text-transform: uppercase;
       font-weight: 800;
       margin-bottom: 5px;
     }
     .sold-price {
-      color: #333333;
+      color: ${Theme.gray80};
       font-size: 20px;
       font-weight: 500;
     }
     .vs {
-      color: #556178;
-      font-size: 15px;
+      color: ${Theme.gray40};
+      font-size: ${Theme.normal};
     }
     .spacing {
       margin: 9px 0 9px 0;
     }
+  }
+  @media only screen and (max-width: 768px) {
+    padding-top: 155px;
   }
   @media only screen and (max-width: 991px) {
     .dashboard-body {

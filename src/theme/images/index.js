@@ -125,7 +125,7 @@ import OrganizationActiveIcon from './icons/organization-active-icon.png';
 import ExpnadArrowBack from './icons/expand-arrow-back.png';
 import CaretUp from './icons/caretUp.png';
 import WhiteCaretUp from './icons/whiteCaretUp.png';
-import ContractCancel from './cancel-contract.png';
+import ContractCancel from './contract-voided.svg';
 import RedCross from './icons/red-cross.png';
 import FileIcon from './icons/file-icon.png';
 import CheckFileIcon from './icons/check-file.png';

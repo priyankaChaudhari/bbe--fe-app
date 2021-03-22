@@ -6,7 +6,7 @@ import PageNotFoundImg from '../theme/images/page-not-found.svg';
 export default function PageNotFound() {
   return (
     <PageNotFounds>
-      <img src={PageNotFoundImg} alt="emoji" />
+      <img src={PageNotFoundImg} alt="not-found" />
       <h5 className="mt-3">Page not found</h5>
       <p className="not-found">
         The page you’re looking for can’t be found. Double check the URL and try

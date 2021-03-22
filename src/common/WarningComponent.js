@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Theme from '../theme/Theme';
 import ErrorMsg from './ErrorMsg';
-import ContractCancel from '../theme/images/cancel-contract.png';
+import ContractVoided from '../theme/images/contract-voided.svg';
 // import PageNotFoundImg from '../theme/images/page-not-found.svg';
 
 export default function WarningComponent() {
@@ -13,11 +13,19 @@ export default function WarningComponent() {
   return (
     <PageNotFounds>
       <ErrorMsg className="  contract-cancel">
-        <img className="contract-cancel-img" src={ContractCancel} alt="" />
+        <img className="contract-cancel-img" src={ContractVoided} alt="" />
         <br />
         {location && location.state && location.state.error
           ? location && location.state && location.state.error
           : ''}
+
+        <h5 className="mt-3">Contract voided</h5>
+        <p className="not-found">
+          The contract signature package you&apos;re trying to access has been
+          voided. Please
+          <br /> check your email for a new version or contact your Buy Box
+          Experts sales agent.
+        </p>
       </ErrorMsg>
     </PageNotFounds>
   );
@@ -30,8 +38,11 @@ const PageNotFounds = styled.div`
   transform: translate(-50%, -50%);
 
   .not-found {
+    color: ${Theme.gray90};
     font-size: 16px;
     text-align: center;
+    font-weight: 600;
+    font-family: ${Theme.baseFontFamily};
   }
 
   .contract-cancel {
