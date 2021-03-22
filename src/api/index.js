@@ -34,6 +34,7 @@ export {
   getAmazonDetails,
   updateAmazonDetails,
   deleteAmazonMarketplace,
+  getPerformance,
 } from './CustomerApi';
 
 // Choices

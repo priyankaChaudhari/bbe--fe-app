@@ -1314,31 +1314,71 @@ g .recharts-layer .recharts-line-dots {
 //     color: #000000;
 //   }
 // }
-span.recharts-legend-item-text {
-  color: black !important;
-}
-.recharts-default-legend {
-  li.recharts-legend-item {
-    display: inline-block;
-    .legend-item-1 {
-      .recharts-surface {
-        width: 20px;
-        height: 20px;
-        path {
-          stroke: #bfc5d2;
-        }
+// span.recharts-legend-item-text {
+//   color: black !important;
+// }
+// .recharts-default-legend {
+//   li.recharts-legend-item {
+//     display: inline-block;
+//     .legend-item-1 {
+//       .recharts-surface {
+//         width: 20px;
+//         height: 20px;
+//         path {
+//           stroke: #bfc5d2;
+//         }
 
-        span.recharts-legend-item-text {
-          color: black !important;
+//         span.recharts-legend-item-text {
+//           color: black !important;
+//         }
+//       }
+//     }
+//     .legend-item-0 {
+//       .recharts-surface {
+//         path {
+//           stroke: red;
+//         }
+//       }
+//     }
+//   }
+// }
+.recharts-legend-wrapper {
+  bottom: 10px !important;
+  top: -28px !important;
+  .recharts-default-legend {
+    text-align: left !important;
+    li.recharts-legend-item {
+      border-radius: 2px;
+      width: -1px;
+      height: 14px;
+      margin-right: 25px !important;
+
+      &.legend-item-0 {
+        .recharts-surface {
+          background: $base-color;
+
+          border-radius: 2px;
+          path {
+            fill: none !important;
+            stroke: none !important;
+          }
+        }
+      }
+      &.legend-item-1 {
+        .recharts-surface {
+          background-color: $gray-25;
+          border-radius: 2px;
+          path {
+            fill: none;
+          }
         }
       }
     }
-    .legend-item-0 {
-      .recharts-surface {
-        path {
-          stroke: red;
-        }
-      }
+  }
+  @media only screen and (max-width: 768px) {
+    top: 20px !important;
+    .recharts-default-legend {
+      text-align: 40% !important;
     }
   }
 }
@@ -1376,4 +1416,126 @@ span.recharts-legend-item-text {
   font-weight: 500;
   border-bottom: hidden !important;
   padding: 7px 13px;
+}
+
+.react-daterange-picker__wrapper {
+  display: flex;
+  flex-grow: 1;
+  min-height: 39px;
+  padding: 7px 11px 7px 0;
+  flex-shrink: 0;
+  border-radius: 18px;
+  align-items: center;
+  border: 1px solid #dee2ed;
+
+  .react-daterange-picker__button {
+    padding: 6px;
+    svg {
+      width: 16px !important;
+      height: 16px !important;
+      stroke: #2e384d !important;
+      stroke-width: 1 !important;
+    }
+    &:focus {
+      background-color: #eceff7 !important;
+      padding: 6px;
+      border-radius: 50%;
+      outline: none;
+    }
+  }
+}
+.performance-graph {
+  // width: 80%;
+  // .recharts-wrapper {
+  //   width: 750px;
+  //   .recharts-surface {
+  //     width: 750px;
+  //   }
+  //   .recharts-default-legend {
+  //     li {
+  //       .recharts-surface {
+  //         width: 14px !important;
+  //       }
+  //     }
+  //   }
+  //   @media only screen and (min-width: 1200px) {
+  //     width: none !important;
+  //     .recharts-surface {
+  //       width: 800px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 1200px) {
+  //     width: 620px !important;
+  //     .recharts-surface {
+  //       width: 620px !important;
+  //     }
+  //     .recharts-default-legend {
+  //       li {
+  //         .recharts-surface {
+  //           width: 14px !important;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   @media only screen and (max-width: 991px) {
+  //     width: 800px !important;
+  //     .recharts-surface {
+  //       width: 800px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 850px) {
+  //     width: 750px !important;
+  //     .recharts-surface {
+  //       width: 750px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 800px) {
+  //     width: 680px !important;
+  //     .recharts-surface {
+  //       width: 680px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 730px) {
+  //     width: 600px !important;
+  //     .recharts-surface {
+  //       width: 600px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 650px) {
+  //     width: 500px !important;
+  //     .recharts-surface {
+  //       width: 500px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 550px) {
+  //     width: 450px !important;
+  //     .recharts-surface {
+  //       width: 450px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 500px) {
+  //     width: 400px !important;
+  //     .recharts-surface {
+  //       width: 400px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 450px) {
+  //     width: 340px !important;
+  //     .recharts-surface {
+  //       width: 340px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 390px) {
+  //     width: 300px !important;
+  //     .recharts-surface {
+  //       width: 300px !important;
+  //     }
+  //   }
+  //   @media only screen and (max-width: 350px) {
+  //     width: 260px !important;
+  //     .recharts-surface {
+  //       width: 260px !important;
+  //     }
+  //   }
+  // }
 }

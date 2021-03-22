@@ -20,6 +20,7 @@ export const API_CREDENTIALS = '/credentials/';
 export const API_BGS = '/bgs/';
 export const API_AMAZON_DETAILS = '/merchant/';
 export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`;
+export const API_PERFORMANCE = '/performance/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

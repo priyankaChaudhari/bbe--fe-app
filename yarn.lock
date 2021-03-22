@@ -2007,6 +2007,18 @@
   resolved "https://registry.yarnpkg.com/@wojtekmaj/date-utils/-/date-utils-1.0.3.tgz#2dcfd92881425c5923e429c2aec86fb3609032a1"
   integrity sha512-1VPkkTBk07gMR1fjpBtse4G+oJqpmE+0gUFB0dg3VIL7qJmUVaBoD/vlzMm/jNeOPfvlmerl1lpnsZyBUFIRuw==
 
+"@wojtekmaj/react-daterange-picker@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@wojtekmaj/react-daterange-picker/-/react-daterange-picker-3.1.0.tgz#fc7720a5bf17aecb3fce695b5a2727b1f740629a"
+  integrity sha512-ea+uj3P/w8AWwT4AJrrHk5YAyPDVxFWbdaev/ktV2AKpVWqzyno3ZntQ/E0bP4KP/UQFGMYeVkrhJouWtko9oQ==
+  dependencies:
+    make-event-props "^1.1.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+    react-calendar "^3.3.1"
+    react-date-picker "^8.1.0"
+    react-fit "^1.0.3"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -10140,6 +10152,16 @@ react-calendar@^3.0.0:
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
 
+react-calendar@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-3.3.1.tgz#da691a5d59c88f178695fd8b33909a71d698021f"
+  integrity sha512-iDIrhE0ABz3mChAIvA+5d2UtQGEb5oaUpLiEbrRdWHBYb45MhsbO59pG9HIy2uTdHkBF/nvzRV2JBmMfdg/0Qg==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.2"
+    get-user-locale "^1.2.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+
 react-collapse@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.1.0.tgz#36f69ecb0fe797f976aaf5e4f2b2c248d2760140"
@@ -10172,6 +10194,21 @@ react-date-picker@^8.0.3:
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
     react-calendar "^3.0.0"
+    react-fit "^1.0.3"
+    update-input-width "^1.1.1"
+
+react-date-picker@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/react-date-picker/-/react-date-picker-8.1.0.tgz#1375ce1b923bbdfaea048ee64f08f4b8e5d29c1f"
+  integrity sha512-JkFBMqtHM/Hxxw5r99sy6RKx5CcKXeqnEStbN/v35DzGR40dYLe/Z67hMiG+8K6WMiowfbNLjzDW7Ej0DM8LIg==
+  dependencies:
+    "@types/react-calendar" "^3.0.0"
+    "@wojtekmaj/date-utils" "^1.0.3"
+    get-user-locale "^1.2.0"
+    make-event-props "^1.1.0"
+    merge-class-names "^1.1.1"
+    prop-types "^15.6.0"
+    react-calendar "^3.3.1"
     react-fit "^1.0.3"
     update-input-width "^1.1.1"
 

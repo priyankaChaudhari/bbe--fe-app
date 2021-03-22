@@ -700,7 +700,7 @@ export default function CustomerMainContainer() {
                     getActivityLogInfo={getActivityLogInfo}
                   />
                 ) : viewComponent === 'performance' ? (
-                  <CompanyPerformance agreement={agreement} />
+                  <CompanyPerformance agreement={agreement} id={id} />
                 ) : (
                   <Activity
                     activityData={activityData}

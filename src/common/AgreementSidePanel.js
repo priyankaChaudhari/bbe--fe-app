@@ -2839,7 +2839,7 @@ export default function AgreementSidePanel({
               </ul>
             ))}
             {activityCount > 10 ? (
-              <Footer>
+              <Footer className="pdf-footer">
                 <CommonPagination
                   count={activityCount}
                   pageNumber={pageNumber || 1}
@@ -3939,7 +3939,7 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom: 200px;
+    padding-bottom: 250px;
     width: 335px;
     position: fixed;
     top: 130px;
@@ -3978,15 +3978,14 @@ const SidePanel = styled.div`
     &.error-container {
     margin-top: -6px;
   }
-  }
+   
   
    .green-check-select {
      width: 16px;
      position: absolute;
      right: 21px;
      top: 22px;
-   }
-
+    }
 
     .red-cross {
       width: 16px;
@@ -4003,7 +4002,7 @@ const SidePanel = styled.div`
       z-index: -2;
       top: 0px;
       position: absolute;
-      width: 70px;
+      width: 64px;
 
       .red-cross {
         width: 16px;
@@ -4011,6 +4010,7 @@ const SidePanel = styled.div`
         right: 21px;
         top: 25px;
       }
+    }
 }
 
   .sender-profile {
@@ -4325,7 +4325,7 @@ const SidePanel = styled.div`
 
   @media only screen and (max-width: 991px) {  
     z-index: 1;
-    padding-bottom: 290px;
+    padding-bottom: 390px;
     width: 100%;
     position: fixed;
     top: 200px;
@@ -4344,11 +4344,19 @@ const SidePanel = styled.div`
 `;
 
 const Footer = styled.div`
-  // border: 1px solid ${Theme.gray7};
-  // bottom: 79px;
-  // background: ${Theme.white};
-  // box-shadow: ${Theme.boxShadow};
-  // position: fixed;
-  // min-height: 80px;
-  // z-index: 2;
+  border: 1px solid ${Theme.gray7};
+  bottom: 79px;
+  background: ${Theme.white};
+  box-shadow: ${Theme.boxShadow};
+  position: fixed;
+  min-height: 60px;
+  z-index: 2;
+
+  &.pdf-footer {
+    bottom: 0px;
+  }
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+    bottom: 134px;
+  }
 `;
