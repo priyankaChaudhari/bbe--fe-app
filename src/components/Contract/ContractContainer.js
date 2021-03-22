@@ -102,6 +102,11 @@ export default function ContractContainer() {
 
   const [editContractFlag, setEditContractFlag] = useState(true);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [
+    showEditContractConfirmationModal,
+    setShowEditContractConfirmationModal,
+  ] = useState(false);
+
   const [isFooter, showFooter] = useState(false);
   const [newAddendumData, setNewAddendum] = useState(null);
   const [originalAddendumData, setOriginalAddendumData] = useState(null);
@@ -790,6 +795,30 @@ export default function ContractContainer() {
       getContractDetails();
     }
     setIsEditContract(false);
+  };
+
+  const editAgreementChanges = (flag) => {
+    if (flag === 'No') {
+      setShowEditContractConfirmationModal(false);
+    }
+
+    if (flag === 'Yes') {
+      const dataToUpdate = {
+        contract_status: 'pending contract',
+      };
+      setIsLoading({ loader: true, type: 'button' });
+
+      updateAccountDetails(details.id, dataToUpdate).then((response) => {
+        setIsLoading({ loader: false, type: 'button' });
+
+        if (response && response.status === 200) {
+          // dispatch(getAccountDetails(id));
+          getContractDetails();
+          setIsEditContract(true);
+        }
+      });
+      setShowEditContractConfirmationModal(false);
+    }
   };
 
   const calculateTotalDays = () => {
@@ -1536,20 +1565,21 @@ export default function ContractContainer() {
   };
 
   const onEditcontract = () => {
-    const dataToUpdate = {
-      contract_status: 'pending contract',
-    };
-    setIsLoading({ loader: true, type: 'button' });
+    setShowEditContractConfirmationModal(true);
+    // const dataToUpdate = {
+    //   contract_status: 'pending contract',
+    // };
+    // setIsLoading({ loader: true, type: 'button' });
 
-    updateAccountDetails(details.id, dataToUpdate).then((response) => {
-      setIsLoading({ loader: false, type: 'button' });
+    // updateAccountDetails(details.id, dataToUpdate).then((response) => {
+    //   setIsLoading({ loader: false, type: 'button' });
 
-      if (response && response.status === 200) {
-        // dispatch(getAccountDetails(id));
-        getContractDetails();
-        setIsEditContract(true);
-      }
-    });
+    //   if (response && response.status === 200) {
+    //     // dispatch(getAccountDetails(id));
+    //     getContractDetails();
+    //     setIsEditContract(true);
+    //   }
+    // });
   };
 
   const showStandardServicesTable = () => {
@@ -2432,6 +2462,39 @@ export default function ContractContainer() {
             discountFlag={discountFlag}
             getContractDetails={getContractDetails}
           />
+        </ModalBox>
+      </Modal>
+      <Modal
+        isOpen={showEditContractConfirmationModal}
+        style={customStylesForAlert}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <ModalBox>
+          <div className="modal-body">
+            <div className="alert-msg ">
+              Making any edits to this contract will void the version of the
+              contract that&apos;s out for signature.
+            </div>
+            <div className="alert-msg ">
+              <span>Are you sure you want to proceed?</span>
+            </div>
+            <div className="text-center ">
+              <Button
+                onClick={() => editAgreementChanges('Yes')}
+                type="button"
+                className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                Yes, Make Edits
+              </Button>
+              <Button
+                onClick={() => editAgreementChanges('No')}
+                type="button"
+                className=" btn-transparent w-50 on-boarding ">
+                Cancel
+              </Button>
+
+              {/* </Link> */}
+            </div>
+          </div>
         </ModalBox>
       </Modal>
     </>
