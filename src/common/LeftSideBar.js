@@ -9,8 +9,8 @@ import {
   ReadBookIconActive,
   OrganizationActiveIcon,
   OrganizationIcon,
-  SpeedometerActive,
-  Speedometer,
+  // SpeedometerActive,
+  // Speedometer,
 } from '../theme/images/index';
 import { PATH_ARTICLE_LIST, PATH_CUSTOMER_LIST } from '../constants';
 
@@ -21,7 +21,7 @@ export default function LeftSideBar() {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          <li>
+          {/* <li>
             {' '}
             <img
               width="32px"
@@ -35,7 +35,7 @@ export default function LeftSideBar() {
               src={Speedometer}
               alt=""
             />
-          </li>
+          </li> */}
           <li
             className={
               !(
