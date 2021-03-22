@@ -854,6 +854,7 @@ export default function NewCustomerList() {
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
+
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
