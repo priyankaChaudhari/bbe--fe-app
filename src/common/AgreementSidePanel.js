@@ -1819,7 +1819,11 @@ export default function AgreementSidePanel({
         <DatePicker
           className="form-control"
           id="date"
-          minDate={new Date()}
+          minDate={
+            item.key && formData[item.key] && formData[item.key] !== null
+              ? new Date(formData[item.key])
+              : new Date()
+          }
           value={
             startDate ||
             ('' ||
