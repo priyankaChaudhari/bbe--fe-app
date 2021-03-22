@@ -454,6 +454,10 @@ export default function CompanyPerformance({ agreement, id }) {
     selectedValue,
   ]);
 
+  useEffect(() => {
+    // getData(selectedAmazonValue);
+  }, []);
+
   return (
     <>
       <div className="col-lg-8 col-12">
