@@ -188,7 +188,10 @@ function Discount({
           one_time_discount_amount: null,
         });
       } else {
-        updateContract(data);
+        updateContract({
+          ...data,
+          one_time_discount_type: formData.one_time_discount_type,
+        });
       }
     }
 
@@ -199,7 +202,10 @@ function Discount({
           monthly_discount_amount: null,
         });
       } else {
-        updateContract(data);
+        updateContract({
+          ...data,
+          monthly_discount_type: formData.monthly_discount_type,
+        });
       }
     }
     // updateContract(data);
