@@ -272,22 +272,21 @@ export default function AgreementSidePanel({
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
-      } 
-        return (
-          <>
-            {activityMessage && activityMessage[0]}
-            <span>
-              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
-              from{' '}
-            </span>{' '}
-            {activityMessage &&
-              activityMessage[1].split(' from ')[1].split(' to ')[0]}
-            <span> to </span>{' '}
-            {activityMessage &&
-              activityMessage[1].split(' from ')[1].split(' to ')[1]}
-          </>
-        );
-      
+      }
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>
+            updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+            from{' '}
+          </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          <span> to </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[1]}
+        </>
+      );
     }
     if (item.message.includes('requested for')) {
       activityMessage = item.message.split('requested for');
@@ -3953,7 +3952,7 @@ const SidePanel = styled.div`
     overflow-y:auto;
     
     .sidebar {
-      width: 335px;
+      /* width: 335px; */
     }
     
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
