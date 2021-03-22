@@ -80,6 +80,7 @@ export default function NewCustomerList() {
     { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const [showExpireSoon, setShowExpireSoon] = useState(false);
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -193,6 +194,7 @@ export default function NewCustomerList() {
         filters,
         searchQuery,
         showPerformance,
+        showExpireSoon,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -200,7 +202,7 @@ export default function NewCustomerList() {
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [searchQuery, selectedValue, filters, showPerformance],
+    [searchQuery, selectedValue, filters, showPerformance, showExpireSoon],
   );
 
   useEffect(() => {
@@ -257,6 +259,13 @@ export default function NewCustomerList() {
   // };
 
   const handleFilters = (event, key, type, action) => {
+    if (type === 'contract_status' && event.target.name === 'expiring_soon') {
+      if (event.target.checked) {
+        setShowExpireSoon(true);
+      } else {
+        setShowExpireSoon(false);
+      }
+    }
     if (type === 'status' && key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       setFilters({
