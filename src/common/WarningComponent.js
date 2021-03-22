@@ -1,15 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import UnauthorizedHeader from "./UnauthorizedHeader";
+import UnauthorizedHeader from './UnauthorizedHeader';
 import Theme from '../theme/Theme';
 import ErrorMsg from './ErrorMsg';
 import ContractVoided from '../theme/images/contract-voided.svg';
 // import PageNotFoundImg from '../theme/images/page-not-found.svg';
 
 export default function WarningComponent() {
-  const location = useLocation();
-
   return (
     <>
       <UnauthorizedHeader />
@@ -19,9 +16,9 @@ export default function WarningComponent() {
           <ErrorMsg className="  contract-cancel">
             <img className="contract-cancel-img" src={ContractVoided} alt="" />
             <br />
-            {location && location.state && location.state.error
+            {/* {location && location.state && location.state.error
               ? location && location.state && location.state.error
-              : ''}
+              : ''} */}
 
             <h5 className="mt-3">Contract voided</h5>
             <p className="not-found">
