@@ -22,12 +22,22 @@ export async function getCustomerList(
   filterOptions,
   searchQuery,
   performance,
-  showExpireSoon,
 ) {
   let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-    'order-by': sort['order-by'],
   };
+
+  if (sort['order-by'] === 'expiring_soon') {
+    params = {
+      ...params,
+      expiring_soon: true,
+    };
+  } else {
+    params = {
+      ...params,
+      'order-by': sort['order-by'] || '-created_at',
+    };
+  }
 
   if (searchQuery) {
     params = {
@@ -55,16 +65,6 @@ export async function getCustomerList(
     filterOptions.contract_status &&
     filterOptions.contract_status.length
   ) {
-    const expiry = filterOptions.contract_status;
-    if (expiry.find((op) => op === 'expiring_soon')) {
-      params = { ...params, expiring_soon: true };
-    }
-
-    const list = filterOptions.contract_status;
-    const index1 = list.indexOf('expiring_soon');
-    if (index1 > -1) {
-      list.splice(index1, 1);
-    }
     const index = filterOptions.contract_status.indexOf('signed');
     if (index !== -1) {
       filterOptions.contract_status[index] = 'active';
@@ -72,9 +72,6 @@ export async function getCustomerList(
     contractStatusParams = queryString.stringify({
       contract_status: filterOptions.contract_status,
     });
-    if (showExpireSoon) {
-      filterOptions.contract_status.push('expiring_soon');
-    }
   }
   let bgsParams = {};
   if (filterOptions && filterOptions.user && filterOptions.user.length) {

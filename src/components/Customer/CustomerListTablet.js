@@ -15,7 +15,7 @@ import {
   CountDayClock,
   FileIcon,
 } from '../../theme/images/index';
-import { PATH_CUSTOMER_DETAILS } from '../../constants';
+import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader } from '../../common';
 
 export default function CustomerListTablet({
@@ -35,10 +35,16 @@ export default function CustomerListTablet({
     return diffDays;
   };
 
-  const generateContractHTML = (type) => {
+  const generateContractHTML = (type, id) => {
     if (countDays(type.end_date) <= 90) {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service count-days">
@@ -54,6 +60,12 @@ export default function CustomerListTablet({
     if (type && type.contract_status === 'pending contract') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file">
@@ -68,6 +80,12 @@ export default function CustomerListTablet({
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file-check">
@@ -86,6 +104,12 @@ export default function CustomerListTablet({
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service edit">
@@ -99,6 +123,12 @@ export default function CustomerListTablet({
     }
     return (
       <li
+        onClickCapture={(e) => {
+          e.stopPropagation();
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.id);
+        }}
+        role="presentation"
         data-tip={type.contract_status}
         style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
@@ -242,7 +272,7 @@ export default function CustomerListTablet({
                           item.contract.map((type) => (
                             <React.Fragment key={Math.random()}>
                               <ReactTooltip />
-                              {generateContractHTML(type)}
+                              {generateContractHTML(type, item.id)}
                             </React.Fragment>
                           ))}
                       </ul>

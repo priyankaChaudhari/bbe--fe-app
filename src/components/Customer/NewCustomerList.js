@@ -39,7 +39,11 @@ import {
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
-import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
+import {
+  PATH_AGREEMENT,
+  PATH_CUSTOMER_DETAILS,
+  PATH_CUSTOMER_LIST,
+} from '../../constants';
 import { sortOptions } from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
@@ -74,13 +78,11 @@ export default function NewCustomerList() {
   ];
   const contractStatus = [
     { value: 'active', label: 'Signed' },
-    { value: 'expiring_soon', label: 'Expiring Soon' },
     { value: 'pending contract signature', label: 'Pending Signature' },
     { value: 'pending contract approval', label: 'Pending Approval' },
     { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
-  const [showExpireSoon, setShowExpireSoon] = useState(false);
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -194,7 +196,6 @@ export default function NewCustomerList() {
         filters,
         searchQuery,
         showPerformance,
-        showExpireSoon,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -202,7 +203,7 @@ export default function NewCustomerList() {
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [searchQuery, selectedValue, filters, showPerformance, showExpireSoon],
+    [searchQuery, selectedValue, filters, showPerformance],
   );
 
   useEffect(() => {
@@ -241,31 +242,7 @@ export default function NewCustomerList() {
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
 
-  // const cancelFilters = (key) => {
-  //   const filter = { ...selectedFilter };
-  //   delete filter[key];
-  //   setSelectedValue({ ...selectedValue, [key]: null });
-  //   setSelectedFilter(filter);
-  //   setClearFilter(true);
-  //   history.push(PATH_CUSTOMER_LIST);
-  //   setIsLoading({ loader: true, type: 'page' });
-  //   getCustomerList(1, filter, searchQuery).then((response) => {
-  //     setData(response.data && response.data.results);
-  //     setPageNumber(pageNumber);
-  //     setCount(response && response.data && response.data.count);
-  //     setIsLoading({ loader: false, type: 'page' });
-  //   });
-  //   if (key === 'user') setBrandGrowthStrategist([]);
-  // };
-
   const handleFilters = (event, key, type, action) => {
-    if (type === 'contract_status' && event.target.name === 'expiring_soon') {
-      if (event.target.checked) {
-        setShowExpireSoon(true);
-      } else {
-        setShowExpireSoon(false);
-      }
-    }
     if (type === 'status' && key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       setFilters({
@@ -413,10 +390,17 @@ export default function NewCustomerList() {
     return '';
   };
 
-  const generateContractHTML = (type) => {
+  const generateContractHTML = (type, id) => {
     if (countDays(type.end_date) <= 90) {
       return (
-        <li data-tip={type.contract_status}>
+        <li
+          data-tip={type.contract_status}
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation">
           <div className="recurring-service count-days">
             {type.contract_type} Service Agreement
             <span className="count-clock-icon active-contract-icon">
@@ -430,6 +414,12 @@ export default function NewCustomerList() {
     if (type && type.contract_status === 'pending contract') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file">
@@ -444,6 +434,12 @@ export default function NewCustomerList() {
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file-check">
@@ -458,6 +454,12 @@ export default function NewCustomerList() {
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation"
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service edit">
@@ -471,6 +473,12 @@ export default function NewCustomerList() {
     }
     return (
       <li
+        onClickCapture={(e) => {
+          e.stopPropagation();
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.id);
+        }}
+        role="presentation"
         data-tip={type.contract_status}
         style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
@@ -955,7 +963,7 @@ export default function NewCustomerList() {
                                   item.contract.map((type) => (
                                     <React.Fragment key={Math.random()}>
                                       <ReactTooltip />
-                                      {generateContractHTML(type)}
+                                      {generateContractHTML(type, item.id)}
                                     </React.Fragment>
                                   ))}
                               </ul>
