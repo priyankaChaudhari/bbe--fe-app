@@ -1772,9 +1772,9 @@ export default function AgreementSidePanel({
           break;
 
         case 'active':
-          statusClass = '';
-          statusSrc = '';
-          dispalyStatus = 'Active';
+          statusClass = 'signature';
+          statusSrc = SignatureIcon;
+          dispalyStatus = 'Signed';
           break;
 
         case 'inactive':
