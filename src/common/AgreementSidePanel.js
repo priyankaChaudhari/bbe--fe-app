@@ -144,8 +144,6 @@ export default function AgreementSidePanel({
   const [isApicalled, setIsApicalled] = useState(false);
 
   const getActivityInitials = (userInfo) => {
-    console.log(userInfo);
-
     if (userInfo && userInfo === 'Contract initiated') {
       return 'SU';
     }
