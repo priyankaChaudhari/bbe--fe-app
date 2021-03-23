@@ -240,10 +240,10 @@ export default function CustomerListTablet({
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].revenue ? (
+                            item.daily_facts.current[0] ? (
                               <>
-                                {item.daily_facts.current[0].revenue}
+                                {item.daily_facts.current[0] &&
+                                  item.daily_facts.current[0].revenue}
 
                                 {calculatePercentage(
                                   item.daily_facts.current[0].revenue,
@@ -263,13 +263,15 @@ export default function CustomerListTablet({
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].units_sold ? (
+                            item.daily_facts.current[0] ? (
                               <>
-                                {item.daily_facts.current[0].units_sold}
+                                {item.daily_facts.current[0] &&
+                                  item.daily_facts.current[0].units_sold}
                                 {calculatePercentage(
-                                  item.daily_facts.current[0].units_sold,
-                                  item.daily_facts.previous[0].units_sold,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.current[0].units_sold,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.previous[0].units_sold,
                                 )}
                               </>
                             ) : (
@@ -310,13 +312,15 @@ export default function CustomerListTablet({
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].traffic ? (
+                            item.daily_facts.current[0] ? (
                               <>
-                                {item.daily_facts.current[0].traffic}
+                                {item.daily_facts.current[0] &&
+                                  item.daily_facts.current[0].traffic}
                                 {calculatePercentage(
-                                  item.daily_facts.current[0].traffic,
-                                  item.daily_facts.previous[0].traffic,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.current[0].traffic,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.previous[0].traffic,
                                 )}
                               </>
                             ) : (
@@ -337,13 +341,15 @@ export default function CustomerListTablet({
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].conversion ? (
+                            item.daily_facts.current[0] ? (
                               <>
-                                {item.daily_facts.current[0].conversion}
+                                {item.daily_facts.current[0] &&
+                                  item.daily_facts.current[0].conversion}
                                 {calculatePercentage(
-                                  item.daily_facts.current[0].conversion,
-                                  item.daily_facts.previous[0].conversion,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.current[0].conversion,
+                                  item.daily_facts.current[0] &&
+                                    item.daily_facts.previous[0].conversion,
                                 )}
                               </>
                             ) : (
