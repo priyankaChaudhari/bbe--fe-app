@@ -42,7 +42,7 @@ export default function CustomerListTablet({
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -63,7 +63,7 @@ export default function CustomerListTablet({
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -83,7 +83,7 @@ export default function CustomerListTablet({
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -107,7 +107,7 @@ export default function CustomerListTablet({
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -129,7 +129,7 @@ export default function CustomerListTablet({
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -143,7 +143,7 @@ export default function CustomerListTablet({
         onClickCapture={(e) => {
           e.stopPropagation();
           history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.id);
+          localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}

@@ -422,6 +422,7 @@ export default function NewCustomerList() {
   };
 
   const generateContractHTML = (type, id) => {
+    console.log(type);
     if (countDays(type.end_date) <= 90) {
       return (
         <li
@@ -429,7 +430,7 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service count-days">
@@ -448,7 +449,7 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -468,7 +469,7 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -488,7 +489,7 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -510,7 +511,7 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.id);
+            localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -524,7 +525,7 @@ export default function NewCustomerList() {
         onClickCapture={(e) => {
           e.stopPropagation();
           history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.id);
+          localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}
