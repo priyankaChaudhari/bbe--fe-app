@@ -178,12 +178,10 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const calculateSalesDifference = (currentTotal, previousTotal) => {
     const diff = ((currentTotal - previousTotal) * 100) / currentTotal;
-    if (diff === -Infinity) {
+    if (diff === -Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
-    return parseFloat(
-      (((currentTotal - previousTotal) * 100) / currentTotal).toFixed(2),
-    );
+    return parseFloat(diff.toFixed(2));
   };
 
   const getData = useCallback(
@@ -543,16 +541,26 @@ export default function CompanyPerformance({ agreement, id }) {
                   }>
                   {allSalesTotal &&
                   allSalesTotal.revenue &&
+                  !Number.isNaN(allSalesTotal.revenue.difference) &&
                   allSalesTotal.revenue.difference > 0 ? (
                     <img src={ArrowUpIcon} alt="arrow-up" />
-                  ) : (
+                  ) : allSalesTotal &&
+                    allSalesTotal.revenue &&
+                    allSalesTotal.revenue.difference &&
+                    !Number.isNaN(allSalesTotal.revenue.difference) &&
+                    allSalesTotal.revenue.difference < 0 ? (
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
                       alt="arrow-up"
                     />
+                  ) : (
+                    ''
                   )}
-                  {allSalesTotal && allSalesTotal.revenue
+                  {allSalesTotal &&
+                  allSalesTotal.revenue &&
+                  allSalesTotal.conversion.difference &&
+                  allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.revenue.difference} %`
                     : 'N/A'}
                 </div>
@@ -591,16 +599,26 @@ export default function CompanyPerformance({ agreement, id }) {
                   }>
                   {allSalesTotal &&
                   allSalesTotal.units &&
+                  !Number.isNaN(allSalesTotal.units.difference) &&
                   allSalesTotal.units.difference > 0 ? (
                     <img src={ArrowUpIcon} alt="arrow-up" />
-                  ) : (
+                  ) : allSalesTotal &&
+                    allSalesTotal.units &&
+                    allSalesTotal.units.difference &&
+                    !Number.isNaN(allSalesTotal.units.difference) &&
+                    allSalesTotal.units.difference < 0 ? (
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
                       alt="arrow-up"
                     />
+                  ) : (
+                    ''
                   )}
-                  {allSalesTotal && allSalesTotal.units
+                  {allSalesTotal &&
+                  allSalesTotal.units &&
+                  allSalesTotal.conversion.difference &&
+                  allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.units.difference} %`
                     : 'N/A'}
                 </div>
@@ -641,16 +659,26 @@ export default function CompanyPerformance({ agreement, id }) {
                   }>
                   {allSalesTotal &&
                   allSalesTotal.traffic &&
+                  !Number.isNaN(allSalesTotal.traffic.difference) &&
                   allSalesTotal.traffic.difference > 0 ? (
                     <img src={ArrowUpIcon} alt="arrow-up" />
-                  ) : (
+                  ) : allSalesTotal &&
+                    allSalesTotal.traffic &&
+                    allSalesTotal.traffic.difference &&
+                    !Number.isNaN(allSalesTotal.traffic.difference) &&
+                    allSalesTotal.traffic.difference < 0 ? (
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
                       alt="arrow-up"
                     />
+                  ) : (
+                    ''
                   )}
-                  {allSalesTotal && allSalesTotal.traffic
+                  {allSalesTotal &&
+                  allSalesTotal.traffic &&
+                  allSalesTotal.conversion.difference &&
+                  allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.traffic.difference} %`
                     : 'N/A'}
                 </div>
@@ -691,16 +719,27 @@ export default function CompanyPerformance({ agreement, id }) {
                   }>
                   {allSalesTotal &&
                   allSalesTotal.conversion &&
+                  allSalesTotal.conversion.difference &&
+                  !Number.isNaN(allSalesTotal.conversion.difference) &&
                   allSalesTotal.conversion.difference > 0 ? (
                     <img src={ArrowUpIcon} alt="arrow-up" />
-                  ) : (
+                  ) : allSalesTotal &&
+                    allSalesTotal.conversion &&
+                    allSalesTotal.conversion.difference &&
+                    !Number.isNaN(allSalesTotal.conversion.difference) &&
+                    allSalesTotal.conversion.difference < 0 ? (
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
                       alt="arrow-up"
                     />
+                  ) : (
+                    ''
                   )}
-                  {allSalesTotal && allSalesTotal.conversion
+                  {allSalesTotal &&
+                  allSalesTotal.conversion &&
+                  allSalesTotal.conversion.difference &&
+                  allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.conversion.difference} %`
                     : 'N/A'}
                 </div>
