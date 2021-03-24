@@ -391,9 +391,6 @@ export default function CompanyPerformance({ agreement, id }) {
     } else {
       setShowCustomDateModal(true);
     }
-    else{
-      setShowCustomDateModal(true);
-    }
   };
 
   const handleAmazonOptions = (event) => {
