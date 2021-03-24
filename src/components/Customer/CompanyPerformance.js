@@ -440,9 +440,9 @@ export default function CompanyPerformance({ agreement, id }) {
         list.push({ value: option.id, label: option.name });
       }
     setAmazonOptions(list);
-    setSelectedAmazonValue(list[0].label.toLowerCase());
-    if (responseId === null && list[0].label !== null) {
-      getData(selectedValue, groupBy, list[0].label.toLowerCase());
+    setSelectedAmazonValue(list[0].label);
+    if (responseId === null) {
+      getData(selectedValue, groupBy, list[0].label);
     }
   }, [
     agreement.additional_marketplaces,
@@ -453,10 +453,6 @@ export default function CompanyPerformance({ agreement, id }) {
     groupBy,
     selectedValue,
   ]);
-
-  useEffect(() => {
-    // getData(selectedAmazonValue);
-  }, []);
 
   return (
     <>
