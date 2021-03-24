@@ -112,26 +112,34 @@ export default function AgreementDetails({ agreements, id }) {
             </div>
 
             <div className="clear-fix" />
-            <div
-              className="col-lg-3 col-md-4 col-12 text-right"
-              role="presentation"
-              onClick={() => localStorage.setItem('agreementID', agreement.id)}>
-              <Link
-                to={{
-                  pathname: PATH_AGREEMENT.replace(':id', id),
-                  state: agreement.id,
-                }}>
-                <Button className="btn-transparent w-100 view-contract">
-                  {' '}
-                  <img
-                    className="file-contract-icon"
-                    src={FileContract}
-                    alt=""
-                  />
-                  View Contract
-                </Button>
-              </Link>
-            </div>
+            {agreement &&
+            agreement.contract_status &&
+            (agreement.contract_status.value === 'pending account setup' ||
+              agreement.contract_status.value === 'active') &&
+            agreement.contract_url === null ? null : (
+              <div
+                className="col-lg-3 col-md-4 col-12 text-right"
+                role="presentation"
+                onClick={() =>
+                  localStorage.setItem('agreementID', agreement.id)
+                }>
+                <Link
+                  to={{
+                    pathname: PATH_AGREEMENT.replace(':id', id),
+                    state: agreement.id,
+                  }}>
+                  <Button className="btn-transparent w-100 view-contract">
+                    {' '}
+                    <img
+                      className="file-contract-icon"
+                      src={FileContract}
+                      alt=""
+                    />
+                    View Contract
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
           <span
             className="cursor"
