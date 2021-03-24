@@ -19,6 +19,7 @@ import {
   Pie,
   Cell,
 } from 'recharts';
+import Modal from 'react-modal';
 import Select, { components } from 'react-select';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { getPerformance } from '../../api';
@@ -31,8 +32,9 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
   CaretUp,
+  CloseIcon,
 } from '../../theme/images/index';
-import { DropDownSelect } from '../../common';
+import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 // import { fn } from 'jquery';
 
@@ -94,6 +96,7 @@ export default function CompanyPerformance({ agreement, id }) {
     new Date(),
     new Date(),
   ]);
+  const [showCustomDateModal, setShowCustomDateModal] = useState(false);
 
   const [revenueData, setRevenueData] = useState([{}]);
   const [unitsSoldData, setUnitsSoldData] = useState([{}]);
@@ -102,12 +105,26 @@ export default function CompanyPerformance({ agreement, id }) {
   const [allSalesTotal, setAllSalesTotal] = useState({});
 
   const [activeSales, setActiveSales] = useState('revenue');
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      // minHeight: '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   const reportOptions = [
     { value: 'week', label: 'This Week', sub: 'vs last week' },
     { value: 'month', label: 'This Month', sub: 'vs last month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
-    { value: 'yeartoDate', label: 'Year to Date', sub: 'vs previous year' },
+    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
     {
       value: 'custom',
       label: 'Custom Range',
@@ -374,6 +391,9 @@ export default function CompanyPerformance({ agreement, id }) {
     if (value !== 'custom') {
       getData(value, groupBy, selectedAmazonValue);
     }
+    else{
+      setShowCustomDateModal(true);
+    }
   };
 
   const handleAmazonOptions = (event) => {
@@ -388,18 +408,22 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const onChangeCustomDate = (event) => {
     if (event !== null) {
-      const startDate = `${event[0].getDate()}-${
-        event[0].getMonth() + 1
-      }-${event[0].getFullYear()}`;
-      const endDate = `${event[1].getDate()}-${
-        event[1].getMonth() + 1
-      }-${event[1].getFullYear()}`;
-
-      setCustomDateValue([startDate, endDate]);
-      getData(selectedAmazonValue, startDate, endDate);
+      setCustomDateValue([event[0], event[1]]);
     } else {
       setCustomDateValue([new Date(), new Date()]);
     }
+  };
+
+  const applyCustomeDate = () => {
+    const startDate = `${customDateValue[0].getDate()}-${
+      customDateValue[0].getMonth() + 1
+    }-${customDateValue[0].getFullYear()}`;
+    const endDate = `${customDateValue[1].getDate()}-${
+      customDateValue[1].getMonth() + 1
+    }-${customDateValue[1].getFullYear()}`;
+
+    getData(selectedAmazonValue, startDate, endDate);
+    setShowCustomDateModal(false);
   };
 
   useEffect(() => {
@@ -482,16 +506,7 @@ export default function CompanyPerformance({ agreement, id }) {
               </DropDownSelect>{' '}
               <div className="clear-fix" />
             </div>
-            <div className="col-12 text-right mb-3">
-              {selectedValue === 'custom' ? (
-                <DateRangePicker
-                  onChange={(event) => onChangeCustomDate(event)}
-                  value={customDateValue}
-                  maxDate={new Date()}
-                  // format="dd-MM-yyyy"
-                />
-              ) : null}
-            </div>
+            <div className="col-12 text-right mb-3" />
           </div>
 
           <div className="row mr-1 ml-1">
@@ -943,6 +958,41 @@ export default function CompanyPerformance({ agreement, id }) {
             </WhiteCard>
           </div>
         </div>
+
+        <Modal
+          isOpen={showCustomDateModal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Edit modal">
+          <img
+            src={CloseIcon}
+            alt="close"
+            className="float-right cursor cross-icon"
+            onClick={() => setShowCustomDateModal(false)}
+            role="presentation"
+          />
+          <ModalBox>
+            <div className="modal-body">
+              <div className="alert-msg edit ">
+                <DateRangePicker
+                  isOpen
+                  onChange={(event) => onChangeCustomDate(event)}
+                  value={customDateValue}
+                  maxDate={new Date()}
+                />
+              </div>
+
+              <div className="text-center ">
+                <Button
+                  onClick={() => applyCustomeDate()}
+                  type="button"
+                  className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                  Apply
+                </Button>
+              </div>
+            </div>
+          </ModalBox>
+        </Modal>
       </div>
     </>
   );
