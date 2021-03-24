@@ -2791,15 +2791,20 @@ export default function AgreementSidePanel({
   const renderContractActivityPanel = () => {
     return (
       <>
-        <div className={`contract-status ${getContractStatusData('class')}`}>
-          <img
-            width="16px"
-            className="contract-file-icon"
-            src={getContractStatusData('src')}
-            alt=""
-          />
-          {_.startCase(getContractStatusData('status'))}
-        </div>
+        {agreementData &&
+        agreementData.contract_status &&
+        agreementData.contract_status.value ? (
+          <div className={`contract-status ${getContractStatusData('class')}`}>
+            <img
+              width="16px"
+              className="contract-file-icon"
+              src={getContractStatusData('src')}
+              alt=""
+            />
+            {_.startCase(getContractStatusData('status'))}
+          </div>
+        ) : null}
+
         <div className="activity-log">Contract Activity</div>
 
         {activityLoader === true ? (
