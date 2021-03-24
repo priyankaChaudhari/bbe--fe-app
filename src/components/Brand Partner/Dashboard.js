@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
@@ -19,8 +20,10 @@ import {
 } from '../../theme/images';
 import getBGSCustomerList from '../../api/BgsApi';
 import { getGrowthStrategist } from '../../api';
+import { PATH_CUSTOMER_DETAILS } from '../../constants';
 
 export default function Dashboard() {
+  const history = useHistory();
   const userInfo = useSelector((state) => state.userState.userInfo);
   const { Option, SingleValue, MultiValue } = components;
   const [data, setData] = useState([]);
@@ -247,7 +250,12 @@ export default function Dashboard() {
           <div className="row">
             {data &&
               data.map((item) => (
-                <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
+                <div
+                  className="col-lg-3 mb-4 col-md-6 col-sm-12 cursor"
+                  onClick={() =>
+                    history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+                  }
+                  role="presentation">
                   <WhiteCard key={item.id}>
                     <img
                       className="company-logo"
