@@ -4226,13 +4226,11 @@ const SidePanel = styled.div`
           font-size: ${Theme.normal};
           color:${Theme.gray90};
           float: left;
-          max-width: 220px;
+          width: 90%;
           text-align: left;
-
           span {
             color:${Theme.gray35};
             font-weight: 500;
-            
           }
         }
 

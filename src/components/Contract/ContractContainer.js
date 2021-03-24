@@ -2138,7 +2138,7 @@ export default function ContractContainer() {
                     Approve and Request Signature
                   </Button>
                   {!isEditContract
-                    ? renderEditContractBtn('light-orange')
+                    ? renderEditContractBtn('light-orange w-sm-50')
                     : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
@@ -2168,7 +2168,7 @@ export default function ContractContainer() {
                     Request Approval
                   </Button>
                   {!isEditContract
-                    ? renderEditContractBtn('light-orange')
+                    ? renderEditContractBtn('light-orange w-sm-50')
                     : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
@@ -2207,7 +2207,9 @@ export default function ContractContainer() {
                   }}>
                   Request Signature
                 </Button>
-                {!isEditContract ? renderEditContractBtn('light-orange') : null}
+                {!isEditContract
+                  ? renderEditContractBtn('light-orange w-sm-50')
+                  : null}
                 <span className="last-update ">
                   Last updated by You on{' '}
                   {dayjs(details && details.updated_at).format('MMM D, h:mm A')}

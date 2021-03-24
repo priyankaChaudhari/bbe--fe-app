@@ -4,7 +4,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState, useCallback } from 'react';
 // import { useMediaQuery } from 'react-responsive';
-
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
   LineChart,
@@ -390,8 +390,7 @@ export default function CompanyPerformance({ agreement, id }) {
     setSelectedValue(value);
     if (value !== 'custom') {
       getData(value, groupBy, selectedAmazonValue);
-    }
-    else{
+    } else {
       setShowCustomDateModal(true);
     }
   };
@@ -895,26 +894,28 @@ export default function CompanyPerformance({ agreement, id }) {
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
               </p>
-              <PieChart width={250} height={150}>
-                <Pie
-                  data={pieData}
-                  cx={90}
-                  cy={100}
-                  startAngle={180}
-                  endAngle={0}
-                  innerRadius={60}
-                  outerRadius={80}
-                  fill="#8884D8"
-                  paddingAngle={6}
-                  dataKey="value">
-                  {pieData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
+              <PiechartResponsive>
+                <PieChart width={250} height={150}>
+                  <Pie
+                    data={pieData}
+                    cx={90}
+                    cy={100}
+                    startAngle={180}
+                    endAngle={0}
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884D8"
+                    paddingAngle={6}
+                    dataKey="value">
+                    {pieData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </PiechartResponsive>
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
@@ -1008,3 +1009,47 @@ CompanyPerformance.propTypes = {
     }),
   }).isRequired,
 };
+
+const PiechartResponsive = styled.div`
+  .recharts-wrapper {
+    .recharts-surface {
+      width: 250px;
+      @media only screen and (max-width: 1119px) {
+        width: 220px;
+      }
+      @media only screen and (max-width: 1044px) {
+        width: 210px;
+      }
+      @media only screen and (max-width: 991px) {
+        width: 310px;
+      }
+      @media only screen and (max-width: 920px) {
+        width: 280px;
+      }
+      @media only screen and (max-width: 846px) {
+        width: 240px;
+      }
+      @media only screen and (max-width: 767px) {
+        width: 684px;
+      }
+      @media only screen and (max-width: 640px) {
+        width: 600px;
+      }
+      @media only screen and (max-width: 590px) {
+        width: 550px;
+      }
+      @media only screen and (max-width: 530px) {
+        width: 510px;
+      }
+      @media only screen and (max-width: 500px) {
+        width: 450px;
+      }
+      @media only screen and (max-width: 475px) {
+        width: 390px;
+      }
+      @media only screen and (max-width: 400px) {
+        width: 300px;
+      }
+    }
+  }
+`;
