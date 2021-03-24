@@ -441,7 +441,7 @@ export default function CompanyPerformance({ agreement, id }) {
       }
     setAmazonOptions(list);
     setSelectedAmazonValue(list[0].label.toLowerCase());
-    if (responseId === null) {
+    if (responseId === null && list[0].label !== null) {
       getData(selectedValue, groupBy, list[0].label.toLowerCase());
     }
   }, [
