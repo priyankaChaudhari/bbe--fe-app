@@ -121,6 +121,23 @@ export default function CustomerListTablet({
         </li>
       );
     }
+    if (type && type.contract_status === 'active') {
+      return (
+        <li
+          data-tip="Signed"
+          style={{ textTransform: 'capitalize' }}
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation">
+          <div className="recurring-service agreement">
+            {type.contract_type} Service Agreement
+          </div>
+        </li>
+      );
+    }
     return (
       <li
         onClickCapture={(e) => {

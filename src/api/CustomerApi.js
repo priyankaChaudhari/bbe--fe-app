@@ -22,20 +22,17 @@ export async function getCustomerList(
   filterOptions,
   searchQuery,
   performance,
+  expiringSoon,
 ) {
   let params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
+    'order-by': sort['order-by'] || '-created_at',
   };
 
-  if (sort['order-by'] === 'expiring_soon') {
+  if (expiringSoon) {
     params = {
       ...params,
       expiring_soon: true,
-    };
-  } else {
-    params = {
-      ...params,
-      'order-by': sort['order-by'] || '-created_at',
     };
   }
 

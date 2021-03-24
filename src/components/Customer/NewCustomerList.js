@@ -83,6 +83,7 @@ export default function NewCustomerList() {
     { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const [expiringSoon, setExpiringSoon] = useState(false);
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -196,6 +197,7 @@ export default function NewCustomerList() {
         filters,
         searchQuery,
         showPerformance,
+        expiringSoon,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -203,7 +205,7 @@ export default function NewCustomerList() {
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [searchQuery, selectedValue, filters, showPerformance],
+    [searchQuery, selectedValue, filters, showPerformance, expiringSoon],
   );
 
   useEffect(() => {
@@ -250,6 +252,13 @@ export default function NewCustomerList() {
         status: [],
       });
     }
+    if (type === 'status' && key === 'selected') {
+      $('.checkboxes input:checkbox').prop('checked', true);
+      setFilters({
+        ...filters,
+        status: ['active', 'at risk', 'pending cancellation', 'inactive'],
+      });
+    }
     if (type === 'contract_status' && key === 'unselected') {
       $('.checkboxes-contract  input:checkbox').prop('checked', false);
       setFilters({
@@ -257,7 +266,19 @@ export default function NewCustomerList() {
         contract_status: [],
       });
     }
-    if (type === 'status' && key !== 'unselected') {
+    if (type === 'contract_status' && key === 'selected') {
+      $('.checkboxes-contract input:checkbox').prop('checked', true);
+      setFilters({
+        ...filters,
+        contract_status: [
+          'active',
+          'pending contract signature',
+          'pending contract approval',
+          'pending contract',
+        ],
+      });
+    }
+    if (type === 'status' && key !== 'unselected' && key !== 'selected') {
       if (
         event.target.checked &&
         filters.status.indexOf(event.target.name) === -1
@@ -274,7 +295,11 @@ export default function NewCustomerList() {
       }
     }
 
-    if (type === 'contract_status' && key !== 'unselected') {
+    if (
+      type === 'contract_status' &&
+      key !== 'unselected' &&
+      key !== 'selected'
+    ) {
       if (
         event.target.checked &&
         filters.contract_status.indexOf(event.target.name) === -1
@@ -348,14 +373,20 @@ export default function NewCustomerList() {
       }
     }
     if (type === 'sort') {
-      setSelectedValue({ ...selectedValue, 'order-by': event.value });
-      customerList(
-        pageNumber,
-        event.value,
-        filters,
-        searchQuery,
-        showPerformance,
-      );
+      if (event.value === 'expiring_soon') {
+        setExpiringSoon(true);
+        setSelectedValue({ ...selectedValue, 'order-by': '' });
+      } else {
+        setExpiringSoon(false);
+        setSelectedValue({ ...selectedValue, 'order-by': event.value });
+        customerList(
+          pageNumber,
+          event.value,
+          filters,
+          searchQuery,
+          showPerformance,
+        );
+      }
     }
     if (type === 'search') {
       setTimeout(() => {
@@ -467,6 +498,23 @@ export default function NewCustomerList() {
             <span className="edit-file-icon  active-contract-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
+          </div>
+        </li>
+      );
+    }
+    if (type && type.contract_status === 'active') {
+      return (
+        <li
+          data-tip="Signed"
+          style={{ textTransform: 'capitalize' }}
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            history.push(PATH_AGREEMENT.replace(':id', id));
+            localStorage.setItem('agreementID', type.id);
+          }}
+          role="presentation">
+          <div className="recurring-service agreement">
+            {type.contract_type} Service Agreement
           </div>
         </li>
       );
@@ -595,14 +643,30 @@ export default function NewCustomerList() {
                     <DropDownSelect className="w-250">
                       {generateDropdown('user')}
                     </DropDownSelect>
-                    <div className="label mt-4">Customer Status</div>
-                    <div
-                      className="unselected uncheck-all"
-                      onClick={(event) =>
-                        handleFilters(event, 'unselected', 'status')
-                      }
-                      role="presentation">
-                      Unselect all
+                    <div className="row mt-4 pt-2">
+                      <div className="col-6 pr-0">
+                        <div className="label">Customer Status</div>
+                      </div>
+                      <div className="col-3 p-0">
+                        <div
+                          className="selected uncheck-all"
+                          onClick={(event) =>
+                            handleFilters(event, 'selected', 'status')
+                          }
+                          role="presentation">
+                          Select all
+                        </div>
+                      </div>
+                      <div className="col-3 p-0">
+                        <div
+                          className="unselected uncheck-all"
+                          onClick={(event) =>
+                            handleFilters(event, 'unselected', 'status')
+                          }
+                          role="presentation">
+                          Unselect all
+                        </div>
+                      </div>
                     </div>
                     <div className="clear-fix" />
                     {!isDesktop ? (
@@ -669,22 +733,42 @@ export default function NewCustomerList() {
                     ) : (
                       ''
                     )}
-                    <div className="label mt-4">Contract Status</div>
-                    <div className="clear-fix" />
+
                     {!isDesktop ? (
                       <>
                         {' '}
-                        <div
-                          className="unselected uncheck-all-contract"
-                          onClick={(event) =>
-                            handleFilters(
-                              event,
-                              'unselected',
-                              'contract_status',
-                            )
-                          }
-                          role="presentation">
-                          Unselect all
+                        <div className="row mt-4 pt-2">
+                          <div className="col-6 pr-0">
+                            <div className="label">Contract Status</div>
+                          </div>
+                          <div className="col-3 p-0">
+                            <div
+                              className="selected uncheck-all-contract"
+                              onClick={(event) =>
+                                handleFilters(
+                                  event,
+                                  'selected',
+                                  'contract_status',
+                                )
+                              }
+                              role="presentation">
+                              Select all
+                            </div>
+                          </div>
+                          <div className="col-3 p-0">
+                            <div
+                              className="unselected uncheck-all-contract"
+                              onClick={(event) =>
+                                handleFilters(
+                                  event,
+                                  'unselected',
+                                  'contract_status',
+                                )
+                              }
+                              role="presentation">
+                              Unselect all
+                            </div>
+                          </div>
                         </div>
                         <div className="clear-fix" />
                         <ul className="check-box-list checkboxes-contract">
@@ -765,11 +849,6 @@ export default function NewCustomerList() {
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            {/* <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
-              <DropDownSelect className="customer-list-header">
-                {generateDropdown('view')}
-              </DropDownSelect>{' '}
-            </div> */}
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
@@ -781,12 +860,26 @@ export default function NewCustomerList() {
         <DropDownSelect className="w-250">
           {generateDropdown('user')}
         </DropDownSelect>{' '}
-        <div className="label mt-4 pt-2">Customer Status</div>
-        <div
-          className="unselected uncheck-all"
-          onClick={(event) => handleFilters(event, 'unselected', 'status')}
-          role="presentation">
-          Unselect all
+        <div className="row mt-4 pt-2">
+          <div className="col-6 pr-0">
+            <div className="label">Customer Status</div>
+          </div>
+          <div className="col-3 p-0">
+            <div
+              className="selected uncheck-all"
+              onClick={(event) => handleFilters(event, 'selected', 'status')}
+              role="presentation">
+              Select all
+            </div>
+          </div>
+          <div className="col-3 p-0">
+            <div
+              className="unselected uncheck-all"
+              onClick={(event) => handleFilters(event, 'unselected', 'status')}
+              role="presentation">
+              Unselect all
+            </div>
+          </div>
         </div>
         <div className="clear-fix" />
         <ul className="check-box-list checkboxes">
@@ -834,14 +927,30 @@ export default function NewCustomerList() {
             </li>
           ))}
         </ul>
-        <div className="label mt-4 pt-2">Contract Status</div>
-        <div
-          className="unselected uncheck-all-contract"
-          onClick={(event) =>
-            handleFilters(event, 'unselected', 'contract_status')
-          }
-          role="presentation">
-          Unselect all
+        <div className="row mt-4 pt-2">
+          <div className="col-6 pr-0">
+            <div className="label">Contract Status</div>
+          </div>
+          <div className="col-3 p-0">
+            <div
+              className="selected uncheck-all-contract"
+              onClick={(event) =>
+                handleFilters(event, 'selected', 'contract_status')
+              }
+              role="presentation">
+              Select all
+            </div>
+          </div>
+          <div className="col-3 p-0">
+            <div
+              className="unselected uncheck-all-contract"
+              onClick={(event) =>
+                handleFilters(event, 'unselected', 'contract_status')
+              }
+              role="presentation">
+              Unselect all
+            </div>
+          </div>
         </div>
         <div className="clear-fix" />
         <ul className="check-box-list checkboxes-contract">
@@ -1195,6 +1304,10 @@ const CustomerListPage = styled.div`
       margin: 5px 0;
     }
   }
+
+  .selectAll {
+    border-right: 1px solid black;
+  }
 `;
 
 const CustomerLeftPannel = styled.div`
@@ -1232,10 +1345,16 @@ const CustomerLeftPannel = styled.div`
   }
 
   .unselected {
-    color: #556178;
+    color: ${Theme.gray40};
     font-size: 14px;
     float: right;
-    margin-top: -19px;
+    cursor: pointer;
+  }
+  .selected {
+    float: right;
+    color: ${Theme.gray40};
+    border-right: 2px solid ${Theme.gray4};
+    padding-right: 8px;
     cursor: pointer;
   }
 
@@ -1347,10 +1466,16 @@ const SideContent = styled.div`
     }
 
     .unselected {
-      color: #556178;
+      color: ${Theme.gray40};
       font-size: 14px;
       float: right;
-      margin-top: -19px;
+      cursor: pointer;
+    }
+    .selected {
+      float: right;
+      color: ${Theme.gray40};
+      border-right: 2px solid ${Theme.gray4};
+      padding-right: 8px;
       cursor: pointer;
     }
   }
