@@ -1,17 +1,203 @@
-import React from 'react';
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import styled from 'styled-components';
-import Select from 'react-select';
-import { DropDownSelect } from '../../common';
+import Select, { components } from 'react-select';
+
+import { DropDownSelect, GetInitialName } from '../../common';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
 import {
-  BrandLogo,
   RecurringIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  ServiceIcon,
+  CompanyDefaultUser,
+  CaretUp,
 } from '../../theme/images';
+import getBGSCustomerList from '../../api/BgsApi';
+import { getGrowthStrategist } from '../../api';
 
 export default function Dashboard() {
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const { Option, SingleValue, MultiValue } = components;
+  const [data, setData] = useState([]);
+  const [selectedValue, setSelectedValue] = useState('week');
+  const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
+
+  const timeOptions = [
+    { value: 'week', label: 'This Week', sub: 'vs last week' },
+    { value: 'month', label: 'This Month', sub: 'vs last month' },
+    { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
+    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
+  ];
+
+  useEffect(() => {
+    getBGSCustomerList(userInfo.id, selectedValue).then((response) => {
+      setData(response && response.data && response.data.results);
+    });
+    getGrowthStrategist().then((gs) => {
+      if (gs && gs.data) {
+        const list = [];
+        for (const brand of gs.data) {
+          list.push({
+            value: brand.id,
+            label: `${brand.first_name} ${brand.last_name}`,
+            icon:
+              brand.documents &&
+              brand.documents[0] &&
+              Object.values(brand.documents[0]) &&
+              Object.values(brand.documents[0])[0],
+          });
+          setBrandGrowthStrategist(list);
+        }
+      }
+    });
+  }, [userInfo, selectedValue]);
+
+  const filterOption = (props) => (
+    <Option {...props}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {props.data.sub}
+        </div>
+      </div>
+    </Option>
+  );
+
+  const singleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+  const IconOption = (props) => (
+    <Option {...props}>
+      {props.data.icon ? (
+        <img
+          className="drop-down-user"
+          src={props.data.icon}
+          alt="user"
+          style={{
+            borderRadius: 50,
+            marginRight: '9px',
+            height: '32px',
+          }}
+        />
+      ) : (
+        <GetInitialName
+          userInfo={props.data.label}
+          type="list"
+          property="mr-2"
+        />
+      )}{' '}
+      {props.data.label}
+    </Option>
+  );
+  const IconSingleOption = (props) => (
+    <MultiValue {...props}>
+      {props.data.icon ? (
+        <img
+          className="drop-down-user"
+          src={props.data.icon}
+          alt="user"
+          style={{ borderRadius: 50, width: '32px', marginBottom: '' }}
+        />
+      ) : (
+        <GetInitialName userInfo={props.data.label} type="list" property="" />
+      )}{' '}
+      &nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+      </span>
+    </MultiValue>
+  );
+
+  const getSelectComponents = (type) => {
+    if (type === 'user') {
+      return {
+        Option: IconOption,
+        MultiValue: IconSingleOption,
+        DropdownIndicator,
+      };
+    }
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropdownIndicator,
+    };
+  };
+
+  const calculatePercentage = (current, previous) => {
+    if (current && previous) {
+      const diff = current - previous;
+      const mean = diff / previous;
+      const percentage = mean * 100;
+
+      if (percentage.toString().includes('-')) {
+        return (
+          <>
+            <br />
+            <span className="decrease-rate">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {percentage
+                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
+            </span>
+          </>
+        );
+      }
+      return (
+        <>
+          <br />
+          <div className="increase-rate">
+            <img
+              className="red-arrow"
+              src={ArrowUpIcon}
+              width="14px"
+              alt="arrow-up"
+            />
+            {percentage ? `${percentage.toFixed(2)} %` : ''}
+          </div>
+        </>
+      );
+    }
+    return '';
+  };
+
   return (
     <BrandPartnerDashboard>
       <div className="dashboard-header-sticky">
@@ -28,12 +214,26 @@ export default function Dashboard() {
               <ul className="partner-select">
                 <li className="partner">
                   <DropDownSelect>
-                    <Select classNamePrefix="react-select" className="active" />
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      placeholder="My Partners"
+                      options={brandGrowthStrategist}
+                      components={getSelectComponents('user')}
+                      componentsValue={{ Option: IconOption }}
+                    />
                   </DropDownSelect>
                 </li>
                 <li>
                   <DropDownSelect>
-                    <Select classNamePrefix="react-select" className="active" />
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      components={getSelectComponents()}
+                      options={timeOptions}
+                      defaultValue={timeOptions[0]}
+                      onChange={(event) => setSelectedValue(event.value)}
+                    />
                   </DropDownSelect>
                 </li>
               </ul>
@@ -45,582 +245,223 @@ export default function Dashboard() {
       <DashboardCard>
         <div className="dashboard-body">
           <div className="row">
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
+            {data &&
+              data.map((item) => (
+                <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
+                  <WhiteCard key={item.id}>
+                    <img
+                      className="company-logo"
+                      src={
+                        item &&
+                        item.documents &&
+                        item.documents[0] &&
+                        Object.values(item.documents[0])
+                          ? Object.values(item.documents[0])[0]
+                          : CompanyDefaultUser
+                      }
+                      alt="logo"
+                    />
 
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
+                    <div className="company-name">
+                      {item &&
+                        item.contract &&
+                        item.contract[0].contract_company_name}
+                    </div>
+                    <div className="status">Health_Wellness_And_Fitness</div>
+                    <div className="straight-line horizontal-line spacing " />
+                    <div className="row">
+                      <div className="col-12 pt-1 pb-1">
+                        <img
+                          className="solid-icon "
+                          src={
+                            item &&
+                            item.contract &&
+                            item.contract[0] &&
+                            (item.contract[0].contract_type === 'One Time' ||
+                              item.contract[0].contract_type === 'one time')
+                              ? ServiceIcon
+                              : RecurringIcon
+                          }
+                          alt=""
+                        />
+                        <p className="black-heading-title mt-0 mb-0 capitalize">
+                          {item &&
+                            item.contract &&
+                            item.contract[0] &&
+                            item.contract[0].contract_type}{' '}
+                          Service Agreement
+                        </p>
 
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
+                        <ul className="recurring-contact ">
+                          <li>
+                            <p className="basic-text ">
+                              {item &&
+                                item.contract &&
+                                item.contract[0] &&
+                                item.contract[0].length}
+                            </p>
+                          </li>
 
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
+                          <li>
+                            <p className="basic-text ">
+                              Started{' '}
+                              {item &&
+                                item.contract &&
+                                item.contract[0] &&
+                                item.contract[0].start_date}
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="straight-line horizontal-line spacing " />
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="card-label">Revenue</div>
+                        {calculatePercentage(
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].revenue,
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.previous &&
+                            item.daily_facts.previous[0] &&
+                            item.daily_facts.previous[0].revenue,
+                        )}
+                      </div>
+                      <div className="col-6 text-right">
+                        <div className="sold-price ">
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.current &&
+                          item.daily_facts.current[0]
+                            ? `$${item.daily_facts.current[0].revenue}`
+                            : ''}
+                        </div>
+                        <div className="vs">
+                          vs{' '}
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.previous &&
+                          item.daily_facts.previous[0]
+                            ? `$${item.daily_facts.previous[0].revenue}`
+                            : ''}
+                        </div>
+                      </div>
+                      <div className="straight-line horizontal-line spacing" />
+                      <div className="col-6">
+                        <div className="card-label">Units Sold</div>
+                        {calculatePercentage(
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].units_sold,
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.previous &&
+                            item.daily_facts.previous[0] &&
+                            item.daily_facts.previous[0].units_sold,
+                        )}
+                      </div>
+                      <div className="col-6 text-right">
+                        <div className="sold-price ">
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.current &&
+                          item.daily_facts.current[0]
+                            ? item.daily_facts.current[0].units_sold
+                            : ''}
+                        </div>
+                        <div className="vs">
+                          vs{' '}
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.previous &&
+                          item.daily_facts.previous[0]
+                            ? item.daily_facts.previous[0].units_sold
+                            : ''}
+                        </div>
+                      </div>
+                      <div className="straight-line horizontal-line spacing" />
+
+                      <div className="col-6">
+                        <div className="card-label">Traffic</div>
+                        {calculatePercentage(
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].traffic,
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.previous &&
+                            item.daily_facts.previous[0] &&
+                            item.daily_facts.previous[0].traffic,
+                        )}
+                      </div>
+                      <div className="col-6 text-right">
+                        <div className="sold-price ">
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.current &&
+                          item.daily_facts.current[0]
+                            ? item.daily_facts.current[0].traffic
+                            : ''}
+                        </div>
+                        <div className="vs">
+                          vs{' '}
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.previous &&
+                          item.daily_facts.previous[0]
+                            ? item.daily_facts.previous[0].units_sold
+                            : ''}
+                        </div>
+                      </div>
+
+                      <div className="straight-line horizontal-line spacing" />
+                      <div className="col-6">
+                        <div className="card-label">Conversion</div>
+                        {calculatePercentage(
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.current &&
+                            item.daily_facts.current[0] &&
+                            item.daily_facts.current[0].conversion,
+                          item &&
+                            item.daily_facts &&
+                            item.daily_facts.previous &&
+                            item.daily_facts.previous[0] &&
+                            item.daily_facts.previous[0].conversion,
+                        )}
+                      </div>
+                      <div className="col-6 text-right">
+                        <div className="sold-price">
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.current &&
+                          item.daily_facts.current[0]
+                            ? item.daily_facts.current[0].conversion
+                            : ''}
+                        </div>
+                        <div className="vs">
+                          vs{' '}
+                          {item &&
+                          item.daily_facts &&
+                          item.daily_facts.previous &&
+                          item.daily_facts.previous[0]
+                            ? item.daily_facts.previous[0].conversion
+                            : ''}
+                        </div>
+                      </div>
+                    </div>
+                  </WhiteCard>
                 </div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
-
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
-
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
-
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line spacing" />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
-
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
-
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
-
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line spacing" />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
-
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
-
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
-
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line spacing" />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
-
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
-
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
-
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line spacing" />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
-            <div className="col-lg-3 mb-4 col-md-6 col-sm-12">
-              <WhiteCard>
-                <img className="company-logo" src={BrandLogo} alt="logo" />
-
-                <div className="company-name">TRX Training</div>
-                <div className="status">Health_Wellness_And_Fitness</div>
-                <div className="straight-line horizontal-line spacing " />
-                <div className="row">
-                  <div className="col-12 pt-1 pb-1">
-                    <img className="solid-icon " src={RecurringIcon} alt="" />
-                    <p className="black-heading-title mt-0 mb-0">Recurring</p>
-
-                    <ul className="recurring-contact ">
-                      <li>
-                        <p className="basic-text ">12 months</p>
-                      </li>
-
-                      <li>
-                        <p className="basic-text ">Started Mar 21, 2020</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="straight-line horizontal-line spacing" />
-                <div className="row">
-                  <div className="col-6">
-                    <div className="card-label">Revenue</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">$22,147.52</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Units Sold</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">268</div>
-                    <div className="vs">vs 247</div>
-                  </div>
-                  <div className="straight-line horizontal-line spacing" />
-
-                  <div className="col-6">
-                    <div className="card-label">Traffic</div>
-                    <div className="increase-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowUpIcon}
-                        width="14px"
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price ">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-
-                  <div className="straight-line horizontal-line spacing" />
-                  <div className="col-6">
-                    <div className="card-label">Conversion</div>
-                    <div className="decrease-rate">
-                      <img
-                        className="red-arrow"
-                        src={ArrowDownIcon}
-                        alt="arrow-up"
-                      />
-                      4.75%
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="sold-price">22,496</div>
-                    <div className="vs">vs 22,368</div>
-                  </div>
-                </div>
-              </WhiteCard>
-            </div>
+              ))}
           </div>
         </div>
       </DashboardCard>

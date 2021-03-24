@@ -91,3 +91,5 @@ export {
   updateArticle,
   createArticle,
 } from './ArticleApi';
+
+// export default {getBGSCustomerList} from './BgsApi'
