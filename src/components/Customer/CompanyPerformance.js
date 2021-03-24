@@ -86,6 +86,7 @@ export default function CompanyPerformance({ agreement, id }) {
   const [lineChartData, setLineChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [groupBy, setGroupBy] = useState('daily');
+  const [responseId, setResponseId] = useState(null);
 
   const pieData = [{ name: 'Group A', value: 15 }];
   const COLORS = ['#407B00'];
@@ -100,6 +101,8 @@ export default function CompanyPerformance({ agreement, id }) {
   const [conversionData, setConversionData] = useState([{}]);
   const [allSalesTotal, setAllSalesTotal] = useState({});
 
+  const [activeSales, setActiveSales] = useState('revenue');
+
   const reportOptions = [
     { value: 'week', label: 'This Week', sub: 'vs last week' },
     { value: 'month', label: 'This Month', sub: 'vs last month' },
@@ -112,19 +115,7 @@ export default function CompanyPerformance({ agreement, id }) {
     },
   ];
 
-  const yAxisTicks = [
-    0,
-    1000,
-    2000,
-    3000,
-    4000,
-    5000,
-    6000,
-    7000,
-    8000,
-    9000,
-    10000,
-  ];
+  const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -169,18 +160,28 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const calculateSalesDifference = (currentTotal, previousTotal) => {
+    const diff = ((currentTotal - previousTotal) * 100) / currentTotal;
+    if (diff === -Infinity) {
+      return 'N/A';
+    }
     return parseFloat(
       (((currentTotal - previousTotal) * 100) / currentTotal).toFixed(2),
     );
   };
 
   const getData = useCallback(
-    (marketplace, startDate = null, endDate = null) => {
+    (
+      selectedDailyFact,
+      selectedGroupBy,
+      marketplace,
+      startDate = null,
+      endDate = null,
+    ) => {
       // setIsLoading({ loader: true, type: 'button' });
       getPerformance(
         id,
-        selectedValue,
-        groupBy,
+        selectedDailyFact,
+        selectedGroupBy,
         marketplace,
         startDate,
         endDate,
@@ -190,6 +191,7 @@ export default function CompanyPerformance({ agreement, id }) {
           // setIsLoading({ loader: false, type: 'button' });
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
+          setResponseId(res.data.id);
           // const tempData = [];
           const tempRevenueData = [];
           const tempUnitsSoldData = [];
@@ -321,7 +323,6 @@ export default function CompanyPerformance({ agreement, id }) {
           setUnitsSoldData(tempUnitsSoldData);
           setTrafficData(tempTrafficData);
           setConversionData(tempConversionData);
-
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = new Date(lastUpdated)
@@ -338,21 +339,25 @@ export default function CompanyPerformance({ agreement, id }) {
         }
       });
     },
-    [id, selectedValue, groupBy],
+    [id],
   );
 
   const setChartData = (value) => {
     if (value === 'traffic') {
       setLineChartData(trafficData);
+      setActiveSales('traffic');
     }
     if (value === 'units sold') {
       setLineChartData(unitsSoldData);
+      setActiveSales('units sold');
     }
     if (value === 'conversion') {
       setLineChartData(conversionData);
+      setActiveSales('conversion');
     }
     if (value === 'revenue') {
       setLineChartData(revenueData);
+      setActiveSales('revenue');
     }
   };
 
@@ -366,19 +371,19 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const handleDailyFact = (value) => {
     setSelectedValue(value);
-    // if (value !== 'custom') {
-    //   getData(value, selectedAmazonValue);
-    // }
+    if (value !== 'custom') {
+      getData(value, groupBy, selectedAmazonValue);
+    }
   };
 
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.label.toLowerCase());
-    getData(event.label.toLowerCase());
+    getData(selectedValue, groupBy, event.label.toLowerCase());
   };
 
   const handleGroupBy = (value) => {
     setGroupBy(value);
-    // getData(selectedAmazonValue);
+    getData(selectedValue, value, selectedAmazonValue);
   };
 
   const onChangeCustomDate = (event) => {
@@ -414,17 +419,19 @@ export default function CompanyPerformance({ agreement, id }) {
         list.push({ value: option.id, label: option.name });
       }
     setAmazonOptions(list);
-    getData(list[0].label);
+    setSelectedAmazonValue(list[0].label);
+    if (responseId === null) {
+      getData(selectedValue, groupBy, list[0].label);
+    }
   }, [
     agreement.additional_marketplaces,
     agreement.primary_marketplace,
     agreement,
     getData,
+    responseId,
+    groupBy,
+    selectedValue,
   ]);
-
-  useEffect(() => {
-    // getData(selectedAmazonValue);
-  }, []);
 
   return (
     <>
@@ -490,7 +497,11 @@ export default function CompanyPerformance({ agreement, id }) {
           <div className="row mr-1 ml-1">
             <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
               <div
-                className="order-chart-box"
+                className={
+                  activeSales === 'revenue'
+                    ? 'order-chart-box active'
+                    : 'order-chart-box'
+                }
                 onClick={() => setChartData('revenue')}
                 role="presentation">
                 {' '}
@@ -508,8 +519,25 @@ export default function CompanyPerformance({ agreement, id }) {
                     ? allSalesTotal.revenue.previousRevenueTotal.toFixed(2)
                     : 0}
                 </div>
-                <div className="perentage-value">
-                  <img src={ArrowUpIcon} alt="arrow-up" />
+                <div
+                  className={
+                    allSalesTotal &&
+                    allSalesTotal.revenue &&
+                    allSalesTotal.revenue.difference > 0
+                      ? 'perentage-value'
+                      : 'perentage-value down'
+                  }>
+                  {allSalesTotal &&
+                  allSalesTotal.revenue &&
+                  allSalesTotal.revenue.difference > 0 ? (
+                    <img src={ArrowUpIcon} alt="arrow-up" />
+                  ) : (
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                  )}
                   {allSalesTotal && allSalesTotal.revenue
                     ? `${allSalesTotal.revenue.difference} %`
                     : 'N/A'}
@@ -518,7 +546,11 @@ export default function CompanyPerformance({ agreement, id }) {
             </div>
             <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
               <div
-                className="order-chart-box"
+                className={
+                  activeSales === 'units sold'
+                    ? 'order-chart-box active'
+                    : 'order-chart-box'
+                }
                 onClick={() => setChartData('units sold')}
                 role="presentation">
                 <div className="chart-name">Units Sold</div>
@@ -535,8 +567,25 @@ export default function CompanyPerformance({ agreement, id }) {
                     ? allSalesTotal.units.previousUnitsTotal.toFixed(2)
                     : 0}
                 </div>
-                <div className="perentage-value">
-                  <img src={ArrowUpIcon} alt="arrow-up" />{' '}
+                <div
+                  className={
+                    allSalesTotal &&
+                    allSalesTotal.units &&
+                    allSalesTotal.units.difference > 0
+                      ? 'perentage-value'
+                      : 'perentage-value down'
+                  }>
+                  {allSalesTotal &&
+                  allSalesTotal.units &&
+                  allSalesTotal.units.difference > 0 ? (
+                    <img src={ArrowUpIcon} alt="arrow-up" />
+                  ) : (
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                  )}
                   {allSalesTotal && allSalesTotal.units
                     ? `${allSalesTotal.units.difference} %`
                     : 'N/A'}
@@ -547,7 +596,11 @@ export default function CompanyPerformance({ agreement, id }) {
               className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3
              ">
               <div
-                className="order-chart-box"
+                className={
+                  activeSales === 'traffic'
+                    ? 'order-chart-box active'
+                    : 'order-chart-box'
+                }
                 onClick={() => setChartData('traffic')}
                 role="presentation">
                 <div className="chart-name">Traffic</div>
@@ -564,12 +617,25 @@ export default function CompanyPerformance({ agreement, id }) {
                     ? allSalesTotal.traffic.previousTrafficTotal.toFixed(2)
                     : 0}
                 </div>
-                <div className="perentage-value down">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-up"
-                  />
+                <div
+                  className={
+                    allSalesTotal &&
+                    allSalesTotal.traffic &&
+                    allSalesTotal.traffic.difference > 0
+                      ? 'perentage-value'
+                      : 'perentage-value down'
+                  }>
+                  {allSalesTotal &&
+                  allSalesTotal.traffic &&
+                  allSalesTotal.traffic.difference > 0 ? (
+                    <img src={ArrowUpIcon} alt="arrow-up" />
+                  ) : (
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                  )}
                   {allSalesTotal && allSalesTotal.traffic
                     ? `${allSalesTotal.traffic.difference} %`
                     : 'N/A'}
@@ -578,7 +644,11 @@ export default function CompanyPerformance({ agreement, id }) {
             </div>
             <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6">
               <div
-                className="order-chart-box"
+                className={
+                  activeSales === 'conversion'
+                    ? 'order-chart-box active'
+                    : 'order-chart-box'
+                }
                 onClick={() => setChartData('conversion')}
                 role="presentation">
                 <div className="chart-name">Conversion</div>
@@ -597,8 +667,25 @@ export default function CompanyPerformance({ agreement, id }) {
                       )
                     : 0}
                 </div>
-                <div className="perentage-value">
-                  <img src={ArrowUpIcon} alt="arrow-up" />
+                <div
+                  className={
+                    allSalesTotal &&
+                    allSalesTotal.conversion &&
+                    allSalesTotal.conversion.difference > 0
+                      ? 'perentage-value'
+                      : 'perentage-value down'
+                  }>
+                  {allSalesTotal &&
+                  allSalesTotal.conversion &&
+                  allSalesTotal.conversion.difference > 0 ? (
+                    <img src={ArrowUpIcon} alt="arrow-up" />
+                  ) : (
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-up"
+                    />
+                  )}
                   {allSalesTotal && allSalesTotal.conversion
                     ? `${allSalesTotal.conversion.difference} %`
                     : 'N/A'}

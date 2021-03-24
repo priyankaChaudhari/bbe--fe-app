@@ -847,6 +847,10 @@ export const WhiteCard = styled.div`
       &:hover {
         border: 1px solid ${Theme.orange};
       }
+
+      &.active {
+        border: 1px solid ${Theme.orange};
+      }
     }
 
   
