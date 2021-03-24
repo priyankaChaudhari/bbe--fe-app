@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint no-shadow: "off" */
 
 import axiosInstance from '../../axios';
@@ -13,6 +14,7 @@ import {
   PATH_AMAZON_ACCOUNT,
   PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
+  PATH_BGS_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -24,6 +26,7 @@ export const userRequestInitiated = () => {
 
 export const userRequestSuccess = (data, history) => {
   localStorage.setItem('token', data.token);
+
   if (data.user && data.user.role === 'Customer') {
     if (data.user.step === null) {
       history.push(PATH_COMPANY_DETAILS);
@@ -38,7 +41,13 @@ export const userRequestSuccess = (data, history) => {
       history.push(PATH_CUSTOMER_DETAILS.replace(data.user.customer));
     }
   } else {
-    history.push(PATH_CUSTOMER_LIST);
+    if (
+      data.user &&
+      data.user.role &&
+      data.user.role.includes('Growth Strategist')
+    ) {
+      history.push(PATH_BGS_DASHBOARD);
+    } else history.push(PATH_CUSTOMER_LIST);
   }
 
   return {

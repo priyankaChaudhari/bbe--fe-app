@@ -23,7 +23,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
-  PATH_DASHBOARD,
+  PATH_BGS_DASHBOARD,
   PATH_TEAM_MEMBER,
 } from '../constants/index';
 
@@ -83,7 +83,7 @@ export default function AuthenticationComponent() {
             <Header />
           </div>
 
-          <LeftSideBar />
+          <LeftSideBar userInfo={userInfo} />
         </>
       );
     return '';
@@ -166,7 +166,7 @@ export default function AuthenticationComponent() {
           )}
 
           {/* Brand Partner */}
-          <Route path={PATH_DASHBOARD} component={Dashboard} />
+          <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
 
           <Route component={PageNotFound} />

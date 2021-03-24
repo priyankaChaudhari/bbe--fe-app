@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -15,37 +16,49 @@ import {
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_DASHBOARD,
+  PATH_BGS_DASHBOARD,
 } from '../constants';
 
-export default function LeftSideBar() {
+export default function LeftSideBar({ userInfo }) {
   const history = useHistory();
 
   return (
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          <li role="presentation" onClick={() => history.push(PATH_DASHBOARD)}>
-            {' '}
-            <img
-              width="32px"
-              className=" speed0meter-icon active"
-              src={SpeedometerActive}
-              alt=""
-            />
-            <img
-              width="32px"
-              className=" speed0meter-icon  disactive"
-              src={Speedometer}
-              alt=""
-            />
-          </li>
+          {userInfo &&
+          userInfo.role &&
+          userInfo.role.includes('Growth Strategist') ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('bgs-dashboard')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_BGS_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : (
+            ''
+          )}
           <li
             className={
-              !(
-                history.location.pathname &&
-                history.location.pathname.includes('collections')
-              )
+              history.location.pathname &&
+              history.location.pathname.includes('customer')
                 ? ' cursor active'
                 : ' cursor'
             }
@@ -75,6 +88,16 @@ export default function LeftSideBar() {
     </div>
   );
 }
+
+LeftSideBar.defaultProps = {
+  userInfo: {},
+};
+
+LeftSideBar.propTypes = {
+  userInfo: PropTypes.shape({
+    role: PropTypes.string,
+  }),
+};
 
 const LeftSideBars = styled.div`
   max-width: 64px;

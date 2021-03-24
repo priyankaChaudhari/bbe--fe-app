@@ -13,7 +13,11 @@ import {
   PageLoader,
   SuccessMsg,
 } from '../../common';
-import { PATH_CUSTOMER_LIST, PATH_FORGOT_PASSWORD } from '../../constants';
+import {
+  PATH_BGS_DASHBOARD,
+  PATH_CUSTOMER_LIST,
+  PATH_FORGOT_PASSWORD,
+} from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 
 export default function Login() {
@@ -26,6 +30,7 @@ export default function Login() {
     (state) => state.userState.showForgotMsg,
   );
   const resetPasswordMsg = useSelector((state) => state.userState.showResetMsg);
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   const onSubmit = (data) => {
     dispatch(login(history, data));
@@ -33,9 +38,15 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      history.push(PATH_CUSTOMER_LIST);
+      if (
+        userInfo &&
+        userInfo.role &&
+        userInfo.role.includes('Growth Strategist')
+      ) {
+        history.push(PATH_BGS_DASHBOARD);
+      } else history.push(PATH_CUSTOMER_LIST);
     }
-  }, [history]);
+  }, [history, userInfo]);
 
   const handleChange = () => {
     dispatch(clearErrorMessage());
