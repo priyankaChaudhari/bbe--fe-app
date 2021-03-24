@@ -394,8 +394,8 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const handleAmazonOptions = (event) => {
-    setSelectedAmazonValue(event.label.toLowerCase());
-    getData(selectedValue, groupBy, event.label.toLowerCase());
+    setSelectedAmazonValue(event.label);
+    getData(selectedValue, groupBy, event.label);
   };
 
   const handleGroupBy = (value) => {
@@ -440,9 +440,9 @@ export default function CompanyPerformance({ agreement, id }) {
         list.push({ value: option.id, label: option.name });
       }
     setAmazonOptions(list);
-    setSelectedAmazonValue(list[0].label.toLowerCase());
+    setSelectedAmazonValue(list[0].label);
     if (responseId === null && list[0].label !== null) {
-      getData(selectedValue, groupBy, list[0].label.toLowerCase());
+      getData(selectedValue, groupBy, list[0].label);
     }
   }, [
     agreement.additional_marketplaces,
@@ -638,7 +638,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Traffic</div>
                 <div className="number-rate">
                   $
-                  {allSalesTotal && allSalesTotal.trafic
+                  {allSalesTotal && allSalesTotal.traffic
                     ? allSalesTotal.traffic.currentTrafficTotal.toFixed(2)
                     : 0}
                 </div>
