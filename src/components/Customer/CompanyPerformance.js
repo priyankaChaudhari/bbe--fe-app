@@ -271,6 +271,8 @@ export default function CompanyPerformance({ agreement, id }) {
                 'vs $': resData.conversion,
               });
             });
+            conversionTotal.previousConversionTotal /=
+              res.data.daily_facts.previous.length;
           }
           if (
             res.data.daily_facts.current &&
@@ -319,6 +321,8 @@ export default function CompanyPerformance({ agreement, id }) {
                 });
               }
             });
+            conversionTotal.currentConversionTotal /=
+              res.data.daily_facts.current.length;
           }
           revenueTotal.difference = calculateSalesDifference(
             revenueTotal.currentRevenueTotal,
@@ -332,10 +336,9 @@ export default function CompanyPerformance({ agreement, id }) {
             trafficTotal.currentTrafficTotal,
             trafficTotal.previousTrafficTotal,
           );
-          conversionTotal.difference = calculateSalesDifference(
-            conversionTotal.currentConversionTotal,
-            conversionTotal.previousConversionTotal,
-          );
+          conversionTotal.difference =
+            conversionTotal.currentConversionTotal -
+            conversionTotal.previousConversionTotal;
           setAllSalesTotal({
             revenue: revenueTotal,
             units: unitsTotal,
@@ -522,10 +525,10 @@ export default function CompanyPerformance({ agreement, id }) {
         list.push({ value: option.id, label: option.name });
       }
     setAmazonOptions(list);
-    setSelectedAmazonValue(list[0].label.toLowerCase());
 
     if (responseId === null && list[0].label !== null) {
-      getData(selectedValue, groupBy, list[0].label.toLowerCase());
+      setSelectedAmazonValue(list[0].label);
+      getData(selectedValue, groupBy, list[0].label);
       setResponseId('12345');
     }
   }, [
@@ -536,6 +539,7 @@ export default function CompanyPerformance({ agreement, id }) {
     responseId,
     groupBy,
     selectedValue,
+    selectedAmazonValue,
   ]);
 
   return (
@@ -603,14 +607,13 @@ export default function CompanyPerformance({ agreement, id }) {
                 {' '}
                 <div className="chart-name">Revenue</div>
                 <div className="number-rate">
-                  $
                   {allSalesTotal && allSalesTotal.revenue
                     ? allSalesTotal.revenue.currentRevenueTotal.toFixed(2)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
-                  vs ${' '}
+                  vs{' '}
                   {allSalesTotal && allSalesTotal.revenue
                     ? allSalesTotal.revenue.previousRevenueTotal.toFixed(2)
                     : 0}
@@ -661,14 +664,13 @@ export default function CompanyPerformance({ agreement, id }) {
                 role="presentation">
                 <div className="chart-name">Units Sold</div>
                 <div className="number-rate">
-                  $
                   {allSalesTotal && allSalesTotal.units
                     ? allSalesTotal.units.currentUnitsTotal.toFixed(2)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
-                  vs ${' '}
+                  vs{' '}
                   {allSalesTotal && allSalesTotal.units
                     ? allSalesTotal.units.previousUnitsTotal.toFixed(2)
                     : 0}
@@ -721,14 +723,13 @@ export default function CompanyPerformance({ agreement, id }) {
                 role="presentation">
                 <div className="chart-name">Traffic</div>
                 <div className="number-rate">
-                  $
                   {allSalesTotal && allSalesTotal.traffic
                     ? allSalesTotal.traffic.currentTrafficTotal.toFixed(2)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
-                  vs ${' '}
+                  vs{' '}
                   {allSalesTotal && allSalesTotal.traffic
                     ? allSalesTotal.traffic.previousTrafficTotal.toFixed(2)
                     : 0}
@@ -779,19 +780,20 @@ export default function CompanyPerformance({ agreement, id }) {
                 role="presentation">
                 <div className="chart-name">Conversion</div>
                 <div className="number-rate">
-                  $
                   {allSalesTotal && allSalesTotal.conversion
                     ? allSalesTotal.conversion.currentConversionTotal.toFixed(2)
-                    : 0}
+                    : 0}{' '}
+                  %
                 </div>
                 <div className="vs">
                   {' '}
-                  vs $
+                  vs
                   {allSalesTotal && allSalesTotal.conversion
                     ? allSalesTotal.conversion.previousConversionTotal.toFixed(
                         2,
                       )
-                    : 0}
+                    : 0}{' '}
+                  %
                 </div>
                 <div
                   className={
@@ -824,7 +826,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.conversion &&
                   allSalesTotal.conversion.difference &&
                   allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.conversion.difference} %`
+                    ? `${allSalesTotal.conversion.difference.toFixed(2)} %`
                     : 'N/A'}
                 </div>
               </div>
