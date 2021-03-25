@@ -394,7 +394,7 @@ export default function CompanyPerformance({ agreement, id }) {
       temp = 'daily';
       setDisableOrderBy({ daily: true });
     } else if (diffDays > 30 && diffDays <= 180) {
-      temp = 'week';
+      temp = 'weekly';
       setDisableOrderBy({ week: true });
     } else if (diffDays > 180) {
       temp = 'month';
@@ -405,7 +405,7 @@ export default function CompanyPerformance({ agreement, id }) {
       if (temp === 'daily') {
         setFilters({ daily: true, weekly: false, month: false });
         setGroupBy('daily');
-      } else if (temp === 'week') {
+      } else if (temp === 'weekly') {
         setFilters({ daily: false, weekly: true, month: false });
         setGroupBy('weekly');
       } else if (temp === 'month') {
