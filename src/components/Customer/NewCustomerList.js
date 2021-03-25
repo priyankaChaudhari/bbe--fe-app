@@ -423,7 +423,7 @@ export default function NewCustomerList() {
     return '';
   };
   const redirectIfContractExists = (type, id) => {
-    getcontract(id).then((res) => {
+    getcontract(type.contract_id).then((res) => {
       if (res && res.status === 200) {
         if (res && res.data && res.data.contract_url) {
           history.push(PATH_AGREEMENT.replace(':id', id));
