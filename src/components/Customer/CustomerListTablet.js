@@ -140,7 +140,7 @@ export default function CustomerListTablet({
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            redirectIfContractExists();
+            redirectIfContractExists(type, id);
             // history.push(PATH_AGREEMENT.replace(':id', id));
             // localStorage.setItem('agreementID', type.contract_id);
           }}
@@ -155,7 +155,7 @@ export default function CustomerListTablet({
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          redirectIfContractExists();
+          redirectIfContractExists(type, id);
           // history.push(PATH_AGREEMENT.replace(':id', id));
           // localStorage.setItem('agreementID', type.contract_id);
         }}

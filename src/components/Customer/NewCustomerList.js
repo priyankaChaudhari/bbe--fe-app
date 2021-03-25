@@ -521,7 +521,7 @@ export default function NewCustomerList() {
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            redirectIfContractExists();
+            redirectIfContractExists(type, id);
             // history.push(PATH_AGREEMENT.replace(':id', id));
             // localStorage.setItem('agreementID', type.contract_id);
           }}
@@ -536,7 +536,7 @@ export default function NewCustomerList() {
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          redirectIfContractExists();
+          redirectIfContractExists(type, id);
 
           // history.push(PATH_AGREEMENT.replace(':id', id));
           // localStorage.setItem('agreementID', type.contract_id);
