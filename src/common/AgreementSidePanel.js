@@ -595,17 +595,17 @@ export default function AgreementSidePanel({
                 });
               }
             } else if (formData && formData[key]) {
-                item.error = true;
+              item.error = true;
 
-                setSectionError({
-                  ...sectionError,
-                  agreement: sectionError.agreement + 1,
-                  dsp: sectionError.dsp + 1,
+              setSectionError({
+                ...sectionError,
+                agreement: sectionError.agreement + 1,
+                dsp: sectionError.dsp + 1,
 
-                  // ? sectionError.agreement + 1
-                  // : 0,
-                });
-              }
+                // ? sectionError.agreement + 1
+                // : 0,
+              });
+            }
           }
           return null;
         });
@@ -655,13 +655,13 @@ export default function AgreementSidePanel({
               });
             }
           } else if (formData && formData[key]) {
-              item.error = true;
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp + 1,
-                //  ? sectionError.statement + 1 : 0,
-              });
-            }
+            item.error = true;
+            setSectionError({
+              ...sectionError,
+              dsp: sectionError.dsp + 1,
+              //  ? sectionError.statement + 1 : 0,
+            });
+          }
         });
       } else if (
         AgreementDetails.find((item) => item.key === key && item.isMandatory) ||
@@ -684,15 +684,15 @@ export default function AgreementSidePanel({
                 });
               }
             } else if (formData && formData[key]) {
-                item.error = true;
+              item.error = true;
 
-                setSectionError({
-                  ...sectionError,
-                  agreement: sectionError.agreement + 1,
-                  // ? sectionError.agreement + 1
-                  // : 0,
-                });
-              }
+              setSectionError({
+                ...sectionError,
+                agreement: sectionError.agreement + 1,
+                // ? sectionError.agreement + 1
+                // : 0,
+              });
+            }
           }
         });
       }
@@ -751,13 +751,13 @@ export default function AgreementSidePanel({
               });
             }
           } else if (formData && formData[event.target.name]) {
-              item.error = true;
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp + 1,
-                //  ? sectionError.statement + 1 : 0,
-              });
-            }
+            item.error = true;
+            setSectionError({
+              ...sectionError,
+              dsp: sectionError.dsp + 1,
+              //  ? sectionError.statement + 1 : 0,
+            });
+          }
         });
       } else if (
         AgreementDetails.find(
@@ -768,7 +768,7 @@ export default function AgreementSidePanel({
         event.target.name === 'city' ||
         event.target.name === 'zip_code'
       ) {
-       return  AgreementDetails.forEach((item) => {
+        return AgreementDetails.forEach((item) => {
           if (item.key !== 'contract_address') {
             if (event && event.target && event.target.value) {
               if (
@@ -785,15 +785,15 @@ export default function AgreementSidePanel({
                 });
               }
             } else if (formData && formData[event.target.name]) {
-                item.error = true;
+              item.error = true;
 
-                setSectionError({
-                  ...sectionError,
-                  agreement: sectionError.agreement + 1,
-                  // ? sectionError.agreement + 1
-                  // : 0,
-                });
-              }
+              setSectionError({
+                ...sectionError,
+                agreement: sectionError.agreement + 1,
+                // ? sectionError.agreement + 1
+                // : 0,
+              });
+            }
           } else {
             return (
               item &&
@@ -814,15 +814,14 @@ export default function AgreementSidePanel({
                     });
                   }
                 } else if (formData && formData[event.target.name]) {
-                    subItem.error = true;
-
-                    setSectionError({
-                      ...sectionError,
-                      agreement: sectionError.agreement + 1,
-                      // ? sectionError.agreement + 1
-                      // : 0,
-                    });
-                  }
+                  subItem.error = true;
+                  setSectionError({
+                    ...sectionError,
+                    agreement: sectionError.agreement + 1,
+                    // ? sectionError.agreement + 1
+                    // : 0,
+                  });
+                }
               })
             );
           }
@@ -1948,20 +1947,36 @@ export default function AgreementSidePanel({
           contractError &&
           contractError.zip_code
         ) {
-          setSectionError({
-            ...sectionError,
-            agreement: sectionError.agreement ? sectionError.agreement - 1 : 0,
-          });
+          if (event.target.value) {
+            setSectionError({
+              ...sectionError,
+              agreement: sectionError.agreement
+                ? sectionError.agreement - 1
+                : 0,
+            });
+          } else {
+            setSectionError({
+              ...sectionError,
+              agreement: sectionError.agreement ? sectionError.agreement : 0,
+            });
+          }
         }
         if (
           event.target.name === 'dsp_fee' &&
           contractError &&
           contractError.dsp_fee
         ) {
-          setSectionError({
-            ...sectionError,
-            dsp: sectionError.dsp ? sectionError.dsp - 1 : 0,
-          });
+          if (event.target.value) {
+            setSectionError({
+              ...sectionError,
+              dsp: sectionError.dsp ? sectionError.dsp - 1 : 0,
+            });
+          } else {
+            setSectionError({
+              ...sectionError,
+              dsp: sectionError.dsp ? sectionError.dsp : 0,
+            });
+          }
         }
 
         setContractError({
@@ -2518,7 +2533,7 @@ export default function AgreementSidePanel({
     //   label: '',
     // };
   };
- 
+
   const displayError = (item) => {
     if (item === 'non_field_errors') {
       return (
@@ -2613,7 +2628,6 @@ export default function AgreementSidePanel({
         ) === 999
       : false;
   };
-
 
   const displayOneTimeServices = () => {
     return (
