@@ -185,7 +185,7 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const calculateSalesDifference = (currentTotal, previousTotal) => {
-    const diff = ((currentTotal - previousTotal) * 100) / currentTotal;
+    const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
     if (diff === -Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
