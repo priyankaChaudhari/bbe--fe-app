@@ -939,7 +939,7 @@ export default function CompanyPerformance({ agreement, id }) {
               }}>
               <CartesianGrid strokeDasharray="none" />
               <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, 'dataMax + 1000']} />
+              <YAxis type="number" domain={[0, (dataMax) => dataMax * 2]} />
               <Tooltip />
               <Legend />
               <Line
