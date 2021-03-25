@@ -67,7 +67,7 @@ export default function KnowledgeBaseHeader() {
       </Header>
       <MobileSidebar>
         <label htmlFor="mobilemenu-check" id="responsive-button">
-          <img src={MenuIcon} alt="Menu Lines" className="menu-icon" />
+          <img src={MenuIcon} alt="Menu Lines" className="menu-icon cursor" />
         </label>
         <input type="checkbox" id="mobilemenu-check" />
         <div id="ifp-sidebar-responsive">
