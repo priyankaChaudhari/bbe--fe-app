@@ -476,8 +476,10 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const handleGroupBy = (value) => {
-    setGroupBy(value);
-    getData(selectedValue, value, selectedAmazonValue);
+    if (value !== groupBy) {
+      setGroupBy(value);
+      getData(selectedValue, value, selectedAmazonValue);
+    }
   };
 
   const onChangeCustomDate = (event) => {
@@ -860,7 +862,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   className="d-none"
                   type="radio"
                   value={groupBy}
-                  checked={filters.weekly}
+                  checked={filters.weekly && groupBy === 'weekly'}
                   id="weeklyCheck"
                   name="flexRadioDefault"
                   onClick={() => handleGroupBy('weekly')}
