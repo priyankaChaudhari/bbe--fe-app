@@ -60,7 +60,8 @@ function RequestSignature({
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [selectedContact, setSelectedContact] = useState({});
-  const [ccEmails, setCCEmails] = useState([{}]);
+  const [ccEmails, setCCEmails] = useState([{}, {}]);
+  // const [ccEmails, setCCEmails] = useState([{}]);
   const [approvalNote, setApprovalNote] = useState({});
   const [sendContractCopy, setSendContractCopy] = useState(false);
   const [contractDesignData, setContractDesignData] = useState(null);
@@ -291,8 +292,8 @@ function RequestSignature({
   const displayCCEmails = () => {
     return ccEmails.map((data, i) => {
       return (
-        <div className="col-12 mt-3">
-          {' '}
+        <div className="col-6 mt-3">
+          {/* <div className="col-12 mt-3"> */}{' '}
           <FormField>
             <input
               id={i}
@@ -380,7 +381,7 @@ function RequestSignature({
       contract: agreementData.id,
       to: selectedContact && selectedContact.email,
       cc: ccEmails,
-      send_contract_copy: sendContractCopy,
+      // send_contract_copy: sendContractCopy,
       contract_data: pdfData
         .replaceAll('PRINTED_NAME', mapValue('printed_name'))
         .replace('CUSTOMER_ROLE', mapValue('customer_role')),
@@ -502,7 +503,7 @@ function RequestSignature({
     <>
       {params && params.step === 'verify-document' ? (
         <>
-          {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
+          {/* {contractDesignData && showHelloSignPage ? displayHelloSign() : ''} */}
           <div className="modal-body ">
             <h4
               className="on-boarding mb-4"
@@ -526,7 +527,13 @@ function RequestSignature({
                   <label
                     className="check-container contract-sign"
                     htmlFor="contract-copy-check">
-                    Send me a copy of the contract
+                    <div className="send-copy-contract mt-4">
+                      Send me a copy of the contract
+                    </div>
+                    <div className="copy-review mt-2">
+                      Those in CC will get a copy of the contract for review.
+                    </div>
+                    {/* Send me a copy of the contract */}
                     <input
                       type="checkbox"
                       id="contract-copy-check"
@@ -707,7 +714,7 @@ function RequestSignature({
       )}
       {params && params.step === 'select-contact' ? (
         <>
-          {/* {contractDesignData && showHelloSignPage ? displayHelloSign() : ''} */}
+          {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
           <div className="modal-body ">
             <h4 className="on-boarding mb-4">Select contact</h4>
             {isLoading.loader && isLoading.type === 'page' ? (
@@ -744,8 +751,8 @@ function RequestSignature({
             <div
               className="mt-4"
               role="presentation"
-              // onClick={() => verifyDocument()}>
-              onClick={() => setParams('verify-document')}>
+              onClick={() => verifyDocument()}>
+              {/* onClick={() => setParams('verify-document')}> */}
               <Button
                 type="button"
                 disabled={!(selectedContact && selectedContact.id)}
