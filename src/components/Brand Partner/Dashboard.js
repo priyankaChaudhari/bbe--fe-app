@@ -189,11 +189,16 @@ export default function Dashboard() {
     };
   };
 
-  const calculatePercentage = (current, previous) => {
+  const calculatePercentage = (current, previous, type) => {
     if (current && previous) {
+      let percentage = '';
+      if (type === 'conversion') {
+        const diff = current - previous;
+        percentage = diff / 2;
+      }
       const diff = current - previous;
       const mean = diff / previous;
-      const percentage = mean * 100;
+      percentage = mean * 100;
 
       if (percentage.toString().includes('-')) {
         return (
@@ -266,6 +271,7 @@ export default function Dashboard() {
                       defaultValue={timeOptions[0]}
                       onChange={(event) =>
                         setSelectedValue({
+                          ...selectedValue,
                           type: event.value,
                           group: event.group,
                         })
@@ -290,6 +296,7 @@ export default function Dashboard() {
               ) : (
                 data.map((item) => (
                   <div
+                    key={item.id}
                     className="col-lg-3 mb-4 col-md-6 col-sm-12 cursor"
                     onClick={() =>
                       history.push(
@@ -297,7 +304,7 @@ export default function Dashboard() {
                       )
                     }
                     role="presentation">
-                    <WhiteCard key={item.id}>
+                    <WhiteCard>
                       <img
                         className="company-logo"
                         src={
@@ -316,7 +323,9 @@ export default function Dashboard() {
                           item.contract &&
                           item.contract[0].contract_company_name}
                       </div>
-                      <div className="status">Health_Wellness_And_Fitness</div>
+                      <div className="status">
+                        {item && item.category && item.category.label}
+                      </div>
                       <div className="straight-line horizontal-line spacing " />
                       <div className="row">
                         <div className="col-12 pt-1 pb-1">
@@ -372,13 +381,19 @@ export default function Dashboard() {
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
-                              item.daily_facts.current[0] &&
-                              item.daily_facts.current[0].revenue,
+                              item.daily_facts.current.length
+                              ? item.daily_facts.current
+                                  .map((rev) => rev.revenue)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                             item &&
                               item.daily_facts &&
                               item.daily_facts.previous &&
-                              item.daily_facts.previous[0] &&
-                              item.daily_facts.previous[0].revenue,
+                              item.daily_facts.previous.length
+                              ? item.daily_facts.previous
+                                  .map((rev) => rev.revenue)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -386,18 +401,32 @@ export default function Dashboard() {
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0]
-                              ? `$${item.daily_facts.current[0].revenue}`
-                              : 0}
+                            item.daily_facts.current.length ? (
+                              <>
+                                $
+                                {item.daily_facts.current
+                                  .map((rev) => rev.revenue)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                           <div className="vs">
                             vs{' '}
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0]
-                              ? `$${item.daily_facts.previous[0].revenue}`
-                              : 0}
+                            item.daily_facts.previous.length ? (
+                              <>
+                                $
+                                {item.daily_facts.previous
+                                  .map((rev) => rev.revenue)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                         </div>
                         <div className="straight-line horizontal-line spacing" />
@@ -407,13 +436,19 @@ export default function Dashboard() {
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
-                              item.daily_facts.current[0] &&
-                              item.daily_facts.current[0].units_sold,
+                              item.daily_facts.current.length
+                              ? item.daily_facts.current
+                                  .map((rev) => rev.units_sold)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                             item &&
                               item.daily_facts &&
                               item.daily_facts.previous &&
-                              item.daily_facts.previous[0] &&
-                              item.daily_facts.previous[0].units_sold,
+                              item.daily_facts.previous.length
+                              ? item.daily_facts.previous
+                                  .map((rev) => rev.units_sold)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -421,18 +456,30 @@ export default function Dashboard() {
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0]
-                              ? item.daily_facts.current[0].units_sold
-                              : 0}
+                            item.daily_facts.current.length ? (
+                              <>
+                                {item.daily_facts.current
+                                  .map((rev) => rev.units_sold)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                           <div className="vs">
                             vs{' '}
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0]
-                              ? item.daily_facts.previous[0].units_sold
-                              : 0}
+                            item.daily_facts.previous.length ? (
+                              <>
+                                {item.daily_facts.previous
+                                  .map((rev) => rev.units_sold)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                         </div>
                         <div className="straight-line horizontal-line spacing" />
@@ -443,13 +490,19 @@ export default function Dashboard() {
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
-                              item.daily_facts.current[0] &&
-                              item.daily_facts.current[0].traffic,
+                              item.daily_facts.current.length
+                              ? item.daily_facts.current
+                                  .map((rev) => rev.traffic)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                             item &&
                               item.daily_facts &&
                               item.daily_facts.previous &&
-                              item.daily_facts.previous[0] &&
-                              item.daily_facts.previous[0].traffic,
+                              item.daily_facts.previous.length
+                              ? item.daily_facts.previous
+                                  .map((rev) => rev.traffic)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -457,18 +510,30 @@ export default function Dashboard() {
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0]
-                              ? item.daily_facts.current[0].traffic
-                              : 0}
+                            item.daily_facts.current.length ? (
+                              <>
+                                {item.daily_facts.current
+                                  .map((rev) => rev.traffic)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                           <div className="vs">
                             vs{' '}
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0]
-                              ? item.daily_facts.previous[0].units_sold
-                              : 0}
+                            item.daily_facts.previous.length ? (
+                              <>
+                                {item.daily_facts.previous
+                                  .map((rev) => rev.traffic)
+                                  .reduce((val, rev) => rev + val)}
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                         </div>
 
@@ -479,13 +544,20 @@ export default function Dashboard() {
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
-                              item.daily_facts.current[0] &&
-                              item.daily_facts.current[0].conversion,
+                              item.daily_facts.current.length
+                              ? item.daily_facts.current
+                                  .map((rev) => rev.conversion)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
                             item &&
                               item.daily_facts &&
                               item.daily_facts.previous &&
-                              item.daily_facts.previous[0] &&
-                              item.daily_facts.previous[0].conversion,
+                              item.daily_facts.previous.length
+                              ? item.daily_facts.previous
+                                  .map((rev) => rev.conversion)
+                                  .reduce((val, rev) => rev + val)
+                              : 0,
+                            'conversion',
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -493,18 +565,32 @@ export default function Dashboard() {
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0]
-                              ? `${item.daily_facts.current[0].conversion} %`
-                              : 0}
+                            item.daily_facts.current.length ? (
+                              <>
+                                {item.daily_facts.current
+                                  .map((rev) => rev.conversion)
+                                  .reduce((val, rev) => rev + val)}{' '}
+                                %
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                           <div className="vs">
                             vs{' '}
                             {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0]
-                              ? `${item.daily_facts.previous[0].conversion} %`
-                              : 0}
+                            item.daily_facts.previous.length ? (
+                              <>
+                                {item.daily_facts.previous
+                                  .map((rev) => rev.conversion)
+                                  .reduce((val, rev) => rev + val)}{' '}
+                                %
+                              </>
+                            ) : (
+                              0
+                            )}
                           </div>
                         </div>
                       </div>

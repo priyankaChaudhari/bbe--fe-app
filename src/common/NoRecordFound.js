@@ -9,7 +9,12 @@ import { TelescopeIcon } from '../theme/images';
 export default function NoRecordFound({ type }) {
   return (
     <NoRecord>
-      <div className={type === 'brand' ? '' : 'text-center no-record-found'}>
+      <div
+        className={
+          type === 'brand'
+            ? 'text-center no-record-found'
+            : 'text-center no-record-found'
+        }>
         <img src={TelescopeIcon} alt="No record found" />
         <p>We looked high and low, but…</p>
         <strong>No records found.</strong>
