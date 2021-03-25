@@ -20,17 +20,23 @@ import {
   // ActiveNotificationBell,
   // CompanyDefaultUser,
   LightBulb,
-  UserGroupIcon,
   ReadBookIcon,
   MenuIcon,
   ReadBookIconActive,
-  UserGroupIconActive,
+  OrganizationIcon,
+  OrganizationActiveIcon,
+  SpeedometerActive,
+  Speedometer,
 } from '../theme/images/index';
 import { logout } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
-import { PATH_ARTICLE_LIST, PATH_CUSTOMER_LIST } from '../constants';
+import {
+  PATH_ARTICLE_LIST,
+  PATH_BGS_DASHBOARD,
+  PATH_CUSTOMER_LIST,
+} from '../constants';
 
 export default function Header() {
   const history = useHistory();
@@ -395,7 +401,7 @@ export default function Header() {
       </MainHeader>
       <MobileSidebar id="kBase">
         <label htmlFor="mobilemenu-check" id="responsive-button">
-          <img src={MenuIcon} alt="Menu Lines" className="menu-icon" />
+          <img src={MenuIcon} alt="Menu Lines" className="menu-icon cursor" />
         </label>
         <input type="checkbox" id="mobilemenu-check" />
         <div id="ifp-sidebar-responsive">
@@ -407,21 +413,56 @@ export default function Header() {
           <SideContents>
             {' '}
             <ul className="side-bar-icon ">
+              {userInfo &&
+              userInfo.role &&
+              userInfo.role.includes('Growth Strategist') ? (
+                <li
+                  className={
+                    history.location.pathname &&
+                    history.location.pathname.includes('bgs-dashboard')
+                      ? ' cursor active'
+                      : ' cursor'
+                  }
+                  role="presentation"
+                  onClick={() => history.push(PATH_BGS_DASHBOARD)}>
+                  {' '}
+                  {history.location.pathname &&
+                  history.location.pathname.includes('bgs-dashboard') ? (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon active"
+                      src={SpeedometerActive}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon  disactive"
+                      src={Speedometer}
+                      alt=""
+                    />
+                  )}
+                </li>
+              ) : (
+                ''
+              )}
               <li
                 className={
-                  !(
-                    history.location.pathname &&
-                    history.location.pathname.includes('collections')
-                  )
+                  history.location.pathname &&
+                  history.location.pathname.includes('customer')
                     ? ' cursor active'
                     : ' cursor'
                 }
                 role="presentation"
                 onClick={() => history.push(PATH_CUSTOMER_LIST)}>
-                <img className="user-group" src={UserGroupIconActive} alt="" />
+                <img
+                  className="user-group"
+                  src={OrganizationActiveIcon}
+                  alt=""
+                />
                 <img
                   className="user-group-active "
-                  src={UserGroupIcon}
+                  src={OrganizationIcon}
                   alt=""
                 />
               </li>

@@ -1,12 +1,20 @@
 import React from 'react';
+
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import Theme from '../theme/Theme';
 import { TelescopeIcon } from '../theme/images';
 
-export default function NoRecordFound() {
+export default function NoRecordFound({ type }) {
   return (
     <NoRecord>
-      <div className="text-center no-record-found">
+      <div
+        className={
+          type === 'brand'
+            ? 'NoRecordFound no-record-found'
+            : 'text-center no-record-found'
+        }>
         <img src={TelescopeIcon} alt="No record found" />
         <p>We looked high and low, but…</p>
         <strong>No records found.</strong>
@@ -15,12 +23,25 @@ export default function NoRecordFound() {
   );
 }
 
+NoRecordFound.defaultProps = {
+  type: '',
+};
+
+NoRecordFound.propTypes = {
+  type: PropTypes.string,
+};
+
 const NoRecord = styled.div`
   position: absolute;
   right: 0;
   left: 0;
   top: 98px;
 
+  .NoRecordFound {
+    margin: auto;
+    text-align: center;
+    margin-top: 10%;
+  }
   .no-record-found {
     img {
       width: 240px;

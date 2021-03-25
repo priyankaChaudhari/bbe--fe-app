@@ -85,7 +85,7 @@ const ContractFormField = styled.div`
     }
 
     &::placeholder {
-      color: ${Theme.gray40};
+      color: ${Theme.gray40} !important;
       font-size: color: ${Theme.extraNormal};
     }
 

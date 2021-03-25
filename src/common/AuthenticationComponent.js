@@ -23,7 +23,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
-  // PATH_DASHBOARD,
+  PATH_BGS_DASHBOARD,
   // PATH_TEAM_MEMBER,
 } from '../constants/index';
 
@@ -31,16 +31,7 @@ import { CustomerListTablet } from '../components/Customer';
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
-import {
-  // Addendum,
-  // Agreement,
-  // Statement,
-  // OneTimeAgreement,
-  // ServicesAmendment,
-  // DSPAddendum,
-  ContractContainer,
-  // HelloSignComponent,
-} from '../components/Contract';
+import { ContractContainer } from '../components/Contract';
 import {
   CompanyDetails,
   AmazonAccount,
@@ -49,7 +40,7 @@ import {
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
-// import { Dashboard, TeamMember } from '../components/Brand Partner';
+import { Dashboard } from '../components/Brand Partner';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -83,7 +74,7 @@ export default function AuthenticationComponent() {
             <Header />
           </div>
 
-          <LeftSideBar />
+          <LeftSideBar userInfo={userInfo} />
         </>
       );
     return '';
@@ -142,13 +133,11 @@ export default function AuthenticationComponent() {
 
           {/* Contract */}
           <Route path={PATH_AGREEMENT} exact component={ContractContainer} />
-          {/* <Route path={PATH_AGREEMENT} exact component={Agreement} /> */}
           <Route path={PATH_STATEMENT} exact component={ContractContainer} />
           <Route path={PATH_ADDENDUM} exact component={ContractContainer} />
           <Route path={PATH_ONE_TIME_AGREEMENT} component={ContractContainer} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ContractContainer} />
           <Route path={PATH_DSP_ADDENDUM} component={ContractContainer} />
-          {/* <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} /> */}
 
           {/* Account Setup */}
           {generateAccountSetup()}
@@ -166,8 +155,8 @@ export default function AuthenticationComponent() {
           )}
 
           {/* Brand Partner */}
-          {/* <Route path={PATH_DASHBOARD} component={Dashboard} />
-          <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
+          <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
+          {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
 
           <Route component={PageNotFound} />
         </Switch>

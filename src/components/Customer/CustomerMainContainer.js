@@ -24,7 +24,7 @@ import {
   LeftArrowIcon,
   GreyBannerBg,
   BackArrowIcon,
-  // HeartMonitorIcon,
+  HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
 } from '../../theme/images/index';
@@ -95,7 +95,7 @@ export default function CustomerMainContainer() {
   const customer = useSelector((state) => state.customerState.data);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
-  const [viewComponent, setViewComponent] = useState('agreement');
+  const [viewComponent, setViewComponent] = useState('performance');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -122,7 +122,7 @@ export default function CustomerMainContainer() {
   ];
 
   const viewOptions = [
-    // { value: 'performance', label: 'Performance' },
+    { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
     { value: 'activity', label: 'Activity' },
@@ -508,7 +508,7 @@ export default function CustomerMainContainer() {
                 <div className="col-lg-4 col-12">
                   <WhiteCard className="left-border  d-lg-block d-none mb-3">
                     <ul className="left-details-card">
-                      {/* <li
+                      <li
                         onClick={() => setViewComponent('performance')}
                         role="presentation">
                         <div
@@ -522,7 +522,7 @@ export default function CustomerMainContainer() {
                           />
                           Performance
                         </div>
-                      </li> */}
+                      </li>
                       <li
                         onClick={() => setViewComponent('agreement')}
                         role="presentation">
@@ -700,7 +700,7 @@ export default function CustomerMainContainer() {
                     getActivityLogInfo={getActivityLogInfo}
                   />
                 ) : viewComponent === 'performance' ? (
-                  <CompanyPerformance agreement={agreement} />
+                  <CompanyPerformance agreement={agreement} id={id} />
                 ) : (
                   <Activity
                     activityData={activityData}

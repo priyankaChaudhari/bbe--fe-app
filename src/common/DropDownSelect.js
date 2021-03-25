@@ -14,11 +14,6 @@ const DropDownSelect = styled.div`
     float: left;
   }
 
-  &.days-performance {
-    max-width: 259px;
-    float: right;
-  }
-
   &.w-250 {
     width: 259px;
 
@@ -137,6 +132,20 @@ const DropDownSelect = styled.div`
         background: none;
         cursor: pointer;
       }
+    }
+  }
+  &.days-performance {
+    max-width: 259px;
+    float: right;
+    .css-yk16xz-control {
+      padding: 5px !important;
+      background-color: ${Theme.gray8};
+      border: 1px solid ${Theme.gray45};
+    }
+    .css-1pahdxg-control {
+      padding: 5px !important;
+      background-color: ${Theme.gray8};
+      border: 1px solid ${Theme.gray45};
     }
   }
 

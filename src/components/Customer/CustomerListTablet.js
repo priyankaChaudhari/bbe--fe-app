@@ -17,6 +17,7 @@ import {
 } from '../../theme/images/index';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader } from '../../common';
+import { getcontract } from '../../api/AgreementApi';
 
 export default function CustomerListTablet({
   data,
@@ -33,6 +34,17 @@ export default function CustomerListTablet({
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  };
+
+  const redirectIfContractExists = (type, id) => {
+    getcontract(id).then((res) => {
+      if (res && res.status === 200) {
+        if (res && res.data && res.data.contract_url) {
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.contract_id);
+        }
+      }
+    });
   };
 
   const generateContractHTML = (type, id) => {
@@ -128,8 +140,9 @@ export default function CustomerListTablet({
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            redirectIfContractExists(type, id);
+            // history.push(PATH_AGREEMENT.replace(':id', id));
+            // localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -142,8 +155,9 @@ export default function CustomerListTablet({
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          redirectIfContractExists(type, id);
+          // history.push(PATH_AGREEMENT.replace(':id', id));
+          // localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}
@@ -155,11 +169,16 @@ export default function CustomerListTablet({
     );
   };
 
-  const calculatePercentage = (current, previous) => {
+  const calculatePercentage = (current, previous, type) => {
     if (current && previous) {
+      let percentage = '';
+      if (type === 'conversion') {
+        const diff = current - previous;
+        percentage = diff / 2;
+      }
       const diff = current - previous;
       const mean = diff / previous;
-      const percentage = mean * 100;
+      percentage = mean * 100;
 
       if (percentage.toString().includes('-')) {
         return (
@@ -237,21 +256,31 @@ export default function CustomerListTablet({
                         <div className="label">Revenue</div>
                         <div className="label-info ">
                           <>
+                            $
                             {item &&
-                            item.daily_facts &&
-                            item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].revenue ? (
-                              <>
-                                {item.daily_facts.current[0].revenue}
-
-                                {calculatePercentage(
-                                  item.daily_facts.current[0].revenue,
-                                  item.daily_facts.previous[0].revenue,
-                                )}
-                              </>
-                            ) : (
-                              ''
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current.length &&
+                              item.daily_facts.current
+                                .map((rev) => rev.revenue)
+                                .reduce((val, rev) => rev + val)}
+                            {calculatePercentage(
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current.length
+                                ? item.daily_facts.current
+                                    .map((rev) => rev.revenue)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.previous &&
+                                item.daily_facts.previous.length
+                                ? item.daily_facts.previous
+                                    .map((rev) => rev.revenue)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
                             )}
                           </>
                         </div>
@@ -261,19 +290,29 @@ export default function CustomerListTablet({
                         <div className="label-info ">
                           <>
                             {item &&
-                            item.daily_facts &&
-                            item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].units_sold ? (
-                              <>
-                                {item.daily_facts.current[0].units_sold}
-                                {calculatePercentage(
-                                  item.daily_facts.current[0].units_sold,
-                                  item.daily_facts.previous[0].units_sold,
-                                )}
-                              </>
-                            ) : (
-                              ''
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current.length &&
+                              item.daily_facts.current
+                                .map((rev) => rev.units_sold)
+                                .reduce((val, rev) => rev + val)}
+                            {calculatePercentage(
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current.length
+                                ? item.daily_facts.current
+                                    .map((rev) => rev.units_sold)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.previous &&
+                                item.daily_facts.previous.length
+                                ? item.daily_facts.previous
+                                    .map((rev) => rev.units_sold)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
                             )}
                           </>
                         </div>
@@ -307,20 +346,31 @@ export default function CustomerListTablet({
                         <div className="label">Traffic</div>
                         <div className="label-info">
                           <>
+                            $
                             {item &&
-                            item.daily_facts &&
-                            item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].traffic ? (
-                              <>
-                                {item.daily_facts.current[0].traffic}
-                                {calculatePercentage(
-                                  item.daily_facts.current[0].traffic,
-                                  item.daily_facts.previous[0].traffic,
-                                )}
-                              </>
-                            ) : (
-                              ''
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current.length &&
+                              item.daily_facts.current
+                                .map((rev) => rev.traffic)
+                                .reduce((val, rev) => rev + val)}
+                            {calculatePercentage(
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current.length
+                                ? item.daily_facts.current
+                                    .map((rev) => rev.traffic)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.previous &&
+                                item.daily_facts.previous.length
+                                ? item.daily_facts.previous
+                                    .map((rev) => rev.traffic)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
                             )}
                           </>
                         </div>
@@ -334,20 +384,33 @@ export default function CustomerListTablet({
                         <div className="label">Conversion</div>
                         <div className="label-info">
                           <>
+                            $
                             {item &&
-                            item.daily_facts &&
-                            item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].conversion ? (
-                              <>
-                                {item.daily_facts.current[0].conversion}
-                                {calculatePercentage(
-                                  item.daily_facts.current[0].conversion,
-                                  item.daily_facts.previous[0].conversion,
-                                )}
-                              </>
-                            ) : (
-                              ''
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current.length &&
+                              item.daily_facts.current
+                                .map((rev) => rev.conversion)
+                                .reduce((val, rev) => rev + val)}{' '}
+                            %
+                            {calculatePercentage(
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.current &&
+                                item.daily_facts.current.length
+                                ? item.daily_facts.current
+                                    .map((rev) => rev.conversion)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
+                              item &&
+                                item.daily_facts &&
+                                item.daily_facts.previous &&
+                                item.daily_facts.previous.length
+                                ? item.daily_facts.previous
+                                    .map((rev) => rev.conversion)
+                                    .reduce((val, rev) => rev + val)
+                                : 0,
+                              'conversion',
                             )}
                           </>
                         </div>

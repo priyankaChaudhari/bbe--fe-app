@@ -39,6 +39,8 @@ import {
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
+import { getcontract } from '../../api/AgreementApi';
+
 import {
   PATH_AGREEMENT,
   PATH_CUSTOMER_DETAILS,
@@ -420,6 +422,16 @@ export default function NewCustomerList() {
     }
     return '';
   };
+  const redirectIfContractExists = (type, id) => {
+    getcontract(id).then((res) => {
+      if (res && res.status === 200) {
+        if (res && res.data && res.data.contract_url) {
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.contract_id);
+        }
+      }
+    });
+  };
 
   const generateContractHTML = (type, id) => {
     if (countDays(type.end_date) <= 90) {
@@ -509,8 +521,9 @@ export default function NewCustomerList() {
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            redirectIfContractExists(type, id);
+            // history.push(PATH_AGREEMENT.replace(':id', id));
+            // localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -523,8 +536,10 @@ export default function NewCustomerList() {
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          redirectIfContractExists(type, id);
+
+          // history.push(PATH_AGREEMENT.replace(':id', id));
+          // localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}
@@ -571,11 +586,16 @@ export default function NewCustomerList() {
     );
   };
 
-  const calculatePercentage = (current, previous) => {
+  const calculatePercentage = (current, previous, type) => {
     if (current && previous) {
+      let percentage = '';
+      if (type === 'conversion') {
+        const diff = current - previous;
+        percentage = diff / 2;
+      }
       const diff = current - previous;
       const mean = diff / previous;
-      const percentage = mean * 100;
+      percentage = mean * 100;
 
       if (percentage.toString().includes('-')) {
         return (
@@ -844,9 +864,14 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-            <div className="col-lg-4 col-md-6 col-12   mb-2 pl-md-0 pr-lg-2">
+            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
+            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
           </div>
@@ -1047,20 +1072,31 @@ export default function NewCustomerList() {
                           <td width={showPerformance ? '15%' : '60%'}>
                             {showPerformance ? (
                               <>
+                                $
                                 {item &&
-                                item.daily_facts &&
-                                item.daily_facts.current &&
-                                item.daily_facts.current[0] &&
-                                item.daily_facts.current[0].revenue ? (
-                                  <>
-                                    {item.daily_facts.current[0].revenue}
-                                    {calculatePercentage(
-                                      item.daily_facts.current[0].revenue,
-                                      item.daily_facts.previous[0].revenue,
-                                    )}
-                                  </>
-                                ) : (
-                                  ''
+                                  item.daily_facts &&
+                                  item.daily_facts.current &&
+                                  item.daily_facts.current.length &&
+                                  item.daily_facts.current
+                                    .map((rev) => rev.revenue)
+                                    .reduce((val, rev) => rev + val)}
+                                {calculatePercentage(
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.current &&
+                                    item.daily_facts.current.length
+                                    ? item.daily_facts.current
+                                        .map((rev) => rev.revenue)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.previous &&
+                                    item.daily_facts.previous.length
+                                    ? item.daily_facts.previous
+                                        .map((rev) => rev.revenue)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
                                 )}
                               </>
                             ) : (
@@ -1082,19 +1118,60 @@ export default function NewCustomerList() {
                             <td width="15%">
                               <>
                                 {item &&
-                                item.daily_facts &&
-                                item.daily_facts.current &&
-                                item.daily_facts.current[0] &&
-                                item.daily_facts.current[0].units_sold ? (
-                                  <>
-                                    {item.daily_facts.current[0].units_sold}
-                                    {calculatePercentage(
-                                      item.daily_facts.current[0].units_sold,
-                                      item.daily_facts.previous[0].units_sold,
-                                    )}
-                                  </>
-                                ) : (
-                                  ''
+                                  item.daily_facts &&
+                                  item.daily_facts.current &&
+                                  item.daily_facts.current.length &&
+                                  item.daily_facts.current
+                                    .map((rev) => rev.units_sold)
+                                    .reduce((val, rev) => rev + val)}
+                                {calculatePercentage(
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.current &&
+                                    item.daily_facts.current.length
+                                    ? item.daily_facts.current
+                                        .map((rev) => rev.units_sold)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.previous &&
+                                    item.daily_facts.previous.length
+                                    ? item.daily_facts.previous
+                                        .map((rev) => rev.units_sold)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
+                                )}
+                              </>
+                            </td>
+                          ) : null}
+                          {showPerformance ? (
+                            <td width="15%">
+                              <>
+                                {item &&
+                                  item.daily_facts &&
+                                  item.daily_facts.current &&
+                                  item.daily_facts.current.length &&
+                                  item.daily_facts.current
+                                    .map((rev) => rev.traffic)
+                                    .reduce((val, rev) => rev + val)}
+                                {calculatePercentage(
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.current &&
+                                    item.daily_facts.current.length
+                                    ? item.daily_facts.current
+                                        .map((rev) => rev.traffic)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
+                                  item &&
+                                    item.daily_facts &&
+                                    item.daily_facts.previous &&
+                                    item.daily_facts.previous.length
+                                    ? item.daily_facts.previous
+                                        .map((rev) => rev.traffic)
+                                        .reduce((val, rev) => rev + val)
+                                    : 0,
                                 )}
                               </>
                             </td>
@@ -1105,34 +1182,33 @@ export default function NewCustomerList() {
                                 {item &&
                                 item.daily_facts &&
                                 item.daily_facts.current &&
-                                item.daily_facts.current[0] &&
-                                item.daily_facts.current[0].traffic ? (
+                                item.daily_facts.current.length &&
+                                item.daily_facts.current !== null ? (
                                   <>
-                                    {item.daily_facts.current[0].traffic}
+                                    {item &&
+                                      item.daily_facts.current
+                                        .map((rev) => rev.conversion)
+                                        .reduce((val, rev) => rev + val)}{' '}
+                                    %
                                     {calculatePercentage(
-                                      item.daily_facts.current[0].traffic,
-                                      item.daily_facts.previous[0].traffic,
-                                    )}
-                                  </>
-                                ) : (
-                                  ''
-                                )}
-                              </>
-                            </td>
-                          ) : null}
-                          {showPerformance ? (
-                            <td width="15%">
-                              <>
-                                {item &&
-                                item.daily_facts &&
-                                item.daily_facts.current &&
-                                item.daily_facts.current[0] &&
-                                item.daily_facts.current[0].conversion ? (
-                                  <>
-                                    {item.daily_facts.current[0].conversion}
-                                    {calculatePercentage(
-                                      item.daily_facts.current[0].conversion,
-                                      item.daily_facts.previous[0].conversion,
+                                      item &&
+                                        item.daily_facts &&
+                                        item.daily_facts.current &&
+                                        item.daily_facts.current.length
+                                        ? item &&
+                                            item.daily_facts.current
+                                              .map((rev) => rev.conversion)
+                                              .reduce((val, rev) => rev + val)
+                                        : 0,
+                                      item &&
+                                        item.daily_facts &&
+                                        item.daily_facts.previous &&
+                                        item.daily_facts.previous.length
+                                        ? item.daily_facts.previous
+                                            .map((rev) => rev.conversion)
+                                            .reduce((val, rev) => rev + val)
+                                        : 0,
+                                      'conversion',
                                     )}
                                   </>
                                 ) : (

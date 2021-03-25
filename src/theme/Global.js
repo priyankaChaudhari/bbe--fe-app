@@ -796,20 +796,15 @@ export const WhiteCard = styled.div`
     min-height:530px;
   }
 
-  .new-order-chart {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-
-    li{
+    .order-chart-box {
       display: inline-block;
       background-color: ${Theme.white};
       border: 1px solid ${Theme.gray45};
       border-radius: 8px;
-      max-width: 170px;
+      max-width: 180px;
       width: 100%;
       padding:13px;
-      margin-right:10px;
+      
       cursor: pointer;
 
       .number-rate {
@@ -852,9 +847,13 @@ export const WhiteCard = styled.div`
       &:hover {
         border: 1px solid ${Theme.orange};
       }
+
+      &.active {
+        border: 1px solid ${Theme.orange};
+      }
     }
 
-  }
+  
   .days-container {
     background-color: ${Theme.white};
     border: 1px solid ${Theme.gray45};
@@ -902,7 +901,8 @@ export const WhiteCard = styled.div`
   .speed-rate {
     font-size: ${Theme.primaryTitleFontSize}; 
     color: ${Theme.black};
-    margin-top: 50px;
+    margin-top: 75px;
+    margin-bottom: 70px;
   }
 
   .last-update {
@@ -987,7 +987,15 @@ export const WhiteCard = styled.div`
             }
           }   
       }
+      .order-chart-box { 
+        max-width: 100%;
+      }
   }
+    @media only screen and (min-width: 1600px) { 
+      .order-chart-box { 
+        max-width: 100%;
+      }
+    }
   @media only screen and (max-width: 1150px) {
      .company-label-info {
         margin-left: 40px;
@@ -1057,7 +1065,15 @@ export const WhiteCard = styled.div`
       }
    }
  }
-
+   @media only screen and (max-width: 768px) {      
+     .order-chart-box { 
+        max-width: 100% !important;
+      }
+       .days-container { 
+         margin: 0 auto;
+         float: none;
+       }
+   }
     @media only screen and (max-width: 460px) {        
        .company-status {
           white-space: nowrap;

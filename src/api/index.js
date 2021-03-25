@@ -34,6 +34,7 @@ export {
   getAmazonDetails,
   updateAmazonDetails,
   deleteAmazonMarketplace,
+  getPerformance,
 } from './CustomerApi';
 
 // Choices
@@ -90,3 +91,5 @@ export {
   updateArticle,
   createArticle,
 } from './ArticleApi';
+
+// export default {getBGSCustomerList} from './BgsApi'

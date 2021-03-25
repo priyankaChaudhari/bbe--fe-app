@@ -1,3 +1,6 @@
+/* eslint no-param-reassign: "error" */
+/* eslint consistent-return: "error" */
+
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -48,6 +51,11 @@ import {
   createAdditionalServiceBulk,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
+import {
+  AgreementDetails,
+  StatementDetails,
+  DSPAddendumDetails,
+} from '../../constants/FieldConstants';
 
 const customStyles = {
   content: {
@@ -336,6 +344,8 @@ export default function ContractContainer() {
 
   const nextStep = () => {
     // if (history.location.pathname.includes('agreement')) {
+
+    // setSectionError({});
 
     let additionalMarketplacesApi = null;
     let additionalMonthlyApi = null;
@@ -639,7 +649,9 @@ export default function ContractContainer() {
                     Object.keys(additionalOneTimeServRes.data).length +
                     Object.keys(additionalOneTimeServRes.data.quantity).length -
                     1;
-                } else {
+                } else if (
+                  !additionalOnetimeSerError.custom_amazon_store_price
+                ) {
                   statementErrCount += Object.keys(
                     additionalOneTimeServRes.data,
                   ).length;
@@ -684,9 +696,15 @@ export default function ContractContainer() {
                     )
                   )
                     statementErrCount += 1;
-                  if (Object.keys(contractRes.data).includes('zip_code'))
+                  if (
+                    Object.keys(contractRes.data).includes('zip_code') &&
+                    !contractError.zip_code
+                  )
                     agreementErrCount += 1;
-                  if (Object.keys(contractRes.data).includes('dsp_fee'))
+                  if (
+                    Object.keys(contractRes.data).includes('dsp_fee') &&
+                    !contractError.dsp_fee
+                  )
                     dspErrCount += 1;
                 }
               }
@@ -697,16 +715,16 @@ export default function ContractContainer() {
                 ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
               });
 
-              if (primaryMarketplaceRes.data) {
+              if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
                 statementErrCount += Object.keys(primaryMarketplaceRes.data)
                   .length;
               }
             }
 
             setSectionError({
-              agreement: agreementErrCount,
-              statement: statementErrCount,
-              dsp: dspErrCount,
+              agreement: agreementErrCount + sectionError.agreement,
+              statement: statementErrCount + sectionError.statement,
+              dsp: dspErrCount + sectionError.dsp,
             });
           }),
         )
@@ -1949,12 +1967,72 @@ export default function ContractContainer() {
     );
   };
 
+  const setMandatoryFieldsErrors = () => {
+    let agreementErrors = 0;
+    let statementErrors = 0;
+    let dspErrors = 0;
+
+    AgreementDetails.forEach((item) => {
+      if (item.key !== 'contract_address') {
+        if (item.isMandatory && !(formData && formData[item.key])) {
+          agreementErrors += 1;
+          item.error = true;
+        }
+      } else {
+        return (
+          item &&
+          item.sections.forEach((subItem) => {
+            if (
+              subItem &&
+              subItem.isMandatory &&
+              !(formData && formData[subItem.key])
+            ) {
+              subItem.error = true;
+              agreementErrors += 1;
+            }
+          })
+        );
+      }
+      return null;
+    });
+
+    StatementDetails.forEach((item) => {
+      if (
+        item.isMandatory &&
+        !(formData && formData[item.key]) &&
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('one')
+        )
+      ) {
+        statementErrors += 1;
+        item.error = true;
+      }
+    });
+
+    DSPAddendumDetails.forEach((item) => {
+      if (item.isMandatory && !(formData && formData[item.key])) {
+        dspErrors += 1;
+        item.error = true;
+      }
+    });
+
+    setSectionError({
+      ...sectionError,
+      agreement: agreementErrors,
+      statement: statementErrors,
+      dsp: dspErrors,
+    });
+  };
+
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
-        className={`${btnClass} on-boarding  mt-3 mr-4 w-sm-100`}
+        className={`${btnClass} on-boarding  mt-3 mr-4`}
         onClick={() => {
           setIsEditContract(true);
+          setMandatoryFieldsErrors();
         }}>
         Edit Contract
       </Button>
@@ -2138,7 +2216,7 @@ export default function ContractContainer() {
                     Approve and Request Signature
                   </Button>
                   {!isEditContract
-                    ? renderEditContractBtn('light-orange')
+                    ? renderEditContractBtn('light-orange w-sm-50')
                     : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
@@ -2168,7 +2246,7 @@ export default function ContractContainer() {
                     Request Approval
                   </Button>
                   {!isEditContract
-                    ? renderEditContractBtn('light-orange')
+                    ? renderEditContractBtn('light-orange w-sm-50')
                     : null}
                   <span className="last-update ">
                     Last updated by You on{' '}
@@ -2207,7 +2285,9 @@ export default function ContractContainer() {
                   }}>
                   Request Signature
                 </Button>
-                {!isEditContract ? renderEditContractBtn('light-orange') : null}
+                {!isEditContract
+                  ? renderEditContractBtn('light-orange w-sm-50')
+                  : null}
                 <span className="last-update ">
                   Last updated by You on{' '}
                   {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
@@ -2304,8 +2384,8 @@ export default function ContractContainer() {
     </>
   ) : (
     <>
+      {/* {setMandatoryFieldsErrors()} */}
       {/* <ToastContainer position="top-center" autoClose={8000} /> */}
-
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
           <li

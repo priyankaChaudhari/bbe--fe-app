@@ -14,6 +14,7 @@ import {
   API_CUSTOMER_MEMBER,
   API_DELETE_MARKETPLACE,
   API_DOCUMENTS,
+  API_PERFORMANCE,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -47,6 +48,7 @@ export async function getCustomerList(
     params = {
       ...params,
       daily_facts: 'week',
+      group_by: 'weekly',
     };
   }
 
@@ -401,6 +403,41 @@ export async function deleteAmazonMarketplace(merchant, marketplace) {
   const params = { merchant_id: merchant, marketplace_id: marketplace };
   const result = await axiosInstance
     .post(API_DELETE_MARKETPLACE, '', { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getPerformance(
+  customer,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  if (startDate && endDate) {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+    };
+  }
+  const result = await axiosInstance
+    .get(`${API_PERFORMANCE + customer}/`, { params })
     .then((response) => {
       return response;
     })

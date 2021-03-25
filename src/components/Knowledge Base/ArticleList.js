@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -16,6 +17,7 @@ export default function ArticleList() {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const history = useHistory();
   const [data, setData] = useState([]);
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   useEffect(() => {
     getArticleCollections().then((response) => {
@@ -35,7 +37,7 @@ export default function ArticleList() {
 
   return (
     <>
-      <LeftSideBar />
+      <LeftSideBar userInfo={userInfo} />
       <GrayBody>
         <div className="graycontainer">
           <h3 className="gray-text pt-5">Knowledge Base</h3>
