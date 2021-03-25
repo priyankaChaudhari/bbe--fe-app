@@ -17,6 +17,7 @@ import {
 } from '../../theme/images/index';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader } from '../../common';
+import { getcontract } from '../../api/AgreementApi';
 
 export default function CustomerListTablet({
   data,
@@ -33,6 +34,17 @@ export default function CustomerListTablet({
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  };
+
+  const redirectIfContractExists = (type, id) => {
+    getcontract(id).then((res) => {
+      if (res && res.status === 200) {
+        if (res && res.data && res.data.contract_url) {
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.contract_id);
+        }
+      }
+    });
   };
 
   const generateContractHTML = (type, id) => {
@@ -128,8 +140,9 @@ export default function CustomerListTablet({
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            redirectIfContractExists();
+            // history.push(PATH_AGREEMENT.replace(':id', id));
+            // localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -142,8 +155,9 @@ export default function CustomerListTablet({
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          redirectIfContractExists();
+          // history.push(PATH_AGREEMENT.replace(':id', id));
+          // localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}

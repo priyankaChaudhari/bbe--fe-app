@@ -39,6 +39,8 @@ import {
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
+import { getcontract } from '../../api/AgreementApi';
+
 import {
   PATH_AGREEMENT,
   PATH_CUSTOMER_DETAILS,
@@ -420,6 +422,16 @@ export default function NewCustomerList() {
     }
     return '';
   };
+  const redirectIfContractExists = (type, id) => {
+    getcontract(id).then((res) => {
+      if (res && res.status === 200) {
+        if (res && res.data && res.data.contract_url) {
+          history.push(PATH_AGREEMENT.replace(':id', id));
+          localStorage.setItem('agreementID', type.contract_id);
+        }
+      }
+    });
+  };
 
   const generateContractHTML = (type, id) => {
     if (countDays(type.end_date) <= 90) {
@@ -509,8 +521,9 @@ export default function NewCustomerList() {
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            redirectIfContractExists();
+            // history.push(PATH_AGREEMENT.replace(':id', id));
+            // localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -523,8 +536,10 @@ export default function NewCustomerList() {
       <li
         onClickCapture={(e) => {
           e.stopPropagation();
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          redirectIfContractExists();
+
+          // history.push(PATH_AGREEMENT.replace(':id', id));
+          // localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}
@@ -854,7 +869,6 @@ export default function NewCustomerList() {
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
-
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
