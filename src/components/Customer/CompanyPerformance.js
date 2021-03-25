@@ -103,6 +103,16 @@ export default function CompanyPerformance({ agreement, id }) {
   const [trafficData, setTrafficData] = useState([{}]);
   const [conversionData, setConversionData] = useState([{}]);
   const [allSalesTotal, setAllSalesTotal] = useState({});
+  const [filters, setFilters] = useState({
+    daily: true,
+    weekly: false,
+    month: false,
+  });
+  const [disableOrderBy, setDisableOrderBy] = useState({
+    daily: true,
+    week: false,
+    month: false,
+  });
 
   const [activeSales, setActiveSales] = useState('revenue');
   const customStyles = {
@@ -206,7 +216,6 @@ export default function CompanyPerformance({ agreement, id }) {
           // setIsLoading({ loader: false, type: 'button' });
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          setResponseId(res.data.id);
           // const tempData = [];
           const tempRevenueData = [];
           const tempUnitsSoldData = [];
@@ -376,6 +385,18 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
+  const checkDifferenceBetweenDates = (startDate, endDate) => {
+    const diffTime = Math.abs(startDate - endDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 30) {
+      setDisableOrderBy({ daily: true });
+    } else if (diffDays > 30 && diffDays <= 180) {
+      setDisableOrderBy({ week: true });
+    } else if (diffDays > 180) {
+      setDisableOrderBy({ month: true });
+    }
+  };
+
   const getSelectComponents = () => {
     return {
       Option: filterOption,
@@ -384,9 +405,65 @@ export default function CompanyPerformance({ agreement, id }) {
     };
   };
 
+  const setGropuByFilter = (value) => {
+    switch (value) {
+      case 'week':
+        setFilters({ daily: true, weekly: false, month: false });
+        setGroupBy('daily');
+        break;
+
+      case 'month':
+        setFilters({ daily: true, weekly: true, month: false });
+        setGroupBy('weekly');
+        break;
+
+      case '30days':
+        setFilters({ daily: true, weekly: false, month: false });
+        setGroupBy('daily');
+        break;
+
+      case 'year':
+        if (disableOrderBy && disableOrderBy.daily) {
+          setFilters({ daily: true, weekly: false, month: false });
+          setGroupBy('daily');
+        } else if (disableOrderBy && disableOrderBy.week) {
+          setFilters({ daily: false, weekly: true, month: false });
+          setGroupBy('weekly');
+        } else if (disableOrderBy && disableOrderBy.month) {
+          setFilters({ daily: false, weekly: false, month: true });
+          setGroupBy('monthly');
+        }
+        break;
+
+      case 'custom':
+        if (disableOrderBy && disableOrderBy.daily) {
+          setFilters({ daily: true, weekly: false, month: false });
+          setGroupBy('daily');
+        } else if (disableOrderBy && disableOrderBy.week) {
+          setFilters({ daily: false, weekly: true, month: false });
+          setGroupBy('weekly');
+        } else if (disableOrderBy && disableOrderBy.month) {
+          setFilters({ daily: false, weekly: false, month: true });
+          setGroupBy('monthly');
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const handleDailyFact = (value) => {
     setSelectedValue(value);
+    if (value === 'year') {
+      checkDifferenceBetweenDates(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+      );
+    }
+
     if (value !== 'custom') {
+      setGropuByFilter(value);
       getData(value, groupBy, selectedAmazonValue);
     } else {
       setShowCustomDateModal(true);
@@ -405,9 +482,11 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const onChangeCustomDate = (event) => {
     if (event !== null) {
+      checkDifferenceBetweenDates(event[0], event[1]);
       setCustomDateValue([event[0], event[1]]);
     } else {
       setCustomDateValue([new Date(), new Date()]);
+      setDisableOrderBy({ daily: true });
     }
   };
 
@@ -419,6 +498,7 @@ export default function CompanyPerformance({ agreement, id }) {
       customDateValue[1].getMonth() + 1
     }-${customDateValue[1].getFullYear()}`;
 
+    setGropuByFilter('custom');
     getData(selectedAmazonValue, startDate, endDate);
     setShowCustomDateModal(false);
   };
@@ -440,9 +520,11 @@ export default function CompanyPerformance({ agreement, id }) {
         list.push({ value: option.id, label: option.name });
       }
     setAmazonOptions(list);
-    setSelectedAmazonValue(list[0].label);
+    setSelectedAmazonValue(list[0].label.toLowerCase());
+
     if (responseId === null && list[0].label !== null) {
-      getData(selectedValue, groupBy, list[0].label);
+      getData(selectedValue, groupBy, list[0].label.toLowerCase());
+      setResponseId('12345');
     }
   }, [
     agreement.additional_marketplaces,
@@ -759,54 +841,39 @@ export default function CompanyPerformance({ agreement, id }) {
 
           <div className="days-container mt-4">
             <ul className="days-tab">
-              <li className={selectedValue === 'custom' ? 'disabled' : ''}>
+              <li className={filters.daily === false ? 'disabled' : ''}>
                 {' '}
                 <input
                   className="d-none"
                   type="radio"
-                  defaultChecked={
-                    selectedValue === 'week' ||
-                    selectedValue === null ||
-                    selectedValue !== 'custom'
-                  }
                   id="daysCheck"
                   name="flexRadioDefault"
+                  value={groupBy}
+                  checked={filters.daily}
                   onClick={() => handleGroupBy('daily')}
                 />
                 <label htmlFor="daysCheck">Daily</label>
               </li>
-              <li
-                className={
-                  selectedValue === 'week' ||
-                  selectedValue === null ||
-                  selectedValue === 'custom'
-                    ? 'disabled'
-                    : ''
-                }>
+
+              <li className={filters.weekly === false ? 'disabled' : ''}>
                 <input
                   className="d-none"
                   type="radio"
-                  value=""
+                  value={groupBy}
+                  checked={filters.weekly}
                   id="weeklyCheck"
                   name="flexRadioDefault"
                   onClick={() => handleGroupBy('weekly')}
                 />
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
-              <li
-                className={
-                  selectedValue === 'week' ||
-                  selectedValue === null ||
-                  selectedValue === 'month' ||
-                  selectedValue === '30days' ||
-                  selectedValue === 'custom'
-                    ? 'disabled'
-                    : ''
-                }>
+
+              <li className={filters.month === false ? 'disabled' : ''}>
                 <input
                   className=" d-none"
                   type="radio"
-                  value=""
+                  value={groupBy}
+                  checked={filters.month}
                   id="monthlyCheck"
                   name="flexRadioDefault"
                   onClick={() => handleGroupBy('monthly')}
@@ -814,6 +881,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="monthlyCheck">Monthly</label>
               </li>
             </ul>
+
             {/* <ul className="days-tab">
               <li>
                 {' '}

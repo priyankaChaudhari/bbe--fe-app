@@ -2029,7 +2029,7 @@ export default function ContractContainer() {
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
-        className={`${btnClass} on-boarding  mt-3 mr-4 w-sm-100`}
+        className={`${btnClass} on-boarding  mt-3 mr-4`}
         onClick={() => {
           setIsEditContract(true);
           setMandatoryFieldsErrors();
