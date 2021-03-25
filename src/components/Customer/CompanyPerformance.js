@@ -653,9 +653,11 @@ export default function CompanyPerformance({ agreement, id }) {
                   )}
                   {allSalesTotal &&
                   allSalesTotal.revenue &&
-                  allSalesTotal.conversion.difference &&
-                  allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.revenue.difference} %`
+                  allSalesTotal.revenue.difference &&
+                  allSalesTotal.revenue.difference !== 'N/A'
+                    ? `${allSalesTotal.revenue.difference
+                        .toString()
+                        .replace('-', '')} %`
                     : 'N/A'}
                 </div>
               </div>
@@ -710,9 +712,11 @@ export default function CompanyPerformance({ agreement, id }) {
                   )}
                   {allSalesTotal &&
                   allSalesTotal.units &&
-                  allSalesTotal.conversion.difference &&
-                  allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.units.difference} %`
+                  allSalesTotal.units.difference &&
+                  allSalesTotal.units.difference !== 'N/A'
+                    ? `${allSalesTotal.units.difference
+                        .toString()
+                        .replace('-', '')} %`
                     : 'N/A'}
                 </div>
               </div>
@@ -769,9 +773,11 @@ export default function CompanyPerformance({ agreement, id }) {
                   )}
                   {allSalesTotal &&
                   allSalesTotal.traffic &&
-                  allSalesTotal.conversion.difference &&
-                  allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.traffic.difference} %`
+                  allSalesTotal.traffic.difference &&
+                  allSalesTotal.traffic.difference !== 'N/A'
+                    ? `${allSalesTotal.traffic.difference
+                        .toString()
+                        .replace('-', '')} %`
                     : 'N/A'}
                 </div>
               </div>
@@ -833,7 +839,10 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.conversion &&
                   allSalesTotal.conversion.difference &&
                   allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.conversion.difference.toFixed(2)} %`
+                    ? `${allSalesTotal.conversion.difference
+                        .toFixed(2)
+                        .toString()
+                        .replace('-', '')} %`
                     : 'N/A'}
                 </div>
               </div>
@@ -990,14 +999,14 @@ export default function CompanyPerformance({ agreement, id }) {
               {' '}
               <p className="black-heading-title mt-0 mb-4">Order Issues</p>
               <div className="seller-health">
-                {dspData && dspData.policy_issues
-                  ? `${dspData && dspData.policy_issues} %`
+                {dspData && dspData.order_defect_fba
+                  ? `${dspData && dspData.order_defect_fba} %`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-3">Order Defect Rate</div>
               <div className="seller-health  ">
-                {dspData && dspData.order_defect_fba
-                  ? `${dspData && dspData.order_defect_fba} %`
+                {dspData && dspData.policy_issues
+                  ? `${dspData && dspData.policy_issues} %`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-5">Policy Violations</div>
