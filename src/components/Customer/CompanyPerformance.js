@@ -861,7 +861,8 @@ export default function CompanyPerformance({ agreement, id }) {
                   name="flexRadioDefault"
                   value={groupBy}
                   checked={filters.daily}
-                  onChange={() => handleGroupBy('daily')}
+                  onClick={() => handleGroupBy('daily')}
+                  onChange={() => {}}
                 />
                 <label htmlFor="daysCheck">Daily</label>
               </li>
