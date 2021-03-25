@@ -220,6 +220,7 @@ h4 {
   margin: 0;
   color: $gray-90;
   text-transform: uppercase;
+  letter-spacing: 1.21px;
 
   &.on-boarding {
     color: $black-color;
@@ -1343,8 +1344,10 @@ g .recharts-layer .recharts-line-dots {
 //   }
 // }
 .recharts-legend-wrapper {
-  bottom: 10px !important;
-  top: -28px !important;
+  bottom: 0px !important;
+  left: 30px;
+  // top: -28px !important;
+
   .recharts-default-legend {
     text-align: left !important;
     li.recharts-legend-item {
@@ -1443,6 +1446,25 @@ g .recharts-layer .recharts-line-dots {
       border-radius: 50%;
       outline: none;
     }
+  }
+}
+.react-daterange-picker__calendar--open {
+  .react-calendar {
+    border: none !important;
+    background-color: $white-color !important;
+    width: 400px !important;
+  }
+  .react-calendar__tile {
+    max-width: 100%;
+    text-align: center;
+    padding: 1.75em 0.6em !important;
+    background: none;
+  }
+  .react-calendar__tile--active {
+    color: $orange-color !important;
+    background-color: $white-color !important;
+    border-radius: 20px;
+    border: 1px solid $orange-color;
   }
 }
 .performance-graph {

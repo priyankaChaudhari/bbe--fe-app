@@ -121,9 +121,9 @@ export default function CompanyPerformance({ agreement, id }) {
       left: '50%',
       right: 'auto',
       bottom: 'auto',
-      maxWidth: '600px ',
+      maxWidth: '420px ',
       width: '100% ',
-      // minHeight: '200px',
+      minHeight: '560px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -135,11 +135,11 @@ export default function CompanyPerformance({ agreement, id }) {
     { value: 'month', label: 'This Month', sub: 'vs last month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    {
-      value: 'custom',
-      label: 'Custom Range',
-      sub: 'Select start and end dates',
-    },
+    // {
+    //   value: 'custom',
+    //   label: 'Custom Range',
+    //   sub: 'Select start and end dates',
+    // },
   ];
 
   const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
@@ -922,8 +922,8 @@ export default function CompanyPerformance({ agreement, id }) {
             margin={{
               top: 40,
               right: 30,
-              left: 0,
-              bottom: 0,
+              left: 30,
+              bottom: 20,
             }}>
             <CartesianGrid strokeDasharray="none" />
             <XAxis dataKey="name" />
@@ -1081,20 +1081,21 @@ export default function CompanyPerformance({ agreement, id }) {
           />
           <ModalBox>
             <div className="modal-body">
-              <div className="alert-msg edit ">
-                <DateRangePicker
-                  isOpen
-                  onChange={(event) => onChangeCustomDate(event)}
-                  value={customDateValue}
-                  maxDate={new Date()}
-                />
-              </div>
+              <h4>Select Date Range</h4>
 
-              <div className="text-center ">
+              <DateRangePicker
+                isOpen={showCustomDateModal}
+                onChange={(event) => onChangeCustomDate(event)}
+                value={customDateValue}
+                maxDate={new Date()}
+              />
+              <div
+                className="text-center  "
+                style={{ bottom: '20px', position: 'absolute', width: '85%' }}>
                 <Button
                   onClick={() => applyCustomeDate()}
                   type="button"
-                  className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                  className="btn-primary on-boarding  mr-2 pb-2 mb-1 w-100">
                   Apply
                 </Button>
               </div>

@@ -4531,6 +4531,7 @@ const SidePanel = styled.div`
           font-size: ${Theme.normal};
           color:${Theme.gray90};
           float: left;
+          word-break: break-word;
           width: 90%;
           text-align: left;
           span {
@@ -4647,19 +4648,19 @@ const SidePanel = styled.div`
 `;
 
 const Footer = styled.div`
-  border: 1px solid ${Theme.gray7};
-  bottom: 79px;
-  background: ${Theme.white};
-  box-shadow: ${Theme.boxShadow};
-  position: fixed;
-  min-height: 60px;
-  z-index: 2;
+  // border: 1px solid ${Theme.gray7};
+  // bottom: 79px;
+  // background: ${Theme.white};
+  // box-shadow: ${Theme.boxShadow};
+  // position: fixed;
+  // min-height: 60px;
+  // z-index: 2;
 
-  &.pdf-footer {
-    bottom: 0px;
-  }
-  @media only screen and (max-width: 991px) {
-    width: 100%;
-    bottom: 134px;
-  }
+  // &.pdf-footer {
+  //   bottom: 0px;
+  // }
+  // @media only screen and (max-width: 991px) {
+  //   width: 100%;
+  //   bottom: 134px;
+  // }
 `;
