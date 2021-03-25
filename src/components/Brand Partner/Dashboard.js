@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 
-import { DropDownSelect, GetInitialName } from '../../common';
+import { DropDownSelect, GetInitialName, PageLoader } from '../../common';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
 import {
@@ -21,47 +21,73 @@ import {
 import getBGSCustomerList from '../../api/BgsApi';
 import { getGrowthStrategist } from '../../api';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
+import NoRecordFound from '../../common/NoRecordFound';
 
 export default function Dashboard() {
   const history = useHistory();
   const userInfo = useSelector((state) => state.userState.userInfo);
   const { Option, SingleValue, MultiValue } = components;
   const [data, setData] = useState([]);
-  const [selectedValue, setSelectedValue] = useState('week');
+  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [selectedValue, setSelectedValue] = useState({
+    type: 'week',
+    group: 'weekly',
+    bgs: '',
+  });
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
 
   const timeOptions = [
-    { value: 'week', label: 'This Week', sub: 'vs last week' },
-    { value: 'month', label: 'This Month', sub: 'vs last month' },
-    { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
-    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    { value: 'week', label: 'This Week', sub: 'vs last week', group: 'weekly' },
     {
-      value: 'custom',
-      label: 'Custom Range',
-      sub: 'Select start and end dates',
+      value: 'month',
+      label: 'This Month',
+      sub: 'vs last month',
+      group: 'monthly',
     },
+    {
+      value: '30days',
+      label: 'Last 30 Days',
+      sub: 'vs previous 30 days',
+      group: 'sum',
+    },
+    {
+      value: 'year',
+      label: 'Year to Date',
+      sub: 'vs previous year',
+      group: 'sum',
+    },
+    // {
+    //   value: 'custom',
+    //   label: 'Custom Range',
+    //   sub: 'Select start and end dates',
+    // },
   ];
 
   useEffect(() => {
-    getBGSCustomerList(userInfo.id, selectedValue).then((response) => {
+    setIsLoading({ loader: true, type: 'page' });
+    getBGSCustomerList(
+      (selectedValue && selectedValue.bgs) || userInfo.id,
+      selectedValue,
+    ).then((response) => {
       setData(response && response.data && response.data.results);
-    });
-    getGrowthStrategist().then((gs) => {
-      if (gs && gs.data) {
-        const list = [];
-        for (const brand of gs.data) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-          });
-          setBrandGrowthStrategist(list);
+      getGrowthStrategist().then((gs) => {
+        if (gs && gs.data) {
+          const list = [];
+          for (const brand of gs.data) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+            setBrandGrowthStrategist(list);
+          }
         }
-      }
+        setIsLoading({ loader: false, type: 'page' });
+      });
     });
   }, [userInfo, selectedValue]);
 
@@ -224,6 +250,9 @@ export default function Dashboard() {
                       options={brandGrowthStrategist}
                       components={getSelectComponents('user')}
                       componentsValue={{ Option: IconOption }}
+                      onChange={(event) =>
+                        setSelectedValue({ ...selectedValue, bgs: event.value })
+                      }
                     />
                   </DropDownSelect>
                 </li>
@@ -235,7 +264,12 @@ export default function Dashboard() {
                       components={getSelectComponents()}
                       options={timeOptions}
                       defaultValue={timeOptions[0]}
-                      onChange={(event) => setSelectedValue(event.value)}
+                      onChange={(event) =>
+                        setSelectedValue({
+                          type: event.value,
+                          group: event.group,
+                        })
+                      }
                     />
                   </DropDownSelect>
                 </li>
@@ -247,230 +281,239 @@ export default function Dashboard() {
       </div>
       <DashboardCard>
         <div className="dashboard-body">
-          <div className="row">
-            {data &&
-              data.map((item) => (
-                <div
-                  className="col-lg-3 mb-4 col-md-6 col-sm-12 cursor"
-                  onClick={() =>
-                    history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-                  }
-                  role="presentation">
-                  <WhiteCard key={item.id}>
-                    <img
-                      className="company-logo"
-                      src={
-                        item &&
-                        item.documents &&
-                        item.documents[0] &&
-                        Object.values(item.documents[0])
-                          ? Object.values(item.documents[0])[0]
-                          : CompanyDefaultUser
-                      }
-                      alt="logo"
-                    />
+          {isLoading.loader && isLoading.type === 'page' ? (
+            <PageLoader component="modal" color="#FF5933" type="page" />
+          ) : (
+            <div className="row">
+              {data && data.length === 0 ? (
+                <NoRecordFound type="brand" />
+              ) : (
+                data.map((item) => (
+                  <div
+                    className="col-lg-3 mb-4 col-md-6 col-sm-12 cursor"
+                    onClick={() =>
+                      history.push(
+                        PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                      )
+                    }
+                    role="presentation">
+                    <WhiteCard key={item.id}>
+                      <img
+                        className="company-logo"
+                        src={
+                          item &&
+                          item.documents &&
+                          item.documents[0] &&
+                          Object.values(item.documents[0])
+                            ? Object.values(item.documents[0])[0]
+                            : CompanyDefaultUser
+                        }
+                        alt="logo"
+                      />
 
-                    <div className="company-name">
-                      {item &&
-                        item.contract &&
-                        item.contract[0].contract_company_name}
-                    </div>
-                    <div className="status">Health_Wellness_And_Fitness</div>
-                    <div className="straight-line horizontal-line spacing " />
-                    <div className="row">
-                      <div className="col-12 pt-1 pb-1">
-                        <img
-                          className="solid-icon "
-                          src={
+                      <div className="company-name">
+                        {item &&
+                          item.contract &&
+                          item.contract[0].contract_company_name}
+                      </div>
+                      <div className="status">Health_Wellness_And_Fitness</div>
+                      <div className="straight-line horizontal-line spacing " />
+                      <div className="row">
+                        <div className="col-12 pt-1 pb-1">
+                          <img
+                            className="solid-icon "
+                            src={
+                              item &&
+                              item.contract &&
+                              item.contract[0] &&
+                              (item.contract[0].contract_type === 'One Time' ||
+                                item.contract[0].contract_type === 'one time')
+                                ? ServiceIcon
+                                : RecurringIcon
+                            }
+                            alt=""
+                          />
+                          <p className="black-heading-title mt-0 mb-0 capitalize">
+                            {item &&
+                              item.contract &&
+                              item.contract[0] &&
+                              item.contract[0].contract_type}{' '}
+                            Service Agreement
+                          </p>
+
+                          <ul className="recurring-contact ">
+                            <li>
+                              <p className="basic-text ">
+                                {item &&
+                                  item.contract &&
+                                  item.contract[0] &&
+                                  item.contract[0].length}
+                              </p>
+                            </li>
+
+                            <li>
+                              <p className="basic-text ">
+                                Started{' '}
+                                {item &&
+                                  item.contract &&
+                                  item.contract[0] &&
+                                  item.contract[0].start_date}
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="straight-line horizontal-line spacing " />
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="card-label">Revenue</div>
+                          {calculatePercentage(
                             item &&
-                            item.contract &&
-                            item.contract[0] &&
-                            (item.contract[0].contract_type === 'One Time' ||
-                              item.contract[0].contract_type === 'one time')
-                              ? ServiceIcon
-                              : RecurringIcon
-                          }
-                          alt=""
-                        />
-                        <p className="black-heading-title mt-0 mb-0 capitalize">
-                          {item &&
-                            item.contract &&
-                            item.contract[0] &&
-                            item.contract[0].contract_type}{' '}
-                          Service Agreement
-                        </p>
-
-                        <ul className="recurring-contact ">
-                          <li>
-                            <p className="basic-text ">
-                              {item &&
-                                item.contract &&
-                                item.contract[0] &&
-                                item.contract[0].length}
-                            </p>
-                          </li>
-
-                          <li>
-                            <p className="basic-text ">
-                              Started{' '}
-                              {item &&
-                                item.contract &&
-                                item.contract[0] &&
-                                item.contract[0].start_date}
-                            </p>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="straight-line horizontal-line spacing " />
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="card-label">Revenue</div>
-                        {calculatePercentage(
-                          item &&
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current[0] &&
+                              item.daily_facts.current[0].revenue,
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.previous &&
+                              item.daily_facts.previous[0] &&
+                              item.daily_facts.previous[0].revenue,
+                          )}
+                        </div>
+                        <div className="col-6 text-right">
+                          <div className="sold-price ">
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].revenue,
-                          item &&
+                            item.daily_facts.current[0]
+                              ? `$${item.daily_facts.current[0].revenue}`
+                              : 0}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0] &&
-                            item.daily_facts.previous[0].revenue,
-                        )}
-                      </div>
-                      <div className="col-6 text-right">
-                        <div className="sold-price ">
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.current &&
-                          item.daily_facts.current[0]
-                            ? `$${item.daily_facts.current[0].revenue}`
-                            : ''}
+                            item.daily_facts.previous[0]
+                              ? `$${item.daily_facts.previous[0].revenue}`
+                              : 0}
+                          </div>
                         </div>
-                        <div className="vs">
-                          vs{' '}
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.previous &&
-                          item.daily_facts.previous[0]
-                            ? `$${item.daily_facts.previous[0].revenue}`
-                            : ''}
+                        <div className="straight-line horizontal-line spacing" />
+                        <div className="col-6">
+                          <div className="card-label">Units Sold</div>
+                          {calculatePercentage(
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current[0] &&
+                              item.daily_facts.current[0].units_sold,
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.previous &&
+                              item.daily_facts.previous[0] &&
+                              item.daily_facts.previous[0].units_sold,
+                          )}
                         </div>
-                      </div>
-                      <div className="straight-line horizontal-line spacing" />
-                      <div className="col-6">
-                        <div className="card-label">Units Sold</div>
-                        {calculatePercentage(
-                          item &&
+                        <div className="col-6 text-right">
+                          <div className="sold-price ">
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].units_sold,
-                          item &&
+                            item.daily_facts.current[0]
+                              ? item.daily_facts.current[0].units_sold
+                              : 0}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0] &&
-                            item.daily_facts.previous[0].units_sold,
-                        )}
-                      </div>
-                      <div className="col-6 text-right">
-                        <div className="sold-price ">
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.current &&
-                          item.daily_facts.current[0]
-                            ? item.daily_facts.current[0].units_sold
-                            : ''}
+                            item.daily_facts.previous[0]
+                              ? item.daily_facts.previous[0].units_sold
+                              : 0}
+                          </div>
                         </div>
-                        <div className="vs">
-                          vs{' '}
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.previous &&
-                          item.daily_facts.previous[0]
-                            ? item.daily_facts.previous[0].units_sold
-                            : ''}
-                        </div>
-                      </div>
-                      <div className="straight-line horizontal-line spacing" />
+                        <div className="straight-line horizontal-line spacing" />
 
-                      <div className="col-6">
-                        <div className="card-label">Traffic</div>
-                        {calculatePercentage(
-                          item &&
+                        <div className="col-6">
+                          <div className="card-label">Traffic</div>
+                          {calculatePercentage(
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current[0] &&
+                              item.daily_facts.current[0].traffic,
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.previous &&
+                              item.daily_facts.previous[0] &&
+                              item.daily_facts.previous[0].traffic,
+                          )}
+                        </div>
+                        <div className="col-6 text-right">
+                          <div className="sold-price ">
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].traffic,
-                          item &&
+                            item.daily_facts.current[0]
+                              ? item.daily_facts.current[0].traffic
+                              : 0}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0] &&
-                            item.daily_facts.previous[0].traffic,
-                        )}
-                      </div>
-                      <div className="col-6 text-right">
-                        <div className="sold-price ">
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.current &&
-                          item.daily_facts.current[0]
-                            ? item.daily_facts.current[0].traffic
-                            : ''}
+                            item.daily_facts.previous[0]
+                              ? item.daily_facts.previous[0].units_sold
+                              : 0}
+                          </div>
                         </div>
-                        <div className="vs">
-                          vs{' '}
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.previous &&
-                          item.daily_facts.previous[0]
-                            ? item.daily_facts.previous[0].units_sold
-                            : ''}
-                        </div>
-                      </div>
 
-                      <div className="straight-line horizontal-line spacing" />
-                      <div className="col-6">
-                        <div className="card-label">Conversion</div>
-                        {calculatePercentage(
-                          item &&
+                        <div className="straight-line horizontal-line spacing" />
+                        <div className="col-6">
+                          <div className="card-label">Conversion</div>
+                          {calculatePercentage(
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.current &&
+                              item.daily_facts.current[0] &&
+                              item.daily_facts.current[0].conversion,
+                            item &&
+                              item.daily_facts &&
+                              item.daily_facts.previous &&
+                              item.daily_facts.previous[0] &&
+                              item.daily_facts.previous[0].conversion,
+                          )}
+                        </div>
+                        <div className="col-6 text-right">
+                          <div className="sold-price">
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
-                            item.daily_facts.current[0] &&
-                            item.daily_facts.current[0].conversion,
-                          item &&
+                            item.daily_facts.current[0]
+                              ? `${item.daily_facts.current[0].conversion} %`
+                              : 0}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
-                            item.daily_facts.previous[0] &&
-                            item.daily_facts.previous[0].conversion,
-                        )}
-                      </div>
-                      <div className="col-6 text-right">
-                        <div className="sold-price">
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.current &&
-                          item.daily_facts.current[0]
-                            ? item.daily_facts.current[0].conversion
-                            : ''}
-                        </div>
-                        <div className="vs">
-                          vs{' '}
-                          {item &&
-                          item.daily_facts &&
-                          item.daily_facts.previous &&
-                          item.daily_facts.previous[0]
-                            ? item.daily_facts.previous[0].conversion
-                            : ''}
+                            item.daily_facts.previous[0]
+                              ? `${item.daily_facts.previous[0].conversion} %`
+                              : 0}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </WhiteCard>
-                </div>
-              ))}
-          </div>
+                    </WhiteCard>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </DashboardCard>
     </BrandPartnerDashboard>
