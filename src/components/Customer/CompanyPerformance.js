@@ -4,7 +4,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState, useCallback } from 'react';
 // import { useMediaQuery } from 'react-responsive';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {
   LineChart,
@@ -15,9 +15,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  PieChart,
-  Pie,
-  Cell,
+  // PieChart,
+  // Pie,
+  // Cell,
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -90,8 +90,8 @@ export default function CompanyPerformance({ agreement, id }) {
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
 
-  const pieData = [{ name: 'Group A', value: 15 }];
-  const COLORS = ['#407B00'];
+  // const pieData = [{ name: 'Group A', value: 15 }];
+  // const COLORS = ['#407B00'];
   const [customDateValue, setCustomDateValue] = useState([
     new Date(),
     new Date(),
@@ -926,42 +926,44 @@ export default function CompanyPerformance({ agreement, id }) {
           {/* <div style={{ height: '400px', width: '1000px' }}>
             <div style={{ height: '100%', width: '60%' }}>
               <ResponsiveContainer width={'79%'} height={'30%'}> */}
-          <LineChart
-            width={700}
-            height={300}
-            data={lineChartData}
-            margin={{
-              top: 40,
-              right: 30,
-              left: 30,
-              bottom: 20,
-            }}>
-            <CartesianGrid strokeDasharray="none" />
-            <XAxis dataKey="name" />
-            <YAxis type="number" domain={[0, 'dataMax + 1000']} />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey=" $"
-              stroke="#FF5933"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="vs $" stroke="#BFC5D2" />
-          </LineChart>
-          {/* </ResponsiveContainer>
+          <div className="performance-graph">
+            <LineChart
+              width={900}
+              height={300}
+              data={lineChartData}
+              margin={{
+                top: 40,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}>
+              <CartesianGrid strokeDasharray="none" />
+              <XAxis dataKey="name" />
+              <YAxis type="number" domain={[0, 'dataMax + 1000']} />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey=" $"
+                stroke="#FF5933"
+                activeDot={{ r: 8 }}
+              />
+              <Line type="monotone" dataKey="vs $" stroke="#BFC5D2" />
+            </LineChart>
+            {/* </ResponsiveContainer>
             </div>
           </div> */}
+          </div>
         </WhiteCard>
 
         <div className="row mt-3">
-          <div className="col-md-4 col-sm-12 mb-3">
+          {/* <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
               <div className="speed-rate">$0</div>
               <div className="last-update">Last updated: N/A</div>
             </WhiteCard>{' '}
-          </div>
+          </div> */}
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
@@ -982,7 +984,7 @@ export default function CompanyPerformance({ agreement, id }) {
               </div>
             </WhiteCard>
           </div>
-          <div className="col-md-4 col-sm-12 ">
+          <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               {' '}
               <p className="black-heading-title mt-0 mb-4">Order Issues</p>
@@ -1001,13 +1003,11 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="last-update ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
-              {/* <div className="seller-health mt-3">0.01%</div>
-              <div className="last-update">Policy Violations</div> */}
             </WhiteCard>
           </div>
         </div>
-        <div className="row mt-3">
-          <div className="col-md-4 col-sm-4 mb-3">
+        {/* <div className="row mt-3">
+          <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
@@ -1051,7 +1051,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 </div>
               </div>
               <LineChart
-                width={450}
+                width={300}
                 height={200}
                 data={lineChartData}
                 margin={{
@@ -1076,7 +1076,7 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
-        </div>
+        </div> */}
 
         <Modal
           isOpen={showCustomDateModal}
@@ -1129,46 +1129,46 @@ CompanyPerformance.propTypes = {
   }).isRequired,
 };
 
-const PiechartResponsive = styled.div`
-  .recharts-wrapper {
-    .recharts-surface {
-      width: 250px;
-      @media only screen and (max-width: 1119px) {
-        width: 220px;
-      }
-      @media only screen and (max-width: 1044px) {
-        width: 210px;
-      }
-      @media only screen and (max-width: 991px) {
-        width: 310px;
-      }
-      @media only screen and (max-width: 920px) {
-        width: 280px;
-      }
-      @media only screen and (max-width: 846px) {
-        width: 240px;
-      }
-      @media only screen and (max-width: 767px) {
-        width: 684px;
-      }
-      @media only screen and (max-width: 640px) {
-        width: 600px;
-      }
-      @media only screen and (max-width: 590px) {
-        width: 550px;
-      }
-      @media only screen and (max-width: 530px) {
-        width: 510px;
-      }
-      @media only screen and (max-width: 500px) {
-        width: 450px;
-      }
-      @media only screen and (max-width: 475px) {
-        width: 390px;
-      }
-      @media only screen and (max-width: 400px) {
-        width: 300px;
-      }
-    }
-  }
-`;
+// const PiechartResponsive = styled.div`
+//   .recharts-wrapper {
+//     .recharts-surface {
+//       width: 250px;
+//       @media only screen and (max-width: 1119px) {
+//         width: 220px;
+//       }
+//       @media only screen and (max-width: 1044px) {
+//         width: 210px;
+//       }
+//       @media only screen and (max-width: 991px) {
+//         width: 310px;
+//       }
+//       @media only screen and (max-width: 920px) {
+//         width: 280px;
+//       }
+//       @media only screen and (max-width: 846px) {
+//         width: 240px;
+//       }
+//       @media only screen and (max-width: 767px) {
+//         width: 622px;
+//       }
+//       @media only screen and (max-width: 640px) {
+//         width: 546px;
+//       }
+//       @media only screen and (max-width: 590px) {
+//         width: 512px;
+//       }
+//       @media only screen and (max-width: 530px) {
+//         width: 557px;
+//       }
+//       @media only screen and (max-width: 500px) {
+//         width: 450px;
+//       }
+//       @media only screen and (max-width: 475px) {
+//         width: 335px;
+//       }
+//       @media only screen and (max-width: 400px) {
+//         width: 260px;
+//       }
+//     }
+//   }
+// `;

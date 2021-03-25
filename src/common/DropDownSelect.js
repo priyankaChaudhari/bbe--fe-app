@@ -139,9 +139,13 @@ const DropDownSelect = styled.div`
     float: right;
     .css-yk16xz-control {
       padding: 5px !important;
+      background-color: ${Theme.gray8};
+      border: 1px solid ${Theme.gray45};
     }
     .css-1pahdxg-control {
       padding: 5px !important;
+      background-color: ${Theme.gray8};
+      border: 1px solid ${Theme.gray45};
     }
   }
 

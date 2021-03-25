@@ -991,6 +991,11 @@ export const WhiteCard = styled.div`
         max-width: 100%;
       }
   }
+    @media only screen and (min-width: 1600px) { 
+      .order-chart-box { 
+        max-width: 100%;
+      }
+    }
   @media only screen and (max-width: 1150px) {
      .company-label-info {
         margin-left: 40px;
