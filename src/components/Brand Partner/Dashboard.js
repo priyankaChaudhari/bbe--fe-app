@@ -162,7 +162,11 @@ export default function Dashboard() {
           className="drop-down-user"
           src={props.data.icon}
           alt="user"
-          style={{ borderRadius: 50, width: '32px', marginBottom: '' }}
+          style={{
+            borderRadius: 50,
+            width: '32px',
+            marginBottom: '',
+          }}
         />
       ) : (
         <GetInitialName userInfo={props.data.label} type="list" property="" />
@@ -249,8 +253,8 @@ export default function Dashboard() {
                 <li className="partner">
                   <DropDownSelect>
                     <Select
+                      className="text-left active"
                       classNamePrefix="react-select"
-                      className="active"
                       placeholder="My Partners"
                       options={brandGrowthStrategist}
                       components={getSelectComponents('user')}
@@ -683,6 +687,8 @@ const BrandPartnerDashboard = styled.div`
 
 const DashboardCard = styled.div`
   background: ${Theme.gray6};
+  min-height: 100vh;
+  hright: 100%;
   padding-top: 70px;
 
   .dashboard-body {

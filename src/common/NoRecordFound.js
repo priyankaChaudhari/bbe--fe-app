@@ -12,7 +12,7 @@ export default function NoRecordFound({ type }) {
       <div
         className={
           type === 'brand'
-            ? 'text-center no-record-found'
+            ? 'NoRecordFound no-record-found'
             : 'text-center no-record-found'
         }>
         <img src={TelescopeIcon} alt="No record found" />
@@ -37,6 +37,11 @@ const NoRecord = styled.div`
   left: 0;
   top: 98px;
 
+  .NoRecordFound {
+    margin: auto;
+    text-align: center;
+    margin-top: 10%;
+  }
   .no-record-found {
     img {
       width: 240px;
