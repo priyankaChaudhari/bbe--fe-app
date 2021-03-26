@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 
+import dayjs from 'dayjs';
 import { DropDownSelect, GetInitialName, PageLoader } from '../../common';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
@@ -368,9 +369,13 @@ export default function Dashboard() {
                               <p className="basic-text ">
                                 Started{' '}
                                 {item &&
-                                  item.contract &&
-                                  item.contract[0] &&
-                                  item.contract[0].start_date}
+                                item.contract &&
+                                item.contract[0] &&
+                                item.contract[0].start_date
+                                  ? dayjs(item.contract[0].start_date).format(
+                                      'MMM DD, YYYY',
+                                    )
+                                  : ''}
                               </p>
                             </li>
                           </ul>
@@ -410,7 +415,9 @@ export default function Dashboard() {
                                 $
                                 {item.daily_facts.current
                                   .map((rev) => rev.revenue)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -426,7 +433,9 @@ export default function Dashboard() {
                                 $
                                 {item.daily_facts.previous
                                   .map((rev) => rev.revenue)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -464,7 +473,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.units_sold)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -479,7 +490,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.units_sold)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -518,7 +531,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.traffic)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -533,7 +548,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.traffic)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -573,7 +590,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.conversion)
-                                  .reduce((val, rev) => rev + val)}{' '}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 %
                               </>
                             ) : (
@@ -589,7 +608,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.conversion)
-                                  .reduce((val, rev) => rev + val)}{' '}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 %
                               </>
                             ) : (
