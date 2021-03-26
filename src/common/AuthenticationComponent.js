@@ -25,7 +25,7 @@ import {
   PATH_CUSTOMER_LIST_TABLET,
   PATH_BGS_DASHBOARD,
   // PATH_TEAM_MEMBER,
-  PATH_TABLET_TEAM_MEMBER,
+  // PATH_TABLET_TEAM_MEMBER,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -45,7 +45,7 @@ import NewCustomerList from '../components/Customer/NewCustomerList';
 import {
   Dashboard,
   // TeamMember,
-  TabletTeamMember,
+  // TabletTeamMember,
 } from '../components/Brand Partner';
 
 export default function AuthenticationComponent() {
@@ -163,7 +163,7 @@ export default function AuthenticationComponent() {
           {/* Brand Partner */}
           <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
           {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
-          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
+          {/* <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
 
           <Route component={PageNotFound} />
         </Switch>

@@ -22,7 +22,6 @@ import {
   EditFileIcons,
   EmailIcon,
   PhoneIcon,
-  ExpnadArrowBack,
   LeftArrowIcon,
 } from '../../theme/images';
 
@@ -291,7 +290,7 @@ function RequestSignature({
   const displayCCEmails = () => {
     return ccEmails.map((data, i) => {
       return (
-        <div className="col-12 mt-3">
+        <div className="col-12 mt-2">
           <FormField>
             <input
               id={i}
@@ -504,13 +503,13 @@ function RequestSignature({
           {contractDesignData && showHelloSignPage ? displayHelloSign() : ''}
           <div className="modal-body ">
             <h4
-              className="on-boarding mb-4"
+              className="on-boarding mb-3"
               role="presentation"
               onClick={() => setParams('select-contact')}>
-              <img className="modal-back-arrow" src={ExpnadArrowBack} alt="" />{' '}
+              <img className="modal-back-arrow" src={LeftArrowIcon} alt="" />{' '}
               Request Signature
             </h4>
-            <div className="row mb-2">
+            <div className="row mb-2 mt-4">
               <div className="col-6">
                 <div className="signature-request">
                   TO:
@@ -520,7 +519,7 @@ function RequestSignature({
                   </span>{' '}
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-6 ">
                 <CheckBox>
                   <label
                     className="check-container contract-sign"

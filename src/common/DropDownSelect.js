@@ -177,8 +177,10 @@ const DropDownSelect = styled.div`
       font-size: ${Theme.normal};
       padding: 1px 5px 1px 5px;
       min-height: 40px;
+
       cursor: pointer;
-      caret-color: transparent, .css-g1d714-ValueContainer {
+      caret-color: transparent;
+      .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
         color: ${Theme.black} !important;
 
@@ -217,7 +219,8 @@ const DropDownSelect = styled.div`
       outline: none;
       min-height: 40px;
       cursor: pointer;
-      caret-color: transparent, .css-b8ldur-Input {
+      caret-color: transparent;
+      .css-b8ldur-Input {
         color: ${Theme.white};
       }
 

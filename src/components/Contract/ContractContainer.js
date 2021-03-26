@@ -2181,7 +2181,10 @@ export default function ContractContainer() {
             </Button>
 
             <Button
-              className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50"
+              className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50 ml-0"
+              // className={`btn-primary sticky-btn-primary sidepanel mt-3 mr-5 ${
+              //   isEditContract ? 'w-sm-100' : 'w-sm-50'
+              // }`}
               onClick={() =>
                 setShowDiscardModal({
                   ...showDiscardModal,
@@ -2235,7 +2238,7 @@ export default function ContractContainer() {
                 showRightTick('dspAddendum') ? (
                 <>
                   <Button
-                    className={`btn-primary on-boarding mt-3 mr-lg-3 ${
+                    className={`btn-primary on-boarding mt-3  ${
                       isEditContract ? 'w-sm-100' : 'w-sm-50'
                     }`}
                     disabled={
@@ -2462,7 +2465,7 @@ export default function ContractContainer() {
               width={40}
               component="agreement"
             />
-          ) : details ? (
+          ) : details && details.id ? (
             viewContract()
           ) : (
             ''

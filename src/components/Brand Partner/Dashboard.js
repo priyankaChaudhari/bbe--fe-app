@@ -321,7 +321,13 @@ export default function Dashboard() {
                         alt="logo"
                       />
 
-                      <div className="company-name">
+                      <div
+                        className="company-name"
+                        title={
+                          item &&
+                          item.contract &&
+                          item.contract[0].contract_company_name
+                        }>
                         {item &&
                           item.contract &&
                           item.contract[0].contract_company_name}
