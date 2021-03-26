@@ -277,17 +277,17 @@ export default function CompanyPerformance({ agreement, id }) {
             res.data.daily_facts.current.length
           ) {
             res.data.daily_facts.current.forEach(function (resData, index) {
-              const key = ' $';
+              // const key = ' $';
               revenueTotal.currentRevenueTotal += resData.revenue;
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
               conversionTotal.currentConversionTotal += resData.conversion;
               if (index < res.data.daily_facts.previous.length) {
                 // tempData[index][key] = resData.revenue;
-                tempRevenueData[index][key] = resData.revenue;
-                tempUnitsSoldData[index][key] = resData.units_sold;
-                tempTrafficData[index][key] = resData.traffic;
-                tempConversionData[index][key] = resData.conversion;
+                tempRevenueData[index][' $'] = resData.revenue;
+                tempUnitsSoldData[index][' $'] = resData.units_sold;
+                tempTrafficData[index][' $'] = resData.traffic;
+                tempConversionData[index][' $'] = resData.conversion;
               } else {
                 const dayDate = new Date(resData.report_date)
                   .toLocaleDateString('us', {
@@ -303,19 +303,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 // });
                 tempRevenueData.push({
                   name: dayDate,
-                  'vs $': resData.revenue,
+                  ' $': resData.revenue,
                 });
                 tempTrafficData.push({
                   name: dayDate,
-                  'vs $': resData.traffic,
+                  ' $': resData.traffic,
                 });
                 tempUnitsSoldData.push({
                   name: dayDate,
-                  'vs $': resData.units_sold,
+                  ' $': resData.units_sold,
                 });
                 tempConversionData.push({
                   name: dayDate,
-                  'vs $': resData.conversion,
+                  ' $': resData.conversion,
                 });
               }
             });
@@ -367,7 +367,6 @@ export default function CompanyPerformance({ agreement, id }) {
     },
     [id],
   );
-
   const setChartData = (value) => {
     if (value === 'traffic') {
       setLineChartData(trafficData);
@@ -539,6 +538,37 @@ export default function CompanyPerformance({ agreement, id }) {
     }
     return null;
   };
+
+  // const CustomTooltip = ({ active, payload, label }) => {
+  //   if (active && payload && payload.length) {
+  //     if (payload.length === 2) {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //           <p className="label">{`vs $ : ${payload[1].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === ' $') {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //   }
+  //   return null;
+  // };
 
   useEffect(() => {
     const list = [];
