@@ -389,14 +389,15 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
-      return `$${  parseInt(number / 1000000000).toString()  }B`;
-    } if (number > 1000000) {
-      return `$${  parseInt(number / 1000000).toString()  }M`;
-    } if (number > 1000) {
-      return `$${  parseInt(number / 1000).toString()  }K`;
-    } 
-      return `$${  parseInt(number).toString()}`;
-    
+      return `$${parseInt(number / 1000000000).toString()}B`;
+    }
+    if (number > 1000000) {
+      return `$${parseInt(number / 1000000).toString()}M`;
+    }
+    if (number > 1000) {
+      return `$${parseInt(number / 1000).toString()}K`;
+    }
+    return `$${parseInt(number).toString()}`;
   };
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
@@ -526,6 +527,17 @@ export default function CompanyPerformance({ agreement, id }) {
     setGropuByFilter('custom');
     getData(selectedValue, groupBy, selectedAmazonValue, startDate, endDate);
     setShowCustomDateModal(false);
+  };
+
+  const renderLegendText = (value, entry) => {
+    const { color } = entry;
+    if (value === ' $') {
+      return <span style={{ color }}>Current</span>;
+    }
+    if (value === 'vs $') {
+      return <span style={{ color }}>Past</span>;
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -970,8 +982,8 @@ export default function CompanyPerformance({ agreement, id }) {
                 domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
               />
               <Tooltip />
-              <Legend />
-              <Line dataKey=" $" stroke="#FF5933" activeDot={{ r: 8 }} />
+              <Legend formatter={renderLegendText} />
+              <Line dataKey=" $" stroke="#FF5933" />
               <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
             {/* </ResponsiveContainer>
