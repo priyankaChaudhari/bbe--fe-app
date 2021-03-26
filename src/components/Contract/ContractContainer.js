@@ -2107,9 +2107,9 @@ export default function ContractContainer() {
       details.contract_status.value === 'pending contract signature' ? (
       <div className="mt-4 pt-5">
         <Footer className=" mt-5 ">
-          <div className="container-fluid">
+          <div className="container-fluid ">
             <Button
-              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5 on-boarding"
+              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5  on-boarding w-sm-50"
               onClick={() => onEditcontract()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -2122,7 +2122,7 @@ export default function ContractContainer() {
             details.contract_status.value &&
             details.contract_status.value === 'pending contract signature' ? (
               <Button
-                className="light-orange sticky-btn   mt-3 mr-3 on-boarding"
+                className="light-orange sticky-btn   mt-3 mr-0  on-boarding w-sm-50"
                 onClick={() => {
                   setParams('send-remainder');
                   setShowModal(true);
@@ -2551,7 +2551,7 @@ export default function ContractContainer() {
         contentLabel="Edit modal">
         <ModalBox>
           <div className="modal-body">
-            <div className="alert-msg edit ">
+            <div className="alert-msg  ">
               Making any edits to this contract will void the version of the
               contract that&apos;s out for signature.
               <div className="sure-to-proceed">
@@ -2620,11 +2620,39 @@ const Footer = styled.div`
       margin-bottom: 10px;
     }
     .w-sm-50 {
-      width: 50% !important;
+      width: 47% !important;
       margin-bottom: 10px;
     }
     .last-update {
       margin-top: 20px;
+    }
+  }
+  @media only screen and (max-width: 831px) {
+    .w-sm-50 {
+      width: 46% !important;
+      margin-bottom: 10px;
+    }
+  }
+  @media only screen and (max-width: 631px) {
+    .w-sm-50 {
+      width: 47.5% !important;
+      margin-right: 25px !important;
+      margin-bottom: 10px;
+    }
+    .mr-0 {
+      margin-right: 0 !important;
+    }
+  }
+  @media only screen and (max-width: 530px) {
+    .w-sm-50 {
+      width: 47.3% !important;
+      margin-bottom: 10px;
+    }
+  }
+  @media only screen and (max-width: 491px) {
+    .w-sm-50 {
+      width: 45.7% !important;
+      margin-bottom: 10px;
     }
   }
 

@@ -25,9 +25,11 @@ import {
   PATH_CUSTOMER_LIST_TABLET,
   PATH_BGS_DASHBOARD,
   // PATH_TEAM_MEMBER,
+  PATH_TABLET_TEAM_MEMBER,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
+
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
@@ -40,7 +42,11 @@ import {
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
-import { Dashboard } from '../components/Brand Partner';
+import {
+  Dashboard,
+  // TeamMember,
+  TabletTeamMember,
+} from '../components/Brand Partner';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -157,6 +163,7 @@ export default function AuthenticationComponent() {
           {/* Brand Partner */}
           <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
           {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
+          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
 
           <Route component={PageNotFound} />
         </Switch>

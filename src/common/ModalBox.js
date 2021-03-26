@@ -138,13 +138,7 @@ const ModalBox = styled.div`
       font-weight: 500;
       padding: 0px 0 30px 0;
 
-      &.edit{
-        font-weight: 800;
-         padding: 0px 0 20px 0;
-      }
-
       .sure-to-proceed {
-        font-weight: 300;
         margin-top: 11px;
       }
     }
