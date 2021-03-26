@@ -16,10 +16,12 @@ const TeamDropDown = styled.div`
     max-width: 211px;
     width: 100%;
     margin: 0 auto;
+    cursor: pointer;
 
     .css-g1d714-ValueContainer {
       color: ${Theme.gray90};
       font-size: 15px;
+      cursor: pointer;
 
       font-family: ${Theme.titleFontFamily};
       max-width: 211px;
@@ -66,6 +68,7 @@ const TeamDropDown = styled.div`
     border: none;
     background-color: ${Theme.white};
     outline: none;
+    cursor: pointer;
 
     .css-1okebmr-indicatorSeparator {
       display: none;

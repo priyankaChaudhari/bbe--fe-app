@@ -141,7 +141,7 @@ export default function EditCompanyDetails({
                 name={icon.key}
                 className="form-control extra-space"
                 type="text"
-                defaultValue={mapIconValues(icon.key)}
+                value={mapIconValues(icon.key)}
                 onChange={(event) => handleChange(event, icon.key)}
               />
 

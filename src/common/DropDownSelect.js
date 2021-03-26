@@ -3,6 +3,7 @@ import Theme from '../theme/Theme';
 
 const DropDownSelect = styled.div`
   width: 100%;
+  cursor: pointer;
 
   &.w-30 {
     width: 160px;
@@ -31,6 +32,7 @@ const DropDownSelect = styled.div`
       .css-yk16xz-control {
         padding: 0 !important;
         min-height: 40px;
+        cursor: pointer;
 
         .css-1hwfws3 {
           padding: 0px !important;
@@ -55,6 +57,7 @@ const DropDownSelect = styled.div`
       .css-1pahdxg-control {
         min-height: 40px;
         background-color: ${Theme.gray15};
+        cursor: pointer;
         .css-g1d714-ValueContainer {
           padding: 0;
         }
@@ -137,15 +140,26 @@ const DropDownSelect = styled.div`
   &.days-performance {
     max-width: 259px;
     float: right;
+
     .css-yk16xz-control {
-      padding: 5px !important;
       background-color: ${Theme.gray8};
       border: 1px solid ${Theme.gray45};
+      caret-color: transparent;
+      cursor: pointer;
+      .css-g1d714-ValueContainer {
+        cursor: pointer;
+        text-align: initial !important;
+      }
     }
     .css-1pahdxg-control {
-      padding: 5px !important;
       background-color: ${Theme.gray8};
       border: 1px solid ${Theme.gray45};
+      caret-color: transparent;
+      cursor: pointer;
+      .css-g1d714-ValueContainer {
+        cursor: pointer;
+        text-align: initial;
+      }
     }
   }
 
@@ -153,6 +167,7 @@ const DropDownSelect = styled.div`
     width: 100%;
     color: ${Theme.black} !important;
     font-size: ${Theme.normal};
+    cursor: pointer;
 
     .css-yk16xz-control {
       background-color: ${Theme.gray15};
@@ -163,6 +178,8 @@ const DropDownSelect = styled.div`
       padding: 1px 5px 1px 5px;
       min-height: 40px;
 
+      cursor: pointer;
+      caret-color: transparent;
       .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
         color: ${Theme.black} !important;
@@ -201,7 +218,8 @@ const DropDownSelect = styled.div`
       box-shadow: none;
       outline: none;
       min-height: 40px;
-
+      cursor: pointer;
+      caret-color: transparent;
       .css-b8ldur-Input {
         color: ${Theme.white};
       }
@@ -226,7 +244,7 @@ const DropDownSelect = styled.div`
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.normal};
-        padding: 4px;
+        // padding: 4px;
         color: ${Theme.black} !important;
       }
     }

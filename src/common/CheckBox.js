@@ -26,7 +26,7 @@ const CheckBox = styled.div`
     }
 
     &.contract-sign {
-      color: ${Theme.black};
+      color: ${Theme.gray35};
     }
 
     &.additional-place {

@@ -89,7 +89,7 @@ export default function AgreementDetails({ agreements, id }) {
                   {agreement && agreement.end_date ? (
                     <li>
                       <p className="basic-text ">
-                        Expires:
+                        Expires:{' '}
                         {dayjs(agreement.end_date).format('MMM DD, YYYY')}
                       </p>
                     </li>

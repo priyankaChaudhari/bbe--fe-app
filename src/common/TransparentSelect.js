@@ -49,9 +49,9 @@ const TransparentSelect = styled.div`
       font-family: ${Theme.titleFontFamily};
       font-size: ${Theme.textFontSize};
       padding: 0 5px 0 5px;
-
       box-shadow: none;
       outline: none;
+      cursor: pointer;
 
       .css-b8ldur-Input {
         color: ${Theme.gray90};

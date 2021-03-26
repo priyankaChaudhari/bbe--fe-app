@@ -1079,7 +1079,9 @@ export default function NewCustomerList() {
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
                                     .map((rev) => rev.revenue)
-                                    .reduce((val, rev) => rev + val)}
+                                    .reduce((val, rev) => rev + val)
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 {calculatePercentage(
                                   item &&
                                     item.daily_facts &&
@@ -1123,7 +1125,9 @@ export default function NewCustomerList() {
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
                                     .map((rev) => rev.units_sold)
-                                    .reduce((val, rev) => rev + val)}
+                                    .reduce((val, rev) => rev + val)
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 {calculatePercentage(
                                   item &&
                                     item.daily_facts &&
@@ -1154,7 +1158,9 @@ export default function NewCustomerList() {
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
                                     .map((rev) => rev.traffic)
-                                    .reduce((val, rev) => rev + val)}
+                                    .reduce((val, rev) => rev + val)
+                                    .toString()
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 {calculatePercentage(
                                   item &&
                                     item.daily_facts &&
@@ -1188,7 +1194,9 @@ export default function NewCustomerList() {
                                     {item &&
                                       item.daily_facts.current
                                         .map((rev) => rev.conversion)
-                                        .reduce((val, rev) => rev + val)}{' '}
+                                        .reduce((val, rev) => rev + val)
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     %
                                     {calculatePercentage(
                                       item &&

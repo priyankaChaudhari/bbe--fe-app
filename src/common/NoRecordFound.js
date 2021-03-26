@@ -34,13 +34,15 @@ NoRecordFound.propTypes = {
 const NoRecord = styled.div`
   position: absolute;
   right: 0;
-  left: 0;
+  left: 65px;
   top: 98px;
 
   .NoRecordFound {
     margin: auto;
     text-align: center;
-    margin-top: 10%;
+    padding-top: 10%;
+    // padding-left: 65px;
+    // left: 65px;
   }
   .no-record-found {
     img {

@@ -21,10 +21,12 @@ const ContractInputSelect = styled.div`
       min-height: 40px !important;
       font-size: color: ${Theme.extraNormal};
       font-weight:500;
+       cursor: pointer;
 
         .css-g1d714-ValueContainer {
           color: ${Theme.gray85};
           font-size: color: ${Theme.extraNormal};
+         
         }
           .css-1wa3eu0-placeholder {
             color: ${Theme.gray85};
@@ -56,7 +58,7 @@ const ContractInputSelect = styled.div`
         font-weight:500;
         //  border: 1px solid ${Theme.red} ;
         //  background: #FBF2F2;
-
+         cursor: pointer;
         &.form-control-error {
           border: 1px solid ${Theme.red} ;
           background: #FBF2F2;

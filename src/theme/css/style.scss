@@ -712,6 +712,11 @@ fieldset {
   position: absolute;
   color: #2e384d;
   font-size: 15px;
+
+  .react-select__option {
+    cursor: pointer;
+    text-align: left;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -1146,6 +1151,11 @@ input:checked + .slider:before {
   cursor: not-allowed !important;
   pointer-events: none !important;
 }
+.disabled-tab {
+  opacity: 0.2;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
 
 .DraftEditor-editorContainer {
   padding: 0 10px;
@@ -1350,7 +1360,6 @@ g .recharts-layer .recharts-line-dots {
 
   .recharts-default-legend {
     text-align: left !important;
-    display: none;
     li.recharts-legend-item {
       border-radius: 2px;
       width: -1px;

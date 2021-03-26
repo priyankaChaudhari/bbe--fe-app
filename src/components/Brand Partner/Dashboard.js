@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 
+import dayjs from 'dayjs';
 import { DropDownSelect, GetInitialName, PageLoader } from '../../common';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
@@ -207,20 +208,18 @@ export default function Dashboard() {
       if (percentage.toString().includes('-')) {
         return (
           <>
-            <br />
-            <span className="decrease-rate">
+            <div className="decrease-rate">
               {' '}
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {percentage
                 ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
                 : ''}
-            </span>
+            </div>
           </>
         );
       }
       return (
         <>
-          <br />
           <div className="increase-rate">
             <img
               className="red-arrow"
@@ -266,7 +265,7 @@ export default function Dashboard() {
                   </DropDownSelect>
                 </li>
                 <li>
-                  <DropDownSelect>
+                  <DropDownSelect className="days-performance">
                     <Select
                       classNamePrefix="react-select"
                       className="active"
@@ -322,7 +321,13 @@ export default function Dashboard() {
                         alt="logo"
                       />
 
-                      <div className="company-name">
+                      <div
+                        className="company-name"
+                        title={
+                          item &&
+                          item.contract &&
+                          item.contract[0].contract_company_name
+                        }>
                         {item &&
                           item.contract &&
                           item.contract[0].contract_company_name}
@@ -365,12 +370,18 @@ export default function Dashboard() {
                             </li>
 
                             <li>
+                              {' '}
+                              <div className="dot" />
                               <p className="basic-text ">
                                 Started{' '}
                                 {item &&
-                                  item.contract &&
-                                  item.contract[0] &&
-                                  item.contract[0].start_date}
+                                item.contract &&
+                                item.contract[0] &&
+                                item.contract[0].start_date
+                                  ? dayjs(item.contract[0].start_date).format(
+                                      'MMM DD, YYYY',
+                                    )
+                                  : ''}
                               </p>
                             </li>
                           </ul>
@@ -410,7 +421,9 @@ export default function Dashboard() {
                                 $
                                 {item.daily_facts.current
                                   .map((rev) => rev.revenue)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -426,7 +439,9 @@ export default function Dashboard() {
                                 $
                                 {item.daily_facts.previous
                                   .map((rev) => rev.revenue)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -464,7 +479,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.units_sold)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -479,7 +496,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.units_sold)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -518,7 +537,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.traffic)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -533,7 +554,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.traffic)
-                                  .reduce((val, rev) => rev + val)}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                               </>
                             ) : (
                               0
@@ -573,7 +596,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.current
                                   .map((rev) => rev.conversion)
-                                  .reduce((val, rev) => rev + val)}{' '}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 %
                               </>
                             ) : (
@@ -589,7 +614,9 @@ export default function Dashboard() {
                               <>
                                 {item.daily_facts.previous
                                   .map((rev) => rev.conversion)
-                                  .reduce((val, rev) => rev + val)}{' '}
+                                  .reduce((val, rev) => rev + val)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 %
                               </>
                             ) : (
@@ -621,6 +648,7 @@ const BrandPartnerDashboard = styled.div`
       display: inline-block;
       width: 220px;
       margin-right: 15px;
+      vertical-align: top;
 
       &.partner {
         width: 230px;
@@ -711,6 +739,10 @@ const DashboardCard = styled.div`
       color: ${Theme.black};
       font-size: ${Theme.title};
       font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 270px;
     }
 
     .status {

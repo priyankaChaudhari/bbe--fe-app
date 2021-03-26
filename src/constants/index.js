@@ -36,6 +36,7 @@ export const PATH_ARTICLE_DETAILS = `${PATH_ARTICLE_LIST}:id/`;
 // Brand Partner
 export const PATH_BGS_DASHBOARD = '/bgs-dashboard/';
 export const PATH_TEAM_MEMBER = '/team-member/';
+export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 
 export const PATH_WARNING = '/warning/';
 

@@ -17,6 +17,7 @@ const InputSelect = styled.div`
     border: 1px solid ${Theme.gray2};
     background-color: rgba(224, 231, 255, 0.2);
     margin-top: 5px;
+    cursor: pointer;
 
     .css-g1d714-ValueContainer {
       color: ${Theme.gray30};
@@ -44,6 +45,7 @@ const InputSelect = styled.div`
     border: 1px solid ${Theme.gray2} !important;
     outline: none;
     font-size: 15px;
+    cursor: pointer;
   }
 `;
 

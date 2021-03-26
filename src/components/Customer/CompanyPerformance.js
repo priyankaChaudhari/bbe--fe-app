@@ -22,6 +22,7 @@ import {
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import { parseInt } from 'lodash';
 import { getPerformance } from '../../api';
 
 import {
@@ -186,7 +187,7 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const calculateSalesDifference = (currentTotal, previousTotal) => {
     const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
-    if (diff === -Infinity || Number.isNaN(diff)) {
+    if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
     return parseFloat(diff.toFixed(2));
@@ -252,7 +253,6 @@ export default function CompanyPerformance({ agreement, id }) {
               const dayDate = new Date(resData.report_date)
                 .toLocaleDateString('us', { month: 'short', day: 'numeric' })
                 .split(' ')
-                .reverse()
                 .join(' ');
               // tempData.push({
               //   name: dayDate,
@@ -277,17 +277,17 @@ export default function CompanyPerformance({ agreement, id }) {
             res.data.daily_facts.current.length
           ) {
             res.data.daily_facts.current.forEach(function (resData, index) {
-              const key = ' $';
+              // const key = ' $';
               revenueTotal.currentRevenueTotal += resData.revenue;
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
               conversionTotal.currentConversionTotal += resData.conversion;
               if (index < res.data.daily_facts.previous.length) {
                 // tempData[index][key] = resData.revenue;
-                tempRevenueData[index][key] = resData.revenue;
-                tempUnitsSoldData[index][key] = resData.units_sold;
-                tempTrafficData[index][key] = resData.traffic;
-                tempConversionData[index][key] = resData.conversion;
+                tempRevenueData[index][' $'] = resData.revenue;
+                tempUnitsSoldData[index][' $'] = resData.units_sold;
+                tempTrafficData[index][' $'] = resData.traffic;
+                tempConversionData[index][' $'] = resData.conversion;
               } else {
                 const dayDate = new Date(resData.report_date)
                   .toLocaleDateString('us', {
@@ -295,7 +295,6 @@ export default function CompanyPerformance({ agreement, id }) {
                     day: 'numeric',
                   })
                   .split(' ')
-                  .reverse()
                   .join(' ');
                 // tempData.push({
                 //   name: dayDate,
@@ -303,19 +302,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 // });
                 tempRevenueData.push({
                   name: dayDate,
-                  'vs $': resData.revenue,
+                  ' $': resData.revenue,
                 });
                 tempTrafficData.push({
                   name: dayDate,
-                  'vs $': resData.traffic,
+                  ' $': resData.traffic,
                 });
                 tempUnitsSoldData.push({
                   name: dayDate,
-                  'vs $': resData.units_sold,
+                  ' $': resData.units_sold,
                 });
                 tempConversionData.push({
                   name: dayDate,
-                  'vs $': resData.conversion,
+                  ' $': resData.conversion,
                 });
               }
             });
@@ -334,9 +333,10 @@ export default function CompanyPerformance({ agreement, id }) {
             trafficTotal.currentTrafficTotal,
             trafficTotal.previousTrafficTotal,
           );
-          conversionTotal.difference =
-            conversionTotal.currentConversionTotal -
-            conversionTotal.previousConversionTotal;
+          conversionTotal.difference = calculateSalesDifference(
+            conversionTotal.currentConversionTotal,
+            conversionTotal.previousConversionTotal,
+          );
           setAllSalesTotal({
             revenue: revenueTotal,
             units: unitsTotal,
@@ -366,7 +366,6 @@ export default function CompanyPerformance({ agreement, id }) {
     },
     [id],
   );
-
   const setChartData = (value) => {
     if (value === 'traffic') {
       setLineChartData(trafficData);
@@ -384,6 +383,19 @@ export default function CompanyPerformance({ agreement, id }) {
       setLineChartData(revenueData);
       setActiveSales('revenue');
     }
+  };
+
+  const DataFormater = (number) => {
+    if (number > 1000000000) {
+      return `$${parseInt(number / 1000000000).toString()}B`;
+    }
+    if (number > 1000000) {
+      return `$${parseInt(number / 1000000).toString()}M`;
+    }
+    if (number > 1000) {
+      return `$${parseInt(number / 1000).toString()}K`;
+    }
+    return `$${parseInt(number).toString()}`;
   };
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
@@ -515,6 +527,48 @@ export default function CompanyPerformance({ agreement, id }) {
     setShowCustomDateModal(false);
   };
 
+  const renderLegendText = (value, entry) => {
+    const { color } = entry;
+    if (value === ' $') {
+      return <span style={{ color }}>Current</span>;
+    }
+    if (value === 'vs $') {
+      return <span style={{ color }}>Past</span>;
+    }
+    return null;
+  };
+
+  // const CustomTooltip = ({ active, payload, label }) => {
+  //   if (active && payload && payload.length) {
+  //     if (payload.length === 2) {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //           <p className="label">{`vs $ : ${payload[1].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === ' $') {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+  //       return (
+  //         <div className="custom-tooltip">
+  //           <p className="label">{activeSales}</p>
+  //           <p className="label">{`$ : ${payload[0].value}`}</p>
+  //         </div>
+  //       );
+  //     }
+  //   }
+  //   return null;
+  // };
+
   useEffect(() => {
     const list = [];
     list.push({
@@ -549,12 +603,19 @@ export default function CompanyPerformance({ agreement, id }) {
     selectedAmazonValue,
   ]);
 
+  const calculateDataMin = (dataMin) => {
+    if (dataMin !== Infinity) {
+      return dataMin - (dataMin * 10) / 100;
+    }
+    return 0;
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
         <div className="row">
           <div className="col-12 mb-3">
-            <DropDownSelect>
+            <DropDownSelect className="cursor">
               <Select
                 classNamePrefix="react-select"
                 className="active"
@@ -567,7 +628,9 @@ export default function CompanyPerformance({ agreement, id }) {
                   ...theme,
                   colors: {
                     ...theme.colors,
-                    neutral50: '#1A1A1A', // Placeholder color
+                    neutral50: '#1A1A1A',
+
+                    // Placeholder color
                   },
                 })}
                 defaultValue={amazonOptions && amazonOptions[0]}
@@ -586,7 +649,7 @@ export default function CompanyPerformance({ agreement, id }) {
               </p>
             </div>
             <div className="col-6  mb-3">
-              <DropDownSelect className="days-performance">
+              <DropDownSelect className="days-performance ">
                 <Select
                   classNamePrefix="react-select"
                   className="active"
@@ -657,7 +720,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.revenue.difference !== 'N/A'
                     ? `${allSalesTotal.revenue.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -716,7 +779,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.units.difference !== 'N/A'
                     ? `${allSalesTotal.units.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -777,7 +840,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.traffic.difference !== 'N/A'
                     ? `${allSalesTotal.traffic.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -794,19 +857,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Conversion</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.conversion
-                    ? allSalesTotal.conversion.currentConversionTotal.toFixed(2)
-                    : 0}{' '}
-                  %
+                    ? `${allSalesTotal.conversion.currentConversionTotal.toFixed(
+                        2,
+                      )}%`
+                    : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs
                   {allSalesTotal && allSalesTotal.conversion
-                    ? allSalesTotal.conversion.previousConversionTotal.toFixed(
+                    ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
                         2,
-                      )
-                    : 0}{' '}
-                  %
+                      )}%`
+                    : 0}
                 </div>
                 <div
                   className={
@@ -840,9 +903,8 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.conversion.difference &&
                   allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.conversion.difference
-                        .toFixed(2)
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -861,7 +923,7 @@ export default function CompanyPerformance({ agreement, id }) {
 
           <div className="days-container mt-4">
             <ul className="days-tab">
-              <li className={filters.daily === false ? 'disabled' : ''}>
+              <li className={filters.daily === false ? 'disabled-tab' : ''}>
                 {' '}
                 <input
                   className="d-none"
@@ -876,7 +938,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="daysCheck">Daily</label>
               </li>
 
-              <li className={filters.weekly === false ? 'disabled' : ''}>
+              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
@@ -889,7 +951,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
 
-              <li className={filters.month === false ? 'disabled' : ''}>
+              <li className={filters.month === false ? 'disabled-tab' : ''}>
                 <input
                   className=" d-none"
                   type="radio"
@@ -948,17 +1010,23 @@ export default function CompanyPerformance({ agreement, id }) {
                 bottom: 0,
               }}>
               <CartesianGrid strokeDasharray="none" />
-              <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, (dataMax) => dataMax * 2]} />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey=" $"
-                stroke="#FF5933"
-                activeDot={{ r: 8 }}
+              <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <YAxis
+                type="number"
+                // domain={[0, 'dataMax']}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={DataFormater}
+                domain={[
+                  (dataMin) => calculateDataMin(dataMin),
+                  (dataMax) => (dataMax * 10) / 100 + dataMax,
+                ]}
               />
-              <Line type="monotone" dataKey="vs $" stroke="#BFC5D2" />
+
+              <Tooltip />
+              <Legend formatter={renderLegendText} />
+              <Line dataKey=" $" stroke="#FF5933" />
+              <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
             {/* </ResponsiveContainer>
             </div>
@@ -979,13 +1047,13 @@ export default function CompanyPerformance({ agreement, id }) {
               <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
               <div className="seller-health positive">
                 {dspData && dspData.feedback_30
-                  ? `${dspData && dspData.feedback_30} %`
+                  ? `${dspData && dspData.feedback_30}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-3">Last 30 days</div>
               <div className="seller-health positive ">
                 {dspData && dspData.feedback_365
-                  ? `${dspData && dspData.feedback_365} %`
+                  ? `${dspData && dspData.feedback_365}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-5">Last 12 months</div>
@@ -1000,13 +1068,13 @@ export default function CompanyPerformance({ agreement, id }) {
               <p className="black-heading-title mt-0 mb-4">Order Issues</p>
               <div className="seller-health">
                 {dspData && dspData.order_defect_fba
-                  ? `${dspData && dspData.order_defect_fba} %`
+                  ? `${dspData && dspData.order_defect_fba}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-3">Order Defect Rate</div>
               <div className="seller-health  ">
                 {dspData && dspData.policy_issues
-                  ? `${dspData && dspData.policy_issues} %`
+                  ? dspData.policy_issues
                   : 'N/A'}
               </div>
               <div className="seller-update mb-5">Policy Violations</div>
