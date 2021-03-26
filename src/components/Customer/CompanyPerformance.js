@@ -186,7 +186,7 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const calculateSalesDifference = (currentTotal, previousTotal) => {
     const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
-    if (diff === -Infinity || Number.isNaN(diff)) {
+    if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
     return parseFloat(diff.toFixed(2));
@@ -334,9 +334,10 @@ export default function CompanyPerformance({ agreement, id }) {
             trafficTotal.currentTrafficTotal,
             trafficTotal.previousTrafficTotal,
           );
-          conversionTotal.difference =
-            conversionTotal.currentConversionTotal -
-            conversionTotal.previousConversionTotal;
+          conversionTotal.difference = calculateSalesDifference(
+            conversionTotal.currentConversionTotal,
+            conversionTotal.previousConversionTotal,
+          );
           setAllSalesTotal({
             revenue: revenueTotal,
             units: unitsTotal,
@@ -840,7 +841,6 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.conversion.difference &&
                   allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.conversion.difference
-                        .toFixed(2)
                         .toString()
                         .replace('-', '')} %`
                     : 'N/A'}
@@ -949,7 +949,11 @@ export default function CompanyPerformance({ agreement, id }) {
               }}>
               <CartesianGrid strokeDasharray="none" />
               <XAxis dataKey="name" />
-              <YAxis type="number" domain={[0, (dataMax) => dataMax * 2]} />
+              <YAxis
+                type="number"
+                domain={[0, 'dataMax']}
+                // domain={[0, (dataMax) => dataMax + dataMax / 2]}
+              />
               <Tooltip />
               <Legend />
               <Line
@@ -1006,7 +1010,7 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="seller-update mb-3">Order Defect Rate</div>
               <div className="seller-health  ">
                 {dspData && dspData.policy_issues
-                  ? `${dspData && dspData.policy_issues} %`
+                  ? dspData.policy_issues
                   : 'N/A'}
               </div>
               <div className="seller-update mb-5">Policy Violations</div>
