@@ -657,7 +657,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.revenue.difference !== 'N/A'
                     ? `${allSalesTotal.revenue.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -716,7 +716,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.units.difference !== 'N/A'
                     ? `${allSalesTotal.units.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -777,7 +777,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.traffic.difference !== 'N/A'
                     ? `${allSalesTotal.traffic.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -794,19 +794,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Conversion</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.conversion
-                    ? allSalesTotal.conversion.currentConversionTotal.toFixed(2)
-                    : 0}{' '}
-                  %
+                    ? `${allSalesTotal.conversion.currentConversionTotal.toFixed(
+                        2,
+                      )}%`
+                    : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs
                   {allSalesTotal && allSalesTotal.conversion
-                    ? allSalesTotal.conversion.previousConversionTotal.toFixed(
+                    ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
                         2,
-                      )
-                    : 0}{' '}
-                  %
+                      )}%`
+                    : 0}
                 </div>
                 <div
                   className={
@@ -841,7 +841,7 @@ export default function CompanyPerformance({ agreement, id }) {
                   allSalesTotal.conversion.difference !== 'N/A'
                     ? `${allSalesTotal.conversion.difference
                         .toString()
-                        .replace('-', '')} %`
+                        .replace('-', '')}%`
                     : 'N/A'}
                 </div>
               </div>
@@ -982,13 +982,13 @@ export default function CompanyPerformance({ agreement, id }) {
               <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
               <div className="seller-health positive">
                 {dspData && dspData.feedback_30
-                  ? `${dspData && dspData.feedback_30} %`
+                  ? `${dspData && dspData.feedback_30}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-3">Last 30 days</div>
               <div className="seller-health positive ">
                 {dspData && dspData.feedback_365
-                  ? `${dspData && dspData.feedback_365} %`
+                  ? `${dspData && dspData.feedback_365}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-5">Last 12 months</div>
@@ -1003,7 +1003,7 @@ export default function CompanyPerformance({ agreement, id }) {
               <p className="black-heading-title mt-0 mb-4">Order Issues</p>
               <div className="seller-health">
                 {dspData && dspData.order_defect_fba
-                  ? `${dspData && dspData.order_defect_fba} %`
+                  ? `${dspData && dspData.order_defect_fba}%`
                   : 'N/A'}
               </div>
               <div className="seller-update mb-3">Order Defect Rate</div>
