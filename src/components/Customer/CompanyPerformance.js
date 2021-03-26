@@ -252,7 +252,6 @@ export default function CompanyPerformance({ agreement, id }) {
               const dayDate = new Date(resData.report_date)
                 .toLocaleDateString('us', { month: 'short', day: 'numeric' })
                 .split(' ')
-                .reverse()
                 .join(' ');
               // tempData.push({
               //   name: dayDate,
