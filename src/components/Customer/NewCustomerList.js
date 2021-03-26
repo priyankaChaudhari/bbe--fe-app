@@ -434,7 +434,6 @@ export default function NewCustomerList() {
   };
 
   const generateContractHTML = (type, id) => {
-    console.log(type);
     if (countDays(type.end_date) <= 90) {
       return (
         <li

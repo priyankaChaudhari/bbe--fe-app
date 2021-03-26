@@ -22,6 +22,7 @@ import {
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import { parseInt } from 'lodash';
 import { getPerformance } from '../../api';
 
 import {
@@ -384,6 +385,18 @@ export default function CompanyPerformance({ agreement, id }) {
       setLineChartData(revenueData);
       setActiveSales('revenue');
     }
+  };
+
+  const DataFormater = (number) => {
+    if (number > 1000000000) {
+      return `$${  parseInt(number / 1000000000).toString()  }B`;
+    } if (number > 1000000) {
+      return `$${  parseInt(number / 1000000).toString()  }M`;
+    } if (number > 1000) {
+      return `$${  parseInt(number / 1000).toString()  }K`;
+    } 
+      return `$${  parseInt(number).toString()}`;
+    
   };
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
@@ -947,21 +960,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 bottom: 0,
               }}>
               <CartesianGrid strokeDasharray="none" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} />
               <YAxis
                 type="number"
-                domain={[0, 'dataMax']}
-                // domain={[0, (dataMax) => dataMax + dataMax / 2]}
+                // domain={[0, 'dataMax']}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={DataFormater}
+                domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
               />
               <Tooltip />
               <Legend />
-              <Line
-                type="monotone"
-                dataKey=" $"
-                stroke="#FF5933"
-                activeDot={{ r: 8 }}
-              />
-              <Line type="monotone" dataKey="vs $" stroke="#BFC5D2" />
+              <Line dataKey=" $" stroke="#FF5933" activeDot={{ r: 8 }} />
+              <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
             {/* </ResponsiveContainer>
             </div>
