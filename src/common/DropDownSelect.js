@@ -137,15 +137,18 @@ const DropDownSelect = styled.div`
   &.days-performance {
     max-width: 259px;
     float: right;
+
     .css-yk16xz-control {
       padding: 5px !important;
       background-color: ${Theme.gray8};
       border: 1px solid ${Theme.gray45};
+      caret-color: transparent;
     }
     .css-1pahdxg-control {
       padding: 5px !important;
       background-color: ${Theme.gray8};
       border: 1px solid ${Theme.gray45};
+      caret-color: transparent;
     }
   }
 
@@ -162,8 +165,7 @@ const DropDownSelect = styled.div`
       font-size: ${Theme.normal};
       padding: 1px 5px 1px 5px;
       min-height: 40px;
-
-      .css-g1d714-ValueContainer {
+      caret-color: transparent, .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
         color: ${Theme.black} !important;
 
@@ -201,8 +203,7 @@ const DropDownSelect = styled.div`
       box-shadow: none;
       outline: none;
       min-height: 40px;
-
-      .css-b8ldur-Input {
+      caret-color: transparent, .css-b8ldur-Input {
         color: ${Theme.white};
       }
 
@@ -226,7 +227,7 @@ const DropDownSelect = styled.div`
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.normal};
-        padding: 4px;
+        // padding: 4px;
         color: ${Theme.black} !important;
       }
     }
