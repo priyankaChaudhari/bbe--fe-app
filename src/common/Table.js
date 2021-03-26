@@ -78,8 +78,14 @@ const Table = styled.table`
         font-size: ${Theme.extraNormal};
         font-weight: 300;
         margin-left: -2px;
-        img {
+
+        .red-arrow {
+          width: 14px;
           vertical-align: bottom;
+          transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
         }
       }
       .decrease-rate {
@@ -91,6 +97,7 @@ const Table = styled.table`
           transform: rotate(180deg);
           vertical-align: middle;
           margin-left: -2px;
+          margin-right: 3px;
         }
       }
 

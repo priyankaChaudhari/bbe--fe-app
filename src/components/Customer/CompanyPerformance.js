@@ -586,7 +586,7 @@ export default function CompanyPerformance({ agreement, id }) {
       <div className="col-lg-8 col-12">
         <div className="row">
           <div className="col-12 mb-3">
-            <DropDownSelect>
+            <DropDownSelect className="cursor">
               <Select
                 classNamePrefix="react-select"
                 className="active"
@@ -599,7 +599,9 @@ export default function CompanyPerformance({ agreement, id }) {
                   ...theme,
                   colors: {
                     ...theme.colors,
-                    neutral50: '#1A1A1A', // Placeholder color
+                    neutral50: '#1A1A1A',
+
+                    // Placeholder color
                   },
                 })}
                 defaultValue={amazonOptions && amazonOptions[0]}
@@ -618,7 +620,7 @@ export default function CompanyPerformance({ agreement, id }) {
               </p>
             </div>
             <div className="col-6  mb-3">
-              <DropDownSelect className="days-performance">
+              <DropDownSelect className="days-performance ">
                 <Select
                   classNamePrefix="react-select"
                   className="active"
@@ -892,7 +894,7 @@ export default function CompanyPerformance({ agreement, id }) {
 
           <div className="days-container mt-4">
             <ul className="days-tab">
-              <li className={filters.daily === false ? 'disabled' : ''}>
+              <li className={filters.daily === false ? 'disabled-tab' : ''}>
                 {' '}
                 <input
                   className="d-none"
@@ -907,7 +909,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="daysCheck">Daily</label>
               </li>
 
-              <li className={filters.weekly === false ? 'disabled' : ''}>
+              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
@@ -920,7 +922,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
 
-              <li className={filters.month === false ? 'disabled' : ''}>
+              <li className={filters.month === false ? 'disabled-tab' : ''}>
                 <input
                   className=" d-none"
                   type="radio"

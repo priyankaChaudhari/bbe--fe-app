@@ -863,6 +863,7 @@ const CustomerBody = styled.div`
 
     .css-yk16xz-control {
       border: none;
+      cursor: pointer;
 
       &:focus {
         outline: none;
@@ -871,6 +872,7 @@ const CustomerBody = styled.div`
     .css-1pahdxg-control {
       border: none !important;
       box-shadow: none !important;
+      cursor: pointer;
 
       &:focus {
         outline: none !important;

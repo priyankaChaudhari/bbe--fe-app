@@ -14,6 +14,7 @@ const DropDownStatus = styled.div`
     width: 100%;
     color: ${Theme.gray6};
     font-size: ${Theme.extraNormal};
+    cursor: pointer;
 
     .react-select__control {
       outline: none !important;
@@ -26,7 +27,7 @@ const DropDownStatus = styled.div`
         padding: 4px 8px;
       }
       .css-1wa3eu0-placeholder  {
-          color: ${Theme.gray6};
+        color: ${Theme.gray6};
       }
         outline: none !important;
         box-shadow: none !important;

@@ -2029,7 +2029,7 @@ export default function ContractContainer() {
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
-        className={`${btnClass} on-boarding  mt-3 mr-4`}
+        className={`${btnClass} on-boarding  mt-3 ml-5 `}
         onClick={() => {
           setIsEditContract(true);
           setMandatoryFieldsErrors();
@@ -2109,7 +2109,10 @@ export default function ContractContainer() {
         <Footer className=" mt-5 ">
           <div className="container-fluid ">
             <Button
-              className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5  on-boarding w-sm-50"
+              // className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5  on-boarding w-sm-50"
+              className={`btn-primary sticky-btn-primary sidepanel mt-3 mr-5 ${
+                isEditContract ? 'w-sm-100' : 'w-sm-50'
+              }`}
               onClick={() => onEditcontract()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -2152,8 +2155,8 @@ export default function ContractContainer() {
                 formData.additional_one_time_services.find(
                   (item) => item.name === 'Amazon Store Package',
                 )
-                  ? 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50 '
-                  : 'light-orange  on-boarding  mt-3 mr-lg-3 w-sm-50'
+                  ? 'light-orange  on-boarding  mt-3 mr-lg-3 mr-0 w-sm-50 '
+                  : 'light-orange  on-boarding  mt-3 mr-lg-3 mr-0 w-sm-50'
               }
               disabled={
                 formData &&
@@ -2206,7 +2209,9 @@ export default function ContractContainer() {
               userInfo && userInfo.role === 'Team Manager - TAM' ? (
                 <>
                   <Button
-                    className="btn-primary on-boarding w-320 mt-3 mr-lg-3 w-sm-100 "
+                    className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
+                      isEditContract ? 'w-sm-100' : 'w-sm-50'
+                    }`}
                     onClick={() => {
                       createAgreementDoc();
                       setParams('select-contact');
@@ -2230,7 +2235,9 @@ export default function ContractContainer() {
                 showRightTick('dspAddendum') ? (
                 <>
                   <Button
-                    className="btn-primary on-boarding mt-3 mr-lg-3 w-sm-100  "
+                    className={`btn-primary on-boarding mt-3 mr-lg-3 ${
+                      isEditContract ? 'w-sm-100' : 'w-sm-50'
+                    }`}
                     disabled={
                       !(
                         showRightTick('service_agreement') &&
@@ -2248,7 +2255,7 @@ export default function ContractContainer() {
                   {!isEditContract
                     ? renderEditContractBtn('light-orange w-sm-50')
                     : null}
-                  <span className="last-update ">
+                  <span className="last-update  ">
                     Last updated by You on{' '}
                     {dayjs(details && details.updated_at).format(
                       'MMM D, h:mm A',
@@ -2276,7 +2283,10 @@ export default function ContractContainer() {
               showRightTick('dspAddendum') ? (
               <>
                 <Button
-                  className="btn-primary on-boarding  mt-3 mr-4 w-sm-100"
+                  // className="btn-primary on-boarding  mt-3 mr-5 w-sm-50"
+                  className={`btn-primary on-boarding mt-3 ml-0 ${
+                    isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
+                  }`}
                   onClick={() => {
                     createAgreementDoc();
                     setParams('select-contact');
@@ -2288,7 +2298,7 @@ export default function ContractContainer() {
                 {!isEditContract
                   ? renderEditContractBtn('light-orange w-sm-50')
                   : null}
-                <span className="last-update ">
+                <span className="last-update">
                   Last updated by You on{' '}
                   {dayjs(details && details.updated_at).format('MMM D, h:mm A')}
                 </span>
@@ -2304,7 +2314,7 @@ export default function ContractContainer() {
               </>
             ) : (
               <Button
-                className="btn-primary on-boarding  mt-3 mr-4 w-sm-100"
+                className="btn-primary on-boarding  mt-3 mr-5 w-sm-50"
                 disabled>
                 Request Signature
               </Button>
@@ -2601,6 +2611,7 @@ const Footer = styled.div`
     margin-top: 30px;
     color: ${Theme.gray40};
     font-size: ${Theme.extraNormal};
+    margin-left: 40px;
 
     &:first-child {
       margin-left: 20px;
@@ -2611,6 +2622,9 @@ const Footer = styled.div`
       width: 16px;
       margin-right: 8px;
     }
+  }
+  .unsave-changes {
+    margin-left: 40px;
   }
   @media only screen and (max-width: 991px) {
     padding-left: 0px;
@@ -2625,6 +2639,13 @@ const Footer = styled.div`
     }
     .last-update {
       margin-top: 20px;
+      margin: 0 auto;
+      display: table;
+    }
+    .unsave-changes {
+      margin-top: 20px;
+      margin: 0 auto;
+      display: table;
     }
   }
   @media only screen and (max-width: 831px) {
@@ -2636,11 +2657,11 @@ const Footer = styled.div`
   @media only screen and (max-width: 631px) {
     .w-sm-50 {
       width: 47.5% !important;
-      margin-right: 25px !important;
+      margin-left: 25px !important;
       margin-bottom: 10px;
     }
-    .mr-0 {
-      margin-right: 0 !important;
+    .ml-0 {
+      margin-left: 0 !important;
     }
   }
   @media only screen and (max-width: 530px) {

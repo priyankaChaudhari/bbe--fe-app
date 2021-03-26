@@ -600,9 +600,16 @@ export const WhiteCard = styled.div`
     color: ${Theme.lighterGreen};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
-    img {
-      vertical-align: bottom;
-    }
+   
+      
+    .red-arrow {
+        width: 14px;
+        transform: rotate(180deg);
+        vertical-align: middle;
+        margin-left: -2px;
+        margin-right: 3px;
+        vertical-align: bottom;
+     }
   }
   .decrease-rate {
     color: ${Theme.darkRed};
@@ -612,6 +619,8 @@ export const WhiteCard = styled.div`
       width: 14px;
       transform: rotate(180deg);
       vertical-align: middle;
+      margin-left: -2px;
+      margin-right: 3px;
     }
   }
 
@@ -728,10 +737,19 @@ export const WhiteCard = styled.div`
 
     li {
       display: inline-block;
-      margin-right: 15px;
+      margin-right: 17px;
 
       &:last-child {
         margin-right: 0;
+      }
+      .dot {
+        background-color: #8798ad;
+        border-radius: 50%;
+        width: 3px;
+        height: 3px;
+        position: absolute;
+        top: 30px;
+        left: 129px;
       }
 
       .days-block {
@@ -888,12 +906,14 @@ export const WhiteCard = styled.div`
         display: inline-block;
       
          label {
-            color: ${Theme.gray40};
+            color: ${Theme.black};
             padding: 7px 19px;
             font-size: 14px;
             display: inline-block;
             cursor: pointer;
          }
+
+        
       }
     }
   }

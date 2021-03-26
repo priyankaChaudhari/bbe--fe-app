@@ -712,6 +712,11 @@ fieldset {
   position: absolute;
   color: #2e384d;
   font-size: 15px;
+
+  .react-select__option {
+    cursor: pointer;
+    text-align: left;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -1143,6 +1148,11 @@ input:checked + .slider:before {
 
 .disabled {
   opacity: 0.6;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+.disabled-tab {
+  opacity: 0.2;
   cursor: not-allowed !important;
   pointer-events: none !important;
 }

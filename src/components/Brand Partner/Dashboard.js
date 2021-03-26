@@ -208,20 +208,18 @@ export default function Dashboard() {
       if (percentage.toString().includes('-')) {
         return (
           <>
-            <br />
-            <span className="decrease-rate">
+            <div className="decrease-rate">
               {' '}
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {percentage
                 ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
                 : ''}
-            </span>
+            </div>
           </>
         );
       }
       return (
         <>
-          <br />
           <div className="increase-rate">
             <img
               className="red-arrow"
@@ -267,7 +265,7 @@ export default function Dashboard() {
                   </DropDownSelect>
                 </li>
                 <li>
-                  <DropDownSelect>
+                  <DropDownSelect className="days-performance">
                     <Select
                       classNamePrefix="react-select"
                       className="active"
@@ -366,6 +364,8 @@ export default function Dashboard() {
                             </li>
 
                             <li>
+                              {' '}
+                              <div className="dot" />
                               <p className="basic-text ">
                                 Started{' '}
                                 {item &&
@@ -642,6 +642,7 @@ const BrandPartnerDashboard = styled.div`
       display: inline-block;
       width: 220px;
       margin-right: 15px;
+      vertical-align: top;
 
       &.partner {
         width: 230px;
@@ -732,6 +733,10 @@ const DashboardCard = styled.div`
       color: ${Theme.black};
       font-size: ${Theme.title};
       font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 270px;
     }
 
     .status {

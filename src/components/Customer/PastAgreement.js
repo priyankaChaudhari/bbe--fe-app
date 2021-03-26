@@ -54,6 +54,7 @@ export default function PastAgreement({ id }) {
                           </li>
                           {item && item.start_date ? (
                             <li>
+                              <div className="dot" />
                               <p className="basic-text ">
                                 Started:{' '}
                                 {dayjs(item.start_date).format('MMM DD, YYYY')}

@@ -22,11 +22,13 @@ const ActionDropDown = styled.div`
       font-weight: 300px;
       padding: 1px 5px 1px 5px;
       min-height: 40px;
+      cursor: pointer;
 
       .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px;
         color: ${Theme.gray85} !important;
         font-weight: 300px;
+        cursor: pointer;
 
         .cross-icon {
           display: none;
@@ -66,6 +68,7 @@ const ActionDropDown = styled.div`
       outline: none;
       min-height: 40px;
       font-weight: 300px;
+      cursor: pointer;
 
       .css-b8ldur-Input {
         color: ${Theme.white};
