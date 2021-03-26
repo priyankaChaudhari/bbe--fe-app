@@ -295,7 +295,6 @@ export default function CompanyPerformance({ agreement, id }) {
                     day: 'numeric',
                   })
                   .split(' ')
-                  .reverse()
                   .join(' ');
                 // tempData.push({
                 //   name: dayDate,
