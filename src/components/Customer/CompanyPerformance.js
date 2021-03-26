@@ -574,6 +574,13 @@ export default function CompanyPerformance({ agreement, id }) {
     selectedAmazonValue,
   ]);
 
+  const calculateDataMin = (dataMin) => {
+    if (dataMin !== Infinity) {
+      return dataMin - (dataMin * 10) / 100;
+    }
+    return 0;
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -979,8 +986,12 @@ export default function CompanyPerformance({ agreement, id }) {
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={DataFormater}
-                domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
+                domain={[
+                  (dataMin) => calculateDataMin(dataMin),
+                  (dataMax) => (dataMax * 10) / 100 + dataMax,
+                ]}
               />
+
               <Tooltip />
               <Legend formatter={renderLegendText} />
               <Line dataKey=" $" stroke="#FF5933" />
