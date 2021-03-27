@@ -1010,13 +1010,14 @@ export default function CompanyPerformance({ agreement, id }) {
                 bottom: 0,
               }}>
               <CartesianGrid strokeDasharray="none" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} dy={20} />
               <YAxis
                 type="number"
                 // domain={[0, 'dataMax']}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={DataFormater}
+                dx={-20}
                 domain={[
                   (dataMin) => calculateDataMin(dataMin),
                   (dataMax) => (dataMax * 10) / 100 + dataMax,
