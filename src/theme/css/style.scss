@@ -1390,6 +1390,8 @@ g .recharts-layer .recharts-line-dots {
   }
   @media only screen and (max-width: 768px) {
     top: 20px !important;
+    right: 0;
+    left: 0;
     // left: 40% !important;
     .recharts-default-legend {
       text-align: center !important;

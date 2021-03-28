@@ -144,6 +144,7 @@ export default function Dashboard() {
             borderRadius: 50,
             marginRight: '9px',
             height: '32px',
+            verticalAlign: 'middle',
           }}
         />
       ) : (
@@ -167,6 +168,7 @@ export default function Dashboard() {
             borderRadius: 50,
             width: '32px',
             marginBottom: '',
+            verticalAlign: 'middle',
           }}
         />
       ) : (
@@ -684,7 +686,7 @@ const BrandPartnerDashboard = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     .text-md-right {
       dispaly: none;
     }

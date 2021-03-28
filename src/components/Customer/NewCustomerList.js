@@ -98,6 +98,7 @@ export default function NewCustomerList() {
             borderRadius: 50,
             marginRight: '9px',
             height: '32px',
+            verticalAlign: 'middle',
           }}
         />
       ) : (
@@ -117,12 +118,17 @@ export default function NewCustomerList() {
           className="drop-down-user"
           src={props.data.icon}
           alt="user"
-          style={{ borderRadius: 50, width: '32px', marginBottom: '' }}
+          style={{
+            borderRadius: 50,
+            width: '32px',
+            verticalAlign: 'middle',
+            marginBottom: '',
+          }}
         />
       ) : (
         <GetInitialName userInfo={props.data.label} type="list" property="" />
       )}{' '}
-      &nbsp;
+      {/* &nbsp; */}
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>

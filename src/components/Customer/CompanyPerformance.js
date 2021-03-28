@@ -641,14 +641,14 @@ export default function CompanyPerformance({ agreement, id }) {
         </div>
         <WhiteCard>
           <div className="row">
-            <div className="col-6 ">
+            <div className="col-md-6 col-sm1-12">
               {' '}
               <p className="black-heading-title mt-0 mb-4">
                 {' '}
                 Sales Performance
               </p>
             </div>
-            <div className="col-6  mb-3">
+            <div className="col-md-6 col-sm1-12  mb-3">
               <DropDownSelect className="days-performance ">
                 <Select
                   classNamePrefix="react-select"
