@@ -21,8 +21,10 @@ import {
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { parseInt } from 'lodash';
+import { DateRange } from 'react-date-range';
+import { enGB } from 'react-date-range/src/locale';
 import { getPerformance } from '../../api';
 
 import {
@@ -37,6 +39,8 @@ import {
 } from '../../theme/images/index';
 import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 // import { fn } from 'jquery';
 
 export default function CompanyPerformance({ agreement, id }) {
@@ -93,10 +97,20 @@ export default function CompanyPerformance({ agreement, id }) {
 
   // const pieData = [{ name: 'Group A', value: 15 }];
   // const COLORS = ['#407B00'];
-  const [customDateValue, setCustomDateValue] = useState([
-    new Date(),
-    new Date(),
+  // const [customDateValue, setCustomDateValue] = useState([
+  //   new Date(),
+  //   new Date(),
+  // ]);
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 3);
+  const [state, setState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'selection',
+    },
   ]);
+
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
 
   const [revenueData, setRevenueData] = useState([{}]);
@@ -108,9 +122,6 @@ export default function CompanyPerformance({ agreement, id }) {
     daily: true,
     weekly: false,
     month: false,
-  });
-  const [disableOrderBy, setDisableOrderBy] = useState({
-    daily: true,
   });
 
   const [activeSales, setActiveSales] = useState('revenue');
@@ -400,30 +411,34 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
     let temp = '';
+    let sd = startDate;
+    let ed = endDate;
     const diffTime = Math.abs(startDate - endDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays <= 30) {
       temp = 'daily';
-      setDisableOrderBy({ daily: true });
+      setFilters({ daily: true, weekly: false, month: false });
+      setGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 180) {
       temp = 'weekly';
-      setDisableOrderBy({ week: true });
+      setFilters({ daily: false, weekly: true, month: false });
+      setGroupBy('weekly');
     } else if (diffDays > 180) {
-      temp = 'month';
-      setDisableOrderBy({ month: true });
+      temp = 'monthly';
+      setFilters({ daily: false, weekly: false, month: true });
+      setGroupBy('monthly');
     }
 
-    if (flag !== null) {
-      if (temp === 'daily') {
-        setFilters({ daily: true, weekly: false, month: false });
-        setGroupBy('daily');
-      } else if (temp === 'weekly') {
-        setFilters({ daily: false, weekly: true, month: false });
-        setGroupBy('weekly');
-      } else if (temp === 'month') {
-        setFilters({ daily: false, weekly: false, month: true });
-        setGroupBy('monthly');
-      }
+    if (flag === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getData(flag, temp, selectedAmazonValue, sd, ed);
+    } else {
+      // flag==='year
       getData(flag, temp, selectedAmazonValue);
     }
   };
@@ -456,19 +471,6 @@ export default function CompanyPerformance({ agreement, id }) {
         getData(value, 'daily', selectedAmazonValue);
         break;
 
-      case 'custom':
-        if (disableOrderBy && disableOrderBy.daily) {
-          setFilters({ daily: true, weekly: false, month: false });
-          setGroupBy('daily');
-        } else if (disableOrderBy && disableOrderBy.week) {
-          setFilters({ daily: false, weekly: true, month: false });
-          setGroupBy('weekly');
-        } else if (disableOrderBy && disableOrderBy.month) {
-          setFilters({ daily: false, weekly: false, month: true });
-          setGroupBy('monthly');
-        }
-        break;
-
       default:
         break;
     }
@@ -482,19 +484,24 @@ export default function CompanyPerformance({ agreement, id }) {
         new Date(),
         'year',
       );
-    }
-
-    if (value !== 'custom') {
-      setGropuByFilter(value);
-      // getData(value, groupBy, selectedAmazonValue);
-    } else {
+    } else if (value === 'custom') {
       setShowCustomDateModal(true);
+    } else {
+      setGropuByFilter(value);
     }
   };
 
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.label);
-    getData(selectedValue, groupBy, event.label);
+    if (selectedValue === 'custom') {
+      checkDifferenceBetweenDates(
+        state[0].startDate,
+        state[0].endDate,
+        'custom',
+      );
+    } else {
+      getData(selectedValue, groupBy, event.label);
+    }
   };
 
   const handleGroupBy = (value) => {
@@ -504,26 +511,8 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
-  const onChangeCustomDate = (event) => {
-    if (event !== null) {
-      checkDifferenceBetweenDates(event[0], event[1]);
-      setCustomDateValue([event[0], event[1]]);
-    } else {
-      setCustomDateValue([new Date(), new Date()]);
-      setDisableOrderBy({ daily: true });
-    }
-  };
-
   const applyCustomeDate = () => {
-    const startDate = `${customDateValue[0].getDate()}-${
-      customDateValue[0].getMonth() + 1
-    }-${customDateValue[0].getFullYear()}`;
-    const endDate = `${customDateValue[1].getDate()}-${
-      customDateValue[1].getMonth() + 1
-    }-${customDateValue[1].getFullYear()}`;
-
-    setGropuByFilter('custom');
-    getData(selectedValue, groupBy, selectedAmazonValue, startDate, endDate);
+    checkDifferenceBetweenDates(state[0].startDate, state[0].endDate, 'custom');
     setShowCustomDateModal(false);
   };
 
@@ -1173,15 +1162,34 @@ export default function CompanyPerformance({ agreement, id }) {
             <div className="modal-body">
               <h4>Select Date Range</h4>
 
-              <DateRangePicker
-                isOpen={showCustomDateModal}
+              {/* <DateRangePicker
+                isOpen={true}
                 onChange={(event) => onChangeCustomDate(event)}
                 value={customDateValue}
                 maxDate={new Date()}
+
+              /> */}
+              <DateRange
+                editableDateInputs
+                onChange={(item) => {
+                  setState([item.selection]);
+                }}
+                showMonthAndYearPickers={false}
+                ranges={state}
+                moveRangeOnFirstSelection={false}
+                showDateDisplay={false}
+                maxDate={currentDate}
+                rangeColors={['#FF5933', 'green']}
+                weekdayDisplayFormat="EEEEE"
+                locale={enGB}
               />
               <div
                 className="text-center  "
-                style={{ bottom: '20px', position: 'absolute', width: '85%' }}>
+                style={{
+                  bottom: '20px',
+                  position: 'absolute',
+                  width: '85%',
+                }}>
                 <Button
                   onClick={() => applyCustomeDate()}
                   type="button"
