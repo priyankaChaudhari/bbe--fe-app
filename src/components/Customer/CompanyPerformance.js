@@ -550,27 +550,41 @@ export default function CompanyPerformance({ agreement, id }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       if (payload.length === 2) {
+        const current = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const previous = payload[1].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
-            <p className="label-2">{`vs $ : ${payload[1].value}`}</p>
+            <p className="label-1">{`$${current}`}</p>
+            <p className="label-2">{`vs $${previous}`}</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === ' $') {
+        const current = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-1">{`$${current}`}</p>
+            <p className="label-2">vs $0.00</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+        const previous = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-1">$0.00</p>
+            <p className="label-2">{`vs $${previous}`}</p>
           </div>
         );
       }
