@@ -6,7 +6,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 // import { useMediaQuery } from 'react-responsive';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import {
   LineChart,
@@ -263,7 +263,7 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = moment(resData.report_date).format('MMM D');
+              const dayDate = dayjs(resData.report_date).format('MMM D');
               tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
               tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
               tempUnitsSoldData.push({
@@ -298,7 +298,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
               } else {
-                const dayDate = moment(resData.report_date).format('MMM D');
+                const dayDate = dayjs(resData.report_date).format('MMM D');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -349,7 +349,7 @@ export default function CompanyPerformance({ agreement, id }) {
           setConversionData(tempConversionData);
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
-            res.data.pf_oi_is[0].latest_date = moment(lastUpdated).format(
+            res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM D YYYY',
             );
 
@@ -388,7 +388,7 @@ export default function CompanyPerformance({ agreement, id }) {
   // const xDataFormater = (date) => {
   //   if (date) {
   //     if (selectedValue === 'month' && groupBy === 'weekly') {
-  //       const weekNumber = Math.ceil(moment(date).date() / 7);
+  //       const weekNumber = Math.ceil(dayjs(date).date() / 7);
   //       switch (weekNumber) {
   //         case 1:
   //           return 'Wk1';
@@ -403,7 +403,7 @@ export default function CompanyPerformance({ agreement, id }) {
   //       }
   //     }
   //     if (selectedValue === 'month' && groupBy === 'daily') {
-  //       return moment(date).day();
+  //       return dayjs(date).day();
   //     }
   //     if (selectedValue === 'year' && groupBy === 'monthly') {
   //       console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
