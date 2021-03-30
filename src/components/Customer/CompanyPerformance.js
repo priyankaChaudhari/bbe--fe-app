@@ -43,6 +43,7 @@ import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+// import styled from 'styled-components';
 // import { fn } from 'jquery';
 
 export default function CompanyPerformance({ agreement, id }) {
@@ -550,25 +551,25 @@ export default function CompanyPerformance({ agreement, id }) {
       if (payload.length === 2) {
         return (
           <div className="custom-tooltip">
-            <p className="label">{activeSales}</p>
-            <p className="label">{`$ : ${payload[0].value}`}</p>
-            <p className="label">{`vs $ : ${payload[1].value}`}</p>
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-2">{`vs $ : ${payload[1].value}`}</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === ' $') {
         return (
           <div className="custom-tooltip">
-            <p className="label">{activeSales}</p>
-            <p className="label">{`$ : ${payload[0].value}`}</p>
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === 'vs $') {
         return (
           <div className="custom-tooltip">
-            <p className="label">{activeSales}</p>
-            <p className="label">{`$ : ${payload[0].value}`}</p>
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
           </div>
         );
       }
@@ -1017,46 +1018,46 @@ export default function CompanyPerformance({ agreement, id }) {
           {/* <div style={{ height: '400px', width: '1000px' }}>
             <div style={{ height: '100%', width: '60%' }}>
               <ResponsiveContainer width={'79%'} height={'30%'}> */}
-          <div className="performance-graph">
-            <LineChart
-              width={900}
-              height={300}
-              data={lineChartData}
-              margin={{
-                top: 40,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}>
-              <CartesianGrid strokeDasharray="none" />
-              <XAxis
-                dataKey="name"
-                axisLine={false}
-                tickLine={false}
-                dy={20}
-                // tickFormatter={xDataFormater}
-              />
-              <YAxis
-                type="number"
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={DataFormater}
-                dx={-20}
-                domain={[
-                  (dataMin) => calculateDataMin(dataMin),
-                  (dataMax) => (dataMax * 10) / 100 + dataMax,
-                ]}
-              />
+          {/* <ResponsiveContainer width={700} height="80%"> */}
+          <LineChart
+            width={750}
+            height={300}
+            data={lineChartData}
+            margin={{
+              top: 40,
+              right: 30,
+              left: 0,
+              bottom: 20,
+            }}>
+            <CartesianGrid strokeDasharray="none" />
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              dy={20}
+              // tickFormatter={xDataFormater}
+            />
+            <YAxis
+              type="number"
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={DataFormater}
+              dx={-20}
+              domain={[
+                (dataMin) => calculateDataMin(dataMin),
+                (dataMax) => (dataMax * 10) / 100 + dataMax,
+              ]}
+            />
 
-              <Tooltip content={<CustomTooltip />} />
-              <Legend formatter={renderLegendText} />
-              <Line dataKey=" $" stroke="#FF5933" />
-              <Line dataKey="vs $" stroke="#BFC5D2" />
-            </LineChart>
-            {/* </ResponsiveContainer>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend className="tolltip-revenue" formatter={renderLegendText} />
+            <Line dataKey=" $" stroke="#FF5933" />
+            <Line dataKey="vs $" stroke="#BFC5D2" />
+          </LineChart>
+          {/* </ResponsiveContainer>
             </div>
           </div> */}
-          </div>
+          {/* </ResponsiveContainer> */}
         </WhiteCard>
 
         <div className="row mt-3">
@@ -1299,6 +1300,126 @@ CompanyPerformance.propTypes = {
 //       }
 //       @media only screen and (max-width: 400px) {
 //         width: 260px;
+//       }
+//     }
+//   }
+// `;
+
+// const ResponsiveContainer = styled.div`
+//   width: 100%;
+//   .recharts-wrapper {
+//     width: 750px;
+//     .recharts-surface {
+//       width: 750px;
+//     }
+//     .recharts-default-legend {
+//       li {
+//         .recharts-surface {
+//           width: 14px !important;
+//         }
+//       }
+//     }
+//     @media only screen and (min-width: 1920px) {
+//       width: none !important;
+//       .recharts-surface {
+//         width: 1100px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     @media only screen and (min-width: 1600px) {
+//       width: 1000px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 1000px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     // @media only screen and (min-width: 1200px) {
+//     //   width: none !important;
+//     //   .recharts-surface {
+//     //     width: 800px !important;
+//     //   }
+//     // }
+//     @media only screen and (min-width: 1200px) {
+//       width: 750px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//       }
+//       .recharts-default-legend {
+//         li {
+//           .recharts-surface {
+//             width: 14px !important;
+//           }
+//         }
+//       }
+//     }
+//     @media only screen and (min-width: 992px) {
+//       width: 750px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     @media only screen and (max-width: 991px) {
+//       width: 800px !important;
+//       .recharts-surface {
+//         width: 800px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 850px) {
+//       width: 750px !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 800px) {
+//       width: 680px !important;
+//       .recharts-surface {
+//         width: 680px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 730px) {
+//       width: 600px !important;
+//       .recharts-surface {
+//         width: 600px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 650px) {
+//       width: 500px !important;
+//       .recharts-surface {
+//         width: 500px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 550px) {
+//       width: 450px !important;
+//       .recharts-surface {
+//         width: 450px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 500px) {
+//       width: 400px !important;
+//       .recharts-surface {
+//         width: 400px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 450px) {
+//       width: 340px !important;
+//       .recharts-surface {
+//         width: 340px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 390px) {
+//       width: 300px !important;
+//       .recharts-surface {
+//         width: 300px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 350px) {
+//       width: 260px !important;
+//       .recharts-surface {
+//         width: 260px !important;
 //       }
 //     }
 //   }

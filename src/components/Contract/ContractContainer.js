@@ -2217,7 +2217,7 @@ export default function ContractContainer() {
                 showRightTick('dspAddendum') ? (
                   <>
                     <Button
-                      className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
+                      className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
                         isEditContract ? 'w-sm-100' : 'w-sm-50'
                       }`}
                       disabled={
@@ -2236,7 +2236,7 @@ export default function ContractContainer() {
                       Approve and Request Signature
                     </Button>
                     {!isEditContract
-                      ? renderEditContractBtn('light-orange w-sm-50')
+                      ? renderEditContractBtn('light-orange w-sm-50 ml-5')
                       : null}
                     <span className="last-update ">
                       Last updated by You on{' '}
@@ -2256,7 +2256,7 @@ export default function ContractContainer() {
                   </>
                 ) : (
                   <Button
-                    className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
+                    className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
                       isEditContract ? 'w-sm-100' : 'w-sm-50'
                     }`}
                     disabled>
@@ -2636,8 +2636,8 @@ const Footer = styled.div`
   padding-left: 78px;
   z-index: 2;
   .w-320 {
-    max-width: 320px;
-    width: 100%;
+    width: 320px;
+    // width: 100%;
   }
 
   .last-update {
