@@ -288,7 +288,10 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
               conversionTotal.currentConversionTotal += resData.conversion;
-              if (index < res.data.daily_facts.previous.length) {
+              if (
+                res.data.daily_facts.previous &&
+                index < res.data.daily_facts.previous.length
+              ) {
                 // tempData[index][key] = resData.revenue;
                 tempRevenueData[index][' $'] = resData.revenue;
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
@@ -382,34 +385,34 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
-  const xDataFormater = (date) => {
-    if (date) {
-      if (selectedValue === 'month' && groupBy === 'weekly') {
-        const weekNumber = Math.ceil(moment(date).date() / 7);
-        switch (weekNumber) {
-          case 1:
-            return 'Wk1';
-          case 2:
-            return 'Wk2';
-          case 3:
-            return 'Wk3';
-          case 4:
-            return 'Wk4';
-          default:
-            return 'Wk';
-        }
-      }
-      if (selectedValue === 'month' && groupBy === 'daily') {
-        return moment(date).day();
-      }
-      if (selectedValue === 'year' && groupBy === 'monthly') {
-        console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
-        return date.split(' ')[0];
-      }
-      return date; // .format('MMM D');
-    }
-    return date;
-  };
+  // const xDataFormater = (date) => {
+  //   if (date) {
+  //     if (selectedValue === 'month' && groupBy === 'weekly') {
+  //       const weekNumber = Math.ceil(moment(date).date() / 7);
+  //       switch (weekNumber) {
+  //         case 1:
+  //           return 'Wk1';
+  //         case 2:
+  //           return 'Wk2';
+  //         case 3:
+  //           return 'Wk3';
+  //         case 4:
+  //           return 'Wk4';
+  //         default:
+  //           return 'Wk';
+  //       }
+  //     }
+  //     if (selectedValue === 'month' && groupBy === 'daily') {
+  //       return moment(date).day();
+  //     }
+  //     if (selectedValue === 'year' && groupBy === 'monthly') {
+  //       console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
+  //       return date.split(' ')[0];
+  //     }
+  //     return date; // .format('MMM D');
+  //   }
+  //   return date;
+  // };
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
@@ -542,36 +545,36 @@ export default function CompanyPerformance({ agreement, id }) {
     return null;
   };
 
-  // const CustomTooltip = ({ active, payload, label }) => {
-  //   if (active && payload && payload.length) {
-  //     if (payload.length === 2) {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //           <p className="label">{`vs $ : ${payload[1].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //     if (payload.length === 1 && payload[0].dataKey === ' $') {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //     if (payload.length === 1 && payload[0].dataKey === 'vs $') {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //   }
-  //   return null;
-  // };
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      if (payload.length === 2) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{activeSales}</p>
+            <p className="label">{`$ : ${payload[0].value}`}</p>
+            <p className="label">{`vs $ : ${payload[1].value}`}</p>
+          </div>
+        );
+      }
+      if (payload.length === 1 && payload[0].dataKey === ' $') {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{activeSales}</p>
+            <p className="label">{`$ : ${payload[0].value}`}</p>
+          </div>
+        );
+      }
+      if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{activeSales}</p>
+            <p className="label">{`$ : ${payload[0].value}`}</p>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
     const list = [];
@@ -1019,11 +1022,10 @@ export default function CompanyPerformance({ agreement, id }) {
                 axisLine={false}
                 tickLine={false}
                 dy={20}
-                tickFormatter={xDataFormater}
+                // tickFormatter={xDataFormater}
               />
               <YAxis
                 type="number"
-                // domain={[0, 'dataMax']}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={DataFormater}
@@ -1034,7 +1036,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 ]}
               />
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Legend formatter={renderLegendText} />
               <Line dataKey=" $" stroke="#FF5933" />
               <Line dataKey="vs $" stroke="#BFC5D2" />
