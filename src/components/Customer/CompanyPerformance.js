@@ -144,7 +144,7 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const reportOptions = [
     { value: 'week', label: 'This Week', sub: 'vs last week' },
-    { value: 'monthly', label: 'This Month', sub: 'vs last month' },
+    { value: 'month', label: 'This Month', sub: 'vs last month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
     {
@@ -477,7 +477,7 @@ export default function CompanyPerformance({ agreement, id }) {
         getData(value, 'daily', selectedAmazonValue);
         break;
 
-      case 'monthly':
+      case 'month':
         setFilters({ daily: true, weekly: true, month: false });
         setGroupBy('daily');
         getData(value, 'daily', selectedAmazonValue);
