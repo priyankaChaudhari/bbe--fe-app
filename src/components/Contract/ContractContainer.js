@@ -812,7 +812,6 @@ export default function ContractContainer() {
       // dispatch(getAccountDetails(id));
       getContractDetails();
     }
-    setIsEditContract(false);
   };
 
   const editAgreementChanges = (flag) => {
@@ -2029,7 +2028,10 @@ export default function ContractContainer() {
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
-        className={`${btnClass} on-boarding  mt-3 ml-5 `}
+        // className={`${btnClass} on-boarding  mt-3  `}
+        className={`${btnClass} on-boarding  mt-3  ${
+          isEditContract ? 'w-sm-50' : 'w-sm-100'
+        }`}
         onClick={() => {
           setIsEditContract(true);
           setMandatoryFieldsErrors();
@@ -2110,8 +2112,8 @@ export default function ContractContainer() {
           <div className="container-fluid ">
             <Button
               // className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5  on-boarding w-sm-50"
-              className={`btn-primary sticky-btn-primary sidepanel mt-3 mr-5 ${
-                isEditContract ? 'w-sm-100' : 'w-sm-50'
+              className={`btn-primary sticky-btn-primary sidepanel mt-3  ${
+                isEditContract ? 'w-sm-100 ml-0 mr-0' : 'w-sm-50 ml-0'
               }`}
               onClick={() => onEditcontract()}>
               {isLoading.loader && isLoading.type === 'button' ? (
@@ -2125,7 +2127,7 @@ export default function ContractContainer() {
             details.contract_status.value &&
             details.contract_status.value === 'pending contract signature' ? (
               <Button
-                className="light-orange sticky-btn   mt-3 mr-0  on-boarding w-sm-50"
+                className="light-orange sticky-btn   mt-3 mr-0 ml-5  on-boarding w-sm-50"
                 onClick={() => {
                   setParams('send-remainder');
                   setShowModal(true);
@@ -2155,8 +2157,8 @@ export default function ContractContainer() {
                 formData.additional_one_time_services.find(
                   (item) => item.name === 'Amazon Store Package',
                 )
-                  ? 'light-orange  on-boarding  mt-3 mr-lg-3 mr-0 w-sm-50 '
-                  : 'light-orange  on-boarding  mt-3 mr-lg-3 mr-0 w-sm-50'
+                  ? 'light-orange  on-boarding  mt-3 mr-0  ml-0 w-sm-50 '
+                  : 'light-orange  on-boarding  mt-3  mr-0 ml-0 w-sm-50'
               }
               disabled={
                 formData &&
@@ -2181,7 +2183,7 @@ export default function ContractContainer() {
             </Button>
 
             <Button
-              className="btn-borderless contract-btn on-boarding  mt-3 mr-lg-3 w-sm-50 ml-0"
+              className="btn-borderless contract-btn on-boarding  mt-3  w-sm-50 ml-5"
               // className={`btn-primary sticky-btn-primary sidepanel mt-3 mr-5 ${
               //   isEditContract ? 'w-sm-100' : 'w-sm-50'
               // }`}
@@ -2210,36 +2212,64 @@ export default function ContractContainer() {
           <div className="container-fluid">
             {checkApprovalCondition() ? (
               userInfo && userInfo.role === 'Team Manager - TAM' ? (
-                <>
+                showRightTick('service_agreement') &&
+                showRightTick('statement') &&
+                showRightTick('dspAddendum') ? (
+                  <>
+                    <Button
+                      className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
+                        isEditContract ? 'w-sm-100' : 'w-sm-50'
+                      }`}
+                      disabled={
+                        !(
+                          showRightTick('service_agreement') &&
+                          showRightTick('statement') &&
+                          showRightTick('dspAddendum')
+                        )
+                      }
+                      onClick={() => {
+                        createAgreementDoc();
+                        setParams('select-contact');
+                        setShowModal(true);
+                        setIsEditContract(false);
+                      }}>
+                      Approve and Request Signature
+                    </Button>
+                    {!isEditContract
+                      ? renderEditContractBtn('light-orange w-sm-50 ml-5')
+                      : null}
+                    <span className="last-update ">
+                      Last updated by You on{' '}
+                      {dayjs(details && details.updated_at).format(
+                        'MMM D, h:mm A',
+                      )}
+                    </span>
+                  </>
+                ) : !isEditContract ? (
+                  <>
+                    {renderEditContractBtn('btn-primary')}
+
+                    <span className="last-update">
+                      <img src={InfoIcon} alt="info" className="info-icon" />
+                      This contract is missing mandatory information.
+                    </span>
+                  </>
+                ) : (
                   <Button
-                    className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
+                    className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
                       isEditContract ? 'w-sm-100' : 'w-sm-50'
                     }`}
-                    onClick={() => {
-                      createAgreementDoc();
-                      setParams('select-contact');
-                      setShowModal(true);
-                      setIsEditContract(false);
-                    }}>
+                    disabled>
                     Approve and Request Signature
                   </Button>
-                  {!isEditContract
-                    ? renderEditContractBtn('light-orange w-sm-50')
-                    : null}
-                  <span className="last-update ">
-                    Last updated by You on{' '}
-                    {dayjs(details && details.updated_at).format(
-                      'MMM D, h:mm A',
-                    )}
-                  </span>
-                </>
+                )
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
                 <>
                   <Button
                     className={`btn-primary on-boarding mt-3  ${
-                      isEditContract ? 'w-sm-100' : 'w-sm-50'
+                      isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
                     }`}
                     disabled={
                       !(
@@ -2256,7 +2286,7 @@ export default function ContractContainer() {
                     Request Approval
                   </Button>
                   {!isEditContract
-                    ? renderEditContractBtn('light-orange w-sm-50')
+                    ? renderEditContractBtn('light-orange w-sm-50 ml-5')
                     : null}
                   <span className="last-update  ">
                     Last updated by You on{' '}
@@ -2299,7 +2329,7 @@ export default function ContractContainer() {
                   Request Signature
                 </Button>
                 {!isEditContract
-                  ? renderEditContractBtn('light-orange w-sm-50')
+                  ? renderEditContractBtn('light-orange w-sm-50 ml-5')
                   : null}
                 <span className="last-update">
                   Last updated by You on{' '}
@@ -2308,7 +2338,7 @@ export default function ContractContainer() {
               </>
             ) : !isEditContract ? (
               <>
-                {renderEditContractBtn('btn-primary')}
+                {renderEditContractBtn('btn-primary w-sm-100')}
 
                 <span className="last-update">
                   <img src={InfoIcon} alt="info" className="info-icon" />
@@ -2317,7 +2347,7 @@ export default function ContractContainer() {
               </>
             ) : (
               <Button
-                className="btn-primary on-boarding  mt-3 mr-5 w-sm-50"
+                className="btn-primary on-boarding  mt-3 mr-5 w-sm-100"
                 disabled>
                 Request Signature
               </Button>
@@ -2606,8 +2636,8 @@ const Footer = styled.div`
   padding-left: 78px;
   z-index: 2;
   .w-320 {
-    max-width: 320px;
-    width: 100%;
+    width: 320px;
+    // width: 100%;
   }
 
   .last-update {
@@ -2657,7 +2687,7 @@ const Footer = styled.div`
       margin-bottom: 10px;
     }
   }
-  @media only screen and (max-width: 631px) {
+  @media only screen and (max-width: 632px) {
     .w-sm-50 {
       width: 47.5% !important;
       margin-left: 25px !important;

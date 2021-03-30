@@ -1390,6 +1390,8 @@ g .recharts-layer .recharts-line-dots {
   }
   @media only screen and (max-width: 768px) {
     top: 20px !important;
+    right: 0;
+    left: 0;
     // left: 40% !important;
     .recharts-default-legend {
       text-align: center !important;
@@ -1458,141 +1460,138 @@ g .recharts-layer .recharts-line-dots {
     }
   }
 }
-.react-daterange-picker__calendar--open {
-  .react-calendar {
-    border: none !important;
-    background-color: $white-color !important;
-    width: 400px !important;
-  }
-  .react-calendar__tile {
-    max-width: 100%;
+// .react-daterange-picker__calendar--open {
+//   .react-calendar {
+//     border: none !important;
+//     background-color: $white-color !important;
+//     width: 400px !important;
+//   }
+//   .react-calendar__tile {
+//     max-width: 100%;
+//     text-align: center;
+//     padding: 1.75em 0.6em !important;
+//     background: none;
+//   }
+//   .react-calendar__tile--active {
+//     color: $orange-color !important;
+//     background-color: $white-color !important;
+//     border-radius: 20px;
+//     border: 1px solid $orange-color;
+//   }
+// }
+.rdrCalendarWrapper {
+  .rdrMonthAndYearPickers {
+    color: $black-color;
+    font-size: 14px;
+    text-transform: uppercase;
     text-align: center;
-    padding: 1.75em 0.6em !important;
-    background: none;
   }
-  .react-calendar__tile--active {
-    color: $orange-color !important;
-    background-color: $white-color !important;
-    border-radius: 20px;
-    border: 1px solid $orange-color;
+  .rdrDay {
+    height: 4.7em;
+    font-size: 15px;
+    color: $black-color;
+
+    .rdrDayNumber span {
+      color: $black-color;
+    }
+    .rdrSelected,
+    .rdrInRange,
+    .rdrStartEdge,
+    .rdrEndEdge {
+      background: currentColor;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      bottom: 8px;
+    }
+    // .rdrDayToday .rdrDayNumber span:after {
+    //   content: '';
+    //   position: absolute;
+    //   top: 4px;
+    //   left: 73%;
+    //   /* transform: translate(-50%, 0); */
+    //   width: 6px;
+    //   border-radius: 50%;
+    //   height: 6px;
+    //   border-radius: 2px;
+    //   background: #ff5933;
+    // }
+  }
+  // .rdrDayToday .rdrDayNumber span:after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 10px;
+  //   left: 73%;
+  //   border-radius: 50% !important;
+  //   /* transform: translate(-50%, 0); */
+  //   width: 6px;
+  //   border-radius: 50%;
+  //   height: 6px;
+  //   border-radius: 2px;
+  //   background: #ff5933;
+  // }
+  // .rdrDayStartPreview {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+
+  // .rdrDayHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  // .rdrWeekHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  // .rdrWeekHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  .rdrMonth {
+    width: 29.667em;
+    padding: 0;
+  }
+  .rdrWeekDays {
+    .rdrWeekDay {
+      color: #556178;
+      font-size: 11px;
+    }
   }
 }
-.performance-graph {
-  width: 100%;
-  .recharts-wrapper {
-    width: 750px;
-    .recharts-surface {
-      width: 750px;
-    }
-    .recharts-default-legend {
-      li {
-        .recharts-surface {
-          width: 14px !important;
-        }
-      }
-    }
-    @media only screen and (min-width: 1920px) {
-      width: none !important;
-      .recharts-surface {
-        width: 1100px !important;
-        max-width: 100% !important;
-      }
-    }
-    @media only screen and (min-width: 1600px) {
-      width: 1000px !important;
-      max-width: 100% !important;
-      .recharts-surface {
-        width: 1000px !important;
-        max-width: 100% !important;
-      }
-    }
-    // @media only screen and (min-width: 1200px) {
-    //   width: none !important;
-    //   .recharts-surface {
-    //     width: 800px !important;
-    //   }
-    // }
-    @media only screen and (min-width: 1200px) {
-      width: 750px !important;
-      max-width: 100% !important;
-      .recharts-surface {
-        width: 750px !important;
-      }
-      .recharts-default-legend {
-        li {
-          .recharts-surface {
-            width: 14px !important;
-          }
-        }
-      }
-    }
-    @media only screen and (min-width: 992px) {
-      width: 750px !important;
-      max-width: 100% !important;
-      .recharts-surface {
-        width: 750px !important;
-        max-width: 100% !important;
-      }
-    }
-    @media only screen and (max-width: 991px) {
-      width: 800px !important;
-      .recharts-surface {
-        width: 800px !important;
-      }
-    }
-    @media only screen and (max-width: 850px) {
-      width: 750px !important;
-      .recharts-surface {
-        width: 750px !important;
-      }
-    }
-    @media only screen and (max-width: 800px) {
-      width: 680px !important;
-      .recharts-surface {
-        width: 680px !important;
-      }
-    }
-    @media only screen and (max-width: 730px) {
-      width: 600px !important;
-      .recharts-surface {
-        width: 600px !important;
-      }
-    }
-    @media only screen and (max-width: 650px) {
-      width: 500px !important;
-      .recharts-surface {
-        width: 500px !important;
-      }
-    }
-    @media only screen and (max-width: 550px) {
-      width: 450px !important;
-      .recharts-surface {
-        width: 450px !important;
-      }
-    }
-    @media only screen and (max-width: 500px) {
-      width: 400px !important;
-      .recharts-surface {
-        width: 400px !important;
-      }
-    }
-    @media only screen and (max-width: 450px) {
-      width: 340px !important;
-      .recharts-surface {
-        width: 340px !important;
-      }
-    }
-    @media only screen and (max-width: 390px) {
-      width: 300px !important;
-      .recharts-surface {
-        width: 300px !important;
-      }
-    }
-    @media only screen and (max-width: 350px) {
-      width: 260px !important;
-      .recharts-surface {
-        width: 260px !important;
-      }
-    }
+
+.recharts-tooltip-wrapper {
+  width: 146px;
+  // min-height: 70px;
+  background: #2e384d;
+  border-radius: 5px;
+}
+.custom-tooltip {
+  padding: 10px;
+  .main-label {
+    color: #f4f6fc;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin: 0;
+    padding-bottom: 8px;
+  }
+  .label-1 {
+    color: $white-color;
+    font-size: 16px;
+    margin: 0;
+    padding-bottom: 3x;
+  }
+  .label-2 {
+    color: #bfc5d2;
+    font-size: 14px;
+    margin: 0;
   }
 }

@@ -187,6 +187,7 @@ export default function AgreementDetails({ agreements, id }) {
                           value={
                             agreement[item.key].label || agreement[item.key]
                           }
+                          thousandSeparator
                           prefix={item.key === 'rev_share' ? '' : '$'}
                           suffix={item.key === 'rev_share' ? '%' : ''}
                         />

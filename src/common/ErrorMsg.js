@@ -6,7 +6,7 @@ const ErrorMsg = styled.div`
   font-size: ${Theme.extraNormal};
   padding: 0;
   margin: 0 0 0 0;
-  transform: translate(0, 10px);
+  transform: translate(0, 6px);
 
   a {
     text-transform: lowercase;

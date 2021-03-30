@@ -7,7 +7,6 @@ import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
-import queryString from 'query-string';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
 
@@ -41,11 +40,7 @@ import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
 import { getcontract } from '../../api/AgreementApi';
 
-import {
-  PATH_AGREEMENT,
-  PATH_CUSTOMER_DETAILS,
-  PATH_CUSTOMER_LIST,
-} from '../../constants';
+import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { sortOptions } from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
@@ -98,6 +93,7 @@ export default function NewCustomerList() {
             borderRadius: 50,
             marginRight: '9px',
             height: '32px',
+            verticalAlign: 'middle',
           }}
         />
       ) : (
@@ -117,12 +113,17 @@ export default function NewCustomerList() {
           className="drop-down-user"
           src={props.data.icon}
           alt="user"
-          style={{ borderRadius: 50, width: '32px', marginBottom: '' }}
+          style={{
+            borderRadius: 50,
+            width: '32px',
+            verticalAlign: 'middle',
+            marginBottom: '',
+          }}
         />
       ) : (
         <GetInitialName userInfo={props.data.label} type="list" property="" />
       )}{' '}
-      &nbsp;
+      {/* &nbsp; */}
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
@@ -236,13 +237,6 @@ export default function NewCustomerList() {
 
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
-    const stringified = queryString.stringify({
-      page: currentPage,
-    });
-    history.push({
-      pathname: `${PATH_CUSTOMER_LIST}`,
-      search: `${stringified}`,
-    });
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
 

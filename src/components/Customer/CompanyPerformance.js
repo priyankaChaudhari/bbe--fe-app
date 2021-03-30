@@ -6,6 +6,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 // import { useMediaQuery } from 'react-responsive';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+
 import {
   LineChart,
   // ResponsiveContainer,
@@ -21,8 +23,10 @@ import {
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { parseInt } from 'lodash';
+import { DateRange } from 'react-date-range';
+import { enGB } from 'react-date-range/src/locale';
 import { getPerformance } from '../../api';
 
 import {
@@ -37,7 +41,11 @@ import {
 } from '../../theme/images/index';
 import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+// import styled from 'styled-components';
 // import { fn } from 'jquery';
+const _ = require('lodash');
 
 export default function CompanyPerformance({ agreement, id }) {
   // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
@@ -93,10 +101,20 @@ export default function CompanyPerformance({ agreement, id }) {
 
   // const pieData = [{ name: 'Group A', value: 15 }];
   // const COLORS = ['#407B00'];
-  const [customDateValue, setCustomDateValue] = useState([
-    new Date(),
-    new Date(),
+  // const [customDateValue, setCustomDateValue] = useState([
+  //   new Date(),
+  //   new Date(),
+  // ]);
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 3);
+  const [state, setState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'selection',
+    },
   ]);
+
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
 
   const [revenueData, setRevenueData] = useState([{}]);
@@ -108,9 +126,6 @@ export default function CompanyPerformance({ agreement, id }) {
     daily: true,
     weekly: false,
     month: false,
-  });
-  const [disableOrderBy, setDisableOrderBy] = useState({
-    daily: true,
   });
 
   const [activeSales, setActiveSales] = useState('revenue');
@@ -250,14 +265,7 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = new Date(resData.report_date)
-                .toLocaleDateString('us', { month: 'short', day: 'numeric' })
-                .split(' ')
-                .join(' ');
-              // tempData.push({
-              //   name: dayDate,
-              //   'vs $': resData.revenue,
-              // });
+              const dayDate = dayjs(resData.report_date).format('MMM D');
               tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
               tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
               tempUnitsSoldData.push({
@@ -282,24 +290,17 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
               conversionTotal.currentConversionTotal += resData.conversion;
-              if (index < res.data.daily_facts.previous.length) {
+              if (
+                res.data.daily_facts.previous &&
+                index < res.data.daily_facts.previous.length
+              ) {
                 // tempData[index][key] = resData.revenue;
                 tempRevenueData[index][' $'] = resData.revenue;
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
               } else {
-                const dayDate = new Date(resData.report_date)
-                  .toLocaleDateString('us', {
-                    month: 'short',
-                    day: 'numeric',
-                  })
-                  .split(' ')
-                  .join(' ');
-                // tempData.push({
-                //   name: dayDate,
-                //   ' $': resData.revenue,
-                // });
+                const dayDate = dayjs(resData.report_date).format('MMM D');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -350,9 +351,10 @@ export default function CompanyPerformance({ agreement, id }) {
           setConversionData(tempConversionData);
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
-            res.data.pf_oi_is[0].latest_date = new Date(lastUpdated)
-              .toDateString()
-              .substr(new Date(lastUpdated).toDateString().indexOf(' ') + 1);
+            res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
+              'MMM D YYYY',
+            );
+
             setDspData(res.data.pf_oi_is[0]);
             // setPieChartData([
             //   {
@@ -385,6 +387,35 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
+  // const xDataFormater = (date) => {
+  //   if (date) {
+  //     if (selectedValue === 'month' && groupBy === 'weekly') {
+  //       const weekNumber = Math.ceil(dayjs(date).date() / 7);
+  //       switch (weekNumber) {
+  //         case 1:
+  //           return 'Wk1';
+  //         case 2:
+  //           return 'Wk2';
+  //         case 3:
+  //           return 'Wk3';
+  //         case 4:
+  //           return 'Wk4';
+  //         default:
+  //           return 'Wk';
+  //       }
+  //     }
+  //     if (selectedValue === 'month' && groupBy === 'daily') {
+  //       return dayjs(date).day();
+  //     }
+  //     if (selectedValue === 'year' && groupBy === 'monthly') {
+  //       console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
+  //       return date.split(' ')[0];
+  //     }
+  //     return date; // .format('MMM D');
+  //   }
+  //   return date;
+  // };
+
   const DataFormater = (number) => {
     if (number > 1000000000) {
       return `$${parseInt(number / 1000000000).toString()}B`;
@@ -400,30 +431,34 @@ export default function CompanyPerformance({ agreement, id }) {
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
     let temp = '';
+    let sd = startDate;
+    let ed = endDate;
     const diffTime = Math.abs(startDate - endDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays <= 30) {
       temp = 'daily';
-      setDisableOrderBy({ daily: true });
+      setFilters({ daily: true, weekly: false, month: false });
+      setGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 180) {
       temp = 'weekly';
-      setDisableOrderBy({ week: true });
+      setFilters({ daily: false, weekly: true, month: false });
+      setGroupBy('weekly');
     } else if (diffDays > 180) {
-      temp = 'month';
-      setDisableOrderBy({ month: true });
+      temp = 'monthly';
+      setFilters({ daily: false, weekly: false, month: true });
+      setGroupBy('monthly');
     }
 
-    if (flag !== null) {
-      if (temp === 'daily') {
-        setFilters({ daily: true, weekly: false, month: false });
-        setGroupBy('daily');
-      } else if (temp === 'weekly') {
-        setFilters({ daily: false, weekly: true, month: false });
-        setGroupBy('weekly');
-      } else if (temp === 'month') {
-        setFilters({ daily: false, weekly: false, month: true });
-        setGroupBy('monthly');
-      }
+    if (flag === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getData(flag, temp, selectedAmazonValue, sd, ed);
+    } else {
+      // flag==='year
       getData(flag, temp, selectedAmazonValue);
     }
   };
@@ -456,19 +491,6 @@ export default function CompanyPerformance({ agreement, id }) {
         getData(value, 'daily', selectedAmazonValue);
         break;
 
-      case 'custom':
-        if (disableOrderBy && disableOrderBy.daily) {
-          setFilters({ daily: true, weekly: false, month: false });
-          setGroupBy('daily');
-        } else if (disableOrderBy && disableOrderBy.week) {
-          setFilters({ daily: false, weekly: true, month: false });
-          setGroupBy('weekly');
-        } else if (disableOrderBy && disableOrderBy.month) {
-          setFilters({ daily: false, weekly: false, month: true });
-          setGroupBy('monthly');
-        }
-        break;
-
       default:
         break;
     }
@@ -482,19 +504,24 @@ export default function CompanyPerformance({ agreement, id }) {
         new Date(),
         'year',
       );
-    }
-
-    if (value !== 'custom') {
-      setGropuByFilter(value);
-      // getData(value, groupBy, selectedAmazonValue);
-    } else {
+    } else if (value === 'custom') {
       setShowCustomDateModal(true);
+    } else {
+      setGropuByFilter(value);
     }
   };
 
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.label);
-    getData(selectedValue, groupBy, event.label);
+    if (selectedValue === 'custom') {
+      checkDifferenceBetweenDates(
+        state[0].startDate,
+        state[0].endDate,
+        'custom',
+      );
+    } else {
+      getData(selectedValue, groupBy, event.label);
+    }
   };
 
   const handleGroupBy = (value) => {
@@ -504,26 +531,8 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
-  const onChangeCustomDate = (event) => {
-    if (event !== null) {
-      checkDifferenceBetweenDates(event[0], event[1]);
-      setCustomDateValue([event[0], event[1]]);
-    } else {
-      setCustomDateValue([new Date(), new Date()]);
-      setDisableOrderBy({ daily: true });
-    }
-  };
-
   const applyCustomeDate = () => {
-    const startDate = `${customDateValue[0].getDate()}-${
-      customDateValue[0].getMonth() + 1
-    }-${customDateValue[0].getFullYear()}`;
-    const endDate = `${customDateValue[1].getDate()}-${
-      customDateValue[1].getMonth() + 1
-    }-${customDateValue[1].getFullYear()}`;
-
-    setGropuByFilter('custom');
-    getData(selectedValue, groupBy, selectedAmazonValue, startDate, endDate);
+    checkDifferenceBetweenDates(state[0].startDate, state[0].endDate, 'custom');
     setShowCustomDateModal(false);
   };
 
@@ -538,36 +547,36 @@ export default function CompanyPerformance({ agreement, id }) {
     return null;
   };
 
-  // const CustomTooltip = ({ active, payload, label }) => {
-  //   if (active && payload && payload.length) {
-  //     if (payload.length === 2) {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //           <p className="label">{`vs $ : ${payload[1].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //     if (payload.length === 1 && payload[0].dataKey === ' $') {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //     if (payload.length === 1 && payload[0].dataKey === 'vs $') {
-  //       return (
-  //         <div className="custom-tooltip">
-  //           <p className="label">{activeSales}</p>
-  //           <p className="label">{`$ : ${payload[0].value}`}</p>
-  //         </div>
-  //       );
-  //     }
-  //   }
-  //   return null;
-  // };
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      if (payload.length === 2) {
+        return (
+          <div className="custom-tooltip">
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-2">{`vs $ : ${payload[1].value}`}</p>
+          </div>
+        );
+      }
+      if (payload.length === 1 && payload[0].dataKey === ' $') {
+        return (
+          <div className="custom-tooltip">
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+          </div>
+        );
+      }
+      if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+        return (
+          <div className="custom-tooltip">
+            <p className="main-label">{activeSales}</p>
+            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
     const list = [];
@@ -610,6 +619,24 @@ export default function CompanyPerformance({ agreement, id }) {
     return 0;
   };
 
+  const bindValues = (value) => {
+    const decimal = _.split(value, '.', 2);
+    if (decimal[1] !== undefined) {
+      return (
+        <span style={{ fontSize: '26px' }}>
+          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
+        </span>
+      );
+    }
+    return (
+      <span style={{ fontSize: '26px' }}>
+        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        <span style={{ fontSize: '16px' }}>.00</span>
+      </span>
+    );
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -641,14 +668,14 @@ export default function CompanyPerformance({ agreement, id }) {
         </div>
         <WhiteCard>
           <div className="row">
-            <div className="col-6 ">
+            <div className="col-md-6 col-sm1-12">
               {' '}
               <p className="black-heading-title mt-0 mb-4">
                 {' '}
                 Sales Performance
               </p>
             </div>
-            <div className="col-6  mb-3">
+            <div className="col-md-6 col-sm1-12  mb-3">
               <DropDownSelect className="days-performance ">
                 <Select
                   classNamePrefix="react-select"
@@ -678,14 +705,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Revenue</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.currentRevenueTotal.toFixed(2)
+                    ? // allSalesTotal.revenue.currentRevenueTotal
+                      // .toFixed(2)
+                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.revenue.currentRevenueTotal)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.previousRevenueTotal.toFixed(2)
+                    ? allSalesTotal.revenue.previousRevenueTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
@@ -737,14 +769,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Units Sold</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.currentUnitsTotal.toFixed(2)
+                    ? // allSalesTotal.units.currentUnitsTotal
+                      // .toFixed(2)
+                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.units.currentUnitsTotal)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.previousUnitsTotal.toFixed(2)
+                    ? allSalesTotal.units.previousUnitsTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
@@ -798,14 +835,19 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Traffic</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.currentTrafficTotal.toFixed(2)
+                    ? // allSalesTotal.traffic.currentTrafficTotal
+                      //  .toFixed(2)
+                      //  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.traffic.currentTrafficTotal)
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.previousTrafficTotal.toFixed(2)
+                    ? allSalesTotal.traffic.previousTrafficTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
@@ -998,40 +1040,46 @@ export default function CompanyPerformance({ agreement, id }) {
           {/* <div style={{ height: '400px', width: '1000px' }}>
             <div style={{ height: '100%', width: '60%' }}>
               <ResponsiveContainer width={'79%'} height={'30%'}> */}
-          <div className="performance-graph">
-            <LineChart
-              width={900}
-              height={300}
-              data={lineChartData}
-              margin={{
-                top: 40,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}>
-              <CartesianGrid strokeDasharray="none" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
-              <YAxis
-                type="number"
-                // domain={[0, 'dataMax']}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={DataFormater}
-                domain={[
-                  (dataMin) => calculateDataMin(dataMin),
-                  (dataMax) => (dataMax * 10) / 100 + dataMax,
-                ]}
-              />
+          {/* <ResponsiveContainer width={700} height="80%"> */}
+          <LineChart
+            width={750}
+            height={300}
+            data={lineChartData}
+            margin={{
+              top: 40,
+              right: 30,
+              left: 0,
+              bottom: 20,
+            }}>
+            <CartesianGrid strokeDasharray="none" />
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              dy={20}
+              // tickFormatter={xDataFormater}
+            />
+            <YAxis
+              type="number"
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={DataFormater}
+              dx={-20}
+              domain={[
+                (dataMin) => calculateDataMin(dataMin),
+                (dataMax) => (dataMax * 10) / 100 + dataMax,
+              ]}
+            />
 
-              <Tooltip />
-              <Legend formatter={renderLegendText} />
-              <Line dataKey=" $" stroke="#FF5933" />
-              <Line dataKey="vs $" stroke="#BFC5D2" />
-            </LineChart>
-            {/* </ResponsiveContainer>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend className="tolltip-revenue" formatter={renderLegendText} />
+            <Line dataKey=" $" stroke="#FF5933" />
+            <Line dataKey="vs $" stroke="#BFC5D2" />
+          </LineChart>
+          {/* </ResponsiveContainer>
             </div>
           </div> */}
-          </div>
+          {/* </ResponsiveContainer> */}
         </WhiteCard>
 
         <div className="row mt-3">
@@ -1165,22 +1213,50 @@ export default function CompanyPerformance({ agreement, id }) {
             src={CloseIcon}
             alt="close"
             className="float-right cursor cross-icon"
-            onClick={() => setShowCustomDateModal(false)}
+            onClick={() => {
+              setShowCustomDateModal(false);
+              setState([
+                {
+                  startDate: currentDate,
+                  endDate: currentDate,
+                  key: 'selection',
+                },
+              ]);
+            }}
             role="presentation"
           />
           <ModalBox>
             <div className="modal-body">
               <h4>Select Date Range</h4>
 
-              <DateRangePicker
-                isOpen={showCustomDateModal}
+              {/* <DateRangePicker
+                isOpen={true}
                 onChange={(event) => onChangeCustomDate(event)}
                 value={customDateValue}
                 maxDate={new Date()}
+
+              /> */}
+              <DateRange
+                editableDateInputs
+                onChange={(item) => {
+                  setState([item.selection]);
+                }}
+                showMonthAndYearPickers={false}
+                ranges={state}
+                moveRangeOnFirstSelection={false}
+                showDateDisplay={false}
+                maxDate={currentDate}
+                rangeColors={['#FF5933', 'green']}
+                weekdayDisplayFormat="EEEEE"
+                locale={enGB}
               />
               <div
                 className="text-center  "
-                style={{ bottom: '20px', position: 'absolute', width: '85%' }}>
+                style={{
+                  bottom: '20px',
+                  position: 'absolute',
+                  width: '85%',
+                }}>
                 <Button
                   onClick={() => applyCustomeDate()}
                   type="button"
@@ -1246,6 +1322,126 @@ CompanyPerformance.propTypes = {
 //       }
 //       @media only screen and (max-width: 400px) {
 //         width: 260px;
+//       }
+//     }
+//   }
+// `;
+
+// const ResponsiveContainer = styled.div`
+//   width: 100%;
+//   .recharts-wrapper {
+//     width: 750px;
+//     .recharts-surface {
+//       width: 750px;
+//     }
+//     .recharts-default-legend {
+//       li {
+//         .recharts-surface {
+//           width: 14px !important;
+//         }
+//       }
+//     }
+//     @media only screen and (min-width: 1920px) {
+//       width: none !important;
+//       .recharts-surface {
+//         width: 1100px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     @media only screen and (min-width: 1600px) {
+//       width: 1000px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 1000px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     // @media only screen and (min-width: 1200px) {
+//     //   width: none !important;
+//     //   .recharts-surface {
+//     //     width: 800px !important;
+//     //   }
+//     // }
+//     @media only screen and (min-width: 1200px) {
+//       width: 750px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//       }
+//       .recharts-default-legend {
+//         li {
+//           .recharts-surface {
+//             width: 14px !important;
+//           }
+//         }
+//       }
+//     }
+//     @media only screen and (min-width: 992px) {
+//       width: 750px !important;
+//       max-width: 100% !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//         max-width: 100% !important;
+//       }
+//     }
+//     @media only screen and (max-width: 991px) {
+//       width: 800px !important;
+//       .recharts-surface {
+//         width: 800px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 850px) {
+//       width: 750px !important;
+//       .recharts-surface {
+//         width: 750px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 800px) {
+//       width: 680px !important;
+//       .recharts-surface {
+//         width: 680px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 730px) {
+//       width: 600px !important;
+//       .recharts-surface {
+//         width: 600px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 650px) {
+//       width: 500px !important;
+//       .recharts-surface {
+//         width: 500px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 550px) {
+//       width: 450px !important;
+//       .recharts-surface {
+//         width: 450px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 500px) {
+//       width: 400px !important;
+//       .recharts-surface {
+//         width: 400px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 450px) {
+//       width: 340px !important;
+//       .recharts-surface {
+//         width: 340px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 390px) {
+//       width: 300px !important;
+//       .recharts-surface {
+//         width: 300px !important;
+//       }
+//     }
+//     @media only screen and (max-width: 350px) {
+//       width: 260px !important;
+//       .recharts-surface {
+//         width: 260px !important;
 //       }
 //     }
 //   }
