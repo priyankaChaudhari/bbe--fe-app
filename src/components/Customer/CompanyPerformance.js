@@ -685,14 +685,18 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Revenue</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.currentRevenueTotal.toFixed(2)
+                    ? allSalesTotal.revenue.currentRevenueTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.previousRevenueTotal.toFixed(2)
+                    ? allSalesTotal.revenue.previousRevenueTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
@@ -744,14 +748,18 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Units Sold</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.currentUnitsTotal.toFixed(2)
+                    ? allSalesTotal.units.currentUnitsTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.previousUnitsTotal.toFixed(2)
+                    ? allSalesTotal.units.previousUnitsTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
@@ -805,14 +813,18 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Traffic</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.currentTrafficTotal.toFixed(2)
+                    ? allSalesTotal.traffic.currentTrafficTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div className="vs">
                   {' '}
                   vs{' '}
                   {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.previousTrafficTotal.toFixed(2)
+                    ? allSalesTotal.traffic.previousTrafficTotal
+                        .toFixed(2)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                 </div>
                 <div
