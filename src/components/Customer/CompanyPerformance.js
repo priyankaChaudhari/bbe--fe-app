@@ -145,11 +145,11 @@ export default function CompanyPerformance({ agreement, id }) {
     { value: 'monthly', label: 'This Month', sub: 'vs last month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   // const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
