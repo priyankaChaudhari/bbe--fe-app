@@ -6,6 +6,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 // import { useMediaQuery } from 'react-responsive';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+
 import {
   LineChart,
   // ResponsiveContainer,
@@ -261,14 +263,7 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = new Date(resData.report_date)
-                .toLocaleDateString('us', { month: 'short', day: 'numeric' })
-                .split(' ')
-                .join(' ');
-              // tempData.push({
-              //   name: dayDate,
-              //   'vs $': resData.revenue,
-              // });
+              const dayDate = moment(resData.report_date).format('MMM D');
               tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
               tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
               tempUnitsSoldData.push({
@@ -300,17 +295,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
               } else {
-                const dayDate = new Date(resData.report_date)
-                  .toLocaleDateString('us', {
-                    month: 'short',
-                    day: 'numeric',
-                  })
-                  .split(' ')
-                  .join(' ');
-                // tempData.push({
-                //   name: dayDate,
-                //   ' $': resData.revenue,
-                // });
+                const dayDate = moment(resData.report_date).format('MMM D');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -361,9 +346,10 @@ export default function CompanyPerformance({ agreement, id }) {
           setConversionData(tempConversionData);
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
-            res.data.pf_oi_is[0].latest_date = new Date(lastUpdated)
-              .toDateString()
-              .substr(new Date(lastUpdated).toDateString().indexOf(' ') + 1);
+            res.data.pf_oi_is[0].latest_date = moment(lastUpdated).format(
+              'MMM D YYYY',
+            );
+
             setDspData(res.data.pf_oi_is[0]);
             // setPieChartData([
             //   {
@@ -394,6 +380,35 @@ export default function CompanyPerformance({ agreement, id }) {
       setLineChartData(revenueData);
       setActiveSales('revenue');
     }
+  };
+
+  const xDataFormater = (date) => {
+    if (date) {
+      if (selectedValue === 'month' && groupBy === 'weekly') {
+        const weekNumber = Math.ceil(moment(date).date() / 7);
+        switch (weekNumber) {
+          case 1:
+            return 'Wk1';
+          case 2:
+            return 'Wk2';
+          case 3:
+            return 'Wk3';
+          case 4:
+            return 'Wk4';
+          default:
+            return 'Wk';
+        }
+      }
+      if (selectedValue === 'month' && groupBy === 'daily') {
+        return moment(date).day();
+      }
+      if (selectedValue === 'year' && groupBy === 'monthly') {
+        console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
+        return date.split(' ')[0];
+      }
+      return date; // .format('MMM D');
+    }
+    return date;
   };
 
   const DataFormater = (number) => {
@@ -999,7 +1014,13 @@ export default function CompanyPerformance({ agreement, id }) {
                 bottom: 0,
               }}>
               <CartesianGrid strokeDasharray="none" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} dy={20} />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                dy={20}
+                tickFormatter={xDataFormater}
+              />
               <YAxis
                 type="number"
                 // domain={[0, 'dataMax']}
