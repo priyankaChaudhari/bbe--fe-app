@@ -17,9 +17,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  // PieChart,
-  // Pie,
-  // Cell,
+  PieChart,
+  Pie,
+  Cell,
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -99,8 +99,13 @@ export default function CompanyPerformance({ agreement, id }) {
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
 
-  // const pieData = [{ name: 'Group A', value: 15 }];
-  // const COLORS = ['#407B00'];
+  const [pieData, setPieData] = useState([
+    { name: 'Inventory', value: 0 },
+    { name: 'Total', value: 1000 },
+  ]);
+
+  const COLORS = ['#97ca61', '#EAEFF2'];
+
   // const [customDateValue, setCustomDateValue] = useState([
   //   new Date(),
   //   new Date(),
@@ -356,12 +361,21 @@ export default function CompanyPerformance({ agreement, id }) {
             );
 
             setDspData(res.data.pf_oi_is[0]);
-            // setPieChartData([
-            //   {
-            //     name: 'Inventory',
-            //     value: res.data.pf_oi_is.inventory_performance_index,
-            //   },
-            // ]);
+
+            setPieData([
+              {
+                name: 'Inventory',
+                value: parseFloat(
+                  res.data.pf_oi_is[0].inventory_performance_index,
+                ),
+              },
+              {
+                name: 'Total',
+                value:
+                  1000 -
+                  parseFloat(res.data.pf_oi_is[0].inventory_performance_index),
+              },
+            ]);
           }
         }
       });
@@ -1146,34 +1160,31 @@ export default function CompanyPerformance({ agreement, id }) {
             </WhiteCard>
           </div>
         </div>
-        {/* <div className="row mt-3">
+        {/* IN PROGRESSSSSSS */}
+        <div className="row mt-3">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
               </p>
-              <PiechartResponsive>
-                <PieChart width={250} height={150}>
-                  <Pie
-                    data={pieData}
-                    cx={90}
-                    cy={100}
-                    startAngle={180}
-                    endAngle={0}
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#8884D8"
-                    paddingAngle={6}
-                    dataKey="value">
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </PiechartResponsive>
+              {/* <PiechartResponsive> */}
+              <PieChart width={250} height={150}>
+                <Pie
+                  data={pieData}
+                  cx={90}
+                  cy={100}
+                  startAngle={180}
+                  endAngle={0}
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884D8"
+                  paddingAngle={6}
+                  dataKey="value">
+                  <Cell key="cell-0" fill={COLORS[0]} />
+                  <Cell key="cell-1" fill={COLORS[1]} />
+                </Pie>
+              </PieChart>
+              {/* </PiechartResponsive> */}
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
@@ -1216,7 +1227,7 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
-        </div> */}
+        </div>
 
         <Modal
           isOpen={showCustomDateModal}
