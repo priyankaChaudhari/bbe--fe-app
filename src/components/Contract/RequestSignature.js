@@ -60,6 +60,8 @@ function RequestSignature({
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [selectedContact, setSelectedContact] = useState({});
   const [ccEmails, setCCEmails] = useState([{}]);
+  const [ccEmailErrors, setccEmailErrors] = useState([]);
+
   const [approvalNote, setApprovalNote] = useState({});
   const [sendContractCopy, setSendContractCopy] = useState(false);
   const [contractDesignData, setContractDesignData] = useState(null);
@@ -219,6 +221,7 @@ function RequestSignature({
             role="presentation"
             onClick={() => {
               setFormData(info);
+              setContactApiError({});
               setModalName('Edit Contact');
               setParams('add-new-contact');
             }}
@@ -259,9 +262,10 @@ function RequestSignature({
       return (
         <div className={field.classname}>
           <ContractFormField className="mt-3">
-            <label>
+            <label htmlFor={field.key}>
               {field.placeholder}
               <input
+                id={field.key}
                 className="form-control"
                 type={field.type}
                 placeholder={field.placeholder}
@@ -286,7 +290,35 @@ function RequestSignature({
     list[i] = event.target.value;
 
     setCCEmails(list);
+
+    const emailList = [...ccEmailErrors];
+    emailList[i] = { email: event.target.value, isValid: true };
+    setccEmailErrors(emailList);
   };
+
+  function ValidateEmail(event, index) {
+    if (event.target.value) {
+      if (
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+          event.target.value,
+        )
+      ) {
+        const list = [...ccEmailErrors];
+        list[index] = { email: event.target.value, isValid: true };
+        setccEmailErrors(list);
+        return true;
+      }
+      const list = [...ccEmailErrors];
+      list[index] = { email: event.target.value, isValid: false };
+      setccEmailErrors(list);
+
+      // alert('You have entered an invalid email address!');
+      return false;
+    } 
+      return false;
+    
+  }
+
   const displayCCEmails = () => {
     return ccEmails.map((data, i) => {
       return (
@@ -299,7 +331,15 @@ function RequestSignature({
               type="email"
               placeholder=" Enter Email Address"
               onChange={(event) => handleCCEmailAddress(event, i)}
+              onBlur={(event) => ValidateEmail(event, i)}
             />
+            <ErrorMsg>
+              {ccEmailErrors &&
+              ccEmailErrors[i] &&
+              ccEmailErrors[i].isValid === false
+                ? 'Enter a valid email address.'
+                : ''}
+            </ErrorMsg>
           </FormField>
         </div>
       );
@@ -496,6 +536,26 @@ function RequestSignature({
     });
   };
 
+  const setDisabledReqSignBtn = () => {
+    if (ccEmailErrors && ccEmailErrors.length) {
+      const list =
+        ccEmailErrors &&
+        ccEmailErrors.length &&
+        ccEmailErrors.filter((item) => item && item.email !== '');
+      if (list) {
+        return !list.every((item) => item && item.isValid === true);
+      }
+    }
+    return false;
+    // return !(
+    //   ccEmailErrors &&
+    //   ccEmailErrors.length &&
+    //   ccEmailErrors
+    //     .filter((item) => item && item.email !== '')
+    //     .every((item) => item && item.isValid === true)
+    // );
+  };
+
   return (
     <>
       {params && params.step === 'verify-document' ? (
@@ -557,6 +617,7 @@ function RequestSignature({
 
             <div className=" mt-4">
               <Button
+                disabled={setDisabledReqSignBtn()}
                 className=" btn-primary on-boarding w-100"
                 onClick={() => verifyDocument()}>
                 {isLoading.loader && isLoading.type === 'button' ? (
@@ -726,6 +787,7 @@ function RequestSignature({
                   role="presentation"
                   onClick={() => {
                     setFormData({});
+                    setContactApiError({});
                     setParams('add-new-contact');
                   }}>
                   {' '}
