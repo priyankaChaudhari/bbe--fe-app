@@ -45,6 +45,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 // import styled from 'styled-components';
 // import { fn } from 'jquery';
+const _ = require('lodash');
 
 export default function CompanyPerformance({ agreement, id }) {
   // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
@@ -618,6 +619,24 @@ export default function CompanyPerformance({ agreement, id }) {
     return 0;
   };
 
+  const bindValues = (value) => {
+    const decimal = _.split(value, '.', 2);
+    if (decimal[1] !== undefined) {
+      return (
+        <span style={{ fontSize: '26px' }}>
+          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
+        </span>
+      );
+    }
+    return (
+      <span style={{ fontSize: '26px' }}>
+        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        <span style={{ fontSize: '16px' }}>.00</span>
+      </span>
+    );
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -686,9 +705,10 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Revenue</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.currentRevenueTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    ? // allSalesTotal.revenue.currentRevenueTotal
+                      // .toFixed(2)
+                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.revenue.currentRevenueTotal)
                     : 0}
                 </div>
                 <div className="vs">
@@ -749,9 +769,10 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Units Sold</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.currentUnitsTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    ? // allSalesTotal.units.currentUnitsTotal
+                      // .toFixed(2)
+                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.units.currentUnitsTotal)
                     : 0}
                 </div>
                 <div className="vs">
@@ -814,9 +835,10 @@ export default function CompanyPerformance({ agreement, id }) {
                 <div className="chart-name">Traffic</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.currentTrafficTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    ? // allSalesTotal.traffic.currentTrafficTotal
+                      //  .toFixed(2)
+                      //  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      bindValues(allSalesTotal.traffic.currentTrafficTotal)
                     : 0}
                 </div>
                 <div className="vs">
