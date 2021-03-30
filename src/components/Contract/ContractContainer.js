@@ -812,7 +812,6 @@ export default function ContractContainer() {
       // dispatch(getAccountDetails(id));
       getContractDetails();
     }
-    setIsEditContract(false);
   };
 
   const editAgreementChanges = (flag) => {
@@ -2213,29 +2212,57 @@ export default function ContractContainer() {
           <div className="container-fluid">
             {checkApprovalCondition() ? (
               userInfo && userInfo.role === 'Team Manager - TAM' ? (
-                <>
+                showRightTick('service_agreement') &&
+                showRightTick('statement') &&
+                showRightTick('dspAddendum') ? (
+                  <>
+                    <Button
+                      className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
+                        isEditContract ? 'w-sm-100' : 'w-sm-50'
+                      }`}
+                      disabled={
+                        !(
+                          showRightTick('service_agreement') &&
+                          showRightTick('statement') &&
+                          showRightTick('dspAddendum')
+                        )
+                      }
+                      onClick={() => {
+                        createAgreementDoc();
+                        setParams('select-contact');
+                        setShowModal(true);
+                        setIsEditContract(false);
+                      }}>
+                      Approve and Request Signature
+                    </Button>
+                    {!isEditContract
+                      ? renderEditContractBtn('light-orange w-sm-50')
+                      : null}
+                    <span className="last-update ">
+                      Last updated by You on{' '}
+                      {dayjs(details && details.updated_at).format(
+                        'MMM D, h:mm A',
+                      )}
+                    </span>
+                  </>
+                ) : !isEditContract ? (
+                  <>
+                    {renderEditContractBtn('btn-primary')}
+
+                    <span className="last-update">
+                      <img src={InfoIcon} alt="info" className="info-icon" />
+                      This contract is missing mandatory information.
+                    </span>
+                  </>
+                ) : (
                   <Button
                     className={`btn-primary on-boarding  w-320 mt-3 mr-lg-3 ${
                       isEditContract ? 'w-sm-100' : 'w-sm-50'
                     }`}
-                    onClick={() => {
-                      createAgreementDoc();
-                      setParams('select-contact');
-                      setShowModal(true);
-                      setIsEditContract(false);
-                    }}>
+                    disabled>
                     Approve and Request Signature
                   </Button>
-                  {!isEditContract
-                    ? renderEditContractBtn('light-orange w-sm-50')
-                    : null}
-                  <span className="last-update ">
-                    Last updated by You on{' '}
-                    {dayjs(details && details.updated_at).format(
-                      'MMM D, h:mm A',
-                    )}
-                  </span>
-                </>
+                )
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
