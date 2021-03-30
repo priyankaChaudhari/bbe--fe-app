@@ -1460,25 +1460,114 @@ g .recharts-layer .recharts-line-dots {
     }
   }
 }
-.react-daterange-picker__calendar--open {
-  .react-calendar {
-    border: none !important;
-    background-color: $white-color !important;
-    width: 400px !important;
-  }
-  .react-calendar__tile {
-    max-width: 100%;
+// .react-daterange-picker__calendar--open {
+//   .react-calendar {
+//     border: none !important;
+//     background-color: $white-color !important;
+//     width: 400px !important;
+//   }
+//   .react-calendar__tile {
+//     max-width: 100%;
+//     text-align: center;
+//     padding: 1.75em 0.6em !important;
+//     background: none;
+//   }
+//   .react-calendar__tile--active {
+//     color: $orange-color !important;
+//     background-color: $white-color !important;
+//     border-radius: 20px;
+//     border: 1px solid $orange-color;
+//   }
+// }
+.rdrCalendarWrapper {
+  .rdrMonthAndYearPickers {
+    color: $black-color;
+    font-size: 14px;
+    text-transform: uppercase;
     text-align: center;
-    padding: 1.75em 0.6em !important;
-    background: none;
   }
-  .react-calendar__tile--active {
-    color: $orange-color !important;
-    background-color: $white-color !important;
-    border-radius: 20px;
-    border: 1px solid $orange-color;
+  .rdrDay {
+    height: 4.7em;
+    font-size: 15px;
+    color: $black-color;
+
+    .rdrDayNumber span {
+      color: $black-color;
+    }
+    .rdrSelected,
+    .rdrInRange,
+    .rdrStartEdge,
+    .rdrEndEdge {
+      background: currentColor;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      bottom: 8px;
+    }
+    // .rdrDayToday .rdrDayNumber span:after {
+    //   content: '';
+    //   position: absolute;
+    //   top: 4px;
+    //   left: 73%;
+    //   /* transform: translate(-50%, 0); */
+    //   width: 6px;
+    //   border-radius: 50%;
+    //   height: 6px;
+    //   border-radius: 2px;
+    //   background: #ff5933;
+    // }
+  }
+  // .rdrDayToday .rdrDayNumber span:after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 10px;
+  //   left: 73%;
+  //   border-radius: 50% !important;
+  //   /* transform: translate(-50%, 0); */
+  //   width: 6px;
+  //   border-radius: 50%;
+  //   height: 6px;
+  //   border-radius: 2px;
+  //   background: #ff5933;
+  // }
+  // .rdrDayStartPreview {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+
+  // .rdrDayHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  // .rdrWeekHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  // .rdrWeekHovered {
+  //   top: 8px;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 8px;
+  // }
+  .rdrMonth {
+    width: 29.667em;
+    padding: 0;
+  }
+  .rdrWeekDays {
+    .rdrWeekDay {
+      color: #556178;
+      font-size: 11px;
+    }
   }
 }
+
 .performance-graph {
   width: 100%;
   .recharts-wrapper {
