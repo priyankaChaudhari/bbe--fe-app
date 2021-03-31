@@ -75,7 +75,7 @@ export default function EditPassword({ userInfo }) {
             },
             minLength: {
               value: 8,
-              message: 'Password must have at least 8 characters',
+              message: 'Password must have at least 8 characters.',
             },
           })}
         />

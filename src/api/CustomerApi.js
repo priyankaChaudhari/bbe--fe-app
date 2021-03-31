@@ -48,7 +48,7 @@ export async function getCustomerList(
     params = {
       ...params,
       daily_facts: 'week',
-      group_by: 'weekly',
+      // group_by: 'weekly',
     };
   }
 
