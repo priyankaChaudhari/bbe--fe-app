@@ -134,7 +134,7 @@ export default function Login() {
                         },
                         minLength: {
                           value: 8,
-                          message: 'Password must have at least 8 characters',
+                          message: 'Password must have at least 8 characters.',
                         },
                       })}
                     />
