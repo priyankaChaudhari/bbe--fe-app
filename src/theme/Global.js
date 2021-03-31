@@ -1145,7 +1145,7 @@ export const WhiteCard = styled.div`
        .rechart-item { 
           margin: 0 auto;
           text-align center;
-          padding-top: 15px;
+          padding-top: 10px;
        }
    }
     @media only screen and (max-width: 460px) {        
