@@ -105,7 +105,20 @@ export default function CompanyPerformance({ agreement, id }) {
   // ]);
 
   // const COLORS = ['#97ca61', '#EAEFF2'];
-
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   // const [customDateValue, setCustomDateValue] = useState([
   //   new Date(),
   //   new Date(),
@@ -425,6 +438,9 @@ export default function CompanyPerformance({ agreement, id }) {
       }
       if (selectedValue === '30days' && groupBy === 'daily') {
         return dayjs(date).date();
+      }
+      if (groupBy === 'monthy') {
+        return monthNames[dayjs(date).month()];
       }
       return dayjs(date).format('MMM D');
     }
