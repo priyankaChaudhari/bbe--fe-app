@@ -270,7 +270,7 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = dayjs(resData.report_date).format('MMM D');
+              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
               tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
               tempUnitsSoldData.push({
@@ -305,7 +305,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
               } else {
-                const dayDate = dayjs(resData.report_date).format('MMM D');
+                const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -359,7 +359,6 @@ export default function CompanyPerformance({ agreement, id }) {
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM D YYYY',
             );
-
             setDspData(res.data.pf_oi_is[0]);
 
             setPieData([
@@ -401,34 +400,36 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
-  // const xDataFormater = (date) => {
-  //   if (date) {
-  //     if (selectedValue === 'month' && groupBy === 'weekly') {
-  //       const weekNumber = Math.ceil(dayjs(date).date() / 7);
-  //       switch (weekNumber) {
-  //         case 1:
-  //           return 'Wk1';
-  //         case 2:
-  //           return 'Wk2';
-  //         case 3:
-  //           return 'Wk3';
-  //         case 4:
-  //           return 'Wk4';
-  //         default:
-  //           return 'Wk';
-  //       }
-  //     }
-  //     if (selectedValue === 'month' && groupBy === 'daily') {
-  //       return dayjs(date).day();
-  //     }
-  //     if (selectedValue === 'year' && groupBy === 'monthly') {
-  //       console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
-  //       return date.split(' ')[0];
-  //     }
-  //     return date; // .format('MMM D');
-  //   }
-  //   return date;
-  // };
+  const xDataFormater = (date) => {
+    if (date) {
+      if (selectedValue === 'month' && groupBy === 'weekly') {
+        const weekNumber = Math.ceil(dayjs(date).date() / 7);
+        switch (weekNumber) {
+          case 1:
+            return 'Wk1';
+          case 2:
+            return 'Wk2';
+          case 3:
+            return 'Wk3';
+          case 4:
+            return 'Wk4';
+          default:
+            return 'Wk';
+        }
+      }
+      if (selectedValue === 'month' && groupBy === 'daily') {
+        return dayjs(date).date();
+      }
+      if (selectedValue === 'year' && groupBy === 'monthly') {
+        return dayjs(date).date();
+      }
+      if (selectedValue === '30days' && groupBy === 'daily') {
+        return dayjs(date).date();
+      }
+      return dayjs(date).format('MMM D');
+    }
+    return dayjs(date).format('MMM D');
+  };
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
@@ -1085,7 +1086,7 @@ export default function CompanyPerformance({ agreement, id }) {
               axisLine={false}
               tickLine={false}
               dy={20}
-              // tickFormatter={xDataFormater}
+              tickFormatter={xDataFormater}
             />
             <YAxis
               type="number"
@@ -1185,9 +1186,12 @@ export default function CompanyPerformance({ agreement, id }) {
                 </Pie>
               </PieChart>
               {/* </PiechartResponsive> */}
-              <div className="last-update ">Last updated: Dec 31 2020</div>
+              <div className="last-update ">
+                Last updated: {dspData && dspData.latest_date}
+              </div>
             </WhiteCard>
           </div>
+          {/*
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1227,6 +1231,7 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
+              */}
         </div>
 
         <Modal
