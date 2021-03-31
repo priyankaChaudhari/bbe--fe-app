@@ -652,12 +652,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     selectedAmazonValue,
   ]);
 
-  const calculateDataMin = (dataMin) => {
-    if (dataMin !== Infinity) {
-      return dataMin - (dataMin * 10) / 100;
-    }
-    return 0;
-  };
+  // const calculateDataMin = (dataMin) => {
+  //   if (dataMin !== Infinity) {
+  //     return dataMin - (dataMin * 10) / 100;
+  //   }
+  //   return 0;
+  // };
 
   const bindValues = (value) => {
     const decimal = _.split(value, '.', 2);
@@ -1127,10 +1127,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tickLine={false}
                 tickFormatter={DataFormater}
                 dx={-20}
-                domain={[
-                  (dataMin) => calculateDataMin(dataMin),
-                  (dataMax) => (dataMax * 10) / 100 + dataMax,
-                ]}
+                domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
+                // domain={[
+                //   (dataMin) => calculateDataMin(dataMin),
+                //   (dataMax) => (dataMax * 10) / 100 + dataMax,
+                // ]}
               />
 
               <Tooltip content={<CustomTooltip />} />
