@@ -1354,9 +1354,10 @@ g .recharts-layer .recharts-line-dots {
 //   }
 // }
 .recharts-legend-wrapper {
-  bottom: 0px !important;
-  top: -28px !important;
+  bottom: 20px !important;
+  top: 0 !important;
   width: auto !important;
+  display: none;
 
   .recharts-default-legend {
     text-align: left !important;
@@ -1388,15 +1389,15 @@ g .recharts-layer .recharts-line-dots {
       }
     }
   }
-  @media only screen and (max-width: 768px) {
-    top: 20px !important;
-    right: 0;
-    left: 0;
-    // left: 40% !important;
-    .recharts-default-legend {
-      text-align: center !important;
-    }
-  }
+  // @media only screen and (max-width: 768px) {
+  //   top: 20px !important;
+  //   right: 0;
+  //   left: 0;
+  //   // left: 40% !important;
+  //   .recharts-default-legend {
+  //     text-align: center !important;
+  //   }
+  // }
 }
 
 .recharts-tooltip-wrapper {

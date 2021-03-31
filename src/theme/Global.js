@@ -499,8 +499,6 @@ export const WhiteCard = styled.div`
     color: ${Theme.gray90};
     font-size: 32px;
     font-weight: 500;
-
-  
   }
    .company-status {
       background: ${Theme.darkGreen};
@@ -917,12 +915,62 @@ export const WhiteCard = styled.div`
       }
     }
   }
+ .rechart-item {
+   list-style-type: none;
+      padding: 0;
+      margin: 0;
 
+      li{
+          display: inline-block;
+          margin-right: 25px;
+
+          &:last-child {
+            margin-right: none;
+          }
+
+          .weeks{
+              display: flex;
+              align-items: center;
+              flex-direction: row;
+          }
+
+          .block {
+            border-radius: 2px;
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+          }
+          .orange {
+            background: ${Theme.baseColor};
+          }
+          .gray {
+            background: ${Theme.gray25};
+          }
+          span {
+             color:${Theme.black};
+             font-size: 15px;
+          }
+    }
+  }
   .speed-rate {
     font-size: ${Theme.primaryTitleFontSize}; 
     color: ${Theme.black};
     margin-top: 75px;
     margin-bottom: 70px;
+  }
+
+  .average {
+    color: ${Theme.black};
+    font-size: ${Theme.primaryTitleFontSize}; 
+    position: absolute;
+    left: 85px;
+    top: 142px;
+
+    .out-off {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal}; 
+      margin-top: -6px;
+    }
   }
 
   .last-update {
@@ -1010,6 +1058,7 @@ export const WhiteCard = styled.div`
       .order-chart-box { 
         max-width: 100%;
       }
+    
   }
     @media only screen and (min-width: 1600px) { 
       .order-chart-box { 
@@ -1093,10 +1142,19 @@ export const WhiteCard = styled.div`
          margin: 0 auto;
          float: none;
        }
+       .rechart-item { 
+          margin: 0 auto;
+          text-align center;
+          padding-top: 10px;
+       }
    }
     @media only screen and (max-width: 460px) {        
-       .company-status {
-          white-space: nowrap;
+       .brand-name {
+         word-break: break-all;
+
+          .company-status {
+             white-space: nowrap;
+          }
        }
     }
 

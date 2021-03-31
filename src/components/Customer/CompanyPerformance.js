@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 
 import {
   LineChart,
-  // ResponsiveContainer,
+  ResponsiveContainer,
   Line,
   XAxis,
   YAxis,
@@ -99,8 +99,26 @@ export default function CompanyPerformance({ agreement, id }) {
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
 
-  // const pieData = [{ name: 'Group A', value: 15 }];
-  // const COLORS = ['#407B00'];
+  // const [pieData, setPieData] = useState([
+  //   { name: 'Inventory', value: 0 },
+  //   { name: 'Total', value: 1000 },
+  // ]);
+
+  // const COLORS = ['#97ca61', '#EAEFF2'];
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   // const [customDateValue, setCustomDateValue] = useState([
   //   new Date(),
   //   new Date(),
@@ -145,7 +163,7 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const reportOptions = [
-    { value: 'week', label: 'This Week', sub: 'vs last week' },
+    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
     { value: 'month', label: 'This Month', sub: 'vs last month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
@@ -265,7 +283,7 @@ export default function CompanyPerformance({ agreement, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = dayjs(resData.report_date).format('MMM D');
+              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
               tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
               tempUnitsSoldData.push({
@@ -300,7 +318,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
               } else {
-                const dayDate = dayjs(resData.report_date).format('MMM D');
+                const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -354,12 +372,20 @@ export default function CompanyPerformance({ agreement, id }) {
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM D YYYY',
             );
-
             setDspData(res.data.pf_oi_is[0]);
-            // setPieChartData([
+
+            // setPieData([
             //   {
             //     name: 'Inventory',
-            //     value: res.data.pf_oi_is.inventory_performance_index,
+            //     value: parseFloat(
+            //       res.data.pf_oi_is[0].inventory_performance_index,
+            //     ),
+            //   },
+            //   {
+            //     name: 'Total',
+            //     value:
+            //       1000 -
+            //       parseFloat(res.data.pf_oi_is[0].inventory_performance_index),
             //   },
             // ]);
           }
@@ -387,34 +413,39 @@ export default function CompanyPerformance({ agreement, id }) {
     }
   };
 
-  // const xDataFormater = (date) => {
-  //   if (date) {
-  //     if (selectedValue === 'month' && groupBy === 'weekly') {
-  //       const weekNumber = Math.ceil(dayjs(date).date() / 7);
-  //       switch (weekNumber) {
-  //         case 1:
-  //           return 'Wk1';
-  //         case 2:
-  //           return 'Wk2';
-  //         case 3:
-  //           return 'Wk3';
-  //         case 4:
-  //           return 'Wk4';
-  //         default:
-  //           return 'Wk';
-  //       }
-  //     }
-  //     if (selectedValue === 'month' && groupBy === 'daily') {
-  //       return dayjs(date).day();
-  //     }
-  //     if (selectedValue === 'year' && groupBy === 'monthly') {
-  //       console.log(date, 'yrrrrrrrr', date.split(' ')[0]);
-  //       return date.split(' ')[0];
-  //     }
-  //     return date; // .format('MMM D');
-  //   }
-  //   return date;
-  // };
+  const xDataFormater = (date) => {
+    if (date) {
+      if (selectedValue === 'month' && groupBy === 'weekly') {
+        const weekNumber = Math.ceil(dayjs(date).date() / 7);
+        switch (weekNumber) {
+          case 1:
+            return 'Wk1';
+          case 2:
+            return 'Wk2';
+          case 3:
+            return 'Wk3';
+          case 4:
+            return 'Wk4';
+          default:
+            return 'Wk';
+        }
+      }
+      if (selectedValue === 'month' && groupBy === 'daily') {
+        return dayjs(date).date();
+      }
+      if (selectedValue === 'year' && groupBy === 'monthly') {
+        return dayjs(date).date();
+      }
+      if (selectedValue === '30days' && groupBy === 'daily') {
+        return dayjs(date).date();
+      }
+      if (groupBy === 'monthy') {
+        return monthNames[dayjs(date).month()];
+      }
+      return dayjs(date).format('MMM D');
+    }
+    return dayjs(date).format('MMM D');
+  };
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
@@ -550,27 +581,41 @@ export default function CompanyPerformance({ agreement, id }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       if (payload.length === 2) {
+        const current = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        const previous = payload[1].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
-            <p className="label-2">{`vs $ : ${payload[1].value}`}</p>
+            <p className="label-1">{`$${current}`}</p>
+            <p className="label-2">{`vs $${previous}`}</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === ' $') {
+        const current = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-1">{`$${current}`}</p>
+            <p className="label-2">vs $0.00</p>
           </div>
         );
       }
       if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+        const previous = payload[0].value
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
             <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$ : ${payload[0].value}`}</p>
+            <p className="label-1">$0.00</p>
+            <p className="label-2">{`vs $${previous}`}</p>
           </div>
         );
       }
@@ -962,52 +1007,74 @@ export default function CompanyPerformance({ agreement, id }) {
                 4.75%
               </div>
             </li> */}
+          <div className="row mt-4">
+            <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+              <ul className="rechart-item">
+                <li>
+                  <div className="weeks">
+                    <span className="orange block" />
+                    <span>Current</span>
+                  </div>
+                </li>
+                <li>
+                  <div className="weeks">
+                    <span className="gray block" />
+                    <span>Past</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="col-md-6 col-sm-12 order-md-2 order-1">
+              {' '}
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li className={filters.daily === false ? 'disabled-tab' : ''}>
+                    {' '}
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="daysCheck"
+                      name="flexRadioDefault"
+                      value={groupBy}
+                      checked={filters.daily}
+                      onClick={() => handleGroupBy('daily')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="daysCheck">Daily</label>
+                  </li>
 
-          <div className="days-container mt-4">
-            <ul className="days-tab">
-              <li className={filters.daily === false ? 'disabled-tab' : ''}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={groupBy}
-                  checked={filters.daily}
-                  onClick={() => handleGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+                  <li
+                    className={filters.weekly === false ? 'disabled-tab' : ''}>
+                    <input
+                      className="d-none"
+                      type="radio"
+                      value={groupBy}
+                      checked={filters.weekly && groupBy === 'weekly'}
+                      id="weeklyCheck"
+                      name="flexRadioDefault"
+                      onChange={() => handleGroupBy('weekly')}
+                    />
+                    <label htmlFor="weeklyCheck">Weekly</label>
+                  </li>
 
-              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.weekly && groupBy === 'weekly'}
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                  <li className={filters.month === false ? 'disabled-tab' : ''}>
+                    <input
+                      className=" d-none"
+                      type="radio"
+                      value={groupBy}
+                      checked={filters.month}
+                      id="monthlyCheck"
+                      name="flexRadioDefault"
+                      onChange={() => handleGroupBy('monthly')}
+                    />
+                    <label htmlFor="monthlyCheck">Monthly</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-              <li className={filters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.month}
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-
-            {/* <ul className="days-tab">
+          {/* <ul className="days-tab">
               <li>
                 {' '}
                 <input
@@ -1035,51 +1102,54 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="weeklyCheck2">Monthly</label>
               </li>
             </ul> */}
-          </div>
+
           <div className="clear-fix" />
           {/* <div style={{ height: '400px', width: '1000px' }}>
             <div style={{ height: '100%', width: '60%' }}>
               <ResponsiveContainer width={'79%'} height={'30%'}> */}
-          {/* <ResponsiveContainer width={700} height="80%"> */}
-          <LineChart
-            width={750}
-            height={300}
-            data={lineChartData}
-            margin={{
-              top: 40,
-              right: 30,
-              left: 0,
-              bottom: 20,
-            }}>
-            <CartesianGrid strokeDasharray="none" />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              dy={20}
-              // tickFormatter={xDataFormater}
-            />
-            <YAxis
-              type="number"
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={DataFormater}
-              dx={-20}
-              domain={[
-                (dataMin) => calculateDataMin(dataMin),
-                (dataMax) => (dataMax * 10) / 100 + dataMax,
-              ]}
-            />
+          <ResponsiveContainer width="99%" height={400}>
+            <LineChart
+              // width={600}
+              // height={400}
+              data={lineChartData}
+              margin={{
+                top: 40,
+                right: 30,
+                left: 0,
+                bottom: 20,
+              }}>
+              <CartesianGrid strokeDasharray="none" />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                dy={20}
+                tickFormatter={xDataFormater}
+              />
+              <YAxis
+                type="number"
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={DataFormater}
+                dx={-20}
+                domain={[
+                  (dataMin) => calculateDataMin(dataMin),
+                  (dataMax) => (dataMax * 10) / 100 + dataMax,
+                ]}
+              />
 
-            <Tooltip content={<CustomTooltip />} />
-            <Legend className="tolltip-revenue" formatter={renderLegendText} />
-            <Line dataKey=" $" stroke="#FF5933" />
-            <Line dataKey="vs $" stroke="#BFC5D2" />
-          </LineChart>
-          {/* </ResponsiveContainer>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                className="tolltip-revenue"
+                formatter={renderLegendText}
+              />
+              <Line dataKey=" $" stroke="#FF5933" />
+              <Line dataKey="vs $" stroke="#BFC5D2" />
+            </LineChart>
+            {/* </ResponsiveContainer>
             </div>
           </div> */}
-          {/* </ResponsiveContainer> */}
+          </ResponsiveContainer>
         </WhiteCard>
 
         <div className="row mt-3">
@@ -1132,6 +1202,7 @@ export default function CompanyPerformance({ agreement, id }) {
             </WhiteCard>
           </div>
         </div>
+        {/* IN PROGRESSSSSSS */}
         {/* <div className="row mt-3">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
@@ -1139,30 +1210,36 @@ export default function CompanyPerformance({ agreement, id }) {
                 Inventory Score (IPI)
               </p>
               <PiechartResponsive>
-                <PieChart width={250} height={150}>
-                  <Pie
-                    data={pieData}
-                    cx={90}
-                    cy={100}
-                    startAngle={180}
-                    endAngle={0}
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#8884D8"
-                    paddingAngle={6}
-                    dataKey="value">
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </PiechartResponsive>
-              <div className="last-update ">Last updated: Dec 31 2020</div>
+                <ResponsiveContainer width="99%" height={150}>
+                  <PieChart width={250} height={190}>
+                    <Pie
+                      data={pieData}
+                      cx={90}
+                      cy={100}
+                      startAngle={180}
+                      marginBottom={40}
+                      endAngle={0}
+                      innerRadius={60}
+                      outerRadius={80}
+                      fill="#8884D8"
+                      paddingAngle={6}
+                      dataKey="value">
+                      <Cell key="cell-0" fill={COLORS[0]} />
+                      <Cell key="cell-1" fill={COLORS[1]} />
+                    </Pie>
+                  </PieChart>
+                </PiechartResponsive>
+              </ResponsiveContainer>
+              <div className="average">
+                602
+                <div className="out-off">Out of 1000</div>
+              </div>
+              <div className="last-update mt-3 ">
+                Last updated: {dspData && dspData.latest_date}
+              </div>
             </WhiteCard>
-          </div>
+          </div> */}
+        {/*
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1202,7 +1279,8 @@ export default function CompanyPerformance({ agreement, id }) {
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
           </div>
-        </div> */}
+              */}
+        {/* </div> */}
 
         <Modal
           isOpen={showCustomDateModal}
@@ -1329,10 +1407,43 @@ CompanyPerformance.propTypes = {
 
 // const ResponsiveContainer = styled.div`
 //   width: 100%;
-//   .recharts-wrapper {
-//     width: 750px;
+//   // .recharts-wrapper {
+//   //   width: 750px;
+//   //   .recharts-surface {
+//   //     width: 750px;
+//   //   }
+//   .recharts-default-legend {
+//     li {
+//       .recharts-surface {
+//         width: 14px !important;
+//       }
+//     }
+//   }
+//   // @media only screen and (min-width: 1920px) {
+//   //   width: 1100px !important;
+//   //   .recharts-surface {
+//   //     width: 1100px !important;
+//   //   }
+//   // }
+//   @media only screen and (min-width: 1600px) and max-width: 2300px {
+//     width: 866px !important;
+//     // max-width: 100% !important;
 //     .recharts-surface {
-//       width: 750px;
+//       width: 866px !important;
+//       // max-width: 100% !important;
+//     }
+//   }
+//   // @media only screen and (min-width: 1200px) {
+//   //   width: none !important;
+//   //   .recharts-surface {
+//   //     width: 800px !important;
+//   //   }
+//   // }
+//   @media only screen and (min-width: 1200px) and max-width: 1599px {
+//     width: 750px !important;
+//     max-width: 100% !important;
+//     .recharts-surface {
+//       width: 750px !important;
 //     }
 //     .recharts-default-legend {
 //       li {
@@ -1341,47 +1452,15 @@ CompanyPerformance.propTypes = {
 //         }
 //       }
 //     }
-//     @media only screen and (min-width: 1920px) {
-//       width: none !important;
+//   }
+//   @media only screen and (min-width: 992px) {
+//     .recharts-wrapper {
+//       width: 700px !important;
+//       // max-width: 100% !important;
 //       .recharts-surface {
-//         width: 1100px !important;
-//         max-width: 100% !important;
+//         width: 700px !important;
+//         // max-width: 100% !important;
 //       }
-//     }
-//     @media only screen and (min-width: 1600px) {
-//       width: 1000px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 1000px !important;
-//         max-width: 100% !important;
-//       }
-//     }
-//     // @media only screen and (min-width: 1200px) {
-//     //   width: none !important;
-//     //   .recharts-surface {
-//     //     width: 800px !important;
-//     //   }
-//     // }
-//     @media only screen and (min-width: 1200px) {
-//       width: 750px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//       }
-//       .recharts-default-legend {
-//         li {
-//           .recharts-surface {
-//             width: 14px !important;
-//           }
-//         }
-//       }
-//     }
-//     @media only screen and (min-width: 992px) {
-//       width: 750px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//         max-width: 100% !important;
 //       }
 //     }
 //     @media only screen and (max-width: 991px) {
@@ -1446,3 +1525,47 @@ CompanyPerformance.propTypes = {
 //     }
 //   }
 // `;
+
+// const ResponsiveContainer = styled.div`
+//   @media only screen and (max-width: 730px) {
+//       width: 600px !important;
+//        .recharts-surface {
+//          width: 600px !important;
+//        }
+//      }
+//     @media only screen and (max-width: 650px) {
+//       width: 500px !important;
+//       .recharts-surface {
+//         width: 500px !important;
+//       }
+//     }
+//      @media only screen and (max-width: 550px) {
+//        width: 450px !important;
+//        .recharts-surface {
+//         width: 450px !important;
+//        }
+//      }
+//      @media only screen and (max-width: 500px) {
+//        width: 400px !important;
+//        .recharts-surface {
+//          width: 400px !important;
+//        }     }
+//    @media only screen and (max-width: 450px) {
+//       width: 340px !important;
+//       .recharts-surface {
+//        width: 340px !important;
+//        }
+//     }     @media only screen and (max-width: 390px) {
+//     width: 300px !important;
+//        .recharts-surface {
+//          width: 300px !important;
+//        }
+//     }
+//     @media only screen and (max-width: 350px) {
+//       width: 260px !important;
+//       .recharts-surface {
+//         width: 260px !important;
+//       }
+//     }
+//   }
+//  `;

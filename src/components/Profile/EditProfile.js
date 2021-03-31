@@ -112,12 +112,12 @@ export default function EditProfile({ initials, userInfo }) {
                 </span>
               </span>
             </div>
-            <div className="row mt-4">
+            <div className="row ">
               {userDetails
                 .filter((part) => part.section === 1)
                 .map((item) => (
                   <React.Fragment key={item.key}>
-                    <div className="col-md-6">
+                    <div className="col-md-6 mt-2">
                       <FormField className="">
                         {generateHTML(item)}
                         <CheckPhoneNumber name="Phone" />
@@ -140,7 +140,7 @@ export default function EditProfile({ initials, userInfo }) {
                 .filter((part) => part.section === 2)
                 .map((item) => (
                   <React.Fragment key={item.key}>
-                    <div className="col-md-6">
+                    <div className="col-md-6 mt-2">
                       <FormField className="">
                         {generateHTML(item)}
                         <ErrorMsg>
