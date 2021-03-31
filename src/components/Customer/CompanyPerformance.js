@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 
 import {
   LineChart,
-  // ResponsiveContainer,
+  ResponsiveContainer,
   Line,
   XAxis,
   YAxis,
@@ -991,52 +991,74 @@ export default function CompanyPerformance({ agreement, id }) {
                 4.75%
               </div>
             </li> */}
+          <div className="row mt-4">
+            <div className="col-md-6 col-sm-12 order-md-1 order-sm-2">
+              <ul className="rechart-item">
+                <li>
+                  <div className="weeks">
+                    <span className="orange block" />
+                    <span>This week</span>
+                  </div>
+                </li>
+                <li>
+                  <div className="weeks">
+                    <span className="gray block" />
+                    <span>Last week</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="col-md-6 col-sm-12 order-md-2 order-sm-1">
+              {' '}
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li className={filters.daily === false ? 'disabled-tab' : ''}>
+                    {' '}
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="daysCheck"
+                      name="flexRadioDefault"
+                      value={groupBy}
+                      checked={filters.daily}
+                      onClick={() => handleGroupBy('daily')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="daysCheck">Daily</label>
+                  </li>
 
-          <div className="days-container mt-4">
-            <ul className="days-tab">
-              <li className={filters.daily === false ? 'disabled-tab' : ''}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={groupBy}
-                  checked={filters.daily}
-                  onClick={() => handleGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+                  <li
+                    className={filters.weekly === false ? 'disabled-tab' : ''}>
+                    <input
+                      className="d-none"
+                      type="radio"
+                      value={groupBy}
+                      checked={filters.weekly && groupBy === 'weekly'}
+                      id="weeklyCheck"
+                      name="flexRadioDefault"
+                      onChange={() => handleGroupBy('weekly')}
+                    />
+                    <label htmlFor="weeklyCheck">Weekly</label>
+                  </li>
 
-              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.weekly && groupBy === 'weekly'}
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                  <li className={filters.month === false ? 'disabled-tab' : ''}>
+                    <input
+                      className=" d-none"
+                      type="radio"
+                      value={groupBy}
+                      checked={filters.month}
+                      id="monthlyCheck"
+                      name="flexRadioDefault"
+                      onChange={() => handleGroupBy('monthly')}
+                    />
+                    <label htmlFor="monthlyCheck">Monthly</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-              <li className={filters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.month}
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-
-            {/* <ul className="days-tab">
+          {/* <ul className="days-tab">
               <li>
                 {' '}
                 <input
@@ -1064,51 +1086,54 @@ export default function CompanyPerformance({ agreement, id }) {
                 <label htmlFor="weeklyCheck2">Monthly</label>
               </li>
             </ul> */}
-          </div>
+
           <div className="clear-fix" />
           {/* <div style={{ height: '400px', width: '1000px' }}>
             <div style={{ height: '100%', width: '60%' }}>
               <ResponsiveContainer width={'79%'} height={'30%'}> */}
-          {/* <ResponsiveContainer width={700} height="80%"> */}
-          <LineChart
-            width={750}
-            height={300}
-            data={lineChartData}
-            margin={{
-              top: 40,
-              right: 30,
-              left: 0,
-              bottom: 20,
-            }}>
-            <CartesianGrid strokeDasharray="none" />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              dy={20}
-              tickFormatter={xDataFormater}
-            />
-            <YAxis
-              type="number"
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={DataFormater}
-              dx={-20}
-              domain={[
-                (dataMin) => calculateDataMin(dataMin),
-                (dataMax) => (dataMax * 10) / 100 + dataMax,
-              ]}
-            />
+          <ResponsiveContainer width="99%" height={400}>
+            <LineChart
+              // width={600}
+              // height={400}
+              data={lineChartData}
+              margin={{
+                top: 40,
+                right: 30,
+                left: 0,
+                bottom: 20,
+              }}>
+              <CartesianGrid strokeDasharray="none" />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                dy={20}
+                //tickFormatter={xDataFormater}
+              />
+              <YAxis
+                type="number"
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={DataFormater}
+                dx={-20}
+                domain={[
+                  (dataMin) => calculateDataMin(dataMin),
+                  (dataMax) => (dataMax * 10) / 100 + dataMax,
+                ]}
+              />
 
-            <Tooltip content={<CustomTooltip />} />
-            <Legend className="tolltip-revenue" formatter={renderLegendText} />
-            <Line dataKey=" $" stroke="#FF5933" />
-            <Line dataKey="vs $" stroke="#BFC5D2" />
-          </LineChart>
-          {/* </ResponsiveContainer>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                className="tolltip-revenue"
+                formatter={renderLegendText}
+              />
+              <Line dataKey=" $" stroke="#FF5933" />
+              <Line dataKey="vs $" stroke="#BFC5D2" />
+            </LineChart>
+            {/* </ResponsiveContainer>
             </div>
           </div> */}
-          {/* </ResponsiveContainer> */}
+          </ResponsiveContainer>
         </WhiteCard>
 
         <div className="row mt-3">
@@ -1359,10 +1384,43 @@ CompanyPerformance.propTypes = {
 
 // const ResponsiveContainer = styled.div`
 //   width: 100%;
-//   .recharts-wrapper {
-//     width: 750px;
+//   // .recharts-wrapper {
+//   //   width: 750px;
+//   //   .recharts-surface {
+//   //     width: 750px;
+//   //   }
+//   .recharts-default-legend {
+//     li {
+//       .recharts-surface {
+//         width: 14px !important;
+//       }
+//     }
+//   }
+//   // @media only screen and (min-width: 1920px) {
+//   //   width: 1100px !important;
+//   //   .recharts-surface {
+//   //     width: 1100px !important;
+//   //   }
+//   // }
+//   @media only screen and (min-width: 1600px) and max-width: 2300px {
+//     width: 866px !important;
+//     // max-width: 100% !important;
 //     .recharts-surface {
-//       width: 750px;
+//       width: 866px !important;
+//       // max-width: 100% !important;
+//     }
+//   }
+//   // @media only screen and (min-width: 1200px) {
+//   //   width: none !important;
+//   //   .recharts-surface {
+//   //     width: 800px !important;
+//   //   }
+//   // }
+//   @media only screen and (min-width: 1200px) and max-width: 1599px {
+//     width: 750px !important;
+//     max-width: 100% !important;
+//     .recharts-surface {
+//       width: 750px !important;
 //     }
 //     .recharts-default-legend {
 //       li {
@@ -1371,47 +1429,15 @@ CompanyPerformance.propTypes = {
 //         }
 //       }
 //     }
-//     @media only screen and (min-width: 1920px) {
-//       width: none !important;
+//   }
+//   @media only screen and (min-width: 992px) {
+//     .recharts-wrapper {
+//       width: 700px !important;
+//       // max-width: 100% !important;
 //       .recharts-surface {
-//         width: 1100px !important;
-//         max-width: 100% !important;
+//         width: 700px !important;
+//         // max-width: 100% !important;
 //       }
-//     }
-//     @media only screen and (min-width: 1600px) {
-//       width: 1000px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 1000px !important;
-//         max-width: 100% !important;
-//       }
-//     }
-//     // @media only screen and (min-width: 1200px) {
-//     //   width: none !important;
-//     //   .recharts-surface {
-//     //     width: 800px !important;
-//     //   }
-//     // }
-//     @media only screen and (min-width: 1200px) {
-//       width: 750px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//       }
-//       .recharts-default-legend {
-//         li {
-//           .recharts-surface {
-//             width: 14px !important;
-//           }
-//         }
-//       }
-//     }
-//     @media only screen and (min-width: 992px) {
-//       width: 750px !important;
-//       max-width: 100% !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//         max-width: 100% !important;
 //       }
 //     }
 //     @media only screen and (max-width: 991px) {
@@ -1476,3 +1502,47 @@ CompanyPerformance.propTypes = {
 //     }
 //   }
 // `;
+
+// const ResponsiveContainer = styled.div`
+//   @media only screen and (max-width: 730px) {
+//       width: 600px !important;
+//        .recharts-surface {
+//          width: 600px !important;
+//        }
+//      }
+//     @media only screen and (max-width: 650px) {
+//       width: 500px !important;
+//       .recharts-surface {
+//         width: 500px !important;
+//       }
+//     }
+//      @media only screen and (max-width: 550px) {
+//        width: 450px !important;
+//        .recharts-surface {
+//         width: 450px !important;
+//        }
+//      }
+//      @media only screen and (max-width: 500px) {
+//        width: 400px !important;
+//        .recharts-surface {
+//          width: 400px !important;
+//        }     }
+//    @media only screen and (max-width: 450px) {
+//       width: 340px !important;
+//       .recharts-surface {
+//        width: 340px !important;
+//        }
+//     }     @media only screen and (max-width: 390px) {
+//     width: 300px !important;
+//        .recharts-surface {
+//          width: 300px !important;
+//        }
+//     }
+//     @media only screen and (max-width: 350px) {
+//       width: 260px !important;
+//       .recharts-surface {
+//         width: 260px !important;
+//       }
+//     }
+//   }
+//  `;
