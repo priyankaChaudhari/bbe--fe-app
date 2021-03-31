@@ -47,7 +47,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 // import { fn } from 'jquery';
 const _ = require('lodash');
 
-export default function CompanyPerformance({ agreement, id }) {
+export default function CompanyPerformance({ marketplaceChoices, id }) {
   // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
   // const isDesktopMedium = useMediaQuery({ minWidth: 1201, maxWidth: 1600 });
   // const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1200 });
@@ -98,6 +98,7 @@ export default function CompanyPerformance({ agreement, id }) {
   const [dspData, setDspData] = useState(null);
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
+  const [currency, setCurrency] = useState(null);
 
   // const [pieData, setPieData] = useState([
   //   { name: 'Inventory', value: 0 },
@@ -543,7 +544,8 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const handleAmazonOptions = (event) => {
-    setSelectedAmazonValue(event.label);
+    setSelectedAmazonValue(event.value);
+    setCurrency(event.currency);
     if (selectedValue === 'custom') {
       checkDifferenceBetweenDates(
         state[0].startDate,
@@ -551,7 +553,7 @@ export default function CompanyPerformance({ agreement, id }) {
         'custom',
       );
     } else {
-      getData(selectedValue, groupBy, event.label);
+      getData(selectedValue, groupBy, event.value);
     }
   };
 
@@ -625,31 +627,24 @@ export default function CompanyPerformance({ agreement, id }) {
 
   useEffect(() => {
     const list = [];
-    list.push({
-      value:
-        agreement &&
-        agreement.primary_marketplace &&
-        agreement.primary_marketplace.id,
-      label:
-        agreement &&
-        agreement.primary_marketplace &&
-        agreement.primary_marketplace.name,
-    });
-    if (agreement && agreement.additional_marketplaces)
-      for (const option of agreement.additional_marketplaces) {
-        list.push({ value: option.id, label: option.name });
+    if (marketplaceChoices && marketplaceChoices.length > 0)
+      for (const option of marketplaceChoices) {
+        list.push({
+          value: option.name,
+          label: option.country_currency.country,
+          currency: option.country_currency.currency,
+        });
       }
     setAmazonOptions(list);
 
-    if (responseId === null && list[0].label !== null) {
-      setSelectedAmazonValue(list[0].label);
-      getData(selectedValue, groupBy, list[0].label);
+    if (responseId === null && list[0].value !== null) {
+      setSelectedAmazonValue(list[0].value);
+      setCurrency(list[0].currency);
+      getData(selectedValue, groupBy, list[0].value);
       setResponseId('12345');
     }
   }, [
-    agreement.additional_marketplaces,
-    agreement.primary_marketplace,
-    agreement,
+    marketplaceChoices,
     getData,
     responseId,
     groupBy,
@@ -747,7 +742,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 onClick={() => setChartData('revenue')}
                 role="presentation">
                 {' '}
-                <div className="chart-name">Revenue</div>
+                <div className="chart-name">Revenue ({currency})</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.revenue
                     ? // allSalesTotal.revenue.currentRevenueTotal
@@ -1352,13 +1347,13 @@ export default function CompanyPerformance({ agreement, id }) {
 
 CompanyPerformance.propTypes = {
   id: PropTypes.string.isRequired,
-  agreement: PropTypes.shape({
-    id: PropTypes.string,
-    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
-    primary_marketplace: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  }).isRequired,
+  // agreement: PropTypes.shape({
+  //   id: PropTypes.string,
+  //   additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
+  //   primary_marketplace: PropTypes.shape({
+  //     id: PropTypes.string,
+  //   }),
+  // }).isRequired,
 };
 
 // const PiechartResponsive = styled.div`
