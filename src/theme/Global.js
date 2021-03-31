@@ -499,8 +499,6 @@ export const WhiteCard = styled.div`
     color: ${Theme.gray90};
     font-size: 32px;
     font-weight: 500;
-
-  
   }
    .company-status {
       background: ${Theme.darkGreen};
@@ -961,6 +959,20 @@ export const WhiteCard = styled.div`
     margin-bottom: 70px;
   }
 
+  .average {
+    color: ${Theme.black};
+    font-size: ${Theme.primaryTitleFontSize}; 
+    position: absolute;
+    left: 85px;
+    top: 142px;
+
+    .out-off {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal}; 
+      margin-top: -6px;
+    }
+  }
+
   .last-update {
     color: ${Theme.gray40};
     font-size: ${Theme.extraNormal}; 
@@ -1137,8 +1149,12 @@ export const WhiteCard = styled.div`
        }
    }
     @media only screen and (max-width: 460px) {        
-       .company-status {
-          white-space: nowrap;
+       .brand-name {
+         word-break: break-all;
+
+          .company-status {
+             white-space: nowrap;
+          }
        }
     }
 

@@ -992,23 +992,23 @@ export default function CompanyPerformance({ agreement, id }) {
               </div>
             </li> */}
           <div className="row mt-4">
-            <div className="col-md-6 col-sm-12 order-md-1 order-sm-2">
+            <div className="col-md-6 col-sm-12 order-md-1 order-2">
               <ul className="rechart-item">
                 <li>
                   <div className="weeks">
                     <span className="orange block" />
-                    <span>This week</span>
+                    <span>Current</span>
                   </div>
                 </li>
                 <li>
                   <div className="weeks">
                     <span className="gray block" />
-                    <span>Last week</span>
+                    <span>Past</span>
                   </div>
                 </li>
               </ul>
             </div>
-            <div className="col-md-6 col-sm-12 order-md-2 order-sm-1">
+            <div className="col-md-6 col-sm-12 order-md-2 order-1">
               {' '}
               <div className="days-container ">
                 <ul className="days-tab">
@@ -1108,7 +1108,7 @@ export default function CompanyPerformance({ agreement, id }) {
                 axisLine={false}
                 tickLine={false}
                 dy={20}
-                //tickFormatter={xDataFormater}
+                tickFormatter={xDataFormater}
               />
               <YAxis
                 type="number"
@@ -1194,12 +1194,14 @@ export default function CompanyPerformance({ agreement, id }) {
                 Inventory Score (IPI)
               </p>
               {/* <PiechartResponsive> */}
-              <PieChart width={250} height={150}>
+              {/* <ResponsiveContainer width="99%" height={150}> */}
+              <PieChart width={250} height={190}>
                 <Pie
                   data={pieData}
                   cx={90}
                   cy={100}
                   startAngle={180}
+                  marginBottom={40}
                   endAngle={0}
                   innerRadius={60}
                   outerRadius={80}
@@ -1211,7 +1213,12 @@ export default function CompanyPerformance({ agreement, id }) {
                 </Pie>
               </PieChart>
               {/* </PiechartResponsive> */}
-              <div className="last-update ">
+              {/* </ResponsiveContainer> */}
+              <div className="average">
+                602
+                <div className="out-off">Out of 1000</div>
+              </div>
+              <div className="last-update mt-3 ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
             </WhiteCard>
