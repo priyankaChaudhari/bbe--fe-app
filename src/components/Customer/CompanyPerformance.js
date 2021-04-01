@@ -165,7 +165,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const reportOptions = [
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
-    { value: 'month', label: 'This Month', sub: 'vs last month' },
+    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
     // {
@@ -377,7 +377,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             const ipiValue = parseFloat(
               res.data.pf_oi_is[0].inventory_performance_index,
             );
-            console.log('is NAN>>>>>', Number.isNaN(ipiValue));
             if (Number.isNaN(ipiValue)) {
               setPieData([
                 {
@@ -401,6 +400,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 },
               ]);
             }
+          } else {
+            setPieData([
+              { name: 'Inventory', value: 'N/A' },
+              { name: 'Total', value: 1000 },
+            ]);
           }
         }
       });
@@ -457,7 +461,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       }
       return dayjs(date).format('MMM D');
     }
-    return dayjs(date).format('MMM D');
+    return date;
   };
 
   const DataFormater = (number) => {
