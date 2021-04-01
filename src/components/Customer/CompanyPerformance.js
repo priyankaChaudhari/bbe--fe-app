@@ -637,7 +637,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       }
     setAmazonOptions(list);
 
-    if (responseId === null && list[0].value !== null) {
+    if (responseId === null && list.length && list[0].value !== null) {
       setSelectedAmazonValue(list[0].value);
       setCurrency(list[0].currency);
       getData(selectedValue, groupBy, list[0].value);
@@ -1127,7 +1127,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tickLine={false}
                 tickFormatter={DataFormater}
                 dx={-20}
-                domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
+                allowDataOverflow
+                // domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
                 // domain={[
                 //   (dataMin) => calculateDataMin(dataMin),
                 //   (dataMax) => (dataMax * 10) / 100 + dataMax,
