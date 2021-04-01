@@ -46,7 +46,7 @@ import {
   getLength,
   // updateAccountDetails,
   getRevenueShare,
-  getMarketplaces,
+  // getMarketplaces,
   getMonthlyService,
   getOneTimeService,
   createAddendum,
@@ -119,14 +119,20 @@ export default function AgreementSidePanel({
   setSectionError,
   setDiscountFlag,
   isEditContract,
+  marketplacesResult,
+  // setMarketplacesResult,
+  marketPlaces,
+  setMarketPlaces,
+  additionalMarketplaces,
+  setAdditionalMarketplaces,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
-  const [marketPlaces, setMarketPlaces] = useState([]);
-  const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
+  // const [marketPlaces, setMarketPlaces] = useState([]);
+  // const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
 
   // const agreement = useSelector((state) => state.accountState.data);
   // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
@@ -446,10 +452,11 @@ export default function AgreementSidePanel({
         );
       }
     });
-    getMarketplaces().then((market) => {
-      setMarketPlaces(market.data);
-      setAdditionalMarketplaces(market.data);
-    });
+    // getMarketplaces().then((market) => {
+    //   setMarketPlaces(market.data);
+    //   setAdditionalMarketplaces(market.data);
+    //   setMarketplacesResult(market.data);
+    // });
   }, []);
 
   const DropdownIndicator = (props) => {
@@ -530,19 +537,32 @@ export default function AgreementSidePanel({
       getContractActivityLogInfo();
     }
 
-    if (
-      agreementData &&
-      agreementData.primary_marketplace &&
-      agreementData.primary_marketplace.name
-    ) {
-      setAdditionalMarketplaces(
-        marketPlaces.filter(
-          (op) => op.value !== agreementData.primary_marketplace.name,
-        ),
-      );
-    } else {
-      setAdditionalMarketplaces(marketPlaces);
-    }
+    // if (
+    //   agreementData &&
+    //   agreementData.primary_marketplace &&
+    //   agreementData.primary_marketplace.name
+    // ) {
+    //   setAdditionalMarketplaces(
+    //     marketPlaces.filter(
+    //       (op) => op.value !== agreementData.primary_marketplace.name,
+    //     ),
+    //   );
+    // } else {
+    //   setAdditionalMarketplaces(marketPlaces);
+    // }
+
+    // if (agreementData && agreementData.additional_marketplaces) {
+    //   setMarketPlaces(
+    //     additionalMarketplaces.filter(
+    //       (choice) =>
+    //         !(agreementData && agreementData.additional_marketplaces).some(
+    //           (item) => item.name === choice.value,
+    //         ),
+    //     ),
+    //   );
+    // }
+
+    // console.log(agreementData, additionalMarketplaces, marketPlaces);
   }, [agreementData]);
   const clearOneTimeQntyError = (val) => {
     const itemFound =
@@ -901,7 +921,9 @@ export default function AgreementSidePanel({
         setAdditionalMarketplaces(
           marketPlaces.filter((op) => op.value !== event.value),
         );
+        // setMarketPlaces();
       }
+
       setFormData({ ...formData, [key]: event.value });
       setUpdatedFormData({ ...updatedFormData, [key]: event.value });
     } else if (type === 'qty') {
@@ -912,20 +934,54 @@ export default function AgreementSidePanel({
       });
     } else if (key === 'additional_marketplaces_checkbox') {
       if (event.target.checked) {
-        if (
-          originalData &&
-          originalData.additional_marketplaces &&
-          originalData.additional_marketplaces.length
-        ) {
-          additionalMarketplacesData.create =
-            originalData.additional_marketplaces;
-          additionalMarketplacesData.delete = [];
+        setFormData({
+          ...formData,
+          additional_marketplaces: [],
+        });
 
-          setFormData({
-            ...formData,
-            additional_marketplaces: additionalMarketplacesData.create,
-          });
+        if (
+          agreementData &&
+          agreementData.primary_marketplace &&
+          agreementData.primary_marketplace.name
+        ) {
+          setAdditionalMarketplaces(
+            marketplacesResult.filter(
+              (op) => op.value !== agreementData.primary_marketplace.name,
+            ),
+          );
+        } else {
+          setAdditionalMarketplaces(marketplacesResult);
         }
+
+        // }
+
+        // if (
+        //   originalData &&
+        //   originalData.additional_marketplaces &&
+        //   originalData.additional_marketplaces.length
+        // ) {
+        //   additionalMarketplacesData.create =
+        //     originalData.additional_marketplaces;
+        //   additionalMarketplacesData.delete = [];
+
+        //   setFormData({
+        //     ...formData,
+        //     additional_marketplaces: additionalMarketplacesData.create,
+        //   });
+        // }
+
+        // if (originalData.additional_marketplaces) {
+        //   setMarketPlaces(
+        //     marketplacesResult.filter(
+        //       (choice) =>
+        //         !originalData.additional_marketplaces.some(
+        //           (item) => item.name === choice.value,
+        //         ),
+        //     ),
+        //   );
+        // } else {
+        //   setMarketPlaces(marketplacesResult);
+        // }
       } else {
         const itemsToBeDelete =
           additionalMarketplacesData &&
@@ -956,14 +1012,26 @@ export default function AgreementSidePanel({
       setAdditionalMarketplace({
         ...additionalMarketplacesData,
       });
+
+      setMarketPlaces(marketplacesResult);
+
+      // if (updatedCreateList) {
+      //   setMarketPlaces(
+      //     marketplacesResult.filter(
+      //       (choice) =>
+      //         !updatedCreateList.some((item) => item.name === choice.value),
+      //     ),
+      //   );
+      // }
     } else if (type === 'multichoice') {
       // setFormData({ ...formData, [key]: event });
       // setUpdatedFormData({ ...updatedFormData, [key]: event });
 
       if (val.action === 'select-option') {
-        setMarketPlaces(
-          additionalMarketplaces.filter((op) => op.value !== val.option.value),
-        );
+        // setMarketPlaces(
+        //   // additionalMarketplaces.filter((op) => op.value !== val.option.value),
+        //   formData && formData.additional_marketplaces.filter((op) => op.value !== val.option.value),
+        // );
         const itemInFormData =
           originalData &&
           originalData.additional_marketplaces &&
@@ -1050,6 +1118,17 @@ export default function AgreementSidePanel({
         setAdditionalMarketplace({
           ...additionalMarketplacesData,
         });
+
+        if (additionalMarketplacesData.create) {
+          setMarketPlaces(
+            marketplacesResult.filter(
+              (choice) =>
+                !additionalMarketplacesData.create.some(
+                  (item) => item.name === choice.value,
+                ),
+            ),
+          );
+        }
       }
       if (val.action === 'remove-value') {
         const itemInFormData =
@@ -1095,6 +1174,15 @@ export default function AgreementSidePanel({
         setAdditionalMarketplace({
           ...additionalMarketplacesData,
         });
+
+        if (updatedCreateList) {
+          setMarketPlaces(
+            marketplacesResult.filter(
+              (choice) =>
+                !updatedCreateList.some((item) => item.name === choice.value),
+            ),
+          );
+        }
         // if (
         //   !(
         //     formData &&
@@ -3683,9 +3771,13 @@ export default function AgreementSidePanel({
                                     );
                                   }}
                                   defaultChecked={
-                                    agreementData &&
-                                    agreementData.additional_marketplaces &&
-                                    agreementData.additional_marketplaces.length
+                                    (agreementData &&
+                                      agreementData.additional_marketplaces &&
+                                      agreementData.additional_marketplaces
+                                        .length) ||
+                                    (formData &&
+                                      formData.additional_marketplaces &&
+                                      formData.additional_marketplaces.length)
                                   }
                                 />
                                 <span className="checkmark" />
