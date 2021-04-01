@@ -736,8 +736,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <div
                 className={
                   activeSales === 'revenue'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('revenue')}
                 role="presentation">
@@ -801,8 +801,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <div
                 className={
                   activeSales === 'units sold'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('units sold')}
                 role="presentation">
@@ -867,8 +867,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <div
                 className={
                   activeSales === 'traffic'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('traffic')}
                 role="presentation">
@@ -927,12 +927,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6">
+            <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3">
               <div
                 className={
                   activeSales === 'conversion'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('conversion')}
                 role="presentation">

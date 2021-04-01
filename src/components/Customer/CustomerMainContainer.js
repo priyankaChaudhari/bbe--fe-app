@@ -363,7 +363,10 @@ export default function CustomerMainContainer() {
                       </div>
                       <div className="col-lg-9 col-md-12 ">
                         <span className="brand-name ">
-                          {agreement && agreement.contract_company_name}
+                          <span className="company-name">
+                            {' '}
+                            {agreement && agreement.contract_company_name}
+                          </span>
 
                           {agreement &&
                           agreement.contract_status &&
