@@ -971,6 +971,7 @@ export const WhiteCard = styled.div`
     position: absolute;
     left: 85px;
     top: 142px;
+    text-align: center;
 
     .out-off {
       color: ${Theme.gray40};
@@ -978,6 +979,7 @@ export const WhiteCard = styled.div`
       margin-top: -6px;
     }
   }
+  
 
   .last-update {
     color: ${Theme.gray40};

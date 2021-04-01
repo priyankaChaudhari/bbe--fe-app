@@ -17,9 +17,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  // PieChart,
-  // Pie,
-  // Cell,
+  PieChart,
+  Pie,
+  Cell,
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -100,12 +100,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
 
-  // const [pieData, setPieData] = useState([
-  //   { name: 'Inventory', value: 0 },
-  //   { name: 'Total', value: 1000 },
-  // ]);
+  const [pieData, setPieData] = useState([
+    { name: 'Inventory', value: 'N/A' },
+    { name: 'Total', value: 1000 },
+  ]);
 
-  // const COLORS = ['#97ca61', '#EAEFF2'];
+  const COLORS = ['#97ca61', '#EAEFF2'];
   const monthNames = [
     'Jan',
     'Feb',
@@ -374,21 +374,33 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               'MMM D YYYY',
             );
             setDspData(res.data.pf_oi_is[0]);
-
-            // setPieData([
-            //   {
-            //     name: 'Inventory',
-            //     value: parseFloat(
-            //       res.data.pf_oi_is[0].inventory_performance_index,
-            //     ),
-            //   },
-            //   {
-            //     name: 'Total',
-            //     value:
-            //       1000 -
-            //       parseFloat(res.data.pf_oi_is[0].inventory_performance_index),
-            //   },
-            // ]);
+            const ipiValue = parseFloat(
+              res.data.pf_oi_is[0].inventory_performance_index,
+            );
+            console.log('is NAN>>>>>', Number.isNaN(ipiValue));
+            if (Number.isNaN(ipiValue)) {
+              setPieData([
+                {
+                  name: 'Inventory',
+                  value: 'N/A',
+                },
+                {
+                  name: 'Total',
+                  value: 1000,
+                },
+              ]);
+            } else {
+              setPieData([
+                {
+                  name: 'Inventory',
+                  value: ipiValue,
+                },
+                {
+                  name: 'Total',
+                  value: 1000 - ipiValue,
+                },
+              ]);
+            }
           }
         }
       });
@@ -1200,43 +1212,46 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           </div>
         </div>
         {/* IN PROGRESSSSSSS */}
-        {/* <div className="row mt-3">
+        <div className="row mt-3">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
               </p>
-              <PiechartResponsive>
-                <ResponsiveContainer width="99%" height={150}>
-                  <PieChart width={250} height={190}>
-                    <Pie
-                      data={pieData}
-                      cx={90}
-                      cy={100}
-                      startAngle={180}
-                      marginBottom={40}
-                      endAngle={0}
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884D8"
-                      paddingAngle={6}
-                      dataKey="value">
-                      <Cell key="cell-0" fill={COLORS[0]} />
-                      <Cell key="cell-1" fill={COLORS[1]} />
-                    </Pie>
-                  </PieChart>
-                </PiechartResponsive>
+              {/* <PiechartResponsive> */}
+              <ResponsiveContainer width="99%" height={150}>
+                <PieChart width={250} height={190}>
+                  <Pie
+                    data={pieData}
+                    cx={90}
+                    cy={100}
+                    startAngle={180}
+                    marginBottom={40}
+                    endAngle={0}
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884D8"
+                    paddingAngle={6}
+                    dataKey="value">
+                    <Cell key="cell-0" fill={COLORS[0]} />
+                    <Cell key="cell-1" fill={COLORS[1]} />
+                  </Pie>
+                </PieChart>
               </ResponsiveContainer>
+              {/* </PiechartResponsive> */}
+
               <div className="average">
-                602
+                {pieData && pieData.length && !Number.isNaN(pieData[0].value)
+                  ? pieData[0].value
+                  : 'N/A'}
                 <div className="out-off">Out of 1000</div>
               </div>
               <div className="last-update mt-3 ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
             </WhiteCard>
-          </div> */}
-        {/*
+          </div>
+          {/*
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1275,9 +1290,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </LineChart>
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
-          </div>
-              */}
-        {/* </div> */}
+          </div> */}
+        </div>
 
         <Modal
           isOpen={showCustomDateModal}
