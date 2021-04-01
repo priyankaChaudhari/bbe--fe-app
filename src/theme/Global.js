@@ -411,10 +411,12 @@ export const WhiteCard = styled.div`
   padding:   20px ;
   position: relative;
   
-
-
-  
  &.fix-height {
+    flex-wrap: wrap;
+    flex: initial;
+    height: 100%;
+  }
+  .fix-height {
     flex-wrap: wrap;
     flex: initial;
     height: 100%;
@@ -499,6 +501,10 @@ export const WhiteCard = styled.div`
     color: ${Theme.gray90};
     font-size: 32px;
     font-weight: 500;
+   
+    .company-name {
+      margin-right: 15px;
+    }
   }
    .company-status {
       background: ${Theme.darkGreen};
@@ -506,7 +512,6 @@ export const WhiteCard = styled.div`
       padding: 3px 10px;
       color: ${Theme.gray6};
       font-size: ${Theme.extraNormal};
-      margin-left: 15px;
       top: -5px;
       cursor:pointer;
       position:relative;
@@ -825,8 +830,9 @@ export const WhiteCard = styled.div`
 
       .number-rate {
         color: ${Theme.gray80};
-        font-size:26px;
-        padding-top:15px;
+        font-size: 26px;
+        padding-top: 15px;
+        word-break: break-all;
       }
       .chart-name {
         color:${Theme.gray40};
@@ -965,6 +971,7 @@ export const WhiteCard = styled.div`
     position: absolute;
     left: 85px;
     top: 142px;
+    text-align: center;
 
     .out-off {
       color: ${Theme.gray40};
@@ -972,6 +979,7 @@ export const WhiteCard = styled.div`
       margin-top: -6px;
     }
   }
+  
 
   .last-update {
     color: ${Theme.gray40};

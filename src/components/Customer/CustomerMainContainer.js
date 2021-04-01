@@ -54,6 +54,7 @@ import {
   getAmazonDetails,
   getCustomerMembers,
   getDocumentList,
+  getMarketPlaceList,
 } from '../../api';
 import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_CUSTOMER_LIST } from '../../constants';
@@ -102,6 +103,7 @@ export default function CustomerMainContainer() {
     add: false,
     modal: false,
   });
+  const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [memberData, setMemberData] = useState([]);
   const [activityData, setActivityData] = useState([]);
   const [activityCount, setActivityCount] = useState(null);
@@ -197,10 +199,17 @@ export default function CustomerMainContainer() {
     });
   }, [id]);
 
+  const getMarketPlace = useCallback(() => {
+    getMarketPlaceList(id).then((res) => {
+      setMarketplaceChoices(res && res.data);
+    });
+  }, [id]);
+
   useEffect(() => {
     dispatch(getAccountDetails(id));
     dispatch(getCustomerDetails(id));
     dispatch(getContactDetails(id));
+    getMarketPlace(id);
     getCustomerMemberList();
     getActivityLogInfo();
     getAmazon();
@@ -213,6 +222,7 @@ export default function CustomerMainContainer() {
     getCustomerMemberList,
     getActivityLogInfo,
     getAmazon,
+    getMarketPlace,
     profileLoader,
   ]);
 
@@ -353,7 +363,10 @@ export default function CustomerMainContainer() {
                       </div>
                       <div className="col-lg-9 col-md-12 ">
                         <span className="brand-name ">
-                          {agreement && agreement.contract_company_name}
+                          <span className="company-name">
+                            {' '}
+                            {agreement && agreement.contract_company_name}
+                          </span>
 
                           {agreement &&
                           agreement.contract_status &&
@@ -712,7 +725,10 @@ export default function CustomerMainContainer() {
                         getActivityLogInfo={getActivityLogInfo}
                       />
                     ) : viewComponent === 'performance' ? (
-                      <CompanyPerformance agreement={agreement} id={id} />
+                      <CompanyPerformance
+                        marketplaceChoices={marketplaceChoices}
+                        id={id}
+                      />
                     ) : (
                       <Activity
                         activityData={activityData}

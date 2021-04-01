@@ -55,6 +55,7 @@ export {
   getMarketplaces,
   getAdditionalServices,
   getContractStatus,
+  getMarketPlaceList,
 } from './ChoicesApi';
 
 // Contract

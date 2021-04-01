@@ -17,9 +17,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  // PieChart,
-  // Pie,
-  // Cell,
+  PieChart,
+  Pie,
+  Cell,
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -47,7 +47,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 // import { fn } from 'jquery';
 const _ = require('lodash');
 
-export default function CompanyPerformance({ agreement, id }) {
+export default function CompanyPerformance({ marketplaceChoices, id }) {
   // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
   // const isDesktopMedium = useMediaQuery({ minWidth: 1201, maxWidth: 1600 });
   // const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1200 });
@@ -98,13 +98,14 @@ export default function CompanyPerformance({ agreement, id }) {
   const [dspData, setDspData] = useState(null);
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
+  const [currency, setCurrency] = useState(null);
 
-  // const [pieData, setPieData] = useState([
-  //   { name: 'Inventory', value: 0 },
-  //   { name: 'Total', value: 1000 },
-  // ]);
+  const [pieData, setPieData] = useState([
+    { name: 'Inventory', value: 'N/A' },
+    { name: 'Total', value: 1000 },
+  ]);
 
-  // const COLORS = ['#97ca61', '#EAEFF2'];
+  const COLORS = ['#97ca61', '#EAEFF2'];
   const monthNames = [
     'Jan',
     'Feb',
@@ -373,21 +374,33 @@ export default function CompanyPerformance({ agreement, id }) {
               'MMM D YYYY',
             );
             setDspData(res.data.pf_oi_is[0]);
-
-            // setPieData([
-            //   {
-            //     name: 'Inventory',
-            //     value: parseFloat(
-            //       res.data.pf_oi_is[0].inventory_performance_index,
-            //     ),
-            //   },
-            //   {
-            //     name: 'Total',
-            //     value:
-            //       1000 -
-            //       parseFloat(res.data.pf_oi_is[0].inventory_performance_index),
-            //   },
-            // ]);
+            const ipiValue = parseFloat(
+              res.data.pf_oi_is[0].inventory_performance_index,
+            );
+            console.log('is NAN>>>>>', Number.isNaN(ipiValue));
+            if (Number.isNaN(ipiValue)) {
+              setPieData([
+                {
+                  name: 'Inventory',
+                  value: 'N/A',
+                },
+                {
+                  name: 'Total',
+                  value: 1000,
+                },
+              ]);
+            } else {
+              setPieData([
+                {
+                  name: 'Inventory',
+                  value: ipiValue,
+                },
+                {
+                  name: 'Total',
+                  value: 1000 - ipiValue,
+                },
+              ]);
+            }
           }
         }
       });
@@ -543,7 +556,8 @@ export default function CompanyPerformance({ agreement, id }) {
   };
 
   const handleAmazonOptions = (event) => {
-    setSelectedAmazonValue(event.label);
+    setSelectedAmazonValue(event.value);
+    setCurrency(event.currency);
     if (selectedValue === 'custom') {
       checkDifferenceBetweenDates(
         state[0].startDate,
@@ -551,7 +565,7 @@ export default function CompanyPerformance({ agreement, id }) {
         'custom',
       );
     } else {
-      getData(selectedValue, groupBy, event.label);
+      getData(selectedValue, groupBy, event.value);
     }
   };
 
@@ -625,31 +639,24 @@ export default function CompanyPerformance({ agreement, id }) {
 
   useEffect(() => {
     const list = [];
-    list.push({
-      value:
-        agreement &&
-        agreement.primary_marketplace &&
-        agreement.primary_marketplace.id,
-      label:
-        agreement &&
-        agreement.primary_marketplace &&
-        agreement.primary_marketplace.name,
-    });
-    if (agreement && agreement.additional_marketplaces)
-      for (const option of agreement.additional_marketplaces) {
-        list.push({ value: option.id, label: option.name });
+    if (marketplaceChoices && marketplaceChoices.length > 0)
+      for (const option of marketplaceChoices) {
+        list.push({
+          value: option.name,
+          label: option.country_currency.country,
+          currency: option.country_currency.currency,
+        });
       }
     setAmazonOptions(list);
 
-    if (responseId === null && list[0].label !== null) {
-      setSelectedAmazonValue(list[0].label);
-      getData(selectedValue, groupBy, list[0].label);
+    if (responseId === null && list.length && list[0].value !== null) {
+      setSelectedAmazonValue(list[0].value);
+      setCurrency(list[0].currency);
+      getData(selectedValue, groupBy, list[0].value);
       setResponseId('12345');
     }
   }, [
-    agreement.additional_marketplaces,
-    agreement.primary_marketplace,
-    agreement,
+    marketplaceChoices,
     getData,
     responseId,
     groupBy,
@@ -657,12 +664,12 @@ export default function CompanyPerformance({ agreement, id }) {
     selectedAmazonValue,
   ]);
 
-  const calculateDataMin = (dataMin) => {
-    if (dataMin !== Infinity) {
-      return dataMin - (dataMin * 10) / 100;
-    }
-    return 0;
-  };
+  // const calculateDataMin = (dataMin) => {
+  //   if (dataMin !== Infinity) {
+  //     return dataMin - (dataMin * 10) / 100;
+  //   }
+  //   return 0;
+  // };
 
   const bindValues = (value) => {
     const decimal = _.split(value, '.', 2);
@@ -741,13 +748,13 @@ export default function CompanyPerformance({ agreement, id }) {
               <div
                 className={
                   activeSales === 'revenue'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('revenue')}
                 role="presentation">
                 {' '}
-                <div className="chart-name">Revenue</div>
+                <div className="chart-name">Revenue ({currency})</div>
                 <div className="number-rate">
                   {allSalesTotal && allSalesTotal.revenue
                     ? // allSalesTotal.revenue.currentRevenueTotal
@@ -806,8 +813,8 @@ export default function CompanyPerformance({ agreement, id }) {
               <div
                 className={
                   activeSales === 'units sold'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('units sold')}
                 role="presentation">
@@ -872,8 +879,8 @@ export default function CompanyPerformance({ agreement, id }) {
               <div
                 className={
                   activeSales === 'traffic'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('traffic')}
                 role="presentation">
@@ -932,12 +939,12 @@ export default function CompanyPerformance({ agreement, id }) {
                 </div>
               </div>
             </div>
-            <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6">
+            <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3">
               <div
                 className={
                   activeSales === 'conversion'
-                    ? 'order-chart-box active'
-                    : 'order-chart-box'
+                    ? 'order-chart-box active fix-height '
+                    : 'order-chart-box fix-height '
                 }
                 onClick={() => setChartData('conversion')}
                 role="presentation">
@@ -1132,10 +1139,12 @@ export default function CompanyPerformance({ agreement, id }) {
                 tickLine={false}
                 tickFormatter={DataFormater}
                 dx={-20}
-                domain={[
-                  (dataMin) => calculateDataMin(dataMin),
-                  (dataMax) => (dataMax * 10) / 100 + dataMax,
-                ]}
+                allowDataOverflow
+                // domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
+                // domain={[
+                //   (dataMin) => calculateDataMin(dataMin),
+                //   (dataMax) => (dataMax * 10) / 100 + dataMax,
+                // ]}
               />
 
               <Tooltip content={<CustomTooltip />} />
@@ -1203,43 +1212,46 @@ export default function CompanyPerformance({ agreement, id }) {
           </div>
         </div>
         {/* IN PROGRESSSSSSS */}
-        {/* <div className="row mt-3">
+        <div className="row mt-3">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
               </p>
-              <PiechartResponsive>
-                <ResponsiveContainer width="99%" height={150}>
-                  <PieChart width={250} height={190}>
-                    <Pie
-                      data={pieData}
-                      cx={90}
-                      cy={100}
-                      startAngle={180}
-                      marginBottom={40}
-                      endAngle={0}
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884D8"
-                      paddingAngle={6}
-                      dataKey="value">
-                      <Cell key="cell-0" fill={COLORS[0]} />
-                      <Cell key="cell-1" fill={COLORS[1]} />
-                    </Pie>
-                  </PieChart>
-                </PiechartResponsive>
+              {/* <PiechartResponsive> */}
+              <ResponsiveContainer width="99%" height={150}>
+                <PieChart width={250} height={190}>
+                  <Pie
+                    data={pieData}
+                    cx={90}
+                    cy={100}
+                    startAngle={180}
+                    marginBottom={40}
+                    endAngle={0}
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884D8"
+                    paddingAngle={6}
+                    dataKey="value">
+                    <Cell key="cell-0" fill={COLORS[0]} />
+                    <Cell key="cell-1" fill={COLORS[1]} />
+                  </Pie>
+                </PieChart>
               </ResponsiveContainer>
+              {/* </PiechartResponsive> */}
+
               <div className="average">
-                602
+                {pieData && pieData.length && !Number.isNaN(pieData[0].value)
+                  ? pieData[0].value
+                  : 'N/A'}
                 <div className="out-off">Out of 1000</div>
               </div>
               <div className="last-update mt-3 ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
             </WhiteCard>
-          </div> */}
-        {/*
+          </div>
+          {/*
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1278,9 +1290,8 @@ export default function CompanyPerformance({ agreement, id }) {
               </LineChart>
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
-          </div>
-              */}
-        {/* </div> */}
+          </div> */}
+        </div>
 
         <Modal
           isOpen={showCustomDateModal}
@@ -1352,13 +1363,13 @@ export default function CompanyPerformance({ agreement, id }) {
 
 CompanyPerformance.propTypes = {
   id: PropTypes.string.isRequired,
-  agreement: PropTypes.shape({
-    id: PropTypes.string,
-    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
-    primary_marketplace: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  }).isRequired,
+  // agreement: PropTypes.shape({
+  //   id: PropTypes.string,
+  //   additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
+  //   primary_marketplace: PropTypes.shape({
+  //     id: PropTypes.string,
+  //   }),
+  // }).isRequired,
 };
 
 // const PiechartResponsive = styled.div`

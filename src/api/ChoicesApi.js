@@ -3,6 +3,7 @@ import {
   API_BGS,
   API_CHOICES,
   API_SERVICE_TYPE,
+  API_MARKETPLACES,
 } from '../constants/ApiConstants';
 
 export async function getStatus() {
@@ -197,3 +198,10 @@ export async function getContractStatus() {
     });
   return result;
 }
+
+export const getMarketPlaceList = async (id) => {
+  const response = await axiosInstance.get(API_MARKETPLACES, {
+    params: { customer_id: id },
+  });
+  return response;
+};
