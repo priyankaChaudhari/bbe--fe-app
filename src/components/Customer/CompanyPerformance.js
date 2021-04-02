@@ -1250,6 +1250,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   : 'N/A'}
                 <div className="out-off">Out of 1000</div>
               </div>
+              <br />
               <div className="last-update mt-3 ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
