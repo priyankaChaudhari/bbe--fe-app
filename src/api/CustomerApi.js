@@ -446,3 +446,21 @@ export async function getPerformance(
     });
   return result;
 }
+
+export async function getBuyBoxChartData(customer, marketplace, bbDailyFact) {
+  const params = {
+    daily_facts: 'week',
+    group_by: 'daily',
+    marketplace,
+    bbep_interval: bbDailyFact,
+  };
+  const result = await axiosInstance
+    .get(`${API_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

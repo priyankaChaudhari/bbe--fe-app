@@ -27,13 +27,9 @@ import Select, { components } from 'react-select';
 import { parseInt } from 'lodash';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { getPerformance } from '../../api';
+import { getPerformance, getBuyBoxChartData } from '../../api';
 
 import {
-  // CopyLinkIcon,
-  // InfoIcons,
-  // ExternalLink,
-
   ArrowUpIcon,
   ArrowDownIcon,
   CaretUp,
@@ -43,16 +39,17 @@ import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-// import styled from 'styled-components';
-// import { fn } from 'jquery';
+
 const _ = require('lodash');
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState('week');
+  const [bBDailyFact, setBBDailyFact] = useState('week');
   const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
   const [lineChartData, setLineChartData] = useState([{}]);
+  const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
@@ -133,8 +130,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     },
   ];
 
-  // const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
-
   const filterOption = (props) => (
     <Option {...props}>
       <div className="pb-2">
@@ -185,6 +180,35 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return parseFloat(diff.toFixed(2));
   };
 
+  const getBBData = useCallback(
+    (marketplace, dailyFact) => {
+      // setIsLoading({ loader: true, type: 'button' });
+      getBuyBoxChartData(id, marketplace, dailyFact).then((res) => {
+        if (res && res.status === 400) {
+          // setApiError(res && res.data);
+          // setIsLoading({ loader: false, type: 'button' });
+        }
+        if (res && res.status === 200 && res.data && res.data.bbep) {
+          const avg =
+            res.data.bbep
+              .filter((record) => record.bbep)
+              .reduce((acc, record) => acc + record.bbep, 0) /
+              res.data.bbep.length || 0;
+
+          const tempBBData = res.data.bbep.map((data) => {
+            return {
+              date: dayjs(data.report_date).format('MMM D'),
+              value: data.bbep,
+              avg: avg.toFixed(2),
+            };
+          });
+          setBBChartData(tempBBData);
+        }
+      });
+    },
+    [id],
+  );
+
   const getData = useCallback(
     (
       selectedDailyFact,
@@ -207,7 +231,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           // setIsLoading({ loader: false, type: 'button' });
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          // const tempData = [];
           const tempRevenueData = [];
           const tempUnitsSoldData = [];
           const tempTrafficData = [];
@@ -237,7 +260,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.daily_facts.previous &&
             res.data.daily_facts.previous.length
           ) {
-            res.data.daily_facts.previous.forEach(function (resData) {
+            res.data.daily_facts.previous.forEach((resData) => {
               revenueTotal.previousRevenueTotal += resData.revenue;
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
@@ -255,7 +278,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.daily_facts.current &&
             res.data.daily_facts.current.length
           ) {
-            res.data.daily_facts.current.forEach(function (resData, index) {
+            res.data.daily_facts.current.forEach((resData, index) => {
               // const key = ' $';
               const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               revenueTotal.currentRevenueTotal += resData.revenue;
@@ -274,11 +297,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
-                // tempUnitsSoldData[index]['name'] = dayDate;
-                // tempTrafficData[index]['name'] = dayDate;
-                // tempConversionData[index]['name'] = dayDate;
               } else {
-                // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -327,7 +346,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           setUnitsSoldData(tempUnitsSoldData);
           setTrafficData(tempTrafficData);
           setConversionData(tempConversionData);
-
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
@@ -516,6 +534,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const handleBBDailyFact = (value) => {
+    setBBDailyFact(value);
+    getBBData(selectedAmazonValue, value);
+  };
+
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.value);
     setCurrency(event.currency);
@@ -527,6 +550,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       );
     } else {
       getData(selectedValue, groupBy, event.value);
+      getBBData(event.value, bBDailyFact);
     }
   };
 
@@ -614,15 +638,18 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       setSelectedAmazonValue(list[0].value);
       setCurrency(list[0].currency);
       getData(selectedValue, groupBy, list[0].value);
+      getBBData(list[0].value, bBDailyFact);
       setResponseId('12345');
     }
   }, [
     marketplaceChoices,
     getData,
+    getBBData,
     responseId,
     groupBy,
     selectedValue,
     selectedAmazonValue,
+    bBDailyFact,
   ]);
 
   // const calculateDataMin = (dataMin) => {
@@ -1172,7 +1199,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-        {/* IN PROGRESSSSSSS */}
         <div className="row mt-3">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
@@ -1213,7 +1239,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </WhiteCard>
           </div>
-          {/*
+
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1222,37 +1248,53 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
                 </div>
                 <div className="col-6 text-right mb-4">
-                  <DropDownSelect className="days-performance">
+                  {/* <DropDownSelect className="days-performance">
                     <Select classNamePrefix="react-select" className="active" />
+                </DropDownSelect>{' '} */}
+                  <DropDownSelect className="days-performance ">
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      components={getSelectComponents()}
+                      options={reportOptions}
+                      defaultValue={reportOptions[0]}
+                      onChange={(event) => handleBBDailyFact(event.value)}
+                    />
                   </DropDownSelect>{' '}
                 </div>
               </div>
               <LineChart
                 width={300}
                 height={200}
-                data={lineChartData}
+                data={bBChartData}
                 margin={{
                   top: 30,
                   right: 30,
                   left: 20,
                   bottom: 5,
                 }}>
-                <CartesianGrid strokeDasharray="none" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis dataKey="date" hide />
+                <YAxis hide />
                 <Tooltip />
                 <Legend />
                 <Line
-                  type="monotone"
-                  dataKey="pv"
-                  stroke="#FF5933"
-                  activeDot={{ r: 8 }}
+                  dataKey="avg"
+                  dot={false}
+                  stroke="#BFC5D2"
+                  activeDot={false}
                 />
-                <Line type="monotone" dataKey="uv" stroke="#BFC5D2" />
+                <Line
+                  dataKey="value"
+                  dot={false}
+                  stroke="BLACK"
+                  activeDot={false}
+                />
               </LineChart>
-              <div className="last-update ">Last updated: Dec 31 2020</div>
+              <div className="last-update ">
+                Last updated: {dspData && dspData.latest_date}
+              </div>
             </WhiteCard>
-          </div> */}
+          </div>
         </div>
 
         <Modal
