@@ -33,14 +33,14 @@ const customerStateReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        error: null,
+        //        error: null,
       };
     case actionTypes.CONTACT_REQUEST_SUCCESS:
       return {
         ...state,
         isLoading: false,
         contactData: action.contact,
-        error: null,
+        //    error: null,
       };
     case actionTypes.CONTACT_REQUEST_FAIL:
       return {
