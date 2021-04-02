@@ -166,7 +166,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const reportOptions = [
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
-    { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
+    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
     // {
     //   value: 'custom',
@@ -1024,13 +1024,13 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 <li>
                   <div className="weeks">
                     <span className="orange block" />
-                    <span>Current</span>
+                    <span>Recent</span>
                   </div>
                 </li>
                 <li>
                   <div className="weeks">
                     <span className="gray block" />
-                    <span>Past</span>
+                    <span>Previous</span>
                   </div>
                 </li>
               </ul>
