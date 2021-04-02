@@ -14,7 +14,7 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
+  // CartesianGrid,
   Tooltip,
   Legend,
   PieChart,
@@ -1113,7 +1113,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 left: 0,
                 bottom: 20,
               }}>
-              <CartesianGrid strokeDasharray="none" />
+              {/* <CartesianGrid strokeDasharray="none" /> */}
               <XAxis
                 dataKey="name"
                 axisLine={false}
