@@ -284,17 +284,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
               conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
-              tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
-              tempUnitsSoldData.push({
-                name: dayDate,
-                'vs $': resData.units_sold,
-              });
-              tempConversionData.push({
-                name: dayDate,
-                'vs $': resData.conversion,
-              });
+              // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
+              tempRevenueData.push({ 'vs $': resData.revenue });
+              tempTrafficData.push({ 'vs $': resData.traffic });
+              tempUnitsSoldData.push({ 'vs $': resData.units_sold });
+              tempConversionData.push({ 'vs $': resData.conversion });
             });
             conversionTotal.previousConversionTotal /=
               res.data.daily_facts.previous.length;
@@ -305,6 +299,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           ) {
             res.data.daily_facts.current.forEach(function (resData, index) {
               // const key = ' $';
+              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               revenueTotal.currentRevenueTotal += resData.revenue;
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
@@ -313,13 +308,19 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 res.data.daily_facts.previous &&
                 index < res.data.daily_facts.previous.length
               ) {
-                // tempData[index][key] = resData.revenue;
+                tempUnitsSoldData[index].name = dayDate;
+                tempRevenueData[index].name = dayDate;
+                tempTrafficData[index].name = dayDate;
+                tempConversionData[index].name = dayDate;
                 tempRevenueData[index][' $'] = resData.revenue;
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
+                // tempUnitsSoldData[index]['name'] = dayDate;
+                // tempTrafficData[index]['name'] = dayDate;
+                // tempConversionData[index]['name'] = dayDate;
               } else {
-                const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
+                // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -368,6 +369,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           setUnitsSoldData(tempUnitsSoldData);
           setTrafficData(tempTrafficData);
           setConversionData(tempConversionData);
+
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
@@ -450,12 +452,9 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       if (selectedValue === 'month' && groupBy === 'daily') {
         return dayjs(date).date();
       }
-      if (selectedValue === 'year' && groupBy === 'monthly') {
-        return dayjs(date).date();
-      }
-      if (selectedValue === '30days' && groupBy === 'daily') {
-        return dayjs(date).date();
-      }
+      // if (selectedValue === '30days' && groupBy === 'daily') {
+      //   return dayjs(date).date();
+      // }
       if (groupBy === 'monthy') {
         return monthNames[dayjs(date).month()];
       }

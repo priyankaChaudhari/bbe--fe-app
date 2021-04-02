@@ -674,39 +674,41 @@ export default function CustomerMainContainer() {
                           {' '}
                           Recent Activity
                         </p>
-                        {activityData.slice(0, 2).map((item) => (
-                          <GroupUser key={Math.random()}>
-                            {images.find(
-                              (op) => op.entity_id === item.user_id,
-                            ) &&
-                            images.find((op) => op.entity_id === item.user_id)
-                              .presigned_url ? (
-                              <img
-                                src={
-                                  isLoading.loader && isLoading.type === 'page'
-                                    ? DefaultUser
-                                    : images.find(
-                                        (op) => op.entity_id === item.user_id,
-                                      ).presigned_url
-                                }
-                                className="default-user-activity"
-                                alt="pic"
-                              />
-                            ) : (
-                              <div className="avatarName float-left mr-3">
-                                {getActivityInitials(item.message)}
-                              </div>
-                            )}
-                            <div className="activity-user mb-4">
-                              {activityDetail(item)}
+                        {activityData &&
+                          activityData.slice(0, 2).map((item) => (
+                            <GroupUser key={Math.random()}>
+                              {images.find(
+                                (op) => op.entity_id === item.user_id,
+                              ) &&
+                              images.find((op) => op.entity_id === item.user_id)
+                                .presigned_url ? (
+                                <img
+                                  src={
+                                    isLoading.loader &&
+                                    isLoading.type === 'page'
+                                      ? DefaultUser
+                                      : images.find(
+                                          (op) => op.entity_id === item.user_id,
+                                        ).presigned_url
+                                  }
+                                  className="default-user-activity"
+                                  alt="pic"
+                                />
+                              ) : (
+                                <div className="avatarName float-left mr-3">
+                                  {getActivityInitials(item.message)}
+                                </div>
+                              )}
+                              <div className="activity-user mb-4">
+                                {activityDetail(item)}
 
-                              <div className="time-date mt-1">
-                                {item && item.time ? item.time : ''}
+                                <div className="time-date mt-1">
+                                  {item && item.time ? item.time : ''}
+                                </div>
                               </div>
-                            </div>
-                            <div className="clear-fix" />
-                          </GroupUser>
-                        ))}
+                              <div className="clear-fix" />
+                            </GroupUser>
+                          ))}
                       </WhiteCard>
                     </div>
                     {viewComponent === 'agreement' ? (
