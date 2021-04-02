@@ -48,48 +48,6 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const _ = require('lodash');
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
-  // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
-  // const isDesktopMedium = useMediaQuery({ minWidth: 1201, maxWidth: 1600 });
-  // const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1200 });
-  // const isTablet = useMediaQuery({ minWidth: 858, maxWidth: 991 });
-  // const isTableMedium = useMediaQuery({ minWidth: 730, maxWidth: 857 });
-  // const isMobileView = useMediaQuery({ minWidth: 630, maxWidth: 731 });
-  // const isMobileMedium = useMediaQuery({ minWidth: 500, maxWidth: 629 });
-  // const isMobileSmall = useMediaQuery({ minWidth: 401, maxWidth: 499 });
-  // const isMobileXtraSmall = useMediaQuery({ minWidth: 320, maxWidth: 400 });
-
-  // const giveWidth = () => {
-  //   if (isDesktop) {
-  //     return 870;
-  //   }
-  //   if (isDesktopMedium) {
-  //     return 750;
-  //   }
-  //   if (isDesktopView) {
-  //     return 600;
-  //   }
-  //   if (isTablet) {
-  //     return 830;
-  //   }
-  //   if (isTableMedium) {
-  //     return 700;
-  //   }
-  //   if (isMobileView) {
-  //     return 580;
-  //   }
-
-  //   if (isMobileMedium) {
-  //     return 480;
-  //   }
-  //   if (isMobileSmall) {
-  //     return 380;
-  //   }
-  //   if (isMobileXtraSmall) {
-  //     return 300;
-  //   }
-  //   return 700;
-  // };
-
   const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState('week');
@@ -156,7 +114,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       bottom: 'auto',
       maxWidth: '420px ',
       width: '100% ',
-      minHeight: '560px',
+      minHeight: '420px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -168,11 +126,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   // const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
@@ -1222,8 +1180,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 Inventory Score (IPI)
               </p>
               {/* <PiechartResponsive> */}
-              <ResponsiveContainer width="99%" height={150}>
-                <PieChart width={250} height={190}>
+              <ResponsiveContainer width="99%" height={200}>
+                <PieChart>
                   <Pie
                     data={pieData}
                     cx={90}
@@ -1339,21 +1297,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 moveRangeOnFirstSelection={false}
                 showDateDisplay={false}
                 maxDate={currentDate}
-                rangeColors={['#FF5933', 'green']}
+                rangeColors={['#FF5933']}
                 weekdayDisplayFormat="EEEEE"
                 locale={enGB}
               />
-              <div
-                className="text-center  "
-                style={{
-                  bottom: '20px',
-                  position: 'absolute',
-                  width: '85%',
-                }}>
+              <div className="text-center mt-3">
                 <Button
                   onClick={() => applyCustomeDate()}
                   type="button"
-                  className="btn-primary on-boarding  mr-2 pb-2 mb-1 w-100">
+                  className="btn-primary on-boarding   w-100">
                   Apply
                 </Button>
               </div>
@@ -1419,168 +1371,3 @@ CompanyPerformance.propTypes = {
 //     }
 //   }
 // `;
-
-// const ResponsiveContainer = styled.div`
-//   width: 100%;
-//   // .recharts-wrapper {
-//   //   width: 750px;
-//   //   .recharts-surface {
-//   //     width: 750px;
-//   //   }
-//   .recharts-default-legend {
-//     li {
-//       .recharts-surface {
-//         width: 14px !important;
-//       }
-//     }
-//   }
-//   // @media only screen and (min-width: 1920px) {
-//   //   width: 1100px !important;
-//   //   .recharts-surface {
-//   //     width: 1100px !important;
-//   //   }
-//   // }
-//   @media only screen and (min-width: 1600px) and max-width: 2300px {
-//     width: 866px !important;
-//     // max-width: 100% !important;
-//     .recharts-surface {
-//       width: 866px !important;
-//       // max-width: 100% !important;
-//     }
-//   }
-//   // @media only screen and (min-width: 1200px) {
-//   //   width: none !important;
-//   //   .recharts-surface {
-//   //     width: 800px !important;
-//   //   }
-//   // }
-//   @media only screen and (min-width: 1200px) and max-width: 1599px {
-//     width: 750px !important;
-//     max-width: 100% !important;
-//     .recharts-surface {
-//       width: 750px !important;
-//     }
-//     .recharts-default-legend {
-//       li {
-//         .recharts-surface {
-//           width: 14px !important;
-//         }
-//       }
-//     }
-//   }
-//   @media only screen and (min-width: 992px) {
-//     .recharts-wrapper {
-//       width: 700px !important;
-//       // max-width: 100% !important;
-//       .recharts-surface {
-//         width: 700px !important;
-//         // max-width: 100% !important;
-//       }
-//       }
-//     }
-//     @media only screen and (max-width: 991px) {
-//       width: 800px !important;
-//       .recharts-surface {
-//         width: 800px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 850px) {
-//       width: 750px !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 800px) {
-//       width: 680px !important;
-//       .recharts-surface {
-//         width: 680px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 730px) {
-//       width: 600px !important;
-//       .recharts-surface {
-//         width: 600px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 650px) {
-//       width: 500px !important;
-//       .recharts-surface {
-//         width: 500px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 550px) {
-//       width: 450px !important;
-//       .recharts-surface {
-//         width: 450px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 500px) {
-//       width: 400px !important;
-//       .recharts-surface {
-//         width: 400px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 450px) {
-//       width: 340px !important;
-//       .recharts-surface {
-//         width: 340px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 390px) {
-//       width: 300px !important;
-//       .recharts-surface {
-//         width: 300px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 350px) {
-//       width: 260px !important;
-//       .recharts-surface {
-//         width: 260px !important;
-//       }
-//     }
-//   }
-// `;
-
-// const ResponsiveContainer = styled.div`
-//   @media only screen and (max-width: 730px) {
-//       width: 600px !important;
-//        .recharts-surface {
-//          width: 600px !important;
-//        }
-//      }
-//     @media only screen and (max-width: 650px) {
-//       width: 500px !important;
-//       .recharts-surface {
-//         width: 500px !important;
-//       }
-//     }
-//      @media only screen and (max-width: 550px) {
-//        width: 450px !important;
-//        .recharts-surface {
-//         width: 450px !important;
-//        }
-//      }
-//      @media only screen and (max-width: 500px) {
-//        width: 400px !important;
-//        .recharts-surface {
-//          width: 400px !important;
-//        }     }
-//    @media only screen and (max-width: 450px) {
-//       width: 340px !important;
-//       .recharts-surface {
-//        width: 340px !important;
-//        }
-//     }     @media only screen and (max-width: 390px) {
-//     width: 300px !important;
-//        .recharts-surface {
-//          width: 300px !important;
-//        }
-//     }
-//     @media only screen and (max-width: 350px) {
-//       width: 260px !important;
-//       .recharts-surface {
-//         width: 260px !important;
-//       }
-//     }
-//   }
-//  `;

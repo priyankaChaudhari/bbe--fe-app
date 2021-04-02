@@ -603,15 +603,12 @@ export const WhiteCard = styled.div`
     color: ${Theme.lighterGreen};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
-   
-      
     .red-arrow {
-        width: 14px;
-        transform: rotate(180deg);
-        vertical-align: middle;
-        margin-left: -2px;
-        margin-right: 3px;
-        vertical-align: bottom;
+      width: 14px;
+      vertical-align: middle;
+      margin-left: -2px;
+      margin-right: 3px;
+      vertical-align: bottom;
      }
   }
   .decrease-rate {
@@ -1022,8 +1019,6 @@ export const WhiteCard = styled.div`
       vertical-align: middle;
       padding-right: 8px;
 
-    
-
         .social-media {
           width:23px;
         }
@@ -1035,12 +1030,10 @@ export const WhiteCard = styled.div`
         &:last-child {
           padding-right: 0;
         }
-     
     }
   }
 
-  
-  @media only screen and (min-width: 1920px) {
+    @media only screen and (min-width: 1920px) {
     .company-label-info {
         margin-left: 40px;
         margin-top:10px;
@@ -1081,7 +1074,6 @@ export const WhiteCard = styled.div`
         &:first-child {
           margin-left: 0;
         }
-
           span { 
               margin-left: 15px;
               max-width: 70px;
@@ -1091,10 +1083,9 @@ export const WhiteCard = styled.div`
                 width:100%;
               }
             }   
-      }
-  }
+       }
+   }
  @media only screen and (max-width: 991px) {
-
   .brand-logo {
     img{
     border-radius: 10px;
