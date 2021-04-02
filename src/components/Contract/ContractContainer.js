@@ -379,60 +379,66 @@ export default function ContractContainer() {
   };
 
   const updateMarketplaces = async () => {
+    let flag = false;
     const result = await createMarketplaceBulk(
       updatedFormData.additional_marketplaces,
-    ).then((res) => {
-      if (res && res.status === 200) {
-        if (updatedFormData && updatedFormData.additional_marketplaces) {
-          delete updatedFormData.additional_marketplaces;
-        }
-        if (
-          !(
-            formData &&
-            formData.additional_marketplace &&
-            formData.additional_marketplace.length
-          )
-        ) {
-          setShowAdditionalMarketplace(false);
-        }
-
-        const statementData = {
-          id:
-            (details &&
-              details.primary_marketplace &&
-              details.primary_marketplace.id) ||
-            '',
-          contract: details.id,
-          name: updatedFormData && updatedFormData.primary_marketplace,
-          is_primary: true,
-        };
-
-        if (details.primary_marketplace && details.primary_marketplace.id) {
-          updateMarketplace(details.primary_marketplace.id, statementData).then(
-            (updateMarketplaceRes) => {
-              setIsLoading({ loader: false, type: 'button' });
-
-              if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
-                if (updatedFormData && updatedFormData.primary_marketplace) {
-                  delete updatedFormData.primary_marketplace;
-                }
-              }
-            },
-          );
-        } else {
-          createMarketplace(statementData).then((createMarketplaceRes) => {
-            setIsLoading({ loader: false, type: 'button' });
-
-            if (createMarketplaceRes && createMarketplaceRes.status === 201) {
-              if (updatedFormData && updatedFormData.primary_marketplace) {
-                delete updatedFormData.primary_marketplace;
-              }
-            }
-          });
-        }
-        setUpdatedFormData({ ...updatedFormData });
-      }
+    ).then(() => {
+      flag = true;
     });
+    if (flag) {
+      if (updatedFormData && updatedFormData.additional_marketplaces) {
+        delete updatedFormData.additional_marketplaces;
+      }
+      if (
+        !(
+          formData &&
+          formData.additional_marketplace &&
+          formData.additional_marketplace.length
+        )
+      ) {
+        setShowAdditionalMarketplace(false);
+      }
+
+      const statementData = {
+        id:
+          (details &&
+            details.primary_marketplace &&
+            details.primary_marketplace.id) ||
+          '',
+        contract: details.id,
+        name: updatedFormData && updatedFormData.primary_marketplace,
+        is_primary: true,
+      };
+
+      if (details.primary_marketplace && details.primary_marketplace.id) {
+        await updateMarketplace(
+          details.primary_marketplace.id,
+          statementData,
+        ).then((updateMarketplaceRes) => {
+          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+              // setUpdatedFormData({ ...updatedFormData });
+              // if (!Object.keys(updatedFormData).length) {
+              //   showFooter(false);
+              //   setIsEditContract(false);
+              //   getContractDetails();
+              // }
+            }
+          }
+        });
+      } else {
+        createMarketplace(statementData).then((createMarketplaceRes) => {
+          setIsLoading({ loader: false, type: 'button' });
+          if (createMarketplaceRes && createMarketplaceRes.status === 201) {
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+            }
+          }
+        });
+      }
+      setUpdatedFormData({ ...updatedFormData });
+    }
     return result;
   };
 
@@ -692,9 +698,7 @@ export default function ContractContainer() {
           });
         }),
       )
-      .catch(() => {
-        // console.log('error');
-      });
+      .catch(() => {});
 
     //  .then((response) => {
     //     if (response && response.status === 400) {
@@ -710,7 +714,7 @@ export default function ContractContainer() {
     //   });
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     // if (history.location.pathname.includes('agreement')) {
 
     // setSectionError({});
@@ -744,11 +748,20 @@ export default function ContractContainer() {
           name: updatedFormData && updatedFormData.primary_marketplace,
           is_primary: true,
         };
+
         if (details.primary_marketplace && details.primary_marketplace.id) {
-          primaryMarketPlaceApi = updateMarketplace(
-            details.primary_marketplace.id,
-            statementData,
-          );
+          if (
+            !(
+              updatedFormData &&
+              updatedFormData.primary_marketplace &&
+              updatedFormData.additional_marketplaces
+            )
+          ) {
+            primaryMarketPlaceApi = updateMarketplace(
+              details.primary_marketplace.id,
+              statementData,
+            );
+          }
         } else {
           primaryMarketPlaceApi = createMarketplace(statementData);
         }
@@ -848,17 +861,18 @@ export default function ContractContainer() {
           AddendumApi,
         ];
 
-        updateMarketplaces();
+        await updateMarketplaces();
       }
-      if (
-        updatedFormData &&
-        updatedFormData.primary_marketplace &&
-        updatedFormData.additional_marketplaces
-      ) {
-        setTimeout(() => saveChanges(apis), 30000);
-      } else {
-        saveChanges(apis);
-      }
+      saveChanges(apis);
+      // if (
+      //   updatedFormData &&
+      //   updatedFormData.primary_marketplace &&
+      //   updatedFormData.additional_marketplaces
+      // ) {
+      //   setTimeout(() => saveChanges(apis), 30000);
+      // } else {
+      //   saveChanges(apis);
+      // }
 
       // else {
       //   const stepsCompletedData = {
@@ -894,9 +908,8 @@ export default function ContractContainer() {
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
-      if (showDiscardModal.clickedBtn === 'back') {
-        // console.log("!!!")
-      }
+      // if (showDiscardModal.clickedBtn === 'back') {
+      // }
     }
 
     if (flag === 'Yes') {
@@ -1020,8 +1033,6 @@ export default function ContractContainer() {
   };
 
   const mapDefaultValues = (key, label, type) => {
-    // console.log(key, label, type, details && details[key]);
-
     if (key === 'contract_company_name') {
       return details && details[key] ? details && details[key] : `Client Name`;
     }
