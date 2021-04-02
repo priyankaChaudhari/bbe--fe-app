@@ -51,6 +51,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
   const [selectedValue, setSelectedValue] = useState('week');
+  const [bBDailyFact, setBBDailyFact] = useState('week');
   const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
   const [lineChartData, setLineChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
@@ -503,6 +504,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const handleDailyFact = (value) => {
     setSelectedValue(value);
+    if (value === 'year') {
+      checkDifferenceBetweenDates(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+      );
+    } else if (value === 'custom') {
+      setShowCustomDateModal(true);
+    } else {
+      setGropuByFilter(value);
+    }
+  };
+
+  const handleBBDailyFact = (value) => {
+    console.log(bBDailyFact);
+    setBBDailyFact(value);
     if (value === 'year') {
       checkDifferenceBetweenDates(
         new Date(new Date().getFullYear(), 0, 1),
@@ -1213,7 +1230,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </WhiteCard>
           </div>
-          {/*
+
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1222,8 +1239,18 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
                 </div>
                 <div className="col-6 text-right mb-4">
-                  <DropDownSelect className="days-performance">
+                  {/* <DropDownSelect className="days-performance">
                     <Select classNamePrefix="react-select" className="active" />
+                </DropDownSelect>{' '} */}
+                  <DropDownSelect className="days-performance ">
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      components={getSelectComponents()}
+                      options={reportOptions}
+                      defaultValue={reportOptions[0]}
+                      onChange={(event) => handleBBDailyFact(event.value)}
+                    />
                   </DropDownSelect>{' '}
                 </div>
               </div>
@@ -1237,9 +1264,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   left: 20,
                   bottom: 5,
                 }}>
-                <CartesianGrid strokeDasharray="none" />
                 <XAxis dataKey="name" />
-                <YAxis />
+                <YAxis hide />
                 <Tooltip />
                 <Legend />
                 <Line
@@ -1252,7 +1278,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </LineChart>
               <div className="last-update ">Last updated: Dec 31 2020</div>
             </WhiteCard>
-          </div> */}
+          </div>
         </div>
 
         <Modal
