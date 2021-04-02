@@ -588,10 +588,10 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const renderLegendText = (value, entry) => {
     const { color } = entry;
     if (value === ' $') {
-      return <span style={{ color }}>Current</span>;
+      return <span style={{ color }}>Recent</span>;
     }
     if (value === 'vs $') {
-      return <span style={{ color }}>Past</span>;
+      return <span style={{ color }}>Previous</span>;
     }
     return null;
   };
