@@ -35,6 +35,7 @@ export {
   updateAmazonDetails,
   deleteAmazonMarketplace,
   getPerformance,
+  getBuyBoxChartData,
 } from './CustomerApi';
 
 // Choices
