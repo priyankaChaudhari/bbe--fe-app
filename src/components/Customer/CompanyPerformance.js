@@ -588,7 +588,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
             <p className="label-1">{`$${current}`}</p>
             <p className="label-2">{`vs $${previous}`}</p>
           </div>
@@ -600,7 +604,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
             <p className="label-1">{`$${current}`}</p>
             <p className="label-2">vs $0.00</p>
           </div>
@@ -612,7 +620,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
             <p className="label-1">$0.00</p>
             <p className="label-2">{`vs $${previous}`}</p>
           </div>
@@ -677,6 +689,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     );
   };
 
+  console.log('activee sate', activeSales);
   return (
     <>
       <div className="col-lg-8 col-12">
