@@ -960,6 +960,9 @@ export const WhiteCard = styled.div`
           .gray {
             background: ${Theme.gray25};
           }
+          .black {
+            background: ${Theme.black};
+          }
           span {
              color:${Theme.black};
              font-size: 15px;

@@ -1499,7 +1499,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   {' '}
                   <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
                 </div>
-                <div className="col-6 text-right mb-4">
+                <div className="col-6 text-right mb-1">
                   <DropDownSelect className="days-performance ">
                     <Select
                       classNamePrefix="react-select"
@@ -1510,6 +1510,24 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                       onChange={(event) => handleBBDailyFact(event.value)}
                     />
                   </DropDownSelect>{' '}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6 col-sm-12 order-md-1 order-2">
+                  <ul className="rechart-item">
+                    <li>
+                      <div className="weeks">
+                        <span className="black block" />
+                        <span>Daily %</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="weeks">
+                        <span className="gray block" />
+                        <span>Average</span>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
               </div>
               <LineChart
