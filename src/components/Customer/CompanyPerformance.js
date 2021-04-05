@@ -375,7 +375,16 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM D YYYY',
             );
-            setDspSpend(res.data.dsp_spend[0]);
+            if (res.data.dsp_spend && res.data.dsp_spend.length) {
+              setDspSpend({
+                value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
+                date: dayjs(res.data.dsp_spend[0].report_date).format(
+                  'MMM D YYYY',
+                ),
+              });
+            } else {
+              setDspSpend({ value: 'N/A', date: 'N/A' });
+            }
             setDspData(res.data.pf_oi_is[0]);
             const ipiValue = parseFloat(
               res.data.pf_oi_is[0].inventory_performance_index,
@@ -1417,10 +1426,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
               <div className="speed-rate">
-                {dspSpend ? `${currencySymbol}${dspSpend}` : 'N/A'}
+                {dspSpend && dspSpend.value
+                  ? `${currencySymbol}${dspSpend.value}`
+                  : 'N/A'}
               </div>
               <div className="last-update">
-                Last updated: {dspData && dspData.latest_date}
+                Last updated: {dspSpend && dspSpend.date}
               </div>
             </WhiteCard>{' '}
           </div>
