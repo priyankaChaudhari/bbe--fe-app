@@ -422,16 +422,16 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   };
 
   const CustomizedLabel = (data) => {
-    if (bBChartData) {
+    const dataLength = bBChartData.length - 1;
+
+    if (data && data.index === dataLength && bBChartData) {
       return (
         <text
           className="cust-label-avg"
-          x={
-            bBChartData.length - 1 ? data.x * (bBChartData.length - 1) : data.x
-          }
+          x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
           y={data.y}
-          dy={-4}
-          fontSize={14}
+          dy={-8}
+          fontSize={16}
           textAnchor="middle">
           {bBChartData[0].avg}%
         </text>
