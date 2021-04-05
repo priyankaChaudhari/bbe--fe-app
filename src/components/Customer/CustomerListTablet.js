@@ -194,15 +194,15 @@ export default function CustomerListTablet({
         );
       }
       return (
-        <div className="increase-rate">
+        <span className="increase-rate ml-1">
           <img
-            className="red-arrow"
+            className="green-arrow"
             src={ArrowUpIcon}
             width="14px"
             alt="arrow-up"
           />
           {percentage ? `${percentage.toFixed(2)} %` : ''}
-        </div>
+        </span>
       );
     }
     return '';

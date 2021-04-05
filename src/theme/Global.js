@@ -603,7 +603,7 @@ export const WhiteCard = styled.div`
     color: ${Theme.lighterGreen};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
-    .red-arrow {
+    .green-arrow {
       width: 14px;
       vertical-align: middle;
       margin-left: -2px;
@@ -843,15 +843,27 @@ export const WhiteCard = styled.div`
       }
       .perentage-value {
         color: ${Theme.lighterGreen};
-        font-size:15px;
-        margin-top:13px;
+        font-size: ${Theme.extraNormal};
+        font-weight: 300;
+        margin-left: -2px;
 
         &.down {
           color: ${Theme.darkRed};
         }
         .red-arrow{
-          width:14px;
+           width: 14px;
           transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
+        }
+        .green-arrow {
+           width: 14px;
+          vertical-align: bottom;
+          // transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
         }
 
         img {
@@ -1196,7 +1208,7 @@ export const GroupUser = styled.div`
     overflow-wrap: break-word;
     text-align: left;
     float: left;
-    width: 79%;
+    width: 76%;
     span {
       color: ${Theme.gray35};
       font-weight: 500;

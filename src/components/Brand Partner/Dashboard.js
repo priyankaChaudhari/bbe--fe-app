@@ -209,7 +209,7 @@ export default function Dashboard() {
         <>
           <div className="increase-rate">
             <img
-              className="red-arrow"
+              className="green-arrow "
               src={ArrowUpIcon}
               width="14px"
               alt="arrow-up"

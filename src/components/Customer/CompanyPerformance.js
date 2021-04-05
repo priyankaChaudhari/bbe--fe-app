@@ -785,7 +785,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.revenue &&
                   !Number.isNaN(allSalesTotal.revenue.difference) &&
                   allSalesTotal.revenue.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.revenue &&
                     allSalesTotal.revenue.difference &&
@@ -794,7 +798,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
-                      alt="arrow-up"
+                      alt="arrow-down"
                     />
                   ) : (
                     ''
@@ -849,7 +853,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.units &&
                   !Number.isNaN(allSalesTotal.units.difference) &&
                   allSalesTotal.units.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.units &&
                     allSalesTotal.units.difference &&
@@ -915,7 +923,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.traffic &&
                   !Number.isNaN(allSalesTotal.traffic.difference) &&
                   allSalesTotal.traffic.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.traffic &&
                     allSalesTotal.traffic.difference &&
@@ -979,7 +991,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.conversion.difference &&
                   !Number.isNaN(allSalesTotal.conversion.difference) &&
                   allSalesTotal.conversion.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.conversion &&
                     allSalesTotal.conversion.difference &&

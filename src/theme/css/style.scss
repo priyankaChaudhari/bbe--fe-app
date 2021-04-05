@@ -1512,6 +1512,10 @@ input:checked + .slider:before {
   }
 }
 
+.rdrDayHovered {
+  color: rgb(255, 89, 51) !important;
+}
+
 .recharts-tooltip-wrapper {
   width: 146px;
   // min-height: 70px;
