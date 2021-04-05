@@ -495,16 +495,23 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   };
 
   const DataFormater = (number) => {
-    if (number > 1000000000) {
-      return `${currencySymbol}${parseInt(number / 1000000000).toString()}B`;
+    let returnValue = number;
+    if (number >= 1000000000) {
+      returnValue = `${parseInt(number / 1000000000).toString()}B`;
     }
-    if (number > 1000000) {
-      return `${currencySymbol}${parseInt(number / 1000000).toString()}M`;
+    if (number >= 1000000) {
+      returnValue = `${parseInt(number / 1000000).toString()}M`;
     }
-    if (number > 1000) {
-      return `${currencySymbol}${parseInt(number / 1000).toString()}K`;
+    if (number >= 1000) {
+      returnValue = `${parseInt(number / 1000).toString()}K`;
+    } else {
+      returnValue = `${parseInt(number).toString()}`;
     }
-    return `${currencySymbol}${parseInt(number).toString()}`;
+
+    if (activeSales === 'revenue') {
+      returnValue = `${currencySymbol}${returnValue}`;
+    }
+    return returnValue;
   };
 
   const getDays = (startDate, endDate) => {

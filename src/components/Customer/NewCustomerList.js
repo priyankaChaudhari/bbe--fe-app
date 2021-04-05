@@ -390,7 +390,7 @@ export default function NewCustomerList() {
           pageNumber,
           selectedValue,
           filters,
-          event.target.value,
+          event && event.target.value ? event.target.value : '',
           showPerformance,
         );
       }, 1000);
