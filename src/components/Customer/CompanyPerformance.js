@@ -1427,7 +1427,9 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
               <div className="speed-rate">
                 {dspSpend && dspSpend.value
-                  ? `${currencySymbol}${dspSpend.value}`
+                  ? `${currencySymbol}${dspSpend.value
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                   : 'N/A'}
               </div>
               <div className="last-update">
