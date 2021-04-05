@@ -7,7 +7,7 @@ const DropDownStatus = styled.div`
   // max-width: 88px;
   display: inline-flex;
   vertical-align: top;
-  margin-left: 20px;
+  // margin-left: 20px;
   margin-top: 7px;
 
   .css-2b097c-container {

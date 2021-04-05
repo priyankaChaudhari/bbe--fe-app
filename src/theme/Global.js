@@ -539,7 +539,6 @@ export const WhiteCard = styled.div`
     }
 
     .dropdown-content-status {
-    
       display: none;
       position: absolute;
       width: 220px;
@@ -1239,6 +1238,9 @@ export const GroupUser = styled.div`
     color: ${Theme.gray85};
     text-align: left;
     font-size: ${Theme.normal};
+    float: left;
+    word-break: break-all;
+    width: 76%;
   }
 `;
 export default global;
