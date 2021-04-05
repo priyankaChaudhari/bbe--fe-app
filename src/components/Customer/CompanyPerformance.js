@@ -119,7 +119,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       bottom: 'auto',
       maxWidth: '420px ',
       width: '100% ',
-      minHeight: '420px',
+      minHeight: '390px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -1437,7 +1437,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-        <div className="row mt-3">
+        <div className="row">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
@@ -1506,7 +1506,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   top: 30,
                   right: 30,
                   left: 20,
-                  bottom: 5,
+                  bottom: 20,
                 }}>
                 <XAxis dataKey="date" hide />
                 <YAxis hide />

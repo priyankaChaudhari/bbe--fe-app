@@ -1431,7 +1431,7 @@ input:checked + .slider:before {
     font-family: $base-font-family;
   }
   .rdrDay {
-    height: 3.7em;
+    // height: 3.7em;
     font-size: 15px;
     color: $black-color !important;
 
@@ -1469,9 +1469,9 @@ input:checked + .slider:before {
     border-radius: 50% !important;
     /* transform: translate(-50%, 0); */
     width: 6px;
-    border-radius: 50%;
+    border-radius: 25px;
     height: 6px;
-    border-radius: 2px;
+    // border-radius: 2px;
     background: #ff5933;
   }
 
