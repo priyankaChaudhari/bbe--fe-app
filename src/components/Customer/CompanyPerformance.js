@@ -46,6 +46,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
+  const [dspSpend, setDspSpend] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [pieData, setPieData] = useState([
@@ -359,6 +360,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM D YYYY',
             );
+            setDspSpend(res.data.dsp_spend[0]);
             setDspData(res.data.pf_oi_is[0]);
             const ipiValue = parseFloat(
               res.data.pf_oi_is[0].inventory_performance_index,
@@ -657,8 +659,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 ? `${activeSales} (${currency})`
                 : activeSales}
             </p>
-            <p className="label-1">{`$${current}`}</p>
-            <p className="label-2">{`vs $${previous}`}</p>
+            <p className="label-1">
+              {activeSales === 'revenue' ? `$${current}` : current}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue' ? `vs $${previous}` : previous}
+            </p>
           </div>
         );
       }
@@ -673,8 +679,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 ? `${activeSales} (${currency})`
                 : activeSales}
             </p>
-            <p className="label-1">{`$${current}`}</p>
-            <p className="label-2">vs $0.00</p>
+            <p className="label-1">
+              {activeSales === 'revenue' ? `$${current}` : current}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue' ? 'vs $0.00' : 'vs 0.00'}
+            </p>
           </div>
         );
       }
@@ -689,8 +699,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 ? `${activeSales} (${currency})`
                 : activeSales}
             </p>
-            <p className="label-1">$0.00</p>
-            <p className="label-2">{`vs $${previous}`}</p>
+            <p className="label-1">
+              {activeSales === 'revenue' ? '$0.00' : '0.00'}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue' ? `vs $${previous}` : previous}
+            </p>
           </div>
         );
       }
@@ -1350,13 +1364,17 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         </WhiteCard>
 
         <div className="row mt-3">
-          {/* <div className="col-md-4 col-sm-12 mb-3">
+          <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
-              <div className="speed-rate">$0</div>
-              <div className="last-update">Last updated: N/A</div>
+              <div className="speed-rate">
+                {dspSpend ? `$${dspSpend}` : 'N/A'}
+              </div>
+              <div className="last-update">
+                Last updated: {dspData && dspData.latest_date}
+              </div>
             </WhiteCard>{' '}
-          </div> */}
+          </div>
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
