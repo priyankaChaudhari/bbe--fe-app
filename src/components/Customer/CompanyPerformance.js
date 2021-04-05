@@ -17,6 +17,7 @@ import {
   // CartesianGrid,
   Tooltip,
   Legend,
+  LabelList,
   PieChart,
   Pie,
   Cell,
@@ -416,6 +417,25 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       setLineChartData(revenueData);
       setActiveSales('revenue');
     }
+  };
+
+  const CustomizedLabel = (data) => {
+    if (bBChartData) {
+      return (
+        <text
+          className="cust-label-avg"
+          x={
+            bBChartData.length - 1 ? data.x * (bBChartData.length - 1) : data.x
+          }
+          y={data.y}
+          dy={-4}
+          fontSize={14}
+          textAnchor="middle">
+          {bBChartData[0].avg}%
+        </text>
+      );
+    }
+    return null;
   };
 
   const xDataFormater = (date) => {
@@ -1496,8 +1516,9 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   dataKey="avg"
                   dot={false}
                   stroke="#BFC5D2"
-                  activeDot={false}
-                />
+                  activeDot={false}>
+                  <LabelList content={<CustomizedLabel />} />
+                </Line>
                 <Line
                   dataKey="value"
                   dot={false}
