@@ -288,15 +288,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               revenueTotal.previousRevenueTotal += resData.revenue;
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
-              conversionTotal.previousConversionTotal += resData.conversion;
+              // conversionTotal.previousConversionTotal += resData.conversion;
               // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               tempRevenueData.push({ 'vs $': resData.revenue });
               tempTrafficData.push({ 'vs $': resData.traffic });
               tempUnitsSoldData.push({ 'vs $': resData.units_sold });
               tempConversionData.push({ 'vs $': resData.conversion });
             });
-            conversionTotal.previousConversionTotal /=
-              res.data.daily_facts.previous.length;
+            // conversionTotal.previousConversionTotal /=
+            //   res.data.daily_facts.previous.length;
           }
           if (
             res.data.daily_facts.current &&
@@ -321,6 +321,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
+                conversionTotal.previousConversionTotal +=
+                  res.data.daily_facts.previous[index].conversion;
               } else {
                 tempRevenueData.push({
                   name: dayDate,
@@ -341,6 +343,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               }
             });
             conversionTotal.currentConversionTotal /=
+              res.data.daily_facts.current.length;
+            conversionTotal.previousConversionTotal /=
               res.data.daily_facts.current.length;
           }
           revenueTotal.difference = calculateSalesDifference(
@@ -1558,34 +1562,38 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   </ul>
                 </div>
               </div>
-              <LineChart
-                width={300}
-                height={200}
-                data={bBChartData}
-                margin={{
-                  top: 30,
-                  right: 30,
-                  left: 20,
-                  bottom: 20,
-                }}>
-                <XAxis dataKey="date" hide />
-                <YAxis hide />
-                <Tooltip />
-                <Legend />
-                <Line
-                  dataKey="avg"
-                  dot={false}
-                  stroke="#BFC5D2"
-                  activeDot={false}>
-                  <LabelList content={<CustomizedLabel />} />
-                </Line>
-                <Line
-                  dataKey="value"
-                  dot={false}
-                  stroke="BLACK"
-                  activeDot={false}
-                />
-              </LineChart>
+              <ResponsiveContainer width="99%" height={200}>
+                <LineChart
+                  // width={300}
+                  // height={200}
+                  data={bBChartData}
+                  margin={{
+                    top: 30,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                  }}>
+                  <XAxis dataKey="date" hide />
+                  <YAxis hide />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    dataKey="avg"
+                    dot={false}
+                    stroke="#BFC5D2"
+                    activeDot={false}>
+                    <LabelList content={<CustomizedLabel />} />
+                  </Line>
+                  <Line
+                    dataKey="value"
+                    dot={false}
+                    stroke="BLACK"
+                    activeDot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+              <br />
+              <br />
               <div className="last-update ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
