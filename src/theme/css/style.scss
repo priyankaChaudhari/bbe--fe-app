@@ -1433,7 +1433,7 @@ input:checked + .slider:before {
   .rdrDay {
     height: 3.7em;
     font-size: 15px;
-    color: $black-color;
+    color: $black-color !important;
 
     .rdrDayNumber span {
       color: $black-color;
@@ -1474,20 +1474,7 @@ input:checked + .slider:before {
     border-radius: 2px;
     background: #ff5933;
   }
-  // .rdrDayStartPreview {
-  //   color: #ff5933 !important;
-  //   outline: #ff5933;
-  // }
 
-  // .rdrDayHovered {
-  //   color: #ff5933 !important;
-  // }
-  // .rdrWeekHovered {
-  //   color: #ff5933 !important;
-  // }
-  // .rdrWeekHovered {
-  //   color: #ff5933 !important;
-  // }
   .rdrMonth {
     // max-width: 29.667em;
     width: 100%;
@@ -1511,9 +1498,27 @@ input:checked + .slider:before {
     }
   }
 }
-
 .rdrDayHovered {
   color: rgb(255, 89, 51) !important;
+  .rdrDayStartPreview {
+    color: rgb(255, 89, 51) !important;
+  }
+  span {
+    color: rgb(255, 89, 51) !important;
+  }
+}
+
+.rdrDayHovered.rdrDayStartPreview ~ .rdrDayNumberHovered span,
+.rdrDay .rdrDayInPreview ~ .rdrDayNumber span,
+.rdrDayHovered .rdrSelectedHovered ~ .rdrDayNumberHovered span {
+  color: #ff5933 !important;
+  background-color: $white-color;
+}
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 .recharts-tooltip-wrapper {
@@ -1544,13 +1549,32 @@ input:checked + .slider:before {
   }
 }
 
-// .rdrPprevButton i {
-//   background-image: url(../images/icons/arrow-back.png);
-//   border-width: 0;
-//   border-color: white;
-//   background-repeat: no-repeat;
-//   z-index: 2;
-//   background-position-y: 10px;
-//   background-position-x: 10px;
-//   content: '';
-// }
+.rdrPprevButton i {
+  background-image: url(../images/icons/calendar-back-arrow.png);
+  border-width: 0;
+  border-color: white;
+  background-repeat: no-repeat;
+  z-index: 9999999999;
+  background-position-y: 0;
+  background-position-x: 7px;
+  padding: 7px 10px;
+}
+.rdrNextButton i {
+  background-image: url(../images/icons/calendar-back-arrow.png);
+  border-width: 0;
+  border-color: white;
+  background-repeat: no-repeat;
+  z-index: 9999999999;
+  background-position-y: 0;
+  background-position-x: 7px;
+  padding: 7px 10px;
+  transform: rotate(180deg);
+}
+
+.rdrNextPrevButton {
+  background: white;
+
+  &:hover {
+    background: white;
+  }
+}
