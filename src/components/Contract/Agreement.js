@@ -138,7 +138,7 @@ export default function Agreement({ formData, details, templateData }) {
                                   )
                                   // .toString()
                                   // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                } /month
+                                } 
                                </td>`
                         : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                       : service && service.service && service.service.fee
@@ -152,7 +152,7 @@ export default function Agreement({ formData, details, templateData }) {
                              //    /\B(?=(\d{3})+(?!\d))/g,
                              //    ',',
                              //  )
-                           } /month </td>`
+                           } </td>`
                       : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                   }
 

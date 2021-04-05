@@ -127,7 +127,7 @@ export default function ServicesAmendment({ formData, details, templateData }) {
               : ''
             )
               .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         </td>
         `
           : `<td>Yet to save</td>`

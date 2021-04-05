@@ -451,7 +451,7 @@ export default function Statement({
                                   )
                                   // .toString()
                                   // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                } /month
+                                }
                                </td>`
                         : `<td>Yet to save</td>`
                       : service && service.service && service.service.fee
@@ -465,7 +465,7 @@ export default function Statement({
                              //    /\B(?=(\d{3})+(?!\d))/g,
                              //    ',',
                              //  )
-                           } /month </td>`
+                           } </td>`
                       : `<td>Yet to save</td>`
                   }
 
