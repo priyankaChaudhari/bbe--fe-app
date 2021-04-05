@@ -79,10 +79,10 @@ const Table = styled.table`
         font-weight: 300;
         margin-left: -2px;
 
-        .red-arrow {
+        .green-arrow {
           width: 14px;
           vertical-align: bottom;
-          transform: rotate(180deg);
+          // transform: rotate(180deg);
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;

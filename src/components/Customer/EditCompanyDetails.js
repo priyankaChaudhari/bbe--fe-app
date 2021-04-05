@@ -356,6 +356,7 @@ export default function EditCompanyDetails({
         list[index][name] = value;
         setContactDetails(list);
       }
+      setContactApiError({ ...contactApiError, [event.target.name]: '' });
     }
   };
 
@@ -461,11 +462,26 @@ export default function EditCompanyDetails({
                             handleContactChange(event, item.id || i)
                           }
                         />
-                        <ErrorMsg>
-                          {contactApiError &&
-                            contactApiError.first_name &&
-                            contactApiError.first_name[0]}
-                        </ErrorMsg>
+                        {checkChange[item.id] ? (
+                          <ErrorMsg>
+                            {item.id &&
+                              contactApiError &&
+                              contactApiError.first_name &&
+                              contactApiError.first_name[0]}
+                          </ErrorMsg>
+                        ) : (
+                          ''
+                        )}
+                        {checkChange[i] && !item.id ? (
+                          <ErrorMsg>
+                            {id &&
+                              contactApiError &&
+                              contactApiError.first_name &&
+                              contactApiError.first_name[0]}
+                          </ErrorMsg>
+                        ) : (
+                          ''
+                        )}
                       </FormField>
                     </div>
                     <div className="col-3 pl-1">
@@ -480,11 +496,26 @@ export default function EditCompanyDetails({
                             handleContactChange(event, item.id || i)
                           }
                         />
-                        <ErrorMsg>
-                          {contactApiError &&
-                            contactApiError.last_name &&
-                            contactApiError.last_name[0]}
-                        </ErrorMsg>
+                        {checkChange[item.id] ? (
+                          <ErrorMsg>
+                            {item.id &&
+                              contactApiError &&
+                              contactApiError.last_name &&
+                              contactApiError.last_name[0]}
+                          </ErrorMsg>
+                        ) : (
+                          ''
+                        )}
+                        {checkChange[i] && !item.id ? (
+                          <ErrorMsg>
+                            {id &&
+                              contactApiError &&
+                              contactApiError.last_name &&
+                              contactApiError.last_name[0]}
+                          </ErrorMsg>
+                        ) : (
+                          ''
+                        )}
                       </FormField>
                     </div>
                     <div className="col-6">

@@ -14,26 +14,22 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
+  // CartesianGrid,
   Tooltip,
   Legend,
+  LabelList,
   PieChart,
   Pie,
   Cell,
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { parseInt } from 'lodash';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { getPerformance } from '../../api';
+import { getPerformance, getBuyBoxChartData } from '../../api';
 
 import {
-  // CopyLinkIcon,
-  // InfoIcons,
-  // ExternalLink,
-
   ArrowUpIcon,
   ArrowDownIcon,
   CaretUp,
@@ -43,63 +39,19 @@ import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-// import styled from 'styled-components';
-// import { fn } from 'jquery';
+
 const _ = require('lodash');
+const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
-  // const isDesktop = useMediaQuery({ minWidth: 1601, maxWidth: 1920 });
-  // const isDesktopMedium = useMediaQuery({ minWidth: 1201, maxWidth: 1600 });
-  // const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1200 });
-  // const isTablet = useMediaQuery({ minWidth: 858, maxWidth: 991 });
-  // const isTableMedium = useMediaQuery({ minWidth: 730, maxWidth: 857 });
-  // const isMobileView = useMediaQuery({ minWidth: 630, maxWidth: 731 });
-  // const isMobileMedium = useMediaQuery({ minWidth: 500, maxWidth: 629 });
-  // const isMobileSmall = useMediaQuery({ minWidth: 401, maxWidth: 499 });
-  // const isMobileXtraSmall = useMediaQuery({ minWidth: 320, maxWidth: 400 });
-
-  // const giveWidth = () => {
-  //   if (isDesktop) {
-  //     return 870;
-  //   }
-  //   if (isDesktopMedium) {
-  //     return 750;
-  //   }
-  //   if (isDesktopView) {
-  //     return 600;
-  //   }
-  //   if (isTablet) {
-  //     return 830;
-  //   }
-  //   if (isTableMedium) {
-  //     return 700;
-  //   }
-  //   if (isMobileView) {
-  //     return 580;
-  //   }
-
-  //   if (isMobileMedium) {
-  //     return 480;
-  //   }
-  //   if (isMobileSmall) {
-  //     return 380;
-  //   }
-  //   if (isMobileXtraSmall) {
-  //     return 300;
-  //   }
-  //   return 700;
-  // };
-
   const { Option, SingleValue } = components;
-  const [amazonOptions, setAmazonOptions] = useState([]);
-  const [selectedValue, setSelectedValue] = useState('week');
-  const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
   const [lineChartData, setLineChartData] = useState([{}]);
+  const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
-  const [groupBy, setGroupBy] = useState('daily');
+  const [dspSpend, setDspSpend] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
-
+  const [currencySymbol, setCurrencySymbol] = useState(null);
   const [pieData, setPieData] = useState([
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
@@ -120,10 +72,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     'Nov',
     'Dec',
   ];
-  // const [customDateValue, setCustomDateValue] = useState([
-  //   new Date(),
-  //   new Date(),
-  // ]);
+
+  // sales performance varibales and BB %
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([
@@ -134,7 +84,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     },
   ]);
 
+  const [BBstate, setBBState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'BBselection',
+    },
+  ]);
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
+  const [showBBCustomDateModal, setShowBBCustomDateModal] = useState(false);
+  const [groupBy, setGroupBy] = useState('daily');
+  const [BBGroupBy, setBBGroupBy] = useState('daily');
+  const [amazonOptions, setAmazonOptions] = useState([]);
+  const [selectedValue, setSelectedValue] = useState('week');
+  const [bBDailyFact, setBBDailyFact] = useState('week');
+  const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
+  // end
 
   const [revenueData, setRevenueData] = useState([{}]);
   const [unitsSoldData, setUnitsSoldData] = useState([{}]);
@@ -156,7 +121,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       bottom: 'auto',
       maxWidth: '420px ',
       width: '100% ',
-      minHeight: '560px',
+      minHeight: '390px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -165,17 +130,27 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const reportOptions = [
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
-    { value: 'month', label: 'This Month', sub: 'vs last month' },
-    { value: '30days', label: 'Last 30 Days', sub: 'vs previous 30 days' },
-    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
+  ];
+
+  const BBReportOptions = [
+    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
+    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+    // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
     // {
     //   value: 'custom',
     //   label: 'Custom Range',
     //   sub: 'Select start and end dates',
     // },
   ];
-
-  // const yAxisTicks = [...Array(20)].map((_, i) => 1000 + i * 1000);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -227,6 +202,37 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return parseFloat(diff.toFixed(2));
   };
 
+  const getBBData = useCallback(
+    (marketplace, BBdailyFact, bBGroupBy) => {
+      // setIsLoading({ loader: true, type: 'button' });
+      getBuyBoxChartData(id, marketplace, BBdailyFact, bBGroupBy).then(
+        (res) => {
+          if (res && res.status === 400) {
+            // setApiError(res && res.data);
+            // setIsLoading({ loader: false, type: 'button' });
+          }
+          if (res && res.status === 200 && res.data && res.data.bbep) {
+            const avg =
+              res.data.bbep
+                .filter((record) => record.bbep)
+                .reduce((acc, record) => acc + record.bbep, 0) /
+                res.data.bbep.length || 0;
+
+            const tempBBData = res.data.bbep.map((data) => {
+              return {
+                date: dayjs(data.report_date).format('MMM D'),
+                value: data.bbep,
+                avg: avg.toFixed(2),
+              };
+            });
+            setBBChartData(tempBBData);
+          }
+        },
+      );
+    },
+    [id],
+  );
+
   const getData = useCallback(
     (
       selectedDailyFact,
@@ -249,7 +255,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           // setIsLoading({ loader: false, type: 'button' });
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          // const tempData = [];
           const tempRevenueData = [];
           const tempUnitsSoldData = [];
           const tempTrafficData = [];
@@ -279,32 +284,27 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.daily_facts.previous &&
             res.data.daily_facts.previous.length
           ) {
-            res.data.daily_facts.previous.forEach(function (resData) {
+            res.data.daily_facts.previous.forEach((resData) => {
               revenueTotal.previousRevenueTotal += resData.revenue;
               unitsTotal.previousUnitsTotal += resData.units_sold;
               trafficTotal.previousTrafficTotal += resData.traffic;
-              conversionTotal.previousConversionTotal += resData.conversion;
-              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              tempRevenueData.push({ name: dayDate, 'vs $': resData.revenue });
-              tempTrafficData.push({ name: dayDate, 'vs $': resData.traffic });
-              tempUnitsSoldData.push({
-                name: dayDate,
-                'vs $': resData.units_sold,
-              });
-              tempConversionData.push({
-                name: dayDate,
-                'vs $': resData.conversion,
-              });
+              // conversionTotal.previousConversionTotal += resData.conversion;
+              // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
+              tempRevenueData.push({ 'vs $': resData.revenue });
+              tempTrafficData.push({ 'vs $': resData.traffic });
+              tempUnitsSoldData.push({ 'vs $': resData.units_sold });
+              tempConversionData.push({ 'vs $': resData.conversion });
             });
-            conversionTotal.previousConversionTotal /=
-              res.data.daily_facts.previous.length;
+            // conversionTotal.previousConversionTotal /=
+            //   res.data.daily_facts.previous.length;
           }
           if (
             res.data.daily_facts.current &&
             res.data.daily_facts.current.length
           ) {
-            res.data.daily_facts.current.forEach(function (resData, index) {
+            res.data.daily_facts.current.forEach((resData, index) => {
               // const key = ' $';
+              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               revenueTotal.currentRevenueTotal += resData.revenue;
               unitsTotal.currentUnitsTotal += resData.units_sold;
               trafficTotal.currentTrafficTotal += resData.traffic;
@@ -313,13 +313,17 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 res.data.daily_facts.previous &&
                 index < res.data.daily_facts.previous.length
               ) {
-                // tempData[index][key] = resData.revenue;
+                tempUnitsSoldData[index].name = dayDate;
+                tempRevenueData[index].name = dayDate;
+                tempTrafficData[index].name = dayDate;
+                tempConversionData[index].name = dayDate;
                 tempRevenueData[index][' $'] = resData.revenue;
                 tempUnitsSoldData[index][' $'] = resData.units_sold;
                 tempTrafficData[index][' $'] = resData.traffic;
                 tempConversionData[index][' $'] = resData.conversion;
+                conversionTotal.previousConversionTotal +=
+                  res.data.daily_facts.previous[index].conversion;
               } else {
-                const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
                 tempRevenueData.push({
                   name: dayDate,
                   ' $': resData.revenue,
@@ -339,6 +343,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               }
             });
             conversionTotal.currentConversionTotal /=
+              res.data.daily_facts.current.length;
+            conversionTotal.previousConversionTotal /=
               res.data.daily_facts.current.length;
           }
           revenueTotal.difference = calculateSalesDifference(
@@ -371,13 +377,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
-              'MMM D YYYY',
+              'MMM DD YYYY',
             );
+            if (res.data.dsp_spend && res.data.dsp_spend.length) {
+              setDspSpend({
+                value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
+                date: dayjs(res.data.dsp_spend[0].report_date).format(
+                  'MMM DD YYYY',
+                ),
+              });
+            }
             setDspData(res.data.pf_oi_is[0]);
             const ipiValue = parseFloat(
               res.data.pf_oi_is[0].inventory_performance_index,
             );
-            console.log('is NAN>>>>>', Number.isNaN(ipiValue));
             if (Number.isNaN(ipiValue)) {
               setPieData([
                 {
@@ -401,6 +414,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 },
               ]);
             }
+          } else {
+            setPieData([
+              { name: 'Inventory', value: 'N/A' },
+              { name: 'Total', value: 1000 },
+            ]);
           }
         }
       });
@@ -426,6 +444,25 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const CustomizedLabel = (data) => {
+    const dataLength = bBChartData.length - 1;
+
+    if (data && data.index === dataLength && bBChartData) {
+      return (
+        <text
+          className="cust-label-avg"
+          x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
+          y={data.y}
+          dy={-8}
+          fontSize={16}
+          textAnchor="middle">
+          {bBChartData[0].avg}%
+        </text>
+      );
+    }
+    return null;
+  };
+
   const xDataFormater = (date) => {
     if (date) {
       if (selectedValue === 'month' && groupBy === 'weekly') {
@@ -446,39 +483,41 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       if (selectedValue === 'month' && groupBy === 'daily') {
         return dayjs(date).date();
       }
-      if (selectedValue === 'year' && groupBy === 'monthly') {
-        return dayjs(date).date();
-      }
-      if (selectedValue === '30days' && groupBy === 'daily') {
-        return dayjs(date).date();
-      }
+      // if (selectedValue === '30days' && groupBy === 'daily') {
+      //   return dayjs(date).date();
+      // }
       if (groupBy === 'monthy') {
         return monthNames[dayjs(date).month()];
       }
       return dayjs(date).format('MMM D');
     }
-    return dayjs(date).format('MMM D');
+    return date;
   };
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
-      return `$${parseInt(number / 1000000000).toString()}B`;
+      return `${currencySymbol}${parseInt(number / 1000000000).toString()}B`;
     }
     if (number > 1000000) {
-      return `$${parseInt(number / 1000000).toString()}M`;
+      return `${currencySymbol}${parseInt(number / 1000000).toString()}M`;
     }
     if (number > 1000) {
-      return `$${parseInt(number / 1000).toString()}K`;
+      return `${currencySymbol}${parseInt(number / 1000).toString()}K`;
     }
-    return `$${parseInt(number).toString()}`;
+    return `${currencySymbol}${parseInt(number).toString()}`;
+  };
+
+  const getDays = (startDate, endDate) => {
+    const diffTime = Math.abs(startDate - endDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
-    const diffTime = Math.abs(startDate - endDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = getDays(startDate, endDate);
     if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: false, month: false });
@@ -540,8 +579,36 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const BBYearAndCustomDateFilter = (value) => {
+    let diffDays = new Date();
+    if (value === 'custom') {
+      diffDays = getDays(BBstate[0].startDate, BBstate[0].endDate);
+    } else {
+      diffDays = getDays(new Date(new Date().getFullYear(), 0, 1), new Date());
+    }
+    if (diffDays <= 30) {
+      getBBData(selectedAmazonValue, value, 'daily');
+      setBBGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 180) {
+      getBBData(selectedAmazonValue, value, 'weekly');
+      setBBGroupBy('weekly');
+    } else if (diffDays > 180) {
+      getBBData(selectedAmazonValue, value, 'monthly');
+      setBBGroupBy('monthly');
+    }
+  };
+
   const handleDailyFact = (value) => {
     setSelectedValue(value);
+    if (value !== 'custom') {
+      setState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'selection',
+        },
+      ]);
+    }
     if (value === 'year') {
       checkDifferenceBetweenDates(
         new Date(new Date().getFullYear(), 0, 1),
@@ -555,9 +622,32 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const handleBBDailyFact = (value) => {
+    setBBDailyFact(value);
+
+    if (value !== 'custom') {
+      setBBState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'BBselection',
+        },
+      ]);
+    }
+    if (value === 'year') {
+      BBYearAndCustomDateFilter('year');
+    } else if (value === 'custom') {
+      setShowBBCustomDateModal(true);
+    } else {
+      getBBData(selectedAmazonValue, value, 'daily');
+      setBBGroupBy('daily');
+    }
+  };
+
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.value);
     setCurrency(event.currency);
+    setCurrencySymbol(getSymbolFromCurrency(event.currency));
     if (selectedValue === 'custom') {
       checkDifferenceBetweenDates(
         state[0].startDate,
@@ -566,6 +656,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       );
     } else {
       getData(selectedValue, groupBy, event.value);
+      getBBData(event.value, bBDailyFact, BBGroupBy);
     }
   };
 
@@ -576,18 +667,27 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const applyCustomeDate = () => {
-    checkDifferenceBetweenDates(state[0].startDate, state[0].endDate, 'custom');
-    setShowCustomDateModal(false);
+  const applyCustomeDate = (flag) => {
+    if (flag === 'BBDate') {
+      BBYearAndCustomDateFilter('custom');
+      setShowBBCustomDateModal(false);
+    } else {
+      checkDifferenceBetweenDates(
+        state[0].startDate,
+        state[0].endDate,
+        'custom',
+      );
+      setShowCustomDateModal(false);
+    }
   };
 
   const renderLegendText = (value, entry) => {
     const { color } = entry;
     if (value === ' $') {
-      return <span style={{ color }}>Current</span>;
+      return <span style={{ color }}>Recent</span>;
     }
     if (value === 'vs $') {
-      return <span style={{ color }}>Past</span>;
+      return <span style={{ color }}>Previous</span>;
     }
     return null;
   };
@@ -603,9 +703,21 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$${current}`}</p>
-            <p className="label-2">{`vs $${previous}`}</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
+            <p className="label-1">
+              {activeSales === 'revenue'
+                ? `${currencySymbol}${current}`
+                : current}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}${previous}`
+                : previous}
+            </p>
           </div>
         );
       }
@@ -615,9 +727,21 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
-            <p className="label-1">{`$${current}`}</p>
-            <p className="label-2">vs $0.00</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
+            <p className="label-1">
+              {activeSales === 'revenue'
+                ? `${currencySymbol}${current}`
+                : current}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}0.00`
+                : 'vs 0.00'}
+            </p>
           </div>
         );
       }
@@ -627,9 +751,19 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">{activeSales}</p>
-            <p className="label-1">$0.00</p>
-            <p className="label-2">{`vs $${previous}`}</p>
+            <p className="main-label">
+              {activeSales === 'revenue'
+                ? `${activeSales} (${currency})`
+                : activeSales}
+            </p>
+            <p className="label-1">
+              {activeSales === 'revenue' ? `${currencySymbol}0.00` : '0.00'}
+            </p>
+            <p className="label-2">
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}${previous}`
+                : previous}
+            </p>
           </div>
         );
       }
@@ -652,16 +786,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     if (responseId === null && list.length && list[0].value !== null) {
       setSelectedAmazonValue(list[0].value);
       setCurrency(list[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
       getData(selectedValue, groupBy, list[0].value);
+      getBBData(list[0].value, bBDailyFact, 'daily');
       setResponseId('12345');
     }
   }, [
     marketplaceChoices,
     getData,
+    getBBData,
     responseId,
     groupBy,
     selectedValue,
     selectedAmazonValue,
+    bBDailyFact,
   ]);
 
   // const calculateDataMin = (dataMin) => {
@@ -686,6 +824,114 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         <span style={{ fontSize: '16px' }}>.00</span>
       </span>
+    );
+  };
+
+  const renderSPCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowCustomDateModal(false);
+            setState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'selection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setState([item.selection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={state}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomeDate('SPDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
+  const renderBBCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showBBCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowBBCustomDateModal(false);
+            setBBState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'BBselection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setBBState([item.BBselection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={BBstate}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomeDate('BBDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
     );
   };
 
@@ -784,7 +1030,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.revenue &&
                   !Number.isNaN(allSalesTotal.revenue.difference) &&
                   allSalesTotal.revenue.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.revenue &&
                     allSalesTotal.revenue.difference &&
@@ -793,7 +1043,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                     <img
                       className="red-arrow"
                       src={ArrowDownIcon}
-                      alt="arrow-up"
+                      alt="arrow-down"
                     />
                   ) : (
                     ''
@@ -848,7 +1098,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.units &&
                   !Number.isNaN(allSalesTotal.units.difference) &&
                   allSalesTotal.units.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.units &&
                     allSalesTotal.units.difference &&
@@ -914,7 +1168,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.traffic &&
                   !Number.isNaN(allSalesTotal.traffic.difference) &&
                   allSalesTotal.traffic.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.traffic &&
                     allSalesTotal.traffic.difference &&
@@ -978,7 +1236,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   allSalesTotal.conversion.difference &&
                   !Number.isNaN(allSalesTotal.conversion.difference) &&
                   allSalesTotal.conversion.difference > 0 ? (
-                    <img src={ArrowUpIcon} alt="arrow-up" />
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-up"
+                    />
                   ) : allSalesTotal &&
                     allSalesTotal.conversion &&
                     allSalesTotal.conversion.difference &&
@@ -1020,13 +1282,13 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 <li>
                   <div className="weeks">
                     <span className="orange block" />
-                    <span>Current</span>
+                    <span>Recent</span>
                   </div>
                 </li>
                 <li>
                   <div className="weeks">
                     <span className="gray block" />
-                    <span>Past</span>
+                    <span>Previous</span>
                   </div>
                 </li>
               </ul>
@@ -1125,7 +1387,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 left: 0,
                 bottom: 20,
               }}>
-              <CartesianGrid strokeDasharray="none" />
+              {/* <CartesianGrid strokeDasharray="none" /> */}
               <XAxis
                 dataKey="name"
                 axisLine={false}
@@ -1162,13 +1424,21 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         </WhiteCard>
 
         <div className="row mt-3">
-          {/* <div className="col-md-4 col-sm-12 mb-3">
+          <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
-              <div className="speed-rate">$0</div>
-              <div className="last-update">Last updated: N/A</div>
+              <div className="speed-rate">
+                {dspSpend && dspSpend.value
+                  ? `${currencySymbol}${dspSpend.value
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                  : 'N/A'}
+              </div>
+              <div className="last-update">
+                Last updated: {dspSpend && dspSpend.date}
+              </div>
             </WhiteCard>{' '}
-          </div> */}
+          </div>
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
@@ -1211,16 +1481,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-        {/* IN PROGRESSSSSSS */}
-        <div className="row mt-3">
+        <div className="row">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
                 Inventory Score (IPI)
               </p>
               {/* <PiechartResponsive> */}
-              <ResponsiveContainer width="99%" height={150}>
-                <PieChart width={250} height={190}>
+              <ResponsiveContainer width="99%" height={200}>
+                <PieChart>
                   <Pie
                     data={pieData}
                     cx={90}
@@ -1246,12 +1515,13 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   : 'N/A'}
                 <div className="out-off">Out of 1000</div>
               </div>
+              <br />
               <div className="last-update mt-3 ">
                 Last updated: {dspData && dspData.latest_date}
               </div>
             </WhiteCard>
           </div>
-          {/*
+
           <div className="col-md-8 col-sm-12">
             <WhiteCard className="fix-height">
               <div className="row">
@@ -1259,103 +1529,77 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   {' '}
                   <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
                 </div>
-                <div className="col-6 text-right mb-4">
-                  <DropDownSelect className="days-performance">
-                    <Select classNamePrefix="react-select" className="active" />
+                <div className="col-6 text-right mb-1">
+                  <DropDownSelect className="days-performance ">
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      // components={getSelectComponents()}
+                      options={BBReportOptions}
+                      defaultValue={BBReportOptions[0]}
+                      onChange={(event) => handleBBDailyFact(event.value)}
+                    />
                   </DropDownSelect>{' '}
                 </div>
               </div>
-              <LineChart
-                width={300}
-                height={200}
-                data={lineChartData}
-                margin={{
-                  top: 30,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}>
-                <CartesianGrid strokeDasharray="none" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="pv"
-                  stroke="#FF5933"
-                  activeDot={{ r: 8 }}
-                />
-                <Line type="monotone" dataKey="uv" stroke="#BFC5D2" />
-              </LineChart>
-              <div className="last-update ">Last updated: Dec 31 2020</div>
-            </WhiteCard>
-          </div> */}
-        </div>
-
-        <Modal
-          isOpen={showCustomDateModal}
-          style={customStyles}
-          ariaHideApp={false}
-          contentLabel="Edit modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => {
-              setShowCustomDateModal(false);
-              setState([
-                {
-                  startDate: currentDate,
-                  endDate: currentDate,
-                  key: 'selection',
-                },
-              ]);
-            }}
-            role="presentation"
-          />
-          <ModalBox>
-            <div className="modal-body">
-              <h4>Select Date Range</h4>
-
-              {/* <DateRangePicker
-                isOpen={true}
-                onChange={(event) => onChangeCustomDate(event)}
-                value={customDateValue}
-                maxDate={new Date()}
-
-              /> */}
-              <DateRange
-                editableDateInputs
-                onChange={(item) => {
-                  setState([item.selection]);
-                }}
-                showMonthAndYearPickers={false}
-                ranges={state}
-                moveRangeOnFirstSelection={false}
-                showDateDisplay={false}
-                maxDate={currentDate}
-                rangeColors={['#FF5933', 'green']}
-                weekdayDisplayFormat="EEEEE"
-                locale={enGB}
-              />
-              <div
-                className="text-center  "
-                style={{
-                  bottom: '20px',
-                  position: 'absolute',
-                  width: '85%',
-                }}>
-                <Button
-                  onClick={() => applyCustomeDate()}
-                  type="button"
-                  className="btn-primary on-boarding  mr-2 pb-2 mb-1 w-100">
-                  Apply
-                </Button>
+              <div className="row">
+                <div className="col-md-6 col-sm-12 order-md-1 order-2">
+                  <ul className="rechart-item">
+                    <li>
+                      <div className="weeks">
+                        <span className="black block" />
+                        <span>Daily %</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="weeks">
+                        <span className="gray block" />
+                        <span>Average</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          </ModalBox>
-        </Modal>
+              <ResponsiveContainer width="99%" height={200}>
+                <LineChart
+                  // width={300}
+                  // height={200}
+                  data={bBChartData}
+                  margin={{
+                    top: 30,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                  }}>
+                  <XAxis dataKey="date" hide />
+                  <YAxis hide />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    dataKey="avg"
+                    dot={false}
+                    stroke="#BFC5D2"
+                    activeDot={false}>
+                    <LabelList content={<CustomizedLabel />} />
+                  </Line>
+                  <Line
+                    dataKey="value"
+                    dot={false}
+                    stroke="BLACK"
+                    activeDot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+              <br />
+              <br />
+              <div className="last-update ">
+                Last updated: {dspData && dspData.latest_date}
+              </div>
+            </WhiteCard>
+          </div>
+        </div>
+        {renderSPCustomDateModal()}
+        {renderBBCustomDateModal()}
       </div>
     </>
   );
@@ -1415,168 +1659,3 @@ CompanyPerformance.propTypes = {
 //     }
 //   }
 // `;
-
-// const ResponsiveContainer = styled.div`
-//   width: 100%;
-//   // .recharts-wrapper {
-//   //   width: 750px;
-//   //   .recharts-surface {
-//   //     width: 750px;
-//   //   }
-//   .recharts-default-legend {
-//     li {
-//       .recharts-surface {
-//         width: 14px !important;
-//       }
-//     }
-//   }
-//   // @media only screen and (min-width: 1920px) {
-//   //   width: 1100px !important;
-//   //   .recharts-surface {
-//   //     width: 1100px !important;
-//   //   }
-//   // }
-//   @media only screen and (min-width: 1600px) and max-width: 2300px {
-//     width: 866px !important;
-//     // max-width: 100% !important;
-//     .recharts-surface {
-//       width: 866px !important;
-//       // max-width: 100% !important;
-//     }
-//   }
-//   // @media only screen and (min-width: 1200px) {
-//   //   width: none !important;
-//   //   .recharts-surface {
-//   //     width: 800px !important;
-//   //   }
-//   // }
-//   @media only screen and (min-width: 1200px) and max-width: 1599px {
-//     width: 750px !important;
-//     max-width: 100% !important;
-//     .recharts-surface {
-//       width: 750px !important;
-//     }
-//     .recharts-default-legend {
-//       li {
-//         .recharts-surface {
-//           width: 14px !important;
-//         }
-//       }
-//     }
-//   }
-//   @media only screen and (min-width: 992px) {
-//     .recharts-wrapper {
-//       width: 700px !important;
-//       // max-width: 100% !important;
-//       .recharts-surface {
-//         width: 700px !important;
-//         // max-width: 100% !important;
-//       }
-//       }
-//     }
-//     @media only screen and (max-width: 991px) {
-//       width: 800px !important;
-//       .recharts-surface {
-//         width: 800px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 850px) {
-//       width: 750px !important;
-//       .recharts-surface {
-//         width: 750px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 800px) {
-//       width: 680px !important;
-//       .recharts-surface {
-//         width: 680px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 730px) {
-//       width: 600px !important;
-//       .recharts-surface {
-//         width: 600px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 650px) {
-//       width: 500px !important;
-//       .recharts-surface {
-//         width: 500px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 550px) {
-//       width: 450px !important;
-//       .recharts-surface {
-//         width: 450px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 500px) {
-//       width: 400px !important;
-//       .recharts-surface {
-//         width: 400px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 450px) {
-//       width: 340px !important;
-//       .recharts-surface {
-//         width: 340px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 390px) {
-//       width: 300px !important;
-//       .recharts-surface {
-//         width: 300px !important;
-//       }
-//     }
-//     @media only screen and (max-width: 350px) {
-//       width: 260px !important;
-//       .recharts-surface {
-//         width: 260px !important;
-//       }
-//     }
-//   }
-// `;
-
-// const ResponsiveContainer = styled.div`
-//   @media only screen and (max-width: 730px) {
-//       width: 600px !important;
-//        .recharts-surface {
-//          width: 600px !important;
-//        }
-//      }
-//     @media only screen and (max-width: 650px) {
-//       width: 500px !important;
-//       .recharts-surface {
-//         width: 500px !important;
-//       }
-//     }
-//      @media only screen and (max-width: 550px) {
-//        width: 450px !important;
-//        .recharts-surface {
-//         width: 450px !important;
-//        }
-//      }
-//      @media only screen and (max-width: 500px) {
-//        width: 400px !important;
-//        .recharts-surface {
-//          width: 400px !important;
-//        }     }
-//    @media only screen and (max-width: 450px) {
-//       width: 340px !important;
-//       .recharts-surface {
-//        width: 340px !important;
-//        }
-//     }     @media only screen and (max-width: 390px) {
-//     width: 300px !important;
-//        .recharts-surface {
-//          width: 300px !important;
-//        }
-//     }
-//     @media only screen and (max-width: 350px) {
-//       width: 260px !important;
-//       .recharts-surface {
-//         width: 260px !important;
-//       }
-//     }
-//   }
-//  `;

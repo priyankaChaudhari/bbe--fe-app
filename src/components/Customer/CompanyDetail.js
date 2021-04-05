@@ -142,7 +142,7 @@ export default function CompanyDetail({
                 {SocialIcons.map((item) => generateSocialIcon(item))}
               </ul>
             </WhiteCard>
-            <WhiteCard className=" mt-3">
+            <WhiteCard className=" mt-3 mb-3">
               <p className="black-heading-title mt-0 ">Company Contacts</p>
               <div
                 className="edit-details"

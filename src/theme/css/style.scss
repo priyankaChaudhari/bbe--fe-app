@@ -1171,10 +1171,6 @@ input:checked + .slider:before {
   display: block;
   user-select: none;
   margin: 0 auto !important;
-
-  // padding-left: 65px !important;
-  // width: 100% !important;
-  // top: 52% !important;
 }
 
 .react-pdf__Page__textContent {
@@ -1236,18 +1232,9 @@ input:checked + .slider:before {
   align-items: center;
 }
 
-// .PDFPage {
-//   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-// }
-
 .PDFPageOne {
   margin-bottom: 25px;
 }
-
-// .PDFPage > canvas {
-//   width: 100%;
-//   height: auto !important;
-// }
 
 .Toastify__toast-container--top-center {
   top: -4px;
@@ -1284,75 +1271,28 @@ input:checked + .slider:before {
   padding: 0;
 }
 
-g .recharts-cartesian-grid-horizontal {
-  display: none;
-}
+// g .recharts-cartesian-grid-horizontal {
+//   display: none;
+// }
 
-g .recharts-cartesian-grid-vertical {
-  border: 1px solid #f1f1f5;
-  stroke-dasharray: 0;
+// g .recharts-cartesian-grid-vertical {
+//   border: 1px solid #f1f1f5;
+//   stroke-dasharray: 0;
 
-  line {
-    stroke: #f1f1f5;
-    outline: 1px solid #f1f1f5;
-  }
-}
-g .recharts-cartesian-axis-ticks {
-  color: #556178;
-  font-size: 15px;
-}
-
-g .recharts-layer .recharts-line-dots {
-  color: red;
-}
-
-// .recharts-wrapper{
-//   .recharts-legend-wrapper{
-//     position: absolute;
-//     width: 100px;
-//     height: auto;
-//     left: 91px;
-//     top: -17px
-//   }
-//   .recharts-legend-icon {
-//     path {
-//       stroke: none;
-//      fill: #BFC5D2;
-//     }
-
-//   }
-//   .recharts-legend-item-text {
-//     color: #000000;
+//   line {
+//     stroke: #f1f1f5;
+//     outline: 1px solid #f1f1f5;
 //   }
 // }
-// span.recharts-legend-item-text {
-//   color: black !important;
+// g .recharts-cartesian-axis-ticks {
+//   color: #556178;
+//   font-size: 15px;
 // }
-// .recharts-default-legend {
-//   li.recharts-legend-item {
-//     display: inline-block;
-//     .legend-item-1 {
-//       .recharts-surface {
-//         width: 20px;
-//         height: 20px;
-//         path {
-//           stroke: #bfc5d2;
-//         }
 
-//         span.recharts-legend-item-text {
-//           color: black !important;
-//         }
-//       }
-//     }
-//     .legend-item-0 {
-//       .recharts-surface {
-//         path {
-//           stroke: red;
-//         }
-//       }
-//     }
-//   }
+// g .recharts-layer .recharts-line-dots {
+//   color: red;
 // }
+
 .recharts-legend-wrapper {
   bottom: 20px !important;
   top: 0 !important;
@@ -1481,31 +1421,33 @@ g .recharts-layer .recharts-line-dots {
 //   }
 // }
 .rdrCalendarWrapper {
+  font-family: $base-font-family;
+  width: 100%;
   .rdrMonthAndYearPickers {
     color: $black-color;
     font-size: 14px;
     text-transform: uppercase;
     text-align: center;
+    font-family: $base-font-family;
   }
   .rdrDay {
-    height: 4.7em;
+    // height: 3.7em;
     font-size: 15px;
-    color: $black-color;
+    color: $black-color !important;
 
     .rdrDayNumber span {
       color: $black-color;
     }
-    .rdrSelected,
-    .rdrInRange,
-    .rdrStartEdge,
-    .rdrEndEdge {
-      background: currentColor;
-      position: absolute;
-      top: 8px;
-      left: 0;
-      right: 0;
-      bottom: 8px;
-    }
+    // .rdrSelected,
+    // .rdrInRange,
+    // .rdrStartEdge,
+    // .rdrEndEdge {
+    //   background: currentColor;
+    //   position: absolute;
+
+    //   left: 0;
+    //   right: 0;
+    // }
     // .rdrDayToday .rdrDayNumber span:after {
     //   content: '';
     //   position: absolute;
@@ -1519,47 +1461,35 @@ g .recharts-layer .recharts-line-dots {
     //   background: #ff5933;
     // }
   }
-  // .rdrDayToday .rdrDayNumber span:after {
-  //   content: '';
-  //   position: absolute;
-  //   top: 10px;
-  //   left: 73%;
-  //   border-radius: 50% !important;
-  //   /* transform: translate(-50%, 0); */
-  //   width: 6px;
-  //   border-radius: 50%;
-  //   height: 6px;
-  //   border-radius: 2px;
-  //   background: #ff5933;
-  // }
-  // .rdrDayStartPreview {
-  //   top: 8px;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 8px;
-  // }
+  .rdrDayToday .rdrDayNumber span:after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 73%;
+    border-radius: 50% !important;
+    /* transform: translate(-50%, 0); */
+    width: 6px;
+    border-radius: 25px;
+    height: 6px;
+    // border-radius: 2px;
+    background: #ff5933;
+  }
 
-  // .rdrDayHovered {
-  //   top: 8px;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 8px;
-  // }
-  // .rdrWeekHovered {
-  //   top: 8px;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 8px;
-  // }
-  // .rdrWeekHovered {
-  //   top: 8px;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 8px;
-  // }
   .rdrMonth {
-    width: 29.667em;
+    // max-width: 29.667em;
+    width: 100%;
     padding: 0;
+  }
+  .rdrSelected,
+  .rdrInRange,
+  .rdrStartEdge,
+  .rdrEndEdge {
+    background: currentColor;
+    position: absolute;
+    top: 5px;
+    left: -1px !important;
+    right: 0;
+    bottom: 5px;
   }
   .rdrWeekDays {
     .rdrWeekDay {
@@ -1567,6 +1497,28 @@ g .recharts-layer .recharts-line-dots {
       font-size: 11px;
     }
   }
+}
+.rdrDayHovered {
+  color: rgb(255, 89, 51) !important;
+  .rdrDayStartPreview {
+    color: rgb(255, 89, 51) !important;
+  }
+  span {
+    color: rgb(255, 89, 51) !important;
+  }
+}
+
+.rdrDayHovered.rdrDayStartPreview ~ .rdrDayNumberHovered span,
+.rdrDay .rdrDayInPreview ~ .rdrDayNumber span,
+.rdrDayHovered .rdrSelectedHovered ~ .rdrDayNumberHovered span {
+  color: #ff5933 !important;
+  background-color: $white-color;
+}
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 .recharts-tooltip-wrapper {
@@ -1594,5 +1546,35 @@ g .recharts-layer .recharts-line-dots {
     color: #bfc5d2;
     font-size: 14px;
     margin: 0;
+  }
+}
+
+.rdrPprevButton i {
+  background-image: url(../images/icons/calendar-back-arrow.png);
+  border-width: 0;
+  border-color: white;
+  background-repeat: no-repeat;
+  z-index: 9999999999;
+  background-position-y: 0;
+  background-position-x: 7px;
+  padding: 7px 10px;
+}
+.rdrNextButton i {
+  background-image: url(../images/icons/calendar-back-arrow.png);
+  border-width: 0;
+  border-color: white;
+  background-repeat: no-repeat;
+  z-index: 9999999999;
+  background-position-y: 0;
+  background-position-x: 7px;
+  padding: 7px 10px;
+  transform: rotate(180deg);
+}
+
+.rdrNextPrevButton {
+  background: white;
+
+  &:hover {
+    background: white;
   }
 }

@@ -38,25 +38,10 @@ export default function Dashboard() {
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
 
   const timeOptions = [
-    { value: 'week', label: 'This Week', sub: 'vs last week', group: 'weekly' },
-    {
-      value: 'month',
-      label: 'This Month',
-      sub: 'vs last month',
-      group: 'monthly',
-    },
-    {
-      value: '30days',
-      label: 'Last 30 Days',
-      sub: 'vs previous 30 days',
-      group: 'sum',
-    },
-    {
-      value: 'year',
-      label: 'Year to Date',
-      sub: 'vs previous year',
-      group: 'sum',
-    },
+    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
+    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
     // {
     //   value: 'custom',
     //   label: 'Custom Range',
@@ -224,7 +209,7 @@ export default function Dashboard() {
         <>
           <div className="increase-rate">
             <img
-              className="red-arrow"
+              className="green-arrow "
               src={ArrowUpIcon}
               width="14px"
               alt="arrow-up"

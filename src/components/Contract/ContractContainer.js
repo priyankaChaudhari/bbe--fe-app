@@ -49,6 +49,7 @@ import {
   updateAddendum,
   createMarketplaceBulk,
   createAdditionalServiceBulk,
+  getMarketplaces,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -107,6 +108,7 @@ export default function ContractContainer() {
   });
   const [isEditContract, setIsEditContract] = useState(false);
   const [details, setDetails] = useState({});
+  const [marketplacesResult, setMarketplacesResult] = useState([]);
 
   const [editContractFlag, setEditContractFlag] = useState(true);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
@@ -177,7 +179,8 @@ export default function ContractContainer() {
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
   const [discountFlag, setDiscountFlag] = useState('');
   const [contractID, setContractID] = useState('');
-
+  const [marketPlaces, setMarketPlaces] = useState([]);
+  const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -255,6 +258,12 @@ export default function ContractContainer() {
       );
     });
 
+    getMarketplaces().then((market) => {
+      setMarketPlaces(market.data);
+      setAdditionalMarketplaces(market.data);
+      setMarketplacesResult(market.data);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
@@ -321,6 +330,33 @@ export default function ContractContainer() {
       setShowCollpase({ ...showSection, dspAddendum: false });
     }
 
+    if (
+      details &&
+      details.primary_marketplace &&
+      details.primary_marketplace.name
+    ) {
+      setAdditionalMarketplaces(
+        marketplacesResult.filter(
+          (op) => op.value !== details.primary_marketplace.name,
+        ),
+      );
+    } else {
+      setAdditionalMarketplaces(marketplacesResult);
+    }
+
+    if (details && details.additional_marketplaces) {
+      setMarketPlaces(
+        marketplacesResult.filter(
+          (choice) =>
+            !(details && details.additional_marketplaces).some(
+              (item) => item.name === choice.value,
+            ),
+        ),
+      );
+    } else {
+      setMarketPlaces(marketplacesResult);
+    }
+
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details]);
@@ -342,7 +378,343 @@ export default function ContractContainer() {
     }
   };
 
-  const nextStep = () => {
+  const updateMarketplaces = async () => {
+    let flag = false;
+    const result = await createMarketplaceBulk(
+      updatedFormData.additional_marketplaces,
+    ).then(() => {
+      flag = true;
+    });
+    if (flag) {
+      if (updatedFormData && updatedFormData.additional_marketplaces) {
+        delete updatedFormData.additional_marketplaces;
+      }
+      if (
+        !(
+          formData &&
+          formData.additional_marketplace &&
+          formData.additional_marketplace.length
+        )
+      ) {
+        setShowAdditionalMarketplace(false);
+      }
+
+      const statementData = {
+        id:
+          (details &&
+            details.primary_marketplace &&
+            details.primary_marketplace.id) ||
+          '',
+        contract: details.id,
+        name: updatedFormData && updatedFormData.primary_marketplace,
+        is_primary: true,
+      };
+
+      if (details.primary_marketplace && details.primary_marketplace.id) {
+        await updateMarketplace(
+          details.primary_marketplace.id,
+          statementData,
+        ).then((updateMarketplaceRes) => {
+          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+              // setUpdatedFormData({ ...updatedFormData });
+              // if (!Object.keys(updatedFormData).length) {
+              //   showFooter(false);
+              //   setIsEditContract(false);
+              //   getContractDetails();
+              // }
+            }
+          }
+        });
+      } else {
+        createMarketplace(statementData).then((createMarketplaceRes) => {
+          setIsLoading({ loader: false, type: 'button' });
+          if (createMarketplaceRes && createMarketplaceRes.status === 201) {
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+            }
+          }
+        });
+      }
+      setUpdatedFormData({ ...updatedFormData });
+    }
+    return result;
+  };
+
+  const saveChanges = (apis) => {
+    axios
+      .all(apis)
+      .then(
+        axios.spread((...responses) => {
+          const additionalMarketplaceRes = responses[0];
+          const additionalMonthlySerRes = responses[1];
+          const additionalOneTimeServRes = responses[2];
+          const contractRes = responses[3];
+          const primaryMarketplaceRes = responses[4];
+          const addendumRes = responses[5];
+          setIsLoading({ loader: false, type: 'button' });
+
+          if (
+            additionalMarketplaceRes &&
+            additionalMarketplaceRes.status === 200 &&
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 200 &&
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 200 &&
+            contractRes &&
+            contractRes.status === 200 &&
+            primaryMarketplaceRes &&
+            primaryMarketplaceRes.status === 200 &&
+            addendumRes &&
+            addendumRes.status === 200
+          ) {
+            // use/access the results
+            showFooter(false);
+            setIsEditContract(false);
+            setUpdatedFormData({});
+            // dispatch(getAccountDetails(id));
+            getContractDetails();
+            setIsEditContract(false);
+          }
+
+          if (
+            additionalMarketplaceRes &&
+            additionalMarketplaceRes.status === 200
+          ) {
+            if (updatedFormData && updatedFormData.additional_marketplaces) {
+              delete updatedFormData.additional_marketplaces;
+            }
+            if (
+              !(
+                formData &&
+                formData.additional_marketplace &&
+                formData.additional_marketplace.length
+              )
+            ) {
+              setShowAdditionalMarketplace(false);
+            }
+          }
+          if (
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 200
+          ) {
+            if (
+              updatedFormData &&
+              updatedFormData.additional_monthly_services
+            ) {
+              delete updatedFormData.additional_monthly_services;
+            }
+          }
+          if (
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 200
+          ) {
+            if (
+              updatedFormData &&
+              updatedFormData.additional_one_time_services
+            ) {
+              delete updatedFormData.additional_one_time_services;
+              setAmazonStoreCustom(false);
+            }
+          }
+          if (
+            (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
+            (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
+          ) {
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+            }
+          }
+
+          if (
+            (addendumRes && addendumRes.status === 200) ||
+            (addendumRes && addendumRes.status === 201)
+          ) {
+            if (addendumRes && addendumRes.status === 201) {
+              setNewAddendum(addendumRes && addendumRes.data);
+            }
+            setOriginalAddendumData(addendumRes && addendumRes.data);
+            setShowEditor(false);
+            if (updatedFormData && updatedFormData.addendum) {
+              delete updatedFormData.addendum;
+            }
+          }
+
+          if (contractRes && contractRes.status === 200) {
+            const updatedKeys = Object.keys(updatedFormData);
+            if (updatedKeys && updatedKeys.length) {
+              const fieldsToDeleteList = updatedKeys
+                .filter((item) => item !== 'additional_one_time_services')
+                .filter((item) => item !== 'additional_monthly_services')
+                .filter((item) => item !== 'additional_marketplaces')
+                .filter((item) => item !== 'primary_marketplace')
+                .filter((item) => item !== 'addendum');
+              // fieldsToDeleteList.map(item => delete updatedFormData.item)
+              for (const item of fieldsToDeleteList) {
+                delete updatedFormData[item];
+              }
+            }
+          }
+
+          if (!Object.keys(updatedFormData).length) {
+            showFooter(false);
+            setIsEditContract(false);
+            // dispatch(getAccountDetails(id));
+            getContractDetails();
+          }
+          setUpdatedFormData({ ...updatedFormData });
+
+          let agreementErrCount = 0;
+          let statementErrCount = 0;
+          let dspErrCount = 0;
+
+          if (
+            (additionalMarketplaceRes &&
+              additionalMarketplaceRes.status === 400) ||
+            (additionalMonthlySerRes &&
+              additionalMonthlySerRes.status === 400) ||
+            (additionalOneTimeServRes &&
+              additionalOneTimeServRes.status === 400) ||
+            (contractRes && contractRes.status === 400) ||
+            (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
+          ) {
+            toast.error(
+              'Changes have not been saved. Please fix errors and try again',
+            );
+          }
+          if (
+            additionalMarketplaceRes &&
+            additionalMarketplaceRes.status === 400
+          ) {
+            setAdditionalMarketplaceError({
+              ...additionalMarketplaceError,
+              ...additionalMarketplaceRes.data,
+            });
+
+            if (additionalMarketplaceRes.data) {
+              statementErrCount += Object.keys(additionalMarketplaceRes.data)
+                .length;
+            }
+          }
+          if (
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 400
+          ) {
+            setAdditionalMonthlySerError({
+              ...additionalMonthlySerError,
+              ...additionalMonthlySerRes.data,
+            });
+
+            if (additionalMonthlySerRes.data) {
+              statementErrCount += Object.keys(additionalMonthlySerRes.data)
+                .length;
+            }
+          }
+          if (
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 400
+          ) {
+            setAdditionalOnetimeSerError({
+              ...additionalOnetimeSerError,
+              ...additionalOneTimeServRes.data,
+            });
+
+            if (additionalOneTimeServRes.data) {
+              if (
+                Object.keys(additionalOneTimeServRes.data).includes('quantity')
+              ) {
+                statementErrCount +=
+                  Object.keys(additionalOneTimeServRes.data).length +
+                  Object.keys(additionalOneTimeServRes.data.quantity).length -
+                  1;
+              } else if (!additionalOnetimeSerError.custom_amazon_store_price) {
+                statementErrCount += Object.keys(additionalOneTimeServRes.data)
+                  .length;
+              }
+            }
+            if (
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.data &&
+              Object.values(additionalOneTimeServRes.data) &&
+              Object.values(additionalOneTimeServRes.data).length &&
+              Object.values(additionalOneTimeServRes.data)[0] ===
+                'Object does not exists'
+            ) {
+              showFooter(false);
+              setIsEditContract(false);
+              setUpdatedFormData({});
+              // dispatch(getAccountDetails(id));
+              getContractDetails();
+            }
+          }
+          if (contractRes && contractRes.status === 400) {
+            setContractError({
+              ...contractError,
+              ...contractRes.data,
+            });
+
+            if (contractRes.data) {
+              if (Object.keys(contractRes.data).length) {
+                if (Object.keys(contractRes.data).includes('monthly_retainer'))
+                  statementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('content_optimization')
+                )
+                  statementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('design_optimization')
+                )
+                  statementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('zip_code') &&
+                  !contractError.zip_code
+                )
+                  agreementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('dsp_fee') &&
+                  !contractError.dsp_fee
+                )
+                  dspErrCount += 1;
+              }
+            }
+          }
+          if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
+            setApiError({
+              ...apiError,
+              ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
+            });
+
+            if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
+              statementErrCount += Object.keys(primaryMarketplaceRes.data)
+                .length;
+            }
+          }
+
+          setSectionError({
+            agreement: agreementErrCount + sectionError.agreement,
+            statement: statementErrCount + sectionError.statement,
+            dsp: dspErrCount + sectionError.dsp,
+          });
+        }),
+      )
+      .catch(() => {});
+
+    //  .then((response) => {
+    //     if (response && response.status === 400) {
+    //       setIsLoading({ loader: false, type: 'button' });
+    //       setApiError(response && response.data);
+    //       // setFormData({});
+    //     } else if (response && response.status === 200) {
+    //       setTimeout(() => dispatch(getAccountDetails(id)), 800);
+    //       setIsLoading({ loader: false, type: 'button' });
+    //       setFormData(response && response.data);
+    //       setUpdatedFormData({});
+    //     }
+    //   });
+  };
+
+  const nextStep = async () => {
     // if (history.location.pathname.includes('agreement')) {
 
     // setSectionError({});
@@ -376,11 +748,20 @@ export default function ContractContainer() {
           name: updatedFormData && updatedFormData.primary_marketplace,
           is_primary: true,
         };
+
         if (details.primary_marketplace && details.primary_marketplace.id) {
-          primaryMarketPlaceApi = updateMarketplace(
-            details.primary_marketplace.id,
-            statementData,
-          );
+          if (
+            !(
+              updatedFormData &&
+              updatedFormData.primary_marketplace &&
+              updatedFormData.additional_marketplaces
+            )
+          ) {
+            primaryMarketPlaceApi = updateMarketplace(
+              details.primary_marketplace.id,
+              statementData,
+            );
+          }
         } else {
           primaryMarketPlaceApi = createMarketplace(statementData);
         }
@@ -455,319 +836,68 @@ export default function ContractContainer() {
         //  });
       }
 
-      axios
-        .all([
-          additionalMarketplacesApi,
+      let apis = [
+        additionalMarketplacesApi,
+        additionalMonthlyApi,
+        additionalOneTimeApi,
+        AccountApi,
+        primaryMarketPlaceApi,
+        AddendumApi,
+      ];
+
+      if (
+        updatedFormData &&
+        updatedFormData.primary_marketplace &&
+        updatedFormData.additional_marketplaces
+      ) {
+        setIsLoading({ loader: true, type: 'button' });
+
+        apis = [
+          null,
           additionalMonthlyApi,
           additionalOneTimeApi,
           AccountApi,
-          primaryMarketPlaceApi,
+          null,
           AddendumApi,
-        ])
-        .then(
-          axios.spread((...responses) => {
-            const additionalMarketplaceRes = responses[0];
-            const additionalMonthlySerRes = responses[1];
-            const additionalOneTimeServRes = responses[2];
-            const contractRes = responses[3];
-            const primaryMarketplaceRes = responses[4];
-            const addendumRes = responses[5];
-            setIsLoading({ loader: false, type: 'button' });
+        ];
 
-            if (
-              additionalMarketplaceRes &&
-              additionalMarketplaceRes.status === 200 &&
-              additionalMonthlySerRes &&
-              additionalMonthlySerRes.status === 200 &&
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.status === 200 &&
-              contractRes &&
-              contractRes.status === 200 &&
-              primaryMarketplaceRes &&
-              primaryMarketplaceRes.status === 200 &&
-              addendumRes &&
-              addendumRes.status === 200
-            ) {
-              // use/access the results
-              showFooter(false);
-              setIsEditContract(false);
-              setUpdatedFormData({});
-              // dispatch(getAccountDetails(id));
-              getContractDetails();
-              setIsEditContract(false);
-            }
+        await updateMarketplaces();
+      }
+      saveChanges(apis);
+      // if (
+      //   updatedFormData &&
+      //   updatedFormData.primary_marketplace &&
+      //   updatedFormData.additional_marketplaces
+      // ) {
+      //   setTimeout(() => saveChanges(apis), 30000);
+      // } else {
+      //   saveChanges(apis);
+      // }
 
-            if (
-              additionalMarketplaceRes &&
-              additionalMarketplaceRes.status === 200
-            ) {
-              if (updatedFormData && updatedFormData.additional_marketplaces) {
-                delete updatedFormData.additional_marketplaces;
-              }
-              if (
-                !(
-                  formData &&
-                  formData.additional_marketplace &&
-                  formData.additional_marketplace.length
-                )
-              ) {
-                setShowAdditionalMarketplace(false);
-              }
-            }
-            if (
-              additionalMonthlySerRes &&
-              additionalMonthlySerRes.status === 200
-            ) {
-              if (
-                updatedFormData &&
-                updatedFormData.additional_monthly_services
-              ) {
-                delete updatedFormData.additional_monthly_services;
-              }
-            }
-            if (
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.status === 200
-            ) {
-              if (
-                updatedFormData &&
-                updatedFormData.additional_one_time_services
-              ) {
-                delete updatedFormData.additional_one_time_services;
-                setAmazonStoreCustom(false);
-              }
-            }
-            if (
-              (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
-              (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
-            ) {
-              if (updatedFormData && updatedFormData.primary_marketplace) {
-                delete updatedFormData.primary_marketplace;
-              }
-            }
+      // else {
+      //   const stepsCompletedData = {
+      //     steps_completed: {
+      //       ...details.steps_completed,
+      //       agreement: true,
+      //       statement: true,
+      //     },
+      //   };
+      //   setIsLoading({ loader: true, type: 'button' });
 
-            if (
-              (addendumRes && addendumRes.status === 200) ||
-              (addendumRes && addendumRes.status === 201)
-            ) {
-              if (addendumRes && addendumRes.status === 201) {
-                setNewAddendum(addendumRes && addendumRes.data);
-              }
-              setOriginalAddendumData(addendumRes && addendumRes.data);
-              setShowEditor(false);
-              if (updatedFormData && updatedFormData.addendum) {
-                delete updatedFormData.addendum;
-              }
-            }
+      //   updateAccountDetails(details.id, stepsCompletedData).then((response) => {
+      //     setIsLoading({ loader: false, type: 'button' });
 
-            if (contractRes && contractRes.status === 200) {
-              const updatedKeys = Object.keys(updatedFormData);
-              if (updatedKeys && updatedKeys.length) {
-                const fieldsToDeleteList = updatedKeys
-                  .filter((item) => item !== 'additional_one_time_services')
-                  .filter((item) => item !== 'additional_monthly_services')
-                  .filter((item) => item !== 'additional_marketplaces')
-                  .filter((item) => item !== 'primary_marketplace')
-                  .filter((item) => item !== 'addendum');
-                // fieldsToDeleteList.map(item => delete updatedFormData.item)
-                for (const item of fieldsToDeleteList) {
-                  delete updatedFormData[item];
-                }
-              }
-            }
-
-            if (!Object.keys(updatedFormData).length) {
-              showFooter(false);
-              setIsEditContract(false);
-              // dispatch(getAccountDetails(id));
-              getContractDetails();
-            }
-            setUpdatedFormData({ ...updatedFormData });
-
-            let agreementErrCount = 0;
-            let statementErrCount = 0;
-            let dspErrCount = 0;
-
-            if (
-              (additionalMarketplaceRes &&
-                additionalMarketplaceRes.status === 400) ||
-              (additionalMonthlySerRes &&
-                additionalMonthlySerRes.status === 400) ||
-              (additionalOneTimeServRes &&
-                additionalOneTimeServRes.status === 400) ||
-              (contractRes && contractRes.status === 400) ||
-              (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
-            ) {
-              toast.error(
-                'Changes have not been saved. Please fix errors and try again',
-              );
-            }
-            if (
-              additionalMarketplaceRes &&
-              additionalMarketplaceRes.status === 400
-            ) {
-              setAdditionalMarketplaceError({
-                ...additionalMarketplaceError,
-                ...additionalMarketplaceRes.data,
-              });
-
-              if (additionalMarketplaceRes.data) {
-                statementErrCount += Object.keys(additionalMarketplaceRes.data)
-                  .length;
-              }
-            }
-            if (
-              additionalMonthlySerRes &&
-              additionalMonthlySerRes.status === 400
-            ) {
-              setAdditionalMonthlySerError({
-                ...additionalMonthlySerError,
-                ...additionalMonthlySerRes.data,
-              });
-
-              if (additionalMonthlySerRes.data) {
-                statementErrCount += Object.keys(additionalMonthlySerRes.data)
-                  .length;
-              }
-            }
-            if (
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.status === 400
-            ) {
-              setAdditionalOnetimeSerError({
-                ...additionalOnetimeSerError,
-                ...additionalOneTimeServRes.data,
-              });
-
-              if (additionalOneTimeServRes.data) {
-                if (
-                  Object.keys(additionalOneTimeServRes.data).includes(
-                    'quantity',
-                  )
-                ) {
-                  statementErrCount +=
-                    Object.keys(additionalOneTimeServRes.data).length +
-                    Object.keys(additionalOneTimeServRes.data.quantity).length -
-                    1;
-                } else if (
-                  !additionalOnetimeSerError.custom_amazon_store_price
-                ) {
-                  statementErrCount += Object.keys(
-                    additionalOneTimeServRes.data,
-                  ).length;
-                }
-              }
-              if (
-                additionalOneTimeServRes &&
-                additionalOneTimeServRes.data &&
-                Object.values(additionalOneTimeServRes.data) &&
-                Object.values(additionalOneTimeServRes.data).length &&
-                Object.values(additionalOneTimeServRes.data)[0] ===
-                  'Object does not exists'
-              ) {
-                showFooter(false);
-                setIsEditContract(false);
-                setUpdatedFormData({});
-                // dispatch(getAccountDetails(id));
-                getContractDetails();
-              }
-            }
-            if (contractRes && contractRes.status === 400) {
-              setContractError({
-                ...contractError,
-                ...contractRes.data,
-              });
-
-              if (contractRes.data) {
-                if (Object.keys(contractRes.data).length) {
-                  if (
-                    Object.keys(contractRes.data).includes('monthly_retainer')
-                  )
-                    statementErrCount += 1;
-                  if (
-                    Object.keys(contractRes.data).includes(
-                      'content_optimization',
-                    )
-                  )
-                    statementErrCount += 1;
-                  if (
-                    Object.keys(contractRes.data).includes(
-                      'design_optimization',
-                    )
-                  )
-                    statementErrCount += 1;
-                  if (
-                    Object.keys(contractRes.data).includes('zip_code') &&
-                    !contractError.zip_code
-                  )
-                    agreementErrCount += 1;
-                  if (
-                    Object.keys(contractRes.data).includes('dsp_fee') &&
-                    !contractError.dsp_fee
-                  )
-                    dspErrCount += 1;
-                }
-              }
-            }
-            if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
-              setApiError({
-                ...apiError,
-                ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
-              });
-
-              if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
-                statementErrCount += Object.keys(primaryMarketplaceRes.data)
-                  .length;
-              }
-            }
-
-            setSectionError({
-              agreement: agreementErrCount + sectionError.agreement,
-              statement: statementErrCount + sectionError.statement,
-              dsp: dspErrCount + sectionError.dsp,
-            });
-          }),
-        )
-        .catch(() => {
-          // console.log('error');
-        });
-
-      //  .then((response) => {
-      //     if (response && response.status === 400) {
-      //       setIsLoading({ loader: false, type: 'button' });
-      //       setApiError(response && response.data);
-      //       // setFormData({});
-      //     } else if (response && response.status === 200) {
-      //       setTimeout(() => dispatch(getAccountDetails(id)), 800);
-      //       setIsLoading({ loader: false, type: 'button' });
-      //       setFormData(response && response.data);
-      //       setUpdatedFormData({});
+      //     if (response && response.status === 200) {
+      //       // dispatch(getAccountDetails(id));
+      //       getContractDetails();
       //     }
       //   });
+      // }
+
+      // }
     }
-
-    // else {
-    //   const stepsCompletedData = {
-    //     steps_completed: {
-    //       ...details.steps_completed,
-    //       agreement: true,
-    //       statement: true,
-    //     },
-    //   };
-    //   setIsLoading({ loader: true, type: 'button' });
-
-    //   updateAccountDetails(details.id, stepsCompletedData).then((response) => {
-    //     setIsLoading({ loader: false, type: 'button' });
-
-    //     if (response && response.status === 200) {
-    //       // dispatch(getAccountDetails(id));
-    //       getContractDetails();
-    //     }
-    //   });
-    // }
-
-    // }
   };
+
   const clearError = () => {
     setApiError({});
     setAdditionalMarketplaceError({});
@@ -778,9 +908,8 @@ export default function ContractContainer() {
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
-      if (showDiscardModal.clickedBtn === 'back') {
-        // console.log("!!!")
-      }
+      // if (showDiscardModal.clickedBtn === 'back') {
+      // }
     }
 
     if (flag === 'Yes') {
@@ -790,7 +919,7 @@ export default function ContractContainer() {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
       setSectionError({});
-      // setFormData({});
+      // setFormData(details);
       showFooter(false);
       setIsEditContract(false);
       setShowEditor(false);
@@ -799,6 +928,32 @@ export default function ContractContainer() {
       clearError();
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
+      // setMarketplacesResult(marketplacesResult)
+
+      // if (
+      //   details &&
+      //   details.primary_marketplace &&
+      //   details.primary_marketplace.name
+      // ) {
+      //   setAdditionalMarketplaces(
+      //     marketPlaces.filter(
+      //       (op) => op.value !== details.primary_marketplace.name,
+      //     ),
+      //   );
+      // } else {
+      //   setAdditionalMarketplaces(marketPlaces);
+      // }
+
+      // if (details && details.additional_marketplaces) {
+      //   setMarketPlaces(
+      //     additionalMarketplaces.filter(
+      //       (choice) =>
+      //         !(details && details.additional_marketplaces).some(
+      //           (item) => item.name === choice.value,
+      //         ),
+      //     ),
+      //   );
+      // }
 
       if (
         details &&
@@ -878,8 +1033,6 @@ export default function ContractContainer() {
   };
 
   const mapDefaultValues = (key, label, type) => {
-    // console.log(key, label, type, details && details[key]);
-
     if (key === 'contract_company_name') {
       return details && details[key] ? details && details[key] : `Client Name`;
     }
@@ -2099,6 +2252,12 @@ export default function ContractContainer() {
         setSectionError={setSectionError}
         setDiscountFlag={setDiscountFlag}
         isEditContract={isEditContract}
+        setMarketplacesResult={setMarketplacesResult}
+        marketplacesResult={marketplacesResult}
+        marketPlaces={marketPlaces}
+        setMarketPlaces={setMarketPlaces}
+        additionalMarketplaces={additionalMarketplaces}
+        setAdditionalMarketplaces={setAdditionalMarketplaces}
       />
     );
   };

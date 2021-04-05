@@ -13,6 +13,7 @@
     "b64-to-blob": "^1.2.19",
     "copy-to-clipboard": "^3.3.1",
     "cropperjs": "^1.5.9",
+    "currency-symbol-map": "^5.0.1",
     "date-fns": "^2.19.0",
     "dayjs": "^1.9.4",
     "dotenv": "^8.2.0",

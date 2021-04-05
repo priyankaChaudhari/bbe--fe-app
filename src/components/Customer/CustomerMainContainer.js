@@ -242,40 +242,86 @@ export default function CustomerMainContainer() {
   };
 
   const activityDetail = (item) => {
-    const newRecord = item.message.includes(
-      'created new record by company name',
-    )
-      ? item.message.split('created new record by company name')
-      : '';
-    const updatedField = item.message.includes('updated')
-      ? item.message.split('updated')
-      : '';
-
-    const deleteRecord = item.message.includes('deleted record')
-      ? item.message.split('deleted record')
-      : '';
-
-    if (newRecord || deleteRecord) {
+    let activityMessage = '';
+    if (item && item.message.includes('created new record by company name')) {
+      activityMessage = item.message.split(
+        'created new record by company name',
+      );
       return (
         <>
-          {newRecord[0] || deleteRecord[0]}
-          <span>
-            {newRecord
-              ? 'created new record by company name'
-              : 'deleted record'}
-          </span>
-          {newRecord[1] || deleteRecord[1]}
+          {activityMessage[0]}
+          <span>created new record by company name</span>
+          {activityMessage[1]}
         </>
       );
     }
-    return (
-      <>
-        {updatedField[0]}
-        <span>updated {updatedField[1].split(' from ')[0]} from </span>{' '}
-        {updatedField[1].split(' from ')[1].split(' to ')[0]}
-        <span> to </span> {updatedField[1].split(' from ')[1].split(' to ')[1]}
-      </>
-    );
+    if (item && item.message.includes('deleted record')) {
+      activityMessage = item.message.split('deleted record');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>deleted record</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+    if (item && item.message.includes('updated')) {
+      activityMessage = item.message.split('updated');
+      if (
+        (item && item.message.includes('annual revenue')) ||
+        (item && item.message.includes('number of employees')) ||
+        (item && item.message.includes('monthly retainer')) ||
+        (item && item.message.includes('sales threshold'))
+      ) {
+        return (
+          <>
+            {activityMessage && activityMessage[0]}
+            <span>
+              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+              from{' '}
+            </span>{' '}
+            {activityMessage &&
+              activityMessage[1]
+                .split(' from ')[1]
+                .split(' to ')[0]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            <span> to </span>{' '}
+            {activityMessage &&
+              activityMessage[1]
+                .split(' from ')[1]
+                .split(' to ')[1]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </>
+        );
+      }
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>
+            updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+            from{' '}
+          </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          <span> to </span>{' '}
+          {activityMessage &&
+            activityMessage[1].split(' from ')[1].split(' to ')[1]}
+        </>
+      );
+    }
+    if (item && item.message.includes('requested for')) {
+      activityMessage = item.message.split('requested for');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>requested for</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    return item && item.message ? item.message : '';
   };
 
   const handlePageChange = (currentPage) => {
@@ -674,39 +720,41 @@ export default function CustomerMainContainer() {
                           {' '}
                           Recent Activity
                         </p>
-                        {activityData.slice(0, 2).map((item) => (
-                          <GroupUser key={Math.random()}>
-                            {images.find(
-                              (op) => op.entity_id === item.user_id,
-                            ) &&
-                            images.find((op) => op.entity_id === item.user_id)
-                              .presigned_url ? (
-                              <img
-                                src={
-                                  isLoading.loader && isLoading.type === 'page'
-                                    ? DefaultUser
-                                    : images.find(
-                                        (op) => op.entity_id === item.user_id,
-                                      ).presigned_url
-                                }
-                                className="default-user-activity"
-                                alt="pic"
-                              />
-                            ) : (
-                              <div className="avatarName float-left mr-3">
-                                {getActivityInitials(item.message)}
-                              </div>
-                            )}
-                            <div className="activity-user mb-4">
-                              {activityDetail(item)}
+                        {activityData &&
+                          activityData.slice(0, 2).map((item) => (
+                            <GroupUser key={Math.random()}>
+                              {images.find(
+                                (op) => op.entity_id === item.user_id,
+                              ) &&
+                              images.find((op) => op.entity_id === item.user_id)
+                                .presigned_url ? (
+                                <img
+                                  src={
+                                    isLoading.loader &&
+                                    isLoading.type === 'page'
+                                      ? DefaultUser
+                                      : images.find(
+                                          (op) => op.entity_id === item.user_id,
+                                        ).presigned_url
+                                  }
+                                  className="default-user-activity"
+                                  alt="pic"
+                                />
+                              ) : (
+                                <div className="avatarName float-left mr-3">
+                                  {getActivityInitials(item.message)}
+                                </div>
+                              )}
+                              <div className="activity-user mb-4">
+                                {activityDetail(item)}
 
-                              <div className="time-date mt-1">
-                                {item && item.time ? item.time : ''}
+                                <div className="time-date mt-1">
+                                  {item && item.time ? item.time : ''}
+                                </div>
                               </div>
-                            </div>
-                            <div className="clear-fix" />
-                          </GroupUser>
-                        ))}
+                              <div className="clear-fix" />
+                            </GroupUser>
+                          ))}
                       </WhiteCard>
                     </div>
                     {viewComponent === 'agreement' ? (
