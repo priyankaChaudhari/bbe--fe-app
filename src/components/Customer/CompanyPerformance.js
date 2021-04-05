@@ -140,6 +140,18 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     },
   ];
 
+  const BBReportOptions = [
+    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
+    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+    // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+    // {
+    //   value: 'custom',
+    //   label: 'Custom Range',
+    //   sub: 'Select start and end dates',
+    // },
+  ];
+
   const filterOption = (props) => (
     <Option {...props}>
       <div className="pb-2">
@@ -1505,8 +1517,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                       classNamePrefix="react-select"
                       className="active"
                       // components={getSelectComponents()}
-                      options={reportOptions}
-                      defaultValue={reportOptions[0]}
+                      options={BBReportOptions}
+                      defaultValue={BBReportOptions[0]}
                       onChange={(event) => handleBBDailyFact(event.value)}
                     />
                   </DropDownSelect>{' '}
