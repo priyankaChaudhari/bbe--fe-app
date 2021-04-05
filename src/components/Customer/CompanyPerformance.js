@@ -41,6 +41,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
+const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
@@ -50,6 +51,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const [dspSpend, setDspSpend] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
   const [pieData, setPieData] = useState([
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
@@ -471,15 +473,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const DataFormater = (number) => {
     if (number > 1000000000) {
-      return `$${parseInt(number / 1000000000).toString()}B`;
+      return `${currencySymbol}${parseInt(number / 1000000000).toString()}B`;
     }
     if (number > 1000000) {
-      return `$${parseInt(number / 1000000).toString()}M`;
+      return `${currencySymbol}${parseInt(number / 1000000).toString()}M`;
     }
     if (number > 1000) {
-      return `$${parseInt(number / 1000).toString()}K`;
+      return `${currencySymbol}${parseInt(number / 1000).toString()}K`;
     }
-    return `$${parseInt(number).toString()}`;
+    return `${currencySymbol}${parseInt(number).toString()}`;
   };
 
   const getDays = (startDate, endDate) => {
@@ -623,6 +625,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const handleAmazonOptions = (event) => {
     setSelectedAmazonValue(event.value);
     setCurrency(event.currency);
+    setCurrencySymbol(getSymbolFromCurrency(event.currency));
     if (selectedValue === 'custom') {
       checkDifferenceBetweenDates(
         state[0].startDate,
@@ -680,10 +683,14 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 : activeSales}
             </p>
             <p className="label-1">
-              {activeSales === 'revenue' ? `$${current}` : current}
+              {activeSales === 'revenue'
+                ? `${currencySymbol}${current}`
+                : current}
             </p>
             <p className="label-2">
-              {activeSales === 'revenue' ? `vs $${previous}` : previous}
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}${previous}`
+                : previous}
             </p>
           </div>
         );
@@ -700,10 +707,14 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 : activeSales}
             </p>
             <p className="label-1">
-              {activeSales === 'revenue' ? `$${current}` : current}
+              {activeSales === 'revenue'
+                ? `${currencySymbol}${current}`
+                : current}
             </p>
             <p className="label-2">
-              {activeSales === 'revenue' ? 'vs $0.00' : 'vs 0.00'}
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}0.00`
+                : 'vs 0.00'}
             </p>
           </div>
         );
@@ -720,10 +731,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 : activeSales}
             </p>
             <p className="label-1">
-              {activeSales === 'revenue' ? '$0.00' : '0.00'}
+              {activeSales === 'revenue' ? `${currencySymbol}0.00` : '0.00'}
             </p>
             <p className="label-2">
-              {activeSales === 'revenue' ? `vs $${previous}` : previous}
+              {activeSales === 'revenue'
+                ? `vs ${currencySymbol}${previous}`
+                : previous}
             </p>
           </div>
         );
@@ -747,6 +760,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     if (responseId === null && list.length && list[0].value !== null) {
       setSelectedAmazonValue(list[0].value);
       setCurrency(list[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
       getData(selectedValue, groupBy, list[0].value);
       getBBData(list[0].value, bBDailyFact, 'daily');
       setResponseId('12345');
@@ -1388,7 +1402,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
               <div className="speed-rate">
-                {dspSpend ? `$${dspSpend}` : 'N/A'}
+                {dspSpend ? `${currencySymbol}${dspSpend}` : 'N/A'}
               </div>
               <div className="last-update">
                 Last updated: {dspData && dspData.latest_date}
