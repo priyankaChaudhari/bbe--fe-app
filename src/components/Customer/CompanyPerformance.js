@@ -507,7 +507,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-
     if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: false, month: false });
@@ -662,7 +661,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       BBYearAndCustomDateFilter('custom');
       setShowBBCustomDateModal(false);
     } else {
-      checkDifferenceBetweenDates('custom');
+      checkDifferenceBetweenDates(
+        state[0].startDate,
+        state[0].endDate,
+        'custom',
+      );
       setShowCustomDateModal(false);
     }
   };
