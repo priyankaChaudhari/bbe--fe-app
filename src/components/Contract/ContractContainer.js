@@ -1333,8 +1333,8 @@ export default function ContractContainer() {
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details && details.total_fee.onetime_service
-          ? details.total_fee.onetime_service
+        details && details.total_fee.onetime_service_after_discount
+          ? details.total_fee.onetime_service_after_discount
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           : 0
@@ -1346,6 +1346,7 @@ export default function ContractContainer() {
     const month = details.total_fee.monthly_service
       ? details.total_fee.monthly_service
       : 0;
+
     return `$${(market + month)
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
