@@ -23,7 +23,6 @@ import {
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { parseInt } from 'lodash';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
@@ -44,17 +43,11 @@ const _ = require('lodash');
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
-  const [amazonOptions, setAmazonOptions] = useState([]);
-  const [selectedValue, setSelectedValue] = useState('week');
-  const [bBDailyFact, setBBDailyFact] = useState('week');
-  const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
   const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
-  const [groupBy, setGroupBy] = useState('daily');
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
-
   const [pieData, setPieData] = useState([
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
@@ -75,10 +68,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     'Nov',
     'Dec',
   ];
-  // const [customDateValue, setCustomDateValue] = useState([
-  //   new Date(),
-  //   new Date(),
-  // ]);
+
+  // sales performance varibales and BB %
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([
@@ -89,7 +80,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     },
   ]);
 
+  const [BBstate, setBBState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'BBselection',
+    },
+  ]);
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
+  const [showBBCustomDateModal, setShowBBCustomDateModal] = useState(false);
+  const [groupBy, setGroupBy] = useState('daily');
+  const [BBGroupBy, setBBGroupBy] = useState('daily');
+  const [amazonOptions, setAmazonOptions] = useState([]);
+  const [selectedValue, setSelectedValue] = useState('week');
+  const [bBDailyFact, setBBDailyFact] = useState('week');
+  const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
+  // end
 
   const [revenueData, setRevenueData] = useState([{}]);
   const [unitsSoldData, setUnitsSoldData] = useState([{}]);
@@ -122,7 +128,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
     {
       value: 'custom',
       label: 'Custom Range',
@@ -181,30 +187,32 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   };
 
   const getBBData = useCallback(
-    (marketplace, dailyFact) => {
+    (marketplace, BBdailyFact, bBGroupBy) => {
       // setIsLoading({ loader: true, type: 'button' });
-      getBuyBoxChartData(id, marketplace, dailyFact).then((res) => {
-        if (res && res.status === 400) {
-          // setApiError(res && res.data);
-          // setIsLoading({ loader: false, type: 'button' });
-        }
-        if (res && res.status === 200 && res.data && res.data.bbep) {
-          const avg =
-            res.data.bbep
-              .filter((record) => record.bbep)
-              .reduce((acc, record) => acc + record.bbep, 0) /
-              res.data.bbep.length || 0;
+      getBuyBoxChartData(id, marketplace, BBdailyFact, bBGroupBy).then(
+        (res) => {
+          if (res && res.status === 400) {
+            // setApiError(res && res.data);
+            // setIsLoading({ loader: false, type: 'button' });
+          }
+          if (res && res.status === 200 && res.data && res.data.bbep) {
+            const avg =
+              res.data.bbep
+                .filter((record) => record.bbep)
+                .reduce((acc, record) => acc + record.bbep, 0) /
+                res.data.bbep.length || 0;
 
-          const tempBBData = res.data.bbep.map((data) => {
-            return {
-              date: dayjs(data.report_date).format('MMM D'),
-              value: data.bbep,
-              avg: avg.toFixed(2),
-            };
-          });
-          setBBChartData(tempBBData);
-        }
-      });
+            const tempBBData = res.data.bbep.map((data) => {
+              return {
+                date: dayjs(data.report_date).format('MMM D'),
+                value: data.bbep,
+                avg: avg.toFixed(2),
+              };
+            });
+            setBBChartData(tempBBData);
+          }
+        },
+      );
     },
     [id],
   );
@@ -452,12 +460,18 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return `$${parseInt(number).toString()}`;
   };
 
+  const getDays = (startDate, endDate) => {
+    const diffTime = Math.abs(startDate - endDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
-    const diffTime = Math.abs(startDate - endDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = getDays(startDate, endDate);
+
     if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: false, month: false });
@@ -519,8 +533,36 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const BBYearAndCustomDateFilter = (value) => {
+    let diffDays = new Date();
+    if (value === 'custom') {
+      diffDays = getDays(BBstate[0].startDate, BBstate[0].endDate);
+    } else {
+      diffDays = getDays(new Date(new Date().getFullYear(), 0, 1), new Date());
+    }
+    if (diffDays <= 30) {
+      getBBData(selectedAmazonValue, value, 'daily');
+      setBBGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 180) {
+      getBBData(selectedAmazonValue, value, 'weekly');
+      setBBGroupBy('weekly');
+    } else if (diffDays > 180) {
+      getBBData(selectedAmazonValue, value, 'monthly');
+      setBBGroupBy('monthly');
+    }
+  };
+
   const handleDailyFact = (value) => {
     setSelectedValue(value);
+    if (value !== 'custom') {
+      setState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'selection',
+        },
+      ]);
+    }
     if (value === 'year') {
       checkDifferenceBetweenDates(
         new Date(new Date().getFullYear(), 0, 1),
@@ -536,7 +578,24 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const handleBBDailyFact = (value) => {
     setBBDailyFact(value);
-    getBBData(selectedAmazonValue, value);
+
+    if (value !== 'custom') {
+      setBBState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'BBselection',
+        },
+      ]);
+    }
+    if (value === 'year') {
+      BBYearAndCustomDateFilter('year');
+    } else if (value === 'custom') {
+      setShowBBCustomDateModal(true);
+    } else {
+      getBBData(selectedAmazonValue, value, 'daily');
+      setBBGroupBy('daily');
+    }
   };
 
   const handleAmazonOptions = (event) => {
@@ -550,7 +609,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       );
     } else {
       getData(selectedValue, groupBy, event.value);
-      getBBData(event.value, bBDailyFact);
+      getBBData(event.value, bBDailyFact, BBGroupBy);
     }
   };
 
@@ -561,9 +620,14 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const applyCustomeDate = () => {
-    checkDifferenceBetweenDates(state[0].startDate, state[0].endDate, 'custom');
-    setShowCustomDateModal(false);
+  const applyCustomeDate = (flag) => {
+    if (flag === 'BBDate') {
+      BBYearAndCustomDateFilter('custom');
+      setShowBBCustomDateModal(false);
+    } else {
+      checkDifferenceBetweenDates('custom');
+      setShowCustomDateModal(false);
+    }
   };
 
   const renderLegendText = (value, entry) => {
@@ -650,7 +714,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       setSelectedAmazonValue(list[0].value);
       setCurrency(list[0].currency);
       getData(selectedValue, groupBy, list[0].value);
-      getBBData(list[0].value, bBDailyFact);
+      getBBData(list[0].value, bBDailyFact, 'daily');
       setResponseId('12345');
     }
   }, [
@@ -689,7 +753,114 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     );
   };
 
-  console.log('activee sate', activeSales);
+  const renderSPCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowCustomDateModal(false);
+            setState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'selection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setState([item.selection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={state}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomeDate('SPDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
+  const renderBBCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showBBCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowBBCustomDateModal(false);
+            setBBState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'BBselection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setBBState([item.BBselection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={BBstate}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomeDate('BBDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -1277,14 +1448,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
                 </div>
                 <div className="col-6 text-right mb-4">
-                  {/* <DropDownSelect className="days-performance">
-                    <Select classNamePrefix="react-select" className="active" />
-                </DropDownSelect>{' '} */}
                   <DropDownSelect className="days-performance ">
                     <Select
                       classNamePrefix="react-select"
                       className="active"
-                      components={getSelectComponents()}
+                      // components={getSelectComponents()}
                       options={reportOptions}
                       defaultValue={reportOptions[0]}
                       onChange={(event) => handleBBDailyFact(event.value)}
@@ -1325,64 +1493,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-
-        <Modal
-          isOpen={showCustomDateModal}
-          style={customStyles}
-          ariaHideApp={false}
-          contentLabel="Edit modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => {
-              setShowCustomDateModal(false);
-              setState([
-                {
-                  startDate: currentDate,
-                  endDate: currentDate,
-                  key: 'selection',
-                },
-              ]);
-            }}
-            role="presentation"
-          />
-          <ModalBox>
-            <div className="modal-body">
-              <h4>Select Date Range</h4>
-
-              {/* <DateRangePicker
-                isOpen={true}
-                onChange={(event) => onChangeCustomDate(event)}
-                value={customDateValue}
-                maxDate={new Date()}
-
-              /> */}
-              <DateRange
-                editableDateInputs
-                onChange={(item) => {
-                  setState([item.selection]);
-                }}
-                showMonthAndYearPickers={false}
-                ranges={state}
-                moveRangeOnFirstSelection={false}
-                showDateDisplay={false}
-                maxDate={currentDate}
-                rangeColors={['#FF5933']}
-                weekdayDisplayFormat="EEEEE"
-                locale={enGB}
-              />
-              <div className="text-center mt-3">
-                <Button
-                  onClick={() => applyCustomeDate()}
-                  type="button"
-                  className="btn-primary on-boarding   w-100">
-                  Apply
-                </Button>
-              </div>
-            </div>
-          </ModalBox>
-        </Modal>
+        {renderSPCustomDateModal()}
+        {renderBBCustomDateModal()}
       </div>
     </>
   );

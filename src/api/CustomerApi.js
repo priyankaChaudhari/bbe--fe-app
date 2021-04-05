@@ -447,10 +447,15 @@ export async function getPerformance(
   return result;
 }
 
-export async function getBuyBoxChartData(customer, marketplace, bbDailyFact) {
+export async function getBuyBoxChartData(
+  customer,
+  marketplace,
+  bbDailyFact,
+  groupBy,
+) {
   const params = {
     daily_facts: 'week',
-    group_by: 'daily',
+    group_by: groupBy,
     marketplace,
     bbep_interval: bbDailyFact,
   };
