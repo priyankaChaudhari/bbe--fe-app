@@ -1221,7 +1221,7 @@ export default function ContractContainer() {
                      ? `<td style="border: 1px solid black;padding: 13px;">
                                 $${item.custom_amazon_store_price
                                   .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                </td>`
                      : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                    : item && item.service && item.service.fee
@@ -1231,10 +1231,7 @@ export default function ContractContainer() {
                              : ''
                            )
                              .toString()
-                             .replace(
-                               /\B(?=(\d{3})+(?!\d))/g,
-                               ',',
-                             )} /month </td>`
+                             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} </td>`
                    : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
                }
 
