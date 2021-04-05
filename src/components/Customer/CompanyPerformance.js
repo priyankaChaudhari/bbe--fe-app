@@ -377,13 +377,13 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
-              'MMM D YYYY',
+              'MMM DD YYYY',
             );
             if (res.data.dsp_spend && res.data.dsp_spend.length) {
               setDspSpend({
                 value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
                 date: dayjs(res.data.dsp_spend[0].report_date).format(
-                  'MMM D YYYY',
+                  'MMM DD YYYY',
                 ),
               });
             }
