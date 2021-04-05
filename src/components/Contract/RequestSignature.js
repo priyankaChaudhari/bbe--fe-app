@@ -254,7 +254,11 @@ function RequestSignature({
 
   const handleContactChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
-    setContactApiError({ ...contactApiError, [event.target.name]: '' });
+    setContactApiError({
+      ...contactApiError,
+      [event.target.name]: '',
+      non_field_errors: '',
+    });
   };
 
   const displayAddNewContactForm = () => {
@@ -277,7 +281,11 @@ function RequestSignature({
             <ErrorMsg>
               {contactApiError &&
                 contactApiError[field.key] &&
-                contactApiError[field.key][0]}
+                contactApiError[field.key][0]}{' '}
+              {contactApiError &&
+                contactApiError.non_field_errors &&
+                field.key === 'email' &&
+                contactApiError.non_field_errors[0]}
             </ErrorMsg>
           </ContractFormField>
         </div>
@@ -314,9 +322,8 @@ function RequestSignature({
 
       // alert('You have entered an invalid email address!');
       return false;
-    } 
-      return false;
-    
+    }
+    return false;
   }
 
   const displayCCEmails = () => {

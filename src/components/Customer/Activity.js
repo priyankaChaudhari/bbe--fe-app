@@ -31,36 +31,37 @@ export default function Activity({
           ) : (
             <>
               <p className="black-heading-title mt-0 mb-4"> Recent Activity</p>
-              {activityData.map((item) => (
-                <GroupUser className="mb-2" key={Math.random()}>
-                  {images.find((op) => op.entity_id === item.user_id) &&
-                  images.find((op) => op.entity_id === item.user_id)
-                    .presigned_url ? (
-                    <img
-                      src={
-                        isLoading.loader && isLoading.type === 'page'
-                          ? DefaultUser
-                          : images.find((op) => op.entity_id === item.user_id)
-                              .presigned_url
-                      }
-                      className="default-user-activity"
-                      alt="pic"
-                    />
-                  ) : (
-                    <div className="avatarName float-left mr-3">
-                      {getActivityInitials(item.message)}
-                    </div>
-                  )}
-                  <div className="activity-user mb-4">
-                    {activityDetail(item)}
+              {activityData &&
+                activityData.map((item) => (
+                  <GroupUser className="mb-2" key={Math.random()}>
+                    {images.find((op) => op.entity_id === item.user_id) &&
+                    images.find((op) => op.entity_id === item.user_id)
+                      .presigned_url ? (
+                      <img
+                        src={
+                          isLoading.loader && isLoading.type === 'page'
+                            ? DefaultUser
+                            : images.find((op) => op.entity_id === item.user_id)
+                                .presigned_url
+                        }
+                        className="default-user-activity"
+                        alt="pic"
+                      />
+                    ) : (
+                      <div className="avatarName float-left mr-3">
+                        {getActivityInitials(item.message)}
+                      </div>
+                    )}
+                    <div className="activity-user mb-4">
+                      {activityDetail(item)}
 
-                    <div className="time-date mt-1">
-                      {item && item.time ? item.time : ''}
+                      <div className="time-date mt-1">
+                        {item && item.time ? item.time : ''}
+                      </div>
                     </div>
-                  </div>
-                  <div className="clear-fix" />
-                </GroupUser>
-              ))}
+                    <div className="clear-fix" />
+                  </GroupUser>
+                ))}
               <div>
                 {activityData && activityData.length === 0 ? (
                   <div>No Activity Log found.</div>
