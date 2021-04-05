@@ -386,8 +386,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   'MMM D YYYY',
                 ),
               });
-            } else {
-              setDspSpend({ value: 'N/A', date: 'N/A' });
             }
             setDspData(res.data.pf_oi_is[0]);
             const ipiValue = parseFloat(
