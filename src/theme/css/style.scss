@@ -9,6 +9,14 @@
   font-family: 'Noah-Regular';
   src: url('../fonts/Noah/Noah/WEB/Noah-Regular.woff');
 }
+@font-face {
+  font-family: 'Noah-RegularItalic';
+  src: url('../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff');
+}
+@font-face {
+  font-family: 'Noah-BoldItalic';
+  src: url('../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff');
+}
 
 // @font-face {
 //   font-family: 'Arial MT Extra Bold';
@@ -1579,15 +1587,10 @@ input:checked + .slider:before {
   }
 }
 
-// .recharts-layer .recharts-label-list {
-//   // width: 38px;
-//   // height: 24px;
-//   // background-color: #bfc5d2;
-//   text.cust-label-avg {
-//     background-color: #bfc5d2 !important;
-//     border-radius: 1px !important;
-//     width: 38px !important;
-//     height: 24px;
-//     color: $black-color;
-//   }
-// }
+text.cust-label-avg {
+  background-color: #bfc5d2 !important;
+  border-radius: 1px !important;
+  width: 38px !important;
+  height: 24px;
+  color: $black-color;
+}

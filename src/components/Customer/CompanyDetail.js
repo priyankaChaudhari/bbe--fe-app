@@ -107,8 +107,8 @@ export default function CompanyDetail({
             Edit
           </div>
         </WhiteCard>
-        <div className="row mt-3">
-          <div className="col-lg-6 col-md-6 col-12">
+        <div className="row ">
+          <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
               <p className="black-heading-title mt-0">Brands</p>
               <p className="no-result-found">
@@ -142,7 +142,7 @@ export default function CompanyDetail({
                 {SocialIcons.map((item) => generateSocialIcon(item))}
               </ul>
             </WhiteCard>
-            <WhiteCard className=" mt-3 mb-3">
+            <WhiteCard className=" mt-3">
               <p className="black-heading-title mt-0 ">Company Contacts</p>
               <div
                 className="edit-details"
@@ -172,7 +172,7 @@ export default function CompanyDetail({
               </div>
             </WhiteCard>
           </div>
-          <div className="col-lg-6 col-md-6 col-12">
+          <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
               <p className="black-heading-title mt-0 ">Amazon Credentials</p>
               <div

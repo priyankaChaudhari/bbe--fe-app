@@ -67,7 +67,7 @@ const Table = styled.table`
       }
       .user-name {
         font-weight: 300;
-        margin-top: 7px;
+        margin-top: 0;
       }
       .user-email {
         font-size: 15px;

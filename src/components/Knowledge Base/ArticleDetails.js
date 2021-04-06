@@ -598,7 +598,7 @@ export default function ArticleDetails() {
                 </div>
                 <div className=" text-center d-lg-none d-md-block ">
                   <div
-                    className="arrow"
+                    className="back-to-top"
                     onClick={() =>
                       window.scrollTo({ top: 0, behavior: 'smooth' })
                     }
@@ -622,9 +622,9 @@ const GrayBody = styled.div`
     margin: 0 auto;
     padding-left: 64px;
   }
-  .arrow {
-    position: fixed;
-    bottom: 25px;
+  .back-to-top {
+    position: relative;
+    bottom: -25px;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9;
@@ -641,13 +641,11 @@ const GrayBody = styled.div`
     margin-top: 30px;
     cursor: pointer;
 
-        img {
-          width: 19px;
-          vertical-align: text-top;
-          margin-right: 2px;
-        }
-      
-    
+    img {
+      width: 19px;
+      vertical-align: text-top;
+      margin-right: 2px;
+    } 
   }
 
     .drop-down-option {
@@ -810,7 +808,7 @@ const GrayBody = styled.div`
     .article-details-text {
       height: 100% !important;
       overflow: none !important;
-      margin-bottom: 50px;
+      
     }
   }
   @media only screen and (max-width: 767px) {

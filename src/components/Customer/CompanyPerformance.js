@@ -449,15 +449,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
     if (data && data.index === dataLength && bBChartData) {
       return (
-        <text
-          className="cust-label-avg"
-          x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
-          y={data.y}
-          dy={-8}
-          fontSize={16}
-          textAnchor="middle">
-          {bBChartData[0].avg}%
-        </text>
+        <>
+          <circle cx={data.x} cy={data.y} r={20} w={40} h={40} fill="#BFC5D2" />
+          <text
+            className="cust-label-avg"
+            x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
+            y={data.y}
+            dy={5}
+            fontSize={14}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="black">
+            {bBChartData[0].avg}%
+          </text>
+        </>
       );
     }
     return null;
@@ -961,8 +966,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   colors: {
                     ...theme.colors,
                     neutral50: '#1A1A1A',
-
-                    // Placeholder color
                   },
                 })}
                 defaultValue={amazonOptions && amazonOptions[0]}
@@ -1273,16 +1276,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </div>
           </div>
-
-          {/* <li>
-              <div className="chart-name">Revenue</div>
-              <div className="number-rate">$22,147.52</div>
-              <div className="vs"> vs $21,114.90</div>
-              <div className="perentage-value">
-                <img src={ArrowUpIcon} alt="arrow-up" />
-                4.75%
-              </div>
-            </li> */}
           <div className="row mt-4">
             <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
               <ul className="rechart-item">
@@ -1349,44 +1342,10 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </div>
           </div>
-
-          {/* <ul className="days-tab">
-              <li>
-                {' '}
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                />
-                <label htmlFor="weeklyCheck">Daily</label>
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  value=""
-                  name="flexRadioDefault"
-                  id="weeklyCheck1"
-                />
-                <label htmlFor="weeklyCheck1">Weekly</label>
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  value=""
-                  name="flexRadioDefault"
-                  id="weeklyCheck2"
-                />
-                <label htmlFor="weeklyCheck2">Monthly</label>
-              </li>
-            </ul> */}
-
           <div className="clear-fix" />
-          {/* <div style={{ height: '400px', width: '1000px' }}>
-            <div style={{ height: '100%', width: '60%' }}>
-              <ResponsiveContainer width={'79%'} height={'30%'}> */}
+
           <ResponsiveContainer width="99%" height={400}>
             <LineChart
-              // width={600}
-              // height={400}
               data={lineChartData}
               margin={{
                 top: 40,
@@ -1424,9 +1383,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <Line dataKey=" $" stroke="#FF5933" />
               <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
-            {/* </ResponsiveContainer>
-            </div>
-          </div> */}
           </ResponsiveContainer>
         </WhiteCard>
 
@@ -1488,7 +1444,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-        <div className="row">
+        <div className="row ">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
@@ -1529,7 +1485,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
 
-          <div className="col-md-8 col-sm-12">
+          <div className="col-md-8 col-sm-12 mb-3 ">
             <WhiteCard className="fix-height">
               <div className="row">
                 <div className="col-6 ">

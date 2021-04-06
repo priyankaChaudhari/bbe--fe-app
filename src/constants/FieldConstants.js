@@ -9,15 +9,17 @@ import {
   AdBannerIcon,
   UpChevronIcon,
   OpenBook,
-  BuildingIcon,
-  PencilPaint,
-  HeadSet,
+  CompanyKnowledge,
+  Creative,
+  CustomerService,
   HelpingHand,
-  WareHouse,
+  Logistics,
   BullHorn,
+  NextIcon,
+  ProductivityTools,
   PiggyBank,
   AmazonIcon,
-  GraphIcon,
+  SellerSupport,
   BoxesIcon,
   VisaCardIcons,
   MasterCardIcons,
@@ -582,15 +584,15 @@ export const collectionDetails = [
   },
   {
     key: 'Company Knowledge',
-    icon: BuildingIcon,
+    icon: CompanyKnowledge,
   },
   {
     key: 'Creative',
-    icon: PencilPaint,
+    icon: Creative,
   },
   {
     key: 'Customer Service',
-    icon: HeadSet,
+    icon: CustomerService,
   },
   {
     key: 'Human Resource',
@@ -598,11 +600,19 @@ export const collectionDetails = [
   },
   {
     key: 'Logistics',
-    icon: WareHouse,
+    icon: Logistics,
   },
   {
     key: 'Marketing',
     icon: BullHorn,
+  },
+  {
+    key: 'NEXT',
+    icon: NextIcon,
+  },
+  {
+    key: 'Productivity Tools',
+    icon: ProductivityTools,
   },
   {
     key: 'Sales',
@@ -610,7 +620,7 @@ export const collectionDetails = [
   },
   {
     key: 'Seller Support - Seller Performance',
-    icon: GraphIcon,
+    icon: SellerSupport,
   },
   {
     key: 'Vendor Collection',

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>BBE</title>
+    <g id="2.-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="KB-Home" transform="translate(-1259.000000, -140.000000)" fill="#FF5933">
+            <g id="card" transform="translate(1136.000000, 115.000000)">
+                <g id="BBE" transform="translate(123.000000, 25.000000)">
+                    <circle id="Oval" fill-opacity="0.06" cx="30" cy="30" r="30"></circle>
+                    <path d="M21.5095777,36.7699357 L29.999975,28.29968 L38.490418,36.7698899 C38.7100982,36.9895702 39.0662375,36.9895702 39.2859178,36.7698899 L40.2140314,35.841822 C40.4336659,35.6221876 40.4336659,35.2660025 40.2140314,35.0463222 L30.3977249,25.2301072 C30.1780446,25.010427 29.8219053,25.010427 29.6021793,25.2301072 L19.7859643,35.046368 C19.566284,35.2660483 19.566284,35.6222333 19.7859643,35.8418678 L20.7140779,36.7699357 C20.9337124,36.9896159 21.2898517,36.9896159 21.5095777,36.7699357 Z" id="chevron-up" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
