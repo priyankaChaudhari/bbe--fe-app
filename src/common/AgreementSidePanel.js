@@ -2194,74 +2194,81 @@ export default function AgreementSidePanel({
   };
 
   const generateDropdown = (item) => {
-    return (
-      <Select
-        classNamePrefix={
-          (apiError && apiError[item.key]) ||
-          (!(formData && formData[item.key]) && item.isMandatory)
-            ? 'react-select  form-control-error'
-            : 'react-select'
-        }
-        styles={{
-          control: (base, state) => ({
-            ...base,
-            background:
-              (apiError &&
-                apiError.non_field_errors &&
-                apiError.non_field_errors[0] &&
-                item.key === 'primary_marketplace') ||
-              (!(formData && formData[item.key]) && item.isMandatory)
-                ? '#FBF2F2'
-                : '#F4F6FC',
-            // match with the menu
-            // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
-            // Overwrittes the different states of border
-            borderColor:
-              (apiError &&
-                apiError.non_field_errors &&
-                apiError.non_field_errors[0] &&
-                item.key === 'primary_marketplace') ||
-              (!(formData && formData[item.key]) && item.isMandatory)
-                ? '#D63649'
-                : '#D5D8E1',
-
-            // Removes weird border around container
-            boxShadow: state.isFocused ? null : null,
-            '&:hover': {
+    if (
+      item.key === 'length' &&
+      formData &&
+      formData.contract_type !== 'one time'
+    )
+      return (
+        <Select
+          classNamePrefix={
+            (apiError && apiError[item.key]) ||
+            (!(formData && formData[item.key]) && item.isMandatory)
+              ? 'react-select  form-control-error'
+              : 'react-select'
+          }
+          styles={{
+            control: (base, state) => ({
+              ...base,
+              background:
+                (apiError &&
+                  apiError.non_field_errors &&
+                  apiError.non_field_errors[0] &&
+                  item.key === 'primary_marketplace') ||
+                (!(formData && formData[item.key]) && item.isMandatory)
+                  ? '#FBF2F2'
+                  : '#F4F6FC',
+              // match with the menu
+              // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
               // Overwrittes the different states of border
+              borderColor:
+                (apiError &&
+                  apiError.non_field_errors &&
+                  apiError.non_field_errors[0] &&
+                  item.key === 'primary_marketplace') ||
+                (!(formData && formData[item.key]) && item.isMandatory)
+                  ? '#D63649'
+                  : '#D5D8E1',
+
+              // Removes weird border around container
               boxShadow: state.isFocused ? null : null,
-              outlineColor: state.isFocused ? null : null,
+              '&:hover': {
+                // Overwrittes the different states of border
+                boxShadow: state.isFocused ? null : null,
+                outlineColor: state.isFocused ? null : null,
+              },
+            }),
+            placeholder: (defaultStyles) => {
+              return {
+                ...defaultStyles,
+                color: '556178',
+              };
             },
-          }),
-          placeholder: (defaultStyles) => {
-            return {
-              ...defaultStyles,
-              color: '556178',
-            };
-          },
-        }}
-        placeholder={item.placeholder ? item.placeholder : 'Select'}
-        defaultValue={
-          item.key === 'primary_marketplace'
-            ? formData.primary_marketplace && formData.primary_marketplace.name
-              ? {
-                  value: formData.primary_marketplace.name,
-                  label: formData.primary_marketplace.name,
-                }
-              : formData && formData.primary_marketplace
-              ? {
-                  value: formData.primary_marketplace,
-                  label: formData.primary_marketplace,
-                }
-              : null
-            : formData[item.key]
-        }
-        options={getOptions(item.key, 'single')}
-        name={item.key}
-        components={{ DropdownIndicator }}
-        onChange={(event) => handleChange(event, item.key, 'choice')}
-      />
-    );
+          }}
+          placeholder={item.placeholder ? item.placeholder : 'Select'}
+          defaultValue={
+            item.key === 'primary_marketplace'
+              ? formData.primary_marketplace &&
+                formData.primary_marketplace.name
+                ? {
+                    value: formData.primary_marketplace.name,
+                    label: formData.primary_marketplace.name,
+                  }
+                : formData && formData.primary_marketplace
+                ? {
+                    value: formData.primary_marketplace,
+                    label: formData.primary_marketplace,
+                  }
+                : null
+              : formData[item.key]
+          }
+          options={getOptions(item.key, 'single')}
+          name={item.key}
+          components={{ DropdownIndicator }}
+          onChange={(event) => handleChange(event, item.key, 'choice')}
+        />
+      );
+    return '';
   };
 
   const generateHTML = (item) => {
@@ -3510,7 +3517,13 @@ export default function AgreementSidePanel({
                       item.key !== 'contract_address' ? (
                         <li key={item.key}>
                           <ContractFormField>
-                            <label htmlFor={item.key}>{item.label}</label>
+                            {item.key === 'length' &&
+                            formData &&
+                            formData.contract_type === 'one time' ? (
+                              ''
+                            ) : (
+                              <label htmlFor={item.key}>{item.label}</label>
+                            )}
                             {generateHTML(item)}
                             {displayError(item)}
                           </ContractFormField>
