@@ -72,6 +72,7 @@ export default function NewCustomerList() {
     { value: 'any', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
+    { value: 'dsp only', label: 'DSP Only' },
   ];
   const contractStatus = [
     { value: 'active', label: 'Signed' },
