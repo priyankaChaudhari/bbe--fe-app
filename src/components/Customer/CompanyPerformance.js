@@ -481,7 +481,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         }
       }
       if (selectedValue === 'month' && groupBy === 'daily') {
-        return dayjs(date).date();
+        return dayjs(date).format('MMM D');
       }
       // if (selectedValue === '30days' && groupBy === 'daily') {
       //   return dayjs(date).date();
@@ -1407,7 +1407,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={DataFormater}
-                dx={-20}
+                dx={-10}
                 allowDataOverflow
                 // domain={[0, (dataMax) => (dataMax * 10) / 100 + dataMax]}
                 // domain={[
