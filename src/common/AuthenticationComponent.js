@@ -26,8 +26,8 @@ import {
   PATH_BGS_DASHBOARD,
   // PATH_TEAM_MEMBER,
   // PATH_TABLET_TEAM_MEMBER,
-  PATH_CREATE_ACCOUNT,
-  PATH_COMPANY_DIGITAL,
+  // PATH_CREATE_ACCOUNT,
+  // PATH_COMPANY_DIGITAL,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -49,8 +49,8 @@ import {
   // TeamMember,
   // TabletTeamMember,
 } from '../components/Brand Partner';
-import CreateAccount from '../components/OnBoardingCustomer/CreateAccount';
-import { CompanyDigital } from '../components/OnBoardingCustomer';
+// import CreateAccount from '../components/OnBoardingCustomer/CreateAccount';
+// import { CompanyDigital } from '../components/OnBoardingCustomer';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -170,8 +170,8 @@ export default function AuthenticationComponent() {
           {/* <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
 
           {/* On-Boarding Customer */}
-          <Route path={PATH_CREATE_ACCOUNT} component={CreateAccount} />
-          <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />
+          {/* <Route path={PATH_CREATE_ACCOUNT} component={CreateAccount} />
+          <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} /> */}
 
           <Route component={PageNotFound} />
         </Switch>
