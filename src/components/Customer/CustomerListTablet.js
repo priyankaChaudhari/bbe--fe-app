@@ -48,7 +48,7 @@ export default function CustomerListTablet({
   };
 
   const generateContractHTML = (type, id) => {
-    if (countDays(type.end_date) <= 90) {
+    if (countDays(type.end_date) <= 90 && type.contract_type !== 'one time') {
       return (
         <li
           onClickCapture={(e) => {

@@ -415,7 +415,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -437,7 +437,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -481,7 +481,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -502,7 +502,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -547,7 +547,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -568,7 +568,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -614,7 +614,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                                 %
                               </>
                             ) : (
@@ -636,7 +636,7 @@ export default function Dashboard() {
                                       .reduce((val, rev) => rev + val)
                                       .toString()
                                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                  : ''}
+                                  : 0}
                                 %
                               </>
                             ) : (
