@@ -1982,23 +1982,24 @@ export default function ContractContainer() {
       details && details.length && details.length.value,
       10,
     );
+    // if (
+    //   details &&
+    //   details.contract_type &&
+    //   details.contract_type.toLowerCase().includes('one')
+    // ) {
+    //   if (
+    //     contractTermLength < 12
+    //     // &&
+    //     // !(userInfo && userInfo.role === 'Team Manager - TAM')
+    //   ) {
+    //     return true;
+    //   }
+    // } else
     if (
       details &&
       details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-    ) {
-      if (
-        contractTermLength < 12
-        // &&
-        // !(userInfo && userInfo.role === 'Team Manager - TAM')
-      ) {
-        return true;
-      }
-    } else if (
-      rev < 3 ||
-      contractTermLength < 12
-      // &&
-      // !(userInfo && userInfo.role === 'Team Manager - TAM')
+      details.contract_type.toLowerCase().includes('recurring') &&
+      (rev < 3 || contractTermLength < 12)
     ) {
       return true;
     }
