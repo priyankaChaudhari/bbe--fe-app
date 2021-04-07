@@ -144,12 +144,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   const filterOption = (props) => (
@@ -203,32 +203,37 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   };
 
   const getBBData = useCallback(
-    (marketplace, BBdailyFact, bBGroupBy) => {
+    (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
       // setIsLoading({ loader: true, type: 'button' });
-      getBuyBoxChartData(id, marketplace, BBdailyFact, bBGroupBy).then(
-        (res) => {
-          if (res && res.status === 400) {
-            // setApiError(res && res.data);
-            // setIsLoading({ loader: false, type: 'button' });
-          }
-          if (res && res.status === 200 && res.data && res.data.bbep) {
-            const avg =
-              res.data.bbep
-                .filter((record) => record.bbep)
-                .reduce((acc, record) => acc + record.bbep, 0) /
-                res.data.bbep.length || 0;
+      getBuyBoxChartData(
+        id,
+        marketplace,
+        BBdailyFact,
+        bBGroupBy,
+        startDate,
+        endDate,
+      ).then((res) => {
+        if (res && res.status === 400) {
+          // setApiError(res && res.data);
+          // setIsLoading({ loader: false, type: 'button' });
+        }
+        if (res && res.status === 200 && res.data && res.data.bbep) {
+          const avg =
+            res.data.bbep
+              .filter((record) => record.bbep)
+              .reduce((acc, record) => acc + record.bbep, 0) /
+              res.data.bbep.length || 0;
 
-            const tempBBData = res.data.bbep.map((data) => {
-              return {
-                date: dayjs(data.report_date).format('MMM D'),
-                value: data.bbep,
-                avg: avg.toFixed(2),
-              };
-            });
-            setBBChartData(tempBBData);
-          }
-        },
-      );
+          const tempBBData = res.data.bbep.map((data) => {
+            return {
+              date: dayjs(data.report_date).format('MMM D'),
+              value: data.bbep,
+              avg: avg.toFixed(2),
+            };
+          });
+          setBBChartData(tempBBData);
+        }
+      });
     },
     [id],
   );
@@ -597,22 +602,34 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const BBYearAndCustomDateFilter = (value) => {
-    let diffDays = new Date();
-    if (value === 'custom') {
-      diffDays = getDays(BBstate[0].startDate, BBstate[0].endDate);
-    } else {
-      diffDays = getDays(new Date(new Date().getFullYear(), 0, 1), new Date());
-    }
+  const BBYearAndCustomDateFilter = (startDate, endDate, value) => {
+    let temp = '';
+
+    let sd = startDate;
+    let ed = endDate;
+    const diffDays = getDays(startDate, endDate);
+
     if (diffDays <= 30) {
-      getBBData(selectedAmazonValue, value, 'daily');
+      temp = 'daily';
       setBBGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 180) {
-      getBBData(selectedAmazonValue, value, 'weekly');
+      temp = 'weekly';
       setBBGroupBy('weekly');
     } else if (diffDays > 180) {
-      getBBData(selectedAmazonValue, value, 'monthly');
+      temp = 'monthly';
       setBBGroupBy('monthly');
+    }
+
+    if (value === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getBBData(selectedAmazonValue, value, temp, sd, ed);
+    } else {
+      getBBData(selectedAmazonValue, value, temp);
     }
   };
 
@@ -653,7 +670,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       ]);
     }
     if (value === 'year') {
-      BBYearAndCustomDateFilter('year');
+      BBYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+      );
     } else if (value === 'custom') {
       setShowBBCustomDateModal(true);
     } else {
@@ -687,7 +708,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const applyCustomeDate = (flag) => {
     if (flag === 'BBDate') {
-      BBYearAndCustomDateFilter('custom');
+      BBYearAndCustomDateFilter(
+        BBstate[0].startDate,
+        BBstate[0].endDate,
+        'custom',
+      );
       setShowBBCustomDateModal(false);
     } else {
       checkDifferenceBetweenDates(

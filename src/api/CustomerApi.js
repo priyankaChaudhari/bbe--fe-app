@@ -452,13 +452,28 @@ export async function getBuyBoxChartData(
   marketplace,
   bbDailyFact,
   groupBy,
+  startDate,
+  endDate,
 ) {
-  const params = {
-    daily_facts: 'week',
-    group_by: groupBy,
-    marketplace,
-    bbep_interval: bbDailyFact,
-  };
+  let params = {};
+  if (startDate && endDate) {
+    params = {
+      daily_facts: 'week',
+      group_by: groupBy,
+      marketplace,
+      bbep_interval: bbDailyFact,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      daily_facts: 'week',
+      group_by: groupBy,
+      marketplace,
+      bbep_interval: bbDailyFact,
+    };
+  }
+
   const result = await axiosInstance
     .get(`${API_PERFORMANCE + customer}/`, { params })
     .then((response) => {
