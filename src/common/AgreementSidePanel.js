@@ -3585,6 +3585,12 @@ export default function AgreementSidePanel({
                                 .toLowerCase()
                                 .includes('one')
                               ? 'addendum'
+                              : formData &&
+                                formData.contract_type &&
+                                formData.contract_type
+                                  .toLowerCase()
+                                  .includes('dsp')
+                              ? 'dspAddendum'
                               : 'statement',
                           )
                         }>
