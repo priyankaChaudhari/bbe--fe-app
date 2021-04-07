@@ -2014,6 +2014,12 @@ export default function ContractContainer() {
       (rev < 3 || contractTermLength < 12)
     ) {
       return true;
+    }else if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
+      return true;
     }
     return false;
   };

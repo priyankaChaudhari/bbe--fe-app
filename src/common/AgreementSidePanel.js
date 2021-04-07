@@ -2194,7 +2194,7 @@ export default function AgreementSidePanel({
 
   const generateDropdown = (item) => {
     if (
-      item.key === 'length' &&
+      // item.key === 'length' &&
       formData &&
       formData.contract_type !== 'one time'
     )
