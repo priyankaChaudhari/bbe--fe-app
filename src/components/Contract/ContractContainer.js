@@ -330,6 +330,9 @@ export default function ContractContainer() {
       setShowCollpase({ ...showSection, dspAddendum: false });
     }
 
+    if (details && details.contract_type === 'dsp only') {
+      setShowCollpase({ ...showSection, dspAddendum: true });
+    }
     if (
       details &&
       details.primary_marketplace &&
@@ -1692,6 +1695,11 @@ export default function ContractContainer() {
           formData &&
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('one')
+        ) &&
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
         )
       ) {
         if (
@@ -1910,6 +1918,7 @@ export default function ContractContainer() {
               mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
             )
         : '';
+
     const dspAddendumSignature =
       showSection && showSection.dspAddendum
         ? AddendumSign.replace(
@@ -1948,10 +1957,13 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-        ? ''
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('one')) ||
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('dsp'))
+        ? null
         : statmentData
     } ${
       details &&
@@ -2002,6 +2014,12 @@ export default function ContractContainer() {
       (rev < 3 || contractTermLength < 12)
     ) {
       return true;
+    }else if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
+      return true;
     }
     return false;
   };
@@ -2043,11 +2061,12 @@ export default function ContractContainer() {
           />
         </div>
 
-        {details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('one') ? (
-          ''
-        ) : (
+        {(details &&
+          details.contract_type &&
+          details.contract_type.toLowerCase().includes('one')) ||
+        (details &&
+          details.contract_type &&
+          details.contract_type.toLowerCase().includes('dsp')) ? null : (
           <div id="statement">
             <Statement
               formData={formData}
@@ -2059,12 +2078,15 @@ export default function ContractContainer() {
           </div>
         )}
 
-        {showSection.dspAddendum &&
-        !(
-          details &&
+        {(details &&
           details.contract_type &&
-          details.contract_type.toLowerCase().includes('one')
-        ) ? (
+          details.contract_type.toLowerCase().includes('dsp')) ||
+        (showSection.dspAddendum &&
+          !(
+            details &&
+            details.contract_type &&
+            details.contract_type.toLowerCase().includes('one')
+          )) ? (
           <div id="dspAddendum">
             <DSPAddendum
               formData={formData}

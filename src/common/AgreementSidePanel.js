@@ -149,7 +149,6 @@ export default function AgreementSidePanel({
   const [images, setImages] = useState([]);
   const [activityLoader, setActivityLoader] = useState(false);
   const [isApicalled, setIsApicalled] = useState(false);
-
   const getActivityInitials = (userInfo) => {
     if (userInfo && userInfo === 'Contract initiated') {
       return 'SU';
@@ -2195,7 +2194,7 @@ export default function AgreementSidePanel({
 
   const generateDropdown = (item) => {
     if (
-      item.key === 'length' &&
+      // item.key === 'length' &&
       formData &&
       formData.contract_type !== 'one time'
     )
@@ -3600,11 +3599,12 @@ export default function AgreementSidePanel({
                   </ul>
                 )}
               </Collapse>
-              {formData &&
-              formData.contract_type &&
-              formData.contract_type.toLowerCase().includes('one') ? (
-                ''
-              ) : (
+              {(formData &&
+                formData.contract_type &&
+                formData.contract_type.toLowerCase().includes('one')) ||
+              (formData &&
+                formData.contract_type &&
+                formData.contract_type.toLowerCase().includes('dsp')) ? null : (
                 <>
                   <div className="straight-line sidepanel " />
                   <div
@@ -3868,13 +3868,16 @@ export default function AgreementSidePanel({
                   color="#FF5933"
                   type="page"
                 />
-              ) : showSection &&
-                showSection.dspAddendum &&
-                !(
-                  formData &&
+              ) : (formData &&
                   formData.contract_type &&
-                  formData.contract_type.toLowerCase().includes('one')
-                ) ? (
+                  formData.contract_type.toLowerCase().includes('dsp')) ||
+                (showSection &&
+                  showSection.dspAddendum &&
+                  !(
+                    formData &&
+                    formData.contract_type &&
+                    formData.contract_type.toLowerCase().includes('one')
+                  )) ? (
                 <>
                   <div className="straight-line sidepanel " />
 
