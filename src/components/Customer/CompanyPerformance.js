@@ -285,9 +285,9 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             res.data.daily_facts.previous.length
           ) {
             res.data.daily_facts.previous.forEach((resData) => {
-              revenueTotal.previousRevenueTotal += resData.revenue;
-              unitsTotal.previousUnitsTotal += resData.units_sold;
-              trafficTotal.previousTrafficTotal += resData.traffic;
+              // revenueTotal.previousRevenueTotal += resData.revenue;
+              // unitsTotal.previousUnitsTotal += resData.units_sold;
+              // trafficTotal.previousTrafficTotal += resData.traffic;
               // conversionTotal.previousConversionTotal += resData.conversion;
               // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               tempRevenueData.push({ 'vs $': resData.revenue });
@@ -323,6 +323,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempConversionData[index][' $'] = resData.conversion;
                 conversionTotal.previousConversionTotal +=
                   res.data.daily_facts.previous[index].conversion;
+                revenueTotal.previousRevenueTotal +=
+                  res.data.daily_facts.previous[index].revenue;
+                unitsTotal.previousUnitsTotal +=
+                  res.data.daily_facts.previous[index].units_sold;
+                trafficTotal.previousTrafficTotal +=
+                  res.data.daily_facts.previous[index].traffic;
               } else {
                 tempRevenueData.push({
                   name: dayDate,
