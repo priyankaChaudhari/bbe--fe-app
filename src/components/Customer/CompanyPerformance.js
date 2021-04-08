@@ -1256,7 +1256,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 </div>
                 <div className="vs">
                   {' '}
-                  vs
+                  vs{' '}
                   {allSalesTotal && allSalesTotal.conversion
                     ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
                         2,
