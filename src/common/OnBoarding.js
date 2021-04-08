@@ -38,12 +38,14 @@ const OnBoardingBody = styled.div`
       font-family: ${Theme.baseFontFamily};
       text-transform: initial;
       padding-bottom: 13px;
+      line-height: 34px;
     }
     .information-text {
       font-weight: 300;
       padding-bottom: 13px;
       line-height: 22px;
       font-size: ${Theme.normal};
+      position: relative;
 
       .hi-name {
         margin-bottom: 12px;
@@ -51,9 +53,37 @@ const OnBoardingBody = styled.div`
       .note {
         font-style: italic;
       }
+      .completed-status {
+        color: ${Theme.orange};
+        .orange-check {
+          width: 16px;
+          margin-right: 5px;
+          vertical-align: middle;
+        }
+      }
+      .pending-status {
+        color: ${Theme.gray35};
+        .pending-icon {
+          width: 14px;
+          margin-right: 4px;
+          vertical-align: middle;
+        }
+      }
+      .view-details {
+        color: ${Theme.gray85};
+        font-size: ${Theme.extraNormal};
+        position: absolute;
+        right: 21px;
+        top: 0;
+        cursor: pointer;
+      }
     }
     .complete-steps {
       font-family: ${Theme.titleFontFamily};
+
+      span {
+        font-family: ${Theme.baseFontFamily};
+      }
     }
     .account-steps-check {
       list-style-type: none;
@@ -86,13 +116,71 @@ const OnBoardingBody = styled.div`
       color: ${Theme.gray40};
       font-size: 14px;
       line-height: 22px;
+
+      .video-link {
+        font-size: 14px;
+        color: ${Theme.orange};
+        text-transform: initial;
+      }
     }
+    .label-title {
+      color: ${Theme.gray40};
+      font-size: ${Theme.verySmall};
+      letter-spacing: 1.13px;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-family: ${Theme.titleFontFamily};
+      .arrow-up {
+        float: right;
+      }
+    }
+
+    span {
+      color: ${Theme.gray90};
+      .social-media {
+        width: 15px;
+        margin-top: 3px;
+        vertical-align: inherit;
+
+        &.insta {
+          width: 19px;
+          margin-top: 3px;
+          vertical-align: bottom;
+        }
+        &.linedin {
+          width: 18px;
+          margin-top: 3px;
+          vertical-align: bottom;
+        }
+        &.face-book {
+          width: 14px;
+        }
+      }
+    }
+    .hereby-acknowledge {
+      line-height: 20px;
+      font-size: ${Theme.extraSmall};
+    }
+    .reach-out-link {
+      color: ${Theme.orange};
+      font-family: ${Theme.regularItalicFontFamily};
+      text-transform: lowercase;
+      text-decoration: underline;
+    }
+  }
+  .w-430 {
+    max-width: 430px;
+    margin: 0 auto;
+    width: 100%;
   }
   .panel {
     padding: 0;
     max-width: 400px;
     margin-top: 105px;
     box-shadow: none;
+  }
+  .gap-none {
+    margin-top: 0;
   }
 `;
 

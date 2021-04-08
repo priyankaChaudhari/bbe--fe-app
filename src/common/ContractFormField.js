@@ -3,6 +3,17 @@ import Theme from '../theme/Theme';
 
 const ContractFormField = styled.div`
   position:relative;
+   .edit-field {
+      position: absolute;
+      right: 0;
+      top: 0px;
+      color: ${Theme.gray85};
+      font-size: ${Theme.extraNormal};
+
+      .edit-icon{
+         vertical-align: text-top
+      }
+    }
 
   label {
     color: ${Theme.gray40};

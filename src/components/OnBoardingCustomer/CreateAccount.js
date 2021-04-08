@@ -88,7 +88,7 @@ export default function CreateAccount() {
           </ContractFormField>
           <ContractFormField className="mt-3">
             <label>
-              Confiirm Email Address
+              Confirm Email Address
               <input className="form-control" />
             </label>
           </ContractFormField>

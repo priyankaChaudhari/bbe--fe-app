@@ -33,5 +33,15 @@ const GreyCard = styled.div`
     right: 50px;
     width: 14px;
   }
+
+  &.yellow-card {
+    background: ${Theme.lightYellow};
+
+    .video-link {
+      font-size: 14px;
+      color: ${Theme.orange};
+      text-transform: initial;
+    }
+  }
 `;
 export default GreyCard;

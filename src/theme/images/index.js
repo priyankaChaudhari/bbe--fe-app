@@ -137,6 +137,8 @@ import CountDayClock from './icons/count-days-clock.svg';
 import SpeedometerActive from './icons/speedometer-icon.png';
 import Speedometer from './icons/speedometer-icon-disactive.png';
 import OrangeCheckMark from './icons/orange-checkmark.svg';
+import SquareFbIcon from './icons/square-fb-icon.svg';
+import GrayClockIcon from './icons/gray-clock-icon.svg';
 
 export {
   BannerBg,
@@ -278,4 +280,6 @@ export {
   SpeedometerActive,
   Speedometer,
   OrangeCheckMark,
+  SquareFbIcon,
+  GrayClockIcon,
 };
