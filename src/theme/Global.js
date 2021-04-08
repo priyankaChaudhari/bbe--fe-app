@@ -483,12 +483,18 @@ export const WhiteCard = styled.div`
       vertical-align: middle;
       width: 14px;
       margin-left: 8px;
-      cursor: pointer;
+      cursor: pointer
     }
   }
   .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};
+
+    .master-card-icon {
+      width: 20px;
+      margin-right: 2px;
+      vertical-align: top;
+    }
   }
 
   .phone-number {
