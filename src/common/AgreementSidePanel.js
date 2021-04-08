@@ -4375,7 +4375,7 @@ const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
     padding-bottom: 250px;
-    width: 335px;
+    width: 336px;
     position: fixed;
     top: 130px;
     right: 0;
@@ -4769,7 +4769,7 @@ const SidePanel = styled.div`
   }
 
    @media only screen and (min-width: 1500px)  {
-     width: 400px;
+     width: 406px;
      .sidebar {
       width: 400px;
     }
