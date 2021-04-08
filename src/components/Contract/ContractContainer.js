@@ -1990,6 +1990,7 @@ export default function ContractContainer() {
 
   const checkApprovalCondition = () => {
     const rev = Number(details && details.rev_share && details.rev_share.value);
+    const dspFee = Number(details && details.dsp_fee);
     const contractTermLength = parseInt(
       details && details.length && details.length.value,
       10,
@@ -2010,18 +2011,24 @@ export default function ContractContainer() {
     if (
       details &&
       details.contract_type &&
-      details.contract_type.toLowerCase().includes('recurring') &&
-      (rev < 3 || contractTermLength < 12)
+      details.contract_type.toLowerCase().includes('recurring')
+    ) {
+      if (
+        (showSection.dspAddendum && dspFee < 10000) ||
+        rev < 3 ||
+        contractTermLength < 12
+      ) {
+        return true;
+      }
+    }
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp') &&
+      dspFee < 10000
     ) {
       return true;
     }
-    // if (
-    //   details &&
-    //   details.contract_type &&
-    //   details.contract_type.toLowerCase().includes('dsp')
-    // ) {
-    //   return true;
-    // }
     return false;
   };
 
