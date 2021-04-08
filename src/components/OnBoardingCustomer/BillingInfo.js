@@ -229,7 +229,7 @@ export default function BillingInfo() {
               is provided in writing. I further agree to the additional Terms &
               Conditions for these payment and agree to the terms and conditions
               found{' '}
-              <a className="reach-out-link" href="*">
+              <a className="link-url" href="*">
                 here.
               </a>
               <input type="checkbox" id="contract-copy-check" />
@@ -275,7 +275,6 @@ const CollapseOpenContainer = styled.div`
       .label-title {
         color: ${Theme.gray40};
         font-size: ${Theme.verySmall};
-        letter-spacing: 1.13px;
         text-transform: uppercase;
         font-weight: bold;
         font-family: ${Theme.titleFontFamily};

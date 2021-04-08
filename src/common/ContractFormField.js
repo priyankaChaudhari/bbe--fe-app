@@ -18,7 +18,7 @@ const ContractFormField = styled.div`
   label {
     color: ${Theme.gray40};
     font-size:${Theme.verySmall};
-    letter-spacing: 0.5px;
+    // letter-spacing: 0.5px;
     text-transform: uppercase;
     font-weight: bold;   
   }

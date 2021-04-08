@@ -123,10 +123,16 @@ const OnBoardingBody = styled.div`
         text-transform: initial;
       }
     }
+    .link-url {
+      font-size: 14px;
+      color: ${Theme.orange};
+      text-transform: initial;
+      text-decoration: underline;
+    }
+
     .label-title {
       color: ${Theme.gray40};
       font-size: ${Theme.verySmall};
-      letter-spacing: 1.13px;
       text-transform: uppercase;
       font-weight: bold;
       font-family: ${Theme.titleFontFamily};
