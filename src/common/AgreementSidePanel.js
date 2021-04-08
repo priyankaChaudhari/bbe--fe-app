@@ -4411,7 +4411,7 @@ const SidePanel = styled.div`
     word-spacing: 3px;
    
     &.error-container {
-    margin-top: -6px;
+    margin-top: -3px;
   }
    
   
@@ -4430,19 +4430,19 @@ const SidePanel = styled.div`
     }
     
    .error-bg {
-      height: 64px;
-      background: #FBF2F2;
+      height: 63px;
+      background: ${Theme.lightRed};
       right: 0px;
       border-right: 2px solid #D63649;
       z-index: -2;
       top: 0px;
       position: absolute;
-      width: 64px;
+      width: 46px;
 
       .red-cross {
         width: 16px;
         position: absolute;
-        right: 21px;
+        right: 13px;
         top: 25px;
       }
     }
@@ -4484,13 +4484,13 @@ const SidePanel = styled.div`
 
 .collapse-btn {
   width:100%;
-  padding: 16px;
+  padding: 15px;
   cursor:pointer;
   position: relative;
 
 }
 .collapse-container {
-  padding:15px;
+  padding: 15px;
 }
 
 .collapse-inner {
@@ -4701,61 +4701,11 @@ const SidePanel = styled.div`
           }
           
         }
-        //  &:hover {
-        //   box-shadow: ${Theme.commonShadow};
-        //   cursor:pointer;
-        // }
+        
       }
 
     }
   }
-
-  
-  //  @media only screen and (max-width: 991px) { 
-  //    top: 70px;
-  //  input[data-function*='swipe'] {
-  //   position: absolute;
-  //   opacity: 0;
-  // }
-  // label[data-function*='swipe'] {
-  //   padding 30px 0 0 10px;
-  //   z-index: 1;
-  //   display: block;
-  //   width: 42px;
-  //   font-family: ${Theme.titleFontFamily};
-  //   height: 42px;
-  //   text-align: center;
-  //   cursor: pointer;
-  //   transform: translate3d(0, 0, 0);
-  //   transition: transform 0.3s;
-  // }
-  
-  // input[data-function*='swipe']:checked ~ label[data-function*='swipe'] {
-  //   transform: translate3d(200px, 0, 0);
-  // }
-  // label[data-function*='swipe']:checked {
-  //   display: block;
-  // }
-  // label:nth-child(2) {
-  //   display: none;
-  // }
-  // input[data-function*='swipe']:checked ~ label:nth-child(2) {
-  //   display: block;
-  //   transform: translate3d(10px, 0px, 0px);
-  // }
-  // input[data-function*='swipe']:checked ~ label:nth-child(3) {
-  //   display: none !important;
-  // }
-  
-  // input[data-function*='swipe']:checked ~ .sidebar {
-  //   transform: translate3d(0px, 0px, 0px);
-  //   display: none;
-  // }
-  // input[data-function*='swipe']:checked ~ .sidebar .menu li {
-  //   width: 100%;
-  // }
- 
-  // }
 
   @media only screen and (max-width: 991px) {  
     z-index: 1;
