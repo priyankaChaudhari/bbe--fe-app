@@ -1677,6 +1677,22 @@ export default function ContractContainer() {
     if (section === 'service_agreement') {
       if (
         formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        if (
+          formData &&
+          formData.contract_company_name &&
+          formData.start_date &&
+          formData.address &&
+          formData.state &&
+          formData.city &&
+          formData.zip_code
+        ) {
+          return true;
+        }
+      } else if (
+        formData &&
         formData.contract_company_name &&
         formData.start_date &&
         formData.length &&
@@ -2155,9 +2171,17 @@ export default function ContractContainer() {
 
     AgreementDetails.forEach((item) => {
       if (item.key !== 'contract_address') {
-        if (item.isMandatory && !(formData && formData[item.key])) {
-          agreementErrors += 1;
-          item.error = true;
+        if (
+          !(
+            item.key === 'length' &&
+            details &&
+            details.contract_type === 'one time'
+          )
+        ) {
+          if (item.isMandatory && !(formData && formData[item.key])) {
+            agreementErrors += 1;
+            item.error = true;
+          }
         }
       } else {
         return (

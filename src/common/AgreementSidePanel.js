@@ -2357,6 +2357,22 @@ export default function AgreementSidePanel({
     if (section === 'service_agreement') {
       if (
         formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        if (
+          formData &&
+          formData.contract_company_name &&
+          formData.start_date &&
+          formData.address &&
+          formData.state &&
+          formData.city &&
+          formData.zip_code
+        ) {
+          return true;
+        }
+      } else if (
+        formData &&
         formData.contract_company_name &&
         formData.start_date &&
         formData.length &&
