@@ -4602,7 +4602,7 @@ const SidePanel = styled.div`
       background: ${Theme.extraLightYellow};
       padding: 12px 0;
       min-height: 40px;
-      margin: 10px;
+      margin: 10px 0px 10px 10px;
 
       &.pending-contract {
         background: ${Theme.gray8};
@@ -4662,7 +4662,7 @@ const SidePanel = styled.div`
           color:${Theme.gray90};
           float: left;
           word-break: break-word;
-          width: 90%;
+          width: 85%;
           text-align: left;
           span {
             color:${Theme.gray35};

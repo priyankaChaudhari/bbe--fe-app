@@ -13,7 +13,7 @@ export default function Billing() {
       <div className="col-lg-8 col-12">
         <div className="row">
           <div className="col-md-6 col-sm-12 mb-3">
-            <WhiteCard>
+            <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4"> Billing Details</p>
               <div className="edit-details" role="presentation">
                 <img src={EditOrangeIcon} alt="" />
@@ -68,8 +68,8 @@ export default function Billing() {
               </div>
             </WhiteCard>
           </div>
-          <div className="col-md-6 col-sm-12">
-            <WhiteCard>
+          <div className="col-md-6 col-sm-12 mb-3">
+            <WhiteCard className="fix-height">
               {' '}
               <p className="black-heading-title mt-0 mb-4"> Billing Contacts</p>
               <div className="edit-details" role="presentation">

@@ -26,6 +26,13 @@ const PageLoaderWrapper = styled.div`
       height: 40px;
     }
   }
+  @media only screen and (max-width: 991px) {
+    &.sidebar-loader {
+      left: unset;
+      right: 50%;
+      left: 50%;
+    }
+  }
 `;
 
 const DetailLoaderWrapper = styled.div`
