@@ -3514,19 +3514,19 @@ export default function AgreementSidePanel({
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
-                        <li key={item.key}>
-                          <ContractFormField>
-                            {item.key === 'length' &&
-                            formData &&
-                            formData.contract_type === 'one time' ? (
-                              ''
-                            ) : (
-                              <label htmlFor={item.key}>{item.label}</label>
-                            )}
-                            {generateHTML(item)}
-                            {displayError(item)}
-                          </ContractFormField>
-                        </li>
+                        <>
+                          {item.key === 'length' &&
+                          formData &&
+                          formData.contract_type === 'one time' ? null : (
+                            <li key={item.key}>
+                              <ContractFormField>
+                                <label htmlFor={item.key}>{item.label}</label>
+                                {generateHTML(item)}
+                                {displayError(item)}
+                              </ContractFormField>
+                            </li>
+                          )}
+                        </>
                       ) : (
                         <>
                           <li key={item.key}>
