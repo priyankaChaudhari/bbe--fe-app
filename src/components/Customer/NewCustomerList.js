@@ -1247,7 +1247,8 @@ export default function NewCustomerList() {
                             <div className="user-name">
                               {item &&
                                 item.brand_growth_strategist &&
-                                item.brand_growth_strategist.first_name}{' '}
+                                item.brand_growth_strategist.first_name}
+                              <br />
                               {item &&
                                 item.brand_growth_strategist &&
                                 item.brand_growth_strategist.last_name}

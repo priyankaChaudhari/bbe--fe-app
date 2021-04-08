@@ -14,12 +14,12 @@ import {
   GreyCard,
 } from '../../common';
 import {
-  CloseArrowIcons,
   VisaCardIcons,
   MasterCardIcons,
   DiscoverCardIcons,
   AmercianExpressCardIcons,
   LeftArrowIcon,
+  CaretUp,
 } from '../../theme/images';
 
 export default function BillingInfo() {
@@ -114,7 +114,7 @@ export default function BillingInfo() {
             role="presentation"
             onClick={() => setOpenCollapse(!openCollapse)}>
             Explore other payment options{' '}
-            <img className="arrow-up" src={CloseArrowIcons} alt="arrow" />
+            <img className="arrow-up" src={CaretUp} alt="arrow" />
             <div className="clear-fix" />
           </div>
         </div>

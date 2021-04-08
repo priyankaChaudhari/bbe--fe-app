@@ -138,6 +138,7 @@ const OnBoardingBody = styled.div`
       font-family: ${Theme.titleFontFamily};
       .arrow-up {
         float: right;
+        width: 19px;
       }
     }
 

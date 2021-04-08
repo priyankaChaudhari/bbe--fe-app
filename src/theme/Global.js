@@ -451,7 +451,7 @@ export const WhiteCard = styled.div`
     }
     .label-info {
       color: ${Theme.black};
-      font-size: ${Theme.normal};
+      font-size: ${Theme.normal};  
     }
 
     &:hover {
@@ -489,6 +489,11 @@ export const WhiteCard = styled.div`
   .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};
+     .master-card-icon {
+        width: 20px;
+        margin-right: 2px;
+        vertical-align: top;
+      }   
   }
 
   .phone-number {

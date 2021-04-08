@@ -28,6 +28,7 @@ import {
   WhiteCaretUp,
   CaretUp,
   ArrowUp,
+  BillingIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
@@ -49,6 +50,7 @@ import {
   EditAccountDetails,
 } from './index';
 import CompanyPerformance from './CompanyPerformance';
+import Billing from './Billing';
 import Activity from './Activity';
 import {
   getActivityLog,
@@ -130,6 +132,7 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
+    { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -620,6 +623,17 @@ export default function CustomerMainContainer() {
                             </div>
                           </li>
                           <li
+                            onClick={() => setViewComponent('billing')}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'billing' ? 'active' : ''
+                              }`}>
+                              <img src={BillingIcon} alt="dollar-invoice" />
+                              Billing
+                            </div>
+                          </li>
+                          <li
                             onClick={() => setViewComponent('activity')}
                             role="presentation">
                             <div
@@ -778,6 +792,8 @@ export default function CustomerMainContainer() {
                         marketplaceChoices={marketplaceChoices}
                         id={id}
                       />
+                    ) : viewComponent === 'billing' ? (
+                      <Billing />
                     ) : (
                       <Activity
                         activityData={activityData}

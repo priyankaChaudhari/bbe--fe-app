@@ -20,7 +20,7 @@ import {
   TwitterIcon,
   LeftArrowIcon,
   EditOrangeIcon,
-  CloseArrowIcons,
+  CaretUp,
 } from '../../theme/images';
 
 export default function CompanyDigital() {
@@ -168,7 +168,7 @@ export default function CompanyDigital() {
             role="presentation"
             onClick={() => setOpenCollapse(!openCollapse)}>
             Expand questions
-            <img className="arrow-up" src={CloseArrowIcons} alt="arrow" />
+            <img className="arrow-up" src={CaretUp} alt="arrow" />
             <div className="clear-fix" />
           </div>
           <CollapseOpenContainer>

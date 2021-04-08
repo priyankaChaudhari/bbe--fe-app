@@ -139,6 +139,7 @@ import Speedometer from './icons/speedometer-icon-disactive.png';
 import OrangeCheckMark from './icons/orange-checkmark.svg';
 import SquareFbIcon from './icons/square-fb-icon.svg';
 import GrayClockIcon from './icons/gray-clock-icon.svg';
+import BillingIcon from './icons/billing-icon.png';
 
 export {
   BannerBg,
@@ -282,4 +283,5 @@ export {
   OrangeCheckMark,
   SquareFbIcon,
   GrayClockIcon,
+  BillingIcon,
 };
