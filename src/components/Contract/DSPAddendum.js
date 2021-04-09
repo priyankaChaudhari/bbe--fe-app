@@ -66,7 +66,7 @@ export default function DSPAddendum({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
-  const calculateTotalDays = () => {
+  const calculateTotalDays = (flag = '') => {
     let firstMonthdays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
       const totalDays = new Date(
@@ -103,10 +103,19 @@ export default function DSPAddendum({
       0,
     ).getDate();
 
-    if (firstMonthdays + extraDays + secondMonthdays + thirdMonthdays < 105) {
-      return 90;
+    const totaldays =
+      firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+
+    if (flag === 'initial') {
+      if (totaldays < 105) {
+        return '3 months';
+      }
+      return '3.5 months';
     }
-    return 105;
+    if (totaldays < 105) {
+      return `90 (3 months)`;
+    }
+    return `105 (3.5 months)`;
 
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
@@ -139,9 +148,17 @@ export default function DSPAddendum({
     }
 
     if (key === 'dsp_length') {
-      return formData && formData.dsp_length && formData.dsp_length.label
-        ? parseInt(formData.dsp_length.label, 10)
-        : parseInt(formData.dsp_length, 10);
+      if (
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) {
+        return calculateTotalDays('initial');
+      } 
+        return formData && formData.dsp_length && formData.dsp_length.label
+          ? parseInt(formData.dsp_length.label, 10)
+          : parseInt(formData.dsp_length, 10);
+      
     }
     if (type && type.includes('number')) {
       return `
@@ -322,18 +339,18 @@ DSPAddendum.defaultProps = {
 };
 
 DSPAddendum.propTypes = {
-  formData: PropTypes.shape({
-    dsp_fee: PropTypes.string,
-    start_date: PropTypes.string,
-    length: PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-    dsp_length: PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  }),
+  // formData: PropTypes.shape({
+  //   dsp_fee: PropTypes.string,
+  //   start_date: PropTypes.string,
+  //   length: PropTypes.shape({
+  //     label: PropTypes.string,
+  //     value: PropTypes.string,
+  //   }),
+  //   dsp_length: PropTypes.shape({
+  //     label: PropTypes.string,
+  //     value: PropTypes.string,
+  //   }),
+  // }),
   templateData: PropTypes.shape({
     dsp_addendum: PropTypes.arrayOf(PropTypes.string),
   }),
@@ -347,6 +364,13 @@ DSPAddendum.propTypes = {
   setThirdMonthDate: PropTypes.func,
   endMonthDate: PropTypes.instanceOf(Date),
   setEndDate: PropTypes.func,
+  formData: PropTypes.shape({
+    dsp_length: PropTypes.number,
+    dsp_fee: PropTypes.number,
+    contract_status: PropTypes.string,
+    start_date: PropTypes.instanceOf(Date),
+    contract_type: PropTypes.string,
+  }),
 };
 
 const Paragraph = styled.div`
