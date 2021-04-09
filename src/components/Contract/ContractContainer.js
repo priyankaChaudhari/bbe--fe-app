@@ -995,7 +995,7 @@ export default function ContractContainer() {
     }
   };
 
-  const calculateTotalDays = () => {
+  const calculateTotalDays = (flag = '') => {
     let firstMonthdays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
       const totalDays = new Date(
@@ -1031,10 +1031,20 @@ export default function ContractContainer() {
       new Date(thirdMonthDate).getMonth() + 1,
       0,
     ).getDate();
-    if (firstMonthdays + extraDays + secondMonthdays + thirdMonthdays < 105) {
-      return 90;
+
+    const totaldays =
+      firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+
+    if (flag === 'initial') {
+      if (totaldays < 105) {
+        return '3 months';
+      }
+      return '3.5 months';
     }
-    return 105;
+    if (totaldays < 105) {
+      return `90 (3 months)`;
+    }
+    return `105 (3.5 months)`;
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
@@ -1049,12 +1059,20 @@ export default function ContractContainer() {
     //     : `Enter ${label}.`;
     // }
     if (key === 'length' && label === 'Initial Period') {
-      return (
+      if (
         formData &&
-        formData.length &&
-        formData.length.label &&
-        parseInt(formData.length.label, 10)
-      );
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) {
+        return calculateTotalDays('initial');
+      } 
+        return (
+          formData &&
+          formData.length &&
+          formData.length.label &&
+          parseInt(formData.length.label, 10)
+        );
+      
     }
     if (key === 'length') {
       return details && details.length.label;
