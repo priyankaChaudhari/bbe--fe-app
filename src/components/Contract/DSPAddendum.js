@@ -108,9 +108,9 @@ export default function DSPAddendum({
 
     if (flag === 'initial') {
       if (totaldays < 105) {
-        return '3 months';
+        return '3';
       }
-      return '3.5 months';
+      return '3.5';
     }
     if (totaldays < 105) {
       return `90 days(3 months)`;
