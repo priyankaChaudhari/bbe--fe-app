@@ -25,6 +25,10 @@ import {
   MasterCardIcons,
   DiscoverCardIcons,
   AmercianExpressCardIcons,
+  SquareFbIcon,
+  TwitterIcon,
+  LinkedinIcon,
+  InstagramIcon,
 } from '../theme/images/index';
 
 export const userDetails = [
@@ -629,11 +633,41 @@ export const collectionDetails = [
 ];
 
 export const SocialIcons = [
-  { key: 'facebook', value: FaceBookIcons, label: 'Facebook' },
-  { key: 'twitter', value: TwitterIcons, label: 'Twitter' },
-  { key: 'linkedin', value: LinkeDinIcons, label: 'LinkedIn' },
-  { key: 'instagram', value: InstagramIcons, label: 'Instagram' },
-  { key: 'pinterest', value: PinterestIcon, label: 'Pinterest' },
+  {
+    key: 'facebook',
+    value: FaceBookIcons,
+    label: 'Facebook',
+    onboard: SquareFbIcon,
+    property: 'social-media face-book mr-1',
+  },
+  {
+    key: 'twitter',
+    value: TwitterIcons,
+    label: 'Twitter',
+    onboard: TwitterIcon,
+    property: 'social-media mr-1',
+  },
+  {
+    key: 'linkedin',
+    value: LinkeDinIcons,
+    label: 'LinkedIn',
+    onboard: LinkedinIcon,
+    property: 'social-media linedin mr-1',
+  },
+  {
+    key: 'instagram',
+    value: InstagramIcons,
+    label: 'Instagram',
+    onboard: InstagramIcon,
+    property: 'social-media  insta mr-1',
+  },
+  {
+    key: 'pinterest',
+    value: PinterestIcon,
+    label: 'Pinterest',
+    onboard: PinterestIcon,
+    property: 'social-media  insta mr-1',
+  },
 ];
 
 export const Billing = [

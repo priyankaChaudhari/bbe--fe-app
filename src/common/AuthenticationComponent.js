@@ -14,7 +14,6 @@ import {
   PATH_STATEMENT,
   PATH_ADDENDUM,
   PATH_COMPANY_DETAILS,
-  PATH_AMAZON_ACCOUNT,
   PATH_BILLING_DETAILS,
   PATH_ROOT,
   PATH_ONE_TIME_AGREEMENT,
@@ -27,12 +26,11 @@ import {
   // PATH_TEAM_MEMBER,
   // PATH_TABLET_TEAM_MEMBER,
   PATH_CREATE_ACCOUNT,
-  PATH_COMPANY_DIGITAL,
-  PATH_BILLING_INFO,
   PATH_AMAZON_MERCHANT_ID,
   PATH_AMAZON_DEVELOPER_ACCESS,
   PATH_SUMMARY,
   PATH_THANKS,
+  PATH_COMPANY_DIGITAL,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -41,11 +39,7 @@ import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import { ContractContainer } from '../components/Contract';
-import {
-  CompanyDetails,
-  AmazonAccount,
-  BillingDetails,
-} from '../components/AccountSetup';
+import { CompanyDetails } from '../components/AccountSetup';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
@@ -105,20 +99,30 @@ export default function AuthenticationComponent() {
   const generateAccountSetup = () => {
     if (userInfo && userInfo.role === 'Customer') {
       if (userInfo.step === null) {
-        return <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />;
+        return <Route path={PATH_CREATE_ACCOUNT} component={CreateAccount} />;
+      }
+      if (userInfo.step === 1) {
+        return '';
+        // return <Route path={PATH_COMPANY_DETAILS} component={CompanyDigital} />;
       }
       if (userInfo.step === 2) {
-        return <Route path={PATH_AMAZON_ACCOUNT} component={AmazonAccount} />;
+        return <Route path={PATH_BILLING_DETAILS} component={BillingInfo} />;
       }
       if (userInfo.step === 3) {
-        return <Route path={PATH_BILLING_DETAILS} component={BillingDetails} />;
+        return (
+          <Route path={PATH_AMAZON_MERCHANT_ID} component={AmazonMerchantId} />
+        );
       }
       if (userInfo.step === 4) {
         return (
+          // <Route
+          //   path={PATH_CUSTOMER_DETAILS}
+          //   exact
+          //   component={CustomerMainContainer}
+          // />
           <Route
-            path={PATH_CUSTOMER_DETAILS}
-            exact
-            component={CustomerMainContainer}
+            path={PATH_AMAZON_DEVELOPER_ACCESS}
+            component={AmazonDeveloperAccess}
           />
         );
       }
@@ -132,7 +136,6 @@ export default function AuthenticationComponent() {
         {generateHeader()}
         <Switch>
           {/* Customer */}
-
           {userInfo && userInfo.role !== 'Customer' ? (
             <Route
               path={PATH_CUSTOMER_LIST}
@@ -152,7 +155,6 @@ export default function AuthenticationComponent() {
             component={CustomerMainContainer}
           />
           <Route path={PATH_COMPANY_DETAILS} component={CompanyDetails} />
-
           {/* Contract */}
           <Route path={PATH_AGREEMENT} exact component={ContractContainer} />
           <Route path={PATH_STATEMENT} exact component={ContractContainer} />
@@ -160,10 +162,8 @@ export default function AuthenticationComponent() {
           <Route path={PATH_ONE_TIME_AGREEMENT} component={ContractContainer} />
           <Route path={PATH_SERVICE_AMENDMENT} component={ContractContainer} />
           <Route path={PATH_DSP_ADDENDUM} component={ContractContainer} />
-
           {/* Account Setup */}
           {generateAccountSetup()}
-
           {/* Knowledge Base  */}
           {userInfo && userInfo.role !== 'Customer' ? (
             <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
@@ -175,24 +175,14 @@ export default function AuthenticationComponent() {
           ) : (
             ''
           )}
-
           {/* Brand Partner */}
           <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
           {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
           {/* <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
-
           {/* On-Boarding Customer */}
-          <Route path={PATH_CREATE_ACCOUNT} component={CreateAccount} />
-          <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />
-          <Route path={PATH_BILLING_INFO} component={BillingInfo} />
-          <Route path={PATH_AMAZON_MERCHANT_ID} component={AmazonMerchantId} />
-          <Route
-            path={PATH_AMAZON_DEVELOPER_ACCESS}
-            component={AmazonDeveloperAccess}
-          />
+          <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />;
           <Route path={PATH_SUMMARY} component={Summary} />
           <Route path={PATH_THANKS} component={Thanks} />
-
           <Route component={PageNotFound} />
         </Switch>
       </>

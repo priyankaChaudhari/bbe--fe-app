@@ -5,6 +5,8 @@ import AmazonMerchantId from './AmazonMerchantId';
 import AmazonDeveloperAccess from './AmazonDeveloperAccess';
 import Summary from './Summary';
 import Thanks from './Thanks';
+import Info from './Info';
+import AskSomeone from './AskSomeone';
 
 export {
   CreateAccount,
@@ -14,4 +16,6 @@ export {
   AmazonDeveloperAccess,
   Summary,
   Thanks,
+  Info,
+  AskSomeone,
 };

@@ -1,20 +1,66 @@
-import React from 'react';
-// import styled from 'styled-components';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import LoadingBar from 'react-top-loading-bar';
+import queryString from 'query-string';
+import styled from 'styled-components';
 // import Select from 'react-select';
-// import Theme from '../../theme/Theme';
+
+import Theme from '../../theme/Theme';
 import UnauthorizedHeader from '../../common/UnauthorizedHeader';
+import { LeftArrowIcon } from '../../theme/images/index';
 import {
-  //   LeftArrowIcon,
-  LockFinish,
-  OrangeCheckMark,
-} from '../../theme/images/index';
-import { Button, OnBoardingBody } from '../../common';
+  Button,
+  ContractFormField,
+  ErrorMsg,
+  OnBoardingBody,
+  PageLoader,
+} from '../../common';
+import { resetPassword } from '../../api';
+import { login } from '../../store/actions/userState';
 
 export default function CreateAccount() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = useState({
+    loader: false,
+    type: 'button',
+  });
+  const [apiError, setApiError] = useState({});
+  const [formData, setFormData] = useState({});
+  const params = queryString.parse(history.location.search);
+
+  const savePassword = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    const data = {
+      ...formData,
+      key: params.key,
+    };
+    const loginData = {
+      ...formData,
+      email:
+        history.location.search.split('email=') &&
+        history.location.search.split('email=')[1],
+    };
+
+    resetPassword(data).then((response) => {
+      if (response && response.status === 400) {
+        setApiError(response && response.data);
+        setIsLoading({ loader: false, type: 'button' });
+      } else if (response && response.status === 200) {
+        dispatch(login(history, loginData));
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
+  };
+
   return (
     <>
       <UnauthorizedHeader />
-      {/* <BackToStep>
+      <LoadingBar color="#FF5933" progress="25" />
+      <BackToStep>
         {' '}
         <div role="presentation" className="back-link">
           <img
@@ -24,47 +70,60 @@ export default function CreateAccount() {
           />
           Back a step
         </div>
-      </BackToStep> */}
+      </BackToStep>
       <OnBoardingBody>
-        <div className="white-card-base">
-          <img className="lock-finish" src={LockFinish} alt="lock" />
+        <div className="white-card-base panel">
           <p className="account-steps m-0">Step 1 of 4</p>
-          <h3 className="page-heading ">Create your account</h3>
-          <p className="information-text m-0 ">
-            <div className="hi-name"> Hi Newton,</div>
-            We need some essential information in order to set up your account
-            on Buy Box Experts NEXT. We hate paperwork so we ask for as little
-            as necessary to get going.
+          <h3 className="page-heading ">
+            Please set your password to create your account.
+          </h3>
+          <p className="info-text-gray m-0 ">
+            If you’d like someone else to administrate the Buy Box Experts
+            account then you can reassign the setup process to them.
           </p>
-          <div className="complete-steps mt-3">
-            You’ll need the following to complete your account setup:
-          </div>
-          <ul className="account-steps-check">
-            <li>
-              <img src={OrangeCheckMark} alt="check" />
-              Your company website url & social links
-            </li>
-            <li>
-              <img src={OrangeCheckMark} alt="check" />
-              Your Amazon account credentials
-            </li>
-            <li>
-              <img src={OrangeCheckMark} alt="check" />
-              Billing and payment details
-            </li>
-            <li>
-              <img src={OrangeCheckMark} alt="check" />
-              Details of co-workers that will help manage the account
-            </li>
-          </ul>
-          <Button className="btn-primary w-100 mb-3">
-            Continue to account creation
-          </Button>
-          <Button className="btn-transparent w-100">
-            Assign to someone else
+          <ContractFormField className="mt-3">
+            <label htmlFor="email">
+              Email Address
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Enter your  Email address"
+                defaultValue={(params && params.email) || ''}
+                readOnly
+              />
+            </label>
+          </ContractFormField>
+          <ContractFormField className="mt-3">
+            <label htmlFor="password">
+              Password
+              <input
+                className="form-control"
+                type="password"
+                placeholder="Enter your Password"
+                name="password"
+                onChange={(event) => {
+                  setFormData({ [event.target.name]: event.target.value });
+                  setApiError({
+                    [event.target.name]: '',
+                  });
+                }}
+              />
+            </label>
+          </ContractFormField>
+          <ErrorMsg>
+            {(apiError && apiError.password && apiError.password[0]) ||
+              (apiError && apiError.key && apiError.key[0])}
+          </ErrorMsg>
+          <Button
+            className="btn-primary w-100 mt-4"
+            onClick={() => savePassword()}>
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#FFF" type="button" />
+            ) : (
+              'Continue'
+            )}
           </Button>
         </div>
-
         {/* Re-assign account setup */}
         {/* <div className="white-card-base panel">
           <h3 className="page-heading ">Re-assign account setup</h3>
@@ -94,7 +153,6 @@ export default function CreateAccount() {
           </ContractFormField>
           <Button className="btn-primary w-100 mt-4">Confirm</Button>
         </div> */}
-
         {/* Re-assign account setup */}
         {/* <div className="white-card-base">
           <h3 className="page-heading ">Account Setup Reassigned</h3>
@@ -111,41 +169,16 @@ export default function CreateAccount() {
             </a>
           </p>
         </div> */}
-
-        {/* Please set your password to create your account. */}
-        {/* <div className="white-card-base panel">
-          <p className="account-steps m-0">Step 1 of 4</p>
-          <h3 className="page-heading ">
-            Please set your password to create your account.
-          </h3>
-          <p className="info-text-gray m-0 ">
-            If you’d like someone else to administrate the Buy Box Experts
-            account then you can reassign the setup process to them.
-          </p>
-          <ContractFormField className="mt-3">
-            <label>
-              Email Address
-              <input className="form-control" />
-            </label>
-          </ContractFormField>
-          <ContractFormField className="mt-3">
-            <label>
-              Password
-              <input className="form-control" />
-            </label>
-          </ContractFormField>
-          <Button className="btn-primary w-100 mt-4">Continue</Button>
-        </div> */}
       </OnBoardingBody>
     </>
   );
 }
 
-// const BackToStep = styled.div`
-//   position: fixed;
-//   background-color: ${Theme.white};
-//   z-index: 2;
-//   padding: 20px 0px 20px 25px;
-//   width: 100%;
-//   border-bottom: 1px solid ${Theme.gray5};
-// `;
+const BackToStep = styled.div`
+  position: fixed;
+  background-color: ${Theme.white};
+  z-index: 2;
+  padding: 20px 0px 20px 25px;
+  width: 100%;
+  border-bottom: 1px solid ${Theme.gray5};
+`;
