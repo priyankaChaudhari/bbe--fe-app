@@ -531,9 +531,9 @@ export const StatementDetails = [
 export const DSPAddendumDetails = [
   {
     key: 'start_date',
-    label: 'Start Date',
+    label: 'Advertising Start Date',
     type: 'date',
-    placeholder: 'Enter Start Date',
+    placeholder: 'Enter Advertising Start Date',
     info:
       'The advertising start date is auto populated based on the contract start date and amended to fall on the 1st or 16th of the month.',
     isMandatory: true,
