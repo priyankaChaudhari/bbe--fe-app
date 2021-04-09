@@ -105,9 +105,8 @@ export default function DSPAddendum({
 
     if (firstMonthdays + extraDays + secondMonthdays + thirdMonthdays < 105) {
       return 90;
-    } 
-      return 105;
-    
+    }
+    return 105;
 
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
