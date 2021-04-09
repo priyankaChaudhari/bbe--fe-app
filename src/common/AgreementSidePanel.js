@@ -168,8 +168,6 @@ export default function AgreementSidePanel({
     return firstName + lastName;
   };
 
-  console.log('firstMonthDateeeeee', firstMonthDate);
-
   // const activityDetail = (item) => {
   //   const newRecord = item.message.includes(
   //     'created new record by company name',
@@ -611,7 +609,7 @@ export default function AgreementSidePanel({
                 setSectionError({
                   ...sectionError,
                   agreement: sectionError.agreement - 1,
-                  dsp: sectionError.dsp - 1,
+                  // dsp: sectionError.dsp - 1,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
@@ -2297,19 +2295,20 @@ export default function AgreementSidePanel({
     }
     if (item.type === 'date') {
       if (
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp') &&
+        // formData &&
+        // formData.contract_type &&
+        // formData.contract_type.toLowerCase().includes('dsp') &&
         item.part === 'dsp'
       ) {
         return (
           <DatePicker
             disabled
-            className={
-              formData && formData[item.key] && item.isMandatory
-                ? 'form-control'
-                : 'form-control form-control-error'
-            }
+            className="form-control"
+            // className={
+            //   formData && formData[item.key] && item.isMandatory
+            //     ? 'form-control'
+            //     : 'form-control form-control-error'
+            // }
             id="date"
             // minDate={
             //   item.key && formData[item.key] && formData[item.key] !== null

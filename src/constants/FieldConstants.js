@@ -536,7 +536,7 @@ export const DSPAddendumDetails = [
     placeholder: 'Enter Advertising Start Date',
     info:
       'The advertising start date is auto populated based on the contract start date and amended to fall on the 1st or 16th of the month.',
-    isMandatory: true,
+    isMandatory: false,
     part: 'dsp',
   },
   {
