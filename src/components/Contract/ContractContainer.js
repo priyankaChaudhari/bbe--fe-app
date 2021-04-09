@@ -1037,14 +1037,14 @@ export default function ContractContainer() {
 
     if (flag === 'initial') {
       if (totaldays < 105) {
-        return '3 months';
+        return '3';
       }
-      return '3.5 months';
+      return '3.5';
     }
     if (totaldays < 105) {
-      return `90 (3 months)`;
+      return `90 days(3 months)`;
     }
-    return `105 (3.5 months)`;
+    return `105 days(3.5 months)`;
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
@@ -1065,14 +1065,13 @@ export default function ContractContainer() {
         formData.contract_type.toLowerCase().includes('dsp')
       ) {
         return calculateTotalDays('initial');
-      } 
-        return (
-          formData &&
-          formData.length &&
-          formData.length.label &&
-          parseInt(formData.length.label, 10)
-        );
-      
+      }
+      return (
+        formData &&
+        formData.length &&
+        formData.length.label &&
+        parseInt(formData.length.label, 10)
+      );
     }
     if (key === 'length') {
       return details && details.length.label;
