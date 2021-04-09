@@ -102,7 +102,14 @@ export default function DSPAddendum({
       new Date(thirdMonthDate).getMonth() + 1,
       0,
     ).getDate();
-    return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+
+    if (firstMonthdays + extraDays + secondMonthdays + thirdMonthdays < 105) {
+      return 90;
+    } 
+      return 105;
+    
+
+    // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
   const mapDefaultValues = (key, label, type) => {
