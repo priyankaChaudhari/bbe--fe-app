@@ -184,7 +184,6 @@ export default function ContractContainer() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
-
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
@@ -2311,6 +2310,7 @@ export default function ContractContainer() {
         setMarketPlaces={setMarketPlaces}
         additionalMarketplaces={additionalMarketplaces}
         setAdditionalMarketplaces={setAdditionalMarketplaces}
+        firstMonthDate={firstMonthDate}
       />
     );
   };

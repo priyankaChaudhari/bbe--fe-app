@@ -125,6 +125,7 @@ export default function AgreementSidePanel({
   setMarketPlaces,
   additionalMarketplaces,
   setAdditionalMarketplaces,
+  firstMonthDate,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -608,7 +609,7 @@ export default function AgreementSidePanel({
                 setSectionError({
                   ...sectionError,
                   agreement: sectionError.agreement - 1,
-                  dsp: sectionError.dsp - 1,
+                  // dsp: sectionError.dsp - 1,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
@@ -2293,8 +2294,46 @@ export default function AgreementSidePanel({
       );
     }
     if (item.type === 'date') {
+      if (
+        // formData &&
+        // formData.contract_type &&
+        // formData.contract_type.toLowerCase().includes('dsp') &&
+        item.part === 'dsp'
+      ) {
+        return (
+          <DatePicker
+            disabled
+            className="form-control"
+            // className={
+            //   formData && formData[item.key] && item.isMandatory
+            //     ? 'form-control'
+            //     : 'form-control form-control-error'
+            // }
+            id="date"
+            // minDate={
+            //   item.key && formData[item.key] && formData[item.key] !== null
+            //     ? new Date(formData[item.key])
+            //     : new Date()
+            // }
+            value={firstMonthDate}
+            format="MM/dd/yyyy"
+            clearIcon={null}
+            dayPlaceholder="DD"
+            monthPlaceholder="MM"
+            yearPlaceholder="YYYY"
+            placeholderText="Select Date"
+          />
+        );
+      }
+
       return (
         <DatePicker
+          // disabled={
+          //   formData &&
+          //   formData.contract_type &&
+          //   formData.contract_type.toLowerCase().includes('dsp') &&
+          //   item.part === 'dsp'
+          // }
           className={
             formData && formData[item.key] && item.isMandatory
               ? 'form-control'
@@ -3966,17 +4005,23 @@ export default function AgreementSidePanel({
                   <Collapse isOpened={openCollapse.dspAddendum}>
                     <ul className="collapse-inner">
                       {DSPAddendumDetails.map((item) => (
-                        <li key={item.key}>
-                          <ContractFormField>
-                            <label htmlFor={item.key}>{item.label}</label>
-                            {generateHTML(item)}
-                            {displayError(item)}
-                          </ContractFormField>
-                          <p className="m-0  pt-1 small-para">
-                            {' '}
-                            {item.info ? item.info : ''}
-                          </p>
-                        </li>
+                        <>
+                          {item.key === 'dsp_length' &&
+                          formData &&
+                          formData.contract_type === 'dsp only' ? null : (
+                            <li key={item.key}>
+                              <ContractFormField>
+                                <label htmlFor={item.key}>{item.label}</label>
+                                {generateHTML(item)}
+                                {displayError(item)}
+                              </ContractFormField>
+                              <p className="m-0  pt-1 small-para">
+                                {' '}
+                                {item.info ? item.info : ''}
+                              </p>
+                            </li>
+                          )}
+                        </>
                       ))}
                       <li>
                         <Button
