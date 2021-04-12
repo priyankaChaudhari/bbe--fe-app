@@ -945,9 +945,18 @@ export default function AgreementSidePanel({
           agreementData.primary_marketplace &&
           agreementData.primary_marketplace.name
         ) {
+          // setAdditionalMarketplaces(
+          //   marketplacesResult.filter(
+          //     (op) => op.value !== agreementData.primary_marketplace.name,
+          //   ),
+          // );
           setAdditionalMarketplaces(
             marketplacesResult.filter(
-              (op) => op.value !== agreementData.primary_marketplace.name,
+              (op) =>
+                op.value !==
+                (formData.primary_marketplace.name
+                  ? formData.primary_marketplace.name
+                  : formData.primary_marketplace),
             ),
           );
         } else {
