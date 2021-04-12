@@ -611,7 +611,7 @@ export default function AgreementSidePanel({
                 setSectionError({
                   ...sectionError,
                   agreement: sectionError.agreement - 1,
-                  // dsp: sectionError.dsp - 1,
+                  dsp: sectionError.dsp - 1,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
@@ -668,13 +668,14 @@ export default function AgreementSidePanel({
           if (event && event.value) {
             if (item.key === key && !(formData && formData[item.key])) {
               item.error = false;
-
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp - 1,
-                // ? sectionError.statement - 1
-                // : 0,
-              });
+              if (sectionError.dsp > 0) {
+                setSectionError({
+                  ...sectionError,
+                  dsp: sectionError.dsp - 1,
+                  // ? sectionError.statement - 1
+                  // : 0,
+                });
+              }
             }
           } else if (formData && formData[key]) {
             item.error = true;
@@ -764,13 +765,14 @@ export default function AgreementSidePanel({
               !(formData && formData[item.key])
             ) {
               item.error = false;
-
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp - 1,
-                // ? sectionError.statement - 1
-                // : 0,
-              });
+              if (sectionError.dsp > 0) {
+                setSectionError({
+                  ...sectionError,
+                  dsp: sectionError.dsp - 1,
+                  // ? sectionError.statement - 1
+                  // : 0,
+                });
+              }
             }
           } else if (formData && formData[event.target.name]) {
             item.error = true;
@@ -2354,7 +2356,7 @@ export default function AgreementSidePanel({
           // minDate={
           //   initialStartDate !== null ? new Date(initialStartDate) : new Date()
           // }
-          minDate={new Date()}
+          // minDate={new Date()}
           value={
             startDate ||
             ('' ||
@@ -2465,6 +2467,15 @@ export default function AgreementSidePanel({
           formData.contract_type.toLowerCase().includes('one')
         )
       ) {
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
+        ) {
+          if (formData && formData.start_date && formData.dsp_fee) {
+            return true;
+          }
+        }
         if (
           formData &&
           formData.start_date &&
@@ -4027,7 +4038,17 @@ export default function AgreementSidePanel({
                               </ContractFormField>
                               <p className="m-0  pt-1 small-para">
                                 {' '}
-                                {item.info ? item.info : ''}
+                                {formData &&
+                                formData.contract_type !== 'dsp only' &&
+                                item.key !== 'dsp_fee' &&
+                                item.info
+                                  ? item.info
+                                  : ''}
+                                {formData &&
+                                formData.contract_type === 'dsp only' &&
+                                item.info
+                                  ? item.info
+                                  : ''}
                               </p>
                             </li>
                           )}

@@ -1766,6 +1766,15 @@ export default function ContractContainer() {
       ) {
         if (
           formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
+        ) {
+          if (formData && formData.start_date && formData.dsp_fee) {
+            return true;
+          }
+        }
+        if (
+          formData &&
           formData.start_date &&
           formData.dsp_fee &&
           formData.dsp_length
@@ -2241,8 +2250,24 @@ export default function ContractContainer() {
 
     DSPAddendumDetails.forEach((item) => {
       if (item.isMandatory && !(formData && formData[item.key])) {
-        dspErrors += 1;
-        item.error = true;
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp') &&
+          item.key !== 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        } else if (
+          !(
+            formData &&
+            formData.contract_type &&
+            formData.contract_type.toLowerCase().includes('dsp')
+          )
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
       }
     });
 
