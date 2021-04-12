@@ -764,7 +764,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -788,7 +788,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -812,7 +812,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -828,6 +828,19 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           </div>
         );
       }
+    }
+    return null;
+  };
+
+  const BBCustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label-1">{payload[0].payload.date}</p>
+          <p className="label-2">{payload[0].payload.avg}%</p>
+          <p className="label-2">{payload[1].payload.value}</p>
+        </div>
+      );
     }
     return null;
   };
@@ -1585,7 +1598,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   }}>
                   <XAxis dataKey="date" hide />
                   <YAxis hide />
-                  <Tooltip />
+                  <Tooltip content={<BBCustomTooltip />} />
                   <Legend />
                   <Line
                     dataKey="avg"
