@@ -251,10 +251,12 @@ export default function AgreementSidePanel({
     if (item.message.includes('updated')) {
       activityMessage = item.message.split('updated');
       if (
-        item.message.includes('fee') ||
-        item.message.includes('discount amount') ||
-        item.message.includes('monthly retainer') ||
-        item.message.includes('sales threshold')
+        (item && item.message.includes('annual revenue')) ||
+        (item && item.message.includes('number of employees')) ||
+        (item && item.message.includes('monthly retainer')) ||
+        (item && item.message.includes('sales threshold')) ||
+        (item && item.message.includes('fee')) ||
+        (item && item.message.includes('discount amount'))
       ) {
         return (
           <>
