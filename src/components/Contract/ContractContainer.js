@@ -2332,6 +2332,7 @@ export default function ContractContainer() {
         additionalMarketplaces={additionalMarketplaces}
         setAdditionalMarketplaces={setAdditionalMarketplaces}
         firstMonthDate={firstMonthDate}
+        initialStartDate={details && details.start_date}
       />
     );
   };
