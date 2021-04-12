@@ -58,7 +58,7 @@ const PageNotFounds = styled.div`
   .not-found {
     color: ${Theme.gray90};
     font-size: 16px;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     font-family: ${Theme.baseFontFamily};
   }

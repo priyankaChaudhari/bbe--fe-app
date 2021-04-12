@@ -834,13 +834,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const BBCustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label-1">{payload[0].payload.date}</p>
-          <p className="label-2">{payload[0].payload.avg}%</p>
-          <p className="label-2">{payload[1].payload.value}</p>
-        </div>
-      );
+      if (payload.length === 2) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label-1">{payload[0].payload.date}</p>
+            <p className="label-2">{payload[0].payload.avg}%</p>
+            <p className="label-2">{payload[1].payload.value}</p>
+          </div>
+        );
+      }
     }
     return null;
   };
