@@ -1135,6 +1135,9 @@ export default function ContractContainer() {
         : details && details[key];
 
     if (details[key] === undefined || details[key] === '') {
+      if (label === 'Dsp Fee') {
+        return `Enter DSP Fee`;
+      }
       return `Enter ${label}`;
     }
 
@@ -1652,7 +1655,7 @@ export default function ContractContainer() {
         formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
-    return 'Enter Dsp Fee ';
+    return 'Enter DSP Fee ';
 
     // );
   };
@@ -2332,7 +2335,6 @@ export default function ContractContainer() {
         additionalMarketplaces={additionalMarketplaces}
         setAdditionalMarketplaces={setAdditionalMarketplaces}
         firstMonthDate={firstMonthDate}
-        initialStartDate={details && details.start_date}
       />
     );
   };

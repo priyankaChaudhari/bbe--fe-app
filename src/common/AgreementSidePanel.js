@@ -126,7 +126,6 @@ export default function AgreementSidePanel({
   additionalMarketplaces,
   setAdditionalMarketplaces,
   firstMonthDate,
-  initialStartDate,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -2352,9 +2351,10 @@ export default function AgreementSidePanel({
               : 'form-control form-control-error'
           }
           id="date"
-          minDate={
-            initialStartDate !== null ? new Date(initialStartDate) : new Date()
-          }
+          // minDate={
+          //   initialStartDate !== null ? new Date(initialStartDate) : new Date()
+          // }
+          minDate={new Date()}
           value={
             startDate ||
             ('' ||

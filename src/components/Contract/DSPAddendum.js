@@ -144,6 +144,9 @@ export default function DSPAddendum({
       formData[key] === '' ||
       formData[key] === null
     ) {
+      if (label === 'Dsp Fee') {
+        return `Enter DSP Fee`;
+      }
       return `Enter ${label}`;
     }
 
@@ -203,7 +206,7 @@ export default function DSPAddendum({
         formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
-    return 'Enter Dsp Fee ';
+    return 'Enter DSP Fee ';
 
     // );
   };

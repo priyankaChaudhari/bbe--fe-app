@@ -28,9 +28,9 @@ import {
   PATH_CREATE_ACCOUNT,
   PATH_AMAZON_MERCHANT_ID,
   PATH_AMAZON_DEVELOPER_ACCESS,
-  PATH_SUMMARY,
-  PATH_THANKS,
-  PATH_COMPANY_DIGITAL,
+  // PATH_SUMMARY,
+  // PATH_THANKS,
+  // PATH_COMPANY_DIGITAL,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -53,9 +53,9 @@ import {
   AmazonDeveloperAccess,
   AmazonMerchantId,
   BillingInfo,
-  CompanyDigital,
-  Summary,
-  Thanks,
+  // CompanyDigital,
+  // Summary,
+  // Thanks,
 } from '../components/OnBoardingCustomer';
 
 export default function AuthenticationComponent() {
@@ -180,9 +180,9 @@ export default function AuthenticationComponent() {
           {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
           {/* <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
           {/* On-Boarding Customer */}
-          <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />;
+          {/* <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />;
           <Route path={PATH_SUMMARY} component={Summary} />
-          <Route path={PATH_THANKS} component={Thanks} />
+          <Route path={PATH_THANKS} component={Thanks} /> */}
           <Route component={PageNotFound} />
         </Switch>
       </>
