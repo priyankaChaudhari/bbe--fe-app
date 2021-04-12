@@ -458,21 +458,40 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const CustomizedLabel = (data) => {
     const dataLength = bBChartData.length - 1;
-
-    if (data && data.index === dataLength && bBChartData) {
+    if (
+      data &&
+      data.index === dataLength &&
+      bBChartData &&
+      data.y !== null &&
+      !Number.isNaN(data.y)
+    ) {
       return (
-        // <circle cx={data.x} cy={data.y} r={20} w={40} h={40} fill="#BFC5D2" />
-        <text
-          className="cust-label-avg"
-          x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
-          y={data.y}
-          dy={-10}
-          fontSize={14}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="black">
-          {bBChartData[0].avg}%
-        </text>
+        <>
+          {bBChartData &&
+          bBChartData[0].avg &&
+          bBChartData[0].avg !== '0.00' ? (
+            <rect
+              x={data.x - 25}
+              y={data.y - 27}
+              fill="#BFC5D2"
+              width={50}
+              height={28}
+            />
+          ) : null}
+          {/* <circle cx={data.x} cy={data.y} r={20} w={40} h={40} fill="#BFC5D2" /> */}
+
+          <text
+            className="cust-label-avg"
+            x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
+            y={data.y}
+            dy={-10}
+            fontSize={14}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="black">
+            {bBChartData[0].avg}%
+          </text>
+        </>
       );
     }
     return null;
