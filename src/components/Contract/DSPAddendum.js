@@ -113,9 +113,9 @@ export default function DSPAddendum({
       return '3.5';
     }
     if (totaldays < 105) {
-      return `90 days(3 months)`;
+      return `90 days (3 months)`;
     }
-    return `105 days(3.5 months)`;
+    return `105 days (3.5 months)`;
 
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
