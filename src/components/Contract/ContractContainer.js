@@ -1202,7 +1202,11 @@ export default function ContractContainer() {
             item.name !== undefined
           ) {
             if (
+              item &&
+              item.service &&
               item.service.name !== 'DSP Advertising' &&
+              item &&
+              item.service &&
               item.service.name !== 'Inventory Reconciliation'
             ) {
               fields.push(
