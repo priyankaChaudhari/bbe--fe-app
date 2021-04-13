@@ -607,11 +607,12 @@ export default function AgreementSidePanel({
             if (event) {
               if (item.key === key && !(formData && formData[item.key])) {
                 item.error = false;
-
+                const dspErrorCount =
+                  sectionError.dsp > 0 ? sectionError.dsp - 1 : 0;
                 setSectionError({
                   ...sectionError,
                   agreement: sectionError.agreement - 1,
-                  dsp: sectionError.dsp - 1,
+                  dsp: dspErrorCount,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
