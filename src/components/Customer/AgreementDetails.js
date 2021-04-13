@@ -76,6 +76,8 @@ export default function AgreementDetails({ agreements, id }) {
                   {(agreement && agreement.contract_type === 'One Time') ||
                   (agreement && agreement.contract_type === 'one time')
                     ? 'One Time Services Contract'
+                    : agreement && agreement.contract_type === 'dsp only'
+                    ? 'DSP Only Services Contract'
                     : 'Recurring Contract'}
                 </p>
 

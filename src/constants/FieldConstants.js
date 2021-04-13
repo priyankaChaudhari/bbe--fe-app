@@ -9,20 +9,26 @@ import {
   AdBannerIcon,
   UpChevronIcon,
   OpenBook,
-  BuildingIcon,
-  PencilPaint,
-  HeadSet,
+  CompanyKnowledge,
+  Creative,
+  CustomerService,
   HelpingHand,
-  WareHouse,
+  Logistics,
   BullHorn,
+  NextIcon,
+  ProductivityTools,
   PiggyBank,
   AmazonIcon,
-  GraphIcon,
+  SellerSupport,
   BoxesIcon,
   VisaCardIcons,
   MasterCardIcons,
   DiscoverCardIcons,
   AmercianExpressCardIcons,
+  SquareFbIcon,
+  TwitterIcon,
+  LinkedinIcon,
+  InstagramIcon,
 } from '../theme/images/index';
 
 export const userDetails = [
@@ -529,12 +535,12 @@ export const StatementDetails = [
 export const DSPAddendumDetails = [
   {
     key: 'start_date',
-    label: 'Start Date',
+    label: 'Advertising Start Date',
     type: 'date',
-    placeholder: 'Enter Start Date',
+    placeholder: 'Enter Advertising Start Date',
     info:
       'The advertising start date is auto populated based on the contract start date and amended to fall on the 1st or 16th of the month.',
-    isMandatory: true,
+    isMandatory: false,
     part: 'dsp',
   },
   {
@@ -544,6 +550,7 @@ export const DSPAddendumDetails = [
     placeholder: 'Enter budget',
     isMandatory: true,
     part: 'dsp',
+    info: 'The minimum monthly budget is $10,000.',
   },
   {
     key: 'dsp_length',
@@ -582,15 +589,15 @@ export const collectionDetails = [
   },
   {
     key: 'Company Knowledge',
-    icon: BuildingIcon,
+    icon: CompanyKnowledge,
   },
   {
     key: 'Creative',
-    icon: PencilPaint,
+    icon: Creative,
   },
   {
     key: 'Customer Service',
-    icon: HeadSet,
+    icon: CustomerService,
   },
   {
     key: 'Human Resource',
@@ -598,11 +605,19 @@ export const collectionDetails = [
   },
   {
     key: 'Logistics',
-    icon: WareHouse,
+    icon: Logistics,
   },
   {
     key: 'Marketing',
     icon: BullHorn,
+  },
+  {
+    key: 'NEXT',
+    icon: NextIcon,
+  },
+  {
+    key: 'Productivity Tools',
+    icon: ProductivityTools,
   },
   {
     key: 'Sales',
@@ -610,7 +625,7 @@ export const collectionDetails = [
   },
   {
     key: 'Seller Support - Seller Performance',
-    icon: GraphIcon,
+    icon: SellerSupport,
   },
   {
     key: 'Vendor Collection',
@@ -619,11 +634,41 @@ export const collectionDetails = [
 ];
 
 export const SocialIcons = [
-  { key: 'facebook', value: FaceBookIcons, label: 'Facebook' },
-  { key: 'twitter', value: TwitterIcons, label: 'Twitter' },
-  { key: 'linkedin', value: LinkeDinIcons, label: 'LinkedIn' },
-  { key: 'instagram', value: InstagramIcons, label: 'Instagram' },
-  { key: 'pinterest', value: PinterestIcon, label: 'Pinterest' },
+  {
+    key: 'facebook',
+    value: FaceBookIcons,
+    label: 'Facebook',
+    onboard: SquareFbIcon,
+    property: 'social-media face-book mr-1',
+  },
+  {
+    key: 'twitter',
+    value: TwitterIcons,
+    label: 'Twitter',
+    onboard: TwitterIcon,
+    property: 'social-media mr-1',
+  },
+  {
+    key: 'linkedin',
+    value: LinkeDinIcons,
+    label: 'LinkedIn',
+    onboard: LinkedinIcon,
+    property: 'social-media linedin mr-1',
+  },
+  {
+    key: 'instagram',
+    value: InstagramIcons,
+    label: 'Instagram',
+    onboard: InstagramIcon,
+    property: 'social-media  insta mr-1',
+  },
+  {
+    key: 'pinterest',
+    value: PinterestIcon,
+    label: 'Pinterest',
+    onboard: PinterestIcon,
+    property: 'social-media  insta mr-1',
+  },
 ];
 
 export const Billing = [

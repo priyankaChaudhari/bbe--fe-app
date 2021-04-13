@@ -9,6 +9,14 @@
   font-family: 'Noah-Regular';
   src: url('../fonts/Noah/Noah/WEB/Noah-Regular.woff');
 }
+@font-face {
+  font-family: 'Noah-RegularItalic';
+  src: url('../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff');
+}
+@font-face {
+  font-family: 'Noah-BoldItalic';
+  src: url('../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff');
+}
 
 // @font-face {
 //   font-family: 'Arial MT Extra Bold';
@@ -705,6 +713,13 @@ fieldset {
   padding: 18px 8px 18px 8px;
   border: 1px solid $gray-10;
   border-left: 2px solid #ff5933;
+
+  &.shape-without-border {
+    background-color: $white-color;
+    padding: 13px 15px;
+    border: 1px solid $gray-25;
+    border-radius: 8px;
+  }
 }
 
 .css-26l3qy-menu {
@@ -1363,7 +1378,7 @@ input:checked + .slider:before {
       font-size: 16px;
     }
     .recharts-tooltip-item {
-      color: #bfc5d2 !important;
+      color: $gray-25 !important;
       padding: 0 !important;
     }
   }
@@ -1543,7 +1558,7 @@ input:checked + .slider:before {
     padding-bottom: 3x;
   }
   .label-2 {
-    color: #bfc5d2;
+    color: $gray-25;
     font-size: 14px;
     margin: 0;
   }
@@ -1577,4 +1592,12 @@ input:checked + .slider:before {
   &:hover {
     background: white;
   }
+}
+
+text.cust-label-avg {
+  background-color: $gray-25 !important;
+  border-radius: 1px !important;
+  width: 38px !important;
+  height: 24px;
+  color: $black-color;
 }

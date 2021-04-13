@@ -20,12 +20,23 @@ export default function WarningComponent() {
               ? location && location.state && location.state.error
               : ''} */}
 
-            <h5 className="mt-3">Contract voided</h5>
+            {/* <h5 className="mt-3">Contract voided</h5>
             <p className="not-found">
               The contract signature package you&apos;re trying to access has
               been voided. Please
               <br /> check your email for a new version or contact your Buy Box
               Experts sales agent.
+            </p> */}
+            <h5 className="mt-3">Document Unavailable</h5>
+            <p className="not-found">
+              The document you&apos;re trying to access is no longer available.
+              This is due to one of two reasons: <br />
+              (1) You already signed the document, or <br />
+              (2) A change has been made to document that was originally sent to
+              you for signature.
+              <br /> <br />
+              Please check your email for a new version of the document, or
+              contact your Buy Box Experts sales agent for help.
             </p>
           </ErrorMsg>
         </div>
@@ -47,7 +58,7 @@ const PageNotFounds = styled.div`
   .not-found {
     color: ${Theme.gray90};
     font-size: 16px;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     font-family: ${Theme.baseFontFamily};
   }

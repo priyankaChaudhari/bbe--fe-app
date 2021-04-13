@@ -125,6 +125,7 @@ export default function AgreementSidePanel({
   setMarketPlaces,
   additionalMarketplaces,
   setAdditionalMarketplaces,
+  firstMonthDate,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -149,7 +150,6 @@ export default function AgreementSidePanel({
   const [images, setImages] = useState([]);
   const [activityLoader, setActivityLoader] = useState(false);
   const [isApicalled, setIsApicalled] = useState(false);
-
   const getActivityInitials = (userInfo) => {
     if (userInfo && userInfo === 'Contract initiated') {
       return 'SU';
@@ -250,10 +250,12 @@ export default function AgreementSidePanel({
     if (item.message.includes('updated')) {
       activityMessage = item.message.split('updated');
       if (
-        item.message.includes('fee') ||
-        item.message.includes('discount amount') ||
-        item.message.includes('monthly retainer') ||
-        item.message.includes('sales threshold')
+        (item && item.message.includes('annual revenue')) ||
+        (item && item.message.includes('number of employees')) ||
+        (item && item.message.includes('monthly retainer')) ||
+        (item && item.message.includes('sales threshold')) ||
+        (item && item.message.includes('fee')) ||
+        (item && item.message.includes('discount amount'))
       ) {
         return (
           <>
@@ -605,11 +607,12 @@ export default function AgreementSidePanel({
             if (event) {
               if (item.key === key && !(formData && formData[item.key])) {
                 item.error = false;
-
+                const dspErrorCount =
+                  sectionError.dsp > 0 ? sectionError.dsp - 1 : 0;
                 setSectionError({
                   ...sectionError,
                   agreement: sectionError.agreement - 1,
-                  dsp: sectionError.dsp - 1,
+                  dsp: dspErrorCount,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
@@ -666,13 +669,14 @@ export default function AgreementSidePanel({
           if (event && event.value) {
             if (item.key === key && !(formData && formData[item.key])) {
               item.error = false;
-
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp - 1,
-                // ? sectionError.statement - 1
-                // : 0,
-              });
+              if (sectionError.dsp > 0) {
+                setSectionError({
+                  ...sectionError,
+                  dsp: sectionError.dsp - 1,
+                  // ? sectionError.statement - 1
+                  // : 0,
+                });
+              }
             }
           } else if (formData && formData[key]) {
             item.error = true;
@@ -762,13 +766,14 @@ export default function AgreementSidePanel({
               !(formData && formData[item.key])
             ) {
               item.error = false;
-
-              setSectionError({
-                ...sectionError,
-                dsp: sectionError.dsp - 1,
-                // ? sectionError.statement - 1
-                // : 0,
-              });
+              if (sectionError.dsp > 0) {
+                setSectionError({
+                  ...sectionError,
+                  dsp: sectionError.dsp - 1,
+                  // ? sectionError.statement - 1
+                  // : 0,
+                });
+              }
             }
           } else if (formData && formData[event.target.name]) {
             item.error = true;
@@ -944,9 +949,18 @@ export default function AgreementSidePanel({
           agreementData.primary_marketplace &&
           agreementData.primary_marketplace.name
         ) {
+          // setAdditionalMarketplaces(
+          //   marketplacesResult.filter(
+          //     (op) => op.value !== agreementData.primary_marketplace.name,
+          //   ),
+          // );
           setAdditionalMarketplaces(
             marketplacesResult.filter(
-              (op) => op.value !== agreementData.primary_marketplace.name,
+              (op) =>
+                op.value !==
+                (formData.primary_marketplace.name
+                  ? formData.primary_marketplace.name
+                  : formData.primary_marketplace),
             ),
           );
         } else {
@@ -2194,74 +2208,81 @@ export default function AgreementSidePanel({
   };
 
   const generateDropdown = (item) => {
-    return (
-      <Select
-        classNamePrefix={
-          (apiError && apiError[item.key]) ||
-          (!(formData && formData[item.key]) && item.isMandatory)
-            ? 'react-select  form-control-error'
-            : 'react-select'
-        }
-        styles={{
-          control: (base, state) => ({
-            ...base,
-            background:
-              (apiError &&
-                apiError.non_field_errors &&
-                apiError.non_field_errors[0] &&
-                item.key === 'primary_marketplace') ||
-              (!(formData && formData[item.key]) && item.isMandatory)
-                ? '#FBF2F2'
-                : '#F4F6FC',
-            // match with the menu
-            // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
-            // Overwrittes the different states of border
-            borderColor:
-              (apiError &&
-                apiError.non_field_errors &&
-                apiError.non_field_errors[0] &&
-                item.key === 'primary_marketplace') ||
-              (!(formData && formData[item.key]) && item.isMandatory)
-                ? '#D63649'
-                : '#D5D8E1',
-
-            // Removes weird border around container
-            boxShadow: state.isFocused ? null : null,
-            '&:hover': {
+    if (
+      // item.key === 'length' &&
+      formData &&
+      formData.contract_type !== 'one time'
+    )
+      return (
+        <Select
+          classNamePrefix={
+            (apiError && apiError[item.key]) ||
+            (!(formData && formData[item.key]) && item.isMandatory)
+              ? 'react-select  form-control-error'
+              : 'react-select'
+          }
+          styles={{
+            control: (base, state) => ({
+              ...base,
+              background:
+                (apiError &&
+                  apiError.non_field_errors &&
+                  apiError.non_field_errors[0] &&
+                  item.key === 'primary_marketplace') ||
+                (!(formData && formData[item.key]) && item.isMandatory)
+                  ? '#FBF2F2'
+                  : '#F4F6FC',
+              // match with the menu
+              // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
               // Overwrittes the different states of border
+              borderColor:
+                (apiError &&
+                  apiError.non_field_errors &&
+                  apiError.non_field_errors[0] &&
+                  item.key === 'primary_marketplace') ||
+                (!(formData && formData[item.key]) && item.isMandatory)
+                  ? '#D63649'
+                  : '#D5D8E1',
+
+              // Removes weird border around container
               boxShadow: state.isFocused ? null : null,
-              outlineColor: state.isFocused ? null : null,
+              '&:hover': {
+                // Overwrittes the different states of border
+                boxShadow: state.isFocused ? null : null,
+                outlineColor: state.isFocused ? null : null,
+              },
+            }),
+            placeholder: (defaultStyles) => {
+              return {
+                ...defaultStyles,
+                color: '556178',
+              };
             },
-          }),
-          placeholder: (defaultStyles) => {
-            return {
-              ...defaultStyles,
-              color: '556178',
-            };
-          },
-        }}
-        placeholder={item.placeholder ? item.placeholder : 'Select'}
-        defaultValue={
-          item.key === 'primary_marketplace'
-            ? formData.primary_marketplace && formData.primary_marketplace.name
-              ? {
-                  value: formData.primary_marketplace.name,
-                  label: formData.primary_marketplace.name,
-                }
-              : formData && formData.primary_marketplace
-              ? {
-                  value: formData.primary_marketplace,
-                  label: formData.primary_marketplace,
-                }
-              : null
-            : formData[item.key]
-        }
-        options={getOptions(item.key, 'single')}
-        name={item.key}
-        components={{ DropdownIndicator }}
-        onChange={(event) => handleChange(event, item.key, 'choice')}
-      />
-    );
+          }}
+          placeholder={item.placeholder ? item.placeholder : 'Select'}
+          defaultValue={
+            item.key === 'primary_marketplace'
+              ? formData.primary_marketplace &&
+                formData.primary_marketplace.name
+                ? {
+                    value: formData.primary_marketplace.name,
+                    label: formData.primary_marketplace.name,
+                  }
+                : formData && formData.primary_marketplace
+                ? {
+                    value: formData.primary_marketplace,
+                    label: formData.primary_marketplace,
+                  }
+                : null
+              : formData[item.key]
+          }
+          options={getOptions(item.key, 'single')}
+          name={item.key}
+          components={{ DropdownIndicator }}
+          onChange={(event) => handleChange(event, item.key, 'choice')}
+        />
+      );
+    return '';
   };
 
   const generateHTML = (item) => {
@@ -2287,19 +2308,56 @@ export default function AgreementSidePanel({
       );
     }
     if (item.type === 'date') {
+      if (
+        // formData &&
+        // formData.contract_type &&
+        // formData.contract_type.toLowerCase().includes('dsp') &&
+        item.part === 'dsp'
+      ) {
+        return (
+          <DatePicker
+            disabled
+            className="form-control"
+            // className={
+            //   formData && formData[item.key] && item.isMandatory
+            //     ? 'form-control'
+            //     : 'form-control form-control-error'
+            // }
+            id="date"
+            // minDate={
+            //   item.key && formData[item.key] && formData[item.key] !== null
+            //     ? new Date(formData[item.key])
+            //     : new Date()
+            // }
+            value={firstMonthDate}
+            format="MM/dd/yyyy"
+            clearIcon={null}
+            dayPlaceholder="DD"
+            monthPlaceholder="MM"
+            yearPlaceholder="YYYY"
+            placeholderText="Select Date"
+          />
+        );
+      }
+
       return (
         <DatePicker
+          // disabled={
+          //   formData &&
+          //   formData.contract_type &&
+          //   formData.contract_type.toLowerCase().includes('dsp') &&
+          //   item.part === 'dsp'
+          // }
           className={
             formData && formData[item.key] && item.isMandatory
               ? 'form-control'
               : 'form-control form-control-error'
           }
           id="date"
-          minDate={
-            item.key && formData[item.key] && formData[item.key] !== null
-              ? new Date(formData[item.key])
-              : new Date()
-          }
+          // minDate={
+          //   initialStartDate !== null ? new Date(initialStartDate) : new Date()
+          // }
+          // minDate={new Date()}
           value={
             startDate ||
             ('' ||
@@ -2351,6 +2409,22 @@ export default function AgreementSidePanel({
     if (section === 'service_agreement') {
       if (
         formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        if (
+          formData &&
+          formData.contract_company_name &&
+          formData.start_date &&
+          formData.address &&
+          formData.state &&
+          formData.city &&
+          formData.zip_code
+        ) {
+          return true;
+        }
+      } else if (
+        formData &&
         formData.contract_company_name &&
         formData.start_date &&
         formData.length &&
@@ -2394,6 +2468,15 @@ export default function AgreementSidePanel({
           formData.contract_type.toLowerCase().includes('one')
         )
       ) {
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
+        ) {
+          if (formData && formData.start_date && formData.dsp_fee) {
+            return true;
+          }
+        }
         if (
           formData &&
           formData.start_date &&
@@ -3508,13 +3591,19 @@ export default function AgreementSidePanel({
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
-                        <li key={item.key}>
-                          <ContractFormField>
-                            <label htmlFor={item.key}>{item.label}</label>
-                            {generateHTML(item)}
-                            {displayError(item)}
-                          </ContractFormField>
-                        </li>
+                        <>
+                          {item.key === 'length' &&
+                          formData &&
+                          formData.contract_type === 'one time' ? null : (
+                            <li key={item.key}>
+                              <ContractFormField>
+                                <label htmlFor={item.key}>{item.label}</label>
+                                {generateHTML(item)}
+                                {displayError(item)}
+                              </ContractFormField>
+                            </li>
+                          )}
+                        </>
                       ) : (
                         <>
                           <li key={item.key}>
@@ -3573,6 +3662,12 @@ export default function AgreementSidePanel({
                                 .toLowerCase()
                                 .includes('one')
                               ? 'addendum'
+                              : formData &&
+                                formData.contract_type &&
+                                formData.contract_type
+                                  .toLowerCase()
+                                  .includes('dsp')
+                              ? 'dspAddendum'
                               : 'statement',
                           )
                         }>
@@ -3587,11 +3682,12 @@ export default function AgreementSidePanel({
                   </ul>
                 )}
               </Collapse>
-              {formData &&
-              formData.contract_type &&
-              formData.contract_type.toLowerCase().includes('one') ? (
-                ''
-              ) : (
+              {(formData &&
+                formData.contract_type &&
+                formData.contract_type.toLowerCase().includes('one')) ||
+              (formData &&
+                formData.contract_type &&
+                formData.contract_type.toLowerCase().includes('dsp')) ? null : (
                 <>
                   <div className="straight-line sidepanel " />
                   <div
@@ -3855,13 +3951,16 @@ export default function AgreementSidePanel({
                   color="#FF5933"
                   type="page"
                 />
-              ) : showSection &&
-                showSection.dspAddendum &&
-                !(
-                  formData &&
+              ) : (formData &&
                   formData.contract_type &&
-                  formData.contract_type.toLowerCase().includes('one')
-                ) ? (
+                  formData.contract_type.toLowerCase().includes('dsp')) ||
+                (showSection &&
+                  showSection.dspAddendum &&
+                  !(
+                    formData &&
+                    formData.contract_type &&
+                    formData.contract_type.toLowerCase().includes('one')
+                  )) ? (
                 <>
                   <div className="straight-line sidepanel " />
 
@@ -3928,17 +4027,33 @@ export default function AgreementSidePanel({
                   <Collapse isOpened={openCollapse.dspAddendum}>
                     <ul className="collapse-inner">
                       {DSPAddendumDetails.map((item) => (
-                        <li key={item.key}>
-                          <ContractFormField>
-                            <label htmlFor={item.key}>{item.label}</label>
-                            {generateHTML(item)}
-                            {displayError(item)}
-                          </ContractFormField>
-                          <p className="m-0  pt-1 small-para">
-                            {' '}
-                            {item.info ? item.info : ''}
-                          </p>
-                        </li>
+                        <>
+                          {item.key === 'dsp_length' &&
+                          formData &&
+                          formData.contract_type === 'dsp only' ? null : (
+                            <li key={item.key}>
+                              <ContractFormField>
+                                <label htmlFor={item.key}>{item.label}</label>
+                                {generateHTML(item)}
+                                {displayError(item)}
+                              </ContractFormField>
+                              <p className="m-0  pt-1 small-para">
+                                {' '}
+                                {formData &&
+                                formData.contract_type !== 'dsp only' &&
+                                item.key !== 'dsp_fee' &&
+                                item.info
+                                  ? item.info
+                                  : ''}
+                                {formData &&
+                                formData.contract_type === 'dsp only' &&
+                                item.info
+                                  ? item.info
+                                  : ''}
+                              </p>
+                            </li>
+                          )}
+                        </>
                       ))}
                       <li>
                         <Button
@@ -4337,7 +4452,7 @@ const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
     padding-bottom: 250px;
-    width: 335px;
+    width: 336px;
     position: fixed;
     top: 130px;
     right: 0;
@@ -4373,7 +4488,7 @@ const SidePanel = styled.div`
     word-spacing: 3px;
    
     &.error-container {
-    margin-top: -6px;
+    margin-top: -3px;
   }
    
   
@@ -4392,19 +4507,19 @@ const SidePanel = styled.div`
     }
     
    .error-bg {
-      height: 64px;
-      background: #FBF2F2;
+      height: 63px;
+      background: ${Theme.lightRed};
       right: 0px;
       border-right: 2px solid #D63649;
       z-index: -2;
       top: 0px;
       position: absolute;
-      width: 64px;
+      width: 46px;
 
       .red-cross {
         width: 16px;
         position: absolute;
-        right: 21px;
+        right: 13px;
         top: 25px;
       }
     }
@@ -4446,13 +4561,13 @@ const SidePanel = styled.div`
 
 .collapse-btn {
   width:100%;
-  padding: 16px;
+  padding: 15px;
   cursor:pointer;
   position: relative;
 
 }
 .collapse-container {
-  padding:15px;
+  padding: 15px;
 }
 
 .collapse-inner {
@@ -4564,7 +4679,7 @@ const SidePanel = styled.div`
       background: ${Theme.extraLightYellow};
       padding: 12px 0;
       min-height: 40px;
-      margin: 10px;
+      margin: 10px 0px 10px 10px;
 
       &.pending-contract {
         background: ${Theme.gray8};
@@ -4624,7 +4739,7 @@ const SidePanel = styled.div`
           color:${Theme.gray90};
           float: left;
           word-break: break-word;
-          width: 90%;
+          width: 85%;
           text-align: left;
           span {
             color:${Theme.gray35};
@@ -4663,61 +4778,11 @@ const SidePanel = styled.div`
           }
           
         }
-        //  &:hover {
-        //   box-shadow: ${Theme.commonShadow};
-        //   cursor:pointer;
-        // }
+        
       }
 
     }
   }
-
-  
-  //  @media only screen and (max-width: 991px) { 
-  //    top: 70px;
-  //  input[data-function*='swipe'] {
-  //   position: absolute;
-  //   opacity: 0;
-  // }
-  // label[data-function*='swipe'] {
-  //   padding 30px 0 0 10px;
-  //   z-index: 1;
-  //   display: block;
-  //   width: 42px;
-  //   font-family: ${Theme.titleFontFamily};
-  //   height: 42px;
-  //   text-align: center;
-  //   cursor: pointer;
-  //   transform: translate3d(0, 0, 0);
-  //   transition: transform 0.3s;
-  // }
-  
-  // input[data-function*='swipe']:checked ~ label[data-function*='swipe'] {
-  //   transform: translate3d(200px, 0, 0);
-  // }
-  // label[data-function*='swipe']:checked {
-  //   display: block;
-  // }
-  // label:nth-child(2) {
-  //   display: none;
-  // }
-  // input[data-function*='swipe']:checked ~ label:nth-child(2) {
-  //   display: block;
-  //   transform: translate3d(10px, 0px, 0px);
-  // }
-  // input[data-function*='swipe']:checked ~ label:nth-child(3) {
-  //   display: none !important;
-  // }
-  
-  // input[data-function*='swipe']:checked ~ .sidebar {
-  //   transform: translate3d(0px, 0px, 0px);
-  //   display: none;
-  // }
-  // input[data-function*='swipe']:checked ~ .sidebar .menu li {
-  //   width: 100%;
-  // }
- 
-  // }
 
   @media only screen and (max-width: 991px) {  
     z-index: 1;
@@ -4731,7 +4796,7 @@ const SidePanel = styled.div`
   }
 
    @media only screen and (min-width: 1500px)  {
-     width: 400px;
+     width: 406px;
      .sidebar {
       width: 400px;
     }

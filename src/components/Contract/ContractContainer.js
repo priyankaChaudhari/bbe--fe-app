@@ -184,7 +184,6 @@ export default function ContractContainer() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
-
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
@@ -330,6 +329,9 @@ export default function ContractContainer() {
       setShowCollpase({ ...showSection, dspAddendum: false });
     }
 
+    if (details && details.contract_type === 'dsp only') {
+      setShowCollpase({ ...showSection, dspAddendum: true });
+    }
     if (
       details &&
       details.primary_marketplace &&
@@ -993,7 +995,7 @@ export default function ContractContainer() {
     }
   };
 
-  const calculateTotalDays = () => {
+  const calculateTotalDays = (flag = '') => {
     let firstMonthdays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
       const totalDays = new Date(
@@ -1029,7 +1031,21 @@ export default function ContractContainer() {
       new Date(thirdMonthDate).getMonth() + 1,
       0,
     ).getDate();
-    return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+
+    const totaldays =
+      firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
+
+    if (flag === 'initial') {
+      if (totaldays < 105) {
+        return '3';
+      }
+      return '3.5';
+    }
+    if (totaldays < 105) {
+      return `90 days (3 months)`;
+    }
+    return `105 days (3.5 months)`;
+    // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
   const mapDefaultValues = (key, label, type) => {
@@ -1043,6 +1059,13 @@ export default function ContractContainer() {
     //     : `Enter ${label}.`;
     // }
     if (key === 'length' && label === 'Initial Period') {
+      if (
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) {
+        return calculateTotalDays('initial');
+      }
       return (
         formData &&
         formData.length &&
@@ -1112,6 +1135,9 @@ export default function ContractContainer() {
         : details && details[key];
 
     if (details[key] === undefined || details[key] === '') {
+      if (label === 'Dsp Fee') {
+        return `Enter DSP Fee`;
+      }
       return `Enter ${label}`;
     }
 
@@ -1176,7 +1202,11 @@ export default function ContractContainer() {
             item.name !== undefined
           ) {
             if (
+              item &&
+              item.service &&
               item.service.name !== 'DSP Advertising' &&
+              item &&
+              item.service &&
               item.service.name !== 'Inventory Reconciliation'
             ) {
               fields.push(
@@ -1629,7 +1659,7 @@ export default function ContractContainer() {
         formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
-    return 'Enter Dsp Fee ';
+    return 'Enter DSP Fee ';
 
     // );
   };
@@ -1674,6 +1704,22 @@ export default function ContractContainer() {
     if (section === 'service_agreement') {
       if (
         formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) {
+        if (
+          formData &&
+          formData.contract_company_name &&
+          formData.start_date &&
+          formData.address &&
+          formData.state &&
+          formData.city &&
+          formData.zip_code
+        ) {
+          return true;
+        }
+      } else if (
+        formData &&
         formData.contract_company_name &&
         formData.start_date &&
         formData.length &&
@@ -1692,6 +1738,11 @@ export default function ContractContainer() {
           formData &&
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('one')
+        ) &&
+        !(
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
         )
       ) {
         if (
@@ -1717,6 +1768,15 @@ export default function ContractContainer() {
           formData.contract_type.toLowerCase().includes('one')
         )
       ) {
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp')
+        ) {
+          if (formData && formData.start_date && formData.dsp_fee) {
+            return true;
+          }
+        }
         if (
           formData &&
           formData.start_date &&
@@ -1910,6 +1970,7 @@ export default function ContractContainer() {
               mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
             )
         : '';
+
     const dspAddendumSignature =
       showSection && showSection.dspAddendum
         ? AddendumSign.replace(
@@ -1948,10 +2009,13 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-        ? ''
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('one')) ||
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('dsp'))
+        ? null
         : statmentData
     } ${
       details &&
@@ -1978,27 +2042,42 @@ export default function ContractContainer() {
 
   const checkApprovalCondition = () => {
     const rev = Number(details && details.rev_share && details.rev_share.value);
+    const dspFee = Number(details && details.dsp_fee);
     const contractTermLength = parseInt(
       details && details.length && details.length.value,
       10,
     );
+    // if (
+    //   details &&
+    //   details.contract_type &&
+    //   details.contract_type.toLowerCase().includes('one')
+    // ) {
+    //   if (
+    //     contractTermLength < 12
+    //     // &&
+    //     // !(userInfo && userInfo.role === 'Team Manager - TAM')
+    //   ) {
+    //     return true;
+    //   }
+    // } else
     if (
       details &&
       details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
+      details.contract_type.toLowerCase().includes('recurring')
     ) {
       if (
+        (showSection.dspAddendum && dspFee < 10000) ||
+        rev < 3 ||
         contractTermLength < 12
-        // &&
-        // !(userInfo && userInfo.role === 'Team Manager - TAM')
       ) {
         return true;
       }
-    } else if (
-      rev < 3 ||
-      contractTermLength < 12
-      // &&
-      // !(userInfo && userInfo.role === 'Team Manager - TAM')
+    }
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp') &&
+      dspFee < 10000
     ) {
       return true;
     }
@@ -2042,11 +2121,12 @@ export default function ContractContainer() {
           />
         </div>
 
-        {details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('one') ? (
-          ''
-        ) : (
+        {(details &&
+          details.contract_type &&
+          details.contract_type.toLowerCase().includes('one')) ||
+        (details &&
+          details.contract_type &&
+          details.contract_type.toLowerCase().includes('dsp')) ? null : (
           <div id="statement">
             <Statement
               formData={formData}
@@ -2058,12 +2138,15 @@ export default function ContractContainer() {
           </div>
         )}
 
-        {showSection.dspAddendum &&
-        !(
-          details &&
+        {(details &&
           details.contract_type &&
-          details.contract_type.toLowerCase().includes('one')
-        ) ? (
+          details.contract_type.toLowerCase().includes('dsp')) ||
+        (showSection.dspAddendum &&
+          !(
+            details &&
+            details.contract_type &&
+            details.contract_type.toLowerCase().includes('one')
+          )) ? (
           <div id="dspAddendum">
             <DSPAddendum
               formData={formData}
@@ -2124,9 +2207,17 @@ export default function ContractContainer() {
 
     AgreementDetails.forEach((item) => {
       if (item.key !== 'contract_address') {
-        if (item.isMandatory && !(formData && formData[item.key])) {
-          agreementErrors += 1;
-          item.error = true;
+        if (
+          !(
+            item.key === 'length' &&
+            details &&
+            details.contract_type === 'one time'
+          )
+        ) {
+          if (item.isMandatory && !(formData && formData[item.key])) {
+            agreementErrors += 1;
+            item.error = true;
+          }
         }
       } else {
         return (
@@ -2163,8 +2254,24 @@ export default function ContractContainer() {
 
     DSPAddendumDetails.forEach((item) => {
       if (item.isMandatory && !(formData && formData[item.key])) {
-        dspErrors += 1;
-        item.error = true;
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp') &&
+          item.key !== 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        } else if (
+          !(
+            formData &&
+            formData.contract_type &&
+            formData.contract_type.toLowerCase().includes('dsp')
+          )
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
       }
     });
 
@@ -2256,6 +2363,7 @@ export default function ContractContainer() {
         setMarketPlaces={setMarketPlaces}
         additionalMarketplaces={additionalMarketplaces}
         setAdditionalMarketplaces={setAdditionalMarketplaces}
+        firstMonthDate={firstMonthDate}
       />
     );
   };

@@ -74,25 +74,27 @@ import ReadBookIconActive from './icons/book-read-active.png';
 import LeftArrowIcon from './icons/left-arrow-icon.png';
 import RightArrowIcons from './icons/right-arrow-icon.png';
 import ToolIcon from './icons/tools.svg';
-import UserIcon from './icons/user.svg';
-import AdBannerIcon from './icons/ad-banner.png';
-import UpChevronIcon from './icons/up-chevron.svg';
-import PiggyBank from './icons/piggybank.svg';
-import OpenBook from './icons/open-book.svg';
-import HeadSet from './icons/headset.svg';
-import BullHorn from './icons/bullhorn.svg';
-import BuildingIcon from './icons/building.svg';
-import WareHouse from './icons/ware-house.png';
+import UserIcon from './icons/Account Management.svg';
+import AdBannerIcon from './icons/Advertising.svg';
+import UpChevronIcon from './icons/BBE.svg';
+import PiggyBank from './icons/Sales.svg';
+import OpenBook from './icons/Catalog.svg';
+import CustomerService from './icons/Customer Service.svg';
+import BullHorn from './icons/Marketing.svg';
+import CompanyKnowledge from './icons/Company Knowledge.svg';
+import Logistics from './icons/Logistics.svg';
 import HelpingHand from './icons/helping-hand.png';
-import PencilPaint from './icons/pencil-paint.png';
+import Creative from './icons/Creative.svg';
 import LightBulb from './icons/light-bulb.png';
 import MenuIcon from './icons/menu-icon.svg';
 import LogoMobileView from './logo-mobile-view.svg';
 import RemoveIcon from './icons/cross-search-icon.png';
 import SearchIcon from './icons/search-icons.svg';
-import AmazonIcon from './icons/amazon.svg';
+import AmazonIcon from './icons/Amazon 101.svg';
 import BoxesIcon from './icons/boxes.png';
-import GraphIcon from './icons/graph.svg';
+import SellerSupport from './icons/Seller Support.svg';
+import NextIcon from './icons/NEXT.svg';
+import ProductivityTools from './icons/Productivity Tools.svg';
 import ArrowUp from './icons/arrow-up.png';
 import BannerImg from './banner-img.png';
 import EditOrangeIcon from './icons/edit-orange-icon.svg';
@@ -134,6 +136,10 @@ import SignatureIcon from './icons/signature.png';
 import CountDayClock from './icons/count-days-clock.svg';
 import SpeedometerActive from './icons/speedometer-icon.png';
 import Speedometer from './icons/speedometer-icon-disactive.png';
+import OrangeCheckMark from './icons/orange-checkmark.svg';
+import SquareFbIcon from './icons/square-fb-icon.svg';
+import GrayClockIcon from './icons/gray-clock-icon.svg';
+import BillingIcon from './icons/billing-icon.png';
 
 export {
   BannerBg,
@@ -217,12 +223,12 @@ export {
   UpChevronIcon,
   PiggyBank,
   OpenBook,
-  HeadSet,
+  CustomerService,
   BullHorn,
-  BuildingIcon,
-  WareHouse,
+  CompanyKnowledge,
+  Logistics,
   HelpingHand,
-  PencilPaint,
+  Creative,
   LightBulb,
   MenuIcon,
   LogoMobileView,
@@ -230,7 +236,9 @@ export {
   SearchIcon,
   AmazonIcon,
   BoxesIcon,
-  GraphIcon,
+  SellerSupport,
+  NextIcon,
+  ProductivityTools,
   ArrowUp,
   BannerImg,
   EditOrangeIcon,
@@ -272,4 +280,8 @@ export {
   CountDayClock,
   SpeedometerActive,
   Speedometer,
+  OrangeCheckMark,
+  SquareFbIcon,
+  GrayClockIcon,
+  BillingIcon,
 };

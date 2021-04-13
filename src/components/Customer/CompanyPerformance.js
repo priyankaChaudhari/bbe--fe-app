@@ -144,12 +144,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   const filterOption = (props) => (
@@ -203,32 +203,38 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   };
 
   const getBBData = useCallback(
-    (marketplace, BBdailyFact, bBGroupBy) => {
+    (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
       // setIsLoading({ loader: true, type: 'button' });
-      getBuyBoxChartData(id, marketplace, BBdailyFact, bBGroupBy).then(
-        (res) => {
-          if (res && res.status === 400) {
-            // setApiError(res && res.data);
-            // setIsLoading({ loader: false, type: 'button' });
-          }
-          if (res && res.status === 200 && res.data && res.data.bbep) {
-            const avg =
-              res.data.bbep
-                .filter((record) => record.bbep)
-                .reduce((acc, record) => acc + record.bbep, 0) /
-                res.data.bbep.length || 0;
+      getBuyBoxChartData(
+        id,
+        marketplace,
+        BBdailyFact,
+        bBGroupBy,
+        startDate,
+        endDate,
+      ).then((res) => {
+        if (res && res.status === 400) {
+          // setApiError(res && res.data);
+          // setIsLoading({ loader: false, type: 'button' });
+        }
+        if (res && res.status === 200 && res.data && res.data.bbep) {
+          const avg =
+            res.data.bbep
+              .filter((record) => record.bbep)
+              .reduce((acc, record) => acc + record.bbep, 0) /
+              res.data.bbep.length || 0;
 
-            const tempBBData = res.data.bbep.map((data) => {
-              return {
-                date: dayjs(data.report_date).format('MMM D'),
-                value: data.bbep,
-                avg: avg.toFixed(2),
-              };
-            });
-            setBBChartData(tempBBData);
-          }
-        },
-      );
+          const tempBBData = res.data.bbep.map((data) => {
+            return {
+              date: dayjs(data.report_date).format('MMM D'),
+              value: data.bbep,
+              avg: avg.toFixed(2),
+            };
+          });
+          tempBBData.push({ avg: avg.toFixed(2) }, { avg: avg.toFixed(2) });
+          setBBChartData(tempBBData);
+        }
+      });
     },
     [id],
   );
@@ -452,18 +458,40 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const CustomizedLabel = (data) => {
     const dataLength = bBChartData.length - 1;
-
-    if (data && data.index === dataLength && bBChartData) {
+    if (
+      data &&
+      data.index === dataLength &&
+      bBChartData &&
+      data.y !== null &&
+      !Number.isNaN(data.y)
+    ) {
       return (
-        <text
-          className="cust-label-avg"
-          x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
-          y={data.y}
-          dy={-8}
-          fontSize={16}
-          textAnchor="middle">
-          {bBChartData[0].avg}%
-        </text>
+        <>
+          {bBChartData &&
+          bBChartData[0].avg &&
+          bBChartData[0].avg !== '0.00' ? (
+            <rect
+              x={data.x - 25}
+              y={data.y - 27}
+              fill="#BFC5D2"
+              width={50}
+              height={28}
+            />
+          ) : null}
+          {/* <circle cx={data.x} cy={data.y} r={20} w={40} h={40} fill="#BFC5D2" /> */}
+
+          <text
+            className="cust-label-avg"
+            x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
+            y={data.y}
+            dy={-10}
+            fontSize={14}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="black">
+            {bBChartData[0].avg}%
+          </text>
+        </>
       );
     }
     return null;
@@ -592,22 +620,34 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const BBYearAndCustomDateFilter = (value) => {
-    let diffDays = new Date();
-    if (value === 'custom') {
-      diffDays = getDays(BBstate[0].startDate, BBstate[0].endDate);
-    } else {
-      diffDays = getDays(new Date(new Date().getFullYear(), 0, 1), new Date());
-    }
+  const BBYearAndCustomDateFilter = (startDate, endDate, value) => {
+    let temp = '';
+
+    let sd = startDate;
+    let ed = endDate;
+    const diffDays = getDays(startDate, endDate);
+
     if (diffDays <= 30) {
-      getBBData(selectedAmazonValue, value, 'daily');
+      temp = 'daily';
       setBBGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 180) {
-      getBBData(selectedAmazonValue, value, 'weekly');
+      temp = 'weekly';
       setBBGroupBy('weekly');
     } else if (diffDays > 180) {
-      getBBData(selectedAmazonValue, value, 'monthly');
+      temp = 'monthly';
       setBBGroupBy('monthly');
+    }
+
+    if (value === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getBBData(selectedAmazonValue, value, temp, sd, ed);
+    } else {
+      getBBData(selectedAmazonValue, value, temp);
     }
   };
 
@@ -648,7 +688,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       ]);
     }
     if (value === 'year') {
-      BBYearAndCustomDateFilter('year');
+      BBYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+      );
     } else if (value === 'custom') {
       setShowBBCustomDateModal(true);
     } else {
@@ -682,7 +726,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const applyCustomeDate = (flag) => {
     if (flag === 'BBDate') {
-      BBYearAndCustomDateFilter('custom');
+      BBYearAndCustomDateFilter(
+        BBstate[0].startDate,
+        BBstate[0].endDate,
+        'custom',
+      );
       setShowBBCustomDateModal(false);
     } else {
       checkDifferenceBetweenDates(
@@ -716,7 +764,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -740,7 +788,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -764,7 +812,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return (
           <div className="custom-tooltip">
-            <p className="main-label">
+            <p className="label-1">
               {activeSales === 'revenue'
                 ? `${activeSales} (${currency})`
                 : activeSales}
@@ -777,6 +825,21 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 ? `vs ${currencySymbol}${previous}`
                 : previous}
             </p>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
+  const BBCustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      if (payload.length === 2) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label-1">{payload[0].payload.date}</p>
+            <p className="label-2">{payload[0].payload.avg}%</p>
+            <p className="label-2">{payload[1].payload.value}</p>
           </div>
         );
       }
@@ -967,8 +1030,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   colors: {
                     ...theme.colors,
                     neutral50: '#1A1A1A',
-
-                    // Placeholder color
                   },
                 })}
                 defaultValue={amazonOptions && amazonOptions[0]}
@@ -1229,7 +1290,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 </div>
                 <div className="vs">
                   {' '}
-                  vs
+                  vs{' '}
                   {allSalesTotal && allSalesTotal.conversion
                     ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
                         2,
@@ -1279,16 +1340,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </div>
           </div>
-
-          {/* <li>
-              <div className="chart-name">Revenue</div>
-              <div className="number-rate">$22,147.52</div>
-              <div className="vs"> vs $21,114.90</div>
-              <div className="perentage-value">
-                <img src={ArrowUpIcon} alt="arrow-up" />
-                4.75%
-              </div>
-            </li> */}
           <div className="row mt-4">
             <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
               <ul className="rechart-item">
@@ -1355,44 +1406,10 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               </div>
             </div>
           </div>
-
-          {/* <ul className="days-tab">
-              <li>
-                {' '}
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                />
-                <label htmlFor="weeklyCheck">Daily</label>
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  value=""
-                  name="flexRadioDefault"
-                  id="weeklyCheck1"
-                />
-                <label htmlFor="weeklyCheck1">Weekly</label>
-                <input
-                  className="form-check-input "
-                  type="radio"
-                  value=""
-                  name="flexRadioDefault"
-                  id="weeklyCheck2"
-                />
-                <label htmlFor="weeklyCheck2">Monthly</label>
-              </li>
-            </ul> */}
-
           <div className="clear-fix" />
-          {/* <div style={{ height: '400px', width: '1000px' }}>
-            <div style={{ height: '100%', width: '60%' }}>
-              <ResponsiveContainer width={'79%'} height={'30%'}> */}
+
           <ResponsiveContainer width="99%" height={400}>
             <LineChart
-              // width={600}
-              // height={400}
               data={lineChartData}
               margin={{
                 top: 40,
@@ -1430,9 +1447,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <Line dataKey=" $" stroke="#FF5933" />
               <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
-            {/* </ResponsiveContainer>
-            </div>
-          </div> */}
           </ResponsiveContainer>
         </WhiteCard>
 
@@ -1494,7 +1508,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
         </div>
-        <div className="row">
+        <div className="row ">
           <div className="col-md-4 col-sm-12 mb-3">
             <WhiteCard className="fix-height">
               <p className="black-heading-title mt-0 mb-4">
@@ -1535,7 +1549,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </WhiteCard>
           </div>
 
-          <div className="col-md-8 col-sm-12">
+          <div className="col-md-8 col-sm-12 mb-3 ">
             <WhiteCard className="fix-height">
               <div className="row">
                 <div className="col-6 ">
@@ -1586,7 +1600,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   }}>
                   <XAxis dataKey="date" hide />
                   <YAxis hide />
-                  <Tooltip />
+                  <Tooltip content={<BBCustomTooltip />} />
                   <Legend />
                   <Line
                     dataKey="avg"

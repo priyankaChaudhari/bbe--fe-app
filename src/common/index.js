@@ -28,6 +28,7 @@ import WarningComponent from './WarningComponent';
 import ActionDropDown from './ActionDropDown';
 // import EditorContainer from './EditorContainer';
 import UnauthorizedHeader from './UnauthorizedHeader';
+import OnBoardingBody from './OnBoarding';
 
 export {
   Button,
@@ -60,4 +61,5 @@ export {
   WarningComponent,
   ActionDropDown,
   UnauthorizedHeader,
+  OnBoardingBody,
 };

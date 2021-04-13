@@ -27,6 +27,8 @@ import {
   HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
+  ArrowUp,
+  BillingIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
@@ -48,6 +50,7 @@ import {
   EditAccountDetails,
 } from './index';
 import CompanyPerformance from './CompanyPerformance';
+import Billing from './Billing';
 import Activity from './Activity';
 import {
   getActivityLog,
@@ -129,6 +132,7 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
+    { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -271,7 +275,9 @@ export default function CustomerMainContainer() {
         (item && item.message.includes('annual revenue')) ||
         (item && item.message.includes('number of employees')) ||
         (item && item.message.includes('monthly retainer')) ||
-        (item && item.message.includes('sales threshold'))
+        (item && item.message.includes('sales threshold')) ||
+        (item && item.message.includes('fee')) ||
+        (item && item.message.includes('discount amount'))
       ) {
         return (
           <>
@@ -619,6 +625,17 @@ export default function CustomerMainContainer() {
                             </div>
                           </li>
                           <li
+                            onClick={() => setViewComponent('billing')}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'billing' ? 'active' : ''
+                              }`}>
+                              <img src={BillingIcon} alt="dollar-invoice" />
+                              Billing
+                            </div>
+                          </li>
+                          <li
                             onClick={() => setViewComponent('activity')}
                             role="presentation">
                             <div
@@ -676,43 +693,45 @@ export default function CustomerMainContainer() {
                           <img className="mr-1" src={AddIcons} alt="" />
                           Add new
                         </div>
-                        {memberData.map((item) => (
-                          <React.Fragment key={item.id}>
-                            <div
-                              className="add-more-people cursor"
-                              data-tip
-                              data-for={item.id}
-                              onClick={() =>
-                                setShowMemberList({
-                                  show: true,
-                                  add: false,
-                                  modal: true,
-                                })
-                              }
-                              role="presentation">
-                              <GetInitialName
-                                userInfo={item.user_profile}
-                                type="team"
-                              />
-                            </div>
-                            <ReactTooltip
-                              place="bottom"
-                              id={item.id}
-                              aria-haspopup="true">
-                              <strong>
-                                {(item.user_profile &&
-                                  item.user_profile.first_name) ||
-                                  ' '}{' '}
-                                {(item.user_profile &&
-                                  item.user_profile.last_name) ||
-                                  ' '}
-                              </strong>
-                              <p style={{ color: 'white', fontSize: '11px' }}>
-                                {item.user_profile && item.user_profile.role}
-                              </p>
-                            </ReactTooltip>
-                          </React.Fragment>
-                        ))}
+                        <div className="ml-2">
+                          {memberData.map((item) => (
+                            <React.Fragment key={item.id}>
+                              <div
+                                className="add-more-people cursor "
+                                data-tip
+                                data-for={item.id}
+                                onClick={() =>
+                                  setShowMemberList({
+                                    show: true,
+                                    add: false,
+                                    modal: true,
+                                  })
+                                }
+                                role="presentation">
+                                <GetInitialName
+                                  userInfo={item.user_profile}
+                                  type="team"
+                                />
+                              </div>
+                              <ReactTooltip
+                                place="bottom"
+                                id={item.id}
+                                aria-haspopup="true">
+                                <strong>
+                                  {(item.user_profile &&
+                                    item.user_profile.first_name) ||
+                                    ' '}{' '}
+                                  {(item.user_profile &&
+                                    item.user_profile.last_name) ||
+                                    ' '}
+                                </strong>
+                                <p style={{ color: 'white', fontSize: '11px' }}>
+                                  {item.user_profile && item.user_profile.role}
+                                </p>
+                              </ReactTooltip>
+                            </React.Fragment>
+                          ))}
+                        </div>
                       </WhiteCard>
 
                       <WhiteCard className="mb-3 d-none d-lg-block">
@@ -777,6 +796,8 @@ export default function CustomerMainContainer() {
                         marketplaceChoices={marketplaceChoices}
                         id={id}
                       />
+                    ) : viewComponent === 'billing' ? (
+                      <Billing />
                     ) : (
                       <Activity
                         activityData={activityData}
@@ -791,7 +812,19 @@ export default function CustomerMainContainer() {
                     )}
                   </div>
                 </CustomerBody>
+                <div className=" text-center d-lg-none d-md-block ">
+                  <div
+                    className="back-to-top"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                    role="presentation">
+                    {' '}
+                    <img src={ArrowUp} alt="" /> Back to top
+                  </div>
+                </div>
               </CustomerDetailBanner>
+
               <Modal
                 isOpen={showMemberList.modal}
                 style={teamDeleteModal ? alertCustomStyles : customStyles}
@@ -881,7 +914,31 @@ const CustomerDetailBanner = styled.div`
       padding: 0 20px;
     }
   }
+  .back-to-top {
+    position: relative;
+    bottom: -25px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+    padding: 5px 10px;
+    width: 135px;
+    background: #f9faff;
+    display: block;
+    border-radius: 5px;
+    border: 1px solid ${Theme.gray7};
+    color: ${Theme.gray90};
+    font-size: ${Theme.normalRes};
+    font-weight: 600;
+    line-height: 39px;
+    margin-top: 30px;
+    cursor: pointer;
 
+    img {
+      width: 19px;
+      vertical-align: text-top;
+      margin-right: 2px;
+    }
+  }
   @media only screen and (max-width: 991px) {
     .banner {
       padding-left: 0;

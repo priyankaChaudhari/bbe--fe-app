@@ -2,6 +2,7 @@
 $white-color: #ffffff;
 $red-color: #d60000;
 $dark-red: #8e4e4e;
+$light-red: #fbf2f2;
 $pink-color: #f6d2c9;
 $light-pink: #ffded6;
 $yellow-color: #f7c137;
@@ -88,9 +89,12 @@ $text-f-size-res: 19px;
 /* Font family */
 $base-font-family: Noah-Regular;
 $title-font-family: Noah-Bold;
+$bold-italic-font-family: Noah-BoldItalic;
+$regular-italic-font-family: Noah-RegularItalic;
 $boldtext-font-family: Arial-bold;
 $regulartext-font-family: Arial-Regular;
 $contact-regular-font-family: Helvetica-Regular;
 $contact-bold-font-family: Helvetica-bold;
 
 $common-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+$box-shadow: 0px 0px 5px 5px rgba(46, 91, 255, 0.04);

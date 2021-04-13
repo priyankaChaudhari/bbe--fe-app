@@ -8,6 +8,7 @@ import CompanyPerformance from './CompanyPerformance';
 import EditCompanyDetails from './EditCompanyDetails';
 import EditAccountDetails from './EditAccountDetails';
 import CustomerStatus from './CustomerStatus';
+import Billing from './Billing';
 
 export {
   CustomerList,
@@ -19,4 +20,5 @@ export {
   EditCompanyDetails,
   EditAccountDetails,
   CustomerStatus,
+  Billing,
 };

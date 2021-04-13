@@ -56,6 +56,8 @@ function RequestSignature({
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [contactDetails, setContactDetails] = useState(contactInfo);
   const [contactApiError, setContactApiError] = useState({});
+  const [reminderError, setReminderErrors] = useState({});
+
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [selectedContact, setSelectedContact] = useState({});
@@ -540,6 +542,9 @@ function RequestSignature({
         // });
         // setTimeout(() => clearSuccessMessage(), 3000);
       }
+      if (res && res.status === 400) {
+        setReminderErrors(res && res.data);
+      }
     });
   };
 
@@ -693,6 +698,7 @@ function RequestSignature({
                     {transactionalData && transactionalData.primary_email}
                   </span>{' '}
                 </div>
+                <ErrorMsg>{reminderError && reminderError.Contact} </ErrorMsg>
               </div>
               {/* <div className="col-12 mt-4">
                 <CheckBox>

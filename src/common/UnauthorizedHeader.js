@@ -29,13 +29,13 @@ const HeaderVoided = styled.div`
   background-color: ${Theme.white};
   height: 70px;
   border-bottom: 1px solid ${Theme.gray7};
-  padding-top: 13px;
+  padding-top: 16px;
   position: fixed;
   width: 100%;
   z-index: 3;
   top: 0;
   .logo {
-    width: 90px;
+    width: 75px;
     cursor: pointer;
   }
 `;

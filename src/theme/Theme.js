@@ -2,6 +2,7 @@ const Theme = {
   /* Theme Base color */
   white: '#ffffff',
   red: '#D60000',
+  lightRed: '#fbf2f2',
   darkRed: '#D60000',
   pink: '#f6d2c9',
   lightPink: '#ffded6',
@@ -119,6 +120,8 @@ const Theme = {
   /* Font family */
   baseFontFamily: 'Noah-Regular',
   titleFontFamily: 'Noah-Bold',
+  boldItalicFontFamily: 'Noah-BoldItalic',
+  regularItalicFontFamily: 'Noah-RegularItalic',
   boldTextFontFamily: 'Arial-bold',
   regularTextFontFamily: 'Arial-Regular',
 

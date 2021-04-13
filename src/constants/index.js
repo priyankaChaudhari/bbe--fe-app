@@ -38,6 +38,15 @@ export const PATH_BGS_DASHBOARD = '/bgs-dashboard/';
 export const PATH_TEAM_MEMBER = '/team-member/';
 export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 
+// On boarding Customer
+export const PATH_CREATE_ACCOUNT = '/create-acc';
+export const PATH_COMPANY_DIGITAL = '/company-digital';
+export const PATH_BILLING_INFO = '/billing-information';
+export const PATH_AMAZON_MERCHANT_ID = '/amazon-merchant';
+export const PATH_AMAZON_DEVELOPER_ACCESS = '/amazon-developer';
+export const PATH_SUMMARY = '/summary';
+export const PATH_THANKS = '/thanks';
+
 export const PATH_WARNING = '/warning/';
 
 export const PATH_UNAUTHORIZED_HEADER = '/unauthorized-header/';

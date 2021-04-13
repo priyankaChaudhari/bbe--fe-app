@@ -284,6 +284,7 @@ export default function Dashboard() {
               {data && data.length === 0 ? (
                 <NoRecordFound type="brand" />
               ) : (
+                data &&
                 data.map((item) => (
                   <div
                     key={item.id}
@@ -409,8 +410,12 @@ export default function Dashboard() {
                                 {item.daily_facts.current
                                   .map((rev) => rev.revenue)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.current
+                                      .map((rev) => rev.revenue)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -427,8 +432,12 @@ export default function Dashboard() {
                                 {item.daily_facts.previous
                                   .map((rev) => rev.revenue)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.previous
+                                      .map((rev) => rev.revenue)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -467,8 +476,12 @@ export default function Dashboard() {
                                 {item.daily_facts.current
                                   .map((rev) => rev.units_sold)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.current
+                                      .map((rev) => rev.units_sold)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -484,8 +497,12 @@ export default function Dashboard() {
                                 {item.daily_facts.previous
                                   .map((rev) => rev.units_sold)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.previous
+                                      .map((rev) => rev.units_sold)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -525,8 +542,12 @@ export default function Dashboard() {
                                 {item.daily_facts.current
                                   .map((rev) => rev.traffic)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.current
+                                      .map((rev) => rev.traffic)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -542,8 +563,12 @@ export default function Dashboard() {
                                 {item.daily_facts.previous
                                   .map((rev) => rev.traffic)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.previous
+                                      .map((rev) => rev.traffic)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                               </>
                             ) : (
                               0
@@ -584,8 +609,12 @@ export default function Dashboard() {
                                 {item.daily_facts.current
                                   .map((rev) => rev.conversion)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.current
+                                      .map((rev) => rev.conversion)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                                 %
                               </>
                             ) : (
@@ -602,8 +631,12 @@ export default function Dashboard() {
                                 {item.daily_facts.previous
                                   .map((rev) => rev.conversion)
                                   .reduce((val, rev) => rev + val)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                  ? item.daily_facts.previous
+                                      .map((rev) => rev.conversion)
+                                      .reduce((val, rev) => rev + val)
+                                      .toString()
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                                  : 0}
                                 %
                               </>
                             ) : (

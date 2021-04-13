@@ -16,8 +16,13 @@ const ModalRadioCheck = styled.div`
 
 }
 .contact-billing {
-  font-size:15px !important;
-  font-weight:600;
+  font-size: 14px !important;
+  font-weight: 500;
+  color: ${Theme.gray85};
+
+  .checkmark-top {
+     top: 0px;  
+   }
 }
   
   .radio-container {

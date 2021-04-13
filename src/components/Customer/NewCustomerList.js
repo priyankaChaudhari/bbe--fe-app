@@ -72,6 +72,7 @@ export default function NewCustomerList() {
     { value: 'any', label: 'Any' },
     { value: 'recurring', label: 'Recurring' },
     { value: 'one time', label: 'One Time' },
+    { value: 'dsp only', label: 'DSP Only' },
   ];
   const contractStatus = [
     { value: 'active', label: 'Signed' },
@@ -390,7 +391,7 @@ export default function NewCustomerList() {
           pageNumber,
           selectedValue,
           filters,
-          event && event.target.value ? event.target.value : '',
+          event && event.target && event.target.value ? event.target.value : '',
           showPerformance,
         );
       }, 1000);
@@ -428,7 +429,8 @@ export default function NewCustomerList() {
   };
 
   const generateContractHTML = (type, id) => {
-    if (countDays(type.end_date) <= 90) {
+    if (countDays(type.end_date) <= 90 && type.contract_type !== 'one time') {
+      console.log('type.contract_type', type.contract_type);
       return (
         <li
           data-tip={type.contract_status}
@@ -439,7 +441,9 @@ export default function NewCustomerList() {
           }}
           role="presentation">
           <div className="recurring-service count-days">
-            {type.contract_type} Service Agreement
+            {type.contract_type === 'dsp only'
+              ? 'DSP only Service Agreement'
+              : `${type.contract_type}Service Agreement`}
             <span className="count-clock-icon active-contract-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
@@ -460,7 +464,9 @@ export default function NewCustomerList() {
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file">
-            {type.contract_type} Service Agreement
+            {type.contract_type === 'dsp only'
+              ? 'DSP only Service Agreement'
+              : `${type.contract_type}Service Agreement`}
             <span className=" active-contract-icon file-icon">
               <img src={FileIcon} alt="file" />{' '}
             </span>
@@ -480,7 +486,9 @@ export default function NewCustomerList() {
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service file-check">
-            {type.contract_type} Service Agreement
+            {type.contract_type === 'dsp only'
+              ? 'DSP only Service Agreement'
+              : `${type.contract_type}Service Agreement`}
             <span className=" active-contract-icon file-check-icon ">
               <img src={CheckFileIcon} alt="check-file" />{' '}
             </span>
@@ -500,7 +508,9 @@ export default function NewCustomerList() {
           data-tip={type.contract_status}
           style={{ textTransform: 'capitalize' }}>
           <div className="recurring-service edit">
-            {type.contract_type} Service Agreement
+            {type.contract_type === 'dsp only'
+              ? 'DSP only Service Agreement'
+              : `${type.contract_type}Service Agreement`}
             <span className="edit-file-icon  active-contract-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
@@ -521,7 +531,9 @@ export default function NewCustomerList() {
           }}
           role="presentation">
           <div className="recurring-service agreement">
-            {type.contract_type} Service Agreement
+            {type.contract_type === 'dsp only'
+              ? 'DSP only Service Agreement'
+              : `${type.contract_type}Service Agreement`}
           </div>
         </li>
       );
@@ -1246,7 +1258,8 @@ export default function NewCustomerList() {
                             <div className="user-name">
                               {item &&
                                 item.brand_growth_strategist &&
-                                item.brand_growth_strategist.first_name}{' '}
+                                item.brand_growth_strategist.first_name}
+                              <br />
                               {item &&
                                 item.brand_growth_strategist &&
                                 item.brand_growth_strategist.last_name}
