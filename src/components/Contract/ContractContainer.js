@@ -2015,7 +2015,7 @@ export default function ContractContainer() {
       (details &&
         details.contract_type &&
         details.contract_type.toLowerCase().includes('dsp'))
-        ? null
+        ? ''
         : statmentData
     } ${
       details &&
