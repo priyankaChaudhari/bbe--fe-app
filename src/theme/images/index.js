@@ -95,6 +95,7 @@ import BoxesIcon from './icons/boxes.png';
 import SellerSupport from './icons/Seller Support.svg';
 import NextIcon from './icons/NEXT.svg';
 import ProductivityTools from './icons/Productivity Tools.svg';
+import ProductivityTool from './icons/productivity-tool.svg';
 import ArrowUp from './icons/arrow-up.png';
 import BannerImg from './banner-img.png';
 import EditOrangeIcon from './icons/edit-orange-icon.svg';
@@ -137,9 +138,12 @@ import CountDayClock from './icons/count-days-clock.svg';
 import SpeedometerActive from './icons/speedometer-icon.png';
 import Speedometer from './icons/speedometer-icon-disactive.png';
 import OrangeCheckMark from './icons/orange-checkmark.svg';
+import WhiteCheckMark from './icons/white-check-icon.svg';
 import SquareFbIcon from './icons/square-fb-icon.svg';
 import GrayClockIcon from './icons/gray-clock-icon.svg';
 import BillingIcon from './icons/billing-icon.png';
+import ArrowRightIcon from './icons/arrow-right-icon.png';
+import ArrowRightBlackIcon from './icons/arrow-right-black-icon.png';
 
 export {
   BannerBg,
@@ -239,6 +243,7 @@ export {
   SellerSupport,
   NextIcon,
   ProductivityTools,
+  ProductivityTool,
   ArrowUp,
   BannerImg,
   EditOrangeIcon,
@@ -284,4 +289,7 @@ export {
   SquareFbIcon,
   GrayClockIcon,
   BillingIcon,
+  ArrowRightIcon,
+  ArrowRightBlackIcon,
+  WhiteCheckMark,
 };

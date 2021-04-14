@@ -13,6 +13,7 @@ import {
   TeamDropDown,
   Button,
   GetInitialName,
+  CheckBoxList,
 } from '../../common';
 import { SearchIcons, SortDownIcon, CloseIcon } from '../../theme/images/index';
 import {
@@ -272,78 +273,82 @@ export default function AddTeamMember({
                   />
                 </TeamDropDown>
               </div>
-              {isLoading.loader && isLoading.type === 'page' ? (
-                <PageLoader
-                  component="member"
-                  color="#FF5933"
-                  type="page"
-                  height={40}
-                />
-              ) : (
-                <>
-                  {data && data.length === 0 ? (
-                    <div className="text-center no-result-found mt-5">
-                      No User Found.
-                    </div>
-                  ) : (
-                    <>
-                      {data &&
-                        data.map((item) => (
-                          <div
-                            className={
-                              checkDisable(item)
-                                ? 'col-12 pt-4 disableCheck'
-                                : 'col-12 pt-4'
-                            }
-                            key={item.id}>
-                            <div className="checkbox" role="presentation">
-                              <input
-                                type="checkbox"
-                                id={item.id}
-                                name={item.id}
-                                onClick={(event) => handleRoles(event, item)}
-                                disabled={checkDisable(item)}
-                                defaultChecked={userRoleId.find(
-                                  (op) => op === item.id,
-                                )}
-                              />
-                              <label
-                                htmlFor={item.id}
-                                style={{
-                                  cursor: checkDisable(item)
-                                    ? 'not-allowed'
-                                    : '',
-                                }}>
-                                <div
-                                  className="edit-profile-text float-left"
-                                  role="presentation">
-                                  <GetInitialName
-                                    userInfo={item}
-                                    property="mr-3"
-                                  />
-
-                                  <div className="name-email">
-                                    <div className="team-member-name">
-                                      {' '}
-                                      {item.first_name || ' '}{' '}
-                                      {item.last_name || ' '}
-                                    </div>
-                                    {item.email || ' '}
-                                  </div>
-                                </div>
-                              </label>
-                            </div>
-                            <div className="float-right role-selected mt-3">
-                              {item.role || ''}
-                            </div>
-                            <div className="clear-fix" />
-                          </div>
-                        ))}
-                    </>
-                  )}
-                </>
-              )}
             </div>
+            {isLoading.loader && isLoading.type === 'page' ? (
+              <PageLoader
+                component="member"
+                color="#FF5933"
+                type="page"
+                height={40}
+              />
+            ) : (
+              <>
+                {data && data.length === 0 ? (
+                  <div className="text-center no-result-found mt-5">
+                    No User Found.
+                  </div>
+                ) : (
+                  <>
+                    {data &&
+                      data.map((item) => (
+                        <CheckBoxList>
+                          <div className="row">
+                            <div
+                              className={
+                                checkDisable(item)
+                                  ? 'col-12 pt-4 disableCheck'
+                                  : 'col-12 pt-4'
+                              }
+                              key={item.id}>
+                              <div className="checkbox" role="presentation">
+                                <input
+                                  type="checkbox"
+                                  id={item.id}
+                                  name={item.id}
+                                  onClick={(event) => handleRoles(event, item)}
+                                  disabled={checkDisable(item)}
+                                  defaultChecked={userRoleId.find(
+                                    (op) => op === item.id,
+                                  )}
+                                />
+                                <label
+                                  htmlFor={item.id}
+                                  style={{
+                                    cursor: checkDisable(item)
+                                      ? 'not-allowed'
+                                      : '',
+                                  }}>
+                                  <div
+                                    className="edit-profile-text float-left"
+                                    role="presentation">
+                                    <GetInitialName
+                                      userInfo={item}
+                                      property="mr-3"
+                                    />
+
+                                    <div className="name-email">
+                                      <div className="team-member-name">
+                                        {' '}
+                                        {item.first_name || ' '}{' '}
+                                        {item.last_name || ' '}
+                                      </div>
+                                      {item.email || ' '}
+                                    </div>
+                                  </div>
+                                </label>
+                              </div>
+                              <div className="float-right role-selected mt-3">
+                                {item.role || ''}
+                              </div>
+                              <div className="clear-fix" />
+                            </div>
+                          </div>
+                        </CheckBoxList>
+                      ))}
+                  </>
+                )}
+              </>
+            )}
           </>
         </div>
         {!isLoading.loader && isLoading.type === 'page' ? (

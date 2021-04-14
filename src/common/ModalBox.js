@@ -25,6 +25,21 @@ const ModalBox = styled.div`
         font-size: ${Theme.normal};
         font-family: ${Theme.titleFontFamily};
       }
+      .light-bg {
+        border-radius: 5px;
+        background: ${Theme.lightOrange};
+        text-align: center;
+        padding: 4px 11px;
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.gray85};
+        font-family: ${Theme.baseFontFamily};
+        font-weight: 600;
+      }
+      .gray {
+          color: ${Theme.gray85};
+          background: ${Theme.gray8};
+          font-weight: 500;
+      }
       .signature-request {
         font-size: ${Theme.verySmall};
         color: ${Theme.gray40};
@@ -33,7 +48,6 @@ const ModalBox = styled.div`
         .email-address {
           color: ${Theme.black};
           font-size: ${Theme.normal};
-
         }
       }
 
@@ -57,20 +71,15 @@ const ModalBox = styled.div`
         .add-new-icon {
           vertical-align: top;
           width: 16px;
-        }
-      
-    }
+        } 
+      }
        @media not all and (min-resolution:.001dpcm)
       { @supports (-webkit-appearance:none) {
-
           .modal-heading{ 
-
             padding: 7px 15px 7px 0 !important;
-              padding-left:15px !important;
-
+            padding-left:15px !important;
           }
       }}
-
           .modal-heading {
             padding: 7px 0;
             padding-left: 0;
@@ -84,10 +93,8 @@ const ModalBox = styled.div`
       { @supports (-webkit-appearance:none) {
 
           .modal-heading{ 
-
             padding: 7px 15px 7px 0 !important;
-              padding-left:15px !important;
-
+            padding-left:15px !important;
           }
       }}
     }
@@ -103,8 +110,6 @@ const ModalBox = styled.div`
       }
     }
   }
-  
-
     .edit-profile-text {
       position: relative;
 
@@ -117,6 +122,12 @@ const ModalBox = styled.div`
           font-size: ${Theme.medium};
         }
       }
+       .brand-pratner {
+          color: ${Theme.gray85};
+          .team-member-name {
+            color: ${Theme.black};
+          }
+        }
     }
     .trash-icon {
       position: absolute;
@@ -207,11 +218,11 @@ const ModalBox = styled.div`
 
       .profile-photo {
         border: 8px solid #fafafb;
-          border-radius: 10px;
-          width: 120px;
-          height: 120px;
-          margin-left: 10px;
-          position: relative;
+        border-radius: 10px;
+        width: 120px;
+        height: 120px;
+        margin-left: 10px;
+        position: relative;
       }
 
       span {
@@ -245,7 +256,7 @@ const ModalBox = styled.div`
             padding: 9px;
             cursor:pointer;
           }
-       }
+      }
 
       .drop-down {
         color: ${Theme.gray90};
@@ -284,15 +295,14 @@ const ModalBox = styled.div`
             vertical-align: top;
           }
         }
-      }
+    }
 
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
       .modal-heading {
           padding: 7px 15px 7px 0;
           padding-left:15px;
         }
-    }
-
+     }
     }
 
     .footer-line {
@@ -329,6 +339,33 @@ const ModalBox = styled.div`
       font-size: ${Theme.normal};
     } 
 
+    .select-new-owner {
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        padding: 0;
+        margin: 0;
+        display: inline-block;
+
+        .arrow-right-gray {
+          width: 16px;
+          vertical-align: top;
+          margin: 2px 6px;
+        }
+        &.active {
+          color: ${Theme.black};
+        }
+      }
+    }
+    .label-title {
+      color: ${Theme.gray40};
+      font-size: ${Theme.verySmall};
+      text-transform: uppercase;
+      font-weight: bold;
+      font-family: ${Theme.titleFontFamily};
+    }
+
     @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
       &.on-boarding {
         .role-selected {
@@ -351,16 +388,18 @@ const ModalBox = styled.div`
           
       }
       .edit-profile-text {
-        position: relative;
+          position: relative;
 
          .name-email {
            font-size: ${Theme.smallRes};
 
-          .team-member-name{
-            font-size: ${Theme.mediumRes};
+            .team-member-name{
+              font-size: ${Theme.mediumRes};
+            }
+        
           }
+         
         }
-      }
 
       .alert-msg {
         font-size: ${Theme.mediumRes};
