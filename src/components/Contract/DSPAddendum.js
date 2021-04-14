@@ -140,6 +140,26 @@ export default function DSPAddendum({
         : 'Select Date';
     }
 
+    if (key === 'dsp_length') {
+      if (
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) {
+        return calculateTotalDays('initial');
+      }
+      if (
+        formData[key] === undefined ||
+        formData[key] === '' ||
+        formData[key] === null
+      ) {
+        return `Enter ${label}`;
+      }
+      return formData && formData.dsp_length && formData.dsp_length.label
+        ? parseInt(formData.dsp_length.label, 10)
+        : parseInt(formData.dsp_length, 10);
+    }
+
     if (
       formData[key] === undefined ||
       formData[key] === '' ||
@@ -151,18 +171,6 @@ export default function DSPAddendum({
       return `Enter ${label}`;
     }
 
-    if (key === 'dsp_length') {
-      if (
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')
-      ) {
-        return calculateTotalDays('initial');
-      }
-      return formData && formData.dsp_length && formData.dsp_length.label
-        ? parseInt(formData.dsp_length.label, 10)
-        : parseInt(formData.dsp_length, 10);
-    }
     if (type && type.includes('number')) {
       return `
       
