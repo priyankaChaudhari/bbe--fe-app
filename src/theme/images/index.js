@@ -144,6 +144,7 @@ import GrayClockIcon from './icons/gray-clock-icon.svg';
 import BillingIcon from './icons/billing-icon.png';
 import ArrowRightIcon from './icons/arrow-right-icon.png';
 import ArrowRightBlackIcon from './icons/arrow-right-black-icon.png';
+import DspOnlyIcon from './icons/dsp-only-icon.png';
 
 export {
   BannerBg,
@@ -292,4 +293,5 @@ export {
   ArrowRightIcon,
   ArrowRightBlackIcon,
   WhiteCheckMark,
+  DspOnlyIcon,
 };

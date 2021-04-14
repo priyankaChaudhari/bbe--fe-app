@@ -921,7 +921,7 @@ export default function ContractContainer() {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
       setSectionError({});
-      // setFormData(details);
+      setFormData(details);
       showFooter(false);
       setIsEditContract(false);
       setShowEditor(false);
@@ -930,6 +930,13 @@ export default function ContractContainer() {
       clearError();
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
+
+      setCalculatedDate(null);
+      setFirstMonthDate(null);
+      setSecondMonthDate(null);
+      setThirdMonthDate(null);
+      setEndDate(null);
+
       // setMarketplacesResult(marketplacesResult)
 
       // if (

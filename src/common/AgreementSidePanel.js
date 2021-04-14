@@ -2292,7 +2292,10 @@ export default function AgreementSidePanel({
           className={
             (contractError && contractError[item.key]) ||
             (!(formData && formData[item.key]) && item.isMandatory) ||
-            (item.key === 'dsp_fee' && formData && formData.dsp_fee < 10000)
+            (item.key === 'dsp_fee' &&
+              formData &&
+              formData.dsp_fee < 10000 &&
+              formData.contract_type.includes('dsp'))
               ? 'form-control form-control-error'
               : 'form-control '
           }

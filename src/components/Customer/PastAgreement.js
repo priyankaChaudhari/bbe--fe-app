@@ -9,6 +9,7 @@ import Button from '../../common/Button';
 import {
   FileContract,
   ServiceIcon,
+  DspOnlyIcon,
   RecurringIcon,
 } from '../../theme/images/index';
 import { WhiteCard } from '../../theme/Global';
@@ -37,6 +38,8 @@ export default function PastAgreement({ id }) {
                             src={
                               item && item.contract_type === 'One Time'
                                 ? ServiceIcon
+                                : item && item.contract_type === 'dsp only'
+                                ? DspOnlyIcon
                                 : RecurringIcon
                             }
                             alt=""
