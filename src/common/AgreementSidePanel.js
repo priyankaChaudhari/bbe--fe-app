@@ -4434,7 +4434,7 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom: 250px;
+    padding-bottom: 370px;
     width: 336px;
     position: fixed;
     top: 130px;
@@ -4442,7 +4442,7 @@ const SidePanel = styled.div`
     height: 100%;
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
-    overflow-y:auto;
+    overflow-y: auto;
     
     .sidebar {
       /* width: 335px; */
