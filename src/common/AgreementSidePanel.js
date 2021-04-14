@@ -2309,27 +2309,12 @@ export default function AgreementSidePanel({
       );
     }
     if (item.type === 'date') {
-      if (
-        // formData &&
-        // formData.contract_type &&
-        // formData.contract_type.toLowerCase().includes('dsp') &&
-        item.part === 'dsp'
-      ) {
+      if (item.part === 'dsp') {
         return (
           <DatePicker
             disabled
             className="form-control"
-            // className={
-            //   formData && formData[item.key] && item.isMandatory
-            //     ? 'form-control'
-            //     : 'form-control form-control-error'
-            // }
             id="date"
-            // minDate={
-            //   item.key && formData[item.key] && formData[item.key] !== null
-            //     ? new Date(formData[item.key])
-            //     : new Date()
-            // }
             value={firstMonthDate}
             format="MM/dd/yyyy"
             clearIcon={null}
@@ -2343,30 +2328,17 @@ export default function AgreementSidePanel({
 
       return (
         <DatePicker
-          // disabled={
-          //   formData &&
-          //   formData.contract_type &&
-          //   formData.contract_type.toLowerCase().includes('dsp') &&
-          //   item.part === 'dsp'
-          // }
           className={
             formData && formData[item.key] && item.isMandatory
               ? 'form-control'
               : 'form-control form-control-error'
           }
           id="date"
-          // minDate={
-          //   initialStartDate !== null ? new Date(initialStartDate) : new Date()
-          // }
-
           minDate={
             agreementData && agreementData.start_date
               ? new Date(agreementData && agreementData.start_date) > new Date()
-                ? new Date(agreementData && agreementData.start_date)
-                : new Date(agreementData && agreementData.start_date) <
-                  new Date()
-                ? new Date(agreementData && agreementData.start_date)
-                : new Date()
+                ? new Date()
+                : new Date(agreementData && agreementData.start_date)
               : ''
           }
           value={
@@ -2382,10 +2354,7 @@ export default function AgreementSidePanel({
           dayPlaceholder="DD"
           monthPlaceholder="MM"
           yearPlaceholder="YYYY"
-          //  formatPlaceholder={{ year: ' y', month: 'M', day: '' }}
-          // formatPlaceholder="wide"
           placeholderText="Select Date"
-          // {item.placeholder ? item.placeholder : item.label}
         />
       );
     }
