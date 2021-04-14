@@ -2273,6 +2273,8 @@ export default function ContractContainer() {
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('dsp') &&
           item.key !== 'dsp_length'
+          // ||
+          // formData.dsp_fee && formData.dsp_fee < 10000
         ) {
           dspErrors += 1;
           item.error = true;

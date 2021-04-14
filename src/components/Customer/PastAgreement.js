@@ -34,6 +34,7 @@ export default function PastAgreement({ id }) {
                         <p className="black-heading-title mt-0 mb-0">
                           {' '}
                           <img
+                            width="48px"
                             className="solid-icon "
                             src={
                               item && item.contract_type === 'One Time'

@@ -1954,8 +1954,25 @@ export default function AgreementSidePanel({
         });
       } else if (event.target.value.includes('$')) {
         let value = event.target.value.slice(1);
+
         if (event.target.name === 'dsp_fee') {
           value = value.replace(/,/g, '');
+          // console.log("inside outer if", value, sectionError.dsp)
+          // if (value < 10000 && formData && formData.contract_type && formData.contract_type.includes('dsp') && sectionError.dsp === 0) {
+          //   console.log("inside inner if")
+          //   setSectionError({
+          //     ...sectionError,
+          //     dsp: sectionError.dsp + 1,
+          //   });
+          // } else  if(value >= 10000 && formData && formData.contract_type && formData.contract_type.includes('dsp')){
+          //   console.log(" inside else")
+          //    const dspErrorCount =
+          //         sectionError.dsp > 0 ? sectionError.dsp - 1 : 0;
+          //    setSectionError({
+          //     ...sectionError,
+          //     dsp: dspErrorCount,
+          //   });
+          // }
         }
         setFormData({
           ...formData,
@@ -1965,7 +1982,24 @@ export default function AgreementSidePanel({
           ...updatedFormData,
           [event.target.name]: value,
         });
-      } else if (
+      }
+      // handled condition to decrease the dsp error count if value is undefined
+      // else if(event.target.name === 'dsp_fee' && formData && formData.contract_type && formData.contract_type.includes('dsp')) {
+      //   if(!event.target.value && formData && formData.contract_type && formData.contract_type.includes('dsp')) {
+      //       console.log("!!!!!!!!!!")
+      //        setSectionError({
+      //         ...sectionError,
+      //         dsp: sectionError.dsp,
+      //       });
+
+      //   }
+      //   setFormData({ ...formData, [event.target.name]: event.target.value });
+      //   setUpdatedFormData({
+      //     ...updatedFormData,
+      //     [event.target.name]: event.target.value,
+      //   });
+      // }
+      else if (
         event.target.name === 'monthly_retainer' &&
         event.target.value === ''
       ) {
@@ -2295,7 +2329,11 @@ export default function AgreementSidePanel({
             (item.key === 'dsp_fee' &&
               formData &&
               formData.dsp_fee < 10000 &&
-              formData.contract_type.includes('dsp'))
+              formData.contract_type.includes('dsp')) ||
+            (item.key === 'dsp_fee' &&
+              formData &&
+              formData.contract_type.includes('recurring') &&
+              !formData.dsp_fee)
               ? 'form-control form-control-error'
               : 'form-control '
           }
@@ -4031,7 +4069,12 @@ export default function AgreementSidePanel({
                                 {formData &&
                                 formData.contract_type === 'dsp only' &&
                                 item.info
-                                  ? item.info
+                                  ? item.key === 'dsp_fee' &&
+                                    formData.dsp_fee < 10000
+                                    ? item.info
+                                    : item.key !== 'dsp_fee'
+                                    ? item.info
+                                    : ''
                                   : ''}
                               </p>
                             </li>
@@ -4451,7 +4494,7 @@ const SidePanel = styled.div`
     //   overflow: hidden !important;
     //   height: auto !important;
     // }
-    
+
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
     //   .sidebar {
     //     padding-bottom: 400px;
