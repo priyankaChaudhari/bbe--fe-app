@@ -2291,7 +2291,8 @@ export default function AgreementSidePanel({
         <NumberFormat
           className={
             (contractError && contractError[item.key]) ||
-            (!(formData && formData[item.key]) && item.isMandatory)
+            (!(formData && formData[item.key]) && item.isMandatory) ||
+            (item.key === 'dsp_fee' && formData && formData.dsp_fee < 10000)
               ? 'form-control form-control-error'
               : 'form-control '
           }
@@ -2357,7 +2358,17 @@ export default function AgreementSidePanel({
           // minDate={
           //   initialStartDate !== null ? new Date(initialStartDate) : new Date()
           // }
-          // minDate={new Date()}
+
+          minDate={
+            agreementData && agreementData.start_date
+              ? new Date(agreementData && agreementData.start_date) > new Date()
+                ? new Date(agreementData && agreementData.start_date)
+                : new Date(agreementData && agreementData.start_date) <
+                  new Date()
+                ? new Date(agreementData && agreementData.start_date)
+                : new Date()
+              : ''
+          }
           value={
             startDate ||
             ('' ||

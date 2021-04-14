@@ -24,45 +24,46 @@ export default function DSPAddendum({
   }
 
   useEffect(() => {
-    const calculateDate = addDays(
-      new Date(formData && formData.start_date),
-      10,
-    );
-    setCalculatedDate(dayjs(calculateDate).format('MM-DD-YYYY'));
+    if (formData && formData.start_date) {
+      const calculateDate = addDays(
+        new Date(formData && formData.start_date),
+        10,
+      );
+      setCalculatedDate(dayjs(calculateDate).format('MM-DD-YYYY'));
 
-    let startDate = '';
-    let lastDate = '';
-    const d = new Date(calculateDate);
+      let startDate = '';
+      let lastDate = '';
+      const d = new Date(calculateDate);
 
-    if (calculateDate.getDate() > 16) {
-      startDate = d.setMonth(d.getMonth() + 1, 1);
-      const first = new Date(startDate);
-      setFirstMonthDate(first);
-      lastDate = first;
-      setEndDate(first);
-    } else if (calculateDate.getDate() === 1) {
-      startDate = d.setMonth(d.getMonth(), 1);
-      const first = new Date(startDate);
-      setFirstMonthDate(first);
-      lastDate = first;
-      setEndDate(first);
-    } else {
-      startDate = d.setMonth(d.getMonth(), 16);
-      const first = new Date(startDate);
-      setFirstMonthDate(first);
-      const endDate = new Date(first.getFullYear(), first.getMonth() + 2, 0);
-      lastDate = endDate;
-      setEndDate(endDate);
+      if (calculateDate.getDate() > 16) {
+        startDate = d.setMonth(d.getMonth() + 1, 1);
+        const first = new Date(startDate);
+        setFirstMonthDate(first);
+        lastDate = first;
+        setEndDate(first);
+      } else if (calculateDate.getDate() === 1) {
+        startDate = d.setMonth(d.getMonth(), 1);
+        const first = new Date(startDate);
+        setFirstMonthDate(first);
+        lastDate = first;
+        setEndDate(first);
+      } else {
+        startDate = d.setMonth(d.getMonth(), 16);
+        const first = new Date(startDate);
+        setFirstMonthDate(first);
+        const endDate = new Date(first.getFullYear(), first.getMonth() + 2, 0);
+        lastDate = endDate;
+        setEndDate(endDate);
+      }
+      const last = new Date(lastDate);
+      const date = new Date(last.setDate(1));
+
+      const third = date.setMonth(date.getMonth() + 1);
+      setSecondMonthDate(new Date(third));
+
+      const fourth = date.setMonth(date.getMonth() + 1);
+      setThirdMonthDate(new Date(fourth));
     }
-    const last = new Date(lastDate);
-    const date = new Date(last.setDate(1));
-
-    const third = date.setMonth(date.getMonth() + 1);
-    setSecondMonthDate(new Date(third));
-
-    const fourth = date.setMonth(date.getMonth() + 1);
-    setThirdMonthDate(new Date(fourth));
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
@@ -180,7 +181,11 @@ export default function DSPAddendum({
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
-          ${dayjs(firstMonthDate).format('MM-DD-YYYY')}
+          ${
+            firstMonthDate
+              ? dayjs(firstMonthDate).format('MM-DD-YYYY')
+              : 'MM-DD-YYYY'
+          }
         </td>
         <td
           style="border: 1px solid black;
@@ -217,17 +222,23 @@ export default function DSPAddendum({
     
     <div class="table-responsive">  <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
-      new Date(firstMonthDate).getDate() !== 1 ? '-' : ''
-    } ${
+    padding: 13px;">${
+      firstMonthDate
+        ? dayjs(firstMonthDate).format('MMM D, YYYY')
+        : 'MM-DD-YYYY'
+    } ${new Date(firstMonthDate).getDate() !== 1 ? '-' : ''} ${
       new Date(firstMonthDate).getDate() !== 1
         ? dayjs(endMonthDate).format('MMM D, YYYY')
         : ''
     } </th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(secondMonthDate).format(
-      'MMMM YYYY',
-    )}</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
+    padding: 13px;">${
+      secondMonthDate
+        ? dayjs(secondMonthDate).format('MMMM YYYY')
+        : 'MM-DD-YYYY'
+    }</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${
+      thirdMonthDate ? dayjs(thirdMonthDate).format('MMMM YYYY') : 'MM-DD-YYYY'
+    } </th></tr>
     <tr>
         <td style="border: 1px solid black;
     padding: 13px;"> ${displayFirstMonthFee()}</td>

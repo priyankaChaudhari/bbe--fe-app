@@ -171,11 +171,11 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
-  const [calculatedDate, setCalculatedDate] = useState('');
-  const [firstMonthDate, setFirstMonthDate] = useState('');
-  const [secondMonthDate, setSecondMonthDate] = useState('');
-  const [thirdMonthDate, setThirdMonthDate] = useState('');
-  const [endMonthDate, setEndDate] = useState('');
+  const [calculatedDate, setCalculatedDate] = useState(null);
+  const [firstMonthDate, setFirstMonthDate] = useState(null);
+  const [secondMonthDate, setSecondMonthDate] = useState(null);
+  const [thirdMonthDate, setThirdMonthDate] = useState(null);
+  const [endMonthDate, setEndDate] = useState(null);
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
   const [discountFlag, setDiscountFlag] = useState('');
   const [contractID, setContractID] = useState('');
