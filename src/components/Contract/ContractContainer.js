@@ -1066,6 +1066,13 @@ export default function ContractContainer() {
       ) {
         return calculateTotalDays('initial');
       }
+      if (
+        formData[key] === undefined ||
+        formData[key] === '' ||
+        formData[key] === null
+      ) {
+        return `Enter ${label}`;
+      }
       return (
         formData &&
         formData.length &&
