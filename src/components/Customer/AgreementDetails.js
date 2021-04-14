@@ -16,6 +16,7 @@ import {
   ClockIcon,
   FileContract,
   RecurringIcon,
+  DspOnlyIcon,
   ServiceIcon,
 } from '../../theme/images';
 import { PATH_AGREEMENT } from '../../constants';
@@ -62,12 +63,15 @@ export default function AgreementDetails({ agreements, id }) {
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
                 <img
+                  width="48px"
                   className="solid-icon  "
                   src={
                     (agreement && agreement.contract_type === 'One Time') ||
                     (agreement && agreement.contract_type === 'one time') ||
                     (agreement && agreement.contract_type === 'One time')
                       ? ServiceIcon
+                      : agreement && agreement.contract_type === 'dsp only'
+                      ? DspOnlyIcon
                       : RecurringIcon
                   }
                   alt=""

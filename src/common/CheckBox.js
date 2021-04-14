@@ -28,7 +28,10 @@ const CheckBox = styled.div`
     &.contract-sign {
       color: ${Theme.gray35};
     }
-
+    &.selected-list {
+      color: ${Theme.gray35};
+      font-size: ${Theme.extraNormal};
+    }
     &.additional-place {
       color: ${Theme.black};
       font-size: ${Theme.textFontSize};

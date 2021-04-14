@@ -231,7 +231,21 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               avg: avg.toFixed(2),
             };
           });
-          tempBBData.push({ avg: avg.toFixed(2) }, { avg: avg.toFixed(2) });
+          const total = tempBBData && tempBBData.length ? tempBBData.length : 0;
+          for (let i = 0; i <= Math.floor((total * 6) / 100); i += 1) {
+            tempBBData.push({ avg: avg.toFixed(2) });
+          }
+          // if (tempBBData && tempBBData.length < 64) {
+          //   tempBBData.push({ avg: avg.toFixed(2) }, { avg: avg.toFixed(2) });
+          // } else {
+          //   tempBBData.push(
+          //     { avg: avg.toFixed(2) },
+          //     { avg: avg.toFixed(2) },
+          //     { avg: avg.toFixed(2) },
+          //     { avg: avg.toFixed(2) },
+          //     { avg: avg.toFixed(2) },
+          //   );
+          // }
           setBBChartData(tempBBData);
         }
       });

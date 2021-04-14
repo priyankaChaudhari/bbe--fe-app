@@ -23,8 +23,8 @@ import {
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
   PATH_BGS_DASHBOARD,
-  // PATH_TEAM_MEMBER,
-  // PATH_TABLET_TEAM_MEMBER,
+  PATH_TEAM_MEMBER,
+  PATH_TABLET_TEAM_MEMBER,
   PATH_CREATE_ACCOUNT,
   PATH_AMAZON_MERCHANT_ID,
   PATH_AMAZON_DEVELOPER_ACCESS,
@@ -45,8 +45,8 @@ import CustomerMainContainer from '../components/Customer/CustomerMainContainer'
 import NewCustomerList from '../components/Customer/NewCustomerList';
 import {
   Dashboard,
-  // TeamMember,
-  // TabletTeamMember,
+  TeamMember,
+  TabletTeamMember,
 } from '../components/Brand Partner';
 import CreateAccount from '../components/OnBoardingCustomer/CreateAccount';
 import {
@@ -177,8 +177,9 @@ export default function AuthenticationComponent() {
           )}
           {/* Brand Partner */}
           <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
-          {/* <Route path={PATH_TEAM_MEMBER} component={TeamMember} /> */}
-          {/* <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
+          <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
+          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
+
           {/* On-Boarding Customer */}
           {/* <Route path={PATH_COMPANY_DIGITAL} component={CompanyDigital} />;
           <Route path={PATH_SUMMARY} component={Summary} />

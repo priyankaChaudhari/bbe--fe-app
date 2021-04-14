@@ -430,7 +430,6 @@ export default function NewCustomerList() {
 
   const generateContractHTML = (type, id) => {
     if (countDays(type.end_date) <= 90 && type.contract_type !== 'one time') {
-      console.log('type.contract_type', type.contract_type);
       return (
         <li
           data-tip={type.contract_status}

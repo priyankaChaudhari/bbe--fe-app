@@ -29,6 +29,7 @@ import ActionDropDown from './ActionDropDown';
 // import EditorContainer from './EditorContainer';
 import UnauthorizedHeader from './UnauthorizedHeader';
 import OnBoardingBody from './OnBoarding';
+import CheckBoxList from './CheckBoxList';
 
 export {
   Button,
@@ -62,4 +63,5 @@ export {
   ActionDropDown,
   UnauthorizedHeader,
   OnBoardingBody,
+  CheckBoxList,
 };

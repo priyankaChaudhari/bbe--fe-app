@@ -171,11 +171,11 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
-  const [calculatedDate, setCalculatedDate] = useState('');
-  const [firstMonthDate, setFirstMonthDate] = useState('');
-  const [secondMonthDate, setSecondMonthDate] = useState('');
-  const [thirdMonthDate, setThirdMonthDate] = useState('');
-  const [endMonthDate, setEndDate] = useState('');
+  const [calculatedDate, setCalculatedDate] = useState(null);
+  const [firstMonthDate, setFirstMonthDate] = useState(null);
+  const [secondMonthDate, setSecondMonthDate] = useState(null);
+  const [thirdMonthDate, setThirdMonthDate] = useState(null);
+  const [endMonthDate, setEndDate] = useState(null);
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
   const [discountFlag, setDiscountFlag] = useState('');
   const [contractID, setContractID] = useState('');
@@ -921,7 +921,7 @@ export default function ContractContainer() {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
       }
       setSectionError({});
-      // setFormData(details);
+      setFormData(details);
       showFooter(false);
       setIsEditContract(false);
       setShowEditor(false);
@@ -930,6 +930,13 @@ export default function ContractContainer() {
       clearError();
       setShowAmazonPlanDropdown(false);
       setAmazonStoreCustom(false);
+
+      setCalculatedDate(null);
+      setFirstMonthDate(null);
+      setSecondMonthDate(null);
+      setThirdMonthDate(null);
+      setEndDate(null);
+
       // setMarketplacesResult(marketplacesResult)
 
       // if (
@@ -1065,6 +1072,13 @@ export default function ContractContainer() {
         formData.contract_type.toLowerCase().includes('dsp')
       ) {
         return calculateTotalDays('initial');
+      }
+      if (
+        formData[key] === undefined ||
+        formData[key] === '' ||
+        formData[key] === null
+      ) {
+        return `Enter ${label}`;
       }
       return (
         formData &&
@@ -2259,6 +2273,8 @@ export default function ContractContainer() {
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('dsp') &&
           item.key !== 'dsp_length'
+          // ||
+          // formData.dsp_fee && formData.dsp_fee < 10000
         ) {
           dspErrors += 1;
           item.error = true;
