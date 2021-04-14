@@ -63,6 +63,7 @@ export default function AgreementDetails({ agreements, id }) {
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
                 <img
+                  width="48px"
                   className="solid-icon  "
                   src={
                     (agreement && agreement.contract_type === 'One Time') ||

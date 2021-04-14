@@ -4447,10 +4447,10 @@ const SidePanel = styled.div`
     .sidebar {
       /* width: 335px; */
     }
-    .ReactCollapse--collapse {
-      overflow: inherit !important;
-      height: auto !important;
-    }
+    // .ReactCollapse--collapse {
+    //   overflow: hidden !important;
+    //   height: auto !important;
+    // }
     
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
     //   .sidebar {

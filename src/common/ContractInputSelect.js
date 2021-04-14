@@ -10,8 +10,11 @@ const ContractInputSelect = styled.div`
     letter-spacing: 0.5px;
     text-transform: uppercase;
     font-weight: bold;
+   
   }
+ 
   .css-2b097c-container {
+     margin-top: 7px;
     .css-yk16xz-control {
       color: ${Theme.gray85};
       border: 1px solid ${Theme.gray45};
@@ -77,6 +80,9 @@ const ContractInputSelect = styled.div`
     .css-1wa3eu0-placeholder {
       font-size: ${Theme.extraNormal};
       color: ${Theme.gray85};
+    }
+     .css-1okebmr-indicatorSeparator {
+      display: none;
     }
       
   }
