@@ -171,6 +171,7 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
+  const [loaderFlag, setLoaderFlag] = useState(true);
   const [calculatedDate, setCalculatedDate] = useState(null);
   const [firstMonthDate, setFirstMonthDate] = useState(null);
   const [secondMonthDate, setSecondMonthDate] = useState(null);
@@ -205,13 +206,24 @@ export default function ContractContainer() {
     setContractID(location.state);
   }
 
+  if (
+    isLoading.loader === true &&
+    isLoading.type === 'page' &&
+    details &&
+    details.id &&
+    loaderFlag === true
+  ) {
+    setIsLoading({ loader: false, type: 'page' });
+    setLoaderFlag(false);
+  }
+
   const getContractDetails = () => {
     setIsLoading({ loader: true, type: 'page' });
     if (contractID || localStorage.getItem('agreementID')) {
       getcontract(contractID || localStorage.getItem('agreementID')).then(
         (res) => {
-          setIsLoading({ loader: false, type: 'page' });
-
+          // setIsLoading({ loader: false, type: 'page' });
+          setLoaderFlag(true);
           if (res && res.status === 200) {
             setDetails(res && res.data);
           }
@@ -239,7 +251,7 @@ export default function ContractContainer() {
       );
       getContractDetails();
 
-      setIsLoading({ loader: false, type: 'page' });
+      // setIsLoading({ loader: false, type: 'page' });
     });
 
     getAddendum({ customer_id: id }).then((addendum) => {
