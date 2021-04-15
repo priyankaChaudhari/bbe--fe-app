@@ -550,7 +550,7 @@ export const DSPAddendumDetails = [
     placeholder: 'Enter budget',
     isMandatory: true,
     part: 'dsp',
-    info: 'The minimum monthly budget is $10,000.',
+    // info: 'The minimum monthly budget is $10,000.',
   },
   {
     key: 'dsp_length',

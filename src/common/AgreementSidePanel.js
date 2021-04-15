@@ -869,16 +869,6 @@ export default function AgreementSidePanel({
         statement: sectionError.statement ? sectionError.statement - 1 : 0,
       });
 
-      // if (
-      //   formData &&
-      //   formData.contract_type &&
-      //   formData.contract_type.toLowerCase().includes('one')
-      // ) {
-      //   setSectionError({
-      //     ...sectionError,
-      //     agreement: sectionError.agreement ? sectionError.agreement - 1 : 0,
-      //   });
-      // }
       setAdditionalOnetimeSerError({
         ...additionalOnetimeSerError,
         custom_amazon_store_price: '',
@@ -1957,22 +1947,6 @@ export default function AgreementSidePanel({
 
         if (event.target.name === 'dsp_fee') {
           value = value.replace(/,/g, '');
-          // console.log("inside outer if", value, sectionError.dsp)
-          // if (value < 10000 && formData && formData.contract_type && formData.contract_type.includes('dsp') && sectionError.dsp === 0) {
-          //   console.log("inside inner if")
-          //   setSectionError({
-          //     ...sectionError,
-          //     dsp: sectionError.dsp + 1,
-          //   });
-          // } else  if(value >= 10000 && formData && formData.contract_type && formData.contract_type.includes('dsp')){
-          //   console.log(" inside else")
-          //    const dspErrorCount =
-          //         sectionError.dsp > 0 ? sectionError.dsp - 1 : 0;
-          //    setSectionError({
-          //     ...sectionError,
-          //     dsp: dspErrorCount,
-          //   });
-          // }
         }
         setFormData({
           ...formData,
@@ -1982,24 +1956,7 @@ export default function AgreementSidePanel({
           ...updatedFormData,
           [event.target.name]: value,
         });
-      }
-      // handled condition to decrease the dsp error count if value is undefined
-      // else if(event.target.name === 'dsp_fee' && formData && formData.contract_type && formData.contract_type.includes('dsp')) {
-      //   if(!event.target.value && formData && formData.contract_type && formData.contract_type.includes('dsp')) {
-      //       console.log("!!!!!!!!!!")
-      //        setSectionError({
-      //         ...sectionError,
-      //         dsp: sectionError.dsp,
-      //       });
-
-      //   }
-      //   setFormData({ ...formData, [event.target.name]: event.target.value });
-      //   setUpdatedFormData({
-      //     ...updatedFormData,
-      //     [event.target.name]: event.target.value,
-      //   });
-      // }
-      else if (
+      } else if (
         event.target.name === 'monthly_retainer' &&
         event.target.value === ''
       ) {
@@ -2020,11 +1977,6 @@ export default function AgreementSidePanel({
         Object.keys(apiError).includes('non_field_errors') ||
         Object.keys(apiError).includes(event.target.name)
       ) {
-        // setSectionError({
-        //   ...sectionError,
-        //   statement: sectionError.statement ? sectionError.statement - 1 : 0,
-        // });
-
         setApiError({
           ...apiError,
           [event.target.name]: '',
@@ -2034,11 +1986,6 @@ export default function AgreementSidePanel({
         additionalMarketplaceError &&
         Object.keys(additionalMarketplaceError).includes(event.target.name)
       ) {
-        // setSectionError({
-        //   ...sectionError,
-        //   statement: sectionError.statement ? sectionError.statement - 1 : 0,
-        // });
-
         setAdditionalMarketplaceError({
           ...additionalMarketplaceError,
           [additionalMarketplaceError]: '',
@@ -2049,11 +1996,6 @@ export default function AgreementSidePanel({
         additionalMonthlySerError &&
         Object.keys(additionalMonthlySerError).includes(event.target.name)
       ) {
-        // setSectionError({
-        //   ...sectionError,
-        //   statement: sectionError.statement ? sectionError.statement - 1 : 0,
-        // });
-
         setAdditionalMonthlySerError({
           ...additionalMonthlySerError,
           [event.target.name]: '',
@@ -2064,11 +2006,6 @@ export default function AgreementSidePanel({
         additionalOnetimeSerError &&
         Object.keys(additionalOnetimeSerError).includes(event.target.name)
       ) {
-        // setSectionError({
-        //   ...sectionError,
-        //   statement: sectionError.statement ? sectionError.statement - 1 : 0,
-        // });
-
         setAdditionalOnetimeSerError({
           ...additionalOnetimeSerError,
           [event.target.name]: '',
@@ -2325,15 +2262,7 @@ export default function AgreementSidePanel({
         <NumberFormat
           className={
             (contractError && contractError[item.key]) ||
-            (!(formData && formData[item.key]) && item.isMandatory) ||
-            (item.key === 'dsp_fee' &&
-              formData &&
-              formData.dsp_fee < 10000 &&
-              formData.contract_type.includes('dsp')) ||
-            (item.key === 'dsp_fee' &&
-              formData &&
-              formData.contract_type.includes('recurring') &&
-              !formData.dsp_fee)
+            (!(formData && formData[item.key]) && item.isMandatory)
               ? 'form-control form-control-error'
               : 'form-control '
           }
@@ -4059,23 +3988,7 @@ export default function AgreementSidePanel({
                                 {displayError(item)}
                               </ContractFormField>
                               <p className="m-0  pt-1 small-para">
-                                {' '}
-                                {formData &&
-                                formData.contract_type !== 'dsp only' &&
-                                item.key !== 'dsp_fee' &&
-                                item.info
-                                  ? item.info
-                                  : ''}
-                                {formData &&
-                                formData.contract_type === 'dsp only' &&
-                                item.info
-                                  ? item.key === 'dsp_fee' &&
-                                    formData.dsp_fee < 10000
-                                    ? item.info
-                                    : item.key !== 'dsp_fee'
-                                    ? item.info
-                                    : ''
-                                  : ''}
+                                {item.info ? item.info : ''}
                               </p>
                             </li>
                           )}
