@@ -1195,7 +1195,7 @@ export default function ContractContainer() {
       <td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
       threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
-    padding: 13px;"> REVENUE_SHARE </td><td style="border: 1px solid black;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
     padding: 13px;">REV_THRESHOLD</td></tr></table>`;
     }
     return `<table class="contact-list"  style="width: 100%;
@@ -1211,7 +1211,7 @@ export default function ContractContainer() {
     padding: 13px;">% Of Sales</td><td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
     through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
-    padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span></td></tr></table>`;
   };
 
   const mapThadSignImg = () => {
