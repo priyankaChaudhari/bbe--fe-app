@@ -24,11 +24,10 @@ export default function PastAgreement({ id }) {
     const fields = [];
     for (const item of multipleAgreement) {
       if (
-        (item &&
-          item.contract_status &&
-          item.contract_status.value &&
-          item.contract_status.value === 'inactive') ||
-        item.end_date > dayjs(new Date()).format('YYYY-MM-DD')
+        item &&
+        item.contract_status &&
+        item.contract_status.value &&
+        item.contract_status.value === 'inactive'
       ) {
         fields.push(
           <WhiteCard className="mt-3" key={item.id}>
