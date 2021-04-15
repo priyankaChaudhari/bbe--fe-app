@@ -74,19 +74,29 @@ export default function PastAgreement({ id }) {
               )}
             </ul>
           </div>
-          <div className="col-lg-3 col-md-4 col-12 text-right">
-            <Link
-              to={{
-                pathname: PATH_AGREEMENT.replace(':id', id),
-                state: item.id,
-              }}>
-              <Button className="btn-transparent w-100  view-contract ">
-                {' '}
-                <img className="file-contract-icon" src={FileContract} alt="" />
-                View Contract
-              </Button>
-            </Link>
-          </div>
+          {item &&
+          item.contract_status &&
+          (item.contract_status.value === 'pending account setup' ||
+            item.contract_status.value === 'active') &&
+          item.contract_url === null ? null : (
+            <div className="col-lg-3 col-md-4 col-12 text-right">
+              <Link
+                to={{
+                  pathname: PATH_AGREEMENT.replace(':id', id),
+                  state: item.id,
+                }}>
+                <Button className="btn-transparent w-100  view-contract ">
+                  {' '}
+                  <img
+                    className="file-contract-icon"
+                    src={FileContract}
+                    alt=""
+                  />
+                  View Contract
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </WhiteCard>,
     );
