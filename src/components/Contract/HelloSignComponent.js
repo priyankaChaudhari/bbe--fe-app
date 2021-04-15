@@ -6,7 +6,7 @@ import HelloSign from 'hellosign-embedded';
 import { PATH_WARNING } from '../../constants/index';
 import { transactionalSignUp, checksignatureStatus } from '../../api/index';
 import { PageLoader } from '../../common';
-// import Header from '../../common/Header';
+import Header from '../../common/Header';
 // import Theme from '../../theme/Theme';
 
 function HelloSignComponent() {
@@ -64,7 +64,7 @@ function HelloSignComponent() {
         <PageLoader color="#FF5933" type="page" />
       ) : (
         <>
-          {/* <Header /> */}
+          <Header />
 
           {/* <Footer className="sticky">
             {' '}
