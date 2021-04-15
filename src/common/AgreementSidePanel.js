@@ -16,6 +16,7 @@ import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
+// import ReactTooltip from 'react-tooltip';
 
 import Theme from '../theme/Theme';
 import {
@@ -34,6 +35,7 @@ import {
   CheckFileIcon,
   EditFileIcon,
   SignatureIcon,
+  // InfoIcon,
 } from '../theme/images/index';
 import { Button, ContractFormField, CommonPagination } from './index';
 import {
@@ -3984,6 +3986,25 @@ export default function AgreementSidePanel({
                             <li key={item.key}>
                               <ContractFormField>
                                 <label htmlFor={item.key}>{item.label}</label>
+                                {/* {item.key === 'dsp_fee' ? (
+                                  <>
+                                    <img
+                                      src={InfoIcon}
+                                      alt="search cursor"
+                                      data-tip="The minimum monthly budget is $10,000."
+                                      data-for={item.key}
+                                      className="info-icon"
+                                    />
+                                    <ReactTooltip
+                                      id={item.key}
+                                      aria-haspopup="true"
+                                      place="bottom"
+                                    />
+                                  </>
+                                ) : (
+                                  ''
+                                )} */}
+
                                 {generateHTML(item)}
                                 {displayError(item)}
                               </ContractFormField>
