@@ -3533,13 +3533,12 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? (
-                  <PageLoader
-                    component="activityLog"
-                    color="#FF5933"
-                    type="page"
-                  />
-                ) : (
+                {loader ? // <PageLoader
+                //   component="activityLog"
+                //   color="#FF5933"
+                //   type="page"
+                // />
+                null : (
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
@@ -3701,15 +3700,14 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ? (
-                      //  ||
-                      // (isLoading.loader && isLoading.type === 'page')
-                      <PageLoader
-                        component="activityLog"
-                        color="#FF5933"
-                        type="page"
-                      />
-                    ) : (
+                    {loader ? //  ||
+                    // (isLoading.loader && isLoading.type === 'page')
+                    // <PageLoader
+                    //   component="activityLog"
+                    //   color="#FF5933"
+                    //   type="page"
+                    // />
+                    null : (
                       // ''
                       <>
                         <ul className="collapse-inner">
@@ -3896,14 +3894,13 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader ? (
-                //  || (isLoading.loader && isLoading.type === 'page')
-                <PageLoader
-                  component="activityLog"
-                  color="#FF5933"
-                  type="page"
-                />
-              ) : (formData &&
+              {loader ? //  || (isLoading.loader && isLoading.type === 'page')
+              // <PageLoader
+              //   component="activityLog"
+              //   color="#FF5933"
+              //   type="page"
+              // />
+              null : (formData &&
                   formData.contract_type &&
                   formData.contract_type.toLowerCase().includes('dsp')) ||
                 (showSection &&
@@ -4061,14 +4058,13 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader ? (
-                  // || (isLoading.loader && isLoading.type === 'page')
-                  <PageLoader
-                    component="activityLog"
-                    color="#FF5933"
-                    type="page"
-                  />
-                ) : (
+                {loader ? // || (isLoading.loader && isLoading.type === 'page')
+                // <PageLoader
+                //   component="activityLog"
+                //   color="#FF5933"
+                //   type="page"
+                // />
+                null : (
                   <ul className="collapse-inner">
                     <li>
                       <p className="small-para  mt-0">
