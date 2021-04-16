@@ -1087,7 +1087,9 @@ export default function NewCustomerList() {
                                   item.daily_facts.current &&
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
-                                    .map((rev) => rev.revenue)
+                                    .map((rev) =>
+                                      rev.revenue === null ? 0 : rev.revenue,
+                                    )
                                     .reduce((val, rev) => rev + val)
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1133,7 +1135,11 @@ export default function NewCustomerList() {
                                   item.daily_facts.current &&
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
-                                    .map((rev) => rev.units_sold)
+                                    .map((rev) =>
+                                      rev.units_sold === null
+                                        ? 0
+                                        : rev.units_sold,
+                                    )
                                     .reduce((val, rev) => rev + val)
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1166,7 +1172,9 @@ export default function NewCustomerList() {
                                   item.daily_facts.current &&
                                   item.daily_facts.current.length &&
                                   item.daily_facts.current
-                                    .map((rev) => rev.traffic)
+                                    .map((rev) =>
+                                      rev.traffic === null ? 0 : rev.traffic,
+                                    )
                                     .reduce((val, rev) => rev + val)
                                     .toString()
                                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1202,7 +1210,11 @@ export default function NewCustomerList() {
                                   <>
                                     {item &&
                                       item.daily_facts.current
-                                        .map((rev) => rev.conversion)
+                                        .map((rev) =>
+                                          rev.conversion === null
+                                            ? 0
+                                            : rev.conversion,
+                                        )
                                         .reduce((val, rev) => rev + val)
                                         .toString()
                                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}

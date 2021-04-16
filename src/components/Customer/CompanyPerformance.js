@@ -618,7 +618,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         break;
 
       case 'month':
-        setFilters({ daily: true, weekly: true, month: false });
+        setFilters({ daily: true, weekly: false, month: false });
         setGroupBy('daily');
         getData(value, 'daily', selectedAmazonValue);
         break;
@@ -852,7 +852,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         return (
           <div className="custom-tooltip">
             <p className="label-1">{payload[0].payload.date}</p>
-            <p className="label-2">{payload[0].payload.avg}%</p>
+            {/* <p className="label-2">{payload[0].payload.avg}%</p> */}
             <p className="label-2">{payload[1].payload.value}</p>
           </div>
         );
