@@ -28,7 +28,7 @@ import {
   WhiteCaretUp,
   CaretUp,
   ArrowUp,
-  BillingIcon,
+  // BillingIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
@@ -132,7 +132,7 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
-    { value: 'billing', label: 'Billing' },
+    // { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -287,18 +287,22 @@ export default function CustomerMainContainer() {
               from{' '}
             </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[0]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[0]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[1]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[1]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
@@ -310,10 +314,14 @@ export default function CustomerMainContainer() {
             from{' '}
           </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[0]}
           <span> to </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[1]}
+          activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[1]}
         </>
       );
     }
@@ -624,7 +632,7 @@ export default function CustomerMainContainer() {
                               Company Details
                             </div>
                           </li>
-                          <li
+                          {/* <li
                             onClick={() => setViewComponent('billing')}
                             role="presentation">
                             <div
@@ -634,7 +642,7 @@ export default function CustomerMainContainer() {
                               <img src={BillingIcon} alt="dollar-invoice" />
                               Billing
                             </div>
-                          </li>
+                          </li> */}
                           <li
                             onClick={() => setViewComponent('activity')}
                             role="presentation">

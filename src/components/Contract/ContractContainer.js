@@ -171,6 +171,7 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
+  const [loaderFlag, setLoaderFlag] = useState(true);
   const [calculatedDate, setCalculatedDate] = useState(null);
   const [firstMonthDate, setFirstMonthDate] = useState(null);
   const [secondMonthDate, setSecondMonthDate] = useState(null);
@@ -205,13 +206,24 @@ export default function ContractContainer() {
     setContractID(location.state);
   }
 
+  if (
+    isLoading.loader === true &&
+    isLoading.type === 'page' &&
+    details &&
+    details.id &&
+    loaderFlag === true
+  ) {
+    setIsLoading({ loader: false, type: 'page' });
+    setLoaderFlag(false);
+  }
+
   const getContractDetails = () => {
     setIsLoading({ loader: true, type: 'page' });
     if (contractID || localStorage.getItem('agreementID')) {
       getcontract(contractID || localStorage.getItem('agreementID')).then(
         (res) => {
-          setIsLoading({ loader: false, type: 'page' });
-
+          // setIsLoading({ loader: false, type: 'page' });
+          setLoaderFlag(true);
           if (res && res.status === 200) {
             setDetails(res && res.data);
           }
@@ -239,7 +251,7 @@ export default function ContractContainer() {
       );
       getContractDetails();
 
-      setIsLoading({ loader: false, type: 'page' });
+      // setIsLoading({ loader: false, type: 'page' });
     });
 
     getAddendum({ customer_id: id }).then((addendum) => {
@@ -1183,7 +1195,7 @@ export default function ContractContainer() {
       <td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
       threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
-    padding: 13px;"> REVENUE_SHARE </td><td style="border: 1px solid black;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
     padding: 13px;">REV_THRESHOLD</td></tr></table>`;
     }
     return `<table class="contact-list"  style="width: 100%;
@@ -1199,7 +1211,7 @@ export default function ContractContainer() {
     padding: 13px;">% Of Sales</td><td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
     through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
-    padding: 13px;"> REVENUE_SHARE</td></tr></table>`;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span></td></tr></table>`;
   };
 
   const mapThadSignImg = () => {
@@ -2050,7 +2062,6 @@ export default function ContractContainer() {
           : addendumData + newAddendumAddedData + addendumSignatureData
         : ''
     } `;
-
     setPDFData(finalAgreement);
   };
 

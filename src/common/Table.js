@@ -4,6 +4,16 @@ import Theme from '../theme/Theme';
 const Table = styled.table`
   position: relative;
   width: 100%;
+  // top: 35px;
+
+  // thead {
+  //   display: inherit;
+  //   position: fixed;
+  //   width: calc(100% - 186px);
+  //   top: 130px;
+  //   z-index: 2;
+  //   height: 54px;
+  // }
 
   tr {
     text-align: left;

@@ -232,7 +232,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             };
           });
           const total = tempBBData && tempBBData.length ? tempBBData.length : 0;
-          for (let i = 0; i <= Math.floor((total * 6) / 100); i += 1) {
+          for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
             tempBBData.push({ avg: avg.toFixed(2) });
           }
           // if (tempBBData && tempBBData.length < 64) {
@@ -480,7 +480,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       !Number.isNaN(data.y)
     ) {
       return (
-        <>
+        <g className="mb-3">
           {bBChartData &&
           bBChartData[0].avg &&
           bBChartData[0].avg !== '0.00' ? (
@@ -505,7 +505,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             fill="black">
             {bBChartData[0].avg}%
           </text>
-        </>
+        </g>
       );
     }
     return null;
@@ -618,7 +618,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         break;
 
       case 'month':
-        setFilters({ daily: true, weekly: true, month: false });
+        setFilters({ daily: true, weekly: false, month: false });
         setGroupBy('daily');
         getData(value, 'daily', selectedAmazonValue);
         break;
@@ -852,8 +852,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         return (
           <div className="custom-tooltip">
             <p className="label-1">{payload[0].payload.date}</p>
-            <p className="label-2">{payload[0].payload.avg}%</p>
-            <p className="label-2">{payload[1].payload.value}</p>
+            {/* <p className="label-2">{payload[0].payload.avg}%</p> */}
+            <p className="label-2">{payload[1].payload.value}%</p>
           </div>
         );
       }

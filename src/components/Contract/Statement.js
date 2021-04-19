@@ -63,11 +63,11 @@ export default function Statement({
       return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
       </tr><tr><td>% Of Incremental Sales</td>
       <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td> REVENUE_SHARE </td><td>REV_THRESHOLD</td></tr></table> </div>`;
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td>REV_THRESHOLD</td></tr></table> </div>`;
     }
     return `<div class="table-responsive"> <table class="contact-list"><tr><th>Type</th><th>Description</th>
     <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td> REVENUE_SHARE</td></tr></table></div>`;
+    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE </span> </td></tr></table></div>`;
   };
 
   const displayNotIncludedServices = () => {
@@ -279,12 +279,12 @@ export default function Statement({
     padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
+    padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> ${
       formData && formData.content_optimization
         ? formData && formData.content_optimization
         : 0
     }</span></span></td><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
+    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"> ${
       formData && formData.design_optimization
         ? formData && formData.design_optimization
         : 0

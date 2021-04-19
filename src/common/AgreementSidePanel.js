@@ -16,6 +16,7 @@ import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
+// import ReactTooltip from 'react-tooltip';
 
 import Theme from '../theme/Theme';
 import {
@@ -34,6 +35,7 @@ import {
   CheckFileIcon,
   EditFileIcon,
   SignatureIcon,
+  // InfoIcon,
 } from '../theme/images/index';
 import { Button, ContractFormField, CommonPagination } from './index';
 import {
@@ -265,21 +267,26 @@ export default function AgreementSidePanel({
               from{' '}
             </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[0]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[0]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[1]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[1]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
+
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -288,10 +295,14 @@ export default function AgreementSidePanel({
             from{' '}
           </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[0]}
           <span> to </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[1]}
+          activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[1]}
         </>
       );
     }
@@ -2309,7 +2320,7 @@ export default function AgreementSidePanel({
               ? new Date(agreementData && agreementData.start_date) > new Date()
                 ? new Date()
                 : new Date(agreementData && agreementData.start_date)
-              : ''
+              : new Date()
           }
           value={
             startDate ||
@@ -3236,7 +3247,8 @@ export default function AgreementSidePanel({
             {activityData.map((item) => (
               <ul className="menu">
                 <li>
-                  {images.find((op) => op.entity_id === item.user_id) &&
+                  {images &&
+                  images.find((op) => op.entity_id === item.user_id) &&
                   images.find((op) => op.entity_id === item.user_id)
                     .presigned_url ? (
                     <img
@@ -3531,13 +3543,8 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? (
-                  <PageLoader
-                    component="activityLog"
-                    color="#FF5933"
-                    type="page"
-                  />
-                ) : (
+                {loader ? // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader
+                null : (
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
@@ -3699,15 +3706,10 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ? (
-                      //  ||
-                      // (isLoading.loader && isLoading.type === 'page')
-                      <PageLoader
-                        component="activityLog"
-                        color="#FF5933"
-                        type="page"
-                      />
-                    ) : (
+                    {loader ? //   color="#FF5933" //   component="activityLog" // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
+                    //   type="page"
+                    // />
+                    null : (
                       // ''
                       <>
                         <ul className="collapse-inner">
@@ -3894,14 +3896,9 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader ? (
-                //  || (isLoading.loader && isLoading.type === 'page')
-                <PageLoader
-                  component="activityLog"
-                  color="#FF5933"
-                  type="page"
-                />
-              ) : (formData &&
+              {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
+              // />
+              null : (formData &&
                   formData.contract_type &&
                   formData.contract_type.toLowerCase().includes('dsp')) ||
                 (showSection &&
@@ -3984,6 +3981,25 @@ export default function AgreementSidePanel({
                             <li key={item.key}>
                               <ContractFormField>
                                 <label htmlFor={item.key}>{item.label}</label>
+                                {/* {item.key === 'dsp_fee' ? (
+                                  <>
+                                    <img
+                                      src={InfoIcon}
+                                      alt="search cursor"
+                                      data-tip="The minimum monthly budget is $10,000."
+                                      data-for={item.key}
+                                      className="info-icon"
+                                    />
+                                    <ReactTooltip
+                                      id={item.key}
+                                      aria-haspopup="true"
+                                      place="bottom"
+                                    />
+                                  </>
+                                ) : (
+                                  ''
+                                )} */}
+
                                 {generateHTML(item)}
                                 {displayError(item)}
                               </ContractFormField>
@@ -4040,14 +4056,9 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader ? (
-                  // || (isLoading.loader && isLoading.type === 'page')
-                  <PageLoader
-                    component="activityLog"
-                    color="#FF5933"
-                    type="page"
-                  />
-                ) : (
+                {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
+                // />
+                null : (
                   <ul className="collapse-inner">
                     <li>
                       <p className="small-para  mt-0">

@@ -88,7 +88,10 @@ export default function AgreementDetails({ agreements, id }) {
                 <ul className="recurring-contact ">
                   <li>
                     <p className="basic-text ">
-                      {agreement && agreement.length && agreement.length.label}{' '}
+                      {agreement &&
+                        agreement.length &&
+                        agreement.length.label &&
+                        agreement.length.label.slice(0, -1)}{' '}
                       contract
                     </p>
                   </li>
@@ -245,17 +248,25 @@ export default function AgreementDetails({ agreements, id }) {
                 ) : (
                   ''
                 )}
-                <div className="label">One Time Services</div>
-                <ul className="selected-list">
-                  {agreement && agreement.additional_one_time_services
-                    ? agreement.additional_one_time_services.map((item) => (
-                        <li key={item.id}>
-                          {(item && item.service && item.service.name) || ''} (
-                          {(item && item.quantity) || ''})
-                        </li>
-                      ))
-                    : 'No One Time services added.'}
-                </ul>
+
+                {agreement && agreement.contract_type === 'dsp only' ? (
+                  ''
+                ) : (
+                  <>
+                    <div className="label">One Time Services</div>
+                    <ul className="selected-list">
+                      {agreement && agreement.additional_one_time_services
+                        ? agreement.additional_one_time_services.map((item) => (
+                            <li key={item.id}>
+                              {(item && item.service && item.service.name) ||
+                                ''}{' '}
+                              ({(item && item.quantity) || ''})
+                            </li>
+                          ))
+                        : 'No One Time services added.'}
+                    </ul>
+                  </>
+                )}
               </Collapse>
             </CustomerDetailCoppase>
           </WhiteCard>,
