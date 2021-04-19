@@ -267,7 +267,7 @@ function RequestSignature({
     return contactFields.map((field) => {
       return (
         <div className={field.classname}>
-          <ContractFormField className="mt-3">
+          <ContractFormField className=" mb-3">
             <label htmlFor={field.key}>
               {field.placeholder}
               <input
@@ -846,7 +846,7 @@ function RequestSignature({
         <>
           <div className="modal-body on-boarding">
             <h4
-              className="on-boarding mb-2"
+              className="on-boarding mb-4"
               role="presentation"
               onClick={() => setParams('select-contact')}>
               {' '}
