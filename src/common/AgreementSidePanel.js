@@ -267,21 +267,26 @@ export default function AgreementSidePanel({
               from{' '}
             </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[0]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[0]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
             {activityMessage &&
-              activityMessage[1]
-                .split(' from ')[1]
-                .split(' to ')[1]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+              ? 'None'
+              : activityMessage[1]
+                  .split(' from ')[1]
+                  .split(' to ')[1]
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
+
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -290,10 +295,14 @@ export default function AgreementSidePanel({
             from{' '}
           </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[0]}
+          activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[0]}
           <span> to </span>{' '}
           {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[1]}
+          activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+            ? 'None'
+            : activityMessage[1].split(' from ')[1].split(' to ')[1]}
         </>
       );
     }
