@@ -88,7 +88,8 @@ export default function PastAgreement({ id }) {
               {item &&
               item.contract_status &&
               (item.contract_status.value === 'pending account setup' ||
-                item.contract_status.value === 'active') &&
+                item.contract_status.value === 'active' ||
+                item.contract_status.value === 'inactive') &&
               item.contract_url === null ? null : (
                 <div className="col-lg-3 col-md-4 col-12 text-right">
                   <Link
