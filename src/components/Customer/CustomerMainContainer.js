@@ -28,7 +28,7 @@ import {
   WhiteCaretUp,
   CaretUp,
   ArrowUp,
-  BillingIcon,
+  // BillingIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
 import {
@@ -132,7 +132,7 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
-    { value: 'billing', label: 'Billing' },
+    // { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -632,7 +632,7 @@ export default function CustomerMainContainer() {
                               Company Details
                             </div>
                           </li>
-                          <li
+                          {/* <li
                             onClick={() => setViewComponent('billing')}
                             role="presentation">
                             <div
@@ -642,7 +642,7 @@ export default function CustomerMainContainer() {
                               <img src={BillingIcon} alt="dollar-invoice" />
                               Billing
                             </div>
-                          </li>
+                          </li> */}
                           <li
                             onClick={() => setViewComponent('activity')}
                             role="presentation">
