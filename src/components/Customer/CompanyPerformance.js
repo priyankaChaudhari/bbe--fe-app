@@ -853,7 +853,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
           <div className="custom-tooltip">
             <p className="label-1">{payload[0].payload.date}</p>
             {/* <p className="label-2">{payload[0].payload.avg}%</p> */}
-            <p className="label-2">{payload[1].payload.value}</p>
+            <p className="label-2">{payload[1].payload.value}%</p>
           </div>
         );
       }
