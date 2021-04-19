@@ -3238,7 +3238,8 @@ export default function AgreementSidePanel({
             {activityData.map((item) => (
               <ul className="menu">
                 <li>
-                  {images.find((op) => op.entity_id === item.user_id) &&
+                  {images &&
+                  images.find((op) => op.entity_id === item.user_id) &&
                   images.find((op) => op.entity_id === item.user_id)
                     .presigned_url ? (
                     <img
@@ -3533,9 +3534,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? // <PageLoader
-                //   component="activityLog"
-                //   color="#FF5933"
+                {loader ? //   color="#FF5933" //   component="activityLog" // <PageLoader
                 //   type="page"
                 // />
                 null : (
@@ -3700,9 +3699,7 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ? //  ||
-                    // (isLoading.loader && isLoading.type === 'page')
-                    // <PageLoader
+                    {loader ? // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
                     //   component="activityLog"
                     //   color="#FF5933"
                     //   type="page"
@@ -3894,9 +3891,7 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader ? //  || (isLoading.loader && isLoading.type === 'page')
-              // <PageLoader
-              //   component="activityLog"
+              {loader ? //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
               //   color="#FF5933"
               //   type="page"
               // />
@@ -4058,9 +4053,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader ? // || (isLoading.loader && isLoading.type === 'page')
-                // <PageLoader
-                //   component="activityLog"
+                {loader ? //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
                 //   color="#FF5933"
                 //   type="page"
                 // />

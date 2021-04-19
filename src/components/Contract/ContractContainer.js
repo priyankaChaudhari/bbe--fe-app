@@ -2062,7 +2062,6 @@ export default function ContractContainer() {
           : addendumData + newAddendumAddedData + addendumSignatureData
         : ''
     } `;
-
     setPDFData(finalAgreement);
   };
 
