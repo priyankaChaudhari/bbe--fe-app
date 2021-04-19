@@ -88,7 +88,10 @@ export default function AgreementDetails({ agreements, id }) {
                 <ul className="recurring-contact ">
                   <li>
                     <p className="basic-text ">
-                      {agreement && agreement.length && agreement.length.label}{' '}
+                      {agreement &&
+                        agreement.length &&
+                        agreement.length.label &&
+                        agreement.length.label.slice(0, -1)}{' '}
                       contract
                     </p>
                   </li>

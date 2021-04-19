@@ -57,7 +57,11 @@ export default function PastAgreement({ id }) {
                 <ul className="recurring-contact mb-2 ">
                   <li>
                     <p className="basic-text ">
-                      {item && item.length && item.length.label} contract
+                      {item &&
+                        item.length &&
+                        item.length.label &&
+                        item.length.label.slice(0, -1)}{' '}
+                      contract
                     </p>
                   </li>
                   {item && item.start_date ? (
@@ -73,7 +77,7 @@ export default function PastAgreement({ id }) {
                   {item && item.start_date ? (
                     <li>
                       <p className="basic-text ">
-                        Expires: {dayjs(item.end_date).format('MMM DD, YYYY')}
+                        Expired: {dayjs(item.end_date).format('MMM DD, YYYY')}
                       </p>
                     </li>
                   ) : (
