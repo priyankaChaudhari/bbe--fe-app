@@ -2320,7 +2320,7 @@ export default function AgreementSidePanel({
               ? new Date(agreementData && agreementData.start_date) > new Date()
                 ? new Date()
                 : new Date(agreementData && agreementData.start_date)
-              : ''
+              : new Date()
           }
           value={
             startDate ||
@@ -3543,9 +3543,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? //   color="#FF5933" //   component="activityLog" // <PageLoader
-                //   type="page"
-                // />
+                {loader ? // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader
                 null : (
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
@@ -3708,9 +3706,7 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ? // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
-                    //   component="activityLog"
-                    //   color="#FF5933"
+                    {loader ? //   color="#FF5933" //   component="activityLog" // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
                     //   type="page"
                     // />
                     null : (
@@ -3900,9 +3896,7 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader ? //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
-              //   color="#FF5933"
-              //   type="page"
+              {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
               // />
               null : (formData &&
                   formData.contract_type &&
@@ -4062,9 +4056,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader ? //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
-                //   color="#FF5933"
-                //   type="page"
+                {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
                 // />
                 null : (
                   <ul className="collapse-inner">
