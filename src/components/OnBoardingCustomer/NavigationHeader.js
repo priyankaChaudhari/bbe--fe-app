@@ -33,7 +33,7 @@ export default function NavigationHeader({ bar, backStep, skipStep }) {
 
   return (
     <>
-      <LoadingBar color="#FF5933" progress={bar} />
+      <LoadingBar color="#FF5933" height="4px" progress={bar} />
       <BackToStep>
         <div className="container-fluid">
           {' '}
@@ -88,6 +88,7 @@ const BackToStep = styled.div`
   position: fixed;
   background-color: ${Theme.white};
   z-index: 2;
+  top: 70px;
   padding: 20px 0px 20px 0px;
   width: 100%;
   border-bottom: 1px solid ${Theme.gray5};

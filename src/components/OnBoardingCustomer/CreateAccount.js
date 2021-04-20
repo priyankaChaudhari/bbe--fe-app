@@ -12,6 +12,7 @@ import {
   ErrorMsg,
   OnBoardingBody,
   PageLoader,
+  UnauthorizedHeader,
 } from '../../common';
 import { resetPassword } from '../../api';
 import { login } from '../../store/actions/userState';
@@ -126,9 +127,9 @@ export default function CreateAccount() {
 
   return (
     <>
-      {/* <UnauthorizedHeader /> */}
+      <UnauthorizedHeader />
       <NavigationHeader bar="25" backStep={showSuccessMsg ? '' : '1'} />
-      <OnBoardingBody>
+      <OnBoardingBody className={showSuccessMsg ? '' : 'body-white'}>
         {!assignTo ? (
           <div className="white-card-base panel">
             <p className="account-steps m-0">Step 1 of 4</p>
@@ -186,7 +187,7 @@ export default function CreateAccount() {
         ) : (
           <>
             {showSuccessMsg ? (
-              <div className="white-card-base">
+              <div className="white-card-base account-reassign">
                 <h3 className="page-heading ">Account Setup Reassigned</h3>
                 <p className="information-text m-0 ">
                   You have successfully reassigned the account setup process to

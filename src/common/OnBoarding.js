@@ -4,8 +4,7 @@ import Theme from '../theme/Theme';
 const OnBoardingBody = styled.div`
   background: ${Theme.gray8};
   height: 100%;
-  padding-left: 64px;
-  padding: 60px 10px 0 10px;
+  padding: 60px 0px 0 0px;
 
   &.body-white {
     background: ${Theme.white};
@@ -22,6 +21,7 @@ const OnBoardingBody = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.normal};
     box-shadow: 0px 5px 15px 0px #44444f33;
+    margin-top: 60px;
 
     .lock-finish {
       padding-bottom: 22px;
@@ -183,8 +183,11 @@ const OnBoardingBody = styled.div`
   .panel {
     padding: 0;
     max-width: 400px;
-    margin-top: 105px;
+    margin-top: 175px;
     box-shadow: none;
+  }
+  .account-reassign {
+    margin-top: 140px;
   }
   .gap-none {
     margin-top: 0;

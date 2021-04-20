@@ -43,7 +43,7 @@ export default function Info() {
   return (
     <OnBoardingBody>
       <UnauthorizedHeader />{' '}
-      <div className="white-card-base">
+      <div className="white-card-base ">
         <img className="lock-finish" src={LockFinish} alt="lock" />
         <p className="account-steps m-0">Step 1 of 4</p>
         <h3 className="page-heading ">Create your account</h3>
