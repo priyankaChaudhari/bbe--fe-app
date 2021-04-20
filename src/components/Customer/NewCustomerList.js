@@ -446,7 +446,7 @@ export default function NewCustomerList() {
           <div className="recurring-service count-days">
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
-              : `${type.contract_type}Service Agreement`}
+              : `${type.contract_type} Service Agreement`}
             <span className="count-clock-icon active-contract-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
@@ -469,7 +469,7 @@ export default function NewCustomerList() {
           <div className="recurring-service file">
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
-              : `${type.contract_type}Service Agreement`}
+              : `${type.contract_type} Service Agreement`}
             <span className=" active-contract-icon file-icon">
               <img src={FileIcon} alt="file" />{' '}
             </span>
@@ -491,7 +491,7 @@ export default function NewCustomerList() {
           <div className="recurring-service file-check">
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
-              : `${type.contract_type}Service Agreement`}
+              : `${type.contract_type} Service Agreement`}
             <span className=" active-contract-icon file-check-icon ">
               <img src={CheckFileIcon} alt="check-file" />{' '}
             </span>
@@ -513,7 +513,7 @@ export default function NewCustomerList() {
           <div className="recurring-service edit">
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
-              : `${type.contract_type}Service Agreement`}
+              : `${type.contract_type} Service Agreement`}
             <span className="edit-file-icon  active-contract-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
@@ -536,7 +536,7 @@ export default function NewCustomerList() {
           <div className="recurring-service agreement">
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
-              : `${type.contract_type}Service Agreement`}
+              : `${type.contract_type} Service Agreement`}
           </div>
         </li>
       );

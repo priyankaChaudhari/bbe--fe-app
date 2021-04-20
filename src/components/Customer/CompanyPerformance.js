@@ -1363,12 +1363,14 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                     <span>Recent</span>
                   </div>
                 </li>
-                <li>
-                  <div className="weeks">
-                    <span className="gray block" />
-                    <span>Previous</span>
-                  </div>
-                </li>
+                {selectedValue !== 'custom' ? (
+                  <li>
+                    <div className="weeks">
+                      <span className="gray block" />
+                      <span>Previous</span>
+                    </div>
+                  </li>
+                ) : null}
               </ul>
             </div>
             <div className="col-md-6 col-sm-12 order-md-2 order-1">
