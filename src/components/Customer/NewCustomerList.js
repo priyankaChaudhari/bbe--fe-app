@@ -242,40 +242,18 @@ export default function NewCustomerList() {
   };
 
   const handleFilters = (event, key, type, action) => {
-    if (type === 'status' && key === 'unselected') {
+    if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
+      $('.checkboxes input:radio').prop('checked', false);
       setFilters({
         ...filters,
         status: [],
-      });
-    }
-    if (type === 'status' && key === 'selected') {
-      $('.checkboxes input:checkbox').prop('checked', true);
-      setFilters({
-        ...filters,
-        status: ['active', 'at risk', 'pending cancellation', 'inactive'],
-      });
-    }
-    if (type === 'contract_status' && key === 'unselected') {
-      $('.checkboxes-contract  input:checkbox').prop('checked', false);
-      setFilters({
-        ...filters,
         contract_status: [],
+        contract_type: [],
       });
     }
-    if (type === 'contract_status' && key === 'selected') {
-      $('.checkboxes-contract input:checkbox').prop('checked', true);
-      setFilters({
-        ...filters,
-        contract_status: [
-          'active',
-          'pending contract signature',
-          'pending contract approval',
-          'pending contract',
-        ],
-      });
-    }
-    if (type === 'status' && key !== 'unselected' && key !== 'selected') {
+
+    if (type === 'status' && key !== 'unselected') {
       if (
         event.target.checked &&
         filters.status.indexOf(event.target.name) === -1
@@ -292,11 +270,7 @@ export default function NewCustomerList() {
       }
     }
 
-    if (
-      type === 'contract_status' &&
-      key !== 'unselected' &&
-      key !== 'selected'
-    ) {
+    if (type === 'contract_status' && key !== 'unselected') {
       if (
         event.target.checked &&
         filters.contract_status.indexOf(event.target.name) === -1
@@ -676,7 +650,7 @@ export default function NewCustomerList() {
                         <div
                           className="clear-filter"
                           onClick={(event) =>
-                            handleFilters(event, 'unselected', 'status')
+                            handleFilters(event, 'unselected')
                           }
                           role="presentation">
                           {' '}
@@ -735,7 +709,7 @@ export default function NewCustomerList() {
                             {' '}
                             <ModalRadioCheck>
                               <label
-                                className="radio-container customer-list"
+                                className="checkboxes radio-container customer-list"
                                 htmlFor={item.value}>
                                 {item.label}
                                 <input
@@ -762,7 +736,7 @@ export default function NewCustomerList() {
                         {' '}
                         <div className="label mt-4 pt-2">Contract Status</div>
                         <div className="clear-fix" />
-                        <ul className="check-box-list checkboxes-contract">
+                        <ul className="check-box-list checkboxes">
                           {contractStatus.map((item) => (
                             <li key={item.value}>
                               <CheckBox>
@@ -900,7 +874,7 @@ export default function NewCustomerList() {
               {' '}
               <ModalRadioCheck>
                 <label
-                  className="radio-container customer-list"
+                  className=" checkboxes radio-container customer-list"
                   htmlFor={item.value}>
                   {item.label}
                   <input
@@ -918,7 +892,7 @@ export default function NewCustomerList() {
         </ul>
         <div className="label mt-4 pt-2">Contract Status</div>
         <div className="clear-fix" />
-        <ul className="check-box-list checkboxes-contract">
+        <ul className="check-box-list checkboxes">
           {contractStatus.map((item) => (
             <li key={item.value}>
               <CheckBox>

@@ -10,7 +10,12 @@ import Theme from '../../theme/Theme';
 import { LeftArrowIcon } from '../../theme/images';
 import { PATH_ACCOUNT_SETUP } from '../../constants';
 
-export default function NavigationHeader({ bar, backStep, skipStep }) {
+export default function NavigationHeader({
+  bar,
+  backStep,
+  skipStep,
+  showSuccessMsg,
+}) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
 
@@ -33,42 +38,51 @@ export default function NavigationHeader({ bar, backStep, skipStep }) {
 
   return (
     <>
-      <LoadingBar className="loader-bar" color="#FF5933" progress={bar} />
-      <BackToStep>
-        <div className="container-fluid">
-          {' '}
-          <div className="row">
-            {backStep ? (
-              <div className="col-6">
-                {' '}
-                <div
-                  role="presentation"
-                  className="back-link"
-                  onClick={() => redirect()}>
-                  <img
-                    src={LeftArrowIcon}
-                    alt="aarow-back"
-                    className="arrow-back-icon "
-                  />
-                  Back a step
+      <LoadingBar
+        className="loader-bar"
+        color="#FF5933"
+        height="4px"
+        progress={bar}
+      />
+      {!showSuccessMsg ? (
+        <BackToStep>
+          <div className="container-fluid">
+            {' '}
+            <div className="row">
+              {backStep ? (
+                <div className="col-6">
+                  {' '}
+                  <div
+                    role="presentation"
+                    className="back-link"
+                    onClick={() => redirect()}>
+                    <img
+                      src={LeftArrowIcon}
+                      alt="aarow-back"
+                      className="arrow-back-icon "
+                    />
+                    Back a step
+                  </div>
                 </div>
-              </div>
-            ) : (
-              ''
-            )}
-            {skipStep ? (
-              <div
-                className="col-6 text-right"
-                onClick={() => redirect()}
-                role="presentation">
-                <div className="skip-steps pr-2">Skip this step</div>
-              </div>
-            ) : (
-              ''
-            )}
+              ) : (
+                ''
+              )}
+              {skipStep ? (
+                <div
+                  className="col-6 text-right"
+                  onClick={() => redirect()}
+                  role="presentation">
+                  <div className="skip-steps pr-2">Skip this step</div>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-        </div>
-      </BackToStep>
+        </BackToStep>
+      ) : (
+        ''
+      )}
     </>
   );
 }
@@ -76,12 +90,14 @@ export default function NavigationHeader({ bar, backStep, skipStep }) {
 NavigationHeader.defaultProps = {
   backStep: '',
   skipStep: '',
+  showSuccessMsg: false,
 };
 
 NavigationHeader.propTypes = {
   bar: PropTypes.string.isRequired,
   backStep: PropTypes.string,
   skipStep: PropTypes.string,
+  showSuccessMsg: PropTypes.bool,
 };
 
 const BackToStep = styled.div`

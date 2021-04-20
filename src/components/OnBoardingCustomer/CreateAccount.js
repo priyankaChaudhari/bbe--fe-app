@@ -29,6 +29,7 @@ export default function CreateAccount() {
   const params = queryString.parse(history.location.search);
   const [assignTo, setAssignTo] = useState(false);
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+  const [getEmail, setGetEmail] = useState('');
   const newDetails = [
     { key: 'first_name', label: 'First Name' },
     { key: 'last_name', label: 'Last Name' },
@@ -77,6 +78,7 @@ export default function CreateAccount() {
       if (response && response.status === 200) {
         setIsLoading({ loader: false, type: 'button' });
         setShowSuccessMsg(true);
+        setGetEmail(data.re_assigned_user_email);
       }
       if (
         (response && response.status === 400) ||
@@ -127,8 +129,12 @@ export default function CreateAccount() {
 
   return (
     <>
+      <NavigationHeader
+        bar="25"
+        backStep={showSuccessMsg ? '' : '1'}
+        showSuccessMsg={showSuccessMsg}
+      />
       <UnauthorizedHeader />
-      <NavigationHeader bar="25" backStep={showSuccessMsg ? '' : '1'} />
       <OnBoardingBody className={showSuccessMsg ? '' : 'body-white'}>
         {!assignTo ? (
           <div className="white-card-base panel">
@@ -193,9 +199,7 @@ export default function CreateAccount() {
                   You have successfully reassigned the account setup process to
                   the following email address:
                 </p>
-                <div className="complete-steps mb-2">
-                  newton@ashersapparel.com
-                </div>
+                <div className="complete-steps mb-2">{getEmail}</div>
                 <p className="reach-out m-0 ">
                   If you need any assistance please reach out to
                   <br />
