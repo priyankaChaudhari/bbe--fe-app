@@ -5,10 +5,10 @@ import { PATH_LOGIN } from './constants';
 import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 
 const requestHandler = (request) => {
-  if (NON_AUTHORIZATION_APIS.includes('/customer-onboarding/')) {
-    delete request.headers.Authorization;
-    return request;
-  }
+  // if (NON_AUTHORIZATION_APIS.includes('/customer-onboarding/')) {
+  //   delete request.headers.Authorization;
+  //   return request;
+  // }
   if (!NON_AUTHORIZATION_APIS.includes(request.url)) {
     let token = localStorage.getItem('token');
     token = token || '';
