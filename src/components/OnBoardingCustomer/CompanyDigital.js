@@ -6,10 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 // import Select from 'react-select';
 import { Collapse } from 'react-collapse';
-import LoadingBar from 'react-top-loading-bar';
 
-import Theme from '../../theme/Theme';
-import Header from '../../common/Header';
 import {
   OnBoardingBody,
   ContractFormField,
@@ -17,11 +14,13 @@ import {
   Button,
   PageLoader,
 } from '../../common';
-import { LeftArrowIcon, CaretUp } from '../../theme/images';
+import { CaretUp } from '../../theme/images';
 import AskSomeone from './AskSomeone';
 import { updateCustomerDetails } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import { SocialIcons } from '../../constants/FieldConstants';
+import NavigationHeader from './NavigationHeader';
+import { PATH_BILLING_INFO } from '../../constants';
 
 export default function CompanyDigital() {
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ export default function CompanyDigital() {
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     if (formData && Object.keys(formData).length) {
-      updateCustomerDetails(userInfo.customer, formData).then((res) => {
+      updateCustomerDetails('CMMVciw', formData).then((res) => {
         if (res && res.status === 200) {
           setIsLoading({ loader: false, type: 'button' });
         }
@@ -107,30 +106,7 @@ export default function CompanyDigital() {
 
   return (
     <>
-      <Header />
-      <LoadingBar color="#FF5933" progress="50" />
-
-      <BackToStep>
-        <div className="container-fluid">
-          {' '}
-          <div className="row">
-            <div className="col-6">
-              {' '}
-              <div role="presentation" className="back-link">
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
-                />
-                Back a step
-              </div>
-            </div>
-            <div className="col-6 text-right ">
-              <div className="skip-steps pr-2">Skip this step</div>
-            </div>
-          </div>
-        </div>
-      </BackToStep>
+      <NavigationHeader bar="50" skipStep={PATH_BILLING_INFO} />
 
       {loader ? (
         <PageLoader component="modal" color="#FF5933" type="page" />
@@ -185,13 +161,13 @@ export default function CompanyDigital() {
                 <Collapse isOpened={openCollapse}>{generateHTML()}</Collapse>
               </CollapseOpenContainer>
               <Button
-                className={
-                  isChecked
-                    ? 'btn-primary w-100  mt-4 disabled'
-                    : 'btn-primary w-100  mt-4'
-                }
-                disabled={isChecked}>
-                Continue
+                className="btn-primary w-100  mt-4"
+                onClick={() => saveDetails()}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Continue'
+                )}
               </Button>
             </div>
           ) : (
@@ -202,21 +178,6 @@ export default function CompanyDigital() {
     </>
   );
 }
-
-const BackToStep = styled.div`
-  position: fixed;
-  background-color: ${Theme.white};
-  z-index: 2;
-  padding: 20px 0px 20px 0px;
-  width: 100%;
-  border-bottom: 1px solid ${Theme.gray5};
-
-  .skip-steps {
-    color: ${Theme.gray40};
-    font-size: ${Theme.extraNormal};
-    cursor: pointer;
-  }
-`;
 
 const CollapseOpenContainer = styled.div`
   opacity: 0.6;

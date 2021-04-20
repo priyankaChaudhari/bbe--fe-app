@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import LoadingBar from 'react-top-loading-bar';
 import queryString from 'query-string';
-import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 // import Select from 'react-select';
 
-import Theme from '../../theme/Theme';
-import UnauthorizedHeader from '../../common/UnauthorizedHeader';
-import { LeftArrowIcon } from '../../theme/images/index';
 import {
   Button,
   ContractFormField,
@@ -19,18 +15,33 @@ import {
 } from '../../common';
 import { resetPassword } from '../../api';
 import { login } from '../../store/actions/userState';
+import NavigationHeader from './NavigationHeader';
+import updateOnBoardCustomer from '../../api/OnboardingCustomerApi';
 
 export default function CreateAccount() {
+  const { register, handleSubmit, errors, watch } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const [isLoading, setIsLoading] = useState({
-    loader: false,
-    type: 'button',
-  });
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
+  const [assignTo, setAssignTo] = useState(false);
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+  const newDetails = [
+    { key: 'first_name', label: 'First Name' },
+    { key: 'last_name', label: 'Last Name' },
+    { key: 're_assigned_user_email', label: 'Email Address' },
+    { key: 'confirm_email', label: 'Confirm Email Address' },
+  ];
+
+  useEffect(() => {
+    if (params && params.type && params.type === 'new') {
+      setAssignTo(true);
+    } else {
+      setAssignTo(false);
+    }
+  }, [params]);
 
   const savePassword = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -40,9 +51,7 @@ export default function CreateAccount() {
     };
     const loginData = {
       ...formData,
-      email:
-        history.location.search.split('email=') &&
-        history.location.search.split('email=')[1],
+      email: params.email,
     };
 
     resetPassword(data).then((response) => {
@@ -56,129 +65,209 @@ export default function CreateAccount() {
     });
   };
 
+  const onSubmit = (data) => {
+    setIsLoading({ loader: true, type: 'button' });
+    const detail = {
+      ...data,
+      is_reassigned: true,
+    };
+
+    updateOnBoardCustomer(params.id, detail).then((response) => {
+      if (response && response.status === 200) {
+        setIsLoading({ loader: false, type: 'button' });
+        setShowSuccessMsg(true);
+      }
+      if (
+        (response && response.status === 400) ||
+        (response && response.status === 403)
+      ) {
+        setShowSuccessMsg(false);
+        setApiError(response && response.data);
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
+  };
+
+  const getHTML = (type) => {
+    if (type === 'confirm_email') {
+      return register({
+        required: {
+          value: true,
+          message: 'This field is required.',
+        },
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+          message: 'Invalid email address.',
+        },
+        validate: (value) =>
+          value === watch('re_assigned_user_email') ||
+          'The Email IDs do not match!',
+      });
+    }
+    if (type === 're_assigned_user_email') {
+      return register({
+        required: {
+          value: true,
+          message: 'This field is required.',
+        },
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+          message: 'Invalid email address.',
+        },
+      });
+    }
+    return register({
+      required: {
+        value: true,
+        message: 'This field is required.',
+      },
+    });
+  };
+
   return (
     <>
-      <UnauthorizedHeader />
-      <LoadingBar color="#FF5933" progress="25" />
-      <BackToStep>
-        {' '}
-        <div role="presentation" className="back-link">
-          <img
-            src={LeftArrowIcon}
-            alt="aarow-back"
-            className="arrow-back-icon "
-          />
-          Back a step
-        </div>
-      </BackToStep>
+      {/* <UnauthorizedHeader /> */}
+      <NavigationHeader bar="25" backStep={showSuccessMsg ? '' : '1'} />
       <OnBoardingBody>
-        <div className="white-card-base panel">
-          <p className="account-steps m-0">Step 1 of 4</p>
-          <h3 className="page-heading ">
-            Please set your password to create your account.
-          </h3>
-          <p className="info-text-gray m-0 ">
-            If you’d like someone else to administrate the Buy Box Experts
-            account then you can reassign the setup process to them.
-          </p>
-          <ContractFormField className="mt-3">
-            <label htmlFor="email">
-              Email Address
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Enter your  Email address"
-                defaultValue={(params && params.email) || ''}
-                readOnly
-              />
-            </label>
-          </ContractFormField>
-          <ContractFormField className="mt-3">
-            <label htmlFor="password">
-              Password
-              <input
-                className="form-control"
-                type="password"
-                placeholder="Enter your Password"
-                name="password"
-                onChange={(event) => {
-                  setFormData({ [event.target.name]: event.target.value });
-                  setApiError({
-                    [event.target.name]: '',
-                  });
-                }}
-              />
-            </label>
-          </ContractFormField>
-          <ErrorMsg>
-            {(apiError && apiError.password && apiError.password[0]) ||
-              (apiError && apiError.key && apiError.key[0])}
-          </ErrorMsg>
-          <Button
-            className="btn-primary w-100 mt-4"
-            onClick={() => savePassword()}>
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#FFF" type="button" />
-            ) : (
-              'Continue'
-            )}
-          </Button>
-        </div>
-        {/* Re-assign account setup */}
-        {/* <div className="white-card-base panel">
-          <h3 className="page-heading ">Re-assign account setup</h3>
-          <p className="information-text m-0 ">
-            <div className="hi-name">
-              {' '}
+        {!assignTo ? (
+          <div className="white-card-base panel">
+            <p className="account-steps m-0">Step 1 of 4</p>
+            <h3 className="page-heading ">
+              Please set your password to create your account.
+            </h3>
+            <p className="info-text-gray m-0 ">
               If you’d like someone else to administrate the Buy Box Experts
               account then you can reassign the setup process to them.
-            </div>
+            </p>
+            <ContractFormField className="mt-3">
+              <label htmlFor="email">
+                Email Address
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Enter your  Email address"
+                  defaultValue={(params && params.email) || ''}
+                  readOnly
+                />
+              </label>
+            </ContractFormField>
+            <ContractFormField className="mt-3">
+              <label htmlFor="password">
+                Password
+                <input
+                  className="form-control"
+                  type="password"
+                  placeholder="Enter your Password"
+                  name="password"
+                  onChange={(event) => {
+                    setFormData({ [event.target.name]: event.target.value });
+                    setApiError({
+                      ...apiError,
+                      [event.target.name]: '',
+                    });
+                  }}
+                />
+              </label>
+            </ContractFormField>
+            <ErrorMsg>
+              {(apiError && apiError.password && apiError.password[0]) ||
+                (apiError && apiError.key && apiError.key[0])}
+            </ErrorMsg>
+            <Button
+              className="btn-primary w-100 mt-4"
+              onClick={() => savePassword()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#FFF" type="button" />
+              ) : (
+                'Continue'
+              )}
+            </Button>
+          </div>
+        ) : (
+          <>
+            {showSuccessMsg ? (
+              <div className="white-card-base">
+                <h3 className="page-heading ">Account Setup Reassigned</h3>
+                <p className="information-text m-0 ">
+                  You have successfully reassigned the account setup process to
+                  the following email address:
+                </p>
+                <div className="complete-steps mb-2">
+                  newton@ashersapparel.com
+                </div>
+                <p className="reach-out m-0 ">
+                  If you need any assistance please reach out to
+                  <br />
+                  <a
+                    className="reach-out-link"
+                    target="_BLANK"
+                    rel="noopener noreferrer"
+                    href="https://www.buyboxexperts.com/">
+                    onboarding@buyboxexperts.com
+                  </a>
+                </p>
+              </div>
+            ) : (
+              <div className="white-card-base panel">
+                <h3 className="page-heading ">Re-assign account setup</h3>
+                <p className="information-text m-0 ">
+                  <div className="hi-name">
+                    {' '}
+                    If you’d like someone else to administrate the Buy Box
+                    Experts account then you can reassign the setup process to
+                    them.
+                  </div>
 
-            <span className="note">
-              Note: Only the nominated email address will be able to add and
-              remove access for other members of your team.
-            </span>
-          </p>
-          <ContractFormField className="">
-            <label>
-              Email Address
-              <input className="form-control" />
-            </label>
-          </ContractFormField>
-          <ContractFormField className="mt-3">
-            <label>
-              Confirm Email Address
-              <input className="form-control" />
-            </label>
-          </ContractFormField>
-          <Button className="btn-primary w-100 mt-4">Confirm</Button>
-        </div> */}
-        {/* Re-assign account setup */}
-        {/* <div className="white-card-base">
-          <h3 className="page-heading ">Account Setup Reassigned</h3>
-          <p className="information-text m-0 ">
-            You have successfully reassigned the account setup process to the
-            following email address:
-          </p>
-          <div className="complete-steps mb-2">newton@ashersapparel.com</div>
-          <p className="reach-out m-0 ">
-            If you need any assistance please reach out to
-            <br />
-            <a className="reach-out-link" href="*">
-              onboarding@buyboxexperts.com
-            </a>
-          </p>
-        </div> */}
+                  <span className="note">
+                    Note: Only the nominated email address will be able to add
+                    and remove access for other members of your team.
+                  </span>
+                </p>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {newDetails.map((item) => (
+                    <ContractFormField key={item.key} className="mt-3">
+                      <label htmlFor={item.key}>
+                        {item.label}
+                        <br />
+                        <input
+                          className={
+                            errors && errors.email
+                              ? 'form-control'
+                              : 'form-control mt-2'
+                          }
+                          type="text"
+                          placeholder={`Enter ${item.label}`}
+                          onChange={() =>
+                            setApiError({
+                              ...apiError,
+                              detail: '',
+                            })
+                          }
+                          id={item.key}
+                          name={item.key}
+                          ref={getHTML(item.key)}
+                        />
+                      </label>
+                      <ErrorMsg>
+                        {errors && errors[item.key] && errors[item.key].message}
+                      </ErrorMsg>
+                    </ContractFormField>
+                  ))}
+                  <ErrorMsg>{apiError && apiError.detail}</ErrorMsg>
+                  <Button className="btn-primary w-100 mt-4">
+                    {' '}
+                    {isLoading.loader && isLoading.type === 'button' ? (
+                      <PageLoader color="#FFF" type="button" />
+                    ) : (
+                      'Confirm'
+                    )}
+                  </Button>
+                </form>
+              </div>
+            )}
+          </>
+        )}
       </OnBoardingBody>
     </>
   );
 }
-
-const BackToStep = styled.div`
-  position: fixed;
-  background-color: ${Theme.white};
-  z-index: 2;
-  padding: 20px 0px 20px 25px;
-  width: 100%;
-  border-bottom: 1px solid ${Theme.gray5};
-`;

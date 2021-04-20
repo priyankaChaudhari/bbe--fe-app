@@ -1,20 +1,57 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import { Button, OnBoardingBody } from '../../common';
+import queryString from 'query-string';
+
+import { Button, OnBoardingBody, UnauthorizedHeader } from '../../common';
 import { PATH_CREATE_PASSWORD } from '../../constants';
 import { LockFinish, OrangeCheckMark } from '../../theme/images';
 
 export default function Info() {
+  const history = useHistory();
+  const params = queryString.parse(history.location.search);
+
+  const redirect = (type) => {
+    if (type === 'continue') {
+      const stringified =
+        queryString &&
+        queryString.stringify({
+          ...params,
+          type: 'continue',
+        });
+
+      history.push({
+        pathname: PATH_CREATE_PASSWORD,
+        search: stringified,
+      });
+    }
+    if (type === 'assign') {
+      const stringified =
+        queryString &&
+        queryString.stringify({
+          ...params,
+          type: 'new',
+        });
+
+      history.push({
+        pathname: PATH_CREATE_PASSWORD,
+        search: stringified,
+      });
+    }
+  };
+
   return (
     <OnBoardingBody>
-      {' '}
+      <UnauthorizedHeader />{' '}
       <div className="white-card-base">
         <img className="lock-finish" src={LockFinish} alt="lock" />
         <p className="account-steps m-0">Step 1 of 4</p>
         <h3 className="page-heading ">Create your account</h3>
         <p className="information-text m-0 ">
-          <div className="hi-name"> Hi Newton,</div>
+          <div className="hi-name">
+            {' '}
+            Hi {(params && params.name) || 'Customer'},
+          </div>
           We need some essential information in order to set up your account on
           Buy Box Experts NEXT. We hate paperwork so we ask for as little as
           necessary to get going.
@@ -40,16 +77,18 @@ export default function Info() {
             Details of co-workers that will help manage the account
           </li>
         </ul>
-        <Link to={PATH_CREATE_PASSWORD}>
-          <Button className="btn-primary w-100 mb-3">
-            Continue to account creation
-          </Button>
-        </Link>
-        <Link to={PATH_CREATE_PASSWORD}>
-          <Button className="btn-transparent w-100">
-            Assign to someone else
-          </Button>
-        </Link>
+
+        <Button
+          className="btn-primary w-100 mb-3"
+          onClick={() => redirect('continue')}>
+          Continue to account creation
+        </Button>
+
+        <Button
+          className="btn-transparent w-100"
+          onClick={() => redirect('assign')}>
+          Assign to someone else
+        </Button>
       </div>
     </OnBoardingBody>
   );

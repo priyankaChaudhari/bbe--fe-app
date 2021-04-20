@@ -1,5 +1,4 @@
 // Auth
-
 export const API_LOGIN = '/login';
 export const API_FORGOT_PASSWORD = '/request-password-reset/';
 export const API_RESET_PASSWORD = '/reset-password/';
@@ -33,6 +32,11 @@ export const API_ADDITIONAL_SERVICE_BULK_UPDATE = `${API_ADDITIONAL_SERVICES}bul
 export const API_SEND_REMINDER = `${API_CUSTOMER_CONTRACT}send-reminder/`;
 export const API_SIGNATURE_STATUS = `${API_CUSTOMER_CONTRACT}check-signature-status/`;
 export const API_SERVICE_TYPE = '/type-of-services/';
+export const API_CONTRACT_DOCUMENT = `${API_CONTACT}contract-pdf/`;
+export const API_CREATE_ADDENDUM = '/contract-data/';
+export const API_TRANSACTION_DATA = '/transactional-data/';
+export const API_CONTRACT_DESIGN = `${API_TRANSACTION_DATA}contract-design/`;
+export const API_TRANSACTIONAL_SIGN_URL = `/sign-url/`;
 
 // Knowledge Base
 export const API_KNOWLEDGE_BASE = '/knowledge/';
@@ -43,11 +47,8 @@ export const API_ARTICLE_SEARCH = `${API_KNOWLEDGE_BASE}search/`;
 export const API_UPDATE_ARTICLE = `${API_KNOWLEDGE_BASE}suggest-update/`;
 export const API_CREATE_ARTICLE = `${API_KNOWLEDGE_BASE}suggest-idea/`;
 
-export const API_CONTRACT_DOCUMENT = `${API_CONTACT}contract-pdf/`;
-export const API_CREATE_ADDENDUM = '/contract-data/';
-export const API_TRANSACTION_DATA = '/transactional-data/';
-export const API_CONTRACT_DESIGN = `${API_TRANSACTION_DATA}contract-design/`;
-export const API_TRANSACTIONAL_SIGN_URL = `/sign-url/`;
+// Onboarding Customer
+export const API_ONBOARD_CUSTOMER = '/customer-onboarding/';
 
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,

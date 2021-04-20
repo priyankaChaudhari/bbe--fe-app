@@ -38,6 +38,10 @@ export const userDetails = [
     placeholder: 'Enter First name',
     type: 'text',
     section: 1,
+    pattern: {
+      value: /^[0-9a-zA-Z ]*$/i,
+      message: 'Special characters are not allowed.',
+    },
   },
 
   {
@@ -57,6 +61,10 @@ export const userDetails = [
     placeholder: 'Enter Last name',
     type: 'text',
     section: 2,
+    pattern: {
+      value: /^[0-9a-zA-Z ]*$/i,
+      message: 'Special characters are not allowed.',
+    },
   },
   {
     key: 'phone_number',
