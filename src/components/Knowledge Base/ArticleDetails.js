@@ -214,8 +214,15 @@ export default function ArticleDetails() {
     const toSend = pickBy(
       {
         event: 'kb-article-content-load',
-        'kb-collection': selectedArticle.collection.name,
-        'kb-board': selectedArticle.boards[0].title,
+        'kb-collection':
+          selectedArticle &&
+          selectedArticle.collection &&
+          selectedArticle.collection.name,
+        'kb-board':
+          selectedArticle &&
+          selectedArticle.boards &&
+          selectedArticle.boards[0] &&
+          selectedArticle.boards[0].title,
         'kb-section': section && section.title,
         'kb-article': selectedArticle.preferredPhrase,
       },

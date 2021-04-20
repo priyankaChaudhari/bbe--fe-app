@@ -245,11 +245,13 @@ export default function NewCustomerList() {
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
+
       setFilters({
         ...filters,
         status: [],
         contract_status: [],
         contract_type: [],
+        user: [],
       });
     }
 

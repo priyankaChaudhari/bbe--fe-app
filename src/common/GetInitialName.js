@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const getInitials = (userInfo, type) => {
   if (type === 'list') {
-    return userInfo.match(/\b(\w)/g).join('');
+    return userInfo && userInfo.match(/\b(\w)/g).join('');
   }
   const firstName =
     (userInfo && userInfo.first_name && userInfo.first_name.charAt(0)) || '';
