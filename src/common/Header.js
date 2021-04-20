@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 import { ToastContainer } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive';
 
 import Theme from '../theme/Theme';
 import {
@@ -53,7 +54,8 @@ export default function Header() {
   const [showArticle, setShowArticle] = useState(false);
   const [showArticleSuccess, setShowArticleSuccess] = useState(false);
   const [formData, setFormData] = useState({});
-
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const profilePic =
     userInfo.documents &&
     userInfo.documents[0] &&
@@ -98,6 +100,11 @@ export default function Header() {
     }
   });
 
+  if (isTablet || isMobile) {
+    $('#idea').hide();
+  } else {
+    $('#idea').show();
+  }
   // window.addEventListener('click', (e) => {
   //   if (document.getElementById('clickNotification').contains(e.target)) {
   //     setShowNotification(true);
