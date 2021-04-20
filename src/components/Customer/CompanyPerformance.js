@@ -767,6 +767,50 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return null;
   };
 
+  const renderTooltip = (current, previous) => {
+    if (selectedValue === 'custom') {
+      return (
+        <div className="custom-tooltip">
+          <p className="label-1">
+            {activeSales === 'revenue'
+              ? `${activeSales} (${currency})`
+              : activeSales}
+          </p>
+          <p className="label-1">
+            {activeSales === 'revenue'
+              ? `${currencySymbol}${current}`
+              : activeSales === 'conversion'
+              ? `${current}%`
+              : current}
+          </p>
+        </div>
+      );
+    }
+    return (
+      <div className="custom-tooltip">
+        <p className="label-1">
+          {activeSales === 'revenue'
+            ? `${activeSales} (${currency})`
+            : activeSales}
+        </p>
+        <p className="label-1">
+          {activeSales === 'revenue'
+            ? `${currencySymbol}${current}`
+            : activeSales === 'conversion'
+            ? `${current}%`
+            : current}
+        </p>
+        <p className="label-2">
+          {activeSales === 'revenue'
+            ? `vs ${currencySymbol}${previous}`
+            : activeSales === 'conversion'
+            ? `vs ${previous}%`
+            : `vs ${previous}`}
+        </p>
+      </div>
+    );
+  };
+
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       if (payload.length === 2) {
@@ -776,71 +820,78 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         const previous = payload[1].value
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return (
-          <div className="custom-tooltip">
-            <p className="label-1">
-              {activeSales === 'revenue'
-                ? `${activeSales} (${currency})`
-                : activeSales}
-            </p>
-            <p className="label-1">
-              {activeSales === 'revenue'
-                ? `${currencySymbol}${current}`
-                : current}
-            </p>
-            <p className="label-2">
-              {activeSales === 'revenue'
-                ? `vs ${currencySymbol}${previous}`
-                : previous}
-            </p>
-          </div>
-        );
+        return renderTooltip(current, previous);
+        // <div className="custom-tooltip">
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${activeSales} (${currency})`
+        //       : activeSales}
+        //   </p>
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${currencySymbol}${current}`
+        //       : activeSales === 'conversion' ? `${current}%` : current}
+        //   </p>
+        //   <p className="label-2">
+        //     {activeSales === 'revenue'
+        //       ? `vs ${currencySymbol}${previous}`
+        //       : activeSales === 'conversion' ? `vs ${previous}%` : `vs ${previous}`}
+        //   </p>
+        // </div>
       }
       if (payload.length === 1 && payload[0].dataKey === ' $') {
         const current = payload[0].value
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return (
-          <div className="custom-tooltip">
-            <p className="label-1">
-              {activeSales === 'revenue'
-                ? `${activeSales} (${currency})`
-                : activeSales}
-            </p>
-            <p className="label-1">
-              {activeSales === 'revenue'
-                ? `${currencySymbol}${current}`
-                : current}
-            </p>
-            <p className="label-2">
-              {activeSales === 'revenue'
-                ? `vs ${currencySymbol}0.00`
-                : 'vs 0.00'}
-            </p>
-          </div>
-        );
+        return renderTooltip(current, '0.00');
+        // <div className="custom-tooltip">
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${activeSales} (${currency})`
+        //       : activeSales}
+        //   </p>
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${currencySymbol}${current}`
+        //       : activeSales === 'conversion'
+        //       ? `${current}%`
+        //       : current}
+        //   </p>
+        //   <p className="label-2">
+        //     {activeSales === 'revenue'
+        //       ? `vs ${currencySymbol}0.00`
+        //       : activeSales === 'conversion'
+        //       ? `vs 0.00%`
+        //       : 'vs 0.00'}
+        //   </p>
+        // </div>
       }
       if (payload.length === 1 && payload[0].dataKey === 'vs $') {
         const previous = payload[0].value
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return (
-          <div className="custom-tooltip">
-            <p className="label-1">
-              {activeSales === 'revenue'
-                ? `${activeSales} (${currency})`
-                : activeSales}
-            </p>
-            <p className="label-1">
-              {activeSales === 'revenue' ? `${currencySymbol}0.00` : '0.00'}
-            </p>
-            <p className="label-2">
-              {activeSales === 'revenue'
-                ? `vs ${currencySymbol}${previous}`
-                : previous}
-            </p>
-          </div>
-        );
+        return renderTooltip('0.00', previous);
+        // <div className="custom-tooltip">
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${activeSales} (${currency})`
+        //       : activeSales}
+        //   </p>
+        //   <p className="label-1">
+        //     {activeSales === 'revenue'
+        //       ? `${currencySymbol}0.00`
+        //       : activeSales === 'conversion'
+        //       ? `0.00%`
+        //       : '0.00'}
+        //   </p>
+        //   <p className="label-2">
+        //     {activeSales === 'revenue'
+        //       ? `vs ${currencySymbol}${previous}`
+        //       : activeSales === 'conversion'
+        //       ? `vs ${previous}%`
+        //       : `vs ${previous}`}
+        //   </p>
+        // </div>
       }
     }
     return null;
