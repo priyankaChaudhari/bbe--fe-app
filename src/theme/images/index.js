@@ -145,6 +145,7 @@ import BillingIcon from './icons/billing-icon.png';
 import ArrowRightIcon from './icons/arrow-right-icon.png';
 import ArrowRightBlackIcon from './icons/arrow-right-black-icon.png';
 import DspOnlyIcon from './icons/dsp-only-icon.png';
+import ThadProfileImg from './thad.png';
 
 export {
   BannerBg,
@@ -294,4 +295,5 @@ export {
   ArrowRightBlackIcon,
   WhiteCheckMark,
   DspOnlyIcon,
+  ThadProfileImg,
 };

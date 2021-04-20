@@ -73,6 +73,14 @@ const ModalBox = styled.div`
           width: 16px;
         } 
       }
+       .default-user-activity {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          float: left;
+          margin-right: 15px;
+          margin-top: -2px;
+        }
        @media not all and (min-resolution:.001dpcm)
       { @supports (-webkit-appearance:none) {
           .modal-heading{ 

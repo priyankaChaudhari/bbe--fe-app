@@ -11,7 +11,7 @@ import {
   FormField,
   ErrorMsg,
   CheckBox,
-  GetInitialName,
+  // GetInitialName,
   ModalRadioCheck,
   PageLoader,
   ContractFormField,
@@ -23,6 +23,7 @@ import {
   EmailIcon,
   PhoneIcon,
   LeftArrowIcon,
+  ThadProfileImg,
 } from '../../theme/images';
 
 import {
@@ -650,7 +651,14 @@ function RequestSignature({
           <div className="modal-body on-boarding">
             <h4 className="on-boarding mb-4">Request Approval</h4>
             <div className="edit-profile-text float-left mb-4">
-              <GetInitialName property="mr-3" />
+              {/* <GetInitialName property="mr-3" /> */}
+
+              <img
+                src={ThadProfileImg}
+                className="default-user-activity"
+                alt="pic"
+              />
+
               <div className="name-email">
                 <div className="team-member-name">Thaddeus Hay</div>
                 <span> thay@buyboxexperts.com</span>
