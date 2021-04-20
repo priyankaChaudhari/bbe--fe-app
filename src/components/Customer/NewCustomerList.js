@@ -668,35 +668,29 @@ export default function NewCustomerList() {
                       className="close-icon d-xl-none d-block cursor">
                       <img width="25px" src={CloseIcon} alt="cross" />
                     </label>
-                    <div className="label">Brand Strategist</div>
-                    <DropDownSelect className="w-250">
-                      {generateDropdown('user')}
-                    </DropDownSelect>
-                    <div className="row mt-4 pt-2">
-                      <div className="col-6 pr-0">
-                        <div className="label">Customer Status</div>
+                    <div className="row mt-2 mb-4">
+                      <div className="col-4">
+                        <div className="customer-list-filter">Filters</div>
                       </div>
-                      <div className="col-3 p-0">
+                      <div className="col-8 text-right">
                         <div
-                          className="selected uncheck-all"
-                          onClick={(event) =>
-                            handleFilters(event, 'selected', 'status')
-                          }
-                          role="presentation">
-                          Select all
-                        </div>
-                      </div>
-                      <div className="col-3 p-0">
-                        <div
-                          className="unselected uncheck-all"
+                          className="clear-filter"
                           onClick={(event) =>
                             handleFilters(event, 'unselected', 'status')
                           }
                           role="presentation">
-                          Unselect all
+                          {' '}
+                          Clear filters
                         </div>
                       </div>
                     </div>
+                    <div className="label">Brand Strategist</div>
+                    <DropDownSelect className="w-250">
+                      {generateDropdown('user')}
+                    </DropDownSelect>
+
+                    <div className="label mt-4 pt-2">Customer Status</div>
+
                     <div className="clear-fix" />
                     {!isDesktop ? (
                       <ul className="check-box-list checkboxes">
@@ -766,39 +760,7 @@ export default function NewCustomerList() {
                     {!isDesktop ? (
                       <>
                         {' '}
-                        <div className="row mt-4 pt-2">
-                          <div className="col-6 pr-0">
-                            <div className="label">Contract Status</div>
-                          </div>
-                          <div className="col-3 p-0">
-                            <div
-                              className="selected uncheck-all-contract"
-                              onClick={(event) =>
-                                handleFilters(
-                                  event,
-                                  'selected',
-                                  'contract_status',
-                                )
-                              }
-                              role="presentation">
-                              Select all
-                            </div>
-                          </div>
-                          <div className="col-3 p-0">
-                            <div
-                              className="unselected uncheck-all-contract"
-                              onClick={(event) =>
-                                handleFilters(
-                                  event,
-                                  'unselected',
-                                  'contract_status',
-                                )
-                              }
-                              role="presentation">
-                              Unselect all
-                            </div>
-                          </div>
-                        </div>
+                        <div className="label mt-4 pt-2">Contract Status</div>
                         <div className="clear-fix" />
                         <ul className="check-box-list checkboxes-contract">
                           {contractStatus.map((item) => (
@@ -890,31 +852,24 @@ export default function NewCustomerList() {
       </div>
 
       <CustomerLeftPannel className="d-none d-lg-block">
+        <div className="row mt-2 mb-4">
+          <div className="col-4">
+            <div className="customer-list-filter">Filters</div>
+          </div>
+          <div className="col-8 text-right">
+            <div
+              className="clear-filter"
+              onClick={(event) => handleFilters(event, 'unselected', 'status')}
+              role="presentation">
+              Clear filters
+            </div>
+          </div>
+        </div>
         <div className="label mt-2 mb-2">Brand Strategist</div>
         <DropDownSelect className="w-250">
           {generateDropdown('user')}
         </DropDownSelect>{' '}
-        <div className="row mt-4 pt-2">
-          <div className="col-6 pr-0">
-            <div className="label">Customer Status</div>
-          </div>
-          <div className="col-3 p-0">
-            <div
-              className="selected uncheck-all"
-              onClick={(event) => handleFilters(event, 'selected', 'status')}
-              role="presentation">
-              Select all
-            </div>
-          </div>
-          <div className="col-3 p-0">
-            <div
-              className="unselected uncheck-all"
-              onClick={(event) => handleFilters(event, 'unselected', 'status')}
-              role="presentation">
-              Unselect all
-            </div>
-          </div>
-        </div>
+        <div className="label mt-4 pt-2">Customer Status</div>
         <div className="clear-fix" />
         <ul className="check-box-list checkboxes">
           {status &&
@@ -961,31 +916,7 @@ export default function NewCustomerList() {
             </li>
           ))}
         </ul>
-        <div className="row mt-4 pt-2">
-          <div className="col-6 pr-0">
-            <div className="label">Contract Status</div>
-          </div>
-          <div className="col-3 p-0">
-            <div
-              className="selected uncheck-all-contract"
-              onClick={(event) =>
-                handleFilters(event, 'selected', 'contract_status')
-              }
-              role="presentation">
-              Select all
-            </div>
-          </div>
-          <div className="col-3 p-0">
-            <div
-              className="unselected uncheck-all-contract"
-              onClick={(event) =>
-                handleFilters(event, 'unselected', 'contract_status')
-              }
-              role="presentation">
-              Unselect all
-            </div>
-          </div>
-        </div>
+        <div className="label mt-4 pt-2">Contract Status</div>
         <div className="clear-fix" />
         <ul className="check-box-list checkboxes-contract">
           {contractStatus.map((item) => (
@@ -1450,20 +1381,30 @@ const CustomerLeftPannel = styled.div`
     }
   }
 
-  .unselected {
+  // .unselected {
+  //   color: ${Theme.gray40};
+  //   font-size: 14px;
+  //   float: right;
+  //   cursor: pointer;
+  // }
+  // .selected {
+  //   float: right;
+  //   color: ${Theme.gray40};
+  //   border-right: 2px solid ${Theme.gray4};
+  //   padding-right: 8px;
+  //   cursor: pointer;
+  // }
+  .customer-list-filter {
+    color: ${Theme.black};
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .clear-filter {
     color: ${Theme.gray40};
-    font-size: 14px;
-    float: right;
+    font-size: ${Theme.extraNormal};
+    font-family: ${Theme.baseFontFamily};
     cursor: pointer;
   }
-  .selected {
-    float: right;
-    color: ${Theme.gray40};
-    border-right: 2px solid ${Theme.gray4};
-    padding-right: 8px;
-    cursor: pointer;
-  }
-
   .btn-apply {
     color: ${Theme.white};
     bottom: 20px;
@@ -1524,6 +1465,17 @@ const MobileLeftSidebar = styled.div`
     }
     .content-header {
       padding: 30px 30px 10px !important;
+    }
+    .customer-list-filter {
+      color: ${Theme.black};
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .clear-filter {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+      font-family: ${Theme.baseFontFamily};
+      cursor: pointer;
     }
   }
   @media only screen and (max-width: 767px) {

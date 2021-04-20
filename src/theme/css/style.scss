@@ -1601,3 +1601,13 @@ text.cust-label-avg {
   height: 24px;
   color: $black-color;
 }
+
+.loader-bar {
+  top: 68px !important;
+  height: 4px !important;
+  div {
+    div {
+      box-shadow: none !important;
+    }
+  }
+}

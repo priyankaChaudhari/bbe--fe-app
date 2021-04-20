@@ -33,7 +33,7 @@ export default function NavigationHeader({ bar, backStep, skipStep }) {
 
   return (
     <>
-      <LoadingBar color="#FF5933" height="4px" progress={bar} />
+      <LoadingBar className="loader-bar" color="#FF5933" progress={bar} />
       <BackToStep>
         <div className="container-fluid">
           {' '}
