@@ -54,13 +54,13 @@ export default function NavigationHeader({
           <div className="container-fluid">
             {' '}
             <div className="row">
-              <div className="col-6">
-                {' '}
-                {backStep ? (
+              {backStep ? (
+                <div className="col-6">
+                  {' '}
                   <div
                     role="presentation"
                     className="back-link"
-                    onClick={() => redirect('back')}>
+                    onClick={() => redirect()}>
                     <img
                       src={LeftArrowIcon}
                       alt="aarow-back"
@@ -68,14 +68,14 @@ export default function NavigationHeader({
                     />
                     Back a step
                   </div>
-                ) : (
-                  ''
-                )}
-              </div>
+                </div>
+              ) : (
+                ''
+              )}
               {skipStep ? (
                 <div
                   className="col-6 text-right"
-                  onClick={() => redirect('skip')}
+                  onClick={() => redirect()}
                   role="presentation">
                   <div className="skip-steps pr-2">Skip this step</div>
                 </div>
