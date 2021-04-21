@@ -15,19 +15,35 @@ const Table = styled.table`
   //   height: 54px;
   // }
 
+  tbody {
+    position: relative;
+    z-index: -1;
+
+    // &:nth-child(1) {
+    //   padding-top: 50px !important;
+    //   color: red !important;
+    // }
+  } 
+
+  thead.sticky {
+    position: fixed;
+    margin-top: -7px;
+  }
+
+  td {
+    padding-top: 50px !important;
+    padding-bottom: 0px !important;
+  }
+
   tr {
     text-align: left;
     background: ${Theme.white};
     border: 1px solid rgba(46, 91, 255, 0.08);
     border-radius: 1px;
-    font-family: ${Theme.baseFontFamily};
     width: 100%;
 
-    &.table-header {
-      box-shadow: none;
-      // display: table;
-      // position: fixed;
-      // width: 75%;
+      
+
 
       th {
         font-family: ${Theme.baseFontFamily};
@@ -36,6 +52,15 @@ const Table = styled.table`
         font-size: 11px;
         border-bottom: 1px solid ${Theme.gray7};
         padding: 13px;
+        padding-right:52px;
+
+        &.Active_Contracts {
+          width: 60%;
+        }
+
+        &.Revenue {
+          width: 15%;
+        }
 
         &.customer-header {
           padding-left: 66px;
@@ -52,6 +77,7 @@ const Table = styled.table`
       font-weight: 600;
       vertical-align: top;
 
+
       .company-logo {
         border-radius: 10px;
         width: 45px;
@@ -59,6 +85,8 @@ const Table = styled.table`
         margin-right: 14px;
         float: left;
       }
+
+
       .company-name {
         min-height: 20px;
       }
@@ -68,6 +96,7 @@ const Table = styled.table`
         font-size: ${Theme.extraNormal};
         font-weight: 300;
       }
+
       .user-profile-circle {
         border-radius: 50%;
         width: 40px;
@@ -75,14 +104,17 @@ const Table = styled.table`
         margin-right: 14px;
         float: left;
       }
+
       .user-name {
         font-weight: 300;
         margin-top: 0;
       }
+
       .user-email {
         font-size: 15px;
         font-weight: 300;
       }
+
       .increase-rate {
         color: ${Theme.lighterGreen};
         font-size: ${Theme.extraNormal};

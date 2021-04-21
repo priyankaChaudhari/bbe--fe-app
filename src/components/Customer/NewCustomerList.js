@@ -933,16 +933,19 @@ export default function NewCustomerList() {
                 <PageLoader color="#FF5933" type="page" />
               ) : (
                 <Table>
-                  <thead>
+                  <thead className="sticky">
                     <tr className="table-header">
                       <th className="customer-header">Customer</th>
-                      <th>
+                      <th
+                        className={
+                          showPerformance ? 'Revenue' : 'Active_Contracts'
+                        }>
                         {showPerformance ? 'Revenue' : 'Active Contracts'}
                       </th>
-                      {showPerformance ? <th>Units Sold</th> : null}
-                      {showPerformance ? <th>Traffic</th> : null}
-                      {showPerformance ? <th>Conversion</th> : null}
-                      <th>Brand Strategist</th>
+                      {showPerformance ? <th width="15%">Units Sold</th> : null}
+                      {showPerformance ? <th width="15%">Traffic</th> : null}
+                      {showPerformance ? <th width="15%">Conversion</th> : null}
+                      <th width="15%">Brand Strategist</th>
                     </tr>
                   </thead>
                   <tbody>
