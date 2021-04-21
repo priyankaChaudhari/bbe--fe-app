@@ -30,6 +30,7 @@ import ActionDropDown from './ActionDropDown';
 import UnauthorizedHeader from './UnauthorizedHeader';
 import OnBoardingBody from './OnBoarding';
 import CheckBoxList from './CheckBoxList';
+import BackToTop from './BackToTop';
 
 export {
   Button,
@@ -64,4 +65,5 @@ export {
   UnauthorizedHeader,
   OnBoardingBody,
   CheckBoxList,
+  BackToTop,
 };

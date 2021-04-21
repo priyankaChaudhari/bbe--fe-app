@@ -53,7 +53,6 @@ const Theme = {
   gray15: ' #f9faff',
   gray12: '#e2e5ef',
   gray11: '#e0e6e8',
-  gray10: '#f9faff',
   gray9: '#dee2ed',
   gray8: '#F4F6FC',
   gray7: '#e4e8f0',

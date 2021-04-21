@@ -12,8 +12,14 @@ import $ from 'jquery';
 import Theme from '../../theme/Theme';
 import { getArticleBoards, updateArticle } from '../../api';
 import { PATH_ARTICLE_LIST } from '../../constants';
-import { Button, ModalBox, FormField, PageLoader } from '../../common';
-import { CloseIcon, LeftArrowIcon, ArrowUp } from '../../theme/images/index';
+import {
+  Button,
+  ModalBox,
+  FormField,
+  PageLoader,
+  BackToTop,
+} from '../../common';
+import { CloseIcon, LeftArrowIcon } from '../../theme/images/index';
 import ArticleSearch from './ArticleSearch';
 
 const customStyles = {
@@ -603,17 +609,7 @@ export default function ArticleDetails() {
                     ''
                   )}
                 </div>
-                <div className=" text-center d-lg-none d-md-block ">
-                  <div
-                    className="back-to-top"
-                    onClick={() =>
-                      window.scrollTo({ top: 0, behavior: 'smooth' })
-                    }
-                    role="presentation">
-                    {' '}
-                    <img src={ArrowUp} alt="" /> Back to top
-                  </div>
-                </div>
+                <BackToTop />
               </div>
             </div>
           </div>
@@ -625,36 +621,10 @@ export default function ArticleDetails() {
 
 const GrayBody = styled.div`
   .graycontainer-fluid {
-    width: 98%;
+    // width: 98%;
     margin: 0 auto;
-    padding-left: 64px;
+    padding-left: 79px;
   }
-  .back-to-top {
-    position: relative;
-    bottom: -25px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-    padding: 5px 10px;
-    width: 135px;
-    background: #f9faff;
-    display: block;
-    border-radius: 5px;
-    border: 1px solid ${Theme.gray7};
-    color:  ${Theme.gray90};
-    font-size:  ${Theme.normalRes};
-    font-weight: 600;
-    line-height: 39px;
-    margin-top: 30px;
-    cursor: pointer;
-
-    img {
-      width: 19px;
-      vertical-align: text-top;
-      margin-right: 2px;
-    } 
-  }
-
     .drop-down-option {
       width: 100%;
       min-height: 1px;
@@ -779,20 +749,11 @@ const GrayBody = styled.div`
     }
     .article-details-text {
       margin: 0 auto;
-      padding: 0 30px;
+      padding: 0 45px 0 30px;
       overflow-x: auto;
       height: 80vh;
       width: 100%;
     }
-
-    // .graycontainer-fluid {
-    //   width: 98%;
-    //   margin: 0 auto;
-    //   padding-left: 63px;
-    // }
-    // .article-details-text {
-    //   height: 85vh;
-    // }
   }
   @media only screen and (min-width: 1700px) {
     .graycontainer-fluid {
@@ -876,8 +837,6 @@ const ArticleDetail = styled.div`
         padding-left: 10px;
       }
 
-     
-
       &:hover {
         .category {
           border-left: 3px solid ${Theme.orange};
@@ -936,24 +895,23 @@ const ArticleDetail = styled.div`
         .category {
           border-left:none !important;
           padding-left: 10px;
-           font-family: ${Theme.baseFontFamily} !important;
+          font-family: ${Theme.baseFontFamily} !important;
 
            .label { 
-              border-left:none !important;;
+             border-left:none !important;;
            }
-           &:hover {
-            .category {
-              border-left:none !important;
-              font-family: ${Theme.baseFontFamily} !important;
-            }
+            &:hover {
+              .category {
+                border-left:none !important;
+                font-family: ${Theme.baseFontFamily} !important;
+              }
 
-             .label { 
+              .label { 
                 border-left: none !important;
                 font-family: ${Theme.baseFontFamily} !important;
-             }
+              }
             }
-             &.active {
-              
+            &.active {
                 .category {
                   border-left: none !important;
                   font-family: ${Theme.baseFontFamily} !important;
@@ -964,7 +922,7 @@ const ArticleDetail = styled.div`
                   border-left:none !important;
                   font-family: ${Theme.baseFontFamily} !important;
                 }
-             }
+            }
         }
       }
     }

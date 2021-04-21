@@ -27,7 +27,7 @@ import {
   HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
-  ArrowUp,
+
   // BillingIcon,
 } from '../../theme/images/index';
 import { GroupUser, WhiteCard } from '../../theme/Global';
@@ -37,6 +37,7 @@ import {
   GetInitialName,
   DropDownStatus,
   PageNotFound,
+  BackToTop,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -820,17 +821,8 @@ export default function CustomerMainContainer() {
                     )}
                   </div>
                 </CustomerBody>
-                <div className=" text-center d-lg-none d-md-block ">
-                  <div
-                    className="back-to-top"
-                    onClick={() =>
-                      window.scrollTo({ top: 0, behavior: 'smooth' })
-                    }
-                    role="presentation">
-                    {' '}
-                    <img src={ArrowUp} alt="" /> Back to top
-                  </div>
-                </div>
+
+                <BackToTop />
               </CustomerDetailBanner>
 
               <Modal
@@ -922,31 +914,7 @@ const CustomerDetailBanner = styled.div`
       padding: 0 20px;
     }
   }
-  .back-to-top {
-    position: relative;
-    bottom: -25px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-    padding: 5px 10px;
-    width: 135px;
-    background: #f9faff;
-    display: block;
-    border-radius: 5px;
-    border: 1px solid ${Theme.gray7};
-    color: ${Theme.gray90};
-    font-size: ${Theme.normalRes};
-    font-weight: 600;
-    line-height: 39px;
-    margin-top: 30px;
-    cursor: pointer;
 
-    img {
-      width: 19px;
-      vertical-align: text-top;
-      margin-right: 2px;
-    }
-  }
   @media only screen and (max-width: 991px) {
     .banner {
       padding-left: 0;

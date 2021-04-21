@@ -3,7 +3,7 @@ import Theme from '../theme/Theme';
 
 const OnBoardingBody = styled.div`
   background: ${Theme.gray8};
-  height: 100%;
+  min-height: 100%;
   padding: 60px 0px 0 0px;
 
   &.body-white {
@@ -191,6 +191,9 @@ const OnBoardingBody = styled.div`
   }
   .gap-none {
     margin-top: 0;
+  }
+  @media only screen and (max-width: 517px) {
+    padding: 60px 10px 0 10px;
   }
 `;
 

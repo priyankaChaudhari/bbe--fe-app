@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const InputText = styled.input`
   &.form-control {
     color: ${Theme.gray35};
-    border: 1px solid ${Theme.gray10};
+    border: 1px solid ${Theme.gray15};
     border-radius: 5px;
     padding: 4px 10px;
     display: block;
