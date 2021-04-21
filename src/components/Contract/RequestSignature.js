@@ -810,6 +810,7 @@ function RequestSignature({
                     setFormData({});
                     setContactApiError({});
                     setParams('add-new-contact');
+                    setModalName('Add Contact');
                   }}>
                   {' '}
                   <img
