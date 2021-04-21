@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
@@ -45,6 +45,7 @@ import { sortOptions } from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
   const history = useHistory();
+  const selectInputRef = useRef();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
   const [count, setCount] = useState(null);
@@ -82,7 +83,6 @@ export default function NewCustomerList() {
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [expiringSoon, setExpiringSoon] = useState(false);
-
   const IconOption = (props) => (
     <Option {...props}>
       {props.data.icon ? (
@@ -245,7 +245,7 @@ export default function NewCustomerList() {
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
-
+      selectInputRef.current.select.clearValue();
       setFilters({
         ...filters,
         status: [],
@@ -535,7 +535,6 @@ export default function NewCustomerList() {
       </li>
     );
   };
-
   const generateDropdown = (item) => {
     return (
       <>
@@ -543,6 +542,7 @@ export default function NewCustomerList() {
           classNamePrefix="react-select"
           isClearable={false}
           className="active"
+          ref={selectInputRef}
           placeholder={getSelectPlaceholder(item)}
           options={
             item === 'user'
