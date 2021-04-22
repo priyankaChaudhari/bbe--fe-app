@@ -202,8 +202,11 @@ export default function ArticleDetails() {
         articleData.items[0] &&
         articleData.items[0].type === 'section'
         ? articleData.items[0] &&
-            articleData.items[0].items &&
-            articleData.items[0].items[0].content
+          articleData.items[0].items &&
+          articleData.items[0].items.length &&
+          articleData.items[0].items[0].content
+          ? articleData.items[0].items[0].content
+          : 'No Article Found'
         : articleData.items[0].content;
     }
     //  @Hack (woody): Would be Ideal for the Back-end to give us the section name of an article rather than do this.
