@@ -188,17 +188,20 @@ export default function DSPAddendum({
   const mapDspDetails = () => {
     return `<tr>
         <td style="border: 1px solid black;
-    padding: 13px;">
+    padding: 13px;"><span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
           ${
             firstMonthDate
               ? dayjs(firstMonthDate).format('MM-DD-YYYY')
               : 'MM-DD-YYYY'
           }
+          </span>
         </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
      DSP_FEE
+     </span>
         </td>
       </tr>`;
   };
@@ -249,15 +252,18 @@ export default function DSPAddendum({
     } </th></tr>
     <tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> ${displayFirstMonthFee()}</td>
+    padding: 13px;"> <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";> ${displayFirstMonthFee()} </span></td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
                DSP_FEE
+               </span>
 
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
               DSP_FEE
 
         </td>

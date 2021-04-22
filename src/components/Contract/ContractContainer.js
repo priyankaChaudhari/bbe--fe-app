@@ -1195,8 +1195,8 @@ export default function ContractContainer() {
       <td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
       threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
-    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
-    padding: 13px;">REV_THRESHOLD</td></tr></table>`;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
+    padding: 13px; "> <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>REV_THRESHOLD </span></td></tr></table>`;
     }
     return `<table class="contact-list"  style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
@@ -1211,7 +1211,7 @@ export default function ContractContainer() {
     padding: 13px;">% Of Sales</td><td style="border: 1px solid black;
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
     through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
-    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;"> REVENUE_SHARE</span></td></tr></table>`;
+    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold;"> REVENUE_SHARE</span></td></tr></table>`;
   };
 
   const mapThadSignImg = () => {
@@ -1659,12 +1659,16 @@ export default function ContractContainer() {
     return `<tr>
         <td style="border: 1px solid black;
     padding: 13px;">
+     <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
           ${dayjs(firstMonthDate).format('MM-DD-YYYY')}
+          </span>
         </td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
      DSP_FEE
+     </span>
         </td>
       </tr>`;
   };
@@ -1709,17 +1713,19 @@ export default function ContractContainer() {
     padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
     <tr>
         <td style="border: 1px solid black;
-    padding: 13px;"> ${displayFirstMonthFee()}</td>
+    padding: 13px;"> <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayFirstMonthFee()}</span></td>
         <td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
                DSP_FEE
-
+</span>
         </td><td
           style="border: 1px solid black;
     padding: 13px;">
+    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
               DSP_FEE
-
+</span>
         </td>
       </tr>
       

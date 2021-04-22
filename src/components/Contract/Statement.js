@@ -63,11 +63,11 @@ export default function Statement({
       return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
       </tr><tr><td>% Of Incremental Sales</td>
       <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td>REV_THRESHOLD</td></tr></table> </div>`;
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td> <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"">REV_THRESHOLD </span></td></tr></table> </div>`;
     }
     return `<div class="table-responsive"> <table class="contact-list"><tr><th>Type</th><th>Description</th>
     <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE </span> </td></tr></table></div>`;
+    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> REVENUE_SHARE </span> </td></tr></table></div>`;
   };
 
   const displayNotIncludedServices = () => {
