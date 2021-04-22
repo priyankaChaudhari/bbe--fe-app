@@ -2,11 +2,20 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect, useState, useCallback } from 'react';
+/* eslint-disable camelcase */
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 // import { useMediaQuery } from 'react-responsive';
 // import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 
 import {
   LineChart,
@@ -24,7 +33,6 @@ import {
 } from 'recharts';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
-import { parseInt } from 'lodash';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { getPerformance, getBuyBoxChartData } from '../../api';
@@ -43,7 +51,9 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
 
+am4core.useTheme(am4themes_dataviz);
 export default function CompanyPerformance({ marketplaceChoices, id }) {
+  // const chart = useRef(null);
   const { Option, SingleValue } = components;
   const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
@@ -58,20 +68,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   ]);
 
   const COLORS = ['#97ca61', '#EAEFF2'];
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
+  // const monthNames = [
+  //   'Jan',
+  //   'Feb',
+  //   'Mar',
+  //   'Apr',
+  //   'May',
+  //   'Jun',
+  //   'Jul',
+  //   'Aug',
+  //   'Sep',
+  //   'Oct',
+  //   'Nov',
+  //   'Dec',
+  // ];
 
   // sales performance varibales and BB %
   const currentDate = new Date();
@@ -151,6 +161,78 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       sub: 'Select start and end dates',
     },
   ];
+
+  useLayoutEffect(() => {
+    const chart = am4core.create('chartdiv', am4charts.XYChart);
+    chart.paddingRight = 10;
+    chart.maxZoomLevel = 1;
+    chart.logo.disabled = true;
+    chart.data = lineChartData;
+
+    // render X axis
+    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.renderer.minGridDistance = 50;
+    dateAxis.renderer.grid.template.disabled = true;
+    dateAxis.dy = 10;
+
+    // render y axis
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.grid.template.disabled = true;
+    // console.log('valueAxis', valueAxis);
+    if (activeSales === 'revenue') {
+      valueAxis.numberFormatter = new am4core.NumberFormatter();
+      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#`;
+    }
+
+    // valueAxis.renderer.labels.template.fill = am4core.color("#FF5933");
+
+    // render tooltip
+    const flag = selectedValue !== 'custom';
+    let tooltipHeader = '';
+    let tooltipCurrent = '';
+    let tooltipPrevious = '';
+
+    if (activeSales === 'revenue') {
+      tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
+      tooltipCurrent = `${currencySymbol}{value1}[/]`;
+      tooltipPrevious = flag ? `\nvs: ${currencySymbol}{value2}` : '';
+    } else if (activeSales === 'conversion') {
+      tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+      tooltipCurrent = `{value1}%[/]`;
+      tooltipPrevious = flag ? `\nvs: {value2}%` : '';
+    } else {
+      tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+      tooltipCurrent = `{value1}[/]`;
+      tooltipPrevious = flag ? `\nvs: {value2}` : '';
+    }
+
+    // Create series
+    // series for current data
+    const series = chart.series.push(new am4charts.LineSeries());
+    series.dataFields.valueY = 'value1';
+    series.dataFields.dateX = 'name';
+    series.strokeWidth = 2;
+    series.minBulletDistance = 10;
+    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+    series.stroke = am4core.color('#FF5933');
+
+    // console.log('series', series);
+    // Create series for previous data
+    const series2 = chart.series.push(new am4charts.LineSeries());
+    series2.dataFields.valueY = 'value2';
+    series2.dataFields.dateX = 'name';
+    series2.strokeWidth = 2;
+    series2.stroke = am4core.color('#BFC5D2');
+    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+
+    // Add cursor
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.xAxis = dateAxis;
+
+    return () => {
+      chart.dispose();
+    };
+  }, [lineChartData, activeSales, currency, currencySymbol, selectedValue]);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -310,10 +392,10 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               // trafficTotal.previousTrafficTotal += resData.traffic;
               // conversionTotal.previousConversionTotal += resData.conversion;
               // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              tempRevenueData.push({ 'vs $': resData.revenue });
-              tempTrafficData.push({ 'vs $': resData.traffic });
-              tempUnitsSoldData.push({ 'vs $': resData.units_sold });
-              tempConversionData.push({ 'vs $': resData.conversion });
+              tempRevenueData.push({ value2: resData.revenue });
+              tempTrafficData.push({ value2: resData.traffic });
+              tempUnitsSoldData.push({ value2: resData.units_sold });
+              tempConversionData.push({ value2: resData.conversion });
             });
             // conversionTotal.previousConversionTotal /=
             //   res.data.daily_facts.previous.length;
@@ -337,10 +419,10 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempRevenueData[index].name = dayDate;
                 tempTrafficData[index].name = dayDate;
                 tempConversionData[index].name = dayDate;
-                tempRevenueData[index][' $'] = resData.revenue;
-                tempUnitsSoldData[index][' $'] = resData.units_sold;
-                tempTrafficData[index][' $'] = resData.traffic;
-                tempConversionData[index][' $'] = resData.conversion;
+                tempRevenueData[index].value1 = resData.revenue;
+                tempUnitsSoldData[index].value1 = resData.units_sold;
+                tempTrafficData[index].value1 = resData.traffic;
+                tempConversionData[index].value1 = resData.conversion;
                 conversionTotal.previousConversionTotal +=
                   res.data.daily_facts.previous[index].conversion;
                 revenueTotal.previousRevenueTotal +=
@@ -352,19 +434,19 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               } else {
                 tempRevenueData.push({
                   name: dayDate,
-                  ' $': resData.revenue,
+                  value1: resData.revenue,
                 });
                 tempTrafficData.push({
                   name: dayDate,
-                  ' $': resData.traffic,
+                  value1: resData.traffic,
                 });
                 tempUnitsSoldData.push({
                   name: dayDate,
-                  ' $': resData.units_sold,
+                  value1: resData.units_sold,
                 });
                 tempConversionData.push({
                   name: dayDate,
-                  ' $': resData.conversion,
+                  value1: resData.conversion,
                 });
               }
             });
@@ -511,56 +593,56 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return null;
   };
 
-  const xDataFormater = (date) => {
-    if (date) {
-      if (selectedValue === 'month' && groupBy === 'weekly') {
-        const weekNumber = Math.ceil(dayjs(date).date() / 7);
-        switch (weekNumber) {
-          case 1:
-            return 'Wk1';
-          case 2:
-            return 'Wk2';
-          case 3:
-            return 'Wk3';
-          case 4:
-            return 'Wk4';
-          default:
-            return 'Wk';
-        }
-      }
-      if (selectedValue === 'month' && groupBy === 'daily') {
-        return dayjs(date).format('MMM D');
-      }
-      // if (selectedValue === '30days' && groupBy === 'daily') {
-      //   return dayjs(date).date();
-      // }
-      if (groupBy === 'monthy') {
-        return monthNames[dayjs(date).month()];
-      }
-      return dayjs(date).format('MMM D');
-    }
-    return date;
-  };
+  // const xDataFormater = (date) => {
+  //   if (date) {
+  //     if (selectedValue === 'month' && groupBy === 'weekly') {
+  //       const weekNumber = Math.ceil(dayjs(date).date() / 7);
+  //       switch (weekNumber) {
+  //         case 1:
+  //           return 'Wk1';
+  //         case 2:
+  //           return 'Wk2';
+  //         case 3:
+  //           return 'Wk3';
+  //         case 4:
+  //           return 'Wk4';
+  //         default:
+  //           return 'Wk';
+  //       }
+  //     }
+  //     if (selectedValue === 'month' && groupBy === 'daily') {
+  //       return dayjs(date).format('MMM D');
+  //     }
+  //     // if (selectedValue === '30days' && groupBy === 'daily') {
+  //     //   return dayjs(date).date();
+  //     // }
+  //     if (groupBy === 'monthy') {
+  //       return monthNames[dayjs(date).month()];
+  //     }
+  //     return dayjs(date).format('MMM D');
+  //   }
+  //   return date;
+  // };
 
-  const DataFormater = (number) => {
-    let returnValue = number;
-    if (number >= 1000000000) {
-      returnValue = `${parseInt(number / 1000000000).toString()}B`;
-    }
-    if (number >= 1000000) {
-      returnValue = `${parseInt(number / 1000000).toString()}M`;
-    }
-    if (number >= 1000) {
-      returnValue = `${parseInt(number / 1000).toString()}K`;
-    } else {
-      returnValue = `${parseInt(number).toString()}`;
-    }
+  // const DataFormater = (number) => {
+  //   let returnValue = number;
+  //   if (number >= 1000000000) {
+  //     returnValue = `${parseInt(number / 1000000000).toString()}B`;
+  //   }
+  //   if (number >= 1000000) {
+  //     returnValue = `${parseInt(number / 1000000).toString()}M`;
+  //   }
+  //   if (number >= 1000) {
+  //     returnValue = `${parseInt(number / 1000).toString()}K`;
+  //   } else {
+  //     returnValue = `${parseInt(number).toString()}`;
+  //   }
 
-    if (activeSales === 'revenue') {
-      returnValue = `${currencySymbol}${returnValue}`;
-    }
-    return returnValue;
-  };
+  //   if (activeSales === 'revenue') {
+  //     returnValue = `${currencySymbol}${returnValue}`;
+  //   }
+  //   return returnValue;
+  // };
 
   const getDays = (startDate, endDate) => {
     const diffTime = Math.abs(startDate - endDate);
@@ -756,146 +838,146 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const renderLegendText = (value, entry) => {
-    const { color } = entry;
-    if (value === ' $') {
-      return <span style={{ color }}>Recent</span>;
-    }
-    if (value === 'vs $') {
-      return <span style={{ color }}>Previous</span>;
-    }
-    return null;
-  };
+  // const renderLegendText = (value, entry) => {
+  //   const { color } = entry;
+  //   if (value === ' $') {
+  //     return <span style={{ color }}>Recent</span>;
+  //   }
+  //   if (value === 'vs $') {
+  //     return <span style={{ color }}>Previous</span>;
+  //   }
+  //   return null;
+  // };
 
-  const renderTooltip = (current, previous) => {
-    if (selectedValue === 'custom') {
-      return (
-        <div className="custom-tooltip">
-          <p className="label-1">
-            {activeSales === 'revenue'
-              ? `${activeSales} (${currency})`
-              : activeSales}
-          </p>
-          <p className="label-1">
-            {activeSales === 'revenue'
-              ? `${currencySymbol}${current}`
-              : activeSales === 'conversion'
-              ? `${current}%`
-              : current}
-          </p>
-        </div>
-      );
-    }
-    return (
-      <div className="custom-tooltip">
-        <p className="label-1">
-          {activeSales === 'revenue'
-            ? `${activeSales} (${currency})`
-            : activeSales}
-        </p>
-        <p className="label-1">
-          {activeSales === 'revenue'
-            ? `${currencySymbol}${current}`
-            : activeSales === 'conversion'
-            ? `${current}%`
-            : current}
-        </p>
-        <p className="label-2">
-          {activeSales === 'revenue'
-            ? `vs ${currencySymbol}${previous}`
-            : activeSales === 'conversion'
-            ? `vs ${previous}%`
-            : `vs ${previous}`}
-        </p>
-      </div>
-    );
-  };
+  // const renderTooltip = (current, previous) => {
+  //   if (selectedValue === 'custom') {
+  //     return (
+  //       <div className="custom-tooltip">
+  //         <p className="label-1">
+  //           {activeSales === 'revenue'
+  //             ? `${activeSales} (${currency})`
+  //             : activeSales}
+  //         </p>
+  //         <p className="label-1">
+  //           {activeSales === 'revenue'
+  //             ? `${currencySymbol}${current}`
+  //             : activeSales === 'conversion'
+  //             ? `${current}%`
+  //             : current}
+  //         </p>
+  //       </div>
+  //     );
+  //   }
+  //   return (
+  //     <div className="custom-tooltip">
+  //       <p className="label-1">
+  //         {activeSales === 'revenue'
+  //           ? `${activeSales} (${currency})`
+  //           : activeSales}
+  //       </p>
+  //       <p className="label-1">
+  //         {activeSales === 'revenue'
+  //           ? `${currencySymbol}${current}`
+  //           : activeSales === 'conversion'
+  //           ? `${current}%`
+  //           : current}
+  //       </p>
+  //       <p className="label-2">
+  //         {activeSales === 'revenue'
+  //           ? `vs ${currencySymbol}${previous}`
+  //           : activeSales === 'conversion'
+  //           ? `vs ${previous}%`
+  //           : `vs ${previous}`}
+  //       </p>
+  //     </div>
+  //   );
+  // };
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      if (payload.length === 2) {
-        const current = payload[0].value
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        const previous = payload[1].value
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return renderTooltip(current, previous);
-        // <div className="custom-tooltip">
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${activeSales} (${currency})`
-        //       : activeSales}
-        //   </p>
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${currencySymbol}${current}`
-        //       : activeSales === 'conversion' ? `${current}%` : current}
-        //   </p>
-        //   <p className="label-2">
-        //     {activeSales === 'revenue'
-        //       ? `vs ${currencySymbol}${previous}`
-        //       : activeSales === 'conversion' ? `vs ${previous}%` : `vs ${previous}`}
-        //   </p>
-        // </div>
-      }
-      if (payload.length === 1 && payload[0].dataKey === ' $') {
-        const current = payload[0].value
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return renderTooltip(current, '0.00');
-        // <div className="custom-tooltip">
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${activeSales} (${currency})`
-        //       : activeSales}
-        //   </p>
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${currencySymbol}${current}`
-        //       : activeSales === 'conversion'
-        //       ? `${current}%`
-        //       : current}
-        //   </p>
-        //   <p className="label-2">
-        //     {activeSales === 'revenue'
-        //       ? `vs ${currencySymbol}0.00`
-        //       : activeSales === 'conversion'
-        //       ? `vs 0.00%`
-        //       : 'vs 0.00'}
-        //   </p>
-        // </div>
-      }
-      if (payload.length === 1 && payload[0].dataKey === 'vs $') {
-        const previous = payload[0].value
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return renderTooltip('0.00', previous);
-        // <div className="custom-tooltip">
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${activeSales} (${currency})`
-        //       : activeSales}
-        //   </p>
-        //   <p className="label-1">
-        //     {activeSales === 'revenue'
-        //       ? `${currencySymbol}0.00`
-        //       : activeSales === 'conversion'
-        //       ? `0.00%`
-        //       : '0.00'}
-        //   </p>
-        //   <p className="label-2">
-        //     {activeSales === 'revenue'
-        //       ? `vs ${currencySymbol}${previous}`
-        //       : activeSales === 'conversion'
-        //       ? `vs ${previous}%`
-        //       : `vs ${previous}`}
-        //   </p>
-        // </div>
-      }
-    }
-    return null;
-  };
+  // const CustomTooltip = ({ active, payload }) => {
+  //   if (active && payload && payload.length) {
+  //     if (payload.length === 2) {
+  //       const current = payload[0].value
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //       const previous = payload[1].value
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //       return renderTooltip(current, previous);
+  //       // <div className="custom-tooltip">
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${activeSales} (${currency})`
+  //       //       : activeSales}
+  //       //   </p>
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${currencySymbol}${current}`
+  //       //       : activeSales === 'conversion' ? `${current}%` : current}
+  //       //   </p>
+  //       //   <p className="label-2">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `vs ${currencySymbol}${previous}`
+  //       //       : activeSales === 'conversion' ? `vs ${previous}%` : `vs ${previous}`}
+  //       //   </p>
+  //       // </div>
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === ' $') {
+  //       const current = payload[0].value
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //       return renderTooltip(current, '0.00');
+  //       // <div className="custom-tooltip">
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${activeSales} (${currency})`
+  //       //       : activeSales}
+  //       //   </p>
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${currencySymbol}${current}`
+  //       //       : activeSales === 'conversion'
+  //       //       ? `${current}%`
+  //       //       : current}
+  //       //   </p>
+  //       //   <p className="label-2">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `vs ${currencySymbol}0.00`
+  //       //       : activeSales === 'conversion'
+  //       //       ? `vs 0.00%`
+  //       //       : 'vs 0.00'}
+  //       //   </p>
+  //       // </div>
+  //     }
+  //     if (payload.length === 1 && payload[0].dataKey === 'vs $') {
+  //       const previous = payload[0].value
+  //         .toString()
+  //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //       return renderTooltip('0.00', previous);
+  //       // <div className="custom-tooltip">
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${activeSales} (${currency})`
+  //       //       : activeSales}
+  //       //   </p>
+  //       //   <p className="label-1">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `${currencySymbol}0.00`
+  //       //       : activeSales === 'conversion'
+  //       //       ? `0.00%`
+  //       //       : '0.00'}
+  //       //   </p>
+  //       //   <p className="label-2">
+  //       //     {activeSales === 'revenue'
+  //       //       ? `vs ${currencySymbol}${previous}`
+  //       //       : activeSales === 'conversion'
+  //       //       ? `vs ${previous}%`
+  //       //       : `vs ${previous}`}
+  //       //   </p>
+  //       // </div>
+  //     }
+  //   }
+  //   return null;
+  // };
 
   const BBCustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -1474,8 +1556,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             </div>
           </div>
           <div className="clear-fix" />
-
-          <ResponsiveContainer width="99%" height={400}>
+          <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
+          {/* <ResponsiveContainer width="99%" height={400}>
             <LineChart
               data={lineChartData}
               margin={{
@@ -1484,7 +1566,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 left: 0,
                 bottom: 20,
               }}>
-              {/* <CartesianGrid strokeDasharray="none" /> */}
+              {/* <CartesianGrid strokeDasharray="none" /> *
               <XAxis
                 dataKey="name"
                 axisLine={false}
@@ -1514,7 +1596,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <Line dataKey=" $" stroke="#FF5933" />
               <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer> */}
         </WhiteCard>
 
         <div className="row mt-3">
