@@ -4,35 +4,11 @@ import Theme from '../theme/Theme';
 const Table = styled.table`
   position: relative;
   width: 100%;
-  // top: 35px;
-
-  // thead {
-  //   display: inherit;
-  //   position: fixed;
-  //   width: calc(100% - 186px);
-  //   top: 130px;
-  //   z-index: 2;
-  //   height: 54px;
-  // }
+  margin-top: 40px;
 
   tbody {
     position: relative;
     z-index: -1;
-
-    // &:nth-child(1) {
-    //   padding-top: 50px !important;
-    //   color: red !important;
-    // }
-  } 
-
-  thead.sticky {
-    position: fixed;
-    margin-top: -7px;
-  }
-
-  td {
-    padding-top: 50px !important;
-    padding-bottom: 0px !important;
   }
 
   tr {
@@ -40,33 +16,8 @@ const Table = styled.table`
     background: ${Theme.white};
     border: 1px solid rgba(46, 91, 255, 0.08);
     border-radius: 1px;
+    font-family: ${Theme.baseFontFamily};
     width: 100%;
-
-      
-
-
-      th {
-        font-family: ${Theme.baseFontFamily};
-        color: ${Theme.gray40};
-        text-transform: uppercase;
-        font-size: 11px;
-        border-bottom: 1px solid ${Theme.gray7};
-        padding: 13px;
-        padding-right:52px;
-
-        &.Active_Contracts {
-          width: 60%;
-        }
-
-        &.Revenue {
-          width: 15%;
-        }
-
-        &.customer-header {
-          padding-left: 66px;
-        }
-      }
-    }
 
     td {
       padding: 20px 10px 3px 10px;
@@ -77,7 +28,6 @@ const Table = styled.table`
       font-weight: 600;
       vertical-align: top;
 
-
       .company-logo {
         border-radius: 10px;
         width: 45px;
@@ -85,7 +35,6 @@ const Table = styled.table`
         margin-right: 14px;
         float: left;
       }
-
 
       .company-name {
         min-height: 20px;
@@ -130,6 +79,7 @@ const Table = styled.table`
           margin-right: 3px;
         }
       }
+
       .decrease-rate {
         color: ${Theme.darkRed};
         font-size: ${Theme.extraNormal};
@@ -158,19 +108,6 @@ const Table = styled.table`
             min-height: 0 !important;
           }
 
-          // .days-block {
-          //   background: ${Theme.lighterOrange};
-          //   padding: 5px 10px;
-          //   border-radius: 5px;
-          //   color: ${Theme.orange};
-          //   font-size: ${Theme.extraNormal};
-
-          //   .clock-icon {
-          //     width: 14px;
-          //     margin-right: 5px;
-          //     vertical-align: text-top;
-          //   }
-          // }
           .recurring-service {
             border: 1px solid ${Theme.gray45};
             border-radius: 5px;
@@ -244,6 +181,7 @@ const Table = styled.table`
           }
         }
       }
+
       .brand-partner {
         list-style-type: none;
         padding: 0;
