@@ -929,25 +929,48 @@ export default function NewCustomerList() {
         {isDesktop ? (
           <div className="table-container">
             <div className="table-part">
+              <div className="sticky-header">
+                <div className="table-header">
+                  <div className="row">
+                    <div
+                      // className="customer-header "
+                      // width={showPerformance ? '20%' : '25%'}
+                      className={
+                        showPerformance
+                          ? 'col-lg-2 col-12 customer-header'
+                          : 'col-lg-3 col-12 customer-header'
+                      }>
+                      Customer
+                    </div>
+                    <div
+                      // width={showPerformance ? '15%' : '60%'}
+                      className={
+                        showPerformance
+                          ? 'col-lg-2 col-12 Revenue'
+                          : 'col-lg-7 col-12'
+                      }>
+                      {showPerformance ? 'Revenue' : 'Active Contracts'}
+                    </div>
+                    {showPerformance ? (
+                      <div className="col-lg-2 col-12">Units Sold</div>
+                    ) : null}
+                    {showPerformance ? (
+                      <div className="col-lg-2 col-12">Traffic</div>
+                    ) : null}
+                    {showPerformance ? (
+                      <div className="col-lg-2 col-12">Conversion</div>
+                    ) : null}
+                    <div className="col-lg-2 col-12 Brand_Strategist">
+                      Brand Strategist
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader color="#FF5933" type="page" />
               ) : (
                 <Table>
-                  <thead className="sticky">
-                    <tr className="table-header">
-                      <th className="customer-header">Customer</th>
-                      <th
-                        className={
-                          showPerformance ? 'Revenue' : 'Active_Contracts'
-                        }>
-                        {showPerformance ? 'Revenue' : 'Active Contracts'}
-                      </th>
-                      {showPerformance ? <th width="15%">Units Sold</th> : null}
-                      {showPerformance ? <th width="15%">Traffic</th> : null}
-                      {showPerformance ? <th width="15%">Conversion</th> : null}
-                      <th width="15%">Brand Strategist</th>
-                    </tr>
-                  </thead>
                   <tbody>
                     {data && data.length === 0 ? (
                       <NoRecordFound />
@@ -1226,6 +1249,49 @@ export default function NewCustomerList() {
 }
 
 const CustomerListPage = styled.div`
+  .table-header {
+    box-shadow: none;
+    position: sticky !important;
+    top: 130px;
+    left: 353px;
+    right: 0px;
+    margin: 0;
+    height: 40px;
+    margin-top: 3px;
+    color: ${Theme.gray40};
+    font-size: 11px;
+    background: ${Theme.white};
+    font-family: ${Theme.baseFontFamily};
+    text-transform: uppercase;
+    border-bottom: 1px solid ${Theme.gray7};
+    padding: 13px;
+    font-weight: 600;
+    vertical-align: top;
+  }
+
+  .Revenue {
+    padding-left: 4%;
+  }
+
+  .Brand_Strategist {
+    padding-left: 2%;
+  }
+
+  .customer-header {
+    padding-left: 66px;
+  }
+
+  .sticky-header {
+    position: fixed;
+    top: 130px;
+    left: 353px;
+    right: 0;
+    background: white;
+    height: 40px;
+    z-index: 0;
+    display: inline;
+  }
+
   padding-left: 62px;
   .table-container {
     padding-left: 290px;
