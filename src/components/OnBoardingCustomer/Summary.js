@@ -2,11 +2,14 @@ import React from 'react';
 import Header from '../../common/Header';
 import { OnBoardingBody, GreyCard, Button } from '../../common';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
+import NavigationHeader from './NavigationHeader';
+import { PATH_AMAZON_ACCOUNT } from '../../constants';
 
 export default function Summary() {
   return (
     <>
-      <Header />
+      <Header type="onboarding" />
+      <NavigationHeader bar="99.9" backStep={PATH_AMAZON_ACCOUNT} />
       <OnBoardingBody className="body-white">
         <div className="white-card-base panel no-gap mt-5 pt-3">
           <h3 className="page-heading ">Account Summary</h3>

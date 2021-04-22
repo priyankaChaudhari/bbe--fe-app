@@ -95,3 +95,11 @@ export {
 } from './ArticleApi';
 
 // export default {getBGSCustomerList} from './BgsApi'
+
+export {
+  updateOnBoardCustomer,
+  askSomeoneData,
+  getStepDetails,
+  updateAskSomeoneData,
+  verifyStepToken,
+} from './OnboardingCustomerApi';

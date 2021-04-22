@@ -19,20 +19,25 @@ export default function NavigationHeader({
   const history = useHistory();
   const params = queryString.parse(history.location.search);
 
-  const redirect = () => {
-    if (backStep === '1') {
-      const stringified =
-        queryString &&
-        queryString.stringify({
-          ...params,
-        });
+  const redirect = (type) => {
+    if (type === 'back') {
+      if (backStep === '1') {
+        const stringified =
+          queryString &&
+          queryString.stringify({
+            ...params,
+          });
 
-      history.push({
-        pathname: PATH_ACCOUNT_SETUP,
-        search: stringified,
-      });
-    } else {
-      history.push(backStep);
+        history.push({
+          pathname: PATH_ACCOUNT_SETUP,
+          search: stringified,
+        });
+      } else {
+        history.push(backStep);
+      }
+    }
+    if (type === 'skip') {
+      history.push(skipStep);
     }
   };
 
@@ -49,13 +54,13 @@ export default function NavigationHeader({
           <div className="container-fluid">
             {' '}
             <div className="row">
-              {backStep ? (
-                <div className="col-6">
-                  {' '}
+              <div className="col-6">
+                {' '}
+                {backStep ? (
                   <div
                     role="presentation"
                     className="back-link"
-                    onClick={() => redirect()}>
+                    onClick={() => redirect('back')}>
                     <img
                       src={LeftArrowIcon}
                       alt="aarow-back"
@@ -63,14 +68,14 @@ export default function NavigationHeader({
                     />
                     Back a step
                   </div>
-                </div>
-              ) : (
-                ''
-              )}
+                ) : (
+                  ''
+                )}
+              </div>
               {skipStep ? (
                 <div
                   className="col-6 text-right"
-                  onClick={() => redirect()}
+                  onClick={() => redirect('skip')}
                   role="presentation">
                   <div className="skip-steps pr-2">Skip this step</div>
                 </div>

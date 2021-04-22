@@ -1,8 +1,13 @@
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
+import queryString from 'query-string';
+
 import Theme from '../../theme/Theme';
 import Header from '../../common/Header';
 import {
@@ -12,99 +17,195 @@ import {
   Button,
   ModalRadioCheck,
   GreyCard,
+  UnauthorizedHeader,
+  PageLoader,
 } from '../../common';
 import {
   VisaCardIcons,
   MasterCardIcons,
   DiscoverCardIcons,
   AmercianExpressCardIcons,
-  LeftArrowIcon,
   CaretUp,
 } from '../../theme/images';
+import {
+  getStepDetails,
+  updateAskSomeoneData,
+  updateUserMe,
+  verifyStepToken,
+} from '../../api';
+import NavigationHeader from './NavigationHeader';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_COMPANY_DETAILS,
+  PATH_THANKS,
+} from '../../constants';
+import AskSomeone from './AskSomeone';
+import { userMe } from '../../store/actions';
 
 export default function BillingInfo() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [openCollapse, setOpenCollapse] = useState(false);
+  const [assignedToSomeone, setAssignedToSomeone] = useState(false);
+  const [verifiedStepData, setVerifiedStepData] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
+  const [stepData, setStepData] = useState([]);
+
+  const params = queryString.parse(history.location.search);
+
+  useEffect(() => {
+    if (params && params.key) {
+      localStorage.setItem('match', params && params.key);
+      verifyStepToken(params.key).then((response) => {
+        setVerifiedStepData(response && response.data);
+      });
+    }
+    if (history.location.pathname.includes('assigned')) {
+      setAssignedToSomeone(true);
+    } else {
+      setAssignedToSomeone(false);
+      getStepDetails(
+        verifiedStepData.customer_onboarding_id || 'CBZQuki',
+        'billing information',
+      ).then((response) => {
+        setStepData(
+          response &&
+            response.data &&
+            response.data.results &&
+            response.data.results[0],
+        );
+        if (
+          response &&
+          response.data &&
+          response.data.results &&
+          response.data.results[0] &&
+          response.data.results[0].step === 'billing information'
+        ) {
+          setIsChecked(true);
+        }
+        setIsLoading({ loader: false, type: 'page' });
+      });
+    }
+  }, []);
+
+  const saveDetails = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    updateAskSomeoneData(
+      (stepData && stepData.id) || verifiedStepData.step_id,
+      {
+        token: assignedToSomeone ? params && params.key : '',
+        is_completed: true,
+      },
+    ).then((response) => {
+      if (response && response.status === 200) {
+        if (assignedToSomeone) {
+          const stringified =
+            queryString &&
+            queryString.stringify({
+              name: verifiedStepData.user_name,
+            });
+          history.push({
+            pathname: PATH_THANKS,
+            search: `${stringified}`,
+          });
+        } else {
+          history.push(PATH_AMAZON_MERCHANT);
+        }
+        updateUserMe(userInfo.id, { step: 3 }).then((user) => {
+          if (user && user.status === 200) {
+            dispatch(userMe());
+          }
+        });
+        localStorage.removeItem('match');
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
+  };
+
   return (
     <>
-      <Header />
-      <BackToStep>
-        <div className="container-fluid">
-          {' '}
-          <div className="row">
-            <div className="col-6">
-              {' '}
-              <div role="presentation" className="back-link">
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
-                />
-                Back a step
-              </div>
-            </div>
-            <div className="col-6 text-right ">
-              <div className="skip-steps pr-2">Skip this step</div>
-            </div>
-          </div>
-        </div>
-      </BackToStep>
+      {assignedToSomeone ? (
+        <UnauthorizedHeader />
+      ) : (
+        <Header type="onboarding" />
+      )}
+      {assignedToSomeone ? (
+        ''
+      ) : (
+        <NavigationHeader
+          bar="60"
+          skipStep={PATH_AMAZON_MERCHANT}
+          backStep={PATH_COMPANY_DETAILS}
+        />
+      )}
+
       <OnBoardingBody className="body-white">
         <div className="white-card-base panel">
-          <GreyCard className="yellow-card mt-2 mb-4">
-            <div className="hi-name mb-2">
-              {' '}
-              <a href="*" className="video-link ">
+          {assignedToSomeone ? (
+            <GreyCard className="yellow-card mt-2 mb-4">
+              <div className="hi-name mb-2">
                 {' '}
-                newton@ashersapparel.com{' '}
-              </a>
-              has asked that you provide the billing information that will be
-              used for your Buy Box Experts agreement.
-            </div>
-            If you’re unable to provide this information or you think this was
-            sent to you unintentionally please let them know via the email
-            address highlighted above.
-          </GreyCard>
-          <p className="account-steps m-0">Step 3 of 4</p>
+                <a href="*" className="video-link ">
+                  {' '}
+                  newton@ashersapparel.com{' '}
+                </a>
+                has asked that you provide the billing information that will be
+                used for your Buy Box Experts agreement.
+              </div>
+              If you’re unable to provide this information or you think this was
+              sent to you unintentionally please let them know via the email
+              address highlighted above.
+            </GreyCard>
+          ) : (
+            <p className="account-steps m-0">Step 3 of 4</p>
+          )}
           <h3 className="page-heading ">Billing Information</h3>
-          <CheckBox className="mt-2 mb-3">
-            <label
-              className="check-container customer-pannel "
-              htmlFor="contract-copy-check">
-              Ask someone else to complete this section
-              <input type="checkbox" id="contract-copy-check" />
-              <span className="checkmark" />
-            </label>
-          </CheckBox>
+          {assignedToSomeone ? (
+            ''
+          ) : (
+            <AskSomeone
+              setIsChecked={setIsChecked}
+              isChecked={isChecked}
+              step="billing information"
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
+              params={verifiedStepData}
+              stepData={stepData}
+              setStepData={setStepData}
+            />
+          )}
           <ContractFormField className="mt-3">
-            <label>
+            <label htmlFor="routing">
               Name on Account
               <input className="form-control" />
             </label>
           </ContractFormField>
           <ContractFormField className="mt-3">
-            <label>
+            <label htmlFor="routing">
               Bank Name
               <input className="form-control" />
             </label>
           </ContractFormField>
           <ContractFormField className="mt-3">
-            <label>
+            <label htmlFor="routing">
               Routing Number
               <input className="form-control" />
             </label>
           </ContractFormField>
           <ContractFormField className="mt-3">
-            <label>
+            <label htmlFor="account">
               Account Number
               <input className="form-control" />
             </label>
           </ContractFormField>
           <div className="label-title mt-4"> Payment Type</div>
           <ModalRadioCheck className="mt-3 ">
-            <label className="radio-container contact-billing">
+            <label className="radio-container contact-billing" htmlFor="ACH">
               ACH
               <br />
-              <input type="radio" checked="checked" name="radio" />
+              <input type="radio" checked="checked" name="radio" readOnly />
               <span className="checkmark checkmark-top" />
             </label>
           </ModalRadioCheck>
@@ -127,7 +228,9 @@ export default function BillingInfo() {
                 <ul className="payment-option">
                   <li>
                     <ModalRadioCheck className="mt-2">
-                      <label className="radio-container contact-billing">
+                      <label
+                        className="radio-container contact-billing"
+                        htmlFor="routing">
                         <img className="card" src={VisaCardIcons} alt="card" />{' '}
                         Visa
                         <br />
@@ -138,7 +241,9 @@ export default function BillingInfo() {
                   </li>
                   <li>
                     <ModalRadioCheck className="mt-2">
-                      <label className="radio-container contact-billing">
+                      <label
+                        className="radio-container contact-billing"
+                        htmlFor="routing">
                         <img
                           className="card"
                           src={MasterCardIcons}
@@ -153,7 +258,9 @@ export default function BillingInfo() {
                   </li>
                   <li>
                     <ModalRadioCheck className="mt-2">
-                      <label className="radio-container contact-billing">
+                      <label
+                        className="radio-container contact-billing"
+                        htmlFor="routing">
                         <img
                           className="card"
                           src={DiscoverCardIcons}
@@ -168,7 +275,9 @@ export default function BillingInfo() {
                   </li>
                   <li>
                     <ModalRadioCheck className="mt-2">
-                      <label className="radio-container contact-billing">
+                      <label
+                        className="radio-container contact-billing"
+                        htmlFor="routing">
                         <img
                           className="card"
                           src={AmercianExpressCardIcons}
@@ -183,13 +292,13 @@ export default function BillingInfo() {
                   </li>
                 </ul>
                 <ContractFormField className="mt-3">
-                  <label>
+                  <label htmlFor="routing">
                     Cardholder name
                     <input className="form-control" />
                   </label>
                 </ContractFormField>
                 <ContractFormField className="mt-3">
-                  <label>
+                  <label htmlFor="routing">
                     Credit card number
                     <input className="form-control" />
                   </label>
@@ -198,7 +307,7 @@ export default function BillingInfo() {
                   <div className="col-8 pr-0">
                     {' '}
                     <ContractFormField className="mt-3">
-                      <label>
+                      <label htmlFor="routing">
                         Exp. Date
                         <input className="form-control" />
                       </label>
@@ -206,7 +315,7 @@ export default function BillingInfo() {
                   </div>
                   <div className="col-4 ">
                     <ContractFormField className="mt-3">
-                      <label>
+                      <label htmlFor="routing">
                         CVV
                         <input className="form-control" />
                       </label>
@@ -236,27 +345,21 @@ export default function BillingInfo() {
               <span className="checkmark" />
             </label>
           </CheckBox>
-          <Button className="btn-primary w-100  mt-3">Continue</Button>
+          <Button
+            className="btn-primary w-100  mt-3"
+            onClick={() => saveDetails()}>
+            {' '}
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              'Continue'
+            )}
+          </Button>
         </div>
       </OnBoardingBody>
     </>
   );
 }
-
-const BackToStep = styled.div`
-  position: fixed;
-  background-color: ${Theme.white};
-  z-index: 2;
-  padding: 20px 0px 20px 0px;
-  width: 100%;
-  border-bottom: 1px solid ${Theme.gray5};
-
-  .skip-steps {
-    color: ${Theme.gray40};
-    font-size: ${Theme.extraNormal};
-    cursor: pointer;
-  }
-`;
 
 const CollapseOpenContainer = styled.div`
   .ReactCollapse--collapse {

@@ -98,6 +98,7 @@ export default function CustomerStatus({ type, setStatusModal, customer }) {
               Select Date
               <br />
               <DatePicker
+                minDate={new Date()}
                 className="form-control"
                 id="date"
                 value={

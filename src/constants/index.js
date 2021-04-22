@@ -26,8 +26,13 @@ export const PATH_HELLO_SIGN = `/contract-signature`;
 export const PATH_ACCOUNT_SETUP = '/account-setup/';
 export const PATH_CREATE_PASSWORD = `${PATH_ACCOUNT_SETUP}create-password`;
 export const PATH_COMPANY_DETAILS = `${PATH_ACCOUNT_SETUP}company-details`;
-export const PATH_AMAZON_ACCOUNT = `${PATH_ACCOUNT_SETUP}amazon-account`;
 export const PATH_BILLING_DETAILS = `${PATH_ACCOUNT_SETUP}billing-details`;
+export const PATH_AMAZON_MERCHANT = `${PATH_ACCOUNT_SETUP}amazon-merchant`;
+export const PATH_AMAZON_ACCOUNT = `${PATH_ACCOUNT_SETUP}amazon-account`;
+export const PATH_UNAUTHORIZED_COMPANY_DETAILS = `${PATH_ACCOUNT_SETUP}assigned-company-details`;
+export const PATH_UNAUTHORIZED_BILLING_DETAILS = `${PATH_ACCOUNT_SETUP}assigned-billing-details`;
+export const PATH_UNAUTHORIZED_AMAZON_MERCHANT = `${PATH_ACCOUNT_SETUP}assigned-amazon-merchant`;
+export const PATH_UNAUTHORIZED_AMAZON_ACCOUNT = `${PATH_ACCOUNT_SETUP}assigned-amazon-account`;
 
 // Knowledge Base
 export const PATH_ARTICLE_LIST = '/collections/';
@@ -42,7 +47,6 @@ export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 // export const PATH_CREATE_ACCOUNT = '/create-acc';
 // export const PATH_COMPANY_DIGITAL = '/company-digital';
 export const PATH_BILLING_INFO = '/billing-information';
-export const PATH_AMAZON_MERCHANT_ID = '/amazon-merchant';
 export const PATH_AMAZON_DEVELOPER_ACCESS = '/amazon-developer';
 export const PATH_SUMMARY = '/summary';
 export const PATH_THANKS = '/thanks';

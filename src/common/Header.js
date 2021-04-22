@@ -10,6 +10,7 @@ import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 import { ToastContainer } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
+import PropTypes from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -39,7 +40,7 @@ import {
   PATH_CUSTOMER_LIST,
 } from '../constants';
 
-export default function Header() {
+export default function Header({ type }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userState.userInfo);
@@ -212,24 +213,17 @@ export default function Header() {
                     </div>
                   </li> */}
 
-                <li
-                  className=" cursor"
-                  onClick={() => {
-                    setShowArticle(true);
-                    setShowArticleSuccess(false);
-                  }}
-                  role="presentation">
-                  <div id="clickNotification ">
-                    <div
-                      className="suggest-box d-none d-md-block"
-                      data-tip="Got an idea? Share it here."
-                      data-for="idea">
-                      <img className="light-bulb-icon" src={LightBulb} alt="" />
-                      Share an idea
-                    </div>
+                {type !== 'onboarding' ? (
+                  <li
+                    className=" cursor"
+                    onClick={() => {
+                      setShowArticle(true);
+                      setShowArticleSuccess(false);
+                    }}
+                    role="presentation">
                     <div id="clickNotification ">
                       <div
-                        className="suggest-box mobile-view d-block d-md-none"
+                        className="suggest-box d-none d-md-block"
                         data-tip="Got an idea? Share it here."
                         data-for="idea">
                         <img
@@ -237,19 +231,34 @@ export default function Header() {
                           src={LightBulb}
                           alt=""
                         />
+                        Share an idea
                       </div>
-                    </div>
-                    {/* <span>
+                      <div id="clickNotification ">
+                        <div
+                          className="suggest-box mobile-view d-block d-md-none"
+                          data-tip="Got an idea? Share it here."
+                          data-for="idea">
+                          <img
+                            className="light-bulb-icon"
+                            src={LightBulb}
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      {/* <span>
                         <div className="notify" />
                       </span> */}
-                  </div>
-                  <ReactTooltip
-                    id="idea"
-                    aria-haspopup="true"
-                    place="bottom"
-                    effect="solid"
-                  />
-                </li>
+                    </div>
+                    <ReactTooltip
+                      id="idea"
+                      aria-haspopup="true"
+                      place="bottom"
+                      effect="solid"
+                    />
+                  </li>
+                ) : (
+                  ''
+                )}
 
                 <li>
                   <div className="header-user-profile">
@@ -406,96 +415,108 @@ export default function Header() {
           </ModalBox>
         </Modal>
       </MainHeader>
-      <MobileSidebar id="kBase">
-        <label htmlFor="mobilemenu-check" id="responsive-button">
-          <img src={MenuIcon} alt="Menu Lines" className="menu-icon cursor" />
-        </label>
-        <input type="checkbox" id="mobilemenu-check" />
-        <div id="ifp-sidebar-responsive">
-          <label
-            htmlFor="mobilemenu-check"
-            className="close-icon d-xl-none d-block"
-          />
+      {type !== 'onboarding' ? (
+        <MobileSidebar id="kBase">
+          <label htmlFor="mobilemenu-check" id="responsive-button">
+            <img src={MenuIcon} alt="Menu Lines" className="menu-icon cursor" />
+          </label>
+          <input type="checkbox" id="mobilemenu-check" />
+          <div id="ifp-sidebar-responsive">
+            <label
+              htmlFor="mobilemenu-check"
+              className="close-icon d-xl-none d-block"
+            />
 
-          <SideContents>
-            {' '}
-            <ul className="side-bar-icon ">
-              {userInfo &&
-              userInfo.role &&
-              userInfo.role.includes('Growth Strategist') ? (
+            <SideContents>
+              {' '}
+              <ul className="side-bar-icon ">
+                {userInfo &&
+                userInfo.role &&
+                userInfo.role.includes('Growth Strategist') ? (
+                  <li
+                    className={
+                      history.location.pathname &&
+                      history.location.pathname.includes('bgs-dashboard')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_BGS_DASHBOARD)}>
+                    {' '}
+                    {history.location.pathname &&
+                    history.location.pathname.includes('bgs-dashboard') ? (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon active"
+                        src={SpeedometerActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon  disactive"
+                        src={Speedometer}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : (
+                  ''
+                )}
                 <li
                   className={
                     history.location.pathname &&
-                    history.location.pathname.includes('bgs-dashboard')
+                    history.location.pathname.includes('customer')
                       ? ' cursor active'
                       : ' cursor'
                   }
                   role="presentation"
-                  onClick={() => history.push(PATH_BGS_DASHBOARD)}>
-                  {' '}
-                  {history.location.pathname &&
-                  history.location.pathname.includes('bgs-dashboard') ? (
-                    <img
-                      width="32px"
-                      className=" speed0meter-icon active"
-                      src={SpeedometerActive}
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      width="32px"
-                      className=" speed0meter-icon  disactive"
-                      src={Speedometer}
-                      alt=""
-                    />
-                  )}
+                  onClick={() => history.push(PATH_CUSTOMER_LIST)}>
+                  <img
+                    className="user-group"
+                    src={OrganizationActiveIcon}
+                    alt=""
+                  />
+                  <img
+                    className="user-group-active "
+                    src={OrganizationIcon}
+                    alt=""
+                  />
                 </li>
-              ) : (
-                ''
-              )}
-              <li
-                className={
-                  history.location.pathname &&
-                  history.location.pathname.includes('customer')
-                    ? ' cursor active'
-                    : ' cursor'
-                }
-                role="presentation"
-                onClick={() => history.push(PATH_CUSTOMER_LIST)}>
-                <img
-                  className="user-group"
-                  src={OrganizationActiveIcon}
-                  alt=""
-                />
-                <img
-                  className="user-group-active "
-                  src={OrganizationIcon}
-                  alt=""
-                />
-              </li>
-              <li
-                className={
-                  history.location.pathname &&
-                  history.location.pathname.includes('collections')
-                    ? 'cursor active'
-                    : ' cursor'
-                }
-                role="presentation"
-                onClick={() => history.push(PATH_ARTICLE_LIST)}>
-                <img
-                  className="read-book-active"
-                  src={ReadBookIconActive}
-                  alt=""
-                />
-                <img className="read-book" src={ReadBookIcon} alt="" />
-              </li>
-            </ul>
-          </SideContents>
-        </div>
-      </MobileSidebar>
+                <li
+                  className={
+                    history.location.pathname &&
+                    history.location.pathname.includes('collections')
+                      ? 'cursor active'
+                      : ' cursor'
+                  }
+                  role="presentation"
+                  onClick={() => history.push(PATH_ARTICLE_LIST)}>
+                  <img
+                    className="read-book-active"
+                    src={ReadBookIconActive}
+                    alt=""
+                  />
+                  <img className="read-book" src={ReadBookIcon} alt="" />
+                </li>
+              </ul>
+            </SideContents>
+          </div>
+        </MobileSidebar>
+      ) : (
+        ''
+      )}
     </div>
   );
 }
+
+Header.defaultProps = {
+  type: '',
+};
+
+Header.propTypes = {
+  type: PropTypes.string,
+};
 
 const MainHeader = styled.div`
   background-color: ${Theme.white};

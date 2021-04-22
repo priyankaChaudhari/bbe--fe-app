@@ -14,10 +14,9 @@ import {
   PageLoader,
   UnauthorizedHeader,
 } from '../../common';
-import { resetPassword } from '../../api';
+import { resetPassword, updateOnBoardCustomer } from '../../api';
 import { login } from '../../store/actions/userState';
 import NavigationHeader from './NavigationHeader';
-import updateOnBoardCustomer from '../../api/OnboardingCustomerApi';
 
 export default function CreateAccount() {
   const { register, handleSubmit, errors, watch } = useForm();
@@ -130,7 +129,7 @@ export default function CreateAccount() {
   return (
     <>
       <NavigationHeader
-        bar="25"
+        bar="20"
         backStep={showSuccessMsg ? '' : '1'}
         showSuccessMsg={showSuccessMsg}
       />

@@ -1,18 +1,23 @@
 /* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 
-import { PATH_LOGIN } from './constants';
+// import { PATH_LOGIN } from './constants';
 import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 
 const requestHandler = (request) => {
-  // if (NON_AUTHORIZATION_APIS.includes('/customer-onboarding/')) {
-  //   delete request.headers.Authorization;
-  //   return request;
-  // }
   if (!NON_AUTHORIZATION_APIS.includes(request.url)) {
-    let token = localStorage.getItem('token');
-    token = token || '';
-    request.headers.Authorization = `Token ${token}`;
+    if (request.url.includes('/customer-onboarding/')) {
+      delete request.headers.Authorization;
+    } else {
+      let token = localStorage.getItem('token');
+      token = token || '';
+      request.headers.Authorization = `Token ${token}`;
+    }
+    const ifMatch = localStorage.getItem('match');
+    if (ifMatch) {
+      request.headers['If-Match'] = ifMatch;
+      delete request.headers.Authorization;
+    }
   }
   return request;
 };
@@ -31,7 +36,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error && error.response && error.response.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = PATH_LOGIN;
+      // window.location.href = PATH_LOGIN;
     }
     return Promise.reject(error);
   },

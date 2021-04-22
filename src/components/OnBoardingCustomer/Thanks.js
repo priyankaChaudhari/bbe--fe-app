@@ -1,34 +1,41 @@
 import React from 'react';
-// import styled from 'styled-components';
-// import Theme from '../../theme/Theme';
+import { useHistory } from 'react-router-dom';
+
+import styled from 'styled-components';
+import queryString from 'query-string';
+
+import Theme from '../../theme/Theme';
 import UnauthorizedHeader from '../../common/UnauthorizedHeader';
 import { AccountSetupIcon } from '../../theme/images';
-import { OnBoardingBody, Button } from '../../common';
+// import { OnBoardingBody, Button } from '../../common';
 
 export default function Thanks() {
+  const history = useHistory();
+  const params = queryString.parse(history.location.search);
+
   return (
     <>
       <UnauthorizedHeader />
-      {/* <ThanksPage>
-        <img className="mb-3" src={AccountSetupIcon} alt="check" /> */}
-      {/* <h5>Thanks!</h5>
+      <ThanksPage>
+        <img className="mb-3" src={AccountSetupIcon} alt="check" />
+        <h5>Thanks!</h5>
         <p className="info">
-          We’ve let Newton know that you’ve provided the information we needed.
+          We’ve let {params && params.name} know that you’ve provided the
+          information we needed.
           <br />
           <br />
           You can close this tab when you’re ready.
-        </p> */}
+        </p>
 
-      {/* <h5>Information already provided</h5>
+        <h5>Information already provided</h5>
         <p className="info">
           Looks like someone has provided the requested information already.
           <br />
           <br /> You can close this tab when you’re ready.
-        </p> */}
+        </p>
+      </ThanksPage>
 
-      {/* </ThanksPage> */}
-
-      <OnBoardingBody>
+      {/* <OnBoardingBody>
         <div className="white-card-base">
           <img className="mb-3" src={AccountSetupIcon} alt="company-icon" />
 
@@ -50,23 +57,23 @@ export default function Thanks() {
           </p>
           <Button className="btn-primary w-100 mt-4">Ok. Got it!</Button>
         </div>
-      </OnBoardingBody>
+      </OnBoardingBody> */}
     </>
   );
 }
 
-// const ThanksPage = styled.div`
-//   text-align: center;
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-//   max-width: 400px;
-//   width: 100%;
-//   margin: 0 auto;
+const ThanksPage = styled.div`
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
 
-//   .info {
-//     color: ${Theme.gray90};
-//     font-size: ${Theme.title};
-//   }
-// `;
+  .info {
+    color: ${Theme.gray90};
+    font-size: ${Theme.title};
+  }
+`;

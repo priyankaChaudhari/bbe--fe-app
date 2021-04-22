@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
-// import Select from 'react-select';
 import { Collapse } from 'react-collapse';
+import queryString from 'query-string';
 
 import {
   OnBoardingBody,
@@ -13,16 +15,26 @@ import {
   // FormField,
   Button,
   PageLoader,
+  UnauthorizedHeader,
+  GreyCard,
 } from '../../common';
 import { CaretUp } from '../../theme/images';
 import AskSomeone from './AskSomeone';
-import { updateCustomerDetails } from '../../api';
-import { getCustomerDetails } from '../../store/actions';
+import {
+  getStepDetails,
+  updateAskSomeoneData,
+  updateCustomerDetails,
+  updateUserMe,
+  verifyStepToken,
+} from '../../api';
+import { getCustomerDetails, userMe } from '../../store/actions';
 import { SocialIcons } from '../../constants/FieldConstants';
 import NavigationHeader from './NavigationHeader';
-import { PATH_BILLING_INFO } from '../../constants';
+import { PATH_BILLING_DETAILS, PATH_THANKS } from '../../constants';
+import Header from '../../common/Header';
 
 export default function CompanyDigital() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
@@ -31,23 +43,91 @@ export default function CompanyDigital() {
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
+  const [assignedToSomeone, setAssignedToSomeone] = useState(false);
+  const [stepData, setStepData] = useState([]);
+  const [verifiedStepData, setVerifiedStepData] = useState({});
+  const params = queryString.parse(history.location.search);
 
   useEffect(() => {
+    if (params && params.key) {
+      localStorage.setItem('match', params && params.key);
+      verifyStepToken(params.key).then((response) => {
+        setVerifiedStepData(response && response.data);
+      });
+    }
+    if (history.location.pathname.includes('assigned')) {
+      setAssignedToSomeone(true);
+    } else {
+      setAssignedToSomeone(false);
+      getStepDetails(
+        verifiedStepData.customer_onboarding_id || 'CBZQuki',
+        'digital presence',
+      ).then((response) => {
+        setStepData(
+          response &&
+            response.data &&
+            response.data.results &&
+            response.data.results[0],
+        );
+        if (
+          response &&
+          response.data &&
+          response.data.results &&
+          response.data.results[0] &&
+          response.data.results[0].step === 'digital presence'
+        ) {
+          setIsChecked(true);
+        }
+        setIsLoading({ loader: false, type: 'page' });
+      });
+    }
     // dispatch(getCustomerDetails(userInfo.customer));
-    dispatch(getCustomerDetails('CMMVciw'));
+    dispatch(getCustomerDetails(verifiedStepData.customer_id || 'CMF9QAS'));
   }, [dispatch, userInfo.customer]);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-    if (formData && Object.keys(formData).length) {
-      updateCustomerDetails('CMMVciw', formData).then((res) => {
-        if (res && res.status === 200) {
-          setIsLoading({ loader: false, type: 'button' });
-        }
-      });
-    } else {
-      setIsLoading({ loader: false, type: 'button' });
-    }
+
+    updateCustomerDetails(
+      'CMF9QAS' || verifiedStepData.customer,
+      formData,
+    ).then((res) => {
+      if (res && res.status === 200) {
+        updateAskSomeoneData(
+          (stepData && stepData.id) || verifiedStepData.step_id,
+          {
+            token: assignedToSomeone ? params && params.key : '',
+            is_completed: true,
+          },
+        ).then((response) => {
+          if (response && response.status === 200) {
+            if (assignedToSomeone) {
+              const stringified =
+                queryString &&
+                queryString.stringify({
+                  name: verifiedStepData.user_name,
+                });
+              history.push({
+                pathname: PATH_THANKS,
+                search: `${stringified}`,
+              });
+            } else {
+              history.push(PATH_BILLING_DETAILS);
+            }
+            updateUserMe(userInfo.id, { step: 2 }).then((user) => {
+              if (user && user.status === 200) {
+                dispatch(userMe());
+              }
+            });
+            localStorage.removeItem('match');
+            setIsLoading({ loader: false, type: 'button' });
+          }
+        });
+      }
+      if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
   };
 
   const handleChange = (event) => {
@@ -73,7 +153,7 @@ export default function CompanyDigital() {
         <div className="label-title mb-1 mt-4">Social</div>
         <div className="row">
           {SocialIcons.map((item) => (
-            <>
+            <React.Fragment key={item.key}>
               <div className="col-4 mt-3 pr-0">
                 <span>
                   <img
@@ -97,7 +177,7 @@ export default function CompanyDigital() {
                   />
                 </ContractFormField>
               </div>
-            </>
+            </React.Fragment>
           ))}
         </div>
       </>
@@ -106,14 +186,41 @@ export default function CompanyDigital() {
 
   return (
     <>
-      <NavigationHeader bar="50" skipStep={PATH_BILLING_INFO} />
+      {assignedToSomeone ? (
+        <UnauthorizedHeader />
+      ) : (
+        <Header type="onboarding" />
+      )}
+      {assignedToSomeone ? (
+        ''
+      ) : (
+        <NavigationHeader bar="40" skipStep={PATH_BILLING_DETAILS} />
+      )}
 
-      {loader ? (
+      {loader || (isLoading.loader && isLoading.type === 'page') ? (
         <PageLoader component="modal" color="#FF5933" type="page" />
       ) : (
         <OnBoardingBody className="body-white">
           <div className="white-card-base panel">
-            <p className="account-steps m-0">Step 2 of 4</p>
+            {assignedToSomeone ? (
+              <GreyCard className="yellow-card mt-2 mb-4">
+                <div className="hi-name mb-2">
+                  {' '}
+                  <span className="video-link ">
+                    {' '}
+                    {verifiedStepData && verifiedStepData.user_email}{' '}
+                  </span>
+                  has asked that you provide the company’s digital presence
+                  information that will be used for your Buy Box Experts
+                  agreement.
+                </div>
+                If you’re unable to provide this information or you think this
+                was sent to you unintentionally please let them know via the
+                email address highlighted above.
+              </GreyCard>
+            ) : (
+              <p className="account-steps m-0">Step 2 of 4</p>
+            )}
             <h3 className="page-heading ">Your company’s digital presence</h3>
             <p className="info-text-gray m-0 ">
               Need help on why we need this information? <br />{' '}
@@ -121,8 +228,21 @@ export default function CompanyDigital() {
                 Click here to watch the video.
               </a>
             </p>
-            <AskSomeone setIsChecked={setIsChecked} isChecked={isChecked} />
-            {!isChecked ? (
+            {assignedToSomeone ? (
+              ''
+            ) : (
+              <AskSomeone
+                setIsChecked={setIsChecked}
+                isChecked={isChecked}
+                step="digital presence"
+                setIsLoading={setIsLoading}
+                isLoading={isLoading}
+                params={verifiedStepData}
+                stepData={stepData}
+                setStepData={setStepData}
+              />
+            )}
+            {assignedToSomeone || !isChecked ? (
               <>
                 {generateHTML()}
                 <Button
@@ -139,7 +259,7 @@ export default function CompanyDigital() {
               ''
             )}
           </div>
-          {isChecked ? (
+          {!assignedToSomeone && isChecked ? (
             <div className="white-card-base panel gap-none">
               <div
                 className="label-title cursor mt-4"
