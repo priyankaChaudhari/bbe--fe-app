@@ -165,28 +165,31 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   useLayoutEffect(() => {
     const chart = am4core.create('chartdiv', am4charts.XYChart);
     chart.paddingRight = 10;
-    chart.maxZoomLevel = 1;
-    chart.logo.disabled = true;
-    chart.data = lineChartData;
+    chart.logo.disabled = true; // disable amchart logo
+    chart.data = lineChartData; // bind th data
 
     // render X axis
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
     dateAxis.renderer.grid.template.disabled = true;
     dateAxis.dy = 10;
+    dateAxis.cursorTooltipEnabled = false;
 
     // render y axis
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
-    // console.log('valueAxis', valueAxis);
+    valueAxis.cursorTooltipEnabled = false;
+    valueAxis.numberFormatter.numberFormat = '#a';
+    valueAxis.numberFormatter = new am4core.NumberFormatter();
+    // add currency only for revenue
     if (activeSales === 'revenue') {
-      valueAxis.numberFormatter = new am4core.NumberFormatter();
-      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#`;
+      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#a`;
+    } else {
+      valueAxis.numberFormatter.numberFormat = '#a';
     }
-
     // valueAxis.renderer.labels.template.fill = am4core.color("#FF5933");
 
-    // render tooltip
+    // create a tooltip
     const flag = selectedValue !== 'custom';
     let tooltipHeader = '';
     let tooltipCurrent = '';
@@ -206,28 +209,41 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       tooltipPrevious = flag ? `\nvs: {value2}` : '';
     }
 
-    // Create series
-    // series for current data
+    // Create series for previous data
     const series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = 'value1';
+    series.dataFields.valueY = 'value2';
     series.dataFields.dateX = 'name';
     series.strokeWidth = 2;
-    series.minBulletDistance = 10;
-    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
-    series.stroke = am4core.color('#FF5933');
+    series.stroke = am4core.color('#BFC5D2');
+    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    series.fill = am4core.color('#2e384d');
 
-    // console.log('series', series);
-    // Create series for previous data
+    // add bullet for
+    const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
+    circleBullet2.circle.fill = am4core.color('#fff');
+    circleBullet2.circle.strokeWidth = 1;
+    circleBullet2.circle.radius = 3;
+
+    // series for current data
     const series2 = chart.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'value2';
+    series2.dataFields.valueY = 'value1';
     series2.dataFields.dateX = 'name';
     series2.strokeWidth = 2;
-    series2.stroke = am4core.color('#BFC5D2');
-    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+    series2.minBulletDistance = 10;
+    series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+    series2.stroke = am4core.color('#FF5933');
+    series2.fill = am4core.color('#2e384d');
+    const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
+    circleBullet.circle.fill = am4core.color('#fff');
+    circleBullet.circle.strokeWidth = 1;
+    circleBullet.circle.radius = 3;
 
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
-    chart.cursor.xAxis = dateAxis;
+    chart.cursor.lineY.disabled = true;
+    chart.cursor.lineX.disabled = true;
+    chart.cursor.snapToSeries = [series, series2];
+    chart.cursor.behavior = 'none'; // disable zoom-in func.
 
     return () => {
       chart.dispose();
