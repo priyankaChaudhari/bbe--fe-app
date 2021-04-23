@@ -49,6 +49,7 @@ function RequestSignature({
   // clearSuccessMessage,
   setOpenCollapse,
   getContractDetails,
+  setContractLoading,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -478,8 +479,11 @@ function RequestSignature({
           contractDesignData.design_url &&
           contractDesignData.design_url.signature_request_id,
       };
+      setContractLoading({ loader: true, type: 'page' });
 
       createTransactionData(requestSignaturedata).then((response) => {
+        setShowModal(false);
+        setContractLoading({ loader: false, type: 'page' });
         if (response && response.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
           // setApiError(response && response.data);
@@ -510,7 +514,6 @@ function RequestSignature({
           setIsLoading({ loader: false, type: 'button' });
         }
       });
-      setShowModal(false);
     });
 
     client.on('close', () => {
@@ -932,6 +935,7 @@ RequestSignature.defaultProps = {
   // clearSuccessMessage: () => {},
   setOpenCollapse: () => {},
   getContractDetails: () => {},
+  setContractLoading: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -955,4 +959,5 @@ RequestSignature.propTypes = {
   // clearSuccessMessage: PropTypes.func,
   setOpenCollapse: PropTypes.func,
   getContractDetails: PropTypes.func,
+  setContractLoading: PropTypes.func,
 };

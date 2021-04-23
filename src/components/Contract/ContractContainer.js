@@ -2833,6 +2833,7 @@ export default function ContractContainer() {
             // clearSuccessMessage={clearSuccessMessage}
             setOpenCollapse={setOpenCollapse}
             getContractDetails={getContractDetails}
+            setContractLoading={setIsLoading}
           />
         </ModalBox>
       </Modal>
