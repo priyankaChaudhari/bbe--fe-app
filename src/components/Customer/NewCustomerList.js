@@ -952,13 +952,17 @@ export default function NewCustomerList() {
                       {showPerformance ? 'Revenue' : 'Active Contracts'}
                     </div>
                     {showPerformance ? (
-                      <div className="col-lg-2 col-12">Units Sold</div>
+                      <div className="col-lg-2 col-12 unit-sold ">
+                        Units Sold
+                      </div>
                     ) : null}
                     {showPerformance ? (
-                      <div className="col-lg-2 col-12">Traffic</div>
+                      <div className="col-lg-2 col-12 traffic">Traffic</div>
                     ) : null}
                     {showPerformance ? (
-                      <div className="col-lg-2 col-12">Conversion</div>
+                      <div className="col-lg-2 col-12 conversion">
+                        Conversion
+                      </div>
                     ) : null}
                     <div className="col-lg-2 col-12 Brand_Strategist">
                       Brand Strategist
@@ -1270,9 +1274,18 @@ const CustomerListPage = styled.div`
   }
 
   .Revenue {
-    padding-left: 4%;
+    padding-left: 5%;
   }
 
+  .unit-sold {
+    padding-left: 4%;
+  }
+  .traffic {
+    padding-left: 3%;
+  }
+  .conversion {
+    padding-left: 2%;
+  }
   .Brand_Strategist {
     padding-left: 2%;
   }
