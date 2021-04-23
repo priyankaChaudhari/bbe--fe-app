@@ -12,7 +12,6 @@ import {
   PATH_AGREEMENT,
   PATH_STATEMENT,
   PATH_ADDENDUM,
-  PATH_COMPANY_DETAILS,
   PATH_ROOT,
   PATH_ONE_TIME_AGREEMENT,
   PATH_SERVICE_AMENDMENT,
@@ -23,9 +22,6 @@ import {
   PATH_BGS_DASHBOARD,
   PATH_TEAM_MEMBER,
   PATH_TABLET_TEAM_MEMBER,
-  PATH_BILLING_DETAILS,
-  PATH_AMAZON_MERCHANT,
-  PATH_AMAZON_ACCOUNT,
   PATH_SUMMARY,
 } from '../constants/index';
 
@@ -43,13 +39,7 @@ import {
   TeamMember,
   TabletTeamMember,
 } from '../components/Brand Partner';
-import {
-  BillingInfo,
-  AmazonMerchant,
-  CompanyDigital,
-  AmazonDeveloperAccess,
-  Summary,
-} from '../components/OnBoardingCustomer';
+import { Summary } from '../components/OnBoardingCustomer';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -137,10 +127,11 @@ export default function AuthenticationComponent() {
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}
-          <Route path={PATH_COMPANY_DETAILS} component={CompanyDigital} />;
-          <Route path={PATH_BILLING_DETAILS} component={BillingInfo} />;
+          {/* <Route path={PATH_COMPANY_DETAILS} component={CompanyDigital} />; */}
+          {/* <Route path={PATH_BILLING_DETAILS} component={BillingInfo} />;
           <Route path={PATH_AMAZON_MERCHANT} component={AmazonMerchant} />;
           <Route path={PATH_AMAZON_ACCOUNT} component={AmazonDeveloperAccess} />
+          <Route path={PATH_SUMMARY} component={Summary} /> */}
           <Route path={PATH_SUMMARY} component={Summary} />
           <Route component={PageNotFound} />
         </Switch>

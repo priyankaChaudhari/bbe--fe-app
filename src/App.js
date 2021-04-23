@@ -29,9 +29,10 @@ import {
   BillingInfo,
   CompanyDigital,
   CreateAccount,
-  Info,
+  // Info,
   Thanks,
 } from './components/OnBoardingCustomer';
+import MainContainer from './components/OnBoardingCustomer/MainContainer';
 
 export default function App() {
   return (
@@ -48,7 +49,8 @@ export default function App() {
         <Route path={PATH_WARNING} component={WarningComponent} />
 
         {/* Onboarding Customer */}
-        <Route path={PATH_ACCOUNT_SETUP} exact component={Info} />
+        {/* <Route path={PATH_ACCOUNT_SETUP} exact component={Info} /> */}
+        <Route path={PATH_ACCOUNT_SETUP} component={MainContainer} />
         <Route path={PATH_CREATE_PASSWORD} component={CreateAccount} />
         <Route
           path={PATH_UNAUTHORIZED_COMPANY_DETAILS}
