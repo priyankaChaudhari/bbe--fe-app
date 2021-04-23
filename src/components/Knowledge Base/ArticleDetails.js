@@ -120,7 +120,17 @@ export default function ArticleDetails() {
                 : res.data.items[0].id,
           });
           setSelectedArticle(
-            res && res.data && res.data.items && res.data.items[0],
+            // res && res.data && res.data.items && res.data.items[0],
+            res &&
+              res.data &&
+              res.data.items &&
+              res.data.items.length &&
+              res.data.items[0] &&
+              res.data.items[0].items &&
+              res.data.items[0].items.length &&
+              res.data.items[0].items[0]
+              ? res.data.items[0].items[0]
+              : {},
           );
         }
         setIsLoading({ loader: false, type: 'page' });
@@ -201,13 +211,18 @@ export default function ArticleDetails() {
         articleData.items &&
         articleData.items[0] &&
         articleData.items[0].type === 'section'
-        ? articleData.items[0] &&
+        ? articleData &&
+          articleData.items &&
+          articleData.items[0] &&
           articleData.items[0].items &&
           articleData.items[0].items.length &&
           articleData.items[0].items[0].content
           ? articleData.items[0].items[0].content
           : 'No Article Found'
-        : articleData.items[0].content;
+        : articleData &&
+            articleData.items &&
+            articleData.items[0] &&
+            articleData.items[0].content;
     }
     //  @Hack (woody): Would be Ideal for the Back-end to give us the section name of an article rather than do this.
     const section = articleData.items.find((sectionOrArticle) => {
@@ -241,10 +256,14 @@ export default function ArticleDetails() {
     window.dataLayer.push(toSend);
 
     return ` <h2 class="primary-heading">
-                          ${selectedArticle && selectedArticle.preferredPhrase}
+                          ${
+                            (selectedArticle &&
+                              selectedArticle.preferredPhrase) ||
+                            ''
+                          }
                         </h2>
           
-        ${selectedArticle && selectedArticle.content}`;
+        ${(selectedArticle && selectedArticle.content) || ''}`;
   };
 
   const getInitials = () => {
