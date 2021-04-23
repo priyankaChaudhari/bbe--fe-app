@@ -7,7 +7,6 @@ const Table = styled.table`
   margin-top: 40px;
 
   tbody {
-    //position: relative;
     z-index: -1;
   }
 
