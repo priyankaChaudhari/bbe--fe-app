@@ -10,7 +10,6 @@ const OnBoardingBody = styled.div`
     background: ${Theme.white};
     padding-top: 0;
   }
-
   .white-card-base {
     background-color: ${Theme.white};
     border-radius: 8px;
@@ -39,6 +38,18 @@ const OnBoardingBody = styled.div`
       text-transform: initial;
       padding-bottom: 13px;
       line-height: 34px;
+    }
+    .copy-info {
+      position: absolute;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+      .copy-icon {
+        width: 13px;
+        color: ${Theme.gray85};
+        font-size: 14px;
+        margin-right: 6px;
+      }
     }
     .information-text {
       font-weight: 300;

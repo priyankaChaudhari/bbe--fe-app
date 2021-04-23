@@ -55,7 +55,7 @@ export default function AskSomeone({
 
   return (
     <>
-      <CheckBox className="mt-3">
+      <CheckBox className="mt-1">
         <label className="check-container customer-pannel " htmlFor={step}>
           Ask someone else to complete this section
           <input

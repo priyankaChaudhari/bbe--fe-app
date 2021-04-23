@@ -11,7 +11,7 @@ export default function Summary() {
       <Header type="onboarding" />
       <NavigationHeader bar="99.9" backStep={PATH_AMAZON_ACCOUNT} />
       <OnBoardingBody className="body-white">
-        <div className="white-card-base panel no-gap mt-5 pt-3">
+        <div className="white-card-base panel account-reassign pt-5">
           <h3 className="page-heading ">Account Summary</h3>
           <p className="information-text mt-2 mb-0">
             <div className="hi-name">

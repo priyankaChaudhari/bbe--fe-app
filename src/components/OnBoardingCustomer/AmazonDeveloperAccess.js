@@ -20,6 +20,7 @@ import {
   updateCustomerDetails,
   updateUserMe,
 } from '../../api';
+import { CopyLinkIcon } from '../../theme/images';
 
 export default function AmazonDeveloperAccess({
   setIsLoading,
@@ -80,52 +81,68 @@ export default function AmazonDeveloperAccess({
   };
 
   return (
-    <OnBoardingBody className="body-white">
-      <div className=" straight-line  horizontal-line mb-4 mt-4" />
-      <p className="account-steps m-0">Part 1</p>
-      <p className="information-text mt-0 mb-0">
-        Log into your Amazon Seller Central admin account below. You should see
-        pre-filled information detailing our Developer Name and ID. If so, just
-        click ‘Next’.{' '}
-        <a className="video-link" href="*">
+    <OnBoardingBody className="body-white w-430 ">
+      <fieldset className="shape-without-border w-430   mt-4">
+        <p className="account-steps m-0">Part 1</p>
+        <p className="information-text mt-0 mb-0">
+          Log into your Amazon Seller Central admin account and navigate to
+          <strong> Appstore {'>'} Manage Your Apps</strong>
+        </p>
+        <Button className="btn-transparent w-100 mt-2">
+          Log into your Amazon Account
+        </Button>
+      </fieldset>
+      <fieldset className="shape-without-border mt-2">
+        <p className="account-steps m-0">Part 2</p>
+        <p className="information-text mt-0 mb-0">
+          Click on ‘Authorize new developer’ and enter the following information
+          on the resulting screen.
+        </p>
+        <p className="account-steps m-0">Developer’s Name</p>
+        <div className="information-text mb-1">
+          Buy Box Experts
+          <div className="copy-info">
+            <img className="copy-icon" src={CopyLinkIcon} alt="copy" />
+            Copy
+          </div>
+        </div>
+        <p className="account-steps m-0">Developer ID</p>
+        <div className="information-text ">
+          AMC184CK5LKV1129F
+          <div className="copy-info">
+            <img className="copy-icon" src={CopyLinkIcon} alt="copy" />
+            Copy
+          </div>
+        </div>
+      </fieldset>
+      <fieldset className="shape-without-border mt-2">
+        <p className="account-steps m-0">Part 3</p>
+        <p className="information-text mt-0 mb-0">
+          Copy and paste the ‘MWS Auth Token’ value shown on the resultant
+          screen below.
+        </p>
+        <ContractFormField>
+          <label htmlFor="token">
+            MWS Auth Token
+            <input
+              className="form-control"
+              onChange={(event) =>
+                setFormData({ merchant_id: event.target.value })
+              }
+            />
+          </label>
+        </ContractFormField>
+        <Button
+          className="btn-primary w-100 mt-4"
+          onClick={() => saveDetails()}>
           {' '}
-          Developer fields not pre-filled?
-        </a>
-      </p>
-      <Button className="btn-transparent w-100 mt-2">
-        Log into your Amazon Account
-      </Button>
-      <div className=" straight-line  horizontal-line mb-4 mt-4" />
-      <p className="account-steps m-0">Part 2</p>
-      <p className="information-text mt-0 mb-0">
-        Copy the ‘Seller ID’ and ‘MWS Auth Token’ values shown on the resultant
-        screen and paste into the field below.
-      </p>
-      <ContractFormField>
-        <label htmlFor="id">
-          Seller ID
-          <input
-            className="form-control"
-            onChange={(event) =>
-              setFormData({ merchant_id: event.target.value })
-            }
-          />
-        </label>
-      </ContractFormField>
-      <ContractFormField className="mt-3">
-        <label htmlFor="token">
-          MWS Auth Token
-          <input className="form-control" />
-        </label>
-      </ContractFormField>
-      <Button className="btn-primary w-100 mt-4" onClick={() => saveDetails()}>
-        {' '}
-        {isLoading.loader && isLoading.type === 'button' ? (
-          <PageLoader color="#fff" type="button" />
-        ) : (
-          'Continue'
-        )}
-      </Button>
+          {isLoading.loader && isLoading.type === 'button' ? (
+            <PageLoader color="#fff" type="button" />
+          ) : (
+            'Continue'
+          )}
+        </Button>
+      </fieldset>
     </OnBoardingBody>
   );
 }
