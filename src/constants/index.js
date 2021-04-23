@@ -24,6 +24,7 @@ export const PATH_HELLO_SIGN = `/contract-signature`;
 
 // Account Setup
 export const PATH_ACCOUNT_SETUP = '/account-setup/';
+export const PATH_ACCOUNT_SETUP_CHOOSE = `${PATH_ACCOUNT_SETUP}choose`;
 export const PATH_CREATE_PASSWORD = `${PATH_ACCOUNT_SETUP}create-password`;
 export const PATH_COMPANY_DETAILS = `${PATH_ACCOUNT_SETUP}company-details`;
 export const PATH_BILLING_DETAILS = `${PATH_ACCOUNT_SETUP}billing-details`;

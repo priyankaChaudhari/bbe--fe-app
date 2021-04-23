@@ -8,7 +8,7 @@ import queryString from 'query-string';
 
 import Theme from '../../theme/Theme';
 import { LeftArrowIcon } from '../../theme/images';
-import { PATH_ACCOUNT_SETUP } from '../../constants';
+import { PATH_ACCOUNT_SETUP_CHOOSE } from '../../constants';
 
 export default function NavigationHeader({
   bar,
@@ -29,7 +29,7 @@ export default function NavigationHeader({
           });
 
         history.push({
-          pathname: PATH_ACCOUNT_SETUP,
+          pathname: PATH_ACCOUNT_SETUP_CHOOSE,
           search: stringified,
         });
       } else {
@@ -54,13 +54,12 @@ export default function NavigationHeader({
           <div className="container-fluid">
             {' '}
             <div className="row">
-              {backStep ? (
-                <div className="col-6">
-                  {' '}
+              <div className="col-6">
+                {backStep !== '' ? (
                   <div
                     role="presentation"
                     className="back-link"
-                    onClick={() => redirect()}>
+                    onClick={() => redirect('back')}>
                     <img
                       src={LeftArrowIcon}
                       alt="aarow-back"
@@ -68,20 +67,19 @@ export default function NavigationHeader({
                     />
                     Back a step
                   </div>
-                </div>
-              ) : (
-                ''
-              )}
-              {skipStep ? (
-                <div
-                  className="col-6 text-right"
-                  onClick={() => redirect()}
-                  role="presentation">
-                  <div className="skip-steps pr-2">Skip this step</div>
-                </div>
-              ) : (
-                ''
-              )}
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="col-6 text-right">
+                {skipStep !== '' ? (
+                  <div onClick={() => redirect('skip')} role="presentation">
+                    <div className="skip-steps pr-2">Skip this step</div>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
             </div>
           </div>
         </BackToStep>

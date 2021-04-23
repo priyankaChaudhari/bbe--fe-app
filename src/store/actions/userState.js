@@ -16,6 +16,7 @@ import {
   PATH_COMPANY_DETAILS,
   PATH_BGS_DASHBOARD,
   PATH_AMAZON_MERCHANT,
+  PATH_SUMMARY,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -45,6 +46,9 @@ export const userRequestSuccess = (data, history) => {
       history.push(PATH_AMAZON_ACCOUNT);
     }
     if (data.user.step === 5) {
+      history.push(PATH_SUMMARY);
+    }
+    if (data.user.step === 6) {
       history.push(PATH_CUSTOMER_DETAILS.replace(data.user.customer));
     }
   } else {

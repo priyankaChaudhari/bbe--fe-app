@@ -102,4 +102,5 @@ export {
   getStepDetails,
   updateAskSomeoneData,
   verifyStepToken,
+  accountSummary,
 } from './OnboardingCustomerApi';

@@ -1,5 +1,6 @@
 import axiosInstance from '../axios';
 import {
+  API_ACCOUNT_SUMMARY,
   API_ONBOARD_CUSTOMER,
   API_STEPS_ASSIGNED,
   API_VERIFY_TOKEN,
@@ -58,6 +59,18 @@ export async function verifyStepToken(key) {
   const params = { key };
   const result = await axiosInstance
     .get(API_VERIFY_TOKEN, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function accountSummary(id) {
+  const result = await axiosInstance
+    .get(API_ACCOUNT_SUMMARY.replace(':id', id))
     .then((response) => {
       return response;
     })

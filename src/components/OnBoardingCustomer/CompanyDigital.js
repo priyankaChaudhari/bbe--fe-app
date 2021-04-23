@@ -12,6 +12,7 @@ import {
   PageLoader,
 } from '../../common';
 import {
+  askSomeoneData,
   updateAskSomeoneData,
   updateCustomerDetails,
   updateUserMe,
@@ -43,36 +44,74 @@ export default function CompanyDigital({
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
-        updateAskSomeoneData(
-          (stepData && stepData.id) || verifiedStepData.step_id,
-          {
-            token: assignedToSomeone ? params && params.key : '',
+        if (
+          stepData === undefined &&
+          verifiedStepData &&
+          Object.keys(verifiedStepData) &&
+          Object.keys(verifiedStepData).length === 0
+        ) {
+          const detail = {
             is_completed: true,
-          },
-        ).then((response) => {
-          if (response && response.status === 200) {
-            if (assignedToSomeone) {
-              const stringified =
-                queryString &&
-                queryString.stringify({
-                  name: verifiedStepData.user_name,
+            email: userInfo.email,
+            step: 'digital presence',
+            customer_onboarding: 'CBZQuki',
+          };
+          askSomeoneData(detail).then((stepResponse) => {
+            if (stepResponse && stepResponse.status === 201) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
                 });
-              history.push({
-                pathname: PATH_THANKS,
-                search: `${stringified}`,
-              });
-            } else {
-              history.push(PATH_BILLING_DETAILS);
-            }
-            updateUserMe(userInfo.id, { step: 2 }).then((user) => {
-              if (user && user.status === 200) {
-                dispatch(userMe());
+              } else {
+                history.push(PATH_BILLING_DETAILS);
               }
-            });
-            localStorage.removeItem('match');
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
+              updateUserMe(userInfo.id, { step: 2 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        } else {
+          updateAskSomeoneData(
+            (stepData && stepData.id) || verifiedStepData.step_id,
+            {
+              token: assignedToSomeone ? params && params.key : '',
+              is_completed: true,
+            },
+          ).then((response) => {
+            if (response && response.status === 200) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
+                });
+              } else {
+                history.push(PATH_BILLING_DETAILS);
+              }
+              updateUserMe(userInfo.id, { step: 2 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        }
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -155,6 +194,7 @@ export default function CompanyDigital({
 CompanyDigital.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
+    email: PropTypes.string,
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

@@ -6,7 +6,10 @@ import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 
 const requestHandler = (request) => {
   if (!NON_AUTHORIZATION_APIS.includes(request.url)) {
-    if (request.url.includes('/customer-onboarding/')) {
+    if (
+      request.url.includes('/customer-onboarding/') &&
+      !request.url.includes('/account-summary/')
+    ) {
       delete request.headers.Authorization;
     } else {
       let token = localStorage.getItem('token');

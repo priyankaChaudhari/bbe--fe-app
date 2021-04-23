@@ -16,6 +16,7 @@ import {
   PATH_UNAUTHORIZED_BILLING_DETAILS,
   PATH_UNAUTHORIZED_AMAZON_MERCHANT,
   PATH_UNAUTHORIZED_AMAZON_ACCOUNT,
+  PATH_ACCOUNT_SETUP_CHOOSE,
 } from './constants/index';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
@@ -29,7 +30,7 @@ import {
   BillingInfo,
   CompanyDigital,
   CreateAccount,
-  // Info,
+  Info,
   Thanks,
 } from './components/OnBoardingCustomer';
 import MainContainer from './components/OnBoardingCustomer/MainContainer';
@@ -49,7 +50,7 @@ export default function App() {
         <Route path={PATH_WARNING} component={WarningComponent} />
 
         {/* Onboarding Customer */}
-        {/* <Route path={PATH_ACCOUNT_SETUP} exact component={Info} /> */}
+        <Route path={PATH_ACCOUNT_SETUP_CHOOSE} exact component={Info} />
         <Route path={PATH_ACCOUNT_SETUP} component={MainContainer} />
         <Route path={PATH_CREATE_PASSWORD} component={CreateAccount} />
         <Route

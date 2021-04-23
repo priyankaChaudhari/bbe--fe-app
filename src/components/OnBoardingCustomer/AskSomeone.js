@@ -14,16 +14,21 @@ export default function AskSomeone({
   isLoading,
   stepData,
   setStepData,
+  userInfo,
 }) {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (stepData && stepData.step === step) {
+    if (
+      stepData &&
+      stepData.step === step &&
+      stepData.email !== userInfo.email
+    ) {
       setIsChecked(true);
     } else {
       setIsChecked(false);
     }
-  }, [stepData, setIsChecked, step]);
+  }, [stepData, setIsChecked, step, userInfo]);
 
   const handleChanges = (event) => {
     if (event.target.checked) {
@@ -63,7 +68,11 @@ export default function AskSomeone({
             id={step}
             name={step}
             onChange={(event) => handleChanges(event)}
-            defaultChecked={stepData && stepData.step === step}
+            checked={
+              stepData &&
+              stepData.step === step &&
+              stepData.email !== userInfo.email
+            }
             disabled={
               stepData && stepData.step === step && stepData.is_completed
             }
@@ -72,7 +81,10 @@ export default function AskSomeone({
           <span className="checkmark" />
         </label>
       </CheckBox>
-      {isChecked || (stepData && stepData.step === step) ? (
+      {isChecked ||
+      (stepData &&
+        stepData.step === step &&
+        stepData.email !== userInfo.email) ? (
         <fieldset className="shape-without-border w-430 mt-4">
           <ContractFormField>
             <label htmlFor="email">
@@ -80,9 +92,15 @@ export default function AskSomeone({
               <input
                 className="form-control"
                 onChange={(event) => setFormData({ email: event.target.value })}
-                readOnly={stepData && stepData.step === step}
+                readOnly={
+                  stepData &&
+                  stepData.step === step &&
+                  stepData.email !== userInfo.email
+                }
                 defaultValue={
-                  stepData && stepData.step === step
+                  stepData &&
+                  stepData.step === step &&
+                  stepData.email !== userInfo.email
                     ? stepData && stepData.email
                     : ''
                 }
@@ -128,10 +146,13 @@ AskSomeone.defaultProps = {
   step: '',
   setIsLoading: () => {},
   setStepData: () => {},
-  stepData: [],
+  stepData: {},
 };
 
 AskSomeone.propTypes = {
+  userInfo: PropTypes.shape({
+    email: PropTypes.string,
+  }).isRequired,
   isChecked: PropTypes.bool.isRequired,
   setIsChecked: PropTypes.func,
   step: PropTypes.string,
@@ -141,5 +162,5 @@ AskSomeone.propTypes = {
     type: PropTypes.string,
   }).isRequired,
   setStepData: PropTypes.func,
-  stepData: PropTypes.arrayOf(PropTypes.array),
+  stepData: PropTypes.objectOf(PropTypes.object),
 };

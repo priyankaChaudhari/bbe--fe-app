@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
 
 import {
   OnBoardingBody,
@@ -16,6 +17,7 @@ import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
 
 import { userMe } from '../../store/actions';
 import {
+  askSomeoneData,
   updateAskSomeoneData,
   updateCustomerDetails,
   updateUserMe,
@@ -28,7 +30,7 @@ export default function AmazonDeveloperAccess({
   stepData,
   verifiedStepData,
   userInfo,
-  // data,
+  data,
   isLoading,
 }) {
   const history = useHistory();
@@ -43,36 +45,74 @@ export default function AmazonDeveloperAccess({
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
-        updateAskSomeoneData(
-          (stepData && stepData.id) || verifiedStepData.step_id,
-          {
-            token: assignedToSomeone ? params && params.key : '',
+        if (
+          stepData === undefined &&
+          verifiedStepData &&
+          Object.keys(verifiedStepData) &&
+          Object.keys(verifiedStepData).length === 0
+        ) {
+          const detail = {
             is_completed: true,
-          },
-        ).then((response) => {
-          if (response && response.status === 200) {
-            if (assignedToSomeone) {
-              const stringified =
-                queryString &&
-                queryString.stringify({
-                  name: verifiedStepData.user_name,
+            email: userInfo.email,
+            step: 'developer access',
+            customer_onboarding: 'CBZQuki',
+          };
+          askSomeoneData(detail).then((stepResponse) => {
+            if (stepResponse && stepResponse.status === 201) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
                 });
-              history.push({
-                pathname: PATH_THANKS,
-                search: `${stringified}`,
-              });
-            } else {
-              history.push(PATH_SUMMARY);
-            }
-            updateUserMe(userInfo.id, { step: 4 }).then((user) => {
-              if (user && user.status === 200) {
-                dispatch(userMe());
+              } else {
+                history.push(PATH_SUMMARY);
               }
-            });
-            localStorage.removeItem('match');
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
+              updateUserMe(userInfo.id, { step: 5 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        } else {
+          updateAskSomeoneData(
+            (stepData && stepData.id) || verifiedStepData.step_id,
+            {
+              token: assignedToSomeone ? params && params.key : '',
+              is_completed: true,
+            },
+          ).then((response) => {
+            if (response && response.status === 200) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
+                });
+              } else {
+                history.push(PATH_SUMMARY);
+              }
+              updateUserMe(userInfo.id, { step: 5 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        }
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -88,9 +128,14 @@ export default function AmazonDeveloperAccess({
           Log into your Amazon Seller Central admin account and navigate to
           <strong> Appstore {'>'} Manage Your Apps</strong>
         </p>
-        <Button className="btn-transparent w-100 mt-2">
-          Log into your Amazon Account
-        </Button>
+        <a
+          href="https://www.amazon.com/"
+          target="_blank"
+          rel="noopener noreferrer">
+          <Button className="btn-transparent w-100 mt-2">
+            Log into your Amazon Account
+          </Button>
+        </a>
       </fieldset>
       <fieldset className="shape-without-border mt-2">
         <p className="account-steps m-0">Part 2</p>
@@ -100,15 +145,25 @@ export default function AmazonDeveloperAccess({
         </p>
         <p className="account-steps m-0">Developer’s Name</p>
         <div className="information-text mb-1">
-          Buy Box Experts
-          <div className="copy-info">
+          {process.env.REACT_APP_DEVELOPERS_NAME || 'Buy Box Experts'}
+          <div
+            className="copy-info"
+            onClick={() =>
+              copy(process.env.REACT_APP_DEVELOPERS_NAME || 'Buy Box Experts')
+            }
+            role="presentation">
             <img className="copy-icon" src={CopyLinkIcon} alt="copy" />
             Copy
           </div>
         </div>
         <p className="account-steps m-0">Developer ID</p>
-        <div className="information-text ">
-          AMC184CK5LKV1129F
+        <div
+          className="information-text"
+          onClick={() =>
+            copy(process.env.REACT_APP_DEVELOPERS_ID || 'AMC184CK5LKV1129F')
+          }
+          role="presentation">
+          {process.env.REACT_APP_DEVELOPERS_ID || 'AMC184CK5LKV1129F'}
           <div className="copy-info">
             <img className="copy-icon" src={CopyLinkIcon} alt="copy" />
             Copy
@@ -127,8 +182,9 @@ export default function AmazonDeveloperAccess({
             <input
               className="form-control"
               onChange={(event) =>
-                setFormData({ merchant_id: event.target.value })
+                setFormData({ mws_auth_token: event.target.value })
               }
+              defaultValue={data && data.mws_auth_token}
             />
           </label>
         </ContractFormField>
@@ -150,6 +206,7 @@ export default function AmazonDeveloperAccess({
 AmazonDeveloperAccess.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
+    email: PropTypes.string,
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
@@ -159,7 +216,7 @@ AmazonDeveloperAccess.propTypes = {
       user_name: PropTypes.string,
     }),
   ).isRequired,
-  // data: PropTypes.objectOf(PropTypes.object).isRequired,
+  data: PropTypes.objectOf(PropTypes.object).isRequired,
   isLoading: PropTypes.shape({
     loader: PropTypes.bool,
     type: PropTypes.string,

@@ -27,12 +27,12 @@ export default function Thanks() {
           You can close this tab when you’re ready.
         </p>
 
-        <h5>Information already provided</h5>
+        {/* <h5>Information already provided</h5>
         <p className="info">
           Looks like someone has provided the requested information already.
           <br />
           <br /> You can close this tab when you’re ready.
-        </p>
+        </p> */}
       </ThanksPage>
 
       {/* <OnBoardingBody>

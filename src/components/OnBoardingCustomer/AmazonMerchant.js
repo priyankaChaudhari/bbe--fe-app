@@ -12,6 +12,7 @@ import {
   PageLoader,
 } from '../../common';
 import {
+  askSomeoneData,
   updateAskSomeoneData,
   updateCustomerDetails,
   updateUserMe,
@@ -40,36 +41,74 @@ export default function AmazonMerchant({
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
-        updateAskSomeoneData(
-          (stepData && stepData.id) || verifiedStepData.step_id,
-          {
-            token: assignedToSomeone ? params && params.key : '',
+        if (
+          stepData === undefined &&
+          verifiedStepData &&
+          Object.keys(verifiedStepData) &&
+          Object.keys(verifiedStepData).length === 0
+        ) {
+          const detail = {
             is_completed: true,
-          },
-        ).then((response) => {
-          if (response && response.status === 200) {
-            if (assignedToSomeone) {
-              const stringified =
-                queryString &&
-                queryString.stringify({
-                  name: verifiedStepData.user_name,
+            email: userInfo.email,
+            step: 'merchant id',
+            customer_onboarding: 'CBZQuki',
+          };
+          askSomeoneData(detail).then((stepResponse) => {
+            if (stepResponse && stepResponse.status === 201) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
                 });
-              history.push({
-                pathname: PATH_THANKS,
-                search: `${stringified}`,
-              });
-            } else {
-              history.push(PATH_AMAZON_ACCOUNT);
-            }
-            updateUserMe(userInfo.id, { step: 4 }).then((user) => {
-              if (user && user.status === 200) {
-                dispatch(userMe());
+              } else {
+                history.push(PATH_AMAZON_ACCOUNT);
               }
-            });
-            localStorage.removeItem('match');
-            setIsLoading({ loader: false, type: 'button' });
-          }
-        });
+              updateUserMe(userInfo.id, { step: 4 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        } else {
+          updateAskSomeoneData(
+            (stepData && stepData.id) || verifiedStepData.step_id,
+            {
+              token: assignedToSomeone ? params && params.key : '',
+              is_completed: true,
+            },
+          ).then((response) => {
+            if (response && response.status === 200) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
+                });
+              } else {
+                history.push(PATH_AMAZON_ACCOUNT);
+              }
+              updateUserMe(userInfo.id, { step: 4 }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+          });
+        }
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -92,9 +131,14 @@ export default function AmazonMerchant({
             />
           </label>
         </ContractFormField>
-        <Button className="btn-transparent w-100 mt-4">
-          Log into your Amazon Account
-        </Button>
+        <a
+          href="https://www.amazon.com/"
+          target="_blank"
+          rel="noopener noreferrer">
+          <Button className="btn-transparent w-100 mt-4">
+            Log into your Amazon Account
+          </Button>
+        </a>
         <Button
           className="btn-primary w-100 mt-3"
           onClick={() => saveDetails()}>
@@ -113,6 +157,7 @@ export default function AmazonMerchant({
 AmazonMerchant.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
+    email: PropTypes.string,
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
