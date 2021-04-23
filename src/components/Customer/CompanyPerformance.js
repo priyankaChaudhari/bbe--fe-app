@@ -164,7 +164,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   useLayoutEffect(() => {
     const chart = am4core.create('chartdiv', am4charts.XYChart);
-    chart.paddingRight = 10;
+    chart.paddingRight = 20;
     chart.logo.disabled = true; // disable amchart logo
     chart.data = lineChartData; // bind th data
 
@@ -181,12 +181,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
     // add currency only for revenue
+
     if (activeSales === 'revenue') {
       valueAxis.numberFormatter.numberFormat = `${currencySymbol}#a`;
     } else {
       valueAxis.numberFormatter.numberFormat = '#a';
     }
-    // valueAxis.renderer.labels.template.fill = am4core.color("#FF5933");
 
     // create a tooltip
     const flag = selectedValue !== 'custom';
