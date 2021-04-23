@@ -58,8 +58,6 @@ export default function AskSomeone({
     });
   };
 
-  console.log(stepData && stepData.step, step, stepData.email, userInfo.email);
-
   return (
     <>
       <CheckBox className="mt-1">
