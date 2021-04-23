@@ -213,7 +213,8 @@ export default function Header({ type }) {
                     </div>
                   </li> */}
 
-                {type !== 'onboarding' ? (
+                {type !== 'onboarding' &&
+                !history.location.pathname.includes('summary') ? (
                   <li
                     className=" cursor"
                     onClick={() => {

@@ -29,7 +29,6 @@ import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
 import BillingInfo from './BillingInfo';
 import { AmazonDeveloperAccess, AmazonMerchant, CreateAccount } from '.';
-import Summary from './Summary';
 
 export default function MainContainer() {
   const history = useHistory();
@@ -88,14 +87,6 @@ export default function MainContainer() {
       subTitle:
         'Finally, we need you to grant us developer access to your Amazon Seller account.',
       video: true,
-    },
-    {
-      key: 'summary',
-      stepof: '',
-      title: 'Account Summary',
-      back: PATH_AMAZON_ACCOUNT,
-      bar: '99.9',
-      path: 'summary',
     },
   ];
 
@@ -201,7 +192,7 @@ export default function MainContainer() {
           isLoading={isLoading}
         />
       );
-    return <Summary />;
+    return '';
   };
 
   const generateHeader = (item) => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import Header from '../../common/Header';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import NavigationHeader from './NavigationHeader';
@@ -85,7 +84,6 @@ export default function Summary() {
 
   return (
     <>
-      <Header type="onboarding" />
       <NavigationHeader bar="99.9" backStep={PATH_AMAZON_ACCOUNT} />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader component="modal" color="#FF5933" type="page" />

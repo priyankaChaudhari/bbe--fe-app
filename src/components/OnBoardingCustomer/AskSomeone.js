@@ -58,6 +58,8 @@ export default function AskSomeone({
     });
   };
 
+  console.log(stepData && stepData.step, step, stepData.email, userInfo.email);
+
   return (
     <>
       <CheckBox className="mt-1">
@@ -70,12 +72,12 @@ export default function AskSomeone({
             onChange={(event) => handleChanges(event)}
             checked={
               stepData &&
-              stepData.step === step &&
-              stepData.email !== userInfo.email
+              stepData.email !== userInfo.email &&
+              stepData.step === step
             }
-            disabled={
-              stepData && stepData.step === step && stepData.is_completed
-            }
+            // disabled={
+            //   stepData && stepData.step === step && stepData.is_completed
+            // }
             readOnly
           />
           <span className="checkmark" />
@@ -106,10 +108,6 @@ export default function AskSomeone({
                 }
               />
             </label>
-            {/* <span className="edit-field">
-              <img className="edit-icon" src={EditOrangeIcon} alt="edit" /> Edit
-              email address
-            </span> */}
           </ContractFormField>
           {stepData && stepData.step === step ? (
             <p className="info-text-gray m-0 pt-3 ">
