@@ -1301,7 +1301,7 @@ const CustomerListPage = styled.div`
     right: 0;
     background: white;
     height: 40px;
-    z-index: 0;
+    z-index: 1;
     display: inline;
   }
 
@@ -1314,7 +1314,7 @@ const CustomerListPage = styled.div`
     position: fixed;
     left: 64px;
     right: 0;
-    z-index: 1;
+    z-index: 2;
     background-color: ${Theme.white};
   }
 

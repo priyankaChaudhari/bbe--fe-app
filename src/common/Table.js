@@ -6,10 +6,6 @@ const Table = styled.table`
   width: 100%;
   margin-top: 40px;
 
-  tbody {
-    z-index: -1;
-  }
-
   tr {
     text-align: left;
     background: ${Theme.white};
