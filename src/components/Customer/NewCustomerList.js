@@ -1407,7 +1407,7 @@ const CustomerListPage = styled.div`
 
 const CustomerLeftPannel = styled.div`
   max-width: 290px;
-  height: 100%;
+  height: 90%;
   position: fixed;
   overflow: auto;
   // padding-bottom: 200px;
@@ -1415,7 +1415,7 @@ const CustomerLeftPannel = styled.div`
   width: 100%;
   left: 62px;
   padding: 15px;
-  padding-bottom: 150px;
+  padding-bottom: 80px;
   border-right: 1px solid ${Theme.gray5};
 
   .label {

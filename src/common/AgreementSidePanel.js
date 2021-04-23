@@ -3543,8 +3543,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader
-                null : (
+                {loader ? null : ( // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
@@ -3706,10 +3705,7 @@ export default function AgreementSidePanel({
                     <div className="clear-fix" />
                   </div>
                   <Collapse isOpened={openCollapse.statement}>
-                    {loader ? //   color="#FF5933" //   component="activityLog" // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
-                    //   type="page"
-                    // />
-                    null : (
+                    {loader ? null : ( // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader // (isLoading.loader && isLoading.type === 'page') //  ||
                       // ''
                       <>
                         <ul className="collapse-inner">
@@ -3896,9 +3892,7 @@ export default function AgreementSidePanel({
                 </>
               )}
 
-              {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
-              // />
-              null : (formData &&
+              {loader ? null : (formData && // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader //  || (isLoading.loader && isLoading.type === 'page')
                   formData.contract_type &&
                   formData.contract_type.toLowerCase().includes('dsp')) ||
                 (showSection &&
@@ -4056,9 +4050,7 @@ export default function AgreementSidePanel({
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
-                {loader ? //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
-                // />
-                null : (
+                {loader ? null : ( // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader // || (isLoading.loader && isLoading.type === 'page')
                   <ul className="collapse-inner">
                     <li>
                       <p className="small-para  mt-0">
@@ -4401,12 +4393,12 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom: 370px;
+    padding-bottom: 70px;
     width: 336px;
     position: fixed;
     top: 130px;
     right: 0;
-    height: 100%;
+    height: 77%;
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y: auto;
