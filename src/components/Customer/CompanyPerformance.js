@@ -179,7 +179,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
-    valueAxis.numberFormatter.numberFormat = '#a';
     valueAxis.numberFormatter = new am4core.NumberFormatter();
     // add currency only for revenue
     if (activeSales === 'revenue') {
@@ -197,16 +196,16 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
     if (activeSales === 'revenue') {
       tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
-      tooltipCurrent = `${currencySymbol}{value1}[/]`;
-      tooltipPrevious = flag ? `\nvs: ${currencySymbol}{value2}` : '';
+      tooltipCurrent = `${currencySymbol}{label1}[/]`;
+      tooltipPrevious = flag ? `\nvs ${currencySymbol}{label2}` : '';
     } else if (activeSales === 'conversion') {
       tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      tooltipCurrent = `{value1}%[/]`;
-      tooltipPrevious = flag ? `\nvs: {value2}%` : '';
+      tooltipCurrent = `{label1}%[/]`;
+      tooltipPrevious = flag ? `\nvs {label2}%` : '';
     } else {
       tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      tooltipCurrent = `{value1}[/]`;
-      tooltipPrevious = flag ? `\nvs: {value2}` : '';
+      tooltipCurrent = `{label1}[/]`;
+      tooltipPrevious = flag ? `\nvs {label2}` : '';
     }
 
     // Create series for previous data
@@ -233,6 +232,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
     series2.stroke = am4core.color('#FF5933');
     series2.fill = am4core.color('#2e384d');
+
     const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
     circleBullet.circle.fill = am4core.color('#fff');
     circleBullet.circle.strokeWidth = 1;
@@ -408,10 +408,24 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               // trafficTotal.previousTrafficTotal += resData.traffic;
               // conversionTotal.previousConversionTotal += resData.conversion;
               // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              tempRevenueData.push({ value2: resData.revenue });
-              tempTrafficData.push({ value2: resData.traffic });
-              tempUnitsSoldData.push({ value2: resData.units_sold });
-              tempConversionData.push({ value2: resData.conversion });
+              tempRevenueData.push({
+                value2: resData.revenue,
+                label2: resData.revenue !== null ? resData.revenue : '0.00',
+              });
+              tempTrafficData.push({
+                value2: resData.traffic,
+                label2: resData.traffic !== null ? resData.traffic : '0.00',
+              });
+              tempUnitsSoldData.push({
+                value2: resData.units_sold,
+                label2:
+                  resData.units_sold !== null ? resData.units_sold : '0.00',
+              });
+              tempConversionData.push({
+                value2: resData.conversion,
+                label2:
+                  resData.conversion !== null ? resData.conversion : '0.00',
+              });
             });
             // conversionTotal.previousConversionTotal /=
             //   res.data.daily_facts.previous.length;
@@ -439,6 +453,16 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempUnitsSoldData[index].value1 = resData.units_sold;
                 tempTrafficData[index].value1 = resData.traffic;
                 tempConversionData[index].value1 = resData.conversion;
+
+                tempRevenueData[index].label1 =
+                  resData.revenue !== null ? resData.revenue : '0.00';
+                tempUnitsSoldData[index].label1 =
+                  resData.units_sold !== null ? resData.units_sold : '0.00';
+                tempTrafficData[index].label1 =
+                  resData.traffic !== null ? resData.traffic : '0.00';
+                tempConversionData[index].label1 =
+                  resData.conversion !== null ? resData.conversion : '0.00';
+
                 conversionTotal.previousConversionTotal +=
                   res.data.daily_facts.previous[index].conversion;
                 revenueTotal.previousRevenueTotal +=
@@ -451,18 +475,28 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempRevenueData.push({
                   name: dayDate,
                   value1: resData.revenue,
+                  label1: resData.revenue !== null ? resData.revenue : '0.00',
+                  label2: '0.00',
                 });
                 tempTrafficData.push({
                   name: dayDate,
                   value1: resData.traffic,
+                  label1: resData.traffic !== null ? resData.traffic : '0.00',
+                  label2: '0.00',
                 });
                 tempUnitsSoldData.push({
                   name: dayDate,
                   value1: resData.units_sold,
+                  label1:
+                    resData.units_sold !== null ? resData.units_sold : '0.00',
+                  label2: '0.00',
                 });
                 tempConversionData.push({
                   name: dayDate,
                   value1: resData.conversion,
+                  label1:
+                    resData.conversion !== null ? resData.conversion : '0.00',
+                  label2: '0.00',
                 });
               }
             });
