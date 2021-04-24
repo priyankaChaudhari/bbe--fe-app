@@ -613,9 +613,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     ) {
       return (
         <g className="mb-3">
-          {bBChartData &&
-          bBChartData[0].avg &&
-          bBChartData[0].avg !== '0.00' ? (
+          {bBChartData && bBChartData[0].avg ? (
             <rect
               x={data.x - 25}
               y={data.y - 27}
@@ -624,7 +622,6 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               height={28}
             />
           ) : null}
-          {/* <circle cx={data.x} cy={data.y} r={20} w={40} h={40} fill="#BFC5D2" /> */}
 
           <text
             className="cust-label-avg"
@@ -1208,6 +1205,17 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     );
   };
 
+  const customTicks = () => {
+    if (bBChartData && bBChartData.length) {
+      const {avg} = bBChartData[0];
+      if (avg === '0.00') {
+        return [-1, parseFloat(avg), 1];
+      }
+      return [0, parseFloat(avg), parseFloat(avg) * 2];
+    }
+    return [];
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
@@ -1786,36 +1794,39 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   </ul>
                 </div>
               </div>
-              <ResponsiveContainer width="99%" height={200}>
-                <LineChart
-                  // width={300}
-                  // height={200}
-                  data={bBChartData}
-                  margin={{
-                    top: 30,
-                    right: 30,
-                    left: 20,
-                    bottom: 20,
-                  }}>
-                  <XAxis dataKey="date" hide />
-                  <YAxis hide />
-                  <Tooltip content={<BBCustomTooltip />} />
-                  <Legend />
-                  <Line
-                    dataKey="avg"
-                    dot={false}
-                    stroke="#BFC5D2"
-                    activeDot={false}>
-                    <LabelList content={<CustomizedLabel />} />
-                  </Line>
-                  <Line
-                    dataKey="value"
-                    dot={false}
-                    stroke="BLACK"
-                    activeDot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {bBChartData && bBChartData.length > 1 ? (
+                <ResponsiveContainer width="99%" height={200}>
+                  <LineChart
+                    // width={300}
+                    // height={200}
+                    data={bBChartData}
+                    margin={{
+                      top: 30,
+                      right: 30,
+                      left: 20,
+                      bottom: 20,
+                    }}>
+                    <XAxis dataKey="date" hide />
+                    <YAxis tickCount={3} ticks={customTicks()} hide />
+                    <Tooltip content={<BBCustomTooltip />} />
+                    <Legend />
+                    <Line
+                      dataKey="avg"
+                      dot={false}
+                      stroke="#BFC5D2"
+                      activeDot={false}>
+                      <LabelList content={<CustomizedLabel />} />
+                    </Line>
+                    <Line
+                      dataKey="value"
+                      dot={false}
+                      stroke="BLACK"
+                      strokeWidth={2}
+                      activeDot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : null}
               <br />
               <br />
               <div className="last-update ">
