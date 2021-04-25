@@ -171,7 +171,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     // render X axis
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
-    dateAxis.renderer.grid.template.disabled = true;
+    dateAxis.renderer.grid.template.location = 0.5;
+    // dateAxis.renderer.grid.template.disabled = true;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 
@@ -180,6 +181,8 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
+    // valueAxis.min = 0;
+
     // add currency only for revenue
 
     if (activeSales === 'revenue') {
@@ -216,6 +219,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     series.stroke = am4core.color('#BFC5D2');
     series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
     series.fill = am4core.color('#2e384d');
+    series.propertyFields.strokeDasharray = 'dashLength';
 
     // add bullet for
     const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
@@ -453,6 +457,26 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 tempUnitsSoldData[index].value1 = resData.units_sold;
                 tempTrafficData[index].value1 = resData.traffic;
                 tempConversionData[index].value1 = resData.conversion;
+
+                if (index > 0) {
+                  tempRevenueData[index - 1].dashLength =
+                    resData.revenue === null ? 8 : null;
+                  tempUnitsSoldData[index - 1].dashLength =
+                    resData.units_sold === null ? 8 : null;
+                  tempTrafficData[index - 1].dashLength =
+                    resData.traffic === null ? 8 : null;
+                  tempConversionData[index - 1].dashLength =
+                    resData.conversion === null ? 8 : null;
+                }
+
+                tempRevenueData[index].dashLength =
+                  resData.revenue === null ? 8 : null;
+                tempUnitsSoldData[index].dashLength =
+                  resData.units_sold === null ? 8 : null;
+                tempTrafficData[index].dashLength =
+                  resData.traffic === null ? 8 : null;
+                tempConversionData[index].dashLength =
+                  resData.conversion === null ? 8 : null;
 
                 tempRevenueData[index].label1 =
                   resData.revenue !== null ? resData.revenue : '0.00';
@@ -1207,7 +1231,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   const customTicks = () => {
     if (bBChartData && bBChartData.length) {
-      const {avg} = bBChartData[0];
+      const { avg } = bBChartData[0];
       if (avg === '0.00') {
         return [-1, parseFloat(avg), 1];
       }
