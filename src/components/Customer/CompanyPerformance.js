@@ -1314,7 +1314,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         </Tab>
         {viewComponent === 'performance' ? (
           <>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-12 mb-3">
                 <DropDownSelect className="cursor">
                   <Select
@@ -1339,7 +1339,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                   />
                 </DropDownSelect>{' '}
               </div>
-            </div>
+            </div> */}
             {renderMarketplaceDropDown()}
             <WhiteCard>
               <div className="row">
