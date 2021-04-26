@@ -370,20 +370,24 @@ BillingInfo.propTypes = {
 };
 
 const CollapseOpenContainer = styled.div`
-  margin-top: 10px;
   .ReactCollapse--collapse {
-    max-width: 409px !important;
+    max-width: 430px !important;
+    margin: 0 auto;
     .inner-content {
       background-color: ${Theme.white};
-      border: 1px solid ${Theme.gray15};
-      box-shadow: ${Theme.commonShadow};
-      width: 409px;
-      border-radius: 1px;
-      padding: 15px;
+      padding: 12px 0px 4px 0px;
       .pay-card {
-        font-size: 15px;
-        color: #2e384d;
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.black};
         font-weight: 600;
+      }
+      .label-title {
+        color: ${Theme.gray40};
+        font-size: ${Theme.verySmall};
+        letter-spacing: 1.13px;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: ${Theme.titleFontFamily};
       }
       .payment-option {
         list-style-type: none;
@@ -392,11 +396,9 @@ const CollapseOpenContainer = styled.div`
         li {
           display: inline-block;
           margin-right: 23px;
-
           &:last-child {
             margin-right: 0px;
           }
-
           .card {
             width: 20px;
             margin-right: 2px;
