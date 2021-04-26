@@ -4,12 +4,12 @@ import CustomerListTablet from './CustomerListTablet';
 import CompanyDetail from './CompanyDetail';
 import Activity from './Activity';
 import AgreementDetails from './AgreementDetails';
-import CompanyPerformance from './CompanyPerformance';
+import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
 import EditCompanyDetails from './EditCompanyDetails';
 import EditAccountDetails from './EditAccountDetails';
 import CustomerStatus from './CustomerStatus';
 import Billing from './Billing';
-import AdPerformance from './AdPerformance';
+// import AdPerformance from './AdPerformance';
 
 export {
   CustomerList,
@@ -22,5 +22,5 @@ export {
   EditAccountDetails,
   CustomerStatus,
   Billing,
-  AdPerformance,
+  // AdPerformance,
 };

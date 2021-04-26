@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import styled from 'styled-components';
-// import Theme from '../../theme/Theme';
 import Select from 'react-select';
-import { DropDownSelect } from '../../common';
-import { WhiteCard } from '../../theme/Global';
-import { ArrowDownIcon } from '../../theme/images/index';
+import { DropDownSelect } from '../../../common';
+import { WhiteCard } from '../../../theme/Global';
+import { ArrowDownIcon } from '../../../theme/images/index';
 
 export default function AdPerformance() {
   return (

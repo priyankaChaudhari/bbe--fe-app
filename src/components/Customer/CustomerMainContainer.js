@@ -50,7 +50,7 @@ import {
   CustomerStatus,
   EditAccountDetails,
 } from './index';
-import CompanyPerformance from './CompanyPerformance';
+import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
 import Billing from './Billing';
 import Activity from './Activity';
 import {
