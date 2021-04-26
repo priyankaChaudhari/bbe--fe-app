@@ -2660,7 +2660,7 @@ export default function ContractContainer() {
     getContractDetails();
     setShowDiscountModal(false);
   };
-
+  console.log(isLoading, 'isLoading');
   return (details &&
     details.contract_status &&
     details.contract_status.value === 'pending account setup') ||
@@ -2810,7 +2810,7 @@ export default function ContractContainer() {
       (isMobile && tabInResponsive === 'edit-fields')
         ? displayRightSidePanel()
         : ''}
-      {details && details.id ? displayFooter() : null}
+      {details && details.id && !isLoading.loader ? displayFooter() : null}
       <Modal
         isOpen={showModal}
         style={customStyles}
