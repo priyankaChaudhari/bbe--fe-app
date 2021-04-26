@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { BannerBg, NextLogo } from '../../theme/images/index';
+
+import { BannerBg, LeftArrowIcon, NextLogo } from '../../theme/images/index';
 // import GoogleIcons from '../../theme/images/icons/google.svg';
 import {
   Button,
@@ -19,6 +22,7 @@ import {
   PATH_FORGOT_PASSWORD,
 } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
+import { getCustomerNames } from '../../api';
 
 export default function Login() {
   const history = useHistory();
@@ -31,9 +35,49 @@ export default function Login() {
   );
   const resetPasswordMsg = useSelector((state) => state.userState.showResetMsg);
   const userInfo = useSelector((state) => state.userState.userInfo);
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    name: false,
+    email: true,
+  });
+  const [customerApiError, setCustomerApiError] = useState([]);
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
+  const [customerNames, setCustomerNames] = useState([]);
+  const [getName, setGetName] = useState({ email: '', customer: '' });
 
   const onSubmit = (data) => {
-    dispatch(login(history, data));
+    setIsLoading({ loader: true, type: 'button' });
+    if (showPassword.email && !showPassword.password) {
+      setGetName({ ...getName, email: data.email });
+      getCustomerNames(data.email).then((response) => {
+        if (response && response.status === 200) {
+          if (
+            (response && response.data && response.data.length === 0) ||
+            (response && response.data === '')
+          ) {
+            setShowPassword({ name: false, password: true });
+          } else {
+            setCustomerNames(response && response.data);
+            setShowPassword({ name: true, password: false });
+          }
+          setIsLoading({ loader: false, type: 'button' });
+        }
+        if (response && response.status === 400) {
+          setCustomerApiError(response && response.data);
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    } else if (showPassword.name) {
+      setShowPassword({ password: true, email: false, name: false });
+      setIsLoading({ loader: false, type: 'button' });
+    } else {
+      const detail = {
+        ...data,
+        email: getName.email,
+      };
+      dispatch(login(history, detail, { customer: getName.customer }));
+      setIsLoading({ loader: false, type: 'button' });
+    }
   };
 
   useEffect(() => {
@@ -50,6 +94,7 @@ export default function Login() {
 
   const handleChange = () => {
     dispatch(clearErrorMessage());
+    setCustomerApiError([]);
   };
 
   return (
@@ -75,84 +120,154 @@ export default function Login() {
                   ''
                 )}
               </div>
-              <h2 className="mb-0">Sign in</h2>
 
-              <p className="small-para sub-text">
-                Please enter your credentials to proceed.{' '}
-              </p>
+              {!showPassword.email ? (
+                <div className="container-fluid">
+                  {' '}
+                  <div className="row">
+                    <div className="col-6">
+                      <div
+                        role="presentation"
+                        className="back-link"
+                        onClick={() =>
+                          setShowPassword({
+                            email: !!showPassword.name,
+                            name: !!showPassword.password,
+                          })
+                        }>
+                        <img
+                          src={LeftArrowIcon}
+                          alt="aarow-back"
+                          className="arrow-back-icon "
+                        />
+                        Back a step
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+
+              <h2 className={showPassword.email ? 'mb-5' : 'mb-0'}>
+                {showPassword.email
+                  ? 'Sign in'
+                  : showPassword.name
+                  ? 'Select Account'
+                  : 'Welcome Back!'}
+              </h2>
+
+              {showPassword.password ? (
+                <p className="small-para sub-text">
+                  Please verify that it&apos;s you.
+                </p>
+              ) : showPassword.name ? (
+                <p className="small-para sub-text">
+                  Please select the account you want to sign into.
+                </p>
+              ) : (
+                ''
+              )}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <FormField>
-                  <label htmlFor="emailAddress">
-                    Email Address
-                    <br />
-                    <input
-                      className={
-                        errors && errors.email
-                          ? 'form-control'
-                          : 'form-control mb-2'
-                      }
-                      type="text"
-                      placeholder=" Enter your Email Address"
-                      onChange={() => handleChange()}
-                      id="emailAddress"
-                      name="email"
-                      ref={register({
-                        required: {
-                          value: true,
-                          message: 'This field is required.',
-                        },
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                          message: 'Invalid email address.',
-                        },
-                      })}
-                    />
-                  </label>
-                  <ErrorMsg>
-                    {errors && errors.email && errors.email.message}
-                  </ErrorMsg>
-                  <br />
-                  <label htmlFor="password">
-                    Password
-                    <Link
-                      className="float-right link"
-                      to={PATH_FORGOT_PASSWORD}>
-                      Forgot password?
-                    </Link>
-                    <br />
-                    <input
-                      className="form-control"
-                      type="password"
-                      name="password"
-                      onChange={() => handleChange()}
-                      placeholder=" Enter your Password"
-                      id="password"
-                      ref={register({
-                        required: {
-                          value: true,
-                          message: 'This field is required.',
-                        },
-                        minLength: {
-                          value: 8,
-                          message: 'Password must have at least 8 characters.',
-                        },
-                      })}
-                    />
-                  </label>
-                  <ErrorMsg>
-                    {errors && errors.password && errors.password.message}
-                  </ErrorMsg>
-                  <ErrorMsg>
-                    {apiError &&
-                      apiError.data &&
-                      apiError.data.non_field_errors &&
-                      apiError.data.non_field_errors[0]}
-                  </ErrorMsg>
-                  <Button className=" btn-primary w-100 mt-4 mb-4">
-                    {loader ? (
+                  {showPassword.email ? (
+                    <>
+                      <label htmlFor="emailAddress">
+                        Email Address
+                        <br />
+                        <input
+                          className={
+                            errors && errors.email
+                              ? 'form-control'
+                              : 'form-control mb-2'
+                          }
+                          type="text"
+                          placeholder=" Enter your Email Address"
+                          onChange={() => handleChange()}
+                          id="emailAddress"
+                          name="email"
+                          ref={register({
+                            required: {
+                              value: true,
+                              message: 'This field is required.',
+                            },
+                            pattern: {
+                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                              message: 'Invalid email address.',
+                            },
+                          })}
+                        />
+                      </label>
+                      <ErrorMsg>
+                        {(errors && errors.email && errors.email.message) ||
+                          (customerApiError && customerApiError[0])}
+                      </ErrorMsg>
+                    </>
+                  ) : (
+                    <>
+                      {showPassword.name ? (
+                        <label htmlFor="account" className="mb-2">
+                          Select Account
+                          <Select
+                            options={customerNames}
+                            onChange={(event) =>
+                              setGetName({ ...getName, customer: event.value })
+                            }
+                          />
+                        </label>
+                      ) : (
+                        <>
+                          <label htmlFor="password">
+                            Password
+                            <Link
+                              className="float-right link"
+                              to={PATH_FORGOT_PASSWORD}>
+                              Forgot password?
+                            </Link>
+                            <br />
+                            <input
+                              className="form-control"
+                              type="password"
+                              name="password"
+                              onChange={() => handleChange()}
+                              placeholder=" Enter your Password"
+                              id="password"
+                              ref={register({
+                                required: {
+                                  value: true,
+                                  message: 'This field is required.',
+                                },
+                                minLength: {
+                                  value: 8,
+                                  message:
+                                    'Password must have at least 8 characters.',
+                                },
+                              })}
+                            />
+                          </label>
+                          <ErrorMsg>
+                            {errors &&
+                              errors.password &&
+                              errors.password.message}
+                          </ErrorMsg>
+                          <ErrorMsg>
+                            {apiError &&
+                              apiError.data &&
+                              apiError.data.non_field_errors &&
+                              apiError.data.non_field_errors[0]}
+                          </ErrorMsg>
+                        </>
+                      )}
+                    </>
+                  )}
+                  <Button
+                    className="btn-primary w-100 mt-4 mb-4"
+                    disabled={showPassword.name && getName.customer === ''}>
+                    {loader ||
+                    (isLoading.loader && isLoading.type === 'button') ? (
                       <PageLoader color="#fff" type="button" />
                     ) : (
-                      'Sign In'
+                      <>{showPassword.password ? 'Sign In' : 'Continue'}</>
                     )}
                   </Button>
 

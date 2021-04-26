@@ -74,11 +74,11 @@ export const userRequestFail = (error) => {
   };
 };
 
-export const login = (history, data) => {
+export const login = (history, data, customer) => {
   return (dispatch) => {
     dispatch(userRequestInitiated());
     axiosInstance
-      .post(API_LOGIN, data)
+      .post(API_LOGIN, data, { params: customer })
       .then((data) => {
         dispatch(userRequestSuccess(data.data, history));
       })

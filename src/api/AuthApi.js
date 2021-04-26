@@ -4,6 +4,7 @@ import {
   API_FORGOT_PASSWORD,
   API_USER,
   API_UPDATE_PASSWORD,
+  API_CUSTOMER_NAMES,
 } from '../constants/ApiConstants';
 
 export async function getEmail(data = null) {
@@ -87,6 +88,19 @@ export async function userCustomerRoleList(id, pageNumber, searchQuery, role) {
 export async function updateUserMe(id, data) {
   const result = await axiosInstance
     .patch(`${API_USER + id}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getCustomerNames(email) {
+  const params = { email };
+  const result = await axiosInstance
+    .get(API_CUSTOMER_NAMES, { params })
     .then((response) => {
       return response;
     })

@@ -6,6 +6,7 @@ export {
   updatePassword,
   userCustomerRoleList,
   updateUserMe,
+  getCustomerNames,
 } from './AuthApi';
 
 // customer

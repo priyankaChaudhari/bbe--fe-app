@@ -6,6 +6,7 @@ export const API_USER_ME = '/user/me/';
 export const API_LOGOUT = '/logout';
 export const API_USER = '/user/';
 export const API_UPDATE_PASSWORD = '/change-password/';
+export const API_CUSTOMER_NAMES = '/get-customers';
 
 // Customer
 export const API_CUSTOMER = '/customer/';
@@ -59,4 +60,5 @@ export const NON_AUTHORIZATION_APIS = [
   API_RESET_PASSWORD,
   API_SIGNATURE_STATUS,
   API_ONBOARD_CUSTOMER,
+  API_CUSTOMER_NAMES,
 ];
