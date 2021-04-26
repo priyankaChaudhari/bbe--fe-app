@@ -68,6 +68,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
   ]);
+  const [isApiSuccess, setIsApiSuccess] = useState(false);
 
   const COLORS = ['#97ca61', '#EAEFF2'];
   // const monthNames = [
@@ -312,6 +313,19 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     }
     return parseFloat(diff.toFixed(2));
   };
+
+  if (isApiSuccess) {
+    if (activeSales === 'traffic') {
+      setLineChartData(trafficData);
+    } else if (activeSales === 'units sold') {
+      setLineChartData(unitsSoldData);
+    } else if (activeSales === 'conversion') {
+      setLineChartData(conversionData);
+    } else if (activeSales === 'revenue') {
+      setLineChartData(revenueData);
+    }
+    setIsApiSuccess(false);
+  }
 
   const getBBData = useCallback(
     (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
@@ -560,11 +574,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
             traffic: trafficTotal,
             conversion: conversionTotal,
           });
-          setLineChartData(tempRevenueData);
+          // setLineChartData(tempRevenueData);
           setRevenueData(tempRevenueData);
           setUnitsSoldData(tempUnitsSoldData);
           setTrafficData(tempTrafficData);
           setConversionData(tempConversionData);
+          setIsApiSuccess(true);
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
