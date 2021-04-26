@@ -46,6 +46,8 @@ import { sortOptions } from '../../constants/FieldConstants';
 export default function NewCustomerList() {
   const history = useHistory();
   const selectInputRef = useRef();
+  const selectInputRefMobile = useRef();
+
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
   const [count, setCount] = useState(null);
@@ -82,7 +84,9 @@ export default function NewCustomerList() {
     { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
+
   const [expiringSoon, setExpiringSoon] = useState(false);
+
   const IconOption = (props) => (
     <Option {...props}>
       {props.data.icon ? (
@@ -245,7 +249,11 @@ export default function NewCustomerList() {
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
-      selectInputRef.current.select.clearValue();
+      if (selectInputRef && selectInputRef.current)
+        selectInputRef.current.select.clearValue();
+      if (selectInputRefMobile && selectInputRefMobile.current)
+        selectInputRefMobile.current.select.clearValue();
+
       setFilters({
         ...filters,
         status: [],
@@ -535,14 +543,14 @@ export default function NewCustomerList() {
       </li>
     );
   };
-  const generateDropdown = (item) => {
+  const generateDropdown = (item, reff = null) => {
     return (
       <>
         <Select
           classNamePrefix="react-select"
           isClearable={false}
           className="active"
-          ref={selectInputRef}
+          ref={reff}
           placeholder={getSelectPlaceholder(item)}
           options={
             item === 'user'
@@ -662,7 +670,7 @@ export default function NewCustomerList() {
                     </div>
                     <div className="label">Brand Strategist</div>
                     <DropDownSelect className="w-250">
-                      {generateDropdown('user')}
+                      {generateDropdown('user', selectInputRefMobile)}
                     </DropDownSelect>
 
                     <div className="label mt-4 pt-2">Customer Status</div>
@@ -843,7 +851,7 @@ export default function NewCustomerList() {
         </div>
         <div className="label mt-2 mb-2">Brand Strategist</div>
         <DropDownSelect className="w-250">
-          {generateDropdown('user')}
+          {generateDropdown('user', selectInputRef)}
         </DropDownSelect>{' '}
         <div className="label mt-4 pt-2">Customer Status</div>
         <div className="clear-fix" />

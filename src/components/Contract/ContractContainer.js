@@ -185,6 +185,7 @@ export default function ContractContainer() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
+
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     // if (eleId !== 'addendum') {
@@ -217,16 +218,20 @@ export default function ContractContainer() {
     setLoaderFlag(false);
   }
 
-  const getContractDetails = () => {
+  const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
     if (contractID || localStorage.getItem('agreementID')) {
       getcontract(contractID || localStorage.getItem('agreementID')).then(
         (res) => {
-          // setIsLoading({ loader: false, type: 'page' });
           setLoaderFlag(true);
+
           if (res && res.status === 200) {
             setDetails(res && res.data);
+            if (showSuccessToastr) {
+              toast.success('Signature Requested Successfully!');
+            }
           }
+          // setIsLoading({ loader: false, type: 'page' });
         },
       );
     } else {
@@ -999,10 +1004,11 @@ export default function ContractContainer() {
       const dataToUpdate = {
         contract_status: 'pending contract',
       };
-      setIsLoading({ loader: true, type: 'button' });
-
+      setIsLoading({ loader: true, type: 'page' });
+      setLoaderFlag(false);
       updateAccountDetails(details.id, dataToUpdate).then((response) => {
-        setIsLoading({ loader: false, type: 'button' });
+        // setIsLoading({ loader: false, type: 'page' });
+        // setLoaderFlag(true);
 
         if (response && response.status === 200) {
           // dispatch(getAccountDetails(id));
@@ -1100,7 +1106,7 @@ export default function ContractContainer() {
       );
     }
     if (key === 'length') {
-      return details && details.length.label;
+      return details && details.length && details.length.label;
     }
     if (key === 'primary_marketplace') {
       return (
@@ -2660,7 +2666,7 @@ export default function ContractContainer() {
     getContractDetails();
     setShowDiscountModal(false);
   };
-  console.log(isLoading, 'isLoading');
+
   return (details &&
     details.contract_status &&
     details.contract_status.value === 'pending account setup') ||
@@ -2728,8 +2734,6 @@ export default function ContractContainer() {
     </>
   ) : (
     <>
-      {/* {setMandatoryFieldsErrors()} */}
-      {/* <ToastContainer position="top-center" autoClose={8000} /> */}
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
           <li

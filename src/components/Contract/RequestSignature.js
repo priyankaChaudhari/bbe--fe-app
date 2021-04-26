@@ -490,8 +490,6 @@ function RequestSignature({
         } else if (response && response.status === 201) {
           // setOpenCollapse({ agreement: false, statement: true });
 
-          toast.success('Signature Requested Successfully!');
-
           // setShowSuccessContact({
           //   message: 'Signature Requested Successfully!',
           //   show: true,
@@ -504,7 +502,10 @@ function RequestSignature({
             dspAddendum: false,
             amendment: false,
           });
-          getContractDetails();
+
+          getContractDetails(true);
+          // toast.success('Signature Requested Successfully!');
+
           // dispatch(getAccountDetails(id));
 
           // history.push({

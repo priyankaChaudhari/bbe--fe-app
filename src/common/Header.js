@@ -126,7 +126,11 @@ export default function Header({ type }) {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={5000} />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
 
       <MainHeader>
         <div className="container-fluid">
