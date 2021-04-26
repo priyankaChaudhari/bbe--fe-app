@@ -181,7 +181,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
-    // valueAxis.min = 0;
+    valueAxis.numberFormatter.bigNumberPrefixes = [
+      { number: 1e3, suffix: 'K' },
+      { number: 1e6, suffix: 'M' },
+      { number: 1e9, suffix: 'B' },
+    ];
+    // valueAxis.numberFormatter.smallNumberPrefixes = [
+    //   { "number": 1e-24, "suffix": "y" },
+    //   { "number": 1e-21, "suffix": "z" },
+    //   { "number": 1e-18, "suffix": "a" },
+    //   { "number": 1e-15, "suffix": "f" },
+    //   { "number": 1e-12, "suffix": "p" },
+    //   { "number": 1e-9, "suffix": "n" },
+    //   { "number": 1e-6, "suffix": "μ" },
+    //   { "number": 1e-3, "suffix": "" }
+    // ]
+    valueAxis.min = 0;
 
     // add currency only for revenue
 
@@ -1240,33 +1255,39 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     return [];
   };
 
+  const renderMarketplaceDropDown = () => {
+    return (
+      <div className="row">
+        <div className="col-12 mb-3">
+          <DropDownSelect className="cursor">
+            <Select
+              classNamePrefix="react-select"
+              className="active"
+              options={amazonOptions}
+              placeholder={
+                amazonOptions && amazonOptions[0] && amazonOptions[0].label
+              }
+              components={{ DropdownIndicator }}
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  neutral50: '#1A1A1A',
+                },
+              })}
+              defaultValue={amazonOptions && amazonOptions[0]}
+              onChange={(event) => handleAmazonOptions(event)}
+            />
+          </DropDownSelect>{' '}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="col-lg-8 col-12">
-        <div className="row">
-          <div className="col-12 mb-3">
-            <DropDownSelect className="cursor">
-              <Select
-                classNamePrefix="react-select"
-                className="active"
-                options={amazonOptions}
-                placeholder={
-                  amazonOptions && amazonOptions[0] && amazonOptions[0].label
-                }
-                components={{ DropdownIndicator }}
-                theme={(theme) => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    neutral50: '#1A1A1A',
-                  },
-                })}
-                defaultValue={amazonOptions && amazonOptions[0]}
-                onChange={(event) => handleAmazonOptions(event)}
-              />
-            </DropDownSelect>{' '}
-          </div>
-        </div>
+        {renderMarketplaceDropDown()}
         <WhiteCard>
           <div className="row">
             <div className="col-md-6 col-sm1-12">
