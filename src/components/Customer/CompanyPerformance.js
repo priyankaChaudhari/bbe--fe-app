@@ -10,7 +10,7 @@ import React, {
   useLayoutEffect,
 } from 'react';
 // import { useMediaQuery } from 'react-responsive';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
@@ -35,6 +35,7 @@ import Modal from 'react-modal';
 import Select, { components } from 'react-select';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
+import Theme from '../../theme/Theme';
 import { getPerformance, getBuyBoxChartData } from '../../api';
 
 import {
@@ -47,6 +48,7 @@ import { DropDownSelect, ModalBox, Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import AdPerformance from './AdPerformance';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -101,6 +103,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       key: 'BBselection',
     },
   ]);
+  const [viewComponent, setViewComponent] = useState('performance');
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
   const [showBBCustomDateModal, setShowBBCustomDateModal] = useState(false);
   const [groupBy, setGroupBy] = useState('daily');
@@ -1278,380 +1281,432 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   return (
     <>
       <div className="col-lg-8 col-12">
-        {renderMarketplaceDropDown()}
-        <WhiteCard>
-          <div className="row">
-            <div className="col-md-6 col-sm1-12">
-              {' '}
-              <p className="black-heading-title mt-0 mb-4">
-                {' '}
-                Sales Performance
-              </p>
-            </div>
-            <div className="col-md-6 col-sm1-12  mb-3">
-              <DropDownSelect className="days-performance ">
-                <Select
-                  classNamePrefix="react-select"
-                  className="active"
-                  components={getSelectComponents()}
-                  options={reportOptions}
-                  defaultValue={reportOptions[0]}
-                  onChange={(event) => handleDailyFact(event.value)}
-                />
-              </DropDownSelect>{' '}
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 text-right mb-3" />
-          </div>
-
-          <div className="row mr-1 ml-1">
-            <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-              <div
-                className={
-                  activeSales === 'revenue'
-                    ? 'order-chart-box active fix-height '
-                    : 'order-chart-box fix-height '
-                }
-                onClick={() => setChartData('revenue')}
-                role="presentation">
-                {' '}
-                <div className="chart-name">Revenue ({currency})</div>
-                <div className="number-rate">
-                  {allSalesTotal && allSalesTotal.revenue
-                    ? // allSalesTotal.revenue.currentRevenueTotal
-                      // .toFixed(2)
-                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      bindValues(allSalesTotal.revenue.currentRevenueTotal)
-                    : 0}
-                </div>
-                <div className="vs">
-                  {' '}
-                  vs{' '}
-                  {allSalesTotal && allSalesTotal.revenue
-                    ? allSalesTotal.revenue.previousRevenueTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0}
-                </div>
-                <div
-                  className={
-                    allSalesTotal &&
-                    allSalesTotal.revenue &&
-                    allSalesTotal.revenue.difference > 0
-                      ? 'perentage-value'
-                      : 'perentage-value down'
-                  }>
-                  {allSalesTotal &&
-                  allSalesTotal.revenue &&
-                  !Number.isNaN(allSalesTotal.revenue.difference) &&
-                  allSalesTotal.revenue.difference > 0 ? (
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-up"
-                    />
-                  ) : allSalesTotal &&
-                    allSalesTotal.revenue &&
-                    allSalesTotal.revenue.difference &&
-                    !Number.isNaN(allSalesTotal.revenue.difference) &&
-                    allSalesTotal.revenue.difference < 0 ? (
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                  ) : (
-                    ''
-                  )}
-                  {allSalesTotal &&
-                  allSalesTotal.revenue &&
-                  allSalesTotal.revenue.difference &&
-                  allSalesTotal.revenue.difference !== 'N/A'
-                    ? `${allSalesTotal.revenue.difference
-                        .toString()
-                        .replace('-', '')}%`
-                    : 'N/A'}
-                </div>
+        <Tab className="mb-3">
+          <ul className="tabs">
+            <li
+              className={viewComponent === 'performance' ? 'active' : ''}
+              onClick={() => setViewComponent('performance')}
+              role="presentation">
+              Performance Report
+            </li>
+            <li
+              className={viewComponent === 'ad' ? 'active' : ''}
+              onClick={() => setViewComponent('ad')}
+              role="presentation">
+              Ad Performance
+            </li>
+          </ul>
+        </Tab>
+        {viewComponent === 'performance' ? (
+          <>
+            <div className="row">
+              <div className="col-12 mb-3">
+                <DropDownSelect className="cursor">
+                  <Select
+                    classNamePrefix="react-select"
+                    className="active"
+                    options={amazonOptions}
+                    placeholder={
+                      amazonOptions &&
+                      amazonOptions[0] &&
+                      amazonOptions[0].label
+                    }
+                    components={{ DropdownIndicator }}
+                    theme={(theme) => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        neutral50: '#1A1A1A',
+                      },
+                    })}
+                    defaultValue={amazonOptions && amazonOptions[0]}
+                    onChange={(event) => handleAmazonOptions(event)}
+                  />
+                </DropDownSelect>{' '}
               </div>
             </div>
-            <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-              <div
-                className={
-                  activeSales === 'units sold'
-                    ? 'order-chart-box active fix-height '
-                    : 'order-chart-box fix-height '
-                }
-                onClick={() => setChartData('units sold')}
-                role="presentation">
-                <div className="chart-name">Units Sold</div>
-                <div className="number-rate">
-                  {allSalesTotal && allSalesTotal.units
-                    ? // allSalesTotal.units.currentUnitsTotal
-                      // .toFixed(2)
-                      // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      bindValues(allSalesTotal.units.currentUnitsTotal)
-                    : 0}
-                </div>
-                <div className="vs">
+            {renderMarketplaceDropDown()}
+            <WhiteCard>
+              <div className="row">
+                <div className="col-md-6 col-sm1-12">
                   {' '}
-                  vs{' '}
-                  {allSalesTotal && allSalesTotal.units
-                    ? allSalesTotal.units.previousUnitsTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0}
-                </div>
-                <div
-                  className={
-                    allSalesTotal &&
-                    allSalesTotal.units &&
-                    allSalesTotal.units.difference > 0
-                      ? 'perentage-value'
-                      : 'perentage-value down'
-                  }>
-                  {allSalesTotal &&
-                  allSalesTotal.units &&
-                  !Number.isNaN(allSalesTotal.units.difference) &&
-                  allSalesTotal.units.difference > 0 ? (
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-up"
-                    />
-                  ) : allSalesTotal &&
-                    allSalesTotal.units &&
-                    allSalesTotal.units.difference &&
-                    !Number.isNaN(allSalesTotal.units.difference) &&
-                    allSalesTotal.units.difference < 0 ? (
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-up"
-                    />
-                  ) : (
-                    ''
-                  )}
-                  {allSalesTotal &&
-                  allSalesTotal.units &&
-                  allSalesTotal.units.difference &&
-                  allSalesTotal.units.difference !== 'N/A'
-                    ? `${allSalesTotal.units.difference
-                        .toString()
-                        .replace('-', '')}%`
-                    : 'N/A'}
-                </div>
-              </div>
-            </div>
-            <div
-              className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3
-             ">
-              <div
-                className={
-                  activeSales === 'traffic'
-                    ? 'order-chart-box active fix-height '
-                    : 'order-chart-box fix-height '
-                }
-                onClick={() => setChartData('traffic')}
-                role="presentation">
-                <div className="chart-name">Traffic</div>
-                <div className="number-rate">
-                  {allSalesTotal && allSalesTotal.traffic
-                    ? // allSalesTotal.traffic.currentTrafficTotal
-                      //  .toFixed(2)
-                      //  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      bindValues(allSalesTotal.traffic.currentTrafficTotal)
-                    : 0}
-                </div>
-                <div className="vs">
-                  {' '}
-                  vs{' '}
-                  {allSalesTotal && allSalesTotal.traffic
-                    ? allSalesTotal.traffic.previousTrafficTotal
-                        .toFixed(2)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0}
-                </div>
-                <div
-                  className={
-                    allSalesTotal &&
-                    allSalesTotal.traffic &&
-                    allSalesTotal.traffic.difference > 0
-                      ? 'perentage-value'
-                      : 'perentage-value down'
-                  }>
-                  {allSalesTotal &&
-                  allSalesTotal.traffic &&
-                  !Number.isNaN(allSalesTotal.traffic.difference) &&
-                  allSalesTotal.traffic.difference > 0 ? (
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-up"
-                    />
-                  ) : allSalesTotal &&
-                    allSalesTotal.traffic &&
-                    allSalesTotal.traffic.difference &&
-                    !Number.isNaN(allSalesTotal.traffic.difference) &&
-                    allSalesTotal.traffic.difference < 0 ? (
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-up"
-                    />
-                  ) : (
-                    ''
-                  )}
-                  {allSalesTotal &&
-                  allSalesTotal.traffic &&
-                  allSalesTotal.traffic.difference &&
-                  allSalesTotal.traffic.difference !== 'N/A'
-                    ? `${allSalesTotal.traffic.difference
-                        .toString()
-                        .replace('-', '')}%`
-                    : 'N/A'}
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3">
-              <div
-                className={
-                  activeSales === 'conversion'
-                    ? 'order-chart-box active fix-height '
-                    : 'order-chart-box fix-height '
-                }
-                onClick={() => setChartData('conversion')}
-                role="presentation">
-                <div className="chart-name">Conversion</div>
-                <div className="number-rate">
-                  {allSalesTotal && allSalesTotal.conversion
-                    ? `${allSalesTotal.conversion.currentConversionTotal.toFixed(
-                        2,
-                      )}%`
-                    : 0}
-                </div>
-                <div className="vs">
-                  {' '}
-                  vs{' '}
-                  {allSalesTotal && allSalesTotal.conversion
-                    ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
-                        2,
-                      )}%`
-                    : 0}
-                </div>
-                <div
-                  className={
-                    allSalesTotal &&
-                    allSalesTotal.conversion &&
-                    allSalesTotal.conversion.difference > 0
-                      ? 'perentage-value'
-                      : 'perentage-value down'
-                  }>
-                  {allSalesTotal &&
-                  allSalesTotal.conversion &&
-                  allSalesTotal.conversion.difference &&
-                  !Number.isNaN(allSalesTotal.conversion.difference) &&
-                  allSalesTotal.conversion.difference > 0 ? (
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-up"
-                    />
-                  ) : allSalesTotal &&
-                    allSalesTotal.conversion &&
-                    allSalesTotal.conversion.difference &&
-                    !Number.isNaN(allSalesTotal.conversion.difference) &&
-                    allSalesTotal.conversion.difference < 0 ? (
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-up"
-                    />
-                  ) : (
-                    ''
-                  )}
-                  {allSalesTotal &&
-                  allSalesTotal.conversion &&
-                  allSalesTotal.conversion.difference &&
-                  allSalesTotal.conversion.difference !== 'N/A'
-                    ? `${allSalesTotal.conversion.difference
-                        .toString()
-                        .replace('-', '')}%`
-                    : 'N/A'}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row mt-4">
-            <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-              <ul className="rechart-item">
-                <li>
-                  <div className="weeks">
-                    <span className="orange block" />
-                    <span>Recent</span>
-                  </div>
-                </li>
-                {selectedValue !== 'custom' ? (
-                  <li>
-                    <div className="weeks">
-                      <span className="gray block" />
-                      <span>Previous</span>
-                    </div>
-                  </li>
-                ) : null}
-              </ul>
-            </div>
-            <div className="col-md-6 col-sm-12 order-md-2 order-1">
-              {' '}
-              <div className="days-container ">
-                <ul className="days-tab">
-                  <li className={filters.daily === false ? 'disabled-tab' : ''}>
+                  <p className="black-heading-title mt-0 mb-4">
                     {' '}
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id="daysCheck"
-                      name="flexRadioDefault"
-                      value={groupBy}
-                      checked={filters.daily}
-                      onClick={() => handleGroupBy('daily')}
-                      onChange={() => {}}
+                    Sales Performance
+                  </p>
+                </div>
+                <div className="col-md-6 col-sm1-12  mb-3">
+                  <DropDownSelect className="days-performance ">
+                    <Select
+                      classNamePrefix="react-select"
+                      className="active"
+                      components={getSelectComponents()}
+                      options={reportOptions}
+                      defaultValue={reportOptions[0]}
+                      onChange={(event) => handleDailyFact(event.value)}
                     />
-                    <label htmlFor="daysCheck">Daily</label>
-                  </li>
-
-                  <li
-                    className={filters.weekly === false ? 'disabled-tab' : ''}>
-                    <input
-                      className="d-none"
-                      type="radio"
-                      value={groupBy}
-                      checked={filters.weekly && groupBy === 'weekly'}
-                      id="weeklyCheck"
-                      name="flexRadioDefault"
-                      onChange={() => handleGroupBy('weekly')}
-                    />
-                    <label htmlFor="weeklyCheck">Weekly</label>
-                  </li>
-
-                  <li className={filters.month === false ? 'disabled-tab' : ''}>
-                    <input
-                      className=" d-none"
-                      type="radio"
-                      value={groupBy}
-                      checked={filters.month}
-                      id="monthlyCheck"
-                      name="flexRadioDefault"
-                      onChange={() => handleGroupBy('monthly')}
-                    />
-                    <label htmlFor="monthlyCheck">Monthly</label>
-                  </li>
-                </ul>
+                  </DropDownSelect>{' '}
+                  <div className="clear-fix" />
+                </div>
+                <div className="col-12 text-right mb-3" />
               </div>
-            </div>
-          </div>
-          <div className="clear-fix" />
-          <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
-          {/* <ResponsiveContainer width="99%" height={400}>
+
+              <div className="row mr-1 ml-1">
+                <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+                  <div
+                    className={
+                      activeSales === 'revenue'
+                        ? 'order-chart-box active fix-height '
+                        : 'order-chart-box fix-height '
+                    }
+                    onClick={() => setChartData('revenue')}
+                    role="presentation">
+                    {' '}
+                    <div className="chart-name">Revenue ({currency})</div>
+                    <div className="number-rate">
+                      {allSalesTotal && allSalesTotal.revenue
+                        ? // allSalesTotal.revenue.currentRevenueTotal
+                          // .toFixed(2)
+                          // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          bindValues(allSalesTotal.revenue.currentRevenueTotal)
+                        : 0}
+                    </div>
+                    <div className="vs">
+                      {' '}
+                      vs{' '}
+                      {allSalesTotal && allSalesTotal.revenue
+                        ? allSalesTotal.revenue.previousRevenueTotal
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : 0}
+                    </div>
+                    <div
+                      className={
+                        allSalesTotal &&
+                        allSalesTotal.revenue &&
+                        allSalesTotal.revenue.difference > 0
+                          ? 'perentage-value'
+                          : 'perentage-value down'
+                      }>
+                      {allSalesTotal &&
+                      allSalesTotal.revenue &&
+                      !Number.isNaN(allSalesTotal.revenue.difference) &&
+                      allSalesTotal.revenue.difference > 0 ? (
+                        <img
+                          className="green-arrow"
+                          src={ArrowUpIcon}
+                          alt="arrow-up"
+                        />
+                      ) : allSalesTotal &&
+                        allSalesTotal.revenue &&
+                        allSalesTotal.revenue.difference &&
+                        !Number.isNaN(allSalesTotal.revenue.difference) &&
+                        allSalesTotal.revenue.difference < 0 ? (
+                        <img
+                          className="red-arrow"
+                          src={ArrowDownIcon}
+                          alt="arrow-down"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      {allSalesTotal &&
+                      allSalesTotal.revenue &&
+                      allSalesTotal.revenue.difference &&
+                      allSalesTotal.revenue.difference !== 'N/A'
+                        ? `${allSalesTotal.revenue.difference
+                            .toString()
+                            .replace('-', '')}%`
+                        : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+                  <div
+                    className={
+                      activeSales === 'units sold'
+                        ? 'order-chart-box active fix-height '
+                        : 'order-chart-box fix-height '
+                    }
+                    onClick={() => setChartData('units sold')}
+                    role="presentation">
+                    <div className="chart-name">Units Sold</div>
+                    <div className="number-rate">
+                      {allSalesTotal && allSalesTotal.units
+                        ? // allSalesTotal.units.currentUnitsTotal
+                          // .toFixed(2)
+                          // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          bindValues(allSalesTotal.units.currentUnitsTotal)
+                        : 0}
+                    </div>
+                    <div className="vs">
+                      {' '}
+                      vs{' '}
+                      {allSalesTotal && allSalesTotal.units
+                        ? allSalesTotal.units.previousUnitsTotal
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : 0}
+                    </div>
+                    <div
+                      className={
+                        allSalesTotal &&
+                        allSalesTotal.units &&
+                        allSalesTotal.units.difference > 0
+                          ? 'perentage-value'
+                          : 'perentage-value down'
+                      }>
+                      {allSalesTotal &&
+                      allSalesTotal.units &&
+                      !Number.isNaN(allSalesTotal.units.difference) &&
+                      allSalesTotal.units.difference > 0 ? (
+                        <img
+                          className="green-arrow"
+                          src={ArrowUpIcon}
+                          alt="arrow-up"
+                        />
+                      ) : allSalesTotal &&
+                        allSalesTotal.units &&
+                        allSalesTotal.units.difference &&
+                        !Number.isNaN(allSalesTotal.units.difference) &&
+                        allSalesTotal.units.difference < 0 ? (
+                        <img
+                          className="red-arrow"
+                          src={ArrowDownIcon}
+                          alt="arrow-up"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      {allSalesTotal &&
+                      allSalesTotal.units &&
+                      allSalesTotal.units.difference &&
+                      allSalesTotal.units.difference !== 'N/A'
+                        ? `${allSalesTotal.units.difference
+                            .toString()
+                            .replace('-', '')}%`
+                        : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3
+             ">
+                  <div
+                    className={
+                      activeSales === 'traffic'
+                        ? 'order-chart-box active fix-height '
+                        : 'order-chart-box fix-height '
+                    }
+                    onClick={() => setChartData('traffic')}
+                    role="presentation">
+                    <div className="chart-name">Traffic</div>
+                    <div className="number-rate">
+                      {allSalesTotal && allSalesTotal.traffic
+                        ? // allSalesTotal.traffic.currentTrafficTotal
+                          //  .toFixed(2)
+                          //  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          bindValues(allSalesTotal.traffic.currentTrafficTotal)
+                        : 0}
+                    </div>
+                    <div className="vs">
+                      {' '}
+                      vs{' '}
+                      {allSalesTotal && allSalesTotal.traffic
+                        ? allSalesTotal.traffic.previousTrafficTotal
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        : 0}
+                    </div>
+                    <div
+                      className={
+                        allSalesTotal &&
+                        allSalesTotal.traffic &&
+                        allSalesTotal.traffic.difference > 0
+                          ? 'perentage-value'
+                          : 'perentage-value down'
+                      }>
+                      {allSalesTotal &&
+                      allSalesTotal.traffic &&
+                      !Number.isNaN(allSalesTotal.traffic.difference) &&
+                      allSalesTotal.traffic.difference > 0 ? (
+                        <img
+                          className="green-arrow"
+                          src={ArrowUpIcon}
+                          alt="arrow-up"
+                        />
+                      ) : allSalesTotal &&
+                        allSalesTotal.traffic &&
+                        allSalesTotal.traffic.difference &&
+                        !Number.isNaN(allSalesTotal.traffic.difference) &&
+                        allSalesTotal.traffic.difference < 0 ? (
+                        <img
+                          className="red-arrow"
+                          src={ArrowDownIcon}
+                          alt="arrow-up"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      {allSalesTotal &&
+                      allSalesTotal.traffic &&
+                      allSalesTotal.traffic.difference &&
+                      allSalesTotal.traffic.difference !== 'N/A'
+                        ? `${allSalesTotal.traffic.difference
+                            .toString()
+                            .replace('-', '')}%`
+                        : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3">
+                  <div
+                    className={
+                      activeSales === 'conversion'
+                        ? 'order-chart-box active fix-height '
+                        : 'order-chart-box fix-height '
+                    }
+                    onClick={() => setChartData('conversion')}
+                    role="presentation">
+                    <div className="chart-name">Conversion</div>
+                    <div className="number-rate">
+                      {allSalesTotal && allSalesTotal.conversion
+                        ? `${allSalesTotal.conversion.currentConversionTotal.toFixed(
+                            2,
+                          )}%`
+                        : 0}
+                    </div>
+                    <div className="vs">
+                      {' '}
+                      vs{' '}
+                      {allSalesTotal && allSalesTotal.conversion
+                        ? `${allSalesTotal.conversion.previousConversionTotal.toFixed(
+                            2,
+                          )}%`
+                        : 0}
+                    </div>
+                    <div
+                      className={
+                        allSalesTotal &&
+                        allSalesTotal.conversion &&
+                        allSalesTotal.conversion.difference > 0
+                          ? 'perentage-value'
+                          : 'perentage-value down'
+                      }>
+                      {allSalesTotal &&
+                      allSalesTotal.conversion &&
+                      allSalesTotal.conversion.difference &&
+                      !Number.isNaN(allSalesTotal.conversion.difference) &&
+                      allSalesTotal.conversion.difference > 0 ? (
+                        <img
+                          className="green-arrow"
+                          src={ArrowUpIcon}
+                          alt="arrow-up"
+                        />
+                      ) : allSalesTotal &&
+                        allSalesTotal.conversion &&
+                        allSalesTotal.conversion.difference &&
+                        !Number.isNaN(allSalesTotal.conversion.difference) &&
+                        allSalesTotal.conversion.difference < 0 ? (
+                        <img
+                          className="red-arrow"
+                          src={ArrowDownIcon}
+                          alt="arrow-up"
+                        />
+                      ) : (
+                        ''
+                      )}
+                      {allSalesTotal &&
+                      allSalesTotal.conversion &&
+                      allSalesTotal.conversion.difference &&
+                      allSalesTotal.conversion.difference !== 'N/A'
+                        ? `${allSalesTotal.conversion.difference
+                            .toString()
+                            .replace('-', '')}%`
+                        : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+                  <ul className="rechart-item">
+                    <li>
+                      <div className="weeks">
+                        <span className="orange block" />
+                        <span>Recent</span>
+                      </div>
+                    </li>
+                    {selectedValue !== 'custom' ? (
+                      <li>
+                        <div className="weeks">
+                          <span className="gray block" />
+                          <span>Previous</span>
+                        </div>
+                      </li>
+                    ) : null}
+                  </ul>
+                </div>
+                <div className="col-md-6 col-sm-12 order-md-2 order-1">
+                  {' '}
+                  <div className="days-container ">
+                    <ul className="days-tab">
+                      <li
+                        className={
+                          filters.daily === false ? 'disabled-tab' : ''
+                        }>
+                        {' '}
+                        <input
+                          className="d-none"
+                          type="radio"
+                          id="daysCheck"
+                          name="flexRadioDefault"
+                          value={groupBy}
+                          checked={filters.daily}
+                          onClick={() => handleGroupBy('daily')}
+                          onChange={() => {}}
+                        />
+                        <label htmlFor="daysCheck">Daily</label>
+                      </li>
+
+                      <li
+                        className={
+                          filters.weekly === false ? 'disabled-tab' : ''
+                        }>
+                        <input
+                          className="d-none"
+                          type="radio"
+                          value={groupBy}
+                          checked={filters.weekly && groupBy === 'weekly'}
+                          id="weeklyCheck"
+                          name="flexRadioDefault"
+                          onChange={() => handleGroupBy('weekly')}
+                        />
+                        <label htmlFor="weeklyCheck">Weekly</label>
+                      </li>
+
+                      <li
+                        className={
+                          filters.month === false ? 'disabled-tab' : ''
+                        }>
+                        <input
+                          className=" d-none"
+                          type="radio"
+                          value={groupBy}
+                          checked={filters.month}
+                          id="monthlyCheck"
+                          name="flexRadioDefault"
+                          onChange={() => handleGroupBy('monthly')}
+                        />
+                        <label htmlFor="monthlyCheck">Monthly</label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="clear-fix" />
+              <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
+              {/* <ResponsiveContainer width="99%" height={400}>
             <LineChart
               data={lineChartData}
               margin={{
@@ -1691,188 +1746,199 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               <Line dataKey="vs $" stroke="#BFC5D2" />
             </LineChart>
           </ResponsiveContainer> */}
-        </WhiteCard>
-
-        <div className="row mt-3">
-          <div className="col-md-4 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
-              <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
-              <div className="speed-rate">
-                {dspSpend && dspSpend.value
-                  ? `${currencySymbol}${dspSpend.value
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                  : 'N/A'}
-              </div>
-              <div className="last-update">
-                Last updated: {dspSpend && dspSpend.date}
-              </div>
-            </WhiteCard>{' '}
-          </div>
-          <div className="col-md-4 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
-              <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
-              <div className="seller-health positive">
-                {dspData && dspData.feedback_30
-                  ? `${dspData && dspData.feedback_30}%`
-                  : 'N/A'}
-              </div>
-              <div className="seller-update mb-3">Last 30 days</div>
-              <div className="seller-health positive ">
-                {dspData && dspData.feedback_365
-                  ? `${dspData && dspData.feedback_365}%`
-                  : 'N/A'}
-              </div>
-              <div className="seller-update mb-5">Last 12 months</div>
-              <div className="last-update ">
-                Last updated: {dspData && dspData.latest_date}
-              </div>
             </WhiteCard>
-          </div>
-          <div className="col-md-4 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
-              {' '}
-              <p className="black-heading-title mt-0 mb-4">Order Issues</p>
-              <div className="seller-health">
-                {dspData && dspData.order_defect_fba
-                  ? `${dspData && dspData.order_defect_fba}%`
-                  : 'N/A'}
-              </div>
-              <div className="seller-update mb-3">Order Defect Rate</div>
-              <div className="seller-health  ">
-                {dspData && dspData.policy_issues
-                  ? dspData.policy_issues
-                  : 'N/A'}
-              </div>
-              <div className="seller-update mb-5">Policy Violations</div>
-              <div className="last-update ">
-                Last updated: {dspData && dspData.latest_date}
-              </div>
-            </WhiteCard>
-          </div>
-        </div>
-        <div className="row ">
-          <div className="col-md-4 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
-              <p className="black-heading-title mt-0 mb-4">
-                Inventory Score (IPI)
-              </p>
-              {/* <PiechartResponsive> */}
-              <ResponsiveContainer width="99%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx={90}
-                    cy={100}
-                    startAngle={180}
-                    marginBottom={40}
-                    endAngle={0}
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#8884D8"
-                    paddingAngle={6}
-                    dataKey="value">
-                    <Cell key="cell-0" fill={COLORS[0]} />
-                    <Cell key="cell-1" fill={COLORS[1]} />
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              {/* </PiechartResponsive> */}
 
-              <div className="average">
-                {pieData && pieData.length && !Number.isNaN(pieData[0].value)
-                  ? pieData[0].value
-                  : 'N/A'}
-                <div className="out-off">Out of 1000</div>
+            <div className="row mt-3">
+              <div className="col-md-4 col-sm-12 mb-3">
+                <WhiteCard className="fix-height">
+                  <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
+                  <div className="speed-rate">
+                    {dspSpend && dspSpend.value
+                      ? `${currencySymbol}${dspSpend.value
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                      : 'N/A'}
+                  </div>
+                  <div className="last-update">
+                    Last updated: {dspSpend && dspSpend.date}
+                  </div>
+                </WhiteCard>{' '}
               </div>
-              <br />
-              <div className="last-update mt-3 ">
-                Last updated: {dspData && dspData.latest_date}
+              <div className="col-md-4 col-sm-12 mb-3">
+                <WhiteCard className="fix-height">
+                  <p className="black-heading-title mt-0 mb-4">
+                    Positive Feedback
+                  </p>
+                  <div className="seller-health positive">
+                    {dspData && dspData.feedback_30
+                      ? `${dspData && dspData.feedback_30}%`
+                      : 'N/A'}
+                  </div>
+                  <div className="seller-update mb-3">Last 30 days</div>
+                  <div className="seller-health positive ">
+                    {dspData && dspData.feedback_365
+                      ? `${dspData && dspData.feedback_365}%`
+                      : 'N/A'}
+                  </div>
+                  <div className="seller-update mb-5">Last 12 months</div>
+                  <div className="last-update ">
+                    Last updated: {dspData && dspData.latest_date}
+                  </div>
+                </WhiteCard>
               </div>
-            </WhiteCard>
-          </div>
-
-          <div className="col-md-8 col-sm-12 mb-3 ">
-            <WhiteCard className="fix-height">
-              <div className="row">
-                <div className="col-6 ">
+              <div className="col-md-4 col-sm-12 mb-3">
+                <WhiteCard className="fix-height">
                   {' '}
-                  <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
-                </div>
-                <div className="col-6 text-right mb-1">
-                  <DropDownSelect className="days-performance ">
-                    <Select
-                      classNamePrefix="react-select"
-                      className="active"
-                      // components={getSelectComponents()}
-                      options={BBReportOptions}
-                      defaultValue={BBReportOptions[0]}
-                      onChange={(event) => handleBBDailyFact(event.value)}
-                    />
-                  </DropDownSelect>{' '}
-                </div>
+                  <p className="black-heading-title mt-0 mb-4">Order Issues</p>
+                  <div className="seller-health">
+                    {dspData && dspData.order_defect_fba
+                      ? `${dspData && dspData.order_defect_fba}%`
+                      : 'N/A'}
+                  </div>
+                  <div className="seller-update mb-3">Order Defect Rate</div>
+                  <div className="seller-health  ">
+                    {dspData && dspData.policy_issues
+                      ? dspData.policy_issues
+                      : 'N/A'}
+                  </div>
+                  <div className="seller-update mb-5">Policy Violations</div>
+                  <div className="last-update ">
+                    Last updated: {dspData && dspData.latest_date}
+                  </div>
+                </WhiteCard>
               </div>
-              <div className="row">
-                <div className="col-md-6 col-sm-12 order-md-1 order-2">
-                  <ul className="rechart-item">
-                    <li>
-                      <div className="weeks">
-                        <span className="black block" />
-                        <span>Daily %</span>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="weeks">
-                        <span className="gray block" />
-                        <span>Average</span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+            </div>
+            <div className="row ">
+              <div className="col-md-4 col-sm-12 mb-3">
+                <WhiteCard className="fix-height">
+                  <p className="black-heading-title mt-0 mb-4">
+                    Inventory Score (IPI)
+                  </p>
+                  {/* <PiechartResponsive> */}
+                  <ResponsiveContainer width="99%" height={200}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx={90}
+                        cy={100}
+                        startAngle={180}
+                        marginBottom={40}
+                        endAngle={0}
+                        innerRadius={60}
+                        outerRadius={80}
+                        fill="#8884D8"
+                        paddingAngle={6}
+                        dataKey="value">
+                        <Cell key="cell-0" fill={COLORS[0]} />
+                        <Cell key="cell-1" fill={COLORS[1]} />
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* </PiechartResponsive> */}
+
+                  <div className="average">
+                    {pieData &&
+                    pieData.length &&
+                    !Number.isNaN(pieData[0].value)
+                      ? pieData[0].value
+                      : 'N/A'}
+                    <div className="out-off">Out of 1000</div>
+                  </div>
+                  <br />
+                  <div className="last-update mt-3 ">
+                    Last updated: {dspData && dspData.latest_date}
+                  </div>
+                </WhiteCard>
               </div>
-              {bBChartData && bBChartData.length > 1 ? (
-                <ResponsiveContainer width="99%" height={200}>
-                  <LineChart
-                    // width={300}
-                    // height={200}
-                    data={bBChartData}
-                    margin={{
-                      top: 30,
-                      right: 30,
-                      left: 20,
-                      bottom: 20,
-                    }}>
-                    <XAxis dataKey="date" hide />
-                    <YAxis tickCount={3} ticks={customTicks()} hide />
-                    <Tooltip content={<BBCustomTooltip />} />
-                    <Legend />
-                    <Line
-                      dataKey="avg"
-                      dot={false}
-                      stroke="#BFC5D2"
-                      activeDot={false}>
-                      <LabelList content={<CustomizedLabel />} />
-                    </Line>
-                    <Line
-                      dataKey="value"
-                      dot={false}
-                      stroke="BLACK"
-                      strokeWidth={2}
-                      activeDot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              ) : null}
-              <br />
-              <br />
-              <div className="last-update ">
-                Last updated: {dspData && dspData.latest_date}
+
+              <div className="col-md-8 col-sm-12 mb-3 ">
+                <WhiteCard className="fix-height">
+                  <div className="row">
+                    <div className="col-6 ">
+                      {' '}
+                      <p className="black-heading-title mt-0 mb-4">
+                        {' '}
+                        Buy Box %
+                      </p>
+                    </div>
+                    <div className="col-6 text-right mb-1">
+                      <DropDownSelect className="days-performance ">
+                        <Select
+                          classNamePrefix="react-select"
+                          className="active"
+                          // components={getSelectComponents()}
+                          options={BBReportOptions}
+                          defaultValue={BBReportOptions[0]}
+                          onChange={(event) => handleBBDailyFact(event.value)}
+                        />
+                      </DropDownSelect>{' '}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-sm-12 order-md-1 order-2">
+                      <ul className="rechart-item">
+                        <li>
+                          <div className="weeks">
+                            <span className="black block" />
+                            <span>Daily %</span>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="weeks">
+                            <span className="gray block" />
+                            <span>Average</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  {bBChartData && bBChartData.length > 1 ? (
+                    <ResponsiveContainer width="99%" height={200}>
+                      <LineChart
+                        // width={300}
+                        // height={200}
+                        data={bBChartData}
+                        margin={{
+                          top: 30,
+                          right: 30,
+                          left: 20,
+                          bottom: 20,
+                        }}>
+                        <XAxis dataKey="date" hide />
+                        <YAxis tickCount={3} ticks={customTicks()} hide />
+                        <Tooltip content={<BBCustomTooltip />} />
+                        <Legend />
+                        <Line
+                          dataKey="avg"
+                          dot={false}
+                          stroke="#BFC5D2"
+                          activeDot={false}>
+                          <LabelList content={<CustomizedLabel />} />
+                        </Line>
+                        <Line
+                          dataKey="value"
+                          dot={false}
+                          stroke="BLACK"
+                          strokeWidth={2}
+                          activeDot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : null}
+                  <br />
+                  <br />
+                  <div className="last-update ">
+                    Last updated: {dspData && dspData.latest_date}
+                  </div>
+                </WhiteCard>
               </div>
-            </WhiteCard>
-          </div>
-        </div>
-        {renderSPCustomDateModal()}
-        {renderBBCustomDateModal()}
+            </div>
+            {renderSPCustomDateModal()}
+            {renderBBCustomDateModal()}
+          </>
+        ) : (
+          <AdPerformance />
+        )}
       </div>
     </>
   );
@@ -1932,3 +1998,40 @@ CompanyPerformance.propTypes = {
 //     }
 //   }
 // `;
+
+const Tab = styled.div`
+  .tabs {
+    list-style-type: none;
+    position: relative;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid ${Theme.gray11};
+
+    li {
+      display: inline-block;
+      margin-right: 60px;
+      padding-bottom: 15px;
+      font-weight: normal;
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
+      font-family: ${Theme.baseFontFamily};
+      cursor: pointer;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.a {
+        text-decoration: none;
+      }
+
+      &.active {
+        padding-bottom: 16px;
+        border-bottom: 2px solid ${Theme.orange};
+        color: ${Theme.black};
+        font-family: ${Theme.titleFontFamily};
+      }
+    }
+  }
+`;

@@ -887,6 +887,32 @@ export const WhiteCard = styled.div`
       &.active {
         border: 1px solid ${Theme.orange};
       }
+      &.ad-sales-active {
+        border: 1px solid #0045B4;
+        .chart-name {
+          color: #0045B4;
+        }
+      }
+
+      &.ad-spend-active {
+         border: 1px solid #8C54FF;
+        .chart-name {
+          color: #8C54FF;
+        }
+      }
+      &.ad-conversion-active {
+         border: 1px solid #30A8BD;
+        .chart-name {
+          color: #30A8BD;
+        }
+      }
+       &.impression-active {
+         border: 1px solid #D6A307;
+        .chart-name {
+          color: #D6A307;
+        }
+      }
+      
     }
 
   
