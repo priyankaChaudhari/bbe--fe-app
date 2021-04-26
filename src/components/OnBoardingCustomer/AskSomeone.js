@@ -60,27 +60,28 @@ export default function AskSomeone({
 
   return (
     <>
-      <CheckBox className="mt-1">
-        <label className="check-container customer-pannel " htmlFor={step}>
-          Ask someone else to complete this section
-          <input
-            type="checkbox"
-            id={step}
-            name={step}
-            onChange={(event) => handleChanges(event)}
-            checked={
-              stepData &&
-              stepData.email !== userInfo.email &&
-              stepData.step === step
-            }
-            // disabled={
-            //   stepData && stepData.step === step && stepData.is_completed
-            // }
-            readOnly
-          />
-          <span className="checkmark" />
-        </label>
-      </CheckBox>
+      {stepData && stepData.step === step && stepData.is_completed ? (
+        ''
+      ) : (
+        <CheckBox className="mt-1">
+          <label className="check-container customer-pannel " htmlFor={step}>
+            Ask someone else to complete this section
+            <input
+              type="checkbox"
+              id={step}
+              name={step}
+              onChange={(event) => handleChanges(event)}
+              checked={
+                stepData &&
+                stepData.email !== userInfo.email &&
+                stepData.step === step
+              }
+              readOnly
+            />
+            <span className="checkmark" />
+          </label>
+        </CheckBox>
+      )}
       {isChecked ||
       (stepData &&
         stepData.step === step &&

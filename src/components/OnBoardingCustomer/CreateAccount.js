@@ -52,7 +52,7 @@ export default function CreateAccount() {
     };
     const loginData = {
       ...formData,
-      email: params.email,
+      email: localStorage.getItem('email') || (params && params.email),
     };
 
     resetPassword(data).then((response) => {
@@ -62,6 +62,7 @@ export default function CreateAccount() {
       } else if (response && response.status === 200) {
         dispatch(login(history, loginData));
         setIsLoading({ loader: false, type: 'button' });
+        localStorage.removeItem('email');
       }
     });
   };
@@ -152,7 +153,9 @@ export default function CreateAccount() {
                   className="form-control"
                   type="text"
                   placeholder="Enter your  Email address"
-                  defaultValue={(params && params.email) || ''}
+                  defaultValue={
+                    localStorage.getItem('email') || (params && params.email)
+                  }
                   readOnly
                 />
               </label>

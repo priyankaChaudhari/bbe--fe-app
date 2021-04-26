@@ -117,7 +117,8 @@ export default function Summary() {
                     src={OrangeCheckMark}
                     alt="check"
                   />
-                  Completed
+                  Completed <br />{' '}
+                  <span style={{ color: '#8798AD' }}>by Me</span>
                 </div>
               </div>
 
@@ -132,7 +133,10 @@ export default function Summary() {
                           src={OrangeCheckMark}
                           alt="check"
                         />
-                        Completed
+                        Completed <br />{' '}
+                        <span style={{ color: '#8798AD' }}>
+                          by {userInfo.email === item.email ? 'Me' : item.email}
+                        </span>
                       </div>
                     ) : (
                       <div className="pending-status">
@@ -141,21 +145,11 @@ export default function Summary() {
                           src={GrayClockIcon}
                           alt="clock"
                         />
-                        Skipped
+                        Skipped <br /> by{' '}
+                        {userInfo.email === item.email ? 'Me' : item.email}
                       </div>
                     )}
-                    {item.email !== userInfo.email ? (
-                      <div className="pending-status">
-                        <img
-                          className="pending-icon"
-                          src={GrayClockIcon}
-                          alt="clock"
-                        />
-                        Assigned to {item.email}
-                      </div>
-                    ) : (
-                      ''
-                    )}
+
                     <div
                       className="view-details"
                       onClick={() => history.push(getPath(item.step, 'path'))}
