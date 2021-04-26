@@ -186,24 +186,15 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       { number: 1e6, suffix: 'M' },
       { number: 1e9, suffix: 'B' },
     ];
-    // valueAxis.numberFormatter.smallNumberPrefixes = [
-    //   { "number": 1e-24, "suffix": "y" },
-    //   { "number": 1e-21, "suffix": "z" },
-    //   { "number": 1e-18, "suffix": "a" },
-    //   { "number": 1e-15, "suffix": "f" },
-    //   { "number": 1e-12, "suffix": "p" },
-    //   { "number": 1e-9, "suffix": "n" },
-    //   { "number": 1e-6, "suffix": "μ" },
-    //   { "number": 1e-3, "suffix": "" }
-    // ]
+    valueAxis.numberFormatter.smallNumberPrefixes = [];
     valueAxis.min = 0;
 
     // add currency only for revenue
 
     if (activeSales === 'revenue') {
-      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#a`;
+      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
     } else {
-      valueAxis.numberFormatter.numberFormat = '#a';
+      valueAxis.numberFormatter.numberFormat = '#.#a';
     }
 
     // create a tooltip
