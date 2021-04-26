@@ -2,19 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
 import Select from 'react-select';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
+import { FormContainer } from '../../theme/Global';
 
-import { BannerBg, LeftArrowIcon, NextLogo } from '../../theme/images/index';
+import { LeftArrowIcon, NextLogo } from '../../theme/images/index';
 // import GoogleIcons from '../../theme/images/icons/google.svg';
 import {
   Button,
   ErrorMsg,
-  FormField,
+  ContractFormField,
   PageLoader,
   SuccessMsg,
+  ContractInputSelect,
 } from '../../common';
 import {
   PATH_BGS_DASHBOARD,
@@ -101,7 +101,7 @@ export default function Login() {
     <FormContainer>
       <div className="container-fluid">
         <div className="row h-100">
-          <div className="col-lg-6 pl-0 pr-0 h-100">
+          <div className="col-lg-5 pl-0 pr-0 h-100">
             <div className="inner-form">
               <div className="logo">
                 <img src={NextLogo} alt="logo " />
@@ -122,10 +122,10 @@ export default function Login() {
               </div>
 
               {!showPassword.email ? (
-                <div className="container-fluid">
+                <>
                   {' '}
                   <div className="row">
-                    <div className="col-6">
+                    <div className="col-12">
                       <div
                         role="presentation"
                         className="back-link"
@@ -138,18 +138,18 @@ export default function Login() {
                         <img
                           src={LeftArrowIcon}
                           alt="aarow-back"
-                          className="arrow-back-icon "
+                          className="arrow-back "
                         />
                         Back a step
                       </div>
                     </div>
                   </div>
-                </div>
+                </>
               ) : (
                 ''
               )}
 
-              <h2 className={showPassword.email ? 'mb-5' : 'mb-0'}>
+              <h2 className={showPassword.email ? 'mb-4' : 'mb-0 mt-3'}>
                 {showPassword.email
                   ? 'Sign in'
                   : showPassword.name
@@ -158,20 +158,18 @@ export default function Login() {
               </h2>
 
               {showPassword.password ? (
-                <p className="small-para sub-text">
-                  Please verify that it&apos;s you.
-                </p>
+                <p className=" sub-text">Please verify that it&apos;s you.</p>
               ) : showPassword.name ? (
-                <p className="small-para sub-text">
+                <p className=" sub-text">
                   Please select the account you want to sign into.
                 </p>
               ) : (
                 ''
               )}
               <form onSubmit={handleSubmit(onSubmit)}>
-                <FormField>
-                  {showPassword.email ? (
-                    <>
+                {showPassword.email ? (
+                  <>
+                    <ContractFormField className="mt-2">
                       <label htmlFor="emailAddress">
                         Email Address
                         <br />
@@ -179,7 +177,7 @@ export default function Login() {
                           className={
                             errors && errors.email
                               ? 'form-control'
-                              : 'form-control mb-2'
+                              : 'form-control '
                           }
                           type="text"
                           placeholder=" Enter your Email Address"
@@ -198,32 +196,34 @@ export default function Login() {
                           })}
                         />
                       </label>
-                      <ErrorMsg>
-                        {(errors && errors.email && errors.email.message) ||
-                          (customerApiError && customerApiError[0])}
-                      </ErrorMsg>
-                    </>
-                  ) : (
-                    <>
-                      {showPassword.name ? (
+                    </ContractFormField>
+                    <ErrorMsg>
+                      {(errors && errors.email && errors.email.message) ||
+                        (customerApiError && customerApiError[0])}
+                    </ErrorMsg>
+                  </>
+                ) : (
+                  <>
+                    {showPassword.name ? (
+                      <ContractInputSelect>
                         <label htmlFor="account" className="mb-2">
                           Select Account
                           <Select
                             options={customerNames}
                             onChange={(event) =>
-                              setGetName({ ...getName, customer: event.value })
+                              setGetName({
+                                ...getName,
+                                customer: event.value,
+                              })
                             }
                           />
                         </label>
-                      ) : (
-                        <>
+                      </ContractInputSelect>
+                    ) : (
+                      <>
+                        <ContractFormField>
                           <label htmlFor="password">
-                            Password
-                            <Link
-                              className="float-right link"
-                              to={PATH_FORGOT_PASSWORD}>
-                              Forgot password?
-                            </Link>
+                            Enter password
                             <br />
                             <input
                               className="form-control"
@@ -245,33 +245,35 @@ export default function Login() {
                               })}
                             />
                           </label>
-                          <ErrorMsg>
-                            {errors &&
-                              errors.password &&
-                              errors.password.message}
-                          </ErrorMsg>
-                          <ErrorMsg>
-                            {apiError &&
-                              apiError.data &&
-                              apiError.data.non_field_errors &&
-                              apiError.data.non_field_errors[0]}
-                          </ErrorMsg>
-                        </>
-                      )}
-                    </>
-                  )}
-                  <Button
-                    className="btn-primary w-100 mt-4 mb-4"
-                    disabled={showPassword.name && getName.customer === ''}>
-                    {loader ||
-                    (isLoading.loader && isLoading.type === 'button') ? (
-                      <PageLoader color="#fff" type="button" />
-                    ) : (
-                      <>{showPassword.password ? 'Sign In' : 'Continue'}</>
+                        </ContractFormField>
+                        <ErrorMsg>
+                          {errors && errors.password && errors.password.message}
+                        </ErrorMsg>
+                        <ErrorMsg>
+                          {apiError &&
+                            apiError.data &&
+                            apiError.data.non_field_errors &&
+                            apiError.data.non_field_errors[0]}
+                        </ErrorMsg>
+                      </>
                     )}
-                  </Button>
+                  </>
+                )}
+                <Button
+                  className="btn-primary w-100 mt-3 mb-3"
+                  disabled={showPassword.name && getName.customer === ''}>
+                  {loader ||
+                  (isLoading.loader && isLoading.type === 'button') ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    <>{showPassword.password ? 'Sign In' : 'Continue'}</>
+                  )}
+                </Button>
+                <Link className=" forgot-pswd-link " to={PATH_FORGOT_PASSWORD}>
+                  Forgot password?
+                </Link>
 
-                  {/* <Button className=" btn-secondary w-100 mt-2">
+                {/* <Button className=" btn-secondary w-100 mt-2">
                     <img
                       className="google-icon"
                       src={GoogleIcons}
@@ -279,11 +281,10 @@ export default function Login() {
                     />
                     Login with Google
                   </Button> */}
-                </FormField>
               </form>
             </div>
           </div>
-          <div className="col-lg-6 pl-0 pr-0">
+          <div className="col-lg-7 pl-0 pr-0">
             <div className="banner-bg  d-lg-block d-none" />
           </div>
         </div>
@@ -291,68 +292,3 @@ export default function Login() {
     </FormContainer>
   );
 }
-
-const FormContainer = styled.div`
-  height: 100%;
-  .banner-bg {
-    width: 100%;
-    height: 100%;
-    background-image: url(${BannerBg});
-    background-position: center;
-    background-size: cover;
-  }
-
-  .inner-form {
-    max-width: 327px;
-    margin: 0 auto;
-    width: 100%;
-    vertical-align: middle;
-
-    .logo {
-      img {
-        width: 160px;
-        display: inline-table;
-        padding: 40px 0 100px 0;
-      }
-    }
-    .sub-text {
-      margin-bottom: 35px;
-    }
-
-    .google-icon {
-      width: 40px;
-      position: absolute;
-      top: 2px;
-      margin-right: 10px;
-      left: 2px;
-      bottom: -2px;
-      vertical-align: bottom;
-    }
-
-    // .login-success-msg {
-    //   max-width: 364px;
-    //   position: absolute;
-    //   top: 0;
-    //   left: 0;
-    //   right: 0;
-    //   width: 100%;
-    //   margin: 0 auto;
-    // }
-  }
-
-  @media only screen and (max-width: 991px) {
-    background-position: center;
-    background-size: cover;
-    background-image: url(${BannerBg});
-    background-repeat: no-repeat;
-    height: 100%;
-
-    .inner-form {
-      background: rgb(91 91 91 / 0.9);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-`;

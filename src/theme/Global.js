@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Theme from './Theme';
+import { BannerBg } from "./images/index";
 
 export const BodyWhite = styled.div`
   // padding: 20px 280px 20px 10px;
@@ -1278,4 +1279,79 @@ export const GroupUser = styled.div`
     width: 76%;
   }
 `;
+
+export const FormContainer = styled.div`
+  height: 100%;
+  .banner-bg {
+    width: 100%;
+    height: 100%;
+    background-image: url(${BannerBg});
+    background-position: center;
+    background-size: cover;
+  }
+
+  .inner-form {
+    max-width: 360px;
+    margin: 0 auto;
+    width: 100%;
+    vertical-align: middle;
+
+    .logo {
+      img {
+        width: 160px;
+        display: inline-table;
+        padding: 40px 0 100px 0;
+      }
+    }
+    .sub-text {
+      color: ${Theme.black};
+      font-size: ${Theme.normal};
+      margin: 0 0 22px 0;
+      line-height: 22px;
+    }
+
+    .google-icon {
+      width: 40px;
+      position: absolute;
+      top: 2px;
+      margin-right: 10px;
+      left: 2px;
+      bottom: -2px;
+      vertical-align: bottom;
+    }
+
+    h2 {
+      font-size: ${Theme.MediumTitleFontSize};
+    }
+    .back-link {
+      font-weight: 500;
+      .arrow-back {
+        vertical-align: middle;
+        width: 15px;
+        margin-right: 8px;
+      }
+    }
+    .forgot-pswd-link {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+    }
+  }
+
+  @media only screen and (max-width: 991px) {
+    background-position: center;
+    background-size: cover;
+    background-image: url(${BannerBg});
+    background-repeat: no-repeat;
+    height: 100%;
+
+    .inner-form {
+      background: rgb(91 91 91 / 0.9);
+      height: 100%;
+      top: 0;
+      max-width: 100%;
+      padding: 0 20px;
+    }
+  }
+`;
+
 export default global;

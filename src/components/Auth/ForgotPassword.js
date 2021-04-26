@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-
-import styled from 'styled-components';
-import { NextLogo, BannerBg, ArrowIcons } from '../../theme/images/index';
-import { Button, FormField, ErrorMsg, PageLoader } from '../../common';
+import { NextLogo, LeftArrowIcon } from '../../theme/images/index';
+import { Button, ContractFormField, ErrorMsg, PageLoader } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { getEmail } from '../../api/index';
+import { FormContainer } from '../../theme/Global';
 import { showForgotPasswordMsg } from '../../store/actions/userState';
 
 export default function ForgotPassword() {
@@ -51,53 +50,55 @@ export default function ForgotPassword() {
                   <img src={NextLogo} alt="logo " />
                 </div>
                 <Link className="link" to={PATH_LOGIN}>
-                  <p className="small-para">
-                    {' '}
+                  <div role="presentation" className="back-link">
                     <img
-                      src={ArrowIcons}
+                      src={LeftArrowIcon}
                       alt="aarow-back"
-                      className="arrow-icon"
+                      className="arrow-back "
                     />
-                    Back to Sign in
-                  </p>
+                    Back a step
+                  </div>
                 </Link>
 
-                <h2 className="mt-2 mb-0">Forgot your Password?</h2>
-                <p className="small-para sub-text">
+                <h2 className="mt-3 mb-0">Forgot your password?</h2>
+                <p className=" sub-text">
                   Enter your email address and we’ll send you instructions to
                   reset your password.
                 </p>
                 <form className="inner-form" onSubmit={handleSubmit(onSubmit)}>
-                  <FormField>
-                    <input
-                      className="form-control"
-                      id="email"
-                      name="email"
-                      placeholder="Enter email"
-                      ref={register({
-                        required: {
-                          value: true,
-                          message: 'This field is required.',
-                        },
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                          message: 'Invalid email address.',
-                        },
-                      })}
-                      onChange={() => setApiError([])}
-                    />
-                    <ErrorMsg>
-                      {errors && errors.email && errors.email.message}
-                    </ErrorMsg>{' '}
-                    <ErrorMsg>{apiError}</ErrorMsg>
-                    <Button className="btn btn-primary w-100 mt-4">
-                      {isLoading.loader && isLoading.type === 'button' ? (
-                        <PageLoader color="#fff" type="button" />
-                      ) : (
-                        'Send Reset Instructions'
-                      )}
-                    </Button>
-                  </FormField>
+                  <ContractFormField>
+                    <label htmlFor="emailAddress">
+                      Email address
+                      <input
+                        className="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email address"
+                        ref={register({
+                          required: {
+                            value: true,
+                            message: 'This field is required.',
+                          },
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                            message: 'Invalid email address.',
+                          },
+                        })}
+                        onChange={() => setApiError([])}
+                      />
+                    </label>
+                  </ContractFormField>
+                  <ErrorMsg>
+                    {errors && errors.email && errors.email.message}
+                  </ErrorMsg>{' '}
+                  <ErrorMsg>{apiError}</ErrorMsg>
+                  <Button className="btn btn-primary w-100 mt-3">
+                    {isLoading.loader && isLoading.type === 'button' ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : (
+                      'Send Reset Instructions'
+                    )}
+                  </Button>
                 </form>
               </div>
             </div>
@@ -110,55 +111,3 @@ export default function ForgotPassword() {
     </FormContainer>
   );
 }
-
-const FormContainer = styled.div`
-  height: 100%;
-  .banner-bg {
-    width: 100%;
-    height: 100%;
-    background-image: url(${BannerBg});
-    background-position: center;
-    background-size: cover;
-  }
-
-  .inner-form {
-    max-width: 327px;
-    margin: 0 auto;
-    width: 100%;
-    vertical-align: middle;
-
-    .logo {
-      img {
-        width: 160px;
-        display: inline-table;
-        padding: 40px 0 100px 0;
-      }
-    }
-    .arrow-icon {
-      width: 13px;
-      margin-right: 5px;
-      vertical-align: top;
-      cursor: pointer;
-    }
-  }
-  .sub-text {
-    margin-bottom: 35px;
-  }
-
-  @media only screen and (max-width: 991px) {
-    background-position: center;
-    background-size: cover;
-    background-image: url(${BannerBg});
-    background-repeat: no-repeat;
-    height: 100%;
-
-    .inner-form {
-      // background: rgb(15 15 17 / 0.9);
-      background: rgb(91 91 91 / 0.9);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-`;
