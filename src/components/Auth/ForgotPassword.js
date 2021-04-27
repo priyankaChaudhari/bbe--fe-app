@@ -7,7 +7,7 @@ import { Button, ContractFormField, ErrorMsg, PageLoader } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { getEmail } from '../../api/index';
 import { FormContainer } from '../../theme/Global';
-import { showForgotPasswordMsg } from '../../store/actions/userState';
+import { showOnboardingMsg } from '../../store/actions/userState';
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export default function ForgotPassword() {
         setApiError(response && response.data && response.data[0]);
         setIsLoading({ loader: false, type: 'button' });
       } else {
-        dispatch(showForgotPasswordMsg());
+        dispatch(showOnboardingMsg());
         history.push(PATH_LOGIN);
         setIsLoading({ loader: false, type: 'button' });
       }

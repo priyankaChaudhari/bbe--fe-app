@@ -14,6 +14,7 @@ import {
 } from '../../constants';
 import { accountSummary, updateUserMe } from '../../api';
 import { logout, userMe } from '../../store/actions';
+import { showOnboardingMsg } from '../../store/actions/userState';
 
 export default function Summary() {
   const history = useHistory();
@@ -50,7 +51,9 @@ export default function Summary() {
     accountSummary(userInfo.customer_onboarding).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
-      if (response.data.some((item) => item.is_completed === false)) {
+      if (response && response.data && response.data.length < 4) {
+        setShowDashboard(false);
+      } else if (response.data.some((item) => item.is_completed === false)) {
         setShowDashboard(false);
       } else {
         setShowDashboard(true);
@@ -76,12 +79,15 @@ export default function Summary() {
       (user) => {
         if (user && user.status === 200) {
           dispatch(userMe());
+          dispatch(showOnboardingMsg(true));
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', userInfo.customer));
+          setIsLoading({ loader: false, type: 'button' });
+        } else {
+          setIsLoading({ loader: false, type: 'button' });
         }
       },
     );
     localStorage.removeItem('match');
-    setIsLoading({ loader: false, type: 'button' });
   };
 
   return (

@@ -155,10 +155,10 @@ export const clearErrorMessage = () => {
   };
 };
 
-export const showForgotPasswordMsg = () => {
+export const showOnboardingMsg = (value) => {
   return {
     type: actionTypes.SHOW_FORGOT_PASSWORD_ERROR,
-    showForgotMsg: true,
+    showForgotMsg: value,
   };
 };
 

@@ -28,9 +28,6 @@ export default function Login() {
   const { register, handleSubmit, errors } = useForm();
   const loader = useSelector((state) => state.userState.isLoading);
   const apiError = useSelector((state) => state.userState.error);
-  const forgotPasswordMsg = useSelector(
-    (state) => state.userState.showForgotMsg,
-  );
   const resetPasswordMsg = useSelector((state) => state.userState.showResetMsg);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showPassword, setShowPassword] = useState({
@@ -127,13 +124,6 @@ export default function Login() {
             <div className="inner-form">
               <div className="logo">
                 <img src={NextLogo} alt="logo " />
-              </div>
-              <div className="login-success-msg">
-                {forgotPasswordMsg ? (
-                  <SuccessMsg message="We have emailed you a reset link, please check your email." />
-                ) : (
-                  ''
-                )}
               </div>
               <div className="login-success-msg">
                 {resetPasswordMsg ? (

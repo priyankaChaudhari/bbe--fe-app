@@ -129,11 +129,15 @@ export default function CreateAccount() {
 
   return (
     <>
-      <NavigationHeader
-        bar="20"
-        backStep={showSuccessMsg ? '' : '1'}
-        showSuccessMsg={showSuccessMsg}
-      />
+      {showSuccessMsg ? (
+        ''
+      ) : (
+        <NavigationHeader
+          bar="20"
+          backStep={showSuccessMsg ? '' : '1'}
+          showSuccessMsg={showSuccessMsg}
+        />
+      )}
       <UnauthorizedHeader />
       <OnBoardingBody className={showSuccessMsg ? '' : 'body-white'}>
         {!assignTo ? (

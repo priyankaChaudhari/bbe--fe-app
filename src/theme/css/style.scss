@@ -358,6 +358,12 @@ p {
   &.extra-bold {
     color: $gray-90;
     font-size: $base-f-size;
+    .link-url {
+      font-size: 14px;
+      color: $orange-color;
+      text-transform: initial;
+      text-decoration: underline;
+    }
   }
 
   span {

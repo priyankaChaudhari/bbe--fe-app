@@ -60,6 +60,7 @@ const OnBoardingBody = styled.div`
 
       .hi-name {
         margin-bottom: 12px;
+        text-transform: capitalize;
       }
       .note {
         font-style: italic;

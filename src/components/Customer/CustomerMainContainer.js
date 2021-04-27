@@ -27,6 +27,7 @@ import {
   HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
+  AccountSetupIcon,
 
   // BillingIcon,
 } from '../../theme/images/index';
@@ -38,6 +39,7 @@ import {
   DropDownStatus,
   PageNotFound,
   BackToTop,
+  Button,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -63,6 +65,7 @@ import {
 import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
+import { showOnboardingMsg } from '../../store/actions/userState';
 
 const customStyles = {
   content: {
@@ -122,6 +125,10 @@ export default function CustomerMainContainer() {
   const profileLoader = useSelector((state) => state.userState.isLoading);
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
   const customerError = useSelector((state) => state.customerState.error);
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const showOnBoardingSuccessMsg = useSelector(
+    (state) => state.userState.showForgotMsg,
+  );
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -129,7 +136,7 @@ export default function CustomerMainContainer() {
     { value: 'inactive', label: 'Inactivate' },
   ];
 
-  const viewOptions = [
+  let viewOptions = [
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
@@ -214,10 +221,15 @@ export default function CustomerMainContainer() {
     dispatch(getAccountDetails(id));
     dispatch(getCustomerDetails(id));
     dispatch(getContactDetails(id));
-    getMarketPlace(id);
+    if (userInfo && userInfo.role !== 'Customer') {
+      getMarketPlace(id);
+      getAmazon();
+    }
     getCustomerMemberList();
     getActivityLogInfo();
-    getAmazon();
+    if (userInfo && userInfo.role === 'Customer') {
+      setViewComponent('company');
+    }
     if (profileLoader) {
       getActivityLogInfo();
     }
@@ -229,18 +241,27 @@ export default function CustomerMainContainer() {
     getAmazon,
     getMarketPlace,
     profileLoader,
+    userInfo,
   ]);
 
-  const getActivityInitials = (userInfo) => {
+  if (userInfo && userInfo.role === 'Customer') {
+    viewOptions = [
+      { value: 'company', label: 'Company Details' },
+      // { value: 'billing', label: 'Billing' },
+      { value: 'activity', label: 'Activity' },
+    ];
+  }
+
+  const getActivityInitials = (user) => {
     const firstName =
-      (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[0].charAt(0)) ||
+      (user &&
+        user.split(' ').slice(0, 2) &&
+        user.split(' ').slice(0, 2)[0].charAt(0)) ||
       '';
     const lastName =
-      (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[1].charAt(0)) ||
+      (user &&
+        user.split(' ').slice(0, 2) &&
+        user.split(' ').slice(0, 2)[1].charAt(0)) ||
       '';
 
     return firstName + lastName;
@@ -380,26 +401,42 @@ export default function CustomerMainContainer() {
             <PageLoader color="#FF5933" type="page" width={20} />
           ) : (
             <>
-              <BackBtn className="d-lg-none d-block ">
-                <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
-                  {' '}
-                  <img className="left-arrow" src={BackArrowIcon} alt="" /> Back
-                  to all customers
-                </Link>
-              </BackBtn>
+              {userInfo && userInfo.role !== 'Customer' ? (
+                <BackBtn className="d-lg-none d-block ">
+                  <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
+                    {' '}
+                    <img
+                      className="left-arrow"
+                      src={BackArrowIcon}
+                      alt=""
+                    />{' '}
+                    Back to all customers
+                  </Link>
+                </BackBtn>
+              ) : (
+                ''
+              )}
               <CustomerDetailBanner>
                 <div className="banner">
                   <div className="inner" />
                 </div>
 
                 <CustomerBody>
-                  <Link to={PATH_CUSTOMER_LIST}>
-                    <div className="back-btn-link d-lg-block d-none">
-                      {' '}
-                      <img className="left-arrow" src={LeftArrowIcon} alt="" />
-                      Back to all customers
-                    </div>
-                  </Link>
+                  {userInfo && userInfo.role !== 'Customer' ? (
+                    <Link to={PATH_CUSTOMER_LIST}>
+                      <div className="back-btn-link d-lg-block d-none">
+                        {' '}
+                        <img
+                          className="left-arrow"
+                          src={LeftArrowIcon}
+                          alt=""
+                        />
+                        Back to all customers
+                      </div>
+                    </Link>
+                  ) : (
+                    ''
+                  )}
 
                   <WhiteCard className="customer-brand-details mb-n2">
                     <div className="row">
@@ -592,36 +629,46 @@ export default function CustomerMainContainer() {
                     <div className="col-lg-4 col-12">
                       <WhiteCard className="left-border  d-lg-block d-none mb-3">
                         <ul className="left-details-card">
-                          <li
-                            onClick={() => setViewComponent('performance')}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'performance' ? 'active' : ''
-                              }`}>
-                              <img
-                                className="file-contract"
-                                src={HeartMonitorIcon}
-                                alt="monitor"
-                              />
-                              Performance
-                            </div>
-                          </li>
-                          <li
-                            onClick={() => setViewComponent('agreement')}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'agreement' ? 'active' : ''
-                              }`}>
-                              <img
-                                className="file-contract"
-                                src={FileContract}
-                                alt=""
-                              />
-                              Agreements
-                            </div>
-                          </li>
+                          {userInfo && userInfo.role !== 'Customer' ? (
+                            <li
+                              onClick={() => setViewComponent('performance')}
+                              role="presentation">
+                              <div
+                                className={`left-details ${
+                                  viewComponent === 'performance'
+                                    ? 'active'
+                                    : ''
+                                }`}>
+                                <img
+                                  className="file-contract"
+                                  src={HeartMonitorIcon}
+                                  alt="monitor"
+                                />
+                                Performance
+                              </div>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                          {userInfo && userInfo.role !== 'Customer' ? (
+                            <li
+                              onClick={() => setViewComponent('agreement')}
+                              role="presentation">
+                              <div
+                                className={`left-details ${
+                                  viewComponent === 'agreement' ? 'active' : ''
+                                }`}>
+                                <img
+                                  className="file-contract"
+                                  src={FileContract}
+                                  alt=""
+                                />
+                                Agreements
+                              </div>
+                            </li>
+                          ) : (
+                            ''
+                          )}
                           <li
                             onClick={() => setViewComponent('company')}
                             role="presentation">
@@ -887,6 +934,53 @@ export default function CustomerMainContainer() {
                   setStatusModal={setStatusModal}
                   customer={customer}
                 />
+              </Modal>
+              <Modal
+                isOpen={showOnBoardingSuccessMsg}
+                style={customStyles}
+                ariaHideApp={false}
+                contentLabel="Edit modal">
+                <img
+                  src={CloseIcon}
+                  alt="close"
+                  className="float-right cursor cross-icon"
+                  onClick={() => dispatch(showOnboardingMsg(false))}
+                  role="presentation"
+                />
+                <ModalBox>
+                  <div className="modal-body">
+                    <img src={AccountSetupIcon} alt="company-icon" />
+
+                    <h3 className="page-heading mb-3 mt-3 ">
+                      Account Set Up Complete
+                    </h3>
+                    <p className="extra-bold ">
+                      {' '}
+                      Congratulations on completing your account setup with Buy
+                      Box Experts! Expect to hear from your On-boarding
+                      Specialist in the next 24 hours to walk through final set
+                      up items and get you in contact with your Brand Growth
+                      Strategist.
+                    </p>
+
+                    <p className="extra-bold mt-4">
+                      If you have any questions in the meantime please reach out
+                      to{' '}
+                      <a
+                        className="link-url"
+                        target="_BLANK"
+                        rel="noopener noreferrer"
+                        href="https://www.buyboxexperts.com/">
+                        onboarding@buyboxexperts.com.
+                      </a>
+                    </p>
+                    <Button
+                      className="btn-primary w-100 on-boarding mt-3"
+                      onClick={() => dispatch(showOnboardingMsg(false))}>
+                      Ok. Got it!
+                    </Button>
+                  </div>
+                </ModalBox>
               </Modal>
             </>
           )}

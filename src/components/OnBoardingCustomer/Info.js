@@ -53,8 +53,7 @@ export default function Info() {
         <p className="account-steps m-0">Step 1 of 5</p>
         <h3 className="page-heading ">Create your account</h3>
         <p className="information-text m-0 ">
-          <div className="hi-name">
-            {' '}
+          <div className="hi-name capitalize">
             Hi {(params && params.name) || 'Customer'},
           </div>
           We need some essential information in order to set up your account on
