@@ -1062,13 +1062,21 @@ export default function NewCustomerList() {
                                 className="recurring-contact"
                                 style={{ textTransform: 'capitalize' }}>
                                 {item &&
+                                item.contract &&
+                                item.contract.length ? (
+                                  item &&
                                   item.contract &&
                                   item.contract.map((type) => (
                                     <React.Fragment key={Math.random()}>
                                       <ReactTooltip />
                                       {generateContractHTML(type, item.id)}
                                     </React.Fragment>
-                                  ))}
+                                  ))
+                                ) : (
+                                  <li className="no-active-contract">
+                                    No active contracts
+                                  </li>
+                                )}
                               </ul>
                             )}
                           </td>

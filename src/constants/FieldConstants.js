@@ -181,7 +181,7 @@ export const sliderSettings = {
 export const sortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
-  { value: 'expiring_soon', label: 'Expiring Soon' },
+  { value: 'expiring_soon', label: 'Expiry Date' },
 ];
 
 export const companyFields = [

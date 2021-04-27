@@ -335,14 +335,20 @@ export default function CustomerListTablet({
                       <ul
                         className="recurring-contact"
                         style={{ textTransform: 'capitalize' }}>
-                        {item &&
+                        {item && item.contract && item.contract.length ? (
+                          item &&
                           item.contract &&
                           item.contract.map((type) => (
                             <React.Fragment key={Math.random()}>
                               <ReactTooltip />
                               {generateContractHTML(type, item.id)}
                             </React.Fragment>
-                          ))}
+                          ))
+                        ) : (
+                          <li className="no-active-contract">
+                            No active contracts
+                          </li>
+                        )}
                       </ul>
                     </>
                   )}
@@ -587,6 +593,11 @@ const CustomerListTabletView = styled.div`
             }
           }
         }
+      }
+      &.no-active-contract {
+        color: ${Theme.gray40};
+        font-size: 14px;
+        text-transform: initial;
       }
     }
   }
