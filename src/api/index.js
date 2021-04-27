@@ -7,6 +7,7 @@ export {
   userCustomerRoleList,
   updateUserMe,
   getCustomerNames,
+  getUserData,
 } from './AuthApi';
 
 // customer

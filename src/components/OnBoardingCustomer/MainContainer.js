@@ -15,8 +15,8 @@ import {
 } from '../../common';
 import { CaretUp } from '../../theme/images';
 import AskSomeone from './AskSomeone';
-import { getStepDetails, verifyStepToken } from '../../api';
-import { getCustomerDetails, userMe } from '../../store/actions';
+import { getStepDetails, getUserData, verifyStepToken } from '../../api';
+import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
 import {
   PATH_AMAZON_ACCOUNT,
@@ -42,7 +42,7 @@ export default function MainContainer() {
   const [stepData, setStepData] = useState({});
   const [verifiedStepData, setVerifiedStepData] = useState({});
   const params = queryString.parse(history.location.search);
-  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [userInfo, setUserInfo] = useState({});
 
   const whichStep = [
     {
@@ -101,6 +101,7 @@ export default function MainContainer() {
   };
 
   useEffect(() => {
+    setIsLoading({ loader: true, type: 'page' });
     if (!history.location.pathname.includes('/account-setup/create-password')) {
       if (
         history.location.pathname.includes('/account-setup/') &&
@@ -115,33 +116,45 @@ export default function MainContainer() {
       if (history.location.pathname.includes('assigned')) {
         setAssignedToSomeone(true);
       } else {
-        dispatch(userMe());
+        //  dispatch(userMe());
         setAssignedToSomeone(false);
       }
-      getStepDetails(
-        userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
-        getStepName(),
-      ).then((response) => {
-        setStepData(
-          response &&
-            response.data &&
-            response.data.results &&
-            response.data.results[0],
-        );
-        if (
-          response &&
-          response.data &&
-          response.data.results &&
-          response.data.results[0] &&
-          response.data.results[0].step === getStepName()
-        ) {
-          setIsChecked(true);
+
+      getUserData(localStorage.getItem('customer')).then((res) => {
+        if (res && res.status === 200) {
+          setUserInfo(res && res.data);
+          getStepDetails(
+            (res && res.data && res.data.customer_onboarding) ||
+              verifiedStepData.customer_onboarding_id,
+            getStepName(),
+          ).then((response) => {
+            setStepData(
+              response &&
+                response.data &&
+                response.data.results &&
+                response.data.results[0],
+            );
+            if (
+              response &&
+              response.data &&
+              response.data.results &&
+              response.data.results[0] &&
+              response.data.results[0].step === getStepName()
+            ) {
+              setIsChecked(true);
+            }
+            setIsLoading({ loader: false, type: 'page' });
+          });
+          dispatch(
+            getCustomerDetails(
+              (res && res.data && res.data.customer) ||
+                verifiedStepData.customer_id,
+            ),
+          );
+        } else {
+          setIsLoading({ loader: false, type: 'page' });
         }
-        setIsLoading({ loader: false, type: 'page' });
       });
-      dispatch(
-        getCustomerDetails(userInfo.customer || verifiedStepData.customer_id),
-      );
     }
   }, [history.location.pathname]);
 
@@ -214,6 +227,10 @@ export default function MainContainer() {
               skipStep={item.skip}
               backStep={item.back}
               showSuccessMsg={item.path === 'summary'}
+              stepData={stepData}
+              verifiedStepData={verifiedStepData}
+              stepName={getStepName()}
+              userInfo={userInfo}
             />
           )}
 

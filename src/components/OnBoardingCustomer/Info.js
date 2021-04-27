@@ -50,7 +50,7 @@ export default function Info() {
       <UnauthorizedHeader />{' '}
       <div className="white-card-base ">
         <img className="lock-finish" src={LockFinish} alt="lock" />
-        <p className="account-steps m-0">Step 1 of 4</p>
+        <p className="account-steps m-0">Step 1 of 5</p>
         <h3 className="page-heading ">Create your account</h3>
         <p className="information-text m-0 ">
           <div className="hi-name">

@@ -68,7 +68,9 @@ export default function AmazonMerchant({
               } else {
                 history.push(PATH_AMAZON_ACCOUNT);
               }
-              updateUserMe(userInfo.id, { step: 4 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 4 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }
@@ -99,7 +101,9 @@ export default function AmazonMerchant({
               } else {
                 history.push(PATH_AMAZON_ACCOUNT);
               }
-              updateUserMe(userInfo.id, { step: 4 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 4 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }

@@ -29,28 +29,41 @@ export const userRequestInitiated = () => {
 export const userRequestSuccess = (data, history, customer) => {
   localStorage.setItem('token', data.token);
   localStorage.setItem('customer', customer.customer);
+  const id = customer.customer || (data && data.user && data.user.customer);
 
   if (data.user && data.user.role === 'Customer') {
-    if (data.user.step === null) {
+    if (
+      Object.keys(data.user.step)[0] !== data.user.customer ||
+      customer.customer
+    ) {
       history.push(PATH_COMPANY_DETAILS);
-    }
-    if (data.user.step === 1) {
-      history.push(PATH_COMPANY_DETAILS);
-    }
-    if (data.user.step === 2) {
-      history.push(PATH_BILLING_DETAILS);
-    }
-    if (data.user.step === 3) {
-      history.push(PATH_AMAZON_MERCHANT);
-    }
-    if (data.user.step === 4) {
-      history.push(PATH_AMAZON_ACCOUNT);
-    }
-    if (data.user.step === 5) {
-      history.push(PATH_SUMMARY);
-    }
-    if (data.user.step === 6) {
-      history.push(PATH_CUSTOMER_DETAILS.replace(data.user.customer));
+    } else {
+      if (data.user.step[id] === null) {
+        history.push(PATH_COMPANY_DETAILS);
+      }
+      if (data.user.step[id] === 1) {
+        history.push(PATH_COMPANY_DETAILS);
+      }
+      if (data.user.step[id] === 2) {
+        history.push(PATH_BILLING_DETAILS);
+      }
+      if (data.user.step[id] === 3) {
+        history.push(PATH_AMAZON_MERCHANT);
+      }
+      if (data.user.step[id] === 4) {
+        history.push(PATH_AMAZON_ACCOUNT);
+      }
+      if (data.user.step[id] === 5) {
+        history.push(PATH_SUMMARY);
+      }
+      if (data.user.step[id] === 6) {
+        history.push(
+          PATH_CUSTOMER_DETAILS.replace(
+            ':id',
+            customer.customer || data.user.customer,
+          ),
+        );
+      }
     }
   } else {
     if (

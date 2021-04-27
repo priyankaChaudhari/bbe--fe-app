@@ -71,7 +71,9 @@ export default function CompanyDigital({
               } else {
                 history.push(PATH_BILLING_DETAILS);
               }
-              updateUserMe(userInfo.id, { step: 2 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 2 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }
@@ -102,7 +104,9 @@ export default function CompanyDigital({
               } else {
                 history.push(PATH_BILLING_DETAILS);
               }
-              updateUserMe(userInfo.id, { step: 2 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 2 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }

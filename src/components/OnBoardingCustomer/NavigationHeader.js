@@ -9,12 +9,17 @@ import queryString from 'query-string';
 import Theme from '../../theme/Theme';
 import { LeftArrowIcon } from '../../theme/images';
 import { PATH_ACCOUNT_SETUP_CHOOSE } from '../../constants';
+import { askSomeoneData } from '../../api';
 
 export default function NavigationHeader({
   bar,
   backStep,
   skipStep,
   showSuccessMsg,
+  stepData,
+  verifiedStepData,
+  userInfo,
+  stepName,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -37,7 +42,25 @@ export default function NavigationHeader({
       }
     }
     if (type === 'skip') {
-      history.push(skipStep);
+      if (
+        stepData === undefined &&
+        verifiedStepData &&
+        Object.keys(verifiedStepData) &&
+        Object.keys(verifiedStepData).length === 0
+      ) {
+        const detail = {
+          email: userInfo.email,
+          step: stepName,
+          customer_onboarding: userInfo.customer_onboarding,
+        };
+        askSomeoneData(detail).then((stepResponse) => {
+          if (stepResponse && stepResponse.status === 201) {
+            history.push(skipStep);
+          }
+        });
+      } else {
+        history.push(skipStep);
+      }
     }
   };
 
@@ -101,6 +124,17 @@ NavigationHeader.propTypes = {
   backStep: PropTypes.string,
   skipStep: PropTypes.string,
   showSuccessMsg: PropTypes.bool,
+  userInfo: PropTypes.shape({
+    email: PropTypes.string,
+    customer_onboarding: PropTypes.string,
+  }).isRequired,
+  stepData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  verifiedStepData: PropTypes.objectOf(
+    PropTypes.shape({
+      user_name: PropTypes.string,
+    }),
+  ).isRequired,
+  stepName: PropTypes.func.isRequired,
 };
 
 const BackToStep = styled.div`

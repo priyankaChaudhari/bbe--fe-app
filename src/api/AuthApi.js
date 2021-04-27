@@ -5,6 +5,7 @@ import {
   API_USER,
   API_UPDATE_PASSWORD,
   API_CUSTOMER_NAMES,
+  API_USER_ME,
 } from '../constants/ApiConstants';
 
 export async function getEmail(data = null) {
@@ -101,6 +102,19 @@ export async function getCustomerNames(email) {
   const params = { email };
   const result = await axiosInstance
     .get(API_CUSTOMER_NAMES, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getUserData(customer) {
+  const params = { customer };
+  const result = await axiosInstance
+    .get(API_USER_ME, { params })
     .then((response) => {
       return response;
     })

@@ -72,7 +72,9 @@ export default function AmazonDeveloperAccess({
               } else {
                 history.push(PATH_SUMMARY);
               }
-              updateUserMe(userInfo.id, { step: 5 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 5 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }
@@ -103,7 +105,9 @@ export default function AmazonDeveloperAccess({
               } else {
                 history.push(PATH_SUMMARY);
               }
-              updateUserMe(userInfo.id, { step: 5 }).then((user) => {
+              updateUserMe(userInfo.id, {
+                step: { [userInfo.customer]: 5 },
+              }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
                 }

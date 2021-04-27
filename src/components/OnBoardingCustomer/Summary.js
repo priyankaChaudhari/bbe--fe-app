@@ -47,7 +47,7 @@ export default function Summary() {
   ];
 
   useEffect(() => {
-    accountSummary('CBZQuki').then((response) => {
+    accountSummary(userInfo.customer_onboarding).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
       if (response.data.some((item) => item.is_completed === false)) {
@@ -56,7 +56,7 @@ export default function Summary() {
         setShowDashboard(true);
       }
     });
-  }, []);
+  }, [userInfo.customer_onboarding]);
 
   const getPath = (step, type) => {
     for (const item of whichStep) {
@@ -72,12 +72,14 @@ export default function Summary() {
 
   const redirect = () => {
     setIsLoading({ loader: true, type: 'button' });
-    updateUserMe(userInfo.id, { step: 6 }).then((user) => {
-      if (user && user.status === 200) {
-        dispatch(userMe());
-        history.push(PATH_CUSTOMER_DETAILS.replace('CMF9QAS'));
-      }
-    });
+    updateUserMe(userInfo.id, { step: { [userInfo.customer]: 2 } }).then(
+      (user) => {
+        if (user && user.status === 200) {
+          dispatch(userMe());
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', userInfo.customer));
+        }
+      },
+    );
     localStorage.removeItem('match');
     setIsLoading({ loader: false, type: 'button' });
   };
@@ -117,8 +119,7 @@ export default function Summary() {
                     src={OrangeCheckMark}
                     alt="check"
                   />
-                  Completed <br />{' '}
-                  <span style={{ color: '#8798AD' }}>by Me</span>
+                  Completed
                 </div>
               </div>
 
@@ -134,9 +135,9 @@ export default function Summary() {
                           alt="check"
                         />
                         Completed <br />{' '}
-                        <span style={{ color: '#8798AD' }}>
-                          by {userInfo.email === item.email ? 'Me' : item.email}
-                        </span>
+                        {userInfo.email === item.email
+                          ? ''
+                          : `Provided by ${item.email}`}
                       </div>
                     ) : (
                       <div className="pending-status">
@@ -145,8 +146,10 @@ export default function Summary() {
                           src={GrayClockIcon}
                           alt="clock"
                         />
-                        Skipped <br /> by{' '}
-                        {userInfo.email === item.email ? 'Me' : item.email}
+                        Skipped <br />
+                        {userInfo.email === item.email
+                          ? ''
+                          : `Provided by ${item.email}`}
                       </div>
                     )}
 
@@ -165,8 +168,11 @@ export default function Summary() {
               <Button
                 className="btn-primary w-100 mt-4"
                 onClick={() => redirect()}>
-                {' '}
-                View Dashboard
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'View Dashboard'
+                )}
               </Button>
             ) : (
               <GreyCard className="yellow-card mt-2">
