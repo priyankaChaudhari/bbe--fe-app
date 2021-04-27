@@ -1084,7 +1084,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           </div>
           <div
             className={
-              difference > 0 ? 'perentage-value' : 'perentage-value down'
+              difference > 0
+                ? 'perentage-value mt-3'
+                : 'perentage-value down mt-3'
             }>
             {!Number.isNaN(difference) && difference > 0 ? (
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
@@ -1107,7 +1109,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         <div className="row">
           <div className="col-md-6 col-sm1-12">
             {' '}
-            <p className="black-heading-title mt-0 mb-4"> Sales Performance</p>
+            <p className="black-heading-title mt-2 mb-4"> Sales Performance</p>
           </div>
           {renderFilterDropDown()}
           <div className="col-12 text-right mb-3" />

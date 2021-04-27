@@ -1,8 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from // useState, // useEffect,
-// useCallback,
-// useLayoutEffect,
-'react';
+import React from 'react'; // useLayoutEffect, // useCallback, // useState, // useEffect,
 import styled from 'styled-components';
 import Select from 'react-select';
 import { DropDownSelect } from '../../../common';
@@ -67,7 +64,7 @@ export default function AdPerformance() {
   const renderAdBox = () => {
     return (
       <>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div className="order-chart-box ad-sales-active fix-height">
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">$15,050.28</div>
@@ -78,7 +75,7 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div className="order-chart-box ad-spend-active fix-height">
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
@@ -89,7 +86,7 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div className="order-chart-box ad-conversion-active fix-height">
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">$15,050.28</div>
@@ -100,7 +97,7 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div className="order-chart-box impression-active fix-height">
             <div className="chart-name">Impressions </div>
             <div className="number-rate">$15,050.28</div>
@@ -112,7 +109,7 @@ export default function AdPerformance() {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div className="order-chart-box  fix-height">
+          <div className="order-chart-box ad-cos-active fix-height">
             <div className="chart-name">Ad Cos</div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -122,8 +119,8 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div className="order-chart-box  fix-height">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div className="order-chart-box ad-roas-active  fix-height">
             <div className="chart-name">RoAS </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -133,8 +130,8 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div className="order-chart-box  fix-height">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div className="order-chart-box ad-click-active  fix-height">
             <div className="chart-name">Clicks </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -144,8 +141,8 @@ export default function AdPerformance() {
             </div>
           </div>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div className="order-chart-box  fix-height">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div className="order-chart-box ad-clickrate-active fix-height">
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -164,9 +161,9 @@ export default function AdPerformance() {
       <>
         <div className="col-md-3  col-sm1-12">
           {' '}
-          <p className="black-heading-title mt-0 mb-4"> Ad Performance</p>
+          <p className="black-heading-title mt-2 mb-5"> Ad Performance</p>
         </div>
-        <div className="col-md-9 col-sm1-12  mb-3 pr-0">
+        <div className="col-md-9 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
             <li className="ad-performance">
               {' '}
@@ -235,6 +232,28 @@ export default function AdPerformance() {
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row">{renderAdGroupBy()}</div>
+      </WhiteCard>
+      <WhiteCard className="mt-3">
+        <div className="row">
+          <div className="col-6">
+            {' '}
+            <p className="black-heading-title mt-2 mb-2"> DSP Spend</p>
+          </div>
+          <div className="col-6 text-right">
+            {' '}
+            <DropDownSelect className="days-performance">
+              <Select classNamePrefix="react-select" className="active" />
+            </DropDownSelect>
+          </div>
+        </div>
+        <div className="number-rate">$15,050.28</div>
+        <div className="vs">
+          vs $11,114.90{' '}
+          <span className="perentage-value down mt-3 ml-1">
+            <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+            40.75%{' '}
+          </span>
+        </div>
       </WhiteCard>
     </AddPerformance>
   );

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Theme from './Theme';
-import { BannerBg } from "./images/index";
+import { BannerBg } from './images/index';
 
 export const BodyWhite = styled.div`
   // padding: 20px 280px 20px 10px;
@@ -827,26 +827,16 @@ export const WhiteCard = styled.div`
       border-radius: 8px;
       max-width: 180px;
       width: 100%;
-      padding:13px;
-      
+      padding: 13px;
       cursor: pointer;
 
-      .number-rate {
-        color: ${Theme.gray80};
-        font-size: 26px;
-        padding-top: 15px;
-        word-break: break-all;
-      }
       .chart-name {
         color:${Theme.gray40};
         font-size:11px;
         text-transform: uppercase;
         font-family: ${Theme.titleFontFamily};
       }
-      .vs {
-        color: ${Theme.gray40};
-        font-size: ${Theme.extraMedium};
-      }
+     
       .perentage-value {
         color: ${Theme.lighterGreen};
         font-size: ${Theme.extraNormal};
@@ -913,8 +903,79 @@ export const WhiteCard = styled.div`
           color: #D6A307;
         }
       }
+      &.ad-cos-active {
+          border: 1px solid #E05D37;
+        .chart-name {
+          color: #E05D37;
+        }
+      }
+      &.ad-roas-active {
+          border: 1px solid #89A43C;
+        .chart-name {
+          color: #89A43C;
+        }
+      }
+       &.ad-roas-active {
+          border: 1px solid #89A43C;
+        .chart-name {
+          color: #89A43C;
+        }
+      }
+
+      &.ad-click-active {
+          border: 1px solid #C84EC6;
+        .chart-name {
+          color: #C84EC6;
+        }
+      }
+      &.ad-clickrate-active {
+          border: 1px solid #A04848;
+        .chart-name {
+          color: #A04848;
+        }
+      }
       
     }
+     .number-rate {
+        color: ${Theme.gray80};
+        font-size: 26px;
+        padding-top: 15px;
+        word-break: break-all;
+        font-family:  ${Theme.baseFontFamily};
+      }
+       .perentage-value {
+        color: ${Theme.lighterGreen};
+        font-size: ${Theme.extraNormal};
+        font-weight: 300;
+        margin-left: -2px;
+
+        &.down {
+          color: ${Theme.darkRed};
+        }
+        .red-arrow{
+           width: 14px;
+          transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
+        }
+        .green-arrow {
+          width: 14px;
+          vertical-align: bottom;
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
+        }
+
+        img {
+          width:14px;
+        }
+      }
+      
+      .vs {
+        color: ${Theme.gray40};
+        font-size: ${Theme.extraMedium};
+      }
 
   
   .days-container {
