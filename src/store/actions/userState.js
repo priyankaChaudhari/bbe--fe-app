@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable no-lonely-if */
 /* eslint no-shadow: "off" */
 
@@ -29,12 +30,17 @@ export const userRequestInitiated = () => {
 export const userRequestSuccess = (data, history, customer) => {
   localStorage.setItem('token', data.token);
   localStorage.setItem('customer', customer.customer);
-  const id = customer.customer || (data && data.user && data.user.customer);
+  const id = Object.keys(data.user.step).find(
+    (op) =>
+      op === customer.customer || (data && data.user && data.user.customer),
+  );
 
   if (data.user && data.user.role === 'Customer') {
     if (
-      Object.keys(data.user.step)[0] !== data.user.customer ||
-      customer.customer
+      Object.keys(data.user.step).find(
+        (op) =>
+          op !== customer.customer || (data && data.user && data.user.customer),
+      )
     ) {
       history.push(PATH_COMPANY_DETAILS);
     } else {
@@ -127,7 +133,7 @@ export const login = (history, data, customer) => {
       .post(API_LOGIN, data, { params: customer })
       .then((data) => {
         dispatch(userRequestSuccess(data.data, history, customer));
-        dispatch(userMe(history, customer));
+        // dispatch(userMe(history, customer));
       })
       .catch((error) => {
         dispatch(userRequestFail(error));

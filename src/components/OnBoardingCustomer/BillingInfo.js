@@ -85,13 +85,13 @@ export default function BillingInfo({
         } else {
           history.push(PATH_AMAZON_MERCHANT);
         }
-        updateUserMe(userInfo.id, { step: { [userInfo.customer]: 3 } }).then(
-          (user) => {
-            if (user && user.status === 200) {
-              dispatch(userMe());
-            }
-          },
-        );
+        updateUserMe(userInfo.id, {
+          step: { ...userInfo.step, [userInfo.customer]: 3 },
+        }).then((user) => {
+          if (user && user.status === 200) {
+            dispatch(userMe());
+          }
+        });
         localStorage.removeItem('match');
         setIsLoading({ loader: false, type: 'button' });
       }
@@ -356,6 +356,7 @@ BillingInfo.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     customer: PropTypes.string,
+    step: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

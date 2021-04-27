@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-cycle */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ import {
   SpeedometerActive,
   Speedometer,
 } from '../theme/images/index';
-import { logout } from '../store/actions/userState';
+import { logout, userMe } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
@@ -58,6 +58,7 @@ export default function Header({ type }) {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const profilePic =
+    userInfo &&
     userInfo.documents &&
     userInfo.documents[0] &&
     Object.values(userInfo.documents[0]) &&
@@ -75,6 +76,10 @@ export default function Header({ type }) {
       transform: 'translate(-50%, -50%)',
     },
   };
+
+  useEffect(() => {
+    dispatch(userMe());
+  }, [dispatch]);
 
   const getInitials = () => {
     const firstName =

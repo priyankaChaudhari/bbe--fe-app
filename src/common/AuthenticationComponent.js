@@ -61,7 +61,8 @@ export default function AuthenticationComponent() {
 
   const generateHeader = () => {
     if (history.location.pathname.includes('account-setup')) return '';
-    if (userInfo && userInfo.role === 'Customer') return <Header />;
+    if (userInfo && userInfo.role === 'Customer')
+      return <Header userInfo={userInfo} />;
     if (
       !history.location.pathname.includes('account-setup') &&
       userInfo &&
@@ -70,7 +71,7 @@ export default function AuthenticationComponent() {
       return (
         <>
           <div className="common-header-sticky">
-            <Header />
+            <Header userInfo={userInfo} />
           </div>
 
           <LeftSideBar userInfo={userInfo} />

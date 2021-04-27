@@ -24,6 +24,7 @@ export default function EditProfile({ initials, userInfo }) {
   const { register, handleSubmit, errors } = useForm();
   const [apiError, setApiError] = useState({});
   const [showBtn, setShowBtn] = useState(false);
+  console.log(userInfo, 'hi');
 
   const onSubmit = (data) => {
     setIsLoading({ loader: true, type: 'button' });

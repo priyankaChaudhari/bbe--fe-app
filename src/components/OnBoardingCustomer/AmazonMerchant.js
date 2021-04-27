@@ -69,7 +69,7 @@ export default function AmazonMerchant({
                 history.push(PATH_AMAZON_ACCOUNT);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 4 },
+                step: { ...userInfo.step, [userInfo.customer]: 4 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -102,7 +102,7 @@ export default function AmazonMerchant({
                 history.push(PATH_AMAZON_ACCOUNT);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 4 },
+                step: { ...userInfo.step, [userInfo.customer]: 4 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -164,6 +164,7 @@ AmazonMerchant.propTypes = {
     email: PropTypes.string,
     customer: PropTypes.string,
     customer_onboarding: PropTypes.string,
+    step: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

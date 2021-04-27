@@ -73,7 +73,7 @@ export default function AmazonDeveloperAccess({
                 history.push(PATH_SUMMARY);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 5 },
+                step: { ...userInfo.step, [userInfo.customer]: 5 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -106,7 +106,7 @@ export default function AmazonDeveloperAccess({
                 history.push(PATH_SUMMARY);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 5 },
+                step: { ...userInfo.step, [userInfo.customer]: 5 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -213,6 +213,7 @@ AmazonDeveloperAccess.propTypes = {
     email: PropTypes.string,
     customer: PropTypes.string,
     customer_onboarding: PropTypes.string,
+    step: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

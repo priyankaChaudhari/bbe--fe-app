@@ -74,7 +74,7 @@ export default function CompanyDigital({
                 history.push(PATH_BILLING_DETAILS);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 2 },
+                step: { ...userInfo.step, [userInfo.customer]: 2 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -107,7 +107,7 @@ export default function CompanyDigital({
                 history.push(PATH_BILLING_DETAILS);
               }
               updateUserMe(userInfo.id, {
-                step: { [userInfo.customer]: 2 },
+                step: { ...userInfo.step, [userInfo.customer]: 2 },
               }).then((user) => {
                 if (user && user.status === 200) {
                   dispatch(userMe());
@@ -211,6 +211,7 @@ CompanyDigital.propTypes = {
     email: PropTypes.string,
     customer: PropTypes.string,
     customer_onboarding: PropTypes.string,
+    step: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

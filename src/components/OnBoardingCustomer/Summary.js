@@ -75,18 +75,18 @@ export default function Summary() {
 
   const redirect = () => {
     setIsLoading({ loader: true, type: 'button' });
-    updateUserMe(userInfo.id, { step: { [userInfo.customer]: 2 } }).then(
-      (user) => {
-        if (user && user.status === 200) {
-          dispatch(userMe());
-          dispatch(showOnboardingMsg(true));
-          history.push(PATH_CUSTOMER_DETAILS.replace(':id', userInfo.customer));
-          setIsLoading({ loader: false, type: 'button' });
-        } else {
-          setIsLoading({ loader: false, type: 'button' });
-        }
-      },
-    );
+    updateUserMe(userInfo.id, {
+      step: { ...userInfo.step, [userInfo.customer]: 6 },
+    }).then((user) => {
+      if (user && user.status === 200) {
+        dispatch(userMe());
+        dispatch(showOnboardingMsg(true));
+        history.push(PATH_CUSTOMER_DETAILS.replace(':id', userInfo.customer));
+        setIsLoading({ loader: false, type: 'button' });
+      } else {
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
     localStorage.removeItem('match');
   };
 
@@ -140,9 +140,8 @@ export default function Summary() {
                           src={OrangeCheckMark}
                           alt="check"
                         />
-                        Completed <br />{' '}
                         {userInfo.email === item.email
-                          ? ''
+                          ? ' Completed '
                           : `Provided by ${item.email}`}
                       </div>
                     ) : (
@@ -152,9 +151,8 @@ export default function Summary() {
                           src={GrayClockIcon}
                           alt="clock"
                         />
-                        Skipped <br />
                         {userInfo.email === item.email
-                          ? ''
+                          ? 'Skipped'
                           : `Provided by ${item.email}`}
                       </div>
                     )}
