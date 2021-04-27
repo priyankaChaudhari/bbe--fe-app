@@ -37,7 +37,7 @@ export default function AmazonMerchant({
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     updateCustomerDetails(
-      'CMF9QAS' || verifiedStepData.customer,
+      userInfo.customer || verifiedStepData.customer,
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
@@ -51,7 +51,7 @@ export default function AmazonMerchant({
             is_completed: true,
             email: userInfo.email,
             step: 'merchant id',
-            customer_onboarding: 'CBZQuki',
+            customer_onboarding: userInfo.customer_onboarding,
           };
           askSomeoneData(detail).then((stepResponse) => {
             if (stepResponse && stepResponse.status === 201) {
@@ -158,6 +158,8 @@ AmazonMerchant.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     email: PropTypes.string,
+    customer: PropTypes.string,
+    customer_onboarding: PropTypes.string,
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

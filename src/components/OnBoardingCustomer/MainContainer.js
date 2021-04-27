@@ -35,7 +35,6 @@ export default function MainContainer() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
-  const userInfo = useSelector((state) => state.userState.userInfo);
   const [openCollapse, setOpenCollapse] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -43,6 +42,8 @@ export default function MainContainer() {
   const [stepData, setStepData] = useState({});
   const [verifiedStepData, setVerifiedStepData] = useState({});
   const params = queryString.parse(history.location.search);
+  const userInfo = useSelector((state) => state.userState.userInfo);
+
   const whichStep = [
     {
       key: 'digital presence',
@@ -118,7 +119,7 @@ export default function MainContainer() {
         setAssignedToSomeone(false);
       }
       getStepDetails(
-        verifiedStepData.customer_onboarding_id || 'CBZQuki',
+        userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
         getStepName(),
       ).then((response) => {
         setStepData(
@@ -138,8 +139,9 @@ export default function MainContainer() {
         }
         setIsLoading({ loader: false, type: 'page' });
       });
-      // dispatch(getCustomerDetails(userInfo.customer));
-      dispatch(getCustomerDetails(verifiedStepData.customer_id || 'CMF9QAS'));
+      dispatch(
+        getCustomerDetails(userInfo.customer || verifiedStepData.customer_id),
+      );
     }
   }, [history.location.pathname]);
 

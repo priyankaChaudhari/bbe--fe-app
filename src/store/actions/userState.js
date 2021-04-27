@@ -26,8 +26,9 @@ export const userRequestInitiated = () => {
   };
 };
 
-export const userRequestSuccess = (data, history) => {
+export const userRequestSuccess = (data, history, customer) => {
   localStorage.setItem('token', data.token);
+  localStorage.setItem('customer', customer.customer);
 
   if (data.user && data.user.role === 'Customer') {
     if (data.user.step === null) {
@@ -74,20 +75,6 @@ export const userRequestFail = (error) => {
   };
 };
 
-export const login = (history, data, customer) => {
-  return (dispatch) => {
-    dispatch(userRequestInitiated());
-    axiosInstance
-      .post(API_LOGIN, data, { params: customer })
-      .then((data) => {
-        dispatch(userRequestSuccess(data.data, history));
-      })
-      .catch((error) => {
-        dispatch(userRequestFail(error));
-      });
-  };
-};
-
 export const userMeSuccess = (data) => {
   return {
     type: actionTypes.USER_ME_SUCCESS,
@@ -98,19 +85,39 @@ export const userMeSuccess = (data) => {
 export const clearToken = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('agreementID');
+  localStorage.removeItem('email');
+  localStorage.removeItem('customer');
+  localStorage.removeItem('match');
   window.location.href = PATH_LOGIN;
 };
 
-export const userMe = (history) => {
+export const userMe = (history, customer) => {
   return (dispatch) => {
     axiosInstance
-      .get(API_USER_ME)
+      .get(API_USER_ME, {
+        params: customer || { customer: localStorage.getItem('customer') },
+      })
       .then((data) => {
         dispatch(userMeSuccess(data));
       })
       .catch(() => {
         dispatch(clearToken());
         history.push(PATH_LOGIN);
+      });
+  };
+};
+
+export const login = (history, data, customer) => {
+  return (dispatch) => {
+    dispatch(userRequestInitiated());
+    axiosInstance
+      .post(API_LOGIN, data, { params: customer })
+      .then((data) => {
+        dispatch(userRequestSuccess(data.data, history, customer));
+        dispatch(userMe(history, customer));
+      })
+      .catch((error) => {
+        dispatch(userRequestFail(error));
       });
   };
 };

@@ -40,7 +40,7 @@ export default function CompanyDigital({
     setIsLoading({ loader: true, type: 'button' });
 
     updateCustomerDetails(
-      'CMF9QAS' || verifiedStepData.customer,
+      userInfo.customer || verifiedStepData.customer,
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
@@ -54,7 +54,7 @@ export default function CompanyDigital({
             is_completed: true,
             email: userInfo.email,
             step: 'digital presence',
-            customer_onboarding: 'CBZQuki',
+            customer_onboarding: userInfo.customer_onboarding,
           };
           askSomeoneData(detail).then((stepResponse) => {
             if (stepResponse && stepResponse.status === 201) {
@@ -195,6 +195,8 @@ CompanyDigital.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     email: PropTypes.string,
+    customer: PropTypes.string,
+    customer_onboarding: PropTypes.string,
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,

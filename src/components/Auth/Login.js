@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+
 import Select from 'react-select';
 import { useForm } from 'react-hook-form';
-import { FormContainer } from '../../theme/Global';
+import { ToastContainer, toast } from 'react-toastify';
 
+import { FormContainer } from '../../theme/Global';
 import { LeftArrowIcon, NextLogo } from '../../theme/images/index';
 // import GoogleIcons from '../../theme/images/icons/google.svg';
 import {
@@ -16,13 +18,9 @@ import {
   SuccessMsg,
   ContractInputSelect,
 } from '../../common';
-import {
-  PATH_BGS_DASHBOARD,
-  PATH_CUSTOMER_LIST,
-  PATH_FORGOT_PASSWORD,
-} from '../../constants';
+import { PATH_BGS_DASHBOARD, PATH_CUSTOMER_LIST } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
-import { getCustomerNames } from '../../api';
+import { getCustomerNames, getEmail } from '../../api';
 
 export default function Login() {
   const history = useHistory();
@@ -44,6 +42,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [customerNames, setCustomerNames] = useState([]);
   const [getName, setGetName] = useState({ email: '', customer: '' });
+  const [forgotApiError, setforgotApiError] = useState([]);
 
   const onSubmit = (data) => {
     setIsLoading({ loader: true, type: 'button' });
@@ -95,10 +94,33 @@ export default function Login() {
   const handleChange = () => {
     dispatch(clearErrorMessage());
     setCustomerApiError([]);
+    setforgotApiError([]);
+  };
+
+  const forgotPassword = () => {
+    setIsLoading({ loader: true, type: 'forgot' });
+    getEmail({ email: getName.email }).then((response) => {
+      if (response && response.status === 400) {
+        setforgotApiError(response && response.data && response.data[0]);
+        setIsLoading({ loader: false, type: 'forgot' });
+        setShowPassword({ email: true, name: false, password: false });
+      } else {
+        toast.success(
+          'We have emailed you a reset link, please check your email.',
+        );
+        setShowPassword({ email: false, name: false, password: true });
+        setIsLoading({ loader: false, type: 'forgot' });
+      }
+    });
   };
 
   return (
     <FormContainer>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       <div className="container-fluid">
         <div className="row h-100">
           <div className="col-lg-5 pl-0 pr-0 h-100">
@@ -130,10 +152,17 @@ export default function Login() {
                         role="presentation"
                         className="back-link"
                         onClick={() =>
-                          setShowPassword({
-                            email: !!showPassword.name,
-                            name: !!showPassword.password,
-                          })
+                          (customerNames && customerNames.length === 0) ||
+                          customerNames === ''
+                            ? setShowPassword({
+                                email: true,
+                                name: false,
+                                password: false,
+                              })
+                            : setShowPassword({
+                                email: !!showPassword.name,
+                                name: !!showPassword.password,
+                              })
                         }>
                         <img
                           src={LeftArrowIcon}
@@ -201,6 +230,7 @@ export default function Login() {
                       {(errors && errors.email && errors.email.message) ||
                         (customerApiError && customerApiError[0])}
                     </ErrorMsg>
+                    <ErrorMsg>{forgotApiError}</ErrorMsg>
                   </>
                 ) : (
                   <>
@@ -216,52 +246,65 @@ export default function Login() {
                                 customer: event.value,
                               })
                             }
+                            defaultValue={getName.customer}
                           />
                         </label>
                       </ContractInputSelect>
                     ) : (
                       <>
-                        <ContractFormField>
-                          <label htmlFor="password">
-                            Enter password
-                            <br />
-                            <input
-                              className="form-control"
-                              type="password"
-                              name="password"
-                              onChange={() => handleChange()}
-                              placeholder=" Enter your Password"
-                              id="password"
-                              ref={register({
-                                required: {
-                                  value: true,
-                                  message: 'This field is required.',
-                                },
-                                minLength: {
-                                  value: 8,
-                                  message:
-                                    'Password must have at least 8 characters.',
-                                },
-                              })}
-                            />
-                          </label>
-                        </ContractFormField>
-                        <ErrorMsg>
-                          {errors && errors.password && errors.password.message}
-                        </ErrorMsg>
-                        <ErrorMsg>
-                          {apiError &&
-                            apiError.data &&
-                            apiError.data.non_field_errors &&
-                            apiError.data.non_field_errors[0]}
-                        </ErrorMsg>
+                        {showPassword.password ? (
+                          <>
+                            <ContractFormField>
+                              <label htmlFor="password">
+                                Enter password
+                                <br />
+                                <input
+                                  className="form-control"
+                                  type="password"
+                                  name="password"
+                                  onChange={() => handleChange()}
+                                  placeholder=" Enter your Password"
+                                  id="password"
+                                  ref={register({
+                                    required: {
+                                      value: true,
+                                      message: 'This field is required.',
+                                    },
+                                    minLength: {
+                                      value: 8,
+                                      message:
+                                        'Password must have at least 8 characters.',
+                                    },
+                                  })}
+                                />
+                              </label>
+                            </ContractFormField>
+                            <ErrorMsg>
+                              {errors &&
+                                errors.password &&
+                                errors.password.message}
+                            </ErrorMsg>
+                            <ErrorMsg>
+                              {apiError &&
+                                apiError.data &&
+                                apiError.data.non_field_errors &&
+                                apiError.data.non_field_errors[0]}
+                            </ErrorMsg>
+                            <ErrorMsg>{forgotApiError}</ErrorMsg>
+                          </>
+                        ) : (
+                          ''
+                        )}
                       </>
                     )}
                   </>
                 )}
                 <Button
                   className="btn-primary w-100 mt-3 mb-3"
-                  disabled={showPassword.name && getName.customer === ''}>
+                  disabled={
+                    (showPassword.name && getName.customer === '') ||
+                    (isLoading.loader && isLoading.type === 'forgot')
+                  }>
                   {loader ||
                   (isLoading.loader && isLoading.type === 'button') ? (
                     <PageLoader color="#fff" type="button" />
@@ -269,9 +312,16 @@ export default function Login() {
                     <>{showPassword.password ? 'Sign In' : 'Continue'}</>
                   )}
                 </Button>
-                <Link className=" forgot-pswd-link " to={PATH_FORGOT_PASSWORD}>
-                  Forgot password?
-                </Link>
+                {showPassword.password ? (
+                  <span
+                    className=" forgot-pswd-link cursor "
+                    onClick={() => forgotPassword()}
+                    role="presentation">
+                    Forgot password?
+                  </span>
+                ) : (
+                  ''
+                )}
 
                 {/* <Button className=" btn-secondary w-100 mt-2">
                     <img
