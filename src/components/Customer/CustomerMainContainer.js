@@ -73,7 +73,7 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '600px ',
+    maxWidth: '480px ',
     width: '100% ',
     minHeight: '200px',
     overlay: ' {zIndex: 1000}',
