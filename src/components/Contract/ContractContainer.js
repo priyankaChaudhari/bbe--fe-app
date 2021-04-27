@@ -220,6 +220,7 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
+
     if (contractID || localStorage.getItem('agreementID')) {
       getcontract(contractID || localStorage.getItem('agreementID')).then(
         (res) => {
@@ -2814,7 +2815,13 @@ export default function ContractContainer() {
       (isMobile && tabInResponsive === 'edit-fields')
         ? displayRightSidePanel()
         : ''}
-      {details && details.id ? displayFooter() : null}
+      {(details &&
+        details.id &&
+        isLoading.loader &&
+        isLoading.type === 'button') ||
+      (!isLoading.loader && isLoading.type === 'page')
+        ? displayFooter()
+        : null}
       <Modal
         isOpen={showModal}
         style={customStyles}
