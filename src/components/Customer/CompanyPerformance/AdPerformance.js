@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from // useEffect,
-// useState,
+import React from // useState, // useEffect,
 // useCallback,
 // useLayoutEffect,
 'react';
@@ -256,7 +255,7 @@ const AddPerformance = styled.div`
       margin-right: 10px;
 
       &:last-child {
-        margin-right: 23px;
+        margin-right: 0px;
       }
       &.ad-performance {
         max-width: 220px;
@@ -269,4 +268,35 @@ const AddPerformance = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 1105px) {
+    .ad-performance-nav {
+      li {
+        
+        &.ad-performance {
+          max-width: 195px;
+          width: 100%;
+        }
+        &.day-performance {
+          max-width: 230px;
+          width: 100%;
+        }
+      }
+    }
+
+  }
+   @media only screen and (max-width: 1105px) { 
+
+     .ad-performance-nav {
+      li {
+         &.ad-performance {
+          max-width: 100%;
+          width: 100%;
+          margin-bottom: 20px;
+        }
+        &.day-performance {
+          max-width: 100%;
+          width: 100%;
+        }
+      }
+   }
 `;

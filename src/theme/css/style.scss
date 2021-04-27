@@ -1562,11 +1562,13 @@ input:checked + .slider:before {
     font-size: 16px;
     margin: 0;
     padding-bottom: 3x;
+    font-weight: 500;
   }
   .label-2 {
     color: $gray-25;
     font-size: 14px;
     margin: 0;
+    font-weight: 300;
   }
 }
 
