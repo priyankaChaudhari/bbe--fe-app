@@ -38,7 +38,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         {viewComponent === 'performance' ? (
           <PerformanceReport marketplaceChoices={marketplaceChoices} id={id} />
         ) : (
-          <AdPerformance />
+          <AdPerformance marketplaceChoices={marketplaceChoices} id={id} />
         )}
       </div>
     </>
