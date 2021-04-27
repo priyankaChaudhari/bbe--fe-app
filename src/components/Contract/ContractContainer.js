@@ -2814,7 +2814,7 @@ export default function ContractContainer() {
       (isMobile && tabInResponsive === 'edit-fields')
         ? displayRightSidePanel()
         : ''}
-      {details && details.id && !isLoading.loader ? displayFooter() : null}
+      {details && details.id ? displayFooter() : null}
       <Modal
         isOpen={showModal}
         style={customStyles}
