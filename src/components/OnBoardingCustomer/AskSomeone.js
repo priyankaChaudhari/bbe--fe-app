@@ -3,7 +3,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import { Button, CheckBox, ContractFormField, PageLoader } from '../../common';
+import {
+  Button,
+  CheckBox,
+  ContractFormField,
+  ErrorMsg,
+  PageLoader,
+} from '../../common';
 import { askSomeoneData } from '../../api';
 
 export default function AskSomeone({
@@ -17,6 +23,7 @@ export default function AskSomeone({
   userInfo,
 }) {
   const [formData, setFormData] = useState({});
+  const [apiError, setApiError] = useState({});
 
   useEffect(() => {
     if (
@@ -43,7 +50,7 @@ export default function AskSomeone({
 
     const data = {
       ...formData,
-      customer_onboarding: 'CBZQuki',
+      customer_onboarding: userInfo && userInfo.customer_onboarding,
       step,
     };
     askSomeoneData(data).then((response) => {
@@ -53,6 +60,7 @@ export default function AskSomeone({
         setIsLoading({ loader: false, type: 'email' });
       }
       if (response && response.status === 400) {
+        setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'email' });
       }
     });
@@ -71,7 +79,7 @@ export default function AskSomeone({
               id={step}
               name={step}
               onChange={(event) => handleChanges(event)}
-              checked={
+              defaultChecked={
                 stepData &&
                 stepData.email !== userInfo.email &&
                 stepData.step === step
@@ -92,7 +100,10 @@ export default function AskSomeone({
               Assign to (email)
               <input
                 className="form-control"
-                onChange={(event) => setFormData({ email: event.target.value })}
+                onChange={(event) => {
+                  setFormData({ email: event.target.value });
+                  setApiError({ email: '' });
+                }}
                 readOnly={
                   stepData &&
                   stepData.step === step &&
@@ -107,6 +118,9 @@ export default function AskSomeone({
                 }
               />
             </label>
+            <ErrorMsg>
+              {apiError && apiError.email && apiError.email[0]}
+            </ErrorMsg>
           </ContractFormField>
           {stepData && stepData.step === step ? (
             <p className="info-text-gray m-0 pt-3 ">
@@ -149,6 +163,7 @@ AskSomeone.defaultProps = {
 AskSomeone.propTypes = {
   userInfo: PropTypes.shape({
     email: PropTypes.string,
+    customer_onboarding: PropTypes.string,
   }).isRequired,
   isChecked: PropTypes.bool.isRequired,
   setIsChecked: PropTypes.func,

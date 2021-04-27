@@ -10,6 +10,7 @@ import {
   ContractFormField,
   Button,
   PageLoader,
+  ErrorMsg,
 } from '../../common';
 import {
   askSomeoneData,
@@ -33,6 +34,7 @@ export default function CompanyDigital({
   const history = useHistory();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [apiError, setApiError] = useState({});
 
   const params = queryString.parse(history.location.search);
 
@@ -118,6 +120,7 @@ export default function CompanyDigital({
         }
       }
       if (res && res.status === 400) {
+        setApiError(res && res.data);
         setIsLoading({ loader: false, type: 'button' });
       }
     });
@@ -125,6 +128,10 @@ export default function CompanyDigital({
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+    setApiError({
+      ...apiError,
+      [event.target.name]: '',
+    });
   };
 
   const generateHTML = () => {
@@ -168,6 +175,9 @@ export default function CompanyDigital({
                     defaultValue={data && data[item.key]}
                     onChange={(event) => handleChange(event)}
                   />
+                  <ErrorMsg>
+                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                  </ErrorMsg>
                 </ContractFormField>
               </div>
             </React.Fragment>
