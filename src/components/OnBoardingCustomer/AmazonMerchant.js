@@ -135,7 +135,7 @@ export default function AmazonMerchant({
           href="https://www.amazon.com/"
           target="_blank"
           rel="noopener noreferrer">
-          <Button className="btn-transparent w-100 mt-4">
+          <Button className="btn-transparent font-style-regular w-100 mt-4">
             Log into your Amazon Account
           </Button>
         </a>

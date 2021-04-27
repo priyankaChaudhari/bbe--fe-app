@@ -264,7 +264,7 @@ export default function BillingInfo({
         </div>
         {generatePayment()}
         <div className="white-card-base panel gap-none">
-          <CheckBox className="mt-2 ">
+          <CheckBox className="mt-3 ">
             <label
               className="check-container customer-pannel hereby-acknowledge"
               htmlFor="contract-copy-check">

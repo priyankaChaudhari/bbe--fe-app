@@ -176,7 +176,7 @@ export default function CompanyDigital({
   return (
     <>
       <OnBoardingBody className="body-white">
-        <div className="white-card-base panel">{generateHTML()}</div>
+        <div className="white-card-base panel gap-none">{generateHTML()}</div>
         <Button
           className="btn-primary w-100  mt-4"
           onClick={() => saveDetails()}>

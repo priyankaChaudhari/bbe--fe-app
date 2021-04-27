@@ -77,6 +77,10 @@ const Button = styled.button`
       outline: none;
     }
   }
+  &.font-style-regular {
+    font-family: ${Theme.baseFontFamily};
+    font-weight: 500;
+  }
 
   &.btn-add {
     background-color: rgba(255, 89, 51, 0.05);

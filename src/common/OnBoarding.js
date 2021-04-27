@@ -3,7 +3,7 @@ import Theme from '../theme/Theme';
 
 const OnBoardingBody = styled.div`
   background: ${Theme.gray8};
-  min-height: 100%;
+  // min-height: 100%;
   padding: 60px 0px 0 0px;
 
   &.body-white {
@@ -63,6 +63,9 @@ const OnBoardingBody = styled.div`
       }
       .note {
         font-style: italic;
+      }
+      .text-bold {
+        font-weight: bold;
       }
       .completed-status {
         color: ${Theme.orange};
@@ -132,6 +135,8 @@ const OnBoardingBody = styled.div`
         font-size: 14px;
         color: ${Theme.orange};
         text-transform: initial;
+        position: relative;
+        top: 8px;
       }
     }
     .link-url {

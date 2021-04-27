@@ -1605,6 +1605,7 @@ text.cust-label-avg {
 .loader-bar {
   top: 68px !important;
   height: 4px !important;
+  position: sticky !important;
   div {
     div {
       box-shadow: none !important;

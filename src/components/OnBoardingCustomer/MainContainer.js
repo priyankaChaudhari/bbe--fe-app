@@ -243,17 +243,17 @@ export default function MainContainer() {
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (
-                  <p className="info-text-gray m-0 ">
-                    {item.subTitle} <br />{' '}
+                  <p className="info-text-gray m-0 mb-4 ">
+                    {item.subTitle} <br />
                     {item.video ? (
-                      <a className="video-link" href="*">
+                      <a className="video-link  " href="*">
                         Click here to watch the video.
                       </a>
                     ) : null}
                   </p>
                 )}
                 {item.path === 'amazon-account' ? (
-                  <p className="information-text mt-2 mb-0">
+                  <p className="information-text mt-0 mb-0">
                     If you don’t have access to your Amazon Seller Central admin
                     account then you can use the checkbox below to assign this
                     step to someone that does.

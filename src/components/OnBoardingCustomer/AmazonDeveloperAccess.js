@@ -126,13 +126,13 @@ export default function AmazonDeveloperAccess({
         <p className="account-steps m-0">Part 1</p>
         <p className="information-text mt-0 mb-0">
           Log into your Amazon Seller Central admin account and navigate to
-          <strong> Appstore {'>'} Manage Your Apps</strong>
+          <span className="text-bold"> Appstore {'>'} Manage Your Apps</span>
         </p>
         <a
           href="https://www.amazon.com/"
           target="_blank"
           rel="noopener noreferrer">
-          <Button className="btn-transparent w-100 mt-2">
+          <Button className="btn-transparent font-style-regular w-100 mt-2">
             Log into your Amazon Account
           </Button>
         </a>
