@@ -84,6 +84,10 @@ export default function Header({ type }) {
     return firstName + lastName;
   };
 
+  const toggleDropdown = () => {
+    document.getElementById('myDropdown').classList.toggle('show');
+  };
+
   window.addEventListener('click', (e) => {
     if (
       document.getElementById('clickbox') &&
@@ -268,15 +272,16 @@ export default function Header({ type }) {
                 <li>
                   <div className="header-user-profile">
                     <div
-                      className="dropdown"
+                      className="dropdown dropbtn"
                       onClick={() => {
-                        setShowDropDown(!showDropDown);
+                        toggleDropdown();
+                        // setShowDropDown(!showDropDown);
                         setShowSuccessMsg({ show: false });
                       }}
                       role="presentation">
                       <div
                         id="clickbox"
-                        className="header-profile"
+                        className="header-profile "
                         style={{
                           paddingTop: profilePic ? '' : '',
                         }}>
@@ -291,8 +296,14 @@ export default function Header({ type }) {
                         )}
                       </div>
                       <ul
-                        className="dropdown-content"
-                        style={{ display: showDropDown ? 'block' : 'none' }}>
+                        className={
+                          showDropDown
+                            ? 'dropdown-content show'
+                            : 'dropdown-content'
+                        }
+                        id="myDropdown"
+                        // style={{ display: showDropDown ? 'block' : 'none' }}
+                      >
                         <li
                           role="presentation"
                           onClick={() => setShowModal(true)}>
@@ -713,6 +724,10 @@ const MainHeader = styled.div`
         height: 40px;
         cursor: pointer;
       }
+    }
+
+    .show {
+      display: block;
     }
   }
 
