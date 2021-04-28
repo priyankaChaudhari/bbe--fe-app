@@ -1612,11 +1612,15 @@ text.cust-label-avg {
 
 .loader-bar {
   top: 68px !important;
-  height: 4px !important;
+  height: 7px !important;
   position: sticky !important;
+  z-index: 3 !important;
   div {
     div {
       box-shadow: none !important;
     }
   }
 }
+// .loader-progress-bar {
+//   z-index: 5 !important;
+// }
