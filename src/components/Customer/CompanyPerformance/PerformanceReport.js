@@ -44,6 +44,7 @@ import { DropDownSelect, ModalBox, Button } from '../../../common';
 import { WhiteCard } from '../../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DropDown } from './DropDown';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -945,26 +946,13 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     return (
       <div className="row">
         <div className="col-12 mb-3">
-          <DropDownSelect className="cursor">
-            <Select
-              classNamePrefix="react-select"
-              className="active"
-              options={amazonOptions}
-              placeholder={
-                amazonOptions && amazonOptions[0] && amazonOptions[0].label
-              }
-              components={{ DropdownIndicator }}
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  neutral50: '#1A1A1A',
-                },
-              })}
-              defaultValue={amazonOptions && amazonOptions[0]}
-              onChange={(event) => handleAmazonOptions(event)}
-            />
-          </DropDownSelect>{' '}
+          {DropDown(
+            amazonOptions,
+            amazonOptions && amazonOptions[0] && amazonOptions[0].label,
+            DropdownIndicator,
+            amazonOptions && amazonOptions[0],
+            handleAmazonOptions,
+          )}
         </div>
       </div>
     );

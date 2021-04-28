@@ -1,61 +1,98 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react'; // useLayoutEffect, // useCallback, // useState, // useEffect,
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable camelcase */
+import React, { useEffect, useState } from 'react'; // useLayoutEffect, // useCallback, // useState, // useEffect,
 import styled from 'styled-components';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import { DropDownSelect } from '../../../common';
 import { WhiteCard } from '../../../theme/Global';
-import { ArrowDownIcon } from '../../../theme/images/index';
-// import { DropDown } from './DropDown';
+import { ArrowDownIcon, CaretUp } from '../../../theme/images/index';
+import { DropDown } from './DropDown';
 
-export default function AdPerformance() {
-  // const [amazonOptions, setAmazonOptions] = useState([]);
+const getSymbolFromCurrency = require('currency-symbol-map');
 
-  // useEffect(() => {
-  // const list = [];
-  // if (marketplaceChoices && marketplaceChoices.length > 0)
-  //   for (const option of marketplaceChoices) {
-  //     list.push({
-  //       value: option.name,
-  //       label: option.country_currency.country,
-  //       currency: option.country_currency.currency,
-  //     });
-  //   }
-  // setAmazonOptions(list);
-  // if (responseId === null && list.length && list[0].value !== null) {
-  //   setSelectedAmazonValue(list[0].value);
-  //   setCurrency(list[0].currency);
-  //   setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-  //   getData(selectedValue, groupBy, list[0].value);
-  //   getBBData(list[0].value, bBDailyFact, 'daily');
-  //   setResponseId('12345');
-  // }
-  // }, [marketplaceChoices]);
+export default function AdPerformance({ marketplaceChoices }) {
+  const [amazonOptions, setAmazonOptions] = useState([]);
+  const [selectedMarketplace, setSelectedMarketplace] = useState(null);
+  const [responseId, setResponseId] = useState(null);
+  const [currency, setCurrency] = useState(null);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
 
-  // const DropdownIndicator = (props) => {
-  //   return (
-  //     components.DropdownIndicator && (
-  //       <components.DropdownIndicator {...props}>
-  //         <img
-  //           src={CaretUp}
-  //           alt="caret"
-  //           style={{
-  //             transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-  //             width: '25px',
-  //             height: '25px',
-  //           }}
-  //         />
-  //       </components.DropdownIndicator>
-  //     )
-  //   );
-  // };
+  useEffect(() => {
+    const list = [];
+    if (marketplaceChoices && marketplaceChoices.length > 0)
+      for (const option of marketplaceChoices) {
+        list.push({
+          value: option.name,
+          label: option.country_currency.country,
+          currency: option.country_currency.currency,
+        });
+      }
+    setAmazonOptions(list);
+    if (responseId === null && list.length && list[0].value !== null) {
+      setSelectedMarketplace(list[0].value);
+      setCurrency(list[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
+      // getData(selectedValue, groupBy, list[0].value);
+      // getBBData(list[0].value, bBDailyFact, 'daily');
+      setResponseId('12345');
+    }
+  }, [
+    marketplaceChoices,
+    responseId,
+    selectedMarketplace,
+    currencySymbol,
+    currency,
+  ]);
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
+  const handleAmazonOptions = (event) => {
+    setSelectedMarketplace(event.value);
+    setCurrency(event.currency);
+    setCurrencySymbol(getSymbolFromCurrency(event.currency));
+    // if (selectedValue === 'custom') {
+    //   checkDifferenceBetweenDates(
+    //     state[0].startDate,
+    //     state[0].endDate,
+    //     'custom',
+    //   );
+    // } else {
+    //   getData(selectedValue, groupBy, event.value);
+    //   getBBData(event.value, bBDailyFact, BBGroupBy);
+    // }
+  };
 
   const renderMarketplaceDropDown = () => {
     return (
       <div className="row">
         <div className="col-12 mb-3">
-          <DropDownSelect className="cursor">
-            <Select classNamePrefix="react-select" className="active" />
-          </DropDownSelect>{' '}
+          {DropDown(
+            amazonOptions,
+            amazonOptions && amazonOptions[0] && amazonOptions[0].label,
+            DropdownIndicator,
+            amazonOptions && amazonOptions[0],
+            handleAmazonOptions,
+          )}
         </div>
       </div>
     );
@@ -185,43 +222,80 @@ export default function AdPerformance() {
 
   const renderAdGroupBy = () => {
     return (
-      <div className="col-md-12 mt-4">
-        {' '}
-        <div className="days-container ">
-          <ul className="days-tab">
+      <>
+        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+          <ul className="rechart-item">
             <li>
-              {' '}
-              <input
-                className="d-none"
-                type="radio"
-                id="daysCheck"
-                name="flexRadioDefault"
-              />
-              <label htmlFor="daysCheck">Daily</label>
+              <div className="weeks">
+                <span className="orange block" />
+                <span>Recent</span>
+              </div>
             </li>
-
+            {/* {selectedValue !== 'custom' ? ( */}
             <li>
-              <input
-                className="d-none"
-                type="radio"
-                id="weeklyCheck"
-                name="flexRadioDefault"
-              />
-              <label htmlFor="weeklyCheck">Weekly</label>
+              <div className="weeks">
+                <span className="gray block" />
+                <span>Previous</span>
+              </div>
             </li>
-
-            <li>
-              <input
-                className=" d-none"
-                type="radio"
-                id="monthlyCheck"
-                name="flexRadioDefault"
-              />
-              <label htmlFor="monthlyCheck">Monthly</label>
-            </li>
+            {/* ) : null} */}
           </ul>
         </div>
-      </div>
+        <div className="col-md-12 mt-4">
+          {' '}
+          <div className="days-container ">
+            <ul className="days-tab">
+              <li>
+                {' '}
+                <input
+                  className="d-none"
+                  type="radio"
+                  id="daysCheck"
+                  name="flexRadioDefault"
+                />
+                <label htmlFor="daysCheck">Daily</label>
+              </li>
+
+              <li>
+                <input
+                  className="d-none"
+                  type="radio"
+                  id="weeklyCheck"
+                  name="flexRadioDefault"
+                />
+                <label htmlFor="weeklyCheck">Weekly</label>
+              </li>
+
+              <li>
+                <input
+                  className=" d-none"
+                  type="radio"
+                  id="monthlyCheck"
+                  name="flexRadioDefault"
+                />
+                <label htmlFor="monthlyCheck">Monthly</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderDSPDailyFacts = () => {
+    return (
+      <>
+        <div className="col-6">
+          {' '}
+          <p className="black-heading-title mt-2 mb-2"> DSP Spend</p>
+        </div>
+        <div className="col-6 text-right">
+          {' '}
+          <DropDownSelect className="days-performance">
+            <Select classNamePrefix="react-select" className="active" />
+          </DropDownSelect>
+        </div>
+      </>
     );
   };
 
@@ -234,18 +308,7 @@ export default function AdPerformance() {
         <div className="row">{renderAdGroupBy()}</div>
       </WhiteCard>
       <WhiteCard className="mt-3">
-        <div className="row">
-          <div className="col-6">
-            {' '}
-            <p className="black-heading-title mt-2 mb-2"> DSP Spend</p>
-          </div>
-          <div className="col-6 text-right">
-            {' '}
-            <DropDownSelect className="days-performance">
-              <Select classNamePrefix="react-select" className="active" />
-            </DropDownSelect>
-          </div>
-        </div>
+        <div className="row">{renderDSPDailyFacts()}</div>
         <div className="number-rate">$15,050.28</div>
         <div className="vs">
           vs $11,114.90{' '}
