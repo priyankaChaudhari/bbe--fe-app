@@ -35,6 +35,7 @@ export async function getCustomerList(
       ...params,
       expiring_soon: true,
     };
+    delete params['order-by'];
   }
 
   if (searchQuery) {
