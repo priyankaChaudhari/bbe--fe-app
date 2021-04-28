@@ -43,6 +43,7 @@ export default function AskSomeone({
     } else {
       setIsChecked(false);
     }
+    setApiError({});
   };
 
   const sendEmail = () => {
