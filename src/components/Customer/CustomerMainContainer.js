@@ -1,6 +1,8 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
+/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
@@ -315,6 +317,31 @@ export default function CustomerMainContainer() {
         (item && item.message.includes('fee')) ||
         (item && item.message.includes('discount amount'))
       ) {
+        let fromAmount = '';
+        let toAmount = '';
+        let rowAmount = '';
+        if (
+          activityMessage &&
+          activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
+        ) {
+          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[0];
+          if (rowAmount.split('.')[1] === '00') {
+            fromAmount = rowAmount.split('.')[0];
+          } else {
+            fromAmount = rowAmount;
+          }
+        }
+        if (
+          activityMessage &&
+          activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
+        ) {
+          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[1];
+          if (rowAmount.split('.')[1] === '00') {
+            toAmount = rowAmount.split('.')[0];
+          } else {
+            toAmount = rowAmount;
+          }
+        }
         return (
           <>
             {activityMessage && activityMessage[0]}
@@ -322,23 +349,13 @@ export default function CustomerMainContainer() {
               updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
               from{' '}
             </span>{' '}
-            {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
+            {fromAmount === ''
               ? 'None'
-              : activityMessage[1]
-                  .split(' from ')[1]
-                  .split(' to ')[0]
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
-            {activityMessage &&
-            activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
+            {toAmount === ''
               ? 'None'
-              : activityMessage[1]
-                  .split(' from ')[1]
-                  .split(' to ')[1]
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
