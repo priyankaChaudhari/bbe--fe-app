@@ -160,7 +160,7 @@ export default function Summary() {
                         />
                         {userInfo.email === item.email
                           ? 'Skipped'
-                          : `Provided by ${item.email}`}
+                          : `Skipped by ${item.email}`}
                       </div>
                     )}
 

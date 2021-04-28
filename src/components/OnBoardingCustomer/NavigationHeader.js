@@ -43,7 +43,10 @@ export default function NavigationHeader({
     }
     if (type === 'skip') {
       if (
-        stepData === undefined &&
+        (stepData === undefined ||
+          (stepData &&
+            Object.keys(stepData) &&
+            Object.keys(stepData).length === 0)) &&
         verifiedStepData &&
         Object.keys(verifiedStepData) &&
         Object.keys(verifiedStepData).length === 0
@@ -129,7 +132,9 @@ NavigationHeader.propTypes = {
     email: PropTypes.string,
     customer_onboarding: PropTypes.string,
   }).isRequired,
-  stepData: PropTypes.objectOf(PropTypes.object),
+  stepData: PropTypes.shape({
+    id: PropTypes.string,
+  }),
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,

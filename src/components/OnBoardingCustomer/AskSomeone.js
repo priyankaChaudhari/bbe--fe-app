@@ -175,5 +175,10 @@ AskSomeone.propTypes = {
     type: PropTypes.string,
   }).isRequired,
   setStepData: PropTypes.func,
-  stepData: PropTypes.objectOf(PropTypes.object),
+  stepData: PropTypes.shape({
+    id: PropTypes.string,
+    email: PropTypes.string,
+    step: PropTypes.string,
+    is_completed: PropTypes.bool,
+  }),
 };

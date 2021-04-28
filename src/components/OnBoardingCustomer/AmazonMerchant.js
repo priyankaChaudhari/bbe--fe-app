@@ -177,7 +177,9 @@ AmazonMerchant.propTypes = {
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.objectOf(PropTypes.object),
+  stepData: PropTypes.shape({
+    id: PropTypes.string,
+  }),
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,
