@@ -149,7 +149,11 @@ export default function Header({ type }) {
             <div className="col-4 ">
               <div
                 className="logo cursor"
-                onClick={() => history.push(PATH_CUSTOMER_LIST)}
+                onClick={() =>
+                  userInfo && userInfo.role !== 'Customer'
+                    ? history.push(PATH_CUSTOMER_LIST)
+                    : ''
+                }
                 role="presentation">
                 <img src={NextLogo} alt="logo" />
               </div>
@@ -157,7 +161,11 @@ export default function Header({ type }) {
                 className="logo-mobile-view cursor"
                 src={NextLogo}
                 alt=""
-                onClick={() => history.push(PATH_CUSTOMER_LIST)}
+                onClick={() =>
+                  userInfo && userInfo.role !== 'Customer'
+                    ? history.push(PATH_CUSTOMER_LIST)
+                    : ''
+                }
                 role="presentation"
               />
             </div>
