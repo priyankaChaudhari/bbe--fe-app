@@ -41,12 +41,15 @@ export default function AmazonDeveloperAccess({
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     updateCustomerDetails(
-      userInfo.customer || verifiedStepData.customer,
+      userInfo.customer || verifiedStepData.customer_id,
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
         if (
-          stepData === undefined &&
+          (stepData === undefined ||
+            (stepData &&
+              Object.keys(stepData) &&
+              Object.keys(stepData).length === 0)) &&
           verifiedStepData &&
           Object.keys(verifiedStepData) &&
           Object.keys(verifiedStepData).length === 0
@@ -207,23 +210,32 @@ export default function AmazonDeveloperAccess({
   );
 }
 
+AmazonDeveloperAccess.defaultProps = {
+  stepData: {},
+};
+
 AmazonDeveloperAccess.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     email: PropTypes.string,
     customer: PropTypes.string,
     customer_onboarding: PropTypes.string,
-    step: PropTypes.objectOf(PropTypes.object),
+    step: PropTypes.shape({
+      step: PropTypes.number,
+    }),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  stepData: PropTypes.objectOf(PropTypes.object),
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,
     }),
   ).isRequired,
-  data: PropTypes.objectOf(PropTypes.object).isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.string,
+    mws_auth_token: PropTypes.string,
+  }).isRequired,
   isLoading: PropTypes.shape({
     loader: PropTypes.bool,
     type: PropTypes.string,

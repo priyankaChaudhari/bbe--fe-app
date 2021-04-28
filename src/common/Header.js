@@ -78,8 +78,10 @@ export default function Header({ type }) {
   };
 
   useEffect(() => {
-    dispatch(userMe());
-  }, [dispatch]);
+    if (!history.location.pathname.includes('assigned')) {
+      dispatch(userMe());
+    }
+  }, [dispatch, history.location.pathname]);
 
   const getInitials = () => {
     const firstName =

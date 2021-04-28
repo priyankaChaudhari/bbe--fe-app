@@ -116,7 +116,12 @@ export default function BillingInfo({
                         <img className="card" src={VisaCardIcons} alt="card" />{' '}
                         Visa
                         <br />
-                        <input type="radio" checked="checked" name="radio" />
+                        <input
+                          type="radio"
+                          checked="checked"
+                          name="radio"
+                          readOnly
+                        />
                         <span className="checkmark" />
                       </label>
                     </ModalRadioCheck>
@@ -133,7 +138,12 @@ export default function BillingInfo({
                         />{' '}
                         Mastercard
                         <br />
-                        <input type="radio" checked="checked" name="radio" />
+                        <input
+                          type="radio"
+                          checked="checked"
+                          name="radio"
+                          readOnly
+                        />
                         <span className="checkmark" />
                       </label>
                     </ModalRadioCheck>
@@ -150,7 +160,12 @@ export default function BillingInfo({
                         />{' '}
                         Discover
                         <br />
-                        <input type="radio" checked="checked" name="radio" />
+                        <input
+                          type="radio"
+                          checked="checked"
+                          name="radio"
+                          readOnly
+                        />
                         <span className="checkmark" />
                       </label>
                     </ModalRadioCheck>
@@ -167,7 +182,12 @@ export default function BillingInfo({
                         />{' '}
                         American Express
                         <br />
-                        <input type="radio" checked="checked" name="radio" />
+                        <input
+                          type="radio"
+                          checked="checked"
+                          name="radio"
+                          readOnly
+                        />
                         <span className="checkmark" />
                       </label>
                     </ModalRadioCheck>
@@ -352,15 +372,21 @@ export default function BillingInfo({
   );
 }
 
+BillingInfo.defaultProps = {
+  stepData: {},
+};
+
 BillingInfo.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     customer: PropTypes.string,
-    step: PropTypes.objectOf(PropTypes.object),
+    step: PropTypes.shape({
+      step: PropTypes.number,
+    }),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  stepData: PropTypes.objectOf(PropTypes.object),
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,

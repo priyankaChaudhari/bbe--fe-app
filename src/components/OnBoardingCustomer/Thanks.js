@@ -19,7 +19,7 @@ export default function Thanks() {
       <ThanksPage>
         <img className="mb-3" src={AccountSetupIcon} alt="check" />
         <h5>Thanks!</h5>
-        <p className="info">
+        <p className="info capitalize">
           We’ve let {params && params.name} know that you’ve provided the
           information we needed.
           <br />
@@ -34,30 +34,6 @@ export default function Thanks() {
           <br /> You can close this tab when you’re ready.
         </p> */}
       </ThanksPage>
-
-      {/* <OnBoardingBody>
-        <div className="white-card-base">
-          <img className="mb-3" src={AccountSetupIcon} alt="company-icon" />
-
-          <h3 className="page-heading">Account Set Up Complete</h3>
-          <p className="information-text m-0 ">
-            {' '}
-            Congratulations on completing your account setup with Buy Box
-            Experts! If you haven’t already, expect to hear from your
-            On-boarding Specialist in the next 24 hours to walk through final
-            setup items and get you in contact with your Brand Growth
-            Strategist.
-          </p>
-
-          <p className="reach-out m-0">
-            If you have any questions in the meantime please reach out to{' '}
-            <a className="reach-out-link" href="*">
-              onboarding@buyboxexperts.com.
-            </a>
-          </p>
-          <Button className="btn-primary w-100 mt-4">Ok. Got it!</Button>
-        </div>
-      </OnBoardingBody> */}
     </>
   );
 }

@@ -30,15 +30,17 @@ export const userRequestInitiated = () => {
 export const userRequestSuccess = (data, history, customer) => {
   localStorage.setItem('token', data.token);
   localStorage.setItem('customer', customer.customer);
-  const id = customer.customer || (data && data.user && data.user.customer);
+
+  const id =
+    data.user.step &&
+    Object.keys(data.user.step) &&
+    Object.keys(data.user.step).find(
+      (op) =>
+        op === (customer.customer || (data && data.user && data.user.customer)),
+    );
 
   if (data.user && data.user.role === 'Customer') {
-    if (
-      Object.keys(data.user.step).find(
-        (op) =>
-          op !== customer.customer || (data && data.user && data.user.customer),
-      )
-    ) {
+    if (id === undefined) {
       history.push(PATH_COMPANY_DETAILS);
     } else {
       if (data.user.step[id] === null) {

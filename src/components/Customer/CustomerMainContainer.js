@@ -82,16 +82,18 @@ const customStyles = {
   },
 };
 const AccountSetupcustomStyles = {
-  top: '50%',
-  left: '50%',
-  right: 'auto',
-  bottom: 'auto',
-  maxWidth: '480px ',
-  width: '100% ',
-  minHeight: '200px',
-  overlay: ' {zIndex: 1000}',
-  marginRight: '-50%',
-  transform: 'translate(-50%, -50%)',
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '480px ',
+    width: '100% ',
+    minHeight: '200px',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
 };
 const alertCustomStyles = {
   content: {

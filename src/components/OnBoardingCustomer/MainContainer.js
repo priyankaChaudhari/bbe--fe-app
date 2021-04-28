@@ -109,23 +109,10 @@ export default function MainContainer() {
         params.key
       ) {
         localStorage.setItem('match', params.key);
-        verifyStepToken(params.key).then((response) => {
-          setVerifiedStepData(response && response.data);
-        });
-      }
-      if (history.location.pathname.includes('assigned')) {
-        setAssignedToSomeone(true);
-      } else {
-        //  dispatch(userMe());
-        setAssignedToSomeone(false);
-      }
-
-      getUserData(localStorage.getItem('customer')).then((res) => {
-        if (res && res.status === 200) {
-          setUserInfo(res && res.data);
+        verifyStepToken(params.key).then((verify) => {
           getStepDetails(
-            (res && res.data && res.data.customer_onboarding) ||
-              verifiedStepData.customer_onboarding_id,
+            (verify && verify.data && verify.data.customer_onboarding_id) ||
+              (userInfo && userInfo.customer_onboarding),
             getStepName(),
           ).then((response) => {
             setStepData(
@@ -147,14 +134,53 @@ export default function MainContainer() {
           });
           dispatch(
             getCustomerDetails(
-              (res && res.data && res.data.customer) ||
-                verifiedStepData.customer_id,
+              (verify && verify.data && verify.data.customer_id) ||
+                (userInfo && userInfo.customer),
             ),
           );
-        } else {
-          setIsLoading({ loader: false, type: 'page' });
-        }
-      });
+          setVerifiedStepData(verify && verify.data);
+        });
+      }
+      if (history.location.pathname.includes('assigned')) {
+        setAssignedToSomeone(true);
+      } else {
+        getUserData(localStorage.getItem('customer')).then((res) => {
+          if (res && res.status === 200) {
+            setUserInfo(res && res.data);
+            getStepDetails(
+              (res && res.data && res.data.customer_onboarding) ||
+                verifiedStepData.customer_onboarding_id,
+              getStepName(),
+            ).then((response) => {
+              setStepData(
+                response &&
+                  response.data &&
+                  response.data.results &&
+                  response.data.results[0],
+              );
+              if (
+                response &&
+                response.data &&
+                response.data.results &&
+                response.data.results[0] &&
+                response.data.results[0].step === getStepName()
+              ) {
+                setIsChecked(true);
+              }
+              setIsLoading({ loader: false, type: 'page' });
+            });
+            dispatch(
+              getCustomerDetails(
+                (res && res.data && res.data.customer) ||
+                  verifiedStepData.customer_id,
+              ),
+            );
+          } else {
+            setIsLoading({ loader: false, type: 'page' });
+          }
+        });
+        setAssignedToSomeone(false);
+      }
     }
   }, [history.location.pathname]);
 

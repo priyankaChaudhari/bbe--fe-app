@@ -92,7 +92,14 @@ export default function Summary() {
 
   return (
     <>
-      <NavigationHeader bar="99.9" backStep={PATH_AMAZON_ACCOUNT} />
+      <NavigationHeader
+        bar="99.9"
+        backStep={PATH_AMAZON_ACCOUNT}
+        userInfo={userInfo}
+        verifiedStepData={{}}
+        stepData={{}}
+        stepName="summary"
+      />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader component="modal" color="#FF5933" type="page" />
       ) : (

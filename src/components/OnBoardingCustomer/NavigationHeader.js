@@ -117,6 +117,7 @@ NavigationHeader.defaultProps = {
   backStep: '',
   skipStep: '',
   showSuccessMsg: false,
+  stepData: {},
 };
 
 NavigationHeader.propTypes = {
@@ -128,13 +129,13 @@ NavigationHeader.propTypes = {
     email: PropTypes.string,
     customer_onboarding: PropTypes.string,
   }).isRequired,
-  stepData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  stepData: PropTypes.objectOf(PropTypes.object),
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,
     }),
   ).isRequired,
-  stepName: PropTypes.func.isRequired,
+  stepName: PropTypes.string.isRequired,
 };
 
 const BackToStep = styled.div`

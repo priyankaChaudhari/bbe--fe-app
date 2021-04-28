@@ -35,19 +35,21 @@ export default function CompanyDigital({
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
-
   const params = queryString.parse(history.location.search);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
 
     updateCustomerDetails(
-      userInfo.customer || verifiedStepData.customer,
+      userInfo.customer || verifiedStepData.customer_id,
       formData,
     ).then((res) => {
       if (res && res.status === 200) {
         if (
-          stepData === undefined &&
+          (stepData === undefined ||
+            (stepData &&
+              Object.keys(stepData) &&
+              Object.keys(stepData).length === 0)) &&
           verifiedStepData &&
           Object.keys(verifiedStepData) &&
           Object.keys(verifiedStepData).length === 0
@@ -205,23 +207,32 @@ export default function CompanyDigital({
   );
 }
 
+CompanyDigital.defaultProps = {
+  stepData: {},
+};
+
 CompanyDigital.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
     email: PropTypes.string,
     customer: PropTypes.string,
     customer_onboarding: PropTypes.string,
-    step: PropTypes.objectOf(PropTypes.object),
+    step: PropTypes.shape({
+      step: PropTypes.number,
+    }),
   }).isRequired,
   setIsLoading: PropTypes.func.isRequired,
   assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.arrayOf(PropTypes.array).isRequired,
-  verifiedStepData: PropTypes.objectOf(
-    PropTypes.shape({
-      user_name: PropTypes.string,
-    }),
-  ).isRequired,
-  data: PropTypes.objectOf(PropTypes.object).isRequired,
+  stepData: PropTypes.objectOf(PropTypes.object),
+  verifiedStepData: PropTypes.shape({
+    user_name: PropTypes.string,
+    step_id: PropTypes.string,
+    customer_id: PropTypes.string,
+  }).isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.string,
+    website: PropTypes.string,
+  }).isRequired,
   isLoading: PropTypes.shape({
     loader: PropTypes.bool,
     type: PropTypes.string,
