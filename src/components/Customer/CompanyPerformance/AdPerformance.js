@@ -24,18 +24,11 @@ export default function AdPerformance({ marketplaceChoices }) {
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
-  const [
-    // selectedAdType,
-    setSelectedAdType,
-  ] = useState('');
-  const [
-    // selectedAdDF,
-    setSelectedAdDF,
-  ] = useState('week');
-  const [
-    // selectedDSPDF,
-    setSelectedDSPDF,
-  ] = useState('week');
+  // const [selectedAdType, setSelectedAdType] = useState('');
+  // const [selectedAdDF, setSelectedAdDF] = useState('week');
+  // const [selectedDSPDF, setSelectedDSPDF] = useState('week');
+
+  // const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
 
   useEffect(() => {
     const list = [];
@@ -130,19 +123,60 @@ export default function AdPerformance({ marketplaceChoices }) {
     // }
   };
 
-  const handleAdType = (event) => {
-    const {value} = event;
-    setSelectedAdType(value);
+  const handleAdType = () => {
+    // const { value } = event;
+    // setSelectedAdType(value);
   };
-  const handleAdDailyFact = (event) => {
-    const {value} = event;
-    setSelectedAdDF(value);
+  const handleAdDailyFact = () => {
+    // const { value } = event;
+    // setSelectedAdDF(value);
   };
 
-  const handleDSPDailyFact = (event) => {
-    const {value} = event;
-    setSelectedDSPDF(value);
+  const handleDSPDailyFact = () => {
+    // const { value } = event;
+    // setSelectedDSPDF(value);
   };
+
+  // const setBox = (name) => {
+  //   // console.log('selectedAdBox', selectedAdBox);
+  //   switch (name) {
+  //     case 'adSales': {
+  //       // console.log('adSales');
+  //       break;
+  //     }
+  //     case 'adSpend': {
+  //       // console.log('adSpend');
+  //       break;
+  //     }
+  //     case 'adConversion': {
+  //       // console.log('adConversion');
+  //       break;
+  //     }
+  //     case 'impressions': {
+  //       // console.log('impressions');
+  //       break;
+  //     }
+  //     case 'adCos': {
+  //       // console.log('adCos');
+  //       break;
+  //     }
+  //     case 'adRoas': {
+  //       // console.log('adRoas');
+  //       break;
+  //     }
+  //     case 'adClicks': {
+  //       // console.log('adClicks');
+  //       break;
+  //     }
+  //     case 'adClickRate': {
+  //       // console.log('adClickRate');
+  //       break;
+  //     }
+  //     default: {
+  //       break;
+  //     }
+  //   }
+  // };
 
   /// ////////// render hrml component ///////////
   const renderMarketplaceDropDown = () => {
@@ -203,7 +237,9 @@ export default function AdPerformance({ marketplaceChoices }) {
     return (
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
-          <div className="order-chart-box ad-sales-active fix-height">
+          <div
+            // onClick={() => setBox('adSales')}
+            className="order-chart-box ad-sales-active fix-height">
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -214,7 +250,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
-          <div className="order-chart-box ad-spend-active fix-height">
+          <div
+            // onClick={() => setBox('adSpend')}
+            className="order-chart-box ad-spend-active fix-height">
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -225,7 +263,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
-          <div className="order-chart-box ad-conversion-active fix-height">
+          <div
+            // onClick={() => setBox('adConversion')}
+            className="order-chart-box ad-conversion-active fix-height">
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -236,7 +276,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
-          <div className="order-chart-box impression-active fix-height">
+          <div
+            // onClick={() => setBox('impressions')}
+            className="order-chart-box impression-active fix-height">
             <div className="chart-name">Impressions </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -247,7 +289,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div className="order-chart-box ad-cos-active fix-height">
+          <div
+            // onClick={() => setBox('adCos')}
+            className="order-chart-box ad-cos-active fix-height">
             <div className="chart-name">Ad Cos</div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -258,7 +302,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div className="order-chart-box ad-roas-active  fix-height">
+          <div
+            // onClick={() => setBox('adRoas')}
+            className="order-chart-box ad-roas-active  fix-height">
             <div className="chart-name">RoAS </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -269,7 +315,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div className="order-chart-box ad-click-active  fix-height">
+          <div
+            // onClick={() => setBox('adClicks')}
+            className="order-chart-box ad-click-active  fix-height">
             <div className="chart-name">Clicks </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -280,7 +328,9 @@ export default function AdPerformance({ marketplaceChoices }) {
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div className="order-chart-box ad-clickrate-active fix-height">
+          <div
+            // onClick={() => setBox('adClickRate')}
+            className="order-chart-box ad-clickrate-active fix-height">
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>

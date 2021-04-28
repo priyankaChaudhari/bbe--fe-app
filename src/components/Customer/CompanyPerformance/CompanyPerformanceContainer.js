@@ -27,12 +27,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               role="presentation">
               Performance Report
             </li>
-            <li
+            {/* <li
               className={viewComponent === 'ad' ? 'active' : ''}
               onClick={() => setViewComponent('ad')}
               role="presentation">
               Ad Performance
-            </li>
+            </li> */}
           </ul>
         </Tab>
         {viewComponent === 'performance' ? (
