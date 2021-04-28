@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { DropDownSelect } from '../../../common';
 
 export const DropDown = (
+  className,
   options,
   placeholder,
   components,
@@ -10,7 +11,7 @@ export const DropDown = (
   handleOnChange,
 ) => {
   return (
-    <DropDownSelect className="cursor">
+    <DropDownSelect className={className}>
       <Select
         classNamePrefix="react-select"
         className="active"

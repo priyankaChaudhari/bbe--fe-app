@@ -6,20 +6,36 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react'; // useLayoutEffect, // useCallback, // useState, // useEffect,
 import styled from 'styled-components';
-import Select, { components } from 'react-select';
-import { DropDownSelect } from '../../../common';
+import { components } from 'react-select';
 import { WhiteCard } from '../../../theme/Global';
 import { ArrowDownIcon, CaretUp } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
+import {
+  dateOptions,
+  AdTypesOptions,
+} from '../../../constants/CompanyPerformanceConstants';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function AdPerformance({ marketplaceChoices }) {
+  const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [
+    // selectedAdType,
+    setSelectedAdType,
+  ] = useState('');
+  const [
+    // selectedAdDF,
+    setSelectedAdDF,
+  ] = useState('week');
+  const [
+    // selectedDSPDF,
+    setSelectedDSPDF,
+  ] = useState('week');
 
   useEffect(() => {
     const list = [];
@@ -48,6 +64,30 @@ export default function AdPerformance({ marketplaceChoices }) {
     currency,
   ]);
 
+  const singleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
+  const filterOption = (props) => (
+    <Option {...props}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {props.data.sub}
+        </div>
+      </div>
+    </Option>
+  );
+
   const DropdownIndicator = (props) => {
     return (
       components.DropdownIndicator && (
@@ -66,6 +106,14 @@ export default function AdPerformance({ marketplaceChoices }) {
     );
   };
 
+  const getSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropdownIndicator,
+    };
+  };
+
   const handleAmazonOptions = (event) => {
     setSelectedMarketplace(event.value);
     setCurrency(event.currency);
@@ -82,11 +130,27 @@ export default function AdPerformance({ marketplaceChoices }) {
     // }
   };
 
+  const handleAdType = (event) => {
+    const {value} = event;
+    setSelectedAdType(value);
+  };
+  const handleAdDailyFact = (event) => {
+    const {value} = event;
+    setSelectedAdDF(value);
+  };
+
+  const handleDSPDailyFact = (event) => {
+    const {value} = event;
+    setSelectedDSPDF(value);
+  };
+
+  /// ////////// render hrml component ///////////
   const renderMarketplaceDropDown = () => {
     return (
       <div className="row">
         <div className="col-12 mb-3">
           {DropDown(
+            'cursor',
             amazonOptions,
             amazonOptions && amazonOptions[0] && amazonOptions[0].label,
             DropdownIndicator,
@@ -95,6 +159,43 @@ export default function AdPerformance({ marketplaceChoices }) {
           )}
         </div>
       </div>
+    );
+  };
+
+  const renderAdDailyFacts = () => {
+    return (
+      <>
+        <div className="col-md-3  col-sm1-12">
+          {' '}
+          <p className="black-heading-title mt-2 mb-5"> Ad Performance</p>
+        </div>
+        <div className="col-md-9 col-sm1-12  mb-3 pl-0">
+          <ul className="ad-performance-nav">
+            <li className="ad-performance">
+              {' '}
+              {DropDown(
+                'days-performance',
+                AdTypesOptions,
+                null,
+                getSelectComponents(),
+                AdTypesOptions[0],
+                handleAdType,
+              )}
+            </li>
+            <li className="day-performance">
+              {' '}
+              {DropDown(
+                'days-performance',
+                dateOptions,
+                null,
+                getSelectComponents(),
+                dateOptions[0],
+                handleAdDailyFact,
+              )}
+            </li>
+          </ul>{' '}
+        </div>
+      </>
     );
   };
 
@@ -193,33 +294,6 @@ export default function AdPerformance({ marketplaceChoices }) {
     );
   };
 
-  const renderAdDailyFacts = () => {
-    return (
-      <>
-        <div className="col-md-3  col-sm1-12">
-          {' '}
-          <p className="black-heading-title mt-2 mb-5"> Ad Performance</p>
-        </div>
-        <div className="col-md-9 col-sm1-12  mb-3 pl-0">
-          <ul className="ad-performance-nav">
-            <li className="ad-performance">
-              {' '}
-              <DropDownSelect>
-                <Select classNamePrefix="react-select" className="active" />
-              </DropDownSelect>
-            </li>
-            <li className="day-performance">
-              {' '}
-              <DropDownSelect className="days-performance">
-                <Select classNamePrefix="react-select" className="active" />
-              </DropDownSelect>
-            </li>
-          </ul>{' '}
-        </div>
-      </>
-    );
-  };
-
   const renderAdGroupBy = () => {
     return (
       <>
@@ -291,9 +365,17 @@ export default function AdPerformance({ marketplaceChoices }) {
         </div>
         <div className="col-6 text-right">
           {' '}
-          <DropDownSelect className="days-performance">
+          {DropDown(
+            'days-performance',
+            dateOptions,
+            null,
+            getSelectComponents(),
+            dateOptions[0],
+            handleDSPDailyFact,
+          )}
+          {/* <DropDownSelect className="days-performance">
             <Select classNamePrefix="react-select" className="active" />
-          </DropDownSelect>
+          </DropDownSelect> */}
         </div>
       </>
     );

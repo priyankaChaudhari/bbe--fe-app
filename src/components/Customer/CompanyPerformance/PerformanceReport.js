@@ -29,7 +29,7 @@ import {
   Cell,
 } from 'recharts';
 import Modal from 'react-modal';
-import Select, { components } from 'react-select';
+import { components } from 'react-select';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { getPerformance, getBuyBoxChartData } from '../../../api';
@@ -40,11 +40,12 @@ import {
   CaretUp,
   CloseIcon,
 } from '../../../theme/images/index';
-import { DropDownSelect, ModalBox, Button } from '../../../common';
+import { ModalBox, Button } from '../../../common';
 import { WhiteCard } from '../../../theme/Global';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
+import { dateOptions } from '../../../constants/CompanyPerformanceConstants';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -120,30 +121,6 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       transform: 'translate(-50%, -50%)',
     },
   };
-
-  const reportOptions = [
-    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
-    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
-    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
-    {
-      value: 'custom',
-      label: 'Custom Range',
-      sub: 'Select start and end dates',
-    },
-  ];
-
-  const BBReportOptions = [
-    { value: 'week', label: 'Recent Week', sub: 'vs Previous week' },
-    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
-    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
-    {
-      value: 'custom',
-      label: 'Custom Range',
-      sub: 'Select start and end dates',
-    },
-  ];
 
   useLayoutEffect(() => {
     const chart = am4core.create('chartdiv', am4charts.XYChart);
@@ -776,7 +753,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     }
   };
 
-  const handleDailyFact = (value) => {
+  const handleDailyFact = (event) => {
+    const {value} = event;
     setSelectedValue(value);
     if (value !== 'custom') {
       setState([
@@ -800,7 +778,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     }
   };
 
-  const handleBBDailyFact = (value) => {
+  const handleBBDailyFact = (event) => {
+    const {value} = event;
     setBBDailyFact(value);
 
     if (value !== 'custom') {
@@ -947,6 +926,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       <div className="row">
         <div className="col-12 mb-3">
           {DropDown(
+            'cursor',
             amazonOptions,
             amazonOptions && amazonOptions[0] && amazonOptions[0].label,
             DropdownIndicator,
@@ -961,7 +941,15 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const renderFilterDropDown = () => {
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
-        <DropDownSelect className="days-performance ">
+        {DropDown(
+          'days-performance',
+          dateOptions,
+          null,
+          getSelectComponents(),
+          dateOptions[0],
+          handleDailyFact,
+        )}
+        {/* <DropDownSelect className="days-performance ">
           <Select
             classNamePrefix="react-select"
             className="active"
@@ -970,8 +958,80 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             defaultValue={reportOptions[0]}
             onChange={(event) => handleDailyFact(event.value)}
           />
-        </DropDownSelect>{' '}
+        </DropDownSelect>{' '} */}
         <div className="clear-fix" />
+      </div>
+    );
+  };
+
+  const rednerSaleGroupBy = () => {
+    return (
+      <div className="row mt-4">
+        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+          <ul className="rechart-item">
+            <li>
+              <div className="weeks">
+                <span className="orange block" />
+                <span>Recent</span>
+              </div>
+            </li>
+            {selectedValue !== 'custom' ? (
+              <li>
+                <div className="weeks">
+                  <span className="gray block" />
+                  <span>Previous</span>
+                </div>
+              </li>
+            ) : null}
+          </ul>
+        </div>
+        <div className="col-md-6 col-sm-12 order-md-2 order-1">
+          {' '}
+          <div className="days-container ">
+            <ul className="days-tab">
+              <li className={filters.daily === false ? 'disabled-tab' : ''}>
+                {' '}
+                <input
+                  className="d-none"
+                  type="radio"
+                  id="daysCheck"
+                  name="flexRadioDefault"
+                  value={groupBy}
+                  checked={filters.daily}
+                  onClick={() => handleGroupBy('daily')}
+                  onChange={() => {}}
+                />
+                <label htmlFor="daysCheck">Daily</label>
+              </li>
+
+              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
+                <input
+                  className="d-none"
+                  type="radio"
+                  value={groupBy}
+                  checked={filters.weekly && groupBy === 'weekly'}
+                  id="weeklyCheck"
+                  name="flexRadioDefault"
+                  onChange={() => handleGroupBy('weekly')}
+                />
+                <label htmlFor="weeklyCheck">Weekly</label>
+              </li>
+
+              <li className={filters.month === false ? 'disabled-tab' : ''}>
+                <input
+                  className=" d-none"
+                  type="radio"
+                  value={groupBy}
+                  checked={filters.month}
+                  id="monthlyCheck"
+                  name="flexRadioDefault"
+                  onChange={() => handleGroupBy('monthly')}
+                />
+                <label htmlFor="monthlyCheck">Monthly</label>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     );
   };
@@ -1115,73 +1175,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
           )}
         </div>
-        <div className="row mt-4">
-          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-            <ul className="rechart-item">
-              <li>
-                <div className="weeks">
-                  <span className="orange block" />
-                  <span>Recent</span>
-                </div>
-              </li>
-              {selectedValue !== 'custom' ? (
-                <li>
-                  <div className="weeks">
-                    <span className="gray block" />
-                    <span>Previous</span>
-                  </div>
-                </li>
-              ) : null}
-            </ul>
-          </div>
-          <div className="col-md-6 col-sm-12 order-md-2 order-1">
-            {' '}
-            <div className="days-container ">
-              <ul className="days-tab">
-                <li className={filters.daily === false ? 'disabled-tab' : ''}>
-                  {' '}
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id="daysCheck"
-                    name="flexRadioDefault"
-                    value={groupBy}
-                    checked={filters.daily}
-                    onClick={() => handleGroupBy('daily')}
-                    onChange={() => {}}
-                  />
-                  <label htmlFor="daysCheck">Daily</label>
-                </li>
-
-                <li className={filters.weekly === false ? 'disabled-tab' : ''}>
-                  <input
-                    className="d-none"
-                    type="radio"
-                    value={groupBy}
-                    checked={filters.weekly && groupBy === 'weekly'}
-                    id="weeklyCheck"
-                    name="flexRadioDefault"
-                    onChange={() => handleGroupBy('weekly')}
-                  />
-                  <label htmlFor="weeklyCheck">Weekly</label>
-                </li>
-
-                <li className={filters.month === false ? 'disabled-tab' : ''}>
-                  <input
-                    className=" d-none"
-                    type="radio"
-                    value={groupBy}
-                    checked={filters.month}
-                    id="monthlyCheck"
-                    name="flexRadioDefault"
-                    onChange={() => handleGroupBy('monthly')}
-                  />
-                  <label htmlFor="monthlyCheck">Monthly</label>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        {rednerSaleGroupBy()}
         <div className="clear-fix" />
         {/* render sale graph */}
         <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
@@ -1300,6 +1294,38 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     );
   };
 
+  const renderBBgraph = () => {
+    return (
+      <ResponsiveContainer width="99%" height={200}>
+        <LineChart
+          // width={300}
+          // height={200}
+          data={bBChartData}
+          margin={{
+            top: 30,
+            right: 30,
+            left: 20,
+            bottom: 20,
+          }}>
+          <XAxis dataKey="date" hide />
+          <YAxis tickCount={3} ticks={customTicks()} hide />
+          <Tooltip content={<BBCustomTooltip />} />
+          <Legend />
+          <Line dataKey="avg" dot={false} stroke="#BFC5D2" activeDot={false}>
+            <LabelList content={<CustomizedLabel />} />
+          </Line>
+          <Line
+            dataKey="value"
+            dot={false}
+            stroke="BLACK"
+            strokeWidth={2}
+            activeDot={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
+
   const renderBBPercentGraphPanel = () => {
     return (
       <div className="col-md-8 col-sm-12 mb-3 ">
@@ -1310,7 +1336,15 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
               <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
             </div>
             <div className="col-6 text-right mb-1">
-              <DropDownSelect className="days-performance ">
+              {DropDown(
+                'days-performance',
+                dateOptions,
+                null,
+                null,
+                dateOptions[0],
+                handleBBDailyFact,
+              )}
+              {/* <DropDownSelect className="days-performance ">
                 <Select
                   classNamePrefix="react-select"
                   className="active"
@@ -1319,7 +1353,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                   defaultValue={BBReportOptions[0]}
                   onChange={(event) => handleBBDailyFact(event.value)}
                 />
-              </DropDownSelect>{' '}
+              </DropDownSelect>{' '} */}
             </div>
           </div>
           <div className="row">
@@ -1340,39 +1374,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
               </ul>
             </div>
           </div>
-          {bBChartData && bBChartData.length > 1 ? (
-            <ResponsiveContainer width="99%" height={200}>
-              <LineChart
-                // width={300}
-                // height={200}
-                data={bBChartData}
-                margin={{
-                  top: 30,
-                  right: 30,
-                  left: 20,
-                  bottom: 20,
-                }}>
-                <XAxis dataKey="date" hide />
-                <YAxis tickCount={3} ticks={customTicks()} hide />
-                <Tooltip content={<BBCustomTooltip />} />
-                <Legend />
-                <Line
-                  dataKey="avg"
-                  dot={false}
-                  stroke="#BFC5D2"
-                  activeDot={false}>
-                  <LabelList content={<CustomizedLabel />} />
-                </Line>
-                <Line
-                  dataKey="value"
-                  dot={false}
-                  stroke="BLACK"
-                  strokeWidth={2}
-                  activeDot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : null}
+          {bBChartData && bBChartData.length > 1 ? renderBBgraph() : null}
           <br />
           <br />
           <div className="last-update ">
