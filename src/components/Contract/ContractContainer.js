@@ -2660,7 +2660,10 @@ export default function ContractContainer() {
     details.contract_status.value === 'pending account setup') ||
     (details &&
       details.contract_status &&
-      details.contract_status.value === 'active') ? (
+      details.contract_status.value === 'active') ||
+    (details &&
+      details.contract_status &&
+      details.contract_status.value === 'inactive') ? (
     <>
       <ContractTab className="d-lg-none d-block">
         <ul className="tabs">
