@@ -139,7 +139,7 @@ export default function CreateAccount() {
         />
       )}
       <UnauthorizedHeader />
-      <OnBoardingBody className={showSuccessMsg ? '' : 'body-white'}>
+      <OnBoardingBody className={showSuccessMsg ? 'grey-bg' : 'body-white'}>
         {!assignTo ? (
           <div className="white-card-base panel">
             <p className="account-steps m-0">Step 1 of 4</p>

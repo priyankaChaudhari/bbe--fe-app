@@ -2,13 +2,16 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const OnBoardingBody = styled.div`
-  background: ${Theme.gray8};
-  // min-height: 100%;
   padding: 60px 0px 0 0px;
 
   &.body-white {
     background: ${Theme.white};
     padding-top: 0;
+  }
+
+  &.grey-bg {
+    background: ${Theme.gray8};
+    min-height: 100%;
   }
   .white-card-base {
     background-color: ${Theme.white};
@@ -210,7 +213,9 @@ const OnBoardingBody = styled.div`
     margin-top: 0;
   }
   @media only screen and (max-width: 517px) {
-    padding: 60px 10px 0 10px;
+    .white-card-base {
+      width: 90%;
+    }
   }
 `;
 

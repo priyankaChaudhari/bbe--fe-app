@@ -46,7 +46,7 @@ export default function Info() {
   };
 
   return (
-    <OnBoardingBody>
+    <OnBoardingBody className="grey-bg">
       <UnauthorizedHeader />{' '}
       <div className="white-card-base ">
         <img className="lock-finish" src={LockFinish} alt="lock" />
