@@ -1423,9 +1423,10 @@ const CustomerListPage = styled.div`
 
 const CustomerLeftPannel = styled.div`
   max-width: 290px;
-  height: 90%;
+  height: 85%;
   position: fixed;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   // padding-bottom: 200px;
   top: 130px;
   width: 100%;
