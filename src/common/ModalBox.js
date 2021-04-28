@@ -16,7 +16,7 @@ const ModalBox = styled.div`
     cursor: pointer;
   }
   .account-setup-complete {
-    padding: 34px 40px 40px 30px;
+    padding: 34px 40px 40px 30px !important;
   }
 
   .modal-body {

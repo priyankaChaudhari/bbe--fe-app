@@ -971,13 +971,6 @@ export default function CustomerMainContainer() {
                 style={AccountSetupcustomStyles}
                 ariaHideApp={false}
                 contentLabel="Edit modal">
-                <img
-                  src={CloseIcon}
-                  alt="close"
-                  className="float-right cursor cross-icon"
-                  onClick={() => dispatch(showOnboardingMsg(false))}
-                  role="presentation"
-                />
                 <ModalBox>
                   <div className="modal-body account-setup-complete">
                     <img
@@ -998,7 +991,7 @@ export default function CustomerMainContainer() {
                       Strategist.
                     </p>
 
-                    <p className="extra-bold mt-3">
+                    <p className="extra-bold mt-2">
                       If you have any questions in the meantime please reach out
                       to{' '}
                       <a

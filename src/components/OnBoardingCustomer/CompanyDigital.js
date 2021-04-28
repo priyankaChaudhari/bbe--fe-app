@@ -194,7 +194,7 @@ export default function CompanyDigital({
       <OnBoardingBody className="body-white">
         <div className="white-card-base panel gap-none">{generateHTML()}</div>
         <Button
-          className="btn-primary w-100  mt-4"
+          className="btn-primary w-100  mt-4 mb-4"
           onClick={() => saveDetails()}>
           {isLoading.loader && isLoading.type === 'button' ? (
             <PageLoader color="#fff" type="button" />

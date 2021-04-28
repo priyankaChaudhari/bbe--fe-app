@@ -128,7 +128,7 @@ export default function AmazonDeveloperAccess({
   };
 
   return (
-    <OnBoardingBody className="body-white w-430 ">
+    <OnBoardingBody className="body-white w-430 pb-4">
       <fieldset className="shape-without-border w-430   mt-4">
         <p className="account-steps m-0">Part 1</p>
         <p className="information-text mt-0 mb-0">
@@ -177,7 +177,7 @@ export default function AmazonDeveloperAccess({
           </div>
         </div>
       </fieldset>
-      <fieldset className="shape-without-border mt-2">
+      <fieldset className="shape-without-border mt-2 ">
         <p className="account-steps m-0">Part 3</p>
         <p className="information-text mt-0 mb-0">
           Copy and paste the ‘MWS Auth Token’ value shown on the resultant

@@ -308,7 +308,7 @@ export default function BillingInfo({
             </label>
           </CheckBox>
           <Button
-            className="btn-primary w-100  mt-3"
+            className="btn-primary w-100  mt-3 mb-4"
             onClick={() => saveDetails()}>
             {' '}
             {isLoading.loader && isLoading.type === 'button' ? (

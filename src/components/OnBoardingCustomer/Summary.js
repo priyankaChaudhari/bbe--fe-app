@@ -104,7 +104,7 @@ export default function Summary() {
         <PageLoader component="modal" color="#FF5933" type="page" />
       ) : (
         <OnBoardingBody className="body-white">
-          <div className="white-card-base panel account-reassign pt-5">
+          <div className="white-card-base panel account-reassign pt-5 pb-4">
             <h3 className="page-heading ">Account Summary</h3>
             <p className="information-text mt-2 mb-0">
               <div className="hi-name">
@@ -177,7 +177,7 @@ export default function Summary() {
 
             {showDashboard ? (
               <Button
-                className="btn-primary w-100 mt-4"
+                className="btn-primary w-100 mt-4 "
                 onClick={() => redirect()}>
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
@@ -186,7 +186,7 @@ export default function Summary() {
                 )}
               </Button>
             ) : (
-              <GreyCard className="yellow-card mt-2">
+              <GreyCard className="yellow-card mt-2  ">
                 Once all the sections above have been completed you’ll get full
                 access to your account dashboard. Your progress so far has been
                 saved so you can{' '}
