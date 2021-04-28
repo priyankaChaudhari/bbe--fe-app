@@ -73,13 +73,25 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '480px ',
+    maxWidth: '600px ',
     width: '100% ',
     minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
+};
+const AccountSetupcustomStyles = {
+  top: '50%',
+  left: '50%',
+  right: 'auto',
+  bottom: 'auto',
+  maxWidth: '480px ',
+  width: '100% ',
+  minHeight: '200px',
+  overlay: ' {zIndex: 1000}',
+  marginRight: '-50%',
+  transform: 'translate(-50%, -50%)',
 };
 const alertCustomStyles = {
   content: {
@@ -937,7 +949,7 @@ export default function CustomerMainContainer() {
               </Modal>
               <Modal
                 isOpen={showOnBoardingSuccessMsg}
-                style={customStyles}
+                style={AccountSetupcustomStyles}
                 ariaHideApp={false}
                 contentLabel="Edit modal">
                 <img
@@ -948,8 +960,12 @@ export default function CustomerMainContainer() {
                   role="presentation"
                 />
                 <ModalBox>
-                  <div className="modal-body">
-                    <img src={AccountSetupIcon} alt="company-icon" />
+                  <div className="modal-body account-setup-complete">
+                    <img
+                      className="mt-2"
+                      src={AccountSetupIcon}
+                      alt="company-icon"
+                    />
 
                     <h3 className="page-heading mb-3 mt-3 ">
                       Account Set Up Complete
@@ -963,7 +979,7 @@ export default function CustomerMainContainer() {
                       Strategist.
                     </p>
 
-                    <p className="extra-bold mt-4">
+                    <p className="extra-bold mt-3">
                       If you have any questions in the meantime please reach out
                       to{' '}
                       <a

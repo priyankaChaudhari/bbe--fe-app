@@ -7,8 +7,6 @@ const ModalBox = styled.div`
   margin: 0 auto;
   border-radius: 8px;
 
-  
-
   .modal-back-arrow {
     margin-top: -2px;
     margin-right: 4px;
@@ -17,14 +15,17 @@ const ModalBox = styled.div`
     vertical-align: middle;
     cursor: pointer;
   }
+  .account-setup-complete {
+    padding: 34px 40px 40px 30px;
+  }
 
   .modal-body {
-
       .role-selected {
         color: ${Theme.gray90};
         font-size: ${Theme.normal};
         font-family: ${Theme.titleFontFamily};
       }
+
       .light-bg {
         border-radius: 5px;
         background: ${Theme.lightOrange};
