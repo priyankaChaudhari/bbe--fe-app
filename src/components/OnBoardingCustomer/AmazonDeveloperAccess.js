@@ -197,7 +197,11 @@ export default function AmazonDeveloperAccess({
         </ContractFormField>
         <Button
           className="btn-primary w-100 mt-4"
-          onClick={() => saveDetails()}>
+          onClick={() => saveDetails()}
+          disabled={
+            formData.mws_auth_token === '' ||
+            formData.mws_auth_token === undefined
+          }>
           {' '}
           {isLoading.loader && isLoading.type === 'button' ? (
             <PageLoader color="#fff" type="button" />

@@ -147,7 +147,7 @@ export default function Summary() {
                           src={OrangeCheckMark}
                           alt="check"
                         />
-                        {userInfo.email === item.email
+                        {userInfo.email === item.email || item.email === ''
                           ? ' Completed '
                           : `Provided by ${item.email}`}
                       </div>
@@ -158,9 +158,10 @@ export default function Summary() {
                           src={GrayClockIcon}
                           alt="clock"
                         />
-                        {userInfo.email === item.email
+
+                        {(item.email === userInfo.email || item.email) === ''
                           ? 'Skipped'
-                          : `Skipped by ${item.email}`}
+                          : `Assigned to ${item.email}`}
                       </div>
                     )}
 

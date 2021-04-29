@@ -148,7 +148,10 @@ export default function AmazonMerchant({
         </a>
         <Button
           className="btn-primary w-100 mt-3"
-          onClick={() => saveDetails()}>
+          onClick={() => saveDetails()}
+          disabled={
+            formData.merchant_id === '' || formData.merchant_id === undefined
+          }>
           {' '}
           {isLoading.loader && isLoading.type === 'button' ? (
             <PageLoader color="#fff" type="button" />

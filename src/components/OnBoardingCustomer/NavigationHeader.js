@@ -52,7 +52,7 @@ export default function NavigationHeader({
         Object.keys(verifiedStepData).length === 0
       ) {
         const detail = {
-          email: userInfo.email,
+          email: '',
           step: stepName,
           customer_onboarding: userInfo.customer_onboarding,
         };

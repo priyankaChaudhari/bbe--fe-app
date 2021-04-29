@@ -10,7 +10,7 @@ import {
   ErrorMsg,
   PageLoader,
 } from '../../common';
-import { askSomeoneData } from '../../api';
+import { askSomeoneData, updateAskSomeoneData } from '../../api';
 
 export default function AskSomeone({
   setIsChecked,
@@ -28,6 +28,7 @@ export default function AskSomeone({
   useEffect(() => {
     if (
       stepData &&
+      stepData.email !== '' &&
       stepData.step === step &&
       stepData.email !== userInfo.email
     ) {
@@ -49,22 +50,38 @@ export default function AskSomeone({
   const sendEmail = () => {
     setIsLoading({ loader: true, type: 'email' });
 
-    const data = {
-      ...formData,
-      customer_onboarding: userInfo && userInfo.customer_onboarding,
-      step,
-    };
-    askSomeoneData(data).then((response) => {
-      if (response && response.status === 201) {
-        setStepData(response && response.data);
-        toast.success('Request Sent Successfully!');
-        setIsLoading({ loader: false, type: 'email' });
-      }
-      if (response && response.status === 400) {
-        setApiError(response && response.data);
-        setIsLoading({ loader: false, type: 'email' });
-      }
-    });
+    if (stepData && stepData.step === step && stepData && stepData.id) {
+      updateAskSomeoneData(stepData.id, { email: formData.email }).then(
+        (res) => {
+          if (res && res.status === 200) {
+            setStepData(res && res.data);
+            toast.success('Request Sent Successfully!');
+            setIsLoading({ loader: false, type: 'email' });
+          }
+          if (res && res.status === 400) {
+            setApiError(res && res.data);
+            setIsLoading({ loader: false, type: 'email' });
+          }
+        },
+      );
+    } else {
+      const data = {
+        ...formData,
+        customer_onboarding: userInfo && userInfo.customer_onboarding,
+        step,
+      };
+      askSomeoneData(data).then((response) => {
+        if (response && response.status === 201) {
+          setStepData(response && response.data);
+          toast.success('Request Sent Successfully!');
+          setIsLoading({ loader: false, type: 'email' });
+        }
+        if (response && response.status === 400) {
+          setApiError(response && response.data);
+          setIsLoading({ loader: false, type: 'email' });
+        }
+      });
+    }
   };
 
   return (
@@ -82,6 +99,7 @@ export default function AskSomeone({
               onChange={(event) => handleChanges(event)}
               defaultChecked={
                 stepData &&
+                stepData.email !== '' &&
                 stepData.email !== userInfo.email &&
                 stepData.step === step
               }
@@ -93,6 +111,7 @@ export default function AskSomeone({
       )}
       {isChecked ||
       (stepData &&
+        stepData.email !== '' &&
         stepData.step === step &&
         stepData.email !== userInfo.email) ? (
         <fieldset className="shape-without-border w-430 mt-2">
@@ -107,11 +126,13 @@ export default function AskSomeone({
                 }}
                 readOnly={
                   stepData &&
+                  stepData.email !== '' &&
                   stepData.step === step &&
                   stepData.email !== userInfo.email
                 }
                 defaultValue={
                   stepData &&
+                  stepData.email !== '' &&
                   stepData.step === step &&
                   stepData.email !== userInfo.email
                     ? stepData && stepData.email
@@ -123,7 +144,10 @@ export default function AskSomeone({
               {apiError && apiError.email && apiError.email[0]}
             </ErrorMsg>
           </ContractFormField>
-          {stepData && stepData.step === step ? (
+          {stepData &&
+          stepData.step === step &&
+          stepData &&
+          stepData.is_completed ? (
             <p className="info-text-gray m-0 pt-3 ">
               We’ve emailed them a link to submit the information in this
               section.
