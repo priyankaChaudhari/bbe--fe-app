@@ -86,7 +86,10 @@ export default function AskSomeone({
 
   return (
     <>
-      {stepData && stepData.step === step && stepData.is_completed ? (
+      {stepData &&
+      stepData.email !== '' &&
+      stepData.step === step &&
+      stepData.email !== userInfo.email ? (
         ''
       ) : (
         <CheckBox className="mt-1 mb-4">
@@ -145,9 +148,9 @@ export default function AskSomeone({
             </ErrorMsg>
           </ContractFormField>
           {stepData &&
+          stepData.email !== '' &&
           stepData.step === step &&
-          stepData &&
-          stepData.is_completed ? (
+          stepData.email !== userInfo.email ? (
             <p className="info-text-gray m-0 pt-3 ">
               We’ve emailed them a link to submit the information in this
               section.
