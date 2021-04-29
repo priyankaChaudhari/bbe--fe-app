@@ -28,6 +28,7 @@ export const userRequestInitiated = () => {
 };
 
 export const userRequestSuccess = (data, history, customer) => {
+  localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
   localStorage.setItem('customer', customer.customer);
 

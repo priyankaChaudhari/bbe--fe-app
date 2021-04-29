@@ -65,7 +65,7 @@ export default function MainContainer() {
         ? 'Billing Address & Contact'
         : 'Billing Information',
       skip: PATH_AMAZON_MERCHANT,
-      back: PATH_COMPANY_DETAILS,
+      back: billingAddress ? 'billingBack' : PATH_COMPANY_DETAILS,
       bar: '49.8',
       path: 'billing-details',
       video: false,

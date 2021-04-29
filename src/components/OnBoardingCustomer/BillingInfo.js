@@ -64,40 +64,41 @@ export default function BillingInfo({
   const saveDetails = (type) => {
     if (type === 'billing') {
       dispatch(showBillingAddress(true));
-    }
-    setIsLoading({ loader: true, type: 'button' });
-    updateAskSomeoneData(
-      (stepData && stepData.id) || verifiedStepData.step_id,
-      {
-        token: assignedToSomeone ? params && params.key : '',
-        is_completed: true,
-      },
-    ).then((response) => {
-      if (response && response.status === 200) {
-        if (assignedToSomeone) {
-          const stringified =
-            queryString &&
-            queryString.stringify({
-              name: verifiedStepData.user_name,
+    } else {
+      setIsLoading({ loader: true, type: 'button' });
+      updateAskSomeoneData(
+        (stepData && stepData.id) || verifiedStepData.step_id,
+        {
+          token: assignedToSomeone ? params && params.key : '',
+          is_completed: true,
+        },
+      ).then((response) => {
+        if (response && response.status === 200) {
+          if (assignedToSomeone) {
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                name: verifiedStepData.user_name,
+              });
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
             });
-          history.push({
-            pathname: PATH_THANKS,
-            search: `${stringified}`,
-          });
-        } else {
-          history.push(PATH_AMAZON_MERCHANT);
-        }
-        updateUserMe(userInfo.id, {
-          step: { ...userInfo.step, [userInfo.customer]: 3 },
-        }).then((user) => {
-          if (user && user.status === 200) {
-            dispatch(userMe());
+          } else {
+            history.push(PATH_AMAZON_MERCHANT);
           }
-        });
-        localStorage.removeItem('match');
-        setIsLoading({ loader: false, type: 'button' });
-      }
-    });
+          updateUserMe(userInfo.id, {
+            step: { ...userInfo.step, [userInfo.customer]: 3 },
+          }).then((user) => {
+            if (user && user.status === 200) {
+              dispatch(userMe());
+            }
+          });
+          localStorage.removeItem('match');
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    }
   };
 
   const generateNumeric = (item, type) => {
@@ -148,13 +149,13 @@ export default function BillingInfo({
     );
   };
 
-  const generateInput = (item, isDisabled) => {
+  const generateInput = (item, isDisabled, type) => {
     return (
       <input
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        value={formData.ach ? '' : formData[item.key]}
+        value={type === 'credit' && formData.ach ? '' : formData[item.key]}
         onChange={(event) =>
           setFormData({
             ...formData,
@@ -192,7 +193,7 @@ export default function BillingInfo({
                           {field.type === 'number' ? (
                             <>{generateNumeric(field, 'credit')}</>
                           ) : (
-                            <>{generateInput(field, false)}</>
+                            <>{generateInput(field, false, 'credit')}</>
                           )}
                         </label>
                       </ContractFormField>
@@ -202,15 +203,15 @@ export default function BillingInfo({
                     item.details
                       .filter((op) => op.property !== '')
                       .map((field) => (
-                        <div className="col-6">
-                          <ContractFormField className="mt-3" key={field.key}>
+                        <div className="col-6" key={field.key}>
+                          <ContractFormField className="mt-3">
                             <label htmlFor={field.label}>
                               {field.label}
                               <br />
                               {field.type === 'number' ? (
                                 <>{generateNumeric(field, 'credit')}</>
                               ) : (
-                                <>{generateInput(field, false)}</>
+                                <>{generateInput(field, false, 'credit')}</>
                               )}
                             </label>
                           </ContractFormField>
@@ -248,8 +249,8 @@ export default function BillingInfo({
           {BillingAddress.filter(
             (op) => op.section === 'address' && op.property !== '',
           ).map((item) => (
-            <div className="col-6">
-              <ContractFormField className="mt-3" key={item.key}>
+            <div className="col-6" key={item.key}>
+              <ContractFormField className="mt-3">
                 <label htmlFor={item.label}>
                   {item.label}
                   <br />
@@ -269,8 +270,8 @@ export default function BillingInfo({
           {BillingAddress.filter(
             (op) => op.section === 'contact' && op.property === '',
           ).map((item) => (
-            <div className="col-6">
-              <ContractFormField className="mt-3" key={item.key}>
+            <div className="col-6" key={item.key}>
+              <ContractFormField className="mt-3">
                 <label htmlFor={item.label}>
                   {item.label}
                   <br />
@@ -288,8 +289,8 @@ export default function BillingInfo({
           {BillingAddress.filter(
             (op) => op.section === 'contact' && op.property !== '',
           ).map((item) => (
-            <div className="col-6">
-              <ContractFormField className="mt-3" key={item.key}>
+            <div className="col-6" key={item.key}>
+              <ContractFormField className="mt-3">
                 <label htmlFor={item.label}>
                   {item.label}
                   <br />
@@ -377,13 +378,21 @@ export default function BillingInfo({
                     role="presentation">
                     here.
                   </span>
-                  <input type="checkbox" id="contract-copy-check" />
+                  <input
+                    type="checkbox"
+                    id="contract-copy-check"
+                    defaultChecked={formData.agreed}
+                    onChange={(event) =>
+                      setFormData({ ...formData, agreed: event.target.checked })
+                    }
+                  />
                   <span className="checkmark" />
                 </label>
               </CheckBox>
               <Button
                 className="btn-primary w-100  mt-3 mb-4"
-                onClick={() => saveDetails('billing')}>
+                onClick={() => saveDetails('billing')}
+                disabled={!formData.agreed}>
                 {' '}
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
