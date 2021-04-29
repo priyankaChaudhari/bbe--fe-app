@@ -194,7 +194,7 @@ export default function BillingDetails() {
 
               <form>
                 {Billing.map((item) => (
-                  <FormField className="mt-4">
+                  <FormField className="">
                     <label htmlFor={item.label}>
                       {item.label}
                       <br />

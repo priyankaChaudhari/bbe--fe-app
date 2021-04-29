@@ -684,7 +684,7 @@ export const Billing = [
   { key: 'bank_name', label: 'Bank Name', type: 'text' },
   { key: 'account_number', label: 'Account Number', type: 'number' },
   { key: 'routing_number', label: 'Routing Number', type: 'number' },
-  { key: 'ach', label: 'ACH', type: 'radio' },
+  { key: 'ach', label: 'payment type', type: 'radio' },
   {
     key: 'credit_card',
     choices: [
@@ -708,6 +708,27 @@ export const Billing = [
         label: 'American Express',
         icon: AmercianExpressCardIcons,
       },
+    ],
+    details: [
+      {
+        key: 'card_name',
+        label: 'Cardholder Name',
+        type: 'text',
+        property: '',
+      },
+      {
+        key: 'card_number',
+        label: 'Credit Card Number',
+        type: 'number',
+        property: '',
+      },
+      {
+        key: 'exp_date',
+        label: 'EXP. Date',
+        type: 'number',
+        property: 'col-8 pr-0',
+      },
+      { key: 'cvv', label: 'CVV', type: 'password', property: 'col-4' },
     ],
   },
 ];

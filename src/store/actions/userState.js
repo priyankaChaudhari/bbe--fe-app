@@ -40,7 +40,7 @@ export const userRequestSuccess = (data, history, customer) => {
     );
 
   if (data.user && data.user.role === 'Customer') {
-    if (id === undefined) {
+    if (id === undefined || id === null) {
       history.push(PATH_COMPANY_DETAILS);
     } else {
       if (data.user.step[id] === null) {

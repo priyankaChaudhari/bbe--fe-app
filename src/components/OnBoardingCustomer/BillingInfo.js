@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
+import NumberFormat from 'react-number-format';
 
 import Theme from '../../theme/Theme';
 import {
@@ -19,17 +20,11 @@ import {
   PageLoader,
   ModalBox,
 } from '../../common';
-import {
-  AmercianExpressCardIcons,
-  CaretUp,
-  CloseIcon,
-  DiscoverCardIcons,
-  MasterCardIcons,
-  VisaCardIcons,
-} from '../../theme/images';
+import { CaretUp, CloseIcon } from '../../theme/images';
 import { updateAskSomeoneData, updateUserMe } from '../../api';
 import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
+import { Billing } from '../../constants/FieldConstants';
 
 export default function BillingInfo({
   setIsLoading,
@@ -98,7 +93,24 @@ export default function BillingInfo({
     });
   };
 
-  const generatePayment = () => {
+  const generateNumeric = () => {
+    return <NumberFormat className="form-control" />;
+  };
+
+  const generateRadio = (item) => {
+    return (
+      <ModalRadioCheck className="mt-1">
+        <label className="radio-container contact-billing" htmlFor={item.label}>
+          {item.label === 'payment type' ? 'ACH' : item.label}
+          <br />
+          <input type="radio" checked="checked" name="radio" />
+          <span className="checkmark" />
+        </label>
+      </ModalRadioCheck>
+    );
+  };
+
+  const generatePayment = (item) => {
     return (
       <>
         <CollapseOpenContainer>
@@ -108,122 +120,48 @@ export default function BillingInfo({
                 <p className="pay-card mt-0 mb-4">Pay By Credit Card</p>
                 <div className="label-title mb-2">Credit Card Type</div>
                 <ul className="payment-option">
-                  <li>
-                    <ModalRadioCheck className="mt-2">
-                      <label
-                        className="radio-container contact-billing"
-                        htmlFor="card">
-                        <img className="card" src={VisaCardIcons} alt="card" />{' '}
-                        Visa
-                        <br />
-                        <input
-                          type="radio"
-                          checked="checked"
-                          name="radio"
-                          readOnly
-                        />
-                        <span className="checkmark" />
-                      </label>
-                    </ModalRadioCheck>
-                  </li>
-                  <li>
-                    <ModalRadioCheck className="mt-2">
-                      <label
-                        className="radio-container contact-billing"
-                        htmlFor="card">
-                        <img
-                          className="card"
-                          src={MasterCardIcons}
-                          alt="card"
-                        />{' '}
-                        Mastercard
-                        <br />
-                        <input
-                          type="radio"
-                          checked="checked"
-                          name="radio"
-                          readOnly
-                        />
-                        <span className="checkmark" />
-                      </label>
-                    </ModalRadioCheck>
-                  </li>
-                  <li>
-                    <ModalRadioCheck className="mt-2">
-                      <label
-                        className="radio-container contact-billing"
-                        htmlFor="card">
-                        <img
-                          className="card"
-                          src={DiscoverCardIcons}
-                          alt="card"
-                        />{' '}
-                        Discover
-                        <br />
-                        <input
-                          type="radio"
-                          checked="checked"
-                          name="radio"
-                          readOnly
-                        />
-                        <span className="checkmark" />
-                      </label>
-                    </ModalRadioCheck>
-                  </li>
-                  <li>
-                    <ModalRadioCheck className="mt-2">
-                      <label
-                        className="radio-container contact-billing"
-                        htmlFor="card">
-                        <img
-                          className="card"
-                          src={AmercianExpressCardIcons}
-                          alt="card"
-                        />{' '}
-                        American Express
-                        <br />
-                        <input
-                          type="radio"
-                          checked="checked"
-                          name="radio"
-                          readOnly
-                        />
-                        <span className="checkmark" />
-                      </label>
-                    </ModalRadioCheck>
-                  </li>
+                  {item &&
+                    item.choices.map((field) => (
+                      <li key={field.key}>
+                        <ModalRadioCheck className="mt-2">
+                          <label
+                            className="radio-container contact-billing"
+                            htmlFor={field.label}>
+                            <img className="card" src={field.icon} alt="card" />{' '}
+                            {field.label}
+                            <br />
+                            <input
+                              type="radio"
+                              checked="checked"
+                              name="radio"
+                            />
+                            <span className="checkmark" />
+                          </label>
+                        </ModalRadioCheck>
+                      </li>
+                    ))}
                 </ul>
-                <ContractFormField className="mt-3">
-                  <label htmlFor="card">
-                    Cardholder name
-                    <input className="form-control" />
-                  </label>
-                </ContractFormField>
-                <ContractFormField className="mt-3">
-                  <label htmlFor="card">
-                    Credit card number
-                    <input className="form-control" />
-                  </label>
-                </ContractFormField>
-                <div className="row">
-                  <div className="col-8 pr-0">
-                    {' '}
-                    <ContractFormField className="mt-3">
-                      <label htmlFor="card">
-                        Exp. Date
-                        <input className="form-control" />
-                      </label>
-                    </ContractFormField>
-                  </div>
-                  <div className="col-4 ">
-                    <ContractFormField className="mt-3">
-                      <label htmlFor="card">
-                        CVV
-                        <input className="form-control" />
-                      </label>
-                    </ContractFormField>
-                  </div>
-                </div>
+                {item &&
+                  item.details.map((field) => (
+                    <div className={field.property !== '' ? 'row' : ''}>
+                      <div
+                        className={field.property !== '' ? field.property : ''}>
+                        <ContractFormField className="mt-3">
+                          <label htmlFor={field.label}>
+                            {field.label}
+                            {field.type === 'number' ? (
+                              <>{generateNumeric(item)}</>
+                            ) : (
+                              <input
+                                className="form-control"
+                                type={item.type}
+                              />
+                            )}
+                          </label>
+                        </ContractFormField>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </fieldset>
           </Collapse>
@@ -235,56 +173,43 @@ export default function BillingInfo({
   return (
     <>
       <OnBoardingBody className="body-white">
-        <ContractFormField className="mt-3">
-          <label htmlFor="routing">
-            Name on Account
-            <input className="form-control" />
-          </label>
-        </ContractFormField>
-        <ContractFormField className="mt-3">
-          <label htmlFor="routing">
-            Bank Name
-            <input className="form-control" />
-          </label>
-        </ContractFormField>
-        <ContractFormField className="mt-3">
-          <label htmlFor="routing">
-            Routing Number
-            <input className="form-control" />
-          </label>
-        </ContractFormField>
-        <ContractFormField className="mt-3">
-          <label htmlFor="account">
-            Account Number
-            <input className="form-control" />
-          </label>
-        </ContractFormField>
-        <div className="label-title mt-4"> Payment Type</div>
-        <ModalRadioCheck className="mt-3 ">
-          <label className="radio-container contact-billing" htmlFor="ACH">
-            ACH
-            <br />
-            <input type="radio" checked="checked" name="radio" readOnly />
-            <span className="checkmark checkmark-top" />
-          </label>
-        </ModalRadioCheck>
-        <div
-          className="label-title cursor mt-4"
-          type="button"
-          role="presentation"
-          onClick={() => setOpenCollapse(!openCollapse)}>
-          Explore other payment options{' '}
-          <img
-            className="arrow-up"
-            src={CaretUp}
-            alt="arrow"
-            style={{
-              transform: openCollapse ? 'rotate(180deg)' : '',
-            }}
-          />
-          <div className="clear-fix" />
-        </div>
-        {generatePayment()}
+        {Billing.map((item) => (
+          <ContractFormField className="mt-3">
+            <label htmlFor={item.label}>
+              {item.label}
+              <br />
+              {item.type === 'number' ? (
+                <>{generateNumeric(item)}</>
+              ) : item.type === 'radio' ? (
+                <>{generateRadio(item)}</>
+              ) : item.key === 'credit_card' ? (
+                <>
+                  {' '}
+                  <div
+                    className="label-title cursor mt-4"
+                    type="button"
+                    role="presentation"
+                    onClick={() => setOpenCollapse(!openCollapse)}>
+                    Explore other payment options{' '}
+                    <img
+                      className="arrow-up"
+                      src={CaretUp}
+                      alt="arrow"
+                      style={{
+                        transform: openCollapse ? 'rotate(180deg)' : '',
+                      }}
+                    />
+                    <div className="clear-fix" />
+                  </div>
+                  {generatePayment(item)}
+                </>
+              ) : (
+                <input className="form-control" type={item.type} />
+              )}
+            </label>
+          </ContractFormField>
+        ))}
+
         <div className="white-card-base panel gap-none">
           <CheckBox className="mt-3 ">
             <label
