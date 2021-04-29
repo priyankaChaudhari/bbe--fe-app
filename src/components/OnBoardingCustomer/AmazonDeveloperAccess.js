@@ -187,6 +187,7 @@ export default function AmazonDeveloperAccess({
           <label htmlFor="token">
             MWS Auth Token
             <input
+              placeholder="Enter MWS Auth Token"
               className="form-control"
               onChange={(event) =>
                 setFormData({ mws_auth_token: event.target.value })

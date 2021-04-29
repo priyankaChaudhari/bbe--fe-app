@@ -119,6 +119,18 @@ export default function CreateAccount() {
         },
       });
     }
+    if (type === 'first_name' || type === 'last_name') {
+      return register({
+        required: {
+          value: true,
+          message: 'This field is required.',
+        },
+        pattern: {
+          value: /^[0-9a-zA-Z ]*$/i,
+          message: 'Special characters are not allowed.',
+        },
+      });
+    }
     return register({
       required: {
         value: true,
@@ -261,6 +273,11 @@ export default function CreateAccount() {
                       </label>
                       <ErrorMsg>
                         {errors && errors[item.key] && errors[item.key].message}
+                      </ErrorMsg>
+                      <ErrorMsg>
+                        {apiError &&
+                          apiError[item.key] &&
+                          apiError[item.key][0]}
                       </ErrorMsg>
                     </ContractFormField>
                   ))}

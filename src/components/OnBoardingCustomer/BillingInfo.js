@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
@@ -24,7 +24,8 @@ import { CaretUp, CloseIcon } from '../../theme/images';
 import { updateAskSomeoneData, updateUserMe } from '../../api';
 import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
-import { Billing } from '../../constants/FieldConstants';
+import { Billing, BillingAddress } from '../../constants/FieldConstants';
+import { showBillingAddress } from '../../store/actions/userState';
 
 export default function BillingInfo({
   setIsLoading,
@@ -37,10 +38,13 @@ export default function BillingInfo({
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  // const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({});
   const [openCollapse, setOpenCollapse] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
+  const billingAddress = useSelector(
+    (state) => state.userState.showBillingAddress,
+  );
 
   const customStyles = {
     content: {
@@ -57,7 +61,10 @@ export default function BillingInfo({
     },
   };
 
-  const saveDetails = () => {
+  const saveDetails = (type) => {
+    if (type === 'billing') {
+      dispatch(showBillingAddress(true));
+    }
     setIsLoading({ loader: true, type: 'button' });
     updateAskSomeoneData(
       (stepData && stepData.id) || verifiedStepData.step_id,
@@ -93,20 +100,69 @@ export default function BillingInfo({
     });
   };
 
-  const generateNumeric = () => {
-    return <NumberFormat className="form-control" />;
+  const generateNumeric = (item, type) => {
+    return (
+      <NumberFormat
+        format={item.format}
+        className="form-control"
+        onChange={(event) =>
+          setFormData({ ...formData, [item.key]: event.target.value })
+        }
+        placeholder={`Enter ${item.label}`}
+        disabled={type === 'credit' && formData.ach}
+        value={type === 'credit' && formData.ach ? '' : formData[item.key]}
+      />
+    );
   };
 
   const generateRadio = (item) => {
     return (
       <ModalRadioCheck className="mt-1">
-        <label className="radio-container contact-billing" htmlFor={item.label}>
+        <label className="radio-container contact-billing" htmlFor={item.key}>
           {item.label === 'payment type' ? 'ACH' : item.label}
+          {item.key === 'ach' ? (
+            ''
+          ) : (
+            <img className="card" src={item.icon} alt="card" />
+          )}{' '}
           <br />
-          <input type="radio" checked="checked" name="radio" />
+          <input
+            type={item.type}
+            name={item.key === 'ach' ? item.key : 'radio'}
+            id={item.key}
+            checked={
+              item.key !== 'ach' && formData.ach ? '' : formData[item.key]
+            }
+            onChange={(event) => {
+              setFormData({
+                ...formData,
+                [item.key]: event.target.checked,
+              });
+            }}
+            disabled={item.key !== 'ach' && formData.ach}
+            readOnly
+          />
           <span className="checkmark" />
         </label>
       </ModalRadioCheck>
+    );
+  };
+
+  const generateInput = (item, isDisabled) => {
+    return (
+      <input
+        className="form-control"
+        placeholder={`Enter ${item.label}`}
+        type={item.type}
+        value={formData.ach ? '' : formData[item.key]}
+        onChange={(event) =>
+          setFormData({
+            ...formData,
+            [item.key]: event.target.value,
+          })
+        }
+        disabled={isDisabled && formData.ach}
+      />
     );
   };
 
@@ -122,46 +178,45 @@ export default function BillingInfo({
                 <ul className="payment-option">
                   {item &&
                     item.choices.map((field) => (
-                      <li key={field.key}>
-                        <ModalRadioCheck className="mt-2">
-                          <label
-                            className="radio-container contact-billing"
-                            htmlFor={field.label}>
-                            <img className="card" src={field.icon} alt="card" />{' '}
-                            {field.label}
-                            <br />
-                            <input
-                              type="radio"
-                              checked="checked"
-                              name="radio"
-                            />
-                            <span className="checkmark" />
-                          </label>
-                        </ModalRadioCheck>
-                      </li>
+                      <li key={field.key}>{generateRadio(field)}</li>
                     ))}
                 </ul>
                 {item &&
-                  item.details.map((field) => (
-                    <div className={field.property !== '' ? 'row' : ''}>
-                      <div
-                        className={field.property !== '' ? field.property : ''}>
-                        <ContractFormField className="mt-3">
-                          <label htmlFor={field.label}>
-                            {field.label}
-                            {field.type === 'number' ? (
-                              <>{generateNumeric(item)}</>
-                            ) : (
-                              <input
-                                className="form-control"
-                                type={item.type}
-                              />
-                            )}
-                          </label>
-                        </ContractFormField>
-                      </div>
-                    </div>
-                  ))}
+                  item.details
+                    .filter((op) => op.property === '')
+                    .map((field) => (
+                      <ContractFormField className="mt-3" key={field.key}>
+                        <label htmlFor={field.label}>
+                          {field.label}
+                          <br />
+                          {field.type === 'number' ? (
+                            <>{generateNumeric(field, 'credit')}</>
+                          ) : (
+                            <>{generateInput(field, false)}</>
+                          )}
+                        </label>
+                      </ContractFormField>
+                    ))}
+                <div className="row">
+                  {item &&
+                    item.details
+                      .filter((op) => op.property !== '')
+                      .map((field) => (
+                        <div className="col-6">
+                          <ContractFormField className="mt-3" key={field.key}>
+                            <label htmlFor={field.label}>
+                              {field.label}
+                              <br />
+                              {field.type === 'number' ? (
+                                <>{generateNumeric(field, 'credit')}</>
+                              ) : (
+                                <>{generateInput(field, false)}</>
+                              )}
+                            </label>
+                          </ContractFormField>
+                        </div>
+                      ))}
+                </div>
               </div>
             </fieldset>
           </Collapse>
@@ -170,129 +225,229 @@ export default function BillingInfo({
     );
   };
 
-  return (
-    <>
-      <OnBoardingBody className="body-white">
-        {Billing.map((item) => (
-          <ContractFormField className="mt-3">
+  const generateBillingAddressHTML = () => {
+    return (
+      <>
+        <strong>Billing Address</strong>
+        {BillingAddress.filter(
+          (op) => op.section === 'address' && op.property === '',
+        ).map((item) => (
+          <ContractFormField className="mt-3" key={item.key}>
             <label htmlFor={item.label}>
               {item.label}
               <br />
               {item.type === 'number' ? (
                 <>{generateNumeric(item)}</>
-              ) : item.type === 'radio' ? (
-                <>{generateRadio(item)}</>
-              ) : item.key === 'credit_card' ? (
-                <>
-                  {' '}
-                  <div
-                    className="label-title cursor mt-4"
-                    type="button"
-                    role="presentation"
-                    onClick={() => setOpenCollapse(!openCollapse)}>
-                    Explore other payment options{' '}
-                    <img
-                      className="arrow-up"
-                      src={CaretUp}
-                      alt="arrow"
-                      style={{
-                        transform: openCollapse ? 'rotate(180deg)' : '',
-                      }}
-                    />
-                    <div className="clear-fix" />
-                  </div>
-                  {generatePayment(item)}
-                </>
               ) : (
-                <input className="form-control" type={item.type} />
+                <>{generateInput(item, false)}</>
               )}
             </label>
           </ContractFormField>
         ))}
-
-        <div className="white-card-base panel gap-none">
-          <CheckBox className="mt-3 ">
-            <label
-              className="check-container customer-pannel hereby-acknowledge"
-              htmlFor="contract-copy-check">
-              I hereby acknowledge that I am an authorized signer on the account
-              listed above and hereby authorize payments to be made to BBE using
-              this payment method to satisfy any and all invoices or bills on
-              our account with BBE moving forward until or unless further notice
-              is provided in writing. I further agree to the additional Terms &
-              Conditions for these payment and agree to the terms and conditions
-              found{' '}
-              <span
-                className="link-url"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                here.
-              </span>
-              <input type="checkbox" id="contract-copy-check" />
-              <span className="checkmark" />
-            </label>
-          </CheckBox>
-          <Button
-            className="btn-primary w-100  mt-3 mb-4"
-            onClick={() => saveDetails()}>
-            {' '}
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#fff" type="button" />
-            ) : (
-              'Continue'
-            )}
-          </Button>
+        <div className="row">
+          {BillingAddress.filter(
+            (op) => op.section === 'address' && op.property !== '',
+          ).map((item) => (
+            <div className="col-6">
+              <ContractFormField className="mt-3" key={item.key}>
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item)}</>
+                  ) : (
+                    <>{generateInput(item, false)}</>
+                  )}
+                </label>
+              </ContractFormField>
+            </div>
+          ))}
         </div>
-      </OnBoardingBody>
-      <Modal
-        isOpen={showModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body" style={{ color: '#2E384D' }}>
-            By accepting the terms on the Payment Information page, I
-            acknowledge that I am an authorized signer, user or representative
-            of the account provided and have the authority to set up payments
-            against that account on a recurring basis moving forward. <br />
-            <br /> I understand that this authorization will remain in effect
-            until I cancel it in writing, and I agree to notify the merchant in
-            writing of any changes in my account information or termination of
-            this authorization at least 15 days prior to the next billing date.
-            If the monthly billing date falls on a weekend or holiday, I
-            understand that the payments may be executed automatically over
-            those days or may be processed on the next business day. <br />
-            <br /> A prorated initial billing may be charged to cover the dates
-            between the signature date and the selected monthly billing date, if
-            different. <br />
-            <br /> For ACH debits to my checking/savings account, I understand
-            that because these are electronic transactions, the funds may be
-            withdrawn from my account as soon as electronic payment is
-            processed. In the case of an ACH Transaction or Credit Card
-            transactions being rejected for Non-Sufficient Funds (NSF), I
-            understand that Buy Box Experts (“BBE”) may, at its discretion
-            attempt to process the charge again within 30 days, and agree to an
-            additional $25 charge for each attempt returned NSF which will be
-            initiated as a separate transaction from the authorized recurring
-            payment method. <br />
-            <br /> I acknowledge that the origination of ACH transactions to my
-            account must comply with the provisions of U.S. law. I certify that
-            I am an authorized user/signer of this credit card/bank account and
-            will not dispute these scheduled transactions with my bank or credit
-            card company; so long as the transactions correspond to the terms
-            indicated in this authorization form, our service agreement with
-            BBE, and any invoice provided by BBE to me in conjunction with the
-            payment.
-          </div>
-        </ModalBox>
-      </Modal>
+        <br />
+        <strong>Billing Contact</strong>
+        <div className="row">
+          {BillingAddress.filter(
+            (op) => op.section === 'contact' && op.property === '',
+          ).map((item) => (
+            <div className="col-6">
+              <ContractFormField className="mt-3" key={item.key}>
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item)}</>
+                  ) : (
+                    <>{generateInput(item, false)}</>
+                  )}
+                </label>
+              </ContractFormField>
+            </div>
+          ))}
+        </div>
+        <div className="row">
+          {BillingAddress.filter(
+            (op) => op.section === 'contact' && op.property !== '',
+          ).map((item) => (
+            <div className="col-6">
+              <ContractFormField className="mt-3" key={item.key}>
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item)}</>
+                  ) : (
+                    <>{generateInput(item, false)}</>
+                  )}
+                </label>
+              </ContractFormField>
+            </div>
+          ))}
+        </div>
+        <Button
+          className="btn-primary w-100  mt-3 mb-4"
+          onClick={() => saveDetails('address')}>
+          {' '}
+          {isLoading.loader && isLoading.type === 'button' ? (
+            <PageLoader color="#fff" type="button" />
+          ) : (
+            'Continue'
+          )}
+        </Button>
+      </>
+    );
+  };
+
+  return (
+    <>
+      {!billingAddress ? (
+        <>
+          <OnBoardingBody className="body-white">
+            {Billing.map((item) => (
+              <ContractFormField className="mt-3" key={item.key}>
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item)}</>
+                  ) : item.type === 'checkbox' ? (
+                    <>{generateRadio(item)}</>
+                  ) : item.key === 'credit_card' ? (
+                    <>
+                      {' '}
+                      <div
+                        className="label-title cursor mt-4"
+                        type="button"
+                        role="presentation"
+                        onClick={() => setOpenCollapse(!openCollapse)}>
+                        Explore other payment options{' '}
+                        <img
+                          className="arrow-up"
+                          src={CaretUp}
+                          alt="arrow"
+                          style={{
+                            transform: openCollapse ? 'rotate(180deg)' : '',
+                          }}
+                        />
+                        <div className="clear-fix" />
+                      </div>
+                      {generatePayment(item)}
+                    </>
+                  ) : (
+                    <>{generateInput(item, false)}</>
+                  )}
+                </label>
+              </ContractFormField>
+            ))}
+
+            <div className="white-card-base panel gap-none">
+              <CheckBox className="mt-3 ">
+                <label
+                  className="check-container customer-pannel hereby-acknowledge"
+                  htmlFor="contract-copy-check">
+                  I hereby acknowledge that I am an authorized signer on the
+                  account listed above and hereby authorize payments to be made
+                  to BBE using this payment method to satisfy any and all
+                  invoices or bills on our account with BBE moving forward until
+                  or unless further notice is provided in writing. I further
+                  agree to the additional Terms & Conditions for these payment
+                  and agree to the terms and conditions found{' '}
+                  <span
+                    className="link-url"
+                    onClick={() => setShowModal(true)}
+                    role="presentation">
+                    here.
+                  </span>
+                  <input type="checkbox" id="contract-copy-check" />
+                  <span className="checkmark" />
+                </label>
+              </CheckBox>
+              <Button
+                className="btn-primary w-100  mt-3 mb-4"
+                onClick={() => saveDetails('billing')}>
+                {' '}
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Continue'
+                )}
+              </Button>
+            </div>
+          </OnBoardingBody>
+          <Modal
+            isOpen={showModal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setShowModal(false)}
+              role="presentation"
+            />
+            <ModalBox>
+              <div className="modal-body" style={{ color: '#2E384D' }}>
+                By accepting the terms on the Payment Information page, I
+                acknowledge that I am an authorized signer, user or
+                representative of the account provided and have the authority to
+                set up payments against that account on a recurring basis moving
+                forward. <br />
+                <br /> I understand that this authorization will remain in
+                effect until I cancel it in writing, and I agree to notify the
+                merchant in writing of any changes in my account information or
+                termination of this authorization at least 15 days prior to the
+                next billing date. If the monthly billing date falls on a
+                weekend or holiday, I understand that the payments may be
+                executed automatically over those days or may be processed on
+                the next business day. <br />
+                <br /> A prorated initial billing may be charged to cover the
+                dates between the signature date and the selected monthly
+                billing date, if different. <br />
+                <br /> For ACH debits to my checking/savings account, I
+                understand that because these are electronic transactions, the
+                funds may be withdrawn from my account as soon as electronic
+                payment is processed. In the case of an ACH Transaction or
+                Credit Card transactions being rejected for Non-Sufficient Funds
+                (NSF), I understand that Buy Box Experts (“BBE”) may, at its
+                discretion attempt to process the charge again within 30 days,
+                and agree to an additional $25 charge for each attempt returned
+                NSF which will be initiated as a separate transaction from the
+                authorized recurring payment method. <br />
+                <br /> I acknowledge that the origination of ACH transactions to
+                my account must comply with the provisions of U.S. law. I
+                certify that I am an authorized user/signer of this credit
+                card/bank account and will not dispute these scheduled
+                transactions with my bank or credit card company; so long as the
+                transactions correspond to the terms indicated in this
+                authorization form, our service agreement with BBE, and any
+                invoice provided by BBE to me in conjunction with the payment.
+              </div>
+            </ModalBox>
+          </Modal>
+        </>
+      ) : (
+        <>{generateBillingAddressHTML()}</>
+      )}
     </>
   );
 }

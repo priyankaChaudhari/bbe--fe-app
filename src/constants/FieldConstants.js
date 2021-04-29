@@ -684,7 +684,7 @@ export const Billing = [
   { key: 'bank_name', label: 'Bank Name', type: 'text' },
   { key: 'account_number', label: 'Account Number', type: 'number' },
   { key: 'routing_number', label: 'Routing Number', type: 'number' },
-  { key: 'ach', label: 'payment type', type: 'radio' },
+  { key: 'ach', label: 'payment type', type: 'checkbox' },
   {
     key: 'credit_card',
     choices: [
@@ -692,21 +692,25 @@ export const Billing = [
         key: 'visa',
         label: 'Visa',
         icon: VisaCardIcons,
+        type: 'radio',
       },
       {
         key: 'mastercard',
         label: 'Mastercard',
         icon: MasterCardIcons,
+        type: 'radio',
       },
       {
         key: 'discover',
         label: 'Discover',
         icon: DiscoverCardIcons,
+        type: 'radio',
       },
       {
         key: 'american_express',
         label: 'American Express',
         icon: AmercianExpressCardIcons,
+        type: 'radio',
       },
     ],
     details: [
@@ -721,14 +725,22 @@ export const Billing = [
         label: 'Credit Card Number',
         type: 'number',
         property: '',
+        format: '#### #### #### ####',
       },
       {
         key: 'exp_date',
         label: 'EXP. Date',
         type: 'number',
         property: 'col-8 pr-0',
+        format: '##/##',
       },
-      { key: 'cvv', label: 'CVV', type: 'password', property: 'col-4' },
+      {
+        key: 'cvv',
+        label: 'CVV',
+        type: 'number',
+        property: 'col-4',
+        format: '###',
+      },
     ],
   },
 ];
@@ -775,4 +787,65 @@ export const AmazonMarketplaceDetails = [
     section: 2,
   },
   { key: 'data_bots_email', label: 'Data Bots Credentials', section: 2 },
+];
+
+export const BillingAddress = [
+  {
+    key: 'address',
+    label: 'Address',
+    type: 'text',
+    property: '',
+    section: 'address',
+  },
+  {
+    key: 'city',
+    label: 'City',
+    type: 'text',
+    property: '',
+    section: 'address',
+  },
+  {
+    key: 'state',
+    label: 'State',
+    type: 'text',
+    property: 'col-6',
+    section: 'address',
+  },
+  {
+    key: 'postal_code',
+    label: 'Postal Code',
+    type: 'number',
+    property: 'col-6',
+    format: '#####',
+    section: 'address',
+  },
+  {
+    key: 'first_name',
+    label: 'First name',
+    type: 'text',
+    property: '',
+    section: 'contact',
+  },
+  {
+    key: 'last_name',
+    label: 'Last name',
+    type: 'text',
+    property: '',
+    section: 'contact',
+  },
+
+  {
+    key: 'email',
+    label: 'Email',
+    type: 'email',
+    property: 'col-6',
+    section: 'contact',
+  },
+  {
+    key: 'phone_number',
+    label: 'Phone number',
+    type: 'number',
+    property: 'col-6',
+    section: 'contact',
+  },
 ];

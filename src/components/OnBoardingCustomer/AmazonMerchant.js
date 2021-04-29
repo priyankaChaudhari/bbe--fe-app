@@ -130,6 +130,7 @@ export default function AmazonMerchant({
           <label htmlFor="merchant">
             Merchant ID
             <input
+              placeholder="Enter Merchant ID"
               className="form-control"
               onChange={(event) =>
                 setFormData({ merchant_id: event.target.value })

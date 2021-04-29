@@ -160,7 +160,10 @@ export default function AskSomeone({
               </p>
               <Button
                 className="btn-primary w-100  mt-3"
-                onClick={() => sendEmail()}>
+                onClick={() => sendEmail()}
+                disabled={
+                  formData.email === '' || formData.email === undefined
+                }>
                 {isLoading.loader && isLoading.type === 'email' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
