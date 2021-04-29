@@ -18,19 +18,23 @@ const PageLoaderWrapper = styled.div`
   right: 0;
 
   &.sidebar-loader {
-    left: unset;
-    right: 65px;
+    position: relative;
+    right: 50%;
 
     svg {
       width: 40px;
       height: 40px;
     }
   }
+  &.modal-loader {
+    right: 14%;
+  }
   @media only screen and (max-width: 991px) {
     &.sidebar-loader {
-      left: unset;
-      right: 50%;
-      left: 50%;
+      position: relative;
+    }
+    &.modal-loader {
+      right: 0%;
     }
   }
 `;
@@ -78,7 +82,7 @@ export default function PageLoader({
         style={{
           top: component === 'member' ? '120px' : '',
           left: component === 'social' ? '110px' : '',
-          width: component === 'activityLog' ? '120px' : '',
+          width: component === 'activityLog' ? '50px' : '',
           right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
         }}>
