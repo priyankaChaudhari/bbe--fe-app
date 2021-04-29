@@ -269,7 +269,7 @@ export default function MainContainer() {
           )}
 
           {loader || (isLoading.loader && isLoading.type === 'page') ? (
-            <PageLoader component="modal" color="#FF5933" type="page" />
+            <PageLoader color="#FF5933" type="page" />
           ) : (
             <OnBoardingBody className="body-white">
               <div className="white-card-base panel">

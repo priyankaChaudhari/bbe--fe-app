@@ -77,13 +77,15 @@ export default function PageLoader({
             ? 'sidebar-loader'
             : component === 'modal'
             ? 'modal-loader text-center '
+            : component === 'agreement'
+            ? 'modal-loader'
             : ''
         }
         style={{
           top: component === 'member' ? '120px' : '',
           left: component === 'social' ? '110px' : '',
           width: component === 'activityLog' ? '50px' : '',
-          right: component === 'agreement' ? '14%' : '',
+          // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
         }}>
         <Loader type="Bars" color={color} height={height} width={pageWidth} />

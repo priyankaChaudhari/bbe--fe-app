@@ -34,7 +34,7 @@ const OnBoardingBody = styled.div`
       font-size: ${Theme.verySmall};
       font-family: ${Theme.titleFontFamily};
       text-transform: uppercase;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
     }
     .page-heading {
       font-family: ${Theme.baseFontFamily};
@@ -193,6 +193,12 @@ const OnBoardingBody = styled.div`
       font-family: ${Theme.regularItalicFontFamily};
       text-transform: lowercase;
       text-decoration: underline;
+    }
+
+    .billing-address {
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
+      font-weight: 600;
     }
   }
   .w-430 {

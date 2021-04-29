@@ -120,12 +120,12 @@ export default function BillingInfo({
     return (
       <ModalRadioCheck className="mt-1">
         <label className="radio-container contact-billing" htmlFor={item.key}>
-          {item.label === 'payment type' ? 'ACH' : item.label}
           {item.key === 'ach' ? (
             ''
           ) : (
             <img className="card" src={item.icon} alt="card" />
           )}{' '}
+          {item.label === 'payment type' ? 'ACH' : item.label}
           <br />
           <input
             type={item.type}
@@ -229,7 +229,7 @@ export default function BillingInfo({
   const generateBillingAddressHTML = () => {
     return (
       <>
-        <strong>Billing Address</strong>
+        <div className="billing-address"> Billing Address </div>
         {BillingAddress.filter(
           (op) => op.section === 'address' && op.property === '',
         ).map((item) => (
@@ -265,7 +265,8 @@ export default function BillingInfo({
           ))}
         </div>
         <br />
-        <strong>Billing Contact</strong>
+        <div className=" straight-line horizontal-line mt-2 mb-4" />
+        <div className="billing-address">Billing Contact</div>
         <div className="row">
           {BillingAddress.filter(
             (op) => op.section === 'contact' && op.property === '',
@@ -305,7 +306,7 @@ export default function BillingInfo({
           ))}
         </div>
         <Button
-          className="btn-primary w-100  mt-3 mb-4"
+          className="btn-primary w-100  mt-4 mb-4"
           onClick={() => saveDetails('address')}>
           {' '}
           {isLoading.loader && isLoading.type === 'button' ? (
@@ -327,7 +328,7 @@ export default function BillingInfo({
               <ContractFormField className="mt-3" key={item.key}>
                 <label htmlFor={item.label}>
                   {item.label}
-                  <br />
+
                   {item.type === 'number' ? (
                     <>{generateNumeric(item)}</>
                   ) : item.type === 'checkbox' ? (
