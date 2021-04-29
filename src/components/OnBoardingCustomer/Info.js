@@ -12,11 +12,17 @@ export default function Info() {
   const params = queryString.parse(history.location.search);
 
   const redirect = (type) => {
-    localStorage.setItem(
-      'email',
-      history.location.search.split('email=')[1].split('&')[0] ||
-        (params && params.email),
-    );
+    if (
+      localStorage.getItem('email') === null ||
+      localStorage.getItem('email') === undefined
+    ) {
+      localStorage.setItem(
+        'email',
+        history.location.search.split('email=')[1].split('&')[0] ||
+          (params && params.email),
+      );
+    }
+
     if (type === 'continue') {
       const stringified =
         queryString &&
