@@ -14,7 +14,7 @@ import Theme from '../../../theme/Theme';
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
-  const [viewComponent, setViewComponent] = useState('performance');
+  const [viewComponent, setViewComponent] = useState('salePerformance');
 
   return (
     <>
@@ -22,20 +22,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
         <Tab className="mb-3">
           <ul className="tabs">
             <li
-              className={viewComponent === 'performance' ? 'active' : ''}
-              onClick={() => setViewComponent('performance')}
+              className={viewComponent === 'salePerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('salePerformance')}
               role="presentation">
               Performance Report
             </li>
             {/* <li
-              className={viewComponent === 'ad' ? 'active' : ''}
-              onClick={() => setViewComponent('ad')}
+              className={viewComponent === 'adPerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('adPerformance')}
               role="presentation">
               Ad Performance
             </li> */}
           </ul>
         </Tab>
-        {viewComponent === 'performance' ? (
+        {viewComponent === 'salePerformance' ? (
           <PerformanceReport marketplaceChoices={marketplaceChoices} id={id} />
         ) : (
           <AdPerformance marketplaceChoices={marketplaceChoices} id={id} />

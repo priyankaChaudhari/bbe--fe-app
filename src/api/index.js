@@ -38,6 +38,8 @@ export {
   deleteAmazonMarketplace,
   getPerformance,
   getBuyBoxChartData,
+  getAdPerformance,
+  getDSPPerformance,
 } from './CustomerApi';
 
 // Choices

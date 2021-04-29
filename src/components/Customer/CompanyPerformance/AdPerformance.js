@@ -4,21 +4,28 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react'; // useLayoutEffect, // useCallback, // useState, // useEffect,
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { components } from 'react-select';
+import Modal from 'react-modal';
+import { DateRange } from 'react-date-range';
+import { enGB } from 'react-date-range/src/locale';
 import { WhiteCard } from '../../../theme/Global';
-import { ArrowDownIcon, CaretUp } from '../../../theme/images/index';
+import { ArrowDownIcon, CaretUp, CloseIcon } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
+import { ModalBox, Button } from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
 } from '../../../constants/CompanyPerformanceConstants';
+import { getAdPerformance, getDSPPerformance } from '../../../api';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({ marketplaceChoices }) {
+export default function AdPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
   const [amazonOptions, setAmazonOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -26,10 +33,105 @@ export default function AdPerformance({ marketplaceChoices }) {
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   // const [selectedAdType, setSelectedAdType] = useState('');
-  // const [selectedAdDF, setSelectedAdDF] = useState('week');
-  // const [selectedDSPDF, setSelectedDSPDF] = useState('week');
-
+  const [selectedAdDF, setSelectedAdDF] = useState('week');
+  const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
+  const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [dspGroupBy, setDSPGroupBy] = useState('daily');
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 3);
+  const [adState, setAdState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'selection',
+    },
+  ]);
+  const [dspState, setDSPState] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'BBselection',
+    },
+  ]);
+
+  const [adFilters, setAdFilters] = useState({
+    daily: true,
+    weekly: false,
+    month: false,
+  });
+
+  const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
+  const [showDSPCustomDateModal, setShowDSPCustomDateModal] = useState(false);
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '420px ',
+      width: '100% ',
+      minHeight: '390px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+
+  const getAdData = useCallback(
+    (
+      selectedDailyFact,
+      selectedGroupBy,
+      marketplace,
+      startDate = null,
+      endDate = null,
+    ) => {
+      getAdPerformance(
+        id,
+        selectedDailyFact,
+        selectedGroupBy,
+        marketplace,
+        startDate,
+        endDate,
+      ).then((res) => {
+        if (res && res.status === 400) {
+          //
+        }
+        if (res && res.status === 200 && res.data && res.data.daily_facts) {
+          // console.log('resss', res.data);
+        }
+      });
+    },
+    [id],
+  );
+
+  const getDSPData = useCallback(
+    (
+      selectedDailyFact,
+      selectedGroupBy,
+      marketplace,
+      startDate = null,
+      endDate = null,
+    ) => {
+      getDSPPerformance(
+        id,
+        selectedDailyFact,
+        selectedGroupBy,
+        marketplace,
+        startDate,
+        endDate,
+      ).then((res) => {
+        if (res && res.status === 400) {
+          //
+        }
+        if (res && res.status === 200 && res.data && res.data.daily_facts) {
+          // console.log('resss', res.data);
+        }
+      });
+    },
+    [id],
+  );
+
   useEffect(() => {
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
@@ -45,17 +147,75 @@ export default function AdPerformance({ marketplaceChoices }) {
       setSelectedMarketplace(list[0].value);
       setCurrency(list[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      // getData(selectedValue, groupBy, list[0].value);
-      // getBBData(list[0].value, bBDailyFact, 'daily');
+      getAdData(selectedAdDF, adGroupBy, list[0].value);
+      getDSPData(selectedDSPDF, dspGroupBy, list[0].value);
       setResponseId('12345');
     }
   }, [
+    getAdData,
+    getDSPData,
     marketplaceChoices,
     responseId,
     selectedMarketplace,
     currencySymbol,
     currency,
+    adGroupBy,
+    dspGroupBy,
+    selectedAdDF,
+    selectedDSPDF,
   ]);
+
+  const getDays = (startDate, endDate) => {
+    const diffTime = Math.abs(startDate - endDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
+    let temp = '';
+    let sd = startDate;
+    let ed = endDate;
+    const diffDays = getDays(startDate, endDate);
+    if (diffDays <= 30) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: false, month: false });
+      setAdGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 180) {
+      temp = 'weekly';
+      setAdFilters({ daily: false, weekly: true, month: false });
+      setAdGroupBy('weekly');
+    } else if (diffDays > 180) {
+      temp = 'monthly';
+      setAdFilters({ daily: false, weekly: false, month: true });
+      setAdGroupBy('monthly');
+    }
+
+    if (flag === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getAdData(flag, temp, selectedMarketplace, sd, ed);
+    } else {
+      // flag==='year
+      getAdData(flag, temp, selectedMarketplace);
+    }
+  };
+
+  const applyCustomDate = (flag) => {
+    if (flag === 'AdDate') {
+      checkDifferenceBetweenDates(
+        adState[0].startDate,
+        adState[0].endDate,
+        'custom',
+      );
+      setShowAdCustomDateModal(false);
+    } else {
+      //
+    }
+  };
 
   const singleFilterOption = (props) => (
     <SingleValue {...props}>
@@ -107,34 +267,131 @@ export default function AdPerformance({ marketplaceChoices }) {
     };
   };
 
-  const handleAmazonOptions = (event) => {
+  const setGropuByFilter = (value) => {
+    switch (value) {
+      case 'week':
+        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdGroupBy('daily');
+        getAdData(value, 'daily', selectedMarketplace);
+        break;
+
+      case 'month':
+        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdGroupBy('daily');
+        getAdData(value, 'daily', selectedMarketplace);
+        break;
+
+      case '30days':
+        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdGroupBy('daily');
+        getAdData(value, 'daily', selectedMarketplace);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleMarketplaceOptions = (event) => {
     setSelectedMarketplace(event.value);
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
-    // if (selectedValue === 'custom') {
-    //   checkDifferenceBetweenDates(
-    //     state[0].startDate,
-    //     state[0].endDate,
-    //     'custom',
-    //   );
-    // } else {
-    //   getData(selectedValue, groupBy, event.value);
-    //   getBBData(event.value, bBDailyFact, BBGroupBy);
-    // }
+    if (selectedAdDF === 'custom') {
+      checkDifferenceBetweenDates(
+        adState[0].startDate,
+        adState[0].endDate,
+        'custom',
+      );
+    } else {
+      getAdData(selectedAdDF, adGroupBy, event.value);
+      getDSPData(selectedDSPDF, dspGroupBy, event.value);
+    }
   };
 
   const handleAdType = () => {
     // const { value } = event;
     // setSelectedAdType(value);
   };
-  const handleAdDailyFact = () => {
-    // const { value } = event;
-    // setSelectedAdDF(value);
+  const handleAdDailyFact = (event) => {
+    const { value } = event;
+    setSelectedAdDF(value);
+    if (value !== 'custom') {
+      setAdState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'selection',
+        },
+      ]);
+    }
+    if (value === 'year') {
+      checkDifferenceBetweenDates(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+      );
+    } else if (value === 'custom') {
+      setShowAdCustomDateModal(true);
+    } else {
+      setGropuByFilter(value);
+    }
   };
 
-  const handleDSPDailyFact = () => {
-    // const { value } = event;
-    // setSelectedDSPDF(value);
+  const DSPYearAndCustomDateFilter = (startDate, endDate, value) => {
+    let temp = '';
+
+    let sd = startDate;
+    let ed = endDate;
+    const diffDays = getDays(startDate, endDate);
+
+    if (diffDays <= 30) {
+      temp = 'daily';
+      setDSPGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 180) {
+      temp = 'weekly';
+      setDSPGroupBy('weekly');
+    } else if (diffDays > 180) {
+      temp = 'monthly';
+      setDSPGroupBy('monthly');
+    }
+
+    if (value === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+      getDSPData(value, temp, selectedMarketplace, sd, ed);
+    } else {
+      getDSPData(value, temp, selectedMarketplace);
+    }
+  };
+
+  const handleDSPDailyFact = (event) => {
+    const { value } = event;
+    setSelectedDSPDF(value);
+    if (value !== 'custom') {
+      setDSPState([
+        {
+          startDate: currentDate,
+          endDate: currentDate,
+          key: 'dspSelection',
+        },
+      ]);
+    }
+    if (value === 'year') {
+      DSPYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+      );
+    } else if (value === 'custom') {
+      setShowDSPCustomDateModal(true);
+    } else {
+      getDSPData(value, 'daily', selectedMarketplace);
+      setDSPGroupBy('daily');
+    }
   };
 
   const setBoxToggle = (name) => {
@@ -159,7 +416,7 @@ export default function AdPerformance({ marketplaceChoices }) {
             amazonOptions && amazonOptions[0] && amazonOptions[0].label,
             DropdownIndicator,
             amazonOptions && amazonOptions[0],
-            handleAmazonOptions,
+            handleMarketplaceOptions,
           )}
         </div>
       </div>
@@ -380,35 +637,41 @@ export default function AdPerformance({ marketplaceChoices }) {
   const renderAdGroupBy = () => {
     return (
       <>
-        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-          <ul className="rechart-item">
-            <li>
-              <div className="weeks">
-                <span className="orange block" />
-                <span>Recent</span>
-              </div>
-            </li>
-            {/* {selectedValue !== 'custom' ? ( */}
-            <li>
-              <div className="weeks">
-                <span className="gray block" />
-                <span>Previous</span>
-              </div>
-            </li>
-            {/* ) : null} */}
-          </ul>
-        </div>
+        {_.size(selectedAdBox) === 1 ? (
+          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+            <ul className="rechart-item">
+              <li>
+                <div className="weeks">
+                  <span className="orange block" />
+                  <span>Recent</span>
+                </div>
+              </li>
+              {selectedAdDF !== 'custom' ? (
+                <li>
+                  <div className="weeks">
+                    <span className="gray block" />
+                    <span>Previous</span>
+                  </div>
+                </li>
+              ) : null}
+            </ul>
+          </div>
+        ) : null}
         <div className="col-md-12 mt-4">
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
-              <li>
+              <li className={adFilters.daily === false ? 'disabled-tab' : ''}>
                 {' '}
                 <input
                   className="d-none"
                   type="radio"
                   id="daysCheck"
                   name="flexRadioDefault"
+                  value={adGroupBy}
+                  checked={adFilters.daily}
+                  // onClick={() => handleGroupBy('daily')}
+                  onChange={() => {}}
                 />
                 <label htmlFor="daysCheck">Daily</label>
               </li>
@@ -464,6 +727,113 @@ export default function AdPerformance({ marketplaceChoices }) {
     );
   };
 
+  const renderAdCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showAdCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowAdCustomDateModal(false);
+            setAdState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'AdSelection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setAdState([item.AdSelection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={adState}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomDate('AdDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
+  const renderDSPCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showDSPCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowDSPCustomDateModal(false);
+            setDSPState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'dspSelection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setDSPState([item.dspSelection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={dspState}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomDate('DSPDate')}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
@@ -483,6 +853,8 @@ export default function AdPerformance({ marketplaceChoices }) {
           </span>
         </div>
       </WhiteCard>
+      {renderAdCustomDateModal()}
+      {renderDSPCustomDateModal()}
     </AddPerformance>
   );
 }

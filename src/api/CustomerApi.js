@@ -488,3 +488,73 @@ export async function getBuyBoxChartData(
     });
   return result;
 }
+
+export async function getAdPerformance(
+  customer,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  if (startDate && endDate) {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+    };
+  }
+  const result = await axiosInstance
+    .get(`${API_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getDSPPerformance(
+  customer,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  if (startDate && endDate) {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+    };
+  }
+  const result = await axiosInstance
+    .get(`${API_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
