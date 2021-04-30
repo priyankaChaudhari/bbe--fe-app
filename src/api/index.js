@@ -105,4 +105,5 @@ export {
   updateAskSomeoneData,
   verifyStepToken,
   accountSummary,
+  saveBillingInfo,
 } from './OnboardingCustomerApi';

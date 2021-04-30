@@ -1,5 +1,3 @@
-/* eslint-disable no-else-return */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -19,9 +17,15 @@ import {
   ModalRadioCheck,
   PageLoader,
   ModalBox,
+  ErrorMsg,
 } from '../../common';
 import { CloseIcon } from '../../theme/images';
-import { updateAskSomeoneData, updateUserMe } from '../../api';
+import {
+  askSomeoneData,
+  updateAskSomeoneData,
+  updateUserMe,
+  saveBillingInfo,
+} from '../../api';
 import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
 import {
@@ -37,15 +41,20 @@ export default function BillingInfo({
   stepData,
   verifiedStepData,
   userInfo,
-  // data,
   isLoading,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ ach: true, credit_card: false });
+  const [formData, setFormData] = useState({
+    ach: true,
+    credit_card: false,
+    billing_address: {},
+    billing_contact: {},
+  });
 
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
+  const [apiError, setApiError] = useState({});
 
   const customStyles = {
     content: {
@@ -64,38 +73,109 @@ export default function BillingInfo({
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-    updateAskSomeoneData(
-      (stepData && stepData.id) || verifiedStepData.step_id,
-      {
-        token: assignedToSomeone ? params && params.key : '',
+
+    if (
+      (stepData === undefined ||
+        (stepData &&
+          Object.keys(stepData) &&
+          Object.keys(stepData).length === 0)) &&
+      verifiedStepData &&
+      Object.keys(verifiedStepData) &&
+      Object.keys(verifiedStepData).length === 0
+    ) {
+      const detail = {
         is_completed: true,
-      },
-    ).then((response) => {
-      if (response && response.status === 200) {
-        if (assignedToSomeone) {
-          const stringified =
-            queryString &&
-            queryString.stringify({
-              name: verifiedStepData.user_name,
-            });
-          history.push({
-            pathname: PATH_THANKS,
-            search: `${stringified}`,
+        email: userInfo.email,
+        step: 'billing information',
+        customer_onboarding: userInfo.customer_onboarding,
+      };
+      askSomeoneData(detail).then((stepResponse) => {
+        if (stepResponse && stepResponse.status === 201) {
+          const details = {
+            payment_type: formData.ach ? 'ach' : 'credit_card',
+            billing_address: formData.billing_address,
+            billing_contact: formData.billing_contact,
+            step: stepResponse && stepResponse.data && stepResponse.data.id,
+          };
+          saveBillingInfo(details).then((response) => {
+            if (response && response.status === 201) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
+                });
+              } else {
+                history.push(PATH_AMAZON_MERCHANT);
+              }
+              updateUserMe(userInfo.id, {
+                step: { ...userInfo.step, [userInfo.customer]: 4 },
+              }).then((user) => {
+                if (user && user.status === 200) {
+                  dispatch(userMe());
+                }
+              });
+              localStorage.removeItem('match');
+              setIsLoading({ loader: false, type: 'button' });
+            }
+            if (response && response.status === 400) {
+              setApiError(response && response.data);
+            }
           });
-        } else {
-          history.push(PATH_AMAZON_MERCHANT);
         }
-        updateUserMe(userInfo.id, {
-          step: { ...userInfo.step, [userInfo.customer]: 3 },
-        }).then((user) => {
-          if (user && user.status === 200) {
-            dispatch(userMe());
-          }
-        });
-        localStorage.removeItem('match');
-        setIsLoading({ loader: false, type: 'button' });
-      }
-    });
+      });
+    } else {
+      updateAskSomeoneData(
+        (stepData && stepData.id) || verifiedStepData.step_id,
+        {
+          token: assignedToSomeone ? params && params.key : '',
+          is_completed: true,
+        },
+      ).then((response) => {
+        if (response && response.status === 200) {
+          const details = {
+            payment_type: formData.ach ? 'ach' : 'credit_card',
+            billing_address: formData.billing_address,
+            billing_contact: formData.billing_contact,
+            step: stepData.id,
+          };
+          saveBillingInfo(details).then((res) => {
+            if (res && res.status === 200) {
+              if (assignedToSomeone) {
+                const stringified =
+                  queryString &&
+                  queryString.stringify({
+                    name: verifiedStepData.user_name,
+                  });
+                history.push({
+                  pathname: PATH_THANKS,
+                  search: `${stringified}`,
+                });
+              } else {
+                history.push(PATH_AMAZON_MERCHANT);
+              }
+            }
+            if (res && res.status === 400) {
+              setApiError(res && res.data);
+            }
+          });
+
+          updateUserMe(userInfo.id, {
+            step: { ...userInfo.step, [userInfo.customer]: 3 },
+          }).then((user) => {
+            if (user && user.status === 200) {
+              dispatch(userMe());
+            }
+          });
+          localStorage.removeItem('match');
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    }
   };
 
   const generateNumeric = (item, type) => {
@@ -103,12 +183,29 @@ export default function BillingInfo({
       <NumberFormat
         format={item.format}
         className="form-control"
-        onChange={(event) =>
-          setFormData({ ...formData, [item.key]: event.target.value })
-        }
+        onChange={(event) => {
+          if (type === 'address') {
+            setFormData({
+              ...formData,
+              billing_address: {
+                ...formData.billing_address,
+                [item.key]: event.target.value,
+              },
+            });
+          } else if (type === 'contact') {
+            setFormData({
+              ...formData,
+              billing_contact: {
+                ...formData.billing_contact,
+                [item.key]: event.target.value,
+              },
+            });
+          } else {
+            setFormData({ ...formData, [item.key]: event.target.value });
+          }
+        }}
         placeholder={`Enter ${item.label}`}
-        disabled={type === 'credit' && formData.ach}
-        value={type === 'credit' && formData.ach ? '' : formData[item.key]}
+        value={formData[item.key]}
       />
     );
   };
@@ -139,20 +236,37 @@ export default function BillingInfo({
     );
   };
 
-  const generateInput = (item, isDisabled, type) => {
+  const generateInput = (item, type) => {
     return (
       <input
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        value={type === 'credit' && formData.ach ? '' : formData[item.key]}
-        onChange={(event) =>
-          setFormData({
-            ...formData,
-            [item.key]: event.target.value,
-          })
-        }
-        disabled={isDisabled && formData.ach}
+        defaultValue={formData[item.key]}
+        onChange={(event) => {
+          if (type === 'address') {
+            setFormData({
+              ...formData,
+              billing_address: {
+                ...formData.billing_address,
+                [item.key]: event.target.value,
+              },
+            });
+          } else if (type === 'contact') {
+            setFormData({
+              ...formData,
+              billing_contact: {
+                ...formData.billing_contact,
+                [item.key]: event.target.value,
+              },
+            });
+          } else {
+            setFormData({
+              ...formData,
+              [item.key]: event.target.value,
+            });
+          }
+        }}
       />
     );
   };
@@ -162,75 +276,64 @@ export default function BillingInfo({
       return (
         <fieldset className="shape-without-border  w-430 mt-4 mb-4">
           {ACHDetails.map((item) => (
-            <ContractFormField className="mt-3" key={item.key}>
-              <label htmlFor={item.label}>
-                {item.label}
-                {item.type === 'number' ? (
-                  <>{generateNumeric(item)}</>
-                ) : item.type === 'checkbox' ? (
-                  <>{generateRadio(item)}</>
-                ) : (
-                  <>{generateInput(item, false)}</>
-                )}
-              </label>
-            </ContractFormField>
+            <React.Fragment key={item.key}>
+              <ContractFormField
+                className={item.key !== 'account_name' ? 'mt-3' : ''}>
+                <label htmlFor={item.label}>
+                  {item.label}
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item)}</>
+                  ) : item.type === 'checkbox' ? (
+                    <>{generateRadio(item)}</>
+                  ) : (
+                    <>{generateInput(item)}</>
+                  )}
+                </label>
+              </ContractFormField>
+              <ErrorMsg>
+                {apiError && apiError[item.key] && apiError[item.key][0]}
+              </ErrorMsg>
+            </React.Fragment>
           ))}
         </fieldset>
       );
-    } else if (formData.credit_card) {
-      return creditCardDetails.map((item) => (
-        <fieldset
-          className="shape-without-border  w-430 mt-4 mb-4"
-          key={item.key}>
-          <div className="inner-content">
-            <div className="label-title mb-2">Credit Card Type</div>
-            <ul className="payment-option">
-              {item &&
-                item.choices.map((field) => (
-                  <li key={field.key}>{generateRadio(field)}</li>
-                ))}
-            </ul>
+    }
+    return creditCardDetails.map((item) => (
+      <fieldset
+        className="shape-without-border  w-430 mt-4 mb-4"
+        key={item.key}>
+        <div className="inner-content">
+          <div className="label-title mb-2">Credit Card Type</div>
+          <ul className="payment-option">
             {item &&
-              item.details
-                .filter((op) => op.property === '')
-                .map((field) => (
-                  <ContractFormField className="mt-3" key={field.key}>
+              item.choices.map((field) => (
+                <li key={field.key}>{generateRadio(field)}</li>
+              ))}
+          </ul>
+          <div className="row">
+            {item &&
+              item.details.map((field) => (
+                <div className={field.property} key={field.key}>
+                  <ContractFormField className="mt-3">
                     <label htmlFor={field.label}>
                       {field.label}
                       <br />
                       {field.type === 'number' ? (
-                        <>{generateNumeric(field, 'credit')}</>
+                        <>{generateNumeric(field)}</>
                       ) : (
-                        <>{generateInput(field, false, 'credit')}</>
+                        <>{generateInput(field)}</>
                       )}
                     </label>
                   </ContractFormField>
-                ))}
-            <div className="row">
-              {item &&
-                item.details
-                  .filter((op) => op.property !== '')
-                  .map((field) => (
-                    <div className="col-6" key={field.key}>
-                      <ContractFormField className="mt-3">
-                        <label htmlFor={field.label}>
-                          {field.label}
-                          <br />
-                          {field.type === 'number' ? (
-                            <>{generateNumeric(field, 'credit')}</>
-                          ) : (
-                            <>{generateInput(field, false, 'credit')}</>
-                          )}
-                        </label>
-                      </ContractFormField>
-                    </div>
-                  ))}
-            </div>
+                  <ErrorMsg>
+                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                  </ErrorMsg>
+                </div>
+              ))}
           </div>
-        </fieldset>
-      ));
-    }
-    return '';
+        </div>
+      </fieldset>
+    ));
   };
 
   const generateBillingAddressHTML = () => {
@@ -242,17 +345,20 @@ export default function BillingInfo({
           {BillingAddress.filter((op) => op.section === 'address').map(
             (item) => (
               <div className={item.property} key={item.key}>
-                <ContractFormField className="mt-3" key={item.key}>
+                <ContractFormField className="mt-3">
                   <label htmlFor={item.label}>
                     {item.label}
                     <br />
                     {item.type === 'number' ? (
-                      <>{generateNumeric(item)}</>
+                      <>{generateNumeric(item, 'address')}</>
                     ) : (
-                      <>{generateInput(item, false)}</>
+                      <>{generateInput(item, 'address')}</>
                     )}
                   </label>
                 </ContractFormField>
+                <ErrorMsg>
+                  {apiError && apiError[item.key] && apiError[item.key][0]}
+                </ErrorMsg>
               </div>
             ),
           )}
@@ -270,12 +376,15 @@ export default function BillingInfo({
                     {item.label}
                     <br />
                     {item.type === 'number' ? (
-                      <>{generateNumeric(item)}</>
+                      <>{generateNumeric(item, 'contact')}</>
                     ) : (
-                      <>{generateInput(item, false)}</>
+                      <>{generateInput(item, 'contact')}</>
                     )}
                   </label>
                 </ContractFormField>
+                <ErrorMsg>
+                  {apiError && apiError[item.key] && apiError[item.key][0]}
+                </ErrorMsg>
               </div>
             ),
           )}
@@ -290,8 +399,8 @@ export default function BillingInfo({
         <div className="billing-address"> Payment Type </div>
         <div className="row">
           {PaymentType.map((item) => (
-            <div className="col-4">
-              <ModalRadioCheck className="mt-1" key={item.key}>
+            <div className="col-4" key={item.key}>
+              <ModalRadioCheck className="mt-1">
                 <label
                   className="radio-container contact-billing"
                   htmlFor={item.key}>
@@ -353,7 +462,7 @@ export default function BillingInfo({
           </CheckBox>
           <Button
             className="btn-primary w-100  mt-3 mb-4"
-            onClick={() => saveDetails('billing')}
+            onClick={() => saveDetails()}
             disabled={!formData.agreed}>
             {' '}
             {isLoading.loader && isLoading.type === 'button' ? (
@@ -424,7 +533,9 @@ BillingInfo.defaultProps = {
 BillingInfo.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.string,
+    email: PropTypes.string,
     customer: PropTypes.string,
+    customer_onboarding: PropTypes.string,
     step: PropTypes.shape({
       step: PropTypes.number,
     }),
@@ -439,7 +550,6 @@ BillingInfo.propTypes = {
       user_name: PropTypes.string,
     }),
   ).isRequired,
-  // data: PropTypes.objectOf(PropTypes.object).isRequired,
   isLoading: PropTypes.shape({
     loader: PropTypes.bool,
     type: PropTypes.string,

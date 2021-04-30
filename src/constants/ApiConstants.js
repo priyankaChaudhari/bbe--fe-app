@@ -53,6 +53,7 @@ export const API_ONBOARD_CUSTOMER = '/customer-onboarding/';
 export const API_ACCOUNT_SUMMARY = `${API_ONBOARD_CUSTOMER}:id/account-summary/`;
 export const API_STEPS_ASSIGNED = '/steps-assigned/';
 export const API_VERIFY_TOKEN = `${API_STEPS_ASSIGNED}verify-token/`;
+export const API_BILLING_INFO = '/billing-info/';
 
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,
