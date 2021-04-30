@@ -61,6 +61,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     month: false,
   });
 
+  const [dspFilters, setDSPFilters] = useState({
+    daily: true,
+    weekly: false,
+    month: false,
+  });
+
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const [showDSPCustomDateModal, setShowDSPCustomDateModal] = useState(false);
   const customStyles = {
@@ -148,6 +154,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setCurrency(list[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
       getAdData(selectedAdDF, adGroupBy, list[0].value);
+
       getDSPData(selectedDSPDF, dspGroupBy, list[0].value);
       setResponseId('12345');
     }
@@ -171,7 +178,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return diffDays;
   };
 
-  const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
+  const ADYearAndCustomDateFilter = (startDate, endDate, flag = null) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
@@ -204,15 +211,55 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const DSPYearAndCustomDateFilter = (startDate, endDate, value) => {
+    let temp = '';
+
+    let sd = startDate;
+    let ed = endDate;
+    const diffDays = getDays(startDate, endDate);
+
+    if (diffDays <= 30) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: false, month: false });
+      setDSPGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 180) {
+      temp = 'weekly';
+      setDSPFilters({ daily: false, weekly: true, month: false });
+      setDSPGroupBy('weekly');
+    } else if (diffDays > 180) {
+      temp = 'monthly';
+      setDSPFilters({ daily: false, weekly: false, month: true });
+      setDSPGroupBy('monthly');
+    }
+
+    if (value === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+
+      getDSPData(value, temp, selectedMarketplace, sd, ed);
+    } else {
+      getDSPData(value, temp, selectedMarketplace);
+    }
+  };
+
   const applyCustomDate = (flag) => {
     if (flag === 'AdDate') {
-      checkDifferenceBetweenDates(
+      ADYearAndCustomDateFilter(
         adState[0].startDate,
         adState[0].endDate,
         'custom',
       );
       setShowAdCustomDateModal(false);
     } else {
+      DSPYearAndCustomDateFilter(
+        dspState[0].startDate,
+        dspState[0].endDate,
+        'custom',
+      );
       //
     }
   };
@@ -267,25 +314,48 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     };
   };
 
-  const setGropuByFilter = (value) => {
+  const setGropuByFilter = (value, type) => {
     switch (value) {
       case 'week':
-        setAdFilters({ daily: true, weekly: false, month: false });
-        setAdGroupBy('daily');
-        getAdData(value, 'daily', selectedMarketplace);
-        break;
+        if (type === 'ad') {
+          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdGroupBy('daily');
+          getAdData(value, 'daily', selectedMarketplace);
+          break;
+        } else {
+          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPGroupBy('daily');
+          getDSPData(value, 'daily', selectedMarketplace);
+          break;
+        }
 
       case 'month':
-        setAdFilters({ daily: true, weekly: false, month: false });
-        setAdGroupBy('daily');
-        getAdData(value, 'daily', selectedMarketplace);
-        break;
+        if (type === 'ad') {
+          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdGroupBy('daily');
+          getAdData(value, 'daily', selectedMarketplace);
+          break;
+        } else {
+          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPGroupBy('daily');
+
+          getDSPData(value, 'daily', selectedMarketplace);
+          break;
+        }
 
       case '30days':
-        setAdFilters({ daily: true, weekly: false, month: false });
-        setAdGroupBy('daily');
-        getAdData(value, 'daily', selectedMarketplace);
-        break;
+        if (type === 'ad') {
+          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdGroupBy('daily');
+          getAdData(value, 'daily', selectedMarketplace);
+          break;
+        } else {
+          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPGroupBy('daily');
+
+          getDSPData(value, 'daily', selectedMarketplace);
+          break;
+        }
 
       default:
         break;
@@ -297,14 +367,36 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
     if (selectedAdDF === 'custom') {
-      checkDifferenceBetweenDates(
+      ADYearAndCustomDateFilter(
         adState[0].startDate,
         adState[0].endDate,
         'custom',
       );
     } else {
       getAdData(selectedAdDF, adGroupBy, event.value);
+    }
+    if (selectedDSPDF === 'custom') {
+      DSPYearAndCustomDateFilter(
+        dspState[0].startDate,
+        dspState[0].endDate,
+        'custom',
+      );
+    } else {
       getDSPData(selectedDSPDF, dspGroupBy, event.value);
+    }
+  };
+
+  const handleAdGroupBy = (value) => {
+    if (value !== adGroupBy) {
+      setAdGroupBy(value);
+      getAdData(selectedAdDF, value, selectedMarketplace);
+    }
+  };
+
+  const handleDSPGroupBy = (value) => {
+    if (value !== dspGroupBy) {
+      setDSPGroupBy(value);
+      // getDSPData(selectedDSPDF, value, selectedMarketplace);
     }
   };
 
@@ -312,6 +404,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     // const { value } = event;
     // setSelectedAdType(value);
   };
+
   const handleAdDailyFact = (event) => {
     const { value } = event;
     setSelectedAdDF(value);
@@ -325,7 +418,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       ]);
     }
     if (value === 'year') {
-      checkDifferenceBetweenDates(
+      ADYearAndCustomDateFilter(
         new Date(new Date().getFullYear(), 0, 1),
         new Date(),
         'year',
@@ -333,38 +426,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     } else if (value === 'custom') {
       setShowAdCustomDateModal(true);
     } else {
-      setGropuByFilter(value);
-    }
-  };
-
-  const DSPYearAndCustomDateFilter = (startDate, endDate, value) => {
-    let temp = '';
-
-    let sd = startDate;
-    let ed = endDate;
-    const diffDays = getDays(startDate, endDate);
-
-    if (diffDays <= 30) {
-      temp = 'daily';
-      setDSPGroupBy('daily');
-    } else if (diffDays > 30 && diffDays <= 180) {
-      temp = 'weekly';
-      setDSPGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setDSPGroupBy('monthly');
-    }
-
-    if (value === 'custom') {
-      sd = `${startDate.getDate()}-${
-        startDate.getMonth() + 1
-      }-${startDate.getFullYear()}`;
-      ed = `${endDate.getDate()}-${
-        endDate.getMonth() + 1
-      }-${endDate.getFullYear()}`;
-      getDSPData(value, temp, selectedMarketplace, sd, ed);
-    } else {
-      getDSPData(value, temp, selectedMarketplace);
+      setGropuByFilter(value, 'ad');
     }
   };
 
@@ -389,8 +451,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     } else if (value === 'custom') {
       setShowDSPCustomDateModal(true);
     } else {
-      getDSPData(value, 'daily', selectedMarketplace);
-      setDSPGroupBy('daily');
+      setGropuByFilter(value, 'dsp');
     }
   };
 
@@ -670,28 +731,34 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                   name="flexRadioDefault"
                   value={adGroupBy}
                   checked={adFilters.daily}
-                  // onClick={() => handleGroupBy('daily')}
+                  onClick={() => handleAdGroupBy('daily')}
                   onChange={() => {}}
                 />
                 <label htmlFor="daysCheck">Daily</label>
               </li>
 
-              <li>
+              <li className={adFilters.weekly === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
                   id="weeklyCheck"
                   name="flexRadioDefault"
+                  value={adGroupBy}
+                  checked={adFilters.weekly && adGroupBy === 'weekly'}
+                  onChange={() => handleAdGroupBy('weekly')}
                 />
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
 
-              <li>
+              <li className={adFilters.month === false ? 'disabled-tab' : ''}>
                 <input
                   className=" d-none"
                   type="radio"
                   id="monthlyCheck"
                   name="flexRadioDefault"
+                  value={adGroupBy}
+                  checked={adFilters.month}
+                  onChange={() => handleAdGroupBy('monthly')}
                 />
                 <label htmlFor="monthlyCheck">Monthly</label>
               </li>
@@ -722,6 +789,79 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           {/* <DropDownSelect className="days-performance">
             <Select classNamePrefix="react-select" className="active" />
           </DropDownSelect> */}
+        </div>
+      </>
+    );
+  };
+
+  const renderDSPGroupBy = () => {
+    return (
+      <>
+        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+          <ul className="rechart-item">
+            <li>
+              <div className="weeks">
+                <span className="orange block" />
+                <span>Recent</span>
+              </div>
+            </li>
+            {selectedDSPDF !== 'custom' ? (
+              <li>
+                <div className="weeks">
+                  <span className="gray block" />
+                  <span>Previous</span>
+                </div>
+              </li>
+            ) : null}
+          </ul>
+        </div>
+
+        <div className="col-md-12 mt-4">
+          {' '}
+          <div className="days-container ">
+            <ul className="days-tab">
+              <li className={dspFilters.daily === false ? 'disabled-tab' : ''}>
+                {' '}
+                <input
+                  className="d-none"
+                  type="radio"
+                  id="daysCheck"
+                  name="flexRadioDefault1"
+                  value={dspGroupBy}
+                  checked={dspFilters.daily}
+                  onClick={() => handleDSPGroupBy('daily')}
+                  onChange={() => {}}
+                />
+                <label htmlFor="daysCheck">Daily</label>
+              </li>
+
+              <li className={dspFilters.weekly === false ? 'disabled-tab' : ''}>
+                <input
+                  className="d-none"
+                  type="radio"
+                  id="weeklyCheck"
+                  name="flexRadioDefault1"
+                  value={dspGroupBy}
+                  checked={dspFilters.weekly && dspGroupBy === 'weekly'}
+                  onChange={() => handleDSPGroupBy('weekly')}
+                />
+                <label htmlFor="weeklyCheck">Weekly</label>
+              </li>
+
+              <li className={dspFilters.month === false ? 'disabled-tab' : ''}>
+                <input
+                  className=" d-none"
+                  type="radio"
+                  id="monthlyCheck"
+                  name="flexRadioDefault1"
+                  value={dspGroupBy}
+                  checked={dspFilters.month}
+                  onChange={() => handleDSPGroupBy('monthly')}
+                />
+                <label htmlFor="monthlyCheck">Monthly</label>
+              </li>
+            </ul>
+          </div>
         </div>
       </>
     );
@@ -852,6 +992,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             40.75%{' '}
           </span>
         </div>
+        {renderDSPGroupBy()}
       </WhiteCard>
       {renderAdCustomDateModal()}
       {renderDSPCustomDateModal()}
