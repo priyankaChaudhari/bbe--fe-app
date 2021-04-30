@@ -181,10 +181,3 @@ export const showProfileLoader = (value) => {
     isLoading: value,
   };
 };
-
-export const showBillingAddress = (value) => {
-  return {
-    type: actionTypes.SHOW_BILLING_ADDRESS,
-    showBillingAddress: value,
-  };
-};

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 import LoadingBar from 'react-top-loading-bar';
@@ -11,7 +10,6 @@ import Theme from '../../theme/Theme';
 import { LeftArrowIcon } from '../../theme/images';
 import { PATH_ACCOUNT_SETUP_CHOOSE } from '../../constants';
 import { askSomeoneData } from '../../api';
-import { showBillingAddress } from '../../store/actions/userState';
 
 export default function NavigationHeader({
   bar,
@@ -24,7 +22,6 @@ export default function NavigationHeader({
   stepName,
 }) {
   const history = useHistory();
-  const dispatch = useDispatch();
   const params = queryString.parse(history.location.search);
 
   const redirect = (type) => {
@@ -40,8 +37,6 @@ export default function NavigationHeader({
           pathname: PATH_ACCOUNT_SETUP_CHOOSE,
           search: stringified,
         });
-      } else if (backStep === 'billingBack') {
-        dispatch(showBillingAddress(false));
       } else {
         history.push(backStep);
       }

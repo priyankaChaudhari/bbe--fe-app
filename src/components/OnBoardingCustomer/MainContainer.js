@@ -43,9 +43,6 @@ export default function MainContainer() {
   const [verifiedStepData, setVerifiedStepData] = useState({});
   const params = queryString.parse(history.location.search);
   const [userInfo, setUserInfo] = useState({});
-  const billingAddress = useSelector(
-    (state) => state.userState.showBillingAddress,
-  );
 
   const whichStep = [
     {
@@ -61,17 +58,12 @@ export default function MainContainer() {
     {
       key: 'billing information',
       stepof: 3,
-      title: billingAddress
-        ? 'Billing Address & Contact'
-        : 'Billing Information',
+      title: 'Billing Information',
       skip: PATH_AMAZON_MERCHANT,
-      back: billingAddress ? 'billingBack' : PATH_COMPANY_DETAILS,
+      back: PATH_COMPANY_DETAILS,
       bar: '49.8',
       path: 'billing-details',
       video: false,
-      subTitle: billingAddress
-        ? 'Please share your company billing address and the primary billing contact within your organization who can help with any billing queries, should they arise.'
-        : '',
     },
     {
       key: 'merchant id',
@@ -293,7 +285,7 @@ export default function MainContainer() {
                   <p className="account-steps m-0">Step {item.stepof} of 5</p>
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
-                {item.path === 'billing-details' && !billingAddress ? null : (
+                {item.path === 'billing-details' ? null : (
                   <p className="info-text-gray m-0 mb-4 ">
                     {item.subTitle} <br />
                     {item.video ? (

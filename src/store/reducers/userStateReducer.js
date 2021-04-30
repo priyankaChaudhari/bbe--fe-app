@@ -8,7 +8,6 @@ const initialState = {
   userInfo: {},
   showForgotMsg: false,
   showResetMsg: false,
-  showBillingAddress: false,
 };
 
 const userStateReducer = (state = initialState, action) => {
@@ -68,11 +67,6 @@ const userStateReducer = (state = initialState, action) => {
         ...state,
         isLoading: action.isLoading,
         error: null,
-      };
-    case actionTypes.SHOW_BILLING_ADDRESS:
-      return {
-        ...state,
-        showBillingAddress: action.showBillingAddress,
       };
     default:
       return state;

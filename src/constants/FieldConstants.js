@@ -679,14 +679,15 @@ export const SocialIcons = [
   },
 ];
 
-export const Billing = [
+export const ACHDetails = [
   { key: 'account_name', label: 'Account Name', type: 'text' },
   { key: 'bank_name', label: 'Bank Name', type: 'text' },
   { key: 'account_number', label: 'Account Number', type: 'number' },
   { key: 'routing_number', label: 'Routing Number', type: 'number' },
-  { key: 'ach', label: 'payment type', type: 'checkbox' },
+];
+
+export const creditCardDetails = [
   {
-    key: 'credit_card',
     choices: [
       {
         key: 'visa',
@@ -715,27 +716,27 @@ export const Billing = [
     ],
     details: [
       {
-        key: 'card_name',
+        key: 'credit_card_name',
         label: 'Cardholder Name',
         type: 'text',
         property: '',
       },
       {
-        key: 'card_number',
+        key: 'credit_card_number',
         label: 'Credit Card Number',
         type: 'number',
         property: '',
         format: '#### #### #### ####',
       },
       {
-        key: 'exp_date',
+        key: 'credit_card_expiration_date',
         label: 'EXP. Date',
         type: 'number',
         property: 'col-8 pr-0',
         format: '##/##',
       },
       {
-        key: 'cvv',
+        key: 'credit_card_code',
         label: 'CVV',
         type: 'number',
         property: 'col-4',
@@ -794,14 +795,14 @@ export const BillingAddress = [
     key: 'address',
     label: 'Address',
     type: 'text',
-    property: '',
+    property: 'col-7',
     section: 'address',
   },
   {
     key: 'city',
     label: 'City',
     type: 'text',
-    property: '',
+    property: 'col-5',
     section: 'address',
   },
   {
@@ -823,14 +824,14 @@ export const BillingAddress = [
     key: 'first_name',
     label: 'First name',
     type: 'text',
-    property: '',
+    property: 'col-6',
     section: 'contact',
   },
   {
     key: 'last_name',
     label: 'Last name',
     type: 'text',
-    property: '',
+    property: 'col-6',
     section: 'contact',
   },
 
@@ -842,10 +843,15 @@ export const BillingAddress = [
     section: 'contact',
   },
   {
-    key: 'phone_number',
+    key: 'phone',
     label: 'Phone number',
     type: 'number',
     property: 'col-6',
     section: 'contact',
   },
+];
+
+export const PaymentType = [
+  { key: 'ach', label: 'ACH', type: 'radio' },
+  { key: 'credit_card', label: 'Credit Card', type: 'radio' },
 ];
