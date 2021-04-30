@@ -93,6 +93,7 @@ export default function ContractContainer() {
   const id = location.pathname.split('/')[2];
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  // const [activityLogLoader, setActivityLogLoader] = useState(false);
   const [formData, setFormData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [updatedFormData, setUpdatedFormData] = useState({});
@@ -2347,6 +2348,7 @@ export default function ContractContainer() {
         formData={formData}
         apiError={apiError}
         loader={isLoading.loader}
+        // setActivityLogLoader={setActivityLogLoader}
         agreementData={details}
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
@@ -2664,7 +2666,14 @@ export default function ContractContainer() {
   };
 
   const closeDiscountModal = () => {
-    getContractDetails();
+    // getContractDetails();
+    const discountUpdatedData = {
+      monthly_discount_amount: details.monthly_discount_amount,
+      monthly_discount_type: details.monthly_discount_type,
+      one_time_discount_amount: details.one_time_discount_amount,
+      one_time_discount_type: details.one_time_discount_type,
+    };
+    setFormData({ ...formData, ...discountUpdatedData });
     setShowDiscountModal(false);
   };
 

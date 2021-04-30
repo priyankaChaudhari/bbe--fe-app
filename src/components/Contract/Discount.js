@@ -172,6 +172,17 @@ function Discount({
         setShowDiscountModal(false);
         // dispatch(getAccountDetails(id));
         getContractDetails();
+        // const data = {
+        //   monthly_discount_amount:
+        //     res && res.data && res.data.monthly_discount_amount,
+        //   monthly_discount_type:
+        //     res && res.data && res.data.monthly_discount_type,
+        //   one_time_discount_amount:
+        //     res && res.data && res.data.one_time_discount_amount,
+        //   one_time_discount_type:
+        //     res && res.data && res.data.one_time_discount_type,
+        // };
+        // setFormData({ ...formData, ...data });
       }
       if (res && res.status === 400) {
         setShowDiscountModal(true);

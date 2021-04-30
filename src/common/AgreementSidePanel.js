@@ -129,6 +129,7 @@ export default function AgreementSidePanel({
   additionalMarketplaces,
   setAdditionalMarketplaces,
   firstMonthDate,
+  // setActivityLogLoader
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -338,6 +339,7 @@ export default function AgreementSidePanel({
   const getContractActivityLogInfo = useCallback(
     (currentPage) => {
       setActivityLoader(true);
+      // setActivityLogLoader(true);
       getContractActivityLog(currentPage, agreementData.id).then((response) => {
         setActivityData(response && response.data && response.data.results);
         setActivityCount(response && response.data && response.data.count);
@@ -346,6 +348,7 @@ export default function AgreementSidePanel({
           setImages(picResponse);
         });
         setActivityLoader(false);
+        // setActivityLogLoader(false);
         setIsApicalled(true);
       });
     },
@@ -3254,7 +3257,8 @@ export default function AgreementSidePanel({
           </div>
         ) : null}
         <div className="activity-log">Contract Activity</div>
-        {activityLoader === true ? (
+
+        {activityLoader === true || loader ? (
           <PageLoader component="activityLog" color="#FF5933" type="page" />
         ) : activityData && activityData.length !== 0 ? (
           <>
