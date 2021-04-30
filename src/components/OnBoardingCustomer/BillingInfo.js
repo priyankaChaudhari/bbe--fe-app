@@ -8,7 +8,6 @@ import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { Collapse } from 'react-collapse';
 import NumberFormat from 'react-number-format';
 
 import Theme from '../../theme/Theme';
@@ -44,7 +43,7 @@ export default function BillingInfo({
   const history = useHistory();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ ach: true, credit_card: false });
-  const [openCollapse, setOpenCollapse] = useState(true);
+
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
 
@@ -161,7 +160,7 @@ export default function BillingInfo({
   const generatePayment = () => {
     if (formData.ach) {
       return (
-        <fieldset className="shape-without-border  w-430 mt-2 mb-4">
+        <fieldset className="shape-without-border  w-430 mt-4 mb-4">
           {ACHDetails.map((item) => (
             <ContractFormField className="mt-3" key={item.key}>
               <label htmlFor={item.label}>
@@ -181,7 +180,7 @@ export default function BillingInfo({
     } else if (formData.credit_card) {
       return creditCardDetails.map((item) => (
         <fieldset
-          className="shape-without-border  w-430 mt-2 mb-4"
+          className="shape-without-border  w-430 mt-4 mb-4"
           key={item.key}>
           <div className="inner-content">
             <div className="label-title mb-2">Credit Card Type</div>
@@ -237,7 +236,7 @@ export default function BillingInfo({
   const generateBillingAddressHTML = () => {
     return (
       <>
-        <div className=" straight-line horizontal-line mt-2 mb-4" />
+        <div className=" straight-line horizontal-line mt-2 mb-3" />
         <div className="billing-address"> Billing Address </div>
         <div className="row">
           {BillingAddress.filter((op) => op.section === 'address').map(
@@ -260,7 +259,7 @@ export default function BillingInfo({
         </div>
 
         <br />
-        <div className=" straight-line horizontal-line mt-2 mb-4" />
+        <div className=" straight-line horizontal-line mt-1 mb-3" />
         <div className="billing-address">Billing Contact</div>
         <div className="row">
           {BillingAddress.filter((op) => op.section === 'contact').map(
@@ -289,37 +288,37 @@ export default function BillingInfo({
     <>
       <OnBoardingBody className="body-white">
         <div className="billing-address"> Payment Type </div>
+        <div className="row">
+          {PaymentType.map((item) => (
+            <div className="col-4">
+              <ModalRadioCheck className="mt-1" key={item.key}>
+                <label
+                  className="radio-container contact-billing"
+                  htmlFor={item.key}>
+                  {item.label}
+                  <br />
+                  <input
+                    type="radio"
+                    name="radio1"
+                    id={item.key}
+                    defaultChecked={formData[item.key]}
+                    onChange={() => {
+                      setFormData({
+                        ...formData,
+                        ach: !formData.ach,
+                        credit_card: !formData.credit_card,
+                      });
+                    }}
+                    readOnly
+                  />
+                  <span className="checkmark" />
+                </label>
+              </ModalRadioCheck>
+            </div>
+          ))}
+        </div>
 
-        {PaymentType.map((item) => (
-          <ModalRadioCheck className="mt-1" key={item.key}>
-            <label
-              className="radio-container contact-billing"
-              htmlFor={item.key}>
-              {item.label}
-              <br />
-              <input
-                type="radio"
-                name="radio1"
-                onClick={() => setOpenCollapse(true)}
-                id={item.key}
-                defaultChecked={formData[item.key]}
-                onChange={() => {
-                  setFormData({
-                    ...formData,
-                    ach: !formData.ach,
-                    credit_card: !formData.credit_card,
-                  });
-                }}
-                readOnly
-              />
-              <span className="checkmark" />
-            </label>
-          </ModalRadioCheck>
-        ))}
-
-        <CollapseOpenContainer>
-          <Collapse isOpened={openCollapse}>{generatePayment()}</Collapse>
-        </CollapseOpenContainer>
+        <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
 
         {generateBillingAddressHTML()}
         <br />
@@ -448,40 +447,38 @@ BillingInfo.propTypes = {
 };
 
 const CollapseOpenContainer = styled.div`
-  .ReactCollapse--collapse {
-    max-width: 430px !important;
-    margin: 0 auto;
-    .inner-content {
-      background-color: ${Theme.white};
-      padding: 12px 0px 4px 0px;
-      .pay-card {
-        font-size: ${Theme.extraNormal};
-        color: ${Theme.black};
-        font-weight: 600;
-      }
-      .label-title {
-        color: ${Theme.gray40};
-        font-size: ${Theme.verySmall};
-        letter-spacing: 1.13px;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-family: ${Theme.titleFontFamily};
-      }
-      .payment-option {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        li {
-          display: inline-block;
-          margin-right: 23px;
-          &:last-child {
-            margin-right: 0px;
-          }
-          .card {
-            width: 20px;
-            margin-right: 2px;
-            vertical-align: top;
-          }
+  max-width: 430px !important;
+  margin: 0 auto;
+  .inner-content {
+    background-color: ${Theme.white};
+    padding: 4px 0px 4px 0px;
+    .pay-card {
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.black};
+      font-weight: 600;
+    }
+    .label-title {
+      color: ${Theme.gray40};
+      font-size: ${Theme.verySmall};
+      letter-spacing: 1.13px;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-family: ${Theme.titleFontFamily};
+    }
+    .payment-option {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        margin-right: 23px;
+        &:last-child {
+          margin-right: 0px;
+        }
+        .card {
+          width: 20px;
+          margin-right: 2px;
+          vertical-align: top;
         }
       }
     }
