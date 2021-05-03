@@ -274,7 +274,7 @@ export default function BillingInfo({
   const generatePayment = () => {
     if (formData.ach) {
       return (
-        <fieldset className="shape-without-border  w-430 mt-4 mb-4">
+        <>
           {ACHDetails.map((item) => (
             <React.Fragment key={item.key}>
               <ContractFormField
@@ -295,15 +295,13 @@ export default function BillingInfo({
               </ErrorMsg>
             </React.Fragment>
           ))}
-        </fieldset>
+        </>
       );
     }
     return creditCardDetails.map((item) => (
-      <fieldset
-        className="shape-without-border  w-430 mt-4 mb-4"
-        key={item.key}>
+      <div key={item.key}>
         <div className="inner-content">
-          <div className="label-title mb-2">Credit Card Type</div>
+          <p className="account-steps m-0">Credit Card Type</p>
           <ul className="payment-option">
             {item &&
               item.choices.map((field) => (
@@ -332,63 +330,66 @@ export default function BillingInfo({
               ))}
           </div>
         </div>
-      </fieldset>
+      </div>
     ));
   };
 
   const generateBillingAddressHTML = () => {
     return (
       <>
-        <div className=" straight-line horizontal-line mt-2 mb-3" />
-        <div className="billing-address"> Billing Address </div>
-        <div className="row">
-          {BillingAddress.filter((op) => op.section === 'address').map(
-            (item) => (
-              <div className={item.property} key={item.key}>
-                <ContractFormField className="mt-3">
-                  <label htmlFor={item.label}>
-                    {item.label}
-                    <br />
-                    {item.type === 'number' ? (
-                      <>{generateNumeric(item, 'address')}</>
-                    ) : (
-                      <>{generateInput(item, 'address')}</>
-                    )}
-                  </label>
-                </ContractFormField>
-                <ErrorMsg>
-                  {apiError && apiError[item.key] && apiError[item.key][0]}
-                </ErrorMsg>
-              </div>
-            ),
-          )}
-        </div>
+        <fieldset className="shape-without-border  w-430 mt-3">
+          <p className="account-steps m-0">Part 2</p>
+          <div className="billing-address"> Billing Address </div>
+          <div className="row">
+            {BillingAddress.filter((op) => op.section === 'address').map(
+              (item) => (
+                <div className={item.property} key={item.key}>
+                  <ContractFormField className="mt-3">
+                    <label htmlFor={item.label}>
+                      {item.label}
+                      <br />
+                      {item.type === 'number' ? (
+                        <>{generateNumeric(item, 'address')}</>
+                      ) : (
+                        <>{generateInput(item, 'address')}</>
+                      )}
+                    </label>
+                  </ContractFormField>
+                  <ErrorMsg>
+                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                  </ErrorMsg>
+                </div>
+              ),
+            )}
+          </div>
+        </fieldset>
 
-        <br />
-        <div className=" straight-line horizontal-line mt-1 mb-3" />
-        <div className="billing-address">Billing Contact</div>
-        <div className="row">
-          {BillingAddress.filter((op) => op.section === 'contact').map(
-            (item) => (
-              <div className={item.property} key={item.key}>
-                <ContractFormField className="mt-3">
-                  <label htmlFor={item.label}>
-                    {item.label}
-                    <br />
-                    {item.type === 'number' ? (
-                      <>{generateNumeric(item, 'contact')}</>
-                    ) : (
-                      <>{generateInput(item, 'contact')}</>
-                    )}
-                  </label>
-                </ContractFormField>
-                <ErrorMsg>
-                  {apiError && apiError[item.key] && apiError[item.key][0]}
-                </ErrorMsg>
-              </div>
-            ),
-          )}
-        </div>
+        <fieldset className="shape-without-border  w-430 mt-3 mb-2">
+          <p className="account-steps m-0">Part 3</p>
+          <div className="billing-address">Billing Contact</div>
+          <div className="row">
+            {BillingAddress.filter((op) => op.section === 'contact').map(
+              (item) => (
+                <div className={item.property} key={item.key}>
+                  <ContractFormField className="mt-3">
+                    <label htmlFor={item.label}>
+                      {item.label}
+                      <br />
+                      {item.type === 'number' ? (
+                        <>{generateNumeric(item, 'contact')}</>
+                      ) : (
+                        <>{generateInput(item, 'contact')}</>
+                      )}
+                    </label>
+                  </ContractFormField>
+                  <ErrorMsg>
+                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                  </ErrorMsg>
+                </div>
+              ),
+            )}
+          </div>
+        </fieldset>
       </>
     );
   };
@@ -396,41 +397,44 @@ export default function BillingInfo({
   return (
     <>
       <OnBoardingBody className="body-white">
-        <div className="billing-address"> Payment Type </div>
-        <div className="row">
-          {PaymentType.map((item) => (
-            <div className="col-4" key={item.key}>
-              <ModalRadioCheck className="mt-1">
-                <label
-                  className="radio-container contact-billing"
-                  htmlFor={item.key}>
-                  {item.label}
-                  <br />
-                  <input
-                    type="radio"
-                    name="radio1"
-                    id={item.key}
-                    defaultChecked={formData[item.key]}
-                    onChange={() => {
-                      setFormData({
-                        ...formData,
-                        ach: !formData.ach,
-                        credit_card: !formData.credit_card,
-                      });
-                    }}
-                    readOnly
-                  />
-                  <span className="checkmark" />
-                </label>
-              </ModalRadioCheck>
-            </div>
-          ))}
-        </div>
+        <fieldset className="shape-without-border  w-430 mt-3">
+          <p className="account-steps m-0">Part 1</p>
+          <div className="billing-address mb-3"> Payment Type </div>
+          <p className="account-steps m-0">Payment Type</p>
+          <ul className="payment-type mb-3 ">
+            {PaymentType.map((item) => (
+              <li key={item.key}>
+                <ModalRadioCheck className="mt-1">
+                  <label
+                    className="radio-container  contact-billing "
+                    htmlFor={item.key}>
+                    {item.label}
+                    <br />
+                    <input
+                      type="radio"
+                      name="radio1"
+                      id={item.key}
+                      defaultChecked={formData[item.key]}
+                      onChange={() => {
+                        setFormData({
+                          ...formData,
+                          ach: !formData.ach,
+                          credit_card: !formData.credit_card,
+                        });
+                      }}
+                      readOnly
+                    />
+                    <span className="checkmark checkmark-top" />
+                  </label>
+                </ModalRadioCheck>
+              </li>
+            ))}
+          </ul>
 
-        <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
-
+          <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
+        </fieldset>
         {generateBillingAddressHTML()}
-        <br />
+
         <div className="white-card-base panel gap-none">
           <CheckBox className="mt-3 ">
             <label
@@ -582,13 +586,15 @@ const CollapseOpenContainer = styled.div`
       li {
         display: inline-block;
         margin-right: 23px;
+        margin-bottom: 7px;
         &:last-child {
           margin-right: 0px;
+          margin-bottom: 0px;
         }
         .card {
-          width: 20px;
-          margin-right: 2px;
-          vertical-align: top;
+          width: 18px;
+          margin-right: 6px;
+          vertical-align: middle;
         }
       }
     }

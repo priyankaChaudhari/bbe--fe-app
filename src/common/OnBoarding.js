@@ -200,6 +200,18 @@ const OnBoardingBody = styled.div`
       font-size: ${Theme.extraMedium};
       font-weight: 600;
     }
+    .payment-type {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        margin-right: 28px;
+        &:last-child {
+          margin-right: 0px;
+        }
+      }
+    }
   }
   .w-430 {
     max-width: 430px;
