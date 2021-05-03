@@ -655,7 +655,12 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
 
   // logic to set radio button(daily, weekly, monthly), so add filter and get data accordingly.
   // function call only when selected option is 'year to date' or custom
-  const checkDifferenceBetweenDates = (startDate, endDate, flag = null) => {
+  const checkDifferenceBetweenDates = (
+    startDate,
+    endDate,
+    flag = null,
+    marketplace = selectedAmazonValue,
+  ) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
@@ -681,10 +686,10 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
-      getData(flag, temp, selectedAmazonValue, sd, ed);
+      getData(flag, temp, marketplace, sd, ed);
     } else {
       // flag==='year
-      getData(flag, temp, selectedAmazonValue);
+      getData(flag, temp, marketplace);
     }
   };
 
@@ -754,7 +759,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   };
 
   const handleDailyFact = (event) => {
-    const {value} = event;
+    const { value } = event;
     setSelectedValue(value);
     if (value !== 'custom') {
       setState([
@@ -779,7 +784,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   };
 
   const handleBBDailyFact = (event) => {
-    const {value} = event;
+    const { value } = event;
     setBBDailyFact(value);
 
     if (value !== 'custom') {
@@ -814,6 +819,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         state[0].startDate,
         state[0].endDate,
         'custom',
+        event.value,
       );
     } else {
       getData(selectedValue, groupBy, event.value);

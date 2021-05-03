@@ -10,8 +10,17 @@ import { components } from 'react-select';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
+import dayjs from 'dayjs';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
 import { WhiteCard } from '../../../theme/Global';
-import { ArrowDownIcon, CaretUp, CloseIcon } from '../../../theme/images/index';
+import {
+  ArrowDownIcon,
+  CaretUp,
+  CloseIcon,
+  ArrowUpIcon,
+} from '../../../theme/images/index';
 import { DropDown } from './DropDown';
 import { ModalBox, Button } from '../../../common';
 import {
@@ -19,15 +28,14 @@ import {
   AdTypesOptions,
 } from '../../../constants/CompanyPerformanceConstants';
 import { getAdPerformance, getDSPPerformance } from '../../../api';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import DSPPerformanceChart from './DSPPerformanceChart';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
 export default function AdPerformance({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
-  const [amazonOptions, setAmazonOptions] = useState([]);
+  const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
@@ -38,20 +46,23 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
+  const [dspChartData, setDSPChratData] = useState([]);
+  const [dspTotal, setDSPTotal] = useState({});
+
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [adState, setAdState] = useState([
     {
       startDate: currentDate,
       endDate: currentDate,
-      key: 'selection',
+      key: 'AdSelection',
     },
   ]);
   const [dspState, setDSPState] = useState([
     {
       startDate: currentDate,
       endDate: currentDate,
-      key: 'BBselection',
+      key: 'dspSelection',
     },
   ]);
 
@@ -82,6 +93,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
     },
+  };
+
+  const calculateSalesDifference = (currentTotal, previousTotal) => {
+    const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
+    if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
+      return 'N/A';
+    }
+    return parseFloat(diff.toFixed(2));
   };
 
   const getAdData = useCallback(
@@ -131,7 +150,65 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           //
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          // console.log('resss', res.data);
+          const tempRevenueData = [];
+          const dspSpendTodal = {
+            previousDspTodal: 0,
+            currentDspTodal: 0,
+            difference: 0,
+          };
+          if (
+            res.data.daily_facts.previous &&
+            res.data.daily_facts.previous.length
+          ) {
+            res.data.daily_facts.previous.forEach((resData) => {
+              tempRevenueData.push({
+                value2: resData.revenue,
+                label2: resData.revenue !== null ? resData.revenue : '0.00',
+              });
+            });
+          }
+          if (
+            res.data.daily_facts.current &&
+            res.data.daily_facts.current.length
+          ) {
+            res.data.daily_facts.current.forEach((resData, index) => {
+              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
+              dspSpendTodal.currentDspTodal += resData.revenue;
+              if (
+                res.data.daily_facts.previous &&
+                index < res.data.daily_facts.previous.length
+              ) {
+                tempRevenueData[index].date = dayDate;
+                tempRevenueData[index].value1 = resData.revenue;
+
+                if (index > 0) {
+                  tempRevenueData[index - 1].dashLength =
+                    resData.revenue === null ? 8 : null;
+                }
+
+                tempRevenueData[index].dashLength =
+                  resData.revenue === null ? 8 : null;
+                tempRevenueData[index].label1 =
+                  resData.revenue !== null ? resData.revenue : '0.00';
+
+                dspSpendTodal.previousDspTodal +=
+                  res.data.daily_facts.previous[index].revenue;
+              } else {
+                tempRevenueData.push({
+                  date: dayDate,
+                  value1: resData.revenue,
+                  label1: resData.revenue !== null ? resData.revenue : '0.00',
+                  label2: '0.00',
+                });
+              }
+            });
+          }
+          dspSpendTodal.difference = calculateSalesDifference(
+            dspSpendTodal.currentDspTodal,
+            dspSpendTodal.previousDspTodal,
+          );
+          setDSPTotal(dspSpendTodal);
+          setDSPChratData(tempRevenueData);
         }
       });
     },
@@ -148,7 +225,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           currency: option.country_currency.currency,
         });
       }
-    setAmazonOptions(list);
+    setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
       setSelectedMarketplace(list[0].value);
       setCurrency(list[0].currency);
@@ -178,7 +255,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return diffDays;
   };
 
-  const ADYearAndCustomDateFilter = (startDate, endDate, flag = null) => {
+  const ADYearAndCustomDateFilter = (
+    startDate,
+    endDate,
+    flag = null,
+    marketplace = selectedMarketplace,
+  ) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
@@ -204,14 +286,19 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
-      getAdData(flag, temp, selectedMarketplace, sd, ed);
+      getAdData(flag, temp, marketplace, sd, ed);
     } else {
       // flag==='year
-      getAdData(flag, temp, selectedMarketplace);
+      getAdData(flag, temp, marketplace);
     }
   };
 
-  const DSPYearAndCustomDateFilter = (startDate, endDate, value) => {
+  const DSPYearAndCustomDateFilter = (
+    startDate,
+    endDate,
+    value,
+    marketplace = selectedMarketplace,
+  ) => {
     let temp = '';
 
     let sd = startDate;
@@ -240,9 +327,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
 
-      getDSPData(value, temp, selectedMarketplace, sd, ed);
+      getDSPData(value, temp, marketplace, sd, ed);
     } else {
-      getDSPData(value, temp, selectedMarketplace);
+      getDSPData(value, temp, marketplace);
     }
   };
 
@@ -260,7 +347,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         dspState[0].endDate,
         'custom',
       );
-      //
+      setShowDSPCustomDateModal(false);
     }
   };
 
@@ -371,6 +458,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         adState[0].startDate,
         adState[0].endDate,
         'custom',
+        event.value,
       );
     } else {
       getAdData(selectedAdDF, adGroupBy, event.value);
@@ -380,6 +468,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         dspState[0].startDate,
         dspState[0].endDate,
         'custom',
+        event.value,
       );
     } else {
       getDSPData(selectedDSPDF, dspGroupBy, event.value);
@@ -466,6 +555,26 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const bindValues = (value) => {
+    const decimal = _.split(value, '.', 2);
+    if (decimal[1] !== undefined) {
+      return (
+        <span style={{ fontSize: '26px' }}>
+          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          {/* <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span> */}
+          <span>.{decimal[1].slice(0, 2)}</span>
+        </span>
+      );
+    }
+    return (
+      <span style={{ fontSize: '26px' }}>
+        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        {/* <span style={{ fontSize: '16px' }}>.00</span> */}
+        <span>.00</span>
+      </span>
+    );
+  };
+
   /// ////////// start rendering hrml component ///////////
   const renderMarketplaceDropDown = () => {
     return (
@@ -473,10 +582,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="col-12 mb-3">
           {DropDown(
             'cursor',
-            amazonOptions,
-            amazonOptions && amazonOptions[0] && amazonOptions[0].label,
+            marketplaceOptions,
+            marketplaceOptions &&
+              marketplaceOptions[0] &&
+              marketplaceOptions[0].label,
             DropdownIndicator,
-            amazonOptions && amazonOptions[0],
+            marketplaceOptions && marketplaceOptions[0],
             handleMarketplaceOptions,
           )}
         </div>
@@ -794,6 +905,50 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     );
   };
 
+  const renderDSPSpendTotals = () => {
+    return (
+      <>
+        <div className="number-rate">
+          {dspTotal && dspTotal.currentDspTodal
+            ? bindValues(dspTotal.currentDspTodal)
+            : '0.00'}
+        </div>
+        <div className="vs">
+          vs{' '}
+          {dspTotal && dspTotal.previousDspTodal
+            ? bindValues(dspTotal.previousDspTodal)
+            : '0.00'}{' '}
+          <span
+            className={
+              dspTotal && dspTotal.difference > 0
+                ? 'perentage-value mt-3 ml-1'
+                : 'perentage-value down mt-3 ml-1'
+            }>
+            {!Number.isNaN(dspTotal && dspTotal.difference) &&
+            dspTotal &&
+            dspTotal.difference > 0 ? (
+              <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
+            ) : !Number.isNaN(dspTotal && dspTotal.difference) &&
+              dspTotal &&
+              dspTotal.difference < 0 ? (
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+            ) : (
+              ''
+            )}
+            {dspTotal &&
+            dspTotal.difference &&
+            dspTotal &&
+            dspTotal.difference !== 'N/A'
+              ? `${dspTotal.difference.toString().replace('-', '')}%`
+              : 'N/A'}
+
+            {/* <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+            40.75%{' '} */}
+          </span>
+        </div>
+      </>
+    );
+  };
   const renderDSPGroupBy = () => {
     return (
       <>
@@ -801,7 +956,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <ul className="rechart-item">
             <li>
               <div className="weeks">
-                <span className="orange block" />
+                <span className="black block" />
                 <span>Recent</span>
               </div>
             </li>
@@ -974,6 +1129,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       </Modal>
     );
   };
+
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
@@ -984,15 +1140,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       </WhiteCard>
       <WhiteCard className="mt-3">
         <div className="row">{renderDSPDailyFacts()}</div>
-        <div className="number-rate">$15,050.28</div>
-        <div className="vs">
-          vs $11,114.90{' '}
-          <span className="perentage-value down mt-3 ml-1">
-            <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-            40.75%{' '}
-          </span>
-        </div>
+        {renderDSPSpendTotals()}
         {renderDSPGroupBy()}
+        <DSPPerformanceChart chartId="dspChart" chartData={dspChartData} />
       </WhiteCard>
       {renderAdCustomDateModal()}
       {renderDSPCustomDateModal()}
