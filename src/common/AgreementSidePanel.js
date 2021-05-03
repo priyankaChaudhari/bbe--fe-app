@@ -3388,7 +3388,20 @@ export default function AgreementSidePanel({
   };
 
   return (
-    <SidePanel>
+    <SidePanel
+      className={
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'pending account setup') ||
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'active') ||
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'inactive')
+          ? 'pdf-sidebar'
+          : 'contract-sidebar'
+      }>
       <div className="sidebar">
         <>
           {/* {formData &&
@@ -4410,7 +4423,6 @@ AgreementSidePanel.propTypes = {
 const SidePanel = styled.div`
     min-width: 60px;
     z-index: 1;
-    padding-bottom: 250px;
     width: 336px;
     position: fixed;
     top: 130px;
@@ -4420,6 +4432,15 @@ const SidePanel = styled.div`
     border-left: 1px solid ${Theme.gray7};
     overflow-y: auto;
     
+    &.pdf-sidebar {
+    padding-bottom: 70px;
+
+    }
+
+    &.contract-sidebar {
+    padding-bottom: 130px;
+
+    }
     .sidebar {
       /* width: 335px; */
     }
@@ -4760,7 +4781,7 @@ const SidePanel = styled.div`
 
    @media only screen and (min-width: 1500px)  {
      width: 406px;
-    
+     height: 90%;
      .sidebar {
       width: 400px;
     }
