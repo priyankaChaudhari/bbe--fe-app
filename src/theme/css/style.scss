@@ -1195,6 +1195,7 @@ input:checked + .slider:before {
   padding: 0 10px;
   font-family: $contact-regular-font-family !important;
   font-weight: 300 !important;
+  line-height: 24px;
 
   p span {
     font-weight: 300 !important;

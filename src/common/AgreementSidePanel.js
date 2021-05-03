@@ -3307,7 +3307,7 @@ export default function AgreementSidePanel({
             ) : null}
           </>
         ) : isApicalled ? (
-          <div className="ml-2 mt-3">No activity log found.</div>
+          <div className="ml-3 mt-3">No activity log found.</div>
         ) : null}
       </>
     );

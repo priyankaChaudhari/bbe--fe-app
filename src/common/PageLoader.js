@@ -20,6 +20,7 @@ const PageLoaderWrapper = styled.div`
   &.sidebar-loader {
     position: relative;
     right: 50%;
+    margin-top: 50%;
 
     svg {
       width: 40px;
@@ -32,6 +33,7 @@ const PageLoaderWrapper = styled.div`
   @media only screen and (max-width: 991px) {
     &.sidebar-loader {
       position: relative;
+      margin-top: 25%;
     }
     &.modal-loader {
       right: 0%;
