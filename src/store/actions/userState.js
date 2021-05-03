@@ -107,6 +107,8 @@ export const clearToken = () => {
   localStorage.removeItem('email');
   localStorage.removeItem('customer');
   localStorage.removeItem('match');
+  localStorage.removeItem('filters');
+
   window.location.href = PATH_LOGIN;
 };
 

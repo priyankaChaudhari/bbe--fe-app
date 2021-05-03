@@ -1,6 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -60,12 +62,14 @@ export default function NewCustomerList() {
     view: null,
     'order-by': null,
   });
-  const [filters, setFilters] = useState({
-    status: [],
-    contract_status: [],
-    user: [],
-    contract_type: [],
-  });
+  const [filters, setFilters] = useState(
+    JSON.parse(localStorage.getItem('filters')) || {
+      status: [],
+      contract_status: [],
+      user: [],
+      contract_type: [],
+    },
+  );
   const [showPerformance, setShowPerformance] = useState(false);
   const options = [
     { value: 'performance', label: 'Performance' },
@@ -202,7 +206,8 @@ export default function NewCustomerList() {
       getCustomerList(
         currentPage,
         selectedValue,
-        filters,
+        JSON.parse(localStorage.getItem('filters')),
+        // filters,
         searchQuery,
         showPerformance,
         expiringSoon,
@@ -261,6 +266,16 @@ export default function NewCustomerList() {
         contract_type: [],
         user: [],
       });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          status: [],
+          contract_status: [],
+          contract_type: [],
+          user: [],
+        }),
+      );
     }
 
     if (type === 'status' && key !== 'unselected') {
@@ -272,11 +287,25 @@ export default function NewCustomerList() {
           ...filters,
           status: [...filters.status, event.target.name],
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            status: [...filters.status, event.target.name],
+          }),
+        );
       } else {
         setFilters({
           ...filters,
           status: filters.status.filter((op) => op !== event.target.name),
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            status: filters.status.filter((op) => op !== event.target.name),
+          }),
+        );
       }
     }
 
@@ -289,6 +318,13 @@ export default function NewCustomerList() {
           ...filters,
           contract_status: [...filters.contract_status, event.target.name],
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_status: [...filters.contract_status, event.target.name],
+          }),
+        );
       } else {
         setFilters({
           ...filters,
@@ -296,6 +332,15 @@ export default function NewCustomerList() {
             (op) => op !== event.target.name,
           ),
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_status: filters.contract_status.filter(
+              (op) => op !== event.target.name,
+            ),
+          }),
+        );
       }
     }
 
@@ -305,6 +350,13 @@ export default function NewCustomerList() {
           ...filters,
           user: [],
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            user: [],
+          }),
+        );
       }
       if (action.action === 'remove-value') {
         const list = filters.user.filter(
@@ -314,6 +366,13 @@ export default function NewCustomerList() {
           ...filters,
           user: list,
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            user: list,
+          }),
+        );
       }
       if (event && event.length && action.action === 'select-option') {
         const list = [...filters.user];
@@ -324,6 +383,13 @@ export default function NewCustomerList() {
           ...filters,
           user: list,
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            user: list,
+          }),
+        );
       }
     }
     if (type === 'radio') {
@@ -332,6 +398,14 @@ export default function NewCustomerList() {
           ...filters,
           contract_type: event.target.value === 'any' ? [] : event.target.value,
         });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_type:
+              event.target.value === 'any' ? [] : event.target.value,
+          }),
+        );
       }
     }
   };
@@ -564,9 +638,13 @@ export default function NewCustomerList() {
               ? handleFilters(event, item, 'brand', action)
               : handleSearch(event, item === 'sort' ? 'sort' : 'view')
           }
-          defaultValue={
+          value={
             item === 'user'
               ? filters.user
+                ? brandGrowthStrategist.filter((option) =>
+                    filters.user.some((op) => op === option.value),
+                  )
+                : ''
               : selectedValue[item.key] === null
               ? null
               : selectedValue[item.key]
@@ -730,6 +808,11 @@ export default function NewCustomerList() {
                                   onChange={(event) =>
                                     handleFilters(event, item, 'radio')
                                   }
+                                  defaultChecked={
+                                    filters.contract_type
+                                      ? filters.contract_type === item.value
+                                      : ''
+                                  }
                                 />
                                 <span className="checkmark checkmark-customer-list" />
                               </label>
@@ -869,6 +952,11 @@ export default function NewCustomerList() {
                       id={item.value}
                       name={item.value}
                       onChange={(event) => handleFilters(event, item, 'status')}
+                      defaultChecked={
+                        filters.status
+                          ? filters.status.find((op) => op === item.value)
+                          : ''
+                      }
                     />
                     <span className="checkmark" />
                   </label>
@@ -893,6 +981,13 @@ export default function NewCustomerList() {
                     id={item.value}
                     value={item.value}
                     onChange={(event) => handleFilters(event, item, 'radio')}
+                    defaultChecked={
+                      filters && filters.contract_type
+                        ? filters &&
+                          filters.contract_type &&
+                          filters.contract_type === item.value
+                        : ''
+                    }
                   />
                   <span className="checkmark checkmark-customer-list" />
                 </label>
