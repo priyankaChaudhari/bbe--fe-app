@@ -475,6 +475,7 @@ export default function ContractContainer() {
           const primaryMarketplaceRes = responses[4];
           const addendumRes = responses[5];
           setIsLoading({ loader: false, type: 'button' });
+          setIsLoading({ loader: false, type: 'page' });
 
           if (
             additionalMarketplaceRes &&
