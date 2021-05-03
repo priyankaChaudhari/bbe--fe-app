@@ -20,7 +20,7 @@ import {
 } from '../../api';
 import { userMe } from '../../store/actions';
 import { SocialIcons } from '../../constants/FieldConstants';
-import { PATH_BILLING_DETAILS, PATH_THANKS } from '../../constants';
+import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
 
 export default function CompanyDigital({
   setIsLoading,
@@ -73,7 +73,7 @@ export default function CompanyDigital({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_BILLING_DETAILS);
+                history.push(PATH_AMAZON_MERCHANT);
               }
               updateUserMe(userInfo.id, {
                 step: { ...userInfo.step, [userInfo.customer]: 2 },
@@ -106,7 +106,7 @@ export default function CompanyDigital({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_BILLING_DETAILS);
+                history.push(PATH_AMAZON_MERCHANT);
               }
               updateUserMe(userInfo.id, {
                 step: { ...userInfo.step, [userInfo.customer]: 2 },

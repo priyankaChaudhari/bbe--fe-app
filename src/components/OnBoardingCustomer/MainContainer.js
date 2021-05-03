@@ -21,7 +21,7 @@ import NavigationHeader from './NavigationHeader';
 import {
   PATH_AMAZON_ACCOUNT,
   PATH_AMAZON_MERCHANT,
-  PATH_BILLING_DETAILS,
+  // PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
   PATH_SUMMARY,
 } from '../../constants';
@@ -49,7 +49,7 @@ export default function MainContainer() {
       key: 'digital presence',
       stepof: 2,
       title: 'Your company’s digital presence',
-      skip: PATH_BILLING_DETAILS,
+      skip: PATH_AMAZON_MERCHANT,
       bar: '33.2',
       path: 'company-details',
       subTitle: 'Need help on why we need this information?',
@@ -67,10 +67,10 @@ export default function MainContainer() {
     },
     {
       key: 'merchant id',
-      stepof: 4,
+      stepof: 3,
       title: 'Your Amazon Merchant ID',
       skip: PATH_AMAZON_ACCOUNT,
-      back: PATH_BILLING_DETAILS,
+      back: PATH_COMPANY_DETAILS,
       bar: '66.4',
       path: 'amazon-merchant',
       subTitle:
@@ -79,7 +79,7 @@ export default function MainContainer() {
     },
     {
       key: 'developer access',
-      stepof: 5,
+      stepof: 4,
       title: 'Amazon Developer Access',
       skip: PATH_SUMMARY,
       back: PATH_AMAZON_MERCHANT,
@@ -273,16 +273,15 @@ export default function MainContainer() {
                         {' '}
                         {verifiedStepData && verifiedStepData.user_email}{' '}
                       </span>
-                      has asked that you provide {item.title}
-                      information that will be used for your Buy Box Experts
-                      agreement.
+                      has asked that you provide {item.title} information that
+                      will be used for your Buy Box Experts agreement.
                     </div>
                     If you’re unable to provide this information or you think
                     this was sent to you unintentionally please let them know
                     via the email address highlighted above.
                   </GreyCard>
                 ) : (
-                  <p className="account-steps m-0">Step {item.stepof} of 5</p>
+                  <p className="account-steps m-0">Step {item.stepof} of 4</p>
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (

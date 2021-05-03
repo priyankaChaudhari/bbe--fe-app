@@ -51,7 +51,7 @@ export default function Summary() {
     accountSummary(userInfo.customer_onboarding).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
-      if (response && response.data && response.data.length < 4) {
+      if (response && response.data && response.data.length < 3) {
         setShowDashboard(false);
       } else if (response.data.some((item) => item.is_completed === false)) {
         setShowDashboard(false);

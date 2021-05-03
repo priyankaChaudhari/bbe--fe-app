@@ -82,7 +82,8 @@ export default function CreateAccount() {
       }
       if (
         (response && response.status === 400) ||
-        (response && response.status === 403)
+        (response && response.status === 403) ||
+        (response && response.status === 401)
       ) {
         setShowSuccessMsg(false);
         setApiError(response && response.data);
@@ -126,7 +127,7 @@ export default function CreateAccount() {
           message: 'This field is required.',
         },
         pattern: {
-          value: /^[0-9a-zA-Z ]*$/i,
+          value: /^[0-9a-zA-Z_-]*$/i,
           message: 'Special characters are not allowed.',
         },
       });
