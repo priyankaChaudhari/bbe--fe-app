@@ -4433,12 +4433,12 @@ const SidePanel = styled.div`
     overflow-y: auto;
     
     &.pdf-sidebar {
-    padding-bottom: 70px;
+     padding-bottom: 70px;
 
     }
 
     &.contract-sidebar {
-    padding-bottom: 130px;
+     padding-bottom: 270px;
 
     }
     .sidebar {
