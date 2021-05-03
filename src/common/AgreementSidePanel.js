@@ -3257,7 +3257,6 @@ export default function AgreementSidePanel({
           </div>
         ) : null}
         <div className="activity-log">Contract Activity</div>
-
         {activityLoader === true || loader ? (
           <PageLoader component="activityLog" color="#FF5933" type="page" />
         ) : activityData && activityData.length !== 0 ? (

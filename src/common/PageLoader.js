@@ -18,10 +18,12 @@ const PageLoaderWrapper = styled.div`
   right: 0;
 
   &.sidebar-loader {
-    position: relative;
-    right: 50%;
-    margin-top: 50%;
-
+    // left: 78%;
+    // top: 50px;
+    left: unset;
+    right: 0;
+    top: 40px;
+    margin-right: 150px;
     svg {
       width: 40px;
       height: 40px;
@@ -30,10 +32,19 @@ const PageLoaderWrapper = styled.div`
   &.modal-loader {
     right: 14%;
   }
+  @media only screen and (min-width: 1500px) {
+    &.sidebar-loader {
+      right: 0;
+      top: 40px;
+      margin-right: 160px;
+    }
+  }
   @media only screen and (max-width: 991px) {
     &.sidebar-loader {
-      position: relative;
-      margin-top: 25%;
+      top: 0;
+      left: 0;
+      margin: auto;
+      right: 0;
     }
     &.modal-loader {
       right: 0%;
