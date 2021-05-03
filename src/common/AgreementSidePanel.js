@@ -4416,7 +4416,7 @@ const SidePanel = styled.div`
     position: fixed;
     top: 130px;
     right: 0;
-    height: 77%;
+    height: 82%;
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y: auto;
