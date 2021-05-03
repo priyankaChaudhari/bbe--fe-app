@@ -909,12 +909,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return (
       <>
         <div className="number-rate">
+          {currencySymbol}
           {dspTotal && dspTotal.currentDspTodal
             ? bindValues(dspTotal.currentDspTodal)
             : '0.00'}
         </div>
         <div className="vs">
-          vs{' '}
+          vs {currencySymbol}
           {dspTotal && dspTotal.previousDspTodal
             ? bindValues(dspTotal.previousDspTodal)
             : '0.00'}{' '}
@@ -1142,7 +1143,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="row">{renderDSPDailyFacts()}</div>
         {renderDSPSpendTotals()}
         {renderDSPGroupBy()}
-        <DSPPerformanceChart chartId="dspChart" chartData={dspChartData} />
+        <DSPPerformanceChart
+          chartId="dspChart"
+          chartData={dspChartData}
+          currencySymbol={currencySymbol}
+        />
       </WhiteCard>
       {renderAdCustomDateModal()}
       {renderDSPCustomDateModal()}

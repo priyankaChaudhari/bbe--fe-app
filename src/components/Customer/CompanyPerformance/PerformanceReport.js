@@ -898,11 +898,12 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     bBDailyFact,
   ]);
 
-  const bindValues = (value) => {
+  const bindValues = (value, name = null) => {
     const decimal = _.split(value, '.', 2);
     if (decimal[1] !== undefined) {
       return (
         <span style={{ fontSize: '26px' }}>
+          {name === 'revenue' ? currencySymbol : null}
           {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
         </span>
@@ -910,6 +911,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     }
     return (
       <span style={{ fontSize: '26px' }}>
+        {name === 'revenue' ? currencySymbol : null}
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         <span style={{ fontSize: '16px' }}>.00</span>
       </span>
@@ -1127,13 +1129,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           <div className="number-rate">
             {name === 'conversion'
               ? `${currentTotal.toFixed(2)}%`
-              : bindValues(currentTotal)}
+              : bindValues(currentTotal, name)}
           </div>
           <div className="vs">
             {' '}
             vs{' '}
             {name === 'conversion'
               ? `${previousTotal.toFixed(2)}%`
+              : name === 'revenue'
+              ? `${currencySymbol}${previousTotal
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
               : previousTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </div>
           <div

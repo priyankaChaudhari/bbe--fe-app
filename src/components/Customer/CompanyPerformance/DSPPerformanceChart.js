@@ -11,7 +11,11 @@ am4core.useTheme(am4themes_dataviz);
 // am4core.useTheme(am4themes_animated);
 am4core.color('red');
 
-export default function DSPPerformanceChart({ chartId, chartData }) {
+export default function DSPPerformanceChart({
+  chartId,
+  chartData,
+  currencySymbol,
+}) {
   // const adGraphData = [
   //   {
   //     date: new Date(2019, 5, 12),
@@ -169,11 +173,11 @@ export default function DSPPerformanceChart({ chartId, chartData }) {
     ];
     valueAxis.numberFormatter.smallNumberPrefixes = [];
     valueAxis.min = 0;
-    valueAxis.numberFormatter.numberFormat = `#.#a`;
+    valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
 
     const tooltipHeader = '[bold]{dateX}[/]\n';
-    const tooltipCurrent = '[#2e384d]● [/]Recent [/]{label1}\n';
-    const tooltipPrevious = '[#BFC5D2]● [/]Previous [/]{label2}';
+    const tooltipCurrent = `[#2e384d]● [/]Recent [/]${currencySymbol}{label1}\n`;
+    const tooltipPrevious = `[#BFC5D2]● [/]Previous [/]${currencySymbol}{label2}`;
     // Create series for previous data
     const series = chart.current.series.push(new am4charts.LineSeries());
     series.dataFields.valueY = 'value2';
@@ -226,7 +230,7 @@ export default function DSPPerformanceChart({ chartId, chartData }) {
     // }
 
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData]);
+  }, [chartId, chartData, currencySymbol]);
 
   // useEffect(() => {
   //   if (chart.current) {
@@ -244,9 +248,11 @@ export default function DSPPerformanceChart({ chartId, chartData }) {
 
 DSPPerformanceChart.defaultProps = {
   chartData: [],
+  currencySymbol: '',
 };
 
 DSPPerformanceChart.propTypes = {
   chartId: PropTypes.string.isRequired,
   chartData: PropTypes.arrayOf(PropTypes.object),
+  currencySymbol: PropTypes.string,
 };
