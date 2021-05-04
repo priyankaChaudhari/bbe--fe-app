@@ -886,7 +886,6 @@ export default function AgreementSidePanel({
     }
     return null;
   };
-
   const handleChange = (event, key, type, val) => {
     showFooter(true);
     clearError(event, key, type);
@@ -965,9 +964,10 @@ export default function AgreementSidePanel({
         });
 
         if (
-          agreementData &&
-          agreementData.primary_marketplace &&
-          agreementData.primary_marketplace.name
+          (agreementData &&
+            agreementData.primary_marketplace &&
+            agreementData.primary_marketplace.name) ||
+          (formData && formData.primary_marketplace)
         ) {
           // setAdditionalMarketplaces(
           //   marketplacesResult.filter(

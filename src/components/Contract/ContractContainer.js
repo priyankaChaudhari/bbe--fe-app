@@ -449,8 +449,9 @@ export default function ContractContainer() {
           }
         });
       } else {
-        createMarketplace(statementData).then((createMarketplaceRes) => {
+        await createMarketplace(statementData).then((createMarketplaceRes) => {
           setIsLoading({ loader: false, type: 'button' });
+          setIsLoading({ loader: false, type: 'page' });
           if (createMarketplaceRes && createMarketplaceRes.status === 201) {
             if (updatedFormData && updatedFormData.primary_marketplace) {
               delete updatedFormData.primary_marketplace;
@@ -741,11 +742,11 @@ export default function ContractContainer() {
 
     // setSectionError({});
 
-    let additionalMarketplacesApi = null;
+    const additionalMarketplacesApi = null;
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
     let AccountApi = null;
-    let primaryMarketPlaceApi = null;
+    const primaryMarketPlaceApi = null;
     let AddendumApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
@@ -759,42 +760,42 @@ export default function ContractContainer() {
       setIsLoading({ loader: true, type: 'button' });
 
       // for primary market place
-      if (updatedFormData && updatedFormData.primary_marketplace) {
-        const statementData = {
-          id:
-            (details &&
-              details.primary_marketplace &&
-              details.primary_marketplace.id) ||
-            '',
-          contract: details.id,
-          name: updatedFormData && updatedFormData.primary_marketplace,
-          is_primary: true,
-        };
+      // if (updatedFormData && updatedFormData.primary_marketplace) {
+      //   const statementData = {
+      //     id:
+      //       (details &&
+      //         details.primary_marketplace &&
+      //         details.primary_marketplace.id) ||
+      //       '',
+      //     contract: details.id,
+      //     name: updatedFormData && updatedFormData.primary_marketplace,
+      //     is_primary: true,
+      //   };
 
-        if (details.primary_marketplace && details.primary_marketplace.id) {
-          if (
-            !(
-              updatedFormData &&
-              updatedFormData.primary_marketplace &&
-              updatedFormData.additional_marketplaces
-            )
-          ) {
-            primaryMarketPlaceApi = updateMarketplace(
-              details.primary_marketplace.id,
-              statementData,
-            );
-          }
-        } else {
-          primaryMarketPlaceApi = createMarketplace(statementData);
-        }
-      }
+      //   if (details.primary_marketplace && details.primary_marketplace.id) {
+      //     if (
+      //       !(
+      //         updatedFormData &&
+      //         updatedFormData.primary_marketplace &&
+      //         updatedFormData.additional_marketplaces
+      //       )
+      //     ) {
+      //       primaryMarketPlaceApi = updateMarketplace(
+      //         details.primary_marketplace.id,
+      //         statementData,
+      //       );
+      //     }
+      //   } else {
+      //     primaryMarketPlaceApi = createMarketplace(statementData);
+      //   }
+      // }
 
-      // for additionL MARKETPLACE
-      if (updatedFormData.additional_marketplaces) {
-        additionalMarketplacesApi = createMarketplaceBulk(
-          updatedFormData.additional_marketplaces,
-        );
-      }
+      // // for additionL MARKETPLACE
+      // if (updatedFormData.additional_marketplaces) {
+      //   additionalMarketplacesApi = createMarketplaceBulk(
+      //     updatedFormData.additional_marketplaces,
+      //   );
+      // }
 
       // for additionL service
       if (updatedFormData.additional_monthly_services) {
@@ -858,7 +859,7 @@ export default function ContractContainer() {
         //  });
       }
 
-      let apis = [
+      const apis = [
         additionalMarketplacesApi,
         additionalMonthlyApi,
         additionalOneTimeApi,
@@ -867,24 +868,27 @@ export default function ContractContainer() {
         AddendumApi,
       ];
 
-      if (
-        updatedFormData &&
-        updatedFormData.primary_marketplace &&
-        updatedFormData.additional_marketplaces
-      ) {
-        setIsLoading({ loader: true, type: 'button' });
+      // if (
+      //   updatedFormData &&
+      //   updatedFormData.primary_marketplace &&
+      //   updatedFormData.additional_marketplaces
+      // ) {
+      //   setIsLoading({ loader: true, type: 'button' });
+      //   console.log(updatedFormData &&
+      //   updatedFormData.primary_marketplace,updatedFormData.additional_marketplaces )
+      //   apis = [
+      //     null,
+      //     additionalMonthlyApi,
+      //     additionalOneTimeApi,
+      //     AccountApi,
+      //     null,
+      //     AddendumApi,
+      //   ];
 
-        apis = [
-          null,
-          additionalMonthlyApi,
-          additionalOneTimeApi,
-          AccountApi,
-          null,
-          AddendumApi,
-        ];
+      //   await updateMarketplaces();
+      // }
+      await updateMarketplaces();
 
-        await updateMarketplaces();
-      }
       saveChanges(apis);
       // if (
       //   updatedFormData &&
