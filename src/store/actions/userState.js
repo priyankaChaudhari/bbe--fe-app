@@ -62,7 +62,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     if (id === undefined || id === null) {
       history.push(PATH_COMPANY_DETAILS);
     } else {
-      if (data.user.step[id] === null || data.user.step[id] === undefined) {
+      if (
+        data.user.step === null ||
+        data.user.step === undefined ||
+        data.user.step[id] === null ||
+        data.user.step[id] === undefined
+      ) {
         history.push(PATH_COMPANY_DETAILS);
       }
       if (data.user.step[id] === 1) {
