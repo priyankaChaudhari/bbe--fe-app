@@ -579,12 +579,20 @@ export default function EditCompanyDetails({
                         ''
                       )}
                       {checkChange[i] && !item.id ? (
-                        <ErrorMsg>
-                          {id &&
-                            contactApiError &&
-                            contactApiError.email &&
-                            contactApiError.email[0]}
-                        </ErrorMsg>
+                        <>
+                          <ErrorMsg>
+                            {id &&
+                              contactApiError &&
+                              contactApiError.email &&
+                              contactApiError.email[0]}
+                          </ErrorMsg>
+                          <ErrorMsg>
+                            {id &&
+                              contactApiError &&
+                              contactApiError.non_field_errors &&
+                              contactApiError.non_field_errors[0]}
+                          </ErrorMsg>
+                        </>
                       ) : (
                         ''
                       )}
