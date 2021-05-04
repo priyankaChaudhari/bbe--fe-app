@@ -59,7 +59,9 @@ export default function CreateAccount() {
       if (response && response.status === 400) {
         setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'button' });
-        localStorage.removeItem('email');
+        if (params && params.type === 'new') {
+          localStorage.removeItem('email');
+        }
       } else if (response && response.status === 200) {
         dispatch(login(history, loginData, '', params && params.id));
         setIsLoading({ loader: false, type: 'button' });
@@ -80,6 +82,7 @@ export default function CreateAccount() {
         setIsLoading({ loader: false, type: 'button' });
         setShowSuccessMsg(true);
         setGetEmail(data.re_assigned_user_email);
+        localStorage.removeItem('email');
       }
       if (
         (response && response.status === 400) ||
@@ -89,6 +92,7 @@ export default function CreateAccount() {
         setShowSuccessMsg(false);
         setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'button' });
+        localStorage.removeItem('email');
       }
     });
   };
