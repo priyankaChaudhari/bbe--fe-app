@@ -44,7 +44,7 @@ export default function CreatePassword() {
         setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'button' });
       } else if (response && response.status === 200) {
-        dispatch(login(history, loginData));
+        dispatch(login(history, loginData, '', ''));
         setIsLoading({ loader: false, type: 'button' });
       }
     });

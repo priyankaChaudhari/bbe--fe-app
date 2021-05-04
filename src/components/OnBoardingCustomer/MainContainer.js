@@ -6,16 +6,23 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import queryString from 'query-string';
+import Modal from 'react-modal';
 
 import {
   OnBoardingBody,
   UnauthorizedHeader,
   GreyCard,
   PageLoader,
+  ModalBox,
 } from '../../common';
-import { CaretUp } from '../../theme/images';
+import { CaretUp, CloseIcon } from '../../theme/images';
 import AskSomeone from './AskSomeone';
-import { getStepDetails, getUserData, verifyStepToken } from '../../api';
+import {
+  getStepDetails,
+  getUserData,
+  getVideoLink,
+  verifyStepToken,
+} from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
 import {
@@ -43,7 +50,23 @@ export default function MainContainer() {
   const [verifiedStepData, setVerifiedStepData] = useState({});
   const params = queryString.parse(history.location.search);
   const [userInfo, setUserInfo] = useState({});
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoData, setVideoData] = useState({});
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      minHeight: '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
   const whichStep = [
     {
       key: 'digital presence',
@@ -236,6 +259,15 @@ export default function MainContainer() {
     return '';
   };
 
+  const getVideo = () => {
+    setIsLoading({ loader: true, type: 'video' });
+    setShowVideo(true);
+    getVideoLink(userInfo && userInfo.customer).then((response) => {
+      setVideoData(response && response.data);
+      setIsLoading({ loader: false, type: 'video' });
+    });
+  };
+
   const generateHeader = (item) => {
     if (history.location.pathname.includes(item.path))
       return (
@@ -288,9 +320,12 @@ export default function MainContainer() {
                   <p className="info-text-gray m-0 mb-4 ">
                     {item.subTitle} <br />
                     {item.video ? (
-                      <a className="video-link  " href="*">
+                      <span
+                        className="video-link cursor"
+                        onClick={() => getVideo()}
+                        role="presentation">
                         Click here to watch the video.
-                      </a>
+                      </span>
                     ) : null}
                   </p>
                 )}
@@ -353,6 +388,41 @@ export default function MainContainer() {
               )}
             </OnBoardingBody>
           )}
+          <Modal
+            isOpen={showVideo}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setShowVideo(false)}
+              role="presentation"
+            />
+            <ModalBox>
+              {isLoading.loader && isLoading.type === 'video' ? (
+                <PageLoader color="#FF5933" type="page" />
+              ) : (
+                <div className="modal-body">
+                  <iframe
+                    title="video"
+                    className="embed-responsive-item w-100"
+                    src={
+                      videoData
+                        ? history.location.pathname.includes(
+                            '/company-details/',
+                          )
+                          ? videoData.step_2_video
+                          : videoData.step_4_video
+                        : ''
+                    }
+                    allowFullScreen
+                  />
+                </div>
+              )}
+            </ModalBox>
+          </Modal>
         </>
       );
     return '';

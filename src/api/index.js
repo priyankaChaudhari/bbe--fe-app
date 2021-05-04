@@ -106,4 +106,5 @@ export {
   verifyStepToken,
   accountSummary,
   saveBillingInfo,
+  getVideoLink,
 } from './OnboardingCustomerApi';

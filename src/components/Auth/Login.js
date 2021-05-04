@@ -71,7 +71,7 @@ export default function Login() {
         ...data,
         email: getName.email,
       };
-      dispatch(login(history, detail, { customer: getName.customer }));
+      dispatch(login(history, detail, { customer: getName.customer }, ''));
       setIsLoading({ loader: false, type: 'button' });
     }
   };

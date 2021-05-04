@@ -60,7 +60,7 @@ export default function CreateAccount() {
         setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'button' });
       } else if (response && response.status === 200) {
-        dispatch(login(history, loginData));
+        dispatch(login(history, loginData, '', params && params.id));
         setIsLoading({ loader: false, type: 'button' });
         localStorage.removeItem('email');
       }

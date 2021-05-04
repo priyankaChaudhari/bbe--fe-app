@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-lonely-if */
 /* eslint no-shadow: "off" */
@@ -27,24 +28,41 @@ export const userRequestInitiated = () => {
   };
 };
 
-export const userRequestSuccess = (data, history, customer) => {
+export const userRequestSuccess = (data, history, customer, onboardingId) => {
   localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
-  localStorage.setItem('customer', customer.customer);
 
-  const id =
-    data.user.step &&
-    Object.keys(data.user.step) &&
-    Object.keys(data.user.step).find(
-      (op) =>
-        op === (customer.customer || (data && data.user && data.user.customer)),
-    );
+  let id = '';
+  if (
+    data &&
+    data.user &&
+    data.user.customer &&
+    typeof data.user.customer === 'object'
+  ) {
+    const customerId =
+      data.user.customer_onboarding &&
+      data.user.customer_onboarding.find(
+        (op) => Object.keys(op)[0] === onboardingId,
+      );
+    id = Object.values(customerId)[0];
+    localStorage.setItem('customer', Object.values(customerId)[0]);
+  } else {
+    id =
+      data.user.step &&
+      Object.keys(data.user.step) &&
+      Object.keys(data.user.step).find(
+        (op) =>
+          op ===
+          (customer.customer || (data && data.user && data.user.customer)),
+      );
+    localStorage.setItem('customer', customer.customer);
+  }
 
   if (data.user && data.user.role === 'Customer') {
     if (id === undefined || id === null) {
       history.push(PATH_COMPANY_DETAILS);
     } else {
-      if (data.user.step[id] === null) {
+      if (data.user.step[id] === null || data.user.step[id] === undefined) {
         history.push(PATH_COMPANY_DETAILS);
       }
       if (data.user.step[id] === 1) {
@@ -128,13 +146,13 @@ export const userMe = (history, customer) => {
   };
 };
 
-export const login = (history, data, customer) => {
+export const login = (history, data, customer, id) => {
   return (dispatch) => {
     dispatch(userRequestInitiated());
     axiosInstance
       .post(API_LOGIN, data, { params: customer })
       .then((data) => {
-        dispatch(userRequestSuccess(data.data, history, customer));
+        dispatch(userRequestSuccess(data.data, history, customer, id));
         // dispatch(userMe(history, customer));
       })
       .catch((error) => {
