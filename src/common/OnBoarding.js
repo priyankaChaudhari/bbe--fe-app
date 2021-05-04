@@ -206,7 +206,7 @@ const OnBoardingBody = styled.div`
       padding: 0;
       li {
         display: inline-block;
-        margin-right: 28px;
+        margin-right: 46px;
         &:last-child {
           margin-right: 0px;
         }

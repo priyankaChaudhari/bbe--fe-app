@@ -101,7 +101,7 @@ export default function Summary() {
         stepName="summary"
       />
       {isLoading.loader && isLoading.type === 'page' ? (
-        <PageLoader component="modal" color="#FF5933" type="page" />
+        <PageLoader color="#FF5933" type="page" />
       ) : (
         <OnBoardingBody className="body-white">
           <div className="white-card-base panel account-reassign pt-5 pb-4">
