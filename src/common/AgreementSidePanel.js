@@ -4474,8 +4474,8 @@ const SidePanel = styled.div`
     max-width: 237px;
    
     &.error-container {
-    margin-top: -3px;
-   }
+     margin-top: -3px;
+    }
    
   
    .green-check-select {
@@ -4775,6 +4775,19 @@ const SidePanel = styled.div`
 
     }
   }
+  @media only screen and (max-width: 350px) {  
+  
+    .sendar-details {
+      max-width: 237px !important;
+      .one-time-service {
+        height: 85px !important; 
+        .red-cross {
+          top: 35px !important;
+        }
+      }
+    }
+  }
+
 
   @media only screen and (max-width: 991px) {  
     z-index: 1;
@@ -4784,7 +4797,15 @@ const SidePanel = styled.div`
     top: 200px;
     right: 0;
     left:0;
-
+  .sendar-details {
+    max-width: 100%;
+      .one-time-service {
+        height: 63px;
+        .red-cross {
+          top: 25px;
+        }
+      }
+    }
   }
 
    @media only screen and (min-width: 1500px)  {
