@@ -3449,7 +3449,7 @@ export default function AgreementSidePanel({
                             alt="right-check"
                           />
                         ) : (
-                          <div className="error-bg">
+                          <div className="error-bg one-time-service">
                             <img
                               className="red-cross "
                               src={RedCross}
@@ -4431,6 +4431,7 @@ const SidePanel = styled.div`
     background: ${Theme.white};
     border-left: 1px solid ${Theme.gray7};
     overflow-y: auto;
+   
     
     &.pdf-sidebar {
      padding-bottom: 70px;
@@ -4470,10 +4471,11 @@ const SidePanel = styled.div`
     margin-left: 16px;
     float: left;
     word-spacing: 3px;
+    max-width: 237px;
    
     &.error-container {
     margin-top: -3px;
-  }
+   }
    
   
    .green-check-select {
@@ -4507,7 +4509,13 @@ const SidePanel = styled.div`
         top: 25px;
       }
     }
-}
+    .one-time-service {
+      height: 85px;
+      .red-cross {
+       top: 35px;
+      }
+    }
+ }
 
   .sender-profile {
     border: 1px solid ${Theme.gray9};
@@ -4785,7 +4793,15 @@ const SidePanel = styled.div`
      .sidebar {
       width: 400px;
     }
-    
+    .sendar-details {
+      max-width: 100%;
+      .one-time-service {
+        height: 63px;
+        .red-cross {
+          top: 25px;
+        }
+      }
+    }
    }
 `;
 
