@@ -396,14 +396,19 @@ export default function NewCustomerList() {
       if (event.target.checked) {
         setFilters({
           ...filters,
-          contract_type: event.target.value === 'any' ? [] : event.target.value,
+          contract_type:
+            event.target.value === 'any'
+              ? event.target.value
+              : event.target.value,
         });
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             contract_type:
-              event.target.value === 'any' ? [] : event.target.value,
+              event.target.value === 'any'
+                ? event.target.value
+                : event.target.value,
           }),
         );
       }

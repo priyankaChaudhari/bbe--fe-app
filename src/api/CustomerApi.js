@@ -85,7 +85,10 @@ export async function getCustomerList(
     filterOptions.contract_type.length
   ) {
     contract = queryString.stringify({
-      contract_type: filterOptions.contract_type,
+      contract_type:
+        filterOptions.contract_type === 'any'
+          ? []
+          : filterOptions.contract_type,
     });
   }
 
