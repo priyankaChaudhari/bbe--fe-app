@@ -94,11 +94,15 @@ export default function Info() {
           Continue to account creation
         </Button>
 
-        <Button
-          className="btn-transparent w-100"
-          onClick={() => redirect('assign')}>
-          Assign to someone else
-        </Button>
+        {params && params.re_assigned === 'None' ? (
+          <Button
+            className="btn-transparent w-100"
+            onClick={() => redirect('assign')}>
+            Assign to someone else
+          </Button>
+        ) : (
+          ''
+        )}
       </div>
     </OnBoardingBody>
   );
