@@ -19,7 +19,7 @@ import { getStepDetails, getUserData, verifyStepToken } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
 import {
-  PATH_AMAZON_ACCOUNT,
+  // PATH_AMAZON_ACCOUNT,
   PATH_AMAZON_MERCHANT,
   // PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
@@ -69,7 +69,7 @@ export default function MainContainer() {
       key: 'merchant id',
       stepof: 3,
       title: 'Your Amazon Merchant ID',
-      skip: PATH_AMAZON_ACCOUNT,
+      skip: PATH_SUMMARY,
       back: PATH_COMPANY_DETAILS,
       bar: '66.4',
       path: 'amazon-merchant',
@@ -281,7 +281,7 @@ export default function MainContainer() {
                     via the email address highlighted above.
                   </GreyCard>
                 ) : (
-                  <p className="account-steps m-0">Step {item.stepof} of 4</p>
+                  <p className="account-steps m-0">Step {item.stepof} of 3</p>
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (

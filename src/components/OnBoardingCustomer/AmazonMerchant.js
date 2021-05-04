@@ -17,7 +17,7 @@ import {
   updateCustomerDetails,
   updateUserMe,
 } from '../../api';
-import { PATH_AMAZON_ACCOUNT, PATH_THANKS } from '../../constants';
+import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
 
 export default function AmazonMerchant({
@@ -69,7 +69,7 @@ export default function AmazonMerchant({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_AMAZON_ACCOUNT);
+                history.push(PATH_SUMMARY);
               }
               updateUserMe(userInfo.id, {
                 step: { ...userInfo.step, [userInfo.customer]: 4 },
@@ -102,7 +102,7 @@ export default function AmazonMerchant({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_AMAZON_ACCOUNT);
+                history.push(PATH_SUMMARY);
               }
               updateUserMe(userInfo.id, {
                 step: { ...userInfo.step, [userInfo.customer]: 4 },

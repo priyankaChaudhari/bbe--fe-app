@@ -12,7 +12,7 @@ import {
   PATH_LOGIN,
   PATH_CUSTOMER_LIST,
   PATH_CUSTOMER_DETAILS,
-  PATH_AMAZON_ACCOUNT,
+  // PATH_AMAZON_ACCOUNT,
   // PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
   PATH_BGS_DASHBOARD,
@@ -56,10 +56,10 @@ export const userRequestSuccess = (data, history, customer) => {
       if (data.user.step[id] === 2 || data.user.step[id] === 3) {
         history.push(PATH_AMAZON_MERCHANT);
       }
-      if (data.user.step[id] === 4) {
-        history.push(PATH_AMAZON_ACCOUNT);
-      }
-      if (data.user.step[id] === 5) {
+      // if (data.user.step[id] === 4) {
+      //   history.push(PATH_AMAZON_ACCOUNT);
+      // }
+      if (data.user.step[id] === 4 || data.user.step[id] === 5) {
         history.push(PATH_SUMMARY);
       }
       if (data.user.step[id] === 6) {

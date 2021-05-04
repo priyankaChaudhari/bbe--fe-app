@@ -6,9 +6,9 @@ import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import NavigationHeader from './NavigationHeader';
 import {
-  PATH_AMAZON_ACCOUNT,
+  // PATH_AMAZON_ACCOUNT,
   PATH_AMAZON_MERCHANT,
-  PATH_BILLING_DETAILS,
+  // PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
   PATH_CUSTOMER_DETAILS,
 } from '../../constants';
@@ -30,28 +30,28 @@ export default function Summary() {
       view: PATH_COMPANY_DETAILS,
       title: 'Company Details',
     },
-    {
-      key: 'billing information',
-      title: 'Billing Information',
-      view: PATH_BILLING_DETAILS,
-    },
+    // {
+    //   key: 'billing information',
+    //   title: 'Billing Information',
+    //   view: PATH_BILLING_DETAILS,
+    // },
     {
       key: 'merchant id',
       title: 'Amazon Merchant ID',
       view: PATH_AMAZON_MERCHANT,
     },
-    {
-      key: 'developer access',
-      title: 'Amazon Developer Access',
-      view: PATH_AMAZON_ACCOUNT,
-    },
+    // {
+    //   key: 'developer access',
+    //   title: 'Amazon Developer Access',
+    //   view: PATH_AMAZON_ACCOUNT,
+    // },
   ];
 
   useEffect(() => {
     accountSummary(userInfo.customer_onboarding).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
-      if (response && response.data && response.data.length < 3) {
+      if (response && response.data && response.data.length < 2) {
         setShowDashboard(false);
       } else if (response.data.some((item) => item.is_completed === false)) {
         setShowDashboard(false);
@@ -94,7 +94,7 @@ export default function Summary() {
     <>
       <NavigationHeader
         bar="99.9"
-        backStep={PATH_AMAZON_ACCOUNT}
+        backStep={PATH_AMAZON_MERCHANT}
         userInfo={userInfo}
         verifiedStepData={{}}
         stepData={{}}

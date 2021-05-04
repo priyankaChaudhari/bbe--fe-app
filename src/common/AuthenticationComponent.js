@@ -128,11 +128,6 @@ export default function AuthenticationComponent() {
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}
-          {/* <Route path={PATH_COMPANY_DETAILS} component={CompanyDigital} />; */}
-          {/* <Route path={PATH_BILLING_DETAILS} component={BillingInfo} />;
-          <Route path={PATH_AMAZON_MERCHANT} component={AmazonMerchant} />;
-          <Route path={PATH_AMAZON_ACCOUNT} component={AmazonDeveloperAccess} />
-          <Route path={PATH_SUMMARY} component={Summary} /> */}
           <Route path={PATH_SUMMARY} component={Summary} />
           <Route component={PageNotFound} />
         </Switch>
