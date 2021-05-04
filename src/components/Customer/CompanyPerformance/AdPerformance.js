@@ -29,6 +29,7 @@ import {
 } from '../../../constants/CompanyPerformanceConstants';
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
+import AdPerformanceChart from './AdPerformanceChart';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -45,6 +46,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
+  // const [adChartData, setAdChartData] = useState([]);
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChratData] = useState([]);
   const [dspTotal, setDSPTotal] = useState({});
@@ -555,6 +557,22 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     }
   };
 
+  const setAdBoxClass = (name, classValue) => {
+    let selectedClass = '';
+    if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
+      if (_.size(selectedAdBox) === 1) {
+        selectedClass = 'order-chart-box active fix-height';
+      } else {
+        selectedClass = `order-chart-box ${classValue} fix-height`;
+      }
+    } else if (_.size(selectedAdBox) === 4) {
+        selectedClass = 'order-chart-box fix-height disabled';
+      } else {
+        selectedClass = 'order-chart-box fix-height';
+      }
+    return selectedClass;
+  };
+
   const bindValues = (value) => {
     const decimal = _.split(value, '.', 2);
     if (decimal[1] !== undefined) {
@@ -639,13 +657,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adSales')}
             role="presentation"
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adSales')
-                ? 'order-chart-box ad-sales-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adSales', 'ad-sales-active')}>
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -659,13 +671,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adSpend')}
             role="presentation"
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adSpend')
-                ? 'order-chart-box ad-spend-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -679,16 +685,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adConversion')}
             role="presentation"
-            className={
-              Object.prototype.hasOwnProperty.call(
-                selectedAdBox,
-                'adConversion',
-              )
-                ? 'order-chart-box ad-conversion-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -702,13 +699,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('impressions')}
             role="presentation"
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'impressions')
-                ? 'order-chart-box impression-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('impressions', 'impression-active')}>
             <div className="chart-name">Impressions </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -722,14 +713,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adCos')}
             role="presentation"
-            // className="order-chart-box ad-cos-active fix-height">
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adCos')
-                ? 'order-chart-box ad-cos-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adCos', 'ad-cos-active')}>
             <div className="chart-name">Ad Cos</div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -743,14 +727,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adRoas')}
             role="presentation"
-            // className="order-chart-box ad-roas-active  fix-height">
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adRoas')
-                ? 'order-chart-box ad-roas-active  fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -764,14 +741,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adClicks')}
             role="presentation"
-            // className="order-chart-box ad-click-active  fix-height">
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adClicks')
-                ? 'order-chart-box ad-click-active  fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adClicks', 'ad-click-active')}>
             <div className="chart-name">Clicks </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -785,14 +755,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           <div
             onClick={() => setBoxToggle('adClickRate')}
             role="presentation"
-            // className="order-chart-box ad-clickrate-active fix-height">
-            className={
-              Object.prototype.hasOwnProperty.call(selectedAdBox, 'adClickRate')
-                ? 'order-chart-box ad-clickrate-active fix-height'
-                : _.size(selectedAdBox) === 4
-                ? 'order-chart-box fix-height disabled'
-                : 'order-chart-box fix-height'
-            }>
+            className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
@@ -1138,6 +1101,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row">{renderAdGroupBy()}</div>
+        <AdPerformanceChart
+          chartId="adChart"
+          chartData={null}
+          currencySymbol={currencySymbol}
+          selectedBox={selectedAdBox}
+        />
       </WhiteCard>
       <WhiteCard className="mt-3">
         <div className="row">{renderDSPDailyFacts()}</div>
