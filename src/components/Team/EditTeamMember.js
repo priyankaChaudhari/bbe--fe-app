@@ -25,6 +25,7 @@ export default function EditTeamMember({
   setShowMemberList,
   showMemberList,
   setTeamDeleteModal,
+  userInfo,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [removeMember, setRemoveMember] = useState({
@@ -173,20 +174,24 @@ export default function EditTeamMember({
                                 ''}
                             </div>
                             <div className="clear-fix" />
-                            <img
-                              src={TrashIcons}
-                              alt="delete"
-                              className="trash-icon cursor "
-                              onClick={() => {
-                                setRemoveMember({
-                                  show: true,
-                                  id: item.id,
-                                  name: `${item.user_profile.first_name} ${item.user_profile.last_name}`,
-                                });
-                                setTeamDeleteModal(true);
-                              }}
-                              role="presentation"
-                            />{' '}
+                            {userInfo && userInfo.role !== 'Customer' ? (
+                              <img
+                                src={TrashIcons}
+                                alt="delete"
+                                className="trash-icon cursor "
+                                onClick={() => {
+                                  setRemoveMember({
+                                    show: true,
+                                    id: item.id,
+                                    name: `${item.user_profile.first_name} ${item.user_profile.last_name}`,
+                                  });
+                                  setTeamDeleteModal(true);
+                                }}
+                                role="presentation"
+                              />
+                            ) : (
+                              ''
+                            )}
                           </div>
                         ))}
                       {data && data.length === 0 ? (
@@ -195,23 +200,27 @@ export default function EditTeamMember({
                         ''
                       )}
 
-                      <Button
-                        className=" btn-add w-100 mt-4 mb-3"
-                        onClick={() =>
-                          setShowMemberList({
-                            show: false,
-                            add: true,
-                            modal: true,
-                          })
-                        }>
-                        {' '}
-                        <img
-                          src={AddIcons}
-                          alt="add"
-                          className="add-user mr-2"
-                        />
-                        Add New Team Member
-                      </Button>
+                      {userInfo && userInfo.role !== 'Customer' ? (
+                        <Button
+                          className=" btn-add w-100 mt-4 mb-3"
+                          onClick={() =>
+                            setShowMemberList({
+                              show: false,
+                              add: true,
+                              modal: true,
+                            })
+                          }>
+                          {' '}
+                          <img
+                            src={AddIcons}
+                            alt="add"
+                            className="add-user mr-2"
+                          />
+                          Add New Team Member
+                        </Button>
+                      ) : (
+                        <div className="mt-4 mb-3" />
+                      )}
                     </div>
                   </div>
                   {showBtn ? (
@@ -311,4 +320,7 @@ EditTeamMember.propTypes = {
     add: PropTypes.bool,
   }),
   setTeamDeleteModal: PropTypes.func,
+  userInfo: PropTypes.shape({
+    role: PropTypes.string,
+  }).isRequired,
 };

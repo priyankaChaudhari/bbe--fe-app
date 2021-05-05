@@ -773,19 +773,23 @@ export default function CustomerMainContainer() {
                             ))}
                           )
                         </p>
-                        <div
-                          className="add-new-tab"
-                          onClick={() =>
-                            setShowMemberList({
-                              show: false,
-                              add: true,
-                              modal: true,
-                            })
-                          }
-                          role="presentation">
-                          <img className="mr-1" src={AddIcons} alt="" />
-                          Add new
-                        </div>
+                        {userInfo && userInfo.role !== 'Customer' ? (
+                          <div
+                            className="add-new-tab"
+                            onClick={() =>
+                              setShowMemberList({
+                                show: false,
+                                add: true,
+                                modal: true,
+                              })
+                            }
+                            role="presentation">
+                            <img className="mr-1" src={AddIcons} alt="" />
+                            Add new
+                          </div>
+                        ) : (
+                          ''
+                        )}
                         <div className="ml-2">
                           {memberData.map((item) => (
                             <React.Fragment key={item.id}>
@@ -927,6 +931,7 @@ export default function CustomerMainContainer() {
                     setShowMemberList={setShowMemberList}
                     showMemberList={showMemberList}
                     setTeamDeleteModal={setTeamDeleteModal}
+                    userInfo={userInfo}
                   />
                 )}
               </Modal>

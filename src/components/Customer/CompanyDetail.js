@@ -33,6 +33,7 @@ export default function CompanyDetail({
   const contactInfo = useSelector((state) => state.customerState.contactData);
   // const [showModal, setShowModal] = useState({ modal: false, type: '' });
   const [showModal, setShowModal] = useState(false);
+  const userInfo = useSelector((state) => state.userState.userInfo);
 
   const customStyles = {
     content: {
@@ -75,6 +76,35 @@ export default function CompanyDetail({
       return '';
     }
     return fields;
+  };
+
+  const getContactCard = () => {
+    return (
+      <WhiteCard className=" mt-3">
+        <p className="black-heading-title mt-0 ">Company Contacts</p>
+        <div
+          className="edit-details"
+          onClick={() => setShowModal(true)}
+          role="presentation">
+          <img src={EditOrangeIcon} alt="" />
+          Edit
+        </div>
+        <div className="company-contract-height">
+          {contactInfo && contactInfo.length === 0
+            ? 'No Record found.'
+            : contactInfo.map((item) => (
+                <GroupUser key={item.id} className="mb-3">
+                  <GetInitialName userInfo={item} property="float-left mr-3 " />
+                  <div className="activity-user">
+                    {item.first_name || ' '} {item.last_name || ' '}
+                  </div>
+                  <div className="user-email-address">{item.email || ' '}</div>
+                  <div className="clear-fix" />
+                </GroupUser>
+              ))}
+        </div>
+      </WhiteCard>
+    );
   };
 
   return (
@@ -142,35 +172,11 @@ export default function CompanyDetail({
                 {SocialIcons.map((item) => generateSocialIcon(item))}
               </ul>
             </WhiteCard>
-            <WhiteCard className=" mt-3">
-              <p className="black-heading-title mt-0 ">Company Contacts</p>
-              <div
-                className="edit-details"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              <div className="company-contract-height">
-                {contactInfo && contactInfo.length === 0
-                  ? 'No Record found.'
-                  : contactInfo.map((item) => (
-                      <GroupUser key={item.id} className="mb-3">
-                        <GetInitialName
-                          userInfo={item}
-                          property="float-left mr-3 "
-                        />
-                        <div className="activity-user">
-                          {item.first_name || ' '} {item.last_name || ' '}
-                        </div>
-                        <div className="user-email-address">
-                          {item.email || ' '}
-                        </div>
-                        <div className="clear-fix" />
-                      </GroupUser>
-                    ))}
-              </div>
-            </WhiteCard>
+            {userInfo && userInfo.role !== 'Customer' ? (
+              <>{getContactCard()}</>
+            ) : (
+              ''
+            )}
           </div>
           <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
@@ -208,64 +214,79 @@ export default function CompanyDetail({
                 ),
               )}
 
-              <div className="straight-line horizontal-line pt-3 mb-3" />
+              {userInfo && userInfo.role !== 'Customer' ? (
+                <>
+                  <div className="straight-line horizontal-line pt-3 mb-3" />
 
-              {AmazonMarketplaceDetails.filter((op) => op.section === 2).map(
-                (item) => (
-                  <React.Fragment key={item.key}>
-                    <div className="label mt-3">
-                      {item.label}
-                      <img className="info-icon" src={InfoIcons} alt="" />
-                    </div>
-                    <div className="label-info">
-                      {(amazonDetails && amazonDetails[item.key]) ||
-                        `No ${item.label}.`}
-                    </div>
-                    {/* <div className="phone-number">+1 592 559 2950</div> */}
-                    <div className="straight-line horizontal-line pt-3 mb-3" />
-                  </React.Fragment>
-                ),
-              )}
+                  {AmazonMarketplaceDetails.filter(
+                    (op) => op.section === 2,
+                  ).map((item) => (
+                    <React.Fragment key={item.key}>
+                      <div className="label mt-3">
+                        {item.label}
+                        <img className="info-icon" src={InfoIcons} alt="" />
+                      </div>
+                      <div className="label-info">
+                        {(amazonDetails && amazonDetails[item.key]) ||
+                          `No ${item.label}.`}
+                      </div>
+                      {/* <div className="phone-number">+1 592 559 2950</div> */}
+                      <div className="straight-line horizontal-line pt-3 mb-3" />
+                    </React.Fragment>
+                  ))}
 
-              <div className="label mt-3">
-                {seller === 'Seller' || seller === 'Hybrid'
-                  ? 'Seller Central Username and Password'
-                  : 'Vendor Central Username and Password'}{' '}
-                <br />
-                <a
-                  href="https://my.1password.com/signin?l=en"
-                  target="_BLANK"
-                  rel="noopener noreferrer">
-                  {' '}
-                  View Credentials
-                  <img
-                    className="external-link-icon"
-                    src={ExternalLink}
-                    alt="link"
-                  />
-                </a>
-              </div>
-              {seller === 'Hybrid' ? (
-                <div className="label mt-3">
-                  Vendor Central Username & password
-                  <br />
-                  <a
-                    href="https://my.1password.com/signin?l=en"
-                    target="_BLANK"
-                    rel="noopener noreferrer">
-                    {' '}
-                    View Credentials
-                    <img
-                      className="external-link-icon"
-                      src={ExternalLink}
-                      alt="link"
-                    />
-                  </a>
-                </div>
+                  <div className="label mt-3">
+                    {seller === 'Seller' || seller === 'Hybrid'
+                      ? 'Seller Central Username and Password'
+                      : 'Vendor Central Username and Password'}{' '}
+                    <br />
+                    <a
+                      href="https://my.1password.com/signin?l=en"
+                      target="_BLANK"
+                      rel="noopener noreferrer">
+                      {' '}
+                      View Credentials
+                      <img
+                        className="external-link-icon"
+                        src={ExternalLink}
+                        alt="link"
+                      />
+                    </a>
+                  </div>
+                  <>
+                    {userInfo &&
+                    userInfo.role !== 'Customer' &&
+                    seller === 'Hybrid' ? (
+                      <div className="label mt-3">
+                        Vendor Central Username & password
+                        <br />
+                        <a
+                          href="https://my.1password.com/signin?l=en"
+                          target="_BLANK"
+                          rel="noopener noreferrer">
+                          {' '}
+                          View Credentials
+                          <img
+                            className="external-link-icon"
+                            src={ExternalLink}
+                            alt="link"
+                          />
+                        </a>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </>
+                </>
               ) : (
                 ''
               )}
             </WhiteCard>
+            {userInfo && userInfo.role === 'Customer' ? (
+              <>{getContactCard()}</>
+            ) : (
+              ''
+            )}
           </div>
         </div>
         <Modal

@@ -52,6 +52,17 @@ export default function Login() {
             (response && response.data === '')
           ) {
             setShowPassword({ name: false, password: true });
+          } else if (response && response.data && response.data.length === 1) {
+            setCustomerNames(response && response.data);
+            setGetName({
+              email: data.email,
+              customer:
+                response &&
+                response.data &&
+                response.data[0] &&
+                response.data[0].value,
+            });
+            setShowPassword({ email: false, name: false, password: true });
           } else {
             setCustomerNames(response && response.data);
             setShowPassword({ name: true, password: false });
@@ -75,6 +86,8 @@ export default function Login() {
       setIsLoading({ loader: false, type: 'button' });
     }
   };
+
+  console.log(getName);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -143,6 +156,7 @@ export default function Login() {
                         className="back-link"
                         onClick={() =>
                           (customerNames && customerNames.length === 0) ||
+                          (customerNames && customerNames.length === 1) ||
                           customerNames === ''
                             ? setShowPassword({
                                 email: true,

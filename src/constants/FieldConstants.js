@@ -781,7 +781,7 @@ export const customerContactDetails = [
 
 export const AmazonMarketplaceDetails = [
   { key: 'merchant_id', label: 'Merchant ID', section: 1 },
-  { key: 'marketplace_id', label: 'Marketplace ID', section: 1 },
+  // { key: 'marketplace_id', label: 'Marketplace ID', section: 1 },
   {
     key: 'account_management_email',
     label: 'Account Management Credentials',

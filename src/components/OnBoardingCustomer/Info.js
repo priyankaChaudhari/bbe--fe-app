@@ -76,15 +76,11 @@ export default function Info() {
           </li>
           <li>
             <img src={OrangeCheckMark} alt="check" />
-            Your Amazon account credentials
-          </li>
-          <li>
-            <img src={OrangeCheckMark} alt="check" />
             Billing and payment details
           </li>
           <li>
             <img src={OrangeCheckMark} alt="check" />
-            Details of co-workers that will help manage the account
+            Your Amazon merchant ID and MWS token
           </li>
         </ul>
 

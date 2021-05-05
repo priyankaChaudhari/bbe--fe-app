@@ -42,7 +42,7 @@ export default function MainContainer() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
-  const [openCollapse, setOpenCollapse] = useState(false);
+  const [openCollapse, setOpenCollapse] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [assignedToSomeone, setAssignedToSomeone] = useState(false);
@@ -262,7 +262,10 @@ export default function MainContainer() {
   const getVideo = () => {
     setIsLoading({ loader: true, type: 'video' });
     setShowVideo(true);
-    getVideoLink(userInfo && userInfo.customer).then((response) => {
+    getVideoLink(
+      (verifiedStepData && verifiedStepData.customer_id) ||
+        (userInfo && userInfo.customer),
+    ).then((response) => {
       setVideoData(response && response.data);
       setIsLoading({ loader: false, type: 'video' });
     });
@@ -305,11 +308,12 @@ export default function MainContainer() {
                         {' '}
                         {verifiedStepData && verifiedStepData.user_email}{' '}
                       </span>
-                      has asked that you provide {item.title} information that
-                      will be used for your Buy Box Experts agreement.
+                      has asked that you provide <strong>{item.title}</strong>{' '}
+                      information, which will be used by our Creative Team to
+                      best understand your brand.
                     </div>
                     If you’re unable to provide this information or you think
-                    this was sent to you unintentionally please let them know
+                    this was sent to you unintentionally, please let them know
                     via the email address highlighted above.
                   </GreyCard>
                 ) : (
