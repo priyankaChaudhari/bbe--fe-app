@@ -284,7 +284,7 @@ const ModalBox = styled.div`
     }
 
     .embed-responsive-item {
-      height: 400px;
+      height: 450px;
     }
     .payment-option {
         list-style-type: none;
