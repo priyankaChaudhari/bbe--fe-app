@@ -100,7 +100,7 @@ export default function PageLoader({
           width: component === 'activityLog' ? '50px' : '',
           // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
-          marginLeft: component === 'customer-list-loader' ? '290px' : '',
+          // left: component === 'customer-list-loader' ? '290px' : '',
         }}>
         <Loader type="Bars" color={color} height={height} width={pageWidth} />
       </PageLoaderWrapper>

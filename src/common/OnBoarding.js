@@ -68,9 +68,11 @@ const OnBoardingBody = styled.div`
       .sub-information {
         text-transform: initial;
         margin-bottom: 12px;
+        color: ${Theme.black};
       }
       .note {
         font-style: italic;
+        color: ${Theme.black};
       }
       .text-bold {
         font-weight: bold;
