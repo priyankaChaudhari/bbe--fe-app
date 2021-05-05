@@ -87,8 +87,6 @@ export default function Login() {
     }
   };
 
-  console.log(getName);
-
   useEffect(() => {
     if (localStorage.getItem('token')) {
       if (

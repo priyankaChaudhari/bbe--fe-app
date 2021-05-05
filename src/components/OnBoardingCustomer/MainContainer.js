@@ -31,6 +31,7 @@ import {
   // PATH_BILLING_DETAILS,
   PATH_COMPANY_DETAILS,
   PATH_SUMMARY,
+  PATH_THANKS,
 } from '../../constants';
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
@@ -133,6 +134,15 @@ export default function MainContainer() {
       ) {
         localStorage.setItem('match', params.key);
         verifyStepToken(params.key).then((verify) => {
+          if (verify && verify.status === 401) {
+            const stringified = queryString.stringify({
+              step: 'completed',
+            });
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
+            });
+          }
           getStepDetails(
             (verify && verify.data && verify.data.customer_onboarding_id) ||
               (userInfo && userInfo.customer_onboarding),
