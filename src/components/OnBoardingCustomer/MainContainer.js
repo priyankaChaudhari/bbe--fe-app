@@ -421,7 +421,7 @@ export default function MainContainer() {
                 <div className="modal-body">
                   <iframe
                     title="video"
-                    allow="accelerometer; autoplay;"
+                    allow="accelerometer; autoplay; "
                     className="embed-responsive-item w-100"
                     allowFullScreen
                     src={
