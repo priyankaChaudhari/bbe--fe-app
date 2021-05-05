@@ -30,7 +30,8 @@ import {
   SpeedometerActive,
   Speedometer,
 } from '../theme/images/index';
-import { logout, userMe } from '../store/actions/userState';
+
+import { logout, userMe, showProfileLoader } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
@@ -349,7 +350,10 @@ export default function Header({ type }) {
             src={CloseIcon}
             alt="close"
             className="float-right cross-icon cursor"
-            onClick={() => setShowModal(false)}
+            onClick={() => {
+              setShowModal(false);
+              dispatch(showProfileLoader(false));
+            }}
             role="presentation"
           />
           <div className="modal-body">

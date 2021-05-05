@@ -203,6 +203,6 @@ export const showResetPasswordMsg = () => {
 export const showProfileLoader = (value) => {
   return {
     type: actionTypes.SHOW_PROFILE_LOADER,
-    isLoading: value,
+    isActivityLoading: value,
   };
 };

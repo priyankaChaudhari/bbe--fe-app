@@ -403,6 +403,4 @@ const UpdateProfile = styled.div`
       font-size: 24px;
     }
   }
-
-  
 `;

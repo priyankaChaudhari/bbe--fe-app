@@ -138,7 +138,9 @@ export default function CustomerMainContainer() {
     type: '',
   });
   const [memberCount, setMemberCount] = useState(null);
-  const profileLoader = useSelector((state) => state.userState.isLoading);
+  const profileLoader = useSelector(
+    (state) => state.userState.isActivityLoading,
+  );
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
   const customerError = useSelector((state) => state.customerState.error);
   const userInfo = useSelector((state) => state.userState.userInfo);

@@ -8,6 +8,7 @@ const initialState = {
   userInfo: {},
   showForgotMsg: false,
   showResetMsg: false,
+  isActivityLoading: false,
 };
 
 const userStateReducer = (state = initialState, action) => {
@@ -65,7 +66,7 @@ const userStateReducer = (state = initialState, action) => {
     case actionTypes.SHOW_PROFILE_LOADER:
       return {
         ...state,
-        isLoading: action.isLoading,
+        isActivityLoading: action.isActivityLoading,
         error: null,
       };
     default:
