@@ -234,15 +234,11 @@ export default function CustomerMainContainer() {
   }, [id]);
 
   useEffect(() => {
-    dispatch(getAccountDetails(id));
-    dispatch(getCustomerDetails(id));
-    dispatch(getContactDetails(id));
     if (userInfo && userInfo.role !== 'Customer') {
       getMarketPlace(id);
       getAmazon();
     }
-    getCustomerMemberList();
-    getActivityLogInfo();
+
     if (userInfo && userInfo.role === 'Customer') {
       setViewComponent('company');
     }
@@ -259,6 +255,14 @@ export default function CustomerMainContainer() {
     profileLoader,
     userInfo,
   ]);
+
+  useEffect(() => {
+    dispatch(getAccountDetails(id));
+    dispatch(getCustomerDetails(id));
+    dispatch(getContactDetails(id));
+    getCustomerMemberList();
+    getActivityLogInfo();
+  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList]);
 
   if (userInfo && userInfo.role === 'Customer') {
     viewOptions = [
