@@ -4442,6 +4442,7 @@ const SidePanel = styled.div`
      padding-bottom: 270px;
 
     }
+
     .sidebar {
       /* width: 335px; */
     }
@@ -4452,7 +4453,7 @@ const SidePanel = styled.div`
 
     // @media screen and (-webkit-min-device-pixel-ratio: 0) {
     //   .sidebar {
-    //     padding-bottom: 400px;
+    //     padding-bottom: 300px;
     //   }
     // }
     .error-found {

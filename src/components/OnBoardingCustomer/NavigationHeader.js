@@ -148,7 +148,7 @@ const BackToStep = styled.div`
   background-color: ${Theme.white};
   z-index: 2;
   top: 70px;
-  padding: 20px 0px 20px 0px;
+  padding: 22px 0px 18px 0px;
   width: 100%;
   border-bottom: 1px solid ${Theme.gray5};
 
