@@ -19,7 +19,7 @@ export default function Thanks() {
       <ThanksPage>
         <img className="mb-3" src={AccountSetupIcon} alt="check" />
         <h5>Thanks!</h5>
-        <p className="info capitalize">
+        <p className="info">
           We’ve let {params && params.name} know that you’ve provided the
           information we needed.
           <br />
@@ -51,5 +51,6 @@ const ThanksPage = styled.div`
   .info {
     color: ${Theme.gray90};
     font-size: ${Theme.title};
+    font-family: ${Theme.baseFontFamily};
   }
 `;

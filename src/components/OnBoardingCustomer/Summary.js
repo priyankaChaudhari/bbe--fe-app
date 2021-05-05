@@ -106,21 +106,17 @@ export default function Summary() {
         <OnBoardingBody className="body-white">
           <div className="white-card-base panel account-reassign pt-5 pb-4">
             <h3 className="page-heading ">Account Summary</h3>
-            <p className="information-text mt-2 mb-0">
-              <div className="hi-name">
-                Thanks! Below is a summary of everything that’s been submitted.
-              </div>
-              Now that you have sent us the invitations for account access, our
-              On-boarding team will accept those and follow up with an email
-              with detailed instructions on the permissions you need to provide
-              to each of the email profiles.
-            </p>
+
+            <div className="sub-information mb-3">
+              Thanks! Below is a summary of everything that’s been submitted.
+            </div>
+
             <div className="complete-steps mt-1 mb-3">
-              Expect to hear from your On-boarding Specialist in the next 24
-              hours to walk through those final set up items.{' '}
+              Within 24 hours of completing your account setup, expect to hear
+              from your On-boarding Specialist.
               <span>
-                They will also get you in contact with your Brand Growth
-                Strategist.
+                They will be walking you through those final set up items and
+                getting you in contact with your Brand Growth Strategist.
               </span>
             </div>
             <GreyCard>

@@ -50,7 +50,7 @@ const OnBoardingBody = styled.div`
       .copy-icon {
         width: 13px;
         color: ${Theme.gray85};
-        font-size: 14px;
+        font-size: ${Theme.extraNormal};
         margin-right: 6px;
       }
     }
@@ -64,6 +64,10 @@ const OnBoardingBody = styled.div`
       .hi-name {
         margin-bottom: 12px;
         text-transform: capitalize;
+      }
+      .sub-information {
+        text-transform: initial;
+        margin-bottom: 12px;
       }
       .note {
         font-style: italic;
@@ -235,6 +239,60 @@ const OnBoardingBody = styled.div`
       width: 90%;
     }
   }
+  //   @media only screen and (min-width: 1920px) {
+  //     .white-card-base {
+  //       max-width: 505px;
+  //       font-size: ${Theme.normalRes};
+
+  //       .account-steps {
+  //         font-size: ${Theme.verySmallRes};
+  //       }
+  //       .copy-info {
+  //         .copy-icon {
+  //           font-size: ${Theme.extraNormalRes};
+  //         }
+  //       }
+  //       .information-text {
+  //         font-size: ${Theme.normalRes};
+  //         .view-details {
+  //           font-size: ${Theme.extraNormalRes};
+  //         }
+  //       }
+  //       .reach-out {
+  //         font-size: ${Theme.normalRes};
+  //       }
+  //       .info-text-gray {
+  //         font-size: ${Theme.extraNormalRes};
+  //         .video-link {
+  //           font-size: ${Theme.extraNormalRes};
+  //         }
+  //       }
+  //       .link-url {
+  //         font-size: ${Theme.extraNormalRes};
+  //       }
+
+  //       .label-title {
+  //         color: ${Theme.gray40};
+  //         font-size: ${Theme.verySmallRes};
+  //       }
+  //       .hereby-acknowledge {
+  //         font-size: ${Theme.extraSmallRes};
+  //       }
+
+  //       .billing-address {
+  //         font-size: ${Theme.extraMediumRes};
+  //       }
+  //     }
+  //     .panel {
+  //       max-width: 425px;
+  //     }
+  //     .w-430 {
+  //       max-width: 455px;
+  //       margin: 0 auto;
+  //       width: 100%;
+  //     }
+  //   }
+  //
 `;
 
 export default OnBoardingBody;

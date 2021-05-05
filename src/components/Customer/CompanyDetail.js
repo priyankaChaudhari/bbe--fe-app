@@ -79,7 +79,7 @@ export default function CompanyDetail({
 
   return (
     <>
-      <div className="col-lg-8 col-12">
+      <div className="col-lg-8 col-12 mb-3">
         <WhiteCard>
           <div className="row">
             <div className="col-10">

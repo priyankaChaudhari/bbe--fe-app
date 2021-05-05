@@ -30,7 +30,7 @@ export default function PastAgreement({ id }) {
         item.contract_status.value === 'inactive'
       ) {
         fields.push(
-          <WhiteCard className="mt-3" key={item.id}>
+          <WhiteCard className="mt-3 mb-3" key={item.id}>
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
                 <p className="black-heading-title mt-0 mb-0">

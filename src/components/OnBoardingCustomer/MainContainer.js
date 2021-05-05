@@ -59,7 +59,7 @@ export default function MainContainer() {
       left: '50%',
       right: 'auto',
       bottom: 'auto',
-      maxWidth: '600px ',
+      maxWidth: '900px ',
       width: '100% ',
       minHeight: '200px',
       overlay: ' {zIndex: 1000}',
@@ -408,6 +408,8 @@ export default function MainContainer() {
                   <iframe
                     title="video"
                     className="embed-responsive-item w-100"
+                    allowFullScreen
+                    allow="autoplay"
                     src={
                       videoData
                         ? history.location.pathname.includes(
@@ -417,7 +419,6 @@ export default function MainContainer() {
                           : videoData.step_4_video
                         : ''
                     }
-                    allowFullScreen
                   />
                 </div>
               )}

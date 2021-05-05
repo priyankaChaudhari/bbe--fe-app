@@ -1024,6 +1024,7 @@ export default function CustomerMainContainer() {
 
 const CustomerDetailBanner = styled.div`
   background: ${Theme.gray6};
+  min-height: 100%;
   .banner {
     height: 307px;
     padding-left: 62px;

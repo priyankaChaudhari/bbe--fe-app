@@ -8,7 +8,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 const PageLoaderWrapper = styled.div`
   position: fixed;
   z-index: 999;
-  height: 80px;
+  height: 55px;
   width: 55px;
   overflow: visible;
   margin: auto;
@@ -100,6 +100,7 @@ export default function PageLoader({
           width: component === 'activityLog' ? '50px' : '',
           // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
+          marginLeft: component === 'customer-list-loader' ? '290px' : '',
         }}>
         <Loader type="Bars" color={color} height={height} width={pageWidth} />
       </PageLoaderWrapper>

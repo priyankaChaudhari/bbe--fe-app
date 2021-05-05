@@ -1078,9 +1078,12 @@ export default function NewCustomerList() {
                   </div>
                 </div>
               </div>
-
               {isLoading.loader && isLoading.type === 'page' ? (
-                <PageLoader color="#FF5933" type="page" />
+                <PageLoader
+                  component="customer-list-loader"
+                  color="#FF5933"
+                  type="page"
+                />
               ) : (
                 <Table>
                   <tbody>

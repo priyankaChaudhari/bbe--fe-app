@@ -59,7 +59,7 @@ export default function AgreementDetails({ agreements, id }) {
         agreement.contract_status.value !== 'inactive'
       )
         fields.push(
-          <WhiteCard className="mt-3" key={agreement.id}>
+          <WhiteCard className="mt-3 mb-3" key={agreement.id}>
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
                 <img

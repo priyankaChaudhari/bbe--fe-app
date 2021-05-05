@@ -18,7 +18,7 @@ export default function Activity({
 }) {
   return (
     <>
-      <div className="col-lg-8  col-12 ">
+      <div className="col-lg-8  col-12 mb-3">
         <WhiteCard className="activity-card">
           {isLoading.loader && isLoading.type === 'activityPage' ? (
             <PageLoader

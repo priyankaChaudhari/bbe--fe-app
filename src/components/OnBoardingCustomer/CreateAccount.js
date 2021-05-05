@@ -237,7 +237,7 @@ export default function CreateAccount() {
               <div className="white-card-base panel">
                 <h3 className="page-heading ">Re-assign account setup</h3>
                 <p className="information-text m-0 ">
-                  <div className="hi-name">
+                  <div className="sub-information">
                     {' '}
                     If you’d like someone else to administrate the Buy Box
                     Experts account then you can reassign the setup process to
