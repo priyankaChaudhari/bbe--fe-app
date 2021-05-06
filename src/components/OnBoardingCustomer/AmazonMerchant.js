@@ -173,7 +173,6 @@ export default function AmazonMerchant({
 
 AmazonMerchant.defaultProps = {
   stepData: {},
-  isChecked: false,
 };
 
 AmazonMerchant.propTypes = {
@@ -204,5 +203,5 @@ AmazonMerchant.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
-  isChecked: PropTypes.bool,
+  isChecked: PropTypes.bool.isRequired,
 };

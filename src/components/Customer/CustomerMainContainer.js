@@ -421,6 +421,9 @@ export default function CustomerMainContainer() {
       if (customer.status.value === 'at risk') {
         return '#d63649';
       }
+      if (customer.status.value === 'pending account setup') {
+        return '#69707f';
+      }
       return '#74B035';
     }
     return '';
@@ -529,11 +532,15 @@ export default function CustomerMainContainer() {
                                     outLine: 'none',
                                     cursor: 'pointer',
                                     width:
-                                      customer &&
-                                      customer.status &&
-                                      customer.status.value ===
-                                        'pending cancellation'
-                                        ? '175px !important'
+                                      (customer &&
+                                        customer.status &&
+                                        customer.status.value ===
+                                          'pending cancellation') ||
+                                      (customer &&
+                                        customer.status &&
+                                        customer.status.value ===
+                                          'pending account setup')
+                                        ? '176px !important'
                                         : customer &&
                                           customer.status &&
                                           customer.status.value === 'at risk'

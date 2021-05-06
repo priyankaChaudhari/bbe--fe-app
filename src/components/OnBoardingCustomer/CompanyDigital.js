@@ -218,7 +218,6 @@ export default function CompanyDigital({
 
 CompanyDigital.defaultProps = {
   stepData: {},
-  isChecked: false,
 };
 
 CompanyDigital.propTypes = {
@@ -249,5 +248,5 @@ CompanyDigital.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
-  isChecked: PropTypes.bool,
+  isChecked: PropTypes.bool.isRequired,
 };

@@ -64,7 +64,7 @@ export default function CheckSteps({ userInfo }) {
         {isLoading.loader && isLoading.type === 'button' ? (
           <PageLoader color="#fff" type="button" />
         ) : (
-          'Next Step'
+          'Continue'
         )}
       </Button>
     </div>
