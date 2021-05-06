@@ -428,15 +428,14 @@ export default function MainContainer() {
                 <PageLoader color="#FF5933" type="page" />
               ) : (
                 <div className="modal-body">
-                  <video
+                  {/* <video
                     title="video "
                     className="embed-responsive-item w-100"
                     allow="accelerometer; autoplay;"
                     allowFullScreen
+                    name="media"
                     controls
-                    autoPlay
-                    name="media">
-                    {' '}
+                    autoPlay>
                     <source
                       src={
                         videoData
@@ -451,7 +450,26 @@ export default function MainContainer() {
                           : ''
                       }
                     />
-                  </video>
+                  </video> */}
+
+                  <iframe
+                    title="video "
+                    className="embed-responsive-item w-100 "
+                    allow="accelerometer; autoplay;"
+                    allowFullScreen
+                    src={
+                      videoData
+                        ? history.location.pathname.includes(
+                            '/account-setup/company-details',
+                          ) ||
+                          history.location.pathname.includes(
+                            '/account-setup/assigned-company-details',
+                          )
+                          ? videoData.step_4_video
+                          : videoData.step_2_video
+                        : ''
+                    }
+                  />
                 </div>
               )}
             </ModalBox>
