@@ -235,6 +235,7 @@ export default function MainContainer() {
           data={data}
           isLoading={isLoading}
           isChecked={isChecked}
+          loader={loader}
         />
       );
     if (path === 'billing-details')

@@ -52,7 +52,9 @@ export default function AskSomeone({
       setIsChecked(false);
       setFormData({});
       if (stepData && stepData.step === step && stepData && stepData.id) {
-        updateAskSomeoneData(stepData.id, { email: '' }).then((res) => {
+        updateAskSomeoneData(stepData.id, {
+          email: userInfo && userInfo.email,
+        }).then((res) => {
           if (res && res.status === 200) {
             setStepData(res && res.data);
             setIsLoading({ loader: false, type: 'check' });
@@ -65,7 +67,7 @@ export default function AskSomeone({
         });
       } else {
         const data = {
-          email: '',
+          email: userInfo && userInfo.email,
           customer_onboarding: userInfo && userInfo.customer_onboarding,
           step,
         };
@@ -216,7 +218,11 @@ export default function AskSomeone({
             stepData.step === step &&
             stepData.email !== userInfo.email ? (
               <span
-                className="edit-field cursor"
+                className={
+                  isLoading.loader && isLoading.type === 'check'
+                    ? 'edit-field cursor isDisabled'
+                    : 'edit-field cursor'
+                }
                 role="presentation"
                 onClick={() => setEditEmail(true)}>
                 <img className="edit-icon" src={EditOrangeIcon} alt="edit" />{' '}

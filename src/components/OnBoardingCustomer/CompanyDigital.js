@@ -18,9 +18,10 @@ import {
   updateCustomerDetails,
   updateUserMe,
 } from '../../api';
-import { userMe } from '../../store/actions';
+import { getCustomerDetails, userMe } from '../../store/actions';
 import { SocialIcons } from '../../constants/FieldConstants';
 import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
+import { TrashIcons } from '../../theme/images';
 
 export default function CompanyDigital({
   setIsLoading,
@@ -37,6 +38,13 @@ export default function CompanyDigital({
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
   const params = queryString.parse(history.location.search);
+  const [clearSocialInput, setClearSocialInput] = useState({
+    facebook: '',
+    instagram: '',
+    linkedin: '',
+    pinterest: '',
+    twitter: '',
+  });
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -149,6 +157,22 @@ export default function CompanyDigital({
     });
   };
 
+  const clearSocialURL = (key) => {
+    setClearSocialInput({ ...clearSocialInput, [key]: null });
+    updateCustomerDetails(userInfo.customer, { [key]: null }).then(
+      (response) => {
+        if (response && response.status === 200) {
+          dispatch(getCustomerDetails(userInfo.customer));
+          setIsLoading({ loader: false, type: 'social' });
+        }
+        if (response && response.status === 400) {
+          setApiError(response && response.data);
+          setIsLoading({ loader: false, type: 'social' });
+        }
+      },
+    );
+  };
+
   const generateHTML = () => {
     return (
       <OnBoardingBody className="body-white">
@@ -167,6 +191,7 @@ export default function CompanyDigital({
           </label>
         </ContractFormField>
         <div className="label-title mb-1 mt-4">Social</div>
+
         <div className="row">
           {SocialIcons.map((item) => (
             <React.Fragment key={item.key}>
@@ -180,11 +205,12 @@ export default function CompanyDigital({
                   {item.label}
                 </span>
               </div>
+
               <div className="col-8 ">
                 {' '}
                 <ContractFormField>
                   <input
-                    className="form-control"
+                    className="form-control extra-space"
                     type="text"
                     placeholder={`Enter ${item.label} URL`}
                     name={item.key}
@@ -192,6 +218,17 @@ export default function CompanyDigital({
                     onChange={(event) => handleChange(event, 'social')}
                     readOnly={isChecked}
                   />
+                  {data && data[item.key] ? (
+                    <img
+                      src={TrashIcons}
+                      alt="delete"
+                      className="trash cursor deleteSocial"
+                      onClick={() => clearSocialURL(item.key)}
+                      role="presentation"
+                    />
+                  ) : (
+                    ''
+                  )}
                   <ErrorMsg>
                     {apiError && apiError[item.key] && apiError[item.key][0]}
                   </ErrorMsg>

@@ -23,6 +23,13 @@ const ContractFormField = styled.div`
     font-weight: bold;   
   }
 
+  .deleteSocial {
+        position: absolute;
+    width: 20px;
+    top: 10px;
+    right: 5px;
+  }
+
   .remove-field-icon {
     background: ${Theme.gray5};
     width: 18px;
