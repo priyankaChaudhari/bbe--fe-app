@@ -45,6 +45,7 @@ export default function AskSomeone({
       setIsChecked(true);
     } else {
       setIsChecked(false);
+      setFormData({});
       if (stepData && stepData.step === step && stepData && stepData.id) {
         updateAskSomeoneData(stepData.id, { email: '' }).then((res) => {
           if (res && res.status === 200) {
@@ -173,13 +174,19 @@ export default function AskSomeone({
             <ErrorMsg>
               {apiError && apiError.email && apiError.email[0]}
             </ErrorMsg>
-            <span
-              className="edit-field cursor"
-              role="presentation"
-              onClick={() => setEditEmail(true)}>
-              <img className="edit-icon" src={EditOrangeIcon} alt="edit" /> Edit
-              email address
-            </span>
+            {stepData.email !== '' &&
+            stepData.step === step &&
+            stepData.email !== userInfo.email ? (
+              <span
+                className="edit-field cursor"
+                role="presentation"
+                onClick={() => setEditEmail(true)}>
+                <img className="edit-icon" src={EditOrangeIcon} alt="edit" />{' '}
+                Edit email address
+              </span>
+            ) : (
+              ''
+            )}
           </ContractFormField>
           {!editEmail &&
           stepData &&
