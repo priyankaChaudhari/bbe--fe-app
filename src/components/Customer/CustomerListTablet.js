@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-
+import queryString from 'query-string';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
 import {
@@ -40,8 +40,16 @@ export default function CustomerListTablet({
     getcontract(type.contract_id).then((res) => {
       if (res && res.status === 200) {
         if (res && res.data && res.data.contract_url) {
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          const stringified =
+            queryString &&
+            queryString.stringify({
+              contract_id: type.contract_id,
+            });
+
+          history.push({
+            pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+            search: `${stringified}`,
+          });
         }
       }
     });
@@ -57,8 +65,16 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -78,8 +94,16 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -98,8 +122,16 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -122,8 +154,16 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}

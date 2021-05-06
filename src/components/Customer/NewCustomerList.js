@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
-
+import queryString from 'query-string';
 import Theme from '../../theme/Theme';
 import {
   CheckBox,
@@ -484,8 +484,18 @@ export default function NewCustomerList() {
     getcontract(type.contract_id).then((res) => {
       if (res && res.status === 200) {
         if (res && res.data && res.data.contract_url) {
-          history.push(PATH_AGREEMENT.replace(':id', id));
-          localStorage.setItem('agreementID', type.contract_id);
+          const stringified =
+            queryString &&
+            queryString.stringify({
+              contract_id: type.contract_id,
+            });
+
+          history.push({
+            pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+            search: `${stringified}`,
+          });
+          // history.push(PATH_AGREEMENT.replace(':id', id).replace(':contract_id', type.contract_id));
+          // localStorage.setItem('agreementID', type.contract_id);
         }
       }
     });
@@ -502,8 +512,17 @@ export default function NewCustomerList() {
           data-tip={type.contract_status}
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            // history.push(PATH_AGREEMENT.replace(':id', id).replace(':contract_id', type.contract_id));
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation">
           <div className="recurring-service count-days">
@@ -523,8 +542,17 @@ export default function NewCustomerList() {
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            // history.push(PATH_AGREEMENT.replace(':id', id).replace(':contract_id', type.contract_id));
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -545,8 +573,17 @@ export default function NewCustomerList() {
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            // history.push(PATH_AGREEMENT.replace(':id', id).replace(':contract_id', type.contract_id));
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}
@@ -567,8 +604,17 @@ export default function NewCustomerList() {
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            history.push(PATH_AGREEMENT.replace(':id', id));
-            localStorage.setItem('agreementID', type.contract_id);
+            // history.push(PATH_AGREEMENT.replace(':id', id).replace(':contract_id', type.contract_id));
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                contract_id: type.contract_id,
+              });
+
+            history.push({
+              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
+              search: `${stringified}`,
+            });
           }}
           role="presentation"
           data-tip={type.contract_status}

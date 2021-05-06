@@ -31,7 +31,6 @@ export const userRequestInitiated = () => {
 export const userRequestSuccess = (data, history, customer, onboardingId) => {
   localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
-
   let id = '';
   if (
     data &&

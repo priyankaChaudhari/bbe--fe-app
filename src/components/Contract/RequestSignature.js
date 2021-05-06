@@ -126,6 +126,7 @@ function RequestSignature({
     const stringified =
       queryString &&
       queryString.stringify({
+        ...params,
         step: param,
       });
     history.push({
@@ -384,6 +385,18 @@ function RequestSignature({
     return '';
   };
 
+  const removeParams = (item) => {
+    delete params[item];
+    const stringified =
+      queryString &&
+      queryString.stringify({
+        ...params,
+      });
+    history.push({
+      pathname: `${history.location.pathname}`,
+      search: `${stringified}`,
+    });
+  };
   const sendRequestApproval = () => {
     const requestApprovalData = {
       ...approvalNote,
@@ -407,6 +420,7 @@ function RequestSignature({
           // setOpenCollapse({ agreement: false, statement: true });
 
           setShowModal(false);
+          removeParams('step');
           toast.success('Approval Requested!');
           // setShowSuccessContact({ message: 'Approval Requested!', show: true });
           // setTimeout(() => clearSuccessMessage(), 3000);
@@ -503,7 +517,9 @@ function RequestSignature({
             amendment: false,
           });
 
+          removeParams('step');
           getContractDetails(true);
+
           // toast.success('Signature Requested Successfully!');
 
           // dispatch(getAccountDetails(id));
@@ -540,7 +556,9 @@ function RequestSignature({
       setIsLoading({ loader: false, type: 'button' });
       if (res && res.status === 200) {
         setShowModal(false);
+        removeParams('step');
         toast.success('Reminder sent successfully!');
+
         // setShowSuccessContact({
         //   message: 'Reminder sent successfully!',
         //   show: true,

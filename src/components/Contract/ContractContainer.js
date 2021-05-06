@@ -90,6 +90,8 @@ export default function ContractContainer() {
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
+  const params = queryString.parse(history.location.search);
+
   const id = location.pathname.split('/')[2];
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -180,7 +182,6 @@ export default function ContractContainer() {
   const [endMonthDate, setEndDate] = useState(null);
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
   const [discountFlag, setDiscountFlag] = useState('');
-  const [contractID, setContractID] = useState('');
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -200,14 +201,6 @@ export default function ContractContainer() {
     window.scrollTo({ top: y });
   };
 
-  // const clearSuccessMessage = () => {
-  //   setShowSuccessContact({ show: false, message: '' });
-  // };
-
-  if (contractID === '' && contractID !== undefined) {
-    setContractID(location.state);
-  }
-
   if (
     isLoading.loader === true &&
     isLoading.type === 'page' &&
@@ -221,28 +214,17 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
+    getcontract(params.contract_id).then((res) => {
+      setLoaderFlag(true);
 
-    if (contractID || localStorage.getItem('agreementID')) {
-      getcontract(contractID || localStorage.getItem('agreementID')).then(
-        (res) => {
-          setLoaderFlag(true);
-
-          if (res && res.status === 200) {
-            setDetails(res && res.data);
-            if (showSuccessToastr) {
-              toast.success('Signature Requested Successfully!');
-            }
-          }
-          // setIsLoading({ loader: false, type: 'page' });
-        },
-      );
-    } else {
-      const path = location.pathname.slice(
-        0,
-        location.pathname.lastIndexOf('/'),
-      );
-      history.push(path);
-    }
+      if (res && res.status === 200) {
+        setDetails(res && res.data);
+        if (showSuccessToastr) {
+          toast.success('Signature Requested Successfully!');
+        }
+      }
+      // setIsLoading({ loader: false, type: 'page' });
+    });
   };
 
   useEffect(() => {
@@ -2132,6 +2114,7 @@ export default function ContractContainer() {
     const stringified =
       queryString &&
       queryString.stringify({
+        ...params,
         step: param,
       });
 
@@ -2682,6 +2665,18 @@ export default function ContractContainer() {
     setShowDiscountModal(false);
   };
 
+  const removeParams = (item) => {
+    delete params[item];
+    const stringified =
+      queryString &&
+      queryString.stringify({
+        ...params,
+      });
+    history.push({
+      pathname: `${history.location.pathname}`,
+      search: `${stringified}`,
+    });
+  };
   return (details &&
     details.contract_status &&
     details.contract_status.value === 'pending account setup') ||
@@ -2845,7 +2840,10 @@ export default function ContractContainer() {
           src={CloseIcon}
           alt="close"
           className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
+          onClick={() => {
+            setShowModal(false);
+            removeParams('step');
+          }}
           role="presentation"
         />
         <ModalBox>
