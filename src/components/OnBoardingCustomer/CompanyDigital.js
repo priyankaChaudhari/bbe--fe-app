@@ -30,6 +30,7 @@ export default function CompanyDigital({
   userInfo,
   data,
   isLoading,
+  isChecked,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -150,6 +151,7 @@ export default function CompanyDigital({
               defaultValue={data && data.website}
               name="website"
               onChange={(event) => handleChange(event)}
+              readOnly={isChecked}
             />
           </label>
         </ContractFormField>
@@ -177,6 +179,7 @@ export default function CompanyDigital({
                     name={item.key}
                     defaultValue={data && data[item.key]}
                     onChange={(event) => handleChange(event)}
+                    readOnly={isChecked}
                   />
                   <ErrorMsg>
                     {apiError && apiError[item.key] && apiError[item.key][0]}
@@ -194,15 +197,20 @@ export default function CompanyDigital({
     <>
       <OnBoardingBody className="body-white">
         <div className="white-card-base panel gap-none">{generateHTML()}</div>
-        <Button
-          className="btn-primary w-100  mt-4 mb-4"
-          onClick={() => saveDetails()}>
-          {isLoading.loader && isLoading.type === 'button' ? (
-            <PageLoader color="#fff" type="button" />
-          ) : (
-            'Continue'
-          )}
-        </Button>
+        {isChecked ? (
+          ''
+        ) : (
+          <Button
+            className="btn-primary w-100  mt-4 mb-4"
+            onClick={() => saveDetails()}
+            disabled={isChecked}>
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              'Continue'
+            )}
+          </Button>
+        )}
       </OnBoardingBody>
     </>
   );
@@ -210,6 +218,7 @@ export default function CompanyDigital({
 
 CompanyDigital.defaultProps = {
   stepData: {},
+  isChecked: false,
 };
 
 CompanyDigital.propTypes = {
@@ -240,4 +249,5 @@ CompanyDigital.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
+  isChecked: PropTypes.bool,
 };

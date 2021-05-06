@@ -28,6 +28,7 @@ export default function AmazonMerchant({
   userInfo,
   data,
   isLoading,
+  isChecked,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -136,6 +137,7 @@ export default function AmazonMerchant({
                 setFormData({ merchant_id: event.target.value })
               }
               defaultValue={data && data.merchant_id}
+              readOnly={isChecked}
             />
           </label>
         </ContractFormField>
@@ -147,19 +149,23 @@ export default function AmazonMerchant({
             Log into your Amazon Account
           </Button>
         </a>
-        <Button
-          className="btn-primary w-100 mt-3"
-          onClick={() => saveDetails()}
-          disabled={
-            formData.merchant_id === '' || formData.merchant_id === undefined
-          }>
-          {' '}
-          {isLoading.loader && isLoading.type === 'button' ? (
-            <PageLoader color="#fff" type="button" />
-          ) : (
-            'Continue'
-          )}
-        </Button>
+        {isChecked ? (
+          ''
+        ) : (
+          <Button
+            className="btn-primary w-100 mt-3"
+            onClick={() => saveDetails()}
+            disabled={
+              formData.merchant_id === '' || formData.merchant_id === undefined
+            }>
+            {' '}
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              'Continue'
+            )}
+          </Button>
+        )}
       </OnBoardingBody>
     </>
   );
@@ -167,6 +173,7 @@ export default function AmazonMerchant({
 
 AmazonMerchant.defaultProps = {
   stepData: {},
+  isChecked: false,
 };
 
 AmazonMerchant.propTypes = {
@@ -197,4 +204,5 @@ AmazonMerchant.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
+  isChecked: PropTypes.bool,
 };

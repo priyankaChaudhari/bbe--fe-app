@@ -36,14 +36,19 @@ import {
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
 import BillingInfo from './BillingInfo';
-import { AmazonDeveloperAccess, AmazonMerchant, CreateAccount } from '.';
+import {
+  AmazonDeveloperAccess,
+  AmazonMerchant,
+  CheckSteps,
+  CreateAccount,
+} from '.';
 
 export default function MainContainer() {
   const history = useHistory();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
-  const [openCollapse, setOpenCollapse] = useState(true);
+  const [openCollapse, setOpenCollapse] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [assignedToSomeone, setAssignedToSomeone] = useState(false);
@@ -228,6 +233,7 @@ export default function MainContainer() {
           userInfo={userInfo}
           data={data}
           isLoading={isLoading}
+          isChecked={isChecked}
         />
       );
     if (path === 'billing-details')
@@ -252,6 +258,7 @@ export default function MainContainer() {
           userInfo={userInfo}
           data={data}
           isLoading={isLoading}
+          isChecked={isChecked}
         />
       );
     if (path === 'amazon-account')
@@ -396,6 +403,7 @@ export default function MainContainer() {
                       {generateHTML(item.path)}
                     </Collapse>
                   </CollapseOpenContainer>
+                  <CheckSteps userInfo={userInfo} />
                 </div>
               ) : (
                 ''
@@ -428,6 +436,9 @@ export default function MainContainer() {
                       videoData
                         ? history.location.pathname.includes(
                             '/account-setup/company-details',
+                          ) ||
+                          history.location.pathname.includes(
+                            '/account-setup/assigned-company-details',
                           )
                           ? videoData.step_4_video
                           : videoData.step_2_video
@@ -461,5 +472,5 @@ export default function MainContainer() {
 }
 
 const CollapseOpenContainer = styled.div`
-  // opacity: 0.6;
+  opacity: 0.6;
 `;

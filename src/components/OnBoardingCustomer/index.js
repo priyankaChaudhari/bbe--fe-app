@@ -8,6 +8,7 @@ import Thanks from './Thanks';
 import Info from './Info';
 import AskSomeone from './AskSomeone';
 import NavigationHeader from './NavigationHeader';
+import CheckSteps from './CheckSteps';
 
 export {
   CreateAccount,
@@ -20,4 +21,5 @@ export {
   Info,
   AskSomeone,
   NavigationHeader,
+  CheckSteps,
 };

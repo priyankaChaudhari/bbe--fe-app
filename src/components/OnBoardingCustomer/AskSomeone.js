@@ -11,6 +11,7 @@ import {
   PageLoader,
 } from '../../common';
 import { askSomeoneData, updateAskSomeoneData } from '../../api';
+import { EditOrangeIcon } from '../../theme/images';
 
 export default function AskSomeone({
   setIsChecked,
@@ -24,6 +25,7 @@ export default function AskSomeone({
 }) {
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
+  const [editEmail, setEditEmail] = useState(false);
 
   useEffect(() => {
     if (
@@ -43,6 +45,35 @@ export default function AskSomeone({
       setIsChecked(true);
     } else {
       setIsChecked(false);
+      if (stepData && stepData.step === step && stepData && stepData.id) {
+        updateAskSomeoneData(stepData.id, { email: '' }).then((res) => {
+          if (res && res.status === 200) {
+            setStepData(res && res.data);
+            setIsLoading({ loader: false, type: 'email' });
+            setEditEmail(false);
+          }
+          if (res && res.status === 400) {
+            setApiError(res && res.data);
+            setIsLoading({ loader: false, type: 'email' });
+          }
+        });
+      } else {
+        const data = {
+          email: '',
+          customer_onboarding: userInfo && userInfo.customer_onboarding,
+          step,
+        };
+        askSomeoneData(data).then((response) => {
+          if (response && response.status === 201) {
+            setStepData(response && response.data);
+            setIsLoading({ loader: false, type: 'email' });
+          }
+          if (response && response.status === 400) {
+            setApiError(response && response.data);
+            setIsLoading({ loader: false, type: 'email' });
+          }
+        });
+      }
     }
     setApiError({});
   };
@@ -57,6 +88,7 @@ export default function AskSomeone({
             setStepData(res && res.data);
             toast.success('Request Sent Successfully!');
             setIsLoading({ loader: false, type: 'email' });
+            setEditEmail(false);
           }
           if (res && res.status === 400) {
             setApiError(res && res.data);
@@ -86,32 +118,26 @@ export default function AskSomeone({
 
   return (
     <>
-      {stepData &&
-      stepData.email !== '' &&
-      stepData.step === step &&
-      stepData.email !== userInfo.email ? (
-        ''
-      ) : (
-        <CheckBox className="mt-1 mb-4">
-          <label className="check-container customer-pannel " htmlFor={step}>
-            Ask someone else to complete this section
-            <input
-              type="checkbox"
-              id={step}
-              name={step}
-              onChange={(event) => handleChanges(event)}
-              defaultChecked={
-                stepData &&
-                stepData.email !== '' &&
-                stepData.email !== userInfo.email &&
-                stepData.step === step
-              }
-              readOnly
-            />
-            <span className="checkmark" />
-          </label>
-        </CheckBox>
-      )}
+      <CheckBox className="mt-1 mb-4">
+        <label className="check-container customer-pannel " htmlFor={step}>
+          Ask someone else to complete this section
+          <input
+            type="checkbox"
+            id={step}
+            name={step}
+            onChange={(event) => handleChanges(event)}
+            defaultChecked={
+              stepData &&
+              stepData.email !== '' &&
+              stepData.email !== userInfo.email &&
+              stepData.step === step
+            }
+            readOnly
+          />
+          <span className="checkmark" />
+        </label>
+      </CheckBox>
+
       {isChecked ||
       (stepData &&
         stepData.email !== '' &&
@@ -128,6 +154,7 @@ export default function AskSomeone({
                   setApiError({ email: '' });
                 }}
                 readOnly={
+                  !editEmail &&
                   stepData &&
                   stepData.email !== '' &&
                   stepData.step === step &&
@@ -146,8 +173,16 @@ export default function AskSomeone({
             <ErrorMsg>
               {apiError && apiError.email && apiError.email[0]}
             </ErrorMsg>
+            <span
+              className="edit-field cursor"
+              role="presentation"
+              onClick={() => setEditEmail(true)}>
+              <img className="edit-icon" src={EditOrangeIcon} alt="edit" /> Edit
+              email address
+            </span>
           </ContractFormField>
-          {stepData &&
+          {!editEmail &&
+          stepData &&
           stepData.email !== '' &&
           stepData.step === step &&
           stepData.email !== userInfo.email ? (
