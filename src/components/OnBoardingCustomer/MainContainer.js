@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -427,24 +428,30 @@ export default function MainContainer() {
                 <PageLoader color="#FF5933" type="page" />
               ) : (
                 <div className="modal-body">
-                  <iframe
+                  <video
                     title="video "
                     className="embed-responsive-item w-100"
                     allow="accelerometer; autoplay;"
                     allowFullScreen
-                    src={
-                      videoData
-                        ? history.location.pathname.includes(
-                            '/account-setup/company-details',
-                          ) ||
-                          history.location.pathname.includes(
-                            '/account-setup/assigned-company-details',
-                          )
-                          ? videoData.step_4_video
-                          : videoData.step_2_video
-                        : ''
-                    }
-                  />
+                    controls
+                    autoPlay
+                    name="media">
+                    {' '}
+                    <source
+                      src={
+                        videoData
+                          ? history.location.pathname.includes(
+                              '/account-setup/company-details',
+                            ) ||
+                            history.location.pathname.includes(
+                              '/account-setup/assigned-company-details',
+                            )
+                            ? videoData.step_4_video
+                            : videoData.step_2_video
+                          : ''
+                      }
+                    />
+                  </video>
                 </div>
               )}
             </ModalBox>

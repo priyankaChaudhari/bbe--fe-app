@@ -220,7 +220,7 @@ const OnBoardingBody = styled.div`
     }
     .highlighter-text {
       background: #ffe5df;
-      padding: 4px;
+      padding: 2px 4px;
       font-weight: bold;
     }
   }
