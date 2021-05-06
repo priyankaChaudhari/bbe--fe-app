@@ -270,14 +270,14 @@ export default function MainContainer() {
   };
 
   const getVideo = () => {
-    setIsLoading({ loader: true, type: 'video' });
+    setIsLoading({ loader: true, type: 'video ' });
     setShowVideo(true);
     getVideoLink(
       (verifiedStepData && verifiedStepData.customer_id) ||
         (userInfo && userInfo.customer),
     ).then((response) => {
       setVideoData(response && response.data);
-      setIsLoading({ loader: false, type: 'video' });
+      setIsLoading({ loader: false, type: 'video ' });
     });
   };
 
@@ -420,9 +420,9 @@ export default function MainContainer() {
               ) : (
                 <div className="modal-body">
                   <iframe
-                    title="video"
-                    allow="accelerometer; autoplay; "
+                    title="video "
                     className="embed-responsive-item w-100"
+                    allow="accelerometer; autoplay;"
                     allowFullScreen
                     src={
                       videoData

@@ -106,7 +106,8 @@ export default function CompanyDetails() {
                     Your company’s digital prescence
                   </h3>
                   <p className="help-info">
-                    Need help on why we need this information? <br />
+                    Need help on why we need this information?
+                    <br />
                     <span
                       className="link-video"
                       onClick={() => setShowModal(true)}

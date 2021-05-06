@@ -239,9 +239,10 @@ export default function CreateAccount() {
                 <p className="information-text m-0 ">
                   <div className="sub-information">
                     {' '}
-                    If you’d like someone else to administrate the Buy Box
-                    Experts account then you can reassign the setup process to
-                    them.
+                    If you’d like someone else to{' '}
+                    <span className="highlighter-text"> administrate</span> the
+                    Buy Box Experts account then you can reassign the setup
+                    process to them.
                   </div>
 
                   <span className="note">
