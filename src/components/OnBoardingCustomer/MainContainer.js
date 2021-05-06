@@ -427,10 +427,10 @@ export default function MainContainer() {
                     src={
                       videoData
                         ? history.location.pathname.includes(
-                            '/company-details/',
+                            '/account-setup/company-details',
                           )
-                          ? videoData.step_2_video
-                          : videoData.step_4_video
+                          ? videoData.step_4_video
+                          : videoData.step_2_video
                         : ''
                     }
                   />

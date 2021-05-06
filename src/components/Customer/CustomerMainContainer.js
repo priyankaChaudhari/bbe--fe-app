@@ -509,6 +509,10 @@ export default function CustomerMainContainer() {
                             <span className="company-status inactive">
                               {agreement.contract_status.label}
                             </span>
+                          ) : userInfo && userInfo.role === 'Customer' ? (
+                            <span className="company-status active">
+                              <>{customer.status.label}</>
+                            </span>
                           ) : (
                             <DropDownStatus>
                               {checkStatus()}
