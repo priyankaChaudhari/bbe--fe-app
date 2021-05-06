@@ -566,10 +566,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         selectedClass = `order-chart-box ${classValue} fix-height`;
       }
     } else if (_.size(selectedAdBox) === 4) {
-        selectedClass = 'order-chart-box fix-height disabled';
-      } else {
-        selectedClass = 'order-chart-box fix-height';
-      }
+      selectedClass = 'order-chart-box fix-height disabled';
+    } else {
+      selectedClass = 'order-chart-box fix-height';
+    }
     return selectedClass;
   };
 
@@ -687,8 +687,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
             <div className="chart-name">Ad Conversion Rate</div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">15.28%</div>
+            <div className="vs">vs 14.90%</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
@@ -701,8 +701,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('impressions', 'impression-active')}>
             <div className="chart-name">Impressions </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">1528K</div>
+            <div className="vs">vs 110K</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
@@ -715,8 +715,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adCos', 'ad-cos-active')}>
             <div className="chart-name">Ad Cos</div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">$1,550.55</div>
+            <div className="vs">vs $1,114.88</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
@@ -729,8 +729,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">50.28</div>
+            <div className="vs">vs 4.90</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
@@ -743,8 +743,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClicks', 'ad-click-active')}>
             <div className="chart-name">Clicks </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">15,050</div>
+            <div className="vs">vs 1,114</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
@@ -757,8 +757,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
             <div className="chart-name">Click through rate </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="number-rate">0.28%</div>
+            <div className="vs">vs 4.90</div>
             <div className="perentage-value down mt-3">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%

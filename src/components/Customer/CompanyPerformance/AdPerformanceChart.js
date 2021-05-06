@@ -36,8 +36,8 @@ export default function AdPerformanceChart({
   //     adRoasPrevious: 3400,
   //     adClicksCurrent: 7300,
   //     adClicksPrevious: 4000,
-  //     adClickRateCurrent: 6000,
-  //     adClickRatePrevious: 4500,
+  //     adClickRateCurrent: 60,
+  //     adClickRatePrevious: 45,
   //     previousDate: new Date(2019, 5, 5),
   //   },
   //   {
@@ -56,8 +56,8 @@ export default function AdPerformanceChart({
   //     adRoasPrevious: 7200,
   //     adClicksCurrent: 1200,
   //     adClicksPrevious: 3000,
-  //     adClickRateCurrent: 9000,
-  //     adClickRatePrevious: 4200,
+  //     adClickRateCurrent: 90,
+  //     adClickRatePrevious: 42,
   //     previousDate: new Date(2019, 5, 6),
   //   },
   //   {
@@ -76,8 +76,8 @@ export default function AdPerformanceChart({
   //     adRoasPrevious: 6000,
   //     adClicksCurrent: 1200,
   //     adClicksPrevious: 4430,
-  //     adClickRateCurrent: 3400,
-  //     adClickRatePrevious: 6000,
+  //     adClickRateCurrent: 34,
+  //     adClickRatePrevious: 60,
   //     previousDate: new Date(2019, 5, 7),
   //   },
   //   {
@@ -96,8 +96,8 @@ export default function AdPerformanceChart({
   //     adRoasPrevious: 7300,
   //     adClicksCurrent: 6200,
   //     adClicksPrevious: 1000,
-  //     adClickRateCurrent: 1000,
-  //     adClickRatePrevious: 9500,
+  //     adClickRateCurrent: 10,
+  //     adClickRatePrevious: 95,
   //     previousDate: new Date(2019, 5, 8),
   //   },
   //   {
@@ -116,14 +116,13 @@ export default function AdPerformanceChart({
   //     adRoasPrevious: 4400,
   //     adClicksCurrent: 8700,
   //     adClicksPrevious: 7200,
-  //     adClickRateCurrent: 4000,
-  //     adClickRatePrevious: 2500,
+  //     adClickRateCurrent: 40,
+  //     adClickRatePrevious: 25,
   //     previousDate: new Date(2019, 5, 9),
   //   },
   // ];
 
   useEffect(() => {
-    // var selectedKeys = _.keys(selectedBox);
     const colorSet = {
       adSales: '#0045B4',
       adSpend: '#8C54FF',
@@ -146,6 +145,9 @@ export default function AdPerformanceChart({
       adClickRate: 'CLICK THROUGH RATE',
     };
 
+    // var firstAxis = null;
+    // var secondAxis = null;
+
     chart.current = am4core.create(chartId, am4charts.XYChart);
     // chart.current.data = adGraphData; // bind th data
     chart.current.data = chartData;
@@ -159,11 +161,15 @@ export default function AdPerformanceChart({
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 
+    // _.keys(selectedBox).map((item) => {
+
+    // });
     // // render y axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
+    // series.yAxis = valueAxis;
     valueAxis.numberFormatter.bigNumberPrefixes = [
       { number: 1e3, suffix: 'K' },
       { number: 1e6, suffix: 'M' },
@@ -220,6 +226,7 @@ export default function AdPerformanceChart({
       series.stroke = am4core.color('#BFC5D2');
       series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
       series.fill = am4core.color('#2e384d');
+
       // series.propertyFields.strokeDasharray = 'dashLength';
 
       // add bullet for
@@ -255,37 +262,143 @@ export default function AdPerformanceChart({
 
       chart.current.cursor.snapToSeries = [series, series2];
     } else {
+      const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
+      valueAxis2.renderer.grid.template.disabled = true;
+      valueAxis2.cursorTooltipEnabled = false;
+      valueAxis2.numberFormatter = new am4core.NumberFormatter();
+      valueAxis2.numberFormatter.numberFormat = `#.#a`;
+
+      const valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
+      valueAxis3.renderer.grid.template.disabled = true;
+      valueAxis3.cursorTooltipEnabled = false;
+      valueAxis3.numberFormatter = new am4core.NumberFormatter();
+      valueAxis3.numberFormatter.numberFormat = `#.#a`;
       const snapToSeries = [];
       let tooltipValue = '';
       _.keys(selectedBox).map((item) => {
         tooltipValue = `${tooltipValue} [${colorSet[item]}]● [/]${tooltipNames[item]}:\t{${item}Current}\n`;
         return '';
       });
-      _.keys(selectedBox).map((item) => {
-        const currentValue = `${item}Current`;
-        const seriesName = `${item}Series`;
-        const series = chart.current.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = currentValue;
-        series.dataFields.dateX = 'date';
-        series.name = seriesName;
-        series.strokeWidth = 2;
-        series.tooltipText = tooltipValue;
-        series.stroke = am4core.color(colorSet[item]);
-        series.fill = am4core.color('#2e384d');
 
-        const circleBullet = series.bullets.push(new am4charts.CircleBullet());
-        circleBullet.circle.fill = am4core.color(colorSet[item]);
-        circleBullet.circle.strokeWidth = 1;
-        circleBullet.circle.radius = 3;
-        // circleBullet.fillOpacity = 0;
-        // circleBullet.strokeOpacity = 0;
-        // const bulletState2 = circleBullet.states.create('hover');
-        // bulletState2.properties.fillOpacity = 1;
-        // bulletState2.properties.strokeOpacity = 1;
+      // _.keys(selectedBox).map((item, index) => {
+      //   const series = chart.current.series.push(new am4charts.LineSeries());
+      //   // console.log('index:==', index);
+      //   if (index === 0) {
+      //     if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+      //       // console.log('index 0 adSales');
+      //       series.yAxis = valueAxis;
+      //       valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+      //       firstAxis = 'currency';
+      //     } else if (item === 'adConversion' || item === 'adClickRate') {
+      //       // console.log('index 0 adConversion');
+      //       series.yAxis = valueAxis;
+      //       valueAxis.numberFormatter.numberFormat = `#.#`;
+      //       firstAxis = 'percentage';
+      //     } else {
+      //       // console.log('index 0 else');
+      //       series.yAxis = valueAxis;
+      //       valueAxis.numberFormatter.numberFormat = `#.#a`;
+      //       firstAxis = 'unit';
+      //     }
+      //     valueAxis.renderer.line.strokeOpacity = 1;
+      //   } else {
+      //     if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+      //       if (firstAxis === 'currency') {
+      //         // console.log('currency');
+      //         series.yAxis = valueAxis;
+      //         valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+      //       } else {
+      //         // console.log('not currency');
+      //         if (secondAxis === null || secondAxis === 'currency') {
+      //           // console.log('second axis null currency');
+      //           series.yAxis = valueAxis2;
+      //           valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+      //           valueAxis2.renderer.opposite = true;
+      //           valueAxis2.renderer.line.strokeOpacity = 1;
+      //           secondAxis = 'currency';
+      //         } else {
+      //           // console.log('second axis not null currency');
+      //           series.yAxis = valueAxis3;
+      //           valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+      //           valueAxis3.renderer.opposite = true;
+      //           valueAxis3.renderer.line.strokeOpacity = 1;
+      //         }
+      //       }
+      //     } else if (item === 'adConversion' || item === 'adClickRate') {
+      //       // console.log('adConversion');
+      //       if (firstAxis === 'percentage') {
+      //         // console.log('percentage');
+      //         series.yAxis = valueAxis;
+      //         valueAxis.numberFormatter.numberFormat = `#.#`;
+      //       } else {
+      //         // console.log(' not percentage');
+      //         if (secondAxis === null || secondAxis === 'percentage') {
+      //           // console.log('second axis null percentage');
+      //           series.yAxis = valueAxis2;
+      //           valueAxis2.numberFormatter.numberFormat = `#.#`;
+      //           valueAxis2.renderer.opposite = true;
+      //           valueAxis2.renderer.line.strokeOpacity = 1;
+      //           secondAxis = 'percentage';
+      //         } else {
+      //           // console.log('second axis not null percentage');
+      //           series.yAxis = valueAxis3;
+      //           valueAxis3.numberFormatter.numberFormat = `#.#`;
+      //           valueAxis3.renderer.opposite = true;
+      //           valueAxis3.renderer.line.strokeOpacity = 1;
+      //         }
+      //       }
+      //     } else {
+      //       if (firstAxis === 'unit') {
+      //         // console.log('unit');
+      //         series.yAxis = valueAxis;
+      //         valueAxis.numberFormatter.numberFormat = `#.#a`;
+      //       } else {
+      //         // console.log('not unit');
+      //         if (secondAxis === null || secondAxis === 'unit') {
+      //           // console.log('second axis null unit');
+      //           series.yAxis = valueAxis2;
+      //           valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      //           valueAxis2.renderer.opposite = true;
+      //           valueAxis2.renderer.line.strokeOpacity = 1;
+      //           secondAxis = 'unit';
+      //         } else {
+      //           // console.log('second axis not null unit');
+      //           series.yAxis = valueAxis3;
+      //           valueAxis3.numberFormatter.numberFormat = `#.#a`;
+      //           valueAxis3.renderer.opposite = true;
+      //           valueAxis3.renderer.line.strokeOpacity = 1;
+      //         }
+      //       }
+      //     }
+      //   }
+      //   const currentValue = `${item}Current`;
+      //   const seriesName = `${item}Series`;
 
-        snapToSeries.push(series);
-        return '';
-      });
+      //   series.dataFields.valueY = currentValue;
+      //   series.dataFields.dateX = 'date';
+      //   series.name = seriesName;
+      //   series.strokeWidth = 2;
+      //   series.tooltipText = tooltipValue;
+      //   series.stroke = am4core.color(colorSet[item]);
+      //   series.fill = am4core.color('#2e384d');
+
+      //   // valueAxis.renderer.labels.template.fill = series.stroke;
+
+      //   // valueAxis.renderer.line.strokeWidth = 2;
+
+      //   const circleBullet = series.bullets.push(new am4charts.CircleBullet());
+      //   circleBullet.circle.fill = am4core.color(colorSet[item]);
+      //   circleBullet.circle.strokeWidth = 1;
+      //   circleBullet.circle.radius = 3;
+      //   // circleBullet.fillOpacity = 0;
+      //   // circleBullet.strokeOpacity = 0;
+      //   // const bulletState2 = circleBullet.states.create('hover');
+      //   // bulletState2.properties.fillOpacity = 1;
+      //   // bulletState2.properties.strokeOpacity = 1;
+
+      //   snapToSeries.push(series);
+      //   return '';
+      // });
       chart.current.cursor.snapToSeries = snapToSeries;
     }
 
