@@ -107,4 +107,5 @@ export {
   accountSummary,
   saveBillingInfo,
   getVideoLink,
+  editCustomerEmail,
 } from './OnboardingCustomerApi';

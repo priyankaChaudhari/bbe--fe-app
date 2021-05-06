@@ -10,7 +10,11 @@ import {
   ErrorMsg,
   PageLoader,
 } from '../../common';
-import { askSomeoneData, updateAskSomeoneData } from '../../api';
+import {
+  askSomeoneData,
+  updateAskSomeoneData,
+  editCustomerEmail,
+} from '../../api';
 import { EditOrangeIcon } from '../../theme/images';
 
 export default function AskSomeone({
@@ -83,7 +87,13 @@ export default function AskSomeone({
   const sendEmail = () => {
     setIsLoading({ loader: true, type: 'email' });
 
-    if (stepData && stepData.step === step && stepData && stepData.id) {
+    if (
+      stepData &&
+      stepData.step === step &&
+      stepData &&
+      stepData.id &&
+      stepData.email === ''
+    ) {
       updateAskSomeoneData(stepData.id, { email: formData.email }).then(
         (res) => {
           if (res && res.status === 200) {
@@ -98,6 +108,28 @@ export default function AskSomeone({
           }
         },
       );
+    } else if (
+      stepData &&
+      stepData.step === step &&
+      stepData &&
+      stepData.id &&
+      stepData.email !== ''
+    ) {
+      editCustomerEmail({
+        email: formData.email,
+        step_assigned_id: stepData.id,
+      }).then((res) => {
+        if (res && res.status === 200) {
+          setStepData(res && res.data);
+          toast.success('Request Sent Successfully!');
+          setIsLoading({ loader: false, type: 'email' });
+          setEditEmail(false);
+        }
+        if (res && res.status === 400) {
+          setApiError(res && res.data);
+          setIsLoading({ loader: false, type: 'email' });
+        }
+      });
     } else {
       const data = {
         ...formData,

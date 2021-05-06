@@ -2,6 +2,7 @@ import axiosInstance from '../axios';
 import {
   API_ACCOUNT_SUMMARY,
   API_BILLING_INFO,
+  API_EDIT_EMAIL,
   API_ONBOARD_CUSTOMER,
   API_STEPS_ASSIGNED,
   API_VERIFY_TOKEN,
@@ -97,6 +98,18 @@ export async function saveBillingInfo(data) {
 export async function getVideoLink(id) {
   const result = await axiosInstance
     .get(API_VIDEO_LINKS.replace(':id', id))
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function editCustomerEmail(data) {
+  const result = await axiosInstance
+    .post(API_EDIT_EMAIL, data)
     .then((response) => {
       return response;
     })
