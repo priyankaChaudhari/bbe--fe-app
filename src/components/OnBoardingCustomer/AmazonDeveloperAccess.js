@@ -136,7 +136,7 @@ export default function AmazonDeveloperAccess({
           <span className="text-bold"> Appstore {'>'} Manage Your Apps</span>
         </p>
         <a
-          href="https://www.amazon.com/"
+          href=" https://sellercentral.amazon.com/"
           target="_blank"
           rel="noopener noreferrer">
           <Button className="btn-transparent font-style-regular w-100 mt-2">
