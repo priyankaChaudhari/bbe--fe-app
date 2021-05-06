@@ -520,7 +520,6 @@ export const WhiteCard = styled.div`
       color: ${Theme.gray6};
       font-size: ${Theme.extraNormal};
       top: -5px;
-      cursor:pointer;
       position:relative;
       
 
