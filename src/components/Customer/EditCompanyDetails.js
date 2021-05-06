@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
 /* eslint jsx-a11y/label-has-associated-control: ["error", { assert: "either" } ] */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
@@ -48,6 +48,8 @@ export default function EditCompanyDetails({
   getAmazon,
   customer,
   getActivityLogInfo,
+  scrollDown,
+  setScrollDown,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -71,6 +73,23 @@ export default function EditCompanyDetails({
   const loader = useSelector((state) => state.customerState.isLoading);
   const agreement = useSelector((state) => state.accountState.data);
 
+  const modalScrollDown = () => {
+    const div = document.getElementById('scroll-contact');
+    if (div) {
+      $('#scroll-contact').animate(
+        {
+          scrollTop: div.scrollHeight,
+        },
+        500,
+      );
+      setScrollDown(false);
+    }
+  };
+  useEffect(() => {
+    if (scrollDown === true) {
+      modalScrollDown();
+    }
+  });
   const clearSocialURL = (key) => {
     setIsLoading({ loader: true, type: 'page' });
 
@@ -784,6 +803,7 @@ export default function EditCompanyDetails({
 
 EditCompanyDetails.defaultProps = {
   id: '',
+  scrollDown: false,
 };
 
 EditCompanyDetails.propTypes = {
@@ -794,4 +814,6 @@ EditCompanyDetails.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
+  setScrollDown: PropTypes.func.isRequired,
+  scrollDown: PropTypes.bool,
 };

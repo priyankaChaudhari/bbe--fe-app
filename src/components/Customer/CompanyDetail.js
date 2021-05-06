@@ -34,6 +34,7 @@ export default function CompanyDetail({
   // const [showModal, setShowModal] = useState({ modal: false, type: '' });
   const [showModal, setShowModal] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
+  const [scrollDown, setScrollDown] = useState(false);
 
   const customStyles = {
     content: {
@@ -84,7 +85,10 @@ export default function CompanyDetail({
         <p className="black-heading-title mt-0 ">Company Contacts</p>
         <div
           className="edit-details"
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true);
+            setScrollDown(true);
+          }}
           role="presentation">
           <img src={EditOrangeIcon} alt="" />
           Edit
@@ -131,7 +135,9 @@ export default function CompanyDetail({
           </div>
           <div
             className=" edit-details"
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setShowModal(true);
+            }}
             role="presentation">
             <img src={EditOrangeIcon} alt="" />
             Edit
@@ -309,6 +315,8 @@ export default function CompanyDetail({
             amazonDetails={amazonDetails}
             getAmazon={getAmazon}
             getActivityLogInfo={getActivityLogInfo}
+            scrollDown={scrollDown}
+            setScrollDown={setScrollDown}
           />
         </Modal>
       </div>
