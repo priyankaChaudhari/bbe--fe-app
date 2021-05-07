@@ -27,7 +27,7 @@ import Statement from './Statement';
 import Discount from './Discount';
 import {
   PageLoader,
-  // PageNotFound,
+  PageNotFound,
   // SuccessMsg,
   Button,
   ModalBox,
@@ -157,6 +157,7 @@ export default function ContractContainer() {
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
+  const [showPageNotFound, setPageNotFoundFlag] = useState(false);
   // const [showSuccessContact, setShowSuccessContact] = useState({
   //   show: false,
   //   message: '',
@@ -214,17 +215,30 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
-    getcontract(params.contract_id).then((res) => {
-      setLoaderFlag(true);
+    if (params.contract_id) {
+      getcontract(params.contract_id).then((res) => {
+        setLoaderFlag(true);
 
-      if (res && res.status === 200) {
-        setDetails(res && res.data);
-        if (showSuccessToastr) {
-          toast.success('Signature Requested Successfully!');
+        if (res && res.status === 200) {
+          setDetails(res && res.data);
+          if (showSuccessToastr) {
+            toast.success('Signature Requested Successfully!');
+          }
+        } else {
+          setIsLoading({ loader: false, type: 'page' });
+
+          setLoaderFlag(false);
+          setPageNotFoundFlag(true);
         }
-      }
-      // setIsLoading({ loader: false, type: 'page' });
-    });
+        // setIsLoading({ loader: false, type: 'page' });
+      });
+    } else {
+      const path = location.pathname.slice(
+        0,
+        location.pathname.lastIndexOf('/'),
+      );
+      history.push(path);
+    }
   };
 
   useEffect(() => {
@@ -2677,275 +2691,281 @@ export default function ContractContainer() {
       search: `${stringified}`,
     });
   };
-  return (details &&
-    details.contract_status &&
-    details.contract_status.value === 'pending account setup') ||
-    (details &&
-      details.contract_status &&
-      details.contract_status.value === 'active') ||
-    (details &&
-      details.contract_status &&
-      details.contract_status.value === 'inactive') ? (
+  return (
     <>
-      <ContractTab className="d-lg-none d-block">
-        <ul className="tabs">
-          <li
-            className={tabInResponsive === 'view-contract' ? 'active' : ''}
-            role="presentation"
-            onClick={() => showTabInResponsive('view-contract')}>
-            View Contract
-          </li>
-          {/* {formData &&
+      {showPageNotFound ? (
+        <PageNotFound />
+      ) : (details &&
+          details.contract_status &&
+          details.contract_status.value === 'pending account setup') ||
+        (details &&
+          details.contract_status &&
+          details.contract_status.value === 'active') ||
+        (details &&
+          details.contract_status &&
+          details.contract_status.value === 'inactive') ? (
+        <>
+          <ContractTab className="d-lg-none d-block">
+            <ul className="tabs">
+              <li
+                className={tabInResponsive === 'view-contract' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('view-contract')}>
+                View Contract
+              </li>
+              {/* {formData &&
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
             '' */}
 
-          <li
-            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-            role="presentation"
-            onClick={() => showTabInResponsive('edit-fields')}>
-            {isEditContract ? 'Edit Fields' : 'Activity'}
-          </li>
-          {/* )} */}
-        </ul>
-      </ContractTab>
-      <div className="on-boarding-container">
-        <div className="row">
-          <div className="col-12">
-            <div className="m-0 sticky">
-              {' '}
-              <div
-                onClick={() => onClickOfBackToCustomerDetail()}
+              <li
+                className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
-                className="back-link">
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
-                />
-                Back to Customer Details
+                onClick={() => showTabInResponsive('edit-fields')}>
+                {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              {/* )} */}
+            </ul>
+          </ContractTab>
+          <div className="on-boarding-container">
+            <div className="row">
+              <div className="col-12">
+                <div className="m-0 sticky">
+                  {' '}
+                  <div
+                    onClick={() => onClickOfBackToCustomerDetail()}
+                    role="presentation"
+                    className="back-link">
+                    <img
+                      src={LeftArrowIcon}
+                      alt="aarow-back"
+                      className="arrow-back-icon "
+                    />
+                    Back to Customer Details
+                  </div>
+                </div>
               </div>
             </div>
+            {isDesktop ||
+            (isTablet && tabInResponsive === 'view-contract') ||
+            (isMobile && tabInResponsive === 'view-contract') ? (
+              <PdfViewer pdf={details && details.contract_url} />
+            ) : (
+              ''
+            )}
+            {isDesktop ||
+            (isTablet && tabInResponsive === 'edit-fields') ||
+            (isMobile && tabInResponsive === 'edit-fields')
+              ? displayRightSidePanel()
+              : ''}
           </div>
-        </div>
-        {isDesktop ||
-        (isTablet && tabInResponsive === 'view-contract') ||
-        (isMobile && tabInResponsive === 'view-contract') ? (
-          <PdfViewer pdf={details && details.contract_url} />
-        ) : (
-          ''
-        )}
-        {isDesktop ||
-        (isTablet && tabInResponsive === 'edit-fields') ||
-        (isMobile && tabInResponsive === 'edit-fields')
-          ? displayRightSidePanel()
-          : ''}
-      </div>
-    </>
-  ) : (
-    <>
-      <ContractTab className="d-lg-none d-block">
-        <ul className="tabs">
-          <li
-            className={tabInResponsive === 'view-contract' ? 'active' : ''}
-            role="presentation"
-            onClick={() => showTabInResponsive('view-contract')}>
-            View Contract
-          </li>
-          {/* {formData &&
+        </>
+      ) : (
+        <>
+          <ContractTab className="d-lg-none d-block">
+            <ul className="tabs">
+              <li
+                className={tabInResponsive === 'view-contract' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('view-contract')}>
+                View Contract
+              </li>
+              {/* {formData &&
           formData.contract_status &&
           formData.contract_status.value === 'pending contract signature' ? (
             '' */}
 
-          <li
-            className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-            role="presentation"
-            onClick={() => showTabInResponsive('edit-fields')}>
-            {isEditContract ? 'Edit Fields' : 'Activity'}
-          </li>
-          {/* )} */}
-        </ul>
-      </ContractTab>
-      {/* <div className="success-msg-pop-up contract">
+              <li
+                className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('edit-fields')}>
+                {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              {/* )} */}
+            </ul>
+          </ContractTab>
+          {/* <div className="success-msg-pop-up contract">
         {showSuccessContact.show ? (
           <SuccessMsg property=" " message={showSuccessContact.message} />
         ) : (
           ''
         )}
       </div> */}
-      {/* <div className="success-msg-pop-up contract">
+          {/* <div className="success-msg-pop-up contract">
         {showErrorMsg.show ? (
           <SuccessMsg property=" " message={showErrorMsg.message} />
         ) : (
           ''
         )}
       </div> */}
-      <div className="on-boarding-container">
-        <div className="row">
-          <div className="col-12">
-            <div className="m-0 sticky">
-              {' '}
-              <div
-                onClick={() => onClickOfBackToCustomerDetail()}
-                role="presentation"
-                className="back-link">
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
+          <div className="on-boarding-container">
+            <div className="row">
+              <div className="col-12">
+                <div className="m-0 sticky">
+                  {' '}
+                  <div
+                    onClick={() => onClickOfBackToCustomerDetail()}
+                    role="presentation"
+                    className="back-link">
+                    <img
+                      src={LeftArrowIcon}
+                      alt="aarow-back"
+                      className="arrow-back-icon "
+                    />
+                    Back to Customer Details
+                  </div>
+                </div>
+              </div>
+            </div>
+            {isDesktop ||
+            (isTablet && tabInResponsive === 'view-contract') ||
+            (isMobile && tabInResponsive === 'view-contract') ? (
+              isLoading.loader && isLoading.type === 'page' ? (
+                <PageLoader
+                  className="modal-loader"
+                  color="#FF5933"
+                  type="page"
+                  width={40}
+                  component="agreement"
                 />
-                Back to Customer Details
-              </div>
-            </div>
+              ) : details && details.id ? (
+                viewContract()
+              ) : (
+                ''
+              )
+            ) : (
+              ''
+            )}
           </div>
-        </div>
-        {isDesktop ||
-        (isTablet && tabInResponsive === 'view-contract') ||
-        (isMobile && tabInResponsive === 'view-contract') ? (
-          isLoading.loader && isLoading.type === 'page' ? (
-            <PageLoader
-              className="modal-loader"
-              color="#FF5933"
-              type="page"
-              width={40}
-              component="agreement"
+          {isDesktop ||
+          (isTablet && tabInResponsive === 'edit-fields') ||
+          (isMobile && tabInResponsive === 'edit-fields')
+            ? displayRightSidePanel()
+            : ''}
+          {(details &&
+            details.id &&
+            isLoading.loader &&
+            isLoading.type === 'button') ||
+          (!isLoading.loader && isLoading.type === 'page')
+            ? displayFooter()
+            : null}
+          <Modal
+            isOpen={showModal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => {
+                setShowModal(false);
+                removeParams('step');
+              }}
+              role="presentation"
             />
-          ) : details && details.id ? (
-            viewContract()
-          ) : (
-            ''
-          )
-        ) : (
-          ''
-        )}
-      </div>
-      {isDesktop ||
-      (isTablet && tabInResponsive === 'edit-fields') ||
-      (isMobile && tabInResponsive === 'edit-fields')
-        ? displayRightSidePanel()
-        : ''}
-      {(details &&
-        details.id &&
-        isLoading.loader &&
-        isLoading.type === 'button') ||
-      (!isLoading.loader && isLoading.type === 'page')
-        ? displayFooter()
-        : null}
-      <Modal
-        isOpen={showModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowModal(false);
-            removeParams('step');
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <RequestSignature
-            id={id}
-            agreementData={details}
-            setShowModal={setShowModal}
-            pdfData={pdfData}
-            // setShowSuccessContact={setShowSuccessContact}
-            // clearSuccessMessage={clearSuccessMessage}
-            setOpenCollapse={setOpenCollapse}
-            getContractDetails={getContractDetails}
-            setContractLoading={setIsLoading}
-          />
-        </ModalBox>
-      </Modal>
-      <Modal
-        isOpen={showDiscardModal.show}
-        style={customStylesForAlert}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <ModalBox>
-          <div className="modal-body">
-            <div className="alert-msg ">
-              <span>Are you sure you want to discard all the changes?</span>
-            </div>
-            <div className="text-center ">
-              <Button
-                onClick={() => discardAgreementChanges('No')}
-                type="button"
-                className="btn-primary on-boarding  mr-2 pb-2 mb-1">
-                Keep Editing
-              </Button>
-              <Button
-                onClick={() => discardAgreementChanges('Yes')}
-                type="button"
-                className=" btn-transparent w-50 on-boarding ">
-                Discard Changes
-              </Button>
+            <ModalBox>
+              <RequestSignature
+                id={id}
+                agreementData={details}
+                setShowModal={setShowModal}
+                pdfData={pdfData}
+                // setShowSuccessContact={setShowSuccessContact}
+                // clearSuccessMessage={clearSuccessMessage}
+                setOpenCollapse={setOpenCollapse}
+                getContractDetails={getContractDetails}
+                setContractLoading={setIsLoading}
+              />
+            </ModalBox>
+          </Modal>
+          <Modal
+            isOpen={showDiscardModal.show}
+            style={customStylesForAlert}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <ModalBox>
+              <div className="modal-body">
+                <div className="alert-msg ">
+                  <span>Are you sure you want to discard all the changes?</span>
+                </div>
+                <div className="text-center ">
+                  <Button
+                    onClick={() => discardAgreementChanges('No')}
+                    type="button"
+                    className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                    Keep Editing
+                  </Button>
+                  <Button
+                    onClick={() => discardAgreementChanges('Yes')}
+                    type="button"
+                    className=" btn-transparent w-50 on-boarding ">
+                    Discard Changes
+                  </Button>
 
-              {/* </Link> */}
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-      <Modal
-        isOpen={showDiscountModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => closeDiscountModal()}
-          role="presentation"
-        />
-        <ModalBox>
-          <Discount
-            agreementData={details}
-            setShowDiscountModal={setShowDiscountModal}
-            formData={formData}
-            setFormData={setFormData}
-            discountFlag={discountFlag}
-            getContractDetails={getContractDetails}
-          />
-        </ModalBox>
-      </Modal>
-      <Modal
-        isOpen={showEditContractConfirmationModal}
-        style={customStylesForAlert}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <ModalBox>
-          <div className="modal-body">
-            <div className="alert-msg  ">
-              Making any edits to this contract will void the version of the
-              contract that&apos;s out for signature.
-              <div className="sure-to-proceed">
-                Are you sure you want to proceed?
+                  {/* </Link> */}
+                </div>
               </div>
-            </div>
+            </ModalBox>
+          </Modal>
+          <Modal
+            isOpen={showDiscountModal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => closeDiscountModal()}
+              role="presentation"
+            />
+            <ModalBox>
+              <Discount
+                agreementData={details}
+                setShowDiscountModal={setShowDiscountModal}
+                formData={formData}
+                setFormData={setFormData}
+                discountFlag={discountFlag}
+                getContractDetails={getContractDetails}
+              />
+            </ModalBox>
+          </Modal>
+          <Modal
+            isOpen={showEditContractConfirmationModal}
+            style={customStylesForAlert}
+            ariaHideApp={false}
+            contentLabel="Edit modal">
+            <ModalBox>
+              <div className="modal-body">
+                <div className="alert-msg  ">
+                  Making any edits to this contract will void the version of the
+                  contract that&apos;s out for signature.
+                  <div className="sure-to-proceed">
+                    Are you sure you want to proceed?
+                  </div>
+                </div>
 
-            <div className="text-center ">
-              <Button
-                onClick={() => editAgreementChanges('Yes')}
-                type="button"
-                className="btn-primary on-boarding  mr-2 pb-2 mb-1">
-                Yes, Make Edits
-              </Button>
-              <Button
-                onClick={() => editAgreementChanges('No')}
-                type="button"
-                className=" btn-transparent w-50 on-boarding ">
-                Cancel
-              </Button>
+                <div className="text-center ">
+                  <Button
+                    onClick={() => editAgreementChanges('Yes')}
+                    type="button"
+                    className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                    Yes, Make Edits
+                  </Button>
+                  <Button
+                    onClick={() => editAgreementChanges('No')}
+                    type="button"
+                    className=" btn-transparent w-50 on-boarding ">
+                    Cancel
+                  </Button>
 
-              {/* </Link> */}
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
+                  {/* </Link> */}
+                </div>
+              </div>
+            </ModalBox>
+          </Modal>
+        </>
+      )}
     </>
   );
 }

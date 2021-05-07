@@ -439,13 +439,14 @@ export default function NewCustomerList() {
       } else {
         setExpiringSoon(false);
         setSelectedValue({ ...selectedValue, 'order-by': event.value });
-        customerList(
-          pageNumber,
-          event.value,
-          filters,
-          searchQuery,
-          showPerformance,
-        );
+
+        // customerList(
+        //   pageNumber,
+        //   event.value,
+        //   filters,
+        //   searchQuery,
+        //   showPerformance,
+        // );
       }
     }
     if (type === 'search') {
