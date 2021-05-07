@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
@@ -23,6 +23,7 @@ export default function CreateAccount() {
   const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
+  const loader = useSelector((state) => state.userState.isLoading);
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
@@ -61,8 +62,8 @@ export default function CreateAccount() {
         setIsLoading({ loader: false, type: 'button' });
       } else if (response && response.status === 200) {
         dispatch(login(history, loginData, '', params && params.id));
-        setIsLoading({ loader: false, type: 'button' });
         localStorage.removeItem('email');
+        setIsLoading({ loader: false, type: 'button' });
       }
     });
   };
@@ -204,7 +205,7 @@ export default function CreateAccount() {
             <Button
               className="btn-primary w-100 mt-4"
               onClick={() => savePassword()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
+              {loader || (isLoading.loader && isLoading.type === 'button') ? (
                 <PageLoader color="#FFF" type="button" />
               ) : (
                 'Continue'
