@@ -159,18 +159,20 @@ export default function CompanyDigital({
 
   const clearSocialURL = (key) => {
     setClearSocialInput({ ...clearSocialInput, [key]: null });
-    updateCustomerDetails(userInfo.customer, { [key]: null }).then(
-      (response) => {
-        if (response && response.status === 200) {
-          dispatch(getCustomerDetails(userInfo.customer));
-          setIsLoading({ loader: false, type: 'social' });
-        }
-        if (response && response.status === 400) {
-          setApiError(response && response.data);
-          setIsLoading({ loader: false, type: 'social' });
-        }
-      },
-    );
+    updateCustomerDetails(userInfo.customer || verifiedStepData.customer_id, {
+      [key]: null,
+    }).then((response) => {
+      if (response && response.status === 200) {
+        dispatch(
+          getCustomerDetails(userInfo.customer || verifiedStepData.customer_id),
+        );
+        setIsLoading({ loader: false, type: 'social' });
+      }
+      if (response && response.status === 400) {
+        setApiError(response && response.data);
+        setIsLoading({ loader: false, type: 'social' });
+      }
+    });
   };
 
   const generateHTML = () => {
