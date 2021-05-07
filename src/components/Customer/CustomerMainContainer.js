@@ -12,6 +12,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
+import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import {
@@ -117,8 +118,10 @@ export default function CustomerMainContainer() {
   const dispatch = useDispatch();
   const agreement = useSelector((state) => state.accountState.data);
   const loader = useSelector((state) => state.accountState.isLoading);
+  const customerLoader = useSelector((state) => state.customerState.isLoading);
   const customer = useSelector((state) => state.customerState.data);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState('performance');
   const [showMemberList, setShowMemberList] = useState({
@@ -234,6 +237,11 @@ export default function CustomerMainContainer() {
       setMarketplaceChoices(res && res.data);
     });
   }, [id]);
+
+  if (isSaveData && !loader && !customerLoader) {
+    toast.success('Changes Saved!');
+    IsSaveDataClicked(false);
+  }
 
   useEffect(() => {
     if (userInfo && userInfo.role !== 'Customer') {
@@ -437,6 +445,7 @@ export default function CustomerMainContainer() {
         <>
           {profileLoader ||
           loader ||
+          customerLoader ||
           (isLoading.loader && isLoading.type === 'page') ? (
             <PageLoader color="#FF5933" type="page" width={20} />
           ) : (
@@ -965,6 +974,7 @@ export default function CustomerMainContainer() {
                     setShowModal={setShowModal}
                     setDocumentImage={customer.documents}
                     getActivityLogInfo={getActivityLogInfo}
+                    IsSaveDataClicked={IsSaveDataClicked}
                   />
                 </ModalBox>
               </Modal>

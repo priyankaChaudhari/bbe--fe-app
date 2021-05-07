@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 
 import {
   getCategories,
@@ -27,6 +26,7 @@ export default function EditAccountDetails({
   setShowModal,
   setDocumentImage,
   getActivityLogInfo,
+  IsSaveDataClicked,
 }) {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
@@ -35,7 +35,6 @@ export default function EditAccountDetails({
   const [apiError, setApiError] = useState({});
   const [showBtn, setShowBtn] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [showMsg, setShowMsg] = useState(false);
 
   const CustomDropdownIndicator = (props) => {
     return (
@@ -168,13 +167,12 @@ export default function EditAccountDetails({
           setApiError(res && res.data);
           setShowModal(true);
         } else if (res && res.status === 200) {
-          setShowMsg(true);
-          setIsLoading({ loader: false, type: 'button' });
-          dispatch(getAccountDetails(customer.id));
-          dispatch(getCustomerDetails(customer.id));
-          getActivityLogInfo();
-          if (showMsg) toast.success('Changes Saved!');
-          setShowModal(false);
+          // dispatch(getAccountDetails(customer.id));
+          // dispatch(getCustomerDetails(customer.id));
+          // IsSaveDataClicked(true);
+          // getActivityLogInfo();
+          // setIsLoading({ loader: false, type: 'button' });
+          // setShowModal(false);
         }
       });
     }
@@ -185,13 +183,11 @@ export default function EditAccountDetails({
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
-        setIsLoading({ loader: false, type: 'button' });
         dispatch(getAccountDetails(customer.id));
         dispatch(getCustomerDetails(customer.id));
         getActivityLogInfo();
-        if (!showMsg) {
-          toast.success('Changes Saved!');
-        }
+        setIsLoading({ loader: false, type: 'button' });
+        IsSaveDataClicked(true);
         setShowModal(false);
       }
     });
@@ -270,6 +266,7 @@ EditAccountDetails.defaultProps = {
   id: '',
   agreement: {},
   setDocumentImage: [],
+  IsSaveDataClicked: () => {},
 };
 
 EditAccountDetails.propTypes = {
@@ -283,4 +280,5 @@ EditAccountDetails.propTypes = {
   }),
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
   getActivityLogInfo: PropTypes.func.isRequired,
+  IsSaveDataClicked: PropTypes.func,
 };
