@@ -1,3 +1,4 @@
+import { PATH_AMAZON_MERCHANT, PATH_COMPANY_DETAILS, PATH_SUMMARY } from '.';
 import {
   LinkeDinIcons,
   FaceBookIcons,
@@ -854,4 +855,74 @@ export const BillingAddress = [
 export const PaymentType = [
   { key: 'ach', label: 'ACH', type: 'radio' },
   { key: 'credit_card', label: 'Credit Card', type: 'radio' },
+];
+
+export const whichStep = [
+  {
+    key: 'digital presence',
+    stepof: 2,
+    title: 'Your company’s digital presence',
+    skip: PATH_AMAZON_MERCHANT,
+    bar: '33.2',
+    path: 'company-details',
+    subTitle: 'Need help on why we need this information?',
+    video: true,
+  },
+  {
+    key: 'billing information',
+    stepof: 3,
+    title: 'Billing Information',
+    skip: PATH_AMAZON_MERCHANT,
+    back: PATH_COMPANY_DETAILS,
+    bar: '49.8',
+    path: 'billing-details',
+    video: false,
+  },
+  {
+    key: 'merchant id',
+    stepof: 3,
+    title: 'Your Amazon Merchant ID',
+    skip: PATH_SUMMARY,
+    back: PATH_COMPANY_DETAILS,
+    bar: '66.4',
+    path: 'amazon-merchant',
+    subTitle:
+      'This information will be used by our data BOTS to access data we will use to best manage your account. For a quick tutorial on how to access this information, watch the video below.',
+    video: true,
+  },
+  {
+    key: 'developer access',
+    stepof: 4,
+    title: 'Amazon Developer Access',
+    skip: PATH_SUMMARY,
+    back: PATH_AMAZON_MERCHANT,
+    bar: '83',
+    path: 'amazon-account',
+    subTitle:
+      'Finally, we need you to grant us developer access to your Amazon Seller account.',
+    video: true,
+  },
+];
+
+export const stepPath = [
+  {
+    key: 'digital presence',
+    view: PATH_COMPANY_DETAILS,
+    title: 'Your company website url & social links',
+  },
+  // {
+  //   key: 'billing information',
+  //   title: 'Billing Information',
+  //   view: PATH_BILLING_DETAILS,
+  // },
+  {
+    key: 'merchant id',
+    title: 'Your Amazon merchant ID',
+    view: PATH_AMAZON_MERCHANT,
+  },
+  // {
+  //   key: 'developer access',
+  //   title: 'Amazon Developer Access',
+  //   view: PATH_AMAZON_ACCOUNT,
+  // },
 ];

@@ -5,16 +5,11 @@ import { useHistory } from 'react-router-dom';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import NavigationHeader from './NavigationHeader';
-import {
-  // PATH_AMAZON_ACCOUNT,
-  PATH_AMAZON_MERCHANT,
-  // PATH_BILLING_DETAILS,
-  PATH_COMPANY_DETAILS,
-  PATH_CUSTOMER_DETAILS,
-} from '../../constants';
+import { PATH_AMAZON_MERCHANT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { accountSummary, updateUserMe } from '../../api';
 import { logout, userMe } from '../../store/actions';
 import { showOnboardingMsg } from '../../store/actions/userState';
+import { stepPath } from '../../constants/FieldConstants';
 
 export default function Summary() {
   const history = useHistory();
@@ -23,29 +18,6 @@ export default function Summary() {
   const [data, setData] = useState([]);
   const [showDashboard, setShowDashboard] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
-
-  const whichStep = [
-    {
-      key: 'digital presence',
-      view: PATH_COMPANY_DETAILS,
-      title: 'Company Details',
-    },
-    // {
-    //   key: 'billing information',
-    //   title: 'Billing Information',
-    //   view: PATH_BILLING_DETAILS,
-    // },
-    {
-      key: 'merchant id',
-      title: 'Amazon Merchant ID',
-      view: PATH_AMAZON_MERCHANT,
-    },
-    // {
-    //   key: 'developer access',
-    //   title: 'Amazon Developer Access',
-    //   view: PATH_AMAZON_ACCOUNT,
-    // },
-  ];
 
   useEffect(() => {
     accountSummary(userInfo.customer_onboarding).then((response) => {
@@ -62,7 +34,7 @@ export default function Summary() {
   }, [userInfo.customer_onboarding]);
 
   const getPath = (step, type) => {
-    for (const item of whichStep) {
+    for (const item of stepPath) {
       if (item.key === step) {
         if (type === 'label') {
           return item.title;

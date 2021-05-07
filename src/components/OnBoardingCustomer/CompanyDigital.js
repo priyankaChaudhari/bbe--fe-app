@@ -208,7 +208,7 @@ export default function CompanyDigital({
                     onChange={(event) => handleChange(event)}
                     readOnly={isChecked}
                   />
-                  {data && data[item.key] ? (
+                  {data && data[item.key] && !isChecked ? (
                     <img
                       src={TrashIcons}
                       alt="delete"

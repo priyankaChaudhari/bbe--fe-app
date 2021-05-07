@@ -26,6 +26,7 @@ export default function AskSomeone({
   stepData,
   setStepData,
   userInfo,
+  setDisableBtn,
 }) {
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
@@ -47,6 +48,7 @@ export default function AskSomeone({
   const handleChanges = (event) => {
     if (event.target.checked) {
       setIsChecked(true);
+      setDisableBtn(true);
     } else {
       setIsLoading({ loader: true, type: 'check' });
       setIsChecked(false);
@@ -103,10 +105,12 @@ export default function AskSomeone({
             toast.success('Request Sent Successfully!');
             setIsLoading({ loader: false, type: 'email' });
             setEditEmail(false);
+            setDisableBtn(false);
           }
           if (res && res.status === 400) {
             setApiError(res && res.data);
             setIsLoading({ loader: false, type: 'email' });
+            setDisableBtn(false);
           }
         },
       );
@@ -126,10 +130,12 @@ export default function AskSomeone({
           toast.success('Request Sent Successfully!');
           setIsLoading({ loader: false, type: 'email' });
           setEditEmail(false);
+          setDisableBtn(false);
         }
         if (res && res.status === 400) {
           setApiError(res && res.data);
           setIsLoading({ loader: false, type: 'email' });
+          setDisableBtn(false);
         }
       });
     } else {
@@ -143,10 +149,12 @@ export default function AskSomeone({
           setStepData(response && response.data);
           toast.success('Request Sent Successfully!');
           setIsLoading({ loader: false, type: 'email' });
+          setDisableBtn(false);
         }
         if (response && response.status === 400) {
           setApiError(response && response.data);
           setIsLoading({ loader: false, type: 'email' });
+          setDisableBtn(false);
         }
       });
     }
@@ -224,7 +232,10 @@ export default function AskSomeone({
                     : 'edit-field cursor'
                 }
                 role="presentation"
-                onClick={() => setEditEmail(true)}>
+                onClick={() => {
+                  setEditEmail(true);
+                  setDisableBtn(true);
+                }}>
                 <img className="edit-icon" src={EditOrangeIcon} alt="edit" />{' '}
                 Edit email address
               </span>
@@ -275,6 +286,7 @@ AskSomeone.defaultProps = {
   setIsLoading: () => {},
   setStepData: () => {},
   stepData: {},
+  setDisableBtn: () => {},
 };
 
 AskSomeone.propTypes = {
@@ -297,4 +309,5 @@ AskSomeone.propTypes = {
     step: PropTypes.string,
     is_completed: PropTypes.bool,
   }),
+  setDisableBtn: PropTypes.func,
 };

@@ -19,6 +19,7 @@ import {
 import { CaretUp, CloseIcon } from '../../theme/images';
 import AskSomeone from './AskSomeone';
 import {
+  accountSummary,
   getStepDetails,
   getUserData,
   getVideoLink,
@@ -26,14 +27,7 @@ import {
 } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
-import {
-  // PATH_AMAZON_ACCOUNT,
-  PATH_AMAZON_MERCHANT,
-  // PATH_BILLING_DETAILS,
-  PATH_COMPANY_DETAILS,
-  PATH_SUMMARY,
-  PATH_THANKS,
-} from '../../constants';
+import { PATH_THANKS } from '../../constants';
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
 import BillingInfo from './BillingInfo';
@@ -43,6 +37,7 @@ import {
   CheckSteps,
   CreateAccount,
 } from '.';
+import { stepPath, whichStep } from '../../constants/FieldConstants';
 
 export default function MainContainer() {
   const history = useHistory();
@@ -59,6 +54,8 @@ export default function MainContainer() {
   const [userInfo, setUserInfo] = useState({});
   const [showVideo, setShowVideo] = useState(false);
   const [videoData, setVideoData] = useState({});
+  const [summaryData, setSummaryData] = useState([]);
+  const [disableBtn, setDisableBtn] = useState(false);
 
   const customStyles = {
     content: {
@@ -74,52 +71,6 @@ export default function MainContainer() {
       transform: 'translate(-50%, -50%)',
     },
   };
-  const whichStep = [
-    {
-      key: 'digital presence',
-      stepof: 2,
-      title: 'Your company’s digital presence',
-      skip: PATH_AMAZON_MERCHANT,
-      bar: '33.2',
-      path: 'company-details',
-      subTitle: 'Need help on why we need this information?',
-      video: true,
-    },
-    {
-      key: 'billing information',
-      stepof: 3,
-      title: 'Billing Information',
-      skip: PATH_AMAZON_MERCHANT,
-      back: PATH_COMPANY_DETAILS,
-      bar: '49.8',
-      path: 'billing-details',
-      video: false,
-    },
-    {
-      key: 'merchant id',
-      stepof: 3,
-      title: 'Your Amazon Merchant ID',
-      skip: PATH_SUMMARY,
-      back: PATH_COMPANY_DETAILS,
-      bar: '66.4',
-      path: 'amazon-merchant',
-      subTitle:
-        'This information will be used by our data BOTS to access data we will use to best manage your account. For a quick tutorial on how to access this information, watch the video below.',
-      video: true,
-    },
-    {
-      key: 'developer access',
-      stepof: 4,
-      title: 'Amazon Developer Access',
-      skip: PATH_SUMMARY,
-      back: PATH_AMAZON_MERCHANT,
-      bar: '83',
-      path: 'amazon-account',
-      subTitle:
-        'Finally, we need you to grant us developer access to your Amazon Seller account.',
-      video: true,
-    },
-  ];
 
   const getStepName = () => {
     for (const item of whichStep) {
@@ -177,15 +128,30 @@ export default function MainContainer() {
                 (userInfo && userInfo.customer),
             ),
           );
+
           setVerifiedStepData(verify && verify.data);
         });
       }
+
       if (history.location.pathname.includes('assigned')) {
         setAssignedToSomeone(true);
       } else {
         getUserData(localStorage.getItem('customer')).then((res) => {
           if (res && res.status === 200) {
             setUserInfo(res && res.data);
+            accountSummary(
+              res && res.data && res.data.customer_onboarding,
+            ).then((summary) => {
+              const fields = [];
+              stepPath.map((item) =>
+                fields.push({
+                  [item.key]: summary.data.some((op) => {
+                    return op.step === item.key ? op.is_completed : false;
+                  }),
+                }),
+              );
+              setSummaryData(fields);
+            });
             getStepDetails(
               (res && res.data && res.data.customer_onboarding) ||
                 verifiedStepData.customer_onboarding_id,
@@ -374,6 +340,7 @@ export default function MainContainer() {
                     stepData={stepData}
                     setStepData={setStepData}
                     userInfo={userInfo}
+                    setDisableBtn={setDisableBtn}
                   />
                 )}
                 {assignedToSomeone || !isChecked ? (
@@ -405,7 +372,12 @@ export default function MainContainer() {
                       {generateHTML(item.path)}
                     </Collapse>
                   </CollapseOpenContainer>
-                  <CheckSteps userInfo={userInfo} />
+                  <CheckSteps
+                    userInfo={userInfo}
+                    summaryData={summaryData}
+                    step={item.key}
+                    disableBtn={disableBtn}
+                  />
                 </div>
               ) : (
                 ''
