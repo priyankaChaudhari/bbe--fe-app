@@ -137,20 +137,8 @@ export default function CompanyDigital({
     });
   };
 
-  const handleChange = (event, type) => {
-    const prefix = 'https://';
-    if (
-      type === 'social' &&
-      event.target.value.substr(0, prefix.length) !== prefix
-    ) {
-      setFormData({
-        ...formData,
-        [event.target.name]: prefix + event.target.value,
-      });
-    } else {
-      setFormData({ ...formData, [event.target.name]: event.target.value });
-    }
-
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
     setApiError({
       ...apiError,
       [event.target.name]: '',
@@ -217,7 +205,7 @@ export default function CompanyDigital({
                     placeholder={`Enter ${item.label} URL`}
                     name={item.key}
                     defaultValue={data && data[item.key]}
-                    onChange={(event) => handleChange(event, 'social')}
+                    onChange={(event) => handleChange(event)}
                     readOnly={isChecked}
                   />
                   {data && data[item.key] ? (
