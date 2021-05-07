@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import { Collapse } from 'react-collapse';
-import queryString from 'query-string';
 import Theme from '../../theme/Theme';
 import { Button } from '../../common';
 import { WhiteCard } from '../../theme/Global';
@@ -139,14 +138,10 @@ export default function AgreementDetails({ agreements, id }) {
                   }>
                   <Link
                     to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id),
-                      state: agreement.id,
-                      search: `${
-                        queryString &&
-                        queryString.stringify({
-                          contract_id: agreement.id,
-                        })
-                      }`,
+                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                        ':contract_id',
+                        agreement.id,
+                      ),
                     }}>
                     <Button className="btn-transparent w-100 view-contract">
                       {' '}

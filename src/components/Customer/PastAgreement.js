@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import queryString from 'query-string';
 import Button from '../../common/Button';
 import {
   FileContract,
@@ -94,14 +93,10 @@ export default function PastAgreement({ id }) {
                 <div className="col-lg-3 col-md-4 col-12 text-right">
                   <Link
                     to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id),
-                      search: `${
-                        queryString &&
-                        queryString.stringify({
-                          contract_id: item.id,
-                        })
-                      }`,
-                      // state: item.id,
+                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                        'contract_id',
+                        item.id,
+                      ),
                     }}>
                     <Button className="btn-transparent w-100  view-contract ">
                       {' '}

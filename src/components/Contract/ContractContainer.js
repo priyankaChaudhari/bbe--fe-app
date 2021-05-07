@@ -6,16 +6,12 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
-// import { Document, Page } from 'react-pdf/dist/entry.webpack';
-// import 'react-pdf/dist/Page/AnnotationLayer.css';
-
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
-// import samplePDF from './sample1.pdf';
 import Theme from '../../theme/Theme';
 
 import AgreementSidePanel from '../../common/AgreementSidePanel';
@@ -25,14 +21,7 @@ import DSPAddendum from './DSPAddendum';
 import Addendum from './Addendum';
 import Statement from './Statement';
 import Discount from './Discount';
-import {
-  PageLoader,
-  PageNotFound,
-  // SuccessMsg,
-  Button,
-  ModalBox,
-} from '../../common';
-// import { getAccountDetails } from '../../store/actions/accountState';
+import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, LeftArrowIcon, InfoIcon } from '../../theme/images';
@@ -42,8 +31,6 @@ import {
   updateAccountDetails,
   createMarketplace,
   updateMarketplace,
-  // createAdditionalServices,
-  // updateAdditionalServices,
   createAddendum,
   getAddendum,
   updateAddendum,
@@ -66,7 +53,6 @@ const customStyles = {
     bottom: 'auto',
     maxWidth: '600px ',
     width: '100% ',
-    // minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -95,12 +81,9 @@ export default function ContractContainer() {
   const id = location.pathname.split('/')[2];
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  // const [activityLogLoader, setActivityLogLoader] = useState(false);
   const [formData, setFormData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [updatedFormData, setUpdatedFormData] = useState({});
-  // const details = useSelector((state) => state.accountState.data);
-  // const loader = useSelector((state) => state.accountState.isLoading);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showModal, setShowModal] = useState(false);
   const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
@@ -158,10 +141,6 @@ export default function ContractContainer() {
     false,
   );
   const [showPageNotFound, setPageNotFoundFlag] = useState(false);
-  // const [showSuccessContact, setShowSuccessContact] = useState({
-  //   show: false,
-  //   message: '',
-  // });
 
   const [showSection, setShowCollpase] = useState({
     addendum: true,
@@ -191,8 +170,6 @@ export default function ContractContainer() {
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
-    // if (eleId !== 'addendum') {
-
     const offset = isDesktop ? -150 : isMobile ? -220 : -220;
     const y =
       element &&
@@ -215,8 +192,10 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
-    if (params.contract_id) {
-      getcontract(params.contract_id).then((res) => {
+    const contractID =
+      location && location.pathname && location.pathname.split('/');
+    if (contractID) {
+      getcontract(contractID[4]).then((res) => {
         setLoaderFlag(true);
 
         if (res && res.status === 200) {
@@ -230,7 +209,6 @@ export default function ContractContainer() {
           setLoaderFlag(false);
           setPageNotFoundFlag(true);
         }
-        // setIsLoading({ loader: false, type: 'page' });
       });
     } else {
       const path = location.pathname.slice(
@@ -242,10 +220,7 @@ export default function ContractContainer() {
   };
 
   useEffect(() => {
-    // dispatch(getAccountDetails(id));
-
     agreementTemplate().then((response) => {
-      // setIsLoading({ loader: true, type: 'page' });
       setData(
         response &&
           response.data &&
@@ -253,8 +228,6 @@ export default function ContractContainer() {
           response.data.results[0],
       );
       getContractDetails();
-
-      // setIsLoading({ loader: false, type: 'page' });
     });
 
     getAddendum({ customer_id: id }).then((addendum) => {
@@ -416,44 +389,48 @@ export default function ContractContainer() {
         setShowAdditionalMarketplace(false);
       }
 
-      const statementData = {
-        id:
-          (details &&
-            details.primary_marketplace &&
-            details.primary_marketplace.id) ||
-          '',
-        contract: details.id,
-        name: updatedFormData && updatedFormData.primary_marketplace,
-        is_primary: true,
-      };
+      if (updatedFormData && updatedFormData.primary_marketplace) {
+        const statementData = {
+          id:
+            (details &&
+              details.primary_marketplace &&
+              details.primary_marketplace.id) ||
+            '',
+          contract: details.id,
+          name: updatedFormData && updatedFormData.primary_marketplace,
+          is_primary: true,
+        };
 
-      if (details.primary_marketplace && details.primary_marketplace.id) {
-        await updateMarketplace(
-          details.primary_marketplace.id,
-          statementData,
-        ).then((updateMarketplaceRes) => {
-          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
-            if (updatedFormData && updatedFormData.primary_marketplace) {
-              delete updatedFormData.primary_marketplace;
-              // setUpdatedFormData({ ...updatedFormData });
-              // if (!Object.keys(updatedFormData).length) {
-              //   showFooter(false);
-              //   setIsEditContract(false);
-              //   getContractDetails();
-              // }
+        if (details.primary_marketplace && details.primary_marketplace.id) {
+          await updateMarketplace(
+            details.primary_marketplace.id,
+            statementData,
+          ).then((updateMarketplaceRes) => {
+            if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+              if (updatedFormData && updatedFormData.primary_marketplace) {
+                delete updatedFormData.primary_marketplace;
+                // setUpdatedFormData({ ...updatedFormData });
+                // if (!Object.keys(updatedFormData).length) {
+                //   showFooter(false);
+                //   setIsEditContract(false);
+                //   getContractDetails();
+                // }
+              }
             }
-          }
-        });
-      } else {
-        await createMarketplace(statementData).then((createMarketplaceRes) => {
-          setIsLoading({ loader: false, type: 'button' });
-          setIsLoading({ loader: false, type: 'page' });
-          if (createMarketplaceRes && createMarketplaceRes.status === 201) {
-            if (updatedFormData && updatedFormData.primary_marketplace) {
-              delete updatedFormData.primary_marketplace;
-            }
-          }
-        });
+          });
+        } else {
+          await createMarketplace(statementData).then(
+            (createMarketplaceRes) => {
+              setIsLoading({ loader: false, type: 'button' });
+              setIsLoading({ loader: false, type: 'page' });
+              if (createMarketplaceRes && createMarketplaceRes.status === 201) {
+                if (updatedFormData && updatedFormData.primary_marketplace) {
+                  delete updatedFormData.primary_marketplace;
+                }
+              }
+            },
+          );
+        }
       }
       setUpdatedFormData({ ...updatedFormData });
     }
@@ -492,7 +469,6 @@ export default function ContractContainer() {
             showFooter(false);
             setIsEditContract(false);
             setUpdatedFormData({});
-            // dispatch(getAccountDetails(id));
             getContractDetails();
             setIsEditContract(false);
           }
@@ -569,7 +545,7 @@ export default function ContractContainer() {
                 .filter((item) => item !== 'additional_marketplaces')
                 .filter((item) => item !== 'primary_marketplace')
                 .filter((item) => item !== 'addendum');
-              // fieldsToDeleteList.map(item => delete updatedFormData.item)
+
               for (const item of fieldsToDeleteList) {
                 delete updatedFormData[item];
               }
@@ -579,7 +555,6 @@ export default function ContractContainer() {
           if (!Object.keys(updatedFormData).length) {
             showFooter(false);
             setIsEditContract(false);
-            // dispatch(getAccountDetails(id));
             getContractDetails();
           }
           setUpdatedFormData({ ...updatedFormData });
@@ -663,7 +638,6 @@ export default function ContractContainer() {
               showFooter(false);
               setIsEditContract(false);
               setUpdatedFormData({});
-              // dispatch(getAccountDetails(id));
               getContractDetails();
             }
           }
@@ -718,26 +692,9 @@ export default function ContractContainer() {
         }),
       )
       .catch(() => {});
-
-    //  .then((response) => {
-    //     if (response && response.status === 400) {
-    //       setIsLoading({ loader: false, type: 'button' });
-    //       setApiError(response && response.data);
-    //       // setFormData({});
-    //     } else if (response && response.status === 200) {
-    //       setTimeout(() => dispatch(getAccountDetails(id)), 800);
-    //       setIsLoading({ loader: false, type: 'button' });
-    //       setFormData(response && response.data);
-    //       setUpdatedFormData({});
-    //     }
-    //   });
   };
 
   const nextStep = async () => {
-    // if (history.location.pathname.includes('agreement')) {
-
-    // setSectionError({});
-
     const additionalMarketplacesApi = null;
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
@@ -811,48 +768,26 @@ export default function ContractContainer() {
       const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
       for (const val of num) {
         if (updatedFormData && updatedFormData[val]) {
-          updatedFormData[val] = updatedFormData[val]
-            // .substring(1)
-            .replace(/,/g, '');
+          updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
         }
       }
       const detail = {
         ...updatedFormData,
-        // steps_completed: {
-        //   ...details.steps_completed,
-        //   agreement: true,
-        //   statement: true,
-        // },
       };
 
       AccountApi = updateAccountDetails(details.id, detail);
 
       if (newAddendumData && newAddendumData.id) {
-        //  setIsLoading({ loader: true, type: 'page' });
-
         AddendumApi = updateAddendum(newAddendumData.id, {
           addendum: newAddendumData && newAddendumData.addendum,
         });
-        //  .then(() => {
-        //    setIsLoading({ loader: false, type: 'page' });
-        //    setShowEditor(false);
-        //  });
       } else {
         const addendumData = {
           customer_id: id,
           addendum: newAddendumData && newAddendumData.addendum,
           contract: details.id,
         };
-        //  setIsLoading({ loader: true, type: 'page' });
-
         AddendumApi = createAddendum(addendumData);
-        // .then((res) => {
-        //    setIsLoading({ loader: false, type: 'page' });
-        //    if (res && res.status === 201) {
-        //      setNewAddendum(res && res.data);
-        //      setShowEditor(false);
-        //    }
-        //  });
       }
 
       const apis = [
@@ -886,37 +821,6 @@ export default function ContractContainer() {
       await updateMarketplaces();
 
       saveChanges(apis);
-      // if (
-      //   updatedFormData &&
-      //   updatedFormData.primary_marketplace &&
-      //   updatedFormData.additional_marketplaces
-      // ) {
-      //   setTimeout(() => saveChanges(apis), 30000);
-      // } else {
-      //   saveChanges(apis);
-      // }
-
-      // else {
-      //   const stepsCompletedData = {
-      //     steps_completed: {
-      //       ...details.steps_completed,
-      //       agreement: true,
-      //       statement: true,
-      //     },
-      //   };
-      //   setIsLoading({ loader: true, type: 'button' });
-
-      //   updateAccountDetails(details.id, stepsCompletedData).then((response) => {
-      //     setIsLoading({ loader: false, type: 'button' });
-
-      //     if (response && response.status === 200) {
-      //       // dispatch(getAccountDetails(id));
-      //       getContractDetails();
-      //     }
-      //   });
-      // }
-
-      // }
     }
   };
 
@@ -930,8 +834,6 @@ export default function ContractContainer() {
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
-      // if (showDiscardModal.clickedBtn === 'back') {
-      // }
     }
 
     if (flag === 'Yes') {
@@ -957,33 +859,6 @@ export default function ContractContainer() {
       setThirdMonthDate(null);
       setEndDate(null);
 
-      // setMarketplacesResult(marketplacesResult)
-
-      // if (
-      //   details &&
-      //   details.primary_marketplace &&
-      //   details.primary_marketplace.name
-      // ) {
-      //   setAdditionalMarketplaces(
-      //     marketPlaces.filter(
-      //       (op) => op.value !== details.primary_marketplace.name,
-      //     ),
-      //   );
-      // } else {
-      //   setAdditionalMarketplaces(marketPlaces);
-      // }
-
-      // if (details && details.additional_marketplaces) {
-      //   setMarketPlaces(
-      //     additionalMarketplaces.filter(
-      //       (choice) =>
-      //         !(details && details.additional_marketplaces).some(
-      //           (item) => item.name === choice.value,
-      //         ),
-      //     ),
-      //   );
-      // }
-
       if (
         details &&
         details.additional_marketplaces &&
@@ -993,7 +868,6 @@ export default function ContractContainer() {
       } else {
         setShowAdditionalMarketplace(false);
       }
-      // dispatch(getAccountDetails(id));
       getContractDetails();
     }
   };
@@ -1010,11 +884,7 @@ export default function ContractContainer() {
       setIsLoading({ loader: true, type: 'page' });
       setLoaderFlag(false);
       updateAccountDetails(details.id, dataToUpdate).then((response) => {
-        // setIsLoading({ loader: false, type: 'page' });
-        // setLoaderFlag(true);
-
         if (response && response.status === 200) {
-          // dispatch(getAccountDetails(id));
           getContractDetails();
           setIsEditContract(true);
         }
@@ -1073,7 +943,6 @@ export default function ContractContainer() {
       return `90 days (3 months)`;
     }
     return `105 days (3.5 months)`;
-    // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
   const mapDefaultValues = (key, label, type) => {
@@ -1081,11 +950,6 @@ export default function ContractContainer() {
       return details && details[key] ? details && details[key] : `Client Name`;
     }
 
-    // if (key === 'contract_company_name') {
-    //   return details && details[key]
-    //     ? details && details[key]
-    //     : `Enter ${label}.`;
-    // }
     if (key === 'length' && label === 'Initial Period') {
       if (
         formData &&
@@ -1835,20 +1699,6 @@ export default function ContractContainer() {
 
   const onEditcontract = () => {
     setShowEditContractConfirmationModal(true);
-    // const dataToUpdate = {
-    //   contract_status: 'pending contract',
-    // };
-    // setIsLoading({ loader: true, type: 'button' });
-
-    // updateAccountDetails(details.id, dataToUpdate).then((response) => {
-    //   setIsLoading({ loader: false, type: 'button' });
-
-    //   if (response && response.status === 200) {
-    //     // dispatch(getAccountDetails(id));
-    //     getContractDetails();
-    //     setIsEditContract(true);
-    //   }
-    // });
   };
 
   const showStandardServicesTable = () => {
@@ -1905,9 +1755,6 @@ export default function ContractContainer() {
         )
         .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-        // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-        // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-        // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
         .replace(
           'AGREEMENT_LENGTH',
           mapDefaultValues('length', 'Contract Length'),
@@ -1917,7 +1764,7 @@ export default function ContractContainer() {
           'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
           `${mapServiceTotal('additional_one_time_services')}`,
         );
-    // }
+
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',
       mapDefaultValues('contract_company_name', 'Customer Name'),
@@ -1927,9 +1774,6 @@ export default function ContractContainer() {
         mapDefaultValues('start_date', 'Start Date'),
       )
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
-      // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City, '))
-      // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State, '))
-      // .replace('CUSTOMER_POSTAL', mapDefaultValues('zip_code', 'Postal Code, '))
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
 
@@ -2087,19 +1931,6 @@ export default function ContractContainer() {
       details && details.length && details.length.value,
       10,
     );
-    // if (
-    //   details &&
-    //   details.contract_type &&
-    //   details.contract_type.toLowerCase().includes('one')
-    // ) {
-    //   if (
-    //     contractTermLength < 12
-    //     // &&
-    //     // !(userInfo && userInfo.role === 'Team Manager - TAM')
-    //   ) {
-    //     return true;
-    //   }
-    // } else
     if (
       details &&
       details.contract_type &&
@@ -2135,7 +1966,6 @@ export default function ContractContainer() {
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
-      // state: `${location.state}`
     });
   };
 
@@ -2329,7 +2159,6 @@ export default function ContractContainer() {
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
-        // className={`${btnClass} on-boarding  mt-3  `}
         className={`${btnClass} on-boarding  mt-3  ${
           isEditContract ? 'w-sm-50' : 'w-sm-100'
         }`}
@@ -2350,7 +2179,6 @@ export default function ContractContainer() {
         formData={formData}
         apiError={apiError}
         loader={isLoading.loader}
-        // setActivityLogLoader={setActivityLogLoader}
         agreementData={details}
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
@@ -2420,7 +2248,6 @@ export default function ContractContainer() {
         <Footer className=" mt-5 ">
           <div className="container-fluid ">
             <Button
-              // className="btn-primary  sticky-btn-primary sidepanel mt-3 mr-5  on-boarding w-sm-50"
               className={`btn-primary sticky-btn-primary sidepanel mt-3  ${
                 isEditContract ? 'w-sm-100 ml-0 mr-0' : 'w-sm-50 ml-0'
               }`}
@@ -2476,12 +2303,6 @@ export default function ContractContainer() {
                 formData.additional_one_time_services.find(
                   (item) => item.name === 'Amazon Store Package',
                 )
-                //   ||
-                // (newAddendumData &&
-                //   newAddendumData.addendum &&
-                //   newAddendumData.addendum) ===
-                //   `<p></p>
-                //   `
               }
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
@@ -2493,9 +2314,6 @@ export default function ContractContainer() {
 
             <Button
               className="btn-borderless contract-btn on-boarding  mt-3  w-sm-50 ml-5"
-              // className={`btn-primary sticky-btn-primary sidepanel mt-3 mr-5 ${
-              //   isEditContract ? 'w-sm-100' : 'w-sm-50'
-              // }`}
               onClick={() =>
                 setShowDiscardModal({
                   ...showDiscardModal,
@@ -2625,7 +2443,6 @@ export default function ContractContainer() {
               showRightTick('dspAddendum') ? (
               <>
                 <Button
-                  // className="btn-primary on-boarding  mt-3 mr-5 w-sm-50"
                   className={`btn-primary on-boarding mt-3 ml-0 ${
                     isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
                   }`}
@@ -2668,7 +2485,6 @@ export default function ContractContainer() {
   };
 
   const closeDiscountModal = () => {
-    // getContractDetails();
     const discountUpdatedData = {
       monthly_discount_amount: details.monthly_discount_amount,
       monthly_discount_type: details.monthly_discount_type,
@@ -2713,10 +2529,6 @@ export default function ContractContainer() {
                 onClick={() => showTabInResponsive('view-contract')}>
                 View Contract
               </li>
-              {/* {formData &&
-          formData.contract_status &&
-          formData.contract_status.value === 'pending contract signature' ? (
-            '' */}
 
               <li
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
@@ -2724,7 +2536,6 @@ export default function ContractContainer() {
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
               </li>
-              {/* )} */}
             </ul>
           </ContractTab>
           <div className="on-boarding-container">
@@ -2770,10 +2581,6 @@ export default function ContractContainer() {
                 onClick={() => showTabInResponsive('view-contract')}>
                 View Contract
               </li>
-              {/* {formData &&
-          formData.contract_status &&
-          formData.contract_status.value === 'pending contract signature' ? (
-            '' */}
 
               <li
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
@@ -2781,23 +2588,9 @@ export default function ContractContainer() {
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
               </li>
-              {/* )} */}
             </ul>
           </ContractTab>
-          {/* <div className="success-msg-pop-up contract">
-        {showSuccessContact.show ? (
-          <SuccessMsg property=" " message={showSuccessContact.message} />
-        ) : (
-          ''
-        )}
-      </div> */}
-          {/* <div className="success-msg-pop-up contract">
-        {showErrorMsg.show ? (
-          <SuccessMsg property=" " message={showErrorMsg.message} />
-        ) : (
-          ''
-        )}
-      </div> */}
+
           <div className="on-boarding-container">
             <div className="row">
               <div className="col-12">
@@ -2870,8 +2663,6 @@ export default function ContractContainer() {
                 agreementData={details}
                 setShowModal={setShowModal}
                 pdfData={pdfData}
-                // setShowSuccessContact={setShowSuccessContact}
-                // clearSuccessMessage={clearSuccessMessage}
                 setOpenCollapse={setOpenCollapse}
                 getContractDetails={getContractDetails}
                 setContractLoading={setIsLoading}
@@ -2958,8 +2749,6 @@ export default function ContractContainer() {
                     className=" btn-transparent w-50 on-boarding ">
                     Cancel
                   </Button>
-
-                  {/* </Link> */}
                 </div>
               </div>
             </ModalBox>

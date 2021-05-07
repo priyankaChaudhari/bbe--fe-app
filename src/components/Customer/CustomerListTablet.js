@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-import queryString from 'query-string';
 import Theme from '../../theme/Theme';
 import { WhiteCard } from '../../theme/Global';
 import {
@@ -40,15 +39,11 @@ export default function CustomerListTablet({
     getcontract(type.contract_id).then((res) => {
       if (res && res.status === 200) {
         if (res && res.data && res.data.contract_url) {
-          const stringified =
-            queryString &&
-            queryString.stringify({
-              contract_id: type.contract_id,
-            });
-
           history.push({
-            pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
-            search: `${stringified}`,
+            pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
+              ':contract_id',
+              type.contract_id,
+            )}`,
           });
         }
       }
@@ -65,15 +60,11 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                contract_id: type.contract_id,
-              });
-
             history.push({
-              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
-              search: `${stringified}`,
+              pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
+                ':contract_id',
+                type.contract_id,
+              )}`,
             });
           }}
           role="presentation"
@@ -94,15 +85,11 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                contract_id: type.contract_id,
-              });
-
             history.push({
-              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
-              search: `${stringified}`,
+              pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
+                ':contract_id',
+                type.contract_id,
+              )}`,
             });
           }}
           role="presentation"
@@ -122,15 +109,11 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                contract_id: type.contract_id,
-              });
-
             history.push({
-              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
-              search: `${stringified}`,
+              pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
+                ':contract_id',
+                type.contract_id,
+              )}`,
             });
           }}
           role="presentation"
@@ -154,15 +137,11 @@ export default function CustomerListTablet({
         <li
           onClickCapture={(e) => {
             e.stopPropagation();
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                contract_id: type.contract_id,
-              });
-
             history.push({
-              pathname: `${PATH_AGREEMENT.replace(':id', id)}`,
-              search: `${stringified}`,
+              pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
+                ':contract_id',
+                type.contract_id,
+              )}`,
             });
           }}
           role="presentation"
