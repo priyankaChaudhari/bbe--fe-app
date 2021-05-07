@@ -19,8 +19,12 @@ import {
   updateUserMe,
 } from '../../api';
 import { getCustomerDetails, userMe } from '../../store/actions';
-import { SocialIcons } from '../../constants/FieldConstants';
-import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
+import { SocialIcons, stepPath } from '../../constants/FieldConstants';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_SUMMARY,
+  PATH_THANKS,
+} from '../../constants';
 import { TrashIcons } from '../../theme/images';
 
 export default function CompanyDigital({
@@ -32,6 +36,7 @@ export default function CompanyDigital({
   data,
   isLoading,
   isChecked,
+  summaryData,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -45,6 +50,27 @@ export default function CompanyDigital({
     pinterest: '',
     twitter: '',
   });
+
+  const getIncompleteStep = summaryData.find(
+    (op) =>
+      Object.keys(op)[0] !== 'digital presence' &&
+      Object.values(op)[0] === false,
+  );
+
+  const CheckStep = (step) => {
+    setIsLoading({ loader: true, type: 'button' });
+    if (step === 'merchant id' || getIncompleteStep === undefined) {
+      history.push(PATH_SUMMARY);
+    } else {
+      stepPath.map((item) => {
+        if (Object.keys(getIncompleteStep)[0] === item.key) {
+          return history.push(item.view);
+        }
+        return history.push(PATH_SUMMARY);
+      });
+    }
+    setIsLoading({ loader: false, type: 'button' });
+  };
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -115,7 +141,8 @@ export default function CompanyDigital({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_AMAZON_MERCHANT);
+                CheckStep('digital presence');
+                // history.push(PATH_AMAZON_MERCHANT);
               }
               updateUserMe(userInfo.id, {
                 step: { ...userInfo.step, [userInfo.customer]: 2 },
@@ -287,4 +314,5 @@ CompanyDigital.propTypes = {
     type: PropTypes.string,
   }).isRequired,
   isChecked: PropTypes.bool.isRequired,
+  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

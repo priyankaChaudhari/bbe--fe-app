@@ -48,6 +48,6 @@ export default function CheckSteps({ summaryData, step, disableBtn }) {
 
 CheckSteps.propTypes = {
   step: PropTypes.string.isRequired,
-  summaryData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableBtn: PropTypes.bool.isRequired,
 };

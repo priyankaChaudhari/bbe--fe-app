@@ -202,6 +202,7 @@ export default function MainContainer() {
           isLoading={isLoading}
           isChecked={isChecked}
           loader={loader}
+          summaryData={summaryData}
         />
       );
     if (path === 'billing-details')
@@ -373,7 +374,6 @@ export default function MainContainer() {
                     </Collapse>
                   </CollapseOpenContainer>
                   <CheckSteps
-                    userInfo={userInfo}
                     summaryData={summaryData}
                     step={item.key}
                     disableBtn={disableBtn}
