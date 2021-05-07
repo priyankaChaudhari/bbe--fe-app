@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WhiteCheckMark } from '../theme/images/index';
+import { WhiteCheckMark, CheckboxCheck } from '../theme/images/index';
 
 const CheckBoxList = styled.div`
   &.reassign-brand {
@@ -25,11 +25,11 @@ const CheckBoxList = styled.div`
   }
 
   .checkbox input:checked ~ label:before {
-    background-image: url(${WhiteCheckMark});
+    background-image: url(${CheckboxCheck});
     background-repeat: no-repeat;
     z-index: 2;
-    background-position-y: 10px;
-    background-position-x: 10px;
+    background-position-y: 8px;
+    background-position-x: 8px;
     content: '';
   }
   .checkbox input {

@@ -407,6 +407,7 @@ export default function MainContainer() {
                     allow="accelerometer; autoplay;"
                     allowFullScreen
                     name="media"
+                    preload="auto"
                     controls
                     autoPlay>
                     <source
@@ -429,6 +430,7 @@ export default function MainContainer() {
                     title="video "
                     className="embed-responsive-item w-100 "
                     allow="accelerometer; autoplay;"
+                    frameBorder="0"
                     allowFullScreen
                     src={
                       videoData

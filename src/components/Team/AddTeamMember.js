@@ -225,9 +225,9 @@ export default function AddTeamMember({
         }
         role="presentation"
       />
-      <div className="modal-body">
+      <div className="modal-body pb-0">
         <h4>Add Team Member</h4>
-        <div className="body-content mt-3">
+        <div className="body-content mt-3 ">
           <>
             <div className="row">
               <div className="col-7 pr-0">
