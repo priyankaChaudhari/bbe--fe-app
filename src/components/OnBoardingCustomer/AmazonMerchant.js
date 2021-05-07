@@ -156,7 +156,10 @@ export default function AmazonMerchant({
             className="btn-primary w-100 mt-3"
             onClick={() => saveDetails()}
             disabled={
-              formData.merchant_id === '' || formData.merchant_id === undefined
+              data && data.merchant_id
+                ? false
+                : formData.merchant_id === '' ||
+                  formData.merchant_id === undefined
             }>
             {' '}
             {isLoading.loader && isLoading.type === 'button' ? (
