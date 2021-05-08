@@ -520,86 +520,86 @@ export default function CustomerMainContainer() {
                             {agreement && agreement.contract_company_name}
                           </span>
 
-                          {agreement &&
-                          agreement.contract_status &&
-                          agreement.contract_status.label !== 'Active' ? (
-                            <span className="company-status inactive">
-                              {agreement &&
-                                agreement.contract_status &&
-                                agreement.contract_status.label}
-                            </span>
-                          ) : userInfo && userInfo.role === 'Customer' ? (
-                            <span className="company-status active">
+                          {customer &&
+                          customer.status &&
+                          customer.status.value === 'active' ? (
+                            userInfo && userInfo.role === 'Customer' ? (
                               <>
                                 {customer &&
                                   customer.status &&
                                   customer.status.label}
                               </>
-                            </span>
-                          ) : (
-                            <DropDownStatus>
-                              {checkStatus()}
-                              <Select
-                                isSearchable={false}
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    background: checkStatusColor(),
-                                    borderRadius: '50px',
-                                    minHeight: '24px',
-                                    outline: 'none !important',
-                                    boxShadow: 'none  !important',
-                                    outLine: 'none',
-                                    cursor: 'pointer',
-                                    width:
-                                      (customer &&
-                                        customer.status &&
-                                        customer.status.value ===
-                                          'pending cancellation') ||
-                                      (customer &&
-                                        customer.status &&
-                                        customer.status.value ===
-                                          'pending account setup')
-                                        ? '176px !important'
-                                        : customer &&
-                                          customer.status &&
-                                          customer.status.value === 'at risk'
-                                        ? '120px'
-                                        : '88px',
-                                    '&:focus': {
+                            ) : (
+                              <DropDownStatus>
+                                {checkStatus()}
+                                <Select
+                                  isSearchable={false}
+                                  styles={{
+                                    control: (base) => ({
+                                      ...base,
+                                      background: checkStatusColor(),
+                                      borderRadius: '50px',
+                                      minHeight: '24px',
                                       outline: 'none !important',
                                       boxShadow: 'none  !important',
-                                    },
-                                    '&:hover': {
-                                      outline: 'none',
-                                    },
-                                  }),
-                                  singleValue: (provided) => {
-                                    const color =
-                                      customer &&
-                                      customer.status &&
-                                      customer.status.value ===
-                                        'pending cancellation'
-                                        ? '#000'
-                                        : '#fff';
+                                      outLine: 'none',
+                                      cursor: 'pointer',
+                                      width:
+                                        (customer &&
+                                          customer.status &&
+                                          customer.status.value ===
+                                            'pending cancellation') ||
+                                        (customer &&
+                                          customer.status &&
+                                          customer.status.value ===
+                                            'pending account setup')
+                                          ? '176px !important'
+                                          : customer &&
+                                            customer.status &&
+                                            customer.status.value === 'at risk'
+                                          ? '120px'
+                                          : '88px',
+                                      '&:focus': {
+                                        outline: 'none !important',
+                                        boxShadow: 'none  !important',
+                                      },
+                                      '&:hover': {
+                                        outline: 'none',
+                                      },
+                                    }),
+                                    singleValue: (provided) => {
+                                      const color =
+                                        customer &&
+                                        customer.status &&
+                                        customer.status.value ===
+                                          'pending cancellation'
+                                          ? '#000'
+                                          : '#fff';
 
-                                    return { ...provided, color };
-                                  },
-                                }}
-                                classNamePrefix="react-select"
-                                options={statusActions}
-                                onChange={(e) =>
-                                  setStatusModal({
-                                    show: true,
-                                    type: e.value,
-                                  })
-                                }
-                                value={customer && customer.status}
-                                components={{
-                                  DropdownIndicator,
-                                }}
-                              />
-                            </DropDownStatus>
+                                      return { ...provided, color };
+                                    },
+                                  }}
+                                  classNamePrefix="react-select"
+                                  options={statusActions}
+                                  onChange={(e) =>
+                                    setStatusModal({
+                                      show: true,
+                                      type: e.value,
+                                    })
+                                  }
+                                  value={customer && customer.status}
+                                  components={{
+                                    DropdownIndicator,
+                                  }}
+                                />
+                              </DropDownStatus>
+                            )
+                          ) : (
+                            <span className="company-status inactive">
+                              {agreement &&
+                                agreement.contract_status &&
+                                agreement.contract_status.label}
+                            </span>
                           )}
                         </span>
 

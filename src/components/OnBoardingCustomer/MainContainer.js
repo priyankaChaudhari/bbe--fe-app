@@ -82,7 +82,10 @@ export default function MainContainer() {
   };
 
   useEffect(() => {
-    if (params && params.openCollapse === null) {
+    if (
+      (params && params.openCollapse === null) ||
+      (params && params.customer && params.step)
+    ) {
       setOpenCollapse(true);
     }
     setIsLoading({ loader: true, type: 'page' });

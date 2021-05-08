@@ -37,7 +37,7 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
 
   if (params && params.callback) {
     if (params && params.customer && params.step) {
-      if (data.user.step[params.customer] === 6) {
+      if ((data.user.step !== null && data.user.step[params.customer]) === 6) {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
       } else {
         history.push({ pathname: params.callback, search: 'openCollapse' });
