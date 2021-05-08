@@ -84,9 +84,13 @@ export default function CreateAccount() {
       }
       if (
         (response && response.status === 400) ||
-        (response && response.status === 403) ||
-        (response && response.status === 401)
+        (response && response.status === 403)
       ) {
+        setShowSuccessMsg(false);
+        setApiError(response && response.data);
+        setIsLoading({ loader: false, type: 'button' });
+      }
+      if (response && response.status === 401) {
         setShowSuccessMsg(false);
         setApiError(response && response.data);
         setIsLoading({ loader: false, type: 'button' });
@@ -285,6 +289,11 @@ export default function CreateAccount() {
                     </ContractFormField>
                   ))}
                   <ErrorMsg>{apiError && apiError.detail}</ErrorMsg>
+                  <ErrorMsg>
+                    {apiError &&
+                      apiError.non_field_errors &&
+                      apiError.non_field_errors[0]}
+                  </ErrorMsg>
                   <Button className="btn-primary w-100 mt-4">
                     {' '}
                     {isLoading.loader && isLoading.type === 'button' ? (
