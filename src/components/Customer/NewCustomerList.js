@@ -103,7 +103,10 @@ export default function NewCustomerList() {
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
 
-  const [expiringSoon, setExpiringSoon] = useState(false);
+  const [expiringSoon, setExpiringSoon] = useState(
+    !!(JSON.parse(localStorage.getItem('filters')) &&
+      JSON.parse(localStorage.getItem('filters')).sort_by === 'expiring_soon'),
+  );
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -273,12 +276,22 @@ export default function NewCustomerList() {
       if (selectInputRefMobile && selectInputRefMobile.current)
         selectInputRefMobile.current.select.clearValue();
 
+      // setShowPerformance(false);
+      // setSearchQuery('');
+      // setSelectedValue({
+      //     'view': null,
+      //     'order-by': null,
+      //   });
+
       setFilters({
         ...filters,
         status: [],
         contract_status: [],
         contract_type: [],
         user: [],
+        // sort_by: '',
+        // searchQuery: '',
+        // showPerformance: false
       });
       localStorage.setItem(
         'filters',
@@ -288,6 +301,9 @@ export default function NewCustomerList() {
           contract_status: [],
           contract_type: [],
           user: [],
+          // sort_by: '',
+          // searchQuery: '',
+          // showPerformance: false
         }),
       );
     }
