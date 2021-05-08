@@ -141,9 +141,13 @@ export default function AuthenticationComponent() {
       dispatch(userMe(history));
       return <PageLoader color="#FF5933" type="page" />;
     } else {
-      const stringified = queryString.stringify({
-        callback: history.location.pathname,
-      });
+      let stringified = '';
+      if (history.location.pathname !== '/') {
+        stringified = queryString.stringify({
+          callback: history.location.pathname,
+        });
+      }
+
       return (
         <Redirect
           to={{

@@ -170,14 +170,18 @@ export const userMe = (history, customer) => {
         localStorage.removeItem('filters');
 
         const params = queryString.parse(history.location.search);
-        const stringified = queryString.stringify({
-          ...params,
-          callback: history.location.pathname,
-        });
-        history.push({
-          pathname: PATH_LOGIN,
-          search: `${stringified}`,
-        });
+        if (history.location.pathname !== '/') {
+          const stringified = queryString.stringify({
+            ...params,
+            callback: history.location.pathname,
+          });
+          history.push({
+            pathname: PATH_LOGIN,
+            search: `${stringified}`,
+          });
+        } else {
+          history.pus(PATH_LOGIN);
+        }
       });
   };
 };
