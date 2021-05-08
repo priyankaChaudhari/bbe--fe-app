@@ -82,6 +82,9 @@ export default function MainContainer() {
   };
 
   useEffect(() => {
+    if (params && params.openCollapse === null) {
+      setOpenCollapse(true);
+    }
     setIsLoading({ loader: true, type: 'page' });
     if (!history.location.pathname.includes('/account-setup/create-password')) {
       if (
