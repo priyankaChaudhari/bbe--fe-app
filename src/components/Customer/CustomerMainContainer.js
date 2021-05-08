@@ -439,7 +439,12 @@ export default function CustomerMainContainer() {
 
   return (
     <>
-      {customerError && customerError.status && customerError.status === 404 ? (
+      {(customerError &&
+        customerError.status &&
+        customerError.status === 404) ||
+      (customerError &&
+        customerError.status &&
+        customerError.status === 403) ? (
         <PageNotFound />
       ) : (
         <>
@@ -519,11 +524,17 @@ export default function CustomerMainContainer() {
                           agreement.contract_status &&
                           agreement.contract_status.label !== 'Active' ? (
                             <span className="company-status inactive">
-                              {agreement.contract_status.label}
+                              {agreement &&
+                                agreement.contract_status &&
+                                agreement.contract_status.label}
                             </span>
                           ) : userInfo && userInfo.role === 'Customer' ? (
                             <span className="company-status active">
-                              <>{customer.status.label}</>
+                              <>
+                                {customer &&
+                                  customer.status &&
+                                  customer.status.label}
+                              </>
                             </span>
                           ) : (
                             <DropDownStatus>

@@ -4,6 +4,8 @@ import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import queryString from 'query-string';
+
 import { userMe } from '../store/actions/index';
 import {
   PATH_CUSTOMER_LIST,
@@ -139,10 +141,14 @@ export default function AuthenticationComponent() {
       dispatch(userMe(history));
       return <PageLoader color="#FF5933" type="page" />;
     } else {
+      const stringified = queryString.stringify({
+        callback: history.location.pathname,
+      });
       return (
         <Redirect
           to={{
             pathname: PATH_LOGIN,
+            search: `${stringified}`,
           }}
         />
       );

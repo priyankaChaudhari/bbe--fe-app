@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import axios from 'axios';
 
-import { PATH_LOGIN } from './constants';
+// import { PATH_LOGIN } from './constants';
 import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 
 const requestHandler = (request) => {
@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error && error.response && error.response.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = PATH_LOGIN;
+      //  window.location.href = PATH_LOGIN;
     }
     return Promise.reject(error);
   },

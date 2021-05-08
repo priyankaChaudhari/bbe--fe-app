@@ -143,13 +143,16 @@ export default function MainContainer() {
               res && res.data && res.data.customer_onboarding,
             ).then((summary) => {
               const fields = [];
-              stepPath.map((item) =>
-                fields.push({
-                  [item.key]: summary.data.some((op) => {
-                    return op.step === item.key ? op.is_completed : false;
-                  }),
-                }),
-              );
+              stepPath.map((item) => {
+                if (summary && summary.data) {
+                  fields.push({
+                    [item.key]: summary.data.some((op) => {
+                      return op.step === item.key ? op.is_completed : false;
+                    }),
+                  });
+                }
+                return '';
+              });
               setSummaryData(fields);
             });
             getStepDetails(

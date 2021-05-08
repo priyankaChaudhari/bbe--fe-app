@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-cycle */
 import React, { useState, useEffect } from 'react';
@@ -80,7 +81,7 @@ export default function Header({ type }) {
 
   useEffect(() => {
     if (!history.location.pathname.includes('assigned')) {
-      dispatch(userMe());
+      dispatch(userMe(history));
     }
   }, [dispatch, history.location.pathname]);
 

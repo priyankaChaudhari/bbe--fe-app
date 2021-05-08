@@ -3,6 +3,8 @@
 /* eslint-disable no-lonely-if */
 /* eslint no-shadow: "off" */
 
+import queryString from 'query-string';
+
 import axiosInstance from '../../axios';
 import {
   API_LOGIN,
@@ -29,78 +31,93 @@ export const userRequestInitiated = () => {
 };
 
 export const userRequestSuccess = (data, history, customer, onboardingId) => {
+  const params = queryString.parse(history.location.search);
   localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
-  let id = '';
-  if (
-    data &&
-    data.user &&
-    data.user.customer &&
-    typeof data.user.customer === 'object'
-  ) {
-    const customerId =
-      data.user.customer_onboarding &&
-      data.user.customer_onboarding.find(
-        (op) => Object.keys(op)[0] === onboardingId,
-      );
-    id = Object.values(customerId)[0];
-    localStorage.setItem('customer', Object.values(customerId)[0]);
-  } else {
-    id =
-      data.user.step &&
-      Object.keys(data.user.step) &&
-      Object.keys(data.user.step).find(
-        (op) =>
-          op ===
-          (customer.customer || (data && data.user && data.user.customer)),
-      );
-    localStorage.setItem('customer', customer.customer);
-  }
 
-  if (data.user && data.user.role === 'Customer') {
-    if (id === undefined || id === null) {
-      history.push(PATH_COMPANY_DETAILS);
+  if (params && params.callback) {
+    if (params && params.customer && params.step) {
+      if (data.user.step[params.customer] === 6) {
+        history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
+      }
+      if (params.step === 6) {
+        history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
+      }
     } else {
-      if (
-        data.user.step === null ||
-        data.user.step === undefined ||
-        data.user.step[id] === null ||
-        data.user.step[id] === undefined
-      ) {
-        history.push(PATH_COMPANY_DETAILS);
-      }
-      if (data.user.step[id] === 1) {
-        history.push(PATH_COMPANY_DETAILS);
-      }
-      // if (data.user.step[id] === 2) {
-      //   history.push(PATH_BILLING_DETAILS);
-      // }
-      if (data.user.step[id] === 2 || data.user.step[id] === 3) {
-        history.push(PATH_AMAZON_MERCHANT);
-      }
-      // if (data.user.step[id] === 4) {
-      //   history.push(PATH_AMAZON_ACCOUNT);
-      // }
-      if (data.user.step[id] === 4 || data.user.step[id] === 5) {
-        history.push(PATH_SUMMARY);
-      }
-      if (data.user.step[id] === 6) {
-        history.push(
-          PATH_CUSTOMER_DETAILS.replace(
-            ':id',
-            customer.customer || data.user.customer,
-          ),
-        );
-      }
+      history.push(params.callback);
     }
   } else {
+    let id = '';
     if (
+      data &&
       data.user &&
-      data.user.role &&
-      data.user.role.includes('Growth Strategist')
+      data.user.customer &&
+      typeof data.user.customer === 'object'
     ) {
-      history.push(PATH_BGS_DASHBOARD);
-    } else history.push(PATH_CUSTOMER_LIST);
+      const customerId =
+        data.user.customer_onboarding &&
+        data.user.customer_onboarding.find(
+          (op) => Object.keys(op)[0] === onboardingId,
+        );
+      id = Object.values(customerId)[0];
+      localStorage.setItem('customer', Object.values(customerId)[0]);
+    } else {
+      id =
+        data.user.step &&
+        Object.keys(data.user.step) &&
+        Object.keys(data.user.step).find(
+          (op) =>
+            op ===
+            (customer.customer || (data && data.user && data.user.customer)),
+        );
+      localStorage.setItem('customer', customer.customer);
+    }
+
+    if (data.user && data.user.role === 'Customer') {
+      if (id === undefined || id === null) {
+        history.push(PATH_COMPANY_DETAILS);
+      } else {
+        if (
+          data.user.step === null ||
+          data.user.step === undefined ||
+          data.user.step[id] === null ||
+          data.user.step[id] === undefined
+        ) {
+          history.push(PATH_COMPANY_DETAILS);
+        }
+        if (data.user.step[id] === 1) {
+          history.push(PATH_COMPANY_DETAILS);
+        }
+        // if (data.user.step[id] === 2) {
+        //   history.push(PATH_BILLING_DETAILS);
+        // }
+        if (data.user.step[id] === 2 || data.user.step[id] === 3) {
+          history.push(PATH_AMAZON_MERCHANT);
+        }
+        // if (data.user.step[id] === 4) {
+        //   history.push(PATH_AMAZON_ACCOUNT);
+        // }
+        if (data.user.step[id] === 4 || data.user.step[id] === 5) {
+          history.push(PATH_SUMMARY);
+        }
+        if (data.user.step[id] === 6) {
+          history.push(
+            PATH_CUSTOMER_DETAILS.replace(
+              ':id',
+              customer.customer || data.user.customer,
+            ),
+          );
+        }
+      }
+    } else {
+      if (
+        data.user &&
+        data.user.role &&
+        data.user.role.includes('Growth Strategist')
+      ) {
+        history.push(PATH_BGS_DASHBOARD);
+      } else history.push(PATH_CUSTOMER_LIST);
+    }
   }
 
   return {
@@ -130,7 +147,6 @@ export const clearToken = () => {
   localStorage.removeItem('customer');
   localStorage.removeItem('match');
   localStorage.removeItem('filters');
-
   window.location.href = PATH_LOGIN;
 };
 
@@ -144,8 +160,22 @@ export const userMe = (history, customer) => {
         dispatch(userMeSuccess(data));
       })
       .catch(() => {
-        dispatch(clearToken());
-        history.push(PATH_LOGIN);
+        localStorage.removeItem('token');
+        localStorage.removeItem('agreementID');
+        localStorage.removeItem('email');
+        localStorage.removeItem('customer');
+        localStorage.removeItem('match');
+        localStorage.removeItem('filters');
+
+        const params = queryString.parse(history.location.search);
+        const stringified = queryString.stringify({
+          ...params,
+          callback: history.location.pathname,
+        });
+        history.push({
+          pathname: PATH_LOGIN,
+          search: `${stringified}`,
+        });
       });
   };
 };

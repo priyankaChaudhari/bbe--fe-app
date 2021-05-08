@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
+import queryString from 'query-string';
 
 import { FormContainer } from '../../theme/Global';
 import { LeftArrowIcon, NextLogo } from '../../theme/images/index';
@@ -40,40 +41,55 @@ export default function Login() {
   const [customerNames, setCustomerNames] = useState([]);
   const [getName, setGetName] = useState({ email: '', customer: '' });
   const [forgotApiError, setforgotApiError] = useState([]);
+  const params = queryString.parse(history.location.search);
 
   const onSubmit = (data) => {
     setIsLoading({ loader: true, type: 'button' });
     if (showPassword.email && !showPassword.password) {
       setGetName({ ...getName, email: data.email });
-      getCustomerNames(data.email).then((response) => {
-        if (response && response.status === 200) {
-          if (
-            (response && response.data && response.data.length === 0) ||
-            (response && response.data === '')
-          ) {
-            setShowPassword({ name: false, password: true });
-          } else if (response && response.data && response.data.length === 1) {
-            setCustomerNames(response && response.data);
-            setGetName({
-              email: data.email,
-              customer:
-                response &&
-                response.data &&
-                response.data[0] &&
-                response.data[0].value,
-            });
-            setShowPassword({ email: false, name: false, password: true });
-          } else {
-            setCustomerNames(response && response.data);
-            setShowPassword({ name: true, password: false });
+      if (params && params.customer && params.step) {
+        setGetName({
+          email: data.email,
+          customer: params && params.customer,
+        });
+        setShowPassword({ email: false, name: false, password: true });
+        localStorage.setItem('customer', params && params.customer);
+        setIsLoading({ loader: false, type: 'button' });
+      } else {
+        getCustomerNames(data.email).then((response) => {
+          if (response && response.status === 200) {
+            if (
+              (response && response.data && response.data.length === 0) ||
+              (response && response.data === '')
+            ) {
+              setShowPassword({ name: false, password: true });
+            } else if (
+              response &&
+              response.data &&
+              response.data.length === 1
+            ) {
+              setCustomerNames(response && response.data);
+              setGetName({
+                email: data.email,
+                customer:
+                  response &&
+                  response.data &&
+                  response.data[0] &&
+                  response.data[0].value,
+              });
+              setShowPassword({ email: false, name: false, password: true });
+            } else {
+              setCustomerNames(response && response.data);
+              setShowPassword({ name: true, password: false });
+            }
+            setIsLoading({ loader: false, type: 'button' });
           }
-          setIsLoading({ loader: false, type: 'button' });
-        }
-        if (response && response.status === 400) {
-          setCustomerApiError(response && response.data);
-          setIsLoading({ loader: false, type: 'button' });
-        }
-      });
+          if (response && response.status === 400) {
+            setCustomerApiError(response && response.data);
+            setIsLoading({ loader: false, type: 'button' });
+          }
+        });
+      }
     } else if (showPassword.name) {
       setShowPassword({ password: true, email: false, name: false });
       setIsLoading({ loader: false, type: 'button' });
@@ -82,6 +98,7 @@ export default function Login() {
         ...data,
         email: getName.email,
       };
+      localStorage.setItem('customer', getName.customer);
       dispatch(login(history, detail, { customer: getName.customer }, ''));
       setIsLoading({ loader: false, type: 'button' });
     }
