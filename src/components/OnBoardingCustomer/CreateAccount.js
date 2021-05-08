@@ -169,6 +169,8 @@ export default function CreateAccount() {
             <p className="info-text-gray m-0 ">
               If you’d like someone else to administrate the Buy Box Experts
               account then you can reassign the setup process to them.
+              <br />
+              <strong>This password will reflect throughout the site.</strong>
             </p>
             <ContractFormField className="mt-3">
               <label htmlFor="email">

@@ -39,6 +39,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     if (params && params.customer && params.step) {
       if (data.user.step[params.customer] === 6) {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
+      } else {
+        history.push(params.callback);
       }
       if (params.step === 6) {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
