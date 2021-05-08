@@ -54,13 +54,24 @@ export default function NewCustomerList() {
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).searchQuery
+      : '',
+  );
   const { Option, MultiValue, SingleValue } = components;
   const [status, setStatus] = useState([]);
-  const [selectedValue, setSelectedValue] = useState({
-    view: null,
-    'order-by': null,
-  });
+  const [selectedValue, setSelectedValue] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? {
+          view: null,
+          'order-by': JSON.parse(localStorage.getItem('filters')).sort_by,
+        }
+      : {
+          view: null,
+          'order-by': null,
+        },
+  );
   const [filters, setFilters] = useState(
     JSON.parse(localStorage.getItem('filters')) || {
       status: [],
@@ -69,7 +80,11 @@ export default function NewCustomerList() {
       contract_type: [],
     },
   );
-  const [showPerformance, setShowPerformance] = useState(false);
+  const [showPerformance, setShowPerformance] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).showPerformance
+      : false,
+  );
   const options = [
     { value: 'performance', label: 'Performance' },
     { value: 'contract_details', label: 'Contract Details' },
@@ -426,19 +441,54 @@ export default function NewCustomerList() {
     if (type === 'view') {
       if (event.value === 'performance') {
         setShowPerformance(true);
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showPerformance: true,
+          }),
+        );
         customerList(pageNumber, selectedValue, filters, searchQuery, true);
       } else {
         setShowPerformance(false);
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showPerformance: false,
+          }),
+        );
       }
     }
     if (type === 'sort') {
       if (event.value === 'expiring_soon') {
         setExpiringSoon(true);
         setSelectedValue({ ...selectedValue, 'order-by': '' });
+        setFilters({
+          ...filters,
+          sort_by: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            sort_by: event.value,
+          }),
+        );
       } else {
         setExpiringSoon(false);
         setSelectedValue({ ...selectedValue, 'order-by': event.value });
-
+        setFilters({
+          ...filters,
+          sort_by: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            sort_by: event.value,
+          }),
+        );
         // customerList(
         //   pageNumber,
         //   event.value,
@@ -642,6 +692,7 @@ export default function NewCustomerList() {
       </li>
     );
   };
+
   const generateDropdown = (item, reff = null) => {
     return (
       <>
@@ -670,9 +721,15 @@ export default function NewCustomerList() {
                     filters.user.some((op) => op === option.value),
                   )
                 : ''
-              : selectedValue[item.key] === null
-              ? null
-              : selectedValue[item.key]
+              : item === 'sort'
+              ? selectedValue[item.key] ||
+                sortOptions.filter((op) => op.value === filters.sort_by)
+              : showPerformance
+              ? [{ value: 'performance', label: 'Performance' }]
+              : [{ value: 'contract_details', label: 'Contract Details' }]
+            // : selectedValue[item.key] === null
+            // ? null
+            // : selectedValue[item.key] || sortOptions.filter(item => item.value === filters.sort_by)
           }
           isMulti={item === 'user'}
           components={getSelectComponents(item)}
@@ -902,13 +959,27 @@ export default function NewCustomerList() {
                 <input
                   className=" form-control search-filter"
                   placeholder="Search"
-                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onChange={(event) => {
+                    setSearchQuery(event.target.value);
+                    setFilters({
+                      ...filters,
+                      searchQuery: event.target.value,
+                    });
+
+                    localStorage.setItem(
+                      'filters',
+                      JSON.stringify({
+                        ...filters,
+                        searchQuery: event.target.value,
+                      }),
+                    );
+                  }}
                   onKeyPress={(event) => {
                     if (event.key === 'Enter') {
                       handleSearch(event, 'search');
                     }
                   }}
-                  value={searchQuery || ''}
+                  value={searchQuery || (filters && filters.searchQuery) || ''}
                 />
 
                 <img
