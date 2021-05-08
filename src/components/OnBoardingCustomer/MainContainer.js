@@ -27,7 +27,7 @@ import {
 } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
-import { PATH_THANKS } from '../../constants';
+import { PATH_CUSTOMER_DETAILS, PATH_THANKS } from '../../constants';
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
 import BillingInfo from './BillingInfo';
@@ -144,6 +144,13 @@ export default function MainContainer() {
       } else {
         getUserData(localStorage.getItem('customer')).then((res) => {
           if (res && res.status === 200) {
+            if (params && params.customer && params.step) {
+              if (res && res.data && res.data.step[params.customer] === 6) {
+                history.push(
+                  PATH_CUSTOMER_DETAILS.replace(':id', params.customer),
+                );
+              }
+            }
             setUserInfo(res && res.data);
             accountSummary(
               res && res.data && res.data.customer_onboarding,

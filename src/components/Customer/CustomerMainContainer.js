@@ -524,11 +524,11 @@ export default function CustomerMainContainer() {
                           customer.status &&
                           customer.status.value === 'active' ? (
                             userInfo && userInfo.role === 'Customer' ? (
-                              <>
+                              <span className="company-status active">
                                 {customer &&
                                   customer.status &&
                                   customer.status.label}
-                              </>
+                              </span>
                             ) : (
                               <DropDownStatus>
                                 {checkStatus()}
