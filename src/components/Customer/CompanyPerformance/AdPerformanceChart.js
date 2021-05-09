@@ -120,6 +120,306 @@ export default function AdPerformanceChart({
   //     adClickRatePrevious: 25,
   //     previousDate: new Date(2019, 5, 9),
   //   },
+  //   {
+  //     date: new Date(2019, 5, 17),
+  //     adSalesCurrent: 5000,
+  //     adSalesPrevious: 4800,
+  //     adSpendCurrent: 4000,
+  //     adSpendPrevious: 3000,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4500,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 2100,
+  //     adRoasPrevious: 3400,
+  //     adClicksCurrent: 7300,
+  //     adClicksPrevious: 4000,
+  //     adClickRateCurrent: 60,
+  //     adClickRatePrevious: 45,
+  //     previousDate: new Date(2019, 5, 5),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 18),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 800,
+  //     adSpendCurrent: 4700,
+  //     adSpendPrevious: 3900,
+  //     adConversionCurrent: 70,
+  //     adConversionPrevious: 55,
+  //     impressionsCurrent: 6000,
+  //     impressionsPrevious: 8200,
+  //     adCosCurrent: 4600,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 9800,
+  //     adRoasPrevious: 7200,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 3000,
+  //     adClickRateCurrent: 90,
+  //     adClickRatePrevious: 42,
+  //     previousDate: new Date(2019, 5, 6),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 19),
+  //     adSalesCurrent: 500,
+  //     adSalesPrevious: 4810,
+  //     adSpendCurrent: 4801,
+  //     adSpendPrevious: 3011,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4700,
+  //     adCosPrevious: 2000,
+  //     adRoasCurrent: 6100,
+  //     adRoasPrevious: 6000,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 4430,
+  //     adClickRateCurrent: 34,
+  //     adClickRatePrevious: 60,
+  //     previousDate: new Date(2019, 5, 7),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 20),
+  //     adSalesCurrent: 7300,
+  //     adSalesPrevious: 1200,
+  //     adSpendCurrent: 8760,
+  //     adSpendPrevious: 4500,
+  //     adConversionCurrent: 67,
+  //     adConversionPrevious: 28,
+  //     impressionsCurrent: 7000,
+  //     impressionsPrevious: 4500,
+  //     adCosCurrent: 8120,
+  //     adCosPrevious: 4800,
+  //     adRoasCurrent: 9300,
+  //     adRoasPrevious: 7300,
+  //     adClicksCurrent: 6200,
+  //     adClicksPrevious: 1000,
+  //     adClickRateCurrent: 10,
+  //     adClickRatePrevious: 95,
+  //     previousDate: new Date(2019, 5, 8),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 21),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 8300,
+  //     adSpendCurrent: 2600,
+  //     adSpendPrevious: 9200,
+  //     adConversionCurrent: 30,
+  //     adConversionPrevious: 65,
+  //     impressionsCurrent: 2600,
+  //     impressionsPrevious: 5700,
+  //     adCosCurrent: 9100,
+  //     adCosPrevious: 2700,
+  //     adRoasCurrent: 6600,
+  //     adRoasPrevious: 4400,
+  //     adClicksCurrent: 8700,
+  //     adClicksPrevious: 7200,
+  //     adClickRateCurrent: 40,
+  //     adClickRatePrevious: 25,
+  //     previousDate: new Date(2019, 5, 9),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 22),
+  //     adSalesCurrent: 5000,
+  //     adSalesPrevious: 4800,
+  //     adSpendCurrent: 4000,
+  //     adSpendPrevious: 3000,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4500,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 2100,
+  //     adRoasPrevious: 3400,
+  //     adClicksCurrent: 7300,
+  //     adClicksPrevious: 4000,
+  //     adClickRateCurrent: 60,
+  //     adClickRatePrevious: 45,
+  //     previousDate: new Date(2019, 5, 5),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 23),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 800,
+  //     adSpendCurrent: 4700,
+  //     adSpendPrevious: 3900,
+  //     adConversionCurrent: 70,
+  //     adConversionPrevious: 55,
+  //     impressionsCurrent: 6000,
+  //     impressionsPrevious: 8200,
+  //     adCosCurrent: 4600,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 9800,
+  //     adRoasPrevious: 7200,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 3000,
+  //     adClickRateCurrent: 90,
+  //     adClickRatePrevious: 42,
+  //     previousDate: new Date(2019, 5, 6),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 24),
+  //     adSalesCurrent: 500,
+  //     adSalesPrevious: 4810,
+  //     adSpendCurrent: 4801,
+  //     adSpendPrevious: 3011,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4700,
+  //     adCosPrevious: 2000,
+  //     adRoasCurrent: 6100,
+  //     adRoasPrevious: 6000,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 4430,
+  //     adClickRateCurrent: 34,
+  //     adClickRatePrevious: 60,
+  //     previousDate: new Date(2019, 5, 7),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 25),
+  //     adSalesCurrent: 7300,
+  //     adSalesPrevious: 1200,
+  //     adSpendCurrent: 8760,
+  //     adSpendPrevious: 4500,
+  //     adConversionCurrent: 67,
+  //     adConversionPrevious: 28,
+  //     impressionsCurrent: 7000,
+  //     impressionsPrevious: 4500,
+  //     adCosCurrent: 8120,
+  //     adCosPrevious: 4800,
+  //     adRoasCurrent: 9300,
+  //     adRoasPrevious: 7300,
+  //     adClicksCurrent: 6200,
+  //     adClicksPrevious: 1000,
+  //     adClickRateCurrent: 10,
+  //     adClickRatePrevious: 95,
+  //     previousDate: new Date(2019, 5, 8),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 26),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 8300,
+  //     adSpendCurrent: 2600,
+  //     adSpendPrevious: 9200,
+  //     adConversionCurrent: 30,
+  //     adConversionPrevious: 65,
+  //     impressionsCurrent: 2600,
+  //     impressionsPrevious: 5700,
+  //     adCosCurrent: 9100,
+  //     adCosPrevious: 2700,
+  //     adRoasCurrent: 6600,
+  //     adRoasPrevious: 4400,
+  //     adClicksCurrent: 8700,
+  //     adClicksPrevious: 7200,
+  //     adClickRateCurrent: 40,
+  //     adClickRatePrevious: 25,
+  //     previousDate: new Date(2019, 5, 9),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 27),
+  //     adSalesCurrent: 5000,
+  //     adSalesPrevious: 4800,
+  //     adSpendCurrent: 4000,
+  //     adSpendPrevious: 3000,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4500,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 2100,
+  //     adRoasPrevious: 3400,
+  //     adClicksCurrent: 7300,
+  //     adClicksPrevious: 4000,
+  //     adClickRateCurrent: 60,
+  //     adClickRatePrevious: 45,
+  //     previousDate: new Date(2019, 5, 5),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 28),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 800,
+  //     adSpendCurrent: 4700,
+  //     adSpendPrevious: 3900,
+  //     adConversionCurrent: 70,
+  //     adConversionPrevious: 55,
+  //     impressionsCurrent: 6000,
+  //     impressionsPrevious: 8200,
+  //     adCosCurrent: 4600,
+  //     adCosPrevious: 7000,
+  //     adRoasCurrent: 9800,
+  //     adRoasPrevious: 7200,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 3000,
+  //     adClickRateCurrent: 90,
+  //     adClickRatePrevious: 42,
+  //     previousDate: new Date(2019, 5, 6),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 29),
+  //     adSalesCurrent: 500,
+  //     adSalesPrevious: 4810,
+  //     adSpendCurrent: 4801,
+  //     adSpendPrevious: 3011,
+  //     adConversionCurrent: 50,
+  //     adConversionPrevious: 25,
+  //     impressionsCurrent: 9000,
+  //     impressionsPrevious: 1200,
+  //     adCosCurrent: 4700,
+  //     adCosPrevious: 2000,
+  //     adRoasCurrent: 6100,
+  //     adRoasPrevious: 6000,
+  //     adClicksCurrent: 1200,
+  //     adClicksPrevious: 4430,
+  //     adClickRateCurrent: 34,
+  //     adClickRatePrevious: 60,
+  //     previousDate: new Date(2019, 5, 7),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 30),
+  //     adSalesCurrent: 7300,
+  //     adSalesPrevious: 1200,
+  //     adSpendCurrent: 8760,
+  //     adSpendPrevious: 4500,
+  //     adConversionCurrent: 67,
+  //     adConversionPrevious: 28,
+  //     impressionsCurrent: 7000,
+  //     impressionsPrevious: 4500,
+  //     adCosCurrent: 8120,
+  //     adCosPrevious: 4800,
+  //     adRoasCurrent: 9300,
+  //     adRoasPrevious: 7300,
+  //     adClicksCurrent: 6200,
+  //     adClicksPrevious: 1000,
+  //     adClickRateCurrent: 10,
+  //     adClickRatePrevious: 95,
+  //     previousDate: new Date(2019, 5, 8),
+  //   },
+  //   {
+  //     date: new Date(2019, 5, 31),
+  //     adSalesCurrent: 1100,
+  //     adSalesPrevious: 8300,
+  //     adSpendCurrent: 2600,
+  //     adSpendPrevious: 9200,
+  //     adConversionCurrent: 30,
+  //     adConversionPrevious: 65,
+  //     impressionsCurrent: 2600,
+  //     impressionsPrevious: 5700,
+  //     adCosCurrent: 9100,
+  //     adCosPrevious: 2700,
+  //     adRoasCurrent: 6600,
+  //     adRoasPrevious: 4400,
+  //     adClicksCurrent: 8700,
+  //     adClicksPrevious: 7200,
+  //     adClickRateCurrent: 40,
+  //     adClickRatePrevious: 25,
+  //     previousDate: new Date(2019, 5, 9),
+  //   },
   // ];
 
   useEffect(() => {
@@ -145,8 +445,8 @@ export default function AdPerformanceChart({
       adClickRate: 'CLICK THROUGH RATE',
     };
 
-    // var firstAxis = null;
-    // var secondAxis = null;
+    let firstAxis = null;
+    let secondAxis = null;
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
     // chart.current.data = adGraphData; // bind th data
@@ -161,10 +461,7 @@ export default function AdPerformanceChart({
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 
-    // _.keys(selectedBox).map((item) => {
-
-    // });
-    // // render y axis
+    // render y axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
@@ -204,7 +501,7 @@ export default function AdPerformanceChart({
         selectedKey === 'adConversion' ||
         selectedKey === 'adClickRate'
       ) {
-        valueAxis.numberFormatter.numberFormat = `#.#`;
+        valueAxis.numberFormatter.numberFormat = `#.#'%'`;
         tooltipCurrent = `[#2e384d]● [/]Recent [/]: {${currentValue}}%\n`;
         tooltipPrevious = `[#BFC5D2]● [/]Previous [/]: {${previousValue}}%`;
       } else {
@@ -280,125 +577,112 @@ export default function AdPerformanceChart({
         return '';
       });
 
-      // _.keys(selectedBox).map((item, index) => {
-      //   const series = chart.current.series.push(new am4charts.LineSeries());
-      //   // console.log('index:==', index);
-      //   if (index === 0) {
-      //     if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
-      //       // console.log('index 0 adSales');
-      //       series.yAxis = valueAxis;
-      //       valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-      //       firstAxis = 'currency';
-      //     } else if (item === 'adConversion' || item === 'adClickRate') {
-      //       // console.log('index 0 adConversion');
-      //       series.yAxis = valueAxis;
-      //       valueAxis.numberFormatter.numberFormat = `#.#`;
-      //       firstAxis = 'percentage';
-      //     } else {
-      //       // console.log('index 0 else');
-      //       series.yAxis = valueAxis;
-      //       valueAxis.numberFormatter.numberFormat = `#.#a`;
-      //       firstAxis = 'unit';
-      //     }
-      //     valueAxis.renderer.line.strokeOpacity = 1;
-      //   } else {
-      //     if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
-      //       if (firstAxis === 'currency') {
-      //         // console.log('currency');
-      //         series.yAxis = valueAxis;
-      //         valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-      //       } else {
-      //         // console.log('not currency');
-      //         if (secondAxis === null || secondAxis === 'currency') {
-      //           // console.log('second axis null currency');
-      //           series.yAxis = valueAxis2;
-      //           valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-      //           valueAxis2.renderer.opposite = true;
-      //           valueAxis2.renderer.line.strokeOpacity = 1;
-      //           secondAxis = 'currency';
-      //         } else {
-      //           // console.log('second axis not null currency');
-      //           series.yAxis = valueAxis3;
-      //           valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-      //           valueAxis3.renderer.opposite = true;
-      //           valueAxis3.renderer.line.strokeOpacity = 1;
-      //         }
-      //       }
-      //     } else if (item === 'adConversion' || item === 'adClickRate') {
-      //       // console.log('adConversion');
-      //       if (firstAxis === 'percentage') {
-      //         // console.log('percentage');
-      //         series.yAxis = valueAxis;
-      //         valueAxis.numberFormatter.numberFormat = `#.#`;
-      //       } else {
-      //         // console.log(' not percentage');
-      //         if (secondAxis === null || secondAxis === 'percentage') {
-      //           // console.log('second axis null percentage');
-      //           series.yAxis = valueAxis2;
-      //           valueAxis2.numberFormatter.numberFormat = `#.#`;
-      //           valueAxis2.renderer.opposite = true;
-      //           valueAxis2.renderer.line.strokeOpacity = 1;
-      //           secondAxis = 'percentage';
-      //         } else {
-      //           // console.log('second axis not null percentage');
-      //           series.yAxis = valueAxis3;
-      //           valueAxis3.numberFormatter.numberFormat = `#.#`;
-      //           valueAxis3.renderer.opposite = true;
-      //           valueAxis3.renderer.line.strokeOpacity = 1;
-      //         }
-      //       }
-      //     } else {
-      //       if (firstAxis === 'unit') {
-      //         // console.log('unit');
-      //         series.yAxis = valueAxis;
-      //         valueAxis.numberFormatter.numberFormat = `#.#a`;
-      //       } else {
-      //         // console.log('not unit');
-      //         if (secondAxis === null || secondAxis === 'unit') {
-      //           // console.log('second axis null unit');
-      //           series.yAxis = valueAxis2;
-      //           valueAxis2.numberFormatter.numberFormat = `#.#a`;
-      //           valueAxis2.renderer.opposite = true;
-      //           valueAxis2.renderer.line.strokeOpacity = 1;
-      //           secondAxis = 'unit';
-      //         } else {
-      //           // console.log('second axis not null unit');
-      //           series.yAxis = valueAxis3;
-      //           valueAxis3.numberFormatter.numberFormat = `#.#a`;
-      //           valueAxis3.renderer.opposite = true;
-      //           valueAxis3.renderer.line.strokeOpacity = 1;
-      //         }
-      //       }
-      //     }
-      //   }
-      //   const currentValue = `${item}Current`;
-      //   const seriesName = `${item}Series`;
+      _.keys(selectedBox).map((item, index) => {
+        const series = chart.current.series.push(new am4charts.LineSeries());
+        // console.log('index:==', index);
+        if (index === 0) {
+          if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+            // console.log('index 0 adSales');
+            series.yAxis = valueAxis;
+            valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+            firstAxis = 'currency';
+          } else if (item === 'adConversion' || item === 'adClickRate') {
+            // console.log('index 0 adConversion');
+            series.yAxis = valueAxis;
+            valueAxis.numberFormatter.numberFormat = `#.#'%'`;
+            firstAxis = 'percentage';
+          } else {
+            // console.log('index 0 else');
+            series.yAxis = valueAxis;
+            valueAxis.numberFormatter.numberFormat = ``;
+            firstAxis = 'unit';
+          }
+          valueAxis.renderer.line.strokeOpacity = 1;
+        } else if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+            if (firstAxis === 'currency') {
+              // console.log('currency');
+              series.yAxis = valueAxis;
+              // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+            } else if (secondAxis === null || secondAxis === 'currency') {
+              // console.log('not currency, second axis null currency')
+              series.yAxis = valueAxis2;
+              valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+              valueAxis2.renderer.opposite = true;
+              valueAxis2.renderer.line.strokeOpacity = 1;
+              secondAxis = 'currency';
+            } else {
+              // console.log('second axis not null currency');
+              series.yAxis = valueAxis3;
+              valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+              valueAxis3.renderer.opposite = true;
+              valueAxis3.renderer.line.strokeOpacity = 1;
+            }
+          } else if (item === 'adConversion' || item === 'adClickRate') {
+            // console.log('adConversion');
+            if (firstAxis === 'percentage') {
+              // console.log('percentage');
+              series.yAxis = valueAxis;
+              // valueAxis.numberFormatter.numberFormat = `#.#`;
+            } else if (secondAxis === null || secondAxis === 'percentage') {
+              // console.log(' not percentage, second axis null percentage');
+              series.yAxis = valueAxis2;
+              valueAxis2.numberFormatter.numberFormat = `#.#'%'`;
+              valueAxis2.renderer.opposite = true;
+              valueAxis2.renderer.line.strokeOpacity = 1;
+              secondAxis = 'percentage';
+            } else {
+              // console.log('second axis not null percentage');
+              series.yAxis = valueAxis3;
+              valueAxis3.numberFormatter.numberFormat = `#.#'%'`;
+              valueAxis3.renderer.opposite = true;
+              valueAxis3.renderer.line.strokeOpacity = 1;
+            }
+          } else if (firstAxis === 'unit') {
+              // console.log('unit');
+              series.yAxis = valueAxis;
+              valueAxis.numberFormatter.numberFormat = `#.#a`;
+            } else if (secondAxis === null || secondAxis === 'unit') {
+              // console.log('not unit, second axis null unit');
+              series.yAxis = valueAxis2;
+              valueAxis2.numberFormatter.numberFormat = `#.#a`;
+              valueAxis2.renderer.opposite = true;
+              valueAxis2.renderer.line.strokeOpacity = 1;
+              secondAxis = 'unit';
+            } else {
+              // console.log('second axis not null unit');
+              series.yAxis = valueAxis3;
+              valueAxis3.numberFormatter.numberFormat = `#.#a`;
+              valueAxis3.renderer.opposite = true;
+              valueAxis3.renderer.line.strokeOpacity = 1;
+            }
+        const currentValue = `${item}Current`;
+        const seriesName = `${item}Series`;
 
-      //   series.dataFields.valueY = currentValue;
-      //   series.dataFields.dateX = 'date';
-      //   series.name = seriesName;
-      //   series.strokeWidth = 2;
-      //   series.tooltipText = tooltipValue;
-      //   series.stroke = am4core.color(colorSet[item]);
-      //   series.fill = am4core.color('#2e384d');
+        series.dataFields.valueY = currentValue;
+        series.dataFields.dateX = 'date';
+        series.name = seriesName;
+        series.strokeWidth = 2;
+        series.tooltipText = tooltipValue;
+        series.stroke = am4core.color(colorSet[item]);
+        series.fill = am4core.color('#2e384d');
 
-      //   // valueAxis.renderer.labels.template.fill = series.stroke;
+        // valueAxis.renderer.labels.template.fill = series.stroke;
 
-      //   // valueAxis.renderer.line.strokeWidth = 2;
+        // valueAxis.renderer.line.strokeWidth = 2;
 
-      //   const circleBullet = series.bullets.push(new am4charts.CircleBullet());
-      //   circleBullet.circle.fill = am4core.color(colorSet[item]);
-      //   circleBullet.circle.strokeWidth = 1;
-      //   circleBullet.circle.radius = 3;
-      //   // circleBullet.fillOpacity = 0;
-      //   // circleBullet.strokeOpacity = 0;
-      //   // const bulletState2 = circleBullet.states.create('hover');
-      //   // bulletState2.properties.fillOpacity = 1;
-      //   // bulletState2.properties.strokeOpacity = 1;
+        const circleBullet = series.bullets.push(new am4charts.CircleBullet());
+        circleBullet.circle.fill = am4core.color(colorSet[item]);
+        circleBullet.circle.strokeWidth = 1;
+        circleBullet.circle.radius = 3;
+        // circleBullet.fillOpacity = 0;
+        // circleBullet.strokeOpacity = 0;
+        // const bulletState2 = circleBullet.states.create('hover');
+        // bulletState2.properties.fillOpacity = 1;
+        // bulletState2.properties.strokeOpacity = 1;
 
-      //   snapToSeries.push(series);
-      //   return '';
-      // });
+        snapToSeries.push(series);
+        return '';
+      });
       chart.current.cursor.snapToSeries = snapToSeries;
     }
 
