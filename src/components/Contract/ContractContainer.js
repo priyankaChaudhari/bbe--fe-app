@@ -2507,6 +2507,7 @@ export default function ContractContainer() {
       search: `${stringified}`,
     });
   };
+
   return (
     <>
       {showPageNotFound ? (
@@ -2541,12 +2542,17 @@ export default function ContractContainer() {
           <div className="on-boarding-container">
             <div className="row">
               <div className="col-12">
-                <div className="m-0 sticky">
+                <div
+                  className={
+                    userInfo && userInfo.role === 'Customer'
+                      ? 'm-0 sticky customer-pdf'
+                      : 'm-0 sticky '
+                  }>
                   {' '}
                   <div
                     onClick={() => onClickOfBackToCustomerDetail()}
                     role="presentation"
-                    className="back-link">
+                    className="back-link ">
                     <img
                       src={LeftArrowIcon}
                       alt="aarow-back"
@@ -2594,7 +2600,12 @@ export default function ContractContainer() {
           <div className="on-boarding-container">
             <div className="row">
               <div className="col-12">
-                <div className="m-0 sticky">
+                <div
+                  className={
+                    userInfo && userInfo.role === 'Customer'
+                      ? 'm-0 sticky customer-pdf'
+                      : 'm-0 sticky '
+                  }>
                   {' '}
                   <div
                     onClick={() => onClickOfBackToCustomerDetail()}

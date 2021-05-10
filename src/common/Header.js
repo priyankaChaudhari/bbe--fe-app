@@ -138,7 +138,10 @@ export default function Header({ type }) {
   };
 
   return (
-    <div>
+    <div
+      className={
+        userInfo && userInfo.role === 'Customer' ? 'common-header-sticky' : ''
+      }>
       <ToastContainer
         position="top-center"
         autoClose={5000}

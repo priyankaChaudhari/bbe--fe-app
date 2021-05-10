@@ -140,6 +140,9 @@ body {
     border-bottom: 1px solid $gray-5;
   }
 
+  .customer-pdf {
+    margin-left: 0px !important;
+  }
   @media only screen and (max-width: 991px) {
     .sticky {
       padding-left: 28px;
