@@ -269,10 +269,11 @@ export default function CreateAccount() {
                           }
                           type="text"
                           placeholder={`Enter ${item.label}`}
-                          onChange={() =>
+                          onChange={(event) =>
                             setApiError({
                               ...apiError,
                               detail: '',
+                              [event.target.name]: '',
                             })
                           }
                           id={item.key}

@@ -250,7 +250,7 @@ export default function CustomerMainContainer() {
     }
 
     if (userInfo && userInfo.role === 'Customer') {
-      setViewComponent('company');
+      setViewComponent('agreement');
     }
     if (profileLoader) {
       getActivityLogInfo();
@@ -276,6 +276,7 @@ export default function CustomerMainContainer() {
 
   if (userInfo && userInfo.role === 'Customer') {
     viewOptions = [
+      { value: 'agreement', label: 'Agreements' },
       { value: 'company', label: 'Company Details' },
       // { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
@@ -718,25 +719,22 @@ export default function CustomerMainContainer() {
                           ) : (
                             ''
                           )}
-                          {userInfo && userInfo.role !== 'Customer' ? (
-                            <li
-                              onClick={() => setViewComponent('agreement')}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'agreement' ? 'active' : ''
-                                }`}>
-                                <img
-                                  className="file-contract"
-                                  src={FileContract}
-                                  alt=""
-                                />
-                                Agreements
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
+                          <li
+                            onClick={() => setViewComponent('agreement')}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'agreement' ? 'active' : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={FileContract}
+                                alt=""
+                              />
+                              Agreements
+                            </div>
+                          </li>
+
                           <li
                             onClick={() => setViewComponent('company')}
                             role="presentation">

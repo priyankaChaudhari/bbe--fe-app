@@ -128,7 +128,9 @@ export default function CompanyDetail({
                   charLimit={150}
                   readMoreText="Read more"
                   readLessText="Read less">
-                  {`${customer.description}${' '}` || ''}
+                  {`${
+                    customer.description === null ? '' : customer.description
+                  }${' '}` || ''}
                 </ReadMoreAndLess>
               </span>
             </div>

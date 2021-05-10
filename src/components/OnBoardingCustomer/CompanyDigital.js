@@ -206,6 +206,9 @@ export default function CompanyDigital({
               readOnly={isChecked}
             />
           </label>
+          <ErrorMsg>
+            {apiError && apiError.website && apiError.website[0]}
+          </ErrorMsg>
         </ContractFormField>
         <div className="label-title mb-1 mt-4">Social</div>
 
