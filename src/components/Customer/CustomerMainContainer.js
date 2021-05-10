@@ -524,7 +524,16 @@ export default function CustomerMainContainer() {
                           {customer &&
                           customer.status &&
                           customer.status.value !== null ? (
-                            userInfo && userInfo.role === 'Customer' ? (
+                            customer &&
+                            customer.status &&
+                            customer.status.value ===
+                              'pending account setup' ? (
+                              <span className="company-status inactive">
+                                {customer &&
+                                  customer.status &&
+                                  customer.status.label}
+                              </span>
+                            ) : userInfo && userInfo.role === 'Customer' ? (
                               <span className="company-status active">
                                 {customer &&
                                   customer.status &&
