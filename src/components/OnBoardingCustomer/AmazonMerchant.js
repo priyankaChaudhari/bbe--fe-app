@@ -168,7 +168,7 @@ export default function AmazonMerchant({
             {isLoading.loader && isLoading.type === 'button' ? (
               <PageLoader color="#fff" type="button" />
             ) : (
-              'Continue'
+              <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
             )}
           </Button>
         )}
