@@ -1,10 +1,10 @@
+/* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
-// import Select from 'react-select';
 
 import {
   Button,
@@ -205,8 +205,12 @@ export default function CreateAccount() {
               </label>
             </ContractFormField>
             <ErrorMsg>
-              {(apiError && apiError.password && apiError.password[0]) ||
-                (apiError && apiError.key && apiError.key[0])}
+              {apiError && apiError.password && apiError.password[0]}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: apiError && apiError.key && apiError.key[0],
+                }}
+              />
             </ErrorMsg>
             <Button
               className="btn-primary w-100 mt-4"

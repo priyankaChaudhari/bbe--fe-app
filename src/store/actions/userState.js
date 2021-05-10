@@ -128,7 +128,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
   };
 };
 
-export const userRequestFail = (error) => {
+export const userRequestFail = (error, type) => {
+  if (type === 'logout') {
+    if (error && error.response && error.response.status === 401) {
+      window.location.href = PATH_LOGIN;
+    }
+  }
   return {
     type: actionTypes.USER_REQUEST_FAIL,
     error,
@@ -196,7 +201,7 @@ export const login = (history, data, customer, id) => {
         // dispatch(userMe(history, customer));
       })
       .catch((error) => {
-        dispatch(userRequestFail(error));
+        dispatch(userRequestFail(error, ''));
       });
   };
 };
@@ -210,7 +215,7 @@ export const logout = () => {
         dispatch(clearToken());
       })
       .catch((error) => {
-        dispatch(userRequestFail(error));
+        dispatch(userRequestFail(error, 'logout'));
       });
   };
 };

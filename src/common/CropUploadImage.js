@@ -240,7 +240,7 @@ export default function CropUploadImage({ type, id, setDocumentImage }) {
                         {isLoading.loader && isLoading.type === 'button' ? (
                           <PageLoader color="#fff" type="button" />
                         ) : (
-                          'Upload'
+                          'Upload & Save'
                         )}
                       </Button>
                     )}
