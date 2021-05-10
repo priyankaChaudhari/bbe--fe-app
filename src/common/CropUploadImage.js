@@ -188,7 +188,8 @@ export default function CropUploadImage({ type, id, setDocumentImage }) {
                     {' '}
                     <Cropper
                       className="crop-cantainer-img"
-                      initialAspectRatio={16 / 9}
+                      initialAspectRatio={1 / 1}
+                      aspectRatio={1 / 1}
                       preview=".img-preview"
                       src={image}
                       viewMode={1}
@@ -220,45 +221,46 @@ export default function CropUploadImage({ type, id, setDocumentImage }) {
             {image &&
             image.split(';') &&
             image.split(';')[0].includes('image') ? (
-              <div className="footer-line">
-                {cropData && cropData.preview === undefined ? (
-                  <Button
-                    className=" btn-primary m-3 p-2"
-                    type="button"
-                    style={{ float: 'right' }}
-                    onClick={(event) => getCropData(event)}>
-                    Crop Image
-                  </Button>
-                ) : (
-                  <Button
-                    className=" btn-primary m-3 p-2"
-                    type="button"
-                    style={{ float: 'right' }}
-                    onClick={() => createDocument()}>
-                    {isLoading.loader && isLoading.type === 'button' ? (
-                      <PageLoader color="#fff" type="button" />
+              <>
+                <div className="footer-line" />
+                <div className="row">
+                  <div className="col-12 text-center">
+                    {cropData && cropData.preview === undefined ? (
+                      <Button
+                        className=" btn-primary m-3 p-2"
+                        type="button"
+                        onClick={(event) => getCropData(event)}>
+                        Crop Image
+                      </Button>
                     ) : (
-                      'Upload & Save'
+                      <Button
+                        className=" btn-primary m-3 p-2"
+                        type="button"
+                        onClick={() => createDocument()}>
+                        {isLoading.loader && isLoading.type === 'button' ? (
+                          <PageLoader color="#fff" type="button" />
+                        ) : (
+                          'Upload'
+                        )}
+                      </Button>
                     )}
-                  </Button>
-                )}
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  ''
-                ) : (
-                  <Button
-                    className=" btn-gray m-3 p-2"
-                    type="button"
-                    style={{ float: 'right' }}
-                    onClick={() => cancelImageCrop()}>
-                    Cancel
-                  </Button>
-                )}
-              </div>
+                    {isLoading.loader && isLoading.type === 'button' ? (
+                      ''
+                    ) : (
+                      <Button
+                        className=" btn-gray m-3 p-2"
+                        type="button"
+                        onClick={() => cancelImageCrop()}>
+                        Cancel
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </>
             ) : (
               <Button
                 className=" btn-gray m-3 p-2"
                 type="button"
-                style={{ float: 'right' }}
                 onClick={() => cancelImageCrop()}>
                 Cancel
               </Button>
@@ -342,8 +344,6 @@ const UpdateProfile = styled.div`
       position: absolute;
       cursor: pointer;
     }
-
-    
   }
 
     .edit-account {

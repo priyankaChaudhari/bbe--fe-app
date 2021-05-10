@@ -1187,7 +1187,7 @@ export default function NewCustomerList() {
               </div>
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader
-                  // component="customer-list-loader"
+                  component="customer-list-loader"
                   color="#FF5933"
                   type="page"
                 />

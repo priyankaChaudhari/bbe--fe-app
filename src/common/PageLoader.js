@@ -96,11 +96,16 @@ export default function PageLoader({
         }
         style={{
           top: component === 'member' ? '120px' : '',
-          left: component === 'social' ? '110px' : '',
           width: component === 'activityLog' ? '50px' : '',
           // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
           // left: component === 'customer-list-loader' ? '290px' : '',
+          left:
+            component === 'social'
+              ? '110px'
+              : component === 'customer-list-loader'
+              ? '290px'
+              : '',
         }}>
         <Loader type="Bars" color={color} height={height} width={pageWidth} />
       </PageLoaderWrapper>

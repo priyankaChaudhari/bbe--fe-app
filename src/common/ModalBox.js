@@ -326,11 +326,11 @@ const ModalBox = styled.div`
     }
 
     .cropper-container {
-      max-width: 600px !important;
+      max-width: 540px !important;
       max-height: 480px !important;
     }
     .croped-img {
-      max-width: 600px !important;
+      max-width: 540px !important;
       padding-top: 20%;
       background: ${Theme.gray20};
       max-height: 480px !important;
@@ -339,6 +339,10 @@ const ModalBox = styled.div`
         outline: 1px solid #39f;
       }
     }
+    .cropper-crop-box {
+       max-width: 540px !important;
+    }
+
 
     .automatic-reminder {
       border-radius: 2px;
