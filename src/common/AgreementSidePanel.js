@@ -259,7 +259,8 @@ export default function AgreementSidePanel({
         (item && item.message.includes('monthly retainer')) ||
         (item && item.message.includes('sales threshold')) ||
         (item && item.message.includes('fee')) ||
-        (item && item.message.includes('discount amount'))
+        (item && item.message.includes('discount amount')) ||
+        (item && item.message.includes('custom amazon store price'))
       ) {
         let fromAmount = '';
         let toAmount = '';
