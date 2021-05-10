@@ -523,7 +523,7 @@ export default function CustomerMainContainer() {
 
                           {customer &&
                           customer.status &&
-                          customer.status.value === 'active' ? (
+                          customer.status.value !== null ? (
                             userInfo && userInfo.role === 'Customer' ? (
                               <span className="company-status active">
                                 {customer &&
