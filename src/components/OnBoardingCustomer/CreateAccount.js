@@ -194,6 +194,11 @@ export default function CreateAccount() {
                   type="password"
                   placeholder="Enter your Password"
                   name="password"
+                  onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                      savePassword();
+                    }
+                  }}
                   onChange={(event) => {
                     setFormData({ [event.target.name]: event.target.value });
                     setApiError({

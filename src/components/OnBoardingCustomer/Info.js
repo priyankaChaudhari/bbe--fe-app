@@ -56,7 +56,7 @@ export default function Info() {
       <UnauthorizedHeader />{' '}
       <div className="white-card-base ">
         <img className="lock-finish" src={LockFinish} alt="lock" />
-        <p className="account-steps m-0">Step 1 of 5</p>
+        <p className="account-steps m-0">Step 1 of 3</p>
         <h3 className="page-heading ">Create your account</h3>
         <p className="information-text m-0 ">
           <div className="hi-name capitalize">
@@ -74,13 +74,13 @@ export default function Info() {
             <img src={OrangeCheckMark} alt="check" />
             Your company website url & social links
           </li>
+          {/* <li>
+            <img src={OrangeCheckMark} alt="check" />
+            Billing and payment details and MWS token
+          </li> */}
           <li>
             <img src={OrangeCheckMark} alt="check" />
-            Billing and payment details
-          </li>
-          <li>
-            <img src={OrangeCheckMark} alt="check" />
-            Your Amazon merchant ID and MWS token
+            Your Amazon merchant ID
           </li>
         </ul>
 
