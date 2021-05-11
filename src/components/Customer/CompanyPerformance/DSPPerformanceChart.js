@@ -151,6 +151,7 @@ export default function DSPPerformanceChart({
     // if (!chart.current) {
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData; // bind th data
+    // chart.current.data = adGraphData; // bind th data
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
 
@@ -160,6 +161,31 @@ export default function DSPPerformanceChart({
     dateAxis.renderer.grid.template.location = 0.5;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
+
+    function renderTooltip(name, color, value, currency) {
+      const tooltipText = `<ul style="padding:0; margin: 0 0 4px 0;">
+      <li style="display: inline-block;">
+        {' '}
+        <div style="background-color: ${color};
+        border: 1px solid white;
+        border-radius: 100%;
+        width: 10px;
+        height: 10px;" />
+      </li>
+      <li style="display: inline-block;">
+        <div style="color: #f4f6fc;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding-left: 8px;">${name}: </div>
+      </li>
+      <li style="display: inline-block;">
+        <div style=" color: white;
+        font-size: 16px;">${currency}{${value}}</div>
+      </li>
+    </ul>
+    `;
+      return tooltipText;
+    }
 
     // render y axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
@@ -175,9 +201,22 @@ export default function DSPPerformanceChart({
     valueAxis.min = 0;
     valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
 
-    const tooltipHeader = '[bold]{dateX}[/]\n';
-    const tooltipCurrent = `[#2e384d]● [/]Recent [/]${currencySymbol}{label1}\n`;
-    const tooltipPrevious = `[#BFC5D2]● [/]Previous [/]${currencySymbol}{label2}`;
+    // const tooltipCurrent = `[#2e384d]● [/]Recent [/]${currencySymbol}{label1}\n`;
+    // const tooltipPrevious = `[#BFC5D2]● [/]Previous [/]${currencySymbol}{label2}`;
+    let tooltipCurrent = ``;
+    let tooltipPrevious = ``;
+    tooltipCurrent = renderTooltip(
+      'Recent',
+      '#2e384d',
+      'value1',
+      currencySymbol,
+    );
+    tooltipPrevious = renderTooltip(
+      'Previous',
+      '#BFC5D2',
+      'value2',
+      currencySymbol,
+    );
     // Create series for previous data
     const series = chart.current.series.push(new am4charts.LineSeries());
     series.dataFields.valueY = 'value2';
@@ -185,7 +224,8 @@ export default function DSPPerformanceChart({
     series.dataFields.dateX = 'date';
     series.strokeWidth = 2;
     series.stroke = am4core.color('#BFC5D2');
-    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
     series.fill = am4core.color('#2e384d');
     series.propertyFields.strokeDasharray = 'dashLength';
 
@@ -194,11 +234,6 @@ export default function DSPPerformanceChart({
     circleBullet2.circle.fill = am4core.color('#BFC5D2');
     circleBullet2.circle.strokeWidth = 1;
     circleBullet2.circle.radius = 3;
-    // circleBullet2.fillOpacity = 0;
-    // circleBullet2.strokeOpacity = 0;
-    // var bulletState = circleBullet2.states.create('hover');
-    // bulletState.properties.fillOpacity = 1;
-    // bulletState.properties.strokeOpacity = 1;
 
     // series for current data
     const series2 = chart.current.series.push(new am4charts.LineSeries());
@@ -207,7 +242,8 @@ export default function DSPPerformanceChart({
     series2.name = 'Recent';
     series2.strokeWidth = 2;
     // series2.minBulletDistance = 10;
-    series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    series2.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
+
     series2.stroke = am4core.color('#2e384d');
     series2.fill = am4core.color('#2e384d');
 
@@ -215,11 +251,6 @@ export default function DSPPerformanceChart({
     circleBullet.circle.fill = am4core.color('#2e384d');
     circleBullet.circle.strokeWidth = 1;
     circleBullet.circle.radius = 3;
-    // circleBullet.fillOpacity = 0;
-    // circleBullet.strokeOpacity = 0;
-    // var bulletState2 = circleBullet.states.create('hover');
-    // bulletState2.properties.fillOpacity = 1;
-    // bulletState2.properties.strokeOpacity = 1;
 
     // Add cursor
     chart.current.cursor = new am4charts.XYCursor();
