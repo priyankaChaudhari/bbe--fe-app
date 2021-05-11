@@ -714,7 +714,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             onClick={() => setBoxToggle('adCos')}
             role="presentation"
             className={setAdBoxClass('adCos', 'ad-cos-active')}>
-            <div className="chart-name">Ad Cos</div>
+            <div className="chart-name">Acos</div>
             <div className="number-rate">$1,550.55</div>
             <div className="vs">vs $1,114.88</div>
             <div className="perentage-value down mt-3">

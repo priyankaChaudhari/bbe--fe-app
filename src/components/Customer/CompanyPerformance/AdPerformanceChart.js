@@ -140,26 +140,26 @@ export default function AdPerformanceChart({
   //     adClickRatePrevious: 35,
   //     previousDate: new Date(2019, 5, 5),
   //   },
-  // {
-  //   date: new Date(2019, 5, 18),
-  //   adSalesCurrent: 2100,
-  //   adSalesPrevious: 700,
-  //   adSpendCurrent: 2700,
-  //   adSpendPrevious: 8900,
-  //   adConversionCurrent: 20,
-  //   adConversionPrevious: 15,
-  //   impressionsCurrent: 7000,
-  //   impressionsPrevious: 8200,
-  //   adCosCurrent: 8600,
-  //   adCosPrevious: 2000,
-  //   adRoasCurrent: 7800,
-  //   adRoasPrevious: 8200,
-  //   adClicksCurrent: 2200,
-  //   adClicksPrevious: 8000,
-  //   adClickRateCurrent: 30,
-  //   adClickRatePrevious: 62,
-  //   previousDate: new Date(2019, 5, 6),
-  // },
+  //   {
+  //     date: new Date(2019, 5, 18),
+  //     adSalesCurrent: 2100,
+  //     adSalesPrevious: 700,
+  //     adSpendCurrent: 2700,
+  //     adSpendPrevious: 8900,
+  //     adConversionCurrent: 20,
+  //     adConversionPrevious: 15,
+  //     impressionsCurrent: 7000,
+  //     impressionsPrevious: 8200,
+  //     adCosCurrent: 8600,
+  //     adCosPrevious: 2000,
+  //     adRoasCurrent: 7800,
+  //     adRoasPrevious: 8200,
+  //     adClicksCurrent: 2200,
+  //     adClicksPrevious: 8000,
+  //     adClickRateCurrent: 30,
+  //     adClickRatePrevious: 62,
+  //     previousDate: new Date(2019, 5, 6),
+  //   },
   // {
   //   date: new Date(2019, 5, 19),
   //   adSalesCurrent: 300,
@@ -482,33 +482,97 @@ export default function AdPerformanceChart({
     chart.current.cursor.lineX.disabled = true;
     chart.current.cursor.behavior = 'none';
 
+    function renderTooltip(name, color, value, currency, percent) {
+      const tooltipText = `<ul style="padding:0; margin: 0 0 4px 0;">
+      <li style="display: inline-block;">
+        {' '}
+        <div style="background-color: ${color};
+        border: 1px solid white;
+        border-radius: 100%;
+        width: 10px;
+        height: 10px;" />
+      </li>
+      <li style="display: inline-block;">
+        <div style="color: #f4f6fc;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding-left: 8px;">${name}: </div>
+      </li>
+      <li style="display: inline-block;">
+        <div style=" color: white;
+        font-size: 16px;">${currency !== null ? currency : ''}{${value}}${
+        percent !== null ? percent : ''
+      }</div>
+      </li>
+    </ul>
+    `;
+
+      return tooltipText;
+    }
+
     // when only one metrics selected
     if (_.size(selectedBox) === 1) {
       const selectedKey = _.keys(selectedBox)[0];
       const previousValue = `${_.keys(selectedBox)[0]}Previous`;
       const currentValue = `${_.keys(selectedBox)[0]}Current`;
-      const tooltipHeader = '[bold]{dateX}[/]\n';
-      let tooltipCurrent = '';
+      let tooltipCurrent = ``;
       let tooltipPrevious = '';
+
       if (
         selectedKey === 'adSales' ||
         selectedKey === 'adSpend' ||
         selectedKey === 'adCos'
       ) {
         valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-        tooltipCurrent = `[#2e384d]● [/]Recent [/]${currencySymbol}{${currentValue}}\n`;
-        tooltipPrevious = `[#BFC5D2]● [/]Previous [/]${currencySymbol}{${previousValue}}`;
+        tooltipCurrent = renderTooltip(
+          'Recent',
+          '#FF5933',
+          currentValue,
+          currencySymbol,
+          null,
+        );
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousValue,
+          currencySymbol,
+          null,
+        );
       } else if (
         selectedKey === 'adConversion' ||
         selectedKey === 'adClickRate'
       ) {
         valueAxis.numberFormatter.numberFormat = `#.#'%'`;
-        tooltipCurrent = `[#2e384d]● [/]Recent [/]: {${currentValue}}%\n`;
-        tooltipPrevious = `[#BFC5D2]● [/]Previous [/]: {${previousValue}}%`;
+        tooltipCurrent = renderTooltip(
+          'Recent',
+          '#FF5933',
+          currentValue,
+          null,
+          '%',
+        );
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousValue,
+          null,
+          '%',
+        );
       } else {
         valueAxis.numberFormatter.numberFormat = `#.#a`;
-        tooltipCurrent = `[#2e384d]● [/]Recent [/]: {${currentValue}}\n`;
-        tooltipPrevious = `[#BFC5D2]● [/]Previous [/]: {${previousValue}}`;
+        tooltipCurrent = renderTooltip(
+          'Recent',
+          '#FF5933',
+          currentValue,
+          null,
+          null,
+        );
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousValue,
+          null,
+          null,
+        );
       }
 
       // Create series for previous data
@@ -518,7 +582,7 @@ export default function AdPerformanceChart({
       series.dataFields.dateX = 'date';
       series.strokeWidth = 2;
       series.stroke = am4core.color('#BFC5D2');
-      series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+      series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
       series.fill = am4core.color('#2e384d');
 
       // series.propertyFields.strokeDasharray = 'dashLength';
@@ -528,6 +592,7 @@ export default function AdPerformanceChart({
       circleBullet2.circle.fill = am4core.color('#BFC5D2');
       circleBullet2.circle.strokeWidth = 1;
       circleBullet2.circle.radius = 3;
+
       // circleBullet2.fillOpacity = 0;
       // circleBullet2.strokeOpacity = 0;
       // var bulletState = circleBullet2.states.create('hover');
@@ -540,7 +605,7 @@ export default function AdPerformanceChart({
       series2.dataFields.dateX = 'date';
       series2.name = currentValue;
       series2.strokeWidth = 2;
-      series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+      series2.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
       series2.stroke = am4core.color('#FF5933');
       series2.fill = am4core.color('#2e384d');
 
@@ -574,12 +639,31 @@ export default function AdPerformanceChart({
 
       // genearate tooltip
       _.keys(selectedBox).map((item) => {
+        const value = `${item}Current`;
         if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
-          tooltipValue = `${tooltipValue} [${colorSet[item]}]● [/]${tooltipNames[item]}:\t${currencySymbol}{${item}Current}\n`;
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            tooltipNames[item],
+            colorSet[item],
+            value,
+            currencySymbol,
+            null,
+          )}`;
         } else if (item === 'adConversion' || item === 'adClickRate') {
-          tooltipValue = `${tooltipValue} [${colorSet[item]}]● [/]${tooltipNames[item]}:\t{${item}Current}%\n`;
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            tooltipNames[item],
+            colorSet[item],
+            value,
+            null,
+            '%',
+          )}`;
         } else {
-          tooltipValue = `${tooltipValue} [${colorSet[item]}]● [/]${tooltipNames[item]}:\t{${item}Current}\n`;
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            tooltipNames[item],
+            colorSet[item],
+            value,
+            null,
+            null,
+          )}`;
         }
         return '';
       });
@@ -606,81 +690,85 @@ export default function AdPerformanceChart({
             firstAxis = 'unit';
           }
           // valueAxis.renderer.line.strokeOpacity = 1;
-        } else if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
-            if (firstAxis === 'currency') {
-              // console.log('currency');
-              series.yAxis = valueAxis;
-              // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-            } else if (secondAxis === null || secondAxis === 'currency') {
-              // console.log('not currency, second axis null currency')
-              series.yAxis = valueAxis2;
-              valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-              valueAxis2.renderer.opposite = true;
-              // valueAxis2.renderer.line.strokeOpacity = 1;
-              secondAxis = 'currency';
-            } else {
-              // console.log('second axis not null currency');
-              series.yAxis = valueAxis3;
-              valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-              valueAxis3.renderer.opposite = true;
+        } else if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adCos'
+        ) {
+          if (firstAxis === 'currency') {
+            // console.log('currency');
+            series.yAxis = valueAxis;
+            // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+          } else if (secondAxis === null || secondAxis === 'currency') {
+            // console.log('not currency, second axis null currency')
+            series.yAxis = valueAxis2;
+            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+            valueAxis2.renderer.opposite = true;
+            // valueAxis2.renderer.line.strokeOpacity = 1;
+            secondAxis = 'currency';
+          } else {
+            // console.log('second axis not null currency');
+            series.yAxis = valueAxis3;
+            valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+            valueAxis3.renderer.opposite = true;
 
-              valueAxis.renderer.line.strokeOpacity = 0;
-              valueAxis2.renderer.line.strokeOpacity = 0;
-              valueAxis3.renderer.line.strokeOpacity = 0;
-              valueAxis.renderer.labels.template.disabled = true;
-              valueAxis2.renderer.labels.template.disabled = true;
-              valueAxis3.renderer.labels.template.disabled = true;
-            }
-          } else if (item === 'adConversion' || item === 'adClickRate') {
-            // console.log('adConversion');
-            if (firstAxis === 'percentage') {
-              // console.log('percentage');
-              series.yAxis = valueAxis;
-              // valueAxis.numberFormatter.numberFormat = `#.#a`;
-            } else if (secondAxis === null || secondAxis === 'percentage') {
-              // console.log(' not percentage, second axis null percentage');
-              series.yAxis = valueAxis2;
-              valueAxis2.numberFormatter.numberFormat = `#.#'%'`;
-              valueAxis2.renderer.opposite = true;
-              // valueAxis2.renderer.line.strokeOpacity = 1;
-              secondAxis = 'percentage';
-            } else {
-              // console.log('second axis not null percentage');
-              series.yAxis = valueAxis3;
-              valueAxis3.numberFormatter.numberFormat = `#.#'%'`;
-              valueAxis3.renderer.opposite = true;
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+          }
+        } else if (item === 'adConversion' || item === 'adClickRate') {
+          // console.log('adConversion');
+          if (firstAxis === 'percentage') {
+            // console.log('percentage');
+            series.yAxis = valueAxis;
+            // valueAxis.numberFormatter.numberFormat = `#.#a`;
+          } else if (secondAxis === null || secondAxis === 'percentage') {
+            // console.log(' not percentage, second axis null percentage');
+            series.yAxis = valueAxis2;
+            valueAxis2.numberFormatter.numberFormat = `#.#'%'`;
+            valueAxis2.renderer.opposite = true;
+            // valueAxis2.renderer.line.strokeOpacity = 1;
+            secondAxis = 'percentage';
+          } else {
+            // console.log('second axis not null percentage');
+            series.yAxis = valueAxis3;
+            valueAxis3.numberFormatter.numberFormat = `#.#'%'`;
+            valueAxis3.renderer.opposite = true;
 
-              valueAxis.renderer.line.strokeOpacity = 0;
-              valueAxis2.renderer.line.strokeOpacity = 0;
-              valueAxis3.renderer.line.strokeOpacity = 0;
-              valueAxis.renderer.labels.template.disabled = true;
-              valueAxis2.renderer.labels.template.disabled = true;
-              valueAxis3.renderer.labels.template.disabled = true;
-            }
-          } else if (firstAxis === 'unit') {
-              // console.log('unit');
-              series.yAxis = valueAxis;
-              valueAxis.numberFormatter.numberFormat = `#.#a`;
-            } else if (secondAxis === null || secondAxis === 'unit') {
-              // console.log('not unit, second axis null unit');
-              series.yAxis = valueAxis2;
-              valueAxis2.numberFormatter.numberFormat = `#.#a`;
-              valueAxis2.renderer.opposite = true;
-              // valueAxis2.renderer.line.strokeOpacity = 1;
-              secondAxis = 'unit';
-            } else {
-              // console.log('second axis not null unit');
-              series.yAxis = valueAxis3;
-              valueAxis3.numberFormatter.numberFormat = `#.#a`;
-              valueAxis3.renderer.opposite = true;
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+          }
+        } else if (firstAxis === 'unit') {
+          // console.log('unit');
+          series.yAxis = valueAxis;
+          valueAxis.numberFormatter.numberFormat = `#.#a`;
+        } else if (secondAxis === null || secondAxis === 'unit') {
+          // console.log('not unit, second axis null unit');
+          series.yAxis = valueAxis2;
+          valueAxis2.numberFormatter.numberFormat = `#.#a`;
+          valueAxis2.renderer.opposite = true;
+          // valueAxis2.renderer.line.strokeOpacity = 1;
+          secondAxis = 'unit';
+        } else {
+          // console.log('second axis not null unit');
+          series.yAxis = valueAxis3;
+          valueAxis3.numberFormatter.numberFormat = `#.#a`;
+          valueAxis3.renderer.opposite = true;
 
-              valueAxis.renderer.line.strokeOpacity = 0;
-              valueAxis2.renderer.line.strokeOpacity = 0;
-              valueAxis3.renderer.line.strokeOpacity = 0;
-              valueAxis.renderer.labels.template.disabled = true;
-              valueAxis2.renderer.labels.template.disabled = true;
-              valueAxis3.renderer.labels.template.disabled = true;
-            }
+          valueAxis.renderer.line.strokeOpacity = 0;
+          valueAxis2.renderer.line.strokeOpacity = 0;
+          valueAxis3.renderer.line.strokeOpacity = 0;
+          valueAxis.renderer.labels.template.disabled = true;
+          valueAxis2.renderer.labels.template.disabled = true;
+          valueAxis3.renderer.labels.template.disabled = true;
+        }
         const currentValue = `${item}Current`;
         const seriesName = `${item}Series`;
 
@@ -688,12 +776,12 @@ export default function AdPerformanceChart({
         series.dataFields.dateX = 'date';
         series.name = seriesName;
         series.strokeWidth = 2;
-        series.tooltipText = tooltipValue;
+        // series.tooltipText = tooltipValue;
+        series.tooltipHTML = tooltipValue;
         series.stroke = am4core.color(colorSet[item]);
         series.fill = am4core.color('#2e384d');
 
         // valueAxis.renderer.labels.template.fill = series.stroke;
-
         // valueAxis.renderer.line.strokeWidth = 2;
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
@@ -702,6 +790,7 @@ export default function AdPerformanceChart({
         circleBullet.circle.radius = 3;
         // circleBullet.fillOpacity = 0;
         // circleBullet.strokeOpacity = 0;
+
         // const bulletState2 = circleBullet.states.create('hover');
         // bulletState2.properties.fillOpacity = 1;
         // bulletState2.properties.strokeOpacity = 1;
