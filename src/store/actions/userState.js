@@ -185,7 +185,7 @@ export const userMe = (history, customer) => {
             search: `${stringified}`,
           });
         } else {
-          history.pus(PATH_LOGIN);
+          history.push(PATH_LOGIN);
         }
       });
   };
