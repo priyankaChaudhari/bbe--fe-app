@@ -938,7 +938,7 @@ export const WhiteCard = styled.div`
      .number-rate {
         color: ${Theme.gray80};
         font-size: 26px;
-        padding-top: 5px;
+        padding-top: 15px;
         word-break: break-all;
         font-family:  ${Theme.baseFontFamily};
       }

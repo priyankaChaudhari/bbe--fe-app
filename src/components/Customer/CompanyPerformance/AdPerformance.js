@@ -792,7 +792,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             </ul>
           </div>
         ) : null}
-        <div className="col-md-6 col-sm-12 order-md-2 order-1">
+        <div
+          className={
+            _.size(selectedAdBox) === 1
+              ? ' col-md-6 col-sm-12 order-md-2 order-1'
+              : 'col-md-12 col-sm-12 order-md-2 order-1'
+          }>
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
@@ -848,7 +853,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-6">
           {' '}
-          <p className="black-heading-title mt-2 mb-2"> DSP Spend</p>
+          <p className="black-heading-title mt-3 mb-2"> DSP Spend</p>
         </div>
         <div className="col-6 text-right">
           {' '}
@@ -1113,7 +1118,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           selectedBox={selectedAdBox}
         />
       </WhiteCard>
-      <WhiteCard className="mt-3">
+      <WhiteCard className="mt-3 mb-3">
         <div className="row">{renderDSPDailyFacts()}</div>
         {renderDSPSpendTotals()}
         {renderDSPGroupBy()}
