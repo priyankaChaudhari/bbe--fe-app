@@ -25,19 +25,19 @@ export default function DSPPerformanceChart({
   //   },
   //   {
   //     date: new Date(2019, 5, 13),
-  //     value1: 5300,
+  //     value1: 1300,
   //     value2: 5100,
   //     previousDate: new Date(2019, 5, 6),
   //   },
   //   {
   //     date: new Date(2019, 5, 14),
-  //     value1: 5600,
-  //     value2: 5800,
+  //     value1: 2600,
+  //     value2: 1800,
   //     previousDate: new Date(2019, 5, 7),
   //   },
   //   {
   //     date: new Date(2019, 5, 15),
-  //     value1: 5200,
+  //     value1: 900,
   //     value2: 5300,
   //     previousDate: new Date(2019, 5, 8),
   //   },
@@ -50,7 +50,7 @@ export default function DSPPerformanceChart({
   //   {
   //     date: new Date(2019, 5, 17),
   //     value1: 4700,
-  //     value2: 4200,
+  //     value2: 3200,
   //     previousDate: new Date(2019, 5, 10),
   //   },
   //   {
@@ -148,10 +148,48 @@ export default function DSPPerformanceChart({
   // ];
   const chart = useRef(null);
   useEffect(() => {
+    const adGraphData = [
+      {
+        date: new Date(2019, 5, 12),
+        value1: 5000,
+        value2: 4800,
+        previousDate: new Date(2019, 5, 5),
+      },
+      {
+        date: new Date(2019, 5, 13),
+        value1: 1300,
+        value2: 5100,
+        previousDate: new Date(2019, 5, 6),
+      },
+      {
+        date: new Date(2019, 5, 14),
+        value1: 2600,
+        value2: 1800,
+        previousDate: new Date(2019, 5, 7),
+      },
+      {
+        date: new Date(2019, 5, 15),
+        value1: 900,
+        value2: 5300,
+        previousDate: new Date(2019, 5, 8),
+      },
+      {
+        date: new Date(2019, 5, 16),
+        value1: 4800,
+        value2: 4400,
+        previousDate: new Date(2019, 5, 9),
+      },
+      {
+        date: new Date(2019, 5, 17),
+        value1: 4700,
+        value2: 3200,
+        previousDate: new Date(2019, 5, 10),
+      },
+    ];
     // if (!chart.current) {
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    chart.current.data = chartData; // bind th data
-    // chart.current.data = adGraphData; // bind th data
+    // chart.current.data = chartData; // bind th data
+    chart.current.data = adGraphData; // bind th data
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
 
