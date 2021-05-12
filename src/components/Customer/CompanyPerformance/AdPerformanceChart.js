@@ -605,7 +605,7 @@ export default function AdPerformanceChart({
     chart.current.cursor.behavior = 'none';
 
     function renderTooltip(name, color, value, currency, percent) {
-      const tooltipText = `<ul style="padding:0; margin: 0 0 4px 0;">
+      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
       <li style="display: inline-block;">
         {' '}
         <div style="background-color: ${color};
@@ -618,15 +618,18 @@ export default function AdPerformanceChart({
         <div style="color: #f4f6fc;
         text-transform: uppercase;
         font-size: 11px;
-        padding-left: 8px;">${name}: </div>
+        padding-left: 5px;">${name} </div>
       </li>
-      <li style="display: inline-block;">
+      <li style="display: inline-block; float: right; margin-left: 25px;">
         <div style=" color: white;
-        font-size: 16px;">${currency !== null ? currency : ''}{${value}}${
+        font-size: 16px; text-align: right;
+       
+        ">${currency !== null ? currency : ''}{${value}}${
         percent !== null ? percent : ''
       }</div>
       </li>
     </ul>
+  
     `;
 
       return tooltipText;

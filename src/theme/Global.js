@@ -1023,6 +1023,7 @@ export const WhiteCard = styled.div`
     }
   }
  .rechart-item {
+   
    list-style-type: none;
       padding: 0;
       margin: 0;
@@ -1240,7 +1241,7 @@ export const WhiteCard = styled.div`
       }
    }
  }
-   @media only screen and (max-width: 768px) {      
+   @media only screen and (max-width: 767px) {      
      .order-chart-box { 
         max-width: 100% !important;
       }
