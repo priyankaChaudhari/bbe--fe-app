@@ -792,7 +792,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             </ul>
           </div>
         ) : null}
-        <div className="col-md-12 mt-4">
+        <div className="col-md-6 col-sm-12 order-md-2 order-1">
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
@@ -916,70 +916,75 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const renderDSPGroupBy = () => {
     return (
       <>
-        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-          <ul className="rechart-item">
-            <li>
-              <div className="weeks">
-                <span className="black block" />
-                <span>Recent</span>
-              </div>
-            </li>
-            {selectedDSPDF !== 'custom' ? (
+        <div className="row mt-4 mb-3">
+          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+            <ul className="rechart-item">
               <li>
                 <div className="weeks">
-                  <span className="gray block" />
-                  <span>Previous</span>
+                  <span className="black block" />
+                  <span>Recent</span>
                 </div>
               </li>
-            ) : null}
-          </ul>
-        </div>
-
-        <div className="col-md-12 mt-4">
-          {' '}
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li className={dspFilters.daily === false ? 'disabled-tab' : ''}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault1"
-                  value={dspGroupBy}
-                  checked={dspFilters.daily}
-                  onClick={() => handleDSPGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
-
-              <li className={dspFilters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault1"
-                  value={dspGroupBy}
-                  checked={dspFilters.weekly && dspGroupBy === 'weekly'}
-                  onChange={() => handleDSPGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
-
-              <li className={dspFilters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  id="monthlyCheck"
-                  name="flexRadioDefault1"
-                  value={dspGroupBy}
-                  checked={dspFilters.month}
-                  onChange={() => handleDSPGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
+              {selectedDSPDF !== 'custom' ? (
+                <li>
+                  <div className="weeks">
+                    <span className="gray block" />
+                    <span>Previous</span>
+                  </div>
+                </li>
+              ) : null}
             </ul>
+          </div>
+
+          <div className="col-md-6 col-sm-12 order-md-2 order-1">
+            {' '}
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li
+                  className={dspFilters.daily === false ? 'disabled-tab' : ''}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault1"
+                    value={dspGroupBy}
+                    checked={dspFilters.daily}
+                    onClick={() => handleDSPGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
+
+                <li
+                  className={dspFilters.weekly === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="weeklyCheck"
+                    name="flexRadioDefault1"
+                    value={dspGroupBy}
+                    checked={dspFilters.weekly && dspGroupBy === 'weekly'}
+                    onChange={() => handleDSPGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
+
+                <li
+                  className={dspFilters.month === false ? 'disabled-tab' : ''}>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    id="monthlyCheck"
+                    name="flexRadioDefault1"
+                    value={dspGroupBy}
+                    checked={dspFilters.month}
+                    onChange={() => handleDSPGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </>
@@ -1100,7 +1105,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <WhiteCard>
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
-        <div className="row">{renderAdGroupBy()}</div>
+        <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
         <AdPerformanceChart
           chartId="adChart"
           chartData={null}
