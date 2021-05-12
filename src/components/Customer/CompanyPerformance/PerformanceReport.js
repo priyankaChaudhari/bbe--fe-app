@@ -417,8 +417,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             res.data.daily_facts.current &&
             res.data.daily_facts.current.length
           ) {
+            let actualCount = 1;
             res.data.daily_facts.current.forEach((resData, index) => {
-              // const key = ' $';
               const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
               revenueTotal.currentRevenueTotal += resData.revenue;
               unitsTotal.currentUnitsTotal += resData.units_sold;
@@ -466,14 +466,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 tempConversionData[index].label1 =
                   resData.conversion !== null ? resData.conversion : '0.00';
 
-                conversionTotal.previousConversionTotal +=
-                  res.data.daily_facts.previous[index].conversion;
-                revenueTotal.previousRevenueTotal +=
-                  res.data.daily_facts.previous[index].revenue;
-                unitsTotal.previousUnitsTotal +=
-                  res.data.daily_facts.previous[index].units_sold;
-                trafficTotal.previousTrafficTotal +=
-                  res.data.daily_facts.previous[index].traffic;
+                if (resData.revenue !== null) {
+                  actualCount = index + 1;
+                  conversionTotal.previousConversionTotal +=
+                    res.data.daily_facts.previous[index].conversion;
+                  revenueTotal.previousRevenueTotal +=
+                    res.data.daily_facts.previous[index].revenue;
+                  unitsTotal.previousUnitsTotal +=
+                    res.data.daily_facts.previous[index].units_sold;
+                  trafficTotal.previousTrafficTotal +=
+                    res.data.daily_facts.previous[index].traffic;
+                }
               } else {
                 tempRevenueData.push({
                   name: dayDate,
@@ -503,10 +506,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 });
               }
             });
-            conversionTotal.currentConversionTotal /=
-              res.data.daily_facts.current.length;
-            conversionTotal.previousConversionTotal /=
-              res.data.daily_facts.current.length;
+            conversionTotal.currentConversionTotal /= actualCount;
+            conversionTotal.previousConversionTotal /= actualCount;
           }
           revenueTotal.difference = calculateSalesDifference(
             revenueTotal.currentRevenueTotal,
