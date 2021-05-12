@@ -85,9 +85,16 @@ export default function NewCustomerList() {
       ? JSON.parse(localStorage.getItem('filters')).showPerformance
       : false,
   );
+
+  const [showAdPerformance, setShowAdPerformance] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).showAdPerformance
+      : false,
+  );
   const options = [
     { value: 'performance', label: 'Performance' },
     { value: 'contract_details', label: 'Contract Details' },
+    { value: 'ad_performance', label: 'Ad Performance' },
   ];
   const contractChoices = [
     { value: 'any', label: 'Any' },
@@ -104,8 +111,10 @@ export default function NewCustomerList() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
 
   const [expiringSoon, setExpiringSoon] = useState(
-    !!(JSON.parse(localStorage.getItem('filters')) &&
-      JSON.parse(localStorage.getItem('filters')).sort_by === 'expiring_soon'),
+    !!(
+      JSON.parse(localStorage.getItem('filters')) &&
+      JSON.parse(localStorage.getItem('filters')).sort_by === 'expiring_soon'
+    ),
   );
 
   const IconOption = (props) => (
@@ -159,7 +168,8 @@ export default function NewCustomerList() {
   const SortOption = (props) => (
     <SingleValue {...props}>
       {props.data.label === 'Performance' ||
-      props.data.label === 'Contract Details'
+      props.data.label === 'Contract Details' ||
+      props.data.label === 'Ad Performance'
         ? 'View:'
         : 'Sort by:'}
       &nbsp;
@@ -457,6 +467,7 @@ export default function NewCustomerList() {
     if (type === 'view') {
       if (event.value === 'performance') {
         setShowPerformance(true);
+        setShowAdPerformance(false);
         localStorage.setItem(
           'filters',
           JSON.stringify({
@@ -465,13 +476,26 @@ export default function NewCustomerList() {
           }),
         );
         customerList(pageNumber, selectedValue, filters, searchQuery, true);
-      } else {
+      } else if (event.value === 'ad_performance') {
+        setShowAdPerformance(true);
         setShowPerformance(false);
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
+            showAdPerformance: true,
+          }),
+        );
+        customerList(pageNumber, selectedValue, filters, searchQuery, true);
+      } else {
+        setShowPerformance(false);
+        setShowAdPerformance(false);
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
             showPerformance: false,
+            showAdPerformance: false,
           }),
         );
       }
@@ -742,6 +766,8 @@ export default function NewCustomerList() {
                 sortOptions.filter((op) => op.value === filters.sort_by)
               : showPerformance
               ? [{ value: 'performance', label: 'Performance' }]
+              : showAdPerformance
+              ? [{ value: 'ad_performance', label: 'Ad Performance' }]
               : [{ value: 'contract_details', label: 'Contract Details' }]
             // : selectedValue[item.key] === null
             // ? null
@@ -796,6 +822,338 @@ export default function NewCustomerList() {
       );
     }
     return '';
+  };
+
+  const renderHeaders = () => {
+    if (showPerformance) {
+      return (
+        <div className="row">
+          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-2 col-12 Revenue">Revenue</div>
+          <div className="col-lg-2 col-12 unit-sold ">Units Sold</div>
+          <div className="col-lg-2 col-12 traffic">Traffic</div>
+          <div className="col-lg-2 col-12 conversion">Conversion</div>
+          <div className="col-lg-2 col-12 Brand_Strategist">
+            Brand Strategist
+          </div>
+        </div>
+      );
+    } if (showAdPerformance) {
+      return (
+        <div className="row">
+          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-2 col-12 Revenue">Ad Sales</div>
+          <div className="col-lg-2 col-12 unit-sold ">Ad Spend</div>
+          <div className="col-lg-2 col-12 traffic">Ad Impressions</div>
+          <div className="col-lg-2 col-12 conversion">Acos</div>
+          <div className="col-lg-2 col-12 Brand_Strategist">Ad Manager</div>
+        </div>
+      );
+    } 
+      return (
+        <div className="row">
+          <div className="col-lg-3 col-12 customer-header">Customer</div>
+          <div className="col-lg-7 col-12">Active Contracts</div>
+          <div className="col-lg-2 col-12 Brand_Strategist">
+            Brand Strategist
+          </div>
+        </div>
+      );
+    
+  };
+
+  const renderCustomerDetails = (item) => {
+    if (showPerformance) {
+      return (
+        <tr
+          className="cursor"
+          key={Math.random()}
+          onClick={() =>
+            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+          }>
+          <td width="20%">
+            <img
+              className="company-logo"
+              src={
+                item &&
+                item.documents &&
+                item.documents[0] &&
+                Object.values(item.documents[0])
+                  ? Object.values(item.documents[0])[0]
+                  : CompanyDefaultUser
+              }
+              alt="logo"
+            />
+
+            <div className="company-name">
+              {item &&
+                item.contract &&
+                item.contract[0] &&
+                item.contract[0].contract_company_name}
+            </div>
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          </td>
+          <td width="15%">
+            $
+            {item &&
+              item.daily_facts &&
+              item.daily_facts.current &&
+              item.daily_facts.current.length &&
+              item.daily_facts.current
+                .map((rev) => (rev.revenue === null ? 0 : rev.revenue))
+                .reduce((val, rev) => rev + val)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {calculatePercentage(
+              item &&
+                item.daily_facts &&
+                item.daily_facts.current &&
+                item.daily_facts.current.length
+                ? item.daily_facts.current
+                    .map((rev) => rev.revenue)
+                    .reduce((val, rev) => rev + val)
+                : 0,
+              item &&
+                item.daily_facts &&
+                item.daily_facts.previous &&
+                item.daily_facts.previous.length
+                ? item.daily_facts.previous
+                    .map((rev) => rev.revenue)
+                    .reduce((val, rev) => rev + val)
+                : 0,
+            )}
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+                item.daily_facts &&
+                item.daily_facts.current &&
+                item.daily_facts.current.length &&
+                item.daily_facts.current
+                  .map((rev) => (rev.units_sold === null ? 0 : rev.units_sold))
+                  .reduce((val, rev) => rev + val)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              {calculatePercentage(
+                item &&
+                  item.daily_facts &&
+                  item.daily_facts.current &&
+                  item.daily_facts.current.length
+                  ? item.daily_facts.current
+                      .map((rev) => rev.units_sold)
+                      .reduce((val, rev) => rev + val)
+                  : 0,
+                item &&
+                  item.daily_facts &&
+                  item.daily_facts.previous &&
+                  item.daily_facts.previous.length
+                  ? item.daily_facts.previous
+                      .map((rev) => rev.units_sold)
+                      .reduce((val, rev) => rev + val)
+                  : 0,
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+                item.daily_facts &&
+                item.daily_facts.current &&
+                item.daily_facts.current.length &&
+                item.daily_facts.current
+                  .map((rev) => (rev.traffic === null ? 0 : rev.traffic))
+                  .reduce((val, rev) => rev + val)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              {calculatePercentage(
+                item &&
+                  item.daily_facts &&
+                  item.daily_facts.current &&
+                  item.daily_facts.current.length
+                  ? item.daily_facts.current
+                      .map((rev) => rev.traffic)
+                      .reduce((val, rev) => rev + val)
+                  : 0,
+                item &&
+                  item.daily_facts &&
+                  item.daily_facts.previous &&
+                  item.daily_facts.previous.length
+                  ? item.daily_facts.previous
+                      .map((rev) => rev.traffic)
+                      .reduce((val, rev) => rev + val)
+                  : 0,
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.daily_facts &&
+              item.daily_facts.current &&
+              item.daily_facts.current.length &&
+              item.daily_facts.current !== null ? (
+                <>
+                  {item &&
+                    item.daily_facts.current
+                      .map((rev) =>
+                        rev.conversion === null ? 0 : rev.conversion,
+                      )
+                      .reduce((val, rev) => rev + val)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  %
+                  {calculatePercentage(
+                    item &&
+                      item.daily_facts &&
+                      item.daily_facts.current &&
+                      item.daily_facts.current.length
+                      ? item &&
+                          item.daily_facts.current
+                            .map((rev) => rev.conversion)
+                            .reduce((val, rev) => rev + val)
+                      : 0,
+                    item &&
+                      item.daily_facts &&
+                      item.daily_facts.previous &&
+                      item.daily_facts.previous.length
+                      ? item.daily_facts.previous
+                          .map((rev) => rev.conversion)
+                          .reduce((val, rev) => rev + val)
+                      : 0,
+                    'conversion',
+                  )}
+                </>
+              ) : (
+                ''
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            {item &&
+            item.brand_growth_strategist &&
+            item.brand_growth_strategist.length !== 0 ? (
+              <>
+                {item.brand_growth_strategist.profile_photo ? (
+                  <img
+                    className="user-profile-circle"
+                    src={item.brand_growth_strategist.profile_photo}
+                    alt="user"
+                  />
+                ) : (
+                  <GetInitialName
+                    property="float-left mr-3"
+                    userInfo={item.brand_growth_strategist}
+                  />
+                )}
+              </>
+            ) : (
+              ''
+            )}
+            <div className="user-name">
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.first_name}
+              <br />
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.last_name}
+            </div>
+          </td>
+        </tr>
+      );
+    } if (showAdPerformance) {
+      return '';
+    } 
+      return (
+        <tr
+          className="cursor"
+          key={Math.random()}
+          onClick={() =>
+            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+          }>
+          <td width="25%">
+            <img
+              className="company-logo"
+              src={
+                item &&
+                item.documents &&
+                item.documents[0] &&
+                Object.values(item.documents[0])
+                  ? Object.values(item.documents[0])[0]
+                  : CompanyDefaultUser
+              }
+              alt="logo"
+            />
+
+            <div className="company-name">
+              {item &&
+                item.contract &&
+                item.contract[0] &&
+                item.contract[0].contract_company_name}
+            </div>
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          </td>
+          <td width="60%">
+            <ul
+              className="recurring-contact"
+              style={{ textTransform: 'capitalize' }}>
+              {item && item.contract && item.contract.length ? (
+                item &&
+                item.contract &&
+                item.contract.map((type) => (
+                  <React.Fragment key={Math.random()}>
+                    <ReactTooltip />
+                    {generateContractHTML(type, item.id)}
+                  </React.Fragment>
+                ))
+              ) : (
+                <li className="no-active-contract">No active contracts</li>
+              )}
+            </ul>
+          </td>
+
+          <td width="15%">
+            {item &&
+            item.brand_growth_strategist &&
+            item.brand_growth_strategist.length !== 0 ? (
+              <>
+                {item.brand_growth_strategist.profile_photo ? (
+                  <img
+                    className="user-profile-circle"
+                    src={item.brand_growth_strategist.profile_photo}
+                    alt="user"
+                  />
+                ) : (
+                  <GetInitialName
+                    property="float-left mr-3"
+                    userInfo={item.brand_growth_strategist}
+                  />
+                )}
+              </>
+            ) : (
+              ''
+            )}
+            <div className="user-name">
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.first_name}
+              <br />
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.last_name}
+            </div>
+          </td>
+        </tr>
+      );
+    
   };
 
   return (
@@ -1146,7 +1504,8 @@ export default function NewCustomerList() {
             <div className="table-part">
               <div className="sticky-header">
                 <div className="table-header">
-                  <div className="row">
+                  {renderHeaders()}
+                  {/* <div className="row">
                     <div
                       // className="customer-header "
                       // width={showPerformance ? '20%' : '25%'}
@@ -1182,7 +1541,7 @@ export default function NewCustomerList() {
                     <div className="col-lg-2 col-12 Brand_Strategist">
                       Brand Strategist
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {isLoading.loader && isLoading.type === 'page' ? (
@@ -1198,253 +1557,254 @@ export default function NewCustomerList() {
                       <NoRecordFound />
                     ) : (
                       data &&
-                      data.map((item) => (
-                        <tr
-                          className="cursor"
-                          key={Math.random()}
-                          onClick={() =>
-                            history.push(
-                              PATH_CUSTOMER_DETAILS.replace(':id', item.id),
-                            )
-                          }>
-                          <td width={showPerformance ? '20%' : '25%'}>
-                            <img
-                              className="company-logo"
-                              src={
-                                item &&
-                                item.documents &&
-                                item.documents[0] &&
-                                Object.values(item.documents[0])
-                                  ? Object.values(item.documents[0])[0]
-                                  : CompanyDefaultUser
-                              }
-                              alt="logo"
-                            />
+                      data.map(
+                        (item) => renderCustomerDetails(item),
+                        // <tr
+                        //   className="cursor"
+                        //   key={Math.random()}
+                        //   onClick={() =>
+                        //     history.push(
+                        //       PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                        //     )
+                        //   }>
+                        //   <td width={showPerformance ? '20%' : '25%'}>
+                        //     <img
+                        //       className="company-logo"
+                        //       src={
+                        //         item &&
+                        //         item.documents &&
+                        //         item.documents[0] &&
+                        //         Object.values(item.documents[0])
+                        //           ? Object.values(item.documents[0])[0]
+                        //           : CompanyDefaultUser
+                        //       }
+                        //       alt="logo"
+                        //     />
 
-                            <div className="company-name">
-                              {item &&
-                                item.contract &&
-                                item.contract[0] &&
-                                item.contract[0].contract_company_name}
-                            </div>
-                            <div
-                              className="status"
-                              style={{ textTransform: 'capitalize' }}>
-                              {item && item.status}
-                            </div>
-                          </td>
-                          <td width={showPerformance ? '15%' : '60%'}>
-                            {showPerformance ? (
-                              <>
-                                $
-                                {item &&
-                                  item.daily_facts &&
-                                  item.daily_facts.current &&
-                                  item.daily_facts.current.length &&
-                                  item.daily_facts.current
-                                    .map((rev) =>
-                                      rev.revenue === null ? 0 : rev.revenue,
-                                    )
-                                    .reduce((val, rev) => rev + val)
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                {calculatePercentage(
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.current &&
-                                    item.daily_facts.current.length
-                                    ? item.daily_facts.current
-                                        .map((rev) => rev.revenue)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.previous &&
-                                    item.daily_facts.previous.length
-                                    ? item.daily_facts.previous
-                                        .map((rev) => rev.revenue)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                )}
-                              </>
-                            ) : (
-                              <ul
-                                className="recurring-contact"
-                                style={{ textTransform: 'capitalize' }}>
-                                {item &&
-                                item.contract &&
-                                item.contract.length ? (
-                                  item &&
-                                  item.contract &&
-                                  item.contract.map((type) => (
-                                    <React.Fragment key={Math.random()}>
-                                      <ReactTooltip />
-                                      {generateContractHTML(type, item.id)}
-                                    </React.Fragment>
-                                  ))
-                                ) : (
-                                  <li className="no-active-contract">
-                                    No active contracts
-                                  </li>
-                                )}
-                              </ul>
-                            )}
-                          </td>
-                          {showPerformance ? (
-                            <td width="15%">
-                              <>
-                                {item &&
-                                  item.daily_facts &&
-                                  item.daily_facts.current &&
-                                  item.daily_facts.current.length &&
-                                  item.daily_facts.current
-                                    .map((rev) =>
-                                      rev.units_sold === null
-                                        ? 0
-                                        : rev.units_sold,
-                                    )
-                                    .reduce((val, rev) => rev + val)
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                {calculatePercentage(
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.current &&
-                                    item.daily_facts.current.length
-                                    ? item.daily_facts.current
-                                        .map((rev) => rev.units_sold)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.previous &&
-                                    item.daily_facts.previous.length
-                                    ? item.daily_facts.previous
-                                        .map((rev) => rev.units_sold)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                )}
-                              </>
-                            </td>
-                          ) : null}
-                          {showPerformance ? (
-                            <td width="15%">
-                              <>
-                                {item &&
-                                  item.daily_facts &&
-                                  item.daily_facts.current &&
-                                  item.daily_facts.current.length &&
-                                  item.daily_facts.current
-                                    .map((rev) =>
-                                      rev.traffic === null ? 0 : rev.traffic,
-                                    )
-                                    .reduce((val, rev) => rev + val)
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                {calculatePercentage(
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.current &&
-                                    item.daily_facts.current.length
-                                    ? item.daily_facts.current
-                                        .map((rev) => rev.traffic)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                  item &&
-                                    item.daily_facts &&
-                                    item.daily_facts.previous &&
-                                    item.daily_facts.previous.length
-                                    ? item.daily_facts.previous
-                                        .map((rev) => rev.traffic)
-                                        .reduce((val, rev) => rev + val)
-                                    : 0,
-                                )}
-                              </>
-                            </td>
-                          ) : null}
-                          {showPerformance ? (
-                            <td width="15%">
-                              <>
-                                {item &&
-                                item.daily_facts &&
-                                item.daily_facts.current &&
-                                item.daily_facts.current.length &&
-                                item.daily_facts.current !== null ? (
-                                  <>
-                                    {item &&
-                                      item.daily_facts.current
-                                        .map((rev) =>
-                                          rev.conversion === null
-                                            ? 0
-                                            : rev.conversion,
-                                        )
-                                        .reduce((val, rev) => rev + val)
-                                        .toString()
-                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    %
-                                    {calculatePercentage(
-                                      item &&
-                                        item.daily_facts &&
-                                        item.daily_facts.current &&
-                                        item.daily_facts.current.length
-                                        ? item &&
-                                            item.daily_facts.current
-                                              .map((rev) => rev.conversion)
-                                              .reduce((val, rev) => rev + val)
-                                        : 0,
-                                      item &&
-                                        item.daily_facts &&
-                                        item.daily_facts.previous &&
-                                        item.daily_facts.previous.length
-                                        ? item.daily_facts.previous
-                                            .map((rev) => rev.conversion)
-                                            .reduce((val, rev) => rev + val)
-                                        : 0,
-                                      'conversion',
-                                    )}
-                                  </>
-                                ) : (
-                                  ''
-                                )}
-                              </>
-                            </td>
-                          ) : null}
+                        //     <div className="company-name">
+                        //       {item &&
+                        //         item.contract &&
+                        //         item.contract[0] &&
+                        //         item.contract[0].contract_company_name}
+                        //     </div>
+                        //     <div
+                        //       className="status"
+                        //       style={{ textTransform: 'capitalize' }}>
+                        //       {item && item.status}
+                        //     </div>
+                        //   </td>
+                        //   <td width={showPerformance ? '15%' : '60%'}>
+                        //     {showPerformance ? (
+                        //       <>
+                        //         $
+                        //         {item &&
+                        //           item.daily_facts &&
+                        //           item.daily_facts.current &&
+                        //           item.daily_facts.current.length &&
+                        //           item.daily_facts.current
+                        //             .map((rev) =>
+                        //               rev.revenue === null ? 0 : rev.revenue,
+                        //             )
+                        //             .reduce((val, rev) => rev + val)
+                        //             .toString()
+                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        //         {calculatePercentage(
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.current &&
+                        //             item.daily_facts.current.length
+                        //             ? item.daily_facts.current
+                        //                 .map((rev) => rev.revenue)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.previous &&
+                        //             item.daily_facts.previous.length
+                        //             ? item.daily_facts.previous
+                        //                 .map((rev) => rev.revenue)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //         )}
+                        //       </>
+                        //     ) : (
+                        //       <ul
+                        //         className="recurring-contact"
+                        //         style={{ textTransform: 'capitalize' }}>
+                        //         {item &&
+                        //         item.contract &&
+                        //         item.contract.length ? (
+                        //           item &&
+                        //           item.contract &&
+                        //           item.contract.map((type) => (
+                        //             <React.Fragment key={Math.random()}>
+                        //               <ReactTooltip />
+                        //               {generateContractHTML(type, item.id)}
+                        //             </React.Fragment>
+                        //           ))
+                        //         ) : (
+                        //           <li className="no-active-contract">
+                        //             No active contracts
+                        //           </li>
+                        //         )}
+                        //       </ul>
+                        //     )}
+                        //   </td>
+                        //   {showPerformance ? (
+                        //     <td width="15%">
+                        //       <>
+                        //         {item &&
+                        //           item.daily_facts &&
+                        //           item.daily_facts.current &&
+                        //           item.daily_facts.current.length &&
+                        //           item.daily_facts.current
+                        //             .map((rev) =>
+                        //               rev.units_sold === null
+                        //                 ? 0
+                        //                 : rev.units_sold,
+                        //             )
+                        //             .reduce((val, rev) => rev + val)
+                        //             .toString()
+                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        //         {calculatePercentage(
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.current &&
+                        //             item.daily_facts.current.length
+                        //             ? item.daily_facts.current
+                        //                 .map((rev) => rev.units_sold)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.previous &&
+                        //             item.daily_facts.previous.length
+                        //             ? item.daily_facts.previous
+                        //                 .map((rev) => rev.units_sold)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //         )}
+                        //       </>
+                        //     </td>
+                        //   ) : null}
+                        //   {showPerformance ? (
+                        //     <td width="15%">
+                        //       <>
+                        //         {item &&
+                        //           item.daily_facts &&
+                        //           item.daily_facts.current &&
+                        //           item.daily_facts.current.length &&
+                        //           item.daily_facts.current
+                        //             .map((rev) =>
+                        //               rev.traffic === null ? 0 : rev.traffic,
+                        //             )
+                        //             .reduce((val, rev) => rev + val)
+                        //             .toString()
+                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        //         {calculatePercentage(
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.current &&
+                        //             item.daily_facts.current.length
+                        //             ? item.daily_facts.current
+                        //                 .map((rev) => rev.traffic)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //           item &&
+                        //             item.daily_facts &&
+                        //             item.daily_facts.previous &&
+                        //             item.daily_facts.previous.length
+                        //             ? item.daily_facts.previous
+                        //                 .map((rev) => rev.traffic)
+                        //                 .reduce((val, rev) => rev + val)
+                        //             : 0,
+                        //         )}
+                        //       </>
+                        //     </td>
+                        //   ) : null}
+                        //   {showPerformance ? (
+                        //     <td width="15%">
+                        //       <>
+                        //         {item &&
+                        //         item.daily_facts &&
+                        //         item.daily_facts.current &&
+                        //         item.daily_facts.current.length &&
+                        //         item.daily_facts.current !== null ? (
+                        //           <>
+                        //             {item &&
+                        //               item.daily_facts.current
+                        //                 .map((rev) =>
+                        //                   rev.conversion === null
+                        //                     ? 0
+                        //                     : rev.conversion,
+                        //                 )
+                        //                 .reduce((val, rev) => rev + val)
+                        //                 .toString()
+                        //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        //             %
+                        //             {calculatePercentage(
+                        //               item &&
+                        //                 item.daily_facts &&
+                        //                 item.daily_facts.current &&
+                        //                 item.daily_facts.current.length
+                        //                 ? item &&
+                        //                     item.daily_facts.current
+                        //                       .map((rev) => rev.conversion)
+                        //                       .reduce((val, rev) => rev + val)
+                        //                 : 0,
+                        //               item &&
+                        //                 item.daily_facts &&
+                        //                 item.daily_facts.previous &&
+                        //                 item.daily_facts.previous.length
+                        //                 ? item.daily_facts.previous
+                        //                     .map((rev) => rev.conversion)
+                        //                     .reduce((val, rev) => rev + val)
+                        //                 : 0,
+                        //               'conversion',
+                        //             )}
+                        //           </>
+                        //         ) : (
+                        //           ''
+                        //         )}
+                        //       </>
+                        //     </td>
+                        //   ) : null}
 
-                          <td width="15%">
-                            {item &&
-                            item.brand_growth_strategist &&
-                            item.brand_growth_strategist.length !== 0 ? (
-                              <>
-                                {item.brand_growth_strategist.profile_photo ? (
-                                  <img
-                                    className="user-profile-circle"
-                                    src={
-                                      item.brand_growth_strategist.profile_photo
-                                    }
-                                    alt="user"
-                                  />
-                                ) : (
-                                  <GetInitialName
-                                    property="float-left mr-3"
-                                    userInfo={item.brand_growth_strategist}
-                                  />
-                                )}
-                              </>
-                            ) : (
-                              ''
-                            )}
-                            <div className="user-name">
-                              {item &&
-                                item.brand_growth_strategist &&
-                                item.brand_growth_strategist.first_name}
-                              <br />
-                              {item &&
-                                item.brand_growth_strategist &&
-                                item.brand_growth_strategist.last_name}
-                            </div>
-                          </td>
-                        </tr>
-                      ))
+                        //   <td width="15%">
+                        //     {item &&
+                        //     item.brand_growth_strategist &&
+                        //     item.brand_growth_strategist.length !== 0 ? (
+                        //       <>
+                        //         {item.brand_growth_strategist.profile_photo ? (
+                        //           <img
+                        //             className="user-profile-circle"
+                        //             src={
+                        //               item.brand_growth_strategist.profile_photo
+                        //             }
+                        //             alt="user"
+                        //           />
+                        //         ) : (
+                        //           <GetInitialName
+                        //             property="float-left mr-3"
+                        //             userInfo={item.brand_growth_strategist}
+                        //           />
+                        //         )}
+                        //       </>
+                        //     ) : (
+                        //       ''
+                        //     )}
+                        //     <div className="user-name">
+                        //       {item &&
+                        //         item.brand_growth_strategist &&
+                        //         item.brand_growth_strategist.first_name}
+                        //       <br />
+                        //       {item &&
+                        //         item.brand_growth_strategist &&
+                        //         item.brand_growth_strategist.last_name}
+                        //     </div>
+                        //   </td>
+                        // </tr>
+                      )
                     )}
                   </tbody>
                 </Table>
