@@ -987,47 +987,28 @@ export default function AgreementSidePanel({
         } else {
           setAdditionalMarketplaces(marketplacesResult);
         }
-
-        // }
-
-        // if (
-        //   originalData &&
-        //   originalData.additional_marketplaces &&
-        //   originalData.additional_marketplaces.length
-        // ) {
-        //   additionalMarketplacesData.create =
-        //     originalData.additional_marketplaces;
-        //   additionalMarketplacesData.delete = [];
-
-        //   setFormData({
-        //     ...formData,
-        //     additional_marketplaces: additionalMarketplacesData.create,
-        //   });
-        // }
-
-        // if (originalData.additional_marketplaces) {
-        //   setMarketPlaces(
-        //     marketplacesResult.filter(
-        //       (choice) =>
-        //         !originalData.additional_marketplaces.some(
-        //           (item) => item.name === choice.value,
-        //         ),
-        //     ),
-        //   );
-        // } else {
-        //   setMarketPlaces(marketplacesResult);
-        // }
       } else {
+        // const itemsToBeDelete =
+        //   additionalMarketplacesData &&
+        //   additionalMarketplacesData.create &&
+        //   additionalMarketplacesData.create.length &&
+        //   additionalMarketplacesData.create.filter((item) => {
+        //     if (item.id) {
+        //       return item;
+        //     }
+        //     return null;
+        //   });
         const itemsToBeDelete =
-          additionalMarketplacesData &&
-          additionalMarketplacesData.create &&
-          additionalMarketplacesData.create.length &&
-          additionalMarketplacesData.create.filter((item) => {
+          originalData &&
+          originalData.additional_marketplaces &&
+          originalData.additional_marketplaces.length &&
+          originalData.additional_marketplaces.filter((item) => {
             if (item.id) {
               return item;
             }
             return null;
           });
+
         if (itemsToBeDelete && itemsToBeDelete.length) {
           const list = itemsToBeDelete.map((item) => item.id);
           additionalMarketplacesData.delete = list;
@@ -1067,6 +1048,7 @@ export default function AgreementSidePanel({
         //   // additionalMarketplaces.filter((op) => op.value !== val.option.value),
         //   formData && formData.additional_marketplaces.filter((op) => op.value !== val.option.value),
         // );
+
         const itemInFormData =
           originalData &&
           originalData.additional_marketplaces &&
@@ -1080,6 +1062,7 @@ export default function AgreementSidePanel({
         //   additionalMarketplacesData.create &&
         //   additionalMarketplacesData.create.length
         // ) {
+
         if (
           additionalMarketplacesData &&
           additionalMarketplacesData.create &&
@@ -1847,7 +1830,6 @@ export default function AgreementSidePanel({
                 ...updatedFormData,
                 additional_one_time_services: additionalOnetimeServices,
               });
-              // console.log('original data found', additionalOnetimeServices);
             }
           }
 
@@ -1954,6 +1936,7 @@ export default function AgreementSidePanel({
 
         setAdditionalOnetimeServices({
           ...additionalOnetimeServices,
+          // deletedUncheckedItemList,
         });
       }
 
@@ -1962,6 +1945,7 @@ export default function AgreementSidePanel({
         additionalOnetimeServices.create,
         'one_time_service',
       );
+
       // }
     } else {
       if (event.target.name === 'zip_code') {
@@ -2824,23 +2808,26 @@ export default function AgreementSidePanel({
                             )
                           }
                           defaultChecked={
-                            (formData &&
-                              formData.additional_one_time_services &&
-                              formData.additional_one_time_services.length &&
-                              formData.additional_one_time_services.find(
-                                (item) =>
-                                  item.service &&
-                                  item.service.id === oneTimeServiceData.value,
-                              )) ||
-                            (agreementData &&
-                              agreementData.additional_one_time_services &&
-                              agreementData.additional_one_time_services
-                                .length &&
-                              agreementData.additional_one_time_services.find(
-                                (item) =>
-                                  item.service &&
-                                  item.service.id === oneTimeServiceData.value,
-                              ))
+                            formData &&
+                            formData.additional_one_time_services &&
+                            formData.additional_one_time_services.length &&
+                            formData.additional_one_time_services.find(
+                              (item) =>
+                                (item.service &&
+                                  item.service.id ===
+                                    oneTimeServiceData.value) ||
+                                item.service_id === oneTimeServiceData.value,
+                            )
+                            //    ||
+                            // (agreementData &&
+                            //   agreementData.additional_one_time_services &&
+                            //   agreementData.additional_one_time_services
+                            //     .length &&
+                            //   agreementData.additional_one_time_services.find(
+                            //     (item) =>
+                            //       item.service &&
+                            //       item.service.id === oneTimeServiceData.value,
+                            //   ))
                           }
                         />
                         <span className="checkmark" />
@@ -3799,27 +3786,30 @@ export default function AgreementSidePanel({
                                         )
                                       }
                                       defaultChecked={
-                                        (formData &&
-                                          formData.additional_monthly_services &&
-                                          formData.additional_monthly_services
-                                            .length &&
-                                          formData.additional_monthly_services.find(
-                                            (item) =>
-                                              item.service &&
+                                        formData &&
+                                        formData.additional_monthly_services &&
+                                        formData.additional_monthly_services
+                                          .length &&
+                                        formData.additional_monthly_services.find(
+                                          (item) =>
+                                            (item.service &&
                                               item.service.id ===
-                                                serviceData.value,
-                                          )) ||
-                                        (agreementData &&
-                                          agreementData.additional_monthly_services &&
-                                          agreementData
-                                            .additional_monthly_services
-                                            .length &&
-                                          agreementData.additional_monthly_services.find(
-                                            (item) =>
-                                              item.service &&
-                                              item.service.id ===
-                                                serviceData.value,
-                                          ))
+                                                serviceData.value) ||
+                                            item.service_id ===
+                                              serviceData.value,
+                                        )
+                                        //   ||
+                                        // (agreementData &&
+                                        //   agreementData.additional_monthly_services &&
+                                        //   agreementData
+                                        //     .additional_monthly_services
+                                        //     .length &&
+                                        //   agreementData.additional_monthly_services.find(
+                                        //     (item) =>
+                                        //       item.service &&
+                                        //       item.service.id ===
+                                        //         serviceData.value,
+                                        //   ))
                                       }
                                     />
                                     <span className="checkmark" />
@@ -3846,13 +3836,13 @@ export default function AgreementSidePanel({
                                     );
                                   }}
                                   defaultChecked={
-                                    (agreementData &&
-                                      agreementData.additional_marketplaces &&
-                                      agreementData.additional_marketplaces
-                                        .length) ||
-                                    (formData &&
-                                      formData.additional_marketplaces &&
-                                      formData.additional_marketplaces.length)
+                                    // (agreementData &&
+                                    //   agreementData.additional_marketplaces &&
+                                    //   agreementData.additional_marketplaces
+                                    //     .length) ||
+                                    formData &&
+                                    formData.additional_marketplaces &&
+                                    formData.additional_marketplaces.length
                                   }
                                 />
                                 <span className="checkmark" />

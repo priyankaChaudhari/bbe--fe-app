@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
+import cloneDeep from 'lodash/cloneDeep';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
@@ -138,11 +139,11 @@ export default function ContractContainer() {
     {},
   );
   const [contractError, setContractError] = useState({});
+
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
   const [showPageNotFound, setPageNotFoundFlag] = useState(false);
-
   const [showSection, setShowCollpase] = useState({
     addendum: true,
     dspAddendum: false,
@@ -310,7 +311,8 @@ export default function ContractContainer() {
       details.additional_monthly_services &&
       details.additional_monthly_services.length &&
       details.additional_monthly_services.find(
-        (item) => item.service.name === 'DSP Advertising',
+        (item) =>
+          item && item.service && item.service.name === 'DSP Advertising',
       )
     ) {
       setShowCollpase({ ...showSection, dspAddendum: true });
@@ -369,16 +371,88 @@ export default function ContractContainer() {
     }
   };
 
+  const createPrimaryMarketplace = () => {
+    const statementData = {
+      id:
+        (details &&
+          details.primary_marketplace &&
+          details.primary_marketplace.id) ||
+        '',
+      contract: details.id,
+      name: updatedFormData && updatedFormData.primary_marketplace,
+      is_primary: true,
+    };
+
+    if (details.primary_marketplace && details.primary_marketplace.id) {
+      updateMarketplace(details.primary_marketplace.id, statementData).then(
+        (updateMarketplaceRes) => {
+          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+            setFormData({
+              ...formData,
+              primary_marketplace:
+                updateMarketplaceRes && updateMarketplaceRes.data,
+            });
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+              setUpdatedFormData({ ...updatedFormData });
+
+              if (!Object.keys(updatedFormData).length) {
+                showFooter(false);
+                setIsEditContract(false);
+                getContractDetails();
+              }
+            }
+          }
+        },
+      );
+    } else {
+      createMarketplace(statementData).then((createMarketplaceRes) => {
+        setIsLoading({ loader: false, type: 'button' });
+        setIsLoading({ loader: false, type: 'page' });
+        if (createMarketplaceRes && createMarketplaceRes.status === 201) {
+          setFormData({
+            ...formData,
+            primary_marketplace:
+              createMarketplaceRes && createMarketplaceRes.data,
+          });
+          if (updatedFormData && updatedFormData.primary_marketplace) {
+            delete updatedFormData.primary_marketplace;
+            setUpdatedFormData({ ...updatedFormData });
+            if (!Object.keys(updatedFormData).length) {
+              showFooter(false);
+              setIsEditContract(false);
+              getContractDetails();
+            }
+          }
+        }
+      });
+    }
+    setUpdatedFormData({ ...updatedFormData });
+  };
+
   const updateMarketplaces = async () => {
     let flag = false;
     const result = await createMarketplaceBulk(
       updatedFormData.additional_marketplaces,
-    ).then(() => {
+    ).then((updateMarketplacesRes) => {
       flag = true;
+      if (updateMarketplacesRes && updateMarketplacesRes.status === 200) {
+        setFormData({
+          ...formData,
+          additional_marketplaces:
+            updateMarketplacesRes && updateMarketplacesRes.data,
+        });
+        setOriginalData({
+          ...originalData,
+          additional_marketplaces:
+            updateMarketplacesRes && updateMarketplacesRes.data,
+        });
+      }
     });
     if (flag) {
       if (updatedFormData && updatedFormData.additional_marketplaces) {
         delete updatedFormData.additional_marketplaces;
+        setUpdatedFormData({ ...updatedFormData });
       }
       if (
         !(
@@ -388,52 +462,13 @@ export default function ContractContainer() {
         )
       ) {
         setShowAdditionalMarketplace(false);
+      } else {
+        setShowAdditionalMarketplace(true);
       }
 
       if (updatedFormData && updatedFormData.primary_marketplace) {
-        const statementData = {
-          id:
-            (details &&
-              details.primary_marketplace &&
-              details.primary_marketplace.id) ||
-            '',
-          contract: details.id,
-          name: updatedFormData && updatedFormData.primary_marketplace,
-          is_primary: true,
-        };
-
-        if (details.primary_marketplace && details.primary_marketplace.id) {
-          await updateMarketplace(
-            details.primary_marketplace.id,
-            statementData,
-          ).then((updateMarketplaceRes) => {
-            if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
-              if (updatedFormData && updatedFormData.primary_marketplace) {
-                delete updatedFormData.primary_marketplace;
-                // setUpdatedFormData({ ...updatedFormData });
-                // if (!Object.keys(updatedFormData).length) {
-                //   showFooter(false);
-                //   setIsEditContract(false);
-                //   getContractDetails();
-                // }
-              }
-            }
-          });
-        } else {
-          await createMarketplace(statementData).then(
-            (createMarketplaceRes) => {
-              setIsLoading({ loader: false, type: 'button' });
-              setIsLoading({ loader: false, type: 'page' });
-              if (createMarketplaceRes && createMarketplaceRes.status === 201) {
-                if (updatedFormData && updatedFormData.primary_marketplace) {
-                  delete updatedFormData.primary_marketplace;
-                }
-              }
-            },
-          );
-        }
+        createPrimaryMarketplace();
       }
-      setUpdatedFormData({ ...updatedFormData });
     }
     return result;
   };
@@ -443,26 +478,26 @@ export default function ContractContainer() {
       .all(apis)
       .then(
         axios.spread((...responses) => {
-          const additionalMarketplaceRes = responses[0];
-          const additionalMonthlySerRes = responses[1];
-          const additionalOneTimeServRes = responses[2];
-          const contractRes = responses[3];
-          const primaryMarketplaceRes = responses[4];
-          const addendumRes = responses[5];
+          // const additionalMarketplaceRes = responses[0];
+          const additionalMonthlySerRes = responses[0];
+          const additionalOneTimeServRes = responses[1];
+          const contractRes = responses[2];
+          // const primaryMarketplaceRes = responses[4];
+          const addendumRes = responses[3];
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
 
           if (
-            additionalMarketplaceRes &&
-            additionalMarketplaceRes.status === 200 &&
+            // additionalMarketplaceRes &&
+            // additionalMarketplaceRes.status === 200 &&
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200 &&
             additionalOneTimeServRes &&
             additionalOneTimeServRes.status === 200 &&
             contractRes &&
             contractRes.status === 200 &&
-            primaryMarketplaceRes &&
-            primaryMarketplaceRes.status === 200 &&
+            // primaryMarketplaceRes &&
+            // primaryMarketplaceRes.status === 200 &&
             addendumRes &&
             addendumRes.status === 200
           ) {
@@ -474,28 +509,49 @@ export default function ContractContainer() {
             setIsEditContract(false);
           }
 
-          if (
-            additionalMarketplaceRes &&
-            additionalMarketplaceRes.status === 200
-          ) {
-            if (updatedFormData && updatedFormData.additional_marketplaces) {
-              delete updatedFormData.additional_marketplaces;
-            }
+          // if (
+          //   additionalMarketplaceRes &&
+          //   additionalMarketplaceRes.status === 200
+          // ) {
+          //   console.log(
+          //     'additional marketplace success',
+          //     updatedFormData,
+          //     formData,
+          //     details,
+          //   );
+          //   setDetails({
+          //     ...details,
+          //     additional_marketplaces: formData.additional_marketplaces,
+          //   });
 
-            if (
-              !(
-                formData &&
-                formData.additional_marketplaces &&
-                formData.additional_marketplaces.length
-              )
-            ) {
-              setShowAdditionalMarketplace(false);
-            }
-          }
+          //   if (updatedFormData && updatedFormData.additional_marketplaces) {
+          //     delete updatedFormData.additional_marketplaces;
+          //   }
+
+          //   if (
+          //     !(
+          //       formData &&
+          //       formData.additional_marketplaces &&
+          //       formData.additional_marketplaces.length
+          //     )
+          //   ) {
+          //     setShowAdditionalMarketplace(false);
+          //   }
+          // }
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200
           ) {
+            setFormData({
+              ...formData,
+              additional_monthly_services:
+                additionalMonthlySerRes && additionalMonthlySerRes.data,
+            });
+            setOriginalData({
+              ...originalData,
+              additional_monthly_services:
+                additionalMonthlySerRes && additionalMonthlySerRes.data,
+            });
             if (
               updatedFormData &&
               updatedFormData.additional_monthly_services
@@ -507,22 +563,50 @@ export default function ContractContainer() {
             additionalOneTimeServRes &&
             additionalOneTimeServRes.status === 200
           ) {
+            setFormData({
+              ...formData,
+              additional_one_time_services:
+                additionalOneTimeServRes && additionalOneTimeServRes.data,
+            });
+            setOriginalData({
+              ...originalData,
+              additional_one_time_services:
+                additionalOneTimeServRes && additionalOneTimeServRes.data,
+            });
+
+            const service =
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.data &&
+              additionalOneTimeServRes.data.length &&
+              additionalOneTimeServRes.data.find(
+                (item) =>
+                  item &&
+                  item.service &&
+                  item.service.name &&
+                  item.service.name === 'Amazon Store Package Custom',
+              );
+            if (service) {
+              setAmazonStoreCustom(true);
+            } else {
+              setAmazonStoreCustom(false);
+            }
+
             if (
               updatedFormData &&
               updatedFormData.additional_one_time_services
             ) {
               delete updatedFormData.additional_one_time_services;
-              setAmazonStoreCustom(false);
+              // setAmazonStoreCustom(false);
             }
           }
-          if (
-            (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
-            (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
-          ) {
-            if (updatedFormData && updatedFormData.primary_marketplace) {
-              delete updatedFormData.primary_marketplace;
-            }
-          }
+          // if (
+          //   (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
+          //   (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
+          // ) {
+          //   if (updatedFormData && updatedFormData.primary_marketplace) {
+          //     delete updatedFormData.primary_marketplace;
+          //   }
+          // }
 
           if (
             (addendumRes && addendumRes.status === 200) ||
@@ -539,6 +623,7 @@ export default function ContractContainer() {
           }
 
           if (contractRes && contractRes.status === 200) {
+            setFormData({ ...formData, ...contractRes.data });
             const updatedKeys = Object.keys(updatedFormData);
             if (updatedKeys && updatedKeys.length) {
               const fieldsToDeleteList = updatedKeys
@@ -566,33 +651,33 @@ export default function ContractContainer() {
           let dspErrCount = 0;
 
           if (
-            (additionalMarketplaceRes &&
-              additionalMarketplaceRes.status === 400) ||
+            // (additionalMarketplaceRes &&
+            //   additionalMarketplaceRes.status === 400) ||
             (additionalMonthlySerRes &&
               additionalMonthlySerRes.status === 400) ||
             (additionalOneTimeServRes &&
               additionalOneTimeServRes.status === 400) ||
-            (contractRes && contractRes.status === 400) ||
-            (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
+            (contractRes && contractRes.status === 400)
+            // (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
           ) {
             toast.error(
               'Changes have not been saved. Please fix errors and try again',
             );
           }
-          if (
-            additionalMarketplaceRes &&
-            additionalMarketplaceRes.status === 400
-          ) {
-            setAdditionalMarketplaceError({
-              ...additionalMarketplaceError,
-              ...additionalMarketplaceRes.data,
-            });
+          // if (
+          //   additionalMarketplaceRes &&
+          //   additionalMarketplaceRes.status === 400
+          // ) {
+          //   setAdditionalMarketplaceError({
+          //     ...additionalMarketplaceError,
+          //     ...additionalMarketplaceRes.data,
+          //   });
 
-            if (additionalMarketplaceRes.data) {
-              statementErrCount += Object.keys(additionalMarketplaceRes.data)
-                .length;
-            }
-          }
+          //   if (additionalMarketplaceRes.data) {
+          //     statementErrCount += Object.keys(additionalMarketplaceRes.data)
+          //       .length;
+          //   }
+          // }
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 400
@@ -674,17 +759,17 @@ export default function ContractContainer() {
               }
             }
           }
-          if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
-            setApiError({
-              ...apiError,
-              ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
-            });
+          // if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
+          //   setApiError({
+          //     ...apiError,
+          //     ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
+          //   });
 
-            if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
-              statementErrCount += Object.keys(primaryMarketplaceRes.data)
-                .length;
-            }
-          }
+          //   if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
+          //     statementErrCount += Object.keys(primaryMarketplaceRes.data)
+          //       .length;
+          //   }
+          // }
 
           setSectionError({
             agreement: agreementErrCount + sectionError.agreement,
@@ -697,11 +782,11 @@ export default function ContractContainer() {
   };
 
   const nextStep = async () => {
-    const additionalMarketplacesApi = null;
+    // const additionalMarketplacesApi = null;
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
     let AccountApi = null;
-    const primaryMarketPlaceApi = null;
+    // const primaryMarketPlaceApi = null;
     let AddendumApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
@@ -711,48 +796,9 @@ export default function ContractContainer() {
           'YYYY-MM-DD',
         );
       }
-
       setIsLoading({ loader: true, type: 'button' });
 
-      // for primary market place
-      // if (updatedFormData && updatedFormData.primary_marketplace) {
-      //   const statementData = {
-      //     id:
-      //       (details &&
-      //         details.primary_marketplace &&
-      //         details.primary_marketplace.id) ||
-      //       '',
-      //     contract: details.id,
-      //     name: updatedFormData && updatedFormData.primary_marketplace,
-      //     is_primary: true,
-      //   };
-
-      //   if (details.primary_marketplace && details.primary_marketplace.id) {
-      //     if (
-      //       !(
-      //         updatedFormData &&
-      //         updatedFormData.primary_marketplace &&
-      //         updatedFormData.additional_marketplaces
-      //       )
-      //     ) {
-      //       primaryMarketPlaceApi = updateMarketplace(
-      //         details.primary_marketplace.id,
-      //         statementData,
-      //       );
-      //     }
-      //   } else {
-      //     primaryMarketPlaceApi = createMarketplace(statementData);
-      //   }
-      // }
-
-      // // for additionL MARKETPLACE
-      // if (updatedFormData.additional_marketplaces) {
-      //   additionalMarketplacesApi = createMarketplaceBulk(
-      //     updatedFormData.additional_marketplaces,
-      //   );
-      // }
-
-      // for additionL service
+      // for additionL montlhy service
       if (updatedFormData.additional_monthly_services) {
         additionalMonthlyApi = createAdditionalServiceBulk(
           updatedFormData.additional_monthly_services,
@@ -773,17 +819,26 @@ export default function ContractContainer() {
           updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
         }
       }
+      const updatedContractFields = cloneDeep(updatedFormData);
+      // const updatedContractFields = updatedFormData;
+      delete updatedContractFields.additional_one_time_services;
+      delete updatedContractFields.additional_monthly_services;
+      delete updatedContractFields.additional_marketplaces;
+      delete updatedContractFields.primary_marketplace;
+      delete updatedContractFields.addendum;
+
       const detail = {
-        ...updatedFormData,
+        ...updatedContractFields,
       };
+      if (Object.keys(detail).length) {
+        AccountApi = updateAccountDetails(details.id, detail);
+      }
 
-      AccountApi = updateAccountDetails(details.id, detail);
-
-      if (newAddendumData && newAddendumData.id) {
+      if (newAddendumData && newAddendumData.id && updatedFormData.addendum) {
         AddendumApi = updateAddendum(newAddendumData.id, {
           addendum: newAddendumData && newAddendumData.addendum,
         });
-      } else {
+      } else if (updatedFormData && updatedFormData.addendum) {
         const addendumData = {
           customer_id: id,
           addendum: newAddendumData && newAddendumData.addendum,
@@ -793,34 +848,26 @@ export default function ContractContainer() {
       }
 
       const apis = [
-        additionalMarketplacesApi,
         additionalMonthlyApi,
         additionalOneTimeApi,
         AccountApi,
-        primaryMarketPlaceApi,
         AddendumApi,
       ];
 
-      // if (
-      //   updatedFormData &&
-      //   updatedFormData.primary_marketplace &&
-      //   updatedFormData.additional_marketplaces
-      // ) {
-      //   setIsLoading({ loader: true, type: 'button' });
-      //   console.log(updatedFormData &&
-      //   updatedFormData.primary_marketplace,updatedFormData.additional_marketplaces )
-      //   apis = [
-      //     null,
-      //     additionalMonthlyApi,
-      //     additionalOneTimeApi,
-      //     AccountApi,
-      //     null,
-      //     AddendumApi,
-      //   ];
-
-      //   await updateMarketplaces();
-      // }
-      await updateMarketplaces();
+      if (
+        (updatedFormData && updatedFormData.primary_marketplace) ||
+        (updatedFormData && updatedFormData.additional_marketplaces)
+      ) {
+        if (
+          updatedFormData &&
+          updatedFormData.primary_marketplace &&
+          !Object.keys(updatedFormData).includes('additional_marketplaces')
+        ) {
+          createPrimaryMarketplace();
+        } else {
+          await updateMarketplaces();
+        }
+      }
 
       saveChanges(apis);
     }
@@ -862,9 +909,9 @@ export default function ContractContainer() {
       setEndDate(null);
 
       if (
-        details &&
-        details.additional_marketplaces &&
-        details.additional_marketplaces.length
+        originalData &&
+        originalData.additional_marketplaces &&
+        originalData.additional_marketplaces.length
       ) {
         setShowAdditionalMarketplace(true);
       } else {
@@ -2405,6 +2452,7 @@ export default function ContractContainer() {
                 </div>
               </div>
             </div>
+
             {isDesktop ||
             (isTablet && tabInResponsive === 'view-contract') ||
             (isMobile && tabInResponsive === 'view-contract') ? (
@@ -2437,6 +2485,7 @@ export default function ContractContainer() {
           (!isLoading.loader && isLoading.type === 'page')
             ? displayFooter()
             : null}
+
           <Modal
             isOpen={showModal}
             style={customStyles}

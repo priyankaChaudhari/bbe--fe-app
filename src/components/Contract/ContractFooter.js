@@ -30,6 +30,42 @@ export default function ContractFooter({
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
 
+  const checkAmazonStorePriceExists = () => {
+    const service =
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find((item) =>
+        item && item.name
+          ? item.name === 'Amazon Store Package'
+          : item &&
+            item.service &&
+            item.service.name === 'Amazon Store Package',
+      );
+
+    if (service) {
+      return true;
+    }
+    const customService =
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find((item) =>
+        item && item.name
+          ? item.name === 'Amazon Store Package Custom'
+          : item &&
+            item.service &&
+            item.service.name === 'Amazon Store Package Custom',
+      );
+
+    if (
+      (customService && !customService.custom_amazon_store_price) ||
+      (customService && customService.custom_amazon_store_price === '')
+    ) {
+      return true;
+    }
+    return false;
+  };
   return details &&
     details.contract_status &&
     details.contract_status.value === 'pending contract signature' ? (
@@ -75,23 +111,16 @@ export default function ContractFooter({
       <Footer className=" mt-5">
         <div className="container-fluid">
           <Button
-            className={
-              formData &&
-              formData.additional_one_time_services &&
-              formData.additional_one_time_services.length &&
-              formData.additional_one_time_services.find(
-                (item) => item.name === 'Amazon Store Package',
-              )
-                ? 'light-orange  on-boarding  mt-3 mr-0  ml-0 w-sm-50 '
-                : 'light-orange  on-boarding  mt-3  mr-0 ml-0 w-sm-50'
-            }
+            className="light-orange  on-boarding  mt-3  mr-0 ml-0 w-sm-50"
             disabled={
-              formData &&
-              formData.additional_one_time_services &&
-              formData.additional_one_time_services.length &&
-              formData.additional_one_time_services.find(
-                (item) => item.name === 'Amazon Store Package',
-              )
+              // formData &&
+              // formData.additional_one_time_services &&
+              // formData.additional_one_time_services.length &&
+              // formData.additional_one_time_services.find(
+              //   (item) => item.name === 'Amazon Store Package',
+              // )
+              //    ||
+              checkAmazonStorePriceExists()
             }
             onClick={() => nextStep()}>
             {isLoading.loader && isLoading.type === 'button' ? (
