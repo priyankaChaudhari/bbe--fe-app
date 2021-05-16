@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: "error" */
 /* eslint consistent-return: "error" */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -39,6 +39,8 @@ import {
   createMarketplaceBulk,
   createAdditionalServiceBulk,
   getMarketplaces,
+  getContractActivityLog,
+  getDocumentList,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -166,6 +168,15 @@ export default function ContractContainer() {
   const [discountFlag, setDiscountFlag] = useState('');
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
+  const [activityData, setActivityData] = useState([]);
+  const [activityCount, setActivityCount] = useState([]);
+  const [pageNumber, setPageNumber] = useState();
+  const [images, setImages] = useState([]);
+  const [activityLoader, setActivityLoader] = useState(false);
+  const [isApicalled, setIsApicalled] = useState(false);
+  const [showSignSuccessMsg, setShowSignSuccessMsg] = useState(false);
+  const [showSaveSuccessMsg, setShowSaveSuccessMsg] = useState(false);
+
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -191,11 +202,43 @@ export default function ContractContainer() {
     setIsLoading({ loader: false, type: 'page' });
     setLoaderFlag(false);
   }
+  const contractID =
+    location && location.pathname && location.pathname.split('/');
+
+  const getContractActivityLogInfo = useCallback(
+    (currentPage) => {
+      setActivityLoader(true);
+      getContractActivityLog(currentPage, contractID && contractID[4]).then(
+        (response) => {
+          setActivityData(response && response.data && response.data.results);
+          setActivityCount(response && response.data && response.data.count);
+          setPageNumber(currentPage);
+          getDocumentList().then((picResponse) => {
+            setImages(picResponse);
+          });
+          setActivityLoader(false);
+          setIsApicalled(true);
+        },
+      );
+    },
+    [contractID],
+  );
+
+  if (!isLoading.loader && !activityLoader) {
+    if (showSignSuccessMsg) {
+      toast.success('Signature Requested Successfully!');
+      setShowSignSuccessMsg(false);
+    }
+
+    if (showSaveSuccessMsg) {
+      toast.success('Changes Saved!');
+      setShowSaveSuccessMsg(false);
+    }
+  }
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
-    const contractID =
-      location && location.pathname && location.pathname.split('/');
+
     if (contractID) {
       getcontract(contractID[4]).then((res) => {
         setLoaderFlag(true);
@@ -203,7 +246,8 @@ export default function ContractContainer() {
         if (res && res.status === 200) {
           setDetails(res && res.data);
           if (showSuccessToastr) {
-            toast.success('Signature Requested Successfully!');
+            setShowSignSuccessMsg(showSuccessToastr);
+            // toast.success('Signature Requested Successfully!');
           }
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -212,6 +256,7 @@ export default function ContractContainer() {
           setPageNotFoundFlag(true);
         }
       });
+      getContractActivityLogInfo();
     } else {
       const path = location.pathname.slice(
         0,
@@ -400,6 +445,7 @@ export default function ContractContainer() {
                 showFooter(false);
                 setIsEditContract(false);
                 getContractDetails();
+                setShowSaveSuccessMsg(true);
               }
             }
           }
@@ -422,6 +468,7 @@ export default function ContractContainer() {
               showFooter(false);
               setIsEditContract(false);
               getContractDetails();
+              setShowSaveSuccessMsg(true);
             }
           }
         }
@@ -643,6 +690,7 @@ export default function ContractContainer() {
             showFooter(false);
             setIsEditContract(false);
             getContractDetails();
+            setShowSaveSuccessMsg(true);
           }
           setUpdatedFormData({ ...updatedFormData });
 
@@ -2285,6 +2333,14 @@ export default function ContractContainer() {
         additionalMarketplaces={additionalMarketplaces}
         setAdditionalMarketplaces={setAdditionalMarketplaces}
         firstMonthDate={firstMonthDate}
+        setPageNumber={setPageNumber}
+        getContractActivityLogInfo={getContractActivityLogInfo}
+        activityLoader={activityLoader}
+        activityData={activityData}
+        images={images}
+        activityCount={activityCount}
+        pageNumber={pageNumber}
+        isApicalled={isApicalled}
       />
     );
   };
@@ -2453,38 +2509,39 @@ export default function ContractContainer() {
               </div>
             </div>
 
-            {isDesktop ||
-            (isTablet && tabInResponsive === 'view-contract') ||
-            (isMobile && tabInResponsive === 'view-contract') ? (
-              isLoading.loader && isLoading.type === 'page' ? (
-                <PageLoader
-                  className="modal-loader"
-                  color="#FF5933"
-                  type="page"
-                  width={40}
-                  component="agreement"
-                />
-              ) : details && details.id ? (
-                viewContract()
-              ) : (
-                ''
-              )
+            {(isLoading.loader && isLoading.type === 'page') ||
+            activityLoader ? (
+              <PageLoader
+                className="modal-loader"
+                color="#FF5933"
+                type="page"
+                width={40}
+                component="agreement"
+              />
+            ) : details && details.id ? (
+              <>
+                {isDesktop ||
+                (isTablet && tabInResponsive === 'view-contract') ||
+                (isMobile && tabInResponsive === 'view-contract')
+                  ? viewContract()
+                  : ''}
+                {isDesktop ||
+                (isTablet && tabInResponsive === 'edit-fields') ||
+                (isMobile && tabInResponsive === 'edit-fields')
+                  ? displayRightSidePanel()
+                  : ''}
+                {(details &&
+                  details.id &&
+                  isLoading.loader &&
+                  isLoading.type === 'button') ||
+                (!isLoading.loader && isLoading.type === 'page')
+                  ? displayFooter()
+                  : null}
+              </>
             ) : (
               ''
             )}
           </div>
-          {isDesktop ||
-          (isTablet && tabInResponsive === 'edit-fields') ||
-          (isMobile && tabInResponsive === 'edit-fields')
-            ? displayRightSidePanel()
-            : ''}
-          {(details &&
-            details.id &&
-            isLoading.loader &&
-            isLoading.type === 'button') ||
-          (!isLoading.loader && isLoading.type === 'page')
-            ? displayFooter()
-            : null}
 
           <Modal
             isOpen={showModal}

@@ -29,9 +29,9 @@ const PageLoaderWrapper = styled.div`
       height: 40px;
     }
   }
-  &.modal-loader {
+  /* &.modal-loader {
     right: 14%;
-  }
+  } */
   @media only screen and (min-width: 1500px) {
     &.sidebar-loader {
       right: 0;

@@ -9,7 +9,7 @@
 /* eslint consistent-return: "error" */
 /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import PropTypes from 'prop-types';
@@ -17,7 +17,6 @@ import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
-// import ReactTooltip from 'react-tooltip';
 
 import Theme from '../theme/Theme';
 import {
@@ -36,7 +35,6 @@ import {
   CheckFileIcon,
   EditFileIcon,
   SignatureIcon,
-  // InfoIcon,
 } from '../theme/images/index';
 import { Button, ContractFormField, CommonPagination } from './index';
 import {
@@ -47,22 +45,15 @@ import {
 } from '../constants/FieldConstants';
 import {
   getLength,
-  // updateAccountDetails,
   getRevenueShare,
-  // getMarketplaces,
   getMonthlyService,
   getOneTimeService,
   createAddendum,
-  getContractActivityLog,
-  getDocumentList,
-  // getAmazonDetails,
-  // getCustomerMembers,
 } from '../api';
 import ContractInputSelect from './ContractInputSelect';
 
 import PageLoader from './PageLoader';
 import ErrorMsg from './ErrorMsg';
-// import { getAccountDetails } from '../store/actions/accountState';
 import CheckBox from './CheckBox';
 
 const _ = require('lodash');
@@ -80,8 +71,6 @@ export default function AgreementSidePanel({
   setNewAddendum,
   setNotIncludedOneTimeServices,
   setNotIncludedMonthlyServices,
-  // sendNotIncludedOneTimeServToAdd,
-  // sendNotIncludedMonthlyServToAdd,
   apiError,
   showFooter,
   setApiError,
@@ -123,37 +112,28 @@ export default function AgreementSidePanel({
   setDiscountFlag,
   isEditContract,
   marketplacesResult,
-  // setMarketplacesResult,
   marketPlaces,
   setMarketPlaces,
   additionalMarketplaces,
   setAdditionalMarketplaces,
   firstMonthDate,
-  // setActivityLogLoader
+  setPageNumber,
+  getContractActivityLogInfo,
+  activityLoader,
+  activityData,
+  images,
+  activityCount,
+  pageNumber,
+  isApicalled,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
-  // const [marketPlaces, setMarketPlaces] = useState([]);
-  // const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
-
-  // const agreement = useSelector((state) => state.accountState.data);
-  // const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
-  //   false,
-  // );
-  // const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
-  // const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
-  const [activityData, setActivityData] = useState([]);
-  const [activityCount, setActivityCount] = useState([]);
-  const [pageNumber, setPageNumber] = useState();
-  const [images, setImages] = useState([]);
-  const [activityLoader, setActivityLoader] = useState(false);
-  const [isApicalled, setIsApicalled] = useState(false);
   const getActivityInitials = (userInfo) => {
     if (userInfo && userInfo === 'Contract initiated') {
       return 'SU';
@@ -171,61 +151,6 @@ export default function AgreementSidePanel({
 
     return firstName + lastName;
   };
-
-  // const activityDetail = (item) => {
-  //   const newRecord = item.message.includes(
-  //     'created new record by company name',
-  //   )
-  //     ? item.message.split('created new record by company name')
-  //     : '';
-  //   const updatedField = item.message.includes('updated')
-  //     ? item.message.split('updated')
-  //     : '';
-
-  //   const deleteRecord = item.message.includes('deleted record')
-  //     ? item.message.split('deleted record')
-  //     : '';
-
-  //   const requestRecord = item.message.includes('requested for')
-  //     ? item.message.split('requested for')
-  //     : '';
-
-  //   if (newRecord || deleteRecord) {
-  //     return (
-  //       <>
-  //         {newRecord[0] || deleteRecord[0]}
-  //         <span>
-  //           {newRecord
-  //             ? 'created new record by company name'
-  //             : 'deleted record'}
-  //         </span>
-  //         {newRecord[1] || deleteRecord[1]}
-  //       </>
-  //     );
-  //   }
-
-  //   if (requestRecord) {
-  //     return (
-  //       <>
-  //         {requestRecord && requestRecord[0]}
-  //         <span>requested for</span>
-  //         {requestRecord && requestRecord[1]}
-  //       </>
-  //     );
-  //   }
-
-  //   return (
-  //     <>
-  //       {updatedField && updatedField[0]}
-  //       <span>
-  //         updated {updatedField && updatedField[1].split(' from ')[0]} from{' '}
-  //       </span>{' '}
-  //       {updatedField && updatedField[1].split(' from ')[1].split(' to ')[0]}
-  //       <span> to </span>{' '}
-  //       {updatedField && updatedField[1].split(' from ')[1].split(' to ')[1]}
-  //     </>
-  //   );
-  // };
 
   const activityDetail = (item) => {
     let activityMessage = '';
@@ -336,25 +261,6 @@ export default function AgreementSidePanel({
     }
     return item && item.message ? item.message : '';
   };
-
-  const getContractActivityLogInfo = useCallback(
-    (currentPage) => {
-      setActivityLoader(true);
-      // setActivityLogLoader(true);
-      getContractActivityLog(currentPage, agreementData.id).then((response) => {
-        setActivityData(response && response.data && response.data.results);
-        setActivityCount(response && response.data && response.data.count);
-        setPageNumber(currentPage);
-        getDocumentList().then((picResponse) => {
-          setImages(picResponse);
-        });
-        setActivityLoader(false);
-        // setActivityLogLoader(false);
-        setIsApicalled(true);
-      });
-    },
-    [agreementData],
-  );
 
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
@@ -565,38 +471,8 @@ export default function AgreementSidePanel({
     ) {
       setShowAdditionalMarketplace(true);
     }
-
-    if (agreementData && agreementData.id) {
-      getContractActivityLogInfo();
-    }
-
-    // if (
-    //   agreementData &&
-    //   agreementData.primary_marketplace &&
-    //   agreementData.primary_marketplace.name
-    // ) {
-    //   setAdditionalMarketplaces(
-    //     marketPlaces.filter(
-    //       (op) => op.value !== agreementData.primary_marketplace.name,
-    //     ),
-    //   );
-    // } else {
-    //   setAdditionalMarketplaces(marketPlaces);
-    // }
-
-    // if (agreementData && agreementData.additional_marketplaces) {
-    //   setMarketPlaces(
-    //     additionalMarketplaces.filter(
-    //       (choice) =>
-    //         !(agreementData && agreementData.additional_marketplaces).some(
-    //           (item) => item.name === choice.value,
-    //         ),
-    //     ),
-    //   );
-    // }
-
-    // console.log(agreementData, additionalMarketplaces, marketPlaces);
   }, [agreementData]);
+
   const clearOneTimeQntyError = (val) => {
     const itemFound =
       additionalOnetimeSerError &&
@@ -4199,6 +4075,14 @@ AgreementSidePanel.defaultProps = {
   setStartDate: () => {},
   sectionError: {},
   setSectionError: () => {},
+  setPageNumber: () => {},
+  getContractActivityLogInfo: () => {},
+  activityLoader: false,
+  activityData: [],
+  images: [],
+  activityCount: 0,
+  pageNumber: 1,
+  isApicalled: false,
 };
 
 AgreementSidePanel.propTypes = {
@@ -4318,6 +4202,14 @@ AgreementSidePanel.propTypes = {
   setStartDate: PropTypes.func,
   sectionError: PropTypes.shape(PropTypes.object),
   setSectionError: PropTypes.func,
+  setPageNumber: PropTypes.func,
+  getContractActivityLogInfo: PropTypes.func,
+  activityLoader: PropTypes.bool,
+  activityData: PropTypes.arrayOf(PropTypes.object),
+  images: PropTypes.arrayOf(PropTypes.object),
+  activityCount: PropTypes.number,
+  pageNumber: PropTypes.number,
+  isApicalled: PropTypes.bool,
 };
 
 const SidePanel = styled.div`
