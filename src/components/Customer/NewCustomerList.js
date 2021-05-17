@@ -838,7 +838,8 @@ export default function NewCustomerList() {
           </div>
         </div>
       );
-    } if (showAdPerformance) {
+    }
+    if (showAdPerformance) {
       return (
         <div className="row">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
@@ -849,17 +850,14 @@ export default function NewCustomerList() {
           <div className="col-lg-2 col-12 Brand_Strategist">Ad Manager</div>
         </div>
       );
-    } 
-      return (
-        <div className="row">
-          <div className="col-lg-3 col-12 customer-header">Customer</div>
-          <div className="col-lg-7 col-12">Active Contracts</div>
-          <div className="col-lg-2 col-12 Brand_Strategist">
-            Brand Strategist
-          </div>
-        </div>
-      );
-    
+    }
+    return (
+      <div className="row">
+        <div className="col-lg-3 col-12 customer-header">Customer</div>
+        <div className="col-lg-7 col-12">Active Contracts</div>
+        <div className="col-lg-2 col-12 Brand_Strategist">Brand Strategist</div>
+      </div>
+    );
   };
 
   const renderCustomerDetails = (item) => {
@@ -1067,93 +1065,94 @@ export default function NewCustomerList() {
           </td>
         </tr>
       );
-    } if (showAdPerformance) {
+    }
+    if (showAdPerformance) {
       return '';
-    } 
-      return (
-        <tr
-          className="cursor"
-          key={Math.random()}
-          onClick={() =>
-            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-          }>
-          <td width="25%">
-            <img
-              className="company-logo"
-              src={
-                item &&
-                item.documents &&
-                item.documents[0] &&
-                Object.values(item.documents[0])
-                  ? Object.values(item.documents[0])[0]
-                  : CompanyDefaultUser
-              }
-              alt="logo"
-            />
+    }
+    // for view-contract Details
+    return (
+      <tr
+        className="cursor"
+        key={Math.random()}
+        onClick={() =>
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+        }>
+        <td width="25%">
+          <img
+            className="company-logo"
+            src={
+              item &&
+              item.documents &&
+              item.documents[0] &&
+              Object.values(item.documents[0])
+                ? Object.values(item.documents[0])[0]
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
 
-            <div className="company-name">
-              {item &&
-                item.contract &&
-                item.contract[0] &&
-                item.contract[0].contract_company_name}
-            </div>
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
-          </td>
-          <td width="60%">
-            <ul
-              className="recurring-contact"
-              style={{ textTransform: 'capitalize' }}>
-              {item && item.contract && item.contract.length ? (
-                item &&
-                item.contract &&
-                item.contract.map((type) => (
-                  <React.Fragment key={Math.random()}>
-                    <ReactTooltip />
-                    {generateContractHTML(type, item.id)}
-                  </React.Fragment>
-                ))
-              ) : (
-                <li className="no-active-contract">No active contracts</li>
-              )}
-            </ul>
-          </td>
-
-          <td width="15%">
+          <div className="company-name">
             {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.length !== 0 ? (
-              <>
-                {item.brand_growth_strategist.profile_photo ? (
-                  <img
-                    className="user-profile-circle"
-                    src={item.brand_growth_strategist.profile_photo}
-                    alt="user"
-                  />
-                ) : (
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={item.brand_growth_strategist}
-                  />
-                )}
-              </>
+              item.contract &&
+              item.contract[0] &&
+              item.contract[0].contract_company_name}
+          </div>
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {item && item.status}
+          </div>
+        </td>
+        <td width="60%">
+          <ul
+            className="recurring-contact"
+            style={{ textTransform: 'capitalize' }}>
+            {item && item.contract && item.contract.length ? (
+              item &&
+              item.contract &&
+              item.contract.map((type) => (
+                <React.Fragment key={Math.random()}>
+                  <ReactTooltip />
+                  {generateContractHTML(type, item.id)}
+                </React.Fragment>
+              ))
             ) : (
-              ''
+              <li className="no-active-contract">No active contracts</li>
             )}
-            <div className="user-name">
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.first_name}
-              <br />
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.last_name}
-            </div>
-          </td>
-        </tr>
-      );
-    
+          </ul>
+        </td>
+
+        <td width="15%">
+          {item &&
+          item.brand_growth_strategist &&
+          item.brand_growth_strategist.length !== 0 ? (
+            <>
+              {item.brand_growth_strategist.profile_photo ? (
+                <img
+                  className="user-profile-circle"
+                  src={item.brand_growth_strategist.profile_photo}
+                  alt="user"
+                />
+              ) : (
+                <GetInitialName
+                  property="float-left mr-3"
+                  userInfo={item.brand_growth_strategist}
+                />
+              )}
+            </>
+          ) : (
+            ''
+          )}
+          <div className="user-name">
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.first_name}
+            <br />
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.last_name}
+          </div>
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -1831,6 +1830,7 @@ export default function NewCustomerList() {
             handlePageChange={handlePageChange}
             isLoading={isLoading}
             showPerformance={showPerformance}
+            showAdPerformance={showAdPerformance}
           />
         )}
       </>
