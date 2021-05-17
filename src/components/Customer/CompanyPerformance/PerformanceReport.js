@@ -1173,7 +1173,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             <p className="black-heading-title mt-2 mb-4"> Sales Performance</p>
           </div>
           {renderFilterDropDown()}
-          <div className="col-12 text-right mb-3" />
+          {/* <div className="col-12 text-right mb-3" /> */}
         </div>
 
         <div className="row mr-1 ml-1">

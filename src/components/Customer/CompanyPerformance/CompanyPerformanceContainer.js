@@ -84,4 +84,12 @@ const Tab = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 767px) {
+    .tabs {
+      li {
+        font-size: 14px;
+        margin-right: 25px;
+      }
+    }
+  }
 `;

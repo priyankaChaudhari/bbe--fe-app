@@ -1206,7 +1206,7 @@ const AddPerformance = styled.div`
          &.ad-performance {
           max-width: 100%;
           width: 100%;
-          margin-bottom: 20px;
+          margin-bottom: 15px;
         }
         &.day-performance {
           max-width: 100%;
