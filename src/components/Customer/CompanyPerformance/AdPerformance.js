@@ -41,7 +41,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
-  // const [selectedAdType, setSelectedAdType] = useState('');
+  const [selectedAdType, setSelectedAdType] = useState('SponsoredProduct');
   const [selectedAdDF, setSelectedAdDF] = useState('week');
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
@@ -57,7 +57,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     {
       startDate: currentDate,
       endDate: currentDate,
-      key: 'AdSelection',
+      key: 'adSelection',
     },
   ]);
   const [dspState, setDSPState] = useState([
@@ -107,6 +107,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
 
   const getAdData = useCallback(
     (
+      adType,
       selectedDailyFact,
       selectedGroupBy,
       marketplace,
@@ -115,6 +116,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     ) => {
       getAdPerformance(
         id,
+        adType,
         selectedDailyFact,
         selectedGroupBy,
         marketplace,
@@ -232,7 +234,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setSelectedMarketplace(list[0].value);
       setCurrency(list[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      getAdData(selectedAdDF, adGroupBy, list[0].value);
+      getAdData(selectedAdType, selectedAdDF, adGroupBy, list[0].value);
 
       getDSPData(selectedDSPDF, dspGroupBy, list[0].value);
       setResponseId('12345');
@@ -247,6 +249,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     currency,
     adGroupBy,
     dspGroupBy,
+    selectedAdType,
     selectedAdDF,
     selectedDSPDF,
   ]);
@@ -260,18 +263,19 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const ADYearAndCustomDateFilter = (
     startDate,
     endDate,
-    flag = null,
-    marketplace = selectedMarketplace,
+    dailyFactFlag,
+    marketplace,
+    adType,
   ) => {
     let temp = '';
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 30) {
+    if (diffDays <= 60) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
-    } else if (diffDays > 30 && diffDays <= 180) {
+    } else if (diffDays > 60 && diffDays <= 180) {
       temp = 'weekly';
       setAdFilters({ daily: false, weekly: true, month: false });
       setAdGroupBy('weekly');
@@ -281,17 +285,17 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setAdGroupBy('monthly');
     }
 
-    if (flag === 'custom') {
+    if (dailyFactFlag === 'custom') {
       sd = `${startDate.getDate()}-${
         startDate.getMonth() + 1
       }-${startDate.getFullYear()}`;
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
-      getAdData(flag, temp, marketplace, sd, ed);
+      getAdData(adType, dailyFactFlag, temp, marketplace, sd, ed);
     } else {
-      // flag==='year
-      getAdData(flag, temp, marketplace);
+      // dailyFactFlag==='year
+      getAdData(adType, dailyFactFlag, temp, marketplace);
     }
   };
 
@@ -307,11 +311,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 30) {
+    if (diffDays <= 60) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
       setDSPGroupBy('daily');
-    } else if (diffDays > 30 && diffDays <= 180) {
+    } else if (diffDays > 60 && diffDays <= 180) {
       temp = 'weekly';
       setDSPFilters({ daily: false, weekly: true, month: false });
       setDSPGroupBy('weekly');
@@ -341,6 +345,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         adState[0].startDate,
         adState[0].endDate,
         'custom',
+        selectedMarketplace,
+        selectedAdType,
       );
       setShowAdCustomDateModal(false);
     } else {
@@ -409,12 +415,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
           setDSPGroupBy('daily');
-          getDSPData(value, 'daily', selectedMarketplace);
+          getDSPData(selectedAdType, value, 'daily', selectedMarketplace);
           break;
         }
 
@@ -422,7 +428,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
@@ -436,7 +442,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
@@ -461,9 +467,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         adState[0].endDate,
         'custom',
         event.value,
+        selectedAdType,
       );
     } else {
-      getAdData(selectedAdDF, adGroupBy, event.value);
+      getAdData(selectedAdType, selectedAdDF, adGroupBy, event.value);
     }
     if (selectedDSPDF === 'custom') {
       DSPYearAndCustomDateFilter(
@@ -480,7 +487,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const handleAdGroupBy = (value) => {
     if (value !== adGroupBy) {
       setAdGroupBy(value);
-      getAdData(selectedAdDF, value, selectedMarketplace);
+      getAdData(selectedAdType, selectedAdDF, value, selectedMarketplace);
     }
   };
 
@@ -491,9 +498,21 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const handleAdType = () => {
-    // const { value } = event;
-    // setSelectedAdType(value);
+  const handleAdType = (event) => {
+    const { value } = event;
+    setSelectedAdType(value);
+
+    if (selectedAdDF === 'custom') {
+      ADYearAndCustomDateFilter(
+        adState[0].startDate,
+        adState[0].endDate,
+        'custom',
+        selectedMarketplace,
+        value,
+      );
+    } else {
+      getAdData(value, selectedAdDF, adGroupBy, selectedMarketplace);
+    }
   };
 
   const handleAdDailyFact = (event) => {
@@ -504,7 +523,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         {
           startDate: currentDate,
           endDate: currentDate,
-          key: 'selection',
+          key: 'adSelection',
         },
       ]);
     }
@@ -513,6 +532,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         new Date(new Date().getFullYear(), 0, 1),
         new Date(),
         'year',
+        selectedMarketplace,
+        selectedAdType,
       );
     } else if (value === 'custom') {
       setShowAdCustomDateModal(true);
@@ -1013,7 +1034,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
               {
                 startDate: currentDate,
                 endDate: currentDate,
-                key: 'AdSelection',
+                key: 'adSelection',
               },
             ]);
           }}
@@ -1025,7 +1046,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <DateRange
               editableDateInputs
               onChange={(item) => {
-                setAdState([item.AdSelection]);
+                setAdState([item.adSelection]);
               }}
               showMonthAndYearPickers={false}
               ranges={adState}
