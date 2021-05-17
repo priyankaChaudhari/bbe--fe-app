@@ -639,7 +639,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-md-3  col-sm1-12">
           {' '}
-          <p className="black-heading-title mt-2 mb-5"> Ad Performance</p>
+          <p className="black-heading-title mt-2 mb-4"> Ad Performance</p>
         </div>
         <div className="col-md-9 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
@@ -682,7 +682,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
-            <div className="perentage-value down mt-3">
+            <div className="perentage-value down mt-3 pt-1">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
             </div>
@@ -696,7 +696,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
-            <div className="perentage-value down mt-3">
+            <div className="perentage-value down mt-3 ">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
               40.75%
             </div>
@@ -1199,7 +1199,7 @@ const AddPerformance = styled.div`
     }
 
   }
-   @media only screen and (max-width: 1105px) { 
+   @media only screen and (max-width: 767px) { 
 
      .ad-performance-nav {
       li {

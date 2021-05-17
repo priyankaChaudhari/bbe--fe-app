@@ -826,7 +826,7 @@ export const WhiteCard = styled.div`
       border-radius: 8px;
       max-width: 180px;
       width: 100%;
-      padding: 13px;
+      padding: 18px 15px;
       cursor: pointer;
 
       .chart-name {

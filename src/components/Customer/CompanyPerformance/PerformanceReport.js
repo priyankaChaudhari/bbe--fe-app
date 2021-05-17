@@ -1146,8 +1146,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           <div
             className={
               difference > 0
-                ? 'perentage-value mt-3'
-                : 'perentage-value down mt-3'
+                ? 'perentage-value mt-3 pt-1'
+                : 'perentage-value down mt-3 pt-1'
             }>
             {!Number.isNaN(difference) && difference > 0 ? (
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
