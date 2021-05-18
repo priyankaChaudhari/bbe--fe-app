@@ -11,8 +11,9 @@ export const dateOptions = [
 ];
 
 export const AdTypesOptions = [
-  { value: 'SponsoredProduct', label: 'Sponsored Product' },
-  { value: 'SponsoredBrand', label: 'Sponsored Brand' },
-  { value: 'SponsoredBrandsVideo', label: 'Sponsored Brands Video' },
-  { value: 'SponsoredDisplay', label: 'Sponsored Display' },
+  { value: 'all', label: 'All Ad Types' },
+  { value: 'sponsoredProduct', label: 'Sponsored Product' },
+  { value: 'sponsoredBrand', label: 'Sponsored Brand' },
+  { value: 'sponsoredBrandsVideo', label: 'Sponsored Brands Video' },
+  { value: 'sponsoredDisplay', label: 'Sponsored Display' },
 ];

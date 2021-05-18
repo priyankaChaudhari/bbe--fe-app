@@ -41,7 +41,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
-  const [selectedAdType, setSelectedAdType] = useState('SponsoredProduct');
+  const [selectedAdType, setSelectedAdType] = useState('All');
   const [selectedAdDF, setSelectedAdDF] = useState('week');
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
