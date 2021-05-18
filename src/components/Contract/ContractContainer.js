@@ -2567,6 +2567,7 @@ export default function ContractContainer() {
               onClick={() => {
                 setShowModal(false);
                 removeParams('step');
+                setShowEditor(false);
               }}
               role="presentation"
             />
@@ -2579,6 +2580,7 @@ export default function ContractContainer() {
                 setOpenCollapse={setOpenCollapse}
                 getContractDetails={getContractDetails}
                 setContractLoading={setIsLoading}
+                setShowEditor={setShowEditor}
               />
             </ModalBox>
           </Modal>

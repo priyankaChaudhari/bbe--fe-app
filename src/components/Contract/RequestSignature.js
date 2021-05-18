@@ -50,6 +50,7 @@ function RequestSignature({
   setOpenCollapse,
   getContractDetails,
   setContractLoading,
+  setShowEditor,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -535,6 +536,7 @@ function RequestSignature({
 
     client.on('close', () => {
       setShowModal(false);
+      setShowEditor(false);
     });
   };
   // const handleChangeForReminder = (event, key) => {
@@ -955,6 +957,7 @@ RequestSignature.defaultProps = {
   setOpenCollapse: () => {},
   getContractDetails: () => {},
   setContractLoading: () => {},
+  setShowEditor: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -979,4 +982,5 @@ RequestSignature.propTypes = {
   setOpenCollapse: PropTypes.func,
   getContractDetails: PropTypes.func,
   setContractLoading: PropTypes.func,
+  setShowEditor: PropTypes.func,
 };
