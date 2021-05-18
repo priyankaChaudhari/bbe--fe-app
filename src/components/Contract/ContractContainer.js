@@ -2353,6 +2353,8 @@ export default function ContractContainer() {
         activityCount={activityCount}
         pageNumber={pageNumber}
         isApicalled={isApicalled}
+        getContractDetails={getContractDetails}
+        setIsEditContract={setIsEditContract}
       />
     );
   };

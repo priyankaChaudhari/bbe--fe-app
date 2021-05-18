@@ -125,6 +125,8 @@ export default function AgreementSidePanel({
   activityCount,
   pageNumber,
   isApicalled,
+  getContractDetails,
+  setIsEditContract,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -2399,7 +2401,10 @@ export default function AgreementSidePanel({
               delete updatedFormData.addendum;
             }
             setUpdatedFormData({ ...updatedFormData });
-
+            if (!Object.keys(updatedFormData).length) {
+              getContractDetails();
+              setIsEditContract(false);
+            }
             executeScroll('addendum');
             setShowEditor(false);
             setOriginalAddendumData(res && res.data);
@@ -4099,6 +4104,8 @@ AgreementSidePanel.defaultProps = {
   activityCount: 0,
   pageNumber: 1,
   isApicalled: false,
+  getContractDetails: () => {},
+  setIsEditContract: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4226,6 +4233,8 @@ AgreementSidePanel.propTypes = {
   activityCount: PropTypes.number,
   pageNumber: PropTypes.number,
   isApicalled: PropTypes.bool,
+  getContractDetails: PropTypes.func,
+  setIsEditContract: PropTypes.func,
 };
 
 const SidePanel = styled.div`
