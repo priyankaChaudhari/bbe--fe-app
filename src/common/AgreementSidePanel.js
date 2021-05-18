@@ -230,22 +230,33 @@ export default function AgreementSidePanel({
         );
       }
 
-      return (
+      return activityMessage && activityMessage[1].includes('addendum') ? (
+        item.message
+      ) : (
         <>
           {activityMessage && activityMessage[0]}
           <span>
-            updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
+            updated{' '}
+            {activityMessage &&
+              activityMessage[1] &&
+              activityMessage[1].split(' from ')[0]}{' '}
             from{' '}
           </span>{' '}
           {activityMessage &&
+          activityMessage[1] &&
           activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
             ? 'None'
-            : activityMessage[1].split(' from ')[1].split(' to ')[0]}
+            : activityMessage &&
+              activityMessage[1] &&
+              activityMessage[1].split(' from ')[1].split(' to ')[0]}
           <span> to </span>{' '}
           {activityMessage &&
+          activityMessage[1] &&
           activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
             ? 'None'
-            : activityMessage[1].split(' from ')[1].split(' to ')[1]}
+            : activityMessage &&
+              activityMessage[1] &&
+              activityMessage[1].split(' from ')[1].split(' to ')[1]}
         </>
       );
     }

@@ -887,6 +887,7 @@ export default function ContractContainer() {
       if (newAddendumData && newAddendumData.id && updatedFormData.addendum) {
         AddendumApi = updateAddendum(newAddendumData.id, {
           addendum: newAddendumData && newAddendumData.addendum,
+          contract: details.id,
         });
       } else if (updatedFormData && updatedFormData.addendum) {
         const addendumData = {
