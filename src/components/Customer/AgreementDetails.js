@@ -8,8 +8,7 @@ import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import { Collapse } from 'react-collapse';
 import Theme from '../../theme/Theme';
-import { Button } from '../../common';
-import { WhiteCard } from '../../theme/Global';
+import { Button, WhiteCard } from '../../common';
 import {
   CaretUp,
   ClockIcon,

@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
-import { ActionDropDown } from '../../common';
+import { ActionDropDown, WhiteCard } from '../../common';
 import Theme from '../../theme/Theme';
 import { CompanyDefaultUser, BrandLogo } from '../../theme/images';
-import { WhiteCard } from '../../theme/Global';
 
 export default function TabletTeamMember() {
   return (

@@ -34,7 +34,7 @@ import {
 
   // BillingIcon,
 } from '../../theme/images/index';
-import { GroupUser, WhiteCard } from '../../theme/Global';
+import { GroupUser } from '../../theme/Global';
 import {
   ModalBox,
   PageLoader,
@@ -43,6 +43,7 @@ import {
   PageNotFound,
   BackToTop,
   Button,
+  WhiteCard,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {

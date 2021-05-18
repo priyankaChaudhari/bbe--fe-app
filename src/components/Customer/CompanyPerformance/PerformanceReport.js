@@ -40,8 +40,7 @@ import {
   CaretUp,
   CloseIcon,
 } from '../../../theme/images/index';
-import { ModalBox, Button } from '../../../common';
-import { WhiteCard } from '../../../theme/Global';
+import { ModalBox, Button, WhiteCard } from '../../../common';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
@@ -1346,7 +1345,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           <div className="row">
             <div className="col-6 ">
               {' '}
-              <p className="black-heading-title mt-0 mb-4"> Buy Box %</p>
+              <p className="black-heading-title mt-2 mb-4"> Buy Box %</p>
             </div>
             <div className="col-6 text-right mb-1">
               {DropDown(

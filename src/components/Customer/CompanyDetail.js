@@ -14,12 +14,12 @@ import {
   ExternalLink,
   CloseIcon,
 } from '../../theme/images/index';
-import { WhiteCard, GroupUser } from '../../theme/Global';
+import { GroupUser } from '../../theme/Global';
 import {
   SocialIcons,
   AmazonMarketplaceDetails,
 } from '../../constants/FieldConstants';
-import { GetInitialName } from '../../common';
+import { GetInitialName, WhiteCard } from '../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 
 export default function CompanyDetail({

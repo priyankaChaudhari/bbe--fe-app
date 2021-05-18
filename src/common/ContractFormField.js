@@ -24,10 +24,10 @@ const ContractFormField = styled.div`
   }
 
   .deleteSocial {
-        position: absolute;
-    width: 20px;
-    top: 10px;
-    right: 5px;
+      position: absolute;
+      width: 16px;
+      top: 11px;
+      right: 6px;
   }
 
   .remove-field-icon {

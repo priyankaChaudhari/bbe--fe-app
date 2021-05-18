@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { DefaultUser } from '../../theme/images/index';
-import { WhiteCard, GroupUser } from '../../theme/Global';
-import { CommonPagination, PageLoader } from '../../common';
+import { GroupUser } from '../../theme/Global';
+import { CommonPagination, PageLoader, WhiteCard } from '../../common';
 
 export default function Activity({
   isLoading,

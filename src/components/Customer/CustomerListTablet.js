@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 import Theme from '../../theme/Theme';
-import { WhiteCard } from '../../theme/Global';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -15,7 +14,7 @@ import {
   FileIcon,
 } from '../../theme/images/index';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
-import { CommonPagination, PageLoader } from '../../common';
+import { CommonPagination, PageLoader, WhiteCard } from '../../common';
 import { getcontract } from '../../api/AgreementApi';
 
 export default function CustomerListTablet({

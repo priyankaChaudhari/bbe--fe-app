@@ -1,6 +1,6 @@
 import React from 'react';
-import { WhiteCard, GroupUser } from '../../theme/Global';
-import { GetInitialName } from '../../common';
+import { GroupUser } from '../../theme/Global';
+import { GetInitialName, WhiteCard } from '../../common';
 import {
   EditOrangeIcon,
   MasterCardIcons,

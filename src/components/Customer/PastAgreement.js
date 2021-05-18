@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import Button from '../../common/Button';
+import { Button, WhiteCard } from '../../common';
 import {
   FileContract,
   ServiceIcon,
   DspOnlyIcon,
   RecurringIcon,
 } from '../../theme/images/index';
-import { WhiteCard } from '../../theme/Global';
 import { PATH_AGREEMENT } from '../../constants';
 
 export default function PastAgreement({ id }) {

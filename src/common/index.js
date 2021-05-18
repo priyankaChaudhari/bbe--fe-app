@@ -31,6 +31,7 @@ import UnauthorizedHeader from './UnauthorizedHeader';
 import OnBoardingBody from './OnBoarding';
 import CheckBoxList from './CheckBoxList';
 import BackToTop from './BackToTop';
+import { WhiteCard } from './WhiteCard';
 
 export {
   Button,
@@ -66,4 +67,5 @@ export {
   OnBoardingBody,
   CheckBoxList,
   BackToTop,
+  WhiteCard,
 };

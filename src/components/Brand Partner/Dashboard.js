@@ -8,9 +8,14 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 
 import dayjs from 'dayjs';
-import { DropDownSelect, GetInitialName, PageLoader } from '../../common';
+import {
+  DropDownSelect,
+  GetInitialName,
+  PageLoader,
+  WhiteCard,
+} from '../../common';
 import Theme from '../../theme/Theme';
-import { WhiteCard } from '../../theme/Global';
+
 import {
   RecurringIcon,
   ArrowUpIcon,

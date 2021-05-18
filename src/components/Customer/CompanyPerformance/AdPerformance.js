@@ -13,8 +13,6 @@ import { enGB } from 'react-date-range/src/locale';
 import dayjs from 'dayjs';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-
-import { WhiteCard } from '../../../theme/Global';
 import {
   ArrowDownIcon,
   CaretUp,
@@ -22,7 +20,7 @@ import {
   ArrowUpIcon,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button } from '../../../common';
+import { ModalBox, Button, WhiteCard } from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
