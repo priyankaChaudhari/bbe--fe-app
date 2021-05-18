@@ -4,13 +4,13 @@
 /* eslint no-shadow: "off" */
 
 import queryString from 'query-string';
+import { updateUserMe } from '../../api';
 
 import axiosInstance from '../../axios';
 import {
   API_LOGIN,
   API_USER_ME,
   API_LOGOUT,
-  // API_USER,
 } from '../../constants/ApiConstants';
 import {
   PATH_LOGIN,
@@ -113,19 +113,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
           data.user.step[id] === undefined
         ) {
           history.push(PATH_COMPANY_DETAILS);
-          // const detail = { step: { ...data.user.step, [id]: 1 } };
-          // return (dispatch) => {
-          //   dispatch(userRequestInitiated());
-          //   axiosInstance
-          //     .patch(`${API_USER + data.user.id}/`, detail)
-          //     .then(() => {
-          //       dispatch(userMeSuccess(data, 'step', history));
-          //       history.push(PATH_COMPANY_DETAILS);
-          //     })
-          //     .catch((error) => {
-          //       dispatch(userRequestFail(error, ''));
-          //     });
-          // };
+          const detail = { step: { ...data.user.step, [id]: 1 } };
+          updateUserMe(data.user.id, detail).then((user) => {
+            if (user && user.status === 200) {
+              history.push(PATH_COMPANY_DETAILS);
+            }
+          });
         }
         if (data.user.step[id] === 1) {
           history.push(PATH_COMPANY_DETAILS);
