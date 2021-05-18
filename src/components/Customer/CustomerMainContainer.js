@@ -537,7 +537,14 @@ export default function CustomerMainContainer() {
                             ) : userInfo && userInfo.role === 'Customer' ? (
                               <span
                                 className="company-status"
-                                style={{ background: checkStatusColor() }}>
+                                style={{
+                                  background: checkStatusColor(),
+                                  color:
+                                    customer.status.value ===
+                                    'pending cancellation'
+                                      ? 'black'
+                                      : '',
+                                }}>
                                 {customer &&
                                   customer.status &&
                                   customer.status.label}

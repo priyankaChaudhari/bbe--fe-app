@@ -43,6 +43,7 @@ export default function Info() {
           setIsLoading({ loader: false, type: 'page' });
           setAlreadyUser(false);
         }
+        setIsLoading({ loader: false, type: 'page' });
       },
     );
   }, [params.email, params.id]);
@@ -94,7 +95,12 @@ export default function Info() {
       ) : (
         <OnBoardingBody className="grey-bg">
           <UnauthorizedHeader />{' '}
-          <div className="white-card-base ">
+          <div
+            className={
+              alreadyUser
+                ? 'white-card-base account-reassign '
+                : 'white-card-base'
+            }>
             {!alreadyUser ? (
               <>
                 <img className="lock-finish" src={LockFinish} alt="lock" />
