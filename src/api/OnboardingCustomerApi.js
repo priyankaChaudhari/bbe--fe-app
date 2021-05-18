@@ -6,6 +6,7 @@ import {
   API_ONBOARD_CUSTOMER,
   API_STEPS_ASSIGNED,
   API_VERIFY_TOKEN,
+  API_VERIFY_USER,
   API_VIDEO_LINKS,
 } from '../constants/ApiConstants';
 
@@ -110,6 +111,18 @@ export async function getVideoLink(id) {
 export async function editCustomerEmail(data) {
   const result = await axiosInstance
     .post(API_EDIT_EMAIL, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function verifyStepUser(email, customerOnboarding) {
+  const result = await axiosInstance
+    .post(API_VERIFY_USER, { email, customer_onboarding: customerOnboarding })
     .then((response) => {
       return response;
     })

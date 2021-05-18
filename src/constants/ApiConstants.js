@@ -56,6 +56,7 @@ export const API_VERIFY_TOKEN = `${API_STEPS_ASSIGNED}verify-token/`;
 export const API_BILLING_INFO = '/billing-info/';
 export const API_VIDEO_LINKS = '/customer/:id/get-video-link/';
 export const API_EDIT_EMAIL = `${API_STEPS_ASSIGNED}edit-email/`;
+export const API_VERIFY_USER = `${API_USER}verify-user/`;
 
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,
@@ -64,4 +65,5 @@ export const NON_AUTHORIZATION_APIS = [
   API_SIGNATURE_STATUS,
   API_ONBOARD_CUSTOMER,
   API_CUSTOMER_NAMES,
+  API_VERIFY_USER,
 ];

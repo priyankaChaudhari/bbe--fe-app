@@ -4,6 +4,13 @@ import Theme from '../theme/Theme';
 const OnBoardingBody = styled.div`
   padding: 60px 0px 0 0px;
 
+  .already-user-msg {
+    background-color: ${Theme.lightOrange};
+    border-radius: 5px;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
   &.body-white {
     background: ${Theme.white};
     padding-top: 0;

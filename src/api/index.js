@@ -110,4 +110,5 @@ export {
   saveBillingInfo,
   getVideoLink,
   editCustomerEmail,
+  verifyStepUser,
 } from './OnboardingCustomerApi';

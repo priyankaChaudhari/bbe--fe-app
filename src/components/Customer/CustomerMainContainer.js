@@ -534,7 +534,9 @@ export default function CustomerMainContainer() {
                                   customer.status.label}
                               </span>
                             ) : userInfo && userInfo.role === 'Customer' ? (
-                              <span className="company-status active">
+                              <span
+                                className="company-status"
+                                style={{ background: checkStatusColor() }}>
                                 {customer &&
                                   customer.status &&
                                   customer.status.label}

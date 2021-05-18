@@ -170,7 +170,10 @@ export default function CreateAccount() {
               If you’d like someone else to administrate the Buy Box Experts
               account then you can reassign the setup process to them.
               <br />
-              <strong>This password will reflect throughout the site.</strong>
+              <div className="already-user-msg mt-2">
+                This email is associated with more than one account. Note that
+                the password you set here will be used for all your accounts.
+              </div>
             </p>
             <ContractFormField className="mt-3">
               <label htmlFor="email">

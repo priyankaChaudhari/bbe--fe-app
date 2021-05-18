@@ -10,6 +10,7 @@ import {
   API_LOGIN,
   API_USER_ME,
   API_LOGOUT,
+  API_USER,
 } from '../../constants/ApiConstants';
 import {
   PATH_LOGIN,
@@ -27,6 +28,28 @@ import * as actionTypes from './actionTypes';
 export const userRequestInitiated = () => {
   return {
     type: actionTypes.USER_REQUEST_INITIATED,
+  };
+};
+
+export const userRequestFail = (error, type) => {
+  if (type === 'logout') {
+    if (error && error.response && error.response.status === 401) {
+      window.location.href = PATH_LOGIN;
+    }
+  }
+  return {
+    type: actionTypes.USER_REQUEST_FAIL,
+    error,
+  };
+};
+
+export const userMeSuccess = (data, type, history) => {
+  if (type === 'step') {
+    history.push(PATH_COMPANY_DETAILS);
+  }
+  return {
+    type: actionTypes.USER_ME_SUCCESS,
+    payload: data,
   };
 };
 
@@ -85,7 +108,18 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
           data.user.step[id] === null ||
           data.user.step[id] === undefined
         ) {
-          history.push(PATH_COMPANY_DETAILS);
+          const detail = { step: { ...data.user.step, [id]: 1 } };
+          return (dispatch) => {
+            dispatch(userRequestInitiated());
+            axiosInstance
+              .patch(`${API_USER + data.user.id}/`, detail)
+              .then(() => {
+                dispatch(userMeSuccess(data, 'step', history));
+              })
+              .catch((error) => {
+                dispatch(userRequestFail(error, ''));
+              });
+          };
         }
         if (data.user.step[id] === 1) {
           history.push(PATH_COMPANY_DETAILS);
@@ -128,25 +162,6 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
   };
 };
 
-export const userRequestFail = (error, type) => {
-  if (type === 'logout') {
-    if (error && error.response && error.response.status === 401) {
-      window.location.href = PATH_LOGIN;
-    }
-  }
-  return {
-    type: actionTypes.USER_REQUEST_FAIL,
-    error,
-  };
-};
-
-export const userMeSuccess = (data) => {
-  return {
-    type: actionTypes.USER_ME_SUCCESS,
-    payload: data,
-  };
-};
-
 export const clearToken = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('agreementID');
@@ -164,7 +179,7 @@ export const userMe = (history, customer) => {
         params: customer || { customer: localStorage.getItem('customer') },
       })
       .then((data) => {
-        dispatch(userMeSuccess(data));
+        dispatch(userMeSuccess(data, '', history));
       })
       .catch(() => {
         localStorage.removeItem('token');
