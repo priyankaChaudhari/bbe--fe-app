@@ -122,7 +122,9 @@ export default function Login() {
           step &&
           Object.keys(step) &&
           Object.keys(step).find((op) => op === customerId);
-
+        if (step === null || id === '' || id === null) {
+          history.push(PATH_COMPANY_DETAILS);
+        }
         if (step[id] === 1) {
           history.push(PATH_COMPANY_DETAILS);
         }
