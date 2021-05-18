@@ -604,7 +604,7 @@ export default function AdPerformanceChart({
     chart.current.cursor.lineX.disabled = true;
     chart.current.cursor.behavior = 'none';
 
-    function renderTooltip(name, color, value, currency, percent) {
+    function renderTooltip(name, color, value, currency, percent, formatter) {
       const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
       <li style="display: inline-block;">
         {' '}
@@ -624,9 +624,13 @@ export default function AdPerformanceChart({
         <div style=" color: white;
         font-size: 16px; text-align: right;
        
-        ">${currency !== null ? currency : ''}{${value}}${
-        percent !== null ? percent : ''
-      }</div>
+        ">${currency !== null ? currency : ''}
+        ${
+          formatter !== null
+            ? `{${value}.formatNumber('${formatter}')}`
+            : `{${value}}`
+        }${percent !== null ? percent : ''}
+      </div>
       </li>
     </ul>
   
@@ -655,12 +659,14 @@ export default function AdPerformanceChart({
           currentValue,
           currencySymbol,
           null,
+          null,
         );
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
           previousValue,
           currencySymbol,
+          null,
           null,
         );
       } else if (
@@ -674,6 +680,7 @@ export default function AdPerformanceChart({
           currentValue,
           null,
           '%',
+          null,
         );
         tooltipPrevious = renderTooltip(
           'Previous',
@@ -681,6 +688,25 @@ export default function AdPerformanceChart({
           previousValue,
           null,
           '%',
+          null,
+        );
+      } else if (selectedKey === 'impressions') {
+        valueAxis.numberFormatter.numberFormat = `#.#a`;
+        tooltipCurrent = renderTooltip(
+          'Recent',
+          '#FF5933',
+          currentValue,
+          null,
+          null,
+          '#.#a',
+        );
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousValue,
+          null,
+          null,
+          '#.#a',
         );
       } else {
         valueAxis.numberFormatter.numberFormat = `#.#a`;
@@ -690,11 +716,13 @@ export default function AdPerformanceChart({
           currentValue,
           null,
           null,
+          null,
         );
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
           previousValue,
+          null,
           null,
           null,
         );
@@ -772,6 +800,7 @@ export default function AdPerformanceChart({
             value,
             currencySymbol,
             null,
+            null,
           )}`;
         } else if (item === 'adConversion' || item === 'adClickRate') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -780,12 +809,23 @@ export default function AdPerformanceChart({
             value,
             null,
             '%',
+            null,
+          )}`;
+        } else if (item === 'impressions') {
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            tooltipNames[item],
+            colorSet[item],
+            value,
+            null,
+            null,
+            '#.#a',
           )}`;
         } else {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],
             value,
+            null,
             null,
             null,
           )}`;
