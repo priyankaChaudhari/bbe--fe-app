@@ -44,6 +44,10 @@ export const userRequestFail = (error, type) => {
 };
 
 export const userMeSuccess = (data, type, history) => {
+  if (data.data.role === 'Customer') {
+    localStorage.setItem('role', data.data.role);
+    localStorage.setItem('step', JSON.stringify(data.data.step));
+  }
   if (type === 'step') {
     history.push(PATH_COMPANY_DETAILS);
   }
@@ -169,6 +173,8 @@ export const clearToken = () => {
   localStorage.removeItem('customer');
   localStorage.removeItem('match');
   localStorage.removeItem('filters');
+  localStorage.removeItem('role');
+  localStorage.removeItem('step');
   window.location.href = PATH_LOGIN;
 };
 
@@ -188,7 +194,8 @@ export const userMe = (history, customer) => {
         localStorage.removeItem('customer');
         localStorage.removeItem('match');
         localStorage.removeItem('filters');
-
+        localStorage.removeItem('role');
+        localStorage.removeItem('step');
         const params = queryString.parse(history.location.search);
         if (history.location.pathname !== '/') {
           const stringified = queryString.stringify({

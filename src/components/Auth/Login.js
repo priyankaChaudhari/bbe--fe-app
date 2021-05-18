@@ -19,7 +19,14 @@ import {
   SuccessMsg,
   ContractInputSelect,
 } from '../../common';
-import { PATH_BGS_DASHBOARD, PATH_CUSTOMER_LIST } from '../../constants';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_BGS_DASHBOARD,
+  PATH_COMPANY_DETAILS,
+  PATH_CUSTOMER_DETAILS,
+  PATH_CUSTOMER_LIST,
+  PATH_SUMMARY,
+} from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
 
@@ -30,7 +37,6 @@ export default function Login() {
   const loader = useSelector((state) => state.userState.isLoading);
   const apiError = useSelector((state) => state.userState.error);
   const resetPasswordMsg = useSelector((state) => state.userState.showResetMsg);
-  const userInfo = useSelector((state) => state.userState.userInfo);
   const [showPassword, setShowPassword] = useState({
     password: false,
     name: false,
@@ -42,6 +48,9 @@ export default function Login() {
   const [getName, setGetName] = useState({ email: '', customer: '' });
   const [forgotApiError, setforgotApiError] = useState([]);
   const params = queryString.parse(history.location.search);
+  const role = localStorage.getItem('role') || '';
+  const customerId = localStorage.getItem('customer') || '';
+  const step = JSON.parse(localStorage.getItem('step')) || '';
 
   const onSubmit = (data) => {
     setIsLoading({ loader: true, type: 'button' });
@@ -106,15 +115,35 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      if (
-        userInfo &&
-        userInfo.role &&
-        userInfo.role.includes('Growth Strategist')
-      ) {
+      if (role.includes('Growth Strategist')) {
         history.push(PATH_BGS_DASHBOARD);
+      } else if (role === 'Customer') {
+        const id =
+          step &&
+          Object.keys(step) &&
+          Object.keys(step).find((op) => op === customerId);
+
+        if (step[id] === 1) {
+          history.push(PATH_COMPANY_DETAILS);
+        }
+        // if (step[id] === 2) {
+        //   history.push(PATH_BILLING_DETAILS);
+        // }
+        if (step[id] === 2 || step[id] === 3) {
+          history.push(PATH_AMAZON_MERCHANT);
+        }
+        // if (step[id] === 4) {
+        //   history.push(PATH_AMAZON_ACCOUNT);
+        // }
+        if (step[id] === 4 || step[id] === 5) {
+          history.push(PATH_SUMMARY);
+        }
+        if (step[id] === 6) {
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+        }
       } else history.push(PATH_CUSTOMER_LIST);
     }
-  }, [history, userInfo]);
+  }, [history, role, customerId, step]);
 
   const handleChange = () => {
     dispatch(clearErrorMessage());
