@@ -8,7 +8,6 @@ const OnBoardingBody = styled.div`
     background-color: ${Theme.lightOrange};
     border-radius: 5px;
     padding: 6px 10px;
-    text-align: center;
   }
 
   &.body-white {
@@ -60,6 +59,14 @@ const OnBoardingBody = styled.div`
         font-size: ${Theme.extraNormal};
         margin-right: 6px;
       }
+    }
+    .invitation-text {
+      font-size: ${Theme.normal};
+      font-size: 15px;
+      max-width: 395px;
+      margin: auto;
+      line-height: 22px;
+      width: 100%;
     }
     .information-text {
       font-weight: 300;

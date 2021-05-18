@@ -148,14 +148,16 @@ export default function Info() {
                   <img className="mb-3" src={AccountSetupIcon} alt="check" />
                 </div>
                 <>
-                  <h5>You are already registered</h5>
-                  <p className="info">
+                  <h3 className="text-center  page-heading ">
+                    You are already registered
+                  </h3>
+                  <p className="invitation-text text-center  pb-2 ">
                     This invitation link has expired because your account has
                     already been created. Click on one of the below options to
                     proceed.
                     <br />
                   </p>
-                  <p className="reach-out  mt-2">
+                  <p className="reach-out text-center  mt-2">
                     If you have any questions in the meantime please reach out
                     to{' '}
                     <a
