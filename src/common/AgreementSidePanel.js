@@ -2395,6 +2395,11 @@ export default function AgreementSidePanel({
               dspAddendum: false,
               addendum: true,
             });
+            if (updatedFormData && updatedFormData.addendum) {
+              delete updatedFormData.addendum;
+            }
+            setUpdatedFormData({ ...updatedFormData });
+
             executeScroll('addendum');
             setShowEditor(false);
             setOriginalAddendumData(res && res.data);

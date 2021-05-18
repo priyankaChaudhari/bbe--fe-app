@@ -221,7 +221,7 @@ export default function ContractFooter({
                       showRightTick('service_agreement') &&
                       showRightTick('statement') &&
                       showRightTick('dspAddendum')
-                    )
+                    ) || Object.keys(updatedFormData).includes('addendum')
                   }
                   onClick={() => {
                     createAgreementDoc();
