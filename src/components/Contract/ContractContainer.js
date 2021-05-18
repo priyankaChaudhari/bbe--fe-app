@@ -662,6 +662,8 @@ export default function ContractContainer() {
             if (addendumRes && addendumRes.status === 201) {
               setNewAddendum(addendumRes && addendumRes.data);
             }
+            setNewAddendum(addendumRes && addendumRes.data);
+
             setOriginalAddendumData(addendumRes && addendumRes.data);
             setShowEditor(false);
             if (updatedFormData && updatedFormData.addendum) {
@@ -1791,6 +1793,7 @@ export default function ContractContainer() {
         return true;
       }
     }
+
     return false;
   };
 
@@ -2046,6 +2049,14 @@ export default function ContractContainer() {
       details.contract_type &&
       details.contract_type.toLowerCase().includes('dsp') &&
       dspFee < 10000
+    ) {
+      return true;
+    }
+
+    if (
+      newAddendumData &&
+      newAddendumData.addendum &&
+      newAddendumData.addendum.length > 7
     ) {
       return true;
     }
