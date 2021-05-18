@@ -51,6 +51,7 @@ function RequestSignature({
   getContractDetails,
   setContractLoading,
   setShowEditor,
+  setIsEditContract,
 }) {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
@@ -397,6 +398,7 @@ function RequestSignature({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
     });
+    setIsEditContract(false);
   };
   const sendRequestApproval = () => {
     const requestApprovalData = {
@@ -958,6 +960,7 @@ RequestSignature.defaultProps = {
   getContractDetails: () => {},
   setContractLoading: () => {},
   setShowEditor: () => {},
+  setIsEditContract: () => {},
 };
 
 RequestSignature.propTypes = {
@@ -983,4 +986,5 @@ RequestSignature.propTypes = {
   getContractDetails: PropTypes.func,
   setContractLoading: PropTypes.func,
   setShowEditor: PropTypes.func,
+  setIsEditContract: PropTypes.func,
 };

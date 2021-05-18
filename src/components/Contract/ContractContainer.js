@@ -2405,6 +2405,7 @@ export default function ContractContainer() {
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
     });
+    setIsEditContract(false);
   };
 
   return (
@@ -2581,6 +2582,7 @@ export default function ContractContainer() {
                 getContractDetails={getContractDetails}
                 setContractLoading={setIsLoading}
                 setShowEditor={setShowEditor}
+                setIsEditContract={setIsEditContract}
               />
             </ModalBox>
           </Modal>
