@@ -10,7 +10,7 @@ import {
   API_LOGIN,
   API_USER_ME,
   API_LOGOUT,
-  API_USER,
+  // API_USER,
 } from '../../constants/ApiConstants';
 import {
   PATH_LOGIN,
@@ -112,18 +112,20 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
           data.user.step[id] === null ||
           data.user.step[id] === undefined
         ) {
-          const detail = { step: { ...data.user.step, [id]: 1 } };
-          return (dispatch) => {
-            dispatch(userRequestInitiated());
-            axiosInstance
-              .patch(`${API_USER + data.user.id}/`, detail)
-              .then(() => {
-                dispatch(userMeSuccess(data, 'step', history));
-              })
-              .catch((error) => {
-                dispatch(userRequestFail(error, ''));
-              });
-          };
+          history.push(PATH_COMPANY_DETAILS);
+          // const detail = { step: { ...data.user.step, [id]: 1 } };
+          // return (dispatch) => {
+          //   dispatch(userRequestInitiated());
+          //   axiosInstance
+          //     .patch(`${API_USER + data.user.id}/`, detail)
+          //     .then(() => {
+          //       dispatch(userMeSuccess(data, 'step', history));
+          //       history.push(PATH_COMPANY_DETAILS);
+          //     })
+          //     .catch((error) => {
+          //       dispatch(userRequestFail(error, ''));
+          //     });
+          // };
         }
         if (data.user.step[id] === 1) {
           history.push(PATH_COMPANY_DETAILS);
