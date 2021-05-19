@@ -846,7 +846,7 @@ export default function ContractContainer() {
           'YYYY-MM-DD',
         );
       }
-      setIsLoading({ loader: true, type: 'button' });
+      setIsLoading({ loader: true, type: 'page' });
 
       // for additionL montlhy service
       if (updatedFormData.additional_monthly_services) {
@@ -2288,6 +2288,7 @@ export default function ContractContainer() {
         formData={formData}
         apiError={apiError}
         loader={isLoading.loader}
+        setContractLoading={setIsLoading}
         agreementData={details}
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
@@ -2355,6 +2356,7 @@ export default function ContractContainer() {
         isApicalled={isApicalled}
         getContractDetails={getContractDetails}
         setIsEditContract={setIsEditContract}
+        setShowSaveSuccessMsg={setShowSaveSuccessMsg}
       />
     );
   };

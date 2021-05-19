@@ -30,7 +30,7 @@ import {
   Advertise,
   CaretUp,
   RedCross,
-  DefaultUser,
+  // DefaultUser,
   FileIcon,
   CheckFileIcon,
   EditFileIcon,
@@ -127,9 +127,11 @@ export default function AgreementSidePanel({
   isApicalled,
   getContractDetails,
   setIsEditContract,
+  setShowSaveSuccessMsg,
+  setContractLoading,
 }) {
   const [accountLength, setAccountLength] = useState([]);
-  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
+  // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
@@ -2385,10 +2387,10 @@ export default function AgreementSidePanel({
           addendum: newAddendumData && newAddendumData.addendum,
           contract: agreementData.id,
         };
-        setIsLoading({ loader: true, type: 'button' });
-
+        setContractLoading({ loader: true, type: 'page' });
         createAddendum(addendumData).then((res) => {
-          setIsLoading({ loader: false, type: 'button' });
+          setContractLoading({ loader: false, type: 'page' });
+
           if (res && res.status === 201) {
             setNewAddendum(res && res.data);
             setOpenCollapse({
@@ -2405,6 +2407,7 @@ export default function AgreementSidePanel({
               getContractDetails();
               setIsEditContract(false);
             }
+            setShowSaveSuccessMsg(true);
             executeScroll('addendum');
             setShowEditor(false);
             setOriginalAddendumData(res && res.data);
@@ -2413,6 +2416,7 @@ export default function AgreementSidePanel({
       }
     }
   };
+
   const changeQuantity = (oneTimeServiceData, flag) => {
     showFooter(true);
     // setSectionError({ ...sectionError, statement: 0 });
@@ -3155,10 +3159,10 @@ export default function AgreementSidePanel({
                     .presigned_url ? (
                     <img
                       src={
-                        isLoading.loader && isLoading.type === 'page'
-                          ? DefaultUser
-                          : images.find((op) => op.entity_id === item.user_id)
-                              .presigned_url
+                        // isLoading.loader && isLoading.type === 'page'
+                        // ? DefaultUser:
+                        images.find((op) => op.entity_id === item.user_id)
+                          .presigned_url
                       }
                       className="default-user-activity"
                       alt="pic"
@@ -3543,11 +3547,11 @@ export default function AgreementSidePanel({
                           )
                         }>
                         {' '}
-                        {isLoading.loader && isLoading.type === 'button' ? (
+                        {/* {isLoading.loader && isLoading.type === 'button' ? (
                           <PageLoader color="#fff" type="button" />
-                        ) : (
-                          'Proceed to Next Section'
-                        )}
+                        ) : ( */}
+                        Proceed to Next Section
+                        {/* )} */}
                       </Button>
                     </li>
                   </ul>
@@ -3795,12 +3799,12 @@ export default function AgreementSidePanel({
                                   ? nextStep('dspAddendum')
                                   : nextStep('addendum')
                               }>
-                              {isLoading.loader &&
+                              {/* {isLoading.loader &&
                               isLoading.type === 'button' ? (
                                 <PageLoader color="#fff" type="button" />
-                              ) : (
-                                'Proceed to Next Section'
-                              )}
+                              ) : ( */}
+                              Proceed to Next Section
+                              {/* )} */}
                             </Button>
                           </li>
                         </ul>
@@ -3937,11 +3941,11 @@ export default function AgreementSidePanel({
                             )
                           }
                           onClick={() => nextStep('addendum')}>
-                          {isLoading.loader && isLoading.type === 'button' ? (
+                          {/* {isLoading.loader && isLoading.type === 'button' ? (
                             <PageLoader color="#fff" type="button" />
-                          ) : (
-                            'Proceed to Next Section'
-                          )}
+                          ) : ( */}
+                          Proceed to Next Section
+                          {/* )} */}
                         </Button>
                       </li>
                     </ul>
@@ -3979,7 +3983,10 @@ export default function AgreementSidePanel({
                       {newAddendumData && newAddendumData.id ? (
                         <Button
                           className=" btn-transparent sidepanel mt-1 mb-3 w-100"
-                          onClick={() => onEditAddendum()}>
+                          onClick={() => {
+                            onEditAddendum();
+                            executeScroll('addendum');
+                          }}>
                           <img
                             className="edit-folder-icon mr-2"
                             src={EditFileIcons}
@@ -4009,11 +4016,11 @@ export default function AgreementSidePanel({
                                 : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
                             }
                             onClick={() => nextStep('final')}>
-                            {isLoading.loader && isLoading.type === 'button' ? (
+                            {/* {isLoading.loader && isLoading.type === 'button' ? (
                               <PageLoader color="#fff" type="button" />
-                            ) : (
-                              'Save Addendum'
-                            )}
+                            ) : ( */}
+                            Save Addendum
+                            {/* )} */}
                           </Button>
                           <Button
                             className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
@@ -4106,6 +4113,8 @@ AgreementSidePanel.defaultProps = {
   isApicalled: false,
   getContractDetails: () => {},
   setIsEditContract: () => {},
+  setShowSaveSuccessMsg: () => {},
+  setContractLoading: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4235,6 +4244,8 @@ AgreementSidePanel.propTypes = {
   isApicalled: PropTypes.bool,
   getContractDetails: PropTypes.func,
   setIsEditContract: PropTypes.func,
+  setShowSaveSuccessMsg: PropTypes.func,
+  setContractLoading: PropTypes.func,
 };
 
 const SidePanel = styled.div`
