@@ -165,15 +165,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     if (activeSales === 'revenue') {
       tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
       tooltipCurrent = `${currencySymbol}{label1}[/]`;
-      tooltipPrevious = flag ? `\nvs ${currencySymbol}{label2}` : '';
+      tooltipPrevious = flag
+        ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
+        : '';
     } else if (activeSales === 'conversion') {
       tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
       tooltipCurrent = `{label1}%[/]`;
-      tooltipPrevious = flag ? `\nvs {label2}%` : '';
+      tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
     } else {
       tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
       tooltipCurrent = `{label1}[/]`;
-      tooltipPrevious = flag ? `\nvs {label2}` : '';
+      tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
     }
 
     // Create series for previous data
