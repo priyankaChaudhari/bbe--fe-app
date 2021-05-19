@@ -2151,7 +2151,15 @@ export default function AgreementSidePanel({
                     label: formData.primary_marketplace,
                   }
                 : null
-              : formData[item.key]
+              : formData[item.key] && formData[item.key].label
+              ? {
+                  value: formData[item.key].label,
+                  label: formData[item.key].value,
+                }
+              : {
+                  value: formData[item.key],
+                  label: formData[item.key],
+                }
           }
           options={getOptions(item.key, 'single')}
           name={item.key}
@@ -2388,6 +2396,7 @@ export default function AgreementSidePanel({
           contract: agreementData.id,
         };
         setContractLoading({ loader: true, type: 'page' });
+
         createAddendum(addendumData).then((res) => {
           setContractLoading({ loader: false, type: 'page' });
 
@@ -3008,6 +3017,7 @@ export default function AgreementSidePanel({
                 <ContractInputSelect>
                   <Select
                     classNamePrefix="react-select"
+                    isSearchable={false}
                     defaultValue={setDefaultAmazonPlanValue()}
                     options={AmazonStoreOptions}
                     name="amazon_store_plan"
