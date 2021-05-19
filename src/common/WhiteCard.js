@@ -546,6 +546,11 @@ export const WhiteCard = styled.div`
         &.down {
           color: ${Theme.darkRed};
         }
+
+        &.grey {
+          color: ${Theme.gray40};
+        }
+
         .red-arrow{
            width: 14px;
           transform: rotate(180deg);

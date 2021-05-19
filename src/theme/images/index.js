@@ -147,6 +147,7 @@ import ArrowRightBlackIcon from './icons/arrow-right-black-icon.png';
 import DspOnlyIcon from './icons/dsp-only-icon.png';
 import ThadProfileImg from './thad.png';
 import CheckboxCheck from './icons/checkmark.svg';
+import UpDowGrayArrow from './icons/up-dow-gray-arrow.png';
 
 export {
   BannerBg,
@@ -298,4 +299,5 @@ export {
   DspOnlyIcon,
   ThadProfileImg,
   CheckboxCheck,
+  UpDowGrayArrow,
 };

@@ -18,6 +18,7 @@ import {
   CaretUp,
   CloseIcon,
   ArrowUpIcon,
+  UpDowGrayArrow,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
 import { ModalBox, Button, WhiteCard } from '../../../common';
@@ -694,8 +695,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
             <div className="vs">vs $11,114.90</div>
-            <div className="perentage-value down mt-3 ">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+            <div className="perentage-value grey mt-3 ">
+              <img
+                className="red-arrow"
+                src={UpDowGrayArrow}
+                alt="arrow-down"
+              />
               40.75%
             </div>
           </div>
