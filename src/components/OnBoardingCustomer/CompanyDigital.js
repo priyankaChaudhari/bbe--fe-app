@@ -110,14 +110,18 @@ export default function CompanyDigital({
               } else {
                 history.push(PATH_AMAZON_MERCHANT);
               }
-              updateUserMe(userInfo.id, {
-                step: { ...userInfo.step, [userInfo.customer]: 2 },
+              updateUserMe(userInfo.id || verifiedStepData.user_id, {
+                step: {
+                  ...(userInfo.step || verifiedStepData.user_step),
+                  [userInfo.customer || verifiedStepData.customer_id]: 2,
+                },
               }).then((user) => {
                 if (user && user.status === 200) {
-                  dispatch(userMe());
+                  if (assignedToSomeone) {
+                    localStorage.removeItem('match');
+                  } else dispatch(userMe());
                 }
               });
-              localStorage.removeItem('match');
               setIsLoading({ loader: false, type: 'button' });
             }
           });
@@ -144,14 +148,18 @@ export default function CompanyDigital({
                 CheckStep('digital presence');
                 // history.push(PATH_AMAZON_MERCHANT);
               }
-              updateUserMe(userInfo.id, {
-                step: { ...userInfo.step, [userInfo.customer]: 2 },
+              updateUserMe(userInfo.id || verifiedStepData.user_id, {
+                step: {
+                  ...(userInfo.step || verifiedStepData.user_step),
+                  [userInfo.customer || verifiedStepData.customer_id]: 2,
+                },
               }).then((user) => {
                 if (user && user.status === 200) {
-                  dispatch(userMe());
+                  if (assignedToSomeone) {
+                    localStorage.removeItem('match');
+                  } else dispatch(userMe());
                 }
               });
-              localStorage.removeItem('match');
               setIsLoading({ loader: false, type: 'button' });
             }
           });
@@ -307,6 +315,8 @@ CompanyDigital.propTypes = {
     user_name: PropTypes.string,
     step_id: PropTypes.string,
     customer_id: PropTypes.string,
+    user_id: PropTypes.string,
+    user_step: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   data: PropTypes.shape({
     id: PropTypes.string,

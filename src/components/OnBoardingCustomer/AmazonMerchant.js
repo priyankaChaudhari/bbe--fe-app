@@ -72,14 +72,18 @@ export default function AmazonMerchant({
               } else {
                 history.push(PATH_SUMMARY);
               }
-              updateUserMe(userInfo.id, {
-                step: { ...userInfo.step, [userInfo.customer]: 4 },
+              updateUserMe(userInfo.id || verifiedStepData.user_id, {
+                step: {
+                  ...(userInfo.step || verifiedStepData.user_step),
+                  [userInfo.customer || verifiedStepData.customer_id]: 4,
+                },
               }).then((user) => {
                 if (user && user.status === 200) {
-                  dispatch(userMe());
+                  if (assignedToSomeone) {
+                    localStorage.removeItem('match');
+                  } else dispatch(userMe());
                 }
               });
-              localStorage.removeItem('match');
               setIsLoading({ loader: false, type: 'button' });
             }
           });
@@ -105,14 +109,18 @@ export default function AmazonMerchant({
               } else {
                 history.push(PATH_SUMMARY);
               }
-              updateUserMe(userInfo.id, {
-                step: { ...userInfo.step, [userInfo.customer]: 4 },
+              updateUserMe(userInfo.id || verifiedStepData.user_id, {
+                step: {
+                  ...(userInfo.step || verifiedStepData.user_step),
+                  [userInfo.customer || verifiedStepData.customer_id]: 4,
+                },
               }).then((user) => {
                 if (user && user.status === 200) {
-                  dispatch(userMe());
+                  if (assignedToSomeone) {
+                    localStorage.removeItem('match');
+                  } else dispatch(userMe());
                 }
               });
-              localStorage.removeItem('match');
               setIsLoading({ loader: false, type: 'button' });
             }
           });
@@ -199,6 +207,7 @@ AmazonMerchant.propTypes = {
   verifiedStepData: PropTypes.objectOf(
     PropTypes.shape({
       user_name: PropTypes.string,
+      user_step: PropTypes.objectOf(PropTypes.object),
     }),
   ).isRequired,
   data: PropTypes.shape({

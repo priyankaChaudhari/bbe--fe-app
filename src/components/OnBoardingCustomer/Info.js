@@ -105,7 +105,7 @@ export default function Info() {
           <UnauthorizedHeader />{' '}
           <div
             className={
-              alreadyUser
+              alreadyUser || reassignedUser
                 ? 'white-card-base account-reassign '
                 : 'white-card-base'
             }>
