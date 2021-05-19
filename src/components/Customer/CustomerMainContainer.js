@@ -7,7 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
@@ -671,6 +671,7 @@ export default function CustomerMainContainer() {
                               <div className="brand-label ">Website</div>
                               <span className=" mid-width website">
                                 <a
+                                  css="text-transform: initial;"
                                   href={
                                     customer &&
                                     customer.website &&
