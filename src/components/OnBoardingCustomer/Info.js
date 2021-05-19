@@ -23,6 +23,8 @@ export default function Info() {
   const params = queryString.parse(history.location.search);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [alreadyUser, setAlreadyUser] = useState(false);
+  const [reassignedData, setReassignedData] = useState({});
+  const [reassignedUser, setReassignedUser] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(
@@ -41,7 +43,13 @@ export default function Info() {
         }
         if (response && response.status === 200) {
           setIsLoading({ loader: false, type: 'page' });
-          setAlreadyUser(false);
+          if (response && response.data) {
+            setReassignedData(response.data);
+            setReassignedUser(true);
+          } else {
+            setAlreadyUser(false);
+            setReassignedUser(false);
+          }
         }
         setIsLoading({ loader: false, type: 'page' });
       },
@@ -101,7 +109,7 @@ export default function Info() {
                 ? 'white-card-base account-reassign '
                 : 'white-card-base'
             }>
-            {!alreadyUser ? (
+            {!alreadyUser && !reassignedUser ? (
               <>
                 <img className="lock-finish" src={LockFinish} alt="lock" />
                 <p className="account-steps m-0">Step 1 of 3</p>
@@ -155,12 +163,14 @@ export default function Info() {
                 </div>
                 <>
                   <h3 className="text-center  page-heading ">
-                    You are already registered
+                    {alreadyUser
+                      ? 'You are already registered'
+                      : 'Customer setup delegated'}
                   </h3>
-                  <p className="invitation-text text-center  pb-2 ">
-                    This invitation link has expired because your account has
-                    already been created. Click on one of the below options to
-                    proceed.
+                  <p className="invitation-text text-center   pb-2 ">
+                    {alreadyUser
+                      ? 'This invitation link has expired because your account has already been created. Click on one of the below options to proceed.'
+                      : `You have delegated your customer setup to ${reassignedData.first_name} ${reassignedData.last_name} at ${reassignedData.email}. They are now the ones responsible for completing your account setup.`}
                     <br />
                   </p>
                   <p className="reach-out text-center  mt-2">
@@ -174,11 +184,22 @@ export default function Info() {
                       onboarding@buyboxexperts.com.
                     </a>
                   </p>
-                  <Button
-                    className="btn-primary w-100 on-boarding mt-3"
-                    onClick={() => history.push(PATH_LOGIN)}>
-                    Sign In
-                  </Button>
+                  {reassignedUser ? (
+                    <p className="invitation-text text-center   pb-2">
+                      You can close this tab when you’re ready.
+                    </p>
+                  ) : (
+                    ''
+                  )}
+                  {alreadyUser ? (
+                    <Button
+                      className="btn-primary w-100 on-boarding mt-3"
+                      onClick={() => history.push(PATH_LOGIN)}>
+                      Sign In
+                    </Button>
+                  ) : (
+                    ''
+                  )}
                 </>
               </>
             )}
