@@ -694,10 +694,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
+            <div className="vs">vs $11,224.90</div>
             <div className="perentage-value grey mt-3 ">
               <img
-                className="red-arrow"
+                className="green-arrow"
                 src={UpDowGrayArrow}
                 alt="arrow-down"
               />
