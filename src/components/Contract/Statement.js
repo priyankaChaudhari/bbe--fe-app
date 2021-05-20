@@ -105,27 +105,27 @@ export default function Statement({
     ];
     if (formData && formData.additional_monthly_services) {
       for (const item of formData.additional_monthly_services) {
-        if (
-          item.name
-            ? item.name === 'DSP Advertising'
-            : item.service.name === 'DSP Advertising'
-        ) {
-          fields.push(
-            `<tr>
-                 <td style="border: 1px solid black;padding: 13px;">${
-                   item.service ? item.service.name : item && item.name
-                 }
-                  </td>
-                  <td style="border: 1px solid black;padding: 13px;">
-                  ${
-                    item.service && item.service.dsp_text
-                      ? item.service.dsp_text
-                      : 'Included'
-                  }
-                  </td>
-                </tr>`,
-          );
-        }
+        // if (
+        //   item.name
+        //     ? item.name === 'DSP Advertising'
+        //     : item.service.name === 'DSP Advertising'
+        // ) {
+        //   fields.push(
+        //     `<tr>
+        //          <td style="border: 1px solid black;padding: 13px;">${
+        //            item.service ? item.service.name : item && item.name
+        //          }
+        //           </td>
+        //           <td style="border: 1px solid black;padding: 13px;">
+        //           ${
+        //             item.service && item.service.dsp_text
+        //               ? item.service.dsp_text
+        //               : 'Included'
+        //           }
+        //           </td>
+        //         </tr>`,
+        //   );
+        // }
         if (
           item.name
             ? item.name === 'Inventory Reconciliation'
@@ -380,12 +380,12 @@ export default function Statement({
             item.name !== undefined
           ) {
             if (
-              (item.name
-                ? item.name !== 'DSP Advertising'
-                : item.service.name !== 'DSP Advertising') &&
-              (item.name
+              // (item.name
+              //   ? item.name !== 'DSP Advertising'
+              //   : item.service.name !== 'DSP Advertising') &&
+              item.name
                 ? item.name !== 'Inventory Reconciliation'
-                : item.service.name !== 'Inventory Reconciliation')
+                : item.service.name !== 'Inventory Reconciliation'
             ) {
               fields.push(
                 `<tr>
@@ -405,7 +405,13 @@ export default function Statement({
                             // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                             ''
                       } /month
-                </td>`
+                  </td>`
+                    : (
+                        item.name
+                          ? item.name === 'DSP Advertising'
+                          : item.service.name === 'DSP Advertising'
+                      )
+                    ? `<td>N/A</td>`
                     : `<td>Yet to save</td>`
                 }
                 </tr>`,

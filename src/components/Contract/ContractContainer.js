@@ -1201,9 +1201,9 @@ export default function ContractContainer() {
             item.name !== undefined
           ) {
             if (
-              item &&
-              item.service &&
-              item.service.name !== 'DSP Advertising' &&
+              // item &&
+              // item.service &&
+              // item.service.name !== 'DSP Advertising' &&
               item &&
               item.service &&
               item.service.name !== 'Inventory Reconciliation'
@@ -1213,16 +1213,24 @@ export default function ContractContainer() {
                 <td style="border: 1px solid black;padding: 13px;">${
                   item.service ? item.service.name : item && item.name
                 }</td>
-                <td style="border: 1px solid black;padding: 13px;">$${
-                  item.service
-                    ? item.service.fee
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : item.fee
-                    ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : ''
-                } /month
-                </td>
+                ${
+                  item.name
+                    ? item.name === 'DSP Advertising'
+                    : item.service.name === 'DSP Advertising'
+                    ? `<td style="border: 1px solid black;padding: 13px;">N/A</td>`
+                    : `<td style="border: 1px solid black;padding: 13px;">$${
+                        item.service
+                          ? item.service.fee
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          : item.fee
+                          ? item.fee
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          : ''
+                      } /month
+                </td>`
+                }
                 </tr>`,
               );
             }
@@ -1324,19 +1332,19 @@ export default function ContractContainer() {
     ];
     if (details && details.additional_monthly_services) {
       for (const item of details.additional_monthly_services) {
-        if (item.service.name === 'DSP Advertising') {
-          fields.push(
-            `<tr>
-                 <td style="border: 1px solid black;padding: 13px;">${
-                   item.service ? item.service.name : item && item.name
-                 }
-                  </td>
-                  <td style="border: 1px solid black;padding: 13px;">
-                  Included
-                  </td>
-                </tr>`,
-          );
-        }
+        // if (item.service.name === 'DSP Advertising') {
+        //   fields.push(
+        //     `<tr>
+        //          <td style="border: 1px solid black;padding: 13px;">${
+        //            item.service ? item.service.name : item && item.name
+        //          }
+        //           </td>
+        //           <td style="border: 1px solid black;padding: 13px;">
+        //           Included
+        //           </td>
+        //         </tr>`,
+        //   );
+        // }
         if (item.service.name === 'Inventory Reconciliation') {
           fields.push(
             `<tr>
