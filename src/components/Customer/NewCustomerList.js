@@ -94,7 +94,7 @@ export default function NewCustomerList() {
   const options = [
     { value: 'performance', label: 'Performance' },
     { value: 'contract_details', label: 'Contract Details' },
-    { value: 'ad_performance', label: 'Ad Performance' },
+    // { value: 'ad_performance', label: 'Ad Performance' },
   ];
   const contractChoices = [
     { value: 'any', label: 'Any' },
