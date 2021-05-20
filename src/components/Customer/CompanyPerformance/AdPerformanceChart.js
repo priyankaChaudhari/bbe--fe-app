@@ -670,7 +670,8 @@ export default function AdPerformanceChart({
       if (
         selectedKey === 'adSales' ||
         selectedKey === 'adSpend' ||
-        selectedKey === 'adCos'
+        selectedKey === 'adCos' ||
+        selectedKey === 'adRoas'
       ) {
         valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
         tooltipCurrent = renderTooltip(
@@ -810,10 +811,15 @@ export default function AdPerformanceChart({
       const snapToSeries = [];
       let tooltipValue = '';
 
-      // genearate tooltip
+      // loop for genearate tooltip
       _.keys(selectedBox).map((item) => {
         const value = `${item}Current`;
-        if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adCos' ||
+          item === 'adRoas'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],
