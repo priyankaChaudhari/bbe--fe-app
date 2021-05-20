@@ -159,7 +159,7 @@ export default function ContractContainer() {
 
   const [showPageNotFound, setPageNotFoundFlag] = useState(false);
   const [showSection, setShowCollpase] = useState({
-    addendum: true,
+    addendum: false,
     dspAddendum: false,
     amendment: false,
   });
@@ -419,6 +419,28 @@ export default function ContractContainer() {
           item.label = serviceName;
           return item;
         });
+        // =======
+        //     if (details && details.contract_type === 'dsp only') {
+        //       setShowCollpase({ ...showSection, dspAddendum: true });
+        //     }
+
+        //     if (newAddendumData && newAddendumData.id) {
+        //       setShowCollpase({ ...showSection, addendum: true });
+        //     }
+        //     if (
+        //       details &&
+        //       details.primary_marketplace &&
+        //       details.primary_marketplace.name
+        //     ) {
+        //       setAdditionalMarketplaces(
+        //         marketplacesResult.filter(
+        //           (op) => op.value !== details.primary_marketplace.name,
+        //         ),
+        //       );
+        //     } else {
+        //       setAdditionalMarketplaces(marketplacesResult);
+        //     }
+        // >>>>>>> PDV-1179 UI update in addendum in progress.
 
         setAmazonStoreOptions(list);
 
@@ -1699,6 +1721,15 @@ export default function ContractContainer() {
     ) {
       setShowCollpase({ ...showSection, dspAddendum: true });
     }
+
+    if (newAddendumData && newAddendumData.id) {
+      if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
+        setShowCollpase({ ...showSection, addendum: false });
+      } else {
+        setShowCollpase({ ...showSection, addendum: true });
+      }
+    }
+
     if (
       details &&
       details.primary_marketplace &&
@@ -1880,7 +1911,7 @@ export default function ContractContainer() {
           ) {
             // use/access the results
             showFooter(false);
-            setIsEditContract(false);
+            // setIsEditContract(false);
             setUpdatedFormData({});
             getContractDetails();
             setIsEditContract(false);
@@ -2125,6 +2156,7 @@ export default function ContractContainer() {
       )
       .catch(() => {});
   };
+
   const nextStep = async () => {
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
@@ -2354,24 +2386,28 @@ export default function ContractContainer() {
         ) : (
           ''
         )}
-
-        <div id="addendum">
-          <Addendum
-            formData={formData}
-            details={details}
-            templateData={data}
-            notIncludedOneTimeServices={notIncludedOneTimeServices}
-            notIncludedMonthlyServices={notIncludedMonthlyServices}
-            newAddendumData={newAddendumData}
-            setNewAddendum={setNewAddendum}
-            showEditor={showEditor}
-            showFooter={showFooter}
-            setShowEditor={setShowEditor}
-            onEditAddendum={onEditAddendum}
-            setUpdatedFormData={setUpdatedFormData}
-            updatedFormData={updatedFormData}
-          />
-        </div>
+        {showSection && showSection.addendum ? (
+          <div id="addendum">
+            <Addendum
+              formData={formData}
+              details={details}
+              templateData={data}
+              notIncludedOneTimeServices={notIncludedOneTimeServices}
+              notIncludedMonthlyServices={notIncludedMonthlyServices}
+              newAddendumData={newAddendumData}
+              setNewAddendum={setNewAddendum}
+              showEditor={showEditor}
+              showFooter={showFooter}
+              setShowEditor={setShowEditor}
+              onEditAddendum={onEditAddendum}
+              setUpdatedFormData={setUpdatedFormData}
+              updatedFormData={updatedFormData}
+              // originalAddendumData={originalAddendumData}
+            />
+          </div>
+        ) : (
+          ''
+        )}
 
         {showSection.amendment ? (
           <div id="amendment">
@@ -2600,6 +2636,7 @@ export default function ContractContainer() {
         monthlyService={monthlyService}
         AmazonStoreOptions={AmazonStoreOptions}
         fetchUncommonOptions={fetchUncommonOptions}
+        originalAddendumData={originalAddendumData}
       />
     );
   };

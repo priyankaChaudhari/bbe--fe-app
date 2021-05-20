@@ -129,6 +129,7 @@ export default function AgreementSidePanel({
   monthlyService,
   AmazonStoreOptions,
   fetchUncommonOptions,
+  originalAddendumData,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -3228,57 +3229,81 @@ export default function AgreementSidePanel({
     });
   };
 
-  // const displayAddendum = () => {
-  //   return newAddendumData && newAddendumData.id ? (
-  //     <Button
-  //       className=" btn-transparent sidepanel mt-1 mb-3 w-100"
-  //       onClick={() => {
-  //         onEditAddendum();
-  //         executeScroll('addendum');
-  //       }}>
-  //       <img
-  //         className="edit-folder-icon mr-2"
-  //         src={EditFileIcons}
-  //         alt="edit "
-  //       />
-  //       Edit Addendum
-  //     </Button>
-  //   ) : !showEditor &&
-  //     !(newAddendumData && Object.keys(newAddendumData).length) ? (
-  //     <Button
-  //       className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
-  //       onClick={() => setShowEditor(true)}>
-  //       Create Addendum
-  //     </Button>
-  //   ) : (
-  //     <>
-  //       <Button
-  //         className={
-  //           (newAddendumData && !Object.keys(newAddendumData).length) ||
-  //           (newAddendumData &&
-  //             newAddendumData.addendum &&
-  //             newAddendumData.addendum.startsWith('<p></p>'))
-  //             ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
-  //             : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
-  //         }
-  //         onClick={() => nextStep('final')}>
-  //         {/* {isLoading.loader && isLoading.type === 'button' ? (
-  //                             <PageLoader color="#fff" type="button" />
-  //                           ) : ( */}
-  //         Save Addendum
-  //         {/* )} */}
-  //       </Button>
-  //       <Button
-  //         className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
-  //         onClick={() => {
-  //           setShowEditor(false);
-  //           setNewAddendum({});
-  //         }}>
-  //         Cancel
-  //       </Button>
-  //     </>
-  //   );
-  // };
+  const onCheckOfAddendum = (flag) => {
+    setShowCollpase({
+      ...showSection,
+      addendum: flag,
+    });
+    setShowEditor(false);
+    // if (updatedFormData && updatedFormData.addendum) {
+    if (!flag) {
+      if (newAddendumData.addendum && newAddendumData.addendum.length > 7) {
+        setNewAddendum({ ...newAddendumData, addendum: '<p></p>' });
+        setUpdatedFormData({ ...updatedFormData, addendum: '<p></p>' });
+        showFooter(true);
+      }
+    } else {
+      showFooter(false);
+      delete updatedFormData.addendum;
+      setNewAddendum(originalAddendumData);
+    }
+    // }
+  };
+
+  const displayAddendum = () => {
+    return newAddendumData && newAddendumData.id ? (
+      <Button
+        className=" btn-transparent sidepanel mt-1 mb-3 w-100"
+        onClick={() => {
+          onEditAddendum();
+          executeScroll('addendum');
+        }}>
+        <img
+          className="edit-folder-icon mr-2"
+          src={EditFileIcons}
+          alt="edit "
+        />
+        Edit Addendum
+      </Button>
+    ) : !showEditor &&
+      !(newAddendumData && Object.keys(newAddendumData).length) ? (
+      <Button
+        className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
+        onClick={() => {
+          onEditAddendum();
+          executeScroll('addendum');
+        }}>
+        Create Addendum
+      </Button>
+    ) : (
+      <>
+        <Button
+          className={
+            (newAddendumData && !Object.keys(newAddendumData).length) ||
+            (newAddendumData &&
+              newAddendumData.addendum &&
+              newAddendumData.addendum.startsWith('<p></p>'))
+              ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
+              : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
+          }
+          onClick={() => nextStep('final')}>
+          {/* {isLoading.loader && isLoading.type === 'button' ? (
+                              <PageLoader color="#fff" type="button" />
+                            ) : ( */}
+          Save Addendum
+          {/* )} */}
+        </Button>
+        <Button
+          className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
+          onClick={() => {
+            setShowEditor(false);
+            setNewAddendum({});
+          }}>
+          Cancel
+        </Button>
+      </>
+    );
+  };
 
   const renderContractActivityPanel = () => {
     return (
@@ -4182,11 +4207,13 @@ export default function AgreementSidePanel({
                 role="presentation"
                 type="button"
                 onClick={() => {
-                  executeScroll('addendum');
+                  if (showSection && showSection.addendum) {
+                    executeScroll('addendum');
+                  }
                   setOpenCollapse({ addendum: !openCollapse.addendum });
                 }}>
                 <img className="service-agre" src={CreateAddendum} alt="pdf" />
-                <h4 className="sendar-details ">Create Addendum </h4>
+                <h4 className="sendar-details ">Addendum </h4>
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.addendum}>
@@ -4194,87 +4221,39 @@ export default function AgreementSidePanel({
                   <ul className="collapse-inner">
                     <li>
                       <p className="small-para  mt-0">
-                        [Optional] Document any terms of the contract that are
-                        not covered in the service agreement.
+                        [Optional] Use this to modify, clarify, or nullify a
+                        portion of the original agreement.
                       </p>
-                      {/* 
+
                       <div className="row ">
-                        {' '}
-                        <CheckBox>
-                          <label
-                            className="check-container customer-pannel"
-                            htmlFor="add-addendum">
-                            Add Addendum
-                            <input
-                              type="checkbox"
-                              id="add-addendum"
-                              onClick={(event) => {
-                                setShowCollpase({
-                                  ...showSection,
-                                  addendum: event.target.checked,
-                                });
-                              }}
-                              defaultChecked
-                            />
-                            <span className="checkmark" />
-                          </label>
-                        </CheckBox>
-                      </div> */}
-                      {newAddendumData && newAddendumData.id ? (
-                        <Button
-                          className=" btn-transparent sidepanel mt-1 mb-3 w-100"
-                          onClick={() => {
-                            onEditAddendum();
-                            executeScroll('addendum');
-                          }}>
-                          <img
-                            className="edit-folder-icon mr-2"
-                            src={EditFileIcons}
-                            alt="edit "
-                          />
-                          Edit Addendum
-                        </Button>
-                      ) : !showEditor &&
-                        !(
-                          newAddendumData && Object.keys(newAddendumData).length
-                        ) ? (
-                        <Button
-                          className=" sidepanel btn-transparent create-addendum mt-1 mb-3 w-100"
-                          onClick={() => setShowEditor(true)}>
-                          Create Addendum
-                        </Button>
-                      ) : (
-                        <>
-                          <Button
-                            className={
-                              (newAddendumData &&
-                                !Object.keys(newAddendumData).length) ||
-                              (newAddendumData &&
-                                newAddendumData.addendum &&
-                                newAddendumData.addendum.startsWith('<p></p>'))
-                                ? ' btn-gray sidepanel on-boarding mt-1 mb-3 w-100 disabled'
-                                : 'btn-primary sidepanel on-boarding mt-1 mb-3 w-100  '
-                            }
-                            onClick={() => nextStep('final')}>
-                            {/* {isLoading.loader && isLoading.type === 'button' ? (
-                              <PageLoader color="#fff" type="button" />
-                            ) : ( */}
-                            Save Addendum
-                            {/* )} */}
-                          </Button>
-                          <Button
-                            className="btn-transparent sidepanel on-boarding mt-1 mb-3 w-100"
-                            onClick={() => {
-                              setShowEditor(false);
-                              setNewAddendum({});
-                            }}>
-                            Cancel
-                          </Button>
-                        </>
-                      )}
-                      {/* {showSection && showSection.addendum
+                        <div className="col-12 ">
+                          {' '}
+                          <CheckBox>
+                            <label
+                              className="check-container customer-pannel"
+                              htmlFor="add-addendum">
+                              Add Addendum
+                              <input
+                                type="checkbox"
+                                id="add-addendum"
+                                onClick={(event) => {
+                                  onCheckOfAddendum(event.target.checked);
+                                  //  executeScroll('addendum');
+                                  // setNewAddendum({});
+                                }}
+                                defaultChecked={
+                                  showSection && showSection.addendum
+                                }
+                              />
+                              <span className="checkmark" />
+                            </label>
+                          </CheckBox>
+                        </div>
+                      </div>
+
+                      {showSection && showSection.addendum
                         ? displayAddendum()
-                        : ''} */}
+                        : ''}
                     </li>
                   </ul>
                 )}
@@ -4360,6 +4339,7 @@ AgreementSidePanel.defaultProps = {
   monthlyService: [],
   AmazonStoreOptions: [],
   fetchUncommonOptions: () => {},
+  originalAddendumData: {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4496,6 +4476,7 @@ AgreementSidePanel.propTypes = {
   monthlyService: PropTypes.arrayOf(PropTypes.object),
   AmazonStoreOptions: PropTypes.arrayOf(PropTypes.object),
   fetchUncommonOptions: PropTypes.func,
+  originalAddendumData: PropTypes.shape(PropTypes.object),
 };
 
 const SidePanel = styled.div`
