@@ -664,6 +664,8 @@ export default function AdPerformanceChart({
       const selectedKey = _.keys(selectedBox)[0];
       const previousValue = `${_.keys(selectedBox)[0]}Previous`;
       const currentValue = `${_.keys(selectedBox)[0]}Current`;
+      const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
+      const previousLabel = `${_.keys(selectedBox)[0]}PreviousLabel`;
       const dashLine = `${_.keys(selectedBox)[0]}DashLength`;
       let tooltipCurrent = ``;
       let tooltipPrevious = '';
@@ -678,7 +680,7 @@ export default function AdPerformanceChart({
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
-          currentValue,
+          currentLabel,
           currencySymbol,
           null,
           null,
@@ -686,7 +688,7 @@ export default function AdPerformanceChart({
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
-          previousValue,
+          previousLabel,
           currencySymbol,
           null,
           null,
@@ -699,7 +701,7 @@ export default function AdPerformanceChart({
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
-          currentValue,
+          currentLabel,
           null,
           '%',
           null,
@@ -707,7 +709,7 @@ export default function AdPerformanceChart({
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
-          previousValue,
+          previousLabel,
           null,
           '%',
           null,
@@ -717,7 +719,7 @@ export default function AdPerformanceChart({
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
-          currentValue,
+          currentLabel,
           null,
           null,
           '#.#a',
@@ -725,7 +727,7 @@ export default function AdPerformanceChart({
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
-          previousValue,
+          previousLabel,
           null,
           null,
           '#.#a',
@@ -735,7 +737,7 @@ export default function AdPerformanceChart({
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
-          currentValue,
+          currentLabel,
           null,
           null,
           null,
@@ -743,7 +745,7 @@ export default function AdPerformanceChart({
         tooltipPrevious = renderTooltip(
           'Previous',
           '#BFC5D2',
-          previousValue,
+          previousLabel,
           null,
           null,
           null,

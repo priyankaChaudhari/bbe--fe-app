@@ -144,6 +144,22 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 adClicksPrevious: item.clicks,
                 adClickRatePrevious: item.ctr,
                 previousDate,
+
+                adSalesPreviousLabel:
+                  item.ad_sales !== null ? item.ad_sales : '0.00',
+                adSpendPreviousLabel:
+                  item.ad_spend !== null ? item.ad_spend : '0.00',
+                adConversionPreviousLabel:
+                  item.ad_conversion_rate !== null
+                    ? item.ad_conversion_rate
+                    : '0.00',
+                impressionsPreviousLabel:
+                  item.impressions !== null ? item.impressions : '0.00',
+                adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
+                adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
+                adClicksPreviousLabel:
+                  item.clicks !== null ? item.clicks : '0.00',
+                adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
               });
             });
           }
@@ -169,6 +185,25 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 tempData[index].adRoasCurrent = item.roas;
                 tempData[index].adClicksCurrent = item.clicks;
                 tempData[index].adClickRateCurrent = item.ctr;
+
+                tempData[index].adSalesCurrentLabel =
+                  item.ad_sales !== null ? item.ad_sales : '0.00';
+                tempData[index].adSpendCurrentLabel =
+                  item.ad_spend !== null ? item.ad_spend : '0.00';
+                tempData[index].adConversionCurrentLabel =
+                  item.ad_conversion_rate !== null
+                    ? item.ad_conversion_rate
+                    : '0.00';
+                tempData[index].impressionsCurrentLabel =
+                  item.impressions !== null ? item.impressions : '0.00';
+                tempData[index].adCosCurrentLabel =
+                  item.acos !== null ? item.acos : '0.00';
+                tempData[index].adRoasCurrentLabel =
+                  item.roas !== null ? item.roas : '0.00';
+                tempData[index].adClicksCurrentLabel =
+                  item.clicks !== null ? item.clicks : '0.00';
+                tempData[index].adClickRateCurrentLabel =
+                  item.ctr !== null ? item.ctr : '0.00';
 
                 if (index > 0) {
                   tempData[index - 1].adSalesDashLength =
