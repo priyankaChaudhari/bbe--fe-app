@@ -29,6 +29,7 @@ import {
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
+import { adResData } from './DummyApiRes';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -45,7 +46,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
-  // const [adChartData, setAdChartData] = useState([]);
+  const [adChartData, setAdChartData] = useState([]);
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChratData] = useState([]);
   const [dspTotal, setDSPTotal] = useState({});
@@ -126,7 +127,88 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           //
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          // console.log('resss', res.data);
+          const tempData = [];
+          if (
+            adResData.daily_facts.previous &&
+            adResData.daily_facts.previous.length
+          ) {
+            adResData.daily_facts.previous.forEach((item) => {
+              const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+              tempData.push({
+                adSalesPrevious: item.ad_sales,
+                adSpendPrevious: item.ad_spend,
+                adConversionPrevious: item.ad_conversion_rate,
+                impressionsPrevious: item.impressions,
+                adCosPrevious: item.acos,
+                adRoasPrevious: item.roas,
+                adClicksPrevious: item.clicks,
+                adClickRatePrevious: item.ctr,
+                previousDate,
+              });
+            });
+          }
+
+          if (
+            adResData.daily_facts.current &&
+            adResData.daily_facts.current.length
+          ) {
+            adResData.daily_facts.current.forEach((item, index) => {
+              const currentReportDate = dayjs(item.report_date).format(
+                'MMM D YYYY',
+              );
+              if (
+                adResData.daily_facts.previous &&
+                index < adResData.daily_facts.previous.length
+              ) {
+                tempData[index].date = currentReportDate;
+                tempData[index].adSalesCurrent = item.ad_sales;
+                tempData[index].adSpendCurrent = item.ad_spend;
+                tempData[index].adConversionCurrent = item.ad_conversion_rate;
+                tempData[index].impressionsCurrent = item.impressions;
+                tempData[index].adCosCurrent = item.acos;
+                tempData[index].adRoasCurrent = item.roas;
+                tempData[index].adClicksCurrent = item.clicks;
+                tempData[index].adClickRateCurrent = item.ctr;
+
+                if (index > 0) {
+                  tempData[index - 1].adSalesDashLength =
+                    item.ad_sales === null ? 8 : null;
+                  tempData[index - 1].adSpendDashLength =
+                    item.ad_spend === null ? 8 : null;
+                  tempData[index - 1].adConversionDashLength =
+                    item.ad_conversion_rate === null ? 8 : null;
+                  tempData[index - 1].impressionsDashLength =
+                    item.impressions === null ? 8 : null;
+                  tempData[index - 1].adCosDashLength =
+                    item.acos === null ? 8 : null;
+                  tempData[index - 1].adRoasDashLength =
+                    item.roas === null ? 8 : null;
+                  tempData[index - 1].adClicksDashLength =
+                    item.clicks === null ? 8 : null;
+                  tempData[index - 1].adClickRateDashLength =
+                    item.ctr === null ? 8 : null;
+                }
+
+                tempData[index].adSalesDashLength =
+                  item.ad_sales === null ? 8 : null;
+                tempData[index].adSpendDashLength =
+                  item.ad_spend === null ? 8 : null;
+                tempData[index].adConversionDashLength =
+                  item.ad_conversion_rate === null ? 8 : null;
+                tempData[index].impressionsDashLength =
+                  item.impressions === null ? 8 : null;
+                tempData[index].adCosDashLength = item.acos === null ? 8 : null;
+                tempData[index].adRoasDashLength =
+                  item.roas === null ? 8 : null;
+                tempData[index].adClicksDashLength =
+                  item.clicks === null ? 8 : null;
+                tempData[index].adClickRateDashLength =
+                  item.ctr === null ? 8 : null;
+              }
+            });
+          }
+          setAdChartData(tempData);
+          // console.log('aaaa', tempData);
         }
       });
     },
@@ -1137,7 +1219,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
         <AdPerformanceChart
           chartId="adChart"
-          chartData={null}
+          chartData={adChartData}
           currencySymbol={currencySymbol}
           selectedBox={selectedAdBox}
         />

@@ -423,148 +423,148 @@ export default function AdPerformanceChart({
   // ];
 
   useEffect(() => {
-    const adGraphData = [
-      {
-        date: new Date(2019, 5, 12),
-        adSalesCurrent: 5000,
-        adSalesPrevious: 4800,
-        adSpendCurrent: 4000,
-        adSpendPrevious: 3000,
-        adConversionCurrent: 50,
-        adConversionPrevious: 25,
-        impressionsCurrent: 9000,
-        impressionsPrevious: 1200,
-        adCosCurrent: 4500,
-        adCosPrevious: 7000,
-        adRoasCurrent: 2100,
-        adRoasPrevious: 3400,
-        adClicksCurrent: 7300,
-        adClicksPrevious: 4000,
-        adClickRateCurrent: 60,
-        adClickRatePrevious: 45,
-        previousDate: new Date(2019, 5, 5),
-      },
-      {
-        date: new Date(2019, 5, 13),
-        adSalesCurrent: 1100,
-        adSalesPrevious: 800,
-        adSpendCurrent: 4700,
-        adSpendPrevious: 3900,
-        adConversionCurrent: 70,
-        adConversionPrevious: 55,
-        impressionsCurrent: 6000,
-        impressionsPrevious: 8200,
-        adCosCurrent: 4600,
-        adCosPrevious: 7000,
-        adRoasCurrent: 9800,
-        adRoasPrevious: 7200,
-        adClicksCurrent: 1200,
-        adClicksPrevious: 3000,
-        adClickRateCurrent: 90,
-        adClickRatePrevious: 42,
-        previousDate: new Date(2019, 5, 6),
-      },
-      {
-        date: new Date(2019, 5, 14),
-        adSalesCurrent: 500,
-        adSalesPrevious: 4810,
-        adSpendCurrent: 4801,
-        adSpendPrevious: 3011,
-        adConversionCurrent: 50,
-        adConversionPrevious: 25,
-        impressionsCurrent: 9000,
-        impressionsPrevious: 1200,
-        adCosCurrent: 4700,
-        adCosPrevious: 2000,
-        adRoasCurrent: 6100,
-        adRoasPrevious: 6000,
-        adClicksCurrent: 1200,
-        adClicksPrevious: 4430,
-        adClickRateCurrent: 34,
-        adClickRatePrevious: 60,
-        previousDate: new Date(2019, 5, 7),
-      },
-      {
-        date: new Date(2019, 5, 15),
-        adSalesCurrent: 7300,
-        adSalesPrevious: 1200,
-        adSpendCurrent: 8760,
-        adSpendPrevious: 4500,
-        adConversionCurrent: 67,
-        adConversionPrevious: 28,
-        impressionsCurrent: 7000,
-        impressionsPrevious: 4500,
-        adCosCurrent: 8120,
-        adCosPrevious: 4800,
-        adRoasCurrent: 9300,
-        adRoasPrevious: 7300,
-        adClicksCurrent: 6200,
-        adClicksPrevious: 1000,
-        adClickRateCurrent: 10,
-        adClickRatePrevious: 95,
-        previousDate: new Date(2019, 5, 8),
-      },
-      {
-        date: new Date(2019, 5, 16),
-        adSalesCurrent: 1100,
-        adSalesPrevious: 8300,
-        adSpendCurrent: 2600,
-        adSpendPrevious: 9200,
-        adConversionCurrent: 30,
-        adConversionPrevious: 65,
-        impressionsCurrent: 2600,
-        impressionsPrevious: 5700,
-        adCosCurrent: 9100,
-        adCosPrevious: 2700,
-        adRoasCurrent: 6600,
-        adRoasPrevious: 4400,
-        adClicksCurrent: 8700,
-        adClicksPrevious: 7200,
-        adClickRateCurrent: 40,
-        adClickRatePrevious: 25,
-        previousDate: new Date(2019, 5, 9),
-      },
-      {
-        date: new Date(2019, 5, 17),
-        adSalesCurrent: 1000,
-        adSalesPrevious: 1800,
-        adSpendCurrent: 8000,
-        adSpendPrevious: 1000,
-        adConversionCurrent: 30,
-        adConversionPrevious: 95,
-        impressionsCurrent: 3000,
-        impressionsPrevious: 6200,
-        adCosCurrent: 4700,
-        adCosPrevious: 3000,
-        adRoasCurrent: 8100,
-        adRoasPrevious: 1400,
-        adClicksCurrent: 6300,
-        adClicksPrevious: 9000,
-        adClickRateCurrent: 10,
-        adClickRatePrevious: 35,
-        previousDate: new Date(2019, 5, 5),
-      },
-      {
-        date: new Date(2019, 5, 18),
-        adSalesCurrent: 2100,
-        adSalesPrevious: 700,
-        adSpendCurrent: 2700,
-        adSpendPrevious: 8900,
-        adConversionCurrent: 20,
-        adConversionPrevious: 15,
-        impressionsCurrent: 7000,
-        impressionsPrevious: 8200,
-        adCosCurrent: 8600,
-        adCosPrevious: 2000,
-        adRoasCurrent: 7800,
-        adRoasPrevious: 8200,
-        adClicksCurrent: 2200,
-        adClicksPrevious: 8000,
-        adClickRateCurrent: 30,
-        adClickRatePrevious: 62,
-        previousDate: new Date(2019, 5, 6),
-      },
-    ];
+    // const adGraphData = [
+    //   {
+    //     date: new Date(2019, 5, 12),
+    //     adSalesCurrent: 5000,
+    //     adSalesPrevious: 4800,
+    //     adSpendCurrent: 4000,
+    //     adSpendPrevious: 3000,
+    //     adConversionCurrent: 50,
+    //     adConversionPrevious: 25,
+    //     impressionsCurrent: 9000,
+    //     impressionsPrevious: 1200,
+    //     adCosCurrent: 4500,
+    //     adCosPrevious: 7000,
+    //     adRoasCurrent: 2100,
+    //     adRoasPrevious: 3400,
+    //     adClicksCurrent: 7300,
+    //     adClicksPrevious: 4000,
+    //     adClickRateCurrent: 60,
+    //     adClickRatePrevious: 45,
+    //     previousDate: new Date(2019, 5, 5),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 13),
+    //     adSalesCurrent: 1100,
+    //     adSalesPrevious: 800,
+    //     adSpendCurrent: 4700,
+    //     adSpendPrevious: 3900,
+    //     adConversionCurrent: 70,
+    //     adConversionPrevious: 55,
+    //     impressionsCurrent: 6000,
+    //     impressionsPrevious: 8200,
+    //     adCosCurrent: 4600,
+    //     adCosPrevious: 7000,
+    //     adRoasCurrent: 9800,
+    //     adRoasPrevious: 7200,
+    //     adClicksCurrent: 1200,
+    //     adClicksPrevious: 3000,
+    //     adClickRateCurrent: 90,
+    //     adClickRatePrevious: 42,
+    //     previousDate: new Date(2019, 5, 6),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 14),
+    //     adSalesCurrent: 500,
+    //     adSalesPrevious: 4810,
+    //     adSpendCurrent: 4801,
+    //     adSpendPrevious: 3011,
+    //     adConversionCurrent: 50,
+    //     adConversionPrevious: 25,
+    //     impressionsCurrent: 9000,
+    //     impressionsPrevious: 1200,
+    //     adCosCurrent: 4700,
+    //     adCosPrevious: 2000,
+    //     adRoasCurrent: 6100,
+    //     adRoasPrevious: 6000,
+    //     adClicksCurrent: 1200,
+    //     adClicksPrevious: 4430,
+    //     adClickRateCurrent: 34,
+    //     adClickRatePrevious: 60,
+    //     previousDate: new Date(2019, 5, 7),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 15),
+    //     adSalesCurrent: 7300,
+    //     adSalesPrevious: 1200,
+    //     adSpendCurrent: 8760,
+    //     adSpendPrevious: 4500,
+    //     adConversionCurrent: 67,
+    //     adConversionPrevious: 28,
+    //     impressionsCurrent: 7000,
+    //     impressionsPrevious: 4500,
+    //     adCosCurrent: 8120,
+    //     adCosPrevious: 4800,
+    //     adRoasCurrent: 9300,
+    //     adRoasPrevious: 7300,
+    //     adClicksCurrent: 6200,
+    //     adClicksPrevious: 1000,
+    //     adClickRateCurrent: 10,
+    //     adClickRatePrevious: 95,
+    //     previousDate: new Date(2019, 5, 8),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 16),
+    //     adSalesCurrent: 1100,
+    //     adSalesPrevious: 8300,
+    //     adSpendCurrent: 2600,
+    //     adSpendPrevious: 9200,
+    //     adConversionCurrent: 30,
+    //     adConversionPrevious: 65,
+    //     impressionsCurrent: 2600,
+    //     impressionsPrevious: 5700,
+    //     adCosCurrent: 9100,
+    //     adCosPrevious: 2700,
+    //     adRoasCurrent: 6600,
+    //     adRoasPrevious: 4400,
+    //     adClicksCurrent: 8700,
+    //     adClicksPrevious: 7200,
+    //     adClickRateCurrent: 40,
+    //     adClickRatePrevious: 25,
+    //     previousDate: new Date(2019, 5, 9),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 17),
+    //     adSalesCurrent: 1000,
+    //     adSalesPrevious: 1800,
+    //     adSpendCurrent: 8000,
+    //     adSpendPrevious: 1000,
+    //     adConversionCurrent: 30,
+    //     adConversionPrevious: 95,
+    //     impressionsCurrent: 3000,
+    //     impressionsPrevious: 6200,
+    //     adCosCurrent: 4700,
+    //     adCosPrevious: 3000,
+    //     adRoasCurrent: 8100,
+    //     adRoasPrevious: 1400,
+    //     adClicksCurrent: 6300,
+    //     adClicksPrevious: 9000,
+    //     adClickRateCurrent: 10,
+    //     adClickRatePrevious: 35,
+    //     previousDate: new Date(2019, 5, 5),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 18),
+    //     adSalesCurrent: 2100,
+    //     adSalesPrevious: 700,
+    //     adSpendCurrent: 2700,
+    //     adSpendPrevious: 8900,
+    //     adConversionCurrent: 20,
+    //     adConversionPrevious: 15,
+    //     impressionsCurrent: 7000,
+    //     impressionsPrevious: 8200,
+    //     adCosCurrent: 8600,
+    //     adCosPrevious: 2000,
+    //     adRoasCurrent: 7800,
+    //     adRoasPrevious: 8200,
+    //     adClicksCurrent: 2200,
+    //     adClicksPrevious: 8000,
+    //     adClickRateCurrent: 30,
+    //     adClickRatePrevious: 62,
+    //     previousDate: new Date(2019, 5, 6),
+    //   },
+    // ];
     const colorSet = {
       adSales: '#0045B4',
       adSpend: '#8C54FF',
@@ -591,11 +591,11 @@ export default function AdPerformanceChart({
     let secondAxis = null;
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    chart.current.data = adGraphData; // bind th data
-    // chart.current.data = chartData;
+    // chart.current.data = adGraphData; // bind th data
+    chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
-
+    // console.log('adChartData', chartData);
     // render X axis
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
@@ -664,6 +664,7 @@ export default function AdPerformanceChart({
       const selectedKey = _.keys(selectedBox)[0];
       const previousValue = `${_.keys(selectedBox)[0]}Previous`;
       const currentValue = `${_.keys(selectedBox)[0]}Current`;
+      const dashLine = `${_.keys(selectedBox)[0]}DashLength`;
       let tooltipCurrent = ``;
       let tooltipPrevious = '';
 
@@ -730,7 +731,7 @@ export default function AdPerformanceChart({
           '#.#a',
         );
       } else {
-        valueAxis.numberFormatter.numberFormat = `#.#a`;
+        valueAxis.numberFormatter.numberFormat = `#.##a`;
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
@@ -759,7 +760,7 @@ export default function AdPerformanceChart({
       series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
       series.fill = am4core.color('#2e384d');
 
-      // series.propertyFields.strokeDasharray = 'dashLength';
+      series.propertyFields.strokeDasharray = dashLine;
 
       // add bullet for
       const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
@@ -877,7 +878,7 @@ export default function AdPerformanceChart({
           } else {
             // console.log('index 0 else');
             series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = `#.#a`;
+            valueAxis.numberFormatter.numberFormat = `#.##`;
             firstAxis = 'unit';
           }
           // valueAxis.renderer.line.strokeOpacity = 1;
@@ -943,7 +944,7 @@ export default function AdPerformanceChart({
         } else if (secondAxis === null || secondAxis === 'unit') {
           // console.log('not unit, second axis null unit');
           series.yAxis = valueAxis2;
-          valueAxis2.numberFormatter.numberFormat = `#.#a`;
+          valueAxis2.numberFormatter.numberFormat = `#.##`;
           valueAxis2.renderer.opposite = true;
           // valueAxis2.renderer.line.strokeOpacity = 1;
           secondAxis = 'unit';
