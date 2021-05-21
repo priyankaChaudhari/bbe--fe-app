@@ -1,3 +1,3 @@
 export { userMe, login, logout } from './userState';
 
-export { getCustomerDetails } from './customerState';
+export { getCustomerDetails, setCustomerSelectedTab } from './customerState';

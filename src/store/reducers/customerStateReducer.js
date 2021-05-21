@@ -5,6 +5,7 @@ const initialState = {
   data: {},
   error: null,
   contactData: [],
+  customerSelectedTab: '',
 };
 
 const customerStateReducer = (state = initialState, action) => {
@@ -40,6 +41,13 @@ const customerStateReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         contactData: action.contact,
+        //    error: null,
+      };
+    case actionTypes.CUSTOMER_SELECTED_TAB:
+      return {
+        ...state,
+        isLoading: false,
+        customerSelectedTab: action.tab,
         //    error: null,
       };
     case actionTypes.CONTACT_REQUEST_FAIL:

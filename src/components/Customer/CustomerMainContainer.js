@@ -6,7 +6,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
@@ -49,6 +48,7 @@ import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
   getCustomerDetails,
+  setCustomerSelectedTab,
 } from '../../store/actions/customerState';
 import {
   AgreementDetails,
@@ -121,10 +121,15 @@ export default function CustomerMainContainer() {
   const loader = useSelector((state) => state.accountState.isLoading);
   const customerLoader = useSelector((state) => state.customerState.isLoading);
   const customer = useSelector((state) => state.customerState.data);
+  const customerSelectedTab = useSelector(
+    (state) => state.customerState.customerSelectedTab,
+  );
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [viewComponent, setViewComponent] = useState('performance');
+  const [viewComponent, setViewComponent] = useState(
+    customerSelectedTab || 'performance',
+  );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -252,6 +257,7 @@ export default function CustomerMainContainer() {
 
     if (userInfo && userInfo.role === 'Customer') {
       setViewComponent('agreement');
+      dispatch(setCustomerSelectedTab('agreement'));
     }
     if (profileLoader) {
       getActivityLogInfo();
@@ -720,7 +726,10 @@ export default function CustomerMainContainer() {
                         <ul className="left-details-card">
                           {userInfo && userInfo.role !== 'Customer' ? (
                             <li
-                              onClick={() => setViewComponent('performance')}
+                              onClick={() => {
+                                setViewComponent('performance');
+                                dispatch(setCustomerSelectedTab('performance'));
+                              }}
                               role="presentation">
                               <div
                                 className={`left-details ${
@@ -740,7 +749,10 @@ export default function CustomerMainContainer() {
                             ''
                           )}
                           <li
-                            onClick={() => setViewComponent('agreement')}
+                            onClick={() => {
+                              setViewComponent('agreement');
+                              dispatch(setCustomerSelectedTab('agreement'));
+                            }}
                             role="presentation">
                             <div
                               className={`left-details ${
@@ -756,7 +768,10 @@ export default function CustomerMainContainer() {
                           </li>
 
                           <li
-                            onClick={() => setViewComponent('company')}
+                            onClick={() => {
+                              setViewComponent('company');
+                              dispatch(setCustomerSelectedTab('company'));
+                            }}
                             role="presentation">
                             <div
                               className={`left-details ${
@@ -778,7 +793,10 @@ export default function CustomerMainContainer() {
                             </div>
                           </li> */}
                           <li
-                            onClick={() => setViewComponent('activity')}
+                            onClick={() => {
+                              setViewComponent('activity');
+                              dispatch(setCustomerSelectedTab('activity'));
+                            }}
                             role="presentation">
                             <div
                               className={`left-details ${
@@ -794,7 +812,10 @@ export default function CustomerMainContainer() {
                       <Select
                         options={viewOptions}
                         className="customer-dropdown-select d-lg-none d-block mb-3 "
-                        onChange={(event) => setViewComponent(event.value)}
+                        onChange={(event) => {
+                          setViewComponent(event.value);
+                          dispatch(setCustomerSelectedTab(event.value));
+                        }}
                         defaultValue={viewOptions[0]}
                       />
 

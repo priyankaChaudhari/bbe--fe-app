@@ -63,6 +63,7 @@ export default function AuthenticationComponent() {
 
   const generateHeader = () => {
     if (history.location.pathname.includes('account-setup')) return '';
+    if (history.location.pathname.includes('agreement')) return '';
     if (userInfo && userInfo.role === 'Customer')
       return <Header userInfo={userInfo} />;
     if (

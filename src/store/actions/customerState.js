@@ -16,6 +16,13 @@ export const customerRequestSuccess = (data) => {
   };
 };
 
+export const setCustomerSelectedTab = (data) => {
+  return {
+    type: actionTypes.CUSTOMER_SELECTED_TAB,
+    tab: data,
+  };
+};
+
 export const customerRequestFail = (error) => {
   return {
     type: actionTypes.CUSTOMER_REQUEST_FAIL,

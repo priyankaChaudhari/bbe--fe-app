@@ -13,6 +13,7 @@ import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
+// import jsPDF from 'jspdf';
 import Theme from '../../theme/Theme';
 
 import AgreementSidePanel from '../../common/AgreementSidePanel';
@@ -26,7 +27,7 @@ import ContractFooter from './ContractFooter';
 import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, LeftArrowIcon } from '../../theme/images';
+import { CloseIcon } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -247,7 +248,6 @@ export default function ContractContainer() {
           setDetails(res && res.data);
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
-            // toast.success('Signature Requested Successfully!');
           }
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -525,26 +525,20 @@ export default function ContractContainer() {
       .all(apis)
       .then(
         axios.spread((...responses) => {
-          // const additionalMarketplaceRes = responses[0];
           const additionalMonthlySerRes = responses[0];
           const additionalOneTimeServRes = responses[1];
           const contractRes = responses[2];
-          // const primaryMarketplaceRes = responses[4];
           const addendumRes = responses[3];
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
 
           if (
-            // additionalMarketplaceRes &&
-            // additionalMarketplaceRes.status === 200 &&
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200 &&
             additionalOneTimeServRes &&
             additionalOneTimeServRes.status === 200 &&
             contractRes &&
             contractRes.status === 200 &&
-            // primaryMarketplaceRes &&
-            // primaryMarketplaceRes.status === 200 &&
             addendumRes &&
             addendumRes.status === 200
           ) {
@@ -556,35 +550,6 @@ export default function ContractContainer() {
             setIsEditContract(false);
           }
 
-          // if (
-          //   additionalMarketplaceRes &&
-          //   additionalMarketplaceRes.status === 200
-          // ) {
-          //   console.log(
-          //     'additional marketplace success',
-          //     updatedFormData,
-          //     formData,
-          //     details,
-          //   );
-          //   setDetails({
-          //     ...details,
-          //     additional_marketplaces: formData.additional_marketplaces,
-          //   });
-
-          //   if (updatedFormData && updatedFormData.additional_marketplaces) {
-          //     delete updatedFormData.additional_marketplaces;
-          //   }
-
-          //   if (
-          //     !(
-          //       formData &&
-          //       formData.additional_marketplaces &&
-          //       formData.additional_marketplaces.length
-          //     )
-          //   ) {
-          //     setShowAdditionalMarketplace(false);
-          //   }
-          // }
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200
@@ -643,17 +608,8 @@ export default function ContractContainer() {
               updatedFormData.additional_one_time_services
             ) {
               delete updatedFormData.additional_one_time_services;
-              // setAmazonStoreCustom(false);
             }
           }
-          // if (
-          //   (primaryMarketplaceRes && primaryMarketplaceRes.status === 200) ||
-          //   (primaryMarketplaceRes && primaryMarketplaceRes.status === 201)
-          // ) {
-          //   if (updatedFormData && updatedFormData.primary_marketplace) {
-          //     delete updatedFormData.primary_marketplace;
-          //   }
-          // }
 
           if (
             (addendumRes && addendumRes.status === 200) ||
@@ -701,33 +657,17 @@ export default function ContractContainer() {
           let dspErrCount = 0;
 
           if (
-            // (additionalMarketplaceRes &&
-            //   additionalMarketplaceRes.status === 400) ||
             (additionalMonthlySerRes &&
               additionalMonthlySerRes.status === 400) ||
             (additionalOneTimeServRes &&
               additionalOneTimeServRes.status === 400) ||
             (contractRes && contractRes.status === 400)
-            // (primaryMarketplaceRes && primaryMarketplaceRes.status === 400)
           ) {
             toast.error(
               'Changes have not been saved. Please fix errors and try again',
             );
           }
-          // if (
-          //   additionalMarketplaceRes &&
-          //   additionalMarketplaceRes.status === 400
-          // ) {
-          //   setAdditionalMarketplaceError({
-          //     ...additionalMarketplaceError,
-          //     ...additionalMarketplaceRes.data,
-          //   });
 
-          //   if (additionalMarketplaceRes.data) {
-          //     statementErrCount += Object.keys(additionalMarketplaceRes.data)
-          //       .length;
-          //   }
-          // }
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 400
@@ -809,17 +749,6 @@ export default function ContractContainer() {
               }
             }
           }
-          // if (primaryMarketplaceRes && primaryMarketplaceRes.status === 400) {
-          //   setApiError({
-          //     ...apiError,
-          //     ...(primaryMarketplaceRes && primaryMarketplaceRes.data),
-          //   });
-
-          //   if (primaryMarketplaceRes.data && !apiError.non_field_errors) {
-          //     statementErrCount += Object.keys(primaryMarketplaceRes.data)
-          //       .length;
-          //   }
-          // }
 
           setSectionError({
             agreement: agreementErrCount + sectionError.agreement,
@@ -832,11 +761,9 @@ export default function ContractContainer() {
   };
 
   const nextStep = async () => {
-    // const additionalMarketplacesApi = null;
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
     let AccountApi = null;
-    // const primaryMarketPlaceApi = null;
     let AddendumApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
@@ -870,7 +797,6 @@ export default function ContractContainer() {
         }
       }
       const updatedContractFields = cloneDeep(updatedFormData);
-      // const updatedContractFields = updatedFormData;
       delete updatedContractFields.additional_one_time_services;
       delete updatedContractFields.additional_monthly_services;
       delete updatedContractFields.additional_marketplaces;
@@ -1285,13 +1211,9 @@ export default function ContractContainer() {
           );
         }
       }
-      // return null;
-
-      // return fields.length ? fields.toString().replaceAll(',', '') : '';
       return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
     }
     return '';
-    // return `Enter ${label}.`;
   };
 
   const mapAdditionalMarketPlaces = () => {
@@ -1319,8 +1241,6 @@ export default function ContractContainer() {
         );
       }
     }
-
-    // return fields.length ? fields.toString().replaceAll(',', '') : '';
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
@@ -1332,19 +1252,6 @@ export default function ContractContainer() {
     ];
     if (details && details.additional_monthly_services) {
       for (const item of details.additional_monthly_services) {
-        // if (item.service.name === 'DSP Advertising') {
-        //   fields.push(
-        //     `<tr>
-        //          <td style="border: 1px solid black;padding: 13px;">${
-        //            item.service ? item.service.name : item && item.name
-        //          }
-        //           </td>
-        //           <td style="border: 1px solid black;padding: 13px;">
-        //           Included
-        //           </td>
-        //         </tr>`,
-        //   );
-        // }
         if (item.service.name === 'Inventory Reconciliation') {
           fields.push(
             `<tr>
@@ -1662,7 +1569,6 @@ export default function ContractContainer() {
         return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
     }
-    // return (
     if (formData && formData.dsp_fee) {
       return `$${
         formData &&
@@ -1671,8 +1577,6 @@ export default function ContractContainer() {
       }`;
     }
     return 'Enter DSP Fee ';
-
-    // );
   };
 
   const mapBudgetBreakdownTable = () => {
@@ -1763,8 +1667,6 @@ export default function ContractContainer() {
           formData.monthly_retainer &&
           formData.primary_marketplace &&
           formData.rev_share
-          // &&
-          // formData.sales_threshold
         ) {
           return true;
         }
@@ -2086,18 +1988,6 @@ export default function ContractContainer() {
     });
   };
 
-  const onClickOfBackToCustomerDetail = () => {
-    if (isFooter) {
-      setShowDiscardModal({
-        ...showDiscardModal,
-        show: true,
-        clickedBtn: 'back',
-      });
-    } else {
-      history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
-    }
-  };
-
   const viewContract = () => {
     return (
       <div className="text-container ">
@@ -2247,8 +2137,6 @@ export default function ContractContainer() {
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('dsp') &&
           item.key !== 'dsp_length'
-          // ||
-          // formData.dsp_fee && formData.dsp_fee < 10000
         ) {
           dspErrors += 1;
           item.error = true;
@@ -2420,6 +2308,15 @@ export default function ContractContainer() {
     setIsEditContract(false);
   };
 
+  // const downloadContract = () => {
+  //   var doc = new jsPDF();
+  //   const xmlString = '<h3>Helloooooo</h3>';
+  //   var parser = new DOMParser();
+  //   var docs = parser.parseFromString(xmlString, 'text');
+  //   console.log(docs.body, docs);
+  //   doc.text(10, 10, 'Hello');
+  //   doc.save('myDocument.pdf');
+  // };
   return (
     <>
       {showPageNotFound ? (
@@ -2461,17 +2358,16 @@ export default function ContractContainer() {
                       : 'm-0 sticky '
                   }>
                   {' '}
-                  <div
-                    onClick={() => onClickOfBackToCustomerDetail()}
+                  Contract Management
+                  <img
+                    src={CloseIcon}
+                    alt="close"
+                    className="float-right cursor cross-icon"
+                    onClick={() => {
+                      history.goBack('Agreement');
+                    }}
                     role="presentation"
-                    className="back-link ">
-                    <img
-                      src={LeftArrowIcon}
-                      alt="aarow-back"
-                      className="arrow-back-icon "
-                    />
-                    Back to Customer Details
-                  </div>
+                  />
                 </div>
               </div>
             </div>
@@ -2519,17 +2415,17 @@ export default function ContractContainer() {
                       : 'm-0 sticky '
                   }>
                   {' '}
-                  <div
-                    onClick={() => onClickOfBackToCustomerDetail()}
+                  Contract Management
+                  {/* <div onClick={() => downloadContract()}>Download</div> */}
+                  <img
+                    src={CloseIcon}
+                    alt="close"
+                    className="float-right cursor cross-icon"
+                    onClick={() => {
+                      history.goBack('Agreement');
+                    }}
                     role="presentation"
-                    className="back-link">
-                    <img
-                      src={LeftArrowIcon}
-                      alt="aarow-back"
-                      className="arrow-back-icon "
-                    />
-                    Back to Customer Details
-                  </div>
+                  />
                 </div>
               </div>
             </div>
