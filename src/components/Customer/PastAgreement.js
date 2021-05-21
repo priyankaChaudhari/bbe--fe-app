@@ -93,7 +93,7 @@ export default function PastAgreement({ id }) {
                   <Link
                     to={{
                       pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                        'contract_id',
+                        ':contract_id',
                         item.id,
                       ),
                     }}>
