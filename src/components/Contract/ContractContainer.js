@@ -27,7 +27,7 @@ import ContractFooter from './ContractFooter';
 import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon } from '../../theme/images';
+import { CloseIcon, DownloadPdf } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -2354,8 +2354,8 @@ export default function ContractContainer() {
                 <div
                   className={
                     userInfo && userInfo.role === 'Customer'
-                      ? 'm-0 sticky customer-pdf'
-                      : 'm-0 sticky '
+                      ? 'customer-pdf'
+                      : ' '
                   }>
                   {' '}
                   Contract Management
@@ -2406,29 +2406,53 @@ export default function ContractContainer() {
           </ContractTab>
 
           <div className="on-boarding-container">
-            <div className="row">
-              <div className="col-12">
-                <div
-                  className={
-                    userInfo && userInfo.role === 'Customer'
-                      ? 'm-0 sticky customer-pdf'
-                      : 'm-0 sticky '
-                  }>
-                  {' '}
-                  Contract Management
-                  {/* <div onClick={() => downloadContract()}>Download</div> */}
-                  <img
-                    src={CloseIcon}
-                    alt="close"
-                    className="float-right cursor cross-icon"
-                    onClick={() => {
-                      history.goBack('Agreement');
-                    }}
-                    role="presentation"
-                  />
+            <HeaderDownloadFuntionality>
+              <div
+                className={
+                  userInfo && userInfo.role === 'Customer'
+                    ? ' customer-pdf'
+                    : ''
+                }>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-6 col-sm-12">
+                      {' '}
+                      Contract Management
+                      {/* <div onClick={() => downloadContract()}>Download</div> */}
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <ul className="contract-download-nav ">
+                        <li className="download-pdf">
+                          <img
+                            src={DownloadPdf}
+                            alt="close"
+                            className="download-pdf-icon "
+                            role="presentation"
+                          />
+                          Download
+                        </li>
+                        <li>
+                          <span className="divide-arrow" />
+                        </li>
+
+                        <li>
+                          <img
+                            width="18px"
+                            src={CloseIcon}
+                            alt="close"
+                            className="float-right cursor remove-cross-icon"
+                            onClick={() => {
+                              history.goBack('Agreement');
+                            }}
+                            role="presentation"
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </HeaderDownloadFuntionality>
 
             {(isLoading.loader && isLoading.type === 'page') ||
             activityLoader ? (
@@ -2586,7 +2610,7 @@ export default function ContractContainer() {
 
 const ContractTab = styled.div`
   background: ${Theme.gray6};
-  padding-top: 60px;
+  padding-top: 70px;
   position: fixed;
   z-index: 1;
   width: 100%;
@@ -2620,6 +2644,67 @@ const ContractTab = styled.div`
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
+      }
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    padding-top: 107px;
+  }
+`;
+
+const HeaderDownloadFuntionality = styled.div`
+  position: fixed;
+  background-color: ${Theme.white};
+  z-index: 2;
+  padding: 26px 0 20px 0;
+  width: 100%;
+  border-bottom: 1px solid ${Theme.gray5};
+  min-height: 70px;
+  color: ${Theme.black};
+  font-size: 14px;
+
+  .contract-download-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: end;
+
+    li {
+      display: inline-block;
+      vertical-align: bottom;
+
+      &.download-pdf {
+        .download-pdf-icon {
+          width: 18px;
+          margin-right: 11px;
+          vertical-align: bottom;
+        }
+      }
+      .divide-arrow {
+        background-color: #e2e2ea;
+        width: 1px;
+        height: 32px;
+        border: 1px solid #e2e2ea;
+        margin: 0 18px;
+      }
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .contract-download-nav {
+      text-align: center;
+      border-top: 1px solid ${Theme.gray5};
+      margin-top: 20px;
+      padding-top: 15px;
+      li {
+        .divide-arrow {
+          display: none;
+        }
+
+        .remove-cross-icon {
+          position: absolute;
+          top: -20px;
+          right: 14px;
+        }
       }
     }
   }

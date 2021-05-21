@@ -308,7 +308,7 @@ const Footer = styled.div`
   box-shadow: ${Theme.boxShadow};
   position: fixed;
   min-height: 80px;
-  padding-left: 78px;
+  padding-left: 15px;
   z-index: 2;
   .w-320 {
     width: 320px;

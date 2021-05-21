@@ -4342,7 +4342,7 @@ const SidePanel = styled.div`
     z-index: 1;
     width: 336px;
     position: fixed;
-    top: 130px;
+    top: 95px;
     right: 0;
     height: 85%;
     background: ${Theme.white};
@@ -4712,7 +4712,7 @@ const SidePanel = styled.div`
     padding-bottom: 390px;
     width: 100%;
     position: fixed;
-    top: 200px;
+    top: 163px;
     right: 0;
     left:0;
   .sendar-details {
