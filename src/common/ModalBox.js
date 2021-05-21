@@ -379,6 +379,27 @@ const ModalBox = styled.div`
       font-weight: bold;
       font-family: ${Theme.titleFontFamily};
     }
+    .verify-info-text {
+      color: ${Theme.gray85};
+      font-size: 14px;
+      font-family: ${Theme.baseFontFamily};
+      line-height: 20px;
+
+      &.font-italic {
+        font-family: ${Theme.regularItalicFontFamily};
+      }
+    }
+    .does-not-match-box {
+       background-color: #FFDED6;
+       border-radius: 5px;
+       color: ${Theme.black};
+       font-size: 15px;
+       padding: 14px;
+       .times-circle-icon {
+         width: 20px;
+         vertical-align: text-bottom;
+       }
+    }
 
     @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
       &.on-boarding {

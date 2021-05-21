@@ -148,6 +148,9 @@ import DspOnlyIcon from './icons/dsp-only-icon.png';
 import ThadProfileImg from './thad.png';
 import CheckboxCheck from './icons/checkmark.svg';
 import UpDowGrayArrow from './icons/up-dow-gray-arrow.png';
+import BlackCheckMark from './icons/black-checkmark-icon.svg';
+import BellNotification from './icons/bell-notification-icon.png';
+import TimesCircle from './icons/times-circle.svg';
 
 export {
   BannerBg,
@@ -300,4 +303,7 @@ export {
   ThadProfileImg,
   CheckboxCheck,
   UpDowGrayArrow,
+  BlackCheckMark,
+  BellNotification,
+  TimesCircle,
 };

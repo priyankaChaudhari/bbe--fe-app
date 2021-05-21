@@ -72,6 +72,13 @@ const Button = styled.button`
       border: 2px solid ${Theme.gray35};
       font-size: 14px;
     }
+    &.verify-now-btn {
+      font-size: 13px;
+      padding: 5px 15px;
+      color: ${Theme.gray90};
+      border-radius: 2px;
+      width: 120px;
+    }
 
     &:focus {
       outline: none;

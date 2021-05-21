@@ -30,8 +30,8 @@ import {
   WhiteCaretUp,
   CaretUp,
   AccountSetupIcon,
-
   // BillingIcon,
+  // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
 import {
@@ -43,6 +43,7 @@ import {
   BackToTop,
   Button,
   WhiteCard,
+  // ContractFormField,
 } from '../../common';
 import { getAccountDetails } from '../../store/actions/accountState';
 import {
@@ -463,6 +464,19 @@ export default function CustomerMainContainer() {
             <PageLoader color="#FF5933" type="page" width={20} />
           ) : (
             <>
+              {/* <AlertMsgUpdate className="account-verify">
+                We’ve initiated a small charge to your bank account. We’ll email
+                you within 3 days to verify the payment.
+                Please verify your bank account
+                <Button
+                  className="btn-transparent verify-now-btn ml-3"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}>
+                  Verify Now
+                </Button>
+              </AlertMsgUpdate> */}
+
               {userInfo && userInfo.role !== 'Customer' ? (
                 <BackBtn className="d-lg-none d-block ">
                   <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
@@ -1092,6 +1106,73 @@ export default function CustomerMainContainer() {
                   </div>
                 </ModalBox>
               </Modal>
+              {/* <Modal
+                isOpen={showModal}
+                style={AccountSetupcustomStyles}
+                ariaHideApp={false}
+                contentLabel="Edit modal">
+                <img
+                  src={CloseIcon}
+                  alt="close"
+                  className="float-right cursor cross-icon"
+                  onClick={() => setShowModal(false)}
+                  role="presentation"
+                /> */}
+              {/* <ModalBox>
+                  <div className="modal-body "> */}
+              {/* <h4 className="on-boarding mb-3">
+                      Verify your bank account
+                    </h4>
+                    <p className="verify-info-text m-0">
+                      {' '}
+                      We have made a charge to your bank account for a small
+                      amount (typically less than $1) from Buy Box Experts. In
+                      order to verify your account, please enter the amount
+                      below. This will verify your account and trigger a refund
+                      for the amount we charged.
+                    </p>
+                    <p className=" verify-info-text font-italic mt-2">
+                      {' '}
+                      Please note the refund can take up to 3 business days to
+                      reach you from the point of verifying your bank account.
+                    </p>
+
+                    <div className="does-not-match-box mt-1 mb-1">
+                      <img
+                        className="times-circle-icon mr-2"
+                        src={TimesCircle}
+                        alt="cross-circle"
+                      />{' '}
+                      Amount entered does not match our records
+                    </div>
+                    <ContractFormField className="mt-3">
+                      <label htmlFor="emailAddress">
+                        Amount Charged
+                        <br />
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder=" $"
+                        />
+                      </label>
+                    </ContractFormField> */}
+              {/* <Button className="btn-primary w-100  mt-3">Verify</Button> */}
+              {/* <img
+                      width="55px"
+                      className="mb-3"
+                      src={AccountSetupIcon}
+                      alt="check"
+                    />
+                    <h3 className=" page-heading ">Success!</h3>
+                    <p className="normal-text mt-2 mb-0">
+                      Thank you, your bank account has now been verified.{' '}
+                    </p>
+                    <Button className="btn-primary w-100  mt-4">
+                      Continue
+                    </Button>
+                  </div>
+                </ModalBox>
+              </Modal> */}
             </>
           )}
         </>
@@ -1240,3 +1321,20 @@ const BackBtn = styled.div`
     margin-right: 6px;
   }
 `;
+
+// const AlertMsgUpdate = styled.div`
+//   background: #fdf3d7;
+//   border-radius: 4px;
+//   width: 100%;
+//   height: 50px;
+//   color: #2e384d;
+//   font-size: 13px;
+//   text-align: center;
+//   padding-top: 16px;
+//   font-family: ${Theme.titleFontFamily};
+
+//   &.account-verify {
+//     background: #ffded6;
+//     padding-top: 11px;
+//   }
+// `;

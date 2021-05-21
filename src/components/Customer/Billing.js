@@ -3,8 +3,12 @@ import { GroupUser } from '../../theme/Global';
 import { GetInitialName, WhiteCard } from '../../common';
 import {
   EditOrangeIcon,
-  MasterCardIcons,
+  // MasterCardIcons,
   // DefaultUser,
+  // BlackCheckMark,
+  // BellNotification,
+  // ClockIcon,
+  CountDayClock,
 } from '../../theme/images/index';
 
 export default function Billing() {
@@ -13,13 +17,28 @@ export default function Billing() {
       <div className="col-lg-8 col-12">
         <div className="row">
           <div className="col-md-6 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
-              <p className="black-heading-title mt-0 mb-4"> Billing Details</p>
+            <WhiteCard>
+              <p className="black-heading-title mt-0 mb-3"> Billing Details</p>
               <div className="edit-details" role="presentation">
                 <img src={EditOrangeIcon} alt="" />
                 Edit
               </div>
-              <div className="label">Name on Account</div>
+              <div className="label">Payment Type</div>
+              <div className="label-info">
+                ACH{' '}
+                <span className="ACH-status unverified pending">
+                  {' '}
+                  {/* <img
+                    className="checked-mark-icon"
+                    src={BlackCheckMark}
+                    alt="check"
+                  />{' '} */}
+                  {/* <img className="bell-icon" src={BellNotification} alt="" />{' '} */}
+                  <img className="bell-icon ml-1" src={CountDayClock} alt="" />{' '}
+                  Pending
+                </span>
+              </div>
+              <div className="label mt-3">Name on Account </div>
               <div className="label-info">TRX Training Inc.</div>
               <div className="label mt-3">Bank Name</div>
               <div className="label-info">Chase</div>
@@ -33,7 +52,34 @@ export default function Billing() {
                   <div className="label-info">7847 0412 80</div>
                 </div>
               </div>
-              <div className="straight-line horizontal-line mt-4 mb-4" />
+            </WhiteCard>
+            <WhiteCard className="mt-3">
+              <p className="black-heading-title mt-0 mb-0">Billing Address</p>
+              <div className="edit-details" role="presentation">
+                <img src={EditOrangeIcon} alt="" />
+                Edit
+              </div>
+              <div className="label mt-3">Address </div>
+              <div className="label-info">1660 Pacific Ave</div>
+              <div className="label mt-3">City </div>
+              <div className="label-info">San Francisco</div>
+              <div className="row">
+                <div className="col-6">
+                  <div className="label mt-3">State</div>
+                  <div className="label-info">CA</div>
+                </div>
+                <div className="col-6">
+                  <div className="label mt-3">Postal Code</div>
+                  <div className="label-info">18828</div>
+                </div>
+              </div>
+            </WhiteCard>
+            {/* <WhiteCard className="mt-3">
+              <p className="black-heading-title mt-0 mb-3">Billing Address</p>
+              <div className="edit-details" role="presentation">
+                <img src={EditOrangeIcon} alt="" />
+                Edit
+              </div>
               <div className="row">
                 <div className="col-6">
                   <div className="label">Payment Type</div>
@@ -66,10 +112,10 @@ export default function Billing() {
                   <div className="label-info">***</div>
                 </div>
               </div>
-            </WhiteCard>
+            </WhiteCard> */}
           </div>
           <div className="col-md-6 col-sm-12 mb-3">
-            <WhiteCard className="fix-height">
+            <WhiteCard>
               {' '}
               <p className="black-heading-title mt-0 mb-4"> Billing Contacts</p>
               <div className="edit-details" role="presentation">

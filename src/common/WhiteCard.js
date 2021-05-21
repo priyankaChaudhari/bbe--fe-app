@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 export const WhiteCard = styled.div`
   background-color:${Theme.white};
   border-radius: 15px;
-  padding:   20px ;
+  padding: 20px ;
   position: relative;
   
  &.fix-height {
@@ -48,6 +48,8 @@ export const WhiteCard = styled.div`
     .label-info {
       color: ${Theme.black};
       font-size: ${Theme.normal};
+
+     
     }
 
     &:hover {
@@ -91,6 +93,30 @@ export const WhiteCard = styled.div`
       margin-right: 2px;
       vertical-align: top;
     }
+     .ACH-status {
+        background-color: #F1F1F5;
+        border-radius: 5px;
+        padding: 4px 10px 3px 4px;
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.gray85};
+        margin-left: 5px;
+        .checked-mark-icon {
+          width: 13px;
+          margin-right: 2px;
+          vertical-align: text-top;
+        }
+        .bell-icon {
+          width: 16px;
+          margin-right: 2px;
+          vertical-align: text-top;
+        }
+      }
+      .unverified {
+        background-color: ${Theme.lightPink};
+      }
+      .pending {
+        background-color: ${Theme.extraLightYellow};
+      }
   }
 
   .phone-number {
