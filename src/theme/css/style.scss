@@ -1438,25 +1438,6 @@ input:checked + .slider:before {
     }
   }
 }
-// .react-daterange-picker__calendar--open {
-//   .react-calendar {
-//     border: none !important;
-//     background-color: $white-color !important;
-//     width: 400px !important;
-//   }
-//   .react-calendar__tile {
-//     max-width: 100%;
-//     text-align: center;
-//     padding: 1.75em 0.6em !important;
-//     background: none;
-//   }
-//   .react-calendar__tile--active {
-//     color: $orange-color !important;
-//     background-color: $white-color !important;
-//     border-radius: 20px;
-//     border: 1px solid $orange-color;
-//   }
-// }
 .rdrCalendarWrapper {
   font-family: $base-font-family;
   width: 100%;
@@ -1468,35 +1449,12 @@ input:checked + .slider:before {
     font-family: $base-font-family;
   }
   .rdrDay {
-    // height: 3.7em;
     font-size: 15px;
     color: $black-color !important;
 
     .rdrDayNumber span {
       color: $black-color;
     }
-    // .rdrSelected,
-    // .rdrInRange,
-    // .rdrStartEdge,
-    // .rdrEndEdge {
-    //   background: currentColor;
-    //   position: absolute;
-
-    //   left: 0;
-    //   right: 0;
-    // }
-    // .rdrDayToday .rdrDayNumber span:after {
-    //   content: '';
-    //   position: absolute;
-    //   top: 4px;
-    //   left: 73%;
-    //   /* transform: translate(-50%, 0); */
-    //   width: 6px;
-    //   border-radius: 50%;
-    //   height: 6px;
-    //   border-radius: 2px;
-    //   background: #ff5933;
-    // }
   }
   .rdrDayToday .rdrDayNumber span:after {
     content: '';
@@ -1504,16 +1462,13 @@ input:checked + .slider:before {
     top: 10px;
     left: 73%;
     border-radius: 50% !important;
-    /* transform: translate(-50%, 0); */
     width: 6px;
     border-radius: 25px;
     height: 6px;
-    // border-radius: 2px;
     background: #ff5933;
   }
 
   .rdrMonth {
-    // max-width: 29.667em;
     width: 100%;
     padding: 0;
   }

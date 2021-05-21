@@ -151,6 +151,7 @@ import UpDowGrayArrow from './icons/up-dow-gray-arrow.png';
 import BlackCheckMark from './icons/black-checkmark-icon.svg';
 import BellNotification from './icons/bell-notification-icon.png';
 import TimesCircle from './icons/times-circle.svg';
+import DownloadPdf from './icons/download-icon.svg';
 
 export {
   BannerBg,
@@ -306,4 +307,5 @@ export {
   BlackCheckMark,
   BellNotification,
   TimesCircle,
+  DownloadPdf,
 };
