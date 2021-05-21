@@ -4342,7 +4342,7 @@ const SidePanel = styled.div`
     z-index: 1;
     width: 336px;
     position: fixed;
-    top: 95px;
+    top: 70px;
     right: 0;
     height: 85%;
     background: ${Theme.white};
@@ -4351,8 +4351,8 @@ const SidePanel = styled.div`
    
     
     &.pdf-sidebar {
-     padding-bottom: 70px;
-
+      padding-bottom: 70px;
+      height: 90%;
     }
 
     &.contract-sidebar {

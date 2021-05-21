@@ -2349,28 +2349,53 @@ export default function ContractContainer() {
             </ul>
           </ContractTab>
           <div className="on-boarding-container">
-            <div className="row">
-              <div className="col-12">
-                <div
-                  className={
-                    userInfo && userInfo.role === 'Customer'
-                      ? 'customer-pdf'
-                      : ' '
-                  }>
-                  {' '}
-                  Contract Management
-                  <img
-                    src={CloseIcon}
-                    alt="close"
-                    className="float-right cursor cross-icon"
-                    onClick={() => {
-                      history.goBack('Agreement');
-                    }}
-                    role="presentation"
-                  />
+            <HeaderDownloadFuntionality>
+              <div
+                className={
+                  userInfo && userInfo.role === 'Customer'
+                    ? 'customer-pdf'
+                    : ' '
+                }>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-md-6 col-sm-12">
+                      {' '}
+                      Contract Management
+                      {/* <div onClick={() => downloadContract()}>Download</div> */}
+                    </div>
+                    <div className="col-md-6 col-sm-12">
+                      <ul className="contract-download-nav ">
+                        <li className="download-pdf">
+                          <img
+                            src={DownloadPdf}
+                            alt="close"
+                            className="download-pdf-icon "
+                            role="presentation"
+                          />
+                          Download
+                        </li>
+                        <li>
+                          <span className="divide-arrow" />
+                        </li>
+
+                        <li>
+                          <img
+                            width="18px"
+                            src={CloseIcon}
+                            alt="close"
+                            className="float-right cursor remove-cross-icon"
+                            onClick={() => {
+                              history.goBack('Agreement');
+                            }}
+                            role="presentation"
+                          />
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </HeaderDownloadFuntionality>
             {isDesktop ||
             (isTablet && tabInResponsive === 'view-contract') ||
             (isMobile && tabInResponsive === 'view-contract') ? (
