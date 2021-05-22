@@ -47,6 +47,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [adChartData, setAdChartData] = useState([]);
+  const [currentTotal, setCurrentTotal] = useState([]);
+  const [previousTotal, setPreviousTotal] = useState([]);
+  const [difference, setDifference] = useState([]);
+
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChratData] = useState([]);
   const [dspTotal, setDSPTotal] = useState({});
@@ -97,14 +101,162 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     },
   };
 
-  const calculateSalesDifference = (currentTotal, previousTotal) => {
-    const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
+  const calculateSalesDifference = (currentTotals, previousTotals) => {
+    const diff = ((currentTotals - previousTotals) * 100) / previousTotals;
     if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
     return parseFloat(diff.toFixed(2));
   };
 
+  /// ////////////////////////////////////////////////////////////////////////
+  //
+  // function name: bindAdResponseData
+  // Descrition : this function is used to manage the ad performance api response and
+  // filter out the response.
+  // required parameters : One
+  // parameter Descrition: 1. response of ad performance api
+  //
+  /// ////////////////////////////////////////////////////////////////////////////////
+  const bindAdResponseData = (response) => {
+    const tempData = [];
+
+    // filterout previous data in one temporary object.
+    if (response.daily_facts.previous && response.daily_facts.previous.length) {
+      response.daily_facts.previous.forEach((item) => {
+        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        tempData.push({
+          adSalesPrevious: item.ad_sales,
+          adSpendPrevious: item.ad_spend,
+          adConversionPrevious: item.ad_conversion_rate,
+          impressionsPrevious: item.impressions,
+          adCosPrevious: item.acos,
+          adRoasPrevious: item.roas,
+          adClicksPrevious: item.clicks,
+          adClickRatePrevious: item.ctr,
+          previousDate,
+
+          adSalesPreviousLabel: item.ad_sales !== null ? item.ad_sales : '0.00',
+          adSpendPreviousLabel: item.ad_spend !== null ? item.ad_spend : '0.00',
+          adConversionPreviousLabel:
+            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00',
+          impressionsPreviousLabel:
+            item.impressions !== null ? item.impressions : '0.00',
+          adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
+          adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
+          adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0.00',
+          adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
+        });
+      });
+    }
+
+    // filterout current data in one temporary object.
+    if (response.daily_facts.current && response.daily_facts.current.length) {
+      response.daily_facts.current.forEach((item, index) => {
+        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        let indexNumber = index;
+        // add the current data at same index of prevoius in temporary object
+        if (
+          response.daily_facts.previous &&
+          index < response.daily_facts.previous.length
+        ) {
+          tempData[index].date = currentReportDate;
+          tempData[index].adSalesCurrent = item.ad_sales;
+          tempData[index].adSpendCurrent = item.ad_spend;
+          tempData[index].adConversionCurrent = item.ad_conversion_rate;
+          tempData[index].impressionsCurrent = item.impressions;
+          tempData[index].adCosCurrent = item.acos;
+          tempData[index].adRoasCurrent = item.roas;
+          tempData[index].adClicksCurrent = item.clicks;
+          tempData[index].adClickRateCurrent = item.ctr;
+
+          tempData[index].adSalesCurrentLabel =
+            item.ad_sales !== null ? item.ad_sales : '0.00';
+          tempData[index].adSpendCurrentLabel =
+            item.ad_spend !== null ? item.ad_spend : '0.00';
+          tempData[index].adConversionCurrentLabel =
+            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00';
+          tempData[index].impressionsCurrentLabel =
+            item.impressions !== null ? item.impressions : '0.00';
+          tempData[index].adCosCurrentLabel =
+            item.acos !== null ? item.acos : '0.00';
+          tempData[index].adRoasCurrentLabel =
+            item.roas !== null ? item.roas : '0.00';
+          tempData[index].adClicksCurrentLabel =
+            item.clicks !== null ? item.clicks : '0.00';
+          tempData[index].adClickRateCurrentLabel =
+            item.ctr !== null ? item.ctr : '0.00';
+
+          // to add the dotted line. we have to check null matrix and add the dummy number like 8
+          if (index > 0) {
+            indexNumber = index - 1;
+          } else {
+            indexNumber = index;
+          }
+          tempData[indexNumber].adSalesDashLength =
+            item.ad_sales === null ? 8 : null;
+          tempData[indexNumber].adSpendDashLength =
+            item.ad_spend === null ? 8 : null;
+          tempData[indexNumber].adConversionDashLength =
+            item.ad_conversion_rate === null ? 8 : null;
+          tempData[indexNumber].impressionsDashLength =
+            item.impressions === null ? 8 : null;
+          tempData[indexNumber].adCosDashLength = item.acos === null ? 8 : null;
+          tempData[indexNumber].adRoasDashLength =
+            item.roas === null ? 8 : null;
+          tempData[indexNumber].adClicksDashLength =
+            item.clicks === null ? 8 : null;
+          tempData[indexNumber].adClickRateDashLength =
+            item.ctr === null ? 8 : null;
+        } else {
+          // if current data count is larger than previous count then
+          // generate separate key for current data
+          tempData.push({
+            adSalesCurrent: item.ad_sales,
+            adSpendCurrent: item.ad_spend,
+            adConversionCurrent: item.ad_conversion_rate,
+            impressionsCurrent: item.impressions,
+            adCosCurrent: item.acos,
+            adRoasCurrent: item.roas,
+            adClicksCurrent: item.clicks,
+            adClickRateCurrent: item.ctr,
+            date: currentReportDate,
+
+            adSalesCurrentLabel:
+              item.ad_sales !== null ? item.ad_sales : '0.00',
+            adSpendCurrentLabel:
+              item.ad_spend !== null ? item.ad_spend : '0.00',
+            adConversionCurrentLabel:
+              item.ad_conversion_rate !== null
+                ? item.ad_conversion_rate
+                : '0.00',
+            impressionsCurrentLabel:
+              item.impressions !== null ? item.impressions : '0.00',
+            adCosCurrentLabel: item.acos !== null ? item.acos : '0.00',
+            adRoasCurrentLabel: item.roas !== null ? item.roas : '0.00',
+            adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0.00',
+            adClickRateCurrentLabel: item.ctr !== null ? item.ctr : '0.00',
+          });
+        }
+      });
+    }
+    return tempData;
+  };
+
+  /// ////////////////////////////////////////////////////////////////////////
+  //
+  // function name: getAdData
+  // Descrition : this function is used to get the ad performace graph data
+  // This functional internaly call the BE api
+  // required parameters : Six
+  // parameter Descrition: 1. advertisement type filter
+  //  2. daily facts filter - required
+  //  3. group by filter - required
+  //  4. marketplace - required
+  //  5. start date - optional
+  //  6. end date - optional
+  //
+  /// ////////////////////////////////////////////////////////////////////////////////
   const getAdData = useCallback(
     (
       adType,
@@ -127,123 +279,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           //
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          const tempData = [];
-          if (
-            adResData.daily_facts.previous &&
-            adResData.daily_facts.previous.length
-          ) {
-            adResData.daily_facts.previous.forEach((item) => {
-              const previousDate = dayjs(item.report_date).format('MMM D YYYY');
-              tempData.push({
-                adSalesPrevious: item.ad_sales,
-                adSpendPrevious: item.ad_spend,
-                adConversionPrevious: item.ad_conversion_rate,
-                impressionsPrevious: item.impressions,
-                adCosPrevious: item.acos,
-                adRoasPrevious: item.roas,
-                adClicksPrevious: item.clicks,
-                adClickRatePrevious: item.ctr,
-                previousDate,
-
-                adSalesPreviousLabel:
-                  item.ad_sales !== null ? item.ad_sales : '0.00',
-                adSpendPreviousLabel:
-                  item.ad_spend !== null ? item.ad_spend : '0.00',
-                adConversionPreviousLabel:
-                  item.ad_conversion_rate !== null
-                    ? item.ad_conversion_rate
-                    : '0.00',
-                impressionsPreviousLabel:
-                  item.impressions !== null ? item.impressions : '0.00',
-                adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
-                adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
-                adClicksPreviousLabel:
-                  item.clicks !== null ? item.clicks : '0.00',
-                adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
-              });
-            });
-          }
-
-          if (
-            adResData.daily_facts.current &&
-            adResData.daily_facts.current.length
-          ) {
-            adResData.daily_facts.current.forEach((item, index) => {
-              const currentReportDate = dayjs(item.report_date).format(
-                'MMM D YYYY',
-              );
-              if (
-                adResData.daily_facts.previous &&
-                index < adResData.daily_facts.previous.length
-              ) {
-                tempData[index].date = currentReportDate;
-                tempData[index].adSalesCurrent = item.ad_sales;
-                tempData[index].adSpendCurrent = item.ad_spend;
-                tempData[index].adConversionCurrent = item.ad_conversion_rate;
-                tempData[index].impressionsCurrent = item.impressions;
-                tempData[index].adCosCurrent = item.acos;
-                tempData[index].adRoasCurrent = item.roas;
-                tempData[index].adClicksCurrent = item.clicks;
-                tempData[index].adClickRateCurrent = item.ctr;
-
-                tempData[index].adSalesCurrentLabel =
-                  item.ad_sales !== null ? item.ad_sales : '0.00';
-                tempData[index].adSpendCurrentLabel =
-                  item.ad_spend !== null ? item.ad_spend : '0.00';
-                tempData[index].adConversionCurrentLabel =
-                  item.ad_conversion_rate !== null
-                    ? item.ad_conversion_rate
-                    : '0.00';
-                tempData[index].impressionsCurrentLabel =
-                  item.impressions !== null ? item.impressions : '0.00';
-                tempData[index].adCosCurrentLabel =
-                  item.acos !== null ? item.acos : '0.00';
-                tempData[index].adRoasCurrentLabel =
-                  item.roas !== null ? item.roas : '0.00';
-                tempData[index].adClicksCurrentLabel =
-                  item.clicks !== null ? item.clicks : '0.00';
-                tempData[index].adClickRateCurrentLabel =
-                  item.ctr !== null ? item.ctr : '0.00';
-
-                if (index > 0) {
-                  tempData[index - 1].adSalesDashLength =
-                    item.ad_sales === null ? 8 : null;
-                  tempData[index - 1].adSpendDashLength =
-                    item.ad_spend === null ? 8 : null;
-                  tempData[index - 1].adConversionDashLength =
-                    item.ad_conversion_rate === null ? 8 : null;
-                  tempData[index - 1].impressionsDashLength =
-                    item.impressions === null ? 8 : null;
-                  tempData[index - 1].adCosDashLength =
-                    item.acos === null ? 8 : null;
-                  tempData[index - 1].adRoasDashLength =
-                    item.roas === null ? 8 : null;
-                  tempData[index - 1].adClicksDashLength =
-                    item.clicks === null ? 8 : null;
-                  tempData[index - 1].adClickRateDashLength =
-                    item.ctr === null ? 8 : null;
-                }
-
-                tempData[index].adSalesDashLength =
-                  item.ad_sales === null ? 8 : null;
-                tempData[index].adSpendDashLength =
-                  item.ad_spend === null ? 8 : null;
-                tempData[index].adConversionDashLength =
-                  item.ad_conversion_rate === null ? 8 : null;
-                tempData[index].impressionsDashLength =
-                  item.impressions === null ? 8 : null;
-                tempData[index].adCosDashLength = item.acos === null ? 8 : null;
-                tempData[index].adRoasDashLength =
-                  item.roas === null ? 8 : null;
-                tempData[index].adClicksDashLength =
-                  item.clicks === null ? 8 : null;
-                tempData[index].adClickRateDashLength =
-                  item.ctr === null ? 8 : null;
-              }
-            });
-          }
-          setAdChartData(tempData);
-          // console.log('aaaa', tempData);
+          const adGraphData = bindAdResponseData(adResData); // after api done then only send res.data
+          setAdChartData(adGraphData);
+          setCurrentTotal(adResData.daily_facts.current_sum);
+          setPreviousTotal(adResData.daily_facts.previous_sum);
+          setDifference(adResData.daily_facts.difference_data);
         }
       });
     },
@@ -796,12 +836,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adSales', 'ad-sales-active')}>
             <div className="chart-name">Ad Sales </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
-            <div className="perentage-value down mt-3 pt-1">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_sales
+                ? `${currencySymbol}${currentTotal.ad_sales}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_sales
+                ? `vs ${currencySymbol}${previousTotal.ad_sales}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+            {difference && difference.ad_sales ? (
+              difference.ad_sales >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_sales}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_sales.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -810,16 +877,40 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,224.90</div>
-            <div className="perentage-value grey mt-3 ">
-              <img
-                className="green-arrow"
-                src={UpDowGrayArrow}
-                alt="arrow-down"
-              />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_spend
+                ? `${currencySymbol}${currentTotal.ad_spend}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_spend
+                ? `vs ${currencySymbol}${previousTotal.ad_spend}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+
+            {difference && difference.ad_spend ? (
+              difference.ad_spend >= 0 ? (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_spend}%
+                </div>
+              ) : (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_spend.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value grey mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -828,12 +919,40 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
             <div className="chart-name">Ad Conversion Rate</div>
-            <div className="number-rate">15.28%</div>
-            <div className="vs">vs 14.90%</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_conversion_rate
+                ? `${currentTotal.ad_conversion_rate}%`
+                : `0.00%`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_conversion_rate
+                ? `vs ${previousTotal.ad_conversion_rate}%`
+                : `vs 0.00%`}
+            </div>
+
+            {difference && difference.ad_conversion_rate ? (
+              difference.ad_conversion_rate >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_conversion_rate}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_conversion_rate.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -842,12 +961,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('impressions', 'impression-active')}>
             <div className="chart-name">Impressions </div>
-            <div className="number-rate">1528K</div>
-            <div className="vs">vs 110K</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.impressions
+                ? currentTotal.impressions
+                : `0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.impressions
+                ? `vs ${previousTotal.impressions}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.impressions ? (
+              difference.impressions >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.impressions}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.impressions.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
@@ -856,12 +1002,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adCos', 'ad-cos-active')}>
             <div className="chart-name">Acos</div>
-            <div className="number-rate">$1,550.55</div>
-            <div className="vs">vs $1,114.88</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.acos
+                ? `${currencySymbol}${currentTotal.acos}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.acos
+                ? `vs ${currencySymbol}${previousTotal.acos}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+            {difference && difference.acos ? (
+              difference.acos >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.acos}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.acos.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -870,12 +1043,38 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
-            <div className="number-rate">50.28</div>
-            <div className="vs">vs 4.90</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.roas ? currentTotal.roas : '0.00'}
             </div>
+            <div className="vs">
+              {' '}
+              {previousTotal && previousTotal.roas
+                ? `vs ${previousTotal.roas}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.roas ? (
+              difference.roas >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.roas}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.roas.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -884,12 +1083,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClicks', 'ad-click-active')}>
             <div className="chart-name">Clicks </div>
-            <div className="number-rate">15,050</div>
-            <div className="vs">vs 1,114</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.clicks
+                ? currentTotal.clicks
+                : '0.00'}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.clicks
+                ? `vs ${previousTotal.clicks}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.clicks ? (
+              difference.clicks >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.clicks}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.clicks.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -898,12 +1124,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
             <div className="chart-name">Click through rate </div>
-            <div className="number-rate">0.28%</div>
-            <div className="vs">vs 4.90</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ctr
+                ? `${currentTotal.ctr}%`
+                : `0.00%`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ctr
+                ? `vs ${previousTotal.ctr}%`
+                : `vs 0.00%`}
+            </div>
+            {difference && difference.ctr ? (
+              difference.ctr >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ctr}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ctr.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
       </>
