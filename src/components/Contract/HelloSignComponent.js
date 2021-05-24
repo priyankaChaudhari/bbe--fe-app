@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import HelloSign from 'hellosign-embedded';
 // import styled from 'styled-components';
 import { PATH_WARNING } from '../../constants/index';
-import { transactionalSignUp, checksignatureStatus } from '../../api/index';
+import { transactionalSignUp } from '../../api/index';
 import { PageLoader } from '../../common';
 // import Header from '../../common/Header';
 // import Theme from '../../theme/Theme';
@@ -35,24 +35,25 @@ function HelloSignComponent() {
         });
 
         client.on('finish', () => {
-          checksignatureStatus({ request_id: params.key }).then((statusRes) => {
-            if (statusRes && statusRes.status === 200) {
-              window.location.href = 'http://www.buyboxexperts.com/';
-            }
-            // console.log(res, ' after check signature status');
-          });
-          // history.push(PATH_LOGIN);
+          window.location.href = 'http://www.buyboxexperts.com/';
+
+          // checksignatureStatus({ request_id: params.key }).then((statusRes) => {
+          //   if (statusRes && statusRes.status === 200) {
+          //     window.location.href = 'http://www.buyboxexperts.com/';
+          //   }
+          //   // console.log(res, ' after check signature status');
+          // });
         });
 
         client.on('close', () => {
-          checksignatureStatus({ request_id: params.key }).then((response) => {
-            // console.log(res, ' after check signature status');
-            if (response && response.status === 200) {
-              window.location.href = 'http://www.buyboxexperts.com/';
-            }
-          });
-          // history.push(PATH_LOGIN);
-          // window.location.href = 'http://www.buyboxexperts.com/';
+          window.location.href = 'http://www.buyboxexperts.com/';
+
+          // checksignatureStatus({ request_id: params.key }).then((response) => {
+          //   // console.log(res, ' after check signature status');
+          //   if (response && response.status === 200) {
+          //     window.location.href = 'http://www.buyboxexperts.com/';
+          //   }
+          // });
         });
       }
     });
