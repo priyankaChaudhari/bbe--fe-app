@@ -64,6 +64,7 @@ export default function BillingInfo({
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
+  const [getnewStepId, setGetnewStepId] = useState(null);
 
   const customStyles = {
     content: {
@@ -82,7 +83,7 @@ export default function BillingInfo({
 
   const getIncompleteStep = summaryData.find(
     (op) =>
-      Object.keys(op)[0] !== 'digital presence' &&
+      Object.keys(op)[0] !== 'billing information' &&
       Object.values(op)[0] === false,
   );
 
@@ -91,12 +92,11 @@ export default function BillingInfo({
     if (step === 'merchant id' || getIncompleteStep === undefined) {
       history.push(PATH_SUMMARY);
     } else {
-      stepPath.map((item) => {
+      for (const item of stepPath) {
         if (Object.keys(getIncompleteStep)[0] === item.key) {
-          return history.push(item.view);
+          history.push(item.view);
         }
-        return history.push(PATH_SUMMARY);
-      });
+      }
     }
     setIsLoading({ loader: false, type: 'button' });
   };
@@ -121,6 +121,7 @@ export default function BillingInfo({
         card_details: {},
       });
     }
+    setGetnewStepId(stepData.id || verifiedStepData.id || null);
   }, [data]);
 
   const saveBillingData = (step) => {
@@ -191,6 +192,7 @@ export default function BillingInfo({
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     if (
+      getnewStepId === null &&
       (stepData === undefined ||
         (stepData &&
           Object.keys(stepData) &&
@@ -207,6 +209,9 @@ export default function BillingInfo({
       };
       askSomeoneData(detail).then((stepResponse) => {
         if (stepResponse && stepResponse.status === 201) {
+          setGetnewStepId(
+            stepResponse && stepResponse.data && stepResponse.data.id,
+          );
           saveBillingData(
             stepResponse && stepResponse.data && stepResponse.data.id,
           );
@@ -214,14 +219,16 @@ export default function BillingInfo({
       });
     } else {
       updateAskSomeoneData(
-        (stepData && stepData.id) || verifiedStepData.step_id,
+        getnewStepId || (stepData && stepData.id) || verifiedStepData.step_id,
         {
           token: assignedToSomeone ? params && params.key : '',
           is_completed: true,
         },
       ).then((response) => {
         if (response && response.status === 200) {
-          saveBillingData(stepData.id || verifiedStepData.step_id);
+          saveBillingData(
+            getnewStepId || stepData.id || verifiedStepData.step_id,
+          );
         }
       });
     }
@@ -241,8 +248,8 @@ export default function BillingInfo({
       [type]: {
         ...apiError[type],
         [item.key]: '',
-        0: '',
       },
+      0: '',
     });
   };
 
@@ -271,7 +278,7 @@ export default function BillingInfo({
         value={
           type === 'card_details' && data && data.id
             ? mapDetails(item.key)
-            : type === 'expiration_date'
+            : item.key === 'expiration_date'
             ? [formData.type][item.key]
             : formData[type][item.key]
         }
