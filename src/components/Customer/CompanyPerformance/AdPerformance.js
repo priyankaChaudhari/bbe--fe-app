@@ -370,11 +370,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           setDifference(adResData.daily_facts.difference_data);
         }
       });
-      // const adGraphData = bindAdResponseData(adResData);
-      // setAdChartData(adGraphData);
-      // setAdCurrentTotal(adResData.daily_facts.current_sum);
-      // setAdPreviousTotal(adResData.daily_facts.previous_sum);
-      // setDifference(adResData.daily_facts.difference_data);
+      const adGraphData = bindAdResponseData(adResData);
+      setAdChartData(adGraphData);
+      setAdCurrentTotal(adResData.daily_facts.current_sum);
+      setAdPreviousTotal(adResData.daily_facts.previous_sum);
+      setDifference(adResData.daily_facts.difference_data);
     },
     [id],
   );
@@ -403,8 +403,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           setDSPChartData(dspGraphData);
         }
       });
-      // const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
-      // setDSPChartData(dspGraphData);
+      const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
+      setDSPChartData(dspGraphData);
     },
     [id],
   );
@@ -883,10 +883,27 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     );
   };
 
-  const addThousandComma = (number) => {
+  const addThousandComma = (number, flag = false) => {
+    let returnValue = number;
+    if (flag) {
+      if (number >= 1000000000) {
+        returnValue = `${parseInt(number / 1000000000, 10).toString()}B`;
+      }
+      if (number >= 1000000) {
+        returnValue = `${parseInt(number / 1000000, 10).toString()}M`;
+      }
+      if (number >= 1000) {
+        returnValue = `${parseInt(number / 1000, 10).toString()}K`;
+      } else {
+        returnValue = `${parseInt(number, 10).toString()}`;
+      }
+      return returnValue;
+    }
+
     if (number !== undefined && number !== null) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+
     return number;
   };
 
@@ -1031,12 +1048,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.impressions
-                ? addThousandComma(adCurrentTotal.impressions)
+                ? addThousandComma(adCurrentTotal.impressions, true)
                 : `0.00`}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.impressions
-                ? `vs ${addThousandComma(adPreviousTotal.impressions)}`
+                ? `vs ${addThousandComma(adPreviousTotal.impressions, true)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.impressions ? (
@@ -1047,7 +1064,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.impressions}%
+                  {addThousandComma(difference.impressions, true)}
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1056,7 +1073,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.impressions.toString().replace('-', '')}%
+                  {difference.impressions.toString().replace('-', '')}
                 </div>
               )
             ) : (
@@ -1130,7 +1147,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.roas}%
+                  {difference.roas}
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1139,7 +1156,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.roas.toString().replace('-', '')}%
+                  {difference.roas.toString().replace('-', '')}
                 </div>
               )
             ) : (
@@ -1171,7 +1188,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.clicks}%
+                  {difference.clicks}
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1180,7 +1197,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.clicks.toString().replace('-', '')}%
+                  {difference.clicks.toString().replace('-', '')}
                 </div>
               )
             ) : (
