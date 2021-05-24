@@ -403,8 +403,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           setDSPChartData(dspGraphData);
         }
       });
-      const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
-      setDSPChartData(dspGraphData);
+      // const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
+      // setDSPChartData(dspGraphData);
     },
     [id],
   );
