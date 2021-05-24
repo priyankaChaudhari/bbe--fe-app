@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -7,6 +9,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import NumberFormat from 'react-number-format';
+import $ from 'jquery';
 
 import Theme from '../../theme/Theme';
 import {
@@ -26,13 +29,14 @@ import {
   updateUserMe,
   saveBillingInfo,
 } from '../../api';
-import { PATH_AMAZON_MERCHANT, PATH_THANKS } from '../../constants';
+import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
 import {
   ACHDetails,
   BillingAddress,
   creditCardDetails,
-  PaymentType,
+  stepPath,
+  //  PaymentType,
 } from '../../constants/FieldConstants';
 
 export default function BillingInfo({
@@ -42,14 +46,19 @@ export default function BillingInfo({
   verifiedStepData,
   userInfo,
   isLoading,
+  data,
+  isChecked,
+  summaryData,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    ach: true,
-    credit_card: false,
+    ach: false,
+    credit_card: true,
     billing_address: {},
     billing_contact: {},
+    agreed: false,
+    card_details: {},
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -71,9 +80,115 @@ export default function BillingInfo({
     },
   };
 
+  const getIncompleteStep = summaryData.find(
+    (op) =>
+      Object.keys(op)[0] !== 'digital presence' &&
+      Object.values(op)[0] === false,
+  );
+
+  const CheckStep = (step) => {
+    setIsLoading({ loader: true, type: 'button' });
+    if (step === 'merchant id' || getIncompleteStep === undefined) {
+      history.push(PATH_SUMMARY);
+    } else {
+      stepPath.map((item) => {
+        if (Object.keys(getIncompleteStep)[0] === item.key) {
+          return history.push(item.view);
+        }
+        return history.push(PATH_SUMMARY);
+      });
+    }
+    setIsLoading({ loader: false, type: 'button' });
+  };
+
+  useEffect(() => {
+    if (data && data.id) {
+      $('.checkboxes input:checkbox').prop('checked', true);
+      setFormData({
+        ...formData,
+        agreed: true,
+        billing_address: data.billing_address[0],
+        billing_contact: data.billing_contact[0],
+        card_details: data.card_details[0],
+      });
+    } else {
+      setFormData({
+        ach: false,
+        credit_card: true,
+        billing_address: {},
+        billing_contact: {},
+        agreed: false,
+        card_details: {},
+      });
+    }
+  }, [data]);
+
+  const saveBillingData = (step) => {
+    const getYear = new Date().getFullYear().toString().substring(0, 2);
+    let format = '';
+    if (
+      formData.card_details.expiration_date &&
+      !formData.card_details.expiration_date.includes(getYear)
+    ) {
+      format = formData.card_details.expiration_date.split('/');
+      formData.card_details.expiration_date = `${getYear + format[1]}-${
+        format[0]
+      }`;
+    }
+    delete formData.agreed;
+    delete formData.ach;
+    delete formData.credit_card;
+    let details = {};
+
+    details = {
+      ...formData,
+      // payment_type: formData.ach ? 'ach' : 'credit card',
+      payment_type: 'credit card',
+      billing_address: formData.billing_address,
+      billing_contact: formData.billing_contact,
+      card_details: formData.card_details,
+      step,
+    };
+    saveBillingInfo(details, (data && data.id) || null).then((res) => {
+      if ((res && res.status === 200) || (res && res.status === 201)) {
+        if (assignedToSomeone) {
+          const stringified =
+            queryString &&
+            queryString.stringify({
+              name: verifiedStepData.user_name,
+            });
+          history.push({
+            pathname: PATH_THANKS,
+            search: `${stringified}`,
+          });
+        } else {
+          CheckStep('billing information');
+          // history.push(PATH_AMAZON_MERCHANT);
+        }
+      }
+      if (res && res.status === 400) {
+        setApiError(res && res.data);
+        setFormData({ ...formData, agreed: false });
+        $('.checkboxes input:checkbox').prop('checked', false);
+      }
+    });
+    updateUserMe(userInfo.id || verifiedStepData.user_id, {
+      step: {
+        ...(userInfo.step || verifiedStepData.user_step),
+        [userInfo.customer || verifiedStepData.customer_id]: 3,
+      },
+    }).then((user) => {
+      if (user && user.status === 200) {
+        if (assignedToSomeone) {
+          localStorage.removeItem('match');
+        } else dispatch(userMe());
+      }
+    });
+    setIsLoading({ loader: false, type: 'button' });
+  };
+
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-
     if (
       (stepData === undefined ||
         (stepData &&
@@ -91,41 +206,9 @@ export default function BillingInfo({
       };
       askSomeoneData(detail).then((stepResponse) => {
         if (stepResponse && stepResponse.status === 201) {
-          const details = {
-            payment_type: formData.ach ? 'ach' : 'credit_card',
-            billing_address: formData.billing_address,
-            billing_contact: formData.billing_contact,
-            step: stepResponse && stepResponse.data && stepResponse.data.id,
-          };
-          saveBillingInfo(details).then((response) => {
-            if (response && response.status === 201) {
-              if (assignedToSomeone) {
-                const stringified =
-                  queryString &&
-                  queryString.stringify({
-                    name: verifiedStepData.user_name,
-                  });
-                history.push({
-                  pathname: PATH_THANKS,
-                  search: `${stringified}`,
-                });
-              } else {
-                history.push(PATH_AMAZON_MERCHANT);
-              }
-              updateUserMe(userInfo.id, {
-                step: { ...userInfo.step, [userInfo.customer]: 4 },
-              }).then((user) => {
-                if (user && user.status === 200) {
-                  dispatch(userMe());
-                }
-              });
-              localStorage.removeItem('match');
-              setIsLoading({ loader: false, type: 'button' });
-            }
-            if (response && response.status === 400) {
-              setApiError(response && response.data);
-            }
-          });
+          saveBillingData(
+            stepResponse && stepResponse.data && stepResponse.data.id,
+          );
         }
       });
     } else {
@@ -137,45 +220,41 @@ export default function BillingInfo({
         },
       ).then((response) => {
         if (response && response.status === 200) {
-          const details = {
-            payment_type: formData.ach ? 'ach' : 'credit_card',
-            billing_address: formData.billing_address,
-            billing_contact: formData.billing_contact,
-            step: stepData.id,
-          };
-          saveBillingInfo(details).then((res) => {
-            if (res && res.status === 200) {
-              if (assignedToSomeone) {
-                const stringified =
-                  queryString &&
-                  queryString.stringify({
-                    name: verifiedStepData.user_name,
-                  });
-                history.push({
-                  pathname: PATH_THANKS,
-                  search: `${stringified}`,
-                });
-              } else {
-                history.push(PATH_AMAZON_MERCHANT);
-              }
-            }
-            if (res && res.status === 400) {
-              setApiError(res && res.data);
-            }
-          });
-
-          updateUserMe(userInfo.id, {
-            step: { ...userInfo.step, [userInfo.customer]: 3 },
-          }).then((user) => {
-            if (user && user.status === 200) {
-              dispatch(userMe());
-            }
-          });
-          localStorage.removeItem('match');
-          setIsLoading({ loader: false, type: 'button' });
+          saveBillingData(stepData.id || verifiedStepData.step_id);
         }
       });
     }
+  };
+
+  const handleChange = (event, item, type) => {
+    if (item.key !== 'card_number') {
+      setFormData({
+        ...formData,
+        [type]: {
+          ...formData[type],
+          [item.key]: event.target.value,
+        },
+      });
+    }
+
+    setApiError({
+      ...apiError,
+      [type]: {
+        ...apiError[type],
+        [item.key]: '',
+        0: '',
+      },
+    });
+  };
+
+  const mapDetails = (item) => {
+    if (item === 'card_number')
+      return `************${
+        data.card_details && data.card_details[0] && data.card_details[0][item]
+      }`;
+    if (item === 'expiration_date') return '****';
+    if (item === 'card_code') return '***';
+    return '';
   };
 
   const generateNumeric = (item, type) => {
@@ -183,29 +262,27 @@ export default function BillingInfo({
       <NumberFormat
         format={item.format}
         className="form-control"
-        onChange={(event) => {
-          if (type === 'address') {
-            setFormData({
-              ...formData,
-              billing_address: {
-                ...formData.billing_address,
-                [item.key]: event.target.value,
-              },
-            });
-          } else if (type === 'contact') {
-            setFormData({
-              ...formData,
-              billing_contact: {
-                ...formData.billing_contact,
-                [item.key]: event.target.value,
-              },
-            });
-          } else {
-            setFormData({ ...formData, [item.key]: event.target.value });
-          }
-        }}
-        placeholder={`Enter ${item.label}`}
-        value={formData[item.key]}
+        onChange={(event) => handleChange(event, item, type)}
+        placeholder={
+          item.key === 'expiration_date'
+            ? `Enter ${item.label} (MM/YY)`
+            : `Enter ${item.label}`
+        }
+        value={
+          type === 'card_details' && data && data.id
+            ? mapDetails(item.key)
+            : formData[type][item.key]
+        }
+        onValueChange={(values) =>
+          item.key === 'card_number'
+            ? setFormData({
+                ...formData,
+                card_details: { [item.key]: values.value },
+              })
+            : ''
+        }
+        isNumericString
+        readOnly={type === 'card_details' && data && data.id}
       />
     );
   };
@@ -222,12 +299,12 @@ export default function BillingInfo({
             type="radio"
             name="radio"
             id={item.key}
-            onChange={(event) => {
-              setFormData({
-                ...formData,
-                [item.key]: event.target.checked,
-              });
-            }}
+            // onChange={(event) => {
+            //   setFormData({
+            //     ...formData,
+            //     credit_card_type: event.target.checked ? item.key : '',
+            //   });
+            // }}
             readOnly
           />
           <span className="checkmark" />
@@ -242,31 +319,11 @@ export default function BillingInfo({
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        defaultValue={formData[item.key]}
-        onChange={(event) => {
-          if (type === 'address') {
-            setFormData({
-              ...formData,
-              billing_address: {
-                ...formData.billing_address,
-                [item.key]: event.target.value,
-              },
-            });
-          } else if (type === 'contact') {
-            setFormData({
-              ...formData,
-              billing_contact: {
-                ...formData.billing_contact,
-                [item.key]: event.target.value,
-              },
-            });
-          } else {
-            setFormData({
-              ...formData,
-              [item.key]: event.target.value,
-            });
-          }
-        }}
+        defaultValue={
+          data && data[type] && data[type][0] && data[type][0][item.key]
+        }
+        onChange={(event) => handleChange(event, item, type)}
+        readOnly={type === 'card_details' && data && data.id}
       />
     );
   };
@@ -301,13 +358,13 @@ export default function BillingInfo({
     return creditCardDetails.map((item) => (
       <div key={item.key}>
         <div className="inner-content">
-          <p className="account-steps m-0">Credit Card Type</p>
-          <ul className="payment-option">
+          {/* <p className="account-steps m-0">Credit Card Type</p> */}
+          {/* <ul className="payment-option">
             {item &&
               item.choices.map((field) => (
                 <li key={field.key}>{generateRadio(field)}</li>
               ))}
-          </ul>
+          </ul> */}
           <div className="row">
             {item &&
               item.details.map((field) => (
@@ -317,19 +374,23 @@ export default function BillingInfo({
                       {field.label}
                       <br />
                       {field.type === 'number' ? (
-                        <>{generateNumeric(field)}</>
+                        <>{generateNumeric(field, 'card_details')}</>
                       ) : (
-                        <>{generateInput(field)}</>
+                        <>{generateInput(field, 'card_details')}</>
                       )}
                     </label>
                   </ContractFormField>
                   <ErrorMsg>
-                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                    {apiError &&
+                      apiError.card_details &&
+                      apiError.card_details[field.key] &&
+                      apiError.card_details[field.key][0]}
                   </ErrorMsg>
                 </div>
               ))}
           </div>
         </div>
+        <ErrorMsg>{apiError && apiError[0]}</ErrorMsg>
       </div>
     ));
   };
@@ -349,14 +410,17 @@ export default function BillingInfo({
                       {item.label}
                       <br />
                       {item.type === 'number' ? (
-                        <>{generateNumeric(item, 'address')}</>
+                        <>{generateNumeric(item, 'billing_address')}</>
                       ) : (
-                        <>{generateInput(item, 'address')}</>
+                        <>{generateInput(item, 'billing_address')}</>
                       )}
                     </label>
                   </ContractFormField>
                   <ErrorMsg>
-                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                    {apiError &&
+                      apiError.billing_address &&
+                      apiError.billing_address[item.key] &&
+                      apiError.billing_address[item.key][0]}
                   </ErrorMsg>
                 </div>
               ),
@@ -376,14 +440,17 @@ export default function BillingInfo({
                       {item.label}
                       <br />
                       {item.type === 'number' ? (
-                        <>{generateNumeric(item, 'contact')}</>
+                        <>{generateNumeric(item, 'billing_contact')}</>
                       ) : (
-                        <>{generateInput(item, 'contact')}</>
+                        <>{generateInput(item, 'billing_contact')}</>
                       )}
                     </label>
                   </ContractFormField>
                   <ErrorMsg>
-                    {apiError && apiError[item.key] && apiError[item.key][0]}
+                    {apiError &&
+                      apiError.billing_contact &&
+                      apiError.billing_contact[item.key] &&
+                      apiError.billing_contact[item.key][0]}
                   </ErrorMsg>
                 </div>
               ),
@@ -400,9 +467,16 @@ export default function BillingInfo({
         <fieldset className="shape-without-border  w-430 mt-3">
           <p className="account-steps m-0">Part 1</p>
           <div className="billing-address mb-3"> Payment Type </div>
-          <p className="account-steps m-0">Payment Type</p>
-          <ul className="payment-type mb-3 ">
-            {PaymentType.map((item) => (
+          {/* <p className="account-steps m-0">Payment Type</p> */}
+          <ul className="payment-type">
+            <li>
+              <label
+                className="radio-container  contact-billing"
+                htmlFor="card">
+                Credit Card
+              </label>
+            </li>
+            {/* {PaymentType.map((item) => (
               <li key={item.key}>
                 <ModalRadioCheck className="mt-1">
                   <label
@@ -428,7 +502,7 @@ export default function BillingInfo({
                   </label>
                 </ModalRadioCheck>
               </li>
-            ))}
+            ))} */}
           </ul>
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
@@ -438,7 +512,7 @@ export default function BillingInfo({
         <div className="white-card-base panel gap-none">
           <CheckBox className="mt-3 ">
             <label
-              className="check-container customer-pannel hereby-acknowledge"
+              className="checkboxes check-container customer-pannel hereby-acknowledge"
               htmlFor="contract-copy-check">
               I hereby acknowledge that I am an authorized signer on the account
               listed above and hereby authorize payments to be made to BBE using
@@ -464,17 +538,21 @@ export default function BillingInfo({
               <span className="checkmark" />
             </label>
           </CheckBox>
-          <Button
-            className="btn-primary w-100  mt-3 mb-4"
-            onClick={() => saveDetails()}
-            disabled={!formData.agreed}>
-            {' '}
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#fff" type="button" />
-            ) : (
-              <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
-            )}
-          </Button>
+          {isChecked ? (
+            ''
+          ) : (
+            <Button
+              className="btn-primary w-100  mt-3 mb-4"
+              onClick={() => saveDetails()}
+              disabled={!formData.agreed}>
+              {' '}
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
+              )}
+            </Button>
+          )}
         </div>
       </OnBoardingBody>
       <Modal
@@ -558,6 +636,18 @@ BillingInfo.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
+  data: PropTypes.shape({
+    id: PropTypes.string,
+    card_details: PropTypes.objectOf(PropTypes.object),
+    billing_address: PropTypes.shape({
+      address: PropTypes.string,
+    }),
+    billing_contact: PropTypes.shape({
+      first_name: PropTypes.string,
+    }),
+  }).isRequired,
+  isChecked: PropTypes.bool.isRequired,
+  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const CollapseOpenContainer = styled.div`

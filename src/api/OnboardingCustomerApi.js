@@ -84,18 +84,6 @@ export async function accountSummary(id) {
   return result;
 }
 
-export async function saveBillingInfo(data) {
-  const result = await axiosInstance
-    .post(API_BILLING_INFO, data)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
 export async function getVideoLink(id) {
   const result = await axiosInstance
     .get(API_VIDEO_LINKS.replace(':id', id))
@@ -123,6 +111,45 @@ export async function editCustomerEmail(data) {
 export async function verifyStepUser(email, customerOnboarding) {
   const result = await axiosInstance
     .post(API_VERIFY_USER, { email, customer_onboarding: customerOnboarding })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBillingDetails(customer) {
+  const params = { customer };
+  if (customer !== undefined) {
+    const result = await axiosInstance
+      .get(API_BILLING_INFO, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  return '';
+}
+
+export async function saveBillingInfo(data, id) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_BILLING_INFO + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_BILLING_INFO, data)
     .then((response) => {
       return response;
     })

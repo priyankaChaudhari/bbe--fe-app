@@ -24,6 +24,7 @@ import {
   getUserData,
   getVideoLink,
   verifyStepToken,
+  getBillingDetails,
 } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
@@ -56,6 +57,7 @@ export default function MainContainer() {
   const [videoData, setVideoData] = useState({});
   const [summaryData, setSummaryData] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
+  const [billingData, setBillingData] = useState({});
 
   const customStyles = {
     content: {
@@ -128,13 +130,36 @@ export default function MainContainer() {
             }
             setIsLoading({ loader: false, type: 'page' });
           });
-          dispatch(
-            getCustomerDetails(
+
+          if (
+            !history.location.pathname.includes(
+              '/account-setup/assigned-billing-details',
+            )
+          ) {
+            dispatch(
+              getCustomerDetails(
+                (verify && verify.data && verify.data.customer_id) ||
+                  (userInfo && userInfo.customer),
+              ),
+            );
+          }
+          if (
+            history.location.pathname.includes(
+              '/account-setup/assigned-billing-details',
+            )
+          ) {
+            getBillingDetails(
               (verify && verify.data && verify.data.customer_id) ||
                 (userInfo && userInfo.customer),
-            ),
-          );
-
+            ).then((response) => {
+              if (response && response.status === 200) {
+                setBillingData(response && response.data);
+              }
+              if (response && response.status === 404) {
+                setBillingData({});
+              }
+            });
+          }
           setVerifiedStepData(verify && verify.data);
         });
       }
@@ -190,12 +215,35 @@ export default function MainContainer() {
               }
               setIsLoading({ loader: false, type: 'page' });
             });
-            dispatch(
-              getCustomerDetails(
+            if (
+              !history.location.pathname.includes(
+                '/account-setup/billing-details',
+              )
+            ) {
+              dispatch(
+                getCustomerDetails(
+                  (res && res.data && res.data.customer) ||
+                    verifiedStepData.customer_id,
+                ),
+              );
+            }
+            if (
+              history.location.pathname.includes(
+                '/account-setup/billing-details',
+              )
+            ) {
+              getBillingDetails(
                 (res && res.data && res.data.customer) ||
-                  verifiedStepData.customer_id,
-              ),
-            );
+                  (userInfo && userInfo.customer),
+              ).then((response) => {
+                if (response && response.status === 200) {
+                  setBillingData(response && response.data);
+                }
+                if (response && response.status === 404) {
+                  setBillingData({});
+                }
+              });
+            }
           } else {
             setIsLoading({ loader: false, type: 'page' });
           }
@@ -229,8 +277,10 @@ export default function MainContainer() {
           stepData={stepData}
           verifiedStepData={verifiedStepData}
           userInfo={userInfo}
-          data={data}
+          data={billingData}
           isLoading={isLoading}
+          isChecked={isChecked}
+          summaryData={summaryData}
         />
       );
     if (path === 'amazon-merchant')
@@ -319,7 +369,7 @@ export default function MainContainer() {
                     via the email address highlighted above.
                   </GreyCard>
                 ) : (
-                  <p className="account-steps m-0">Step {item.stepof} of 3</p>
+                  <p className="account-steps m-0">Step {item.stepof} of 4</p>
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (

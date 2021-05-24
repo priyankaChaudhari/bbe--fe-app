@@ -111,4 +111,5 @@ export {
   getVideoLink,
   editCustomerEmail,
   verifyStepUser,
+  getBillingDetails,
 } from './OnboardingCustomerApi';

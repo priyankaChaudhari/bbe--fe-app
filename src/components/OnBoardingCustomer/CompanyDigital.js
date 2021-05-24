@@ -20,11 +20,7 @@ import {
 } from '../../api';
 import { getCustomerDetails, userMe } from '../../store/actions';
 import { SocialIcons, stepPath } from '../../constants/FieldConstants';
-import {
-  PATH_AMAZON_MERCHANT,
-  PATH_SUMMARY,
-  PATH_THANKS,
-} from '../../constants';
+import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
 import { TrashIcons } from '../../theme/images';
 
 export default function CompanyDigital({
@@ -108,7 +104,8 @@ export default function CompanyDigital({
                   search: `${stringified}`,
                 });
               } else {
-                history.push(PATH_AMAZON_MERCHANT);
+                CheckStep('digital presence');
+                // history.push(PATH_BILLING_DETAILS);
               }
               updateUserMe(userInfo.id || verifiedStepData.user_id, {
                 step: {

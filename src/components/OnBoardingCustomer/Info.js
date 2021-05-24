@@ -112,7 +112,7 @@ export default function Info() {
             {!alreadyUser && !reassignedUser ? (
               <>
                 <img className="lock-finish" src={LockFinish} alt="lock" />
-                <p className="account-steps m-0">Step 1 of 3</p>
+                <p className="account-steps m-0">Step 1 of 4</p>
                 <h3 className="page-heading ">Create your account</h3>
                 <p className="information-text m-0 ">
                   <div className="hi-name capitalize">
@@ -130,10 +130,11 @@ export default function Info() {
                     <img src={OrangeCheckMark} alt="check" />
                     Your company website url & social links
                   </li>
-                  {/* <li>
-            <img src={OrangeCheckMark} alt="check" />
-            Billing and payment details and MWS token
-          </li> */}
+                  {/* and MWS token */}
+                  <li>
+                    <img src={OrangeCheckMark} alt="check" />
+                    Billing and payment details
+                  </li>
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
                     Your Amazon merchant ID

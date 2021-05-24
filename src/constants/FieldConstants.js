@@ -1,4 +1,9 @@
-import { PATH_AMAZON_MERCHANT, PATH_COMPANY_DETAILS, PATH_SUMMARY } from '.';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_BILLING_DETAILS,
+  PATH_COMPANY_DETAILS,
+  PATH_SUMMARY,
+} from '.';
 import {
   LinkeDinIcons,
   FaceBookIcons,
@@ -22,10 +27,6 @@ import {
   AmazonIcon,
   SellerSupport,
   BoxesIcon,
-  VisaCardIcons,
-  MasterCardIcons,
-  DiscoverCardIcons,
-  AmercianExpressCardIcons,
   SquareFbIcon,
   TwitterIcon,
   LinkedinIcon,
@@ -689,55 +690,29 @@ export const ACHDetails = [
 
 export const creditCardDetails = [
   {
-    choices: [
-      {
-        key: 'visa',
-        label: 'Visa',
-        icon: VisaCardIcons,
-        type: 'radio',
-      },
-      {
-        key: 'mastercard',
-        label: 'Mastercard',
-        icon: MasterCardIcons,
-        type: 'radio',
-      },
-      {
-        key: 'discover',
-        label: 'Discover',
-        icon: DiscoverCardIcons,
-        type: 'radio',
-      },
-      {
-        key: 'american_express',
-        label: 'American Express',
-        icon: AmercianExpressCardIcons,
-        type: 'radio',
-      },
-    ],
     details: [
       {
-        key: 'credit_card_name',
+        key: 'card_holder_name',
         label: 'Cardholder Name',
         type: 'text',
         property: 'col-12',
       },
       {
-        key: 'credit_card_number',
+        key: 'card_number',
         label: 'Credit Card Number',
         type: 'number',
         property: 'col-12',
         format: '#### #### #### ####',
       },
       {
-        key: 'credit_card_expiration_date',
-        label: 'MM/YY',
+        key: 'expiration_date',
+        label: 'Expiration Date',
         type: 'number',
         property: 'col-8 pr-0',
         format: '##/##',
       },
       {
-        key: 'credit_card_code',
+        key: 'card_code',
         label: 'CVV',
         type: 'number',
         property: 'col-4',
@@ -746,6 +721,33 @@ export const creditCardDetails = [
     ],
   },
 ];
+
+// choices: [
+//       {
+//         key: 'visa',
+//         label: 'Visa',
+//         icon: VisaCardIcons,
+//         type: 'radio',
+//       },
+//       {
+//         key: 'mastercard',
+//         label: 'Mastercard',
+//         icon: MasterCardIcons,
+//         type: 'radio',
+//       },
+//       {
+//         key: 'discover',
+//         label: 'Discover',
+//         icon: DiscoverCardIcons,
+//         type: 'radio',
+//       },
+//       {
+//         key: 'american_express',
+//         label: 'American Express',
+//         icon: AmercianExpressCardIcons,
+//         type: 'radio',
+//       },
+//     ],
 
 export const customerContactDetails = [
   {
@@ -844,7 +846,7 @@ export const BillingAddress = [
     section: 'contact',
   },
   {
-    key: 'phone',
+    key: 'phone_number',
     label: 'Phone number',
     type: 'number',
     property: 'col-6 pl-2',
@@ -862,8 +864,8 @@ export const whichStep = [
     key: 'digital presence',
     stepof: 2,
     title: 'Your company’s digital presence',
-    skip: PATH_AMAZON_MERCHANT,
-    bar: '33.2',
+    skip: PATH_BILLING_DETAILS,
+    bar: '40',
     path: 'company-details',
     subTitle: 'Need help on why we need this information?',
     video: true,
@@ -874,34 +876,34 @@ export const whichStep = [
     title: 'Billing Information',
     skip: PATH_AMAZON_MERCHANT,
     back: PATH_COMPANY_DETAILS,
-    bar: '49.8',
+    bar: '60',
     path: 'billing-details',
     video: false,
   },
   {
     key: 'merchant id',
-    stepof: 3,
+    stepof: 4,
     title: 'Your Amazon Merchant ID',
     skip: PATH_SUMMARY,
-    back: PATH_COMPANY_DETAILS,
-    bar: '66.4',
+    back: PATH_BILLING_DETAILS,
+    bar: '80',
     path: 'amazon-merchant',
     subTitle:
       'This information will be used by our data BOTS to access data we will use to best manage your account. For a quick tutorial on how to access this information, watch the video below.',
     video: true,
   },
-  {
-    key: 'developer access',
-    stepof: 4,
-    title: 'Amazon Developer Access',
-    skip: PATH_SUMMARY,
-    back: PATH_AMAZON_MERCHANT,
-    bar: '83',
-    path: 'amazon-account',
-    subTitle:
-      'Finally, we need you to grant us developer access to your Amazon Seller account.',
-    video: true,
-  },
+  // {
+  //   key: 'developer access',
+  //   stepof: 4,
+  //   title: 'Amazon Developer Access',
+  //   skip: PATH_SUMMARY,
+  //   back: PATH_AMAZON_MERCHANT,
+  //   bar: '83',
+  //   path: 'amazon-account',
+  //   subTitle:
+  //     'Finally, we need you to grant us developer access to your Amazon Seller account.',
+  //   video: true,
+  // },
 ];
 
 export const stepPath = [
@@ -910,11 +912,11 @@ export const stepPath = [
     view: PATH_COMPANY_DETAILS,
     title: 'Your company website url & social links',
   },
-  // {
-  //   key: 'billing information',
-  //   title: 'Billing Information',
-  //   view: PATH_BILLING_DETAILS,
-  // },
+  {
+    key: 'billing information',
+    title: 'Billing Information',
+    view: PATH_BILLING_DETAILS,
+  },
   {
     key: 'merchant id',
     title: 'Your Amazon merchant ID',
