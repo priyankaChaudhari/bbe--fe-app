@@ -13,7 +13,6 @@ import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
-// import jsPDF from 'jspdf';
 import Theme from '../../theme/Theme';
 
 import AgreementSidePanel from '../../common/AgreementSidePanel';
@@ -2308,15 +2307,6 @@ export default function ContractContainer() {
     setIsEditContract(false);
   };
 
-  // const downloadContract = () => {
-  //   var doc = new jsPDF();
-  //   const xmlString = '<h3>Helloooooo</h3>';
-  //   var parser = new DOMParser();
-  //   var docs = parser.parseFromString(xmlString, 'text');
-  //   console.log(docs.body, docs);
-  //   doc.text(10, 10, 'Hello');
-  //   doc.save('myDocument.pdf');
-  // };
   return (
     <>
       {showPageNotFound ? (
@@ -2361,18 +2351,25 @@ export default function ContractContainer() {
                     <div className="col-md-6 col-sm-12">
                       {' '}
                       Contract Management
-                      {/* <div onClick={() => downloadContract()}>Download</div> */}
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
                         <li className="download-pdf">
-                          <img
-                            src={DownloadPdf}
-                            alt="close"
-                            className="download-pdf-icon "
-                            role="presentation"
-                          />
-                          Download
+                          <a
+                            href={
+                              details && details.contract_url
+                                ? details && details.contract_url
+                                : ''
+                            }
+                            download>
+                            <img
+                              src={DownloadPdf}
+                              alt="close"
+                              className="download-pdf-icon "
+                              role="presentation"
+                            />
+                            Download
+                          </a>
                         </li>
                         <li>
                           <span className="divide-arrow" />
@@ -2443,18 +2440,25 @@ export default function ContractContainer() {
                     <div className="col-md-6 col-sm-12">
                       {' '}
                       Contract Management
-                      {/* <div onClick={() => downloadContract()}>Download</div> */}
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
                         <li className="download-pdf">
-                          <img
-                            src={DownloadPdf}
-                            alt="close"
-                            className="download-pdf-icon "
-                            role="presentation"
-                          />
-                          Download
+                          <a
+                            href={
+                              details && details.contract_url
+                                ? details && details.contract_url
+                                : ''
+                            }
+                            download>
+                            <img
+                              src={DownloadPdf}
+                              alt="close"
+                              className="download-pdf-icon "
+                              role="presentation"
+                            />
+                            Download
+                          </a>
                         </li>
                         <li>
                           <span className="divide-arrow" />
