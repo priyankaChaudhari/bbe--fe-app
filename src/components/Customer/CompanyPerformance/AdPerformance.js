@@ -29,7 +29,7 @@ import {
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
-import { adResData } from './DummyApiRes';
+import { adResData, dspResData } from './DummyApiRes';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -47,12 +47,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [adChartData, setAdChartData] = useState([]);
-  const [currentTotal, setCurrentTotal] = useState([]);
-  const [previousTotal, setPreviousTotal] = useState([]);
+  const [adCurrentTotal, setAdCurrentTotal] = useState([]);
+  const [adPreviousTotal, setAdPreviousTotal] = useState([]);
   const [difference, setDifference] = useState([]);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
-  const [dspChartData, setDSPChratData] = useState([]);
+  const [dspChartData, setDSPChartData] = useState([]);
   const [dspTotal, setDSPTotal] = useState({});
 
   const currentDate = new Date();
@@ -101,19 +101,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     },
   };
 
-  const calculateSalesDifference = (currentTotals, previousTotals) => {
-    const diff = ((currentTotals - previousTotals) * 100) / previousTotals;
-    if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
-      return 'N/A';
-    }
-    return parseFloat(diff.toFixed(2));
-  };
-
   /// ////////////////////////////////////////////////////////////////////////
   //
   // function name: bindAdResponseData
   // Descrition : this function is used to manage the ad performance api response and
-  // filter out the response.
+  // filter out this response.
   // required parameters : One
   // parameter Descrition: 1. response of ad performance api
   //
@@ -245,6 +237,98 @@ export default function AdPerformance({ marketplaceChoices, id }) {
 
   /// ////////////////////////////////////////////////////////////////////////
   //
+  // function name: bindDSPResponseData
+  // Descrition : this function is used to manage the DSP performance api response and
+  // filter out this response.
+  // required parameters : One
+  // parameter Descrition: 1. response of DSP performance api
+  //
+  /// ////////////////////////////////////////////////////////////////////////////////
+
+  const bindDSPResponseData = (response) => {
+    const tempData = [];
+
+    // filterout previous data in one temporary object.
+    if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
+      response.dsp_spend.previous.forEach((item) => {
+        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        tempData.push({
+          DspPrevious: item.daily_dsp_spend_report,
+          previousDate,
+
+          DspPreviousLabel:
+            item.daily_dsp_spend_report !== null
+              ? item.daily_dsp_spend_report
+              : '0.00',
+        });
+      });
+    }
+
+    // filterout current data in one temporary object.
+    if (response.dsp_spend.current && response.dsp_spend.current.length) {
+      response.dsp_spend.current.forEach((item, index) => {
+        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        // add the current data at same index of prevoius in temporary object
+        if (
+          response.dsp_spend.previous &&
+          index < response.dsp_spend.previous.length
+        ) {
+          tempData[index].date = currentReportDate;
+          tempData[index].DspCurrent = item.daily_dsp_spend_report;
+
+          tempData[index].DspCurrentLabel =
+            item.daily_dsp_spend_report !== null
+              ? item.daily_dsp_spend_report
+              : '0.00';
+
+          // to add the dotted line. we have to check null matrix and add the dummy number like 8
+          if (index > 0) {
+            tempData[index - 1].DspdashLength =
+              item.daily_dsp_spend_report === null ? 8 : null;
+          } else {
+            tempData[index].DspdashLength =
+              item.daily_dsp_spend_report === null ? 8 : null;
+          }
+        } else {
+          // if current data count is larger than previous count then
+          // generate separate key for current data
+          tempData.push({
+            DspCurrent: item.daily_dsp_spend_report,
+            date: currentReportDate,
+
+            DspCurrentLabel:
+              item.daily_dsp_spend_report !== null
+                ? item.daily_dsp_spend_report
+                : '0.00',
+          });
+        }
+      });
+    }
+    // filterout the dsp current total, previous total, and diffrence
+    if (response.dsp_spend) {
+      let dspTempData = {};
+      const dspCurrent =
+        response.dsp_spend &&
+        response.dsp_spend.current_sum.daily_dsp_spend_report;
+      const dspPrevious =
+        response.dsp_spend &&
+        response.dsp_spend.previous_sum.daily_dsp_spend_report;
+      const dspDifference =
+        response.dsp_spend &&
+        response.dsp_spend.difference_data.daily_dsp_spend_report;
+
+      dspTempData = {
+        currentDspTodal: dspCurrent !== null ? dspCurrent : '0.00',
+        previousDspTodal: dspPrevious !== null ? dspPrevious : '0.00',
+        dspDifference,
+      };
+      setDSPTotal(dspTempData);
+    }
+    return tempData;
+  };
+
+  /// ////////////////////////////////////////////////////////////////////////
+  //
   // function name: getAdData
   // Descrition : this function is used to get the ad performace graph data
   // This functional internaly call the BE api
@@ -281,15 +365,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
           const adGraphData = bindAdResponseData(adResData); // after api done then only send res.data
           setAdChartData(adGraphData);
-          setCurrentTotal(adResData.daily_facts.current_sum);
-          setPreviousTotal(adResData.daily_facts.previous_sum);
+          setAdCurrentTotal(adResData.daily_facts.current_sum);
+          setAdPreviousTotal(adResData.daily_facts.previous_sum);
           setDifference(adResData.daily_facts.difference_data);
         }
       });
       // const adGraphData = bindAdResponseData(adResData);
       // setAdChartData(adGraphData);
-      // setCurrentTotal(adResData.daily_facts.current_sum);
-      // setPreviousTotal(adResData.daily_facts.previous_sum);
+      // setAdCurrentTotal(adResData.daily_facts.current_sum);
+      // setAdPreviousTotal(adResData.daily_facts.previous_sum);
       // setDifference(adResData.daily_facts.difference_data);
     },
     [id],
@@ -315,67 +399,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           //
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          const tempRevenueData = [];
-          const dspSpendTodal = {
-            previousDspTodal: 0,
-            currentDspTodal: 0,
-            difference: 0,
-          };
-          if (
-            res.data.daily_facts.previous &&
-            res.data.daily_facts.previous.length
-          ) {
-            res.data.daily_facts.previous.forEach((resData) => {
-              tempRevenueData.push({
-                value2: resData.revenue,
-                label2: resData.revenue !== null ? resData.revenue : '0.00',
-              });
-            });
-          }
-          if (
-            res.data.daily_facts.current &&
-            res.data.daily_facts.current.length
-          ) {
-            res.data.daily_facts.current.forEach((resData, index) => {
-              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              dspSpendTodal.currentDspTodal += resData.revenue;
-              if (
-                res.data.daily_facts.previous &&
-                index < res.data.daily_facts.previous.length
-              ) {
-                tempRevenueData[index].date = dayDate;
-                tempRevenueData[index].value1 = resData.revenue;
-
-                if (index > 0) {
-                  tempRevenueData[index - 1].dashLength =
-                    resData.revenue === null ? 8 : null;
-                }
-
-                tempRevenueData[index].dashLength =
-                  resData.revenue === null ? 8 : null;
-                tempRevenueData[index].label1 =
-                  resData.revenue !== null ? resData.revenue : '0.00';
-
-                dspSpendTodal.previousDspTodal +=
-                  res.data.daily_facts.previous[index].revenue;
-              } else {
-                tempRevenueData.push({
-                  date: dayDate,
-                  value1: resData.revenue,
-                  label1: resData.revenue !== null ? resData.revenue : '0.00',
-                  label2: '0.00',
-                });
-              }
-            });
-          }
-          dspSpendTodal.difference = calculateSalesDifference(
-            dspSpendTodal.currentDspTodal,
-            dspSpendTodal.previousDspTodal,
-          );
-          setDSPTotal(dspSpendTodal);
-          setDSPChratData(tempRevenueData);
+          const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
+          setDSPChartData(dspGraphData);
         }
       });
+      const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
+      setDSPChartData(dspGraphData);
     },
     [id],
   );
@@ -755,11 +784,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return selectedClass;
   };
 
-  const bindValues = (value) => {
+  const bindValues = (value, fontSize) => {
     const decimal = _.split(value, '.', 2);
     if (decimal[1] !== undefined) {
       return (
-        <span style={{ fontSize: '26px' }}>
+        <span style={{ fontSize }}>
           {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           {/* <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span> */}
           <span>.{decimal[1].slice(0, 2)}</span>
@@ -767,7 +796,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       );
     }
     return (
-      <span style={{ fontSize: '26px' }}>
+      <span style={{ fontSize }}>
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
         {/* <span style={{ fontSize: '16px' }}>.00</span> */}
         <span>.00</span>
@@ -872,14 +901,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adSales', 'ad-sales-active')}>
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.ad_sales
-                ? `${currencySign}${addThousandComma(currentTotal.ad_sales)}`
+              {adCurrentTotal && adCurrentTotal.ad_sales
+                ? `${currencySign}${addThousandComma(adCurrentTotal.ad_sales)}`
                 : `${currencySign}0.00`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.ad_sales
+              {adPreviousTotal && adPreviousTotal.ad_sales
                 ? `vs ${currencySign}${addThousandComma(
-                    previousTotal.ad_sales,
+                    adPreviousTotal.ad_sales,
                   )}`
                 : `vs ${currencySign}0.00`}
             </div>
@@ -915,14 +944,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.ad_spend
-                ? `${currencySign}${addThousandComma(currentTotal.ad_spend)}`
+              {adCurrentTotal && adCurrentTotal.ad_spend
+                ? `${currencySign}${addThousandComma(adCurrentTotal.ad_spend)}`
                 : `${currencySign}0.00`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.ad_spend
+              {adPreviousTotal && adPreviousTotal.ad_spend
                 ? `vs ${currencySign}${addThousandComma(
-                    previousTotal.ad_spend,
+                    adPreviousTotal.ad_spend,
                   )}`
                 : `vs ${currencySign}0.00`}
             </div>
@@ -959,13 +988,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">
-              {currentTotal && currentTotal.ad_conversion_rate
-                ? `${currentTotal.ad_conversion_rate}%`
+              {adCurrentTotal && adCurrentTotal.ad_conversion_rate
+                ? `${adCurrentTotal.ad_conversion_rate}%`
                 : `0.00%`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.ad_conversion_rate
-                ? `vs ${previousTotal.ad_conversion_rate}%`
+              {adPreviousTotal && adPreviousTotal.ad_conversion_rate
+                ? `vs ${adPreviousTotal.ad_conversion_rate}%`
                 : `vs 0.00%`}
             </div>
 
@@ -1001,13 +1030,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('impressions', 'impression-active')}>
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.impressions
-                ? addThousandComma(currentTotal.impressions)
+              {adCurrentTotal && adCurrentTotal.impressions
+                ? addThousandComma(adCurrentTotal.impressions)
                 : `0.00`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.impressions
-                ? `vs ${addThousandComma(previousTotal.impressions)}`
+              {adPreviousTotal && adPreviousTotal.impressions
+                ? `vs ${addThousandComma(adPreviousTotal.impressions)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.impressions ? (
@@ -1042,13 +1071,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adCos', 'ad-cos-active')}>
             <div className="chart-name">Acos</div>
             <div className="number-rate">
-              {currentTotal && currentTotal.acos
-                ? `${currencySign}${addThousandComma(currentTotal.acos)}`
+              {adCurrentTotal && adCurrentTotal.acos
+                ? `${currencySign}${addThousandComma(adCurrentTotal.acos)}`
                 : `${currencySign}0.00`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.acos
-                ? `vs ${currencySign}${addThousandComma(previousTotal.acos)}`
+              {adPreviousTotal && adPreviousTotal.acos
+                ? `vs ${currencySign}${addThousandComma(adPreviousTotal.acos)}`
                 : `vs ${currencySign}0.00`}
             </div>
             {difference && difference.acos ? (
@@ -1083,14 +1112,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.roas
-                ? addThousandComma(currentTotal.roas)
+              {adCurrentTotal && adCurrentTotal.roas
+                ? addThousandComma(adCurrentTotal.roas)
                 : '0.00'}
             </div>
             <div className="vs">
               {' '}
-              {previousTotal && previousTotal.roas
-                ? `vs ${addThousandComma(previousTotal.roas)}`
+              {adPreviousTotal && adPreviousTotal.roas
+                ? `vs ${addThousandComma(adPreviousTotal.roas)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.roas ? (
@@ -1125,13 +1154,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adClicks', 'ad-click-active')}>
             <div className="chart-name">Clicks </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.clicks
-                ? addThousandComma(currentTotal.clicks)
+              {adCurrentTotal && adCurrentTotal.clicks
+                ? addThousandComma(adCurrentTotal.clicks)
                 : '0.00'}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.clicks
-                ? `vs ${addThousandComma(previousTotal.clicks)}`
+              {adPreviousTotal && adPreviousTotal.clicks
+                ? `vs ${addThousandComma(adPreviousTotal.clicks)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.clicks ? (
@@ -1166,13 +1195,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.ctr
-                ? `${currentTotal.ctr}%`
+              {adCurrentTotal && adCurrentTotal.ctr
+                ? `${adCurrentTotal.ctr}%`
                 : `0.00%`}
             </div>
             <div className="vs">
-              {previousTotal && previousTotal.ctr
-                ? `vs ${previousTotal.ctr}%`
+              {adPreviousTotal && adPreviousTotal.ctr
+                ? `vs ${adPreviousTotal.ctr}%`
                 : `vs 0.00%`}
             </div>
             {difference && difference.ctr ? (
@@ -1314,36 +1343,36 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="number-rate">
           {currencySymbol}
           {dspTotal && dspTotal.currentDspTodal
-            ? bindValues(dspTotal.currentDspTodal)
+            ? bindValues(dspTotal.currentDspTodal, '26px')
             : '0.00'}
         </div>
         <div className="vs">
           vs {currencySymbol}
           {dspTotal && dspTotal.previousDspTodal
-            ? bindValues(dspTotal.previousDspTodal)
+            ? bindValues(dspTotal.previousDspTodal, '16px')
             : '0.00'}{' '}
           <span
             className={
-              dspTotal && dspTotal.difference > 0
+              dspTotal && dspTotal.dspDifference > 0
                 ? 'perentage-value mt-3 ml-1'
                 : 'perentage-value down mt-3 ml-1'
             }>
-            {!Number.isNaN(dspTotal && dspTotal.difference) &&
+            {!Number.isNaN(dspTotal && dspTotal.dspDifference) &&
             dspTotal &&
-            dspTotal.difference > 0 ? (
+            dspTotal.dspDifference > 0 ? (
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-            ) : !Number.isNaN(dspTotal && dspTotal.difference) &&
+            ) : !Number.isNaN(dspTotal && dspTotal.dspDifference) &&
               dspTotal &&
-              dspTotal.difference < 0 ? (
+              dspTotal.dspDifference < 0 ? (
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
             ) : (
               ''
             )}
             {dspTotal &&
-            dspTotal.difference &&
+            dspTotal.dspDifference &&
             dspTotal &&
-            dspTotal.difference !== 'N/A'
-              ? `${dspTotal.difference.toString().replace('-', '')}%`
+            dspTotal.dspDifference !== 'N/A'
+              ? `${dspTotal.dspDifference.toString().replace('-', '')}%`
               : 'N/A'}
 
             {/* <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />

@@ -211,4 +211,79 @@ export const adResData = {
   },
 };
 
-export const abc = [];
+export const dspResData = {
+  dsp_spend: {
+    current: [
+      {
+        report_date: '2021-05-17',
+        daily_dsp_spend_report: 1227.21,
+      },
+      {
+        report_date: '2021-05-18',
+        daily_dsp_spend_report: 1323.01,
+      },
+      {
+        report_date: '2021-05-19',
+        daily_dsp_spend_report: 1346.37,
+      },
+      {
+        report_date: '2021-05-20',
+        daily_dsp_spend_report: 1198.02,
+      },
+      {
+        report_date: '2021-05-21',
+        daily_dsp_spend_report: 1200.56,
+      },
+      {
+        report_date: '2021-05-22',
+        daily_dsp_spend_report: null,
+      },
+      {
+        report_date: '2021-05-23',
+        daily_dsp_spend_report: null,
+      },
+    ],
+    previous: [
+      {
+        report_date: '2021-05-10',
+        daily_dsp_spend_report: 1096.57,
+      },
+      {
+        report_date: '2021-05-11',
+        daily_dsp_spend_report: 1258.26,
+      },
+      {
+        report_date: '2021-05-12',
+        daily_dsp_spend_report: 1269.1,
+      },
+      {
+        report_date: '2021-05-13',
+        daily_dsp_spend_report: 1318.96,
+      },
+      {
+        report_date: '2021-05-14',
+        daily_dsp_spend_report: 1295.16,
+      },
+      {
+        report_date: '2021-05-15',
+        daily_dsp_spend_report: 1254.5,
+      },
+      {
+        report_date: '2021-05-16',
+        daily_dsp_spend_report: 1305.0,
+      },
+    ],
+    current_sum: {
+      report_date: '',
+      daily_dsp_spend_report: 6295.17,
+    },
+    previous_sum: {
+      report_date: '',
+      daily_dsp_spend_report: 6238.05,
+    },
+    difference_data: {
+      report_date: '',
+      daily_dsp_spend_report: -57.12,
+    },
+  },
+};

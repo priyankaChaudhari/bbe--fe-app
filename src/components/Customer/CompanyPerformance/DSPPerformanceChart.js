@@ -16,180 +16,51 @@ export default function DSPPerformanceChart({
   chartData,
   currencySymbol,
 }) {
-  // const adGraphData = [
-  //   {
-  //     date: new Date(2019, 5, 12),
-  //     value1: 5000,
-  //     value2: 4800,
-  //     previousDate: new Date(2019, 5, 5),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 13),
-  //     value1: 1300,
-  //     value2: 5100,
-  //     previousDate: new Date(2019, 5, 6),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 14),
-  //     value1: 2600,
-  //     value2: 1800,
-  //     previousDate: new Date(2019, 5, 7),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 15),
-  //     value1: 900,
-  //     value2: 5300,
-  //     previousDate: new Date(2019, 5, 8),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 16),
-  //     value1: 4800,
-  //     value2: 4400,
-  //     previousDate: new Date(2019, 5, 9),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 17),
-  //     value1: 4700,
-  //     value2: 3200,
-  //     previousDate: new Date(2019, 5, 10),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 18),
-  //     value1: 5900,
-  //     value2: 5500,
-  //     previousDate: new Date(2019, 5, 11),
-  //   },
-
-  //   {
-  //     date: new Date(2019, 5, 19),
-  //     value1: 5000,
-  //     value2: 4800,
-  //     previousDate: new Date(2019, 5, 12),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 20),
-  //     value1: 5300,
-  //     value2: 5100,
-  //     previousDate: new Date(2019, 5, 13),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 21),
-  //     value1: 5600,
-  //     value2: 5800,
-  //     previousDate: new Date(2019, 5, 14),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 22),
-  //     value1: 5020,
-  //     value2: 5300,
-  //     previousDate: new Date(2019, 5, 15),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 23),
-  //     value1: 4800,
-  //     value2: 4400,
-  //     previousDate: new Date(2019, 5, 16),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 24),
-  //     value1: 4070,
-  //     value2: 4200,
-  //     previousDate: new Date(2019, 5, 17),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 25),
-  //     value1: 5900,
-  //     value2: 5500,
-  //     previousDate: new Date(2019, 5, 18),
-  //   },
-
-  //   {
-  //     date: new Date(2019, 5, 26),
-  //     value1: 5000,
-  //     value2: 4800,
-  //     previousDate: new Date(2019, 5, 19),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 27),
-  //     value1: 5030,
-  //     value2: 5100,
-  //     previousDate: new Date(2019, 5, 20),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 28),
-  //     value1: 5600,
-  //     value2: 5800,
-  //     previousDate: new Date(2019, 5, 21),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 29),
-  //     value1: 5200,
-  //     value2: null,
-  //     previousDate: new Date(2019, 5, 22),
-  //   },
-  //   {
-  //     date: new Date(2019, 5, 30),
-  //     value1: 4800,
-  //     value2: 4400,
-  //     previousDate: new Date(2019, 5, 23),
-  //   },
-  //   {
-  //     date: new Date(2019, 6, 1),
-  //     value1: 4700,
-  //     value2: null,
-  //     previousDate: new Date(2019, 5, 24),
-  //   },
-  //   {
-  //     date: new Date(2019, 6, 2),
-  //     value1: 5900,
-  //     value2: 5500,
-  //     previousDate: new Date(2019, 5, 25),
-  //   },
-  // ];
   const chart = useRef(null);
   useEffect(() => {
-    const adGraphData = [
-      {
-        date: new Date(2019, 5, 12),
-        value1: 5000,
-        value2: 4800,
-        previousDate: new Date(2019, 5, 5),
-      },
-      {
-        date: new Date(2019, 5, 13),
-        value1: 1300,
-        value2: 5100,
-        previousDate: new Date(2019, 5, 6),
-      },
-      {
-        date: new Date(2019, 5, 14),
-        value1: 2600,
-        value2: 1800,
-        previousDate: new Date(2019, 5, 7),
-      },
-      {
-        date: new Date(2019, 5, 15),
-        value1: 900,
-        value2: 5300,
-        previousDate: new Date(2019, 5, 8),
-      },
-      {
-        date: new Date(2019, 5, 16),
-        value1: 4800,
-        value2: 4400,
-        previousDate: new Date(2019, 5, 9),
-      },
-      {
-        date: new Date(2019, 5, 17),
-        value1: 4700,
-        value2: 3200,
-        previousDate: new Date(2019, 5, 10),
-      },
-    ];
+    // const adGraphData = [
+    //   {
+    //     date: new Date(2019, 5, 12),
+    //     value1: 5000,
+    //     value2: 4800,
+    //     previousDate: new Date(2019, 5, 5),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 13),
+    //     value1: 1300,
+    //     value2: 5100,
+    //     previousDate: new Date(2019, 5, 6),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 14),
+    //     value1: 2600,
+    //     value2: 1800,
+    //     previousDate: new Date(2019, 5, 7),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 15),
+    //     value1: 900,
+    //     value2: 5300,
+    //     previousDate: new Date(2019, 5, 8),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 16),
+    //     value1: 4800,
+    //     value2: 4400,
+    //     previousDate: new Date(2019, 5, 9),
+    //   },
+    //   {
+    //     date: new Date(2019, 5, 17),
+    //     value1: 4700,
+    //     value2: 3200,
+    //     previousDate: new Date(2019, 5, 10),
+    //   },
+    // ];
     // if (!chart.current) {
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    // chart.current.data = chartData; // bind th data
-    chart.current.data = adGraphData; // bind th data
+    chart.current.data = chartData; // bind th data
+    // console.log('chartData', chartData);
+    // chart.current.data = adGraphData; // bind th data
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
 
@@ -246,18 +117,18 @@ export default function DSPPerformanceChart({
     tooltipCurrent = renderTooltip(
       'Recent',
       '#2e384d',
-      'value1',
+      'DspCurrentLabel',
       currencySymbol,
     );
     tooltipPrevious = renderTooltip(
       'Previous',
       '#BFC5D2',
-      'value2',
+      'DspPreviousLabel',
       currencySymbol,
     );
     // Create series for previous data
     const series = chart.current.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = 'value2';
+    series.dataFields.valueY = 'DspPrevious';
     series.name = 'Previous';
     series.dataFields.dateX = 'date';
     series.strokeWidth = 2;
@@ -265,7 +136,7 @@ export default function DSPPerformanceChart({
     // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
     series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
     series.fill = am4core.color('#2e384d');
-    series.propertyFields.strokeDasharray = 'dashLength';
+    series.propertyFields.strokeDasharray = 'DspdashLength';
 
     // add bullet for
     const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
@@ -275,7 +146,7 @@ export default function DSPPerformanceChart({
 
     // series for current data
     const series2 = chart.current.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'value1';
+    series2.dataFields.valueY = 'DspCurrent';
     series2.dataFields.dateX = 'date';
     series2.name = 'Recent';
     series2.strokeWidth = 2;
