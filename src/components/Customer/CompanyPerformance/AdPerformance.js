@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { components } from 'react-select';
+import Select, { components } from 'react-select';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
@@ -21,7 +21,7 @@ import {
   UpDowGrayArrow,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button, WhiteCard } from '../../../common';
+import { ModalBox, Button, WhiteCard , DropDownSelect } from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
@@ -30,6 +30,8 @@ import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
 import { adResData } from './DummyApiRes';
+
+
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -780,7 +782,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return (
       <div className="row">
         <div className="col-12 mb-3">
-          {DropDown(
+          {/* {DropDown(
             'cursor',
             marketplaceOptions,
             marketplaceOptions &&
@@ -789,7 +791,29 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             DropdownIndicator,
             marketplaceOptions && marketplaceOptions[0],
             handleMarketplaceOptions,
-          )}
+          )} */}
+          <DropDownSelect className="cursor ">
+            <Select
+              classNamePrefix="react-select"
+              className="active"
+              components={DropdownIndicator}
+              options={marketplaceOptions}
+              defaultValue={marketplaceOptions && marketplaceOptions[0]}
+              onChange={(event) => handleMarketplaceOptions(event)}
+              placeholder={
+                marketplaceOptions &&
+                marketplaceOptions[0] &&
+                marketplaceOptions[0].label
+              }
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  neutral50: '#1A1A1A',
+                },
+              })}
+            />
+          </DropDownSelect>
         </div>
       </div>
     );
@@ -810,7 +834,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 'days-performance',
                 AdTypesOptions,
                 null,
-                getSelectComponents(),
+                getSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
               )}
@@ -821,7 +845,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 'days-performance',
                 dateOptions,
                 null,
-                getSelectComponents(),
+                getSelectComponents,
                 dateOptions[0],
                 handleAdDailyFact,
               )}
@@ -1273,7 +1297,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             'days-performance',
             dateOptions,
             null,
-            getSelectComponents(),
+            getSelectComponents,
             dateOptions[0],
             handleDSPDailyFact,
           )}

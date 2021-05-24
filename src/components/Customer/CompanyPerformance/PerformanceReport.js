@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
-
+import Select, { components } from 'react-select';
 import {
   LineChart,
   ResponsiveContainer,
@@ -29,9 +29,10 @@ import {
   Cell,
 } from 'recharts';
 import Modal from 'react-modal';
-import { components } from 'react-select';
+
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
+import { DropDownSelect , ModalBox, Button, WhiteCard } from '../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../api';
 
 import {
@@ -40,7 +41,7 @@ import {
   CaretUp,
   CloseIcon,
 } from '../../../theme/images/index';
-import { ModalBox, Button, WhiteCard } from '../../../common';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
@@ -935,14 +936,35 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     return (
       <div className="row">
         <div className="col-12 mb-3">
-          {DropDown(
+          {/* {DropDown(
             'cursor',
             amazonOptions,
             amazonOptions && amazonOptions[0] && amazonOptions[0].label,
             DropdownIndicator,
             amazonOptions && amazonOptions[0],
             handleAmazonOptions,
-          )}
+          )} */}
+
+          <DropDownSelect className="cursor ">
+            <Select
+              classNamePrefix="react-select"
+              className="active"
+              components={DropdownIndicator}
+              options={amazonOptions}
+              defaultValue={amazonOptions && amazonOptions[0]}
+              onChange={(event) => handleAmazonOptions(event)}
+              placeholder={
+                amazonOptions && amazonOptions[0] && amazonOptions[0].label
+              }
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  neutral50: '#1A1A1A',
+                },
+              })}
+            />
+          </DropDownSelect>
         </div>
       </div>
     );
@@ -955,7 +977,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           'days-performance',
           dateOptions,
           null,
-          getSelectComponents(),
+          getSelectComponents,
           dateOptions[0],
           handleDailyFact,
         )}
@@ -964,8 +986,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             classNamePrefix="react-select"
             className="active"
             components={getSelectComponents()}
-            options={reportOptions}
-            defaultValue={reportOptions[0]}
+            options={dateOptions}
+            defaultValue={dateOptions[0]}
             onChange={(event) => handleDailyFact(event.value)}
           />
         </DropDownSelect>{' '} */}
@@ -1354,6 +1376,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 'days-performance',
                 dateOptions,
                 null,
+                // getSelectComponents,
                 null,
                 dateOptions[0],
                 handleBBDailyFact,
@@ -1362,9 +1385,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 <Select
                   classNamePrefix="react-select"
                   className="active"
-                  // components={getSelectComponents()}
-                  options={BBReportOptions}
-                  defaultValue={BBReportOptions[0]}
+                  components={getSelectComponents()}
+                  options={dateOptions}
+                  defaultValue={dateOptions[0]}
                   onChange={(event) => handleBBDailyFact(event.value)}
                 />
               </DropDownSelect>{' '} */}

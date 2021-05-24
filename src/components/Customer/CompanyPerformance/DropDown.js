@@ -17,7 +17,7 @@ export const DropDown = (
         className="active"
         options={options}
         placeholder={placeholder}
-        components={{ components }}
+        components={components !== null ? components() : null}
         theme={(theme) => ({
           ...theme,
           colors: {
