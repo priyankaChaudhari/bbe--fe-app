@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { components } from 'react-select';
+import Select, { components } from 'react-select';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
@@ -21,7 +21,7 @@ import {
   UpDowGrayArrow,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button, WhiteCard } from '../../../common';
+import { ModalBox, Button, WhiteCard , DropDownSelect } from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
@@ -29,6 +29,9 @@ import {
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
+import { adResData } from './DummyApiRes';
+
+
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -45,7 +48,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [adGroupBy, setAdGroupBy] = useState('daily');
-  // const [adChartData, setAdChartData] = useState([]);
+  const [adChartData, setAdChartData] = useState([]);
+  const [currentTotal, setCurrentTotal] = useState([]);
+  const [previousTotal, setPreviousTotal] = useState([]);
+  const [difference, setDifference] = useState([]);
+
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChratData] = useState([]);
   const [dspTotal, setDSPTotal] = useState({});
@@ -96,14 +103,162 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     },
   };
 
-  const calculateSalesDifference = (currentTotal, previousTotal) => {
-    const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
+  const calculateSalesDifference = (currentTotals, previousTotals) => {
+    const diff = ((currentTotals - previousTotals) * 100) / previousTotals;
     if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
       return 'N/A';
     }
     return parseFloat(diff.toFixed(2));
   };
 
+  /// ////////////////////////////////////////////////////////////////////////
+  //
+  // function name: bindAdResponseData
+  // Descrition : this function is used to manage the ad performance api response and
+  // filter out the response.
+  // required parameters : One
+  // parameter Descrition: 1. response of ad performance api
+  //
+  /// ////////////////////////////////////////////////////////////////////////////////
+  const bindAdResponseData = (response) => {
+    const tempData = [];
+
+    // filterout previous data in one temporary object.
+    if (response.daily_facts.previous && response.daily_facts.previous.length) {
+      response.daily_facts.previous.forEach((item) => {
+        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        tempData.push({
+          adSalesPrevious: item.ad_sales,
+          adSpendPrevious: item.ad_spend,
+          adConversionPrevious: item.ad_conversion_rate,
+          impressionsPrevious: item.impressions,
+          adCosPrevious: item.acos,
+          adRoasPrevious: item.roas,
+          adClicksPrevious: item.clicks,
+          adClickRatePrevious: item.ctr,
+          previousDate,
+
+          adSalesPreviousLabel: item.ad_sales !== null ? item.ad_sales : '0.00',
+          adSpendPreviousLabel: item.ad_spend !== null ? item.ad_spend : '0.00',
+          adConversionPreviousLabel:
+            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00',
+          impressionsPreviousLabel:
+            item.impressions !== null ? item.impressions : '0.00',
+          adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
+          adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
+          adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0.00',
+          adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
+        });
+      });
+    }
+
+    // filterout current data in one temporary object.
+    if (response.daily_facts.current && response.daily_facts.current.length) {
+      response.daily_facts.current.forEach((item, index) => {
+        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        let indexNumber = index;
+        // add the current data at same index of prevoius in temporary object
+        if (
+          response.daily_facts.previous &&
+          index < response.daily_facts.previous.length
+        ) {
+          tempData[index].date = currentReportDate;
+          tempData[index].adSalesCurrent = item.ad_sales;
+          tempData[index].adSpendCurrent = item.ad_spend;
+          tempData[index].adConversionCurrent = item.ad_conversion_rate;
+          tempData[index].impressionsCurrent = item.impressions;
+          tempData[index].adCosCurrent = item.acos;
+          tempData[index].adRoasCurrent = item.roas;
+          tempData[index].adClicksCurrent = item.clicks;
+          tempData[index].adClickRateCurrent = item.ctr;
+
+          tempData[index].adSalesCurrentLabel =
+            item.ad_sales !== null ? item.ad_sales : '0.00';
+          tempData[index].adSpendCurrentLabel =
+            item.ad_spend !== null ? item.ad_spend : '0.00';
+          tempData[index].adConversionCurrentLabel =
+            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00';
+          tempData[index].impressionsCurrentLabel =
+            item.impressions !== null ? item.impressions : '0.00';
+          tempData[index].adCosCurrentLabel =
+            item.acos !== null ? item.acos : '0.00';
+          tempData[index].adRoasCurrentLabel =
+            item.roas !== null ? item.roas : '0.00';
+          tempData[index].adClicksCurrentLabel =
+            item.clicks !== null ? item.clicks : '0.00';
+          tempData[index].adClickRateCurrentLabel =
+            item.ctr !== null ? item.ctr : '0.00';
+
+          // to add the dotted line. we have to check null matrix and add the dummy number like 8
+          if (index > 0) {
+            indexNumber = index - 1;
+          } else {
+            indexNumber = index;
+          }
+          tempData[indexNumber].adSalesDashLength =
+            item.ad_sales === null ? 8 : null;
+          tempData[indexNumber].adSpendDashLength =
+            item.ad_spend === null ? 8 : null;
+          tempData[indexNumber].adConversionDashLength =
+            item.ad_conversion_rate === null ? 8 : null;
+          tempData[indexNumber].impressionsDashLength =
+            item.impressions === null ? 8 : null;
+          tempData[indexNumber].adCosDashLength = item.acos === null ? 8 : null;
+          tempData[indexNumber].adRoasDashLength =
+            item.roas === null ? 8 : null;
+          tempData[indexNumber].adClicksDashLength =
+            item.clicks === null ? 8 : null;
+          tempData[indexNumber].adClickRateDashLength =
+            item.ctr === null ? 8 : null;
+        } else {
+          // if current data count is larger than previous count then
+          // generate separate key for current data
+          tempData.push({
+            adSalesCurrent: item.ad_sales,
+            adSpendCurrent: item.ad_spend,
+            adConversionCurrent: item.ad_conversion_rate,
+            impressionsCurrent: item.impressions,
+            adCosCurrent: item.acos,
+            adRoasCurrent: item.roas,
+            adClicksCurrent: item.clicks,
+            adClickRateCurrent: item.ctr,
+            date: currentReportDate,
+
+            adSalesCurrentLabel:
+              item.ad_sales !== null ? item.ad_sales : '0.00',
+            adSpendCurrentLabel:
+              item.ad_spend !== null ? item.ad_spend : '0.00',
+            adConversionCurrentLabel:
+              item.ad_conversion_rate !== null
+                ? item.ad_conversion_rate
+                : '0.00',
+            impressionsCurrentLabel:
+              item.impressions !== null ? item.impressions : '0.00',
+            adCosCurrentLabel: item.acos !== null ? item.acos : '0.00',
+            adRoasCurrentLabel: item.roas !== null ? item.roas : '0.00',
+            adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0.00',
+            adClickRateCurrentLabel: item.ctr !== null ? item.ctr : '0.00',
+          });
+        }
+      });
+    }
+    return tempData;
+  };
+
+  /// ////////////////////////////////////////////////////////////////////////
+  //
+  // function name: getAdData
+  // Descrition : this function is used to get the ad performace graph data
+  // This functional internaly call the BE api
+  // required parameters : Six
+  // parameter Descrition: 1. advertisement type filter
+  //  2. daily facts filter - required
+  //  3. group by filter - required
+  //  4. marketplace - required
+  //  5. start date - optional
+  //  6. end date - optional
+  //
+  /// ////////////////////////////////////////////////////////////////////////////////
   const getAdData = useCallback(
     (
       adType,
@@ -126,9 +281,18 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           //
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          // console.log('resss', res.data);
+          const adGraphData = bindAdResponseData(adResData); // after api done then only send res.data
+          setAdChartData(adGraphData);
+          setCurrentTotal(adResData.daily_facts.current_sum);
+          setPreviousTotal(adResData.daily_facts.previous_sum);
+          setDifference(adResData.daily_facts.difference_data);
         }
       });
+      // const adGraphData = bindAdResponseData(adResData);
+      // setAdChartData(adGraphData);
+      // setCurrentTotal(adResData.daily_facts.current_sum);
+      // setPreviousTotal(adResData.daily_facts.previous_sum);
+      // setDifference(adResData.daily_facts.difference_data);
     },
     [id],
   );
@@ -618,7 +782,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     return (
       <div className="row">
         <div className="col-12 mb-3">
-          {DropDown(
+          {/* {DropDown(
             'cursor',
             marketplaceOptions,
             marketplaceOptions &&
@@ -627,7 +791,29 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             DropdownIndicator,
             marketplaceOptions && marketplaceOptions[0],
             handleMarketplaceOptions,
-          )}
+          )} */}
+          <DropDownSelect className="cursor ">
+            <Select
+              classNamePrefix="react-select"
+              className="active"
+              components={DropdownIndicator}
+              options={marketplaceOptions}
+              defaultValue={marketplaceOptions && marketplaceOptions[0]}
+              onChange={(event) => handleMarketplaceOptions(event)}
+              placeholder={
+                marketplaceOptions &&
+                marketplaceOptions[0] &&
+                marketplaceOptions[0].label
+              }
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  neutral50: '#1A1A1A',
+                },
+              })}
+            />
+          </DropDownSelect>
         </div>
       </div>
     );
@@ -648,7 +834,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 'days-performance',
                 AdTypesOptions,
                 null,
-                getSelectComponents(),
+                getSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
               )}
@@ -659,7 +845,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 'days-performance',
                 dateOptions,
                 null,
-                getSelectComponents(),
+                getSelectComponents,
                 dateOptions[0],
                 handleAdDailyFact,
               )}
@@ -668,6 +854,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
       </>
     );
+  };
+
+  const addThousandComma = (number) => {
+    if (number !== undefined && number !== null) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    return number;
   };
 
   const renderAdBox = () => {
@@ -679,12 +872,41 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adSales', 'ad-sales-active')}>
             <div className="chart-name">Ad Sales </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,114.90</div>
-            <div className="perentage-value down mt-3 pt-1">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_sales
+                ? `${currencySymbol}${addThousandComma(currentTotal.ad_sales)}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_sales
+                ? `vs ${currencySymbol}${addThousandComma(
+                    previousTotal.ad_sales,
+                  )}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+            {difference && difference.ad_sales ? (
+              difference.ad_sales >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_sales}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_sales.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -693,16 +915,42 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend </div>
-            <div className="number-rate">$15,050.28</div>
-            <div className="vs">vs $11,224.90</div>
-            <div className="perentage-value grey mt-3 ">
-              <img
-                className="green-arrow"
-                src={UpDowGrayArrow}
-                alt="arrow-down"
-              />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_spend
+                ? `${currencySymbol}${addThousandComma(currentTotal.ad_spend)}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_spend
+                ? `vs ${currencySymbol}${addThousandComma(
+                    previousTotal.ad_spend,
+                  )}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+
+            {difference && difference.ad_spend ? (
+              difference.ad_spend >= 0 ? (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_spend}%
+                </div>
+              ) : (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_spend.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value grey mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -711,12 +959,40 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
             <div className="chart-name">Ad Conversion Rate</div>
-            <div className="number-rate">15.28%</div>
-            <div className="vs">vs 14.90%</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ad_conversion_rate
+                ? `${currentTotal.ad_conversion_rate}%`
+                : `0.00%`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ad_conversion_rate
+                ? `vs ${previousTotal.ad_conversion_rate}%`
+                : `vs 0.00%`}
+            </div>
+
+            {difference && difference.ad_conversion_rate ? (
+              difference.ad_conversion_rate >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_conversion_rate}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ad_conversion_rate.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
@@ -725,12 +1001,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('impressions', 'impression-active')}>
             <div className="chart-name">Impressions </div>
-            <div className="number-rate">1528K</div>
-            <div className="vs">vs 110K</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.impressions
+                ? addThousandComma(currentTotal.impressions)
+                : `0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.impressions
+                ? `vs ${addThousandComma(previousTotal.impressions)}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.impressions ? (
+              difference.impressions >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.impressions}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.impressions.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
@@ -739,12 +1042,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adCos', 'ad-cos-active')}>
             <div className="chart-name">Acos</div>
-            <div className="number-rate">$1,550.55</div>
-            <div className="vs">vs $1,114.88</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.acos
+                ? `${currencySymbol}${addThousandComma(currentTotal.acos)}`
+                : `${currencySymbol}0.00`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.acos
+                ? `vs ${currencySymbol}${addThousandComma(previousTotal.acos)}`
+                : `vs ${currencySymbol}0.00`}
+            </div>
+            {difference && difference.acos ? (
+              difference.acos >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.acos}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.acos.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -753,12 +1083,40 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
-            <div className="number-rate">50.28</div>
-            <div className="vs">vs 4.90</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.roas
+                ? addThousandComma(currentTotal.roas)
+                : '0.00'}
             </div>
+            <div className="vs">
+              {' '}
+              {previousTotal && previousTotal.roas
+                ? `vs ${addThousandComma(previousTotal.roas)}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.roas ? (
+              difference.roas >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.roas}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.roas.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -767,12 +1125,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClicks', 'ad-click-active')}>
             <div className="chart-name">Clicks </div>
-            <div className="number-rate">15,050</div>
-            <div className="vs">vs 1,114</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.clicks
+                ? addThousandComma(currentTotal.clicks)
+                : '0.00'}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.clicks
+                ? `vs ${addThousandComma(previousTotal.clicks)}`
+                : `vs 0.00`}
+            </div>
+            {difference && difference.clicks ? (
+              difference.clicks >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.clicks}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.clicks.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
@@ -781,12 +1166,39 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             role="presentation"
             className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
             <div className="chart-name">Click through rate </div>
-            <div className="number-rate">0.28%</div>
-            <div className="vs">vs 4.90</div>
-            <div className="perentage-value down mt-3">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-              40.75%
+            <div className="number-rate">
+              {currentTotal && currentTotal.ctr
+                ? `${currentTotal.ctr}%`
+                : `0.00%`}
             </div>
+            <div className="vs">
+              {previousTotal && previousTotal.ctr
+                ? `vs ${previousTotal.ctr}%`
+                : `vs 0.00%`}
+            </div>
+            {difference && difference.ctr ? (
+              difference.ctr >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ctr}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {difference.ctr.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
           </div>
         </div>
       </>
@@ -885,7 +1297,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             'days-performance',
             dateOptions,
             null,
-            getSelectComponents(),
+            getSelectComponents,
             dateOptions[0],
             handleDSPDailyFact,
           )}
@@ -1137,7 +1549,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
         <AdPerformanceChart
           chartId="adChart"
-          chartData={null}
+          chartData={adChartData}
           currencySymbol={currencySymbol}
           selectedBox={selectedAdBox}
         />
