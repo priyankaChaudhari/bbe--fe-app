@@ -32,7 +32,7 @@ import Modal from 'react-modal';
 
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { DropDownSelect , ModalBox, Button, WhiteCard } from '../../../common';
+import { DropDownSelect, ModalBox, Button, WhiteCard } from '../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../api';
 
 import {
@@ -1088,7 +1088,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         allSalesTotal.revenue.difference
           ? allSalesTotal.revenue.difference
           : 0;
-      theCurrency = `(${currency})`;
+      theCurrency = currency !== null ? `(${currency})` : null;
     } else if (name === 'units sold') {
       currentTotal =
         allSalesTotal && allSalesTotal.units
@@ -1161,7 +1161,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             {name === 'conversion'
               ? `${previousTotal.toFixed(2)}%`
               : name === 'revenue'
-              ? `${currencySymbol}${previousTotal
+              ? `${
+                  currencySymbol !== null ? currencySymbol : ''
+                }${previousTotal
                   .toFixed(2)
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
               : previousTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}

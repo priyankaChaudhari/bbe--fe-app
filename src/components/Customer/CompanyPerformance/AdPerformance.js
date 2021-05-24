@@ -21,7 +21,7 @@ import {
   UpDowGrayArrow,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button, WhiteCard , DropDownSelect } from '../../../common';
+import { ModalBox, Button, WhiteCard, DropDownSelect } from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
@@ -30,8 +30,6 @@ import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
 import { adResData } from './DummyApiRes';
-
-
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -864,6 +862,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   };
 
   const renderAdBox = () => {
+    const currencySign = currencySymbol !== null ? currencySymbol : '';
     return (
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
@@ -874,15 +873,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">
               {currentTotal && currentTotal.ad_sales
-                ? `${currencySymbol}${addThousandComma(currentTotal.ad_sales)}`
-                : `${currencySymbol}0.00`}
+                ? `${currencySign}${addThousandComma(currentTotal.ad_sales)}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.ad_sales
-                ? `vs ${currencySymbol}${addThousandComma(
+                ? `vs ${currencySign}${addThousandComma(
                     previousTotal.ad_sales,
                   )}`
-                : `vs ${currencySymbol}0.00`}
+                : `vs ${currencySign}0.00`}
             </div>
             {difference && difference.ad_sales ? (
               difference.ad_sales >= 0 ? (
@@ -917,15 +916,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">
               {currentTotal && currentTotal.ad_spend
-                ? `${currencySymbol}${addThousandComma(currentTotal.ad_spend)}`
-                : `${currencySymbol}0.00`}
+                ? `${currencySign}${addThousandComma(currentTotal.ad_spend)}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.ad_spend
-                ? `vs ${currencySymbol}${addThousandComma(
+                ? `vs ${currencySign}${addThousandComma(
                     previousTotal.ad_spend,
                   )}`
-                : `vs ${currencySymbol}0.00`}
+                : `vs ${currencySign}0.00`}
             </div>
 
             {difference && difference.ad_spend ? (
@@ -1044,13 +1043,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Acos</div>
             <div className="number-rate">
               {currentTotal && currentTotal.acos
-                ? `${currencySymbol}${addThousandComma(currentTotal.acos)}`
-                : `${currencySymbol}0.00`}
+                ? `${currencySign}${addThousandComma(currentTotal.acos)}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.acos
-                ? `vs ${currencySymbol}${addThousandComma(previousTotal.acos)}`
-                : `vs ${currencySymbol}0.00`}
+                ? `vs ${currencySign}${addThousandComma(previousTotal.acos)}`
+                : `vs ${currencySign}0.00`}
             </div>
             {difference && difference.acos ? (
               difference.acos >= 0 ? (
