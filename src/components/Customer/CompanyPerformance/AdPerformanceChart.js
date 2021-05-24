@@ -595,7 +595,6 @@ export default function AdPerformanceChart({
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
-    // console.log('adChartData', chartData);
     // render X axis
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
@@ -644,12 +643,11 @@ export default function AdPerformanceChart({
         <div style=" color: white;
         font-size: 16px; text-align: right;
        
-        ">${currency !== null ? currency : ''}
-        ${
-          formatter !== null
-            ? `{${value}.formatNumber('${formatter}')}`
-            : `{${value}}`
-        }${percent !== null ? percent : ''}
+        ">${currency !== null ? currency : ''}${
+        formatter !== null
+          ? `{${value}.formatNumber('${formatter}')}`
+          : `{${value}}`
+      }${percent !== null ? percent : ''}
       </div>
       </li>
     </ul>
@@ -676,7 +674,12 @@ export default function AdPerformanceChart({
         selectedKey === 'adCos' ||
         selectedKey === 'adRoas'
       ) {
-        valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+        if (selectedKey === 'adRoas') {
+          valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+        } else {
+          valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+        }
+        // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
@@ -805,12 +808,19 @@ export default function AdPerformanceChart({
       valueAxis2.cursorTooltipEnabled = false;
       valueAxis2.numberFormatter = new am4core.NumberFormatter();
       valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      valueAxis2.numberFormatter.bigNumberPrefixes = [
+        { number: 1e3, suffix: 'K' },
+        { number: 1e6, suffix: 'M' },
+        { number: 1e9, suffix: 'B' },
+      ];
+      valueAxis2.numberFormatter.smallNumberPrefixes = [];
 
       const valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis3.renderer.grid.template.disabled = true;
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
       valueAxis3.numberFormatter.numberFormat = `#.#a`;
+
       const snapToSeries = [];
       let tooltipValue = '';
 
@@ -877,10 +887,17 @@ export default function AdPerformanceChart({
             series.yAxis = valueAxis;
             valueAxis.numberFormatter.numberFormat = `#.#'%'`;
             firstAxis = 'percentage';
-          } else {
+          }
+          /// / seperate out roas //
+          // else if (item === 'adRoas') {
+          //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+          //   series.yAxis = valueAxis;
+          //   firstAxis = 'adRoas';
+          // }
+          else {
             // console.log('index 0 else');
             series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = `#.##`;
+            valueAxis.numberFormatter.numberFormat = `#.####`;
             firstAxis = 'unit';
           }
           // valueAxis.renderer.line.strokeOpacity = 1;
@@ -939,14 +956,36 @@ export default function AdPerformanceChart({
             valueAxis2.renderer.labels.template.disabled = true;
             valueAxis3.renderer.labels.template.disabled = true;
           }
-        } else if (firstAxis === 'unit') {
+        }
+
+        // seperate out roas //
+        // else if (item === 'adRoas') {
+        //   if (secondAxis === null) {
+        //     series.yAxis = valueAxis2;
+        //     valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+        //     valueAxis2.renderer.opposite = true;
+        //     secondAxis = 'adRoas';
+        //   } else {
+        //     series.yAxis = valueAxis3;
+        //     valueAxis3.numberFormatter.numberFormat = `#.####`;
+        //     valueAxis3.renderer.opposite = true;
+
+        //     valueAxis.renderer.line.strokeOpacity = 0;
+        //     valueAxis2.renderer.line.strokeOpacity = 0;
+        //     valueAxis3.renderer.line.strokeOpacity = 0;
+        //     valueAxis.renderer.labels.template.disabled = true;
+        //     valueAxis2.renderer.labels.template.disabled = true;
+        //     valueAxis3.renderer.labels.template.disabled = true;
+        //   }
+        // }
+        else if (firstAxis === 'unit') {
           // console.log('unit');
           series.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = `#.#a`;
         } else if (secondAxis === null || secondAxis === 'unit') {
           // console.log('not unit, second axis null unit');
           series.yAxis = valueAxis2;
-          valueAxis2.numberFormatter.numberFormat = `#.##`;
+          valueAxis2.numberFormatter.numberFormat = `#.#a`;
           valueAxis2.renderer.opposite = true;
           // valueAxis2.renderer.line.strokeOpacity = 1;
           secondAxis = 'unit';

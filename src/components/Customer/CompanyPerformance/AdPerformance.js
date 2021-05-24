@@ -286,6 +286,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           setDifference(adResData.daily_facts.difference_data);
         }
       });
+      // const adGraphData = bindAdResponseData(adResData);
+      // setAdChartData(adGraphData);
+      // setCurrentTotal(adResData.daily_facts.current_sum);
+      // setPreviousTotal(adResData.daily_facts.previous_sum);
+      // setDifference(adResData.daily_facts.difference_data);
     },
     [id],
   );
@@ -827,6 +832,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     );
   };
 
+  const addThousandComma = (number) => {
+    if (number !== undefined && number !== null) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    return number;
+  };
+
   const renderAdBox = () => {
     return (
       <>
@@ -838,12 +850,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">
               {currentTotal && currentTotal.ad_sales
-                ? `${currencySymbol}${currentTotal.ad_sales}`
+                ? `${currencySymbol}${addThousandComma(currentTotal.ad_sales)}`
                 : `${currencySymbol}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.ad_sales
-                ? `vs ${currencySymbol}${previousTotal.ad_sales}`
+                ? `vs ${currencySymbol}${addThousandComma(
+                    previousTotal.ad_sales,
+                  )}`
                 : `vs ${currencySymbol}0.00`}
             </div>
             {difference && difference.ad_sales ? (
@@ -879,12 +893,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">
               {currentTotal && currentTotal.ad_spend
-                ? `${currencySymbol}${currentTotal.ad_spend}`
+                ? `${currencySymbol}${addThousandComma(currentTotal.ad_spend)}`
                 : `${currencySymbol}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.ad_spend
-                ? `vs ${currencySymbol}${previousTotal.ad_spend}`
+                ? `vs ${currencySymbol}${addThousandComma(
+                    previousTotal.ad_spend,
+                  )}`
                 : `vs ${currencySymbol}0.00`}
             </div>
 
@@ -963,12 +979,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
               {currentTotal && currentTotal.impressions
-                ? currentTotal.impressions
+                ? addThousandComma(currentTotal.impressions)
                 : `0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.impressions
-                ? `vs ${previousTotal.impressions}`
+                ? `vs ${addThousandComma(previousTotal.impressions)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.impressions ? (
@@ -1004,12 +1020,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Acos</div>
             <div className="number-rate">
               {currentTotal && currentTotal.acos
-                ? `${currencySymbol}${currentTotal.acos}`
+                ? `${currencySymbol}${addThousandComma(currentTotal.acos)}`
                 : `${currencySymbol}0.00`}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.acos
-                ? `vs ${currencySymbol}${previousTotal.acos}`
+                ? `vs ${currencySymbol}${addThousandComma(previousTotal.acos)}`
                 : `vs ${currencySymbol}0.00`}
             </div>
             {difference && difference.acos ? (
@@ -1044,12 +1060,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             className={setAdBoxClass('adRoas', 'ad-roas-active')}>
             <div className="chart-name">RoAS </div>
             <div className="number-rate">
-              {currentTotal && currentTotal.roas ? currentTotal.roas : '0.00'}
+              {currentTotal && currentTotal.roas
+                ? addThousandComma(currentTotal.roas)
+                : '0.00'}
             </div>
             <div className="vs">
               {' '}
               {previousTotal && previousTotal.roas
-                ? `vs ${previousTotal.roas}`
+                ? `vs ${addThousandComma(previousTotal.roas)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.roas ? (
@@ -1085,12 +1103,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Clicks </div>
             <div className="number-rate">
               {currentTotal && currentTotal.clicks
-                ? currentTotal.clicks
+                ? addThousandComma(currentTotal.clicks)
                 : '0.00'}
             </div>
             <div className="vs">
               {previousTotal && previousTotal.clicks
-                ? `vs ${previousTotal.clicks}`
+                ? `vs ${addThousandComma(previousTotal.clicks)}`
                 : `vs 0.00`}
             </div>
             {difference && difference.clicks ? (
