@@ -271,6 +271,8 @@ export default function BillingInfo({
         value={
           type === 'card_details' && data && data.id
             ? mapDetails(item.key)
+            : type === 'expiration_date'
+            ? [formData.type][item.key]
             : formData[type][item.key]
         }
         onValueChange={(values) =>
