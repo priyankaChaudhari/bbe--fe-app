@@ -138,6 +138,7 @@ export default function BillingInfo({
     delete formData.agreed;
     delete formData.ach;
     delete formData.credit_card;
+    if (data && data.id) delete formData.card_details;
     let details = {};
 
     details = {
@@ -163,10 +164,10 @@ export default function BillingInfo({
           });
         } else {
           CheckStep('billing information');
-          // history.push(PATH_AMAZON_MERCHANT);
         }
       }
       if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
         setApiError(res && res.data);
         setFormData({ ...formData, agreed: false });
         $('.checkboxes input:checkbox').prop('checked', false);
@@ -179,12 +180,12 @@ export default function BillingInfo({
       },
     }).then((user) => {
       if (user && user.status === 200) {
+        setIsLoading({ loader: false, type: 'button' });
         if (assignedToSomeone) {
           localStorage.removeItem('match');
         } else dispatch(userMe());
       }
     });
-    setIsLoading({ loader: false, type: 'button' });
   };
 
   const saveDetails = () => {
@@ -227,15 +228,13 @@ export default function BillingInfo({
   };
 
   const handleChange = (event, item, type) => {
-    if (item.key !== 'card_number') {
-      setFormData({
-        ...formData,
-        [type]: {
-          ...formData[type],
-          [item.key]: event.target.value,
-        },
-      });
-    }
+    setFormData({
+      ...formData,
+      [type]: {
+        ...formData[type],
+        [item.key]: item.key === 'card_number' ? event : event.target.value,
+      },
+    });
 
     setApiError({
       ...apiError,
@@ -253,7 +252,6 @@ export default function BillingInfo({
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
     if (item === 'expiration_date') return '****';
-    if (item === 'card_code') return '***';
     return '';
   };
 
@@ -262,7 +260,9 @@ export default function BillingInfo({
       <NumberFormat
         format={item.format}
         className="form-control"
-        onChange={(event) => handleChange(event, item, type)}
+        onChange={(event) =>
+          item.key !== 'card_number' ? handleChange(event, item, type) : ''
+        }
         placeholder={
           item.key === 'expiration_date'
             ? `Enter ${item.label} (MM/YY)`
@@ -275,10 +275,7 @@ export default function BillingInfo({
         }
         onValueChange={(values) =>
           item.key === 'card_number'
-            ? setFormData({
-                ...formData,
-                card_details: { [item.key]: values.value },
-              })
+            ? handleChange(values.value, item, type)
             : ''
         }
         isNumericString
@@ -356,7 +353,7 @@ export default function BillingInfo({
       );
     }
     return creditCardDetails.map((item) => (
-      <div key={item.key}>
+      <div key={item.key} style={{ opacity: data && data.id ? 0.5 : '' }}>
         <div className="inner-content">
           {/* <p className="account-steps m-0">Credit Card Type</p> */}
           {/* <ul className="payment-option">
