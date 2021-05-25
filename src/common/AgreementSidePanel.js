@@ -158,8 +158,10 @@ export default function AgreementSidePanel({
 
   const activityDetail = (item) => {
     let activityMessage = '';
-    if (item.message.includes('created new record by company name')) {
-      activityMessage = item.message.split(
+    if (
+      item.history_change_reason.includes('created new record by company name')
+    ) {
+      activityMessage = item.history_change_reason.split(
         'created new record by company name',
       );
       return (
@@ -170,8 +172,8 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.message.includes('deleted record')) {
-      activityMessage = item.message.split('deleted record');
+    if (item.history_change_reason.includes('deleted record')) {
+      activityMessage = item.history_change_reason.split('deleted record');
       return (
         <>
           {activityMessage[0]}
@@ -180,16 +182,17 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.message.includes('updated')) {
-      activityMessage = item.message.split('updated');
+    if (item.history_change_reason.includes('updated')) {
+      activityMessage = item.history_change_reason.split('updated');
       if (
-        (item && item.message.includes('annual revenue')) ||
-        (item && item.message.includes('number of employees')) ||
-        (item && item.message.includes('monthly retainer')) ||
-        (item && item.message.includes('sales threshold')) ||
-        (item && item.message.includes('fee')) ||
-        (item && item.message.includes('discount amount')) ||
-        (item && item.message.includes('custom amazon store price'))
+        (item && item.history_change_reason.includes('annual revenue')) ||
+        (item && item.history_change_reason.includes('number of employees')) ||
+        (item && item.history_change_reason.includes('monthly retainer')) ||
+        (item && item.history_change_reason.includes('sales threshold')) ||
+        (item && item.history_change_reason.includes('fee')) ||
+        (item && item.history_change_reason.includes('discount amount')) ||
+        (item &&
+          item.history_change_reason.includes('custom amazon store price'))
       ) {
         let fromAmount = '';
         let toAmount = '';
@@ -235,7 +238,7 @@ export default function AgreementSidePanel({
       }
 
       return activityMessage && activityMessage[1].includes('addendum') ? (
-        item.message
+        item.history_change_reason
       ) : (
         <>
           {activityMessage && activityMessage[0]}
@@ -264,8 +267,8 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.message.includes('requested for')) {
-      activityMessage = item.message.split('requested for');
+    if (item.history_change_reason.includes('requested for')) {
+      activityMessage = item.history_change_reason.split('requested for');
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -274,7 +277,7 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    return item && item.message ? item.message : '';
+    return item && item.history_change_reason ? item.history_change_reason : '';
   };
 
   const handlePageChange = (currentPage) => {
@@ -3218,29 +3221,30 @@ export default function AgreementSidePanel({
               <ul className="menu">
                 <li>
                   {images &&
-                  images.find((op) => op.entity_id === item.user_id) &&
-                  images.find((op) => op.entity_id === item.user_id)
+                  images.find((op) => op.entity_id === item.history_user_id) &&
+                  images.find((op) => op.entity_id === item.history_user_id)
                     .presigned_url ? (
                     <img
                       src={
                         // isLoading.loader && isLoading.type === 'page'
                         // ? DefaultUser:
-                        images.find((op) => op.entity_id === item.user_id)
-                          .presigned_url
+                        images.find(
+                          (op) => op.entity_id === item.history_user_id,
+                        ).presigned_url
                       }
                       className="default-user-activity"
                       alt="pic"
                     />
                   ) : (
                     <div className="avatarName float-left mr-3">
-                      {getActivityInitials(item.message)}
+                      {getActivityInitials(item.history_change_reason)}
                     </div>
                   )}
 
                   <div className="activity-user">
                     {activityDetail(item)}
                     <div className="time-date mt-1">
-                      {item && item.time ? item.time : ''}
+                      {item && item.history_date ? item.history_date : ''}
                     </div>
                   </div>
                   <div className="clear-fix" />

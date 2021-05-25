@@ -15,6 +15,7 @@ export const API_DOCUMENTS = '/document/';
 export const API_CUSTOMER_CONTRACT = '/contract/';
 export const API_CUSTOMER_MEMBER = '/customer-user/';
 export const API_ACTIVITY_LOG = '/history/';
+export const API_CUSTOMER_ACTIVITY_LOG = '/customer_history/';
 export const API_CONTACT = '/contact/';
 export const API_CREDENTIALS = '/credentials/';
 export const API_BGS = '/bgs/';
@@ -38,6 +39,7 @@ export const API_CREATE_ADDENDUM = '/contract-data/';
 export const API_TRANSACTION_DATA = '/transactional-data/';
 export const API_CONTRACT_DESIGN = `${API_TRANSACTION_DATA}contract-design/`;
 export const API_TRANSACTIONAL_SIGN_URL = `/sign-url/`;
+export const API_CONTRACT_ACTIVITY_LOG = `/contract_history/`;
 
 // Knowledge Base
 export const API_KNOWLEDGE_BASE = '/knowledge/';

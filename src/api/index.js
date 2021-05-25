@@ -25,6 +25,7 @@ export {
   updateCustomerMember,
   addCustomerMember,
   getActivityLog,
+  getCustomerActivityLog,
   createContactInfo,
   updateContactInfo,
   deleteContactInfo,
