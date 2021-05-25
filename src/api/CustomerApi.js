@@ -16,6 +16,7 @@ import {
   API_DELETE_MARKETPLACE,
   API_DOCUMENTS,
   API_PERFORMANCE,
+  API_AD_PERFORMANCE,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -536,7 +537,7 @@ export async function getAdPerformance(
     };
   }
   const result = await axiosInstance
-    .get(`${API_PERFORMANCE + customer}/`, { params })
+    .get(`${API_AD_PERFORMANCE + customer}/`, { params })
     .then((response) => {
       return response;
     })
@@ -557,21 +558,21 @@ export async function getDSPPerformance(
   let params = {};
   if (startDate && endDate) {
     params = {
-      daily_facts: dailyFacts,
-      group_by: groupBy,
-      marketplace,
-      start_date: startDate,
-      end_date: endDate,
+      dsp_daily_facts: dailyFacts,
+      dsp_group_by: groupBy,
+      dsp_marketplace: marketplace,
+      dsp_start_date: startDate,
+      dsp_end_date: endDate,
     };
   } else {
     params = {
-      daily_facts: dailyFacts,
-      group_by: groupBy,
-      marketplace,
+      dsp_daily_facts: dailyFacts,
+      dsp_group_by: groupBy,
+      dsp_marketplace: marketplace,
     };
   }
   const result = await axiosInstance
-    .get(`${API_PERFORMANCE + customer}/`, { params })
+    .get(`${API_AD_PERFORMANCE + customer}/`, { params })
     .then((response) => {
       return response;
     })
