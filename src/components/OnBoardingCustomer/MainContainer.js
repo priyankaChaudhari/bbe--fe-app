@@ -351,7 +351,7 @@ export default function MainContainer() {
             <PageLoader color="#FF5933" type="page" />
           ) : (
             <OnBoardingBody className="body-white">
-              <div className="white-card-base panel">
+              <div className="white-card-base panel ">
                 {assignedToSomeone ? (
                   <GreyCard className="yellow-card mt-2 mb-4">
                     <div className="hi-name mb-2">

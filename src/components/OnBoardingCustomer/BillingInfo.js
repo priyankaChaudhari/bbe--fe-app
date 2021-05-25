@@ -22,7 +22,7 @@ import {
   ModalBox,
   ErrorMsg,
 } from '../../common';
-import { CloseIcon } from '../../theme/images';
+import { CloseIcon, SecurityLock } from '../../theme/images';
 import {
   askSomeoneData,
   updateAskSomeoneData,
@@ -36,7 +36,7 @@ import {
   BillingAddress,
   creditCardDetails,
   stepPath,
-  //  PaymentType,
+  PaymentType,
 } from '../../constants/FieldConstants';
 
 export default function BillingInfo({
@@ -472,17 +472,19 @@ export default function BillingInfo({
       <OnBoardingBody className="body-white">
         <fieldset className="shape-without-border  w-430 mt-3">
           <p className="account-steps m-0">Part 1</p>
-          <div className="billing-address mb-3"> Payment Type </div>
+          <div className="billing-address mb-3 pb-1"> Payment Type </div>
           {/* <p className="account-steps m-0">Payment Type</p> */}
+          <p className="account-steps m-0">Payment Type</p>
           <ul className="payment-type">
-            <li>
+            {/* <li>
               <label
                 className="radio-container  contact-billing"
                 htmlFor="card">
                 Credit Card
               </label>
-            </li>
-            {/* {PaymentType.map((item) => (
+            </li> */}
+
+            {PaymentType.map((item) => (
               <li key={item.key}>
                 <ModalRadioCheck className="mt-1">
                   <label
@@ -508,10 +510,28 @@ export default function BillingInfo({
                   </label>
                 </ModalRadioCheck>
               </li>
-            ))} */}
+            ))}
           </ul>
+          <p className="text-verify-account mb-0">
+            To verify your bank account we’ll be making a small charge
+            (typically less than $1) to your account from Buy Box Experts. It
+            can take up to 3 days to process this charge. You’ll then receive an
+            email from us, asking you to enter the amount charged to complete
+            the process. The charge will then be refunded to you.
+          </p>
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
+          <img
+            className=" mt-2 pt-1"
+            width="16px"
+            src={SecurityLock}
+            alt="lock"
+          />
+          <p className="info-text-gray security">
+            {' '}
+            We have partnered with Authorize.Net (link), to capture your credit
+            card or ACH payment information safely and securely.
+          </p>
         </fieldset>
         {generateBillingAddressHTML()}
 

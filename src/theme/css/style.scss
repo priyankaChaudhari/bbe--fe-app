@@ -18,13 +18,6 @@
   src: url('../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff');
 }
 
-// @font-face {
-//   font-family: 'Arial MT Extra Bold';
-//   font-style: normal;
-//   font-weight: normal;
-//   src: local('Arial MT Extra Bold'), url('ARIALMTEXTRABOLD.woff') format('woff');
-// }
-
 @font-face {
   font-family: 'Arial-bold';
   src: url('../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.woff');
@@ -1364,15 +1357,6 @@ input:checked + .slider:before {
       }
     }
   }
-  // @media only screen and (max-width: 768px) {
-  //   top: 20px !important;
-  //   right: 0;
-  //   left: 0;
-  //   // left: 40% !important;
-  //   .recharts-default-legend {
-  //     text-align: center !important;
-  //   }
-  // }
 }
 
 .recharts-tooltip-wrapper {
@@ -1581,7 +1565,7 @@ text.cust-label-avg {
 
 .loader-bar {
   top: 68px !important;
-  height: 4px !important;
+  height: 7px !important;
   position: sticky !important;
   z-index: 3 !important;
   background: #e2e2ea !important;

@@ -152,6 +152,7 @@ import BlackCheckMark from './icons/black-checkmark-icon.svg';
 import BellNotification from './icons/bell-notification-icon.png';
 import TimesCircle from './icons/times-circle.svg';
 import DownloadPdf from './icons/download-icon.svg';
+import SecurityLock from './icons/security-lock-icon.png';
 
 export {
   BannerBg,
@@ -308,4 +309,5 @@ export {
   BellNotification,
   TimesCircle,
   DownloadPdf,
+  SecurityLock,
 };

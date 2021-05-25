@@ -2356,6 +2356,7 @@ export default function ContractContainer() {
                       <ul className="contract-download-nav ">
                         <li className="download-pdf">
                           <a
+                            className="download-pdf-link"
                             href={
                               details && details.contract_url
                                 ? details && details.contract_url
@@ -2364,7 +2365,7 @@ export default function ContractContainer() {
                             download>
                             <img
                               src={DownloadPdf}
-                              alt="close"
+                              alt="download"
                               className="download-pdf-icon "
                               role="presentation"
                             />
@@ -2453,7 +2454,7 @@ export default function ContractContainer() {
                             download>
                             <img
                               src={DownloadPdf}
-                              alt="close"
+                              alt="download"
                               className="download-pdf-icon "
                               role="presentation"
                             />
@@ -2704,6 +2705,10 @@ const HeaderDownloadFuntionality = styled.div`
 
       &.download-pdf {
         cursor: pointer;
+        .download-pdf-link {
+          color: ${Theme.black};
+        }
+
         .download-pdf-icon {
           width: 18px;
           margin-right: 11px;

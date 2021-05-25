@@ -162,6 +162,11 @@ const OnBoardingBody = styled.div`
         position: relative;
         top: 8px;
       }
+      &.security {
+        font-size: 12px;
+        float: right;
+        max-width: 345px;
+      }
     }
     .link-url {
       font-size: 14px;
@@ -232,7 +237,13 @@ const OnBoardingBody = styled.div`
         }
       }
     }
+    .text-verify-account {
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.gray85};
+      line-height: 20px;
+    }
   }
+
   .w-430 {
     max-width: 430px;
     margin: 0 auto;
@@ -241,7 +252,7 @@ const OnBoardingBody = styled.div`
   .panel {
     padding: 0;
     max-width: 400px;
-    margin-top: 175px;
+    margin-top: 100px;
     box-shadow: none;
   }
   .account-reassign {

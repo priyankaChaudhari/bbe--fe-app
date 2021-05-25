@@ -76,7 +76,7 @@ export default function Summary() {
         <PageLoader color="#FF5933" type="page" />
       ) : (
         <OnBoardingBody className="body-white">
-          <div className="white-card-base panel account-reassign pt-5 pb-4">
+          <div className="white-card-base panel pb-4">
             <h3 className="page-heading ">Account Summary</h3>
 
             <div className="sub-information mb-3">
