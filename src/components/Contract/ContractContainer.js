@@ -2446,6 +2446,7 @@ export default function ContractContainer() {
                       <ul className="contract-download-nav ">
                         <li className="download-pdf">
                           <a
+                            className="download-pdf-link"
                             href={
                               details && details.contract_url
                                 ? details && details.contract_url
