@@ -23,7 +23,8 @@ export default function CheckSteps({ summaryData, step, disableBtn }) {
         if (Object.keys(getIncompleteStep)[0] === item.key) {
           return history.push(item.view);
         }
-        return history.push(PATH_SUMMARY);
+        return '';
+        //  return history.push(PATH_SUMMARY);
       });
     }
     setIsLoading({ loader: false, type: 'button' });
