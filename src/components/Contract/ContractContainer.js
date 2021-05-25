@@ -2703,6 +2703,7 @@ const HeaderDownloadFuntionality = styled.div`
       vertical-align: bottom;
 
       &.download-pdf {
+        cursor: pointer;
         .download-pdf-icon {
           width: 18px;
           margin-right: 11px;
