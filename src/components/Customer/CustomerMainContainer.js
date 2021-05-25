@@ -61,7 +61,7 @@ import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer
 import Billing from './Billing';
 import Activity from './Activity';
 import {
-  getActivityLog,
+  getCustomerActivityLog,
   getAmazonDetails,
   getCustomerMembers,
   getDocumentList,
@@ -218,7 +218,7 @@ export default function CustomerMainContainer() {
   const getActivityLogInfo = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'activityPage' });
-      getActivityLog(currentPage, id).then((response) => {
+      getCustomerActivityLog(currentPage, id).then((response) => {
         setActivityData(response && response.data && response.data.results);
         setActivityCount(response && response.data && response.data.count);
         setPageNumber(currentPage);
@@ -308,8 +308,11 @@ export default function CustomerMainContainer() {
 
   const activityDetail = (item) => {
     let activityMessage = '';
-    if (item && item.message.includes('created new record by company name')) {
-      activityMessage = item.message.split(
+    if (
+      item &&
+      item.history_change_reason.includes('created new record by company name')
+    ) {
+      activityMessage = item.history_change_reason.split(
         'created new record by company name',
       );
       return (
@@ -320,8 +323,8 @@ export default function CustomerMainContainer() {
         </>
       );
     }
-    if (item && item.message.includes('deleted record')) {
-      activityMessage = item.message.split('deleted record');
+    if (item && item.history_change_reason.includes('deleted record')) {
+      activityMessage = item.history_change_reason.split('deleted record');
       return (
         <>
           {activityMessage[0]}
@@ -330,15 +333,15 @@ export default function CustomerMainContainer() {
         </>
       );
     }
-    if (item && item.message.includes('updated')) {
-      activityMessage = item.message.split('updated');
+    if (item && item.history_change_reason.includes('updated')) {
+      activityMessage = item.history_change_reason.split('updated');
       if (
-        (item && item.message.includes('annual revenue')) ||
-        (item && item.message.includes('number of employees')) ||
-        (item && item.message.includes('monthly retainer')) ||
-        (item && item.message.includes('sales threshold')) ||
-        (item && item.message.includes('fee')) ||
-        (item && item.message.includes('discount amount'))
+        (item && item.history_change_reason.includes('annual revenue')) ||
+        (item && item.history_change_reason.includes('number of employees')) ||
+        (item && item.history_change_reason.includes('monthly retainer')) ||
+        (item && item.history_change_reason.includes('sales threshold')) ||
+        (item && item.history_change_reason.includes('fee')) ||
+        (item && item.history_change_reason.includes('discount amount'))
       ) {
         let fromAmount = '';
         let toAmount = '';
@@ -401,8 +404,8 @@ export default function CustomerMainContainer() {
         </>
       );
     }
-    if (item && item.message.includes('requested for')) {
-      activityMessage = item.message.split('requested for');
+    if (item && item.history_change_reason.includes('requested for')) {
+      activityMessage = item.history_change_reason.split('requested for');
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -411,7 +414,7 @@ export default function CustomerMainContainer() {
         </>
       );
     }
-    return item && item.message ? item.message : '';
+    return item && item.history_change_reason ? item.history_change_reason : '';
   };
 
   const handlePageChange = (currentPage) => {
@@ -924,17 +927,20 @@ export default function CustomerMainContainer() {
                           activityData.slice(0, 2).map((item) => (
                             <GroupUser key={Math.random()}>
                               {images.find(
-                                (op) => op.entity_id === item.user_id,
+                                (op) => op.entity_id === item.history_user_id,
                               ) &&
-                              images.find((op) => op.entity_id === item.user_id)
-                                .presigned_url ? (
+                              images.find(
+                                (op) => op.entity_id === item.history_user_id,
+                              ).presigned_url ? (
                                 <img
                                   src={
                                     isLoading.loader &&
                                     isLoading.type === 'page'
                                       ? DefaultUser
                                       : images.find(
-                                          (op) => op.entity_id === item.user_id,
+                                          (op) =>
+                                            op.entity_id ===
+                                            item.history_user_id,
                                         ).presigned_url
                                   }
                                   className="default-user-activity"
@@ -942,14 +948,18 @@ export default function CustomerMainContainer() {
                                 />
                               ) : (
                                 <div className="avatarName float-left mr-3">
-                                  {getActivityInitials(item.message)}
+                                  {getActivityInitials(
+                                    item.history_change_reason,
+                                  )}
                                 </div>
                               )}
                               <div className="activity-user mb-4">
                                 {activityDetail(item)}
 
                                 <div className="time-date mt-1">
-                                  {item && item.time ? item.time : ''}
+                                  {item && item.history_date
+                                    ? item.history_date
+                                    : ''}
                                 </div>
                               </div>
                               <div className="clear-fix" />
