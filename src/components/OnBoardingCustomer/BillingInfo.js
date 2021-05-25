@@ -36,7 +36,7 @@ import {
   BillingAddress,
   creditCardDetails,
   stepPath,
-  PaymentType,
+  // PaymentType,
 } from '../../constants/FieldConstants';
 
 export default function BillingInfo({
@@ -65,6 +65,11 @@ export default function BillingInfo({
   const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
   const [getnewStepId, setGetnewStepId] = useState(null);
+  const [allSuccess, setAllSuccess] = useState({
+    user: false,
+    step: false,
+    billing: false,
+  });
 
   const customStyles = {
     content: {
@@ -153,6 +158,7 @@ export default function BillingInfo({
     };
     saveBillingInfo(details, (data && data.id) || null).then((res) => {
       if ((res && res.status === 200) || (res && res.status === 201)) {
+        setAllSuccess({ billing: true, step: false, user: false });
         if (assignedToSomeone) {
           const stringified =
             queryString &&
@@ -181,12 +187,15 @@ export default function BillingInfo({
       },
     }).then((user) => {
       if (user && user.status === 200) {
+        setAllSuccess({ ...allSuccess, step: false, user: true });
         setIsLoading({ loader: false, type: 'button' });
-        if (assignedToSomeone) {
-          localStorage.removeItem('match');
-        } else dispatch(userMe());
+        if (!assignedToSomeone) {
+          dispatch(userMe());
+        }
       }
     });
+    if (allSuccess.billing && allSuccess.user && allSuccess.step)
+      localStorage.removeItem('match');
   };
 
   const saveDetails = () => {
@@ -209,6 +218,7 @@ export default function BillingInfo({
       };
       askSomeoneData(detail).then((stepResponse) => {
         if (stepResponse && stepResponse.status === 201) {
+          setAllSuccess({ ...allSuccess, step: true });
           setGetnewStepId(
             stepResponse && stepResponse.data && stepResponse.data.id,
           );
@@ -226,6 +236,7 @@ export default function BillingInfo({
         },
       ).then((response) => {
         if (response && response.status === 200) {
+          setAllSuccess({ ...allSuccess, step: true });
           saveBillingData(
             getnewStepId || stepData.id || verifiedStepData.step_id,
           );
@@ -476,15 +487,15 @@ export default function BillingInfo({
           {/* <p className="account-steps m-0">Payment Type</p> */}
           <p className="account-steps m-0">Payment Type</p>
           <ul className="payment-type">
-            {/* <li>
+            <li>
               <label
                 className="radio-container  contact-billing"
                 htmlFor="card">
                 Credit Card
               </label>
-            </li> */}
+            </li>
 
-            {PaymentType.map((item) => (
+            {/* {PaymentType.map((item) => (
               <li key={item.key}>
                 <ModalRadioCheck className="mt-1">
                   <label
@@ -510,15 +521,15 @@ export default function BillingInfo({
                   </label>
                 </ModalRadioCheck>
               </li>
-            ))}
+            ))} */}
           </ul>
-          <p className="text-verify-account mb-0">
+          {/* <p className="text-verify-account mb-0">
             To verify your bank account we’ll be making a small charge
             (typically less than $1) to your account from Buy Box Experts. It
             can take up to 3 days to process this charge. You’ll then receive an
             email from us, asking you to enter the amount charged to complete
             the process. The charge will then be refunded to you.
-          </p>
+          </p> */}
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
           <img
@@ -530,7 +541,7 @@ export default function BillingInfo({
           <p className="info-text-gray security">
             {' '}
             We have partnered with Authorize.Net (link), to capture your credit
-            card or ACH payment information safely and securely.
+            card payment information safely and securely.
           </p>
         </fieldset>
         {generateBillingAddressHTML()}

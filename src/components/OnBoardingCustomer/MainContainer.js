@@ -539,4 +539,5 @@ export default function MainContainer() {
 
 const CollapseOpenContainer = styled.div`
   opacity: 0.6;
+  pointer-events: none;
 `;

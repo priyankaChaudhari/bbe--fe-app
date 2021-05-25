@@ -213,7 +213,7 @@ export default function CompanyDetail({
 
                     <div
                       className="copy-text"
-                      onClick={() => copy(amazonDetails[market.key] || '')}
+                      onClick={() => copy(customer && customer.merchant_id)}
                       role="presentation">
                       <img src={CopyLinkIcon} alt="" />
                       Copy
@@ -338,6 +338,7 @@ CompanyDetail.propTypes = {
     description: PropTypes.string,
     brand: PropTypes.string,
     phone_number: PropTypes.string,
+    merchant_id: PropTypes.string,
   }).isRequired,
   amazonDetails: PropTypes.arrayOf(PropTypes.array),
   seller: PropTypes.string.isRequired,
