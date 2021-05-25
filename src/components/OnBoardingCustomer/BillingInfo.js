@@ -64,12 +64,6 @@ export default function BillingInfo({
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
-  const [getnewStepId, setGetnewStepId] = useState(null);
-  const [allSuccess, setAllSuccess] = useState({
-    user: false,
-    step: false,
-    billing: false,
-  });
 
   const customStyles = {
     content: {
@@ -126,10 +120,99 @@ export default function BillingInfo({
         card_details: {},
       });
     }
-    setGetnewStepId(stepData.id || verifiedStepData.id || null);
   }, [data]);
 
-  const saveBillingData = (step) => {
+  const saveDetails = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    if (
+      (stepData === undefined ||
+        (stepData &&
+          Object.keys(stepData) &&
+          Object.keys(stepData).length === 0)) &&
+      verifiedStepData &&
+      Object.keys(verifiedStepData) &&
+      Object.keys(verifiedStepData).length === 0
+    ) {
+      const detail = {
+        is_completed: true,
+        email: userInfo.email,
+        step: 'billing information',
+        customer_onboarding: userInfo.customer_onboarding,
+      };
+      askSomeoneData(detail).then((stepResponse) => {
+        if (stepResponse && stepResponse.status === 201) {
+          if (assignedToSomeone) {
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                name: verifiedStepData.user_name,
+              });
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
+            });
+          } else {
+            CheckStep('billing information');
+            // history.push(PATH_BILLING_DETAILS);
+          }
+          updateUserMe(userInfo.id || verifiedStepData.user_id, {
+            step: {
+              ...(userInfo.step || verifiedStepData.user_step),
+              [userInfo.customer || verifiedStepData.customer_id]: 3,
+            },
+          }).then((user) => {
+            if (user && user.status === 200) {
+              if (assignedToSomeone) {
+                localStorage.removeItem('match');
+              } else dispatch(userMe());
+            }
+          });
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    } else {
+      updateAskSomeoneData(
+        (stepData && stepData.id) || verifiedStepData.step_id,
+        {
+          token: assignedToSomeone ? params && params.key : '',
+          is_completed: true,
+        },
+      ).then((response) => {
+        if (response && response.status === 200) {
+          if (assignedToSomeone) {
+            const stringified =
+              queryString &&
+              queryString.stringify({
+                name: verifiedStepData.user_name,
+              });
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
+            });
+          } else {
+            CheckStep('billing information');
+            // history.push(PATH_AMAZON_MERCHANT);
+          }
+          updateUserMe(userInfo.id || verifiedStepData.user_id, {
+            step: {
+              ...(userInfo.step || verifiedStepData.user_step),
+              [userInfo.customer || verifiedStepData.customer_id]: 3,
+            },
+          }).then((user) => {
+            if (user && user.status === 200) {
+              if (assignedToSomeone) {
+                localStorage.removeItem('match');
+              } else dispatch(userMe());
+            }
+          });
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    }
+  };
+
+  const saveBillingData = () => {
+    setIsLoading({ loader: true, type: 'button' });
     const getYear = new Date().getFullYear().toString().substring(0, 2);
     let format = '';
     if (
@@ -154,11 +237,12 @@ export default function BillingInfo({
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
       card_details: formData.card_details,
-      step,
+      customer_onboarding:
+        userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
     };
     saveBillingInfo(details, (data && data.id) || null).then((res) => {
       if ((res && res.status === 200) || (res && res.status === 201)) {
-        setAllSuccess({ billing: true, step: false, user: false });
+        saveDetails();
         if (assignedToSomeone) {
           const stringified =
             queryString &&
@@ -180,69 +264,6 @@ export default function BillingInfo({
         $('.checkboxes input:checkbox').prop('checked', false);
       }
     });
-    updateUserMe(userInfo.id || verifiedStepData.user_id, {
-      step: {
-        ...(userInfo.step || verifiedStepData.user_step),
-        [userInfo.customer || verifiedStepData.customer_id]: 3,
-      },
-    }).then((user) => {
-      if (user && user.status === 200) {
-        setAllSuccess({ ...allSuccess, step: false, user: true });
-        setIsLoading({ loader: false, type: 'button' });
-        if (!assignedToSomeone) {
-          dispatch(userMe());
-        }
-      }
-    });
-    if (allSuccess.billing && allSuccess.user && allSuccess.step)
-      localStorage.removeItem('match');
-  };
-
-  const saveDetails = () => {
-    setIsLoading({ loader: true, type: 'button' });
-    if (
-      getnewStepId === null &&
-      (stepData === undefined ||
-        (stepData &&
-          Object.keys(stepData) &&
-          Object.keys(stepData).length === 0)) &&
-      verifiedStepData &&
-      Object.keys(verifiedStepData) &&
-      Object.keys(verifiedStepData).length === 0
-    ) {
-      const detail = {
-        is_completed: true,
-        email: userInfo.email,
-        step: 'billing information',
-        customer_onboarding: userInfo.customer_onboarding,
-      };
-      askSomeoneData(detail).then((stepResponse) => {
-        if (stepResponse && stepResponse.status === 201) {
-          setAllSuccess({ ...allSuccess, step: true });
-          setGetnewStepId(
-            stepResponse && stepResponse.data && stepResponse.data.id,
-          );
-          saveBillingData(
-            stepResponse && stepResponse.data && stepResponse.data.id,
-          );
-        }
-      });
-    } else {
-      updateAskSomeoneData(
-        getnewStepId || (stepData && stepData.id) || verifiedStepData.step_id,
-        {
-          token: assignedToSomeone ? params && params.key : '',
-          is_completed: true,
-        },
-      ).then((response) => {
-        if (response && response.status === 200) {
-          setAllSuccess({ ...allSuccess, step: true });
-          saveBillingData(
-            getnewStepId || stepData.id || verifiedStepData.step_id,
-          );
-        }
-      });
-    }
   };
 
   const handleChange = (event, item, type) => {
@@ -580,7 +601,7 @@ export default function BillingInfo({
           ) : (
             <Button
               className="btn-primary w-100  mt-3 mb-4"
-              onClick={() => saveDetails()}
+              onClick={() => saveBillingData()}
               disabled={!formData.agreed}>
               {' '}
               {isLoading.loader && isLoading.type === 'button' ? (
