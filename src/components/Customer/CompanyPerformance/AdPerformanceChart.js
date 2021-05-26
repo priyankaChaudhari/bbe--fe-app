@@ -904,9 +904,14 @@ export default function AdPerformanceChart({
           //   firstAxis = 'adRoas';
           // }
           else {
-            // console.log('index 0 else');
+            if (item === 'impressions' || item === 'adClicks') {
+              valueAxis.numberFormatter.numberFormat = `#.#a`;
+            }
+            if (item === 'adRoas') {
+              valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+            }
+            // valueAxis.numberFormatter.numberFormat = `#.####`;
             series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = `#.####`;
             firstAxis = 'unit';
           }
           // valueAxis.renderer.line.strokeOpacity = 1;
@@ -989,12 +994,24 @@ export default function AdPerformanceChart({
         // }
         else if (firstAxis === 'unit') {
           // console.log('unit');
+          if (item === 'impressions' || item === 'adClicks') {
+            valueAxis.numberFormatter.numberFormat = `#.#a`;
+          }
+          // if (item === 'adRoas') {
+          //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+          // }
+          // valueAxis.numberFormatter.numberFormat = `#.#a`;
           series.yAxis = valueAxis;
-          valueAxis.numberFormatter.numberFormat = `#.#a`;
         } else if (secondAxis === null || secondAxis === 'unit') {
           // console.log('not unit, second axis null unit');
+          if (item === 'impressions' || item === 'adClicks') {
+            valueAxis2.numberFormatter.numberFormat = `#.#a`;
+          }
+          if (item === 'adRoas') {
+            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+          }
           series.yAxis = valueAxis2;
-          valueAxis2.numberFormatter.numberFormat = `#.#a`;
+          // valueAxis2.numberFormatter.numberFormat = `#.#a`;
           valueAxis2.renderer.opposite = true;
           // valueAxis2.renderer.line.strokeOpacity = 1;
           secondAxis = 'unit';
