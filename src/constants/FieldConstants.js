@@ -367,7 +367,7 @@ export const editAccountFields = [
     key: 'zip_code',
     label: 'Postal Code',
     property: 'col-md-6',
-    type: 'number',
+    type: 'text',
     level: 'agreement',
   },
   {
@@ -482,7 +482,7 @@ export const AgreementDetails = [
       },
       {
         key: 'zip_code',
-        type: 'number',
+        type: 'text',
         placeholder: 'Enter Postcode',
         isMandatory: true,
         part: 'agreement',
