@@ -1375,7 +1375,11 @@ export default function NewCustomerList() {
                         </div>
                       </div>
                     </div>
-                    <div className="label">Brand Strategist</div>
+                    {showAdPerformance ? (
+                      <div className="label">Ad Manager</div>
+                    ) : (
+                      <div className="label">Brand Strategist</div>
+                    )}
                     <DropDownSelect className="w-250">
                       {generateDropdown('user', selectInputRefMobile)}
                     </DropDownSelect>

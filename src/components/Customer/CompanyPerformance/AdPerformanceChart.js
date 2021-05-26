@@ -898,18 +898,17 @@ export default function AdPerformanceChart({
             firstAxis = 'percentage';
           }
           /// / seperate out roas //
-          // else if (item === 'adRoas') {
-          //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
-          //   series.yAxis = valueAxis;
-          //   firstAxis = 'adRoas';
-          // }
-          else {
+          else if (item === 'adRoas') {
+            valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+            series.yAxis = valueAxis;
+            firstAxis = 'adRoas';
+          } else {
             if (item === 'impressions' || item === 'adClicks') {
               valueAxis.numberFormatter.numberFormat = `#.#a`;
             }
-            if (item === 'adRoas') {
-              valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
-            }
+            // if (item === 'adRoas') {
+            //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+            // }
             // valueAxis.numberFormatter.numberFormat = `#.####`;
             series.yAxis = valueAxis;
             firstAxis = 'unit';
@@ -973,26 +972,25 @@ export default function AdPerformanceChart({
         }
 
         // seperate out roas //
-        // else if (item === 'adRoas') {
-        //   if (secondAxis === null) {
-        //     series.yAxis = valueAxis2;
-        //     valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.####`;
-        //     valueAxis2.renderer.opposite = true;
-        //     secondAxis = 'adRoas';
-        //   } else {
-        //     series.yAxis = valueAxis3;
-        //     valueAxis3.numberFormatter.numberFormat = `#.####`;
-        //     valueAxis3.renderer.opposite = true;
+        else if (item === 'adRoas') {
+          if (secondAxis === null) {
+            series.yAxis = valueAxis2;
+            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.####`;
+            valueAxis2.renderer.opposite = true;
+            secondAxis = 'adRoas';
+          } else {
+            series.yAxis = valueAxis3;
+            valueAxis3.numberFormatter.numberFormat = `#.####`;
+            valueAxis3.renderer.opposite = true;
 
-        //     valueAxis.renderer.line.strokeOpacity = 0;
-        //     valueAxis2.renderer.line.strokeOpacity = 0;
-        //     valueAxis3.renderer.line.strokeOpacity = 0;
-        //     valueAxis.renderer.labels.template.disabled = true;
-        //     valueAxis2.renderer.labels.template.disabled = true;
-        //     valueAxis3.renderer.labels.template.disabled = true;
-        //   }
-        // }
-        else if (firstAxis === 'unit') {
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+          }
+        } else if (firstAxis === 'unit') {
           // console.log('unit');
           if (item === 'impressions' || item === 'adClicks') {
             valueAxis.numberFormatter.numberFormat = `#.#a`;

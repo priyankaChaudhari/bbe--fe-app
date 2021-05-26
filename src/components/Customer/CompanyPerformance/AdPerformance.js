@@ -924,9 +924,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     //   }
     //   return returnValue;
     // }
-
     if (number !== undefined && number !== null) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
     return number;
