@@ -54,6 +54,7 @@ export default function NewCustomerList() {
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
+  // const [adManager, setAdManager] = useState([]); //for ad manager dropdown
   const [searchQuery, setSearchQuery] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).searchQuery
@@ -267,6 +268,7 @@ export default function NewCustomerList() {
               Object.values(brand.documents[0])[0],
           });
           setBrandGrowthStrategist(list);
+          // setAdManager(list); //for ad manager dropdown
         }
       }
     });
@@ -783,6 +785,35 @@ export default function NewCustomerList() {
       </>
     );
   };
+
+  // for ad manager dropdown
+  // const generateAdManagerDropdown = (item, reff = null) => {
+  //   return (
+  //     <>
+  //       <Select
+  //         classNamePrefix="react-select"
+  //         isClearable={false}
+  //         className="active"
+  //         ref={reff}
+  //         placeholder={getSelectPlaceholder(item)}
+  //         options={adManager}
+  //         onChange={(event, action) =>
+  //           handleFilters(event, item, 'brand', action)
+  //         }
+  //         value={
+  //           filters.user
+  //             ? adManager.filter((option) =>
+  //                 filters.user.some((op) => op === option.value),
+  //               )
+  //             : ''
+  //         }
+  //         isMulti={true}
+  //         components={getSelectComponents(item)}
+  //         componentsValue={{ Option: IconOption }}
+  //       />
+  //     </>
+  //   );
+  // };
 
   const calculatePercentage = (current, previous, type) => {
     if (current && previous) {
@@ -1375,11 +1406,25 @@ export default function NewCustomerList() {
                         </div>
                       </div>
                     </div>
+
+                    {/* //for ad manager dropdown 
                     {showAdPerformance ? (
-                      <div className="label">Ad Manager</div>
+                      <>
+                        <div className="label">Ad Manager</div>
+                        <DropDownSelect className="w-250">
+                          {generateAdManagerDropdown('user', selectInputRefMobile)}
+                        </DropDownSelect>
+                      </>
                     ) : (
-                      <div className="label">Brand Strategist</div>
-                    )}
+                      <>
+                        <div className="label">Brand Strategist</div>
+                        <DropDownSelect className="w-250">
+                          {generateDropdown('user', selectInputRefMobile)}
+                        </DropDownSelect>
+                      </>
+                    )} */}
+
+                    <div className="label">Brand Strategist</div>
                     <DropDownSelect className="w-250">
                       {generateDropdown('user', selectInputRefMobile)}
                     </DropDownSelect>
@@ -1579,11 +1624,23 @@ export default function NewCustomerList() {
             </div>
           </div>
         </div>
+        {/* //for ad manager dropdown 
         {showAdPerformance ? (
-          <div className="label mt-2 mb-2">Ad Manager</div>
+          <>
+            <div className="label mt-2 mb-2">Ad Manager</div>
+            <DropDownSelect className="w-250">
+              {generateAdManagerDropdown('user', selectInputRef)}
+            </DropDownSelect>{' '}
+          </>
         ) : (
-          <div className="label mt-2 mb-2">Brand Strategist</div>
-        )}
+          <>
+            <div className="label mt-2 mb-2">Brand Strategist</div>
+            <DropDownSelect className="w-250">
+              {generateDropdown('user', selectInputRef)}
+            </DropDownSelect>{' '}
+          </>
+        )} */}
+        <div className="label mt-2 mb-2">Brand Strategist</div>
         <DropDownSelect className="w-250">
           {generateDropdown('user', selectInputRef)}
         </DropDownSelect>{' '}
