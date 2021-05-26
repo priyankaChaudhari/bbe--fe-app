@@ -8,10 +8,11 @@ import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 import $ from 'jquery';
+import queryString from 'query-string';
 
 import Theme from '../../theme/Theme';
 import { getArticleBoards, updateArticle } from '../../api';
-import { PATH_ARTICLE_LIST } from '../../constants';
+import { PATH_ARTICLE_DETAILS, PATH_ARTICLE_LIST } from '../../constants';
 import {
   Button,
   ModalBox,
@@ -62,6 +63,7 @@ export default function ArticleDetails() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const params = queryString.parse(history.location.search);
 
   useEffect(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -69,69 +71,116 @@ export default function ArticleDetails() {
       setBoardData(response && response.data);
       if (history && history.location && history.location.state) {
         setActiveField({
-          board: history.location.state.boards[0].id,
-          article: history.location.state.id,
+          board: params.board || history.location.state.boards[0].id,
+          article: params.article || history.location.state.id,
         });
+
         setSelectedArticle(history.location.state);
       } else {
         setActiveField({
           board:
-            response &&
-            response.data &&
-            response.data.items &&
-            response.data.items[0] &&
-            response.data.items[0].id,
+            params.board ||
+            (response &&
+              response.data &&
+              response.data.items &&
+              response.data.items[0] &&
+              response.data.items[0].id),
+          article: params.article || '',
         });
       }
-      const boardId =
-        history && history.location && history.location.state
-          ? history.location.state.boards[0].id
-          : response &&
+      const boardId = params.board
+        ? params.board
+        : history && history.location && history.location.state
+        ? history.location.state.boards[0].id
+        : (response &&
             response.data &&
             response.data.items &&
             response.data.items[0] &&
-            response.data.items[0].id;
+            response.data.items[0].id) ||
+          params.board;
       getArticleBoards(boardId, 'sections').then((res) => {
         setArticleData(res && res.data);
         if (history && history.location && history.location.state) {
           setActiveField({
-            board: history.location.state.boards[0].id,
-            article: history.location.state.id,
+            board: params.board || history.location.state.boards[0].id,
+            article: params.article || history.location.state.id,
           });
           setSelectedArticle(history.location.state);
         } else {
           setActiveField({
-            board:
-              response &&
-              response.data &&
-              response.data.items &&
-              response.data.items[0] &&
-              response.data.items[0].id,
+            board: params.board
+              ? params.board
+              : response &&
+                response.data &&
+                response.data.items &&
+                response.data.items[0] &&
+                response.data.items[0].id,
 
-            article:
-              res &&
-              res.data &&
-              res.data.items &&
-              res.data.items[0] &&
-              res.data.items[0].type === 'section'
-                ? res.data.items[0].items &&
-                  res.data.items[0].items[0] &&
-                  res.data.items[0].items[0].id
-                : res.data.items[0].id,
+            article: params.article
+              ? params.article
+              : res &&
+                res.data &&
+                res.data.items &&
+                res.data.items[0] &&
+                res.data.items[0].type === 'section'
+              ? res.data.items[0].items &&
+                res.data.items[0].items[0] &&
+                res.data.items[0].items[0].id
+              : res.data.items[0].id,
           });
-          setSelectedArticle(
-            // res && res.data && res.data.items && res.data.items[0],
-            res &&
+          if (params && params.article) {
+            let articleContent = '';
+            const getArticle = (op) => {
+              return op && op.items.find((el) => el.id === params.article);
+            };
+
+            articleContent =
               res.data &&
               res.data.items &&
-              res.data.items.length &&
-              res.data.items[0] &&
-              res.data.items[0].items &&
-              res.data.items[0].items.length &&
-              res.data.items[0].items[0]
-              ? res.data.items[0].items[0]
-              : {},
-          );
+              res.data.items.find((op) =>
+                op.type === 'fact' ? op.id === params.article : getArticle(op),
+              );
+
+            setSelectedArticle(
+              articleContent && articleContent.items
+                ? articleContent.items.find((op) => op.id === params.article)
+                : articleContent,
+            );
+          } else {
+            setSelectedArticle(
+              res &&
+                res.data &&
+                res.data.items &&
+                res.data.items[0] &&
+                res.data.items[0].items
+                ? res.data.items[0].items[0]
+                : res.data.items[0] || {},
+            );
+          }
+          const stringified = queryString.stringify({
+            ...params,
+            article:
+              params.article ||
+              (res.data &&
+                res.data.items &&
+                res.data.items[0] &&
+                res.data.items[0].id),
+          });
+          history.push({
+            pathname: `${PATH_ARTICLE_DETAILS.replace(
+              ':id',
+              res &&
+                res.data &&
+                res.data.items &&
+                res.data.items[0] &&
+                res.data.items[0] &&
+                res.data.items[0].items
+                ? res.data.items[0].items[0].collection.id
+                : res.data.items[0].collection &&
+                    res.data.items[0].collection.id,
+            )}`,
+            search: `${stringified}`,
+          });
         }
         setIsLoading({ loader: false, type: 'page' });
       });
@@ -147,7 +196,6 @@ export default function ArticleDetails() {
 
   const handleBoard = (field) => {
     setIsLoading({ loader: true, type: 'page' });
-
     setActiveField({
       board: field.id,
     });
@@ -177,6 +225,20 @@ export default function ArticleDetails() {
               response.data.items[0].items[0]
           : response.data.items[0],
       );
+      const stringified = queryString.stringify({
+        board:
+          selectedArticle.boards &&
+          selectedArticle.boards[0] &&
+          selectedArticle.boards[0].id,
+        article: selectedArticle.id,
+      });
+      history.push({
+        pathname: `${PATH_ARTICLE_DETAILS.replace(
+          ':id',
+          selectedArticle.collection.id,
+        )}`,
+        search: `${stringified}`,
+      });
       setIsLoading({ loader: false, type: 'page' });
     });
     if (isMobile)
@@ -184,6 +246,14 @@ export default function ArticleDetails() {
   };
 
   const handleArticle = (field) => {
+    const stringified = queryString.stringify({
+      board: field.boards && field.boards[0] && field.boards[0].id,
+      article: field.id,
+    });
+    history.push({
+      pathname: `${PATH_ARTICLE_DETAILS.replace(':id', field.collection.id)}`,
+      search: `${stringified}`,
+    });
     setActiveField({ ...activeField, article: field.id });
 
     for (const card of articleData.items) {

@@ -312,7 +312,7 @@ export default function BillingInfo({
             ? mapDetails(item.key)
             : item.key === 'expiration_date'
             ? [formData.type][item.key]
-            : formData[type][item.key]
+            : formData && formData[type] && formData[type][item.key]
         }
         onValueChange={(values) =>
           item.key === 'card_number'

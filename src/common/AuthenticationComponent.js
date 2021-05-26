@@ -145,10 +145,9 @@ export default function AuthenticationComponent() {
       let stringified = '';
       if (history.location.pathname !== '/') {
         stringified = queryString.stringify({
-          callback: history.location.pathname,
+          callback: history.location.pathname + history.location.search,
         });
       }
-
       return (
         <Redirect
           to={{
