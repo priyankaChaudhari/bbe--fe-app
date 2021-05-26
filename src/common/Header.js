@@ -597,7 +597,7 @@ const MainHeader = styled.div`
         max-width: 137px;
         background: ${Theme.gray3};
         padding: 11px 13px;
-        font-size: 15px;
+        font-size: ${Theme.normal};
         color: #2e384d;
         .light-bulb-icon {
           width: 21px;
@@ -913,9 +913,9 @@ const MobileSidebar = styled.div`
       top: 0px;
       left: 0;
       .close-icon {
-        color: ${Theme['$a-white']};
-        font-size: ${Theme['$base-f-size-res']};
-        font-family: ${Theme['$title-font-family']};
+        color: ${Theme.white};
+        font-size: ${Theme.normalRes};
+        font-family: ${Theme.titleFontFamily};
         position: absolute;
         right: 20px;
         top: 10px;

@@ -35,7 +35,7 @@ const CheckBox = styled.div`
     &.additional-place {
       color: ${Theme.black};
       font-size: ${Theme.textFontSize};
-      font-family: ${Theme.regularTextFontFamily};
+      font-family: ${Theme.regularArialTextFontFamily};
     }
   }
 

@@ -688,7 +688,7 @@ const GrayBody = styled.div`
           }
           .header-list {
             color: ${Theme.gray90};
-            font-size: 15px;
+            font-size: ${Theme.normal};
             font-weight: 800;
 
             .sub-list {
@@ -848,7 +848,7 @@ const ArticleDetail = styled.div`
 
     li {
       color:${Theme.gray90};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       line-height: 22px;
       font-family: ${Theme.baseFontFamily};
       padding: 0px 9px 15px 0;

@@ -2655,7 +2655,7 @@ const ContractTab = styled.div`
     li {
       display: inline-block;
       color: ${Theme.black};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       padding: 23px 40px;
       cursor: pointer;
 

@@ -393,7 +393,7 @@ const ModalBox = styled.div`
        background-color: #FFDED6;
        border-radius: 5px;
        color: ${Theme.black};
-       font-size: 15px;
+       font-size: ${Theme.normal};
        padding: 14px;
        .times-circle-icon {
          width: 20px;

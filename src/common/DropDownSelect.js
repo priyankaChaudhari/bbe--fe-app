@@ -78,7 +78,7 @@ const DropDownSelect = styled.div`
         .css-b8ldur-Input,
         .css-1g6gooi {
           color: ${Theme.black};
-          font-size: 15px;
+          font-size: ${Theme.normal};
           padding-left: 8px;
         }
 
@@ -115,7 +115,7 @@ const DropDownSelect = styled.div`
     }
     .css-12jo7m5 {
       color: ${Theme.black};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       overflow: hidden;
       text-overflow: ellipsis;
       padding: 5px 3px 3px 3px;
@@ -126,7 +126,7 @@ const DropDownSelect = styled.div`
         line-height: 0 !important;
         vertical-align: middle;
         color: ${Theme.black};
-        font-size: 15px;
+        font-size: ${Theme.normal};
       }
     }
     .css-xb97g8 {

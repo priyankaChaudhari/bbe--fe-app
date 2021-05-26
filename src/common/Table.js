@@ -55,7 +55,7 @@ const Table = styled.table`
       }
 
       .user-email {
-        font-size: 15px;
+        font-size: ${Theme.normal};
         font-weight: 300;
       }
 

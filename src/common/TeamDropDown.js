@@ -6,7 +6,7 @@ const TeamDropDown = styled.div`
 
   label {
     color: ${Theme.gray90};
-    font-size: 15px;
+    font-size: ${Theme.normal};
     font-family: ${Theme.titleFontFamily};
   }
   .css-yk16xz-control {
@@ -20,7 +20,7 @@ const TeamDropDown = styled.div`
 
     .css-g1d714-ValueContainer {
       color: ${Theme.gray90};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       cursor: pointer;
 
       font-family: ${Theme.titleFontFamily};
@@ -28,7 +28,7 @@ const TeamDropDown = styled.div`
 
       .css-1wa3eu0-placeholder {
         color: ${Theme.gray90};
-        font-size: 15px;
+        font-size: ${Theme.normal};
         font-family: ${Theme.titleFontFamily};
         text-transform: none;
       }
@@ -48,7 +48,7 @@ const TeamDropDown = styled.div`
 
     .css-1uccc91-singleValue {
       color: ${Theme.gray90};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       font-family: ${Theme.titleFontFamily};
     }
 
@@ -98,7 +98,7 @@ const TeamDropDown = styled.div`
 
   .css-1uccc91-singleValue {
     color: ${Theme.gray90};
-    font-size: 15px;
+    font-size: ${Theme.normal};
     font-weight: 600;
     cursor: pointer;
   }
@@ -125,7 +125,6 @@ const TeamDropDown = styled.div`
     }
   }
   .css-26l3qy-menu {
-    z-index: 99999 !important;
     right: 20%;
     width: 320px;
     border: 1px solid rgba(46, 91, 255, 0.08);

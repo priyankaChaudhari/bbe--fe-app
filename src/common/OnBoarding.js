@@ -62,7 +62,6 @@ const OnBoardingBody = styled.div`
     }
     .invitation-text {
       font-size: ${Theme.normal};
-      font-size: 15px;
       max-width: 395px;
       margin: auto;
       line-height: 22px;

@@ -84,7 +84,7 @@ const TabletTeamMemberView = styled.div`
     font-weight: 300;
   }
   .user-email {
-    font-size: 15px;
+    font-size: ${Theme.normal};
     font-weight: 300;
     color: ${Theme.gray85};
   }

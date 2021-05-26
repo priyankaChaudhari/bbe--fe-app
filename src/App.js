@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import GlobalStyle from './theme/css/GlobalStyle';
 
 import {
   PATH_FORGOT_PASSWORD,
@@ -38,6 +39,7 @@ import MainContainer from './components/OnBoardingCustomer/MainContainer';
 export default function App() {
   return (
     <BrowserRouter>
+      <GlobalStyle />
       <Switch>
         {/* Auth */}
         <Route path={PATH_LOGIN} component={Login} />

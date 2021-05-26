@@ -2202,7 +2202,7 @@ const CustomerListPage = styled.div`
       padding: 8px 15px;
       border-radius: 25px;
       color: ${Theme.black};
-      font-size: 15px;
+      font-size: ${Theme.normal};
       float: right;
       top: -7px;
       right: 40px;
@@ -2327,9 +2327,9 @@ const MobileLeftSidebar = styled.div`
       top: 0px;
       left: 0;
       .close-icon {
-        color: ${Theme['$a-white']};
-        font-size: ${Theme['$base-f-size-res']};
-        font-family: ${Theme['$title-font-family']};
+        color: ${Theme.white};
+        font-size: ${Theme.normalRes};
+        font-family: ${Theme.titleFontFamily};
         position: absolute;
         right: 20px;
         top: 10px;

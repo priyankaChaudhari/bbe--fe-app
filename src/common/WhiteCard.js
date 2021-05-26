@@ -685,7 +685,7 @@ export const WhiteCard = styled.div`
           }
           span {
              color:${Theme.black};
-             font-size: 15px;
+             font-size: ${Theme.normal};
           }
     }
   }
