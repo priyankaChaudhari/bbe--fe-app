@@ -92,9 +92,9 @@ export default function NewCustomerList() {
       : false,
   );
   const options = [
-    { value: 'performance', label: 'Performance' },
+    { value: 'performance', label: 'Sales Performance' },
     { value: 'contract_details', label: 'Contract Details' },
-    // { value: 'ad_performance', label: 'Ad Performance' },
+    { value: 'ad_performance', label: 'Ad Performance' },
   ];
   const contractChoices = [
     { value: 'any', label: 'Any' },
@@ -237,6 +237,7 @@ export default function NewCustomerList() {
         // filters,
         searchQuery,
         showPerformance,
+        showAdPerformance,
         expiringSoon,
       ).then((response) => {
         setData(response && response.data && response.data.results);
@@ -473,6 +474,7 @@ export default function NewCustomerList() {
           JSON.stringify({
             ...filters,
             showPerformance: true,
+            showAdPerformance: false,
           }),
         );
         customerList(pageNumber, selectedValue, filters, searchQuery, true);
@@ -484,6 +486,7 @@ export default function NewCustomerList() {
           JSON.stringify({
             ...filters,
             showAdPerformance: true,
+            showPerformance: false,
           }),
         );
         customerList(pageNumber, selectedValue, filters, searchQuery, true);
@@ -824,6 +827,40 @@ export default function NewCustomerList() {
     return '';
   };
 
+  const renderAdPerformanceDifference = (value) => {
+    if (value) {
+      if (value.toString().includes('-')) {
+        return (
+          <>
+            <br />
+            <span className="decrease-rate">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {value
+                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
+            </span>
+          </>
+        );
+      }
+      return (
+        <>
+          <br />
+          <div className="increase-rate">
+            <img
+              className="green-arrow"
+              src={ArrowUpIcon}
+              width="14px"
+              alt="arrow-up"
+            />
+            {value ? `${value.toFixed(2)} %` : ''}
+          </div>
+        </>
+      );
+    }
+    return '';
+  };
+
   const renderHeaders = () => {
     if (showPerformance) {
       return (
@@ -1067,7 +1104,144 @@ export default function NewCustomerList() {
       );
     }
     if (showAdPerformance) {
-      return '';
+      return (
+        <tr
+          className="cursor"
+          key={Math.random()}
+          onClick={() =>
+            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+          }>
+          <td width="20%">
+            <img
+              className="company-logo"
+              src={
+                item &&
+                item.documents &&
+                item.documents[0] &&
+                Object.values(item.documents[0])
+                  ? Object.values(item.documents[0])[0]
+                  : CompanyDefaultUser
+              }
+              alt="logo"
+            />
+
+            <div className="company-name">
+              {item &&
+                item.contract &&
+                item.contract[0] &&
+                item.contract[0].contract_company_name}
+            </div>
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          </td>
+          <td width="15%">
+            {item &&
+            item.ad_performace &&
+            item.ad_performace.current_sum &&
+            item.ad_performace.current_sum.ad_sales
+              ? `$${item.ad_performace.current_sum.ad_sales
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+              : '$0'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.ad_performace &&
+                item.ad_performace.difference_data &&
+                item.ad_performace.difference_data.ad_sales,
+            )}
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.ad_performace &&
+              item.ad_performace.current_sum &&
+              item.ad_performace.current_sum.ad_spend
+                ? `$${item.ad_performace.current_sum.ad_spend
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.ad_performace &&
+                  item.ad_performace.difference_data &&
+                  item.ad_performace.difference_data.ad_spend,
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.ad_performace &&
+              item.ad_performace.current_sum &&
+              item.ad_performace.current_sum.impressions
+                ? item.ad_performace.current_sum.impressions
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.ad_performace &&
+                  item.ad_performace.difference_data &&
+                  item.ad_performace.difference_data.impressions,
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.ad_performace &&
+              item.ad_performace.current_sum &&
+              item.ad_performace.current_sum.acos
+                ? `$${item.ad_performace.current_sum.acos
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.ad_performace &&
+                  item.ad_performace.difference_data &&
+                  item.ad_performace.difference_data.acos,
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            {item &&
+            item.brand_growth_strategist &&
+            item.brand_growth_strategist.length !== 0 ? (
+              <>
+                {item.brand_growth_strategist.profile_photo ? (
+                  <img
+                    className="user-profile-circle"
+                    src={item.brand_growth_strategist.profile_photo}
+                    alt="user"
+                  />
+                ) : (
+                  <GetInitialName
+                    property="float-left mr-3"
+                    userInfo={item.brand_growth_strategist}
+                  />
+                )}
+              </>
+            ) : (
+              ''
+            )}
+            <div className="user-name">
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.first_name}
+              <br />
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.last_name}
+            </div>
+          </td>
+        </tr>
+      );
     }
     // for view-contract Details
     return (
@@ -1401,7 +1575,11 @@ export default function NewCustomerList() {
             </div>
           </div>
         </div>
-        <div className="label mt-2 mb-2">Brand Strategist</div>
+        {showAdPerformance ? (
+          <div className="label mt-2 mb-2">Ad Manager</div>
+        ) : (
+          <div className="label mt-2 mb-2">Brand Strategist</div>
+        )}
         <DropDownSelect className="w-250">
           {generateDropdown('user', selectInputRef)}
         </DropDownSelect>{' '}
