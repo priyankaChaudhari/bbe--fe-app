@@ -18,7 +18,6 @@ const ContractFormField = styled.div`
   label {
     color: ${Theme.gray40};
     font-size:${Theme.verySmall};
-    // letter-spacing: 0.5px;
     text-transform: uppercase;
     font-weight: bold;   
   }
@@ -63,23 +62,7 @@ const ContractFormField = styled.div`
       }
    
     }
-    // .modal-input-control {
-    //   width: 100%;
-    //   height: 40px!important;
-    //   background-color: #F4F6FC;
-    //   border: 1px solid ${Theme.gray45}!important;
-    //   border-radius: 2px !important;
-    //   margin-top: 7px;
-    //   outline: none;
-    //   font-weight: 500;
-    //   font-size: 14px;
-
-    // &::placeholder {
-    //     color: ${Theme.gray40};
-    //     font-weight: 500;
-    //     font-size: 14px;
-    //   }
-    // }
+    
   }
 
 

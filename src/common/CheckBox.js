@@ -60,7 +60,6 @@ const CheckBox = styled.div`
 
   .check-container:hover input ~ .checkmark {
     background-color: ${Theme.white};
-    // border: 1px solid ${Theme.gray9};
   }
 
   .check-container input:checked ~ .checkmark {

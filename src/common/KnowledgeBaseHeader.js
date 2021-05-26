@@ -276,13 +276,6 @@ const MobileSidebar = styled.div`
 
 const SideContents = styled.div`
   @media (max-width: 991px) {
-    // height: 100%;
-    // width: 240px;
-    // left: 0;
-    // z-index: 98;
-    // background-color: ${Theme['$base-color']};
-    // font-family: ${Theme['$base-font-family']};
-    // overflow-x: hidden;
     max-width: 64px;
     position: absolute;
     top: 80px;

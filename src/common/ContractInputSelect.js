@@ -59,17 +59,15 @@ const ContractInputSelect = styled.div`
         outline: none;
         font-size: ${Theme.extraNormal};
         font-weight:500;
-        //  border: 1px solid ${Theme.red} ;
-        //  background: #FBF2F2;
-         cursor: pointer;
-        &.form-control-error {
-          border: 1px solid ${Theme.red} ;
-          background: #FBF2F2;
-      
-        }
-        .css-1gtu0rj-indicatorContainer {
-          padding: 4px;
-        }
+        cursor: pointer;
+          &.form-control-error {
+            border: 1px solid ${Theme.red} ;
+            background: #FBF2F2;
+        
+          }
+          .css-1gtu0rj-indicatorContainer {
+            padding: 4px;
+          }
 
     }
     .css-1uccc91-singleValue {

@@ -4367,16 +4367,7 @@ const SidePanel = styled.div`
     .sidebar {
       /* width: 335px; */
     }
-    // .ReactCollapse--collapse {
-    //   overflow: hidden !important;
-    //   height: auto !important;
-    // }
-
-    // @media screen and (-webkit-min-device-pixel-ratio: 0) {
-    //   .sidebar {
-    //     padding-bottom: 300px;
-    //   }
-    // }
+    
     .error-found {
       color: ${Theme.red};
       font-size: ${Theme.small};

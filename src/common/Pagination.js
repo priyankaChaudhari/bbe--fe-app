@@ -84,10 +84,6 @@ const PaginationStyled = styled.div`
     }
     .rc-pagination-prev button,
     .rc-pagination-next button {
-      //   .rc-pagination-next button:after {
-      //     font-size: 22px !important;
-      //   }
-      // }
       font-size: 18px;
       .rc-pagination-next button:after {
         font-size: 15px !important;

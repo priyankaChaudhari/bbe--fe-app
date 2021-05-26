@@ -63,16 +63,7 @@ const PageNotFounds = styled.div`
     font-family: ${Theme.baseFontFamily};
   }
 
-  // .contract-cancel {
-  //   text-transform: capitalize;
-  //   color: ${Theme.red};
-  //   font-size: 18px;
-  //   text-align: center;
-  // }
-
   .contract-cancel-img {
-    // vertical-align: middle;
-    // margin-right: 15px;
     margin-bottom: 15px;
   }
 `;

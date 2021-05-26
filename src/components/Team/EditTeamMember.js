@@ -146,52 +146,55 @@ export default function EditTeamMember({
                     <div className="body-content mt-3">
                       {data &&
                         data.map((item) => (
-                          <div
-                            className="col-12 team-member-list pt-4"
-                            key={item.id}>
-                            <div className="edit-profile-text float-left">
-                              <GetInitialName
-                                userInfo={item.user_profile}
-                                property="mr-3"
-                              />
+                          <div className="row">
+                            <div
+                              className="col-12 team-member-list pt-4"
+                              key={item.id}>
+                              <div className="edit-profile-text float-left">
+                                <GetInitialName
+                                  userInfo={item.user_profile}
+                                  property="mr-3"
+                                />
 
-                              <div className="name-email">
-                                <div className="team-member-name">
+                                <div className="name-email">
+                                  <div className="team-member-name">
+                                    {(item.user_profile &&
+                                      item.user_profile.first_name) ||
+                                      ' '}{' '}
+                                    {(item.user_profile &&
+                                      item.user_profile.last_name) ||
+                                      ' '}
+                                  </div>
                                   {(item.user_profile &&
-                                    item.user_profile.first_name) ||
-                                    ' '}{' '}
-                                  {(item.user_profile &&
-                                    item.user_profile.last_name) ||
+                                    item.user_profile.email) ||
                                     ' '}
                                 </div>
-                                {(item.user_profile &&
-                                  item.user_profile.email) ||
-                                  ' '}
                               </div>
+                              <div className="float-right role-selected mr-5 mt-3">
+                                {(item.user_profile &&
+                                  item.user_profile.role) ||
+                                  ''}
+                              </div>
+                              <div className="clear-fix" />
+                              {userInfo && userInfo.role !== 'Customer' ? (
+                                <img
+                                  src={TrashIcons}
+                                  alt="delete"
+                                  className="trash-icon cursor "
+                                  onClick={() => {
+                                    setRemoveMember({
+                                      show: true,
+                                      id: item.id,
+                                      name: `${item.user_profile.first_name} ${item.user_profile.last_name}`,
+                                    });
+                                    setTeamDeleteModal(true);
+                                  }}
+                                  role="presentation"
+                                />
+                              ) : (
+                                ''
+                              )}
                             </div>
-                            <div className="float-right role-selected mr-4 mt-3">
-                              {(item.user_profile && item.user_profile.role) ||
-                                ''}
-                            </div>
-                            <div className="clear-fix" />
-                            {userInfo && userInfo.role !== 'Customer' ? (
-                              <img
-                                src={TrashIcons}
-                                alt="delete"
-                                className="trash-icon cursor "
-                                onClick={() => {
-                                  setRemoveMember({
-                                    show: true,
-                                    id: item.id,
-                                    name: `${item.user_profile.first_name} ${item.user_profile.last_name}`,
-                                  });
-                                  setTeamDeleteModal(true);
-                                }}
-                                role="presentation"
-                              />
-                            ) : (
-                              ''
-                            )}
                           </div>
                         ))}
                       {data && data.length === 0 ? (

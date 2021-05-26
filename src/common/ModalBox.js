@@ -141,7 +141,7 @@ const ModalBox = styled.div`
     .trash-icon {
       position: absolute;
       top: 40px;
-      right: 5px;
+      right: 21px;
       width: 18px;
     }
 

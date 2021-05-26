@@ -1,12 +1,10 @@
 import Button from './Button';
-import CardBox from './CardBox';
 import DropDownSelect from './DropDownSelect';
 import ErrorMsg from './ErrorMsg';
 import SuccessMsg from './SuccessMsg';
 import PageLoader from './PageLoader';
 import SearchInput from './SearchInput';
 import InputText from './InputText';
-import NavBar from './NavBar';
 import FormField from './FormField';
 import Table from './Table';
 import PageNotFound from './PageNotFound';
@@ -35,14 +33,12 @@ import { WhiteCard } from './WhiteCard';
 
 export {
   Button,
-  CardBox,
   DropDownSelect,
   ErrorMsg,
   SuccessMsg,
   PageLoader,
   SearchInput,
   InputText,
-  NavBar,
   FormField,
   Table,
   PageNotFound,

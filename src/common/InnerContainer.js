@@ -5,11 +5,7 @@ const InnerContainer = styled.div`
   max-width: 409px;
   width: 100%;
   margin: 0 auto;
-  // &.white-card-container {
-  //   width: 100%;
-  //   margin: 0 auto;
-  //   max-width: 569px;
-  // }
+
   .logo {
     position: relative;
     width: 100%;
