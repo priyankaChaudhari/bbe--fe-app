@@ -17,6 +17,7 @@ export default function AdPerformanceChart({
   chartData,
   currencySymbol,
   selectedBox,
+  selectedDF,
 }) {
   const chart = useRef(null);
   // const adGraphData = [
@@ -688,14 +689,16 @@ export default function AdPerformanceChart({
           null,
           null,
         );
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          currencySymbol,
-          null,
-          null,
-        );
+        if (selectedDF !== 'custom') {
+          tooltipPrevious = renderTooltip(
+            'Previous',
+            '#BFC5D2',
+            previousLabel,
+            currencySymbol,
+            null,
+            null,
+          );
+        }
       } else if (
         selectedKey === 'adConversion' ||
         selectedKey === 'adClickRate'
@@ -709,14 +712,16 @@ export default function AdPerformanceChart({
           '%',
           null,
         );
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          null,
-          '%',
-          null,
-        );
+        if (selectedDF !== 'custom') {
+          tooltipPrevious = renderTooltip(
+            'Previous',
+            '#BFC5D2',
+            previousLabel,
+            null,
+            '%',
+            null,
+          );
+        }
       } else if (selectedKey === 'impressions') {
         valueAxis.numberFormatter.numberFormat = `#.#a`;
         tooltipCurrent = renderTooltip(
@@ -727,14 +732,16 @@ export default function AdPerformanceChart({
           null,
           '#.#a',
         );
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          null,
-          null,
-          '#.#a',
-        );
+        if (selectedDF !== 'custom') {
+          tooltipPrevious = renderTooltip(
+            'Previous',
+            '#BFC5D2',
+            previousLabel,
+            null,
+            null,
+            '#.#a',
+          );
+        }
       } else {
         valueAxis.numberFormatter.numberFormat = `#.##a`;
         tooltipCurrent = renderTooltip(
@@ -745,14 +752,16 @@ export default function AdPerformanceChart({
           null,
           null,
         );
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          null,
-          null,
-          null,
-        );
+        if (selectedDF !== 'custom') {
+          tooltipPrevious = renderTooltip(
+            'Previous',
+            '#BFC5D2',
+            previousLabel,
+            null,
+            null,
+            null,
+          );
+        }
       }
 
       // Create series for previous data
@@ -1035,7 +1044,7 @@ export default function AdPerformanceChart({
     }
 
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol, selectedBox]);
+  }, [chartId, chartData, currencySymbol, selectedBox, selectedDF]);
 
   return <div id={chartId} style={{ width: '100%', height: '500px' }} />;
 }
@@ -1044,6 +1053,7 @@ AdPerformanceChart.defaultProps = {
   chartData: [],
   currencySymbol: '',
   selectedBox: {},
+  selectedDF: '',
 };
 
 AdPerformanceChart.propTypes = {
@@ -1051,4 +1061,5 @@ AdPerformanceChart.propTypes = {
   chartData: PropTypes.arrayOf(PropTypes.object),
   currencySymbol: PropTypes.string,
   selectedBox: PropTypes.shape(PropTypes.object),
+  selectedDF: PropTypes.string,
 };

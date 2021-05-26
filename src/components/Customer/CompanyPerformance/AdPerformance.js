@@ -214,6 +214,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             adClickRateCurrent: item.ctr,
             date: currentReportDate,
 
+            adSalesPrevious: null,
+            adSpendPrevious: null,
+            adConversionPrevious: null,
+            impressionsPrevious: null,
+            adCosPrevious: null,
+            adRoasPrevious: null,
+            adClicksPrevious: null,
+            adClickRatePrevious: null,
+
             adSalesCurrentLabel:
               item.ad_sales !== null ? item.ad_sales : '0.00',
             adSpendCurrentLabel:
@@ -228,6 +237,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             adRoasCurrentLabel: item.roas !== null ? item.roas : '0.00',
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0.00',
             adClickRateCurrentLabel: item.ctr !== null ? item.ctr : '0.00',
+
+            adSalesPreviousLabel: '0.00',
+            adSpendPreviousLabel: '0.00',
+            adConversionPreviousLabel: '0.00',
+            impressionsPreviousLabel: '0.00',
+            adCosPreviousLabel: '0.00',
+            adRoasPreviousLabel: '0.00',
+            adClicksPreviousLabel: '0.00',
+            adClickRatePreviousLabel: '0.00',
           });
         }
       });
@@ -1604,6 +1622,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           chartData={adChartData}
           currencySymbol={currencySymbol}
           selectedBox={selectedAdBox}
+          selectedDF={selectedAdDF}
         />
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
