@@ -231,6 +231,36 @@ export default function CustomerListTablet({
     return '';
   };
 
+  const renderAdPerformanceDifference = (value) => {
+    if (value) {
+      if (value.toString().includes('-')) {
+        return (
+          <>
+            <span className="decrease-rate ml-1">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {value
+                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
+            </span>
+          </>
+        );
+      }
+      return (
+        <span className="increase-rate ml-1">
+          <img
+            className="green-arrow"
+            src={ArrowUpIcon}
+            width="14px"
+            alt="arrow-up"
+          />
+          {value ? `${value.toFixed(2)} %` : ''}
+        </span>
+      );
+    }
+    return '';
+  };
+
   const renderCustomerDetails = (item) => {
     if (showPerformance) {
       return (
@@ -428,7 +458,8 @@ export default function CustomerListTablet({
           </div>
         </WhiteCard>
       );
-    } if (showAdPerformance) {
+    }
+    if (showAdPerformance) {
       return (
         <WhiteCard className="mt-2">
           <img
@@ -461,33 +492,19 @@ export default function CustomerListTablet({
               <div className="label">Ad Sales</div>
               <div className="label-info ">
                 <>
-                  $
                   {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) => (rev.revenue === null ? 0 : rev.revenue))
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
+                  item.ad_performace &&
+                  item.ad_performace.current_sum &&
+                  item.ad_performace.current_sum.ad_sales
+                    ? `$${item.ad_performace.current_sum.ad_sales
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
                     item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.revenue)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.revenue)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
+                      item.ad_performace &&
+                      item.ad_performace.difference_data &&
+                      item.ad_performace.difference_data.ad_sales,
                   )}
                 </>
               </div>
@@ -496,35 +513,19 @@ export default function CustomerListTablet({
               <div className="label">Ad Spend</div>
               <div className="label-info ">
                 <>
-                  $
                   {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) =>
-                        rev.units_sold === null ? 0 : rev.units_sold,
-                      )
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
+                  item.ad_performace &&
+                  item.ad_performace.current_sum &&
+                  item.ad_performace.current_sum.ad_spend
+                    ? `$${item.ad_performace.current_sum.ad_spend
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
                     item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.units_sold)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.units_sold)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
+                      item.ad_performace &&
+                      item.ad_performace.difference_data &&
+                      item.ad_performace.difference_data.ad_spend,
                   )}
                 </>
               </div>
@@ -537,31 +538,18 @@ export default function CustomerListTablet({
               <div className="label-info">
                 <>
                   {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) => (rev.traffic === null ? 0 : rev.traffic))
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
+                  item.ad_performace &&
+                  item.ad_performace.current_sum &&
+                  item.ad_performace.current_sum.impressions
+                    ? item.ad_performace.current_sum.impressions
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : 0}
+                  {renderAdPerformanceDifference(
                     item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.traffic)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.traffic)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
+                      item.ad_performace &&
+                      item.ad_performace.difference_data &&
+                      item.ad_performace.difference_data.impressions,
                   )}
                 </>
               </div>
@@ -571,36 +559,19 @@ export default function CustomerListTablet({
               <div className="label">Acos</div>
               <div className="label-info">
                 <>
-                  $
                   {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) =>
-                        rev.conversion === null ? 0 : rev.conversion,
-                      )
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
+                  item.ad_performace &&
+                  item.ad_performace.current_sum &&
+                  item.ad_performace.current_sum.acos
+                    ? `$${item.ad_performace.current_sum.acos
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
                     item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.conversion)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.conversion)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    'conversion',
+                      item.ad_performace &&
+                      item.ad_performace.difference_data &&
+                      item.ad_performace.difference_data.acos,
                   )}
                 </>
               </div>
@@ -623,70 +594,69 @@ export default function CustomerListTablet({
           </div>
         </WhiteCard>
       );
-    } 
-      // for- view contract details
-      return (
-        <WhiteCard className="mt-2">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
+    }
+    // for- view contract details
+    return (
+      <WhiteCard className="mt-2">
+        <img
+          className="company-logo"
+          src={
+            item &&
+            item.documents &&
+            item.documents[0] &&
+            Object.values(item.documents[0])
+              ? Object.values(item.documents[0])[0]
+              : CompanyDefaultUser
+          }
+          alt="logo"
+        />
 
-          <div className="company-name">
-            {item &&
-              item.contract &&
-              item.contract[0] &&
-              item.contract[0].contract_company_name}
-          </div>
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
-          <div className="clear-fix" />
-          <div className=" straight-line horizontal-line pt-3 mb-3 " />
+        <div className="company-name">
+          {item &&
+            item.contract &&
+            item.contract[0] &&
+            item.contract[0].contract_company_name}
+        </div>
+        <div className="status" style={{ textTransform: 'capitalize' }}>
+          {item && item.status}
+        </div>
+        <div className="clear-fix" />
+        <div className=" straight-line horizontal-line pt-3 mb-3 " />
 
-          <ul
-            className="recurring-contact"
-            style={{ textTransform: 'capitalize' }}>
-            {item && item.contract && item.contract.length ? (
-              item &&
-              item.contract &&
-              item.contract.map((type) => (
-                <React.Fragment key={Math.random()}>
-                  <ReactTooltip />
-                  {generateContractHTML(type, item.id)}
-                </React.Fragment>
-              ))
-            ) : (
-              <li className="no-active-contract">No active contracts</li>
-            )}
-          </ul>
+        <ul
+          className="recurring-contact"
+          style={{ textTransform: 'capitalize' }}>
+          {item && item.contract && item.contract.length ? (
+            item &&
+            item.contract &&
+            item.contract.map((type) => (
+              <React.Fragment key={Math.random()}>
+                <ReactTooltip />
+                {generateContractHTML(type, item.id)}
+              </React.Fragment>
+            ))
+          ) : (
+            <li className="no-active-contract">No active contracts</li>
+          )}
+        </ul>
 
-          <div className=" straight-line horizontal-line pt-3" />
-          <div className="row">
-            <div className="col-12 mt-3">
-              <div className="label">Brand Strategist</div>
-              <div className="label-info">
-                {' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.first_name}{' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.last_name}
-              </div>
+        <div className=" straight-line horizontal-line pt-3" />
+        <div className="row">
+          <div className="col-12 mt-3">
+            <div className="label">Brand Strategist</div>
+            <div className="label-info">
+              {' '}
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.first_name}{' '}
+              {item &&
+                item.brand_growth_strategist &&
+                item.brand_growth_strategist.last_name}
             </div>
           </div>
-        </WhiteCard>
-      );
-    
+        </div>
+      </WhiteCard>
+    );
   };
 
   return (

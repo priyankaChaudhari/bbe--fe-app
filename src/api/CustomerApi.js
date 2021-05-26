@@ -25,6 +25,7 @@ export async function getCustomerList(
   filterOptions,
   searchQuery,
   performance,
+  adPerformance,
   expiringSoon,
 ) {
   let params = {
@@ -51,6 +52,13 @@ export async function getCustomerList(
     params = {
       ...params,
       daily_facts: 'week',
+      // group_by: 'weekly',
+    };
+  }
+  if (adPerformance) {
+    params = {
+      ...params,
+      ad_performace: 'week',
       // group_by: 'weekly',
     };
   }
