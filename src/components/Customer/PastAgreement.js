@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -14,6 +14,7 @@ import {
 import { PATH_AGREEMENT } from '../../constants';
 
 export default function PastAgreement({ id }) {
+  const history = useHistory();
   const multipleAgreement = useSelector(
     (state) => state.accountState.multipleAgreement,
   );
@@ -96,6 +97,7 @@ export default function PastAgreement({ id }) {
                         ':contract_id',
                         item.id,
                       ),
+                      state: `${history.location.pathname}`,
                     }}>
                     <Button className="btn-transparent w-100  view-contract ">
                       {' '}

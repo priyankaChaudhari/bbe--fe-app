@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import PdfViewer from '../../common/PdfViewer';
 import Theme from '../../theme/Theme';
 
@@ -41,6 +41,7 @@ import {
   getMarketplaces,
   getContractActivityLog,
   getDocumentList,
+  createContractDesign,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -159,6 +160,7 @@ export default function ContractContainer() {
     amendment: false,
   });
   const [loaderFlag, setLoaderFlag] = useState(true);
+  const [contractDesignLoader, setContractDesignLoader] = useState(null);
   const [calculatedDate, setCalculatedDate] = useState(null);
   const [firstMonthDate, setFirstMonthDate] = useState(null);
   const [secondMonthDate, setSecondMonthDate] = useState(null);
@@ -202,13 +204,13 @@ export default function ContractContainer() {
     setIsLoading({ loader: false, type: 'page' });
     setLoaderFlag(false);
   }
-  const contractID =
+  const splittedPath =
     location && location.pathname && location.pathname.split('/');
 
   const getContractActivityLogInfo = useCallback(
     (currentPage) => {
       setActivityLoader(true);
-      getContractActivityLog(currentPage, contractID && contractID[4]).then(
+      getContractActivityLog(currentPage, splittedPath && splittedPath[4]).then(
         (response) => {
           setActivityData(response && response.data && response.data.results);
           setActivityCount(response && response.data && response.data.count);
@@ -221,7 +223,7 @@ export default function ContractContainer() {
         },
       );
     },
-    [contractID],
+    [splittedPath],
   );
 
   if (!isLoading.loader && !activityLoader) {
@@ -229,7 +231,6 @@ export default function ContractContainer() {
       toast.success('Signature Requested Successfully!');
       setShowSignSuccessMsg(false);
     }
-
     if (showSaveSuccessMsg) {
       toast.success('Changes Saved!');
       setShowSaveSuccessMsg(false);
@@ -239,10 +240,8 @@ export default function ContractContainer() {
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
-    if (contractID) {
-      getcontract(contractID[4]).then((res) => {
-        setLoaderFlag(true);
-
+    if (splittedPath) {
+      getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
           setDetails(res && res.data);
           if (showSuccessToastr) {
@@ -256,6 +255,7 @@ export default function ContractContainer() {
         }
       });
       getContractActivityLogInfo();
+      setLoaderFlag(true);
     } else {
       const path = location.pathname.slice(
         0,
@@ -299,104 +299,6 @@ export default function ContractContainer() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
-
-  useEffect(() => {
-    if (details) {
-      setFormData({ ...formData, ...details });
-      setOriginalData({ ...formData, ...details });
-    }
-    if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length
-    ) {
-      setMonthlyAdditionalServices({
-        create: [...details.additional_monthly_services],
-        delete: [],
-      });
-    } else {
-      setMonthlyAdditionalServices({
-        create: [],
-        delete: [],
-      });
-    }
-    if (
-      details &&
-      details.additional_marketplaces &&
-      details.additional_marketplaces.length
-    ) {
-      setAdditionalMarketplace({
-        create: [...details.additional_marketplaces],
-        delete: [],
-      });
-    } else {
-      setAdditionalMarketplace({
-        create: [],
-        delete: [],
-      });
-    }
-    if (
-      details &&
-      details.additional_one_time_services &&
-      details.additional_one_time_services.length
-    ) {
-      setAdditionalOnetimeServices({
-        create: [...details.additional_one_time_services],
-        delete: [],
-      });
-    } else {
-      setAdditionalOnetimeServices({
-        create: [],
-        delete: [],
-      });
-    }
-    if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length &&
-      details.additional_monthly_services.find(
-        (item) =>
-          item && item.service && item.service.name === 'DSP Advertising',
-      )
-    ) {
-      setShowCollpase({ ...showSection, dspAddendum: true });
-    } else {
-      setShowCollpase({ ...showSection, dspAddendum: false });
-    }
-
-    if (details && details.contract_type === 'dsp only') {
-      setShowCollpase({ ...showSection, dspAddendum: true });
-    }
-    if (
-      details &&
-      details.primary_marketplace &&
-      details.primary_marketplace.name
-    ) {
-      setAdditionalMarketplaces(
-        marketplacesResult.filter(
-          (op) => op.value !== details.primary_marketplace.name,
-        ),
-      );
-    } else {
-      setAdditionalMarketplaces(marketplacesResult);
-    }
-
-    if (details && details.additional_marketplaces) {
-      setMarketPlaces(
-        marketplacesResult.filter(
-          (choice) =>
-            !(details && details.additional_marketplaces).some(
-              (item) => item.name === choice.value,
-            ),
-        ),
-      );
-    } else {
-      setMarketPlaces(marketplacesResult);
-    }
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [details]);
 
   const showTabInResponsive = (section) => {
     if (section === 'edit-fields') {
@@ -757,96 +659,6 @@ export default function ContractContainer() {
         }),
       )
       .catch(() => {});
-  };
-
-  const nextStep = async () => {
-    let additionalMonthlyApi = null;
-    let additionalOneTimeApi = null;
-    let AccountApi = null;
-    let AddendumApi = null;
-
-    if (updatedFormData && Object.keys(updatedFormData).length) {
-      // for start date
-      if (updatedFormData && updatedFormData.start_date) {
-        updatedFormData.start_date = dayjs(updatedFormData.start_date).format(
-          'YYYY-MM-DD',
-        );
-      }
-      setIsLoading({ loader: true, type: 'page' });
-
-      // for additionL montlhy service
-      if (updatedFormData.additional_monthly_services) {
-        additionalMonthlyApi = createAdditionalServiceBulk(
-          updatedFormData.additional_monthly_services,
-        );
-      }
-
-      // for additional one time service
-      if (updatedFormData.additional_one_time_services) {
-        additionalOneTimeApi = createAdditionalServiceBulk(
-          updatedFormData.additional_one_time_services,
-        );
-      }
-
-      // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
-      const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
-      for (const val of num) {
-        if (updatedFormData && updatedFormData[val]) {
-          updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
-        }
-      }
-      const updatedContractFields = cloneDeep(updatedFormData);
-      delete updatedContractFields.additional_one_time_services;
-      delete updatedContractFields.additional_monthly_services;
-      delete updatedContractFields.additional_marketplaces;
-      delete updatedContractFields.primary_marketplace;
-      delete updatedContractFields.addendum;
-
-      const detail = {
-        ...updatedContractFields,
-      };
-      if (Object.keys(detail).length) {
-        AccountApi = updateAccountDetails(details.id, detail);
-      }
-
-      if (newAddendumData && newAddendumData.id && updatedFormData.addendum) {
-        AddendumApi = updateAddendum(newAddendumData.id, {
-          addendum: newAddendumData && newAddendumData.addendum,
-          contract: details.id,
-        });
-      } else if (updatedFormData && updatedFormData.addendum) {
-        const addendumData = {
-          customer_id: id,
-          addendum: newAddendumData && newAddendumData.addendum,
-          contract: details.id,
-        };
-        AddendumApi = createAddendum(addendumData);
-      }
-
-      const apis = [
-        additionalMonthlyApi,
-        additionalOneTimeApi,
-        AccountApi,
-        AddendumApi,
-      ];
-
-      if (
-        (updatedFormData && updatedFormData.primary_marketplace) ||
-        (updatedFormData && updatedFormData.additional_marketplaces)
-      ) {
-        if (
-          updatedFormData &&
-          updatedFormData.primary_marketplace &&
-          !Object.keys(updatedFormData).includes('additional_marketplaces')
-        ) {
-          createPrimaryMarketplace();
-        } else {
-          await updateMarketplaces();
-        }
-      }
-
-      saveChanges(apis);
-    }
   };
 
   const clearError = () => {
@@ -1755,6 +1567,7 @@ export default function ContractContainer() {
   };
 
   const createAgreementDoc = () => {
+    setContractDesignLoader(true);
     const serviceData = getAgreementAccorType(0);
     const agreementData =
       serviceData &&
@@ -1931,7 +1744,207 @@ export default function ContractContainer() {
           : addendumData + newAddendumAddedData + addendumSignatureData
         : ''
     } `;
+
     setPDFData(finalAgreement);
+
+    const contractData = {
+      contract: details && details.id,
+      contract_data: finalAgreement
+        .replaceAll('PRINTED_NAME', '')
+        .replace('CUSTOMER_ROLE', ''),
+    };
+    createContractDesign(contractData).then(() => {
+      setContractDesignLoader(false);
+    });
+  };
+
+  useEffect(() => {
+    if (details && Object.keys(details).length) {
+      setFormData({ ...formData, ...details });
+      setOriginalData({ ...formData, ...details });
+      createAgreementDoc();
+    }
+    if (
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length
+    ) {
+      setMonthlyAdditionalServices({
+        create: [...details.additional_monthly_services],
+        delete: [],
+      });
+    } else {
+      setMonthlyAdditionalServices({
+        create: [],
+        delete: [],
+      });
+    }
+    if (
+      details &&
+      details.additional_marketplaces &&
+      details.additional_marketplaces.length
+    ) {
+      setAdditionalMarketplace({
+        create: [...details.additional_marketplaces],
+        delete: [],
+      });
+    } else {
+      setAdditionalMarketplace({
+        create: [],
+        delete: [],
+      });
+    }
+    if (
+      details &&
+      details.additional_one_time_services &&
+      details.additional_one_time_services.length
+    ) {
+      setAdditionalOnetimeServices({
+        create: [...details.additional_one_time_services],
+        delete: [],
+      });
+    } else {
+      setAdditionalOnetimeServices({
+        create: [],
+        delete: [],
+      });
+    }
+    if (
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length &&
+      details.additional_monthly_services.find(
+        (item) =>
+          item && item.service && item.service.name === 'DSP Advertising',
+      )
+    ) {
+      setShowCollpase({ ...showSection, dspAddendum: true });
+    } else {
+      setShowCollpase({ ...showSection, dspAddendum: false });
+    }
+
+    if (details && details.contract_type === 'dsp only') {
+      setShowCollpase({ ...showSection, dspAddendum: true });
+    }
+    if (
+      details &&
+      details.primary_marketplace &&
+      details.primary_marketplace.name
+    ) {
+      setAdditionalMarketplaces(
+        marketplacesResult.filter(
+          (op) => op.value !== details.primary_marketplace.name,
+        ),
+      );
+    } else {
+      setAdditionalMarketplaces(marketplacesResult);
+    }
+
+    if (details && details.additional_marketplaces) {
+      setMarketPlaces(
+        marketplacesResult.filter(
+          (choice) =>
+            !(details && details.additional_marketplaces).some(
+              (item) => item.name === choice.value,
+            ),
+        ),
+      );
+    } else {
+      setMarketPlaces(marketplacesResult);
+    }
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [details]);
+
+  const nextStep = async () => {
+    let additionalMonthlyApi = null;
+    let additionalOneTimeApi = null;
+    let AccountApi = null;
+    let AddendumApi = null;
+
+    if (updatedFormData && Object.keys(updatedFormData).length) {
+      // for start date
+      if (updatedFormData && updatedFormData.start_date) {
+        updatedFormData.start_date = dayjs(updatedFormData.start_date).format(
+          'YYYY-MM-DD',
+        );
+      }
+      setIsLoading({ loader: true, type: 'page' });
+      setContractDesignLoader(true);
+      // for additionL montlhy service
+      if (updatedFormData.additional_monthly_services) {
+        additionalMonthlyApi = createAdditionalServiceBulk(
+          updatedFormData.additional_monthly_services,
+        );
+      }
+
+      // for additional one time service
+      if (updatedFormData.additional_one_time_services) {
+        additionalOneTimeApi = createAdditionalServiceBulk(
+          updatedFormData.additional_one_time_services,
+        );
+      }
+
+      // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
+      const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
+      for (const val of num) {
+        if (updatedFormData && updatedFormData[val]) {
+          updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
+        }
+      }
+      const updatedContractFields = cloneDeep(updatedFormData);
+      delete updatedContractFields.additional_one_time_services;
+      delete updatedContractFields.additional_monthly_services;
+      delete updatedContractFields.additional_marketplaces;
+      delete updatedContractFields.primary_marketplace;
+      delete updatedContractFields.addendum;
+
+      const detail = {
+        ...updatedContractFields,
+      };
+      if (Object.keys(detail).length) {
+        AccountApi = updateAccountDetails(details.id, detail);
+      }
+
+      if (newAddendumData && newAddendumData.id && updatedFormData.addendum) {
+        AddendumApi = updateAddendum(newAddendumData.id, {
+          addendum: newAddendumData && newAddendumData.addendum,
+          contract: details.id,
+        });
+      } else if (updatedFormData && updatedFormData.addendum) {
+        const addendumData = {
+          customer_id: id,
+          addendum: newAddendumData && newAddendumData.addendum,
+          contract: details.id,
+        };
+        AddendumApi = createAddendum(addendumData);
+      }
+
+      const apis = [
+        additionalMonthlyApi,
+        additionalOneTimeApi,
+        AccountApi,
+        AddendumApi,
+      ];
+
+      if (
+        (updatedFormData && updatedFormData.primary_marketplace) ||
+        (updatedFormData && updatedFormData.additional_marketplaces)
+      ) {
+        if (
+          updatedFormData &&
+          updatedFormData.primary_marketplace &&
+          !Object.keys(updatedFormData).includes('additional_marketplaces')
+        ) {
+          createPrimaryMarketplace();
+        } else {
+          await updateMarketplaces();
+        }
+      }
+
+      saveChanges(apis);
+    }
   };
 
   const checkApprovalCondition = () => {
@@ -1984,6 +1997,7 @@ export default function ContractContainer() {
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
+      state: `${history.location.state}`,
     });
   };
 
@@ -2274,7 +2288,6 @@ export default function ContractContainer() {
         setShowDiscardModal={setShowDiscardModal}
         checkApprovalCondition={checkApprovalCondition}
         showRightTick={showRightTick}
-        createAgreementDoc={createAgreementDoc}
         setIsEditContract={setIsEditContract}
         renderEditContractBtn={renderEditContractBtn}
         showDiscardModal={showDiscardModal}
@@ -2303,12 +2316,18 @@ export default function ContractContainer() {
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
+      state: `${history.location.state}`,
     });
     setIsEditContract(false);
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       {showPageNotFound ? (
         <PageNotFound />
       ) : (details &&
@@ -2354,24 +2373,31 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        <li className="download-pdf">
-                          <a
-                            className="download-pdf-link"
-                            href={
-                              details && details.contract_url
-                                ? details && details.contract_url
-                                : ''
-                            }
-                            download>
-                            <img
-                              src={DownloadPdf}
-                              alt="download"
-                              className="download-pdf-icon "
-                              role="presentation"
-                            />
-                            Download
-                          </a>
-                        </li>
+                        {details &&
+                        details.id &&
+                        contractDesignLoader !== null &&
+                        !contractDesignLoader ? (
+                          <li className="download-pdf">
+                            <a
+                              className="download-pdf-link"
+                              href={
+                                details && details.contract_url
+                                  ? details && details.contract_url
+                                  : null
+                              }
+                              download>
+                              <img
+                                src={DownloadPdf}
+                                alt="download"
+                                className="download-pdf-icon "
+                                role="presentation"
+                              />
+                              Download
+                            </a>
+                          </li>
+                        ) : (
+                          ''
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2383,7 +2409,12 @@ export default function ContractContainer() {
                             alt="close"
                             className="float-right cursor remove-cross-icon"
                             onClick={() => {
-                              history.goBack('Agreement');
+                              // history.goBack('Agreement');
+                              history.push(
+                                history &&
+                                  history.location &&
+                                  history.location.state,
+                              );
                             }}
                             role="presentation"
                           />
@@ -2444,24 +2475,31 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        <li className="download-pdf">
-                          <a
-                            className="download-pdf-link"
-                            href={
-                              details && details.contract_url
-                                ? details && details.contract_url
-                                : ''
-                            }
-                            download>
-                            <img
-                              src={DownloadPdf}
-                              alt="download"
-                              className="download-pdf-icon "
-                              role="presentation"
-                            />
-                            Download
-                          </a>
-                        </li>
+                        {details &&
+                        details.id &&
+                        contractDesignLoader !== null &&
+                        !contractDesignLoader ? (
+                          <li className="download-pdf">
+                            <a
+                              className="download-pdf-link"
+                              href={
+                                details && details.contract_url
+                                  ? details && details.contract_url
+                                  : null
+                              }
+                              download>
+                              <img
+                                src={DownloadPdf}
+                                alt="download"
+                                className="download-pdf-icon "
+                                role="presentation"
+                              />
+                              Download
+                            </a>
+                          </li>
+                        ) : (
+                          ''
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2473,7 +2511,12 @@ export default function ContractContainer() {
                             alt="close"
                             className="float-right cursor remove-cross-icon"
                             onClick={() => {
-                              history.goBack('Agreement');
+                              // history.goBack('Agreement');
+                              history.push(
+                                history &&
+                                  history.location &&
+                                  history.location.state,
+                              );
                             }}
                             role="presentation"
                           />
@@ -2598,6 +2641,7 @@ export default function ContractContainer() {
                 setFormData={setFormData}
                 discountFlag={discountFlag}
                 getContractDetails={getContractDetails}
+                setIsEditContract={setIsEditContract}
               />
             </ModalBox>
           </Modal>

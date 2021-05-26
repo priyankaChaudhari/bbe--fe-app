@@ -584,6 +584,7 @@ export default function NewCustomerList() {
               ':contract_id',
               type.contract_id,
             )}`,
+            state: `${history.location.pathname}`,
           });
         }
       }
@@ -606,6 +607,7 @@ export default function NewCustomerList() {
                 ':contract_id',
                 type.contract_id,
               )}`,
+              state: `${history.location.pathname}`,
             });
           }}
           role="presentation">
@@ -631,6 +633,7 @@ export default function NewCustomerList() {
                 ':contract_id',
                 type.contract_id,
               )}`,
+              state: `${history.location.pathname}`,
             });
           }}
           role="presentation"
@@ -657,6 +660,7 @@ export default function NewCustomerList() {
                 ':contract_id',
                 type.contract_id,
               )}`,
+              state: `${history.location.pathname}`,
             });
           }}
           role="presentation"
@@ -683,6 +687,7 @@ export default function NewCustomerList() {
                 ':contract_id',
                 type.contract_id,
               )}`,
+              state: `${history.location.pathname}`,
             });
           }}
           role="presentation"

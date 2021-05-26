@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
@@ -21,6 +21,7 @@ import { PATH_AGREEMENT } from '../../constants';
 import PastAgreement from './PastAgreement';
 
 export default function AgreementDetails({ agreements, id }) {
+  const history = useHistory();
   const [viewComponent, setViewComponent] = useState('current');
   const [openCollapse, setOpenCollapse] = useState([]);
   const multipleAgreement = useSelector(
@@ -141,6 +142,10 @@ export default function AgreementDetails({ agreements, id }) {
                         ':contract_id',
                         agreement.id,
                       ),
+                      state:
+                        history &&
+                        history.location &&
+                        history.location.pathname,
                     }}>
                     <Button className="btn-transparent w-100 view-contract">
                       {' '}

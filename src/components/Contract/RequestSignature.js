@@ -134,6 +134,7 @@ function RequestSignature({
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
+      state: `${history.location.state}`,
     });
   };
 
@@ -394,9 +395,11 @@ function RequestSignature({
       queryString.stringify({
         ...params,
       });
+
     history.push({
       pathname: `${history.location.pathname}`,
       search: `${stringified}`,
+      state: `${history.location.state}`,
     });
     setIsEditContract(false);
   };
