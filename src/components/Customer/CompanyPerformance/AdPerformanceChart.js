@@ -672,7 +672,6 @@ export default function AdPerformanceChart({
       if (
         selectedKey === 'adSales' ||
         selectedKey === 'adSpend' ||
-        selectedKey === 'adCos' ||
         selectedKey === 'adRoas'
       ) {
         if (selectedKey === 'adRoas') {
@@ -701,7 +700,8 @@ export default function AdPerformanceChart({
         }
       } else if (
         selectedKey === 'adConversion' ||
-        selectedKey === 'adClickRate'
+        selectedKey === 'adClickRate' ||
+        selectedKey === 'adCos'
       ) {
         valueAxis.numberFormatter.numberFormat = `#.#'%'`;
         tooltipCurrent = renderTooltip(
@@ -836,12 +836,7 @@ export default function AdPerformanceChart({
       // loop for genearate tooltip
       _.keys(selectedBox).map((item) => {
         const value = `${item}Current`;
-        if (
-          item === 'adSales' ||
-          item === 'adSpend' ||
-          item === 'adCos' ||
-          item === 'adRoas'
-        ) {
+        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],
@@ -850,7 +845,11 @@ export default function AdPerformanceChart({
             null,
             null,
           )}`;
-        } else if (item === 'adConversion' || item === 'adClickRate') {
+        } else if (
+          item === 'adConversion' ||
+          item === 'adClickRate' ||
+          item === 'adCos'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],
@@ -886,12 +885,16 @@ export default function AdPerformanceChart({
         const series = chart.current.series.push(new am4charts.LineSeries());
         // console.log('item=',item);
         if (index === 0) {
-          if (item === 'adSales' || item === 'adSpend' || item === 'adCos') {
+          if (item === 'adSales' || item === 'adSpend') {
             // console.log('index 0 adSales');
             series.yAxis = valueAxis;
             valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
             firstAxis = 'currency';
-          } else if (item === 'adConversion' || item === 'adClickRate') {
+          } else if (
+            item === 'adConversion' ||
+            item === 'adClickRate' ||
+            item === 'adCos'
+          ) {
             // console.log('index 0 adConversion');
             series.yAxis = valueAxis;
             valueAxis.numberFormatter.numberFormat = `#.#'%'`;
@@ -914,11 +917,7 @@ export default function AdPerformanceChart({
             firstAxis = 'unit';
           }
           // valueAxis.renderer.line.strokeOpacity = 1;
-        } else if (
-          item === 'adSales' ||
-          item === 'adSpend' ||
-          item === 'adCos'
-        ) {
+        } else if (item === 'adSales' || item === 'adSpend') {
           if (firstAxis === 'currency') {
             // console.log('currency');
             series.yAxis = valueAxis;
@@ -943,7 +942,11 @@ export default function AdPerformanceChart({
             valueAxis2.renderer.labels.template.disabled = true;
             valueAxis3.renderer.labels.template.disabled = true;
           }
-        } else if (item === 'adConversion' || item === 'adClickRate') {
+        } else if (
+          item === 'adConversion' ||
+          item === 'adClickRate' ||
+          item === 'adCos'
+        ) {
           // console.log('adConversion');
           if (firstAxis === 'percentage') {
             // console.log('percentage');
