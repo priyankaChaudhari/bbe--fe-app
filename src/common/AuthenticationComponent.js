@@ -25,6 +25,7 @@ import {
   PATH_TEAM_MEMBER,
   PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
+  PATH_ADM_DASHBOARD,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -40,6 +41,7 @@ import {
   Dashboard,
   TeamMember,
   TabletTeamMember,
+  AdManagerDashboard,
 } from '../components/Brand Partner';
 import { Summary } from '../components/OnBoardingCustomer';
 
@@ -128,6 +130,8 @@ export default function AuthenticationComponent() {
           )}
           {/* Brand Partner */}
           <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
+          {/* <Route path={PATH_BGS_DASHBOARD} component={AdManagerDashboard} /> */}
+          <Route path={PATH_ADM_DASHBOARD} component={AdManagerDashboard} />
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}

@@ -26,6 +26,7 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_CUSTOMER_LIST,
   PATH_SUMMARY,
+  PATH_ADM_DASHBOARD,
 } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
@@ -117,6 +118,8 @@ export default function Login() {
     if (localStorage.getItem('token')) {
       if (role.includes('Growth Strategist')) {
         history.push(PATH_BGS_DASHBOARD);
+      } else if (role.includes('Ad Manager')) {
+        history.push(PATH_ADM_DASHBOARD);
       } else if (role === 'Customer') {
         const id =
           step &&
