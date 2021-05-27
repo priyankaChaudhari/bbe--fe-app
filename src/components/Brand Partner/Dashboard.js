@@ -227,6 +227,8 @@ export default function Dashboard() {
     return '';
   };
 
+  console.log('data', data);
+
   return (
     <BrandPartnerDashboard>
       <div className="dashboard-header-sticky">
@@ -319,10 +321,12 @@ export default function Dashboard() {
                         title={
                           item &&
                           item.contract &&
+                          item.contract[0] &&
                           item.contract[0].contract_company_name
                         }>
                         {item &&
                           item.contract &&
+                          item.contract[0] &&
                           item.contract[0].contract_company_name}
                       </div>
                       <div className="status">
