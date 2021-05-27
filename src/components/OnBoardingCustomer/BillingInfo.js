@@ -227,6 +227,9 @@ export default function BillingInfo({
     delete formData.agreed;
     delete formData.ach;
     delete formData.credit_card;
+
+    if (formData && formData.billing_contact.phone_number === '')
+      delete formData.billing_contact.phone_number;
     if (data && data.id) delete formData.card_details;
     let details = {};
 
