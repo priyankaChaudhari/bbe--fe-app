@@ -2736,7 +2736,7 @@ const HeaderDownloadFuntionality = styled.div`
   border-bottom: 1px solid ${Theme.gray5};
   min-height: 70px;
   color: ${Theme.black};
-  font-size: 14px;
+  font-size: 15px;
 
   .contract-download-nav {
     list-style-type: none;
@@ -2750,6 +2750,7 @@ const HeaderDownloadFuntionality = styled.div`
 
       &.download-pdf {
         cursor: pointer;
+        font-size: 14px;
         .download-pdf-link {
           color: ${Theme.black};
         }
