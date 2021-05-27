@@ -60,7 +60,7 @@ export default function LeftSideBar({ userInfo }) {
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('bgs-dashboard')
+                history.location.pathname.includes('ad-manager')
                   ? ' cursor active'
                   : ' cursor'
               }

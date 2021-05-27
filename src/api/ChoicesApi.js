@@ -4,7 +4,7 @@ import {
   API_CHOICES,
   API_SERVICE_TYPE,
   API_MARKETPLACES,
-  // API_ADM
+  API_ADM,
 } from '../constants/ApiConstants';
 
 export async function getStatus() {
@@ -209,8 +209,7 @@ export const getMarketPlaceList = async (id) => {
 
 export async function getAdManagers() {
   const result = await axiosInstance
-    // .get(`${API_ADM}`) //for ad manager list
-    .get(`${API_BGS}`)
+    .get(`${API_ADM}`)
     .then((response) => {
       return response;
     })
