@@ -1237,10 +1237,8 @@ export default function NewCustomerList() {
               item.ad_performace &&
               item.ad_performace.current_sum &&
               item.ad_performace.current_sum.acos
-                ? `$${item.ad_performace.current_sum.acos
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+                ? `${item.ad_performace.current_sum.acos.toFixed(2)}%`
+                : '0%'}
               {renderAdPerformanceDifference(
                 item &&
                   item.ad_performace &&
@@ -1423,9 +1421,9 @@ export default function NewCustomerList() {
                       </>
                     )} */}
                     {showAdPerformance ? (
-                      <div className="label">Brand Strategist</div>
-                    ) : (
                       <div className="label">Ad Manager</div>
+                    ) : (
+                      <div className="label">Brand Strategist</div>
                     )}
                     <DropDownSelect className="w-250">
                       {generateDropdown('user', selectInputRefMobile)}

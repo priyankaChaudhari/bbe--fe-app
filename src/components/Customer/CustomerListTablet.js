@@ -553,10 +553,8 @@ export default function CustomerListTablet({
                   item.ad_performace &&
                   item.ad_performace.current_sum &&
                   item.ad_performace.current_sum.acos
-                    ? `$${item.ad_performace.current_sum.acos
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                    ? `${item.ad_performace.current_sum.acos.toFixed(2)}%`
+                    : '0%'}
                   {renderAdPerformanceDifference(
                     item &&
                       item.ad_performace &&

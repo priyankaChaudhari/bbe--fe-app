@@ -311,16 +311,8 @@ export default function AdManagerDashboard() {
 
                       <div
                         className="company-name"
-                        title={
-                          item &&
-                          item.contract &&
-                          item.contract[0] &&
-                          item.contract[0].contract_company_name
-                        }>
-                        {item &&
-                          item.contract &&
-                          item.contract[0] &&
-                          item.contract[0].contract_company_name}
+                        title={item && item.company_name}>
+                        {item && item.company_name}
                       </div>
                       <div className="status">
                         {item && item.category && item.category.label}
@@ -497,10 +489,10 @@ export default function AdManagerDashboard() {
                             item.ad_performace &&
                             item.ad_performace.current_sum &&
                             item.ad_performace.current_sum.acos
-                              ? `$${item.ad_performace.current_sum.acos
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
+                              ? `${item.ad_performace.current_sum.acos.toFixed(
+                                  2,
+                                )}%`
+                              : '0%'}
                           </div>
                           <div className="vs">
                             vs{' '}
@@ -508,10 +500,10 @@ export default function AdManagerDashboard() {
                             item.ad_performace &&
                             item.ad_performace.previous_sum &&
                             item.ad_performace.previous_sum.acos
-                              ? `$${item.ad_performace.previous_sum.acos
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
+                              ? `${item.ad_performace.previous_sum.acos.toFixed(
+                                  2,
+                                )}%`
+                              : '0%'}
                           </div>
                         </div>
                       </div>
