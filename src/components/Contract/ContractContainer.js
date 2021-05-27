@@ -94,6 +94,7 @@ export default function ContractContainer() {
   const [showModal, setShowModal] = useState(false);
   const [amazonStoreCustom, setAmazonStoreCustom] = useState(false);
   const [showAmazonPlanDropdown, setShowAmazonPlanDropdown] = useState(false);
+
   const [showDiscardModal, setShowDiscardModal] = useState({
     clickedBtn: '',
     show: false,
@@ -848,7 +849,13 @@ export default function ContractContainer() {
       );
     }
     if (key === 'length') {
-      return details && details.length && details.length.label;
+      // return details && details.length && details.length.label;
+
+      return formData && formData.length && formData.length.label
+        ? formData.length.label
+        : formData.length
+        ? formData.length
+        : 'Select Length';
     }
     if (key === 'primary_marketplace') {
       return (
@@ -858,7 +865,11 @@ export default function ContractContainer() {
       );
     }
     if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM / DD / YYYY');
+      // return
+      return formData && formData[key] !== null
+        ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
+        : 'Select Date';
+      // details && dayjs(details[key]).format('MM / DD / YYYY');
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM / DD / YYYY');
@@ -1757,24 +1768,24 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      (details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('one')) ||
-      (details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('dsp'))
+      (formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')) ||
+      (formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp'))
         ? ''
         : statmentData
     } ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendum
     } ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
     } ${

@@ -453,11 +453,19 @@ export default function AgreementSidePanel({
 
   useEffect(() => {
     goToSection();
+    // const serviceData =
+    //   agreementData &&
+    //   agreementData.additional_one_time_services &&
+    //   agreementData.additional_one_time_services.length &&
+    //   agreementData.additional_one_time_services.find(
+    //     (item) =>
+    //       item.service && item.service.name.includes('Amazon Store Package'),
+    //   );
     const serviceData =
-      agreementData &&
-      agreementData.additional_one_time_services &&
-      agreementData.additional_one_time_services.length &&
-      agreementData.additional_one_time_services.find(
+      formData &&
+      formData.additional_one_time_services &&
+      formData.additional_one_time_services.length &&
+      formData.additional_one_time_services.find(
         (item) =>
           item.service && item.service.name.includes('Amazon Store Package'),
       );
@@ -485,9 +493,12 @@ export default function AgreementSidePanel({
       'monthly_service',
     );
     if (
-      agreementData &&
-      agreementData.additional_marketplaces &&
-      agreementData.additional_marketplaces.length
+      // agreementData &&
+      // agreementData.additional_marketplaces &&
+      // agreementData.additional_marketplaces.length
+      formData &&
+      formData.additional_marketplaces &&
+      formData.additional_marketplaces.length
     ) {
       setShowAdditionalMarketplace(true);
     }

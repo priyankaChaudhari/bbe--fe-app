@@ -15,7 +15,9 @@ export default function Agreement({ formData, details, templateData }) {
     if (key === 'length') {
       return formData && formData.length && formData.length.label
         ? formData.length.label
-        : formData.length;
+        : formData.length
+        ? formData.length
+        : 'Select Length';
     }
     if (key === 'start_date') {
       return formData && formData[key] !== null
