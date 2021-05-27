@@ -26,6 +26,7 @@ export default function ContractFooter({
   setIsEditContract,
   renderEditContractBtn,
   showDiscardModal,
+  createAgreementDoc,
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
 
@@ -172,6 +173,7 @@ export default function ContractFooter({
                       )
                     }
                     onClick={() => {
+                      createAgreementDoc();
                       setParams('select-contact');
                       setShowModal(true);
                       setIsEditContract(false);
@@ -222,6 +224,7 @@ export default function ContractFooter({
                     ) || Object.keys(updatedFormData).includes('addendum')
                   }
                   onClick={() => {
+                    createAgreementDoc();
                     setParams('request-approve');
                     setShowModal(true);
                   }}>
@@ -260,6 +263,8 @@ export default function ContractFooter({
                   isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
                 }`}
                 onClick={() => {
+                  createAgreementDoc();
+
                   setParams('select-contact');
                   setShowModal(true);
                   setIsEditContract(false);
@@ -405,6 +410,7 @@ ContractFooter.defaultProps = {
   setIsEditContract: () => {},
   renderEditContractBtn: () => {},
   showDiscardModal: () => {},
+  createAgreementDoc: () => {},
 };
 
 ContractFooter.propTypes = {
@@ -440,4 +446,5 @@ ContractFooter.propTypes = {
   setIsEditContract: PropTypes.func,
   renderEditContractBtn: PropTypes.func,
   showDiscardModal: PropTypes.func,
+  createAgreementDoc: PropTypes.func,
 };

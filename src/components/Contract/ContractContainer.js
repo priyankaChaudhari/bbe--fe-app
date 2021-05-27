@@ -1745,6 +1745,24 @@ export default function ContractContainer() {
         : ''
     } `;
 
+    // console.log(
+    //   'agreementDatan\n\n\n\n',
+    //   agreementData,
+    //   'agreementSignatureData\n\n\n',
+    //   agreementSignatureData,
+    //   'statmentData\n\n',
+    //   statmentData,
+    //   'dspAddendum\n\n',
+    //   dspAddendum,
+    //   'dspAddendumSignature\n\n',
+    //   dspAddendumSignature,
+    //   'addendumData\n\n',
+    //   addendumData,
+    //   'newAddendumAddedData\n\n',
+    //   newAddendumAddedData,
+    //   'addendumSignatureData\n\n',
+    //   addendumSignatureData,
+    // );
     setPDFData(finalAgreement);
 
     const contractData = {
@@ -2291,6 +2309,7 @@ export default function ContractContainer() {
         setIsEditContract={setIsEditContract}
         renderEditContractBtn={renderEditContractBtn}
         showDiscardModal={showDiscardModal}
+        createAgreementDoc={createAgreementDoc}
       />
     );
   };
