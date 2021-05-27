@@ -247,7 +247,14 @@ export default function NewCustomerList() {
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [searchQuery, selectedValue, filters, showPerformance, expiringSoon],
+    [
+      searchQuery,
+      selectedValue,
+      filters,
+      showPerformance,
+      expiringSoon,
+      showAdPerformance,
+    ],
   );
 
   useEffect(() => {
@@ -479,19 +486,33 @@ export default function NewCustomerList() {
             showAdPerformance: false,
           }),
         );
-        customerList(pageNumber, selectedValue, filters, searchQuery, true);
+        customerList(
+          pageNumber,
+          selectedValue,
+          filters,
+          searchQuery,
+          true,
+          false,
+        );
       } else if (event.value === 'ad_performance') {
-        setShowAdPerformance(true);
         setShowPerformance(false);
+        setShowAdPerformance(true);
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
-            showAdPerformance: true,
             showPerformance: false,
+            showAdPerformance: true,
           }),
         );
-        customerList(pageNumber, selectedValue, filters, searchQuery, true);
+        customerList(
+          pageNumber,
+          selectedValue,
+          filters,
+          searchQuery,
+          false,
+          true,
+        );
       } else {
         setShowPerformance(false);
         setShowAdPerformance(false);
@@ -775,7 +796,7 @@ export default function NewCustomerList() {
               ? selectedValue[item.key] ||
                 sortOptions.filter((op) => op.value === filters.sort_by)
               : showPerformance
-              ? [{ value: 'performance', label: 'Performance' }]
+              ? [{ value: 'performance', label: 'Sales Performance' }]
               : showAdPerformance
               ? [{ value: 'ad_performance', label: 'Ad Performance' }]
               : [{ value: 'contract_details', label: 'Contract Details' }]

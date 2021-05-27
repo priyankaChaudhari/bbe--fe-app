@@ -227,8 +227,6 @@ export default function Dashboard() {
     return '';
   };
 
-  console.log('data', data);
-
   return (
     <BrandPartnerDashboard>
       <div className="dashboard-header-sticky">

@@ -133,10 +133,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           adConversionPreviousLabel:
             item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00',
           impressionsPreviousLabel:
-            item.impressions !== null ? item.impressions : '0.00',
+            item.impressions !== null ? item.impressions : '0',
           adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
           adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
-          adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0.00',
+          adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
           adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
         });
       });
@@ -169,13 +169,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           tempData[index].adConversionCurrentLabel =
             item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00';
           tempData[index].impressionsCurrentLabel =
-            item.impressions !== null ? item.impressions : '0.00';
+            item.impressions !== null ? item.impressions : '0';
           tempData[index].adCosCurrentLabel =
             item.acos !== null ? item.acos : '0.00';
           tempData[index].adRoasCurrentLabel =
             item.roas !== null ? item.roas : '0.00';
           tempData[index].adClicksCurrentLabel =
-            item.clicks !== null ? item.clicks : '0.00';
+            item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr : '0.00';
 
@@ -232,19 +232,19 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? item.ad_conversion_rate
                 : '0.00',
             impressionsCurrentLabel:
-              item.impressions !== null ? item.impressions : '0.00',
+              item.impressions !== null ? item.impressions : '0',
             adCosCurrentLabel: item.acos !== null ? item.acos : '0.00',
             adRoasCurrentLabel: item.roas !== null ? item.roas : '0.00',
-            adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0.00',
+            adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
             adClickRateCurrentLabel: item.ctr !== null ? item.ctr : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
             adConversionPreviousLabel: '0.00',
-            impressionsPreviousLabel: '0.00',
+            impressionsPreviousLabel: '0',
             adCosPreviousLabel: '0.00',
             adRoasPreviousLabel: '0.00',
-            adClicksPreviousLabel: '0.00',
+            adClicksPreviousLabel: '0',
             adClickRatePreviousLabel: '0.00',
           });
         }
@@ -908,7 +908,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     );
   };
 
-  const addThousandComma = (number) => {
+  const addThousandComma = (number, decimalDigits = 2) => {
     // let returnValue = number;
     // if (flag) {
     //   if (number >= 1000000000) {
@@ -925,7 +925,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     //   return returnValue;
     // }
     if (number !== undefined && number !== null) {
-      return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return number
+        .toFixed(decimalDigits)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
     return number;
@@ -1072,13 +1074,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.impressions
-                ? addThousandComma(adCurrentTotal.impressions)
-                : `0.00`}
+                ? addThousandComma(adCurrentTotal.impressions, 0)
+                : `0`}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.impressions
-                ? `vs ${addThousandComma(adPreviousTotal.impressions)}`
-                : `vs 0.00`}
+                ? `vs ${addThousandComma(adPreviousTotal.impressions, 0)}`
+                : `vs 0`}
             </div>
             {difference && difference.impressions ? (
               difference.impressions >= 0 ? (
@@ -1196,13 +1198,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Clicks </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.clicks
-                ? addThousandComma(adCurrentTotal.clicks)
-                : '0.00'}
+                ? addThousandComma(adCurrentTotal.clicks, 0)
+                : '0'}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.clicks
-                ? `vs ${addThousandComma(adPreviousTotal.clicks)}`
-                : `vs 0.00`}
+                ? `vs ${addThousandComma(adPreviousTotal.clicks, 0)}`
+                : `vs 0`}
             </div>
             {difference && difference.clicks ? (
               difference.clicks >= 0 ? (
