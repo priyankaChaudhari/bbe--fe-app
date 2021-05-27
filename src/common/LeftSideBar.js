@@ -17,6 +17,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
   PATH_BGS_DASHBOARD,
+  PATH_ADM_DASHBOARD,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -38,6 +39,33 @@ export default function LeftSideBar({ userInfo }) {
               }
               role="presentation"
               onClick={() => history.push(PATH_BGS_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : (
+            ''
+          )}
+          {userInfo && userInfo.role && userInfo.role.includes('Ad Manager') ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('adm-dashboard')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_ADM_DASHBOARD)}>
               {' '}
               <img
                 width="32px"

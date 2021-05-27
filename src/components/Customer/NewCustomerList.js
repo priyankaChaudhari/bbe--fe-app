@@ -38,7 +38,12 @@ import {
   ArrowDownIcon,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
+import {
+  getCustomerList,
+  getGrowthStrategist,
+  getStatus,
+  getAdManagers,
+} from '../../api';
 import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -54,7 +59,6 @@ export default function NewCustomerList() {
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
-  // const [adManager, setAdManager] = useState([]); //for ad manager dropdown
   const [searchQuery, setSearchQuery] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).searchQuery
@@ -261,24 +265,43 @@ export default function NewCustomerList() {
     getStatus().then((statusResponse) => {
       setStatus(statusResponse.data);
     });
-    getGrowthStrategist().then((gs) => {
-      if (gs && gs.data) {
-        const list = [];
-        for (const brand of gs.data) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-          });
-          setBrandGrowthStrategist(list);
-          // setAdManager(list); //for ad manager dropdown
+    if (showAdPerformance) {
+      getAdManagers().then((adm) => {
+        if (adm && adm.data) {
+          const list = [];
+          for (const brand of adm.data) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+            setBrandGrowthStrategist(list);
+          }
         }
-      }
-    });
+      });
+    } else {
+      getGrowthStrategist().then((gs) => {
+        if (gs && gs.data) {
+          const list = [];
+          for (const brand of gs.data) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+            setBrandGrowthStrategist(list);
+          }
+        }
+      });
+    }
     customerList(1);
   }, [customerList]);
 
@@ -812,35 +835,6 @@ export default function NewCustomerList() {
     );
   };
 
-  // for ad manager dropdown
-  // const generateAdManagerDropdown = (item, reff = null) => {
-  //   return (
-  //     <>
-  //       <Select
-  //         classNamePrefix="react-select"
-  //         isClearable={false}
-  //         className="active"
-  //         ref={reff}
-  //         placeholder={getSelectPlaceholder(item)}
-  //         options={adManager}
-  //         onChange={(event, action) =>
-  //           handleFilters(event, item, 'brand', action)
-  //         }
-  //         value={
-  //           filters.user
-  //             ? adManager.filter((option) =>
-  //                 filters.user.some((op) => op === option.value),
-  //               )
-  //             : ''
-  //         }
-  //         isMulti={true}
-  //         components={getSelectComponents(item)}
-  //         componentsValue={{ Option: IconOption }}
-  //       />
-  //     </>
-  //   );
-  // };
-
   const calculatePercentage = (current, previous, type) => {
     if (current && previous) {
       let percentage = '';
@@ -1257,20 +1251,18 @@ export default function NewCustomerList() {
           </td>
 
           <td width="15%">
-            {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.length !== 0 ? (
+            {item && item.ad_manager && item.ad_manager.length !== 0 ? (
               <>
-                {item.brand_growth_strategist.profile_photo ? (
+                {item.ad_manager.profile_photo ? (
                   <img
                     className="user-profile-circle"
-                    src={item.brand_growth_strategist.profile_photo}
+                    src={item.ad_manager.profile_photo}
                     alt="user"
                   />
                 ) : (
                   <GetInitialName
                     property="float-left mr-3"
-                    userInfo={item.brand_growth_strategist}
+                    userInfo={item.ad_manager}
                   />
                 )}
               </>
@@ -1278,13 +1270,9 @@ export default function NewCustomerList() {
               ''
             )}
             <div className="user-name">
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.first_name}
+              {item && item.ad_manager && item.ad_manager.first_name}
               <br />
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.last_name}
+              {item && item.ad_manager && item.ad_manager.last_name}
             </div>
           </td>
         </tr>
@@ -1434,8 +1422,11 @@ export default function NewCustomerList() {
                         </DropDownSelect>
                       </>
                     )} */}
-
-                    <div className="label">Brand Strategist</div>
+                    {showAdPerformance ? (
+                      <div className="label">Brand Strategist</div>
+                    ) : (
+                      <div className="label">Ad Manager</div>
+                    )}
                     <DropDownSelect className="w-250">
                       {generateDropdown('user', selectInputRefMobile)}
                     </DropDownSelect>
@@ -1651,7 +1642,11 @@ export default function NewCustomerList() {
             </DropDownSelect>{' '}
           </>
         )} */}
-        <div className="label mt-2 mb-2">Brand Strategist</div>
+        {showAdPerformance ? (
+          <div className="label mt-2 mb-2">Ad Manager</div>
+        ) : (
+          <div className="label mt-2 mb-2">Brand Strategist</div>
+        )}
         <DropDownSelect className="w-250">
           {generateDropdown('user', selectInputRef)}
         </DropDownSelect>{' '}

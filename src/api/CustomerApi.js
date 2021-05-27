@@ -49,18 +49,32 @@ export async function getCustomerList(
   }
 
   if (performance) {
-    params = {
-      ...params,
-      daily_facts: 'week',
-      // group_by: 'weekly',
-    };
+    if (filterOptions && filterOptions.user && filterOptions.user.length) {
+      params = {
+        ...params,
+        daily_facts: 'week',
+        role: 'growth_strategist',
+      };
+    } else {
+      params = {
+        ...params,
+        daily_facts: 'week',
+      };
+    }
   }
   if (adPerformance) {
-    params = {
-      ...params,
-      ad_performace: 'week',
-      // group_by: 'weekly',
-    };
+    if (filterOptions && filterOptions.user && filterOptions.user.length) {
+      params = {
+        ...params,
+        ad_performace: 'week',
+        role: 'ad_manager',
+      };
+    } else {
+      params = {
+        ...params,
+        ad_performace: 'week',
+      };
+    }
   }
 
   let statusParams = {};

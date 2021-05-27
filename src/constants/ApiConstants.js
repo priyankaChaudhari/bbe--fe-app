@@ -24,6 +24,7 @@ export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`
 export const API_PERFORMANCE = '/performance/';
 export const API_MARKETPLACES = '/marketplaces/';
 export const API_AD_PERFORMANCE = '/adperformance/';
+export const API_ADM = '/admanager/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';
