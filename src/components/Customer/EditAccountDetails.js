@@ -12,7 +12,6 @@ import InputSelect from '../../common/InputSelect';
 import { editAccountFields } from '../../constants/FieldConstants';
 import { SortDownIcon } from '../../theme/images';
 import { getCustomerDetails } from '../../store/actions/customerState';
-import { getAccountDetails } from '../../store/actions/accountState';
 import CropUploadImage from '../../common/CropUploadImage';
 
 export default function EditAccountDetails({
@@ -138,14 +137,12 @@ export default function EditAccountDetails({
 
   const saveData = () => {
     setIsLoading({ loader: true, type: 'button' });
-
     updateCustomerDetails(customer.id, formData).then((response) => {
       if (response && response.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
-        dispatch(getAccountDetails(customer.id));
         dispatch(getCustomerDetails(customer.id));
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'button' });

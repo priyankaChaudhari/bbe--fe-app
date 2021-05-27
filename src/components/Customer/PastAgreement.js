@@ -38,7 +38,8 @@ export default function PastAgreement({ id }) {
                     width="48px"
                     className="solid-icon "
                     src={
-                      item && item.contract_type === 'One Time'
+                      (item && item.contract_type === 'One Time') ||
+                      (item && item.contract_type === 'one time')
                         ? ServiceIcon
                         : item && item.contract_type === 'dsp only'
                         ? DspOnlyIcon
@@ -48,10 +49,10 @@ export default function PastAgreement({ id }) {
                   />{' '}
                   {(item && item.contract_type === 'One Time') ||
                   (item && item.contract_type === 'one time')
-                    ? 'One Time Services Contract'
+                    ? 'One Time Service Agreement'
                     : item && item.contract_type === 'dsp only'
-                    ? 'DSP Only Services Contract'
-                    : 'Recurring Contract'}
+                    ? 'DSP Service Agreement'
+                    : 'Recurring Service Agreement'}
                 </p>
                 {item && item.contract_type !== 'one time' ? (
                   <ul className="recurring-contact mb-2 ">
