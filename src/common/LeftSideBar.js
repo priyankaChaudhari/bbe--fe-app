@@ -60,7 +60,7 @@ export default function LeftSideBar({ userInfo }) {
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('ad-manager')
+                history.location.pathname.includes('adm-dashboard')
                   ? ' cursor active'
                   : ' cursor'
               }
