@@ -81,7 +81,7 @@ export default function AgreementDetails({ agreements, id }) {
                   }
                   alt=""
                 />
-                <p className="black-heading-title mt-0 mb-0">
+                <p className="black-heading-title mt-1 mb-0">
                   {(agreement && agreement.contract_type === 'One Time') ||
                   (agreement && agreement.contract_type === 'one time')
                     ? 'One Time Service Agreement'
@@ -102,8 +102,9 @@ export default function AgreementDetails({ agreements, id }) {
                     </li>
                     {agreement && agreement.start_date ? (
                       <li>
+                        <span className="dot" />
                         <p className="basic-text ">
-                          Started:{' '}
+                          Started &nbsp;
                           {dayjs(agreement.start_date).format('MMM DD, YYYY')}
                         </p>
                       </li>
@@ -112,6 +113,7 @@ export default function AgreementDetails({ agreements, id }) {
                     )}
                     {agreement && agreement.end_date ? (
                       <li>
+                        <span className="dot" />
                         <p className="basic-text ">
                           Expires:{' '}
                           {dayjs(agreement.end_date).format('MMM DD, YYYY')}
@@ -182,45 +184,49 @@ export default function AgreementDetails({ agreements, id }) {
             </div>
 
             <CustomerDetailCoppase>
-              <ul className="monthly-retainer">
-                {agreement && agreement.contract_type === 'recurring' ? (
-                  <>
-                    {agreementOptions.map((item) => (
-                      <li key={item.key}>
-                        <div className="label">{item.label}</div>
-                        {agreement && agreement[item.key] ? (
-                          <NumberFormat
-                            displayType="text"
-                            value={
-                              agreement[item.key].label || agreement[item.key]
-                            }
-                            thousandSeparator
-                            prefix={item.key === 'rev_share' ? '' : '$'}
-                            suffix={item.key === 'rev_share' ? '%' : ''}
-                          />
-                        ) : (
-                          '0'
-                        )}
-                      </li>
-                    ))}
-                  </>
-                ) : agreement && agreement.contract_type === 'dsp only' ? (
-                  <li>
-                    <div className="label">Monthly Ad Budget</div>
-                    <NumberFormat
-                      displayType="text"
-                      value={agreement.monthly_fee || 0}
-                      thousandSeparator
-                      prefix="$"
-                    />
-                  </li>
-                ) : (
-                  ''
-                )}
-              </ul>
+              <div className="DSP-contract-retainer">
+                <div className="row ">
+                  {agreement && agreement.contract_type === 'recurring' ? (
+                    <>
+                      {agreementOptions.map((item) => (
+                        <div
+                          className=" col-lg-3 col-md-3 mb-3 col-6 "
+                          key={item.key}>
+                          <div className="label">{item.label}</div>
+                          {agreement && agreement[item.key] ? (
+                            <NumberFormat
+                              displayType="text"
+                              value={
+                                agreement[item.key].label || agreement[item.key]
+                              }
+                              thousandSeparator
+                              prefix={item.key === 'rev_share' ? '' : '$'}
+                              suffix={item.key === 'rev_share' ? '%' : ''}
+                            />
+                          ) : (
+                            '0'
+                          )}
+                        </div>
+                      ))}
+                    </>
+                  ) : agreement && agreement.contract_type === 'dsp only' ? (
+                    <div className=" col-lg-3 col-md-3 col-6">
+                      <div className="label">Monthly Ad Budget</div>
+                      <NumberFormat
+                        displayType="text"
+                        value={agreement.monthly_fee || 0}
+                        thousandSeparator
+                        prefix="$"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                </div>
+              </div>
               {agreement && agreement.contract_type === 'recurring' ? (
                 <>
-                  <div className="straight-line horizontal-line pt-3 mb-3" />
+                  <div className="straight-line horizontal-line pt-1 mb-3" />
                   <div className="label">Marketplaces</div>
                   <ul className="selected-list">
                     {agreement &&

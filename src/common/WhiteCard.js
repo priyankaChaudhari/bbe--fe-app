@@ -363,7 +363,8 @@ export const WhiteCard = styled.div`
 
     li {
       display: inline-block;
-      margin-right: 17px;
+      margin-right: 18px;
+      position: relative;
 
       &:last-child {
         margin-right: 0;
@@ -374,8 +375,8 @@ export const WhiteCard = styled.div`
         width: 3px;
         height: 3px;
         position: absolute;
-        top: 30px;
-        left: 129px;
+        top: 7px;
+        margin-left: -10px;
       }
 
       .days-block {
@@ -393,31 +394,49 @@ export const WhiteCard = styled.div`
       }
     }
   }
-  .monthly-retainer {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+  // .monthly-retainer {
+  //   padding: 0;
+  //   margin: 0;
+  //   list-style-type: none;
 
-    li {
-      display: inline-block;
-      margin-right: 70px;
-      color: ${Theme.black};
-      font-size: ${Theme.normal};
-      font-weight: 500;
+  //   li {
+  //     display: inline-block;
+  //     margin-right: 70px;
+  //     color: ${Theme.black};
+  //     font-size: ${Theme.normal};
+  //     font-weight: 500;
 
-      .label {
-        color: ${Theme.gray40};
-        text-transform: uppercase;
-        line-height: 22px;
-        font-family: ${Theme.titleFontFamily};
-        font-size: ${Theme.verySmall};
-        margin-bottom: 3px;
-      }
+  //     .label {
+  //       color: ${Theme.gray40};
+  //       text-transform: uppercase;
+  //       line-height: 22px;
+  //       font-family: ${Theme.titleFontFamily};
+  //       font-size: ${Theme.verySmall};
+  //       margin-bottom: 3px;
+  //     }
 
-      &:last-child {
-        margin-right: 0;
-      }
-    }
+  //     &:last-child {
+  //       margin-right: 0;
+  //     }
+  //   }
+  // }
+
+
+  .DSP-contract-retainer {
+    .label {
+      color: ${Theme.gray40};
+      text-transform: uppercase;
+      line-height: 22px;
+      font-family: ${Theme.titleFontFamily};
+      font-size: ${Theme.verySmall};
+      margin-bottom: 1px;
+   }
+   span {
+     color: ${Theme.black};
+     font-size: ${Theme.normal};
+     font-weight: 600;
+
+   }
   }
 
   .selected-list {
@@ -733,7 +752,7 @@ export const WhiteCard = styled.div`
   }
 
   .solid-icon {
-    margin-right: 10px;
+    margin-right: 15px;
     vertical-align: middle;
     float: left;
   }
