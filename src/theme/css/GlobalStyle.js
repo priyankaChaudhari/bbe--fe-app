@@ -9,43 +9,8 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-// @font-face {
-//   font-family: 'Noah-Regular';
-//   src: url('../fonts/Noah/Noah/WEB/Noah-Regular.woff');
-// }
-// @font-face {
-//   font-family: 'Noah-RegularItalic';
-//   src: url('../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff');
-// }
-// @font-face {
-//   font-family: 'Noah-BoldItalic';
-//   src: url('../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff');
-// }
+import { CalendarFontBackArrow } from '../images/index';
 
-// @font-face {
-//   font-family: 'Arial-bold';
-//   src: url('../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.woff');
-// }
-
-// @font-face {
-//   font-family: 'Arial-Regular';
-//   font-style: normal;
-//   font-weight: normal;
-//   src: url('../fonts//arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff');
-// }
-
-// @font-face {
-//   font-family: 'Helvetica-Regular';
-//   font-style: normal;
-//   font-weight: normal;
-//   src: url('../fonts/Helvetica-Font/Helvetica.ttf');
-// }
-// @font-face {
-//   font-family: 'Helvetica-bold';
-//   font-style: normal;
-//   font-weight: bold;
-//   src: url('../fonts/Helvetica-Font//Helvetica-Bold.ttf');
-// }
 const bodyStyles = createGlobalStyle`
 
   @font-face {
@@ -1579,7 +1544,7 @@ fieldset {
 }
 
 .rdrPprevButton i {
-  background-image: url(../images/icons/calendar-back-arrow.png);
+  background-image: url(${CalendarFontBackArrow}) !important;
   border-width: 0;
   border-color:${Theme.white};
   background-repeat: no-repeat;
@@ -1589,7 +1554,7 @@ fieldset {
   padding: 7px 10px;
 }
 .rdrNextButton i {
-  background-image: url(../images/icons/calendar-back-arrow.png);
+  background-image: url(${CalendarFontBackArrow}) !important;
   border-width: 0;
   border-color: ${Theme.white};
   background-repeat: no-repeat;
@@ -1601,7 +1566,7 @@ fieldset {
 }
 
 .rdrNextPrevButton {
-  background:${Theme.white};
+  background: ${Theme.white};
 
   &:hover {
     background: ${Theme.white};

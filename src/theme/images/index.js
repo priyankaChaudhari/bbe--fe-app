@@ -153,6 +153,7 @@ import BellNotification from './icons/bell-notification-icon.png';
 import TimesCircle from './icons/times-circle.svg';
 import DownloadPdf from './icons/download-icon.svg';
 import SecurityLock from './icons/security-lock-icon.png';
+import CalendarFontBackArrow from './icons/calendar-back-arrow.png';
 
 export {
   BannerBg,
@@ -310,4 +311,5 @@ export {
   TimesCircle,
   DownloadPdf,
   SecurityLock,
+  CalendarFontBackArrow,
 };

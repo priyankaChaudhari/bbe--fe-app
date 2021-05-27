@@ -314,7 +314,7 @@ export default function AgreementDetails({ agreements, id }) {
         </Tab>
         <>
           {loader ? (
-            <PageLoader color="#FF5933" type="detail" width={30} height={30} />
+            <PageLoader color="#FF5933" type="detail" width={40} height={40} />
           ) : (
             <>
               {viewComponent === 'current' ? (
