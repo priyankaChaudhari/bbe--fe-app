@@ -45,7 +45,7 @@ import {
   WhiteCard,
   // ContractFormField,
 } from '../../common';
-import { getAccountDetails } from '../../store/actions/accountState';
+// import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
   getCustomerDetails,
@@ -119,7 +119,7 @@ export default function CustomerMainContainer() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const agreement = useSelector((state) => state.accountState.data);
-  const loader = useSelector((state) => state.accountState.isLoading);
+  const loader = useSelector((state) => state.customerState.isLoading);
   const customerLoader = useSelector((state) => state.customerState.isLoading);
   const customer = useSelector((state) => state.customerState.data);
   const customerSelectedTab = useSelector(
@@ -138,7 +138,7 @@ export default function CustomerMainContainer() {
   });
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [memberData, setMemberData] = useState([]);
-  const [activityData, setActivityData] = useState([]);
+  const [activityData, setActivityData] = useState(null);
   const [activityCount, setActivityCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
@@ -275,7 +275,6 @@ export default function CustomerMainContainer() {
   ]);
 
   useEffect(() => {
-    dispatch(getAccountDetails(id));
     dispatch(getCustomerDetails(id));
     dispatch(getContactDetails(id));
     getCustomerMemberList();
@@ -542,7 +541,7 @@ export default function CustomerMainContainer() {
                         <span className="brand-name ">
                           <span className="company-name">
                             {' '}
-                            {agreement && agreement.contract_company_name}
+                            {customer.company_name}
                           </span>
 
                           {customer &&
@@ -656,21 +655,21 @@ export default function CustomerMainContainer() {
                         <div className="row mt-2">
                           <div className="col-lg-4 col-12">
                             <div className="company-label-info text-left">
-                              {agreement && agreement.address
-                                ? `${agreement.address}`
+                              {customer && customer.address
+                                ? `${customer.address}`
                                 : ''}
-                              {agreement && agreement.city
-                                ? `, ${agreement.city}`
+                              {customer && customer.city
+                                ? `, ${customer.city}`
                                 : ''}
-                              {agreement &&
-                              agreement.state &&
-                              agreement.state.label
-                                ? `, ${agreement.state.label}`
-                                : agreement && agreement.state
-                                ? `, ${agreement.state}`
+                              {customer &&
+                              customer.state &&
+                              customer.state.label
+                                ? `, ${customer.state.label}`
+                                : customer && customer.state
+                                ? `, ${customer.state}`
                                 : ''}
-                              {agreement && agreement.zip_code
-                                ? `, ${agreement.zip_code}`
+                              {customer && customer.zip_code
+                                ? `, ${customer.zip_code}`
                                 : ''}
                               {customer &&
                               customer.country &&

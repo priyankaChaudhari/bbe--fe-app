@@ -20,7 +20,8 @@ export default function Activity({
     <>
       <div className="col-lg-8  col-12 mb-3">
         <WhiteCard className="activity-card">
-          {isLoading.loader && isLoading.type === 'activityPage' ? (
+          {(isLoading.loader && isLoading.type === 'activityPage') ||
+          activityData === null ? (
             <PageLoader
               component="activity"
               color="#FF5933"

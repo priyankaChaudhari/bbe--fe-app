@@ -316,16 +316,8 @@ export default function Dashboard() {
 
                       <div
                         className="company-name"
-                        title={
-                          item &&
-                          item.contract &&
-                          item.contract[0] &&
-                          item.contract[0].contract_company_name
-                        }>
-                        {item &&
-                          item.contract &&
-                          item.contract[0] &&
-                          item.contract[0].contract_company_name}
+                        title={item && item.company_name}>
+                        {item && item.company_name}
                       </div>
                       <div className="status">
                         {item && item.category && item.category.label}

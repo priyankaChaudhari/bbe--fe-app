@@ -93,12 +93,11 @@ export const userDetails = [
 
 export const dataHeaders = [
   {
-    key: 'contract_company_name',
+    key: 'company_name',
     name: 'Company Name',
     width: '25%',
     section: 1,
     type: 'icon',
-    level: 'contract',
   },
   { key: 'status', name: 'Status', width: '15%', section: 1 },
   {
@@ -328,11 +327,10 @@ export const editCompanyFields = [
 
 export const editAccountFields = [
   {
-    key: 'contract_company_name',
+    key: 'company_name',
     label: 'Company Name',
     property: 'col-9',
     type: 'text',
-    level: 'agreement',
   },
   { key: 'website', label: 'Website', type: 'text', property: 'col-md-6' },
   {
@@ -346,21 +344,18 @@ export const editAccountFields = [
     label: 'Address',
     property: 'col-12',
     type: 'text',
-    level: 'agreement',
   },
   {
     key: 'city',
     label: 'City',
     type: 'text',
     property: 'col-md-6',
-    level: 'agreement',
   },
   {
     key: 'state',
     label: 'State',
     type: 'text',
     property: 'col-md-6',
-    level: 'agreement',
   },
 
   {
@@ -368,7 +363,6 @@ export const editAccountFields = [
     label: 'Postal Code',
     property: 'col-md-6',
     type: 'text',
-    level: 'agreement',
   },
   {
     key: 'number_of_employees',

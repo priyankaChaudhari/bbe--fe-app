@@ -8,7 +8,6 @@ import Modal from 'react-modal';
 
 import {
   EditOrangeIcon,
-  // DefaultUser,
   CopyLinkIcon,
   InfoIcons,
   ExternalLink,
@@ -31,7 +30,6 @@ export default function CompanyDetail({
   getActivityLogInfo,
 }) {
   const contactInfo = useSelector((state) => state.customerState.contactData);
-  // const [showModal, setShowModal] = useState({ modal: false, type: '' });
   const [showModal, setShowModal] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [scrollDown, setScrollDown] = useState(false);

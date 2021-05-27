@@ -53,36 +53,40 @@ export default function PastAgreement({ id }) {
                     ? 'DSP Only Services Contract'
                     : 'Recurring Contract'}
                 </p>
-                <ul className="recurring-contact mb-2 ">
-                  <li>
-                    <p className="basic-text ">
-                      {item &&
-                        item.length &&
-                        item.length.label &&
-                        item.length.label.slice(0, -1)}{' '}
-                      contract
-                    </p>
-                  </li>
-                  {item && item.start_date ? (
-                    <li>
-                      <div className="dot" />
-                      <p className="basic-text ">
-                        Started: {dayjs(item.start_date).format('MMM DD, YYYY')}
-                      </p>
-                    </li>
-                  ) : (
-                    ''
-                  )}
-                  {item && item.start_date ? (
+                {item && item.contract_type !== 'one time' ? (
+                  <ul className="recurring-contact mb-2 ">
                     <li>
                       <p className="basic-text ">
-                        Expired: {dayjs(item.end_date).format('MMM DD, YYYY')}
+                        {item &&
+                          item.length &&
+                          item.length.label &&
+                          item.length.label.slice(0, -1)}{' '}
                       </p>
                     </li>
-                  ) : (
-                    ''
-                  )}
-                </ul>
+                    {item && item.start_date ? (
+                      <li>
+                        <div className="dot" />
+                        <p className="basic-text ">
+                          Started:{' '}
+                          {dayjs(item.start_date).format('MMM DD, YYYY')}
+                        </p>
+                      </li>
+                    ) : (
+                      ''
+                    )}
+                    {item && item.start_date ? (
+                      <li>
+                        <p className="basic-text ">
+                          Expired: {dayjs(item.end_date).format('MMM DD, YYYY')}
+                        </p>
+                      </li>
+                    ) : (
+                      ''
+                    )}
+                  </ul>
+                ) : (
+                  ''
+                )}
               </div>
               {item &&
               item.contract_status &&

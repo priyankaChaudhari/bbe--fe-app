@@ -59,10 +59,10 @@ const DetailLoaderWrapper = styled.div`
   width: 100px;
   overflow: visible;
   margin: auto;
-  top: 150px;
-  left: 0;
+  top: 500px;
+  left: 500px;
   bottom: 0;
-  right: 850px;
+  right: 0;
 `;
 
 const ButtonLoaderCss = styled.div`

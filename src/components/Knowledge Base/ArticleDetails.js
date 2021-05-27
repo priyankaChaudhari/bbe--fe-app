@@ -196,6 +196,16 @@ export default function ArticleDetails() {
 
   const handleBoard = (field) => {
     setIsLoading({ loader: true, type: 'page' });
+    const stringified = queryString.stringify({
+      board: field.id,
+    });
+    history.push({
+      pathname: `${PATH_ARTICLE_DETAILS.replace(
+        ':id',
+        selectedArticle.collection.id,
+      )}`,
+      search: `${stringified}`,
+    });
     setActiveField({
       board: field.id,
     });
@@ -225,20 +235,7 @@ export default function ArticleDetails() {
               response.data.items[0].items[0]
           : response.data.items[0],
       );
-      const stringified = queryString.stringify({
-        board:
-          selectedArticle.boards &&
-          selectedArticle.boards[0] &&
-          selectedArticle.boards[0].id,
-        article: selectedArticle.id,
-      });
-      history.push({
-        pathname: `${PATH_ARTICLE_DETAILS.replace(
-          ':id',
-          selectedArticle.collection.id,
-        )}`,
-        search: `${stringified}`,
-      });
+
       setIsLoading({ loader: false, type: 'page' });
     });
     if (isMobile)

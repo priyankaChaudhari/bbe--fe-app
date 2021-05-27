@@ -977,12 +977,7 @@ export default function NewCustomerList() {
               alt="logo"
             />
 
-            <div className="company-name">
-              {item &&
-                item.contract &&
-                item.contract[0] &&
-                item.contract[0].contract_company_name}
-            </div>
+            <div className="company-name">{item && item.company_name}</div>
             <div className="status" style={{ textTransform: 'capitalize' }}>
               {item && item.status}
             </div>
@@ -1182,12 +1177,7 @@ export default function NewCustomerList() {
               alt="logo"
             />
 
-            <div className="company-name">
-              {item &&
-                item.contract &&
-                item.contract[0] &&
-                item.contract[0].contract_company_name}
-            </div>
+            <div className="company-name">{item && item.company_name}</div>
             <div className="status" style={{ textTransform: 'capitalize' }}>
               {item && item.status}
             </div>
@@ -1322,12 +1312,7 @@ export default function NewCustomerList() {
             alt="logo"
           />
 
-          <div className="company-name">
-            {item &&
-              item.contract &&
-              item.contract[0] &&
-              item.contract[0].contract_company_name}
-          </div>
+          <div className="company-name">{item && item.company_name}</div>
           <div className="status" style={{ textTransform: 'capitalize' }}>
             {item && item.status}
           </div>

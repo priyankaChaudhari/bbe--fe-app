@@ -5,12 +5,7 @@ import NumberFormat from 'react-number-format';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 
-import {
-  getCategories,
-  getCountry,
-  updateAccountDetails,
-  updateCustomerDetails,
-} from '../../api';
+import { getCategories, getCountry, updateCustomerDetails } from '../../api';
 
 import { Button, ErrorMsg, FormField, PageLoader } from '../../common';
 import InputSelect from '../../common/InputSelect';
@@ -22,7 +17,6 @@ import CropUploadImage from '../../common/CropUploadImage';
 
 export default function EditAccountDetails({
   customer,
-  agreement,
   setShowModal,
   setDocumentImage,
   getActivityLogInfo,
@@ -90,11 +84,7 @@ export default function EditAccountDetails({
         }}
         name={item.key}
         onChange={(event) => handleSelectChange(event, item.key)}
-        defaultValue={
-          item.level === 'agreement'
-            ? agreement && agreement[item.key]
-            : customer && customer[item.key]
-        }
+        defaultValue={customer && customer[item.key]}
         components={{ DropdownIndicator: CustomDropdownIndicator }}
         menuPortalTarget={document.body}
       />
@@ -130,11 +120,7 @@ export default function EditAccountDetails({
         format={item.key === 'zip_code' ? '##########' : null}
         name={item.key}
         className="form-control"
-        defaultValue={
-          item.level === 'agreement'
-            ? agreement && agreement[item.key]
-            : customer && customer[item.key]
-        }
+        defaultValue={customer && customer[item.key]}
         placeholder={item.label}
         prefix={item.type === 'number-currency' ? '$' : ''}
         onChange={(event) => handleChange(event, item.key)}
@@ -152,30 +138,6 @@ export default function EditAccountDetails({
 
   const saveData = () => {
     setIsLoading({ loader: true, type: 'button' });
-
-    if (
-      formData &&
-      (formData.city ||
-        formData.address ||
-        formData.state ||
-        formData.zip_code ||
-        formData.contract_company_name)
-    ) {
-      updateAccountDetails(agreement.id, formData).then((res) => {
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'button' });
-          setApiError(res && res.data);
-          setShowModal(true);
-        } else if (res && res.status === 200) {
-          // dispatch(getAccountDetails(customer.id));
-          // dispatch(getCustomerDetails(customer.id));
-          // IsSaveDataClicked(true);
-          // getActivityLogInfo();
-          // setIsLoading({ loader: false, type: 'button' });
-          // setShowModal(false);
-        }
-      });
-    }
 
     updateCustomerDetails(customer.id, formData).then((response) => {
       if (response && response.status === 400) {
@@ -221,11 +183,7 @@ export default function EditAccountDetails({
                         className="form-control"
                         type="text"
                         placeholder={item.label}
-                        defaultValue={
-                          item.level === 'agreement'
-                            ? agreement && agreement[item.key]
-                            : customer && customer[item.key]
-                        }
+                        defaultValue={customer && customer[item.key]}
                         onChange={(event) => handleChange(event, item.key)}
                       />
                     )}
@@ -264,7 +222,6 @@ export default function EditAccountDetails({
 
 EditAccountDetails.defaultProps = {
   id: '',
-  agreement: {},
   setDocumentImage: [],
   IsSaveDataClicked: () => {},
 };
@@ -275,9 +232,7 @@ EditAccountDetails.propTypes = {
   customer: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  agreement: PropTypes.shape({
-    id: PropTypes.string,
-  }),
+
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
   getActivityLogInfo: PropTypes.func.isRequired,
   IsSaveDataClicked: PropTypes.func,
