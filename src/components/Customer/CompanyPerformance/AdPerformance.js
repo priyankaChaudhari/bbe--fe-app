@@ -1032,12 +1032,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ad_conversion_rate
-                ? `${adCurrentTotal.ad_conversion_rate}%`
+                ? `${addThousandComma(adCurrentTotal.ad_conversion_rate)}%`
                 : `0.00%`}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.ad_conversion_rate
-                ? `vs ${adPreviousTotal.ad_conversion_rate}%`
+                ? `vs ${addThousandComma(adPreviousTotal.ad_conversion_rate)}%`
                 : `vs 0.00%`}
             </div>
 
@@ -1239,12 +1239,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ctr
-                ? `${adCurrentTotal.ctr}%`
+                ? `${addThousandComma(adCurrentTotal.ctr)}%`
                 : `0.00%`}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.ctr
-                ? `vs ${adPreviousTotal.ctr}%`
+                ? `vs ${addThousandComma(adPreviousTotal.ctr)}%`
                 : `vs 0.00%`}
             </div>
             {difference && difference.ctr ? (
