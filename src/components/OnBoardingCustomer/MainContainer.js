@@ -361,8 +361,17 @@ export default function MainContainer() {
                         {verifiedStepData && verifiedStepData.user_email}{' '}
                       </span>
                       has asked that you provide <strong>{item.title}</strong>{' '}
-                      information, which will be used by our Creative Team to
-                      best understand your brand.
+                      information, which will be used{' '}
+                      {item.key === 'merchant id' ? (
+                        <>
+                          to access data we will use to best manage your
+                          account.
+                        </>
+                      ) : (
+                        <>
+                          by our Creative Team to best understand your brand.{' '}
+                        </>
+                      )}
                     </div>
                     If you’re unable to provide this information or you think
                     this was sent to you unintentionally, please let them know
