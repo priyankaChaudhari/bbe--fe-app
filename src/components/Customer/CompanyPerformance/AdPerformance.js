@@ -1115,13 +1115,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             <div className="chart-name">Acos</div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.acos
-                ? `${currencySign}${addThousandComma(adCurrentTotal.acos)}`
-                : `${currencySign}0.00`}
+                ? `${addThousandComma(adCurrentTotal.acos)}%`
+                : `0.00%`}
             </div>
             <div className="vs">
               {adPreviousTotal && adPreviousTotal.acos
-                ? `vs ${currencySign}${addThousandComma(adPreviousTotal.acos)}`
-                : `vs ${currencySign}0.00`}
+                ? `vs ${addThousandComma(adPreviousTotal.acos)}%`
+                : `vs 0.00%`}
             </div>
             {difference && difference.acos ? (
               difference.acos >= 0 ? (
