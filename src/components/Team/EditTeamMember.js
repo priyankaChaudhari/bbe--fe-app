@@ -148,7 +148,7 @@ export default function EditTeamMember({
                         data.map((item) => (
                           <div className="row">
                             <div
-                              className="col-12 team-member-list pt-4"
+                              className="col-12 team-member-list pt-5"
                               key={item.id}>
                               <div className="edit-profile-text float-left">
                                 <GetInitialName

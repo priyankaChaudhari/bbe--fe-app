@@ -251,8 +251,11 @@ const OnBoardingBody = styled.div`
   .panel {
     padding: 0;
     max-width: 400px;
-    margin-top: 100px;
+    margin-top: 120px;
     box-shadow: none;
+  }
+  .panel-unauthorize-header {
+    margin-top: 190px;
   }
   .account-reassign {
     margin-top: 140px;

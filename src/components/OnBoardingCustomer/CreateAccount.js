@@ -161,7 +161,7 @@ export default function CreateAccount() {
       <UnauthorizedHeader />
       <OnBoardingBody className={showSuccessMsg ? 'grey-bg' : 'body-white'}>
         {!assignTo ? (
-          <div className="white-card-base panel">
+          <div className="white-card-base panel panel-unauthorize-header">
             <p className="account-steps m-0">Step 1 of 4</p>
             <h3 className="page-heading ">
               Please set your password to create your account.
