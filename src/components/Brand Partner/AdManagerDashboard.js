@@ -45,7 +45,7 @@ export default function AdManagerDashboard() {
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
 
   const timeOptions = [
-    { value: 'week', label: 'Recent 7 Week', sub: 'vs Previous 7 week' },
+    { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
     { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
