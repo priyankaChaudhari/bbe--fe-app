@@ -72,20 +72,6 @@ import { PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    minHeight: '200px',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 const AccountSetupcustomStyles = {
   content: {
     top: '50%',
@@ -170,6 +156,21 @@ export default function CustomerMainContainer() {
     { value: 'company', label: 'Company Details' },
     { value: 'activity', label: 'Activity' },
   ];
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      minHeight: userInfo && userInfo.role === 'Customer' ? '130px' : '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   const DropdownIndicator = (props) => {
     return (
