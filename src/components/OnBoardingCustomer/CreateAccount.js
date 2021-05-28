@@ -149,6 +149,7 @@ export default function CreateAccount() {
 
   return (
     <>
+      <UnauthorizedHeader />
       {showSuccessMsg ? (
         ''
       ) : (
@@ -158,7 +159,7 @@ export default function CreateAccount() {
           showSuccessMsg={showSuccessMsg}
         />
       )}
-      <UnauthorizedHeader />
+
       <OnBoardingBody className={showSuccessMsg ? 'grey-bg' : 'body-white'}>
         {!assignTo ? (
           <div className="white-card-base panel panel-unauthorize-header">
