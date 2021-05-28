@@ -129,6 +129,8 @@ export default function AgreementSidePanel({
   setIsEditContract,
   setShowSaveSuccessMsg,
   setContractLoading,
+  customerError,
+  setCustomerErrors,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -723,18 +725,61 @@ export default function AgreementSidePanel({
             if (event && event.target && event.target.value) {
               if (
                 item.key === event.target.name &&
+                item.field === 'customer' &&
+                !(
+                  formData &&
+                  formData.customer_id &&
+                  formData.customer_id[item.key]
+                )
+              ) {
+                item.error = false;
+
+                setSectionError({
+                  ...sectionError,
+                  agreement: sectionError.agreement
+                    ? sectionError.agreement - 1
+                    : 0,
+                  // ? sectionError.agreement - 1
+                  // : 0,
+                });
+              }
+
+              if (
+                item.key === event.target.name &&
+                item.field !== 'customer' &&
                 !(formData && formData[item.key])
               ) {
                 item.error = false;
 
                 setSectionError({
                   ...sectionError,
-                  agreement: sectionError.agreement - 1,
+                  agreement: sectionError.agreement
+                    ? sectionError.agreement - 1
+                    : 0,
                   // ? sectionError.agreement - 1
                   // : 0,
                 });
               }
-            } else if (formData && formData[event.target.name]) {
+            } else if (
+              formData &&
+              formData[event.target.name] &&
+              item.field !== 'customer'
+            ) {
+              item.error = true;
+              setSectionError({
+                ...sectionError,
+                agreement: sectionError.agreement
+                  ? sectionError.agreement + 1
+                  : 0,
+                // ? sectionError.agreement + 1
+                // : 0,
+              });
+            } else if (
+              formData &&
+              formData.customer_id &&
+              formData.customer_id[event.target.name] &&
+              item.field === 'customer'
+            ) {
               item.error = true;
 
               setSectionError({
@@ -751,23 +796,34 @@ export default function AgreementSidePanel({
                 if (event && event.target && event.target.value) {
                   if (
                     subItem.key === event.target.name &&
-                    !(formData && formData[subItem.key]) &&
+                    !(
+                      formData &&
+                      formData.customer_id &&
+                      formData.customer_id[subItem.key]
+                    ) &&
                     event.target.value
                   ) {
                     subItem.error = false;
 
                     setSectionError({
                       ...sectionError,
-                      agreement: sectionError.agreement - 1,
+                      agreement: sectionError.agreement
+                        ? sectionError.agreement - 1
+                        : 0,
                       // ? sectionError.agreement - 1
                       // : 0,
                     });
                   }
-                } else if (formData && formData[event.target.name]) {
+                } else if (
+                  formData &&
+                  formData.customer_id &&
+                  formData.customer_id[event.target.name]
+                ) {
                   subItem.error = true;
                   setSectionError({
                     ...sectionError,
                     agreement: sectionError.agreement + 1,
+
                     // ? sectionError.agreement + 1
                     // : 0,
                   });
@@ -1461,7 +1517,6 @@ export default function AgreementSidePanel({
                 ? item.name.includes('Amazon Store Package')
                 : item.service.name.includes('Amazon Store Package'),
             );
-          // console.log('in amazon checked', itemInOriginalData);
 
           if (itemInOriginalData) {
             additionalOnetimeServices.create.push(itemInOriginalData);
@@ -1843,13 +1898,24 @@ export default function AgreementSidePanel({
       // }
     } else {
       if (event.target.name === 'zip_code') {
+        const customerData = formData.customer_id;
+        // setUpdatedCustomerFields({
+        //   ...updatedCustomerFields,
+        //   [event.target.name]: event.target.value.trim(),
+        // });
         setFormData({
           ...formData,
-          [event.target.name]: event.target.value.trim(),
+          customer_id: {
+            ...customerData,
+            [event.target.name]: event.target.value.trim(),
+          },
         });
         setUpdatedFormData({
           ...updatedFormData,
+          // customer_id: {
+          //   ...customerData,
           [event.target.name]: event.target.value.trim(),
+          // },
         });
       } else if (event.target.value.includes('$')) {
         let value = event.target.value.slice(1);
@@ -1873,6 +1939,31 @@ export default function AgreementSidePanel({
         setUpdatedFormData({
           ...updatedFormData,
           [event.target.name]: null,
+        });
+      } else if (
+        event.target.name === 'company_name' ||
+        event.target.name === 'state' ||
+        event.target.name === 'city' ||
+        event.target.name === 'address'
+      ) {
+        const customerData = formData.customer_id;
+        // setUpdatedCustomerFields({
+        //   ...updatedCustomerFields,
+        //   [event.target.name]: event.target.value.trim(),
+        // });
+        setFormData({
+          ...formData,
+          customer_id: {
+            ...customerData,
+            [event.target.name]: event.target.value,
+          },
+        });
+        setUpdatedFormData({
+          ...updatedFormData,
+          // customer_id: {
+          //   ...customerData,
+          [event.target.name]: event.target.value,
+          // },
         });
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -1921,13 +2012,13 @@ export default function AgreementSidePanel({
         });
       }
       if (
-        contractError &&
-        Object.keys(contractError).includes(event.target.name)
+        customerError &&
+        Object.keys(customerError).includes(event.target.name)
       ) {
         if (
           event.target.name === 'zip_code' &&
-          contractError &&
-          contractError.zip_code
+          customerError &&
+          customerError.zip_code
         ) {
           if (event.target.value) {
             setSectionError({
@@ -1942,6 +2033,10 @@ export default function AgreementSidePanel({
               agreement: sectionError.agreement ? sectionError.agreement : 0,
             });
           }
+          setCustomerErrors({
+            ...customerError,
+            [event.target.name]: '',
+          });
         }
         if (
           event.target.name === 'dsp_fee' &&
@@ -2257,6 +2352,30 @@ export default function AgreementSidePanel({
         <ContractInputSelect>{generateMultiChoice(item)}</ContractInputSelect>
       );
     }
+    if (item && item.field === 'customer') {
+      return (
+        <input
+          className={
+            (customerError && customerError[item.key]) ||
+            (!(
+              formData &&
+              formData.customer_id &&
+              formData.customer_id[item.key]
+            ) &&
+              item.isMandatory)
+              ? 'form-control form-control-error'
+              : 'form-control '
+          }
+          type="text"
+          placeholder={item.placeholder ? item.placeholder : item.label}
+          onChange={(event) => handleChange(event, item.key)}
+          name={item.key}
+          defaultValue={
+            formData && formData.customer_id && formData.customer_id[item.key]
+          }
+        />
+      );
+    }
     return (
       <input
         className={
@@ -2283,24 +2402,26 @@ export default function AgreementSidePanel({
       ) {
         if (
           formData &&
-          formData.contract_company_name &&
+          formData.customer_id &&
+          formData.customer_id.company_name &&
           formData.start_date &&
-          formData.address &&
-          formData.state &&
-          formData.city &&
-          formData.zip_code
+          formData.customer_id.address &&
+          formData.customer_id.state &&
+          formData.customer_id.city &&
+          formData.customer_id.zip_code
         ) {
           return true;
         }
       } else if (
         formData &&
-        formData.contract_company_name &&
+        formData.customer_id &&
+        formData.customer_id.company_name &&
         formData.start_date &&
         formData.length &&
-        formData.address &&
-        formData.state &&
-        formData.city &&
-        formData.zip_code
+        formData.customer_id.address &&
+        formData.customer_id.state &&
+        formData.customer_id.city &&
+        formData.customer_id.zip_code
       ) {
         return true;
       }
@@ -2613,6 +2734,11 @@ export default function AgreementSidePanel({
           {contractError &&
             contractError[item.key] &&
             contractError[item.key][0]}
+        </ErrorMsg>
+        <ErrorMsg>
+          {customerError &&
+            customerError[item.key] &&
+            customerError[item.key][0]}
         </ErrorMsg>
         <ErrorMsg>
           {additionalOnetimeSerError &&
@@ -4208,6 +4334,8 @@ AgreementSidePanel.defaultProps = {
   setIsEditContract: () => {},
   setShowSaveSuccessMsg: () => {},
   setContractLoading: () => {},
+  customerError: {},
+  setCustomerErrors: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4339,6 +4467,8 @@ AgreementSidePanel.propTypes = {
   setIsEditContract: PropTypes.func,
   setShowSaveSuccessMsg: PropTypes.func,
   setContractLoading: PropTypes.func,
+  customerError: PropTypes.shape(PropTypes.object),
+  setCustomerErrors: PropTypes.func,
 };
 
 const SidePanel = styled.div`

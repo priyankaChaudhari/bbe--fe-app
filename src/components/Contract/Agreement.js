@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 
 export default function Agreement({ formData, details, templateData }) {
   const mapDefaultValues = (key, label) => {
-    if (key === 'contract_company_name') {
-      return formData && formData[key]
-        ? formData && formData[key]
+    if (key === 'company_name') {
+      return formData && formData.customer_id && formData.customer_id[key]
+        ? formData && formData.customer_id && formData.customer_id[key]
         : `Client Name`;
     }
     if (key === 'length') {
@@ -27,40 +27,80 @@ export default function Agreement({ formData, details, templateData }) {
     }
     if (key === 'address') {
       if (
-        ((formData && formData.address === '') ||
-          (formData && formData.address === null)) &&
-        ((formData && formData.state === '') ||
-          (formData && formData.state === null)) &&
-        ((formData && formData.city === '') ||
-          (formData && formData.city === null)) &&
-        ((formData && formData.zip_code === '') ||
-          (formData && formData.zip_code === null))
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.address === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.address === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.state === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.state === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.city === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.city === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.zip_code === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.zip_code === null))
       ) {
         return `Enter Location`;
       }
       return `${
-        formData && formData.address ? formData && formData.address : ''
+        formData && formData.customer_id && formData.customer_id.address
+          ? formData && formData.customer_id && formData.customer_id.address
+          : ''
       }${
         formData &&
-        formData.address &&
-        ((formData && formData.state) ||
-          (formData && formData.city) ||
-          (formData && formData.zip_code))
+        formData.customer_id &&
+        formData.customer_id.address &&
+        ((formData && formData.customer_id && formData.customer_id.state) ||
+          (formData && formData.customer_id && formData.customer_id.city) ||
+          (formData && formData.customer_id && formData.customer_id.zip_code))
           ? ','
           : ''
       }
-       ${formData && formData.city ? formData && formData.city : ''}${
+       ${
+         formData && formData.customer_id && formData.customer_id.city
+           ? formData && formData.customer_id && formData.customer_id.city
+           : ''
+       }${
         formData &&
-        formData.city &&
-        (formData.state || (formData && formData.zip_code))
+        formData.customer_id &&
+        formData.customer_id.city &&
+        (formData.customer_id.state ||
+          (formData && formData.customer_id && formData.customer_id.zip_code))
           ? ','
           : ''
       }
-      ${formData && formData.state ? formData && formData.state : ''}${
-        formData && formData.state && formData && formData.zip_code ? ',' : ''
+      ${
+        formData && formData.customer_id && formData.customer_id.state
+          ? formData && formData.customer_id && formData.customer_id.state
+          : ''
+      }${
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.state &&
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.zip_code
+          ? ','
+          : ''
       }
      
-      ${formData && formData.zip_code ? formData && formData.zip_code : ''}
+      ${
+        formData && formData.customer_id && formData.customer_id.zip_code
+          ? formData && formData.customer_id && formData.customer_id.zip_code
+          : ''
+      }
       `;
     }
     if (
@@ -329,7 +369,7 @@ export default function Agreement({ formData, details, templateData }) {
               getAgreementAccorType(0)
                 .replace(
                   'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                  mapDefaultValues('company_name', 'Customer Name'),
                 )
                 .replace(
                   'START_DATE',
@@ -445,11 +485,14 @@ Agreement.propTypes = {
   formData: PropTypes.shape({
     length: PropTypes.string,
     sales_threshold: PropTypes.string,
-    address: PropTypes.string,
-    city: PropTypes.string,
-    state: PropTypes.string,
-    zip_code: PropTypes.string,
+
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
+    customer_id: PropTypes.shape({
+      address: PropTypes.string,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zip_code: PropTypes.string,
+    }),
   }),
   templateData: PropTypes.shape({
     addendum: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),

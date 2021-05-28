@@ -420,13 +420,14 @@ export const contactDetails = [
 
 export const AgreementDetails = [
   {
-    key: 'contract_company_name',
+    key: 'company_name',
     label: 'Customer Name',
     type: 'text',
     placeholder: 'Enter Customer Name',
     isMandatory: true,
     part: 'agreement',
     error: false,
+    field: 'customer',
   },
   {
     key: 'start_date',
@@ -457,6 +458,7 @@ export const AgreementDetails = [
         isMandatory: true,
         part: 'agreement',
         error: false,
+        field: 'customer',
       },
       {
         key: 'state',
@@ -465,6 +467,7 @@ export const AgreementDetails = [
         isMandatory: true,
         part: 'agreement',
         error: false,
+        field: 'customer',
       },
       {
         key: 'city',
@@ -473,6 +476,7 @@ export const AgreementDetails = [
         isMandatory: true,
         part: 'agreement',
         error: false,
+        field: 'customer',
       },
       {
         key: 'zip_code',
@@ -481,6 +485,7 @@ export const AgreementDetails = [
         isMandatory: true,
         part: 'agreement',
         error: false,
+        field: 'customer',
       },
     ],
   },

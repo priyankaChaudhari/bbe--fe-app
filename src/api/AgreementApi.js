@@ -43,8 +43,10 @@ export async function agreementDetails(id) {
 }
 
 export async function getcontract(id) {
+  const params = { expand: '~all' };
+
   const result = await axiosInstance
-    .get(`${API_CUSTOMER_CONTRACT + id}/`)
+    .get(`${API_CUSTOMER_CONTRACT + id}/`, { params })
     .then((response) => {
       return response;
     })

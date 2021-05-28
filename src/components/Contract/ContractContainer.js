@@ -42,6 +42,7 @@ import {
   getContractActivityLog,
   getDocumentList,
   createContractDesign,
+  updateCustomerDetails,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -141,6 +142,8 @@ export default function ContractContainer() {
   const [additionalOnetimeSerError, setAdditionalOnetimeSerError] = useState(
     {},
   );
+  const [customerError, setCustomerErrors] = useState({});
+
   const [contractError, setContractError] = useState({});
 
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
@@ -430,6 +433,8 @@ export default function ContractContainer() {
           const additionalOneTimeServRes = responses[1];
           const contractRes = responses[2];
           const addendumRes = responses[3];
+          const updateCustomerRes = responses[4];
+
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
 
@@ -441,7 +446,9 @@ export default function ContractContainer() {
             contractRes &&
             contractRes.status === 200 &&
             addendumRes &&
-            addendumRes.status === 200
+            addendumRes.status === 200 &&
+            updateCustomerRes &&
+            updateCustomerRes.status === 200
           ) {
             // use/access the results
             showFooter(false);
@@ -528,6 +535,16 @@ export default function ContractContainer() {
             }
           }
 
+          if (updateCustomerRes && updateCustomerRes.status === 200) {
+            const customerData = updateCustomerRes.data;
+            setFormData({ ...formData, ...customerData });
+            delete updatedFormData.company_name;
+            delete updatedFormData.address;
+            delete updatedFormData.city;
+            delete updatedFormData.state;
+            delete updatedFormData.zip_code;
+          }
+
           if (contractRes && contractRes.status === 200) {
             setFormData({ ...formData, ...contractRes.data });
             const updatedKeys = Object.keys(updatedFormData);
@@ -537,7 +554,12 @@ export default function ContractContainer() {
                 .filter((item) => item !== 'additional_monthly_services')
                 .filter((item) => item !== 'additional_marketplaces')
                 .filter((item) => item !== 'primary_marketplace')
-                .filter((item) => item !== 'addendum');
+                .filter((item) => item !== 'addendum')
+                .filter((item) => item !== 'company_name')
+                .filter((item) => item !== 'address')
+                .filter((item) => item !== 'city')
+                .filter((item) => item !== 'state')
+                .filter((item) => item !== 'zip_code');
 
               for (const item of fieldsToDeleteList) {
                 delete updatedFormData[item];
@@ -562,7 +584,8 @@ export default function ContractContainer() {
               additionalMonthlySerRes.status === 400) ||
             (additionalOneTimeServRes &&
               additionalOneTimeServRes.status === 400) ||
-            (contractRes && contractRes.status === 400)
+            (contractRes && contractRes.status === 400) ||
+            (updateCustomerRes && updateCustomerRes.status === 400)
           ) {
             toast.error(
               'Changes have not been saved. Please fix errors and try again',
@@ -619,6 +642,23 @@ export default function ContractContainer() {
               getContractDetails();
             }
           }
+
+          if (updateCustomerRes && updateCustomerRes.status === 400) {
+            setCustomerErrors({
+              ...customerError,
+              ...updateCustomerRes.data,
+            });
+            if (
+              updateCustomerRes.data &&
+              Object.keys(updateCustomerRes.data).length
+            ) {
+              if (
+                Object.keys(updateCustomerRes.data).includes('zip_code') &&
+                !customerError.zip_code
+              )
+                agreementErrCount += 1;
+            }
+          }
           if (contractRes && contractRes.status === 400) {
             setContractError({
               ...contractError,
@@ -637,11 +677,7 @@ export default function ContractContainer() {
                   Object.keys(contractRes.data).includes('design_optimization')
                 )
                   statementErrCount += 1;
-                if (
-                  Object.keys(contractRes.data).includes('zip_code') &&
-                  !contractError.zip_code
-                )
-                  agreementErrCount += 1;
+
                 if (
                   Object.keys(contractRes.data).includes('dsp_fee') &&
                   !contractError.dsp_fee
@@ -783,8 +819,10 @@ export default function ContractContainer() {
   };
 
   const mapDefaultValues = (key, label, type) => {
-    if (key === 'contract_company_name') {
-      return details && details[key] ? details && details[key] : `Client Name`;
+    if (key === 'company_name') {
+      return details && details.customer_id && details.customer_id[key]
+        ? details && details.customer_id && details.customer_id[key]
+        : `Client Name`;
     }
 
     if (key === 'length' && label === 'Initial Period') {
@@ -1437,24 +1475,26 @@ export default function ContractContainer() {
       ) {
         if (
           formData &&
-          formData.contract_company_name &&
+          formData.customer_id &&
+          formData.customer_id.company_name &&
           formData.start_date &&
-          formData.address &&
-          formData.state &&
-          formData.city &&
-          formData.zip_code
+          formData.customer_id.address &&
+          formData.customer_id.state &&
+          formData.customer_id.city &&
+          formData.customer_id.zip_code
         ) {
           return true;
         }
       } else if (
         formData &&
-        formData.contract_company_name &&
+        formData.customer_id &&
+        formData.customer_id.company_name &&
         formData.start_date &&
         formData.length &&
-        formData.address &&
-        formData.state &&
-        formData.city &&
-        formData.zip_code
+        formData.customer_id.address &&
+        formData.customer_id.state &&
+        formData.customer_id.city &&
+        formData.customer_id.zip_code
       ) {
         return true;
       }
@@ -1574,7 +1614,7 @@ export default function ContractContainer() {
       serviceData
         .replace(
           'CUSTOMER_NAME',
-          mapDefaultValues('contract_company_name', 'Customer Name'),
+          mapDefaultValues('company_name', 'Customer Name'),
         )
         .replace('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
@@ -1590,7 +1630,7 @@ export default function ContractContainer() {
 
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',
-      mapDefaultValues('contract_company_name', 'Customer Name'),
+      mapDefaultValues('company_name', 'Customer Name'),
     )
       .replaceAll(
         'AGREEMENT_DATE',
@@ -1605,7 +1645,7 @@ export default function ContractContainer() {
       data.statement_of_work[0]
         .replace(
           'CUSTOMER_NAME',
-          mapDefaultValues('contract_company_name', 'Customer Name'),
+          mapDefaultValues('company_name', 'Customer Name'),
         )
         .replaceAll('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace(
@@ -1646,7 +1686,7 @@ export default function ContractContainer() {
           data.dsp_addendum[0]
             .replace(
               'CUSTOMER_NAME',
-              mapDefaultValues('contract_company_name', 'Customer Name'),
+              mapDefaultValues('company_name', 'Customer Name'),
             )
 
             .replaceAll(
@@ -1683,7 +1723,7 @@ export default function ContractContainer() {
       showSection && showSection.dspAddendum
         ? AddendumSign.replace(
             'CUSTOMER_NAME',
-            mapDefaultValues('contract_company_name', 'Customer Name'),
+            mapDefaultValues('company_name', 'Customer Name'),
           )
             .replace(
               'BBE_DATE',
@@ -1697,7 +1737,7 @@ export default function ContractContainer() {
       data.addendum[0]
         .replace(
           'CUSTOMER_NAME',
-          mapDefaultValues('contract_company_name', 'Customer Name'),
+          mapDefaultValues('company_name', 'Customer Name'),
         )
         .replaceAll(
           'AGREEMENT_DATE',
@@ -1711,7 +1751,7 @@ export default function ContractContainer() {
 
     const addendumSignatureData = AddendumSign.replace(
       'CUSTOMER_NAME',
-      mapDefaultValues('contract_company_name', 'Customer Name'),
+      mapDefaultValues('company_name', 'Customer Name'),
     )
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
@@ -1880,6 +1920,7 @@ export default function ContractContainer() {
     let additionalOneTimeApi = null;
     let AccountApi = null;
     let AddendumApi = null;
+    let updateCustomerApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
@@ -1904,6 +1945,23 @@ export default function ContractContainer() {
         );
       }
 
+      if (
+        Object.keys(updatedFormData).includes('company_name') ||
+        Object.keys(updatedFormData).includes('address') ||
+        Object.keys(updatedFormData).includes('city') ||
+        Object.keys(updatedFormData).includes('state') ||
+        Object.keys(updatedFormData).includes('zip_code')
+      ) {
+        const customerData = {
+          company_name: updatedFormData.company_name,
+          address: updatedFormData.address,
+          city: updatedFormData.city,
+          state: updatedFormData.state,
+          zip_code: updatedFormData.zip_code,
+        };
+        updateCustomerApi = updateCustomerDetails(id, customerData);
+      }
+
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
       const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
       for (const val of num) {
@@ -1917,6 +1975,11 @@ export default function ContractContainer() {
       delete updatedContractFields.additional_marketplaces;
       delete updatedContractFields.primary_marketplace;
       delete updatedContractFields.addendum;
+      delete updatedContractFields.company_name;
+      delete updatedContractFields.address;
+      delete updatedContractFields.city;
+      delete updatedContractFields.state;
+      delete updatedContractFields.zip_code;
 
       const detail = {
         ...updatedContractFields,
@@ -1944,6 +2007,7 @@ export default function ContractContainer() {
         additionalOneTimeApi,
         AccountApi,
         AddendumApi,
+        updateCustomerApi,
       ];
 
       if (
@@ -2123,7 +2187,23 @@ export default function ContractContainer() {
             details.contract_type === 'one time'
           )
         ) {
-          if (item.isMandatory && !(formData && formData[item.key])) {
+          if (
+            item.isMandatory &&
+            item.field === 'customer' &&
+            !(
+              formData &&
+              formData.customer_id &&
+              formData.customer_id[item.key]
+            )
+          ) {
+            agreementErrors += 1;
+            item.error = true;
+          }
+          if (
+            item.isMandatory &&
+            item.field !== 'customer' &&
+            !(formData && formData[item.key])
+          ) {
             agreementErrors += 1;
             item.error = true;
           }
@@ -2135,7 +2215,11 @@ export default function ContractContainer() {
             if (
               subItem &&
               subItem.isMandatory &&
-              !(formData && formData[subItem.key])
+              !(
+                formData &&
+                formData.customer_id &&
+                formData.customer_id[subItem.key]
+              )
             ) {
               subItem.error = true;
               agreementErrors += 1;
@@ -2284,6 +2368,8 @@ export default function ContractContainer() {
         getContractDetails={getContractDetails}
         setIsEditContract={setIsEditContract}
         setShowSaveSuccessMsg={setShowSaveSuccessMsg}
+        customerError={customerError}
+        setCustomerErrors={setCustomerErrors}
       />
     );
   };
