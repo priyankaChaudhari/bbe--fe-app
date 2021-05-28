@@ -140,6 +140,7 @@ const DropDownSelect = styled.div`
   &.days-performance {
     max-width: 259px;
     float: right;
+    text-align: initial;
 
     .css-yk16xz-control {
       background-color: ${Theme.gray8};
