@@ -129,9 +129,18 @@ export default function AuthenticationComponent() {
             ''
           )}
           {/* Brand Partner */}
-          <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
-          {/* <Route path={PATH_BGS_DASHBOARD} component={AdManagerDashboard} /> */}
-          <Route path={PATH_ADM_DASHBOARD} component={AdManagerDashboard} />
+          {userInfo && userInfo.role === 'Growth Strategist' ? (
+            <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
+          ) : (
+            ''
+          )}
+
+          {userInfo && userInfo.role === 'Ad Manager' ? (
+            <Route path={PATH_ADM_DASHBOARD} component={AdManagerDashboard} />
+          ) : (
+            ''
+          )}
+
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}
