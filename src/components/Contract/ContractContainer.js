@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: "error" */
 /* eslint consistent-return: "error" */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -247,7 +248,10 @@ export default function ContractContainer() {
     if (splittedPath) {
       getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
-          setDetails(res && res.data);
+          setDetails(res.data);
+          setFormData(res.data);
+          setOriginalData(res.data);
+
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
@@ -277,6 +281,7 @@ export default function ContractContainer() {
           response.data.results &&
           response.data.results[0],
       );
+
       getContractDetails();
     });
 
@@ -858,12 +863,16 @@ export default function ContractContainer() {
         : 'Select Length';
     }
     if (key === 'primary_marketplace') {
-      return (
-        details &&
-        details.primary_marketplace &&
-        details.primary_marketplace.name
-      );
+      if (details && details.primary_marketplace) {
+        return details &&
+          details.primary_marketplace &&
+          details.primary_marketplace.name
+          ? details.primary_marketplace.name
+          : details.primary_marketplace;
+      }
+      return `Enter ${label}.`;
     }
+
     if (key === 'start_date') {
       // return
       return formData && formData[key] !== null
@@ -880,44 +889,82 @@ export default function ContractContainer() {
 
     if (key === 'address') {
       if (
-        ((formData && formData.address === '') ||
-          (formData && formData.address === null)) &&
-        ((formData && formData.state === '') ||
-          (formData && formData.state === null)) &&
-        ((formData && formData.city === '') ||
-          (formData && formData.city === null)) &&
-        ((formData && formData.zip_code === '') ||
-          (formData && formData.zip_code === null))
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.address === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.address === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.state === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.state === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.city === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.city === null)) &&
+        ((formData &&
+          formData.customer_id &&
+          formData.customer_id.zip_code === '') ||
+          (formData &&
+            formData.customer_id &&
+            formData.customer_id.zip_code === null))
       ) {
         return `Enter Location`;
       }
-      return `${details && details.address ? details && details.address : ''}${
-        details &&
-        details.address &&
-        ((details && details.state) ||
-          (details && details.city) ||
-          (details && details.zip_code))
+      return `${
+        formData && formData.customer_id && formData.customer_id.address
+          ? formData && formData.customer_id && formData.customer_id.address
+          : ''
+      }${
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.address &&
+        ((formData && formData.customer_id && formData.customer_id.state) ||
+          (formData && formData.customer_id && formData.customer_id.city) ||
+          (formData && formData.customer_id && formData.customer_id.zip_code))
           ? ','
           : ''
       }
-      ${details && details.city ? details && details.city : ''}${
-        details &&
-        details.city &&
-        (details.state || (details && details.zip_code))
+       ${
+         formData && formData.customer_id && formData.customer_id.city
+           ? formData && formData.customer_id && formData.customer_id.city
+           : ''
+       }${
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.city &&
+        (formData.customer_id.state ||
+          (formData && formData.customer_id && formData.customer_id.zip_code))
           ? ','
           : ''
       }
-      ${details && details.state ? details && details.state : ''}${
-        details && details.state && details && details.zip_code ? ',' : ''
+      ${
+        formData && formData.customer_id && formData.customer_id.state
+          ? formData && formData.customer_id && formData.customer_id.state
+          : ''
+      }${
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.state &&
+        formData &&
+        formData.customer_id &&
+        formData.customer_id.zip_code
+          ? ','
+          : ''
       }
-      
-      ${details && details.zip_code ? details && details.zip_code : ''}
+     
+      ${
+        formData && formData.customer_id && formData.customer_id.zip_code
+          ? formData && formData.customer_id && formData.customer_id.zip_code
+          : ''
+      }
       `;
     }
-    const result =
-      key === 'rev_share' || key === 'seller_type'
-        ? details && details[key] && details[key].label
-        : details && details[key];
 
     if (details[key] === undefined || details[key] === '') {
       if (label === 'Dsp Fee') {
@@ -930,9 +977,20 @@ export default function ContractContainer() {
       return `${type === 'number-currency' ? '$' : '%'}${
         details && details[key]
           ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : ''
+          : `Enter ${label}`
       }`;
     }
+    const result =
+      key === 'rev_share' || key === 'seller_type'
+        ? details && details[key] && details[key].label
+          ? details && details[key] && details[key].label
+          : (details && details[key] === null) ||
+            (details && details[key] === '') ||
+            (details && details[key] === undefined)
+          ? `Enter ${label}`
+          : details && details[key]
+        : details && details[key];
+
     return result;
     // return details && details[key];
   };
@@ -1134,7 +1192,9 @@ export default function ContractContainer() {
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details && details.total_fee.onetime_service_after_discount
+        details &&
+        details.total_fee &&
+        details.total_fee.onetime_service_after_discount
           ? details.total_fee.onetime_service_after_discount
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -1383,6 +1443,7 @@ export default function ContractContainer() {
     }
     return '';
   };
+
   const getAgreementAccorType = (index) => {
     if (
       data &&
@@ -1619,6 +1680,8 @@ export default function ContractContainer() {
 
   const createAgreementDoc = () => {
     setContractDesignLoader(true);
+    // if (data && data.length && details && Object.keys(details).length) {
+
     const serviceData = getAgreementAccorType(0);
     const agreementData =
       serviceData &&
@@ -1768,24 +1831,24 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      (formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('one')) ||
-      (formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp'))
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('one')) ||
+      (details &&
+        details.contract_type &&
+        details.contract_type.toLowerCase().includes('dsp'))
         ? ''
         : statmentData
     } ${
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('one')
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendum
     } ${
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('one')
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
     } ${
@@ -1796,24 +1859,6 @@ export default function ContractContainer() {
         : ''
     } `;
 
-    // console.log(
-    //   'agreementDatan\n\n\n\n',
-    //   agreementData,
-    //   'agreementSignatureData\n\n\n',
-    //   agreementSignatureData,
-    //   'statmentData\n\n',
-    //   statmentData,
-    //   'dspAddendum\n\n',
-    //   dspAddendum,
-    //   'dspAddendumSignature\n\n',
-    //   dspAddendumSignature,
-    //   'addendumData\n\n',
-    //   addendumData,
-    //   'newAddendumAddedData\n\n',
-    //   newAddendumAddedData,
-    //   'addendumSignatureData\n\n',
-    //   addendumSignatureData,
-    // );
     setPDFData(finalAgreement);
 
     const contractData = {
@@ -1822,17 +1867,35 @@ export default function ContractContainer() {
         .replaceAll('PRINTED_NAME', '')
         .replace('CUSTOMER_ROLE', ''),
     };
+
     createContractDesign(contractData).then(() => {
       setContractDesignLoader(false);
     });
+    // }
   };
 
   useEffect(() => {
-    if (details && Object.keys(details).length) {
-      setFormData({ ...formData, ...details });
-      setOriginalData({ ...formData, ...details });
+    if (
+      data &&
+      Object.keys(data).length &&
+      details &&
+      Object.keys(details).length &&
+      notIncludedMonthlyServices &&
+      notIncludedMonthlyServices.length &&
+      notIncludedOneTimeServices &&
+      notIncludedOneTimeServices.length
+    ) {
       createAgreementDoc();
     }
+  }, [
+    data,
+    details,
+    showSection,
+    notIncludedMonthlyServices,
+    notIncludedOneTimeServices,
+  ]);
+
+  useEffect(() => {
     if (
       details &&
       details.additional_monthly_services &&
@@ -1892,7 +1955,11 @@ export default function ContractContainer() {
       setShowCollpase({ ...showSection, dspAddendum: false });
     }
 
-    if (details && details.contract_type === 'dsp only') {
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
       setShowCollpase({ ...showSection, dspAddendum: true });
     }
     if (
@@ -2263,6 +2330,16 @@ export default function ContractContainer() {
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('dsp') &&
           item.key !== 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
+
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('dsp') &&
+          item.key === 'dsp_length'
         ) {
           dspErrors += 1;
           item.error = true;

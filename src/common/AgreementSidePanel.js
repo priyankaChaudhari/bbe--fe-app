@@ -2049,29 +2049,29 @@ export default function AgreementSidePanel({
             [event.target.name]: '',
           });
         }
-        if (
-          event.target.name === 'dsp_fee' &&
-          contractError &&
-          contractError.dsp_fee
-        ) {
-          if (event.target.value) {
-            setSectionError({
-              ...sectionError,
-              dsp: sectionError.dsp ? sectionError.dsp - 1 : 0,
-            });
-          } else {
-            setSectionError({
-              ...sectionError,
-              dsp: sectionError.dsp ? sectionError.dsp : 0,
-            });
-          }
-        }
-
-        setContractError({
-          ...contractError,
-          [event.target.name]: '',
-        });
       }
+      if (
+        event.target.name === 'dsp_fee' &&
+        contractError &&
+        contractError.dsp_fee
+      ) {
+        if (event.target.value) {
+          setSectionError({
+            ...sectionError,
+            dsp: sectionError.dsp ? sectionError.dsp - 1 : 0,
+          });
+        } else {
+          setSectionError({
+            ...sectionError,
+            dsp: sectionError.dsp ? sectionError.dsp : 0,
+          });
+        }
+      }
+
+      setContractError({
+        ...contractError,
+        [event.target.name]: '',
+      });
     }
   };
 
@@ -4033,11 +4033,7 @@ export default function AgreementSidePanel({
                   <div className="straight-line sidepanel " />
 
                   <div
-                    className={
-                      showSection && showSection.dspAddendum
-                        ? 'collapse-btn   '
-                        : 'collapse-btn  disabled '
-                    }
+                    className="collapse-btn "
                     role="presentation"
                     type="button"
                     onClick={() => {
