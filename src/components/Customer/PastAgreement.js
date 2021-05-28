@@ -32,7 +32,7 @@ export default function PastAgreement({ id }) {
           <WhiteCard className="mt-3 mb-3" key={item.id}>
             <div className="row">
               <div className="col-lg-9 col-md-8 col-12">
-                <p className="black-heading-title  mb-0">
+                <p className="black-heading-title mt-0 mb-0">
                   {' '}
                   <img
                     width="48px"
