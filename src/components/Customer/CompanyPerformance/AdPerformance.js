@@ -1634,6 +1634,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           chartId="dspChart"
           chartData={dspChartData}
           currencySymbol={currencySymbol}
+          selectedDF={selectedDSPDF}
         />
       </WhiteCard>
       {renderAdCustomDateModal()}

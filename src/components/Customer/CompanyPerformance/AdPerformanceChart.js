@@ -47,7 +47,6 @@ export default function AdPerformanceChart({
     let secondAxis = null;
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    // chart.current.data = adGraphData; // bind th data
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
@@ -63,7 +62,6 @@ export default function AdPerformanceChart({
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
-    // series.yAxis = valueAxis;
     valueAxis.numberFormatter.bigNumberPrefixes = [
       { number: 1e3, suffix: 'K' },
       { number: 1e6, suffix: 'M' },
@@ -134,7 +132,6 @@ export default function AdPerformanceChart({
         } else {
           valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
         }
-        // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
         tooltipCurrent = renderTooltip(
           'Recent',
           '#FF5933',
@@ -364,10 +361,6 @@ export default function AdPerformanceChart({
             if (item === 'impressions' || item === 'adClicks') {
               valueAxis.numberFormatter.numberFormat = `#.#a`;
             }
-            // if (item === 'adRoas') {
-            //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-            // }
-            // valueAxis.numberFormatter.numberFormat = `#.#`;
             series.yAxis = valueAxis;
             firstAxis = 'unit';
           }
@@ -406,7 +399,6 @@ export default function AdPerformanceChart({
           if (firstAxis === 'percentage') {
             // console.log('percentage');
             series.yAxis = valueAxis;
-            // valueAxis.numberFormatter.numberFormat = `#.#a`;
           } else if (secondAxis === null || secondAxis === 'percentage') {
             // console.log(' not percentage, second axis null percentage');
             series.yAxis = valueAxis2;
@@ -453,10 +445,7 @@ export default function AdPerformanceChart({
           if (item === 'impressions' || item === 'adClicks') {
             valueAxis.numberFormatter.numberFormat = `#.#a`;
           }
-          // if (item === 'adRoas') {
-          //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-          // }
-          // valueAxis.numberFormatter.numberFormat = `#.#a`;
+
           series.yAxis = valueAxis;
         } else if (secondAxis === null || secondAxis === 'unit') {
           // console.log('not unit, second axis null unit');
@@ -467,7 +456,7 @@ export default function AdPerformanceChart({
             valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#`;
           }
           series.yAxis = valueAxis2;
-          // valueAxis2.numberFormatter.numberFormat = `#.#a`;
+
           valueAxis2.renderer.opposite = true;
           // valueAxis2.renderer.line.strokeOpacity = 1;
           secondAxis = 'unit';

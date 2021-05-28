@@ -15,52 +15,13 @@ export default function DSPPerformanceChart({
   chartId,
   chartData,
   currencySymbol,
+  selectedDF,
 }) {
   const chart = useRef(null);
   useEffect(() => {
-    // const adGraphData = [
-    //   {
-    //     date: new Date(2019, 5, 12),
-    //     value1: 5000,
-    //     value2: 4800,
-    //     previousDate: new Date(2019, 5, 5),
-    //   },
-    //   {
-    //     date: new Date(2019, 5, 13),
-    //     value1: 1300,
-    //     value2: 5100,
-    //     previousDate: new Date(2019, 5, 6),
-    //   },
-    //   {
-    //     date: new Date(2019, 5, 14),
-    //     value1: 2600,
-    //     value2: 1800,
-    //     previousDate: new Date(2019, 5, 7),
-    //   },
-    //   {
-    //     date: new Date(2019, 5, 15),
-    //     value1: 900,
-    //     value2: 5300,
-    //     previousDate: new Date(2019, 5, 8),
-    //   },
-    //   {
-    //     date: new Date(2019, 5, 16),
-    //     value1: 4800,
-    //     value2: 4400,
-    //     previousDate: new Date(2019, 5, 9),
-    //   },
-    //   {
-    //     date: new Date(2019, 5, 17),
-    //     value1: 4700,
-    //     value2: 3200,
-    //     previousDate: new Date(2019, 5, 10),
-    //   },
-    // ];
     // if (!chart.current) {
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData; // bind th data
-    // console.log('chartData', chartData);
-    // chart.current.data = adGraphData; // bind th data
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
 
@@ -110,8 +71,6 @@ export default function DSPPerformanceChart({
     valueAxis.min = 0;
     valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
 
-    // const tooltipCurrent = `[#2e384d]● [/]Recent [/]${currencySymbol}{label1}\n`;
-    // const tooltipPrevious = `[#BFC5D2]● [/]Previous [/]${currencySymbol}{label2}`;
     let tooltipCurrent = ``;
     let tooltipPrevious = ``;
     tooltipCurrent = renderTooltip(
@@ -120,12 +79,14 @@ export default function DSPPerformanceChart({
       'DspCurrentLabel',
       currencySymbol,
     );
-    tooltipPrevious = renderTooltip(
-      'Previous',
-      '#BFC5D2',
-      'DspPreviousLabel',
-      currencySymbol,
-    );
+    if (selectedDF !== 'custom') {
+      tooltipPrevious = renderTooltip(
+        'Previous',
+        '#BFC5D2',
+        'DspPreviousLabel',
+        currencySymbol,
+      );
+    }
     // Create series for previous data
     const series = chart.current.series.push(new am4charts.LineSeries());
     series.dataFields.valueY = 'DspPrevious';
@@ -170,7 +131,7 @@ export default function DSPPerformanceChart({
     // }
 
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol]);
+  }, [chartId, chartData, currencySymbol, selectedDF]);
 
   // useEffect(() => {
   //   if (chart.current) {
@@ -189,10 +150,12 @@ export default function DSPPerformanceChart({
 DSPPerformanceChart.defaultProps = {
   chartData: [],
   currencySymbol: '',
+  selectedDF: '',
 };
 
 DSPPerformanceChart.propTypes = {
   chartId: PropTypes.string.isRequired,
   chartData: PropTypes.arrayOf(PropTypes.object),
   currencySymbol: PropTypes.string,
+  selectedDF: PropTypes.string,
 };
