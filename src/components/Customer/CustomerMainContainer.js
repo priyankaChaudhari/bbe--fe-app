@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
@@ -990,7 +991,7 @@ export default function CustomerMainContainer() {
                         id={id}
                       />
                     ) : viewComponent === 'billing' ? (
-                      <BillingDetails id={id} />
+                      <BillingDetails id={id} userInfo={userInfo} />
                     ) : (
                       <Activity
                         activityData={activityData}

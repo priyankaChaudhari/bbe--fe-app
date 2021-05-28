@@ -1,27 +1,66 @@
 import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
+import Modal from 'react-modal';
+import NumberFormat from 'react-number-format';
 
 import { GroupUser } from '../../theme/Global';
-import { GetInitialName, PageLoader, WhiteCard } from '../../common';
 import {
+  Button,
+  ContractFormField,
+  ErrorMsg,
+  GetInitialName,
+  ModalBox,
+  PageLoader,
+  WhiteCard,
+} from '../../common';
+import {
+  CloseIcon,
   EditOrangeIcon,
-  // MasterCardIcons,
   // DefaultUser,
   // BlackCheckMark,
   // BellNotification,
   // ClockIcon,
 } from '../../theme/images/index';
-import { getBillingDetails } from '../../api';
+import { getBillingDetails, saveBillingInfo } from '../../api';
+import { BillingAddress } from '../../constants/FieldConstants';
 
-export default function BillingDetails({ id }) {
+export default function BillingDetails({ id, userInfo }) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [showModal, setShowModal] = useState(false);
+  const [apiError, setApiError] = useState({});
+  const [formData, setFormData] = useState({
+    billing_contact: {},
+  });
+  const [showBtn, setShowBtn] = useState(false);
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      minHeight: '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   useEffect(() => {
     getBillingDetails(id).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
+      setFormData({
+        billing_contact:
+          response &&
+          response.data &&
+          response.data.billing_contact &&
+          response.data.billing_contact[0],
+      });
     });
   }, [id]);
 
@@ -30,6 +69,108 @@ export default function BillingDetails({ id }) {
       return data[type][0][key];
     }
     return '';
+  };
+
+  const handleChange = (event, item, type) => {
+    setShowBtn(true);
+    setFormData({
+      ...formData,
+      [type]: {
+        ...formData[type],
+        [item.key]: event.target.value,
+      },
+    });
+
+    setApiError({
+      ...apiError,
+      [type]: {
+        ...apiError[type],
+        [item.key]: '',
+      },
+      0: '',
+    });
+  };
+
+  const generateNumeric = (item, type) => {
+    return (
+      <NumberFormat
+        className="form-control"
+        onChange={(event) => handleChange(event, item, type)}
+        placeholder={`Enter ${item.label}`}
+        value={data && data[type] && data[type][0] && data[type][0][item.key]}
+      />
+    );
+  };
+
+  const generateInput = (item, type) => {
+    return (
+      <input
+        className="form-control"
+        placeholder={`Enter ${item.label}`}
+        type={item.type}
+        defaultValue={
+          data && data[type] && data[type][0] && data[type][0][item.key]
+        }
+        onChange={(event) => handleChange(event, item, type)}
+      />
+    );
+  };
+
+  const mapContactDetails = () => {
+    return (
+      <div className="row">
+        {BillingAddress.filter((op) => op.section === 'contact').map((item) => {
+          return (
+            <div className="col-md-6" key={item.key}>
+              <ContractFormField className="mt-3">
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item, 'billing_contact')}</>
+                  ) : (
+                    <>{generateInput(item, 'billing_contact')}</>
+                  )}
+                </label>
+              </ContractFormField>
+              <ErrorMsg>
+                {apiError &&
+                  apiError.billing_contact &&
+                  apiError.billing_contact[item.key] &&
+                  apiError.billing_contact[item.key][0]}
+              </ErrorMsg>
+            </div>
+          );
+        })}
+        ;
+      </div>
+    );
+  };
+
+  const saveBillingData = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    if (formData && formData.billing_contact.phone_number === '')
+      delete formData.billing_contact.phone_number;
+
+    const details = {
+      ...formData,
+      billing_address: data.billing_address[0],
+      billing_contact: formData.billing_contact,
+      customer_onboarding: userInfo.customer_onboarding,
+    };
+    saveBillingInfo(details, data && data.id).then((res) => {
+      if (res && res.status === 200) {
+        setIsLoading({ loader: false, type: 'button' });
+        getBillingDetails(id).then((contact) => {
+          setData(contact && contact.data);
+        });
+        setShowModal(false);
+      }
+      if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+        setApiError(res && res.data);
+      }
+    });
   };
 
   return (
@@ -157,9 +298,12 @@ export default function BillingDetails({ id }) {
                 {' '}
                 <p className="black-heading-title mt-0 mb-4">
                   {' '}
-                  Billing Contacts
+                  Billing Contact
                 </p>
-                <div className="edit-details" role="presentation">
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
                   <img src={EditOrangeIcon} alt="" />
                   Edit
                 </div>
@@ -182,10 +326,53 @@ export default function BillingDetails({ id }) {
           </div>
         </div>
       )}
+      <Modal
+        isOpen={showModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowModal(false)}
+          role="presentation"
+        />
+        <ModalBox>
+          {' '}
+          <div className="modal-body">{mapContactDetails()}</div>
+          {showBtn ? (
+            <>
+              <div className="footer-line " />
+              <div className=" col-12  modal-footer">
+                <Button
+                  className=" btn-primary mr-4"
+                  onClick={() => saveBillingData()}>
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+                <Button
+                  className=" btn-borderless"
+                  onClick={() => setShowModal(false)}>
+                  Discard Changes
+                </Button>
+              </div>
+            </>
+          ) : (
+            ''
+          )}
+        </ModalBox>
+      </Modal>
     </>
   );
 }
 
 BillingDetails.propTypes = {
   id: PropTypes.string.isRequired,
+  userInfo: PropTypes.shape({
+    customer_onboarding: PropTypes.string,
+  }).isRequired,
 };

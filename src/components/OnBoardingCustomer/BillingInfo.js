@@ -263,6 +263,13 @@ export default function BillingInfo({
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
         setApiError(res && res.data);
+        if (
+          (res && res.data && res.data.card_details) ||
+          (res && res.data && res.data[0])
+        ) {
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
         setFormData({ ...formData, agreed: false });
         $('.checkboxes input:checkbox').prop('checked', false);
       }
