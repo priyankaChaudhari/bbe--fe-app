@@ -637,10 +637,8 @@ export default function CustomerMainContainer() {
                               </DropDownStatus>
                             )
                           ) : (
-                            <span className="company-status inactive">
-                              {agreement &&
-                                agreement.contract_status &&
-                                agreement.contract_status.label}
+                            <span className="company-status inactive capitalize">
+                              {customer && customer.contract_status}
                             </span>
                           )}
                         </span>

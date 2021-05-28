@@ -165,6 +165,14 @@ export default function ArticleDetails() {
                 res.data.items &&
                 res.data.items[0] &&
                 res.data.items[0].id),
+            board:
+              params.board ||
+              (res.data &&
+                res.data.items &&
+                res.data.items[0] &&
+                res.data.items[0].boards &&
+                res.data.items[0].boards[0] &&
+                res.data.items[0].boards[0].id),
           });
           history.push({
             pathname: `${PATH_ARTICLE_DETAILS.replace(
@@ -196,16 +204,7 @@ export default function ArticleDetails() {
 
   const handleBoard = (field) => {
     setIsLoading({ loader: true, type: 'page' });
-    const stringified = queryString.stringify({
-      board: field.id,
-    });
-    history.push({
-      pathname: `${PATH_ARTICLE_DETAILS.replace(
-        ':id',
-        selectedArticle.collection.id,
-      )}`,
-      search: `${stringified}`,
-    });
+
     setActiveField({
       board: field.id,
     });
@@ -235,6 +234,26 @@ export default function ArticleDetails() {
               response.data.items[0].items[0]
           : response.data.items[0],
       );
+      const stringified = queryString.stringify({
+        board: field.id,
+        article:
+          response &&
+          response.data &&
+          response.data.items &&
+          response.data.items[0] &&
+          response.data.items[0].type === 'section'
+            ? response.data.items[0].items &&
+              response.data.items[0].items[0] &&
+              response.data.items[0].items[0].id
+            : response.data.items[0].id,
+      });
+      history.push({
+        pathname: `${PATH_ARTICLE_DETAILS.replace(
+          ':id',
+          selectedArticle.collection.id,
+        )}`,
+        search: `${stringified}`,
+      });
 
       setIsLoading({ loader: false, type: 'page' });
     });
@@ -315,7 +334,7 @@ export default function ArticleDetails() {
           selectedArticle.boards[0] &&
           selectedArticle.boards[0].title,
         'kb-section': section && section.title,
-        'kb-article': selectedArticle.preferredPhrase,
+        'kb-article': selectedArticle && selectedArticle.preferredPhrase,
       },
       (v) => v !== undefined,
     );

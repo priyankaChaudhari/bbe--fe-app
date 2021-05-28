@@ -323,7 +323,11 @@ export default function BillingInfo({
             : ''
         }
         isNumericString
-        readOnly={type === 'card_details' && data && data.id}
+        readOnly={
+          (type === 'card_details' || type === 'billing_address') &&
+          data &&
+          data.id
+        }
       />
     );
   };
@@ -364,7 +368,11 @@ export default function BillingInfo({
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
-        readOnly={type === 'card_details' && data && data.id}
+        readOnly={
+          (type === 'card_details' || type === 'billing_address') &&
+          data &&
+          data.id
+        }
       />
     );
   };
@@ -439,7 +447,9 @@ export default function BillingInfo({
   const generateBillingAddressHTML = () => {
     return (
       <>
-        <fieldset className="shape-without-border  w-430 mt-3">
+        <fieldset
+          className="shape-without-border  w-430 mt-3"
+          style={{ opacity: data && data.id ? 0.5 : '' }}>
           <p className="account-steps m-0">Part 2</p>
           <div className="billing-address"> Billing Address </div>
           <div className="row">

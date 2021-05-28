@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
@@ -323,6 +324,14 @@ export default function MainContainer() {
     });
   };
 
+  const getInformation = (item) => {
+    if (item.key === 'billing information')
+      return `has asked that you provide your companies <strong> ${item.title}</strong>, which will be used by our Finance Team to bill for our services.`;
+    if (item.key === 'merchant id')
+      return `has asked that you provide <strong> ${item.title} </strong> information, which will be used to access data we will use to best manage your account.`;
+    return `has asked that you provide <strong>${item.title}</strong> information, which will be used by our Creative Team to best understand your brand.`;
+  };
+
   const generateHeader = (item) => {
     if (history.location.pathname.includes(item.path))
       return (
@@ -360,18 +369,11 @@ export default function MainContainer() {
                         {' '}
                         {verifiedStepData && verifiedStepData.user_email}{' '}
                       </span>
-                      has asked that you provide <strong>{item.title}</strong>{' '}
-                      information, which will be used{' '}
-                      {item.key === 'merchant id' ? (
-                        <>
-                          to access data we will use to best manage your
-                          account.
-                        </>
-                      ) : (
-                        <>
-                          by our Creative Team to best understand your brand.{' '}
-                        </>
-                      )}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: getInformation(item),
+                        }}
+                      />
                     </div>
                     If you’re unable to provide this information or you think
                     this was sent to you unintentionally, please let them know

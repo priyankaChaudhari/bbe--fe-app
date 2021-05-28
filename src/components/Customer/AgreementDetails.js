@@ -71,21 +71,26 @@ export default function AgreementDetails({ agreements, id }) {
                   width="48px"
                   className="solid-icon"
                   src={
-                    (agreement && agreement.contract_type === 'One Time') ||
-                    (agreement && agreement.contract_type === 'one time') ||
-                    (agreement && agreement.contract_type === 'One time')
+                    agreement &&
+                    agreement.contract_type &&
+                    agreement.contract_type.toLowerCase().includes('one')
                       ? ServiceIcon
-                      : agreement && agreement.contract_type === 'dsp only'
+                      : agreement &&
+                        agreement.contract_type &&
+                        agreement.contract_type.toLowerCase().includes('dsp')
                       ? DspOnlyIcon
                       : RecurringIcon
                   }
                   alt=""
                 />
                 <p className="black-heading-title mt-1 mb-0">
-                  {(agreement && agreement.contract_type === 'One Time') ||
-                  (agreement && agreement.contract_type === 'one time')
+                  {agreement &&
+                  agreement.contract_type &&
+                  agreement.contract_type.toLowerCase().includes('one')
                     ? 'One Time Service Agreement'
-                    : agreement && agreement.contract_type === 'dsp only'
+                    : agreement &&
+                      agreement.contract_type &&
+                      agreement.contract_type.toLowerCase().includes('dsp')
                     ? 'DSP Service Agreement'
                     : 'Recurring Service Agreement'}
                 </p>
