@@ -8,7 +8,7 @@ import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer
 import EditCompanyDetails from './EditCompanyDetails';
 import EditAccountDetails from './EditAccountDetails';
 import CustomerStatus from './CustomerStatus';
-import Billing from './Billing';
+import BillingDetails from './BillingDetails';
 // import AdPerformance from './AdPerformance';
 
 export {
@@ -21,6 +21,6 @@ export {
   EditCompanyDetails,
   EditAccountDetails,
   CustomerStatus,
-  Billing,
+  BillingDetails,
   // AdPerformance,
 };

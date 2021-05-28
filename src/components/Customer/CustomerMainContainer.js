@@ -30,7 +30,7 @@ import {
   WhiteCaretUp,
   CaretUp,
   AccountSetupIcon,
-  // BillingIcon,
+  BillingIcon,
   // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
@@ -58,7 +58,7 @@ import {
   EditAccountDetails,
 } from './index';
 import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
-import Billing from './Billing';
+import BillingDetails from './BillingDetails';
 import Activity from './Activity';
 import {
   getCustomerActivityLog,
@@ -168,7 +168,6 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
-    // { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -285,7 +284,7 @@ export default function CustomerMainContainer() {
     viewOptions = [
       { value: 'agreement', label: 'Agreements' },
       { value: 'company', label: 'Company Details' },
-      // { value: 'billing', label: 'Billing' },
+      { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
     ];
   }
@@ -795,17 +794,22 @@ export default function CustomerMainContainer() {
                               Company Details
                             </div>
                           </li>
-                          {/* <li
-                            onClick={() => setViewComponent('billing')}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'billing' ? 'active' : ''
-                              }`}>
-                              <img src={BillingIcon} alt="dollar-invoice" />
-                              Billing
-                            </div>
-                          </li> */}
+                          {userInfo && userInfo.role === 'Customer' ? (
+                            <li
+                              onClick={() => setViewComponent('billing')}
+                              role="presentation">
+                              <div
+                                className={`left-details ${
+                                  viewComponent === 'billing' ? 'active' : ''
+                                }`}>
+                                <img src={BillingIcon} alt="dollar-invoice" />
+                                Billing
+                              </div>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+
                           <li
                             onClick={() => {
                               setViewComponent('activity');
@@ -985,7 +989,7 @@ export default function CustomerMainContainer() {
                         id={id}
                       />
                     ) : viewComponent === 'billing' ? (
-                      <Billing />
+                      <BillingDetails id={id} />
                     ) : (
                       <Activity
                         activityData={activityData}

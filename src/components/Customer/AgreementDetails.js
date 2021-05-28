@@ -219,7 +219,7 @@ export default function AgreementDetails({ agreements, id }) {
                       <div className="label">Monthly Ad Budget</div>
                       <NumberFormat
                         displayType="text"
-                        value={agreement.monthly_fee || 0}
+                        value={agreement.dsp_fee || 0}
                         thousandSeparator
                         prefix="$"
                       />
