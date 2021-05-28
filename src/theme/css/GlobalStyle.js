@@ -1582,8 +1582,8 @@ text.cust-label-avg {
 }
 
 .loader-bar {
-  top: 68px !important;
-  height: 7px !important;
+  top: 70px !important;
+  height: 4px !important;
   // position: sticky !important;
   z-index: 3 !important;
   background: ${Theme.gray4} !important;
@@ -1593,7 +1593,9 @@ text.cust-label-avg {
     }
   }
 }
-
+.common-unauthorized-header-sticky {
+  padding-top: 10px;
+}
 .isDisabled {
   opacity: 0.6;
   cursor: not-allowed !important;

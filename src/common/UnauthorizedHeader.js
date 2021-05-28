@@ -5,23 +5,25 @@ import { NextLogo } from '../theme/images/index';
 
 export default function UnauthorizedHeader() {
   return (
-    <HeaderVoided>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-12 text-center">
-            <img
-              role="presentation"
-              onClick={() => {
-                window.location.href = 'http://www.buyboxexperts.com/';
-              }}
-              className="logo"
-              src={NextLogo}
-              alt="logo"
-            />
+    <div className="common-unauthorized-header-sticky">
+      <HeaderVoided>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12 text-center">
+              <img
+                role="presentation"
+                onClick={() => {
+                  window.location.href = 'http://www.buyboxexperts.com/';
+                }}
+                className="logo"
+                src={NextLogo}
+                alt="logo"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </HeaderVoided>
+      </HeaderVoided>
+    </div>
   );
 }
 

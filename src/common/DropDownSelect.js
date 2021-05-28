@@ -257,6 +257,7 @@ const DropDownSelect = styled.div`
       &.days-performance {
         max-width: 100%;
         float: left;
+        text-align: initial;
       }
 `;
 
