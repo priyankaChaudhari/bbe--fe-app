@@ -275,7 +275,7 @@ const ModalBox = styled.div`
       }
 
       .team-member-list:first-child {
-        padding-top: 5px !important;
+        // padding-top: 5px !important;
 
         .trash-icon {
           top: 22px !important;
