@@ -23,6 +23,7 @@ import {
   PATH_AMAZON_MERCHANT,
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
+  PATH_ADM_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -152,6 +153,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         data.user.role.includes('Growth Strategist')
       ) {
         history.push(PATH_BGS_DASHBOARD);
+      } else if (
+        data.user &&
+        data.user.role &&
+        data.user.role.includes('Ad Manager')
+      ) {
+        history.push(PATH_ADM_DASHBOARD);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
