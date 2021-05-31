@@ -263,7 +263,9 @@ export default function NewCustomerList() {
 
   useEffect(() => {
     getStatus().then((statusResponse) => {
-      setStatus(statusResponse.data);
+      if (statusResponse.status === 200) {
+        setStatus(statusResponse.data);
+      }
     });
     if (showAdPerformance) {
       getAdManagers().then((adm) => {

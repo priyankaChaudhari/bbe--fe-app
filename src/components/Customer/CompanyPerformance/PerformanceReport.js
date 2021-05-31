@@ -132,7 +132,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
     dateAxis.renderer.grid.template.location = 0.5;
-    // dateAxis.renderer.grid.template.disabled = true;
+    dateAxis.renderer.labels.template.location = 0.5;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 

@@ -54,6 +54,7 @@ export default function AdPerformanceChart({
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
     dateAxis.renderer.grid.template.location = 0.5;
+    dateAxis.renderer.labels.template.location = 0.5;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 
