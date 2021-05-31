@@ -13,7 +13,6 @@ import customerStateReducer from './store/reducers/customerStateReducer';
 import accountStateReducer from './store/reducers/accountStateReducer';
 
 import * as serviceWorker from './serviceWorker';
-import './theme/css/style.scss';
 import './theme/css/bootstrap-grid.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
