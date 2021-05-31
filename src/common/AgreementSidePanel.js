@@ -453,14 +453,7 @@ export default function AgreementSidePanel({
 
   useEffect(() => {
     goToSection();
-    // const serviceData =
-    //   agreementData &&
-    //   agreementData.additional_one_time_services &&
-    //   agreementData.additional_one_time_services.length &&
-    //   agreementData.additional_one_time_services.find(
-    //     (item) =>
-    //       item.service && item.service.name.includes('Amazon Store Package'),
-    //   );
+
     const serviceData =
       formData &&
       formData.additional_one_time_services &&
