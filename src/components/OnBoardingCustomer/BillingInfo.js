@@ -216,6 +216,8 @@ export default function BillingInfo({
     const getYear = new Date().getFullYear().toString().substring(0, 2);
     let format = '';
     if (
+      formData &&
+      formData.card_details &&
       formData.card_details.expiration_date &&
       !formData.card_details.expiration_date.includes(getYear)
     ) {
