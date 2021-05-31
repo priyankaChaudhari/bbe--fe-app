@@ -386,194 +386,96 @@ export default function ArticleDetails() {
   };
 
   return (
-    <GrayBody>
-      <div className="laptop-view ">
-        <div className="graycontainer-fluid ">
-          <div className="row">
-            <div className="col-lg-2 col-md-3 col-12  pt-2 pl-lg-0 pl-md-0  ">
-              <div className="small-title">
-                {' '}
-                <Link className="link" to={PATH_ARTICLE_LIST}>
-                  <div className="back-to-pervious mb-2 cursor">
-                    <img className="left-arrow" src={LeftArrowIcon} alt="" />{' '}
-                    Back to All Collections
-                  </div>
-                </Link>
-                {boardData.collection && boardData.collection.name}
-              </div>
-            </div>
-            <div className="col-lg-10 col-md-9 col-12 pt-3  ">
-              <ArticleSearch
-                setSelectedArticle={setSelectedArticle}
-                setActiveField={setActiveField}
-                setArticleData={setArticleData}
-                setScrollToTop={setScrollToTop}
-              />
+    <GrayBody className="container-fluid">
+      <div className="graycontainer-fluid ">
+        <div className="row">
+          <div className="col-lg-2 col-md-3 col-12  pt-2 pl-lg-0 pl-md-0  ">
+            <div className="small-title">
+              {' '}
+              <Link className="link" to={PATH_ARTICLE_LIST}>
+                <div className="back-to-pervious mb-2 cursor">
+                  <img className="left-arrow" src={LeftArrowIcon} alt="" /> Back
+                  to All Collections
+                </div>
+              </Link>
+              {boardData.collection && boardData.collection.name}
             </div>
           </div>
+          <div className="col-lg-10 col-md-9 col-12 pt-3  ">
+            <ArticleSearch
+              setSelectedArticle={setSelectedArticle}
+              setActiveField={setActiveField}
+              setArticleData={setArticleData}
+              setScrollToTop={setScrollToTop}
+            />
+          </div>
         </div>
-        <div className="straight-line horizontal-line" />
-        {isLoading.loader && isLoading.type === 'page' ? (
-          <PageLoader color="#FF5933" type="page" width={40} />
-        ) : (
-          <div className="graycontainer-fluid ">
-            <div className="row">
-              <div className="col-lg-5 col-12 pl-lg-0 pl-md-0 pr-0">
-                <ArticleDetail>
-                  {isDesktop ||
-                  (isTablet && !tabView) ||
-                  (isMobile && mobileView.board) ? (
-                    <div className="board" id="boardBox">
-                      <ul className="acc-management-list">
-                        <li>
-                          <div className="small-title">Boards</div>
-                        </li>
-                        {boardData.items &&
-                          boardData.items.map((field) => (
-                            <li
-                              className={
-                                field.id === activeField.board ? 'active' : ''
-                              }
-                              key={field.id}
-                              role="presentation"
-                              onClick={() => handleBoard(field)}>
-                              <div className="category">
-                                {field && field.title}
-                              </div>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    ''
-                  )}
-
-                  {isMobile && mobileView.section ? (
-                    <>
-                      <div className="row">
-                        <div className=" d-sm-block   col-12  pt-2  mb-3 ">
-                          <div className="small-title">
-                            {' '}
-                            <div
-                              className="back-to-pervious mb-2 cursor"
-                              role="presentation"
-                              onClick={() =>
-                                isMobile
-                                  ? setMobileView({
-                                      board: true,
-                                      section: false,
-                                      article: false,
-                                    })
-                                  : ''
-                              }>
-                              <img
-                                className="left-arrow"
-                                src={LeftArrowIcon}
-                                alt=""
-                              />{' '}
-                              Back to All Boards
+      </div>
+      <div className="straight-line horizontal-line" />
+      {isLoading.loader && isLoading.type === 'page' ? (
+        <PageLoader color="#FF5933" type="page" width={40} />
+      ) : (
+        <div className="graycontainer-fluid ">
+          <div className="row">
+            <div className="col-lg-5 col-12 pl-lg-0 pl-md-0 pr-0">
+              <ArticleDetail>
+                {isDesktop ||
+                (isTablet && !tabView) ||
+                (isMobile && mobileView.board) ? (
+                  <div className="board" id="boardBox">
+                    <ul className="acc-management-list">
+                      <li>
+                        <div className="small-title">Boards</div>
+                      </li>
+                      {boardData.items &&
+                        boardData.items.map((field) => (
+                          <li
+                            className={
+                              field.id === activeField.board ? 'active' : ''
+                            }
+                            key={field.id}
+                            role="presentation"
+                            onClick={() => handleBoard(field)}>
+                            <div className="category">
+                              {field && field.title}
                             </div>
-                            {selectedArticle &&
-                              selectedArticle.boards &&
-                              selectedArticle.boards[0] &&
-                              selectedArticle.boards[0].title}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="straight-line horizontal-line" />
-                    </>
-                  ) : (
-                    ''
-                  )}
-
-                  {isDesktop ||
-                  (isTablet && !tabView) ||
-                  (isMobile && mobileView.section) ? (
-                    <>
-                      {/* <div className="straight-line horizontal-line" /> */}
-                      <div className="articles" id="articleBox">
-                        <ul className="acc-management-list">
-                          <li>
-                            <div className="small-title">Articles</div>
                           </li>
-                          {articleData &&
-                            articleData.items &&
-                            articleData.items.map((field) => (
-                              <React.Fragment key={field.id}>
-                                {field.type === 'section' ? (
-                                  <>
-                                    <div className="label ml-2">
-                                      {field.title}
-                                    </div>
-                                    {field.items &&
-                                      field.items.map((sub) => (
-                                        <li
-                                          className={
-                                            sub.id === activeField.article
-                                              ? 'active'
-                                              : ''
-                                          }
-                                          key={sub.id}
-                                          role="presentation"
-                                          onClick={() => handleArticle(sub)}>
-                                          <div className="category">
-                                            {sub.preferredPhrase}
-                                          </div>
-                                        </li>
-                                      ))}
-                                  </>
-                                ) : (
-                                  <li
-                                    className={
-                                      field.id === activeField.article
-                                        ? 'active'
-                                        : ''
-                                    }
-                                    role="presentation"
-                                    onClick={() => handleArticle(field)}>
-                                    <div className="category">
-                                      {field.preferredPhrase}
-                                    </div>
-                                  </li>
-                                )}
-                              </React.Fragment>
-                            ))}
-                        </ul>
-                      </div>
-                    </>
-                  ) : (
-                    ''
-                  )}
-                </ArticleDetail>
-              </div>{' '}
-              <div className="col-lg-7 col-12">
-                {(isTablet && tabView) || (isMobile && mobileView.article) ? (
+                        ))}
+                    </ul>
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                {isMobile && mobileView.section ? (
                   <>
                     <div className="row">
-                      <div className="col-12  pt-2  mb-3 ">
+                      <div className=" d-sm-block   col-12  pt-2  mb-3 ">
                         <div className="small-title">
                           {' '}
                           <div
-                            className="back-to-pervious-page mb-2 cursor"
+                            className="back-to-pervious mb-2 cursor"
+                            role="presentation"
                             onClick={() =>
-                              isTablet
-                                ? setTabView(false)
-                                : isMobile
+                              isMobile
                                 ? setMobileView({
-                                    board: false,
-                                    section: true,
+                                    board: true,
+                                    section: false,
                                     article: false,
                                   })
                                 : ''
-                            }
-                            role="presentation">
+                            }>
                             <img
                               className="left-arrow"
                               src={LeftArrowIcon}
                               alt=""
                             />{' '}
-                            Back to All Articles
+                            Back to All Boards
                           </div>
+                          {selectedArticle &&
+                            selectedArticle.boards &&
+                            selectedArticle.boards[0] &&
+                            selectedArticle.boards[0].title}
                         </div>
                       </div>
                     </div>
@@ -583,155 +485,250 @@ export default function ArticleDetails() {
                   ''
                 )}
 
-                <div className="article-details-text" id="blogBox">
-                  {isDesktop ||
-                  (isTablet && tabView) ||
-                  (isMobile && mobileView.article) ? (
-                    <div className="row mt-lg-5 mt-4">
-                      <div className="col-md-6 ">
-                        <div
-                          className="edit-profile-text float-left"
-                          role="presentation">
-                          {selectedArticle &&
-                          selectedArticle.owner &&
-                          selectedArticle.owner.profilePicUrl ? (
-                            <img
-                              src={selectedArticle.owner.profilePicUrl}
-                              alt="logo"
-                            />
-                          ) : (
-                            <div className="avatarName mr-2">
-                              {getInitials()}
-                            </div>
-                          )}
-
-                          <div className="name-email">
-                            <div className="team-member-name">
-                              {selectedArticle &&
-                                selectedArticle.owner &&
-                                selectedArticle.owner.firstName}{' '}
-                              {selectedArticle &&
-                                selectedArticle.owner &&
-                                selectedArticle.owner.lastName}
-                            </div>
-                            Last Updated on{' '}
-                            {selectedArticle &&
-                              dayjs(selectedArticle.lastModified).format(
-                                'MMM DD, YYYY',
+                {isDesktop ||
+                (isTablet && !tabView) ||
+                (isMobile && mobileView.section) ? (
+                  <>
+                    {/* <div className="straight-line horizontal-line" /> */}
+                    <div className="articles" id="articleBox">
+                      <ul className="acc-management-list">
+                        <li>
+                          <div className="small-title">Articles</div>
+                        </li>
+                        {articleData &&
+                          articleData.items &&
+                          articleData.items.map((field) => (
+                            <React.Fragment key={field.id}>
+                              {field.type === 'section' ? (
+                                <>
+                                  <div className="label ml-2">
+                                    {field.title}
+                                  </div>
+                                  {field.items &&
+                                    field.items.map((sub) => (
+                                      <li
+                                        className={
+                                          sub.id === activeField.article
+                                            ? 'active'
+                                            : ''
+                                        }
+                                        key={sub.id}
+                                        role="presentation"
+                                        onClick={() => handleArticle(sub)}>
+                                        <div className="category">
+                                          {sub.preferredPhrase}
+                                        </div>
+                                      </li>
+                                    ))}
+                                </>
+                              ) : (
+                                <li
+                                  className={
+                                    field.id === activeField.article
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  role="presentation"
+                                  onClick={() => handleArticle(field)}>
+                                  <div className="category">
+                                    {field.preferredPhrase}
+                                  </div>
+                                </li>
                               )}
-                          </div>
+                            </React.Fragment>
+                          ))}
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  ''
+                )}
+              </ArticleDetail>
+            </div>{' '}
+            <div className="col-lg-7 col-12">
+              {(isTablet && tabView) || (isMobile && mobileView.article) ? (
+                <>
+                  <div className="row">
+                    <div className="col-12  pt-2  mb-3 ">
+                      <div className="small-title">
+                        {' '}
+                        <div
+                          className="back-to-pervious-page mb-2 cursor"
+                          onClick={() =>
+                            isTablet
+                              ? setTabView(false)
+                              : isMobile
+                              ? setMobileView({
+                                  board: false,
+                                  section: true,
+                                  article: false,
+                                })
+                              : ''
+                          }
+                          role="presentation">
+                          <img
+                            className="left-arrow"
+                            src={LeftArrowIcon}
+                            alt=""
+                          />{' '}
+                          Back to All Articles
                         </div>
                       </div>
-                      <div
-                        className="col-md-6 
-                    text-right">
-                        <Button
-                          onClick={() => {
-                            setShowModal(true);
-                            setShowContinueMsg(false);
-                          }}
-                          className=" btn-with-radius  ">
-                          {' '}
-                          Suggest an update
-                        </Button>
-                        <Modal
-                          isOpen={showModal}
-                          style={customStyles}
-                          ariaHideApp={false}
-                          contentLabel="Edit modal">
-                          <ModalBox>
-                            <img
-                              src={CloseIcon}
-                              alt="close"
-                              className="float-right cursor cross-icon"
-                              onClick={() => setShowModal(false)}
-                              role="presentation"
-                            />
-                            {!showContinueMsg ? (
-                              <div className="modal-body">
-                                <h4>Suggest an Update</h4>
-                                <p className="text-detail-modal">
-                                  See something that&apos;s not correct in this
-                                  article? Simply send us a note and we will
-                                  update the content.
-                                </p>
-
-                                <FormField className="mt-3">
-                                  <textarea
-                                    className="text-area"
-                                    rows="6"
-                                    placeholder="Please provide details of the suggested update."
-                                    name="description"
-                                    onChange={(event) =>
-                                      setFormData({
-                                        ...formData,
-                                        description: event.target.value,
-                                      })
-                                    }
-                                  />
-                                </FormField>
-                                <Button
-                                  className={
-                                    !formData.description
-                                      ? 'btn-primary mt-4 w-100 disabled'
-                                      : 'btn-primary mt-4 w-100'
-                                  }
-                                  onClick={() => saveArticle()}
-                                  disabled={!formData.description}>
-                                  {isLoading.loader &&
-                                  isLoading.type === 'button' ? (
-                                    <PageLoader color="#fff" type="button" />
-                                  ) : (
-                                    'Submit'
-                                  )}
-                                </Button>
-                              </div>
-                            ) : (
-                              <div className="modal-body">
-                                <h5 className="mt-4">Thanks for your help!</h5>
-                                <p className="text-detail-modal pt-0 pb-0">
-                                  One of our knowledge experts will now review
-                                  your submission. Thanks again for helping us
-                                  make our knowledge base great.
-                                </p>
-
-                                <Button
-                                  className="btn-primary mt-3 w-100"
-                                  onClick={() => setShowModal(false)}>
-                                  Continue
-                                </Button>
-                              </div>
-                            )}
-                          </ModalBox>
-                        </Modal>
-                      </div>
-
-                      <div
-                        className="col-12 remove-author"
-                        dangerouslySetInnerHTML={{
-                          __html: handleContent(),
-                        }}
-                      />
                     </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <BackToTop />
+                  </div>
+                  <div className="straight-line horizontal-line" />
+                </>
+              ) : (
+                ''
+              )}
+
+              <div className="article-details-text" id="blogBox">
+                {isDesktop ||
+                (isTablet && tabView) ||
+                (isMobile && mobileView.article) ? (
+                  <div className="row mt-lg-5 mt-4">
+                    <div className="col-md-6 ">
+                      <div
+                        className="edit-profile-text float-left"
+                        role="presentation">
+                        {selectedArticle &&
+                        selectedArticle.owner &&
+                        selectedArticle.owner.profilePicUrl ? (
+                          <img
+                            src={selectedArticle.owner.profilePicUrl}
+                            alt="logo"
+                          />
+                        ) : (
+                          <div className="avatarName mr-2">{getInitials()}</div>
+                        )}
+
+                        <div className="name-email">
+                          <div className="team-member-name">
+                            {selectedArticle &&
+                              selectedArticle.owner &&
+                              selectedArticle.owner.firstName}{' '}
+                            {selectedArticle &&
+                              selectedArticle.owner &&
+                              selectedArticle.owner.lastName}
+                          </div>
+                          Last Updated on{' '}
+                          {selectedArticle &&
+                            dayjs(selectedArticle.lastModified).format(
+                              'MMM DD, YYYY',
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="col-md-6 
+                    text-right">
+                      <Button
+                        onClick={() => {
+                          setShowModal(true);
+                          setShowContinueMsg(false);
+                        }}
+                        className=" btn-with-radius  ">
+                        {' '}
+                        Suggest an update
+                      </Button>
+                      <Modal
+                        isOpen={showModal}
+                        style={customStyles}
+                        ariaHideApp={false}
+                        contentLabel="Edit modal">
+                        <ModalBox>
+                          <img
+                            src={CloseIcon}
+                            alt="close"
+                            className="float-right cursor cross-icon"
+                            onClick={() => setShowModal(false)}
+                            role="presentation"
+                          />
+                          {!showContinueMsg ? (
+                            <div className="modal-body">
+                              <h4>Suggest an Update</h4>
+                              <p className="text-detail-modal">
+                                See something that&apos;s not correct in this
+                                article? Simply send us a note and we will
+                                update the content.
+                              </p>
+
+                              <FormField className="mt-3">
+                                <textarea
+                                  className="text-area"
+                                  rows="6"
+                                  placeholder="Please provide details of the suggested update."
+                                  name="description"
+                                  onChange={(event) =>
+                                    setFormData({
+                                      ...formData,
+                                      description: event.target.value,
+                                    })
+                                  }
+                                />
+                              </FormField>
+                              <Button
+                                className={
+                                  !formData.description
+                                    ? 'btn-primary mt-4 w-100 disabled'
+                                    : 'btn-primary mt-4 w-100'
+                                }
+                                onClick={() => saveArticle()}
+                                disabled={!formData.description}>
+                                {isLoading.loader &&
+                                isLoading.type === 'button' ? (
+                                  <PageLoader color="#fff" type="button" />
+                                ) : (
+                                  'Submit'
+                                )}
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="modal-body">
+                              <h5 className="mt-4">Thanks for your help!</h5>
+                              <p className="text-detail-modal pt-0 pb-0">
+                                One of our knowledge experts will now review
+                                your submission. Thanks again for helping us
+                                make our knowledge base great.
+                              </p>
+
+                              <Button
+                                className="btn-primary mt-3 w-100"
+                                onClick={() => setShowModal(false)}>
+                                Continue
+                              </Button>
+                            </div>
+                          )}
+                        </ModalBox>
+                      </Modal>
+                    </div>
+
+                    <div
+                      className="col-12 remove-author"
+                      dangerouslySetInnerHTML={{
+                        __html: handleContent(),
+                      }}
+                    />
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
+              <BackToTop />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </GrayBody>
   );
 }
 
 const GrayBody = styled.div`
+
   .graycontainer-fluid {
     // width: 98%;
     margin: 0 auto;
-    padding-left: 79px;
+    padding-left: 64px;
   }
     .drop-down-option {
       width: 100%;
@@ -865,7 +862,7 @@ const GrayBody = styled.div`
   }
   @media only screen and (min-width: 1700px) {
     .graycontainer-fluid {
-      width: 98%;
+      width: 100%;
       margin: 0 auto;
       padding-left: 60px;
     }
@@ -987,7 +984,13 @@ const ArticleDetail = styled.div`
 
     .articles {
       height 85vh;
+     
     }
+  }
+  @media only screen and (max-width: 991px) { 
+   .articles {
+      border-right: none;
+    }  
   }
    @media only screen and (max-width: 767px) {
     .board {

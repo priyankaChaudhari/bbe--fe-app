@@ -50,32 +50,36 @@ export default function ArticleList() {
           {isLoading.loader && isLoading.type === 'page' ? (
             <PageLoader color="#FF5933" type="page" width={40} />
           ) : (
-            <div className="row mt-5">
-              {data.map((item) => (
-                <React.Fragment key={item.id}>
-                  {(item.cards === 0 && item.boards === 0) ||
-                  item.name === 'Getting Started with Guru' ? (
-                    ''
-                  ) : (
-                    <div
-                      className="col-lg-3 col-md-4 col-sm-6 col-6  card-gap"
-                      key={item.id}>
+            <div className="main-container">
+              <div className="row mt-5">
+                {data.map((item) => (
+                  <React.Fragment key={item.id}>
+                    {(item.cards === 0 && item.boards === 0) ||
+                    item.name === 'Getting Started with Guru' ? (
+                      ''
+                    ) : (
                       <div
-                        className="article-card cursor"
-                        role="presentation"
-                        onClick={() =>
-                          history.push(
-                            `${PATH_ARTICLE_DETAILS.replace(':id', item.id)}`,
-                          )
-                        }>
-                        {getImages(item.name)}
-                        <h6 className="extra-bold">{item.name}</h6>
-                        <p className="d-none d-lg-block">{item.description}</p>
+                        className="col-lg-3 col-md-4 col-sm-6 col-6  card-gap"
+                        key={item.id}>
+                        <div
+                          className="article-card cursor"
+                          role="presentation"
+                          onClick={() =>
+                            history.push(
+                              `${PATH_ARTICLE_DETAILS.replace(':id', item.id)}`,
+                            )
+                          }>
+                          {getImages(item.name)}
+                          <h6 className="extra-bold">{item.name}</h6>
+                          <p className="d-none d-lg-block">
+                            {item.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           )}
         </div>

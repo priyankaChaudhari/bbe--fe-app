@@ -270,13 +270,13 @@ export const WhiteCard = styled.div`
           color: ${Theme.black};
           float:left;
           word-break: break-word;
-          max-width: 123px;
+          max-width: 115px;
        
           width:100%;
 
           &.mid-width {
-            max-width:170px;
-            width:100%;
+            max-width: 158px;
+            width: 100%;
 
              &.website {
                 margin-left: 20px;

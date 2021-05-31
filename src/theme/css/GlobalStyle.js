@@ -125,6 +125,11 @@ body {
     padding-left: 75px !important;
   }
 }
+.main-container {
+   width: 100% !important;
+   margin-right: -15px;
+  margin-left: -15px;
+}
 
 .on-boarding-container {
   width: 100% !important;
@@ -1595,6 +1600,10 @@ text.cust-label-avg {
 }
 .common-unauthorized-header-sticky {
   padding-top: 10px;
+}
+.scroll-x-axis {
+  margin-left: 15px;
+  margin-right: 15px;
 }
 .isDisabled {
   opacity: 0.6;

@@ -3,14 +3,14 @@ import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import queryString from 'query-string';
 
-import { BannerBg, ArrowIcons, NextLogo } from '../../theme/images/index';
+import { ArrowIcons, NextLogo } from '../../theme/images/index';
 import { Button, FormField, PageLoader, ErrorMsg } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { resetPassword } from '../../api/index';
 import { showResetPasswordMsg } from '../../store/actions/userState';
+import { FormContainer } from '../../theme/Global';
 
 export default function ResetPassword() {
   const history = useHistory();
@@ -173,51 +173,51 @@ export default function ResetPassword() {
   );
 }
 
-const FormContainer = styled.div`
-  height: 100%;
-  .banner-bg {
-    width: 100%;
-    height: 100%;
-    background-image: url(${BannerBg});
-    background-position: center;
-    background-size: cover;
-  }
+// const FormContainer = styled.div`
+//   height: 100%;
+//   .banner-bg {
+//     width: 100%;
+//     height: 100%;
+//     background-image: url(${BannerBg});
+//     background-position: center;
+//     background-size: cover;
+//   }
 
-  .inner-form {
-    max-width: 327px;
-    margin: 0 auto;
-    width: 100%;
-    vertical-align: middle;
+//   .inner-form {
+//     max-width: 327px;
+//     margin: 0 auto;
+//     width: 100%;
+//     vertical-align: middle;
 
-    .logo {
-      img {
-        width: 160px;
-        display: inline-table;
-        padding: 40px 0 100px 0;
-      }
-    }
-    .arrow-icon {
-      width: 13px;
-      margin-right: 5px;
-      vertical-align: top;
-      cursor: pointer;
-    }
-  }
+//     .logo {
+//       img {
+//         width: 160px;
+//         display: inline-table;
+//         padding: 40px 0 100px 0;
+//       }
+//     }
+//     .arrow-icon {
+//       width: 13px;
+//       margin-right: 5px;
+//       vertical-align: top;
+//       cursor: pointer;
+//     }
+//   }
 
-  @media only screen and (max-width: 991px) {
-    background-position: center;
-    background-size: cover;
-    background-image: url(${BannerBg});
-    background-repeat: no-repeat;
-    height: 100%;
+//   @media only screen and (max-width: 991px) {
+//     background-position: center;
+//     background-size: cover;
+//     background-image: url(${BannerBg});
+//     background-repeat: no-repeat;
+//     height: 100%;
 
-    .inner-form {
-      // background: rgb(15 15 17 / 0.9);
-      background: rgb(91 91 91 / 0.9);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-`;
+//     .inner-form {
+//       // background: rgb(15 15 17 / 0.9);
+//       background: rgb(91 91 91 / 0.9);
+//       height: 100%;
+//       top: 0;
+//       max-width: 100%;
+//       padding: 0 20px;
+//     }
+//   }
+// `;

@@ -293,14 +293,14 @@ export default function Dashboard() {
                 data.map((item) => (
                   <div
                     key={item.id}
-                    className="col-lg-3 mb-4 col-md-6 col-sm-12 cursor"
+                    className="col-lg-3 mb-4 col-md-6 col-sm-12 "
                     onClick={() =>
                       history.push(
                         PATH_CUSTOMER_DETAILS.replace(':id', item.id),
                       )
                     }
                     role="presentation">
-                    <WhiteCard>
+                    <WhiteCard className="cursor">
                       <img
                         className="company-logo"
                         src={
@@ -319,7 +319,9 @@ export default function Dashboard() {
                         title={item && item.company_name}>
                         {item && item.company_name}
                       </div>
-                      <div className="status">
+                      <div
+                        className="status"
+                        title={item && item.category && item.category.label}>
                         {item && item.category && item.category.label}
                       </div>
                       <div className="straight-line horizontal-line spacing " />
@@ -767,6 +769,11 @@ const DashboardCard = styled.div`
     .status {
       color: ${Theme.gray85};
       font-size: ${Theme.extraNormal};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 270px;
+      min-height: 15px;
     }
 
     .solid-icon {

@@ -238,6 +238,27 @@ export const FormContainer = styled.div`
       top: 0;
       max-width: 100%;
       padding: 0 20px;
+
+      .sub-text {
+        color: ${Theme.white};
+      }
+
+      h2 {
+        font-size: ${Theme.MediumTitleFontSize};
+        color: ${Theme.white};
+      }
+      .back-link {
+        font-weight: 500;
+        color: ${Theme.white};
+        .arrow-back {
+          vertical-align: middle;
+          width: 15px;
+          margin-right: 8px;
+        }
+      }
+      .forgot-pswd-link {
+        color: ${Theme.white};
+      }
     }
   }
 `;

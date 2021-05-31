@@ -1671,16 +1671,16 @@ const AddPerformance = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 1105px) {
+  @media only screen and (max-width: 1155px) {
     .ad-performance-nav {
       li {
         
         &.ad-performance {
-          max-width: 195px;
+          max-width: 192px;
           width: 100%;
         }
         &.day-performance {
-          max-width: 230px;
+          max-width: 227px;
           width: 100%;
         }
       }
