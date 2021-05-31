@@ -571,12 +571,8 @@ export default function CustomerListTablet({
               <div className="label">Ad Manager</div>
               <div className="label-info">
                 {' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.first_name}{' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.last_name}
+                {item && item.ad_manager && item.ad_manager.first_name}{' '}
+                {item && item.ad_manager && item.ad_manager.last_name}
               </div>
             </div>
           </div>
