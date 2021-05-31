@@ -27,33 +27,39 @@ export default function Info() {
   const [reassignedUser, setReassignedUser] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem(
-      'email',
-      history.location.search.split('email=')[1].split('&')[0] ||
-        (params && params.email),
-    );
-    verifyStepUser(localStorage.getItem('email'), params.id).then(
-      (response) => {
-        if (
-          (response && response.status === 403) ||
-          (response && response.status === 401)
-        ) {
-          setIsLoading({ loader: false, type: 'page' });
-          setAlreadyUser(true);
-        }
-        if (response && response.status === 200) {
-          setIsLoading({ loader: false, type: 'page' });
-          if (response && response.data) {
-            setReassignedData(response.data);
-            setReassignedUser(true);
-          } else {
-            setAlreadyUser(false);
-            setReassignedUser(false);
+    if (params && params.alreadyAssigned) {
+      setReassignedUser(true);
+      setAlreadyUser(false);
+      setIsLoading({ loader: false, type: 'page' });
+    } else {
+      localStorage.setItem(
+        'email',
+        history.location.search.split('email=')[1].split('&')[0] ||
+          (params && params.email),
+      );
+      verifyStepUser(localStorage.getItem('email'), params.id).then(
+        (response) => {
+          if (
+            (response && response.status === 403) ||
+            (response && response.status === 401)
+          ) {
+            setIsLoading({ loader: false, type: 'page' });
+            setAlreadyUser(true);
           }
-        }
-        setIsLoading({ loader: false, type: 'page' });
-      },
-    );
+          if (response && response.status === 200) {
+            setIsLoading({ loader: false, type: 'page' });
+            if (response && response.data) {
+              setReassignedData(response.data);
+              setReassignedUser(true);
+            } else {
+              setAlreadyUser(false);
+              setReassignedUser(false);
+            }
+          }
+          setIsLoading({ loader: false, type: 'page' });
+        },
+      );
+    }
   }, [params.email, params.id]);
 
   const redirect = (type) => {
@@ -171,7 +177,15 @@ export default function Info() {
                   <p className="invitation-text text-center   pb-2 ">
                     {alreadyUser
                       ? 'This invitation link has expired because your account has already been created. Click on one of the below options to proceed.'
-                      : `You have delegated your customer setup to ${reassignedData.first_name} ${reassignedData.last_name} at ${reassignedData.email}. They are now the ones responsible for completing your account setup.`}
+                      : `You have delegated your customer setup to ${
+                          reassignedData.first_name ||
+                          (params && params.first_name)
+                        } ${
+                          reassignedData.last_name ||
+                          (params && params.last_name)
+                        } at ${
+                          reassignedData.email || (params && params.email)
+                        }. They are now the ones responsible for completing your account setup.`}
                     <br />
                   </p>
                   <p className="reach-out text-center  mt-2">

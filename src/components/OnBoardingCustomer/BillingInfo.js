@@ -304,12 +304,7 @@ export default function BillingInfo({
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
     if (item === 'expiration_date') {
-      const getDate =
-        data.card_details &&
-        data.card_details[0] &&
-        data.card_details[0][item].split('-');
-      getDate[0].substring(2);
-      return getDate[0].substring(2) + getDate[1];
+      return '****';
     }
 
     return '';

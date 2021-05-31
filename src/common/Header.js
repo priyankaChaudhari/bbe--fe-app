@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import Modal from 'react-modal';
@@ -32,7 +32,7 @@ import {
   Speedometer,
 } from '../theme/images/index';
 
-import { logout, userMe, showProfileLoader } from '../store/actions/userState';
+import { logout, showProfileLoader } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
@@ -42,10 +42,9 @@ import {
   PATH_CUSTOMER_LIST,
 } from '../constants';
 
-export default function Header({ type }) {
+export default function Header({ type, userInfo }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.userState.userInfo);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [showModal, setShowModal] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
@@ -78,12 +77,6 @@ export default function Header({ type }) {
       transform: 'translate(-50%, -50%)',
     },
   };
-
-  useEffect(() => {
-    if (!history.location.pathname.includes('assigned')) {
-      dispatch(userMe(history));
-    }
-  }, [dispatch, history.location.pathname]);
 
   const getInitials = () => {
     const firstName =
@@ -557,6 +550,12 @@ Header.defaultProps = {
 
 Header.propTypes = {
   type: PropTypes.string,
+  userInfo: PropTypes.shape({
+    role: PropTypes.string,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    documents: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
 };
 
 const MainHeader = styled.div`

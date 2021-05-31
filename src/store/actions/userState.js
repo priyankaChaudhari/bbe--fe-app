@@ -24,6 +24,7 @@ import {
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
   PATH_ADM_DASHBOARD,
+  PATH_ACCOUNT_SETUP_CHOOSE,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -78,6 +79,26 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
       history.push(params.callback);
     }
   } else {
+    if (
+      data.user.role === 'Customer' &&
+      data.user.customer &&
+      data.user.customer.length === 0
+    ) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('customer');
+      localStorage.removeItem('match');
+      localStorage.removeItem('filters');
+      localStorage.removeItem('role');
+      localStorage.removeItem('step');
+      history.push({
+        pathname: PATH_ACCOUNT_SETUP_CHOOSE,
+        search: `alreadyAssigned=true&first_name=${
+          data.user && data.user.re_assigned_user_details.first_name
+        }&last_name=${
+          data.user && data.user.re_assigned_user_details.last_name
+        }&email=${data.user.re_assigned_user_details.email}`,
+      });
+    }
     let id = '';
     if (
       data &&

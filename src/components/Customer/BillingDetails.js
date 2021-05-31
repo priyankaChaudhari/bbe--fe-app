@@ -66,12 +66,7 @@ export default function BillingDetails({ id, userInfo }) {
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
-      const getDate =
-        data.card_details &&
-        data.card_details[0] &&
-        data.card_details[0][key].split('-');
-      getDate[0].substring(2);
-      return `${getDate[0].substring(2)}/${getDate[1]}`;
+      return '**/**';
     }
     if (data && data[type] && data[type][0]) {
       return data[type][0][key];

@@ -339,7 +339,7 @@ export default function MainContainer() {
           {assignedToSomeone ? (
             <UnauthorizedHeader />
           ) : (
-            <Header type="onboarding" />
+            <Header type="onboarding" userInfo={userInfo} />
           )}
           {assignedToSomeone ? (
             ''
