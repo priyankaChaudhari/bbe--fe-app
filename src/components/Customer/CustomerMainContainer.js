@@ -380,6 +380,16 @@ export default function CustomerMainContainer() {
         </>
       );
     }
+    if (item.history_change_reason.includes('updated addendum')) {
+      activityMessage = item.history_change_reason.split('updated addendum');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>updated </span>
+          addendum
+        </>
+      );
+    }
     if (item && item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
       logUser = activityMessage[0];

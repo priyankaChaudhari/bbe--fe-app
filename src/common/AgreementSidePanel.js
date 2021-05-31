@@ -231,7 +231,19 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.history_change_reason.includes('updated')) {
+
+    if (item.history_change_reason.includes('updated addendum')) {
+      activityMessage = item.history_change_reason.split('updated addendum');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>updated </span>
+          addendum
+        </>
+      );
+    }
+
+    if (item && item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
       logUser = activityMessage[0];
       field = activityMessage[1].split('from')[0];
@@ -301,12 +313,12 @@ export default function AgreementSidePanel({
       }
 
       return activityMessage && activityMessage[1].includes('addendum')
-        ? item.history_change_reason
+        ? item && item.history_change_reason
         : mixedLog
         ? displayMixedLog(logUser, activityMessage)
         : displayLog(logUser, field, oldValue, newValue);
     }
-    if (item.history_change_reason.includes('requested for')) {
+    if (item && item.history_change_reason.includes('requested for')) {
       activityMessage = item.history_change_reason.split('requested for');
       return (
         <>
@@ -316,7 +328,7 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.history_change_reason.includes('added')) {
+    if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
       return (
         <>
@@ -326,7 +338,7 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.history_change_reason.includes('removed')) {
+    if (item && item.history_change_reason.includes('removed')) {
       activityMessage = item.history_change_reason.split('removed');
       return (
         <>
