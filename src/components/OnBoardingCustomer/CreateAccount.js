@@ -168,8 +168,8 @@ export default function CreateAccount() {
               Please set your password to create your account.
             </h3>
             <p className="info-text-gray m-0 ">
-              If you’d like someone else to administrate the Buy Box Experts
-              account then you can reassign the setup process to them.
+              If you’d like someone else to manage the Buy Box Experts account
+              then you can reassign the setup process to them.
               <br />
               {params && params.multiple_customers === 'True' ? (
                 <div className="already-user-msg mt-2">

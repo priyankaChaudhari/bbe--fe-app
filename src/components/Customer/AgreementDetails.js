@@ -205,7 +205,13 @@ export default function AgreementDetails({ agreements, id }) {
                                 agreement[item.key].label || agreement[item.key]
                               }
                               thousandSeparator
-                              prefix={item.key === 'rev_share' ? '' : '$'}
+                              prefix={
+                                item.key === 'rev_share' ||
+                                item.key === 'content_optimization' ||
+                                item.key === 'design_optimization'
+                                  ? ''
+                                  : '$'
+                              }
                               suffix={item.key === 'rev_share' ? '%' : ''}
                             />
                           ) : (

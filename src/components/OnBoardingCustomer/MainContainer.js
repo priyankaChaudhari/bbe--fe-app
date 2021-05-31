@@ -370,6 +370,7 @@ export default function MainContainer() {
                         {verifiedStepData && verifiedStepData.user_email}{' '}
                       </span>
                       <span
+                        style={{ color: 'black' }}
                         dangerouslySetInnerHTML={{
                           __html: getInformation(item),
                         }}

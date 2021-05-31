@@ -230,7 +230,10 @@ export default function BillingInfo({
 
     if (formData && formData.billing_contact.phone_number === '')
       delete formData.billing_contact.phone_number;
-    if (data && data.id) delete formData.card_details;
+    if (data && data.id) {
+      delete formData.card_details;
+      delete formData.billing_contact.email;
+    }
     let details = {};
 
     details = {
@@ -300,7 +303,15 @@ export default function BillingInfo({
       return `************${
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
-    if (item === 'expiration_date') return '****';
+    if (item === 'expiration_date') {
+      const getDate =
+        data.card_details &&
+        data.card_details[0] &&
+        data.card_details[0][item].split('-');
+      getDate[0].substring(2);
+      return getDate[0].substring(2) + getDate[1];
+    }
+
     return '';
   };
 
@@ -376,7 +387,9 @@ export default function BillingInfo({
         }
         onChange={(event) => handleChange(event, item, type)}
         readOnly={
-          (type === 'card_details' || type === 'billing_address') &&
+          (type === 'card_details' ||
+            type === 'billing_address' ||
+            item.key === 'email') &&
           data &&
           data.id
         }
@@ -446,7 +459,6 @@ export default function BillingInfo({
               ))}
           </div>
         </div>
-        <ErrorMsg>{apiError && apiError[0]}</ErrorMsg>
       </div>
     ));
   };
@@ -492,7 +504,12 @@ export default function BillingInfo({
           <div className="row">
             {BillingAddress.filter((op) => op.section === 'contact').map(
               (item) => (
-                <div className={item.property} key={item.key}>
+                <div
+                  className={item.property}
+                  key={item.key}
+                  style={{
+                    opacity: data && data.id && item.key === 'email' ? 0.5 : '',
+                  }}>
                   <ContractFormField className="mt-3">
                     <label htmlFor={item.label}>
                       {item.label}
@@ -573,17 +590,21 @@ export default function BillingInfo({
           </p> */}
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
-          <img
-            className=" mt-2 pt-1"
-            width="16px"
-            src={SecurityLock}
-            alt="lock"
-          />
-          <p className="info-text-gray security">
-            {' '}
-            We have partnered with Authorize.Net (link), to capture your credit
-            card payment information safely and securely.
-          </p>
+          <div>
+            <img
+              className=" mt-2 pt-1"
+              width="16px"
+              src={SecurityLock}
+              alt="lock"
+            />
+            <p className="info-text-gray security mb-0">
+              {' '}
+              We have partnered with Authorize.Net (link), to capture your
+              credit card payment information safely and securely.
+            </p>
+          </div>
+          <div className="clear-fix" />
+          <ErrorMsg>{apiError && apiError[0]}</ErrorMsg>
         </fieldset>
         {generateBillingAddressHTML()}
 

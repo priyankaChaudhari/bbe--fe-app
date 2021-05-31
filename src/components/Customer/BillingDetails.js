@@ -65,6 +65,14 @@ export default function BillingDetails({ id, userInfo }) {
   }, [id]);
 
   const mapDefaultValues = (type, key) => {
+    if (key === 'expiration_date') {
+      const getDate =
+        data.card_details &&
+        data.card_details[0] &&
+        data.card_details[0][key].split('-');
+      getDate[0].substring(2);
+      return `${getDate[0].substring(2)}/${getDate[1]}`;
+    }
     if (data && data[type] && data[type][0]) {
       return data[type][0][key];
     }
@@ -112,6 +120,7 @@ export default function BillingDetails({ id, userInfo }) {
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
+        readOnly={item.key === 'email'}
       />
     );
   };
@@ -121,7 +130,10 @@ export default function BillingDetails({ id, userInfo }) {
       <div className="row">
         {BillingAddress.filter((op) => op.section === 'contact').map((item) => {
           return (
-            <div className="col-md-6" key={item.key}>
+            <div
+              className="col-md-6"
+              key={item.key}
+              style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
               <ContractFormField className="mt-3">
                 <label htmlFor={item.label}>
                   {item.label}
@@ -151,6 +163,7 @@ export default function BillingDetails({ id, userInfo }) {
     setIsLoading({ loader: true, type: 'button' });
     if (formData && formData.billing_contact.phone_number === '')
       delete formData.billing_contact.phone_number;
+    delete formData.billing_contact.email;
 
     const details = {
       ...formData,
@@ -218,7 +231,9 @@ export default function BillingDetails({ id, userInfo }) {
                   </div>
                   <div className="col-3 pr-0">
                     <div className="label mt-3">Exp. Date</div>
-                    <div className="label-info">**/**</div>
+                    <div className="label-info">
+                      {mapDefaultValues('card_details', 'expiration_date')}
+                    </div>
                   </div>
                   <div className="col-3">
                     <div className="label mt-3">CSV</div>
@@ -318,6 +333,9 @@ export default function BillingDetails({ id, userInfo }) {
                   </div>
                   <div className="user-email-address">
                     {mapDefaultValues('billing_contact', 'email')}
+                  </div>
+                  <div className="user-email-address">
+                    {mapDefaultValues('billing_contact', 'phone_number')}
                   </div>
                   <div className="clear-fix" />
                 </GroupUser>
