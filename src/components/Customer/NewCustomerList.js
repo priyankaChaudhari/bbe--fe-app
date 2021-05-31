@@ -82,6 +82,7 @@ export default function NewCustomerList() {
       status: [],
       contract_status: [],
       user: [],
+      ad_user: [],
       contract_type: [],
     },
   );
@@ -334,6 +335,7 @@ export default function NewCustomerList() {
         contract_status: [],
         contract_type: [],
         user: [],
+        ad_user: [],
         // sort_by: '',
         // searchQuery: '',
         // showPerformance: false
@@ -424,12 +426,14 @@ export default function NewCustomerList() {
         setFilters({
           ...filters,
           user: [],
+          ad_user: [],
         });
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             user: [],
+            ad_user: [],
           }),
         );
       }
@@ -437,32 +441,51 @@ export default function NewCustomerList() {
         const list = filters.user.filter(
           (op) => op !== action.removedValue.value,
         );
+
+        const adList = filters.ad_user.filter(
+          (op) => op !== action.removedValue.value,
+        );
         setFilters({
           ...filters,
           user: list,
+          ad_user: adList,
         });
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             user: list,
+            ad_user: adList,
           }),
         );
       }
       if (event && event.length && action.action === 'select-option') {
         const list = [...filters.user];
-        for (const bgs of event) {
-          if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
+        const adList = [...filters.ad_user];
+
+        if (!showAdPerformance) {
+          for (const bgs of event) {
+            if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
+          }
         }
+
+        if (showAdPerformance) {
+          for (const adm of event) {
+            if (adList.indexOf(adm.value) === -1) adList.push(adm.value);
+          }
+        }
+
         setFilters({
           ...filters,
           user: list,
+          ad_user: adList,
         });
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             user: list,
+            ad_user: adList,
           }),
         );
       }
@@ -511,14 +534,14 @@ export default function NewCustomerList() {
             showAdPerformance: false,
           }),
         );
-        customerList(
-          pageNumber,
-          selectedValue,
-          filters,
-          searchQuery,
-          true,
-          false,
-        );
+        // customerList(
+        //   pageNumber,
+        //   selectedValue,
+        //   filters,
+        //   searchQuery,
+        //   true,
+        //   false,
+        // );
       } else if (event.value === 'ad_performance') {
         setShowPerformance(false);
         setShowAdPerformance(true);
@@ -530,14 +553,14 @@ export default function NewCustomerList() {
             showAdPerformance: true,
           }),
         );
-        customerList(
-          pageNumber,
-          selectedValue,
-          filters,
-          searchQuery,
-          false,
-          true,
-        );
+        // customerList(
+        //   pageNumber,
+        //   selectedValue,
+        //   filters,
+        //   searchQuery,
+        //   false,
+        //   true,
+        // );
       } else {
         setShowPerformance(false);
         setShowAdPerformance(false);
@@ -789,6 +812,31 @@ export default function NewCustomerList() {
     );
   };
 
+  const bindValue = (item) => {
+    if (item === 'user') {
+      if (filters.user && !showAdPerformance) {
+        return brandGrowthStrategist.filter((option) =>
+          filters.user.some((op) => op === option.value),
+        );
+      }
+      if (filters.ad_user && showAdPerformance) {
+        return brandGrowthStrategist.filter((option) =>
+          filters.ad_user.some((op) => op === option.value),
+        );
+      }
+    } else if (item === 'sort') {
+      return (
+        selectedValue[item.key] ||
+        sortOptions.filter((op) => op.value === filters.sort_by)
+      );
+    } else if (showPerformance) {
+      return [{ value: 'performance', label: 'Sales Performance' }];
+    } else if (showAdPerformance) {
+      return [{ value: 'ad_performance', label: 'Ad Performance' }];
+    }
+    return [{ value: 'contract_details', label: 'Contract Details' }];
+  };
+
   const generateDropdown = (item, reff = null) => {
     return (
       <>
@@ -810,25 +858,26 @@ export default function NewCustomerList() {
               ? handleFilters(event, item, 'brand', action)
               : handleSearch(event, item === 'sort' ? 'sort' : 'view')
           }
-          value={
-            item === 'user'
-              ? filters.user
-                ? brandGrowthStrategist.filter((option) =>
-                    filters.user.some((op) => op === option.value),
-                  )
-                : ''
-              : item === 'sort'
-              ? selectedValue[item.key] ||
-                sortOptions.filter((op) => op.value === filters.sort_by)
-              : showPerformance
-              ? [{ value: 'performance', label: 'Sales Performance' }]
-              : showAdPerformance
-              ? [{ value: 'ad_performance', label: 'Ad Performance' }]
-              : [{ value: 'contract_details', label: 'Contract Details' }]
-            // : selectedValue[item.key] === null
-            // ? null
-            // : selectedValue[item.key] || sortOptions.filter(item => item.value === filters.sort_by)
-          }
+          value={bindValue(item)}
+          // value={
+          //   item === 'user'
+          //     ? filters.user
+          //       ? brandGrowthStrategist.filter((option) =>
+          //           filters.user.some((op) => op === option.value),
+          //         )
+          //       : ''
+          //     : item === 'sort'
+          //     ? selectedValue[item.key] ||
+          //       sortOptions.filter((op) => op.value === filters.sort_by)
+          //     : showPerformance
+          //     ? [{ value: 'performance', label: 'Sales Performance' }]
+          //     : showAdPerformance
+          //     ? [{ value: 'ad_performance', label: 'Ad Performance' }]
+          //     : [{ value: 'contract_details', label: 'Contract Details' }]
+          //   // : selectedValue[item.key] === null
+          //   // ? null
+          //   // : selectedValue[item.key] || sortOptions.filter(item => item.value === filters.sort_by)
+          // }
           isMulti={item === 'user'}
           components={getSelectComponents(item)}
           componentsValue={item === 'user' ? { Option: IconOption } : ''}

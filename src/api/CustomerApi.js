@@ -97,8 +97,22 @@ export async function getCustomerList(
     });
   }
   let bgsParams = {};
-  if (filterOptions && filterOptions.user && filterOptions.user.length) {
+  if (
+    filterOptions &&
+    filterOptions.user &&
+    filterOptions.user.length &&
+    !adPerformance
+  ) {
     bgsParams = queryString.stringify({ user: filterOptions.user });
+  }
+
+  if (
+    filterOptions &&
+    filterOptions.ad_user &&
+    filterOptions.ad_user.length &&
+    adPerformance
+  ) {
+    bgsParams = queryString.stringify({ user: filterOptions.ad_user });
   }
 
   let contract = {};
