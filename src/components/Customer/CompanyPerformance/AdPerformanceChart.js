@@ -45,6 +45,8 @@ export default function AdPerformanceChart({
 
     let firstAxis = null;
     let secondAxis = null;
+    const tooltipDate =
+      '<div style="color: white; font-size: 16px;">{date}</div>';
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
@@ -224,7 +226,7 @@ export default function AdPerformanceChart({
       series.dataFields.dateX = 'date';
       series.strokeWidth = 2;
       series.stroke = am4core.color('#BFC5D2');
-      series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
+      series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
       series.fill = am4core.color('#2e384d');
 
       series.propertyFields.strokeDasharray = dashLine;
@@ -247,7 +249,7 @@ export default function AdPerformanceChart({
       series2.dataFields.dateX = 'date';
       series2.name = currentValue;
       series2.strokeWidth = 2;
-      series2.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
+      series2.tooltipHTML = `${tooltipDate}${tooltipCurrent} ${tooltipPrevious}`;
       series2.stroke = am4core.color('#FF5933');
       series2.fill = am4core.color('#2e384d');
 
@@ -482,7 +484,7 @@ export default function AdPerformanceChart({
         series.name = seriesName;
         series.strokeWidth = 2;
         // series.tooltipText = tooltipValue;
-        series.tooltipHTML = tooltipValue;
+        series.tooltipHTML = `${tooltipDate}${tooltipValue}`;
         series.stroke = am4core.color(colorSet[item]);
         series.fill = am4core.color('#2e384d');
 

@@ -74,6 +74,9 @@ export default function DSPPerformanceChart({
 
     let tooltipCurrent = ``;
     let tooltipPrevious = ``;
+    const tooltipDate =
+      '<div style="color: white; font-size: 16px;">{date}</div>';
+
     tooltipCurrent = renderTooltip(
       'Recent',
       '#2e384d',
@@ -96,7 +99,7 @@ export default function DSPPerformanceChart({
     series.strokeWidth = 2;
     series.stroke = am4core.color('#BFC5D2');
     // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
-    series.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
+    series.tooltipHTML = `${tooltipDate}${tooltipCurrent} ${tooltipPrevious}`;
     series.fill = am4core.color('#2e384d');
     series.propertyFields.strokeDasharray = 'DspdashLength';
 
@@ -113,7 +116,7 @@ export default function DSPPerformanceChart({
     series2.name = 'Recent';
     series2.strokeWidth = 2;
     // series2.minBulletDistance = 10;
-    series2.tooltipHTML = `${tooltipCurrent} ${tooltipPrevious}`;
+    series2.tooltipHTML = `${tooltipDate}${tooltipCurrent} ${tooltipPrevious}`;
 
     series2.stroke = am4core.color('#2e384d');
     series2.fill = am4core.color('#2e384d');

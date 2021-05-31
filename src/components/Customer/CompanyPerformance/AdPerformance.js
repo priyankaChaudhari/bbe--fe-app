@@ -202,7 +202,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             item.ctr === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
-          // generate separate key for current data
+          // generate separate key for current data and defien previou value null and previous label 0
           tempData.push({
             adSalesCurrent: item.ad_sales,
             adSpendCurrent: item.ad_spend,
@@ -319,15 +319,17 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           }
         } else {
           // if current data count is larger than previous count then
-          // generate separate key for current data
+          // generate separate key for current data and defien previou value null and previous label 0
           tempData.push({
             DspCurrent: item.daily_dsp_spend_report,
             date: currentReportDate,
+            DspPrevious: null,
 
             DspCurrentLabel:
               item.daily_dsp_spend_report !== null
                 ? item.daily_dsp_spend_report
                 : '0.00',
+            DspPreviousLabel: '0.00',
           });
         }
       });
