@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import axiosInstance from '../axios';
 import {
   API_ACTIVITY_LOG,
-  API_CUSTOMER_ACTIVITY_LOG,
   API_AMAZON_DETAILS,
   API_CONTACT,
   API_CREDENTIALS,
@@ -305,10 +304,12 @@ export async function getActivityLog(pageNumber, id) {
 export async function getCustomerActivityLog(pageNumber, id) {
   const params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
+    model: 'customer',
+    id,
   };
   if (id !== undefined) {
     const result = await axiosInstance
-      .get(API_CUSTOMER + id + API_CUSTOMER_ACTIVITY_LOG, { params })
+      .get(API_ACTIVITY_LOG, { params })
       .then((response) => {
         return response;
       })

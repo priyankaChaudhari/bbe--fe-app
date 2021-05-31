@@ -14,7 +14,7 @@ import {
   API_ADDITIONAL_SERVICE_BULK_UPDATE,
   API_SEND_REMINDER,
   API_SIGNATURE_STATUS,
-  API_CONTRACT_ACTIVITY_LOG,
+  API_ACTIVITY_LOG,
   API_CUSTOMER_CONTRACT,
 } from '../constants/ApiConstants';
 
@@ -284,10 +284,12 @@ export async function checksignatureStatus(data) {
 export async function getContractActivityLog(pageNumber, id) {
   const params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
+    model: 'contract',
+    id,
   };
   if (id !== undefined) {
     const result = await axiosInstance
-      .get(API_CUSTOMER_CONTRACT + id + API_CONTRACT_ACTIVITY_LOG, { params })
+      .get(API_ACTIVITY_LOG, { params })
       .then((response) => {
         return response;
       })

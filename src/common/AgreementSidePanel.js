@@ -158,9 +158,56 @@ export default function AgreementSidePanel({
     return firstName + lastName;
   };
 
+  const displayMixedLog = (logUser, msg) => {
+    return msg.map((item, index) => {
+      const field = item.split('from')[0];
+      let oldValue = item.split('from')[1].split(' to ')[0];
+      let newValue = item.split('from')[1].split(' to ')[1].split(', ,')[0];
+
+      if (
+        item.includes('annual revenue') ||
+        item.includes('number of employees') ||
+        item.includes('monthly retainer') ||
+        item.includes('sales threshold') ||
+        item.includes('fee') ||
+        item.includes('discount amount')
+        //  ||
+        // item.includes('custom amazon store price')
+      ) {
+        oldValue = oldValue.replace('.00', '');
+        newValue = newValue.replace('.00', '');
+        oldValue = oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        newValue = newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+      return (
+        <>
+          {index === 0 ? logUser : ''}
+          <span>updated {field || ''} from </span> {oldValue || ''}
+          <span> to </span> {newValue === '' ? 'None' : newValue}
+        </>
+      );
+    });
+  };
+
+  const displayLog = (logUser, field, oldValue, newValue) => {
+    return (
+      <>
+        {logUser || ''}
+        <span>updated {field || ''} from </span> {oldValue || ''}
+        <span> to </span> {newValue === '' ? 'None' : newValue}
+      </>
+    );
+  };
+
   const activityDetail = (item) => {
     let activityMessage = '';
+    let logUser;
+    let field;
+    let oldValue;
+    let newValue = '';
+    let mixedLog = false;
     if (
+      item &&
       item.history_change_reason.includes('created new record by company name')
     ) {
       activityMessage = item.history_change_reason.split(
@@ -186,15 +233,29 @@ export default function AgreementSidePanel({
     }
     if (item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
+      logUser = activityMessage[0];
+      field = activityMessage[1].split('from')[0];
+      oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
+      newValue = activityMessage[1]
+        .split('from')[1]
+        .split(' to ')[1]
+        .split(', ,')[0];
+
+      if (activityMessage.length > 2) {
+        mixedLog = true;
+        activityMessage.shift();
+      }
       if (
-        (item && item.history_change_reason.includes('annual revenue')) ||
-        (item && item.history_change_reason.includes('number of employees')) ||
-        (item && item.history_change_reason.includes('monthly retainer')) ||
-        (item && item.history_change_reason.includes('sales threshold')) ||
-        (item && item.history_change_reason.includes('fee')) ||
-        (item && item.history_change_reason.includes('discount amount')) ||
-        (item &&
-          item.history_change_reason.includes('custom amazon store price'))
+        !mixedLog &&
+        ((item && item.history_change_reason.includes('annual revenue')) ||
+          (item &&
+            item.history_change_reason.includes('number of employees')) ||
+          (item && item.history_change_reason.includes('monthly retainer')) ||
+          (item && item.history_change_reason.includes('sales threshold')) ||
+          (item && item.history_change_reason.includes('fee')) ||
+          (item && item.history_change_reason.includes('discount amount')) ||
+          (item &&
+            item.history_change_reason.includes('custom amazon store price')))
       ) {
         let fromAmount = '';
         let toAmount = '';
@@ -239,35 +300,11 @@ export default function AgreementSidePanel({
         );
       }
 
-      return activityMessage && activityMessage[1].includes('addendum') ? (
-        item.history_change_reason
-      ) : (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>
-            updated{' '}
-            {activityMessage &&
-              activityMessage[1] &&
-              activityMessage[1].split(' from ')[0]}{' '}
-            from{' '}
-          </span>{' '}
-          {activityMessage &&
-          activityMessage[1] &&
-          activityMessage[1].split(' from ')[1].split(' to ')[0] === ''
-            ? 'None'
-            : activityMessage &&
-              activityMessage[1] &&
-              activityMessage[1].split(' from ')[1].split(' to ')[0]}
-          <span> to </span>{' '}
-          {activityMessage &&
-          activityMessage[1] &&
-          activityMessage[1].split(' from ')[1].split(' to ')[1] === ''
-            ? 'None'
-            : activityMessage &&
-              activityMessage[1] &&
-              activityMessage[1].split(' from ')[1].split(' to ')[1]}
-        </>
-      );
+      return activityMessage && activityMessage[1].includes('addendum')
+        ? item.history_change_reason
+        : mixedLog
+        ? displayMixedLog(logUser, activityMessage)
+        : displayLog(logUser, field, oldValue, newValue);
     }
     if (item.history_change_reason.includes('requested for')) {
       activityMessage = item.history_change_reason.split('requested for');
@@ -275,6 +312,16 @@ export default function AgreementSidePanel({
         <>
           {activityMessage && activityMessage[0]}
           <span>requested for</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    if (item.history_change_reason.includes('added')) {
+      activityMessage = item.history_change_reason.split('added');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>added</span>
           {activityMessage && activityMessage[1]}
         </>
       );
