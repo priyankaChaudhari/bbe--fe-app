@@ -138,14 +138,14 @@ const OnBoardingBody = styled.div`
     }
     .reach-out {
       color: ${Theme.gray90};
-      // font-family: ${Theme.regularItalicFontFamily};
+      font-family: ${Theme.regularItalicFontFamily};
       font-weight: 600;
-      font-style: italic;
+      // font-style: italic;
       font-size: ${Theme.normal};
 
       .reach-out-link {
         color: ${Theme.orange};
-        font-style: italic;
+        font-family: ${Theme.regularItalicFontFamily};
         text-transform: lowercase;
         text-decoration: underline;
       }
@@ -215,7 +215,7 @@ const OnBoardingBody = styled.div`
     }
     .reach-out-link {
       color: ${Theme.orange};
-      font-style: italic;
+      font-family: ${Theme.regularItalicFontFamily};
       text-transform: lowercase;
       text-decoration: underline;
     }
