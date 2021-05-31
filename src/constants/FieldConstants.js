@@ -715,7 +715,7 @@ export const creditCardDetails = [
         label: 'CVV',
         type: 'number',
         property: 'col-4',
-        format: '###',
+        format: '####',
       },
     ],
   },
@@ -817,9 +817,8 @@ export const BillingAddress = [
   {
     key: 'postal_code',
     label: 'Postal Code',
-    type: 'number',
+    type: 'text',
     property: 'col-6 pl-2',
-    format: '#####',
     section: 'address',
   },
   {

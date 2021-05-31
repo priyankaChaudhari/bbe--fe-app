@@ -383,6 +383,7 @@ export default function BillingInfo({
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
+        maxLength={item.key === 'postal_code' ? 7 : ''}
         readOnly={
           (type === 'card_details' ||
             type === 'billing_address' ||
