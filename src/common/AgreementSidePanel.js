@@ -221,12 +221,12 @@ export default function AgreementSidePanel({
         </>
       );
     }
-    if (item.history_change_reason.includes('deleted record')) {
-      activityMessage = item.history_change_reason.split('deleted record');
+    if (item.history_change_reason.includes('deleted')) {
+      activityMessage = item.history_change_reason.split('deleted');
       return (
         <>
           {activityMessage[0]}
-          <span>deleted record</span>
+          <span>deleted</span>
           {activityMessage[1]}
         </>
       );
@@ -322,6 +322,16 @@ export default function AgreementSidePanel({
         <>
           {activityMessage && activityMessage[0]}
           <span>added</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    if (item.history_change_reason.includes('removed')) {
+      activityMessage = item.history_change_reason.split('removed');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>removed</span>
           {activityMessage && activityMessage[1]}
         </>
       );

@@ -207,15 +207,6 @@ export default function CustomerMainContainer() {
     );
   };
 
-  const getCustomerMemberList = useCallback(() => {
-    setIsLoading({ loader: true, type: 'page' });
-    getCustomerMembers(id).then((member) => {
-      setMemberData(member && member.data && member.data.results);
-      setMemberCount(member && member.data && member.data.count);
-      setIsLoading({ loader: false, type: 'page' });
-    });
-  }, [id]);
-
   const getActivityLogInfo = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'activityPage' });
@@ -231,6 +222,16 @@ export default function CustomerMainContainer() {
     },
     [id],
   );
+
+  const getCustomerMemberList = useCallback(() => {
+    setIsLoading({ loader: true, type: 'page' });
+    getCustomerMembers(id).then((member) => {
+      getActivityLogInfo();
+      setMemberData(member && member.data && member.data.results);
+      setMemberCount(member && member.data && member.data.count);
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  }, [id, getActivityLogInfo]);
 
   const getAmazon = useCallback(() => {
     getAmazonDetails(id).then((res) => {
@@ -369,12 +370,12 @@ export default function CustomerMainContainer() {
         </>
       );
     }
-    if (item.history_change_reason.includes('deleted record')) {
-      activityMessage = item.history_change_reason.split('deleted record');
+    if (item.history_change_reason.includes('deleted')) {
+      activityMessage = item.history_change_reason.split('deleted');
       return (
         <>
           {activityMessage[0]}
-          <span>deleted record</span>
+          <span>deleted</span>
           {activityMessage[1]}
         </>
       );
@@ -470,6 +471,16 @@ export default function CustomerMainContainer() {
         <>
           {activityMessage && activityMessage[0]}
           <span>added</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    if (item && item.history_change_reason.includes('removed')) {
+      activityMessage = item.history_change_reason.split('removed');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>removed</span>
           {activityMessage && activityMessage[1]}
         </>
       );
