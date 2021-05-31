@@ -1170,7 +1170,11 @@ export default function ContractContainer() {
     ];
     if (details && details.additional_monthly_services) {
       for (const item of details.additional_monthly_services) {
-        if (item.service.name === 'Inventory Reconciliation') {
+        if (
+          item &&
+          item.service &&
+          item.service.name === 'Inventory Reconciliation'
+        ) {
           fields.push(
             `<tr>
                  <td style="border: 1px solid black;padding: 13px;">${
@@ -1879,11 +1883,11 @@ export default function ContractContainer() {
       data &&
       Object.keys(data).length &&
       details &&
-      Object.keys(details).length &&
-      notIncludedMonthlyServices &&
-      notIncludedMonthlyServices.length &&
-      notIncludedOneTimeServices &&
-      notIncludedOneTimeServices.length
+      Object.keys(details).length
+      // notIncludedMonthlyServices &&
+      // notIncludedMonthlyServices.length &&
+      // notIncludedOneTimeServices &&
+      // notIncludedOneTimeServices.length
     ) {
       createAgreementDoc();
     }
@@ -1893,6 +1897,7 @@ export default function ContractContainer() {
     showSection,
     notIncludedMonthlyServices,
     notIncludedOneTimeServices,
+    newAddendumData,
   ]);
 
   useEffect(() => {
@@ -2566,31 +2571,33 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {details &&
-                        details.id &&
-                        contractDesignLoader !== null &&
-                        !contractDesignLoader ? (
-                          <li className="download-pdf">
-                            <a
-                              className="download-pdf-link"
-                              href={
-                                details && details.contract_url
-                                  ? details && details.contract_url
-                                  : null
-                              }
-                              download>
-                              <img
-                                src={DownloadPdf}
-                                alt="download"
-                                className="download-pdf-icon "
-                                role="presentation"
-                              />
-                              Download
-                            </a>
-                          </li>
-                        ) : (
-                          ''
-                        )}
+                        <li
+                          className={
+                            details &&
+                            details.id &&
+                            contractDesignLoader !== null &&
+                            !contractDesignLoader
+                              ? 'download-pdf '
+                              : 'download-pdf disabled'
+                          }>
+                          <a
+                            className="download-pdf-link"
+                            href={
+                              details && details.contract_url
+                                ? details && details.contract_url
+                                : null
+                            }
+                            download>
+                            <img
+                              src={DownloadPdf}
+                              alt="download"
+                              className="download-pdf-icon "
+                              role="presentation"
+                            />
+                            Download
+                          </a>
+                        </li>
+
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2668,35 +2675,36 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {details &&
-                        details.id &&
-                        contractDesignLoader !== null &&
-                        !contractDesignLoader ? (
-                          <li className="download-pdf">
-                            <a
-                              className="download-pdf-link"
-                              href={
-                                details && details.contract_url
-                                  ? details && details.contract_url
-                                  : null
-                              }
-                              download>
-                              <img
-                                src={DownloadPdf}
-                                alt="download"
-                                className="download-pdf-icon "
-                                role="presentation"
-                              />
-                              Download
-                            </a>
-                          </li>
-                        ) : (
-                          ''
-                        )}
+                        <li
+                          className={
+                            details &&
+                            details.id &&
+                            contractDesignLoader !== null &&
+                            !contractDesignLoader
+                              ? 'download-pdf '
+                              : 'download-pdf disabled'
+                          }>
+                          <a
+                            className="download-pdf-link"
+                            href={
+                              details && details.contract_url
+                                ? details && details.contract_url
+                                : null
+                            }
+                            download>
+                            <img
+                              src={DownloadPdf}
+                              alt="download"
+                              className="download-pdf-icon "
+                              role="presentation"
+                            />
+                            Download
+                          </a>
+                        </li>
+
                         <li>
                           <span className="divide-arrow" />
                         </li>
-
                         <li>
                           <img
                             width="18px"
