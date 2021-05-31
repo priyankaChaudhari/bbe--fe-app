@@ -131,6 +131,8 @@ export default function AgreementSidePanel({
   setContractLoading,
   customerError,
   setCustomerErrors,
+  setIsDocRendered,
+  isDocRendered,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -437,12 +439,12 @@ export default function AgreementSidePanel({
 
     getMonthlyService().then((res) => {
       setMonthlyService(res.data);
-
       fetchUncommonOptions(
         res && res.data,
-        agreementData.additional_monthly_services,
+        formData.additional_monthly_services,
         'monthly_service',
       );
+
       // if (
       //   agreementData &&
       //   agreementData.additional_monthly_services &&
@@ -475,11 +477,13 @@ export default function AgreementSidePanel({
 
         fetchUncommonOptions(
           r && r.data,
-          agreementData.additional_one_time_services,
+          formData.additional_one_time_services,
           'one_time_service',
         );
+        setIsDocRendered(true);
       }
     });
+
     // getMarketplaces().then((market) => {
     //   setMarketPlaces(market.data);
     //   setAdditionalMarketplaces(market.data);
@@ -540,18 +544,18 @@ export default function AgreementSidePanel({
     }
     setSelectedAmazonStorePackService(serviceData);
     // }
-
     // if (agreementData && agreementData.additional_one_time_services) {
     fetchUncommonOptions(
       oneTimeService,
-      agreementData.additional_one_time_services,
+      formData.additional_one_time_services,
       'one_time_service',
     );
 
     // if (agreementData && agreementData.additional_monthly_services) {
+
     fetchUncommonOptions(
       monthlyService,
-      agreementData.additional_monthly_services,
+      formData.additional_monthly_services,
       'monthly_service',
     );
     if (
@@ -564,7 +568,7 @@ export default function AgreementSidePanel({
     ) {
       setShowAdditionalMarketplace(true);
     }
-  }, [agreementData, formData]);
+  }, [agreementData, isDocRendered]);
 
   const clearOneTimeQntyError = (val) => {
     const itemFound =
@@ -4405,6 +4409,8 @@ AgreementSidePanel.defaultProps = {
   setContractLoading: () => {},
   customerError: {},
   setCustomerErrors: () => {},
+  setIsDocRendered: () => {},
+  isDocRendered: false,
 };
 
 AgreementSidePanel.propTypes = {
@@ -4538,6 +4544,8 @@ AgreementSidePanel.propTypes = {
   setContractLoading: PropTypes.func,
   customerError: PropTypes.shape(PropTypes.object),
   setCustomerErrors: PropTypes.func,
+  setIsDocRendered: PropTypes.func,
+  isDocRendered: PropTypes.bool,
 };
 
 const SidePanel = styled.div`

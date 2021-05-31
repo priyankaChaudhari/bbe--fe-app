@@ -151,6 +151,10 @@ export default function ContractContainer() {
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
+
+  const [downloadApiCall, setDownloadApiCall] = useState(false);
+  const [isDocRendered, setIsDocRendered] = useState(false);
+
   const [showPageNotFound, setPageNotFoundFlag] = useState(false);
   const [showSection, setShowCollpase] = useState({
     addendum: true,
@@ -242,6 +246,11 @@ export default function ContractContainer() {
     }
   }
 
+  if (isDocRendered && formData && formData.id) {
+    setIsDocRendered(false);
+    setDownloadApiCall(true);
+  }
+
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
@@ -251,10 +260,10 @@ export default function ContractContainer() {
           setDetails(res.data);
           setFormData(res.data);
           setOriginalData(res.data);
-
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
+          // setIsDocRendered(true);
         } else {
           setIsLoading({ loader: false, type: 'page' });
 
@@ -324,383 +333,6 @@ export default function ContractContainer() {
       showTabInResponsive('view-contract');
       setTimeout(() => executeScroll('addendum'), 500);
     }
-  };
-
-  const createPrimaryMarketplace = () => {
-    const statementData = {
-      id:
-        (details &&
-          details.primary_marketplace &&
-          details.primary_marketplace.id) ||
-        '',
-      contract: details.id,
-      name: updatedFormData && updatedFormData.primary_marketplace,
-      is_primary: true,
-    };
-
-    if (details.primary_marketplace && details.primary_marketplace.id) {
-      updateMarketplace(details.primary_marketplace.id, statementData).then(
-        (updateMarketplaceRes) => {
-          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
-            setFormData({
-              ...formData,
-              primary_marketplace:
-                updateMarketplaceRes && updateMarketplaceRes.data,
-            });
-            if (updatedFormData && updatedFormData.primary_marketplace) {
-              delete updatedFormData.primary_marketplace;
-              setUpdatedFormData({ ...updatedFormData });
-
-              if (!Object.keys(updatedFormData).length) {
-                showFooter(false);
-                setIsEditContract(false);
-                getContractDetails();
-                setShowSaveSuccessMsg(true);
-              }
-            }
-          }
-        },
-      );
-    } else {
-      createMarketplace(statementData).then((createMarketplaceRes) => {
-        setIsLoading({ loader: false, type: 'button' });
-        setIsLoading({ loader: false, type: 'page' });
-        if (createMarketplaceRes && createMarketplaceRes.status === 201) {
-          setFormData({
-            ...formData,
-            primary_marketplace:
-              createMarketplaceRes && createMarketplaceRes.data,
-          });
-          if (updatedFormData && updatedFormData.primary_marketplace) {
-            delete updatedFormData.primary_marketplace;
-            setUpdatedFormData({ ...updatedFormData });
-            if (!Object.keys(updatedFormData).length) {
-              showFooter(false);
-              setIsEditContract(false);
-              getContractDetails();
-              setShowSaveSuccessMsg(true);
-            }
-          }
-        }
-      });
-    }
-    setUpdatedFormData({ ...updatedFormData });
-  };
-
-  const updateMarketplaces = async () => {
-    let flag = false;
-    const result = await createMarketplaceBulk(
-      updatedFormData.additional_marketplaces,
-    ).then((updateMarketplacesRes) => {
-      flag = true;
-      if (updateMarketplacesRes && updateMarketplacesRes.status === 200) {
-        setFormData({
-          ...formData,
-          additional_marketplaces:
-            updateMarketplacesRes && updateMarketplacesRes.data,
-        });
-        setOriginalData({
-          ...originalData,
-          additional_marketplaces:
-            updateMarketplacesRes && updateMarketplacesRes.data,
-        });
-      }
-    });
-    if (flag) {
-      if (updatedFormData && updatedFormData.additional_marketplaces) {
-        delete updatedFormData.additional_marketplaces;
-        setUpdatedFormData({ ...updatedFormData });
-      }
-      if (
-        !(
-          formData &&
-          formData.additional_marketplaces &&
-          formData.additional_marketplaces.length
-        )
-      ) {
-        setShowAdditionalMarketplace(false);
-      } else {
-        setShowAdditionalMarketplace(true);
-      }
-
-      if (updatedFormData && updatedFormData.primary_marketplace) {
-        createPrimaryMarketplace();
-      }
-    }
-    return result;
-  };
-
-  const saveChanges = (apis) => {
-    axios
-      .all(apis)
-      .then(
-        axios.spread((...responses) => {
-          const additionalMonthlySerRes = responses[0];
-          const additionalOneTimeServRes = responses[1];
-          const contractRes = responses[2];
-          const addendumRes = responses[3];
-          const updateCustomerRes = responses[4];
-
-          setIsLoading({ loader: false, type: 'button' });
-          setIsLoading({ loader: false, type: 'page' });
-
-          if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 200 &&
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 200 &&
-            contractRes &&
-            contractRes.status === 200 &&
-            addendumRes &&
-            addendumRes.status === 200 &&
-            updateCustomerRes &&
-            updateCustomerRes.status === 200
-          ) {
-            // use/access the results
-            showFooter(false);
-            setIsEditContract(false);
-            setUpdatedFormData({});
-            getContractDetails();
-            setIsEditContract(false);
-          }
-
-          if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 200
-          ) {
-            setFormData({
-              ...formData,
-              additional_monthly_services:
-                additionalMonthlySerRes && additionalMonthlySerRes.data,
-            });
-            setOriginalData({
-              ...originalData,
-              additional_monthly_services:
-                additionalMonthlySerRes && additionalMonthlySerRes.data,
-            });
-            if (
-              updatedFormData &&
-              updatedFormData.additional_monthly_services
-            ) {
-              delete updatedFormData.additional_monthly_services;
-            }
-          }
-          if (
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 200
-          ) {
-            setFormData({
-              ...formData,
-              additional_one_time_services:
-                additionalOneTimeServRes && additionalOneTimeServRes.data,
-            });
-            setOriginalData({
-              ...originalData,
-              additional_one_time_services:
-                additionalOneTimeServRes && additionalOneTimeServRes.data,
-            });
-
-            const service =
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.data &&
-              additionalOneTimeServRes.data.length &&
-              additionalOneTimeServRes.data.find(
-                (item) =>
-                  item &&
-                  item.service &&
-                  item.service.name &&
-                  item.service.name === 'Amazon Store Package Custom',
-              );
-            if (service) {
-              setAmazonStoreCustom(true);
-            } else {
-              setAmazonStoreCustom(false);
-            }
-
-            if (
-              updatedFormData &&
-              updatedFormData.additional_one_time_services
-            ) {
-              delete updatedFormData.additional_one_time_services;
-            }
-          }
-
-          if (
-            (addendumRes && addendumRes.status === 200) ||
-            (addendumRes && addendumRes.status === 201)
-          ) {
-            if (addendumRes && addendumRes.status === 201) {
-              setNewAddendum(addendumRes && addendumRes.data);
-            }
-            setNewAddendum(addendumRes && addendumRes.data);
-
-            setOriginalAddendumData(addendumRes && addendumRes.data);
-            setShowEditor(false);
-            if (updatedFormData && updatedFormData.addendum) {
-              delete updatedFormData.addendum;
-            }
-          }
-
-          if (updateCustomerRes && updateCustomerRes.status === 200) {
-            const customerData = updateCustomerRes.data;
-            setFormData({ ...formData, ...customerData });
-            delete updatedFormData.company_name;
-            delete updatedFormData.address;
-            delete updatedFormData.city;
-            delete updatedFormData.state;
-            delete updatedFormData.zip_code;
-          }
-
-          if (contractRes && contractRes.status === 200) {
-            setFormData({ ...formData, ...contractRes.data });
-            const updatedKeys = Object.keys(updatedFormData);
-            if (updatedKeys && updatedKeys.length) {
-              const fieldsToDeleteList = updatedKeys
-                .filter((item) => item !== 'additional_one_time_services')
-                .filter((item) => item !== 'additional_monthly_services')
-                .filter((item) => item !== 'additional_marketplaces')
-                .filter((item) => item !== 'primary_marketplace')
-                .filter((item) => item !== 'addendum')
-                .filter((item) => item !== 'company_name')
-                .filter((item) => item !== 'address')
-                .filter((item) => item !== 'city')
-                .filter((item) => item !== 'state')
-                .filter((item) => item !== 'zip_code');
-
-              for (const item of fieldsToDeleteList) {
-                delete updatedFormData[item];
-              }
-            }
-          }
-
-          if (!Object.keys(updatedFormData).length) {
-            showFooter(false);
-            setIsEditContract(false);
-            getContractDetails();
-            setShowSaveSuccessMsg(true);
-          }
-          setUpdatedFormData({ ...updatedFormData });
-
-          let agreementErrCount = 0;
-          let statementErrCount = 0;
-          let dspErrCount = 0;
-
-          if (
-            (additionalMonthlySerRes &&
-              additionalMonthlySerRes.status === 400) ||
-            (additionalOneTimeServRes &&
-              additionalOneTimeServRes.status === 400) ||
-            (contractRes && contractRes.status === 400) ||
-            (updateCustomerRes && updateCustomerRes.status === 400)
-          ) {
-            toast.error(
-              'Changes have not been saved. Please fix errors and try again',
-            );
-          }
-
-          if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 400
-          ) {
-            setAdditionalMonthlySerError({
-              ...additionalMonthlySerError,
-              ...additionalMonthlySerRes.data,
-            });
-
-            if (additionalMonthlySerRes.data) {
-              statementErrCount += Object.keys(additionalMonthlySerRes.data)
-                .length;
-            }
-          }
-          if (
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 400
-          ) {
-            setAdditionalOnetimeSerError({
-              ...additionalOnetimeSerError,
-              ...additionalOneTimeServRes.data,
-            });
-
-            if (additionalOneTimeServRes.data) {
-              if (
-                Object.keys(additionalOneTimeServRes.data).includes('quantity')
-              ) {
-                statementErrCount +=
-                  Object.keys(additionalOneTimeServRes.data).length +
-                  Object.keys(additionalOneTimeServRes.data.quantity).length -
-                  1;
-              } else if (!additionalOnetimeSerError.custom_amazon_store_price) {
-                statementErrCount += Object.keys(additionalOneTimeServRes.data)
-                  .length;
-              }
-            }
-            if (
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.data &&
-              Object.values(additionalOneTimeServRes.data) &&
-              Object.values(additionalOneTimeServRes.data).length &&
-              Object.values(additionalOneTimeServRes.data)[0] ===
-                'Object does not exists'
-            ) {
-              showFooter(false);
-              setIsEditContract(false);
-              setUpdatedFormData({});
-              getContractDetails();
-            }
-          }
-
-          if (updateCustomerRes && updateCustomerRes.status === 400) {
-            setCustomerErrors({
-              ...customerError,
-              ...updateCustomerRes.data,
-            });
-            if (
-              updateCustomerRes.data &&
-              Object.keys(updateCustomerRes.data).length
-            ) {
-              if (
-                Object.keys(updateCustomerRes.data).includes('zip_code') &&
-                !customerError.zip_code
-              )
-                agreementErrCount += 1;
-            }
-          }
-          if (contractRes && contractRes.status === 400) {
-            setContractError({
-              ...contractError,
-              ...contractRes.data,
-            });
-
-            if (contractRes.data) {
-              if (Object.keys(contractRes.data).length) {
-                if (Object.keys(contractRes.data).includes('monthly_retainer'))
-                  statementErrCount += 1;
-                if (
-                  Object.keys(contractRes.data).includes('content_optimization')
-                )
-                  statementErrCount += 1;
-                if (
-                  Object.keys(contractRes.data).includes('design_optimization')
-                )
-                  statementErrCount += 1;
-
-                if (
-                  Object.keys(contractRes.data).includes('dsp_fee') &&
-                  !contractError.dsp_fee
-                )
-                  dspErrCount += 1;
-              }
-            }
-          }
-
-          setSectionError({
-            agreement: agreementErrCount + sectionError.agreement,
-            statement: statementErrCount + sectionError.statement,
-            dsp: dspErrCount + sectionError.dsp,
-          });
-        }),
-      )
-      .catch(() => {});
   };
 
   const clearError = () => {
@@ -1879,26 +1511,11 @@ export default function ContractContainer() {
   };
 
   useEffect(() => {
-    if (
-      data &&
-      Object.keys(data).length &&
-      details &&
-      Object.keys(details).length
-      // notIncludedMonthlyServices &&
-      // notIncludedMonthlyServices.length &&
-      // notIncludedOneTimeServices &&
-      // notIncludedOneTimeServices.length
-    ) {
+    if (downloadApiCall) {
       createAgreementDoc();
+      setDownloadApiCall(false);
     }
-  }, [
-    data,
-    details,
-    showSection,
-    notIncludedMonthlyServices,
-    notIncludedOneTimeServices,
-    newAddendumData,
-  ]);
+  }, [downloadApiCall]);
 
   useEffect(() => {
     if (
@@ -1998,6 +1615,384 @@ export default function ContractContainer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details]);
 
+  const createPrimaryMarketplace = () => {
+    const statementData = {
+      id:
+        (details &&
+          details.primary_marketplace &&
+          details.primary_marketplace.id) ||
+        '',
+      contract: details.id,
+      name: updatedFormData && updatedFormData.primary_marketplace,
+      is_primary: true,
+    };
+
+    if (details.primary_marketplace && details.primary_marketplace.id) {
+      updateMarketplace(details.primary_marketplace.id, statementData).then(
+        (updateMarketplaceRes) => {
+          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+            setFormData({
+              ...formData,
+              primary_marketplace:
+                updateMarketplaceRes && updateMarketplaceRes.data,
+            });
+            if (updatedFormData && updatedFormData.primary_marketplace) {
+              delete updatedFormData.primary_marketplace;
+              setUpdatedFormData({ ...updatedFormData });
+
+              if (!Object.keys(updatedFormData).length) {
+                showFooter(false);
+                setIsEditContract(false);
+                getContractDetails();
+                setShowSaveSuccessMsg(true);
+              }
+            }
+          }
+        },
+      );
+    } else {
+      createMarketplace(statementData).then((createMarketplaceRes) => {
+        setIsLoading({ loader: false, type: 'button' });
+        setIsLoading({ loader: false, type: 'page' });
+        if (createMarketplaceRes && createMarketplaceRes.status === 201) {
+          setFormData({
+            ...formData,
+            primary_marketplace:
+              createMarketplaceRes && createMarketplaceRes.data,
+          });
+          if (updatedFormData && updatedFormData.primary_marketplace) {
+            delete updatedFormData.primary_marketplace;
+            setUpdatedFormData({ ...updatedFormData });
+            if (!Object.keys(updatedFormData).length) {
+              showFooter(false);
+              setIsEditContract(false);
+              getContractDetails();
+              createAgreementDoc();
+              setShowSaveSuccessMsg(true);
+            }
+          }
+        }
+      });
+    }
+    setUpdatedFormData({ ...updatedFormData });
+  };
+
+  const updateMarketplaces = async () => {
+    let flag = false;
+    const result = await createMarketplaceBulk(
+      updatedFormData.additional_marketplaces,
+    ).then((updateMarketplacesRes) => {
+      flag = true;
+      if (updateMarketplacesRes && updateMarketplacesRes.status === 200) {
+        setFormData({
+          ...formData,
+          additional_marketplaces:
+            updateMarketplacesRes && updateMarketplacesRes.data,
+        });
+        setOriginalData({
+          ...originalData,
+          additional_marketplaces:
+            updateMarketplacesRes && updateMarketplacesRes.data,
+        });
+      }
+    });
+    if (flag) {
+      if (updatedFormData && updatedFormData.additional_marketplaces) {
+        delete updatedFormData.additional_marketplaces;
+        setUpdatedFormData({ ...updatedFormData });
+      }
+      if (
+        !(
+          formData &&
+          formData.additional_marketplaces &&
+          formData.additional_marketplaces.length
+        )
+      ) {
+        setShowAdditionalMarketplace(false);
+      } else {
+        setShowAdditionalMarketplace(true);
+      }
+
+      if (updatedFormData && updatedFormData.primary_marketplace) {
+        createPrimaryMarketplace();
+      }
+    }
+    return result;
+  };
+
+  const saveChanges = (apis) => {
+    axios
+      .all(apis)
+      .then(
+        axios.spread((...responses) => {
+          const additionalMonthlySerRes = responses[0];
+          const additionalOneTimeServRes = responses[1];
+          const contractRes = responses[2];
+          const addendumRes = responses[3];
+          const updateCustomerRes = responses[4];
+
+          setIsLoading({ loader: false, type: 'button' });
+          setIsLoading({ loader: false, type: 'page' });
+
+          if (
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 200 &&
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 200 &&
+            contractRes &&
+            contractRes.status === 200 &&
+            addendumRes &&
+            addendumRes.status === 200 &&
+            updateCustomerRes &&
+            updateCustomerRes.status === 200
+          ) {
+            // use/access the results
+            showFooter(false);
+            setIsEditContract(false);
+            setUpdatedFormData({});
+            getContractDetails();
+            setIsEditContract(false);
+          }
+
+          if (
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 200
+          ) {
+            setFormData({
+              ...formData,
+              additional_monthly_services:
+                additionalMonthlySerRes && additionalMonthlySerRes.data,
+            });
+            setOriginalData({
+              ...originalData,
+              additional_monthly_services:
+                additionalMonthlySerRes && additionalMonthlySerRes.data,
+            });
+            if (
+              updatedFormData &&
+              updatedFormData.additional_monthly_services
+            ) {
+              delete updatedFormData.additional_monthly_services;
+            }
+          }
+          if (
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 200
+          ) {
+            setFormData({
+              ...formData,
+              additional_one_time_services:
+                additionalOneTimeServRes && additionalOneTimeServRes.data,
+            });
+            setOriginalData({
+              ...originalData,
+              additional_one_time_services:
+                additionalOneTimeServRes && additionalOneTimeServRes.data,
+            });
+
+            const service =
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.data &&
+              additionalOneTimeServRes.data.length &&
+              additionalOneTimeServRes.data.find(
+                (item) =>
+                  item &&
+                  item.service &&
+                  item.service.name &&
+                  item.service.name === 'Amazon Store Package Custom',
+              );
+            if (service) {
+              setAmazonStoreCustom(true);
+            } else {
+              setAmazonStoreCustom(false);
+            }
+
+            if (
+              updatedFormData &&
+              updatedFormData.additional_one_time_services
+            ) {
+              delete updatedFormData.additional_one_time_services;
+            }
+          }
+
+          if (
+            (addendumRes && addendumRes.status === 200) ||
+            (addendumRes && addendumRes.status === 201)
+          ) {
+            if (addendumRes && addendumRes.status === 201) {
+              setNewAddendum(addendumRes && addendumRes.data);
+            }
+            setNewAddendum(addendumRes && addendumRes.data);
+
+            setOriginalAddendumData(addendumRes && addendumRes.data);
+            setShowEditor(false);
+            if (updatedFormData && updatedFormData.addendum) {
+              delete updatedFormData.addendum;
+            }
+          }
+
+          if (updateCustomerRes && updateCustomerRes.status === 200) {
+            const customerData = updateCustomerRes.data;
+            setFormData({ ...formData, ...customerData });
+            delete updatedFormData.company_name;
+            delete updatedFormData.address;
+            delete updatedFormData.city;
+            delete updatedFormData.state;
+            delete updatedFormData.zip_code;
+          }
+
+          if (contractRes && contractRes.status === 200) {
+            setFormData({ ...formData, ...contractRes.data });
+            const updatedKeys = Object.keys(updatedFormData);
+            if (updatedKeys && updatedKeys.length) {
+              const fieldsToDeleteList = updatedKeys
+                .filter((item) => item !== 'additional_one_time_services')
+                .filter((item) => item !== 'additional_monthly_services')
+                .filter((item) => item !== 'additional_marketplaces')
+                .filter((item) => item !== 'primary_marketplace')
+                .filter((item) => item !== 'addendum')
+                .filter((item) => item !== 'company_name')
+                .filter((item) => item !== 'address')
+                .filter((item) => item !== 'city')
+                .filter((item) => item !== 'state')
+                .filter((item) => item !== 'zip_code');
+
+              for (const item of fieldsToDeleteList) {
+                delete updatedFormData[item];
+              }
+            }
+          }
+
+          if (!Object.keys(updatedFormData).length) {
+            showFooter(false);
+            setIsEditContract(false);
+            getContractDetails();
+            createAgreementDoc();
+            setShowSaveSuccessMsg(true);
+          }
+          setUpdatedFormData({ ...updatedFormData });
+
+          let agreementErrCount = 0;
+          let statementErrCount = 0;
+          let dspErrCount = 0;
+
+          if (
+            (additionalMonthlySerRes &&
+              additionalMonthlySerRes.status === 400) ||
+            (additionalOneTimeServRes &&
+              additionalOneTimeServRes.status === 400) ||
+            (contractRes && contractRes.status === 400) ||
+            (updateCustomerRes && updateCustomerRes.status === 400)
+          ) {
+            toast.error(
+              'Changes have not been saved. Please fix errors and try again',
+            );
+          }
+
+          if (
+            additionalMonthlySerRes &&
+            additionalMonthlySerRes.status === 400
+          ) {
+            setAdditionalMonthlySerError({
+              ...additionalMonthlySerError,
+              ...additionalMonthlySerRes.data,
+            });
+
+            if (additionalMonthlySerRes.data) {
+              statementErrCount += Object.keys(additionalMonthlySerRes.data)
+                .length;
+            }
+          }
+          if (
+            additionalOneTimeServRes &&
+            additionalOneTimeServRes.status === 400
+          ) {
+            setAdditionalOnetimeSerError({
+              ...additionalOnetimeSerError,
+              ...additionalOneTimeServRes.data,
+            });
+
+            if (additionalOneTimeServRes.data) {
+              if (
+                Object.keys(additionalOneTimeServRes.data).includes('quantity')
+              ) {
+                statementErrCount +=
+                  Object.keys(additionalOneTimeServRes.data).length +
+                  Object.keys(additionalOneTimeServRes.data.quantity).length -
+                  1;
+              } else if (!additionalOnetimeSerError.custom_amazon_store_price) {
+                statementErrCount += Object.keys(additionalOneTimeServRes.data)
+                  .length;
+              }
+            }
+            if (
+              additionalOneTimeServRes &&
+              additionalOneTimeServRes.data &&
+              Object.values(additionalOneTimeServRes.data) &&
+              Object.values(additionalOneTimeServRes.data).length &&
+              Object.values(additionalOneTimeServRes.data)[0] ===
+                'Object does not exists'
+            ) {
+              showFooter(false);
+              setIsEditContract(false);
+              setUpdatedFormData({});
+              getContractDetails();
+            }
+          }
+
+          if (updateCustomerRes && updateCustomerRes.status === 400) {
+            setCustomerErrors({
+              ...customerError,
+              ...updateCustomerRes.data,
+            });
+            if (
+              updateCustomerRes.data &&
+              Object.keys(updateCustomerRes.data).length
+            ) {
+              if (
+                Object.keys(updateCustomerRes.data).includes('zip_code') &&
+                !customerError.zip_code
+              )
+                agreementErrCount += 1;
+            }
+          }
+          if (contractRes && contractRes.status === 400) {
+            setContractError({
+              ...contractError,
+              ...contractRes.data,
+            });
+
+            if (contractRes.data) {
+              if (Object.keys(contractRes.data).length) {
+                if (Object.keys(contractRes.data).includes('monthly_retainer'))
+                  statementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('content_optimization')
+                )
+                  statementErrCount += 1;
+                if (
+                  Object.keys(contractRes.data).includes('design_optimization')
+                )
+                  statementErrCount += 1;
+
+                if (
+                  Object.keys(contractRes.data).includes('dsp_fee') &&
+                  !contractError.dsp_fee
+                )
+                  dspErrCount += 1;
+              }
+            }
+          }
+
+          setSectionError({
+            agreement: agreementErrCount + sectionError.agreement,
+            statement: statementErrCount + sectionError.statement,
+            dsp: dspErrCount + sectionError.dsp,
+          });
+        }),
+      )
+      .catch(() => {});
+  };
   const nextStep = async () => {
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
@@ -2463,6 +2458,8 @@ export default function ContractContainer() {
         setShowSaveSuccessMsg={setShowSaveSuccessMsg}
         customerError={customerError}
         setCustomerErrors={setCustomerErrors}
+        setIsDocRendered={setIsDocRendered}
+        isDocRendered={downloadApiCall}
       />
     );
   };
@@ -2571,33 +2568,41 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        <li
-                          className={
-                            details &&
-                            details.id &&
-                            contractDesignLoader !== null &&
-                            !contractDesignLoader
-                              ? 'download-pdf '
-                              : 'download-pdf disabled'
-                          }>
-                          <a
-                            className="download-pdf-link"
-                            href={
-                              details && details.contract_url
-                                ? details && details.contract_url
-                                : null
-                            }
-                            download>
-                            <img
-                              src={DownloadPdf}
-                              alt="download"
-                              className="download-pdf-icon "
-                              role="presentation"
-                            />
-                            Download
-                          </a>
-                        </li>
-
+                        {isFooter ||
+                        (newAddendumData &&
+                          newAddendumData.id &&
+                          showEditor &&
+                          updatedFormData &&
+                          updatedFormData.addendum) ? (
+                          ''
+                        ) : (
+                          <li
+                            className={
+                              details &&
+                              details.id &&
+                              contractDesignLoader !== null &&
+                              !contractDesignLoader
+                                ? 'download-pdf '
+                                : 'download-pdf disabled'
+                            }>
+                            <a
+                              className="download-pdf-link"
+                              href={
+                                details && details.contract_url
+                                  ? details && details.contract_url
+                                  : null
+                              }
+                              download>
+                              <img
+                                src={DownloadPdf}
+                                alt="download"
+                                className="download-pdf-icon "
+                                role="presentation"
+                              />
+                              Download
+                            </a>
+                          </li>
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2675,33 +2680,41 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        <li
-                          className={
-                            details &&
-                            details.id &&
-                            contractDesignLoader !== null &&
-                            !contractDesignLoader
-                              ? 'download-pdf '
-                              : 'download-pdf disabled'
-                          }>
-                          <a
-                            className="download-pdf-link"
-                            href={
-                              details && details.contract_url
-                                ? details && details.contract_url
-                                : null
-                            }
-                            download>
-                            <img
-                              src={DownloadPdf}
-                              alt="download"
-                              className="download-pdf-icon "
-                              role="presentation"
-                            />
-                            Download
-                          </a>
-                        </li>
-
+                        {isFooter ||
+                        (newAddendumData &&
+                          newAddendumData.id &&
+                          showEditor &&
+                          updatedFormData &&
+                          updatedFormData.addendum) ? (
+                          ''
+                        ) : (
+                          <li
+                            className={
+                              details &&
+                              details.id &&
+                              contractDesignLoader !== null &&
+                              !contractDesignLoader
+                                ? 'download-pdf '
+                                : 'download-pdf disabled'
+                            }>
+                            <a
+                              className="download-pdf-link"
+                              href={
+                                details && details.contract_url
+                                  ? details && details.contract_url
+                                  : null
+                              }
+                              download>
+                              <img
+                                src={DownloadPdf}
+                                alt="download"
+                                className="download-pdf-icon "
+                                role="presentation"
+                              />
+                              Download
+                            </a>
+                          </li>
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
