@@ -542,7 +542,7 @@ export default function AgreementSidePanel({
     ) {
       setShowAdditionalMarketplace(true);
     }
-  }, [agreementData]);
+  }, [agreementData, formData]);
 
   const clearOneTimeQntyError = (val) => {
     const itemFound =
