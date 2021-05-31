@@ -27,7 +27,7 @@ import ContractFooter from './ContractFooter';
 import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, DownloadPdf } from '../../theme/images';
+import { CloseIcon } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -169,7 +169,7 @@ export default function ContractContainer() {
     amendment: false,
   });
   const [loaderFlag, setLoaderFlag] = useState(true);
-  const [contractDesignLoader, setContractDesignLoader] = useState(null);
+  // const [contractDesignLoader, setContractDesignLoader] = useState(null);
   const [calculatedDate, setCalculatedDate] = useState(null);
   const [firstMonthDate, setFirstMonthDate] = useState(null);
   const [secondMonthDate, setSecondMonthDate] = useState(null);
@@ -1315,7 +1315,7 @@ export default function ContractContainer() {
   };
 
   const createAgreementDoc = () => {
-    setContractDesignLoader(true);
+    // setContractDesignLoader(true);
     // if (data && data.length && details && Object.keys(details).length) {
 
     const serviceData = getAgreementAccorType(0);
@@ -1505,7 +1505,7 @@ export default function ContractContainer() {
     };
 
     createContractDesign(contractData).then(() => {
-      setContractDesignLoader(false);
+      // setContractDesignLoader(false);
     });
     // }
   };
@@ -2008,7 +2008,7 @@ export default function ContractContainer() {
         );
       }
       setIsLoading({ loader: true, type: 'page' });
-      setContractDesignLoader(true);
+      // setContractDesignLoader(true);
       // for additionL montlhy service
       if (updatedFormData.additional_monthly_services) {
         additionalMonthlyApi = createAdditionalServiceBulk(
@@ -2568,7 +2568,7 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {isFooter ||
+                        {/* {isFooter ||
                         (newAddendumData &&
                           newAddendumData.id &&
                           showEditor &&
@@ -2602,7 +2602,7 @@ export default function ContractContainer() {
                               Download
                             </a>
                           </li>
-                        )}
+                        )} */}
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2680,7 +2680,7 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {isFooter ||
+                        {/* {isFooter ||
                         (newAddendumData &&
                           newAddendumData.id &&
                           showEditor &&
@@ -2714,7 +2714,7 @@ export default function ContractContainer() {
                               Download
                             </a>
                           </li>
-                        )}
+                        )} */}
                         <li>
                           <span className="divide-arrow" />
                         </li>
