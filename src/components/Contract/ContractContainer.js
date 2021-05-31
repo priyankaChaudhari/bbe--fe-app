@@ -2338,7 +2338,7 @@ export default function ContractContainer() {
         if (
           formData &&
           formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('dsp') &&
+          formData.contract_type.toLowerCase().includes('recurring') &&
           item.key === 'dsp_length'
         ) {
           dspErrors += 1;

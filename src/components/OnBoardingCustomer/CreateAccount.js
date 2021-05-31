@@ -259,7 +259,7 @@ export default function CreateAccount() {
               </div>
             ) : (
               <div className="white-card-base panel">
-                <h3 className="page-heading ">Re-assign account setup</h3>
+                <h3 className="page-heading pt-5">Re-assign account setup</h3>
                 <p className="information-text m-0 ">
                   <div className="sub-information">
                     {' '}
