@@ -110,7 +110,7 @@ export default function Agreement({ formData, details, templateData }) {
       formData[key] === '' ||
       formData[key] === null
     ) {
-      return key === 'contract_company_name' ? `Client Name` : `Enter ${label}`;
+      return key === 'company_name' ? `Client Name` : `Enter ${label}`;
     }
     return formData[key];
   };
@@ -407,7 +407,7 @@ export default function Agreement({ formData, details, templateData }) {
               getAgreementAccorType(1)
                 .replace(
                   'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                  mapDefaultValues('company_name', 'Customer Name'),
                 )
                 .replace(
                   'AGREEMENT_DATE',

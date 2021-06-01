@@ -80,9 +80,9 @@ export default function Addendum({
     //     ? details && details[key]
     //     : `Enter ${label}.`;
     // }
-    if (key === 'contract_company_name') {
-      return formData && formData[key]
-        ? formData && formData[key]
+    if (key === 'company_name') {
+      return formData && formData.customer_id && formData.customer_id[key]
+        ? formData && formData.customer_id && formData.customer_id[key]
         : `Client Name`;
     }
     // if (key === 'length') {
@@ -165,10 +165,7 @@ export default function Addendum({
             __html:
               templateData.addendum &&
               templateData.addendum[0]
-                .replace(
-                  'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name'),
-                )
+                .replace('CUSTOMER_NAME', mapDefaultValues('company_name'))
                 .replace('AGREEMENT_DATE', mapDefaultValues('start_date')),
           }}
         />
@@ -191,10 +188,7 @@ export default function Addendum({
             __html:
               templateData.addendum &&
               templateData.addendum[1]
-                .replace(
-                  'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name'),
-                )
+                .replace('CUSTOMER_NAME', mapDefaultValues('company_name'))
                 .replace('AGREEMENT_DATE', mapDefaultValues('start_date'))
                 .replace('BBE_DATE', mapDefaultValues('current_date')),
           }}
@@ -222,6 +216,12 @@ Addendum.propTypes = {
       fee: PropTypes.number,
       name: PropTypes.string,
       id: PropTypes.string,
+    }),
+    customer_id: PropTypes.shape({
+      address: PropTypes.string,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zip_code: PropTypes.string,
     }),
   }),
   templateData: PropTypes.shape({

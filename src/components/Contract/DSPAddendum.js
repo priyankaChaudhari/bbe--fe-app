@@ -125,9 +125,9 @@ export default function DSPAddendum({
     if (key === 'current_date') {
       return dayjs(new Date()).format('MM / DD / YYYY');
     }
-    if (key === 'contract_company_name') {
-      return formData && formData[key]
-        ? formData && formData[key]
+    if (key === 'company_name') {
+      return formData && formData.customer_id && formData.customer_id[key]
+        ? formData && formData.customer_id && formData.customer_id[key]
         : `Client Name`;
     }
     if (key === 'calculated_no_of_days') {
@@ -284,7 +284,7 @@ export default function DSPAddendum({
                 templateData.dsp_addendum[0]
                   .replace(
                     'CUSTOMER_NAME',
-                    mapDefaultValues('contract_company_name', 'Customer Name'),
+                    mapDefaultValues('company_name', 'Customer Name'),
                   )
 
                   .replace(
@@ -332,7 +332,7 @@ export default function DSPAddendum({
                 templateData.dsp_addendum[1]
                   .replace(
                     'CUSTOMER_NAME',
-                    mapDefaultValues('contract_company_name', 'Customer Name'),
+                    mapDefaultValues('company_name', 'Customer Name'),
                   )
                   .replace(
                     'AGREEMENT_DATE',
@@ -397,6 +397,12 @@ DSPAddendum.propTypes = {
     contract_status: PropTypes.string,
     start_date: PropTypes.instanceOf(Date),
     contract_type: PropTypes.string,
+    customer_id: PropTypes.shape({
+      address: PropTypes.string,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zip_code: PropTypes.string,
+    }),
   }),
 };
 

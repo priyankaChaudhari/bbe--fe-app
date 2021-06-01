@@ -17,9 +17,9 @@ export default function Statement({
   notIncludedMonthlyServices,
 }) {
   const mapDefaultValues = (key, label, type) => {
-    if (key === 'contract_company_name') {
-      return formData && formData[key]
-        ? formData && formData[key]
+    if (key === 'company_name') {
+      return formData && formData.customer_id && formData.customer_id[key]
+        ? formData && formData.customer_id && formData.customer_id[key]
         : `Client Name`;
     }
 
@@ -595,7 +595,7 @@ export default function Statement({
               templateData.statement_of_work[0]
                 .replace(
                   'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
+                  mapDefaultValues('company_name', 'Customer Name'),
                 )
                 .replace(
                   'START_DATE',
@@ -724,6 +724,12 @@ Statement.propTypes = {
     ),
     content_optimization: PropTypes.number,
     design_optimization: PropTypes.number,
+    customer_id: PropTypes.shape({
+      address: PropTypes.string,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zip_code: PropTypes.string,
+    }),
   }),
   templateData: PropTypes.shape({
     addendum: PropTypes.string,
