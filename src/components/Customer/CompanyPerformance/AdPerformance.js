@@ -262,14 +262,21 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         }
       });
     }
+
     if (response.daily_facts && response.daily_facts.current_sum) {
       setAdCurrentTotal(response.daily_facts.current_sum);
+    } else {
+      setAdCurrentTotal([]);
     }
     if (response.daily_facts && response.daily_facts.previous_sum) {
       setAdPreviousTotal(response.daily_facts.previous_sum);
+    } else {
+      setAdPreviousTotal([]);
     }
     if (response.daily_facts && response.daily_facts.difference_data) {
       setDifference(response.daily_facts.difference_data);
+    } else {
+      setDifference([]);
     }
 
     console.log('temp data', tempData);
