@@ -438,7 +438,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (res && res.status === 400) {
           //
         }
-        if (res && res.status === 200 && res.data && res.data.daily_facts) {
+        if (res && res.status === 200 && res.data && res.data.dsp_spend) {
           const dspGraphData = bindDSPResponseData(res.data);
           setDSPChartData(dspGraphData);
         }
