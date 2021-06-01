@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-cycle */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -41,6 +41,7 @@ import {
   PATH_BGS_DASHBOARD,
   PATH_CUSTOMER_LIST,
   PATH_ADM_DASHBOARD,
+  PATH_LOGIN,
 } from '../constants';
 
 export default function Header({ type, userInfo }) {
@@ -78,6 +79,12 @@ export default function Header({ type, userInfo }) {
       transform: 'translate(-50%, -50%)',
     },
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('token') === null) {
+      window.location.href = PATH_LOGIN;
+    }
+  }, []);
 
   const getInitials = () => {
     const firstName =
