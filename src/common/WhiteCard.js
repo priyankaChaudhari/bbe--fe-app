@@ -236,6 +236,10 @@ export const WhiteCard = styled.div`
       margin-right: 3px;
       vertical-align: bottom;
      }
+    &.grey {
+      color: ${Theme.gray40};
+    }
+
   }
   .decrease-rate {
     color: ${Theme.darkRed};
@@ -247,6 +251,9 @@ export const WhiteCard = styled.div`
       vertical-align: middle;
       margin-left: -2px;
       margin-right: 3px;
+    }
+    &.grey {
+      color: ${Theme.gray40};
     }
   }
 

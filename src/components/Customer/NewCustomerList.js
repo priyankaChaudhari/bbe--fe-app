@@ -36,6 +36,7 @@ import {
   CheckFileIcon,
   FileIcon,
   ArrowDownIcon,
+  UpDowGrayArrow,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import {
@@ -929,15 +930,20 @@ export default function NewCustomerList() {
     return '';
   };
 
-  const renderAdPerformanceDifference = (value) => {
+  const renderAdPerformanceDifference = (value, grayArrow = false) => {
     if (value) {
       if (value.toString().includes('-')) {
         return (
           <>
             <br />
-            <span className="decrease-rate">
+            <span
+              className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
               {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              <img
+                className="red-arrow"
+                src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
+                alt="arrow-up"
+              />
               {value
                 ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
                 : ''}
@@ -948,10 +954,10 @@ export default function NewCustomerList() {
       return (
         <>
           <br />
-          <div className="increase-rate">
+          <div className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
             <img
               className="green-arrow"
-              src={ArrowUpIcon}
+              src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
               width="14px"
               alt="arrow-up"
             />
@@ -1259,6 +1265,7 @@ export default function NewCustomerList() {
                   item.ad_performace &&
                   item.ad_performace.difference_data &&
                   item.ad_performace.difference_data.ad_spend,
+                true,
               )}
             </>
           </td>

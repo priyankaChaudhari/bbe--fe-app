@@ -73,6 +73,9 @@ const Table = styled.table`
           margin-left: -2px;
           margin-right: 3px;
         }
+        &.grey {
+          color: ${Theme.gray40};
+        }
       }
 
       .decrease-rate {
@@ -85,6 +88,9 @@ const Table = styled.table`
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;
+        }
+        &.grey {
+          color: ${Theme.gray40};
         }
       }
 

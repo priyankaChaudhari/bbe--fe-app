@@ -12,6 +12,7 @@ import {
   EditFileIcon,
   CountDayClock,
   FileIcon,
+  UpDowGrayArrow,
 } from '../../theme/images/index';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader, WhiteCard } from '../../common';
@@ -231,14 +232,21 @@ export default function CustomerListTablet({
     return '';
   };
 
-  const renderAdPerformanceDifference = (value) => {
+  const renderAdPerformanceDifference = (value, grayArrow = false) => {
     if (value) {
       if (value.toString().includes('-')) {
         return (
           <>
-            <span className="decrease-rate ml-1">
+            <span
+              className={
+                grayArrow ? 'decrease-rate grey ml-1' : 'decrease-rate ml-1 '
+              }>
               {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              <img
+                className="red-arrow"
+                src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
+                alt="arrow-up"
+              />
               {value
                 ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
                 : ''}
@@ -247,10 +255,13 @@ export default function CustomerListTablet({
         );
       }
       return (
-        <span className="increase-rate ml-1">
+        <span
+          className={
+            grayArrow ? 'increase-rate grey ml-1' : 'increase-rate ml-1 '
+          }>
           <img
             className="green-arrow"
-            src={ArrowUpIcon}
+            src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
             width="14px"
             alt="arrow-up"
           />
@@ -516,6 +527,7 @@ export default function CustomerListTablet({
                       item.ad_performace &&
                       item.ad_performace.difference_data &&
                       item.ad_performace.difference_data.ad_spend,
+                    true,
                   )}
                 </>
               </div>
@@ -1059,6 +1071,9 @@ const CustomerListTabletView = styled.div`
     img {
       vertical-align: bottom;
     }
+    &.grey {
+      color: ${Theme.gray40};
+    }
   }
   .decrease-rate {
     color: ${Theme.darkRed};
@@ -1068,6 +1083,9 @@ const CustomerListTabletView = styled.div`
       width: 14px;
       transform: rotate(180deg);
       vertical-align: middle;
+    }
+    &.grey {
+      color: ${Theme.gray40};
     }
   }
   @media (max-width: 991px) {
