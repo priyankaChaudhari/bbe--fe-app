@@ -314,7 +314,9 @@ export default function AdPerformanceChart({
 
       // loop for genearate tooltip
       _.keys(selectedBox).map((item) => {
-        const value = `${item}Current`;
+        const value = `${item}CurrentLabel`;
+        // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
+
         if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],

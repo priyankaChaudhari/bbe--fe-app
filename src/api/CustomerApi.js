@@ -562,7 +562,7 @@ export async function getAdPerformance(
   let params = {};
   if (startDate && endDate) {
     params = {
-      ad_type: adType,
+      sponsored_type: adType,
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
@@ -571,7 +571,7 @@ export async function getAdPerformance(
     };
   } else {
     params = {
-      ad_type: adType,
+      sponsored_type: adType,
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,

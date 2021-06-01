@@ -393,6 +393,7 @@ export default function AdManagerDashboard() {
                             item.ad_performace.current_sum &&
                             item.ad_performace.current_sum.ad_sales
                               ? `$${item.ad_performace.current_sum.ad_sales
+                                  .toFixed(2)
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                               : '$0'}
@@ -404,6 +405,7 @@ export default function AdManagerDashboard() {
                             item.ad_performace.previous_sum &&
                             item.ad_performace.previous_sum.ad_sales
                               ? `$${item.ad_performace.previous_sum.ad_sales
+                                  .toFixed(2)
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                               : '$0'}
@@ -427,6 +429,7 @@ export default function AdManagerDashboard() {
                             item.ad_performace.current_sum &&
                             item.ad_performace.current_sum.ad_spend
                               ? `$${item.ad_performace.current_sum.ad_spend
+                                  .toFixed(2)
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                               : '$0'}
@@ -438,6 +441,7 @@ export default function AdManagerDashboard() {
                             item.ad_performace.previous_sum &&
                             item.ad_performace.previous_sum.ad_spend
                               ? `$${item.ad_performace.previous_sum.ad_spend
+                                  .toFixed(2)
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                               : '$0'}

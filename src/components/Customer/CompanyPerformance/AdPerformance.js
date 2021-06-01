@@ -128,16 +128,23 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           adClickRatePrevious: item.ctr,
           previousDate,
 
-          adSalesPreviousLabel: item.ad_sales !== null ? item.ad_sales : '0.00',
-          adSpendPreviousLabel: item.ad_spend !== null ? item.ad_spend : '0.00',
+          adSalesPreviousLabel:
+            item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
+          adSpendPreviousLabel:
+            item.ad_spend !== null ? item.ad_spend.toFixed(2) : '0.00',
           adConversionPreviousLabel:
-            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00',
+            item.ad_conversion_rate !== null
+              ? item.ad_conversion_rate.toFixed(2)
+              : '0.00',
           impressionsPreviousLabel:
             item.impressions !== null ? item.impressions : '0',
-          adCosPreviousLabel: item.acos !== null ? item.acos : '0.00',
-          adRoasPreviousLabel: item.roas !== null ? item.roas : '0.00',
+          adCosPreviousLabel:
+            item.acos !== null ? item.acos.toFixed(2) : '0.00',
+          adRoasPreviousLabel:
+            item.roas !== null ? item.roas.toFixed(2) : '0.00',
           adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
-          adClickRatePreviousLabel: item.ctr !== null ? item.ctr : '0.00',
+          adClickRatePreviousLabel:
+            item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
         });
       });
     }
@@ -163,21 +170,23 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           tempData[index].adClickRateCurrent = item.ctr;
 
           tempData[index].adSalesCurrentLabel =
-            item.ad_sales !== null ? item.ad_sales : '0.00';
+            item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00';
           tempData[index].adSpendCurrentLabel =
-            item.ad_spend !== null ? item.ad_spend : '0.00';
+            item.ad_spend !== null ? item.ad_spend.toFixed(2) : '0.00';
           tempData[index].adConversionCurrentLabel =
-            item.ad_conversion_rate !== null ? item.ad_conversion_rate : '0.00';
+            item.ad_conversion_rate !== null
+              ? item.ad_conversion_rate.toFixed(2)
+              : '0.00';
           tempData[index].impressionsCurrentLabel =
             item.impressions !== null ? item.impressions : '0';
           tempData[index].adCosCurrentLabel =
-            item.acos !== null ? item.acos : '0.00';
+            item.acos !== null ? item.acos.toFixed(2) : '0.00';
           tempData[index].adRoasCurrentLabel =
-            item.roas !== null ? item.roas : '0.00';
+            item.roas !== null ? item.roas.toFixed(2) : '0.00';
           tempData[index].adClicksCurrentLabel =
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
-            item.ctr !== null ? item.ctr : '0.00';
+            item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
           if (index > 0) {
@@ -224,19 +233,22 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             adClickRatePrevious: null,
 
             adSalesCurrentLabel:
-              item.ad_sales !== null ? item.ad_sales : '0.00',
+              item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
             adSpendCurrentLabel:
-              item.ad_spend !== null ? item.ad_spend : '0.00',
+              item.ad_spend !== null ? item.ad_spend.toFixed(2) : '0.00',
             adConversionCurrentLabel:
               item.ad_conversion_rate !== null
-                ? item.ad_conversion_rate
+                ? item.ad_conversion_rate.toFixed(2)
                 : '0.00',
             impressionsCurrentLabel:
               item.impressions !== null ? item.impressions : '0',
-            adCosCurrentLabel: item.acos !== null ? item.acos : '0.00',
-            adRoasCurrentLabel: item.roas !== null ? item.roas : '0.00',
+            adCosCurrentLabel:
+              item.acos !== null ? item.acos.toFixed(2) : '0.00',
+            adRoasCurrentLabel:
+              item.roas !== null ? item.roas.toFixed(2) : '0.00',
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
-            adClickRateCurrentLabel: item.ctr !== null ? item.ctr : '0.00',
+            adClickRateCurrentLabel:
+              item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
@@ -260,6 +272,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setDifference(response.daily_facts.difference_data);
     }
 
+    console.log('temp data', tempData);
     return tempData;
   };
 
@@ -286,7 +299,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
 
           DspPreviousLabel:
             item.daily_dsp_spend_report !== null
-              ? item.daily_dsp_spend_report
+              ? item.daily_dsp_spend_report.toFixed(2)
               : '0.00',
         });
       });
@@ -306,7 +319,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
 
           tempData[index].DspCurrentLabel =
             item.daily_dsp_spend_report !== null
-              ? item.daily_dsp_spend_report
+              ? item.daily_dsp_spend_report.toFixed(2)
               : '0.00';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
@@ -327,7 +340,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
 
             DspCurrentLabel:
               item.daily_dsp_spend_report !== null
-                ? item.daily_dsp_spend_report
+                ? item.daily_dsp_spend_report.toFixed(2)
                 : '0.00',
             DspPreviousLabel: '0.00',
           });

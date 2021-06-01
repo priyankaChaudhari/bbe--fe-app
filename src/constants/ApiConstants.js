@@ -23,8 +23,8 @@ export const API_AMAZON_DETAILS = '/merchant/';
 export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`;
 export const API_PERFORMANCE = '/performance/';
 export const API_MARKETPLACES = '/marketplaces/';
-export const API_AD_PERFORMANCE = '/adperformance/';
-export const API_ADM = '/admanager/';
+export const API_AD_PERFORMANCE = '/performance-metrics/';
+export const API_ADM = '/manager-list/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

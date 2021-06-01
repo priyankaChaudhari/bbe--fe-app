@@ -826,18 +826,20 @@ export default function NewCustomerList() {
         );
       }
       return [{ value: 'any', label: 'Any' }];
-    } if (item === 'sort') {
+    }
+    if (item === 'sort') {
       return (
         selectedValue[item.key] ||
         sortOptions.filter((op) => op.value === filters.sort_by)
       );
-    } if (showPerformance) {
+    }
+    if (showPerformance) {
       return [{ value: 'performance', label: 'Sales Performance' }];
-    } if (showAdPerformance) {
+    }
+    if (showAdPerformance) {
       return [{ value: 'ad_performance', label: 'Ad Performance' }];
-    } 
-      return [{ value: 'contract_details', label: 'Contract Details' }];
-    
+    }
+    return [{ value: 'contract_details', label: 'Contract Details' }];
   };
 
   const generateDropdown = (item, reff = null) => {
@@ -1241,6 +1243,7 @@ export default function NewCustomerList() {
             item.ad_performace.current_sum &&
             item.ad_performace.current_sum.ad_sales
               ? `$${item.ad_performace.current_sum.ad_sales
+                  .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
               : '$0'}
@@ -1259,6 +1262,7 @@ export default function NewCustomerList() {
               item.ad_performace.current_sum &&
               item.ad_performace.current_sum.ad_spend
                 ? `$${item.ad_performace.current_sum.ad_spend
+                    .toFixed(2)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                 : '$0'}
