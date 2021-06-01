@@ -40,6 +40,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_BGS_DASHBOARD,
   PATH_CUSTOMER_LIST,
+  PATH_ADM_DASHBOARD,
 } from '../constants';
 
 export default function Header({ type, userInfo }) {
@@ -479,6 +480,39 @@ export default function Header({ type, userInfo }) {
                     {' '}
                     {history.location.pathname &&
                     history.location.pathname.includes('bgs-dashboard') ? (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon active"
+                        src={SpeedometerActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon  disactive"
+                        src={Speedometer}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : (
+                  ''
+                )}
+                {userInfo &&
+                userInfo.role &&
+                userInfo.role.includes('Ad Manager') ? (
+                  <li
+                    className={
+                      history.location.pathname &&
+                      history.location.pathname.includes('adm-dashboard')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_ADM_DASHBOARD)}>
+                    {' '}
+                    {history.location.pathname &&
+                    history.location.pathname.includes('adm-dashboard') ? (
                       <img
                         width="32px"
                         className=" speed0meter-icon active"
