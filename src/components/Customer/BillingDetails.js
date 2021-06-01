@@ -66,7 +66,11 @@ export default function BillingDetails({ id, userInfo }) {
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
-      return '**/**';
+      const getDate =
+        data.card_details && data.card_details[0] && data.card_details[0][key]
+          ? data.card_details[0][key].split('-')
+          : '';
+      return getDate ? `${getDate[1]}/${getDate[0].substring(2)}` : '**/**';
     }
     if (data && data[type] && data[type][0]) {
       return data[type][0][key];
@@ -231,7 +235,7 @@ export default function BillingDetails({ id, userInfo }) {
                     </div>
                   </div>
                   <div className="col-3">
-                    <div className="label mt-3">CSV</div>
+                    <div className="label mt-3">CVV</div>
                     <div className="label-info">***</div>
                   </div>
                 </div>

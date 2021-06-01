@@ -306,7 +306,11 @@ export default function BillingInfo({
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
     if (item === 'expiration_date') {
-      return '****';
+      const getDate =
+        data.card_details && data.card_details[0] && data.card_details[0][item]
+          ? data.card_details[0][item].split('-')
+          : '';
+      return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
     }
 
     return '';
@@ -383,7 +387,7 @@ export default function BillingInfo({
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
-        maxLength={item.key === 'postal_code' ? 7 : ''}
+        maxLength={item.key === 'postal_code' ? 10 : ''}
         readOnly={
           (type === 'card_details' ||
             type === 'billing_address' ||
