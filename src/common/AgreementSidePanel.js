@@ -43,13 +43,7 @@ import {
   DSPAddendumDetails,
   ListingOptimization,
 } from '../constants/FieldConstants';
-import {
-  getLength,
-  getRevenueShare,
-  getMonthlyService,
-  getOneTimeService,
-  createAddendum,
-} from '../api';
+import { getLength, getRevenueShare, createAddendum } from '../api';
 import ContractInputSelect from './ContractInputSelect';
 
 import PageLoader from './PageLoader';
@@ -70,7 +64,6 @@ export default function AgreementSidePanel({
   setShowEditor,
   setNewAddendum,
   setNotIncludedOneTimeServices,
-  setNotIncludedMonthlyServices,
   apiError,
   showFooter,
   setApiError,
@@ -131,15 +124,18 @@ export default function AgreementSidePanel({
   setContractLoading,
   customerError,
   setCustomerErrors,
-  setIsDocRendered,
   isDocRendered,
+  oneTimeService,
+  monthlyService,
+  AmazonStoreOptions,
+  fetchUncommonOptions,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
-  const [oneTimeService, setOneTimeService] = useState([]);
-  const [monthlyService, setMonthlyService] = useState([]);
-  const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
+  // const [oneTimeService, setOneTimeService] = useState([]);
+  // const [monthlyService, setMonthlyService] = useState([]);
+  // const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
   const getActivityInitials = (userInfo) => {
@@ -358,77 +354,6 @@ export default function AgreementSidePanel({
     getContractActivityLogInfo(currentPage);
   };
 
-  const fetchUncommonOptions = (options, alreadySelected, type) => {
-    let result = [];
-    if (alreadySelected && alreadySelected.length) {
-      for (const option of options) {
-        let isFound = true;
-        for (const service of alreadySelected) {
-          if (
-            service && service.service && service.service.id
-              ? service.service.id !== option.value
-              : service.service_id !== option.value
-          ) {
-            isFound = false;
-          } else {
-            isFound = true;
-            break;
-          }
-        }
-
-        if (isFound === false) {
-          // result.push(option);
-          if (type === 'monthly_service') {
-            result.push(option);
-          } else if (
-            alreadySelected.find((item) =>
-              item.name
-                ? item.name.includes('Amazon Store Package')
-                : item.service.name.includes('Amazon Store Package'),
-            )
-          ) {
-            if (!option.label.includes('Amazon Store Package')) {
-              result.push(option);
-            }
-          } else if (!option.label.includes('Amazon Store Package')) {
-            result.push(option);
-          } else if (
-            result.find((item) => item.label.includes('Amazon Store Package'))
-          ) {
-            // dfgdfgh
-          } else {
-            result.push({
-              value: 'Amazon Store Package',
-              label: 'Amazon Store Package',
-            });
-          }
-        }
-      }
-    } else if (type === 'monthly_service') {
-      result = options;
-    } else {
-      result = options.filter(
-        (item) => !item.label.includes('Amazon Store Package'),
-      );
-      result.push({
-        value: 'Amazon Store Package',
-        label: 'Amazon Store Package',
-      });
-    }
-    // }
-    // func(result);
-    if (type === 'one_time_service') {
-      if (setNotIncludedOneTimeServices) {
-        setNotIncludedOneTimeServices(result);
-      }
-    }
-    if (type === 'monthly_service') {
-      if (setNotIncludedMonthlyServices) {
-        setNotIncludedMonthlyServices(result);
-      }
-    }
-  };
-
   useEffect(() => {
     getLength().then((len) => {
       setAccountLength(len.data);
@@ -436,59 +361,6 @@ export default function AgreementSidePanel({
     getRevenueShare().then((rev) => {
       setRevShare(rev.data);
     });
-
-    getMonthlyService().then((res) => {
-      setMonthlyService(res.data);
-      fetchUncommonOptions(
-        res && res.data,
-        formData.additional_monthly_services,
-        'monthly_service',
-      );
-
-      // if (
-      //   agreementData &&
-      //   agreementData.additional_monthly_services &&
-      //   agreementData.additional_monthly_services.length
-      // ) {
-      //   getMonthlyServiceOptions(res.data);
-      // }
-    });
-
-    getOneTimeService().then((r) => {
-      setOneTimeService(r && r.data);
-
-      if (r && r.data) {
-        const result = [];
-        r.data.forEach((item) => {
-          if (item.label.includes('Amazon Store Package')) {
-            result.push({ value: item.value, label: item.label });
-          }
-        });
-        const list = result.filter((item) =>
-          item.label.includes('Amazon Store Package'),
-        );
-        list.filter((item) => {
-          const serviceName = item.label.split(' ')[3];
-          item.label = serviceName;
-          return item;
-        });
-
-        setAmazonStoreOptions(list);
-
-        fetchUncommonOptions(
-          r && r.data,
-          formData.additional_one_time_services,
-          'one_time_service',
-        );
-        setIsDocRendered(true);
-      }
-    });
-
-    // getMarketplaces().then((market) => {
-    //   setMarketPlaces(market.data);
-    //   setAdditionalMarketplaces(market.data);
-    //   setMarketplacesResult(market.data);
-    // });
   }, []);
 
   const DropdownIndicator = (props) => {
@@ -543,25 +415,20 @@ export default function AgreementSidePanel({
       }
     }
     setSelectedAmazonStorePackService(serviceData);
-    // }
-    // if (agreementData && agreementData.additional_one_time_services) {
+
     fetchUncommonOptions(
       oneTimeService,
       formData.additional_one_time_services,
       'one_time_service',
     );
 
-    // if (agreementData && agreementData.additional_monthly_services) {
-
     fetchUncommonOptions(
       monthlyService,
       formData.additional_monthly_services,
       'monthly_service',
     );
+
     if (
-      // agreementData &&
-      // agreementData.additional_marketplaces &&
-      // agreementData.additional_marketplaces.length
       formData &&
       formData.additional_marketplaces &&
       formData.additional_marketplaces.length
@@ -4342,16 +4209,11 @@ AgreementSidePanel.defaultProps = {
   formData: {},
   loader: false,
   agreementData: {},
-  // accountURL: {},
-  // customerData: {},
   newAddendumData: {},
   onEditAddendum: () => {},
   setShowEditor: () => {},
   setNewAddendum: () => {},
   setNotIncludedOneTimeServices: () => {},
-  setNotIncludedMonthlyServices: () => {},
-  // sendNotIncludedOneTimeServToAdd: () => {},
-  // sendNotIncludedMonthlyServToAdd: () => {},
   apiError: {},
   showFooter: () => {},
   setApiError: () => {},
@@ -4409,8 +4271,11 @@ AgreementSidePanel.defaultProps = {
   setContractLoading: () => {},
   customerError: {},
   setCustomerErrors: () => {},
-  setIsDocRendered: () => {},
   isDocRendered: false,
+  oneTimeService: [],
+  monthlyService: [],
+  AmazonStoreOptions: [],
+  fetchUncommonOptions: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4445,7 +4310,7 @@ AgreementSidePanel.propTypes = {
     sales_threshold: PropTypes.string,
   }),
   loader: PropTypes.bool,
-  // accountURL: PropTypes.objectOf(PropTypes.object),
+
   newAddendumData: PropTypes.shape({
     id: PropTypes.string,
     addendum: PropTypes.string,
@@ -4454,9 +4319,7 @@ AgreementSidePanel.propTypes = {
   setShowEditor: PropTypes.func,
   setNewAddendum: PropTypes.func,
   setNotIncludedOneTimeServices: PropTypes.func,
-  setNotIncludedMonthlyServices: PropTypes.func,
-  // sendNotIncludedOneTimeServToAdd: PropTypes.func,
-  // sendNotIncludedMonthlyServToAdd: PropTypes.func,
+
   apiError: PropTypes.shape({
     quantity: PropTypes.arrayOf(PropTypes.string),
     service: PropTypes.arrayOf(PropTypes.string),
@@ -4544,8 +4407,11 @@ AgreementSidePanel.propTypes = {
   setContractLoading: PropTypes.func,
   customerError: PropTypes.shape(PropTypes.object),
   setCustomerErrors: PropTypes.func,
-  setIsDocRendered: PropTypes.func,
   isDocRendered: PropTypes.bool,
+  oneTimeService: PropTypes.arrayOf(PropTypes.object),
+  monthlyService: PropTypes.arrayOf(PropTypes.object),
+  AmazonStoreOptions: PropTypes.arrayOf(PropTypes.object),
+  fetchUncommonOptions: PropTypes.func,
 };
 
 const SidePanel = styled.div`

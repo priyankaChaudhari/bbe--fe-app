@@ -27,7 +27,7 @@ import ContractFooter from './ContractFooter';
 import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon } from '../../theme/images';
+import { CloseIcon, DownloadPdf } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -44,6 +44,8 @@ import {
   getDocumentList,
   createContractDesign,
   updateCustomerDetails,
+  getMonthlyService,
+  getOneTimeService,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -169,7 +171,7 @@ export default function ContractContainer() {
     amendment: false,
   });
   const [loaderFlag, setLoaderFlag] = useState(true);
-  // const [contractDesignLoader, setContractDesignLoader] = useState(null);
+  const [contractDesignLoader, setContractDesignLoader] = useState(null);
   const [calculatedDate, setCalculatedDate] = useState(null);
   const [firstMonthDate, setFirstMonthDate] = useState(null);
   const [secondMonthDate, setSecondMonthDate] = useState(null);
@@ -192,6 +194,10 @@ export default function ContractContainer() {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
+  const [oneTimeService, setOneTimeService] = useState([]);
+  const [monthlyService, setMonthlyService] = useState([]);
+  const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
+
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     const offset = isDesktop ? -150 : isMobile ? -220 : -220;
@@ -213,6 +219,78 @@ export default function ContractContainer() {
     setIsLoading({ loader: false, type: 'page' });
     setLoaderFlag(false);
   }
+
+  const fetchUncommonOptions = (options, alreadySelected, type) => {
+    let result = [];
+    if (alreadySelected && alreadySelected.length) {
+      for (const option of options) {
+        let isFound = true;
+        for (const service of alreadySelected) {
+          if (
+            service && service.service && service.service.id
+              ? service.service.id !== option.value
+              : service.service_id !== option.value
+          ) {
+            isFound = false;
+          } else {
+            isFound = true;
+            break;
+          }
+        }
+
+        if (isFound === false) {
+          // result.push(option);
+          if (type === 'monthly_service') {
+            result.push(option);
+          } else if (
+            alreadySelected.find((item) =>
+              item.name
+                ? item.name.includes('Amazon Store Package')
+                : item.service.name.includes('Amazon Store Package'),
+            )
+          ) {
+            if (!option.label.includes('Amazon Store Package')) {
+              result.push(option);
+            }
+          } else if (!option.label.includes('Amazon Store Package')) {
+            result.push(option);
+          } else if (
+            result.find((item) => item.label.includes('Amazon Store Package'))
+          ) {
+            // dfgdfgh
+          } else {
+            result.push({
+              value: 'Amazon Store Package',
+              label: 'Amazon Store Package',
+            });
+          }
+        }
+      }
+    } else if (type === 'monthly_service') {
+      result = options;
+    } else {
+      result = options.filter(
+        (item) => !item.label.includes('Amazon Store Package'),
+      );
+      result.push({
+        value: 'Amazon Store Package',
+        label: 'Amazon Store Package',
+      });
+    }
+    // }
+    // func(result);
+    if (type === 'one_time_service') {
+      if (setNotIncludedOneTimeServices) {
+        setNotIncludedOneTimeServices(result);
+      }
+    }
+    if (type === 'monthly_service') {
+      if (setNotIncludedMonthlyServices) {
+        setNotIncludedMonthlyServices(result);
+      }
+    }
+  };
+
   const splittedPath =
     location && location.pathname && location.pathname.split('/');
 
@@ -314,7 +392,44 @@ export default function ContractContainer() {
       setAdditionalMarketplaces(market.data);
       setMarketplacesResult(market.data);
     });
+    getMonthlyService().then((res) => {
+      setMonthlyService(res.data);
 
+      // fetchUncommonOptions(
+      //   res && res.data,
+      //   formData.additional_monthly_services,
+      //   'monthly_service',
+      // );
+    });
+
+    getOneTimeService().then((r) => {
+      setOneTimeService(r && r.data);
+
+      if (r && r.data) {
+        const result = [];
+        r.data.forEach((item) => {
+          if (item.label.includes('Amazon Store Package')) {
+            result.push({ value: item.value, label: item.label });
+          }
+        });
+        const list = result.filter((item) =>
+          item.label.includes('Amazon Store Package'),
+        );
+        list.filter((item) => {
+          const serviceName = item.label.split(' ')[3];
+          item.label = serviceName;
+          return item;
+        });
+
+        setAmazonStoreOptions(list);
+
+        // fetchUncommonOptions(
+        //   r && r.data,
+        //   formData.additional_one_time_services,
+        //   'one_time_service',
+        // );
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
@@ -1315,8 +1430,7 @@ export default function ContractContainer() {
   };
 
   const createAgreementDoc = () => {
-    // setContractDesignLoader(true);
-    // if (data && data.length && details && Object.keys(details).length) {
+    setContractDesignLoader(true);
 
     const serviceData = getAgreementAccorType(0);
     const agreementData =
@@ -1388,6 +1502,8 @@ export default function ContractContainer() {
         .replace(
           'ADDITIONAL_SERVICES_NOT_INCLUDED',
           showNotIncludedServicesTable(),
+          // notIncludedMonthlyServices,
+          // notIncludedOneTimeServices,
         );
 
     const dspAddendum =
@@ -1505,7 +1621,7 @@ export default function ContractContainer() {
     };
 
     createContractDesign(contractData).then(() => {
-      // setContractDesignLoader(false);
+      setContractDesignLoader(false);
     });
     // }
   };
@@ -1610,6 +1726,23 @@ export default function ContractContainer() {
     } else {
       setMarketPlaces(marketplacesResult);
     }
+
+    if (details && details.additional_one_time_services) {
+      fetchUncommonOptions(
+        oneTimeService,
+        details.additional_one_time_services,
+        'one_time_service',
+      );
+    }
+
+    if (details && details.additional_monthly_services) {
+      fetchUncommonOptions(
+        monthlyService,
+        details.additional_monthly_services,
+        'monthly_service',
+      );
+    }
+    setIsDocRendered(true);
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -2008,7 +2141,7 @@ export default function ContractContainer() {
         );
       }
       setIsLoading({ loader: true, type: 'page' });
-      // setContractDesignLoader(true);
+      setContractDesignLoader(true);
       // for additionL montlhy service
       if (updatedFormData.additional_monthly_services) {
         additionalMonthlyApi = createAdditionalServiceBulk(
@@ -2397,7 +2530,7 @@ export default function ContractContainer() {
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
         setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
-        setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
+        // setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
         notIncludedOneTimeServices={notIncludedOneTimeServices}
         showFooter={showFooter}
         newAddendumData={newAddendumData}
@@ -2463,8 +2596,11 @@ export default function ContractContainer() {
         setShowSaveSuccessMsg={setShowSaveSuccessMsg}
         customerError={customerError}
         setCustomerErrors={setCustomerErrors}
-        setIsDocRendered={setIsDocRendered}
         isDocRendered={downloadApiCall}
+        oneTimeService={oneTimeService}
+        monthlyService={monthlyService}
+        AmazonStoreOptions={AmazonStoreOptions}
+        fetchUncommonOptions={fetchUncommonOptions}
       />
     );
   };
@@ -2573,7 +2709,7 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {/* {isFooter ||
+                        {isFooter ||
                         (newAddendumData &&
                           newAddendumData.id &&
                           showEditor &&
@@ -2607,7 +2743,7 @@ export default function ContractContainer() {
                               Download
                             </a>
                           </li>
-                        )} */}
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
@@ -2685,7 +2821,7 @@ export default function ContractContainer() {
                     </div>
                     <div className="col-md-6 col-sm-12">
                       <ul className="contract-download-nav ">
-                        {/* {isFooter ||
+                        {isFooter ||
                         (newAddendumData &&
                           newAddendumData.id &&
                           showEditor &&
@@ -2719,7 +2855,7 @@ export default function ContractContainer() {
                               Download
                             </a>
                           </li>
-                        )} */}
+                        )}
                         <li>
                           <span className="divide-arrow" />
                         </li>
