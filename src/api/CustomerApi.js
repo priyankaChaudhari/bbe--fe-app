@@ -104,6 +104,10 @@ export async function getCustomerList(
     !adPerformance
   ) {
     bgsParams = queryString.stringify({ user: filterOptions.user });
+    params = {
+      ...params,
+      role: 'growth_strategist',
+    };
   }
 
   if (

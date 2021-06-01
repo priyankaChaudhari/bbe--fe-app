@@ -99,8 +99,8 @@ export default function NewCustomerList() {
       : false,
   );
   const options = [
-    { value: 'performance', label: 'Sales Performance' },
     { value: 'contract_details', label: 'Contract Details' },
+    { value: 'performance', label: 'Sales Performance' },
     { value: 'ad_performance', label: 'Ad Performance' },
   ];
   const contractChoices = [
@@ -813,7 +813,7 @@ export default function NewCustomerList() {
     );
   };
 
-  const bindValue = (item) => {
+  const bindDropDownValue = (item) => {
     if (item === 'user') {
       if (filters.user && !showAdPerformance) {
         return brandGrowthStrategist.filter((option) =>
@@ -825,17 +825,19 @@ export default function NewCustomerList() {
           filters.ad_user.some((op) => op === option.value),
         );
       }
-    } else if (item === 'sort') {
+      return [{ value: 'any', label: 'Any' }];
+    } if (item === 'sort') {
       return (
         selectedValue[item.key] ||
         sortOptions.filter((op) => op.value === filters.sort_by)
       );
-    } else if (showPerformance) {
+    } if (showPerformance) {
       return [{ value: 'performance', label: 'Sales Performance' }];
-    } else if (showAdPerformance) {
+    } if (showAdPerformance) {
       return [{ value: 'ad_performance', label: 'Ad Performance' }];
-    }
-    return [{ value: 'contract_details', label: 'Contract Details' }];
+    } 
+      return [{ value: 'contract_details', label: 'Contract Details' }];
+    
   };
 
   const generateDropdown = (item, reff = null) => {
@@ -859,7 +861,7 @@ export default function NewCustomerList() {
               ? handleFilters(event, item, 'brand', action)
               : handleSearch(event, item === 'sort' ? 'sort' : 'view')
           }
-          value={bindValue(item)}
+          value={bindDropDownValue(item)}
           // value={
           //   item === 'user'
           //     ? filters.user
@@ -1462,22 +1464,6 @@ export default function NewCustomerList() {
                       </div>
                     </div>
 
-                    {/* //for ad manager dropdown 
-                    {showAdPerformance ? (
-                      <>
-                        <div className="label">Ad Manager</div>
-                        <DropDownSelect className="w-250">
-                          {generateAdManagerDropdown('user', selectInputRefMobile)}
-                        </DropDownSelect>
-                      </>
-                    ) : (
-                      <>
-                        <div className="label">Brand Strategist</div>
-                        <DropDownSelect className="w-250">
-                          {generateDropdown('user', selectInputRefMobile)}
-                        </DropDownSelect>
-                      </>
-                    )} */}
                     {showAdPerformance ? (
                       <div className="label">Ad Manager</div>
                     ) : (
