@@ -43,8 +43,6 @@ export default function AdPerformanceChart({
       adClickRate: 'CLICK THROUGH RATE',
     };
 
-    let firstAxis = null;
-    let secondAxis = null;
     const tooltipDate =
       '<div style="color: white; font-size: 16px;">{date}</div>';
 
@@ -60,7 +58,7 @@ export default function AdPerformanceChart({
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
 
-    // render y axis
+    // create object of first value axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
@@ -112,6 +110,24 @@ export default function AdPerformanceChart({
     `;
 
       return tooltipText;
+    }
+
+    function bindValueAxisFormatter(item) {
+      let format = '';
+      if (item === 'adSales' || item === 'adSpend') {
+        format = `${currencySymbol}#.#a`;
+      } else if (
+        item === 'adConversion' ||
+        item === 'adClickRate' ||
+        item === 'adCos'
+      ) {
+        format = `#.#'%'`;
+      } else if (item === 'adRoas') {
+        format = `${currencySymbol}#.#`;
+      } else {
+        format = `#.#a`;
+      }
+      return format;
     }
 
     // when only one metrics selected
@@ -267,6 +283,7 @@ export default function AdPerformanceChart({
     } else {
       // else part- for multiple metrics selected
 
+      // create object of 2nd value axis
       const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis2.renderer.grid.template.disabled = true;
       valueAxis2.cursorTooltipEnabled = false;
@@ -279,12 +296,19 @@ export default function AdPerformanceChart({
       ];
       valueAxis2.numberFormatter.smallNumberPrefixes = [];
 
+      // create object of 3rd value axis
       const valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis3.renderer.grid.template.disabled = true;
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
       valueAxis3.numberFormatter.numberFormat = `#.#a`;
 
+      // create object of 4th value axis
+      const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
+      valueAxis4.renderer.grid.template.disabled = true;
+      valueAxis4.cursorTooltipEnabled = false;
+      valueAxis4.numberFormatter = new am4core.NumberFormatter();
+      valueAxis4.numberFormatter.numberFormat = `#.#a`;
       const snapToSeries = [];
       let tooltipValue = '';
 
@@ -335,140 +359,24 @@ export default function AdPerformanceChart({
         return '';
       });
 
-      // render series
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
-        // console.log('item=',item);
         if (index === 0) {
-          if (item === 'adSales' || item === 'adSpend') {
-            // console.log('index 0 adSales');
-            series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-            firstAxis = 'currency';
-          } else if (
-            item === 'adConversion' ||
-            item === 'adClickRate' ||
-            item === 'adCos'
-          ) {
-            // console.log('index 0 adConversion');
-            series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = `#.#'%'`;
-            firstAxis = 'percentage';
-          }
-          /// / seperate out roas //
-          else if (item === 'adRoas') {
-            valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-            series.yAxis = valueAxis;
-            firstAxis = 'adRoas';
-          } else {
-            if (item === 'impressions' || item === 'adClicks') {
-              valueAxis.numberFormatter.numberFormat = `#.#a`;
-            }
-            series.yAxis = valueAxis;
-            firstAxis = 'unit';
-          }
-          // valueAxis.renderer.line.strokeOpacity = 1;
-        } else if (item === 'adSales' || item === 'adSpend') {
-          if (firstAxis === 'currency') {
-            // console.log('currency');
-            series.yAxis = valueAxis;
-            // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-          } else if (secondAxis === null || secondAxis === 'currency') {
-            // console.log('not currency, second axis null currency')
-            series.yAxis = valueAxis2;
-            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-            valueAxis2.renderer.opposite = true;
-            // valueAxis2.renderer.line.strokeOpacity = 1;
-            secondAxis = 'currency';
-          } else {
-            // console.log('second axis not null currency');
-            series.yAxis = valueAxis3;
-            valueAxis3.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-            valueAxis3.renderer.opposite = true;
-
-            valueAxis.renderer.line.strokeOpacity = 0;
-            valueAxis2.renderer.line.strokeOpacity = 0;
-            valueAxis3.renderer.line.strokeOpacity = 0;
-            valueAxis.renderer.labels.template.disabled = true;
-            valueAxis2.renderer.labels.template.disabled = true;
-            valueAxis3.renderer.labels.template.disabled = true;
-          }
-        } else if (
-          item === 'adConversion' ||
-          item === 'adClickRate' ||
-          item === 'adCos'
-        ) {
-          // console.log('adConversion');
-          if (firstAxis === 'percentage') {
-            // console.log('percentage');
-            series.yAxis = valueAxis;
-          } else if (secondAxis === null || secondAxis === 'percentage') {
-            // console.log(' not percentage, second axis null percentage');
-            series.yAxis = valueAxis2;
-            valueAxis2.numberFormatter.numberFormat = `#.#'%'`;
-            valueAxis2.renderer.opposite = true;
-            // valueAxis2.renderer.line.strokeOpacity = 1;
-            secondAxis = 'percentage';
-          } else {
-            // console.log('second axis not null percentage');
-            series.yAxis = valueAxis3;
-            valueAxis3.numberFormatter.numberFormat = `#.#'%'`;
-            valueAxis3.renderer.opposite = true;
-
-            valueAxis.renderer.line.strokeOpacity = 0;
-            valueAxis2.renderer.line.strokeOpacity = 0;
-            valueAxis3.renderer.line.strokeOpacity = 0;
-            valueAxis.renderer.labels.template.disabled = true;
-            valueAxis2.renderer.labels.template.disabled = true;
-            valueAxis3.renderer.labels.template.disabled = true;
-          }
-        }
-
-        // seperate out roas //
-        else if (item === 'adRoas') {
-          if (secondAxis === null) {
-            series.yAxis = valueAxis2;
-            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-            valueAxis2.renderer.opposite = true;
-            secondAxis = 'adRoas';
-          } else {
-            series.yAxis = valueAxis3;
-            valueAxis3.numberFormatter.numberFormat = `#.#`;
-            valueAxis3.renderer.opposite = true;
-
-            valueAxis.renderer.line.strokeOpacity = 0;
-            valueAxis2.renderer.line.strokeOpacity = 0;
-            valueAxis3.renderer.line.strokeOpacity = 0;
-            valueAxis.renderer.labels.template.disabled = true;
-            valueAxis2.renderer.labels.template.disabled = true;
-            valueAxis3.renderer.labels.template.disabled = true;
-          }
-        } else if (firstAxis === 'unit') {
-          // console.log('unit');
-          if (item === 'impressions' || item === 'adClicks') {
-            valueAxis.numberFormatter.numberFormat = `#.#a`;
-          }
-
           series.yAxis = valueAxis;
-        } else if (secondAxis === null || secondAxis === 'unit') {
-          // console.log('not unit, second axis null unit');
-          if (item === 'impressions' || item === 'adClicks') {
-            valueAxis2.numberFormatter.numberFormat = `#.#a`;
-          }
-          if (item === 'adRoas') {
-            valueAxis2.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-          }
+          valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+        }
+        if (index === 1) {
           series.yAxis = valueAxis2;
-
           valueAxis2.renderer.opposite = true;
-          // valueAxis2.renderer.line.strokeOpacity = 1;
-          secondAxis = 'unit';
-        } else {
-          // console.log('second axis not null unit');
+          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+        } else if (index === 2) {
           series.yAxis = valueAxis3;
-          valueAxis3.numberFormatter.numberFormat = `#.#a`;
           valueAxis3.renderer.opposite = true;
-
+          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
           valueAxis.renderer.line.strokeOpacity = 0;
           valueAxis2.renderer.line.strokeOpacity = 0;
           valueAxis3.renderer.line.strokeOpacity = 0;
@@ -476,6 +384,15 @@ export default function AdPerformanceChart({
           valueAxis2.renderer.labels.template.disabled = true;
           valueAxis3.renderer.labels.template.disabled = true;
         }
+        if (index === 3) {
+          series.yAxis = valueAxis4;
+          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+          valueAxis4.renderer.line.strokeOpacity = 0;
+          valueAxis4.renderer.labels.template.disabled = true;
+        }
+
         const currentValue = `${item}Current`;
         const seriesName = `${item}Series`;
 
@@ -483,28 +400,19 @@ export default function AdPerformanceChart({
         series.dataFields.dateX = 'date';
         series.name = seriesName;
         series.strokeWidth = 2;
-        // series.tooltipText = tooltipValue;
         series.tooltipHTML = `${tooltipDate}${tooltipValue}`;
         series.stroke = am4core.color(colorSet[item]);
         series.fill = am4core.color('#2e384d');
-
-        // valueAxis.renderer.labels.template.fill = series.stroke;
-        // valueAxis.renderer.line.strokeWidth = 2;
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
         circleBullet.circle.fill = am4core.color(colorSet[item]);
         circleBullet.circle.strokeWidth = 1;
         circleBullet.circle.radius = 3;
-        // circleBullet.fillOpacity = 0;
-        // circleBullet.strokeOpacity = 0;
-
-        // const bulletState2 = circleBullet.states.create('hover');
-        // bulletState2.properties.fillOpacity = 1;
-        // bulletState2.properties.strokeOpacity = 1;
 
         snapToSeries.push(series);
         return '';
       });
+
       chart.current.cursor.snapToSeries = snapToSeries;
     }
 
