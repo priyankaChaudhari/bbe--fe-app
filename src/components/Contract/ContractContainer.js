@@ -2041,7 +2041,12 @@ export default function ContractContainer() {
       }
 
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
-      const num = ['monthly_retainer', 'dsp_fee', 'sales_threshold'];
+      const num = [
+        'monthly_retainer',
+        'dsp_fee',
+        'sales_threshold',
+        'billing_cap',
+      ];
       for (const val of num) {
         if (updatedFormData && updatedFormData[val]) {
           updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
