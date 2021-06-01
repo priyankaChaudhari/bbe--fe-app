@@ -740,6 +740,9 @@ fieldset {
     border: 1px solid ${Theme.gray25};
     border-radius: 8px;
   }
+  &.extra-radius {
+      border-radius: 15px;
+  }
 }
 
 .css-26l3qy-menu {

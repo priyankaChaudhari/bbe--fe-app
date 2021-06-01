@@ -72,6 +72,7 @@ import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
+import SetUpChecklist from '../Brand Asset Gathering/SetUpChecklist';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -116,7 +117,7 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'performance',
+    customerSelectedTab || 'dashboard',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
@@ -846,6 +847,23 @@ export default function CustomerMainContainer() {
                     <div className="col-lg-4 col-12">
                       <WhiteCard className="left-border  d-lg-block d-none mb-3">
                         <ul className="left-details-card">
+                          <li
+                            onClick={() => {
+                              setViewComponent('dashboard');
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'dashboard' ? 'active' : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={HeartMonitorIcon}
+                                alt="monitor"
+                              />
+                              Dashboard
+                            </div>
+                          </li>
                           {userInfo && userInfo.role !== 'Customer' ? (
                             <li
                               onClick={() => {
@@ -1093,6 +1111,8 @@ export default function CustomerMainContainer() {
                         getAmazon={getAmazon}
                         getActivityLogInfo={getActivityLogInfo}
                       />
+                    ) : viewComponent === 'dashboard' ? (
+                      <SetUpChecklist id={id} />
                     ) : viewComponent === 'performance' ? (
                       <CompanyPerformance
                         marketplaceChoices={marketplaceChoices}
