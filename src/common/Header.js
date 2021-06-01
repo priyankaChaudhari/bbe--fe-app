@@ -32,7 +32,7 @@ import {
   Speedometer,
 } from '../theme/images/index';
 
-import { logout, showProfileLoader } from '../store/actions/userState';
+import { logout, showProfileLoader, userMe } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
@@ -41,7 +41,6 @@ import {
   PATH_BGS_DASHBOARD,
   PATH_CUSTOMER_LIST,
   PATH_ADM_DASHBOARD,
-  PATH_LOGIN,
 } from '../constants';
 
 export default function Header({ type, userInfo }) {
@@ -81,10 +80,10 @@ export default function Header({ type, userInfo }) {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token') === null) {
-      window.location.href = PATH_LOGIN;
+    if (!history.location.pathname.includes('assigned')) {
+      dispatch(userMe(history));
     }
-  }, []);
+  }, [dispatch, history.location.pathname]);
 
   const getInitials = () => {
     const firstName =
