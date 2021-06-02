@@ -264,7 +264,8 @@ export default function AgreementSidePanel({
           (item && item.history_change_reason.includes('fee')) ||
           (item && item.history_change_reason.includes('discount amount')) ||
           (item &&
-            item.history_change_reason.includes('custom amazon store price')))
+            item.history_change_reason.includes('custom amazon store price')) ||
+          (item && item.history_change_reason.includes('billing cap')))
       ) {
         let fromAmount = '';
         let toAmount = '';
@@ -327,6 +328,20 @@ export default function AgreementSidePanel({
     }
     if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
+      let value;
+      if (item && item.history_change_reason.includes('Custom')) {
+        // activityMessage = item.history_change_reason.split('as')[1];
+        value = activityMessage[1].split('as');
+        return (
+          <>
+            {activityMessage && activityMessage[0]}
+            <span>added</span>
+            {value && value[0]}
+            as
+            {value && value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </>
+        );
+      }
       return (
         <>
           {activityMessage && activityMessage[0]}

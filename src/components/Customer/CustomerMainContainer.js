@@ -425,7 +425,8 @@ export default function CustomerMainContainer() {
           (item && item.history_change_reason.includes('fee')) ||
           (item && item.history_change_reason.includes('discount amount')) ||
           (item &&
-            item.history_change_reason.includes('custom amazon store price')))
+            item.history_change_reason.includes('custom amazon store price')) ||
+          (item && item.history_change_reason.includes('billing cap')))
       ) {
         let fromAmount = '';
         let toAmount = '';
