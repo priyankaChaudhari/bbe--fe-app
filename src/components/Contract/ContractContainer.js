@@ -3113,7 +3113,7 @@ const HeaderDownloadFuntionality = styled.div`
         .download-pdf-icon {
           width: 18px;
           margin-right: 11px;
-          vertical-align: bottom;
+          vertical-align: text-top;
         }
       }
       .divide-arrow {
