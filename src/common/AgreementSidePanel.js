@@ -3801,6 +3801,76 @@ export default function AgreementSidePanel({
                               </>
                             </React.Fragment>
                           ))}
+                          <li>
+                            <div className="label-heading mb-2">
+                              Revenue Share Threshold
+                            </div>
+                            <div className="thershold">
+                              <ul className="days-tab">
+                                <li className="p-0">
+                                  <input
+                                    className="d-none"
+                                    type="radio"
+                                    id="nonedefault"
+                                    name="discount"
+                                    value="nonedefault"
+                                    defaultChecked
+                                  />
+                                  <label
+                                    className="radio-container customer-list"
+                                    htmlFor="nonedefault">
+                                    None
+                                  </label>
+                                </li>
+                                <li className="p-0">
+                                  <input
+                                    className="d-none"
+                                    type="radio"
+                                    id="fixed"
+                                    name="discount"
+                                    value="fixed"
+                                    defaultChecked
+                                  />
+                                  <label
+                                    className="radio-container customer-list"
+                                    htmlFor="fixed">
+                                    Fixed
+                                  </label>
+                                </li>
+                                <li className="p-0">
+                                  <input
+                                    className="d-none"
+                                    type="radio"
+                                    id="yoy"
+                                    name="discount"
+                                    value="yoy"
+                                    defaultChecked
+                                  />
+                                  <label
+                                    className="radio-container customer-list"
+                                    htmlFor="yoy">
+                                    YOY
+                                  </label>
+                                </li>
+                                <li className="p-0">
+                                  <input
+                                    className="d-none"
+                                    type="radio"
+                                    id="yoyplus"
+                                    name="discount"
+                                    value="yoyplus"
+                                    defaultChecked
+                                  />
+                                  <label
+                                    className="radio-container customer-list"
+                                    htmlFor="yoyplus">
+                                    YOY + %
+                                  </label>
+                                </li>{' '}
+                              </ul>
+                            </div>
+                          </li>
+
                           <li>{displayListingOptimizations()}</li>
                           <li>
                             <ContractFormField className="mb-3">
@@ -4583,13 +4653,10 @@ const SidePanel = styled.div`
           width: 17px;
         }
 
-        .service-heading {
+        .label-heading {
+          color: ${Theme.gray40};
+          font-size:${Theme.verySmall};
           text-transform: uppercase;
-          letter-spacing: 1.13px;
-          text-transform: uppercase;
-          font-family: ${Theme.baseFontFamily};
-          font-size:${Theme.extraSmall};
-          color: ${Theme.gray30};
           font-weight: bold;
         }
         .listing-optimazation {
@@ -4660,6 +4727,62 @@ const SidePanel = styled.div`
           right: 0;
           top: 4px;
           cursor: pointer;
+        }
+        .thershold {
+          background-color: ${Theme.gray8};
+           border-radius: 2px;
+          
+          .days-tab {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+           
+              
+            #nonedefault:checked + label{
+              background-color: ${Theme.white};
+              border: 1px solid ${Theme.gray90};
+              color: ${Theme.gray90};
+              width: 100%;
+              font-family: ${Theme.titleFontFamily};
+              }
+            #fixed:checked + label{
+              background-color: ${Theme.white};
+              border: 1px solid ${Theme.gray90};
+              color: ${Theme.gray90};
+              width: 100%;
+              font-family: ${Theme.titleFontFamily};
+              }
+              #yoy:checked + label{
+                background-color: ${Theme.white};
+                border: 1px solid ${Theme.gray90};
+                color: ${Theme.gray90};
+                width: 100%;
+                font-family: ${Theme.titleFontFamily};
+              }
+              #yoyplus:checked + label{
+                background-color: ${Theme.white};
+                border: 1px solid ${Theme.gray90};
+                color: ${Theme.gray90};
+                width: 100%;
+                font-family: ${Theme.titleFontFamily};
+              }
+
+            li{
+              display: inline-block;
+              text-align: center;
+              width: 25%;
+              border: 1px solid ${Theme.gray45};
+            
+              label {
+                color: ${Theme.black};
+                padding: 9px 8px;
+                height: 36px;
+                font-size: ${Theme.extraNormal};
+                display: inline-block;
+                cursor: pointer;
+              }
+            }
+          }
         }
      }
    } 
