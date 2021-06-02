@@ -72,7 +72,7 @@ import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
-import SetUpChecklist from '../Brand Asset Gathering/SetUpChecklist';
+import SetupCheckList from '../BrandAssetGathering/SetupCheckList';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -117,7 +117,7 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'dashboard',
+    customerSelectedTab || 'performance',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
@@ -260,7 +260,7 @@ export default function CustomerMainContainer() {
     }
 
     if (userInfo && userInfo.role === 'Customer') {
-      setViewComponent('agreement');
+      setViewComponent('dashboard');
       dispatch(setCustomerSelectedTab('agreement'));
     }
     if (profileLoader) {
@@ -286,6 +286,7 @@ export default function CustomerMainContainer() {
 
   if (userInfo && userInfo.role === 'Customer') {
     viewOptions = [
+      { value: 'dashboard', label: 'Dashboard' },
       { value: 'agreement', label: 'Agreements' },
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
@@ -847,23 +848,27 @@ export default function CustomerMainContainer() {
                     <div className="col-lg-4 col-12">
                       <WhiteCard className="left-border  d-lg-block d-none mb-3">
                         <ul className="left-details-card">
-                          <li
-                            onClick={() => {
-                              setViewComponent('dashboard');
-                            }}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'dashboard' ? 'active' : ''
-                              }`}>
-                              <img
-                                className="file-contract"
-                                src={HeartMonitorIcon}
-                                alt="monitor"
-                              />
-                              Dashboard
-                            </div>
-                          </li>
+                          {userInfo && userInfo.role === 'Customer' ? (
+                            <li
+                              onClick={() => {
+                                setViewComponent('dashboard');
+                              }}
+                              role="presentation">
+                              <div
+                                className={`left-details ${
+                                  viewComponent === 'dashboard' ? 'active' : ''
+                                }`}>
+                                <img
+                                  className="file-contract"
+                                  src={HeartMonitorIcon}
+                                  alt="monitor"
+                                />
+                                Dashboard
+                              </div>
+                            </li>
+                          ) : (
+                            ''
+                          )}
                           {userInfo && userInfo.role !== 'Customer' ? (
                             <li
                               onClick={() => {
@@ -1112,7 +1117,7 @@ export default function CustomerMainContainer() {
                         getActivityLogInfo={getActivityLogInfo}
                       />
                     ) : viewComponent === 'dashboard' ? (
-                      <SetUpChecklist id={id} />
+                      <SetupCheckList id={id} />
                     ) : viewComponent === 'performance' ? (
                       <CompanyPerformance
                         marketplaceChoices={marketplaceChoices}
