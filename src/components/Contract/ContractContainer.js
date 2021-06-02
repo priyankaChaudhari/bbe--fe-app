@@ -239,7 +239,6 @@ export default function ContractContainer() {
         }
 
         if (isFound === false) {
-          // result.push(option);
           if (type === 'monthly_service') {
             result.push(option);
           } else if (
