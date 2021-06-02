@@ -489,6 +489,20 @@ export default function CustomerMainContainer() {
     }
     if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
+      let value;
+      if (item && item.history_change_reason.includes('Custom')) {
+        value = activityMessage[1].split('as');
+        return (
+          <>
+            {activityMessage && activityMessage[0]}
+            <span>added</span>
+            {value && value[0]}
+            as
+            {value && value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          </>
+        );
+      }
+
       return (
         <>
           {activityMessage && activityMessage[0]}
