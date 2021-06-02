@@ -26,8 +26,12 @@ import {
   PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
   PATH_ADM_DASHBOARD,
+<<<<<<< HEAD
   PATH_CHOOSE_BRAND_DELEGATE,
   PATH_BRAND_ASSET,
+=======
+  PATH_UPLOAD_DELEGATION,
+>>>>>>> PDV-11249 worked on upload delegation.
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -46,10 +50,14 @@ import {
   AdManagerDashboard,
 } from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';
+<<<<<<< HEAD
 import {
   BrandAssetUpload,
   DelegationUpload,
 } from '../components/BrandAssetGathering';
+=======
+import UploadDelegation from '../components/Brand Asset Gathering/UploadDelegation';
+>>>>>>> PDV-11249 worked on upload delegation.
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -158,6 +166,9 @@ export default function AuthenticationComponent() {
           />
           <Route path={PATH_BRAND_ASSET} component={BrandAssetUpload} />
           <Route component={PageNotFound} />
+
+          {/* Brand Asset Gathering */}
+          <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} />
         </Switch>
       </>
     );

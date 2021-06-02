@@ -167,6 +167,11 @@ const OnBoardingBody = styled.div`
         float: right;
         max-width: 345px;
       }
+      &.security-lock span {
+        font-size: 12px;
+        vertical-align: text-bottom;
+        margin-left: 4px;
+      }
     }
     .link-url {
       font-size: 14px;

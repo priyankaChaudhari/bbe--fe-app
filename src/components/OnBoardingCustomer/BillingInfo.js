@@ -595,19 +595,19 @@ export default function BillingInfo({
           </p> */}
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
-          <div>
-            <img
-              className=" mt-2 pt-1"
-              width="16px"
-              src={SecurityLock}
-              alt="lock"
-            />
-            <p className="info-text-gray security mb-0">
-              {' '}
-              We have partnered with Authorize.Net (link), to capture your
-              credit card payment information safely and securely.
-            </p>
-          </div>
+
+          <img
+            className=" mt-2 pt-1"
+            width="16px"
+            src={SecurityLock}
+            alt="lock"
+          />
+          <p className="info-text-gray security mb-0">
+            {' '}
+            We have partnered with Authorize.Net (link), to capture your credit
+            card payment information safely and securely.
+          </p>
+
           <div className="clear-fix" />
           <ErrorMsg>{apiError && apiError[0]}</ErrorMsg>
         </fieldset>

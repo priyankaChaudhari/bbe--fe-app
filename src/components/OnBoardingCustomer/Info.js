@@ -107,7 +107,7 @@ export default function Info() {
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader color="#FF5933" type="page" />
       ) : (
-        <OnBoardingBody className="grey-bg">
+        <OnBoardingBody className="panel">
           <UnauthorizedHeader />{' '}
           <div
             className={

@@ -62,8 +62,13 @@ export const API_VIDEO_LINKS = '/customer/:id/get-video-link/';
 export const API_EDIT_EMAIL = `${API_STEPS_ASSIGNED}edit-email/`;
 export const API_VERIFY_USER = `${API_USER}verify-user/`;
 
+<<<<<<< HEAD
 // Brand Assets
 export const API_ACCOUNT_ASSIGNEE_COUNT = `${API_CUSTOMER}:id/account-setup-completion/`;
+=======
+// Brand Asset Gathering
+export const API_UPLOAD_DELEGATION = '/upload-delegation';
+>>>>>>> PDV-11249 worked on upload delegation.
 
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,

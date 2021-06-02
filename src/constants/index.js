@@ -45,6 +45,11 @@ export const PATH_TEAM_MEMBER = '/team-member/';
 export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
 
+<<<<<<< HEAD
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/`;
 export const PATH_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/brand-asset/`;
+=======
+// Brand Asset Gathering
+export const PATH_UPLOAD_DELEGATION = '/upload-delegation';
+>>>>>>> PDV-11249 worked on upload delegation.
