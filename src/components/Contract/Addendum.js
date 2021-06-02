@@ -124,6 +124,7 @@ export default function Addendum({
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
           onEditorStateChange={onEditorStateChange}
+          stripPastedStyles
           placeholder="   Add the points you would like to edit in the Standard Agreement"
           toolbar={{
             options: [
