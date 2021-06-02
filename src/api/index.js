@@ -115,3 +115,5 @@ export {
   verifyStepUser,
   getBillingDetails,
 } from './OnboardingCustomerApi';
+
+export { getAgreementList, getAssigneeCount } from './BrandAssestsApi';

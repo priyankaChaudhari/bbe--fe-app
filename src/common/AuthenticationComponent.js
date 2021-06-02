@@ -26,6 +26,7 @@ import {
   PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
   PATH_ADM_DASHBOARD,
+  PATH_CHOOSE_BRAND_DELEGATE,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -37,6 +38,7 @@ import { ContractContainer } from '../components/Contract';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
+import DelegationUpload from '../components/BrandAssetGathering/DelegationUpload';
 import {
   Dashboard,
   TeamMember,
@@ -145,6 +147,11 @@ export default function AuthenticationComponent() {
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}
           <Route path={PATH_SUMMARY} component={Summary} />
+          {/* Brand Assets */}
+          <Route
+            path={PATH_CHOOSE_BRAND_DELEGATE}
+            component={DelegationUpload}
+          />
           <Route component={PageNotFound} />
         </Switch>
       </>
