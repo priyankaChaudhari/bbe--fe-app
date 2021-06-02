@@ -420,6 +420,7 @@ export default function MainContainer() {
                     setStepData={setStepData}
                     userInfo={userInfo}
                     setDisableBtn={setDisableBtn}
+                    setOpenCollapse={setOpenCollapse}
                   />
                 )}
                 {assignedToSomeone || !isChecked ? (

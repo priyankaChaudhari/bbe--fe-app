@@ -155,6 +155,7 @@ export default function CustomerMainContainer() {
     { value: 'performance', label: 'Performance' },
     { value: 'agreement', label: 'Agreements' },
     { value: 'company', label: 'Company Details' },
+    { value: 'billing', label: 'Billing' },
     { value: 'activity', label: 'Activity' },
   ];
 
@@ -877,22 +878,17 @@ export default function CustomerMainContainer() {
                               Company Details
                             </div>
                           </li>
-                          {userInfo && userInfo.role === 'Customer' ? (
-                            <li
-                              onClick={() => setViewComponent('billing')}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'billing' ? 'active' : ''
-                                }`}>
-                                <img src={BillingIcon} alt="dollar-invoice" />
-                                Billing
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-
+                          <li
+                            onClick={() => setViewComponent('billing')}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'billing' ? 'active' : ''
+                              }`}>
+                              <img src={BillingIcon} alt="dollar-invoice" />
+                              Billing
+                            </div>
+                          </li>
                           <li
                             onClick={() => {
                               setViewComponent('activity');

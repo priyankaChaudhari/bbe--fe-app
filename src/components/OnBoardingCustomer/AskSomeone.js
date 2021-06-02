@@ -27,6 +27,7 @@ export default function AskSomeone({
   setStepData,
   userInfo,
   setDisableBtn,
+  setOpenCollapse,
 }) {
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
@@ -46,6 +47,7 @@ export default function AskSomeone({
   }, [stepData, setIsChecked, step, userInfo]);
 
   const handleChanges = (event) => {
+    setOpenCollapse(false);
     if (event.target.checked) {
       setIsChecked(true);
       setDisableBtn(true);
@@ -287,6 +289,7 @@ AskSomeone.defaultProps = {
   setStepData: () => {},
   stepData: {},
   setDisableBtn: () => {},
+  setOpenCollapse: () => {},
 };
 
 AskSomeone.propTypes = {
@@ -310,4 +313,5 @@ AskSomeone.propTypes = {
     is_completed: PropTypes.bool,
   }),
   setDisableBtn: PropTypes.func,
+  setOpenCollapse: PropTypes.func,
 };
