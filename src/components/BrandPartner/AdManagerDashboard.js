@@ -294,6 +294,7 @@ export default function AdManagerDashboard() {
                     onClick={() =>
                       history.push(
                         PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                        'adManager',
                       )
                     }
                     role="presentation">

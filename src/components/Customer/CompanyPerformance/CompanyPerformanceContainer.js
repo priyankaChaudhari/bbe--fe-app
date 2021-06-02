@@ -6,16 +6,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import PerformanceReport from './PerformanceReport';
 import AdPerformance from './AdPerformance';
 import Theme from '../../../theme/Theme';
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
+  const history = useHistory();
   const currentDate = new Date();
+  const setTab =
+    history.location.state === 'adManager'
+      ? 'adPerformance'
+      : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
-  const [viewComponent, setViewComponent] = useState('salePerformance');
-
+  const [viewComponent, setViewComponent] = useState(setTab);
   return (
     <>
       <div className="col-lg-8 col-12">
