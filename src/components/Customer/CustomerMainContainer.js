@@ -329,7 +329,8 @@ export default function CustomerMainContainer() {
         item.includes('monthly retainer') ||
         item.includes('sales threshold') ||
         item.includes('fee') ||
-        item.includes('discount amount')
+        item.includes('discount amount') ||
+        item.includes('billing cap')
         //  ||
         // item.includes('custom amazon store price')
       ) {

@@ -168,9 +168,8 @@ export default function AgreementSidePanel({
         item.includes('monthly retainer') ||
         item.includes('sales threshold') ||
         item.includes('fee') ||
-        item.includes('discount amount')
-        //  ||
-        // item.includes('custom amazon store price')
+        item.includes('discount amount') ||
+        item.includes('billing cap')
       ) {
         oldValue = oldValue.replace('.00', '');
         newValue = newValue.replace('.00', '');

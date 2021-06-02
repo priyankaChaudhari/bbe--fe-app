@@ -42,7 +42,7 @@ import {
   TeamMember,
   TabletTeamMember,
   AdManagerDashboard,
-} from '../components/Brand Partner';
+} from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';
 
 export default function AuthenticationComponent() {
