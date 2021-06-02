@@ -160,7 +160,10 @@ export default function BillingDetails({ id, userInfo }) {
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
-    if (formData && formData.billing_contact.phone_number === '')
+    if (
+      (formData && formData.billing_contact.phone_number === '') ||
+      (formData && formData.billing_contact.phone_number === null)
+    )
       delete formData.billing_contact.phone_number;
     delete formData.billing_contact.email;
 

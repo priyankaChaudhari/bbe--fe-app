@@ -230,7 +230,10 @@ export default function BillingInfo({
     delete formData.ach;
     delete formData.credit_card;
 
-    if (formData && formData.billing_contact.phone_number === '')
+    if (
+      (formData && formData.billing_contact.phone_number === '') ||
+      (formData && formData.billing_contact.phone_number === null)
+    )
       delete formData.billing_contact.phone_number;
     if (data && data.id) {
       delete formData.card_details;
