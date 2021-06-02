@@ -539,14 +539,14 @@ export const StatementDetails = [
     isMandatory: false,
     part: 'statement',
   },
-  {
-    key: 'billing_cap',
-    label: 'BILLING CAP',
-    type: 'number-currency',
-    placeholder: 'Enter Billing Cap',
-    isMandatory: false,
-    part: 'statement',
-  },
+  // {
+  //   key: 'billing_cap',
+  //   label: 'BILLING CAP',
+  //   type: 'number-currency',
+  //   placeholder: 'Enter Billing Cap',
+  //   isMandatory: false,
+  //   part: 'statement',
+  // },
 ];
 
 export const DSPAddendumDetails = [
