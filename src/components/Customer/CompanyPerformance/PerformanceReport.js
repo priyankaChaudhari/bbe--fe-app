@@ -105,7 +105,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     weekly: false,
     month: false,
   });
-
+  const [isApiCall, setIsApiCall] = useState(false);
   const [activeSales, setActiveSales] = useState('revenue');
   const customStyles = {
     content: {
@@ -288,6 +288,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const getBBData = useCallback(
     (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
       // setIsLoading({ loader: true, type: 'button' });
+      setIsApiCall(true);
       getBuyBoxChartData(
         id,
         marketplace,
@@ -299,6 +300,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         if (res && res.status === 400) {
           // setApiError(res && res.data);
           // setIsLoading({ loader: false, type: 'button' });
+          setIsApiCall(false);
         }
         if (res && res.status === 200 && res.data && res.data.bbep) {
           const avg =
@@ -330,6 +332,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           //   );
           // }
           setBBChartData(tempBBData);
+          setIsApiCall(false);
         }
       });
     },
@@ -345,6 +348,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       endDate = null,
     ) => {
       // setIsLoading({ loader: true, type: 'button' });
+      setIsApiCall(true);
       getPerformance(
         id,
         selectedDailyFact,
@@ -356,6 +360,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         if (res && res.status === 400) {
           // setApiError(res && res.data);
           // setIsLoading({ loader: false, type: 'button' });
+          setIsApiCall(false);
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
           const tempRevenueData = [];
@@ -585,6 +590,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
               { name: 'Total', value: 1000 },
             ]);
           }
+          setIsApiCall(false);
         }
       });
     },
@@ -980,6 +986,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           getSelectComponents,
           dateOptions[0],
           handleDailyFact,
+          isApiCall,
         )}
         {/* <DropDownSelect className="days-performance ">
           <Select
@@ -1382,6 +1389,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 null,
                 dateOptions[0],
                 handleBBDailyFact,
+                isApiCall,
               )}
               {/* <DropDownSelect className="days-performance ">
                 <Select

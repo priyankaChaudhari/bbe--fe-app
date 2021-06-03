@@ -9,9 +9,11 @@ export const DropDown = (
   components,
   defaultValue,
   handleOnChange,
+  isDisabled,
 ) => {
   return (
-    <DropDownSelect className={className}>
+    <DropDownSelect
+      className={isDisabled ? `${className} disabled` : className}>
       <Select
         classNamePrefix="react-select"
         className="active"

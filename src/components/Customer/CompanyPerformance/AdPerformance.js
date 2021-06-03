@@ -50,6 +50,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
   const [difference, setDifference] = useState([]);
+  const [isApiCall, setIsApiCall] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
@@ -403,6 +404,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       startDate = null,
       endDate = null,
     ) => {
+      setIsApiCall(true);
       getAdPerformance(
         id,
         adType,
@@ -413,13 +415,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          //
+          setIsApiCall(false);
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
           const adGraphData = bindAdResponseData(res.data);
           setAdChartData(adGraphData);
+          setIsApiCall(false);
         }
       });
+
       // const adGraphData = bindAdResponseData(adResData);
       // setAdChartData(adGraphData);
     },
@@ -434,6 +438,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       startDate = null,
       endDate = null,
     ) => {
+      setIsApiCall(true);
       getDSPPerformance(
         id,
         selectedDailyFact,
@@ -443,11 +448,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          //
+          setIsApiCall(false);
         }
         if (res && res.status === 200 && res.data && res.data.dsp_spend) {
           const dspGraphData = bindDSPResponseData(res.data);
           setDSPChartData(dspGraphData);
+          setIsApiCall(false);
         }
       });
       // const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
@@ -911,6 +917,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 getSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
+                isApiCall,
               )}
             </li>
             <li className="day-performance">
@@ -922,6 +929,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 getSelectComponents,
                 dateOptions[0],
                 handleAdDailyFact,
+                isApiCall,
               )}
             </li>
           </ul>{' '}
@@ -1393,6 +1401,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             getSelectComponents,
             dateOptions[0],
             handleDSPDailyFact,
+            isApiCall,
           )}
           {/* <DropDownSelect className="days-performance">
             <Select classNamePrefix="react-select" className="active" />
