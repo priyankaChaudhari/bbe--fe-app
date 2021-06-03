@@ -154,6 +154,8 @@ import TimesCircle from './icons/times-circle.svg';
 import DownloadPdf from './icons/download-icon.svg';
 import SecurityLock from './icons/security-lock-icon.png';
 import CalendarFontBackArrow from './icons/calendar-back-arrow.png';
+import GrayCheckIcon from './icons/gray-check.svg';
+import GrayInfoIcon from './icons/gray-info-icon.svg';
 
 export {
   BannerBg,
@@ -312,4 +314,6 @@ export {
   DownloadPdf,
   SecurityLock,
   CalendarFontBackArrow,
+  GrayCheckIcon,
+  GrayInfoIcon,
 };

@@ -47,3 +47,6 @@ export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
 
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/`;
+// Brand Asset Gathering
+
+export const PATH_BRAND_ASSET_COMMON_CONTAINER = '/brand-asset-common';

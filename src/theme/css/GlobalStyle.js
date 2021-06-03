@@ -10,6 +10,7 @@ import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.wof
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
 import { CalendarFontBackArrow } from '../images/index';
+// import theme from '@amcharts/amcharts4/themes/dataviz';
 
 const bodyStyles = createGlobalStyle`
 
@@ -319,6 +320,11 @@ p {
   &.no-result-found {
     color: ${Theme.gray40};
     font-size: ${Theme.normal};
+  }
+
+  &.gray-normal-text {
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
   }
 
   &.long-text {
@@ -1609,6 +1615,38 @@ text.cust-label-avg {
   opacity: 0.6;
   cursor: not-allowed !important;
   pointer-events: none !important;
+}
+.progress-bar-value {
+  color: ${Theme.black};
+  font-size: ${Theme.normal};
+  progress[value] {
+    height: 4px;
+    position: relative;
+    border-radius: 1px;
+    right: 120px;
+    text-align: right;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  progress[value]::-webkit-progress-bar {
+    background: #D8D8D8;
+    border-radius: 1px;
+  }
+  progress[value]::-webkit-progress-value { 
+    background-color: #FF4817;
+  }
+  .progress-range-text {
+    position: absolute;
+    right: 28px;
+    top: 6px;
+  }
+}
+
+.label-heading {
+   color: ${Theme.gray40};
+   font-size:${Theme.verySmall};
+   text-transform: uppercase;
+   font-weight: bold;
 }
 
 `;

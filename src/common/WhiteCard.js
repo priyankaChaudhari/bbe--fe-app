@@ -792,6 +792,7 @@ export const WhiteCard = styled.div`
           padding-right: 0;
         }
     }
+    
   }
 
     @media only screen and (min-width: 1920px) {

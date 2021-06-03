@@ -90,7 +90,10 @@ export default function SetupCheckList({ id }) {
                 <p className="black-heading-title mt-2 mb-4">Setup Checklist</p>
               </div>
               <div className="col-6 text-right">
-                <progress value="67" max="100" /> 67% Complete
+                <div className="progress-bar-value">
+                  <progress value="67" max="100" />
+                  <div className="progress-range-text"> 67% Complete</div>
+                </div>
               </div>
             </div>
             <div className="checklist-setup">
