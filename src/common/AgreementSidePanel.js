@@ -339,7 +339,9 @@ export default function AgreementSidePanel({
             <span>added</span>
             {value && value[0]}
             as
-            {value && value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {value &&
+              value[1] &&
+              value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
