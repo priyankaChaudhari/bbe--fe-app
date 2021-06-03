@@ -1,5 +1,5 @@
 import SetupCheckList from './SetupCheckList';
 import DelegationUpload from './DelegationUpload';
-import BrandAssetCommonContainer from './BrandAssetCommonContainer';
+import BrandAssetUpload from './BrandAssetUpload';
 
-export { SetupCheckList, DelegationUpload, BrandAssetCommonContainer };
+export { SetupCheckList, DelegationUpload, BrandAssetUpload };

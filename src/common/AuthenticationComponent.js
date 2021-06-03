@@ -27,7 +27,7 @@ import {
   PATH_SUMMARY,
   PATH_ADM_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
-  PATH_BRAND_ASSET_COMMON_CONTAINER,
+  PATH_BRAND_ASSET,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -39,7 +39,6 @@ import { ContractContainer } from '../components/Contract';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
-import DelegationUpload from '../components/BrandAssetGathering/DelegationUpload';
 import {
   Dashboard,
   TeamMember,
@@ -47,7 +46,10 @@ import {
   AdManagerDashboard,
 } from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';
-import { BrandAssetCommonContainer } from '../components/BrandAssetGathering';
+import {
+  BrandAssetUpload,
+  DelegationUpload,
+} from '../components/BrandAssetGathering';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -154,13 +156,8 @@ export default function AuthenticationComponent() {
             path={PATH_CHOOSE_BRAND_DELEGATE}
             component={DelegationUpload}
           />
+          <Route path={PATH_BRAND_ASSET} component={BrandAssetUpload} />
           <Route component={PageNotFound} />
-
-          {/* Brand Asset Gathering */}
-          <Route
-            path={PATH_BRAND_ASSET_COMMON_CONTAINER}
-            component={BrandAssetCommonContainer}
-          />
         </Switch>
       </>
     );

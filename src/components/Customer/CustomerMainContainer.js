@@ -294,7 +294,7 @@ export default function CustomerMainContainer() {
     ];
   }
 
-  if (customer && customer.status && customer.status.value === 'active') {
+  if (customer && customer.status !== null) {
     viewOptions = [
       { value: 'performance', label: 'Performance' },
       { value: 'agreement', label: 'Agreements' },
@@ -928,9 +928,7 @@ export default function CustomerMainContainer() {
                               Company Details
                             </div>
                           </li>
-                          {customer &&
-                          customer.status &&
-                          customer.status.value === 'active' ? (
+                          {customer && customer.status !== null ? (
                             <li
                               onClick={() => setViewComponent('billing')}
                               role="presentation">

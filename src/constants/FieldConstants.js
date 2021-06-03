@@ -934,3 +934,46 @@ export const stepPath = [
   //   view: PATH_AMAZON_ACCOUNT,
   // },
 ];
+
+export const BrandSteps = [
+  {
+    key: 'brand-logo',
+    label: 'Brand Logo',
+    step: 1,
+    subtitle: 'Please upload one or more versions of your brand logo.',
+    format: 'AI or EPS file',
+  },
+  {
+    key: 'brand-guidelines',
+    label: 'Brand Guidelines',
+    step: 2,
+    subtitle:
+      'Please upload a brand style guide. This should include specifics around brand colors, logo usage, fonts, tone of voice and other relevant information.',
+    format: '',
+  },
+  {
+    key: 'font-files',
+    label: 'Font Files',
+    step: 3,
+    subtitle:
+      'Please upload the raw font files that are used across your brand identity, such as for your logo or any specific fonts used on your website and marketing material.',
+    format: 'OTF, TTF, WOFF',
+  },
+  {
+    key: 'iconography',
+    label: 'Iconography',
+    step: 4,
+    subtitle:
+      "Please upload any iconography you use across your brand's various platforms, such as your website and marketing material.",
+
+    format: 'AI, EPS, SVG',
+  },
+  {
+    key: 'additional-brand-material',
+    label: 'Additional Brand Material',
+    step: 5,
+    subtitle:
+      'Please upload anything else you have that will help us understand and represent your brand image as accurately as possible.',
+    format: '',
+  },
+];

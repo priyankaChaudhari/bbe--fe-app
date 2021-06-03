@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
+import styled from 'styled-components';
+
+import Theme from '../../theme/Theme';
 import {
   Button,
   OnBoardingBody,
@@ -8,13 +12,17 @@ import {
   ContractFormField,
   PageLoader,
 } from '../../common';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
 import {
   OrangeCheckMark,
   EditOrangeIcon,
   SecurityLock,
+  LeftArrowIcon,
 } from '../../theme/images';
 
 export default function UploadDelegation() {
+  const { id } = useParams();
+  const history = useHistory();
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'email' });
   const [formData, setFormData] = useState({ email: '' });
@@ -24,8 +32,38 @@ export default function UploadDelegation() {
     setIsLoading({ loader: false, type: 'email' });
   };
 
+  const redirectTO = () => {
+    history.push({
+      pathname: PATH_BRAND_ASSET.replace(':id', id),
+      search: 'step=brand-logo',
+    });
+  };
+
   return (
     <div>
+      <BackToStep>
+        {' '}
+        <div className="container-fluid">
+          {' '}
+          <div className="row">
+            <div className="col-12">
+              <div
+                role="presentation"
+                className="back-link"
+                onClick={() =>
+                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+                }>
+                <img
+                  src={LeftArrowIcon}
+                  alt="aarow-back"
+                  className="arrow-back-icon "
+                />
+                Back to Dashboard
+              </div>
+            </div>
+          </div>
+        </div>{' '}
+      </BackToStep>
       <OnBoardingBody className="body-white">
         <div className="white-card-base panel pb-4">
           <UnauthorizedHeader />{' '}
@@ -113,7 +151,11 @@ export default function UploadDelegation() {
             </li>
           </ul>
           {!isChecked ? (
-            <Button className="btn-primary w-100 mb-2">Continue</Button>
+            <Button
+              className="btn-primary w-100 mb-2"
+              onClick={() => redirectTO()}>
+              Continue
+            </Button>
           ) : (
             ''
           )}
@@ -130,3 +172,19 @@ export default function UploadDelegation() {
     </div>
   );
 }
+
+const BackToStep = styled.div`
+  position: fixed;
+  background-color: ${Theme.white};
+  z-index: 2;
+  top: 70px;
+  padding: 22px 0px 18px 0px;
+  width: 100%;
+  border-bottom: 1px solid ${Theme.gray5};
+
+  .skip-steps {
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
+    cursor: pointer;
+  }
+`;

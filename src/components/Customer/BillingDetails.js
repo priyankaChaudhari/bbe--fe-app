@@ -23,7 +23,10 @@ import {
   // ClockIcon,
 } from '../../theme/images/index';
 import { getBillingDetails, saveBillingInfo } from '../../api';
-import { BillingAddress } from '../../constants/FieldConstants';
+import {
+  BillingAddress,
+  creditCardDetails,
+} from '../../constants/FieldConstants';
 
 export default function BillingDetails({ id, userInfo }) {
   const [data, setData] = useState({});
@@ -60,6 +63,16 @@ export default function BillingDetails({ id, userInfo }) {
           response.data &&
           response.data.billing_contact &&
           response.data.billing_contact[0],
+        billing_address:
+          response &&
+          response.data &&
+          response.data.billing_address &&
+          response.data.billing_address[0],
+        card_details:
+          response &&
+          response.data &&
+          response.data.card_details &&
+          response.data.card_details[0],
       });
     });
   }, [id]);
@@ -70,7 +83,11 @@ export default function BillingDetails({ id, userInfo }) {
         data.card_details && data.card_details[0] && data.card_details[0][key]
           ? data.card_details[0][key].split('-')
           : '';
-      return getDate ? `${getDate[1]}/${getDate[0].substring(2)}` : '**/**';
+      return getDate
+        ? `${getDate[1]}/${getDate[0].substring(2)}`
+        : data.id
+        ? '**/**'
+        : '';
     }
     if (data && data[type] && data[type][0]) {
       return data[type][0][key];
@@ -84,7 +101,7 @@ export default function BillingDetails({ id, userInfo }) {
       ...formData,
       [type]: {
         ...formData[type],
-        [item.key]: event.target.value,
+        [item.key]: item.key === 'card_number' ? event : event.target.value,
       },
     });
 
@@ -98,13 +115,47 @@ export default function BillingDetails({ id, userInfo }) {
     });
   };
 
+  const mapPaymentDefaultValues = (item) => {
+    if (item === 'card_number') {
+      return `************${
+        data.card_details && data.card_details[0] && data.card_details[0][item]
+      }`;
+    }
+    if (item === 'expiration_date') {
+      const getDate =
+        data.card_details && data.card_details[0] && data.card_details[0][item]
+          ? data.card_details[0][item].split('-')
+          : '';
+      return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
+    }
+
+    return '';
+  };
+
   const generateNumeric = (item, type) => {
     return (
       <NumberFormat
         className="form-control"
-        onChange={(event) => handleChange(event, item, type)}
-        placeholder={`Enter ${item.label}`}
-        value={data && data[type] && data[type][0] && data[type][0][item.key]}
+        placeholder={
+          item.key === 'expiration_date'
+            ? `Enter ${item.label} (MM/YY)`
+            : `Enter ${item.label}`
+        }
+        onChange={(event) =>
+          item.key !== 'card_number' ? handleChange(event, item, type) : ''
+        }
+        value={
+          type === 'card_details'
+            ? mapPaymentDefaultValues(item.key)
+            : data && data[type] && data[type][0] && data[type][0][item.key]
+        }
+        isNumericString
+        onValueChange={(values) =>
+          item.key === 'card_number'
+            ? handleChange(values.value, item, type)
+            : ''
+        }
+        readOnly={type === 'card_details' && data && data.id}
       />
     );
   };
@@ -119,7 +170,9 @@ export default function BillingDetails({ id, userInfo }) {
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
-        readOnly={item.key === 'email'}
+        readOnly={
+          item.key === 'email' && type === 'card_details' && data && data.id
+        }
       />
     );
   };
@@ -158,6 +211,75 @@ export default function BillingDetails({ id, userInfo }) {
     );
   };
 
+  const mapAddressDetails = () => {
+    return (
+      <div className="row">
+        {BillingAddress.filter((op) => op.section === 'address').map((item) => {
+          return (
+            <div
+              className="col-md-6"
+              key={item.key}
+              style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
+              <ContractFormField className="mt-3">
+                <label htmlFor={item.label}>
+                  {item.label}
+                  <br />
+                  {item.type === 'number' ? (
+                    <>{generateNumeric(item, 'billing_address')}</>
+                  ) : (
+                    <>{generateInput(item, 'billing_address')}</>
+                  )}
+                </label>
+              </ContractFormField>
+              <ErrorMsg>
+                {apiError &&
+                  apiError.billing_address &&
+                  apiError.billing_address[item.key] &&
+                  apiError.billing_address[item.key][0]}
+              </ErrorMsg>
+            </div>
+          );
+        })}
+        ;
+      </div>
+    );
+  };
+
+  const mapPaymentDetails = () => {
+    return (
+      <>
+        {creditCardDetails.map((field) => (
+          <div className="row" key={field}>
+            {field.details.map((item) => {
+              return (
+                <div className="col-md-6" key={item.key}>
+                  <ContractFormField className="mt-3">
+                    <label htmlFor={item.label}>
+                      {item.label}
+                      <br />
+                      {item.type === 'number' ? (
+                        <>{generateNumeric(item, 'card_details')}</>
+                      ) : (
+                        <>{generateInput(item, 'card_details')}</>
+                      )}
+                    </label>
+                  </ContractFormField>
+                  <ErrorMsg>
+                    {apiError &&
+                      apiError.card_details &&
+                      apiError.card_details[item.key] &&
+                      apiError.card_details[item.key][0]}
+                  </ErrorMsg>
+                </div>
+              );
+            })}
+            ;
+          </div>
+        ))}
+      </>
+    );
+  };
+
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
     if (
@@ -169,8 +291,9 @@ export default function BillingDetails({ id, userInfo }) {
 
     const details = {
       ...formData,
-      billing_address: data.billing_address[0],
+      billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
+      card_details: formData.card_details,
       customer_onboarding: userInfo.customer_onboarding,
     };
     saveBillingInfo(details, data && data.id).then((res) => {
@@ -180,6 +303,7 @@ export default function BillingDetails({ id, userInfo }) {
           setData(contact && contact.data);
         });
         setShowModal(false);
+        setShowBtn(false);
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -198,10 +322,13 @@ export default function BillingDetails({ id, userInfo }) {
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
-                {/* <div className="edit-details" role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div> */}
+                {/* <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div> */}
                 <div className="row">
                   <div className="col-6">
                     <div className="label">Payment Type</div>
@@ -227,8 +354,12 @@ export default function BillingDetails({ id, userInfo }) {
                   <div className="col-6 pr-0 ">
                     <div className="label mt-3">Credit Card Number</div>
                     <div className="label-info">
-                      **** **** ****{' '}
-                      {mapDefaultValues('card_details', 'card_number')}
+                      {data.id
+                        ? `**** **** **** ${mapDefaultValues(
+                            'card_details',
+                            'card_number',
+                          )}`
+                        : ''}
                     </div>
                   </div>
                   <div className="col-3 pr-0">
@@ -239,7 +370,7 @@ export default function BillingDetails({ id, userInfo }) {
                   </div>
                   <div className="col-3">
                     <div className="label mt-3">CVV</div>
-                    <div className="label-info">***</div>
+                    <div className="label-info">{data.id ? '***' : ''}</div>
                   </div>
                 </div>
               </WhiteCard>
@@ -282,10 +413,13 @@ export default function BillingDetails({ id, userInfo }) {
 
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
-                {/* <div className="edit-details" role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div> */}
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
                 <div className="label mt-3">Address </div>
                 <div className="label-info">
                   {mapDefaultValues('billing_address', 'address')}
@@ -355,12 +489,32 @@ export default function BillingDetails({ id, userInfo }) {
           src={CloseIcon}
           alt="close"
           className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
+          onClick={() => {
+            setShowModal(false);
+            setShowBtn(false);
+          }}
           role="presentation"
         />
         <ModalBox>
           {' '}
-          <div className="modal-body">{mapContactDetails()}</div>
+          <div className="modal-body">
+            <h4>Payment Details</h4>
+            {/* <div
+              className="already-user-msg mt-2"
+              style={{ color: '#FF5933', backgroundColor: '#ffe5df' }}>
+              This email is associated with more than one account. Note that the
+              password you set here will be used for all your accounts.
+            </div> */}
+            {mapPaymentDetails()}
+            <div className=" straight-line horizontal-line  mb-3" />
+
+            <h4>Billing Address</h4>
+            {mapAddressDetails()}
+            <div className=" straight-line horizontal-line  mb-3" />
+
+            <h4>Billing Contact</h4>
+            {mapContactDetails()}
+          </div>
           {showBtn ? (
             <>
               <div className="footer-line " />
@@ -376,7 +530,10 @@ export default function BillingDetails({ id, userInfo }) {
                 </Button>
                 <Button
                   className=" btn-borderless"
-                  onClick={() => setShowModal(false)}>
+                  onClick={() => {
+                    setShowModal(false);
+                    setShowBtn(false);
+                  }}>
                   Discard Changes
                 </Button>
               </div>

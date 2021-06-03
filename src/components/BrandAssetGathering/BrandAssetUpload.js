@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+
 import styled from 'styled-components';
+import queryString from 'query-string';
+import ReactTooltip from 'react-tooltip';
+
 import Theme from '../../theme/Theme';
 import {
   GrayCheckIcon,
@@ -8,8 +13,20 @@ import {
   LeftArrowIcon,
 } from '../../theme/images';
 import { Button } from '../../common';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
+import { BrandSteps } from '../../constants/FieldConstants';
 
-export default function BrandAssetCommonContainer() {
+export default function BrandAssetUpload() {
+  const history = useHistory();
+  const { id } = useParams();
+  const params = queryString.parse(history.location.search);
+  const [selectedStep, setSelectedStep] = useState(null);
+
+  useEffect(() => {
+    setSelectedStep(BrandSteps.find((op) => op.key === params.step));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.step]);
+
   return (
     <>
       <BackToStep>
@@ -18,7 +35,12 @@ export default function BrandAssetCommonContainer() {
           {' '}
           <div className="row">
             <div className="col-12">
-              <div role="presentation" className="back-link">
+              <div
+                role="presentation"
+                className="back-link"
+                onClick={() =>
+                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+                }>
                 <img
                   src={LeftArrowIcon}
                   alt="aarow-back"
@@ -31,91 +53,68 @@ export default function BrandAssetCommonContainer() {
         </div>{' '}
       </BackToStep>
       <BrandAssetSideBar>
-        <div className="label-heading mb-3">Your Checklist</div>
+        <div className="label-heading mb-3">Your BrandSteps</div>
         <ul className="asset-check-list">
-          <li>
-            <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-            <div className="check-list-item">
-              <div className="check-list-label">Brand Logo</div>
-              <div className="check-list-file-uploaded">0 files uploaded</div>
-            </div>
-            <img
-              className="active-arrow-icon"
-              src={ArrowRightBlackIcon}
-              alt="arrow"
-            />
-            <div className="clear-fix" />
-          </li>
-          <li>
-            <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-            <div className="check-list-item">
-              <div className="check-list-label">Brand Guidelines</div>
-              <div className="check-list-file-uploaded">0 files uploaded</div>
-            </div>
-            <img
-              className="active-arrow-icon"
-              src={ArrowRightBlackIcon}
-              alt="arrow"
-            />
-            <div className="clear-fix" />
-          </li>
-          <li>
-            <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-            <div className="check-list-item">
-              <div className="check-list-label">Font Files</div>
-              <div className="check-list-file-uploaded">0 files uploaded</div>
-            </div>
-            <img
-              className="active-arrow-icon"
-              src={ArrowRightBlackIcon}
-              alt="arrow"
-            />
-            <div className="clear-fix" />
-          </li>
-          <li>
-            <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-            <div className="check-list-item">
-              <div className="check-list-label">Iconography</div>
-              <div className="check-list-file-uploaded">0 files uploaded</div>
-            </div>
-            <img
-              className="active-arrow-icon"
-              src={ArrowRightBlackIcon}
-              alt="arrow"
-            />
-            <div className="clear-fix" />
-          </li>
-          <li>
-            <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-            <div className="check-list-item">
-              <div className="check-list-label">Additional Brand Material</div>
-              <div className="check-list-file-uploaded">0 files uploaded</div>
-            </div>
-            <img
-              className="active-arrow-icon"
-              src={ArrowRightBlackIcon}
-              alt="arrow"
-            />
-            <div className="clear-fix" />
-          </li>
+          {BrandSteps.map((item) => (
+            <li
+              className="cursor"
+              key={item.key}
+              role="presentation"
+              onClick={() =>
+                history.push({
+                  pathname: PATH_BRAND_ASSET.replace(':id', id),
+                  search: `step=${item.key}`,
+                })
+              }>
+              {/* if step complete show this
+              <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
+              <img className="checked-gray" src={GrayCheckIcon} alt="check" />
+              <div className="check-list-item">
+                <div className="check-list-label">{item.label}</div>
+                <div className="check-list-file-uploaded">0 files uploaded</div>
+              </div>
+              {item.key === params.step ? (
+                <img
+                  className="active-arrow-icon"
+                  src={ArrowRightBlackIcon}
+                  alt="arrow"
+                />
+              ) : (
+                ''
+              )}
+              <div className="clear-fix" />
+            </li>
+          ))}
         </ul>
       </BrandAssetSideBar>
+
       <BrandAssetBody>
-        <div className="label-heading">Part 1/5</div>
-        <h3 className="page-heading ">Brand Logo</h3>
+        {' '}
+        <div className="label-heading">
+          Part {selectedStep && selectedStep.step}/5
+        </div>
+        <h3 className="page-heading ">{selectedStep && selectedStep.label}</h3>
         <p className="normal-text mt-1 mb-0">
-          Please upload one or more versions of your brand logo.
+          {selectedStep && selectedStep.subtitle}
         </p>
         <p className="gray-normal-text mt-1">
-          Preferred format: AI or EPS file{' '}
+          Preferred format: {selectedStep && selectedStep.format}{' '}
           <img
             className="gray-info-icon"
             width="15px "
             src={GrayInfoIcon}
             alt=""
+            data-tip
+            data-for="format"
           />
+          <ReactTooltip place="bottom" id="format">
+            <p>All Accepted Formats</p>
+            ai, .eps, .png, .jpg or .gif
+          </ReactTooltip>
         </p>
+        <input type="file" />
       </BrandAssetBody>
+
       <BrandAssetFooter>
         <div className="container-fluid">
           <div className="row">
@@ -149,7 +148,8 @@ const BrandAssetSideBar = styled.div`
   left: 20px;
   padding: 20px;
   width: 100%;
-  height: 68%;
+  height: 70%;
+  bottom: 90px;
 
   .asset-check-list {
     list-style-type: none;
@@ -166,10 +166,16 @@ const BrandAssetSideBar = styled.div`
           color: ${Theme.black};
           font-size: ${Theme.normal};
           padding-bottom: 2px;
+          &.active {
+            font-weight: 600;
+          }
         }
         .check-list-file-uploaded {
           font-size: ${Theme.extraNormal};
           color: ${Theme.gray40};
+          &.active {
+            color: ${Theme.orange};
+          }
         }
       }
       .checked-gray {
