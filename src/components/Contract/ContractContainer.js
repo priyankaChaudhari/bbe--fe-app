@@ -1655,6 +1655,8 @@ export default function ContractContainer() {
   }, [downloadApiCall]);
 
   useEffect(() => {
+    const sectionFlag = { ...showSection };
+
     if (
       details &&
       details.additional_monthly_services &&
@@ -1700,34 +1702,13 @@ export default function ContractContainer() {
         delete: [],
       });
     }
-    if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length &&
-      details.additional_monthly_services.find(
-        (item) =>
-          item && item.service && item.service.name === 'DSP Advertising',
-      )
-    ) {
-      setShowCollpase({ ...showSection, dspAddendum: true });
-    } else {
-      setShowCollpase({ ...showSection, dspAddendum: false });
-    }
 
     if (
       details &&
       details.contract_type &&
       details.contract_type.toLowerCase().includes('dsp')
     ) {
-      setShowCollpase({ ...showSection, dspAddendum: true });
-    }
-
-    if (newAddendumData && newAddendumData.id) {
-      if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
-        setShowCollpase({ ...showSection, addendum: false });
-      } else {
-        setShowCollpase({ ...showSection, addendum: true });
-      }
+      sectionFlag.dspAddendum = true;
     }
 
     if (
@@ -1772,9 +1753,33 @@ export default function ContractContainer() {
         'monthly_service',
       );
     }
-    setIsDocRendered(true);
+    if (newAddendumData && newAddendumData.id) {
+      if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
+        sectionFlag.addendum = false;
+      } else {
+        sectionFlag.addendum = true;
+      }
+    }
 
-    return () => {};
+    if (
+      details &&
+      details.additional_monthly_services &&
+      details.additional_monthly_services.length &&
+      details.additional_monthly_services.find(
+        (item) =>
+          item &&
+          item.service &&
+          item.service.name &&
+          item.service.name.toLowerCase().includes('dsp'),
+      )
+    ) {
+      sectionFlag.dspAddendum = true;
+    } else {
+      sectionFlag.dspAddendum = false;
+    }
+    setIsDocRendered(true);
+    setShowCollpase(sectionFlag);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details]);
 
