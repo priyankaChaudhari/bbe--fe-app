@@ -3255,7 +3255,7 @@ export default function AgreementSidePanel({
   const displayAddendum = () => {
     return newAddendumData && newAddendumData.id ? (
       <Button
-        className=" btn-transparent sidepanel mt-1 mb-3 w-100"
+        className=" btn-transparent sidepanel mt-3 mb-3 w-100"
         onClick={() => {
           onEditAddendum();
           executeScroll('addendum');
@@ -4227,32 +4227,24 @@ export default function AgreementSidePanel({
                         portion of the original agreement.
                       </p>
 
-                      <div className="row ">
-                        <div className="col-12 ">
-                          {' '}
-                          <CheckBox>
-                            <label
-                              className="check-container customer-pannel"
-                              htmlFor="add-addendum">
-                              Add Addendum
-                              <input
-                                type="checkbox"
-                                id="add-addendum"
-                                onClick={(event) => {
-                                  onCheckOfAddendum(event.target.checked);
-                                  //  executeScroll('addendum');
-                                  // setNewAddendum({});
-                                }}
-                                defaultChecked={
-                                  showSection && showSection.addendum
-                                }
-                              />
-                              <span className="checkmark" />
-                            </label>
-                          </CheckBox>
-                        </div>
-                      </div>
-
+                      <CheckBox>
+                        <label
+                          className="check-container customer-pannel"
+                          htmlFor="add-addendum">
+                          Add Addendum
+                          <input
+                            type="checkbox"
+                            id="add-addendum"
+                            onClick={(event) => {
+                              onCheckOfAddendum(event.target.checked);
+                              //  executeScroll('addendum');
+                              // setNewAddendum({});
+                            }}
+                            defaultChecked={showSection && showSection.addendum}
+                          />
+                          <span className="checkmark" />
+                        </label>
+                      </CheckBox>
                       {showSection && showSection.addendum
                         ? displayAddendum()
                         : ''}
