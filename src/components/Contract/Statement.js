@@ -642,6 +642,14 @@ export default function Statement({
                 .replace(
                   'ADDITIONAL_SERVICES_NOT_INCLUDED',
                   showNotIncludedServicesTable(),
+                )
+                .replace(
+                  'BILLING_CAP_AMOUNT',
+                  mapDefaultValues(
+                    'billing_cap',
+                    'Billing Cap',
+                    'number-currency',
+                  ),
                 ),
           }}
         />
