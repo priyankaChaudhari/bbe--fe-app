@@ -742,12 +742,15 @@ export default function ContractContainer() {
     }
 
     if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'}${
-        details && details[key]
-          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : `Enter ${label}`
-      }`;
+      if (details && details[key]) {
+        return `${type === 'number-currency' ? '$' : '%'}${details[key]
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      } 
+        return `Enter ${label}`;
+      
     }
+
     const result =
       key === 'rev_share' || key === 'seller_type'
         ? details && details[key] && details[key].label

@@ -1921,6 +1921,15 @@ export default function AgreementSidePanel({
           [event.target.name]: null,
         });
       } else if (
+        event.target.name === 'billing_cap' &&
+        event.target.value === ''
+      ) {
+        setFormData({ ...formData, [event.target.name]: null });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: null,
+        });
+      } else if (
         event.target.name === 'company_name' ||
         event.target.name === 'state' ||
         event.target.name === 'city' ||

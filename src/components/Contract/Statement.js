@@ -44,11 +44,13 @@ export default function Statement({
     }
     if (type && type.includes('number')) {
       // ${type === 'number-currency' ? '$' : '%'}
-      return `${type === 'number-currency' ? '$' : '%'}${
-        formData && formData[key]
-          ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-          : `Enter ${label}.`
-      }`;
+      if (formData && formData[key]) {
+        return `${type === 'number-currency' ? '$' : '%'}${`${formData[key]
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}`;
+      } 
+        return `Enter ${label}.`;
+      
     }
 
     return key === 'rev_share' || key === 'seller_type'
