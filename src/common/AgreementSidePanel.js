@@ -132,12 +132,31 @@ export default function AgreementSidePanel({
   originalAddendumData,
 }) {
   const [accountLength, setAccountLength] = useState([]);
-  // const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [revShare, setRevShare] = useState([]);
-  // const [oneTimeService, setOneTimeService] = useState([]);
-  // const [monthlyService, setMonthlyService] = useState([]);
-  // const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
+
+  const assignOptions = () => {
+    const YoyOptions = Array.from(Array(100).keys())
+      .filter((n) => n % 5 === 0)
+      .slice(1);
+    const result = [];
+    YoyOptions.forEach((item) => {
+      result.push({ label: item, value: item });
+    });
+    return result;
+  };
+
+  const thresholdOptions = [
+    { label: 'None' },
+    { label: 'Fixed', showTextField: true },
+    { label: 'YOY' },
+    {
+      label: 'YOY + %',
+      showDropdown: true,
+      options: assignOptions(),
+    },
+  ];
+  const [selectedThreshold, setSelectedThreshold] = useState('');
 
   const getActivityInitials = (userInfo) => {
     if (userInfo && userInfo === 'Contract initiated') {
@@ -3834,68 +3853,95 @@ export default function AgreementSidePanel({
                             </div>
                             <div className="thershold">
                               <ul className="days-tab">
-                                <li className="p-0">
-                                  <input
-                                    className="d-none"
-                                    type="radio"
-                                    id="nonedefault"
-                                    name="discount"
-                                    value="nonedefault"
-                                    defaultChecked
-                                  />
-                                  <label
-                                    className="radio-container customer-list"
-                                    htmlFor="nonedefault">
-                                    None
-                                  </label>
-                                </li>
-                                <li className="p-0">
-                                  <input
-                                    className="d-none"
-                                    type="radio"
-                                    id="fixed"
-                                    name="discount"
-                                    value="fixed"
-                                    defaultChecked
-                                  />
-                                  <label
-                                    className="radio-container customer-list"
-                                    htmlFor="fixed">
-                                    Fixed
-                                  </label>
-                                </li>
-                                <li className="p-0">
-                                  <input
-                                    className="d-none"
-                                    type="radio"
-                                    id="yoy"
-                                    name="discount"
-                                    value="yoy"
-                                    defaultChecked
-                                  />
-                                  <label
-                                    className="radio-container customer-list"
-                                    htmlFor="yoy">
-                                    YOY
-                                  </label>
-                                </li>
-                                <li className="p-0">
-                                  <input
-                                    className="d-none"
-                                    type="radio"
-                                    id="yoyplus"
-                                    name="discount"
-                                    value="yoyplus"
-                                    defaultChecked
-                                  />
-                                  <label
-                                    className="radio-container customer-list"
-                                    htmlFor="yoyplus">
-                                    YOY + %
-                                  </label>
-                                </li>{' '}
+                                {thresholdOptions.map((threshold) => {
+                                  return (
+                                    <>
+                                      <li
+                                        className={
+                                          selectedThreshold.label ===
+                                          threshold.label
+                                            ? 'p-0 thresholdChecked'
+                                            : 'p-0'
+                                        }>
+                                        <input
+                                          className="d-none "
+                                          type="radio"
+                                          id={threshold.label}
+                                          name="discount"
+                                          value={threshold.label}
+                                          defaultChecked
+                                          // ={
+                                          //   selectedThreshold ===
+                                          //   threshold.label
+                                          // }
+                                          onClick={() =>
+                                            setSelectedThreshold(threshold)
+                                          }
+                                        />
+                                        <label
+                                          className="radio-container customer-list"
+                                          htmlFor={threshold.label}>
+                                          {threshold.label}
+                                        </label>
+                                      </li>
+                                    </>
+                                  );
+                                })}
                               </ul>
                             </div>
+                            {selectedThreshold.label === 'Fixed' ? (
+                              <div>
+                                <ContractFormField>
+                                  <div className="input-container">
+                                    <span className="input-icon">$ </span>
+                                    <NumberFormat
+                                      name="amount"
+                                      className="form-control modal-input-control"
+                                      placeholder="Enter threshold"
+                                      // onChange={(event) =>
+                                      //   handleInputChange(event)
+                                      // }
+                                      defaultValue={
+                                        formData && formData.sales_threshold
+                                      }
+                                      thousandSeparator
+                                      allowNegative={false}
+                                    />
+                                  </div>
+                                </ContractFormField>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                            {selectedThreshold.label === 'YOY + %' ? (
+                              <div>
+                                <ContractInputSelect>
+                                  <Select
+                                    classNamePrefix="react-select"
+                                    isSearchable={false}
+                                    // defaultValue={setDefaultAmazonPlanValue()}
+                                    options={
+                                      thresholdOptions &&
+                                      thresholdOptions[3] &&
+                                      thresholdOptions[3].options
+                                    }
+                                    name="amazon_store_plan"
+                                    components={{ DropdownIndicator }}
+                                    // onChange={(event) => {
+                                    //   handleAmazonPlanChange(event);
+                                    //   handleChange(
+                                    //     event,
+                                    //     'amazon_store_package',
+                                    //     'dropdown',
+                                    //   );
+                                    // }}
+                                    placeholder="Select percentage"
+                                  />
+                                </ContractInputSelect>
+                              </div>
+                            ) : (
+                              ''
+                            )}
                           </li>
 
                           <li>{displayListingOptimizations()}</li>
@@ -4712,36 +4758,14 @@ const SidePanel = styled.div`
             padding: 0;
             margin: 0;
            
-              
-            #nonedefault:checked + label{
+            .thresholdChecked {
               background-color: ${Theme.white};
               border: 1px solid ${Theme.gray90};
               color: ${Theme.gray90};
-              width: 100%;
+              /* width: 100%; */
               font-family: ${Theme.titleFontFamily};
-              }
-            #fixed:checked + label{
-              background-color: ${Theme.white};
-              border: 1px solid ${Theme.gray90};
-              color: ${Theme.gray90};
-              width: 100%;
-              font-family: ${Theme.titleFontFamily};
-              }
-              #yoy:checked + label{
-                background-color: ${Theme.white};
-                border: 1px solid ${Theme.gray90};
-                color: ${Theme.gray90};
-                width: 100%;
-                font-family: ${Theme.titleFontFamily};
-              }
-              #yoyplus:checked + label{
-                background-color: ${Theme.white};
-                border: 1px solid ${Theme.gray90};
-                color: ${Theme.gray90};
-                width: 100%;
-                font-family: ${Theme.titleFontFamily};
-              }
-
+            }
+           
             li{
               display: inline-block;
               text-align: center;
