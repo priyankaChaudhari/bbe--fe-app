@@ -1548,6 +1548,10 @@ export default function ContractContainer() {
           showNotIncludedServicesTable(),
           // notIncludedMonthlyServices,
           // notIncludedOneTimeServices,
+        )
+        .replace(
+          'BILLING_CAP_AMOUNT',
+          mapDefaultValues('billing_cap', 'Billing Cap', 'number-currency'),
         );
     // .replace(
     //   'BILLING_CAP_AMOUNT',
