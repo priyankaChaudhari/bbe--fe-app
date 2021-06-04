@@ -15,6 +15,7 @@ import {
   RecurringIcon,
   ServiceIcon,
   SignatureIcon,
+  WhiteArrowRight,
 } from '../../theme/images';
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
@@ -122,11 +123,20 @@ export default function SetupCheckList({ id }) {
                     </label>
                   </GreenCheckBox>
                 </div>
-                <Link to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id)}>
-                  <div className="col-4 mt-3">
-                    <Button className="btn-primary ">Upload Assets</Button>
-                  </div>
-                </Link>
+
+                <div className="col-4 mt-3 text-right">
+                  <Link to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id)}>
+                    <Button className="btn-primary ">
+                      Upload Assets{' '}
+                      <img
+                        className="btn-icon ml-2"
+                        width="16px"
+                        src={WhiteArrowRight}
+                        alt=""
+                      />{' '}
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </fieldset>

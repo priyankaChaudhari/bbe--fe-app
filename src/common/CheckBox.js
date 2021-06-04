@@ -39,6 +39,26 @@ const CheckBox = styled.div`
     }
   }
 
+  &.selected-img {
+    .check-container {
+      padding-left: 0px;
+    }
+    .checkmark {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+    }
+    .check-container .checkmark:after {
+      left: 9px;
+      top: 4px;
+      width: 7px;
+      height: 17px;
+    }
+  }
+
   .check-container input {
     position: absolute;
     opacity: 0;

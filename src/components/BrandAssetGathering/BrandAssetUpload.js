@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
+import Select from 'react-select';
 
 import Theme from '../../theme/Theme';
 import {
@@ -11,10 +12,19 @@ import {
   ArrowRightBlackIcon,
   GrayInfoIcon,
   LeftArrowIcon,
+  BannerBg,
 } from '../../theme/images';
-import { Button } from '../../common';
+import { Button, CheckBox } from '../../common';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
+
+const viewOptions = [
+  { value: 'Brand Logo', label: 'Brand Logo' },
+  { value: 'Brand Guidelines', label: 'Brand Guidelines' },
+  { value: 'Font Files', label: 'Font Files' },
+  { value: 'Iconography', label: 'Iconography' },
+  { value: 'Additional Brand Material', label: 'Additional Brand Material' },
+];
 
 export default function BrandAssetUpload() {
   const history = useHistory();
@@ -52,68 +62,110 @@ export default function BrandAssetUpload() {
           </div>
         </div>{' '}
       </BackToStep>
-      <BrandAssetSideBar>
-        <div className="label-heading mb-3">Your BrandSteps</div>
-        <ul className="asset-check-list">
-          {BrandSteps.map((item) => (
-            <li
-              className="cursor"
-              key={item.key}
-              role="presentation"
-              onClick={() =>
-                history.push({
-                  pathname: PATH_BRAND_ASSET.replace(':id', id),
-                  search: `step=${item.key}`,
-                })
-              }>
-              {/* if step complete show this
+      <div className="container-fluid">
+        <BrandAssetSideBar className="d-none d-lg-block">
+          <div className="label-heading mb-3">Your BrandSteps</div>
+          <ul className="asset-check-list">
+            {BrandSteps.map((item) => (
+              <li
+                className="cursor"
+                key={item.key}
+                role="presentation"
+                onClick={() =>
+                  history.push({
+                    pathname: PATH_BRAND_ASSET.replace(':id', id),
+                    search: `step=${item.key}`,
+                  })
+                }>
+                {/* if step complete show this
               <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
-              <img className="checked-gray" src={GrayCheckIcon} alt="check" />
-              <div className="check-list-item">
-                <div className="check-list-label">{item.label}</div>
-                <div className="check-list-file-uploaded">0 files uploaded</div>
-              </div>
-              {item.key === params.step ? (
-                <img
-                  className="active-arrow-icon"
-                  src={ArrowRightBlackIcon}
-                  alt="arrow"
-                />
-              ) : (
-                ''
-              )}
-              <div className="clear-fix" />
-            </li>
-          ))}
-        </ul>
-      </BrandAssetSideBar>
-
-      <BrandAssetBody>
-        {' '}
-        <div className="label-heading">
-          Part {selectedStep && selectedStep.step}/5
-        </div>
-        <h3 className="page-heading ">{selectedStep && selectedStep.label}</h3>
-        <p className="normal-text mt-1 mb-0">
-          {selectedStep && selectedStep.subtitle}
-        </p>
-        <p className="gray-normal-text mt-1">
-          Preferred format: {selectedStep && selectedStep.format}{' '}
-          <img
-            className="gray-info-icon"
-            width="15px "
-            src={GrayInfoIcon}
-            alt=""
-            data-tip
-            data-for="format"
+                <img className="checked-gray" src={GrayCheckIcon} alt="check" />
+                <div className="check-list-item">
+                  <div className="check-list-label">{item.label}</div>
+                  <div className="check-list-file-uploaded">
+                    0 files uploaded
+                  </div>
+                </div>
+                {item.key === params.step ? (
+                  <img
+                    className="active-arrow-icon"
+                    src={ArrowRightBlackIcon}
+                    alt="arrow"
+                  />
+                ) : (
+                  ''
+                )}
+                <div className="clear-fix" />
+              </li>
+            ))}
+          </ul>
+        </BrandAssetSideBar>
+        <DropDownBrandAsset>
+          <Select
+            options={viewOptions}
+            className="customer-dropdown-select d-lg-none d-block mb-3 "
           />
-          <ReactTooltip place="bottom" id="format">
-            <p>All Accepted Formats</p>
-            ai, .eps, .png, .jpg or .gif
-          </ReactTooltip>
-        </p>
-        <input type="file" />
-      </BrandAssetBody>
+        </DropDownBrandAsset>
+
+        <BrandAssetBody>
+          {' '}
+          <div className="label-heading">
+            Part {selectedStep && selectedStep.step}/5
+          </div>
+          <h3 className="page-heading ">
+            {selectedStep && selectedStep.label}
+          </h3>
+          <p className="normal-text mt-1 mb-0">
+            {selectedStep && selectedStep.subtitle}
+          </p>
+          <p className="gray-normal-text mt-1">
+            Preferred format: {selectedStep && selectedStep.format}{' '}
+            <img
+              className="gray-info-icon"
+              width="15px "
+              src={GrayInfoIcon}
+              alt=""
+              data-tip
+              data-for="format"
+            />
+            <ReactTooltip place="bottom" id="format">
+              <p>All Accepted Formats</p>
+              ai, .eps, .png, .jpg or .gif
+            </ReactTooltip>
+          </p>
+          <input type="file" />
+          <ul className="Image-container">
+            <li>
+              <CheckBox className="selected-img mt-4">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-addendum">
+                  <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    {' '}
+                    <img className="checked-gray" src={BannerBg} alt="check" />
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+            <li>
+              <CheckBox className="selected-img mt-4">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-img">
+                  <input type="checkbox" id="add-img" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    {' '}
+                    <img className="checked-gray" src={BannerBg} alt="check" />
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+          </ul>
+        </BrandAssetBody>
+      </div>
 
       <BrandAssetFooter>
         <div className="container-fluid">
@@ -136,6 +188,20 @@ const BrandAssetBody = styled.div`
   .gray-info-icon {
     vertical-align: bottom;
     margin-left: 3px;
+  }
+  .Image-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+  @media only screen and (max-width: 991px) {
+    padding-left: 0px;
+    margin-top: 50px;
   }
 `;
 
@@ -224,5 +290,35 @@ const BrandAssetFooter = styled.div`
     color: #556178;
     font-size: 14px;
     margin-right: 20px;
+  }
+`;
+
+const CheckSelectImage = styled.div`
+  background-color: #f4f6fc;
+  border-radius: 8px;
+  width: 170px;
+  height: 170px;
+  position: relative;
+  img {
+    width: 170px;
+    height: 170px;
+    border-radius: 8px;
+  }
+  .selected-img {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+`;
+
+const DropDownBrandAsset = styled.div`
+  margin-top: 100px;
+
+  .css-yk16xz-control {
+    background: #f4f6fc;
+    border: none;
+  }
+  .css-1okebmr-indicatorSeparator {
+    display: none;
   }
 `;
