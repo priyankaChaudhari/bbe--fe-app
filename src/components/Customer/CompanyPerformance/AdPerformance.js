@@ -417,9 +417,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (res && res.status === 400) {
           setIsApiCall(false);
         }
-        if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          const adGraphData = bindAdResponseData(res.data);
-          setAdChartData(adGraphData);
+        if (res && res.status === 200) {
+          if (res.data && res.data.daily_facts) {
+            const adGraphData = bindAdResponseData(res.data);
+            setAdChartData(adGraphData);
+          } else {
+            setAdChartData([]);
+          }
           setIsApiCall(false);
         }
       });
@@ -450,9 +454,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         if (res && res.status === 400) {
           setIsApiCall(false);
         }
-        if (res && res.status === 200 && res.data && res.data.dsp_spend) {
-          const dspGraphData = bindDSPResponseData(res.data);
-          setDSPChartData(dspGraphData);
+        if (res && res.status === 200) {
+          if (res.data && res.data.dsp_spend) {
+            const dspGraphData = bindDSPResponseData(res.data);
+            setDSPChartData(dspGraphData);
+          } else {
+            setDSPChartData([]);
+          }
           setIsApiCall(false);
         }
       });
