@@ -234,7 +234,7 @@ export async function getAccountDetails(id) {
 
 export async function updateAccountDetails(id, data) {
   const result = await axiosInstance
-    .patch(`${API_CUSTOMER_CONTRACT + id}/`, data)
+    .patch(`${API_CUSTOMER_CONTRACT + id}/?expand=~all`, data)
     .then((response) => {
       return response;
     })
