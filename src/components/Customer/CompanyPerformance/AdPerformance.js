@@ -915,7 +915,10 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-md-3  col-sm1-12">
           {' '}
-          <p className="black-heading-title mt-2 mb-4"> Ad Performance</p>
+          <p className="black-heading-title mt-2 mb-4">
+            {' '}
+            Sponsored Ad Performance
+          </p>
         </div>
         <div className="col-md-9 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
