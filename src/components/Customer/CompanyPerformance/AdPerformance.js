@@ -376,6 +376,8 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         dspDifference,
       };
       setDSPTotal(dspTempData);
+    } else {
+      setDSPTotal({});
     }
     return tempData;
   };
@@ -422,6 +424,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             setAdChartData(adGraphData);
           } else {
             setAdChartData([]);
+            setAdPreviousTotal([]);
+            setAdCurrentTotal([]);
+            setDifference([]);
           }
           setIsApiCall(false);
         }
@@ -459,6 +464,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
+            setDSPTotal({});
           }
           setIsApiCall(false);
         }
