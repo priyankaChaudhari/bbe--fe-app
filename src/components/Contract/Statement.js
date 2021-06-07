@@ -48,9 +48,8 @@ export default function Statement({
         return `${type === 'number-currency' ? '$' : '%'}${`${formData[key]
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}`;
-      } 
-        return `Enter ${label}.`;
-      
+      }
+      return `Enter ${label}.`;
     }
 
     return key === 'rev_share' || key === 'seller_type'
@@ -567,6 +566,20 @@ export default function Statement({
     return '';
   };
 
+  const showBillingCap = () => {
+    if (formData && formData.billing_cap) {
+      return `<br><br><div class=" text-center " style="text-align: center;"><span style="font-weight: 800;
+      font-family: Helvetica-bold;"> Billing Cap </span> </div><div style="text-align: center;">Maximum amount that will be charged between the monthly retainer and revenue share.</div>
+      <div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;"><span style="background:#ffe5df;padding: 4px 9px; font-weight: bold"> 
+      ${mapDefaultValues(
+        'billing_cap',
+        'Billing Cap',
+        'number-currency',
+      )}</span></div>`;
+    }
+    return '';
+  };
+
   const showNotIncludedServicesTable = () => {
     if (
       notIncludedMonthlyServices.length ||
@@ -611,6 +624,8 @@ export default function Statement({
                     'number-currency',
                   ),
                 )
+                // <br><br><div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;"></div>
+                .replace('BILLING_CAP_AMOUNT', showBillingCap())
                 .replace('REV_SHARE_TABLE', showRevTable())
                 .replace(
                   'REVENUE_SHARE',
@@ -644,15 +659,15 @@ export default function Statement({
                 .replace(
                   'ADDITIONAL_SERVICES_NOT_INCLUDED',
                   showNotIncludedServicesTable(),
-                )
-                .replace(
-                  'BILLING_CAP_AMOUNT',
-                  mapDefaultValues(
-                    'billing_cap',
-                    'Billing Cap',
-                    'number-currency',
-                  ),
                 ),
+            // .replace(
+            //   'BILLING_CAP_AMOUNT',
+            //   mapDefaultValues(
+            //     'billing_cap',
+            //     'Billing Cap',
+            //     'number-currency',
+            //   ),
+            // ),
           }}
         />
       </Paragraph>
@@ -708,6 +723,7 @@ Statement.propTypes = {
   formData: PropTypes.shape({
     length: PropTypes.string,
     sales_threshold: PropTypes.string,
+    billing_cap: PropTypes.string,
     additional_marketplaces: PropTypes.arrayOf(
       PropTypes.shape({
         service: PropTypes.string,
