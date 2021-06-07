@@ -1,8 +1,9 @@
 import axiosInstance from '../axios';
 import { API_CUSTOMER } from '../constants/ApiConstants';
 
-export default async function getBGSCustomerList(id, value) {
+export default async function getBGSCustomerList(pageNumber, id, value) {
   const params = {
+    page: pageNumber,
     user: id,
     daily_facts: value.type,
     role: 'growth_strategist',

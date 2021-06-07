@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Select, { components } from 'react-select';
@@ -11,6 +12,7 @@ import {
   GetInitialName,
   PageLoader,
   WhiteCard,
+  CommonPagination,
 } from '../../common';
 import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
 
@@ -42,6 +44,8 @@ export default function AdManagerDashboard() {
     bgs: '',
   });
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
+  const [pageNumber, setPageNumber] = useState();
+  const [count, setCount] = useState(null);
 
   const timeOptions = [
     { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
@@ -55,33 +59,73 @@ export default function AdManagerDashboard() {
     // },
   ];
 
-  useEffect(() => {
-    setIsLoading({ loader: true, type: 'page' });
-    getAdManagerCustomerList(
-      (selectedValue && selectedValue.bgs) || userInfo.id,
-      selectedValue,
-    ).then((response) => {
-      setData(response && response.data && response.data.results);
-      getAdManagers().then((gs) => {
-        if (gs && gs.data) {
-          const list = [];
-          for (const brand of gs.data) {
-            list.push({
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
-            });
-            setBrandGrowthStrategist(list);
+  const adManagerCustomerList = useCallback(
+    (currentPage, selectedUser, dateFilter) => {
+      setIsLoading({ loader: true, type: 'page' });
+      getAdManagerCustomerList(
+        currentPage,
+        selectedUser || userInfo.id,
+        dateFilter,
+      ).then((response) => {
+        setData(response && response.data && response.data.results);
+        setPageNumber(currentPage);
+        setCount(response && response.data && response.data.count);
+        getAdManagers().then((gs) => {
+          if (gs && gs.data) {
+            const list = [];
+            for (const brand of gs.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]) &&
+                  Object.values(brand.documents[0])[0],
+              });
+              setBrandGrowthStrategist(list);
+            }
           }
-        }
-        setIsLoading({ loader: false, type: 'page' });
+          setIsLoading({ loader: false, type: 'page' });
+        });
       });
-    });
-  }, [userInfo, selectedValue]);
+    },
+    [userInfo],
+  );
+
+  useEffect(() => {
+    adManagerCustomerList(1, userInfo.id, selectedValue);
+  }, []);
+
+  // useEffect((currentPage) => {
+  //   setIsLoading({ loader: true, type: 'page' });
+  //   getAdManagerCustomerList(
+  //     (selectedValue && selectedValue.bgs) || userInfo.id,
+  //     selectedValue,
+  //   ).then((response) => {
+  //     setData(response && response.data && response.data.results);
+  //     setPageNumber(currentPage);
+  //     setCount(response && response.data && response.data.count);
+  //     getAdManagers().then((gs) => {
+  //       if (gs && gs.data) {
+  //         const list = [];
+  //         for (const brand of gs.data) {
+  //           list.push({
+  //             value: brand.id,
+  //             label: `${brand.first_name} ${brand.last_name}`,
+  //             icon:
+  //               brand.documents &&
+  //               brand.documents[0] &&
+  //               Object.values(brand.documents[0]) &&
+  //               Object.values(brand.documents[0])[0],
+  //           });
+  //           setBrandGrowthStrategist(list);
+  //         }
+  //       }
+  //       setIsLoading({ loader: false, type: 'page' });
+  //     });
+  //   });
+  // }, [userInfo, selectedValue, pageNumber]);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -187,6 +231,26 @@ export default function AdManagerDashboard() {
     };
   };
 
+  const handleOnchange = (event, type) => {
+    if (type === 'manager') {
+      setSelectedValue({ ...selectedValue, bgs: event.value });
+      adManagerCustomerList(1, event.value, selectedValue);
+    } else if (type === 'date') {
+      setSelectedValue({
+        ...selectedValue,
+        type: event.value,
+        group: event.group,
+      });
+      adManagerCustomerList(pageNumber, selectedValue.bgs, {
+        type: event.value,
+      });
+    }
+  };
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    adManagerCustomerList(currentPage, selectedValue.bgs, selectedValue);
+  };
+
   const renderAdPerformanceDifference = (value, grayArrow = false) => {
     if (value) {
       if (value.toString().includes('-')) {
@@ -247,9 +311,7 @@ export default function AdManagerDashboard() {
                       options={brandGrowthStrategist}
                       components={getSelectComponents('user')}
                       componentsValue={{ Option: IconOption }}
-                      onChange={(event) =>
-                        setSelectedValue({ ...selectedValue, bgs: event.value })
-                      }
+                      onChange={(event) => handleOnchange(event, 'manager')}
                     />
                   </DropDownSelect>
                 </li>
@@ -261,13 +323,14 @@ export default function AdManagerDashboard() {
                       components={getSelectComponents()}
                       options={timeOptions}
                       defaultValue={timeOptions[0]}
-                      onChange={(event) =>
-                        setSelectedValue({
-                          ...selectedValue,
-                          type: event.value,
-                          group: event.group,
-                        })
-                      }
+                      onChange={(event) => handleOnchange(event, 'date')}
+                      // onChange={(event) =>
+                      //   setSelectedValue({
+                      //     ...selectedValue,
+                      //     type: event.value,
+                      //     group: event.group,
+                      //   })
+                      // }
                     />
                   </DropDownSelect>
                 </li>
@@ -525,6 +588,16 @@ export default function AdManagerDashboard() {
           )}
         </div>
       </DashboardCard>
+      <div className="footer-sticky">
+        <div className="straight-line horizontal-line" />
+        <div className="container-fluid">
+          <CommonPagination
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+          />
+        </div>
+      </div>
     </BrandPartnerDashboard>
   );
 }

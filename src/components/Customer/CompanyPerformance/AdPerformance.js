@@ -280,7 +280,6 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setDifference([]);
     }
 
-    console.log('temp data', tempData);
     return tempData;
   };
 
@@ -464,8 +463,6 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           setIsApiCall(false);
         }
       });
-      // const dspGraphData = bindDSPResponseData(dspResData); // after api done then only send res.data
-      // setDSPChartData(dspGraphData);
     },
     [id],
   );
