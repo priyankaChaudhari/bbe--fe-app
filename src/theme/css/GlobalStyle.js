@@ -629,9 +629,45 @@ a {
 .text-left {
   text-align: left;
 }
+.text-lg-right {
+   @media only screen and (min-width: 992px)  {
+     text-align: right;
+     text-align: -webkit-right;
+   }
+}
+.text-md-left {
+   @media only screen and (max-width: 991px)  {
+     text-align: left;
+     text-align: -webkit-left;
+   }
+}
+.text-md-right {
+   @media only screen and (max-width: 991px)  {
+     text-align: right;
+     text-align: -webkit-right;
+   }
+}
+.text-sm-left {
+   @media only screen and (max-width: 767px)  {
+     text-align: left;
+     text-align: -webkit-left;
+   }
+}
+.text-sm-right {
+   @media only screen and (max-width: 767px)  {
+     text-align: right;
+     text-align: -webkit-right;
+   }
+}
 
 .w-100 {
   width: 100% !important;
+}
+
+.w-sm-100 {
+   @media only screen and (max-width: 767px)  {
+     width: 100% !important;
+   }
 }
 
 .h-100 {
@@ -1637,9 +1673,21 @@ text.cust-label-avg {
   }
   .progress-range-text {
     position: absolute;
-    right: 28px;
+    right: 20px;
     top: 6px;
   }
+   @media only screen and (max-width: 767px)  {
+      progress[value] { 
+        right: 0;
+        width: 75%;
+      }
+   }
+   @media only screen and (max-width: 550px)  {
+      progress[value] { 
+        right: 0;
+        width: 60%;
+      }
+   }
 }
 
 .label-heading {

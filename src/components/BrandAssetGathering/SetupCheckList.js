@@ -86,11 +86,11 @@ export default function SetupCheckList({ id }) {
       ) : (
         <>
           <fieldset className="shape-without-border extra-radius">
-            <div className="row">
-              <div className="col-6">
-                <p className="black-heading-title mt-2 mb-4">Setup Checklist</p>
+            <div className="row mb-3">
+              <div className="col-lg-6 col-md-6 col-12">
+                <p className="black-heading-title mt-2 mb-2">Setup Checklist</p>
               </div>
-              <div className="col-6 text-right">
+              <div className="col-lg-6 col-md-6 col-12 text-lg-right text-md-right text-sm-left">
                 <div className="progress-bar-value">
                   <progress value="67" max="100" />
                   <div className="progress-range-text"> 67% Complete</div>
@@ -110,12 +110,12 @@ export default function SetupCheckList({ id }) {
               ))}
 
               <div className="row">
-                <div className="col-8">
+                <div className="col-lg-7 col-md-7 col-12  ">
                   {' '}
                   <GreenCheckBox className="mt-3">
                     <label className="cursor">
                       Upload Brand Assets
-                      <div className="steps-completed">
+                      <div className="steps-completed gray-color">
                         0/1 Steps completed by you{' '}
                       </div>
                       <input type="" defaultChecked={false} readOnly />
@@ -124,9 +124,9 @@ export default function SetupCheckList({ id }) {
                   </GreenCheckBox>
                 </div>
 
-                <div className="col-4 mt-3 text-right">
+                <div className="col-lg-5 col-md-5 col-12 mt-3  text-lg-right text-md-right text-sm-left ">
                   <Link to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id)}>
-                    <Button className="btn-primary ">
+                    <Button className="btn-primary w-sm-100">
                       Upload Assets{' '}
                       <img
                         className="btn-icon ml-2"
@@ -140,51 +140,127 @@ export default function SetupCheckList({ id }) {
               </div>
             </div>
           </fieldset>
+          {/* <WhiteCard className="mt-3">
+        <p className="black-heading-title mt-2 ">Creative Schedule</p>
+
+        <p className="no-result-found  text-center mt-4 mb-4">
+          Your creative schedule is being generated
+        </p>
+      </WhiteCard> */}
           <WhiteCard className="mt-3">
             <p className="black-heading-title mt-2 ">
               Active Agreement(s) ({agreementData.count})
             </p>
             <ActiveAgreementTable>
-              <table>
-                <tbody>
-                  <tr>
-                    <th width="40%">Agreement Type</th>
-                    <th width="24%">Contract Status</th>
-                    <th width="18%">Start Date</th>
-                    <th width="18%">Expires in</th>
-                  </tr>
+              <div className="d-lg-block d-md-block d-none">
+                <table>
+                  <tbody>
+                    <tr className="label-heading ">
+                      <th width="40%">Agreement Type</th>
+                      <th width="24%">Contract Status</th>
+                      <th width="18%">Start Date</th>
+                      <th width="18%">Expires in</th>
+                    </tr>
 
-                  {agreementData.data.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <img
-                          className="solid-icon"
-                          src={
-                            item &&
+                    {agreementData.data.map((item) => (
+                      <tr key={item.id}>
+                        <td>
+                          <img
+                            className="solid-icon"
+                            src={
+                              item &&
+                              item.contract_type &&
+                              item.contract_type.toLowerCase().includes('one')
+                                ? ServiceIcon
+                                : item &&
+                                  item.contract_type &&
+                                  item.contract_type
+                                    .toLowerCase()
+                                    .includes('dsp')
+                                ? DspOnlyIcon
+                                : RecurringIcon
+                            }
+                            alt="recurring"
+                          />
+                          <p className="black-heading-title recurring-service mt-2 mb-0">
+                            {item &&
                             item.contract_type &&
                             item.contract_type.toLowerCase().includes('one')
-                              ? ServiceIcon
+                              ? 'One Time Service Agreement'
                               : item &&
                                 item.contract_type &&
                                 item.contract_type.toLowerCase().includes('dsp')
-                              ? DspOnlyIcon
-                              : RecurringIcon
-                          }
-                          alt="recurring"
-                        />
-                        <p className="black-heading-title recurring-service mt-2 mb-0">
-                          {item &&
+                              ? 'DSP Service Agreement'
+                              : 'Recurring Service Agreement'}
+                          </p>
+                        </td>
+                        <td>
+                          <div className="sign-box">
+                            {item.contract_status &&
+                            item.contract_status.value === 'active' ? (
+                              <>
+                                <img
+                                  width="14px"
+                                  src={SignatureIcon}
+                                  alt="signature"
+                                />{' '}
+                                Signed
+                              </>
+                            ) : (
+                              item.contract_status && item.contract_status.label
+                            )}
+                          </div>
+                        </td>
+                        <td>{dayjs(item.start_date).format('MMM DD, YYYY')}</td>
+                        <td>
+                          {item.contract_type &&
+                          item.contract_type.includes('one')
+                            ? 'N/A'
+                            : `${countDays(item && item.end_date)} days`}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="d-lg-none d-md-none d-block">
+                {agreementData.data.map((item) => (
+                  <>
+                    <div className="key={item.id}">
+                      <div className="label-heading ">Agreement Type</div>
+                      <div className="straight-line horizontal-line  mt-2 mb-2" />
+                      <img
+                        className="solid-icon"
+                        src={
+                          item &&
                           item.contract_type &&
                           item.contract_type.toLowerCase().includes('one')
-                            ? 'One Time Service Agreement'
+                            ? ServiceIcon
                             : item &&
                               item.contract_type &&
                               item.contract_type.toLowerCase().includes('dsp')
-                            ? 'DSP Service Agreement'
-                            : 'Recurring Service Agreement'}
-                        </p>
-                      </td>
-                      <td>
+                            ? DspOnlyIcon
+                            : RecurringIcon
+                        }
+                        alt="recurring"
+                      />
+                      <p className="black-heading-title recurring-service mt-3 mb-0">
+                        {item &&
+                        item.contract_type &&
+                        item.contract_type.toLowerCase().includes('one')
+                          ? 'One Time Service Agreement'
+                          : item &&
+                            item.contract_type &&
+                            item.contract_type.toLowerCase().includes('dsp')
+                          ? 'DSP Service Agreement'
+                          : 'Recurring Service Agreement'}
+                      </p>
+                    </div>
+                    <div className="row mt-4 pt-1">
+                      <div className="col-5">
+                        <div className="label-heading  mb-2">
+                          Contract Status
+                        </div>
                         <div className="sign-box">
                           {item.contract_status &&
                           item.contract_status.value === 'active' ? (
@@ -200,27 +276,31 @@ export default function SetupCheckList({ id }) {
                             item.contract_status && item.contract_status.label
                           )}
                         </div>
-                      </td>
-                      <td>{dayjs(item.start_date).format('MMM DD, YYYY')}</td>
-                      <td>
-                        {item.contract_type &&
-                        item.contract_type.includes('one')
-                          ? 'N/A'
-                          : `${countDays(item && item.end_date)} days`}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                      <div className="col-4">
+                        <div className="label-heading mb-2">Start Date</div>
+                        <div>
+                          {' '}
+                          {dayjs(item.start_date).format('MMM DD, YYYY')}{' '}
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="label-heading mb-2">Expires in</div>
+
+                        <div>
+                          {' '}
+                          {item.contract_type &&
+                          item.contract_type.includes('one')
+                            ? 'N/A'
+                            : `${countDays(item && item.end_date)} days`}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
             </ActiveAgreementTable>
           </WhiteCard>
-          {/* <WhiteCard className="mt-3">
-        <p className="black-heading-title mt-2 ">Creative Schedule</p>
-
-        <p className="no-result-found  text-center mt-4 mb-4">
-          Your creative schedule is being generated
-        </p>
-      </WhiteCard> */}
         </>
       )}
     </div>
@@ -238,22 +318,27 @@ const GreenCheckBox = styled.div`
     padding-left: 35px;
     padding-bottom: 15px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: ${Theme.extraNormal};
     color : ${Theme.black};
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     font-weight: 600;
-    border-bottom: 1px dotted #BFC5D2;
+    border-bottom: 1px dotted ${Theme.gray25};
 
     &:last-child {
-        border-bottom: none;
+      border-bottom: none;
+      padding-bottom:0;
     }
   }
   .steps-completed {
-      color: #407b00;
-      font-weight: 500;
+    color: ${Theme.lighterGreen};
+    font-weight: 500;
+
+    &.gray-color{
+      color: ${Theme.gray40};
+    }
   }
 
    input {
@@ -268,7 +353,7 @@ const GreenCheckBox = styled.div`
     position: absolute;
     top: 4px;
     left: 0;
-    border: 1px solid #8798AD;
+    border: 1px solid ${Theme.gray35};
     border-radius: 100%;
     width: 24px;
     height: 24px;
@@ -294,7 +379,7 @@ const GreenCheckBox = styled.div`
     top: 4px;
     width: 5px;
     height: 12px;
-    border: solid #407b00;
+    border: solid ${Theme.lighterGreen};
     border-width: 0 2px 2px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -306,11 +391,12 @@ const ActiveAgreementTable = styled.div`
   position: relative;
   width: 100%;
   margin-top: 20px;
+  ${Theme.extraNormal};
+  color: ${Theme.black};
 
   table {
     width: 100%;
-    font-size: 14px;
-    color: ${Theme.black};
+
     tr {
       text-align: left;
       background: ${Theme.white};
@@ -323,9 +409,7 @@ const ActiveAgreementTable = styled.div`
         padding: 5px 0px 12px 0px;
         vertical-align: middle;
         position: relative;
-        color: ${Theme.gray35};
-        font-size: ${Theme.extraNormal};
-        font-weight: 500;
+
         vertical-align: top;
         border-bottom: 1px solid #e2e2ea;
       }
@@ -333,24 +417,41 @@ const ActiveAgreementTable = styled.div`
       td {
         padding: 12px 0;
 
-        .sign-box {
-          background-color: #ffffff;
-          border: 1px solid #d5d8e1;
-          border-radius: 2px;
-          max-width: 100px;
-          height: 32px;
-          text-align: center;
-          padding: 6px;
-        }
-        .solid-icon {
-          width: 36px;
-          height: 36px;
-          margin-right: 10px;
-        }
-        .recurring-service {
-          font-size: 14px;
-        }
+        // .sign-box {
+        //   background-color: #ffffff;
+        //   border: 1px solid #d5d8e1;
+        //   border-radius: 2px;
+        //   max-width: 100px;
+        //   height: 32px;
+        //   text-align: center;
+        //   padding: 6px;
+        // }
+        // .solid-icon {
+        //   width: 36px;
+        //   height: 36px;
+        //   margin-right: 10px;
+        // }
+        // .recurring-service {
+        //   font-size: 14px;
+        // }
       }
     }
+  }
+  .solid-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+  }
+  .recurring-service {
+    font-size: ${Theme.extraNormal};
+  }
+  .sign-box {
+    background-color: ${Theme.white};
+    border: 1px solid ${Theme.gray45};
+    border-radius: 2px;
+    max-width: 100px;
+    height: 32px;
+    text-align: center;
+    padding: 6px;
   }
 `;
