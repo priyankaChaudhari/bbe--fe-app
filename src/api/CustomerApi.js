@@ -62,7 +62,11 @@ export async function getCustomerList(
     }
   }
   if (adPerformance) {
-    if (filterOptions && filterOptions.user && filterOptions.user.length) {
+    if (
+      filterOptions &&
+      filterOptions.ad_user &&
+      filterOptions.ad_user.length
+    ) {
       params = {
         ...params,
         ad_performace: 'week',
