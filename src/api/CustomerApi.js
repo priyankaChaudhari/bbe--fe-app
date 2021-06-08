@@ -186,9 +186,11 @@ export async function getCustomerDetails(id) {
   return result;
 }
 
-export async function getDocuments(id, type) {
+export async function getDocuments(id, type, docType) {
   const result = await axiosInstance
-    .get(`${API_DOCUMENTS}?entity_type=${type}&&entity_id=${id}`)
+    .get(
+      `${API_DOCUMENTS}?entity_type=${type}&&entity_id=${id}&&document_type=${docType}`,
+    )
     .then((response) => {
       return response.data;
     })

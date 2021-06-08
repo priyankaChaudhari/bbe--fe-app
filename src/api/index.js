@@ -116,4 +116,8 @@ export {
   getBillingDetails,
 } from './OnboardingCustomerApi';
 
-export { getAgreementList, getAssigneeCount } from './BrandAssestsApi';
+export {
+  getAgreementList,
+  getAssigneeCount,
+  deleteDocument,
+} from './BrandAssestsApi';

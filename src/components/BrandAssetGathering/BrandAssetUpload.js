@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
@@ -19,8 +20,15 @@ import {
   LeftArrowIcon,
   OrangeDownloadPdf,
   CloseIcon,
+  TrashIcons,
+  RedTrashIcon,
 } from '../../theme/images';
-import { Button, HeaderDownloadFuntionality } from '../../common';
+import {
+  Button,
+  CheckBox,
+  HeaderDownloadFuntionality,
+  PageLoader,
+} from '../../common';
 import {
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
@@ -30,13 +38,14 @@ import { BrandSteps } from '../../constants/FieldConstants';
 import DragNDrop from './DragNDrop';
 import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
+import { deleteDocument, getDocuments } from '../../api';
 
 const viewOptions = [
-  { value: 'Brand Logo', label: 'Brand Logo' },
-  { value: 'Brand Guidelines', label: 'Brand Guidelines' },
-  { value: 'Font Files', label: 'Font Files' },
-  { value: 'Iconography', label: 'Iconography' },
-  { value: 'Additional Brand Material', label: 'Additional Brand Material' },
+  { value: 'brand-logo', label: 'Brand Logo' },
+  { value: 'brand-guidelines', label: 'Brand Guidelines' },
+  { value: 'font-files', label: 'Font Files' },
+  { value: 'iconography', label: 'Iconography' },
+  { value: 'additional-brand-material', label: 'Additional Brand Material' },
 ];
 
 export default function BrandAssetUpload() {
@@ -45,11 +54,23 @@ export default function BrandAssetUpload() {
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [documentData, setDocumentData] = useState([]);
+  const [showDeleteMsg, setShowDeleteMsg] = useState(false);
+
+  const getDocumentList = (docType) => {
+    setIsLoading({ loader: true, type: 'page' });
+    getDocuments(id, 'customer', docType).then((response) => {
+      setDocumentData(response);
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
 
   useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
+    const docType = BrandSteps.find((op) => op.url === params.step).key;
     setSelectedFiles([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getDocumentList(docType);
   }, [params.step]);
 
   const destructureselectedFiles = () => {
@@ -79,6 +100,7 @@ export default function BrandAssetUpload() {
     return null;
   };
   const createDocument = () => {
+    setIsLoading({ loader: true, type: 'button' });
     for (const item of destructureselectedFiles()) {
       axiosInstance.post(API_DOCUMENTS, item).then((res) => {
         if (res && res.data && res.data.presigned_url !== '') {
@@ -98,7 +120,9 @@ export default function BrandAssetUpload() {
                 })
                 .then(() => {
                   setSelectedFiles([]);
+                  getDocumentList(selectedStep && selectedStep.key);
                 });
+              setIsLoading({ loader: false, type: 'button' });
             });
         }
         return res;
@@ -118,6 +142,81 @@ export default function BrandAssetUpload() {
         pathname: PATH_BRAND_ASSET.replace(':id', id),
         search: `step=${selectedStep && selectedStep.skip}`,
       });
+  };
+
+  const deleteImage = (imageId) => {
+    setIsLoading({ loader: true, type: 'page' });
+    deleteDocument(imageId).then((res) => {
+      if (res && res.status === 204) {
+        getDocumentList(selectedStep && selectedStep.key);
+      }
+    });
+  };
+
+  const showDocuments = () => {
+    return (
+      <ul className="Image-container" key={Math.random()}>
+        {documentData &&
+          documentData.map((file) => (
+            <li>
+              <CheckBox className="selected-img mt-4">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-addendum">
+                  <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    <img
+                      src={file && file.presigned_url}
+                      className="image-thumbnail"
+                      alt={file.original_name}
+                    />
+                    {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
+                    <div
+                      className="remove-box"
+                      role="presentation"
+                      onClick={() => setShowDeleteMsg({ [file.id]: true })}>
+                      <img
+                        className="trash-icon"
+                        src={TrashIcons}
+                        alt="check"
+                      />
+                    </div>
+                    {showDeleteMsg[file.id] ? (
+                      <div
+                        className="delete-msg"
+                        onClick={() => {
+                          deleteImage(file.id);
+                        }}
+                        role="presentation">
+                        {' '}
+                        <img
+                          className="red-trash-icon"
+                          src={RedTrashIcon}
+                          alt="check"
+                        />
+                        Confirm Delete
+                        <img
+                          className="confirm-delete-cross"
+                          src={CloseIcon}
+                          alt="check"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowDeleteMsg({ [file.id]: false });
+                          }}
+                          role="presentation"
+                        />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+          ))}
+      </ul>
+    );
   };
 
   return (
@@ -234,65 +333,68 @@ export default function BrandAssetUpload() {
             ))}
           </ul>
         </BrandAssetSideBar>
+
         <DropDownBrandAsset>
           <Select
             options={viewOptions}
-            defaultValue={
-              viewOptions.filter(
-                (op) => op.label === selectedStep && selectedStep.label,
-              )[0]
-            }
-            onChange={() => {
+            defaultValue={viewOptions.find((op) => op.value === params.step)}
+            onChange={(event) => {
               setSelectedFiles([]);
               history.push({
                 pathname: PATH_BRAND_ASSET.replace(':id', id),
-                search: `step=${selectedStep && selectedStep.url}`,
+                search: `step=${event.value}`,
               });
             }}
             className="customer-dropdown-select d-lg-none d-block mb-3 "
           />
         </DropDownBrandAsset>
 
-        <BrandAssetBody>
-          {' '}
-          <div className="label-heading">
-            Part {selectedStep && selectedStep.step}/5
-          </div>
-          <h3 className="page-heading ">
-            {selectedStep && selectedStep.label}
-          </h3>
-          <p className="normal-text mt-1 mb-0">
-            {selectedStep && selectedStep.subtitle}
-          </p>
-          <p className="gray-normal-text mt-1">
-            {selectedStep && selectedStep.format ? (
-              <>
-                Preferred format: {selectedStep.format}{' '}
-                <img
-                  className="gray-info-icon"
-                  width="15px "
-                  src={GrayInfoIcon}
-                  alt=""
-                  data-tip
-                  data-for="format"
-                />
-                <ReactTooltip place="bottom" id="format">
-                  <p>All Accepted Formats</p>
-                  ai, .eps, .png, .jpg or .gif
-                </ReactTooltip>
-              </>
-            ) : (
-              ''
-            )}
-          </p>
-          <div>
-            <DragNDrop
-              setSelectedFiles={setSelectedFiles}
-              fileType={selectedStep && selectedStep.format}
-            />
-            {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
-          </div>
-        </BrandAssetBody>
+        {isLoading.loader && isLoading.type === 'page' ? (
+          <PageLoader color="#FF5933" type="page" />
+        ) : (
+          <BrandAssetBody>
+            {' '}
+            <div className="label-heading">
+              Part {selectedStep && selectedStep.step}/5
+            </div>
+            <h3 className="page-heading ">
+              {selectedStep && selectedStep.label}
+            </h3>
+            <p className="normal-text mt-1 mb-0">
+              {selectedStep && selectedStep.subtitle}
+            </p>
+            <p className="gray-normal-text mt-1">
+              {selectedStep && selectedStep.format ? (
+                <>
+                  Preferred format: {selectedStep.format}{' '}
+                  <img
+                    className="gray-info-icon"
+                    width="15px "
+                    src={GrayInfoIcon}
+                    alt=""
+                    data-tip
+                    data-for="format"
+                  />
+                  <ReactTooltip place="bottom" id="format">
+                    <p>All Accepted Formats</p>
+                    ai, .eps, .png, .jpg or .gif
+                  </ReactTooltip>
+                </>
+              ) : (
+                ''
+              )}
+            </p>
+            <div>
+              <DragNDrop
+                setSelectedFiles={setSelectedFiles}
+                // fileType={selectedStep && selectedStep.format}
+                fileLength={selectedFiles && selectedFiles.length}
+              />
+              {showDocuments()}
+              {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
+            </div>
+          </BrandAssetBody>
+        )}
       </div>
 
       <BrandAssetFooter>
@@ -305,7 +407,13 @@ export default function BrandAssetUpload() {
                 role="presentation">
                 Skip this step
               </span>
-              <Button className="btn-primary" onClick={() => saveImages()}>
+              <Button
+                className="btn-primary"
+                disabled={
+                  (selectedFiles && selectedFiles.length === 0) ||
+                  isLoading.loader
+                }
+                onClick={() => saveImages()}>
                 Next Step
               </Button>
             </div>
@@ -459,5 +567,61 @@ const DropDownBrandAsset = styled.div`
   }
   .css-1okebmr-indicatorSeparator {
     display: none;
+  }
+`;
+
+const CheckSelectImage = styled.div`
+  background-color: #f4f6fc;
+  border-radius: 8px;
+  width: 180px;
+  height: 180px;
+  position: relative;
+
+  .image-thumbnail {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    
+    
+  }
+  .blur-bg {
+    background-color: rgba(46, 56, 77, 0.6);
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    position: absolute;
+    top: 0;
+  }
+  .selected-img {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+  .confirm-delete-cross {
+    position: absolute;
+    width: 12px;
+    top: 7px;
+  }
+  
+  .delete-msg {
+    border-radius: 6px;
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    max-width: 170px;
+    color: #d60000;
+    font-size: 16px;
+    text-align: center;
+    position: absolute;
+    top: 62px;
+    padding: 16px;
+    width: 100%;
+    left: 6px;
+    font-weight: 600;
+    .red-trash-icon {
+      width: 18px;
+      vertical-align: text-top;
+      margin-right: 6px;
+    }
+}
   }
 `;

@@ -2,7 +2,7 @@
 /* eslint no-restricted-syntax: off */
 /* eslint no-nested-ternary:off */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { TrashIcons, RedTrashIcon, CloseIcon } from '../../theme/images';
 import { CheckBox } from '../../common';
 
-export default function DragDrop({ setSelectedFiles }) {
+export default function DragDrop({ setSelectedFiles, fileLength }) {
   const [files, setFiles] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   //   const [currentRejectedFiles, setRejectedFiles] = useState([]);
@@ -23,6 +23,13 @@ export default function DragDrop({ setSelectedFiles }) {
     borderRadius: '8px',
     backgroundColor: '#f4f6fc',
   };
+
+  useEffect(() => {
+    if (fileLength === 0) {
+      setSelectedFiles([]);
+      setFiles([]);
+    }
+  }, [fileLength, setSelectedFiles]);
 
   const removeFile = (file) => {
     const newFiles = [...files];
@@ -102,7 +109,9 @@ export default function DragDrop({ setSelectedFiles }) {
                   {showDeleteMsg[file.name] ? (
                     <div
                       className="delete-msg"
-                      onClick={() => removeFile(file)}
+                      onClick={() => {
+                        removeFile(file);
+                      }}
                       role="presentation">
                       {' '}
                       <img
@@ -115,7 +124,10 @@ export default function DragDrop({ setSelectedFiles }) {
                         className="confirm-delete-cross"
                         src={CloseIcon}
                         alt="check"
-                        onClick={() => setShowDeleteMsg({ [file.name]: false })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowDeleteMsg({ [file.name]: false });
+                        }}
                         role="presentation"
                       />
                     </div>
@@ -169,6 +181,7 @@ DragDrop.defaultProps = {
 
 DragDrop.propTypes = {
   setSelectedFiles: PropTypes.func,
+  fileLength: PropTypes.number.isRequired,
 };
 
 const CheckSelectImage = styled.div`
