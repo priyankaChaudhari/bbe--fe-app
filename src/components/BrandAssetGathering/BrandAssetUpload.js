@@ -137,6 +137,7 @@ export default function BrandAssetUpload() {
             : params.step,
       });
     });
+    console.log('selectefd files', selectedFiles);
     uploadDocuments(formData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
