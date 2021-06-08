@@ -225,8 +225,8 @@ export default function SetupCheckList({ id }) {
               </div>
               <div className="d-lg-none d-md-none d-block">
                 {agreementData.data.map((item) => (
-                  <>
-                    <div className="key={item.id}">
+                  <React.Fragment key={item.id}>
+                    <div>
                       <div className="label-heading ">Agreement Type</div>
                       <div className="straight-line horizontal-line  mt-2 mb-2" />
                       <img
@@ -296,7 +296,7 @@ export default function SetupCheckList({ id }) {
                         </div>
                       </div>
                     </div>
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
             </ActiveAgreementTable>

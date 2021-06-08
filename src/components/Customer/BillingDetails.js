@@ -28,7 +28,7 @@ import {
   creditCardDetails,
 } from '../../constants/FieldConstants';
 
-export default function BillingDetails({ id, userInfo }) {
+export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
@@ -73,6 +73,11 @@ export default function BillingDetails({ id, userInfo }) {
           response.data &&
           response.data.card_details &&
           response.data.card_details[0],
+        expiryMessage:
+          response.data &&
+          response.data.card_details &&
+          response.data.card_details[0] &&
+          response.data.card_details[0].expiry_info,
       });
     });
   }, [id]);
@@ -116,11 +121,10 @@ export default function BillingDetails({ id, userInfo }) {
   };
 
   const mapPaymentDefaultValues = (item) => {
-    if (item === 'card_number') {
+    if (item === 'card_number')
       return `************${
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
-    }
     if (item === 'expiration_date') {
       const getDate =
         data.card_details && data.card_details[0] && data.card_details[0][item]
@@ -135,6 +139,7 @@ export default function BillingDetails({ id, userInfo }) {
   const generateNumeric = (item, type) => {
     return (
       <NumberFormat
+        format={item.format}
         className="form-control"
         placeholder={
           item.key === 'expiration_date'
@@ -145,9 +150,11 @@ export default function BillingDetails({ id, userInfo }) {
           item.key !== 'card_number' ? handleChange(event, item, type) : ''
         }
         value={
-          type === 'card_details'
+          type === 'card_details' && data && data.id
             ? mapPaymentDefaultValues(item.key)
-            : data && data[type] && data[type][0] && data[type][0][item.key]
+            : item.key === 'expiration_date'
+            ? [formData.type][item.key]
+            : formData && formData[type] && formData[type][item.key]
         }
         isNumericString
         onValueChange={(values) =>
@@ -155,7 +162,7 @@ export default function BillingDetails({ id, userInfo }) {
             ? handleChange(values.value, item, type)
             : ''
         }
-        readOnly={type === 'card_details' && data && data.id}
+        // readOnly={type === 'card_details' && data && data.id}
       />
     );
   };
@@ -170,9 +177,7 @@ export default function BillingDetails({ id, userInfo }) {
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
-        readOnly={
-          item.key === 'email' && type === 'card_details' && data && data.id
-        }
+        readOnly={item.key === 'email' && type === 'card_details'}
       />
     );
   };
@@ -206,7 +211,6 @@ export default function BillingDetails({ id, userInfo }) {
             </div>
           );
         })}
-        ;
       </div>
     );
   };
@@ -240,7 +244,6 @@ export default function BillingDetails({ id, userInfo }) {
             </div>
           );
         })}
-        ;
       </div>
     );
   };
@@ -273,7 +276,6 @@ export default function BillingDetails({ id, userInfo }) {
                 </div>
               );
             })}
-            ;
           </div>
         ))}
       </>
@@ -288,13 +290,14 @@ export default function BillingDetails({ id, userInfo }) {
     )
       delete formData.billing_contact.phone_number;
     delete formData.billing_contact.email;
+    delete formData.billing_contact.expiry_info;
 
     const details = {
       ...formData,
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
       card_details: formData.card_details,
-      customer_onboarding: userInfo.customer_onboarding,
+      customer_onboarding: userInfo.customer_onboarding || onBoardingId,
     };
     saveBillingInfo(details, data && data.id).then((res) => {
       if (res && res.status === 200) {
@@ -318,17 +321,33 @@ export default function BillingDetails({ id, userInfo }) {
         <PageLoader type="detail" color="#FF5933" width={40} height={40} />
       ) : (
         <div className="col-lg-8 col-12">
+          {formData.expiryMessage && formData.expiryMessage.message ? (
+            <div
+              className="already-user-msg mt-2 mb-3 p-2 text-center"
+              style={{
+                color: !formData.expiryMessage.is_expired ? '#000' : '#FF5933',
+                backgroundColor: !formData.expiryMessage.is_expired
+                  ? '#f7c137'
+                  : '#ffe5df',
+                borderRadius: '15px',
+              }}>
+              {formData.expiryMessage.message}
+            </div>
+          ) : (
+            ''
+          )}
           <div className="row">
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
-                {/* <div
+                <div
                   className="edit-details"
                   role="presentation"
                   onClick={() => setShowModal(true)}>
                   <img src={EditOrangeIcon} alt="" />
                   Edit
-                </div> */}
+                </div>
+
                 <div className="row">
                   <div className="col-6">
                     <div className="label">Payment Type</div>
@@ -420,6 +439,17 @@ export default function BillingDetails({ id, userInfo }) {
                   <img src={EditOrangeIcon} alt="" />
                   Edit
                 </div>
+                {formData.expiryMessage && formData.expiryMessage.message ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : (
+                  ''
+                )}
                 <div className="label mt-3">Address </div>
                 <div className="label-info">
                   {mapDefaultValues('billing_address', 'address')}
@@ -499,19 +529,11 @@ export default function BillingDetails({ id, userInfo }) {
           {' '}
           <div className="modal-body">
             <h4>Payment Details</h4>
-            {/* <div
-              className="already-user-msg mt-2"
-              style={{ color: '#FF5933', backgroundColor: '#ffe5df' }}>
-              This email is associated with more than one account. Note that the
-              password you set here will be used for all your accounts.
-            </div> */}
             {mapPaymentDetails()}
-            <div className=" straight-line horizontal-line  mb-3" />
-
+            <div className="straight-line horizontal-line  mt-3 mb-3" />
             <h4>Billing Address</h4>
             {mapAddressDetails()}
-            <div className=" straight-line horizontal-line  mb-3" />
-
+            <div className="straight-line horizontal-line  mt-3 mb-3" />
             <h4>Billing Contact</h4>
             {mapContactDetails()}
           </div>
@@ -547,9 +569,14 @@ export default function BillingDetails({ id, userInfo }) {
   );
 }
 
+BillingDetails.defaultProps = {
+  onBoardingId: null,
+};
+
 BillingDetails.propTypes = {
   id: PropTypes.string.isRequired,
   userInfo: PropTypes.shape({
     customer_onboarding: PropTypes.string,
   }).isRequired,
+  onBoardingId: PropTypes.string,
 };

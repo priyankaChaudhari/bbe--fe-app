@@ -937,14 +937,16 @@ export const stepPath = [
 
 export const BrandSteps = [
   {
-    key: 'brand-logo',
+    key: 'brand_logo',
+    url: 'brand-logo',
     label: 'Brand Logo',
     step: 1,
     subtitle: 'Please upload one or more versions of your brand logo.',
     format: 'AI or EPS file',
   },
   {
-    key: 'brand-guidelines',
+    key: 'brand_guidelines',
+    url: 'brand-guidelines',
     label: 'Brand Guidelines',
     step: 2,
     subtitle:
@@ -952,7 +954,8 @@ export const BrandSteps = [
     format: '',
   },
   {
-    key: 'font-files',
+    key: 'font_files',
+    url: 'font-files',
     label: 'Font Files',
     step: 3,
     subtitle:
@@ -961,6 +964,7 @@ export const BrandSteps = [
   },
   {
     key: 'iconography',
+    url: 'iconography',
     label: 'Iconography',
     step: 4,
     subtitle:
@@ -969,7 +973,8 @@ export const BrandSteps = [
     format: 'AI, EPS, SVG',
   },
   {
-    key: 'additional-brand-material',
+    key: 'additional_brand_material',
+    url: 'additional-brand-material',
     label: 'Additional Brand Material',
     step: 5,
     subtitle:

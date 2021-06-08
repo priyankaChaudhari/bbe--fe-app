@@ -74,7 +74,7 @@ export default function BrandAssetUpload() {
                 onClick={() =>
                   history.push({
                     pathname: PATH_BRAND_ASSET.replace(':id', id),
-                    search: `step=${item.key}`,
+                    search: `step=${item.url}`,
                   })
                 }>
                 {/* if step complete show this

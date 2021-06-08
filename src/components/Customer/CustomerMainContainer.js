@@ -1124,7 +1124,13 @@ export default function CustomerMainContainer() {
                         id={id}
                       />
                     ) : viewComponent === 'billing' ? (
-                      <BillingDetails id={id} userInfo={userInfo} />
+                      <BillingDetails
+                        id={id}
+                        userInfo={userInfo}
+                        onBoardingId={
+                          customer && customer.customer_onboarding_id
+                        }
+                      />
                     ) : (
                       <Activity
                         activityData={activityData}
