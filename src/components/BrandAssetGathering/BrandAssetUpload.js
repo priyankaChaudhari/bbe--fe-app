@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+/* eslint-disable no-loop-func */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
-import { Line } from 'rc-progress';
-import axios from 'axios';
-// import b64toBlob from 'b64-to-blob';
 
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
-import axiosInstance from '../../axios';
+// import { Line } from 'rc-progress';
+import axios from 'axios';
 
 import Theme from '../../theme/Theme';
 import {
@@ -17,15 +17,18 @@ import {
   ArrowRightBlackIcon,
   GrayInfoIcon,
   LeftArrowIcon,
-  BannerBg,
   OrangeDownloadPdf,
   CloseIcon,
-  TrashIcons,
-  RedTrashIcon,
 } from '../../theme/images';
-import { Button, CheckBox, HeaderDownloadFuntionality } from '../../common';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
+import { Button, HeaderDownloadFuntionality } from '../../common';
+import {
+  PATH_BRAND_ASSET,
+  PATH_BRAND_ASSET_SUMMARY,
+  PATH_CUSTOMER_DETAILS,
+} from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
+import DragNDrop from './DragNDrop';
+import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
 
 const viewOptions = [
@@ -37,32 +40,34 @@ const viewOptions = [
 ];
 
 export default function BrandAssetUpload() {
-  const [selectedFiles, setSelectedFiles] = useState();
-  // const [progress, setProgress] = useState();
-  // const [fileData, setFileData] = useState([]);
   const history = useHistory();
   const { id } = useParams();
-
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState();
 
-  /*
-  const getBase64 = (file) => {
-    const reader = new FileReader();
-    console.log('READER->', reader);
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      console.log('Load:', reader.result);
-      return reader.result;
-    };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
+  useEffect(() => {
+    setSelectedStep(BrandSteps.find((op) => op.url === params.step));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.step]);
+
+  const destructureselectedFiles = () => {
+    const formData = [];
+    for (const files of selectedFiles) {
+      for (const item of files) {
+        formData.push({
+          original_name: item.name,
+          entity_id: id,
+          entity_type: 'customer',
+          mime_type: item.type,
+          status: 'requested',
+          document_type: selectedStep && selectedStep.key,
+        });
+      }
+    }
+    return formData;
   };
-*/
-
   const createMetaData = (name) => {
-    console.log('SELECTED FILES =>', selectedFiles);
     for (const fileList of selectedFiles) {
       for (const item of fileList) {
         if (name === item.name) {
@@ -72,25 +77,12 @@ export default function BrandAssetUpload() {
     }
     return null;
   };
-
-  const uploadDocuments = (formData) => {
-    const api = axiosInstance.post(API_DOCUMENTS, formData, {
-      onUploadProgress: (data) => {
-        // Set the progress value to show the progress bar
-        console.log(
-          'PROGRESSSS....',
-          Math.round((100 * data.loaded) / data.total),
-        );
-        // setProgress(Math.round((100 * data.loaded) / data.total));
-      },
-    });
-    api.then((res) => {
-      if (res && res.data) {
-        console.log('POST RESSS => ', res);
-        res.data.forEach((data) => {
-          console.log('DOCUMENT RES DATA>>>>', data);
+  const createDocument = () => {
+    for (const item of destructureselectedFiles()) {
+      axiosInstance.post(API_DOCUMENTS, item).then((res) => {
+        if (res && res.data && res.data.presigned_url !== '') {
           const request = {
-            meta: createMetaData(data.original_name),
+            meta: createMetaData(res.data.original_name),
             url: res.data.presigned_url,
             headers: {
               'Content-type': res.data.mime_type,
@@ -100,53 +92,32 @@ export default function BrandAssetUpload() {
             .put(request.url, request.meta, { headers: request.headers })
             .then(() => {
               axiosInstance
-                .patch(`${API_DOCUMENTS + data.id}/`, {
+                .patch(`${API_DOCUMENTS + res.data.id}/`, {
                   status: 'available',
                 })
                 .then(() => {
-                  if (res.type === 'customer') {
-                    console.log('IF CUST****', data);
-                  } else {
-                    console.log('ELSE CUST****', data);
-                  }
+                  setSelectedFiles([]);
                 });
             });
-        });
-      }
-      return res;
-    });
+        }
+        return res;
+      });
+    }
   };
 
-  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    const formData = [];
-    console.log('accepted *******', acceptedFiles);
-    console.log('Rejected =>', rejectedFiles);
-    setSelectedFiles(acceptedFiles);
+  const saveImages = () => {
+    createDocument();
+  };
 
-    acceptedFiles.forEach((file) => {
-      formData.push({
-        original_name: file.name,
-        entity_id: id,
-        entity_type: 'customer',
-        mime_type: file.type,
-        status: 'requested',
-        size: file.size,
-        document_type:
-          selectedStep && selectedStep.key != null
-            ? selectedStep.key
-            : params.step,
+  const skipStep = () => {
+    if (selectedStep && selectedStep.skip === 'summary') {
+      history.push(PATH_BRAND_ASSET_SUMMARY.replace(':id', id));
+    } else
+      history.push({
+        pathname: PATH_BRAND_ASSET.replace(':id', id),
+        search: `step=${selectedStep && selectedStep.skip}`,
       });
-    });
-    console.log('selectefd files', selectedFiles);
-    uploadDocuments(formData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  useEffect(() => {
-    setSelectedStep(BrandSteps.find((op) => op.key === params.step));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.step]);
+  };
 
   return (
     <>
@@ -188,7 +159,6 @@ export default function BrandAssetUpload() {
                     alt="close"
                     className="float-right cursor remove-cross-icon"
                     onClick={() => {
-                      // history.goBack('Agreement');
                       history.push(
                         history && history.location && history.location.state,
                       );
@@ -248,7 +218,7 @@ export default function BrandAssetUpload() {
                     0 files uploaded
                   </div>
                 </div>
-                {item.key === params.step ? (
+                {item.url === params.step ? (
                   <img
                     className="active-arrow-icon"
                     src={ArrowRightBlackIcon}
@@ -295,73 +265,10 @@ export default function BrandAssetUpload() {
               ai, .eps, .png, .jpg or .gif
             </ReactTooltip>
           </p>
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <p>
-                Drag &apos;n&apos; drop some files here, or click to select
-                files
-              </p>
-            )}
+          <div>
+            <DragNDrop setSelectedFiles={setSelectedFiles} pageType="catalog" />
+            {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
           </div>
-          <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" />
-          <ul className="Image-container">
-            <li>
-              <CheckBox className="selected-img mt-4">
-                <label
-                  className="check-container customer-pannel"
-                  htmlFor="add-addendum">
-                  <input type="checkbox" id="add-addendum" />
-                  <span className="checkmark" />
-                  <CheckSelectImage>
-                    {' '}
-                    <img
-                      className="image-thumbnail "
-                      src={BannerBg}
-                      alt="check"
-                    />
-                    <div className="blur-bg" />
-                    <div className="remove-box">
-                      <img
-                        className="trash-icon"
-                        src={TrashIcons}
-                        alt="check"
-                      />
-                    </div>
-                    <div className="delete-msg">
-                      {' '}
-                      <img
-                        className="red-trash-icon"
-                        src={RedTrashIcon}
-                        alt="check"
-                      />
-                      Confirm Delete
-                    </div>
-                  </CheckSelectImage>
-                </label>
-              </CheckBox>
-            </li>
-            <li>
-              <CheckBox className="selected-img mt-4">
-                <label
-                  className="check-container customer-pannel"
-                  htmlFor="add-img">
-                  <input type="checkbox" id="add-img" />
-                  <span className="checkmark" />
-                  <CheckSelectImage>
-                    {' '}
-                    <img
-                      className="image-thumbnail"
-                      src={BannerBg}
-                      alt="check"
-                    />
-                  </CheckSelectImage>
-                </label>
-              </CheckBox>
-            </li>
-          </ul>
         </BrandAssetBody>
       </div>
 
@@ -369,8 +276,15 @@ export default function BrandAssetUpload() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12 text-right">
-              <span className="skip-step">Skip this step</span>
-              <Button className="btn-primary ">Next Step</Button>
+              <span
+                className="skip-step cursor"
+                onClick={() => skipStep()}
+                role="presentation">
+                Skip this step
+              </span>
+              <Button className="btn-primary" onClick={() => saveImages()}>
+                Next Step
+              </Button>
             </div>
           </div>
         </div>
@@ -488,70 +402,6 @@ const BrandAssetFooter = styled.div`
     color: #556178;
     font-size: 14px;
     margin-right: 20px;
-  }
-`;
-
-const CheckSelectImage = styled.div`
-  background-color: #f4f6fc;
-  border-radius: 8px;
-  width: 170px;
-  height: 170px;
-  position: relative;
-
-  .image-thumbnail {
-    width: 180px;
-    height: 180px;
-    border-radius: 8px;
-    
-    
-  }
-  .blur-bg {
-    background-color: rgba(46, 56, 77, 0.6);
-    width: 180px;
-    height: 180px;
-    border-radius: 8px;
-    position: absolute;
-    top: 0;
-  }
-  .selected-img {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-  }
-  .remove-box {
-    background-color: #ffffff;
-    border: 1px solid #e2e2ea;
-    border-radius: 6px;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    bottom: -8px;
-    right: -8px;
-    padding: 9px;
-    .trash-icon {
-      width: 22px;
-    }
-  }
-  .delete-msg {
-    border-radius: 6px;
-    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    max-width: 170px;
-    color: #d60000;
-    font-size: 16px;
-    text-align: center;
-    position: absolute;
-    top: 62px;
-    padding: 16px;
-    width: 100%;
-    left: 6px;
-    font-weight: 600;
-    .red-trash-icon {
-      width: 18px;
-      vertical-align: text-top;
-      margin-right: 6px;
-    }
-}
   }
 `;
 

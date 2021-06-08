@@ -48,4 +48,4 @@ export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/`;
 export const PATH_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/brand-asset/`;
-export const PATH_BRAND_ASSET_SUMMARY = '/brand-asset-summary';
+export const PATH_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/brand-summary/`;

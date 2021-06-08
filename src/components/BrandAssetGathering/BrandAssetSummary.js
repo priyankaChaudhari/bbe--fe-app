@@ -1,8 +1,15 @@
 import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+
 import { OnBoardingBody, GreyCard, Button } from '../../common';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
+import { BrandSteps } from '../../constants/FieldConstants';
 import { OrangeCheckMark } from '../../theme/images';
 
 export default function BrandAssetSummary() {
+  const { id } = useParams();
+  const history = useHistory();
+
   return (
     <OnBoardingBody className="body-white">
       <div className="white-card-base panel pb-4">
@@ -14,63 +21,40 @@ export default function BrandAssetSummary() {
         </div>
 
         <GreyCard>
-          <div className="information-text mt-2">
-            Brand Logo
-            <div className="completed-status">
-              <img className="orange-check" src={OrangeCheckMark} alt="check" />
-              3 files uploaded
+          {BrandSteps.map((item) => (
+            <div className="information-text mt-2">
+              {item.label}
+              <div className="completed-status">
+                <img
+                  className="orange-check"
+                  src={OrangeCheckMark}
+                  alt="check"
+                />
+                3 files uploaded
+              </div>
+              <div
+                className="view-details"
+                role="presentation"
+                onClick={() =>
+                  history.push({
+                    pathname: PATH_BRAND_ASSET.replace(':id', id),
+                    search: `step=${item.url}`,
+                  })
+                }>
+                {' '}
+                View
+              </div>
             </div>
-            <div className="view-details" role="presentation">
-              {' '}
-              View
-            </div>
-          </div>
-          <div className="information-text mt-2">
-            Brand Guidelines
-            <div className="completed-status">
-              <img className="orange-check" src={OrangeCheckMark} alt="check" />
-              2 files uploaded
-            </div>
-            <div className="view-details" role="presentation">
-              {' '}
-              View
-            </div>
-          </div>
-          <div className="information-text mt-2">
-            Font Files
-            <div className="completed-status">
-              <img className="orange-check" src={OrangeCheckMark} alt="check" />
-              3 files uploaded
-            </div>
-            <div className="view-details" role="presentation">
-              {' '}
-              View
-            </div>
-          </div>
-          <div className="information-text mt-2">
-            Iconography
-            <div className="completed-status">
-              <img className="orange-check" src={OrangeCheckMark} alt="check" />
-              None available
-            </div>
-            <div className="view-details" role="presentation">
-              {' '}
-              View
-            </div>
-          </div>
-          <div className="information-text mt-2">
-            Additional Brand material
-            <div className="completed-status">
-              <img className="orange-check" src={OrangeCheckMark} alt="check" />
-              Skipped
-            </div>
-            <div className="view-details" role="presentation">
-              {' '}
-              View
-            </div>
-          </div>
+          ))}
         </GreyCard>
-        <Button className="btn-primary w-100 mt-4 ">Back to Dashboard</Button>
+
+        <Button
+          className="btn-primary w-100 mt-4"
+          onClick={() =>
+            history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+          }>
+          Back to Dashboard
+        </Button>
       </div>
     </OnBoardingBody>
   );

@@ -943,6 +943,7 @@ export const BrandSteps = [
     step: 1,
     subtitle: 'Please upload one or more versions of your brand logo.',
     format: 'AI or EPS file',
+    skip: 'brand-guidelines',
   },
   {
     key: 'brand_guidelines',
@@ -952,6 +953,7 @@ export const BrandSteps = [
     subtitle:
       'Please upload a brand style guide. This should include specifics around brand colors, logo usage, fonts, tone of voice and other relevant information.',
     format: '',
+    skip: 'font-files',
   },
   {
     key: 'font_files',
@@ -961,6 +963,7 @@ export const BrandSteps = [
     subtitle:
       'Please upload the raw font files that are used across your brand identity, such as for your logo or any specific fonts used on your website and marketing material.',
     format: 'OTF, TTF, WOFF',
+    skip: 'iconography',
   },
   {
     key: 'iconography',
@@ -971,6 +974,7 @@ export const BrandSteps = [
       "Please upload any iconography you use across your brand's various platforms, such as your website and marketing material.",
 
     format: 'AI, EPS, SVG',
+    skip: 'additional-brand-material',
   },
   {
     key: 'additional_brand_material',
@@ -980,5 +984,6 @@ export const BrandSteps = [
     subtitle:
       'Please upload anything else you have that will help us understand and represent your brand image as accurately as possible.',
     format: '',
+    skip: 'summary',
   },
 ];
