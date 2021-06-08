@@ -3,28 +3,18 @@ import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
-import copy from 'copy-to-clipboard';
 import Modal from 'react-modal';
 
-import {
-  EditOrangeIcon,
-  CopyLinkIcon,
-  InfoIcons,
-  ExternalLink,
-  CloseIcon,
-} from '../../theme/images/index';
+import { EditOrangeIcon, CloseIcon } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
-import {
-  SocialIcons,
-  AmazonMarketplaceDetails,
-} from '../../constants/FieldConstants';
+import { SocialIcons } from '../../constants/FieldConstants';
 import { GetInitialName, WhiteCard } from '../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 
 export default function CompanyDetail({
   customer,
-  amazonDetails,
-  seller,
+  // amazonDetails,
+  // seller,
   id,
   getAmazon,
   getActivityLogInfo,
@@ -158,8 +148,14 @@ export default function CompanyDetail({
                 Edit
               </div>
             </WhiteCard>
-
-            <WhiteCard className="mt-3">
+            {userInfo && userInfo.role !== 'Customer' ? (
+              <>{getContactCard()}</>
+            ) : (
+              ''
+            )}
+          </div>
+          <div className="col-lg-6 col-md-6 col-12 mt-3">
+            <WhiteCard>
               <p className="black-heading-title mt-0">Contact Info</p>
               <div
                 className="edit-details"
@@ -178,13 +174,8 @@ export default function CompanyDetail({
                 {SocialIcons.map((item) => generateSocialIcon(item))}
               </ul>
             </WhiteCard>
-            {userInfo && userInfo.role !== 'Customer' ? (
-              <>{getContactCard()}</>
-            ) : (
-              ''
-            )}
           </div>
-          <div className="col-lg-6 col-md-6 col-12 mt-3">
+          {/* <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
               <p className="black-heading-title mt-0 ">Amazon Credentials</p>
               <div
@@ -236,7 +227,6 @@ export default function CompanyDetail({
                         {(amazonDetails && amazonDetails[item.key]) ||
                           `No ${item.label}.`}
                       </div>
-                      {/* <div className="phone-number">+1 592 559 2950</div> */}
                       <div className="straight-line horizontal-line pt-3 mb-3" />
                     </React.Fragment>
                   ))}
@@ -293,7 +283,7 @@ export default function CompanyDetail({
             ) : (
               ''
             )}
-          </div>
+          </div> */}
         </div>
         <Modal
           isOpen={showModal}
@@ -312,7 +302,7 @@ export default function CompanyDetail({
             id={id}
             customer={customer}
             showModal={showModal}
-            amazonDetails={amazonDetails}
+            // amazonDetails={amazonDetails}
             getAmazon={getAmazon}
             getActivityLogInfo={getActivityLogInfo}
             scrollDown={scrollDown}
@@ -326,7 +316,7 @@ export default function CompanyDetail({
 
 CompanyDetail.defaultProps = {
   id: '',
-  amazonDetails: [],
+  // amazonDetails: [],
 };
 
 CompanyDetail.propTypes = {
@@ -338,8 +328,8 @@ CompanyDetail.propTypes = {
     phone_number: PropTypes.string,
     merchant_id: PropTypes.string,
   }).isRequired,
-  amazonDetails: PropTypes.arrayOf(PropTypes.array),
-  seller: PropTypes.string.isRequired,
+  // amazonDetails: PropTypes.arrayOf(PropTypes.array),
+  // seller: PropTypes.string.isRequired,
   getAmazon: PropTypes.func.isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
 };

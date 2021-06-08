@@ -35,7 +35,7 @@ export default function AgreementDetails({ agreements, id }) {
     { key: 'billing_cap', label: 'Billing Cap' },
     {
       key: 'content_optimization',
-      label: 'Content Optimization',
+      label: 'Copy Optimization',
     },
     {
       key: 'design_optimization',

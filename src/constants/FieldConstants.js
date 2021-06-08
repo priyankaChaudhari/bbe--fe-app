@@ -307,8 +307,8 @@ export const editCompanyFields = [
     property: 'col-md-12',
   },
   { key: 'brand', label: 'Brands', property: 'col-md-6' },
-  { key: 'merchant_id', label: 'Merchant ID', property: 'col-md-6' },
-  { key: 'phone_number', label: 'Phone', property: 'col-md-12', type: 'text' },
+  // { key: 'merchant_id', label: 'Merchant ID', property: 'col-md-6' },
+  { key: 'phone_number', label: 'Phone', property: 'col-md-6', type: 'text' },
   {
     key: 'social',
     label: 'Social',
