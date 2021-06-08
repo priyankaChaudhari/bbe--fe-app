@@ -141,13 +141,13 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       <NumberFormat
         format={item.format}
         className="form-control"
+        onChange={(event) =>
+          item.key !== 'card_number' ? handleChange(event, item, type) : ''
+        }
         placeholder={
           item.key === 'expiration_date'
             ? `Enter ${item.label} (MM/YY)`
             : `Enter ${item.label}`
-        }
-        onChange={(event) =>
-          item.key !== 'card_number' ? handleChange(event, item, type) : ''
         }
         value={
           type === 'card_details' && data && data.id
@@ -156,13 +156,17 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             ? [formData.type][item.key]
             : formData && formData[type] && formData[type][item.key]
         }
-        isNumericString
         onValueChange={(values) =>
           item.key === 'card_number'
             ? handleChange(values.value, item, type)
             : ''
         }
-        // readOnly={type === 'card_details' && data && data.id}
+        isNumericString
+        readOnly={
+          (type === 'card_details' || type === 'billing_address') &&
+          data &&
+          data.id
+        }
       />
     );
   };
@@ -177,7 +181,14 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           data && data[type] && data[type][0] && data[type][0][item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
-        readOnly={item.key === 'email' && type === 'card_details'}
+        maxLength={item.key === 'postal_code' ? 10 : ''}
+        readOnly={
+          (type === 'card_details' ||
+            type === 'billing_address' ||
+            item.key === 'email') &&
+          data &&
+          data.id
+        }
       />
     );
   };
@@ -190,7 +201,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             <div
               className="col-md-6"
               key={item.key}
-              style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
+              style={{
+                opacity: data && data.id && item.key === 'email' ? 0.5 : '',
+              }}>
               <ContractFormField className="mt-3">
                 <label htmlFor={item.label}>
                   {item.label}
@@ -217,7 +230,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const mapAddressDetails = () => {
     return (
-      <div className="row">
+      <div className="row" style={{ opacity: data && data.id ? 0.5 : '' }}>
         {BillingAddress.filter((op) => op.section === 'address').map((item) => {
           return (
             <div
@@ -252,7 +265,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return (
       <>
         {creditCardDetails.map((field) => (
-          <div className="row" key={field}>
+          <div
+            className="row"
+            key={field}
+            style={{ opacity: data && data.id ? 0.5 : '' }}>
             {field.details.map((item) => {
               return (
                 <div className="col-md-6" key={item.key}>
@@ -284,12 +300,28 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
+    const getYear = new Date().getFullYear().toString().substring(0, 2);
+    let format = '';
+    if (
+      formData &&
+      formData.card_details &&
+      formData.card_details.expiration_date &&
+      !formData.card_details.expiration_date.includes(getYear)
+    ) {
+      format = formData.card_details.expiration_date.split('/');
+      formData.card_details.expiration_date = `${getYear + format[1]}-${
+        format[0]
+      }`;
+    }
     if (
       (formData && formData.billing_contact.phone_number === '') ||
       (formData && formData.billing_contact.phone_number === null)
     )
       delete formData.billing_contact.phone_number;
-    delete formData.billing_contact.email;
+    if (data && data.id) {
+      delete formData.card_details;
+      delete formData.billing_contact.email;
+    }
     delete formData.billing_contact.expiry_info;
 
     const details = {
@@ -298,9 +330,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       billing_contact: formData.billing_contact,
       card_details: formData.card_details,
       customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+      payment_type: 'credit card',
     };
     saveBillingInfo(details, data && data.id).then((res) => {
-      if (res && res.status === 200) {
+      if ((res && res.status === 200) || (res && res.status === 201)) {
         setIsLoading({ loader: false, type: 'button' });
         getBillingDetails(id).then((contact) => {
           setData(contact && contact.data);
@@ -340,13 +373,17 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
+                {data && data.id ? (
+                  ''
+                ) : (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                )}
 
                 <div className="row">
                   <div className="col-6">
@@ -432,14 +469,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
-                {formData.expiryMessage && formData.expiryMessage.message ? (
+                {data && data.id ? (
+                  ''
+                ) : (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                )}
+                {/* {formData.expiryMessage && formData.expiryMessage.message ? (
                   <div
                     className="edit-details"
                     role="presentation"
@@ -449,7 +490,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                 ) : (
                   ''
-                )}
+                )} */}
                 <div className="label mt-3">Address </div>
                 <div className="label-info">
                   {mapDefaultValues('billing_address', 'address')}
@@ -489,10 +530,14 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   Edit
                 </div>
                 <GroupUser className="mt-3">
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={data.billing_contact && data.billing_contact[0]}
-                  />
+                  {data && data.id ? (
+                    <GetInitialName
+                      property="float-left mr-3"
+                      userInfo={data.billing_contact && data.billing_contact[0]}
+                    />
+                  ) : (
+                    ''
+                  )}
                   <div className="activity-user">
                     {mapDefaultValues('billing_contact', 'first_name')}{' '}
                     {mapDefaultValues('billing_contact', 'last_name')}
