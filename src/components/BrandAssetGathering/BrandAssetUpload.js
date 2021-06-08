@@ -332,6 +332,28 @@ const BrandAssetBody = styled.div`
     li {
       display: inline-block;
       margin-right: 20px;
+
+      .remove-box {
+        display: none;
+      }
+
+      &:hover {
+        .remove-box {
+          background-color: #ffffff;
+          border: 1px solid #e2e2ea;
+          border-radius: 6px;
+          width: 40px;
+          height: 40px;
+          position: absolute;
+          bottom: 3px;
+          right: 3px;
+          padding: 9px;
+          display: block;
+          .trash-icon {
+            width: 22px;
+          }
+        }
+      }
     }
   }
   @media only screen and (max-width: 991px) {

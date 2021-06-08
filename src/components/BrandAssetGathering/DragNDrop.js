@@ -20,6 +20,8 @@ export default function DragDrop({ setSelectedFiles }) {
     display: 'block',
     width: '100%',
     height: '100%',
+    borderRadius: '8px',
+    backgroundColor: '#f4f6fc',
   };
 
   const removeFile = (file) => {
@@ -110,6 +112,7 @@ export default function DragDrop({ setSelectedFiles }) {
                       />
                       Confirm Delete
                       <img
+                        className="confirm-delete-cross"
                         src={CloseIcon}
                         alt="check"
                         onClick={() => setShowDeleteMsg({ [file.name]: false })}
@@ -171,8 +174,8 @@ DragDrop.propTypes = {
 const CheckSelectImage = styled.div`
   background-color: #f4f6fc;
   border-radius: 8px;
-  width: 170px;
-  height: 170px;
+  width: 180px;
+  height: 180px;
   position: relative;
 
   .image-thumbnail {
@@ -195,20 +198,12 @@ const CheckSelectImage = styled.div`
     top: 5px;
     left: 5px;
   }
-  .remove-box {
-    background-color: #ffffff;
-    border: 1px solid #e2e2ea;
-    border-radius: 6px;
-    width: 40px;
-    height: 40px;
+  .confirm-delete-cross {
     position: absolute;
-    bottom: -8px;
-    right: -8px;
-    padding: 9px;
-    .trash-icon {
-      width: 22px;
-    }
+    width: 12px;
+    top: 7px;
   }
+  
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
