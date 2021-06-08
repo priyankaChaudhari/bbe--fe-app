@@ -44,10 +44,11 @@ export default function BrandAssetUpload() {
   const { id } = useParams();
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
-  const [selectedFiles, setSelectedFiles] = useState();
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
+    setSelectedFiles([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.step]);
 
@@ -203,12 +204,13 @@ export default function BrandAssetUpload() {
                 className="cursor"
                 key={item.key}
                 role="presentation"
-                onClick={() =>
+                onClick={() => {
+                  setSelectedFiles([]);
                   history.push({
                     pathname: PATH_BRAND_ASSET.replace(':id', id),
                     search: `step=${item.url}`,
-                  })
-                }>
+                  });
+                }}>
                 {/* if step complete show this
               <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
                 <img className="checked-gray" src={GrayCheckIcon} alt="check" />
@@ -235,6 +237,18 @@ export default function BrandAssetUpload() {
         <DropDownBrandAsset>
           <Select
             options={viewOptions}
+            defaultValue={
+              viewOptions.filter(
+                (op) => op.label === selectedStep && selectedStep.label,
+              )[0]
+            }
+            onChange={() => {
+              setSelectedFiles([]);
+              history.push({
+                pathname: PATH_BRAND_ASSET.replace(':id', id),
+                search: `step=${selectedStep && selectedStep.url}`,
+              });
+            }}
             className="customer-dropdown-select d-lg-none d-block mb-3 "
           />
         </DropDownBrandAsset>
@@ -251,22 +265,31 @@ export default function BrandAssetUpload() {
             {selectedStep && selectedStep.subtitle}
           </p>
           <p className="gray-normal-text mt-1">
-            Preferred format: {selectedStep && selectedStep.format}{' '}
-            <img
-              className="gray-info-icon"
-              width="15px "
-              src={GrayInfoIcon}
-              alt=""
-              data-tip
-              data-for="format"
-            />
-            <ReactTooltip place="bottom" id="format">
-              <p>All Accepted Formats</p>
-              ai, .eps, .png, .jpg or .gif
-            </ReactTooltip>
+            {selectedStep && selectedStep.format ? (
+              <>
+                Preferred format: {selectedStep.format}{' '}
+                <img
+                  className="gray-info-icon"
+                  width="15px "
+                  src={GrayInfoIcon}
+                  alt=""
+                  data-tip
+                  data-for="format"
+                />
+                <ReactTooltip place="bottom" id="format">
+                  <p>All Accepted Formats</p>
+                  ai, .eps, .png, .jpg or .gif
+                </ReactTooltip>
+              </>
+            ) : (
+              ''
+            )}
           </p>
           <div>
-            <DragNDrop setSelectedFiles={setSelectedFiles} pageType="catalog" />
+            <DragNDrop
+              setSelectedFiles={setSelectedFiles}
+              fileType={selectedStep && selectedStep.format}
+            />
             {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
           </div>
         </BrandAssetBody>

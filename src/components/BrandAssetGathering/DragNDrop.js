@@ -8,7 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { TrashIcons, RedTrashIcon } from '../../theme/images';
+import { TrashIcons, RedTrashIcon, CloseIcon } from '../../theme/images';
 import { CheckBox } from '../../common';
 
 export default function DragDrop({ setSelectedFiles }) {
@@ -48,7 +48,6 @@ export default function DragDrop({ setSelectedFiles }) {
   const showThumbnail = (thumbnail) => {
     return <>{thumbnail}</>;
   };
-
   const Previews = () => {
     const { getRootProps, getInputProps } = useDropzone({
       accept: 'image/*',
@@ -110,6 +109,12 @@ export default function DragDrop({ setSelectedFiles }) {
                         alt="check"
                       />
                       Confirm Delete
+                      <img
+                        src={CloseIcon}
+                        alt="check"
+                        onClick={() => setShowDeleteMsg({ [file.name]: false })}
+                        role="presentation"
+                      />
                     </div>
                   ) : (
                     ''
