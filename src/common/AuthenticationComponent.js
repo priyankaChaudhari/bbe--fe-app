@@ -28,6 +28,7 @@ import {
   PATH_ADM_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
   PATH_BRAND_ASSET,
+  PATH_BRAND_ASSET_SUMMARY,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -47,6 +48,7 @@ import {
 } from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';
 import {
+  BrandAssetSummary,
   BrandAssetUpload,
   DelegationUpload,
 } from '../components/BrandAssetGathering';
@@ -157,6 +159,10 @@ export default function AuthenticationComponent() {
             component={DelegationUpload}
           />
           <Route path={PATH_BRAND_ASSET} component={BrandAssetUpload} />
+          <Route
+            path={PATH_BRAND_ASSET_SUMMARY}
+            component={BrandAssetSummary}
+          />
           <Route component={PageNotFound} />
 
           {/* Brand Asset Gathering */}

@@ -24,10 +24,16 @@ import Addendum from './Addendum';
 import Statement from './Statement';
 import Discount from './Discount';
 import ContractFooter from './ContractFooter';
-import { PageLoader, PageNotFound, Button, ModalBox } from '../../common';
+import {
+  PageLoader,
+  PageNotFound,
+  Button,
+  ModalBox,
+  HeaderDownloadFuntionality,
+} from '../../common';
 import { agreementTemplate, getcontract } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
-import { CloseIcon, DownloadPdf } from '../../theme/images';
+import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
@@ -2797,7 +2803,7 @@ export default function ContractContainer() {
                               }
                               download>
                               <img
-                                src={DownloadPdf}
+                                src={OrangeDownloadPdf}
                                 alt="download"
                                 className="download-pdf-icon "
                                 role="presentation"
@@ -2807,7 +2813,7 @@ export default function ContractContainer() {
                           </li>
                         )}
                         <li>
-                          <span className="divide-arrow" />
+                          <span className="divide-arrow hide-mobile" />
                         </li>
 
                         <li>
@@ -2909,7 +2915,7 @@ export default function ContractContainer() {
                               }
                               download>
                               <img
-                                src={DownloadPdf}
+                                src={OrangeDownloadPdf}
                                 alt="download"
                                 className="download-pdf-icon "
                                 role="presentation"
@@ -3144,66 +3150,66 @@ const ContractTab = styled.div`
   }
 `;
 
-const HeaderDownloadFuntionality = styled.div`
-  position: fixed;
-  background-color: ${Theme.white};
-  z-index: 2;
-  padding: 26px 0 20px 0;
-  width: 100%;
-  border-bottom: 1px solid ${Theme.gray5};
-  min-height: 70px;
-  color: ${Theme.black};
-  font-size: 15px;
+// const HeaderDownloadFuntionality = styled.div`
+//   position: fixed;
+//   background-color: ${Theme.white};
+//   z-index: 2;
+//   padding: 26px 0 20px 0;
+//   width: 100%;
+//   border-bottom: 1px solid ${Theme.gray5};
+//   min-height: 70px;
+//   color: ${Theme.black};
+//   font-size: 15px;
 
-  .contract-download-nav {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    text-align: end;
+//   .contract-download-nav {
+//     list-style-type: none;
+//     padding: 0;
+//     margin: 0;
+//     text-align: end;
 
-    li {
-      display: inline-block;
-      vertical-align: bottom;
+//     li {
+//       display: inline-block;
+//       vertical-align: bottom;
 
-      &.download-pdf {
-        cursor: pointer;
-        font-size: 14px;
-        .download-pdf-link {
-          color: ${Theme.black};
-        }
+//       &.download-pdf {
+//         cursor: pointer;
+//         font-size: 14px;
+//         .download-pdf-link {
+//           color: ${Theme.black};
+//         }
 
-        .download-pdf-icon {
-          width: 18px;
-          margin-right: 11px;
-          vertical-align: text-top;
-        }
-      }
-      .divide-arrow {
-        background-color: #e2e2ea;
-        width: 1px;
-        height: 32px;
-        border: 1px solid #e2e2ea;
-        margin: 0 18px;
-      }
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    .contract-download-nav {
-      text-align: center;
-      border-top: 1px solid ${Theme.gray5};
-      margin-top: 20px;
-      padding-top: 15px;
-      li {
-        .divide-arrow {
-          display: none;
-        }
+//         .download-pdf-icon {
+//           width: 18px;
+//           margin-right: 11px;
+//           vertical-align: text-top;
+//         }
+//       }
+//       .divide-arrow {
+//         background-color: #e2e2ea;
+//         width: 1px;
+//         height: 32px;
+//         border: 1px solid #e2e2ea;
+//         margin: 0 18px;
+//       }
+//     }
+//   }
+//   @media only screen and (max-width: 767px) {
+//     .contract-download-nav {
+//       text-align: center;
+//       border-top: 1px solid ${Theme.gray5};
+//       margin-top: 20px;
+//       padding-top: 15px;
+//       li {
+//         .divide-arrow {
+//           display: none;
+//         }
 
-        .remove-cross-icon {
-          position: absolute;
-          top: -20px;
-          right: 14px;
-        }
-      }
-    }
-  }
-`;
+//         .remove-cross-icon {
+//           position: absolute;
+//           top: -20px;
+//           right: 14px;
+//         }
+//       }
+//     }
+//   }
+// `;

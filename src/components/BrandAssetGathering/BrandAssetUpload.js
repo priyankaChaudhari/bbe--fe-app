@@ -13,8 +13,12 @@ import {
   GrayInfoIcon,
   LeftArrowIcon,
   BannerBg,
+  OrangeDownloadPdf,
+  CloseIcon,
+  TrashIcons,
+  RedTrashIcon,
 } from '../../theme/images';
-import { Button, CheckBox } from '../../common';
+import { Button, CheckBox, HeaderDownloadFuntionality } from '../../common';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
 
@@ -39,6 +43,57 @@ export default function BrandAssetUpload() {
 
   return (
     <>
+      <HeaderDownloadFuntionality>
+        <div className="container-fluid">
+          <div className="row">
+            {' '}
+            <div className="col-md-6 col-sm-12"> Contract Management</div>
+            <div className="col-md-6 col-sm-12">
+              <ul className="contract-download-nav ">
+                <li className="download-pdf">
+                  <img
+                    src={OrangeDownloadPdf}
+                    alt="download"
+                    className="download-pdf-icon upload-icon "
+                    role="presentation"
+                  />
+                  Upload
+                </li>
+                <li>
+                  <span className="divide-arrow " />
+                </li>
+                <li className="download-pdf">
+                  <img
+                    src={OrangeDownloadPdf}
+                    alt="download"
+                    className="download-pdf-icon "
+                    role="presentation"
+                  />
+                  Download
+                </li>
+                <li>
+                  <span className="divide-arrow hide-mobile" />
+                </li>
+                <li>
+                  <img
+                    width="18px"
+                    src={CloseIcon}
+                    alt="close"
+                    className="float-right cursor remove-cross-icon"
+                    onClick={() => {
+                      // history.goBack('Agreement');
+                      history.push(
+                        history && history.location && history.location.state,
+                      );
+                    }}
+                    role="presentation"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </HeaderDownloadFuntionality>
       <BackToStep>
         {' '}
         <div className="container-fluid">
@@ -144,7 +199,28 @@ export default function BrandAssetUpload() {
                   <span className="checkmark" />
                   <CheckSelectImage>
                     {' '}
-                    <img className="checked-gray" src={BannerBg} alt="check" />
+                    <img
+                      className="image-thumbnail "
+                      src={BannerBg}
+                      alt="check"
+                    />
+                    <div className="blur-bg" />
+                    <div className="remove-box">
+                      <img
+                        className="trash-icon"
+                        src={TrashIcons}
+                        alt="check"
+                      />
+                    </div>
+                    <div className="delete-msg">
+                      {' '}
+                      <img
+                        className="red-trash-icon"
+                        src={RedTrashIcon}
+                        alt="check"
+                      />
+                      Confirm Delete
+                    </div>
                   </CheckSelectImage>
                 </label>
               </CheckBox>
@@ -158,7 +234,11 @@ export default function BrandAssetUpload() {
                   <span className="checkmark" />
                   <CheckSelectImage>
                     {' '}
-                    <img className="checked-gray" src={BannerBg} alt="check" />
+                    <img
+                      className="image-thumbnail"
+                      src={BannerBg}
+                      alt="check"
+                    />
                   </CheckSelectImage>
                 </label>
               </CheckBox>
@@ -299,15 +379,61 @@ const CheckSelectImage = styled.div`
   width: 170px;
   height: 170px;
   position: relative;
-  img {
-    width: 170px;
-    height: 170px;
+
+  .image-thumbnail {
+    width: 180px;
+    height: 180px;
     border-radius: 8px;
+    
+    
+  }
+  .blur-bg {
+    background-color: rgba(46, 56, 77, 0.6);
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    position: absolute;
+    top: 0;
   }
   .selected-img {
     position: absolute;
     top: 5px;
     left: 5px;
+  }
+  .remove-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e2ea;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    padding: 9px;
+    .trash-icon {
+      width: 22px;
+    }
+  }
+  .delete-msg {
+    border-radius: 6px;
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    max-width: 170px;
+    color: #d60000;
+    font-size: 16px;
+    text-align: center;
+    position: absolute;
+    top: 62px;
+    padding: 16px;
+    width: 100%;
+    left: 6px;
+    font-weight: 600;
+    .red-trash-icon {
+      width: 18px;
+      vertical-align: text-top;
+      margin-right: 6px;
+    }
+}
   }
 `;
 

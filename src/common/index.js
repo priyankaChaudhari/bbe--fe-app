@@ -30,6 +30,7 @@ import OnBoardingBody from './OnBoarding';
 import CheckBoxList from './CheckBoxList';
 import BackToTop from './BackToTop';
 import { WhiteCard } from './WhiteCard';
+import HeaderDownloadFuntionality from './HeaderFunctionality';
 
 export {
   Button,
@@ -64,4 +65,5 @@ export {
   CheckBoxList,
   BackToTop,
   WhiteCard,
+  HeaderDownloadFuntionality,
 };

@@ -157,6 +157,8 @@ import CalendarFontBackArrow from './icons/calendar-back-arrow.png';
 import GrayCheckIcon from './icons/gray-check.svg';
 import GrayInfoIcon from './icons/gray-info-icon.svg';
 import WhiteArrowRight from './icons/white-arrow-right.png';
+import OrangeDownloadPdf from './icons/orange-download-pdf.png';
+import RedTrashIcon from './icons/red-trash-icon.svg';
 
 export {
   BannerBg,
@@ -318,4 +320,6 @@ export {
   GrayCheckIcon,
   GrayInfoIcon,
   WhiteArrowRight,
+  OrangeDownloadPdf,
+  RedTrashIcon,
 };

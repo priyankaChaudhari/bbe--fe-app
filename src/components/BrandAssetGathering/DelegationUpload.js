@@ -40,7 +40,7 @@ export default function UploadDelegation() {
   };
 
   return (
-    <div>
+    <>
       <BackToStep>
         {' '}
         <div className="container-fluid">
@@ -64,8 +64,8 @@ export default function UploadDelegation() {
           </div>
         </div>{' '}
       </BackToStep>
-      <OnBoardingBody className="body-white">
-        <div className="white-card-base panel pb-4">
+      <OnBoardingBody className="grey-bg">
+        <div className="white-card-base  pb-4">
           <UnauthorizedHeader />{' '}
           <h3 className="page-heading ">Upload Your Brand Assets</h3>
           <CheckBox className="mt-1 mb-4">
@@ -169,7 +169,7 @@ export default function UploadDelegation() {
           </p>
         </div>
       </OnBoardingBody>
-    </div>
+    </>
   );
 }
 
