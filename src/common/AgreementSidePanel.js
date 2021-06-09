@@ -4877,6 +4877,7 @@ const SidePanel = styled.div`
               color: ${Theme.gray90};
               /* width: 100%; */
               font-family: ${Theme.titleFontFamily};
+                 
             }
            
             li{

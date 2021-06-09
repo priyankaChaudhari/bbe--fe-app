@@ -8,7 +8,12 @@ import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Theme from '../../theme/Theme';
-import { TrashIcons, RedTrashIcon, CloseIcon } from '../../theme/images';
+import {
+  TrashIcons,
+  RedTrashIcon,
+  CloseIcon,
+  FileCloud,
+} from '../../theme/images';
 import { CheckBox } from '../../common';
 
 export default function DragDrop({ setSelectedFiles, fileLength }) {
@@ -87,69 +92,84 @@ export default function DragDrop({ setSelectedFiles, fileLength }) {
     };
 
     const thumbnail = files.map((item) => (
-      <ul className="Image-container" key={Math.random()}>
-        {item.map((file) => (
-          <li>
-            <CheckBox className="selected-img mt-4">
-              <label
-                className="check-container customer-pannel"
-                htmlFor="add-addendum">
-                <input type="checkbox" id="add-addendum" />
-                <span className="checkmark" />
-                <CheckSelectImage>
-                  {' '}
-                  {generateFileType(file.type, file.preview)}
-                  {showDeleteMsg[file.name] ? <div className="blur-bg" /> : ''}
-                  <div
-                    className="remove-box"
-                    role="presentation"
-                    onClick={() => setShowDeleteMsg({ [file.name]: true })}>
-                    <img className="trash-icon" src={TrashIcons} alt="check" />
-                  </div>
-                  {showDeleteMsg[file.name] ? (
+      <span>
+        <ul className="Image-container" key={Math.random()}>
+          {item.map((file) => (
+            <li>
+              <CheckBox className="selected-img mt-4">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-addendum">
+                  <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    {' '}
+                    {generateFileType(file.type, file.preview)}
+                    {showDeleteMsg[file.name] ? (
+                      <div className="blur-bg" />
+                    ) : (
+                      ''
+                    )}
                     <div
-                      className="delete-msg"
-                      onClick={() => {
-                        removeFile(file);
-                      }}
-                      role="presentation">
-                      {' '}
+                      className="remove-box"
+                      role="presentation"
+                      onClick={() => setShowDeleteMsg({ [file.name]: true })}>
                       <img
-                        className="red-trash-icon"
-                        src={RedTrashIcon}
+                        className="trash-icon"
+                        src={TrashIcons}
                         alt="check"
-                      />
-                      Confirm Delete
-                      <img
-                        className="confirm-delete-cross"
-                        src={CloseIcon}
-                        alt="check"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowDeleteMsg({ [file.name]: false });
-                        }}
-                        role="presentation"
                       />
                     </div>
-                  ) : (
-                    ''
-                  )}
-                </CheckSelectImage>
-              </label>
-            </CheckBox>
-          </li>
-        ))}
-      </ul>
+                    {showDeleteMsg[file.name] ? (
+                      <div
+                        className="delete-msg"
+                        onClick={() => {
+                          removeFile(file);
+                        }}
+                        role="presentation">
+                        {' '}
+                        <img
+                          className="red-trash-icon"
+                          src={RedTrashIcon}
+                          alt="check"
+                        />
+                        Confirm Delete
+                        <img
+                          className="confirm-delete-cross"
+                          src={CloseIcon}
+                          alt="check"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowDeleteMsg({ [file.name]: false });
+                          }}
+                          role="presentation"
+                        />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+          ))}
+        </ul>
+      </span>
     ));
     return (
       <DragDropImg>
         <section>
-          <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
+          <span className="mb-4" {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <div className=" select-files ">
+            <span
+              className={
+                fileLength === 0 ? 'select-files  ' : 'thumail-select-file'
+              }>
+              <img width="70px" src={FileCloud} alt="file-cloud" />
+              <br />
               Drag and drop your files here or <span>browse </span>
-            </div>
-          </div>
+            </span>
+          </span>
           {showThumbnail(thumbnail)}
 
           {/* <>
@@ -186,7 +206,7 @@ DragDrop.propTypes = {
 };
 
 const CheckSelectImage = styled.div`
-  background-color: #f4f6fc;
+  background-color: ${Theme.gray8};
   border-radius: 8px;
   width: 180px;
   height: 180px;
@@ -196,8 +216,6 @@ const CheckSelectImage = styled.div`
     width: 180px;
     height: 180px;
     border-radius: 8px;
-    
-    
   }
   .blur-bg {
     background-color: rgba(46, 56, 77, 0.6);
@@ -217,7 +235,7 @@ const CheckSelectImage = styled.div`
     width: 12px;
     top: 7px;
   }
-  
+
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
@@ -232,23 +250,23 @@ const CheckSelectImage = styled.div`
     width: 100%;
     left: 6px;
     font-weight: 600;
+
     .red-trash-icon {
       width: 18px;
       vertical-align: text-top;
       margin-right: 6px;
     }
-}
   }
-
-  
 `;
 
 const DragDropImg = styled.div`
   section {
+    display: flex;
+    flex-flow: wrap;
     cursor: pointer;
     .dropzone {
       min-height: 170px;
-      max-width: 70%;
+      max-width: 30%;
       border: 1px dotted ${Theme.gray40};
       border-radius: 4px;
     }
@@ -256,11 +274,13 @@ const DragDropImg = styled.div`
       font-size: ${Theme.extraNormal};
       color: ${Theme.black};
       text-align: center;
-      margin-top: 100px;
+      margin-top: 30px;
 
       span {
         color: ${Theme.orange};
       }
+    }
+    .thumail-select-file {
     }
   }
 `;
