@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+import Theme from '../../theme/Theme';
 import { TrashIcons, RedTrashIcon, CloseIcon } from '../../theme/images';
 import { CheckBox } from '../../common';
 
@@ -142,17 +142,17 @@ export default function DragDrop({ setSelectedFiles, fileLength }) {
       </ul>
     ));
     return (
-      <section>
-        <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <div className=" mb-3 ">
-            <br />
-            Drag and drop some files here, or click to select files
+      <DragDropImg>
+        <section>
+          <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
+            <input {...getInputProps()} />
+            <div className=" select-files ">
+              Drag and drop your files here or <span>browse </span>
+            </div>
           </div>
-        </div>
-        {showThumbnail(thumbnail)}
+          {showThumbnail(thumbnail)}
 
-        {/* <>
+          {/* <>
           {files.length > 0 && (
             <div className="row">
               <div className="col-12 text-center mt-4 mb-lg-0 mb-3">
@@ -164,12 +164,13 @@ export default function DragDrop({ setSelectedFiles, fileLength }) {
           )}
         </> */}
 
-        {/* {currentRejectedFiles.length ? (
+          {/* {currentRejectedFiles.length ? (
           <div className="text-danger">File size is larger than 26 Mb</div>
         ) : (
           ''
         )} */}
-      </section>
+        </section>
+      </DragDropImg>
     );
   };
   return <Previews />;
@@ -220,9 +221,9 @@ const CheckSelectImage = styled.div`
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: ${Theme.white};
     max-width: 170px;
-    color: #d60000;
+    color: ${Theme.red};
     font-size: 16px;
     text-align: center;
     position: absolute;
@@ -237,5 +238,29 @@ const CheckSelectImage = styled.div`
       margin-right: 6px;
     }
 }
+  }
+
+  
+`;
+
+const DragDropImg = styled.div`
+  section {
+    cursor: pointer;
+    .dropzone {
+      min-height: 170px;
+      max-width: 70%;
+      border: 1px dotted ${Theme.gray40};
+      border-radius: 4px;
+    }
+    .select-files {
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.black};
+      text-align: center;
+      margin-top: 100px;
+
+      span {
+        color: ${Theme.orange};
+      }
+    }
   }
 `;

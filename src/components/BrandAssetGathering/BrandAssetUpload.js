@@ -528,7 +528,7 @@ const BrandAssetSideBar = styled.div`
 const BackToStep = styled.div`
   position: fixed;
   background-color: ${Theme.white};
-  z-index: 2;
+  z-index: 3;
   top: 70px;
   padding: 22px 0px 18px 0px;
   width: 100%;
