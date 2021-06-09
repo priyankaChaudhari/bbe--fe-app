@@ -3,6 +3,7 @@ import {
   API_ACCOUNT_ASSIGNEE_COUNT,
   API_CUSTOMER_CONTRACT,
   API_DOCUMENTS,
+  API_BRAND_ASSETS,
 } from '../constants/ApiConstants';
 
 export async function getAgreementList(customer) {
@@ -38,6 +39,18 @@ export async function getAssigneeCount(customer) {
 export async function deleteDocument(id) {
   const result = await axiosInstance
     .delete(`${API_DOCUMENTS + id}/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function updateBrandAssetStep(id, data) {
+  const result = await axiosInstance
+    .patch(`${API_BRAND_ASSETS + id}/`, data)
     .then((response) => {
       return response;
     })

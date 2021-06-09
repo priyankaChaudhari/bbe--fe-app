@@ -122,4 +122,5 @@ export {
   getAgreementList,
   getAssigneeCount,
   deleteDocument,
+  updateBrandAssetStep,
 } from './BrandAssestsApi';

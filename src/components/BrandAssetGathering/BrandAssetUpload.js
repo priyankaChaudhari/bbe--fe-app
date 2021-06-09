@@ -57,10 +57,11 @@ export default function BrandAssetUpload() {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [documentData, setDocumentData] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState();
 
   const getDocumentList = (docType) => {
     setIsLoading({ loader: true, type: 'page' });
-    getDocuments(id, 'customer', docType).then((response) => {
+    getDocuments('BAFNKpr', 'brandassets', docType).then((response) => {
       setDocumentData(response);
       setIsLoading({ loader: false, type: 'page' });
     });
@@ -79,8 +80,8 @@ export default function BrandAssetUpload() {
       for (const item of files) {
         formData.push({
           original_name: item.name,
-          entity_id: id,
-          entity_type: 'customer',
+          entity_id: 'BAFNKpr',
+          entity_type: 'brandassets',
           mime_type: item.type,
           status: 'requested',
           document_type: selectedStep && selectedStep.key,
@@ -101,8 +102,17 @@ export default function BrandAssetUpload() {
   };
   const createDocument = () => {
     setIsLoading({ loader: true, type: 'button' });
-    for (const item of destructureselectedFiles()) {
-      axiosInstance.post(API_DOCUMENTS, item).then((res) => {
+    const formData = destructureselectedFiles();
+    console.log('FORM DATA', formData);
+    axiosInstance
+      .post(API_DOCUMENTS, formData, {
+        onUploadProgress: (data) => {
+          console.log('>>>>', Math.round((100 * data.loaded) / data.total));
+          setUploadProgress(Math.round((100 * data.loaded) / data.total));
+        },
+      })
+      .then((res) => {
+        console.log('******', res);
         if (res && res.data && res.data.presigned_url !== '') {
           const request = {
             meta: createMetaData(res.data.original_name),
@@ -127,7 +137,6 @@ export default function BrandAssetUpload() {
         }
         return res;
       });
-    }
   };
 
   const saveImages = () => {
@@ -316,7 +325,7 @@ export default function BrandAssetUpload() {
                 <div className="check-list-item">
                   <div className="check-list-label">{item.label}</div>
                   <div className="check-list-file-uploaded">
-                    0 files uploaded
+                    {selectedFiles.length} files uploaded
                   </div>
                 </div>
                 {item.url === params.step ? (
@@ -390,6 +399,15 @@ export default function BrandAssetUpload() {
                 // fileType={selectedStep && selectedStep.format}
                 fileLength={selectedFiles && selectedFiles.length}
               />
+              <div className="progress-bar-value">
+                {uploadProgress > 0 && (
+                  <progress
+                    value={uploadProgress}
+                    label={`${uploadProgress}%`}
+                  />
+                )}
+                {/* <progress value="67" max="100" /> */}
+              </div>
               {showDocuments()}
               {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
             </div>
