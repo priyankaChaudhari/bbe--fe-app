@@ -52,6 +52,8 @@ import {
   updateCustomerDetails,
   getMonthlyService,
   getOneTimeService,
+  getThresholdType,
+  getYoyPercentage,
 } from '../../api';
 import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
 import {
@@ -155,7 +157,6 @@ export default function ContractContainer() {
   const [customerError, setCustomerErrors] = useState({});
 
   const [contractError, setContractError] = useState({});
-
   const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
     false,
   );
@@ -203,6 +204,8 @@ export default function ContractContainer() {
   const [oneTimeService, setOneTimeService] = useState([]);
   const [monthlyService, setMonthlyService] = useState([]);
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
+  const [thresholdTypeOptions, setThresholdTypeOptions] = useState(false);
+  const [yoyPercentageOptions, setYoyPercentageOptions] = useState(false);
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -390,6 +393,14 @@ export default function ContractContainer() {
           addendum.data.results &&
           addendum.data.results[0],
       );
+    });
+
+    getThresholdType().then((thresholdType) => {
+      setThresholdTypeOptions(thresholdType);
+    });
+
+    getYoyPercentage().then((yoyPercentage) => {
+      setYoyPercentageOptions(yoyPercentage);
     });
 
     getMarketplaces().then((market) => {
@@ -1437,7 +1448,7 @@ export default function ContractContainer() {
     padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Content <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background: #ffe5df;padding: 4px 9px;"> ${
+    padding: 13px;">Listing Optimization - Copy <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background: #ffe5df;padding: 4px 9px;"> ${
       details && details.content_optimization
         ? details && details.content_optimization
         : 0
@@ -2174,6 +2185,12 @@ export default function ContractContainer() {
                 )
                   statementErrCount += 1;
 
+                if (Object.keys(contractRes.data).includes('yoy_percentage'))
+                  statementErrCount += 1;
+
+                if (Object.keys(contractRes.data).includes('sales_threshold'))
+                  statementErrCount += 1;
+
                 if (
                   Object.keys(contractRes.data).includes('dsp_fee') &&
                   !contractError.dsp_fee
@@ -2263,6 +2280,30 @@ export default function ContractContainer() {
       delete updatedContractFields.city;
       delete updatedContractFields.state;
       delete updatedContractFields.zip_code;
+
+      if (
+        updatedContractFields &&
+        updatedContractFields.threshold_type === 'Fixed'
+      ) {
+        updatedContractFields.yoy_percentage = null;
+      }
+
+      if (
+        updatedContractFields &&
+        updatedContractFields.threshold_type === 'YoY + %'
+      ) {
+        updatedContractFields.sales_threshold = null;
+      }
+
+      if (
+        (updatedContractFields &&
+          updatedContractFields.threshold_type === 'YoY') ||
+        (updatedContractFields &&
+          updatedContractFields.threshold_type === 'None')
+      ) {
+        updatedContractFields.sales_threshold = null;
+        updatedContractFields.yoy_percentage = null;
+      }
 
       const detail = {
         ...updatedContractFields,
@@ -2673,6 +2714,8 @@ export default function ContractContainer() {
         AmazonStoreOptions={AmazonStoreOptions}
         fetchUncommonOptions={fetchUncommonOptions}
         originalAddendumData={originalAddendumData}
+        thresholdTypeOptions={thresholdTypeOptions}
+        yoyPercentageOptions={yoyPercentageOptions}
       />
     );
   };

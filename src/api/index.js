@@ -63,6 +63,8 @@ export {
   getContractStatus,
   getMarketPlaceList,
   getAdManagers,
+  getThresholdType,
+  getYoyPercentage,
 } from './ChoicesApi';
 
 // Contract

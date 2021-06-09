@@ -69,6 +69,12 @@ const ContractFormField = styled.div`
       }
    
     }
+
+     &.form-control-error {
+     border: 1px solid ${Theme.red} ;
+     background: #FBF2F2;
+  
+    }
     
   }
 

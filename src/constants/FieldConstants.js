@@ -494,7 +494,7 @@ export const AgreementDetails = [
 export const ListingOptimization = [
   {
     key: 'content_optimization',
-    label: 'Content',
+    label: 'Copy',
   },
   {
     key: 'design_optimization',
@@ -531,14 +531,14 @@ export const StatementDetails = [
     isMandatory: true,
     part: 'statement',
   },
-  {
-    key: 'sales_threshold',
-    label: 'REVENUE THRESHOLD',
-    type: 'number-currency',
-    placeholder: 'Enter Revenue Threshold (Optional)',
-    isMandatory: false,
-    part: 'statement',
-  },
+  // {
+  //   key: 'sales_threshold',
+  //   label: 'REVENUE THRESHOLD',
+  //   type: 'number-currency',
+  //   placeholder: 'Enter Revenue Threshold (Optional)',
+  //   isMandatory: false,
+  //   part: 'statement',
+  // },
   {
     key: 'billing_cap',
     label: 'BILLING CAP',

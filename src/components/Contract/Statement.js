@@ -282,7 +282,7 @@ export default function Statement({
     padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Content <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> ${
+    padding: 13px;">Listing Optimization - Copy <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> ${
       formData && formData.content_optimization
         ? formData && formData.content_optimization
         : 0

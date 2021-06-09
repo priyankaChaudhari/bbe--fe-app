@@ -5,6 +5,8 @@ import {
   API_SERVICE_TYPE,
   API_MARKETPLACES,
   API_ADM,
+  API_THRESHOLD_TYPE,
+  API_YOY_PERCENTAGE,
 } from '../constants/ApiConstants';
 
 export async function getStatus() {
@@ -212,6 +214,30 @@ export async function getAdManagers() {
     .get(`${API_ADM}`)
     .then((response) => {
       return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getThresholdType() {
+  const result = await axiosInstance
+    .get(`${API_CHOICES + API_THRESHOLD_TYPE}`)
+    .then((response) => {
+      return response && response.data;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getYoyPercentage() {
+  const result = await axiosInstance
+    .get(`${API_CHOICES + API_YOY_PERCENTAGE}`)
+    .then((response) => {
+      return response && response.data;
     })
     .catch((error) => {
       return error.response;

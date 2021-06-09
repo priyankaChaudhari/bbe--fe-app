@@ -130,32 +130,13 @@ export default function AgreementSidePanel({
   AmazonStoreOptions,
   fetchUncommonOptions,
   originalAddendumData,
+  thresholdTypeOptions,
+  yoyPercentageOptions,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
-  const assignOptions = () => {
-    const YoyOptions = Array.from(Array(100).keys())
-      .filter((n) => n % 5 === 0)
-      .slice(1);
-    const result = [];
-    YoyOptions.forEach((item) => {
-      result.push({ label: item, value: item });
-    });
-    return result;
-  };
-
-  const thresholdOptions = [
-    { label: 'None' },
-    { label: 'Fixed', showTextField: true },
-    { label: 'YOY' },
-    {
-      label: 'YOY + %',
-      showDropdown: true,
-      options: assignOptions(),
-    },
-  ];
   const [selectedThreshold, setSelectedThreshold] = useState('');
 
   const getActivityInitials = (userInfo) => {
@@ -878,7 +859,19 @@ export default function AgreementSidePanel({
         );
         // setMarketPlaces();
       }
-
+      if (key === 'yoy_percentage') {
+        setContractError({
+          ...contractError,
+          [key]: '',
+        });
+        const statmentErr = sectionError.statement
+          ? sectionError.statement - 1
+          : 0;
+        setSectionError({
+          ...sectionError,
+          statement: statmentErr,
+        });
+      }
       setFormData({ ...formData, [key]: event.value });
       setUpdatedFormData({ ...updatedFormData, [key]: event.value });
     } else if (type === 'qty') {
@@ -2045,10 +2038,26 @@ export default function AgreementSidePanel({
           });
         }
       }
+      const statementErr = sectionError.statement
+        ? sectionError.statement - 1
+        : 0;
 
-      setContractError({
-        ...contractError,
-        [event.target.name]: '',
+      if (key === 'threshold_type') {
+        setContractError({
+          ...contractError,
+          sales_threshold: '',
+          yoy_percentage: '',
+        });
+      } else {
+        setContractError({
+          ...contractError,
+          [event.target.name]: '',
+        });
+      }
+
+      setSectionError({
+        ...sectionError,
+        statement: statementErr,
       });
     }
   };
@@ -3483,6 +3492,11 @@ export default function AgreementSidePanel({
     );
   };
 
+  const onThresholdTypeChange = (event, key, threshold) => {
+    setSelectedThreshold(threshold);
+    handleChange(event, key);
+  };
+
   return (
     <SidePanel
       className={
@@ -3862,13 +3876,17 @@ export default function AgreementSidePanel({
                             </div>
                             <div className="thershold">
                               <ul className="days-tab">
-                                {thresholdOptions.map((threshold) => {
+                                {thresholdTypeOptions.map((threshold) => {
                                   return (
                                     <>
                                       <li
                                         className={
                                           selectedThreshold.label ===
-                                          threshold.label
+                                            threshold.label ||
+                                          formData.threshold_type ===
+                                            threshold.label ||
+                                          (!formData.threshold_type &&
+                                            threshold.label === 'None')
                                             ? 'p-0 thresholdChecked'
                                             : 'p-0'
                                         }>
@@ -3876,15 +3894,14 @@ export default function AgreementSidePanel({
                                           className="d-none "
                                           type="radio"
                                           id={threshold.label}
-                                          name="discount"
+                                          name="threshold_type"
                                           value={threshold.label}
-                                          defaultChecked
-                                          // ={
-                                          //   selectedThreshold ===
-                                          //   threshold.label
-                                          // }
-                                          onClick={() =>
-                                            setSelectedThreshold(threshold)
+                                          onClick={(event) =>
+                                            onThresholdTypeChange(
+                                              event,
+                                              'threshold_type',
+                                              threshold,
+                                            )
                                           }
                                         />
                                         <label
@@ -3898,20 +3915,31 @@ export default function AgreementSidePanel({
                                 })}
                               </ul>
                             </div>
-                            {selectedThreshold.label === 'Fixed' ? (
+                            {formData && formData.threshold_type === 'Fixed' ? (
                               <div>
                                 <ContractFormField>
                                   <div className="input-container  ">
-                                    <span className="input-icon error-msg">
+                                    <span
+                                      className={
+                                        contractError &&
+                                        contractError.sales_threshold
+                                          ? 'input-icon error-msg'
+                                          : 'input-icon'
+                                      }>
                                       ${' '}
                                     </span>
                                     <NumberFormat
-                                      name="amount"
-                                      className="form-control modal-input-control form-control-error"
+                                      name="sales_threshold"
+                                      className={
+                                        contractError &&
+                                        contractError.sales_threshold
+                                          ? 'form-control modal-input-control form-control-error'
+                                          : 'form-control modal-input-control'
+                                      }
                                       placeholder="Enter threshold"
-                                      // onChange={(event) =>
-                                      //   handleInputChange(event)
-                                      // }
+                                      onChange={(event) =>
+                                        handleChange(event, 'sales_threshold')
+                                      }
                                       defaultValue={
                                         formData && formData.sales_threshold
                                       }
@@ -3919,35 +3947,84 @@ export default function AgreementSidePanel({
                                       allowNegative={false}
                                     />
                                   </div>
+                                  {displayError({ key: 'sales_threshold' })}
                                 </ContractFormField>
                               </div>
                             ) : (
                               ''
                             )}
-                            {selectedThreshold.label === 'YOY + %' ? (
+                            {formData &&
+                            formData.threshold_type === 'YoY + %' ? (
                               <div>
                                 <ContractInputSelect>
                                   <Select
                                     classNamePrefix="react-select"
+                                    styles={{
+                                      control: (base, state) => ({
+                                        ...base,
+                                        background:
+                                          contractError &&
+                                          contractError.yoy_percentage
+                                            ? '#FBF2F2'
+                                            : '#F4F6FC',
+                                        // match with the menu
+                                        // borderRadius: state.isFocused ? '3px 3px 0 0' : 3,
+                                        // Overwrittes the different states of border
+                                        borderColor:
+                                          contractError &&
+                                          contractError.yoy_percentage
+                                            ? '#D63649'
+                                            : '#D5D8E1',
+
+                                        // Removes weird border around container
+                                        boxShadow: state.isFocused
+                                          ? null
+                                          : null,
+                                        '&:hover': {
+                                          // Overwrittes the different states of border
+                                          boxShadow: state.isFocused
+                                            ? null
+                                            : null,
+                                          outlineColor: state.isFocused
+                                            ? null
+                                            : null,
+                                        },
+                                      }),
+                                      placeholder: (defaultStyles) => {
+                                        return {
+                                          ...defaultStyles,
+                                          color: '556178',
+                                        };
+                                      },
+                                    }}
                                     isSearchable={false}
-                                    // defaultValue={setDefaultAmazonPlanValue()}
-                                    options={
-                                      thresholdOptions &&
-                                      thresholdOptions[3] &&
-                                      thresholdOptions[3].options
+                                    defaultValue={
+                                      formData && formData.yoy_percentage
+                                        ? [
+                                            {
+                                              label:
+                                                formData &&
+                                                formData.yoy_percentage,
+                                              value:
+                                                formData &&
+                                                formData.yoy_percentage,
+                                            },
+                                          ]
+                                        : []
                                     }
-                                    name="amazon_store_plan"
+                                    options={yoyPercentageOptions}
+                                    name="yoy_percentage"
                                     components={{ DropdownIndicator }}
-                                    // onChange={(event) => {
-                                    //   handleAmazonPlanChange(event);
-                                    //   handleChange(
-                                    //     event,
-                                    //     'amazon_store_package',
-                                    //     'dropdown',
-                                    //   );
-                                    // }}
+                                    onChange={(event) => {
+                                      handleChange(
+                                        event,
+                                        'yoy_percentage',
+                                        'choice',
+                                      );
+                                    }}
                                     placeholder="Select percentage"
                                   />
+                                  {displayError({ key: 'yoy_percentage' })}
                                 </ContractInputSelect>
                               </div>
                             ) : (

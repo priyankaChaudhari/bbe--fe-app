@@ -42,6 +42,8 @@ export const API_TRANSACTION_DATA = '/transactional-data/';
 export const API_CONTRACT_DESIGN = `${API_TRANSACTION_DATA}contract-design/`;
 export const API_TRANSACTIONAL_SIGN_URL = `/sign-url/`;
 export const API_CONTRACT_ACTIVITY_LOG = `/contract_history/`;
+export const API_THRESHOLD_TYPE = `threshold-type`;
+export const API_YOY_PERCENTAGE = `yoy-percentage`;
 
 // Knowledge Base
 export const API_KNOWLEDGE_BASE = '/knowledge/';
