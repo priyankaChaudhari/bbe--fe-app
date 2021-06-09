@@ -987,3 +987,5 @@ export const BrandSteps = [
     skip: 'summary',
   },
 ];
+
+export const additionaMarketplaceAmount = 1500;

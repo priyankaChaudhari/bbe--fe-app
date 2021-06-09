@@ -25,6 +25,7 @@ export const API_PERFORMANCE = '/performance/';
 export const API_MARKETPLACES = '/marketplaces/';
 export const API_AD_PERFORMANCE = '/performance-metrics/';
 export const API_ADM = '/manager-list/';
+export const API_SERVICES_FEE = '/type-of-services/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

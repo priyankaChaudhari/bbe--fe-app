@@ -16,6 +16,7 @@ import {
   API_SIGNATURE_STATUS,
   API_ACTIVITY_LOG,
   API_CUSTOMER_CONTRACT,
+  API_SERVICES_FEE,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -299,4 +300,16 @@ export async function getContractActivityLog(pageNumber, id) {
     return result;
   }
   return null;
+}
+
+export async function getServicesFee() {
+  const result = await axiosInstance
+    .get(API_SERVICES_FEE)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
 }

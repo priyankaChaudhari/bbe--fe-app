@@ -31,7 +31,7 @@ import {
   ModalBox,
   HeaderDownloadFuntionality,
 } from '../../common';
-import { agreementTemplate, getcontract } from '../../api/AgreementApi';
+import { agreementTemplate, getcontract, getServicesFee } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -206,6 +206,7 @@ export default function ContractContainer() {
   const [AmazonStoreOptions, setAmazonStoreOptions] = useState(false);
   const [thresholdTypeOptions, setThresholdTypeOptions] = useState(false);
   const [yoyPercentageOptions, setYoyPercentageOptions] = useState(false);
+  const [servicesFees, setServicesFees] = useState({});
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -416,6 +417,10 @@ export default function ContractContainer() {
       //   formData.additional_monthly_services,
       //   'monthly_service',
       // );
+    });
+
+    getServicesFee().then((res) => {
+      setServicesFees(res.data);
     });
 
     getOneTimeService().then((r) => {
@@ -2431,6 +2436,7 @@ export default function ContractContainer() {
               templateData={data}
               notIncludedOneTimeServices={notIncludedOneTimeServices}
               notIncludedMonthlyServices={notIncludedMonthlyServices}
+              servicesFees={servicesFees}
             />
           </div>
         )}
