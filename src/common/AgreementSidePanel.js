@@ -3901,11 +3901,13 @@ export default function AgreementSidePanel({
                             {selectedThreshold.label === 'Fixed' ? (
                               <div>
                                 <ContractFormField>
-                                  <div className="input-container">
-                                    <span className="input-icon">$ </span>
+                                  <div className="input-container  ">
+                                    <span className="input-icon error-msg">
+                                      ${' '}
+                                    </span>
                                     <NumberFormat
                                       name="amount"
-                                      className="form-control modal-input-control"
+                                      className="form-control modal-input-control form-control-error"
                                       placeholder="Enter threshold"
                                       // onChange={(event) =>
                                       //   handleInputChange(event)

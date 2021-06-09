@@ -913,14 +913,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const renderAdDailyFacts = () => {
     return (
       <>
-        <div className="col-md-3  col-sm1-12">
+        <div className="col-md-4  col-sm1-12 pr-0">
           {' '}
           <p className="black-heading-title mt-2 mb-4">
             {' '}
             Sponsored Ad Performance
           </p>
         </div>
-        <div className="col-md-9 col-sm1-12  mb-3 pl-0">
+        <div className="col-md-8 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
             <li className="ad-performance">
               {' '}
@@ -1700,7 +1700,7 @@ const AddPerformance = styled.div`
 
     li {
       display: inline-block;
-      margin-right: 10px;
+      margin-right: 6px;
 
       &:last-child {
         margin-right: 0px;
@@ -1716,7 +1716,7 @@ const AddPerformance = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 1155px) {
+  @media only screen and (max-width: 1255px) {
     .ad-performance-nav {
       li {
         
@@ -1726,6 +1726,22 @@ const AddPerformance = styled.div`
         }
         &.day-performance {
           max-width: 227px;
+          width: 100%;
+        }
+      }
+    }
+
+  }
+  @media only screen and (max-width: 1084px) {
+    .ad-performance-nav {
+      li {
+        
+        &.ad-performance {
+          max-width: 165px;
+          width: 100%;
+        }
+        &.day-performance {
+          max-width: 210px;
           width: 100%;
         }
       }

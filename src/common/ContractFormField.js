@@ -60,6 +60,13 @@ const ContractFormField = styled.div`
         border-bottom: 1px solid ${Theme.gray45};
         border-radius: 0px 2px 2px 0;
       }
+
+      &.error-msg {
+        border-left: 1px solid ${Theme.red};
+        border-top: 1px solid ${Theme.red} !important;
+        border-bottom: 1px solid ${Theme.red};
+        background:  ${Theme.lightRed};
+      }
    
     }
     
