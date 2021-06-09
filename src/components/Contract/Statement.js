@@ -233,26 +233,30 @@ export default function Statement({
     if (formData) {
       if (type === 'monthly') {
         // caculate the total of additional monthly serviece
-        formData.additional_monthly_services.forEach((item) => {
-          if (item && item.service) {
-            monthlySubTotal += item.service.fee;
-          } else {
-            const fixedFee = servicesFees.filter((n) => n.id === item.service_id);
-            monthlySubTotal += fixedFee[0].fee;
-          }
-        });
+        if (formData.additional_monthly_services !== null) {
+          formData.additional_monthly_services.forEach((item) => {
+            if (item && item.service) {
+              monthlySubTotal += item.service.fee;
+            } else {
+              const fixedFee = servicesFees.filter(
+                (n) => n.id === item.service_id,
+              );
+              monthlySubTotal += fixedFee[0].fee;
+            }
+          });
+        }
+        if (formData.additional_marketplaces !== null) {
+          // calculate the total of additional marketplaces
+          formData.additional_marketplaces.forEach((item) => {
+            if (item && item.fee) {
+              additionalMarketplacesTotal += item.fee;
+            } else {
+              additionalMarketplacesTotal += additionaMarketplaceAmount;
+            }
+          });
 
-        // calculate the total of additional marketplaces
-        formData.additional_marketplaces.forEach((item) => {
-          if (item && item.fee) {
-            additionalMarketplacesTotal += item.fee;
-          } else {
-            additionalMarketplacesTotal += additionaMarketplaceAmount;
-          }
-        });
-
-        monthlySubTotal += additionalMarketplacesTotal;
-
+          monthlySubTotal += additionalMarketplacesTotal;
+        }
         if (formData.monthly_discount_type !== null) {
           const discountType = formData.monthly_discount_type;
           if (discountType === 'percentage') {
@@ -271,16 +275,18 @@ export default function Statement({
           monthlyDiscountType: formData.monthly_discount_type,
           monthlyDiscount: formData.monthly_discount_amount,
         };
-      } if (type === 'onetime') {
+      }
+      if (
+        type === 'onetime' &&
+        formData.additional_one_time_services !== null
+      ) {
         formData.additional_one_time_services.forEach((item) => {
-          const {quantity} = item;
-          if (item && item.service) {
-            oneTimeSubTotal += item.service.fee * quantity;
-          } else if (
-            item.name === 'Amazon Store Package Custom' &&
-            item.custom_amazon_store_price
-          ) {
+          const { quantity } = item;
+
+          if (item.custom_amazon_store_price) {
             oneTimeSubTotal += item.custom_amazon_store_price * quantity;
+          } else if (item && item.service) {
+            oneTimeSubTotal += item.service.fee * quantity;
           } else {
             let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
             fixedFee =
@@ -623,7 +629,9 @@ export default function Statement({
       }
     } else if (formData && formData.additional_one_time_services) {
       formData.additional_one_time_services.forEach((service) => {
-        const fixedFee = servicesFees.filter((n) => n.id === service.service_id);
+        const fixedFee = servicesFees.filter(
+          (n) => n.id === service.service_id,
+        );
         return fields.push(
           `<tr>
               <td style="border: 1px solid black;padding: 13px;">${
