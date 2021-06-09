@@ -4,6 +4,7 @@ import {
   API_CUSTOMER_CONTRACT,
   API_DOCUMENTS,
   API_BRAND_ASSETS,
+  API_BRAND_ASSETS_SUMMARY,
 } from '../constants/ApiConstants';
 
 export async function getAgreementList(customer) {
@@ -51,6 +52,19 @@ export async function deleteDocument(id) {
 export async function updateBrandAssetStep(id, data) {
   const result = await axiosInstance
     .patch(`${API_BRAND_ASSETS + id}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBrandAssetsSummary(id) {
+  const params = { brand_asset: id };
+  const result = await axiosInstance
+    .get(API_BRAND_ASSETS_SUMMARY, { params })
     .then((response) => {
       return response;
     })

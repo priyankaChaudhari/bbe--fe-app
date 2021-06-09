@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { getBrandAssetsSummary } from '../../api';
 
 import { OnBoardingBody, GreyCard, Button } from '../../common';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -9,6 +10,12 @@ import { OrangeCheckMark } from '../../theme/images';
 export default function BrandAssetSummary() {
   const { id } = useParams();
   const history = useHistory();
+
+  useEffect(() => {
+    getBrandAssetsSummary('BAFNKpr').then((response) => {
+      console.log(response, 'rest');
+    });
+  }, []);
 
   return (
     <OnBoardingBody className="body-white">

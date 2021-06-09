@@ -10,6 +10,7 @@ import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
 // import { Line } from 'rc-progress';
+import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 
 import Theme from '../../theme/Theme';
@@ -35,10 +36,10 @@ import {
   PATH_CUSTOMER_DETAILS,
 } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
-import DragNDrop from './DragNDrop';
 import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
 import { deleteDocument, getDocuments } from '../../api';
+import { updateBrandAssetStep } from '../../api/BrandAssestsApi';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -53,11 +54,13 @@ export default function BrandAssetUpload() {
   const { id } = useParams();
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [documentData, setDocumentData] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [uploadProgress, setUploadProgress] = useState();
+  const [brandAssetData, setBrandAssetData] = useState([]);
+
+  const selectedFiles = [];
 
   const getDocumentList = (docType) => {
     setIsLoading({ loader: true, type: 'page' });
@@ -70,7 +73,6 @@ export default function BrandAssetUpload() {
   useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
     const docType = BrandSteps.find((op) => op.url === params.step).key;
-    setSelectedFiles([]);
     getDocumentList(docType);
   }, [params.step]);
 
@@ -100,10 +102,10 @@ export default function BrandAssetUpload() {
     }
     return null;
   };
+
   const createDocument = () => {
     setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
-    console.log('FORM DATA', formData);
     axiosInstance
       .post(API_DOCUMENTS, formData, {
         onUploadProgress: (data) => {
@@ -112,45 +114,58 @@ export default function BrandAssetUpload() {
         },
       })
       .then((res) => {
-        console.log('******', res);
-        if (res && res.data && res.data.presigned_url !== '') {
-          const request = {
-            meta: createMetaData(res.data.original_name),
-            url: res.data.presigned_url,
-            headers: {
-              'Content-type': res.data.mime_type,
-            },
-          };
-          axios
-            .put(request.url, request.meta, { headers: request.headers })
-            .then(() => {
-              axiosInstance
-                .patch(`${API_DOCUMENTS + res.data.id}/`, {
-                  status: 'available',
-                })
-                .then(() => {
-                  setSelectedFiles([]);
-                  getDocumentList(selectedStep && selectedStep.key);
-                });
-              setIsLoading({ loader: false, type: 'button' });
-            });
+        for (const detail of res.data) {
+          if (detail && detail.presigned_url !== '') {
+            const request = {
+              meta: createMetaData(detail.original_name),
+              url: detail.presigned_url,
+              headers: {
+                'Content-type': detail.mime_type,
+              },
+            };
+
+            axios
+              .put(request.url, request.meta, { headers: request.headers })
+              .then(() => {
+                axiosInstance
+                  .patch(`${API_DOCUMENTS + detail.id}/`, {
+                    status: 'available',
+                  })
+                  .then(() => {
+                    getDocumentList(selectedStep && selectedStep.key);
+                  });
+                setIsLoading({ loader: false, type: 'button' });
+              });
+          }
         }
         return res;
       });
   };
 
-  const saveImages = () => {
-    createDocument();
-  };
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: 'image/*',
+    onDrop: (acceptedFiles) => {
+      selectedFiles.push(acceptedFiles);
+      createDocument();
+    },
+  });
 
-  const skipStep = () => {
-    if (selectedStep && selectedStep.skip === 'summary') {
-      history.push(PATH_BRAND_ASSET_SUMMARY.replace(':id', id));
-    } else
-      history.push({
-        pathname: PATH_BRAND_ASSET.replace(':id', id),
-        search: `step=${selectedStep && selectedStep.skip}`,
-      });
+  const redirectTo = (value) => {
+    updateBrandAssetStep('BAFNKpr', {
+      steps: {
+        ...brandAssetData.steps,
+        [selectedStep && selectedStep.key]: value,
+      },
+    }).then((response) => {
+      if (response && response.status === 200)
+        if (selectedStep && selectedStep.skip === 'summary') {
+          history.push(PATH_BRAND_ASSET_SUMMARY.replace(':id', id));
+        } else
+          history.push({
+            pathname: PATH_BRAND_ASSET.replace(':id', id),
+            search: `step=${selectedStep && selectedStep.skip}`,
+          });
+    });
   };
 
   const deleteImage = (imageId) => {
@@ -167,7 +182,7 @@ export default function BrandAssetUpload() {
       <ul className="Image-container" key={Math.random()}>
         {documentData &&
           documentData.map((file) => (
-            <li>
+            <li key={file.id}>
               <CheckBox className="selected-img mt-4">
                 <label
                   className="check-container customer-pannel"
@@ -313,7 +328,6 @@ export default function BrandAssetUpload() {
                 key={item.key}
                 role="presentation"
                 onClick={() => {
-                  setSelectedFiles([]);
                   history.push({
                     pathname: PATH_BRAND_ASSET.replace(':id', id),
                     search: `step=${item.url}`,
@@ -325,7 +339,7 @@ export default function BrandAssetUpload() {
                 <div className="check-list-item">
                   <div className="check-list-label">{item.label}</div>
                   <div className="check-list-file-uploaded">
-                    {selectedFiles.length} files uploaded
+                    {documentData && documentData.length} files uploaded
                   </div>
                 </div>
                 {item.url === params.step ? (
@@ -348,7 +362,6 @@ export default function BrandAssetUpload() {
             options={viewOptions}
             defaultValue={viewOptions.find((op) => op.value === params.step)}
             onChange={(event) => {
-              setSelectedFiles([]);
               history.push({
                 pathname: PATH_BRAND_ASSET.replace(':id', id),
                 search: `step=${event.value}`,
@@ -393,21 +406,17 @@ export default function BrandAssetUpload() {
                 ''
               )}
             </p>
-            <div>
-              <DragNDrop
-                setSelectedFiles={setSelectedFiles}
-                // fileType={selectedStep && selectedStep.format}
-                fileLength={selectedFiles && selectedFiles.length}
-              />
-              <div className="progress-bar-value">
-                {uploadProgress > 0 && (
-                  <progress
-                    value={uploadProgress}
-                    label={`${uploadProgress}%`}
-                  />
-                )}
-                {/* <progress value="67" max="100" /> */}
+            <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <div className=" select-files ">
+                Drag and drop your files here or <span>browse </span>
               </div>
+            </div>
+            <div className="progress-bar-value">
+              {uploadProgress > 0 && (
+                <progress value={uploadProgress} label={`${uploadProgress}%`} />
+              )}
+
               {showDocuments()}
               {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
             </div>
@@ -421,17 +430,14 @@ export default function BrandAssetUpload() {
             <div className="col-12 text-right">
               <span
                 className="skip-step cursor"
-                onClick={() => skipStep()}
+                onClick={() => redirectTo('skipped')}
                 role="presentation">
                 Skip this step
               </span>
               <Button
                 className="btn-primary"
-                disabled={
-                  (selectedFiles && selectedFiles.length === 0) ||
-                  isLoading.loader
-                }
-                onClick={() => saveImages()}>
+                disabled={isLoading.loader}
+                onClick={() => redirectTo('completed')}>
                 Next Step
               </Button>
             </div>
