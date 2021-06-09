@@ -31,7 +31,11 @@ import {
   ModalBox,
   HeaderDownloadFuntionality,
 } from '../../common';
-import { agreementTemplate, getcontract, getServicesFee } from '../../api/AgreementApi';
+import {
+  agreementTemplate,
+  getcontract,
+  getServicesFee,
+} from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -2291,6 +2295,9 @@ export default function ContractContainer() {
         updatedContractFields.threshold_type === 'Fixed'
       ) {
         updatedContractFields.yoy_percentage = null;
+        if (!updatedContractFields.sales_threshold) {
+          updatedContractFields.sales_threshold = formData.sales_threshold;
+        }
       }
 
       if (
@@ -2298,6 +2305,9 @@ export default function ContractContainer() {
         updatedContractFields.threshold_type === 'YoY + %'
       ) {
         updatedContractFields.sales_threshold = null;
+        if (!updatedContractFields.yoy_percentage) {
+          updatedContractFields.yoy_percentage = formData.yoy_percentage;
+        }
       }
 
       if (

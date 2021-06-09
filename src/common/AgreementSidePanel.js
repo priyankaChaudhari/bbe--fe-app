@@ -3881,12 +3881,12 @@ export default function AgreementSidePanel({
                                     <>
                                       <li
                                         className={
-                                          selectedThreshold.label ===
-                                            threshold.label ||
+                                          selectedThreshold.value ===
+                                            threshold.value ||
                                           formData.threshold_type ===
-                                            threshold.label ||
+                                            threshold.value ||
                                           (!formData.threshold_type &&
-                                            threshold.label === 'None')
+                                            threshold.value === 'None')
                                             ? 'p-0 thresholdChecked'
                                             : 'p-0'
                                         }>
@@ -3895,14 +3895,14 @@ export default function AgreementSidePanel({
                                           type="radio"
                                           id={threshold.label}
                                           name="threshold_type"
-                                          value={threshold.label}
-                                          onClick={(event) =>
+                                          value={threshold.value}
+                                          onClick={(event) => {
                                             onThresholdTypeChange(
                                               event,
                                               'threshold_type',
                                               threshold,
-                                            )
-                                          }
+                                            );
+                                          }}
                                         />
                                         <label
                                           className="radio-container customer-list"
