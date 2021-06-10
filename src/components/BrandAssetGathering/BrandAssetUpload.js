@@ -82,6 +82,13 @@ export default function BrandAssetUpload() {
     'additional-brand-material': 0,
   });
 
+  const formats = {
+    'brand-logo': 'image/*',
+    'brand-guidelines': 'image/*, .pdf',
+    'font-files': '.ttf, .otf, .woff',
+    iconography: 'image/*',
+    'additional-brand-material': '*',
+  };
   const selectedFiles = [];
 
   const getDocumentList = (docType) => {
@@ -89,7 +96,7 @@ export default function BrandAssetUpload() {
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
-      const newCount = JSON.parse(JSON.stringify(uploadCount));
+      const newCount = uploadCount;
       newCount[params.step] = response.length;
       setUploadCount(newCount);
       setIsLoading({ loader: false, type: 'page' });
@@ -208,7 +215,9 @@ export default function BrandAssetUpload() {
                     newFiles.push(r.data);
                     setDocumentData(newFiles);
                     setDroppedFiles([]);
-                    setUploadCount(newFiles.length);
+                    const newCount = uploadCount;
+                    newCount[params.step] = newFiles.length;
+                    setUploadCount(newCount);
                     // getDocumentList(selectedStep && selectedStep.key);
                   });
                 setIsLoading({ loader: false, type: 'button' });
@@ -222,10 +231,11 @@ export default function BrandAssetUpload() {
   };
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept:
-      params && params.step === 'brand-guidelines'
-        ? 'image/*, .pdf'
-        : 'image/*',
+    // accept:
+    //   params && params.step === 'brand-guidelines'
+    //     ? 'image/*, .pdf'
+    //     : 'image/*',
+    accept: params && params.step && formats && formats[params.step],
     onDrop: (acceptedFiles) => {
       const files = [];
       selectedFiles.push(acceptedFiles);
