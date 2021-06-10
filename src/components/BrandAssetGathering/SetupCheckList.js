@@ -100,7 +100,7 @@ export default function SetupCheckList({ id }) {
             <div className="checklist-setup">
               {checkList.map((item) => (
                 <GreenCheckBox className={item.property} key={item.label}>
-                  <label className="cursor">
+                  <label className="">
                     {item.label}
                     <div className="steps-completed">{item.subtitle}</div>
                     <input type="checkbox" checked={item.active} readOnly />
@@ -113,7 +113,7 @@ export default function SetupCheckList({ id }) {
                 <div className="col-lg-7 col-md-7 col-12  ">
                   {' '}
                   <GreenCheckBox className="mt-3">
-                    <label className="cursor">
+                    <label className="">
                       Upload Brand Assets
                       <div className="steps-completed gray-color">
                         0/1 Steps completed by you{' '}
@@ -317,7 +317,6 @@ const GreenCheckBox = styled.div`
     position: relative;
     padding-left: 35px;
     padding-bottom: 15px;
-    cursor: pointer;
     font-size: ${Theme.extraNormal};
     color : ${Theme.black};
     -webkit-user-select: none;
