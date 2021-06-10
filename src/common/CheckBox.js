@@ -17,8 +17,8 @@ const CheckBox = styled.div`
     user-select: none;
 
     &.customer-pannel {
-      color: #171725;
-      font-size: 14px;
+      color: ${Theme.gray85};
+      font-size: ${Theme.extraNormal};
     }
 
     &.term-condition {
@@ -52,7 +52,7 @@ const CheckBox = styled.div`
       height: 30px;
     }
     .check-container .checkmark:after {
-      left: 9px;
+      left: 11px;
       top: 4px;
       width: 7px;
       height: 17px;

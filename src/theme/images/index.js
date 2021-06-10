@@ -159,7 +159,7 @@ import GrayInfoIcon from './icons/gray-info-icon.svg';
 import WhiteArrowRight from './icons/white-arrow-right.png';
 import OrangeDownloadPdf from './icons/orange-download-pdf.png';
 import RedTrashIcon from './icons/red-trash-icon.svg';
-import FileCloud from './file-cloud.png';
+import FileCloud from './icon_upload.svg';
 
 export {
   BannerBg,

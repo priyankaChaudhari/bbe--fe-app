@@ -159,17 +159,17 @@ export default function DragDrop({ setSelectedFiles, fileLength }) {
     return (
       <DragDropImg>
         <section>
-          <span className="mb-4" {...getRootProps({ className: 'dropzone' })}>
+          <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
             <input {...getInputProps()} />
-            <span
+            <div
               className={
                 fileLength === 0 ? 'select-files  ' : 'thumail-select-file'
               }>
               <img width="70px" src={FileCloud} alt="file-cloud" />
               <br />
               Drag and drop your files here or <span>browse </span>
-            </span>
-          </span>
+            </div>
+          </div>
           {showThumbnail(thumbnail)}
 
           {/* <>

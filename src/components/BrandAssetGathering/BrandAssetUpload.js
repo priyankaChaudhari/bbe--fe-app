@@ -29,6 +29,7 @@ import {
   CloseIcon,
   TrashIcons,
   RedTrashIcon,
+  FileCloud,
 } from '../../theme/images';
 import {
   Button,
@@ -51,6 +52,7 @@ import {
   getBrandAssetsDetail,
   updateBrandAssetStep,
 } from '../../api/BrandAssestsApi';
+import DragDrop from './DragNDrop';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -291,7 +293,7 @@ export default function BrandAssetUpload() {
         {documentData &&
           documentData.map((file) => (
             <li key={file.id}>
-              <CheckBox className="selected-img mt-4">
+              <CheckBox className="selected-img mb-3">
                 <label
                   className="check-container customer-pannel"
                   htmlFor="add-addendum">
@@ -351,7 +353,7 @@ export default function BrandAssetUpload() {
         {droppedFiles &&
           droppedFiles.map((file) => (
             <li key={file && file.file.lastModified}>
-              <CheckBox className="selected-img mt-4">
+              <CheckBox className="selected-img mb-3">
                 <label
                   className="check-container customer-pannel"
                   htmlFor="add-addendum">
@@ -383,7 +385,7 @@ export default function BrandAssetUpload() {
 
   return (
     <>
-      <HeaderDownloadFuntionality>
+      {/* <HeaderDownloadFuntionality>
         <div className="container-fluid">
           <div className="row">
             {' '}
@@ -432,7 +434,7 @@ export default function BrandAssetUpload() {
             </div>
           </div>
         </div>
-      </HeaderDownloadFuntionality>
+      </HeaderDownloadFuntionality> */}
       <BackToStep>
         {' '}
         <div className="container-fluid">
@@ -535,7 +537,7 @@ export default function BrandAssetUpload() {
           />
         </DropDownBrandAsset>
 
-        {isLoading.loader && isLoading.type === 'page' ? (
+        {/* {isLoading.loader && isLoading.type === 'page' ? (
           <PageLoader color="#FF5933" type="page" />
         ) : (
           <BrandAssetBody>
@@ -566,40 +568,112 @@ export default function BrandAssetUpload() {
                     ai, .eps, .png, .jpg or .gif
                   </ReactTooltip>
                 </>
+            */}
+
+        {isLoading.loader && isLoading.type === 'page' ? (
+          <PageLoader color="#FF5933" type="page" />
+        ) : (
+          <BrandAssetBody>
+            <div className="label-heading">
+              Part {selectedStep && selectedStep.step}/5
+            </div>
+            <h3 className="page-heading ">
+              {selectedStep && selectedStep.label}
+            </h3>
+            <p className="normal-text mt-1 mb-0">
+              {selectedStep && selectedStep.subtitle}
+            </p>
+            <p className="gray-normal-text mt-1">
+              {selectedStep && selectedStep.format ? (
+                <>
+                  Preferred format: {selectedStep.format}{' '}
+                  <img
+                    className="gray-info-icon"
+                    width="15px "
+                    src={GrayInfoIcon}
+                    alt=""
+                    data-tip
+                    data-for="format"
+                  />
+                  <ReactTooltip place="bottom" id="format">
+                    <p>All Accepted Formats</p>
+                    ai, .eps, .png, .jpg or .gif
+                  </ReactTooltip>
+                </>
               ) : (
                 ''
               )}
             </p>
-            <div className="mb-4" {...getRootProps({ className: 'dropzone' })}>
-              <input {...getInputProps()} />
-              <div className=" select-files ">
-                Drag and drop your files here or <span>browse </span>
-              </div>
-            </div>
-            {showDocuments()}
-            {params &&
-            (params.step === 'additional-brand-material' ||
-              params.step === 'iconography') ? (
-              <CheckBox className="mt-4 mb-4">
-                <label
-                  className="check-container customer-pannel "
-                  htmlFor="step">
-                  {params.step === 'iconography'
-                    ? 'We don’t have any special icons'
-                    : 'We don’t have any other branding materials'}
-                  <input
-                    className="checkboxes"
-                    type="checkbox"
-                    id="step"
-                    readOnly
-                    onChange={() => setNoImages(true)}
-                  />
-                  <span className="checkmark" />
-                </label>
-              </CheckBox>
-            ) : (
-              ''
-            )}
+            <DragDropImg>
+              {(documentData && documentData.length) ||
+              (droppedFiles && droppedFiles.length) ? (
+                <section className="thumbnail-dropzone mb-3">
+                  <div
+                    className="mb-4"
+                    {...getRootProps({ className: 'dropzone mb-3' })}>
+                    <input {...getInputProps()} />
+
+                    <div className="thumbnail-select-files">
+                      <img
+                        className="mb-2"
+                        width="70px"
+                        src={FileCloud}
+                        alt="file-cloud"
+                      />
+                      <br />
+                      Drag and drop your files here or <span>browse </span>
+                    </div>
+                  </div>
+
+                  {showDocuments()}
+                </section>
+              ) : (
+                <section className="drag-drop mb-4">
+                  <div
+                    className="mb-4"
+                    {...getRootProps({ className: 'dropzone mb-3' })}>
+                    <input {...getInputProps()} />
+
+                    <div className=" select-files ">
+                      <img
+                        className="mb-2"
+                        width="70px"
+                        src={FileCloud}
+                        alt="file-cloud"
+                      />
+                      <br />
+                      Drag and drop your files here or <span>browse </span>
+                    </div>
+                  </div>
+
+                  {showDocuments()}
+
+                  {params &&
+                  (params.step === 'additional-brand-material' ||
+                    params.step === 'iconography') ? (
+                    <CheckBox className="mt-4 mb-4">
+                      <label
+                        className="check-container customer-pannel "
+                        htmlFor="step">
+                        {params.step === 'iconography'
+                          ? 'We don’t have any special icons'
+                          : 'We don’t have any other branding materials'}
+                        <input
+                          className="checkboxes"
+                          type="checkbox"
+                          id="step"
+                          readOnly
+                          onChange={() => setNoImages(true)}
+                        />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  ) : (
+                    ''
+                  )}
+                </section>
+              )}
+            </DragDropImg>
           </BrandAssetBody>
         )}
       </div>
@@ -647,6 +721,7 @@ const BrandAssetBody = styled.div`
     list-style-type: none;
     padding: 0;
     margin: 0;
+    display: contents;
 
     li {
       display: inline-block;
@@ -690,7 +765,13 @@ const BrandAssetBody = styled.div`
     }
   }
   @media only screen and (max-width: 991px) {
-    padding-left: 0px;
+    padding-left: 95px;
+    padding-right: 95px;
+    margin-top: 50px;
+  }
+  @media only screen and (max-width: 767px) {
+    padding-left: 15px;
+    padding-right: 15px;
     margin-top: 50px;
   }
 `;
@@ -798,21 +879,21 @@ const DropDownBrandAsset = styled.div`
 const CheckSelectImage = styled.div`
   background-color: #f4f6fc;
   border-radius: 8px;
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   position: relative;
 
   .image-thumbnail {
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
     border-radius: 8px;
     
     
   }
   .blur-bg {
     background-color: rgba(46, 56, 77, 0.6);
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
     border-radius: 8px;
     position: absolute;
     top: 0;
@@ -832,13 +913,13 @@ const CheckSelectImage = styled.div`
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
-    max-width: 170px;
+    max-width: 160px;
     color: #d60000;
     font-size: 16px;
     text-align: center;
     position: absolute;
     top: 62px;
-    padding: 16px;
+    padding: 16px 13px;
     width: 100%;
     left: 6px;
     font-weight: 600;
@@ -848,5 +929,54 @@ const CheckSelectImage = styled.div`
       margin-right: 6px;
     }
 }
+  }
+`;
+
+const DragDropImg = styled.div`
+  padding-bottom: 60px;
+  section {
+    &.thumbnail-dropzone {
+      display: flex;
+      flex-flow: wrap;
+      cursor: pointer;
+      .dropzone {
+        width: 170px;
+        height: 170px;
+        border: 1px dotted ${Theme.gray40};
+        border-radius: 4px;
+        padding: 50px 22px 0 20px;
+        text-align: center;
+        margin-right: 20px;
+      }
+      .thumbnail-select-files {
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.black};
+        text-align: center;
+
+        span {
+          color: ${Theme.orange};
+        }
+      }
+    }
+    &.drag-drop {
+      .dropzone {
+        width: 550px;
+        height: 170px;
+        border: 1px dotted ${Theme.gray40};
+        border-radius: 4px;
+        padding: 50px 22px 0 20px;
+        text-align: center;
+        margin-right: 20px;
+      }
+      .select-files {
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.black};
+        text-align: center;
+
+        span {
+          color: ${Theme.orange};
+        }
+      }
+    }
   }
 `;
