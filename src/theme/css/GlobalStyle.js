@@ -1652,7 +1652,7 @@ text.cust-label-avg {
   cursor: not-allowed !important;
   pointer-events: none !important;
 }
-.progress-bar-value {
+.progress-bar-value  {
   color: ${Theme.black};
   font-size: ${Theme.normal};
   progress[value] {
@@ -1689,6 +1689,27 @@ text.cust-label-avg {
       }
    }
 }
+ .uploading-progress-bar {
+    text-align: center;
+    margin-top: 5px;
+
+    progress[value] {
+      height: 4px;
+      position: relative;
+      border-radius: 10px;
+      width: 120px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    progress[value]::-webkit-progress-bar {
+      background: #d8d8d8;
+      border-radius: 10px;
+    }
+    progress[value]::-webkit-progress-value {
+      background-color: #ff4817;
+      border-radius: 10px;
+    }
+  }
 
 .label-heading {
    color: ${Theme.gray40};

@@ -63,7 +63,12 @@ export default function BrandAssetUpload() {
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [uploadProgress, setUploadProgress] = useState();
   const [brandAssetData, setBrandAssetData] = useState([]);
-  const [droppedFiles, setDroppedFiles] = useState([]);
+  const [droppedFiles, setDroppedFiles] = useState([
+    {
+      file: { path: 'crop.jpeg', name: 'crop.jpeg' },
+      progress: 1,
+    },
+  ]);
 
   const selectedFiles = [];
 
@@ -285,17 +290,21 @@ export default function BrandAssetUpload() {
                   <label
                     className="check-container customer-pannel"
                     htmlFor="add-addendum">
-                    Uploading file <br />
-                    {file.file.name}
                     <input type="checkbox" id="add-addendum" />
                     <span className="checkmark" />
                     <CheckSelectImage>
                       <div className="image-thumbnail">
+                        <div className="uploading-file-name">
+                          Uploading file
+                          <div className="file-path"> {file.file.name}</div>
+                        </div>
                         {file && file.progress > 0 && (
-                          <progress
-                            value={file.progress}
-                            label={`${file.progress}%`}
-                          />
+                          <div className="uploading-progress-bar ">
+                            <progress
+                              value={file.progress}
+                              label={`${file.progress}%`}
+                            />
+                          </div>
                         )}
                       </div>
                     </CheckSelectImage>
@@ -578,14 +587,28 @@ const BrandAssetBody = styled.div`
     li {
       display: inline-block;
       margin-right: 20px;
+      vertical-align: text-bottom;
 
       .remove-box {
         display: none;
       }
+      .uploading-file-name {
+        text-align: center;
+        padding-top: 60px;
+        color: ${Theme.black};
+
+        .file-path {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 80px;
+          margin: auto;
+        }
+      }
 
       &:hover {
         .remove-box {
-          background-color: #ffffff;
+          background-color: ${Theme.white};
           border: 1px solid #e2e2ea;
           border-radius: 6px;
           width: 40px;
