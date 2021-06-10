@@ -2038,27 +2038,46 @@ export default function AgreementSidePanel({
           });
         }
       }
-      const statementErr = sectionError.statement
-        ? sectionError.statement - 1
-        : 0;
 
-      if (key === 'threshold_type') {
+      if (
+        (key === 'threshold_type' &&
+          contractError &&
+          contractError.sales_threshold) ||
+        (contractError && contractError.yoy_percentage)
+      ) {
+        const statementErr = sectionError.statement
+          ? sectionError.statement - 1
+          : 0;
         setContractError({
           ...contractError,
           sales_threshold: '',
           yoy_percentage: '',
         });
+        setSectionError({
+          ...sectionError,
+          statement: statementErr,
+        });
+      } else if (event.target.name === 'sales_threshold') {
+        if (contractError && contractError.sales_threshold) {
+          const statementErr = sectionError.statement
+            ? sectionError.statement - 1
+            : 0;
+          setContractError({
+            ...contractError,
+            sales_threshold: '',
+            yoy_percentage: '',
+          });
+          setSectionError({
+            ...sectionError,
+            statement: statementErr,
+          });
+        }
       } else {
         setContractError({
           ...contractError,
           [event.target.name]: '',
         });
       }
-
-      setSectionError({
-        ...sectionError,
-        statement: statementErr,
-      });
     }
   };
 
@@ -3905,7 +3924,13 @@ export default function AgreementSidePanel({
                                           }}
                                         />
                                         <label
-                                          className="radio-container customer-list"
+                                          className={
+                                            threshold.label
+                                              .toLowerCase()
+                                              .includes('yoy')
+                                              ? 'radio-container customer-list thresholdLable'
+                                              : 'radio-container customer-list'
+                                          }
                                           htmlFor={threshold.label}>
                                           {threshold.label}
                                         </label>
@@ -4867,6 +4892,10 @@ const SidePanel = styled.div`
                 font-size: ${Theme.extraNormal};
                 display: inline-block;
                 cursor: pointer;
+
+                  &.thresholdLable {
+                    text-transform: uppercase;
+                  }
               }
             }
           }
