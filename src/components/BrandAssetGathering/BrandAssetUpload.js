@@ -43,7 +43,10 @@ import { BrandSteps } from '../../constants/FieldConstants';
 import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
 import { deleteDocument, getDocuments } from '../../api';
-import { updateBrandAssetStep } from '../../api/BrandAssestsApi';
+import {
+  getBrandAssetsDetail,
+  updateBrandAssetStep,
+} from '../../api/BrandAssestsApi';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -55,27 +58,21 @@ const viewOptions = [
 
 export default function BrandAssetUpload() {
   const history = useHistory();
-  const { id } = useParams();
+  const { id, brandId } = useParams();
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [documentData, setDocumentData] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState();
-  const [brandAssetData, setBrandAssetData] = useState([]);
-  const [droppedFiles, setDroppedFiles] = useState([
-    {
-      file: { path: 'crop.jpeg', name: 'crop.jpeg' },
-      progress: 1,
-    },
-  ]);
+  const [brandAssetData, setBrandAssetData] = useState({});
+  const [droppedFiles, setDroppedFiles] = useState([]);
 
   const selectedFiles = [];
 
   const getDocumentList = (docType) => {
     setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
-    getDocuments('BAFNKpr', 'brandassets', docType).then((response) => {
+    getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
       setIsLoading({ loader: false, type: 'page' });
     });
@@ -83,8 +80,13 @@ export default function BrandAssetUpload() {
 
   useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
-    const docType = BrandSteps.find((op) => op.url === params.step).key;
+    const docType =
+      BrandSteps.find((op) => op.url === params.step) &&
+      BrandSteps.find((op) => op.url === params.step).key;
     getDocumentList(docType);
+    getBrandAssetsDetail(brandId).then((response) => {
+      setBrandAssetData(response && response.data);
+    });
   }, [params.step]);
 
   const destructureselectedFiles = () => {
@@ -93,7 +95,7 @@ export default function BrandAssetUpload() {
       for (const item of files) {
         formData.push({
           original_name: item.name,
-          entity_id: 'BAFNKpr',
+          entity_id: brandId,
           entity_type: 'brandassets',
           mime_type: item.type,
           status: 'requested',
@@ -122,7 +124,7 @@ export default function BrandAssetUpload() {
         onUploadProgress: (data) => {
           files &&
             files.map((file) => {
-              file.progress = Math.round((100 * data.loaded) / data.total) - 50;
+              file.progress = (data.loaded / data.total) * 100;
             });
           setDroppedFiles(files);
         },
@@ -180,7 +182,10 @@ export default function BrandAssetUpload() {
   };
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept:
+      params && params.step === 'brand-guidelines'
+        ? 'image/*, .pdf'
+        : 'image/*',
     onDrop: (acceptedFiles) => {
       const files = [];
       selectedFiles.push(acceptedFiles);
@@ -193,7 +198,8 @@ export default function BrandAssetUpload() {
   });
 
   const redirectTo = (value) => {
-    updateBrandAssetStep('BAFNKpr', {
+    setIsLoading({ loader: true, type: 'button' });
+    updateBrandAssetStep(brandId, {
       steps: {
         ...brandAssetData.steps,
         [selectedStep && selectedStep.key]: value,
@@ -201,12 +207,21 @@ export default function BrandAssetUpload() {
     }).then((response) => {
       if (response && response.status === 200)
         if (selectedStep && selectedStep.skip === 'summary') {
-          history.push(PATH_BRAND_ASSET_SUMMARY.replace(':id', id));
+          history.push(
+            PATH_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
+              ':brandId',
+              brandId,
+            ),
+          );
         } else
           history.push({
-            pathname: PATH_BRAND_ASSET.replace(':id', id),
+            pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
+              ':brandId',
+              brandId,
+            ),
             search: `step=${selectedStep && selectedStep.skip}`,
           });
+      setIsLoading({ loader: false, type: 'button' });
     });
   };
 
@@ -283,92 +298,34 @@ export default function BrandAssetUpload() {
           ))}
 
         {droppedFiles &&
-          droppedFiles.map(
-            (file) => (
-              <li key={file && file.file.lastModified}>
-                <CheckBox className="selected-img mt-4">
-                  <label
-                    className="check-container customer-pannel"
-                    htmlFor="add-addendum">
-                    <input type="checkbox" id="add-addendum" />
-                    <span className="checkmark" />
-                    <CheckSelectImage>
-                      <div className="image-thumbnail">
-                        <div className="uploading-file-name">
-                          Uploading file
-                          <div className="file-path"> {file.file.name}</div>
-                        </div>
-                        {file && file.progress > 0 && (
-                          <div className="uploading-progress-bar ">
-                            <progress
-                              value={file.progress}
-                              label={`${file.progress}%`}
-                            />
-                          </div>
-                        )}
+          droppedFiles.map((file) => (
+            <li key={file && file.file.lastModified}>
+              <CheckBox className="selected-img mt-4">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-addendum">
+                  <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    <div className="image-thumbnail">
+                      <div className="uploading-file-name">
+                        Uploading file
+                        <div className="file-path"> {file.file.name}</div>
                       </div>
-                    </CheckSelectImage>
-                  </label>
-                </CheckBox>
-              </li>
-            ),
-            // <li key={file.id}>
-            //   <CheckBox className="selected-img mt-4">
-            //     <label
-            //       className="check-container customer-pannel"
-            //       htmlFor="add-addendum">
-            //       <input type="checkbox" id="add-addendum" />
-            //       <span className="checkmark" />
-            //       <CheckSelectImage>
-            //         <img
-            //           src={file && file.presigned_url}
-            //           className="image-thumbnail"
-            //           alt={file.original_name}
-            //         />
-            //         {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
-            //         <div
-            //           className="remove-box"
-            //           role="presentation"
-            //           onClick={() => setShowDeleteMsg({ [file.id]: true })}>
-            //           <img
-            //             className="trash-icon"
-            //             src={TrashIcons}
-            //             alt="check"
-            //           />
-            //         </div>
-            //         {showDeleteMsg[file.id] ? (
-            //           <div
-            //             className="delete-msg"
-            //             onClick={() => {
-            //               deleteImage(file.id);
-            //             }}
-            //             role="presentation">
-            //             {' '}
-            //             <img
-            //               className="red-trash-icon"
-            //               src={RedTrashIcon}
-            //               alt="check"
-            //             />
-            //             Confirm Delete
-            //             <img
-            //               className="confirm-delete-cross"
-            //               src={CloseIcon}
-            //               alt="check"
-            //               onClick={(e) => {
-            //                 e.stopPropagation();
-            //                 setShowDeleteMsg({ [file.id]: false });
-            //               }}
-            //               role="presentation"
-            //             />
-            //           </div>
-            //         ) : (
-            //           ''
-            //         )}
-            //       </CheckSelectImage>
-            //     </label>
-            //   </CheckBox>
-            // </li>
-          )}
+                      {file && file.progress > 0 && (
+                        <div className="uploading-progress-bar ">
+                          <progress
+                            value={file.progress}
+                            label={`${file.progress}%`}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+          ))}
       </ul>
     );
   };
@@ -435,7 +392,12 @@ export default function BrandAssetUpload() {
                 role="presentation"
                 className="back-link"
                 onClick={() =>
-                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+                  history.push(
+                    PATH_CUSTOMER_DETAILS.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    ),
+                  )
                 }>
                 <img
                   src={LeftArrowIcon}
@@ -454,15 +416,18 @@ export default function BrandAssetUpload() {
           <ul className="asset-check-list">
             {BrandSteps.map((item) => (
               <li
-                className="cursor"
                 key={item.key}
                 role="presentation"
-                onClick={() => {
-                  history.push({
-                    pathname: PATH_BRAND_ASSET.replace(':id', id),
-                    search: `step=${item.url}`,
-                  });
-                }}>
+                // onClick={() => {
+                //   history.push({
+                //     pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
+                //       ':brandId',
+                //       brandId,
+                //     ),
+                //     search: `step=${item.url}`,
+                //   });
+                // }}
+              >
                 {/* if step complete show this
               <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
                 <img className="checked-gray" src={GrayCheckIcon} alt="check" />
@@ -493,7 +458,10 @@ export default function BrandAssetUpload() {
             defaultValue={viewOptions.find((op) => op.value === params.step)}
             onChange={(event) => {
               history.push({
-                pathname: PATH_BRAND_ASSET.replace(':id', id),
+                pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                ),
                 search: `step=${event.value}`,
               });
             }}
@@ -559,9 +527,16 @@ export default function BrandAssetUpload() {
               </span>
               <Button
                 className="btn-primary"
-                disabled={isLoading.loader}
+                disabled={
+                  isLoading.loader ||
+                  (documentData && documentData.length === 0)
+                }
                 onClick={() => redirectTo('completed')}>
-                Next Step
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Next Step'
+                )}
               </Button>
             </div>
           </div>

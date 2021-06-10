@@ -1117,7 +1117,10 @@ export default function CustomerMainContainer() {
                         getActivityLogInfo={getActivityLogInfo}
                       />
                     ) : viewComponent === 'dashboard' ? (
-                      <SetupCheckList id={id} />
+                      <SetupCheckList
+                        id={id}
+                        brandId={customer && customer.brand_assets_id}
+                      />
                     ) : viewComponent === 'performance' ? (
                       <CompanyPerformance
                         marketplaceChoices={marketplaceChoices}

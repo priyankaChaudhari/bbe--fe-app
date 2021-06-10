@@ -124,4 +124,5 @@ export {
   deleteDocument,
   updateBrandAssetStep,
   getBrandAssetsSummary,
+  getBrandAssetsDetail,
 } from './BrandAssestsApi';

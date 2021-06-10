@@ -20,7 +20,7 @@ import {
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
-export default function SetupCheckList({ id }) {
+export default function SetupCheckList({ id, brandId }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
@@ -125,7 +125,11 @@ export default function SetupCheckList({ id }) {
                 </div>
 
                 <div className="col-lg-5 col-md-5 col-12 mt-3  text-lg-right text-md-right text-sm-left ">
-                  <Link to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id)}>
+                  <Link
+                    to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    )}>
                     <Button className="btn-primary w-sm-100">
                       Upload Assets{' '}
                       <img
@@ -307,8 +311,13 @@ export default function SetupCheckList({ id }) {
   );
 }
 
+SetupCheckList.defaultProps = {
+  brandId: '',
+};
+
 SetupCheckList.propTypes = {
   id: PropTypes.string.isRequired,
+  brandId: PropTypes.string,
 };
 
 const GreenCheckBox = styled.div`

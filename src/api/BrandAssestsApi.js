@@ -73,3 +73,15 @@ export async function getBrandAssetsSummary(id) {
     });
   return result;
 }
+
+export async function getBrandAssetsDetail(id) {
+  const result = await axiosInstance
+    .get(`${API_BRAND_ASSETS + id}/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
