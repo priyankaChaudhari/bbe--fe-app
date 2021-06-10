@@ -3127,7 +3127,7 @@ export default function ContractContainer() {
                 formData={formData}
                 setFormData={setFormData}
                 discountFlag={discountFlag}
-                getContractDetails={getContractDetails}
+                // getContractDetails={getContractDetails}
                 setIsEditContract={setIsEditContract}
               />
             </ModalBox>

@@ -17,7 +17,7 @@ function Discount({
   setShowDiscountModal,
   formData,
   setFormData,
-  getContractDetails,
+  // getContractDetails,
   // setIsEditContract,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
@@ -172,7 +172,7 @@ function Discount({
       if (res && res.status === 200) {
         setShowDiscountModal(false);
         // dispatch(getAccountDetails(id));
-        getContractDetails();
+        // getContractDetails();
         // setIsEditContract(false);
         // const data = {
         //   monthly_discount_amount:
@@ -427,7 +427,7 @@ Discount.defaultProps = {
   setShowDiscountModal: () => {},
   formData: {},
   setFormData: () => {},
-  getContractDetails: () => {},
+  // getContractDetails: () => {},
   // setIsEditContract: () => {},
 };
 Discount.propTypes = {
@@ -447,7 +447,7 @@ Discount.propTypes = {
     one_time_discount_amount: PropTypes.string,
   }),
   setFormData: PropTypes.func,
-  getContractDetails: PropTypes.func,
+  // getContractDetails: PropTypes.func,
   // setIsEditContract: PropTypes.func,
 };
 
