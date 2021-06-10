@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import $ from 'jquery';
+import queryString from 'query-string';
 
 import Theme from '../../theme/Theme';
 import {
@@ -14,7 +16,11 @@ import {
   ContractFormField,
   PageLoader,
 } from '../../common';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_DETAILS } from '../../constants';
+import {
+  PATH_BRAND_ASSET,
+  PATH_CUSTOMER_DETAILS,
+  PATH_UNAUTHORIZED_BRAND_ASSET,
+} from '../../constants';
 import {
   OrangeCheckMark,
   EditOrangeIcon,
@@ -32,6 +38,7 @@ export default function UploadDelegation() {
   const [ifStepsNull, setIfStepsNull] = useState(false);
   const [data, setData] = useState({});
   const [editEmail, setEditEmail] = useState(false);
+  const params = queryString.parse(history.location.search);
 
   const brandAssetData = useCallback(() => {
     getBrandAssetsDetail(brandId).then((response) => {
@@ -56,6 +63,9 @@ export default function UploadDelegation() {
   }, [brandId]);
 
   useEffect(() => {
+    if (params && params.key) {
+      localStorage.setItem('match', params.key);
+    }
     brandAssetData();
   }, [brandAssetData]);
 
@@ -89,20 +99,29 @@ export default function UploadDelegation() {
       }).then((response) => {
         if (response && response.status === 200) {
           history.push({
-            pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-              ':brandId',
-              brandId,
-            ),
+            pathname:
+              params && params.key
+                ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                    ':brandId',
+                    brandId,
+                  )
+                : PATH_BRAND_ASSET.replace(':id', id).replace(
+                    ':brandId',
+                    brandId,
+                  ),
             search: 'step=brand-logo',
           });
         }
       });
     } else {
       history.push({
-        pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-          ':brandId',
-          brandId,
-        ),
+        pathname:
+          params && params.key
+            ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                ':brandId',
+                brandId,
+              )
+            : PATH_BRAND_ASSET.replace(':id', id).replace(':brandId', brandId),
         search: 'step=brand-logo',
       });
     }
@@ -128,53 +147,63 @@ export default function UploadDelegation() {
 
   return (
     <>
-      <BackToStep>
-        {' '}
-        <div className="container-fluid">
+      {params && params.key ? (
+        <UnauthorizedHeader />
+      ) : (
+        <BackToStep>
           {' '}
-          <div className="row">
-            <div className="col-12">
-              <div
-                role="presentation"
-                className="back-link"
-                onClick={() =>
-                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
-                }>
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
-                />
-                Back to Dashboard
+          <div className="container-fluid">
+            {' '}
+            <div className="row">
+              <div className="col-12">
+                <div
+                  role="presentation"
+                  className="back-link"
+                  onClick={() =>
+                    history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+                  }>
+                  <img
+                    src={LeftArrowIcon}
+                    alt="aarow-back"
+                    className="arrow-back-icon "
+                  />
+                  Back to Dashboard
+                </div>
               </div>
             </div>
-          </div>
-        </div>{' '}
-      </BackToStep>
+          </div>{' '}
+        </BackToStep>
+      )}
       <OnBoardingBody className="grey-bg">
         <div className="white-card-base  pb-4">
           <UnauthorizedHeader />{' '}
           <h3 className="page-heading ">Upload Your Brand Assets</h3>
-          <CheckBox className="mt-1 mb-4">
-            <label className="check-container customer-pannel " htmlFor="step">
-              Ask someone else to complete this section
-              <input
-                className="checkboxes"
-                type="checkbox"
-                id="step"
-                readOnly
-                checked={data && data.re_assigned_email}
-                onChange={(event) =>
-                  event.target.checked
-                    ? updateInput()
-                    : data && data.re_assigned_email
-                    ? updateEmail()
-                    : setIsChecked(false)
-                }
-              />
-              <span className="checkmark" />
-            </label>
-          </CheckBox>
+          {params && params.key ? (
+            ''
+          ) : (
+            <CheckBox className="mt-1 mb-4">
+              <label
+                className="check-container customer-pannel "
+                htmlFor="step">
+                Ask someone else to complete this section
+                <input
+                  className="checkboxes"
+                  type="checkbox"
+                  id="step"
+                  readOnly
+                  checked={data && data.re_assigned_email}
+                  onChange={(event) =>
+                    event.target.checked
+                      ? updateInput()
+                      : data && data.re_assigned_email
+                      ? updateEmail()
+                      : setIsChecked(false)
+                  }
+                />
+                <span className="checkmark" />
+              </label>
+            </CheckBox>
+          )}
           {isChecked ? (
             <fieldset className="shape-without-border w-430 mt-2">
               <ContractFormField>

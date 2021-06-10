@@ -18,6 +18,9 @@ import {
   PATH_UNAUTHORIZED_AMAZON_MERCHANT,
   PATH_UNAUTHORIZED_AMAZON_ACCOUNT,
   PATH_ACCOUNT_SETUP_CHOOSE,
+  PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE,
+  PATH_UNAUTHORIZED_BRAND_ASSET,
+  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
 } from './constants/index';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
@@ -35,6 +38,11 @@ import {
   Thanks,
 } from './components/OnBoardingCustomer';
 import MainContainer from './components/OnBoardingCustomer/MainContainer';
+import {
+  BrandAssetSummary,
+  BrandAssetUpload,
+  DelegationUpload,
+} from './components/BrandAssetGathering';
 
 export default function App() {
   return (
@@ -73,6 +81,18 @@ export default function App() {
         />
 
         <Route path={PATH_THANKS} component={Thanks} />
+        <Route
+          path={PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE}
+          component={DelegationUpload}
+        />
+        <Route
+          path={PATH_UNAUTHORIZED_BRAND_ASSET}
+          component={BrandAssetUpload}
+        />
+        <Route
+          path={PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY}
+          component={BrandAssetSummary}
+        />
 
         {/*  Default */}
         <Route path={PATH_ROOT} component={AuthenticationComponent} />

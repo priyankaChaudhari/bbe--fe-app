@@ -40,6 +40,8 @@ import {
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
   PATH_CUSTOMER_DETAILS,
+  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
+  PATH_UNAUTHORIZED_BRAND_ASSET,
 } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
 import axiosInstance from '../../axios';
@@ -68,6 +70,7 @@ export default function BrandAssetUpload() {
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [brandAssetData, setBrandAssetData] = useState([]);
   const [droppedFiles, setDroppedFiles] = useState([]);
+  const [noImages, setNoImages] = useState(false);
 
   const [uploadCount, setUploadCount] = useState({
     'brand-logo': 0,
@@ -99,6 +102,14 @@ export default function BrandAssetUpload() {
     getDocumentList(docType);
     getBrandAssetsDetail(brandId).then((response) => {
       setBrandAssetData(response && response.data);
+      if (
+        response &&
+        response.data &&
+        response.data.steps &&
+        response.data.steps[params.step] === 'none'
+      ) {
+        setNoImages(true);
+      } else setNoImages(false);
     });
   }, [params.step]);
 
@@ -229,25 +240,38 @@ export default function BrandAssetUpload() {
     updateBrandAssetStep(brandId, {
       steps: {
         ...brandAssetData.steps,
-        [selectedStep && selectedStep.key]: value,
+        [selectedStep && selectedStep.key]: noImages ? 'none' : value,
       },
     }).then((response) => {
       if (response && response.status === 200)
         if (selectedStep && selectedStep.skip === 'summary') {
           history.push(
-            PATH_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
-              ':brandId',
-              brandId,
-            ),
+            history.location.pathname.includes('/assigned-brand-asset/')
+              ? PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY.replace(
+                  ':id',
+                  id,
+                ).replace(':brandId', brandId)
+              : PATH_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                ),
           );
         } else
           history.push({
-            pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-              ':brandId',
-              brandId,
-            ),
+            pathname: history.location.pathname.includes(
+              '/assigned-brand-asset/',
+            )
+              ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                )
+              : PATH_BRAND_ASSET.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                ),
             search: `step=${selectedStep && selectedStep.skip}`,
           });
+
       setIsLoading({ loader: false, type: 'button' });
     });
   };
@@ -443,18 +467,25 @@ export default function BrandAssetUpload() {
           <ul className="asset-check-list">
             {BrandSteps.map((item) => (
               <li
+                className="cursor"
                 key={item.key}
                 role="presentation"
-                // onClick={() => {
-                //   history.push({
-                //     pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-                //       ':brandId',
-                //       brandId,
-                //     ),
-                //     search: `step=${item.url}`,
-                //   });
-                // }}
-              >
+                onClick={() => {
+                  history.push({
+                    pathname: history.location.pathname.includes(
+                      '/assigned-brand-asset/',
+                    )
+                      ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(
+                          ':id',
+                          id,
+                        ).replace(':brandId', brandId)
+                      : PATH_BRAND_ASSET.replace(':id', id).replace(
+                          ':brandId',
+                          brandId,
+                        ),
+                    search: `step=${item.url}`,
+                  });
+                }}>
                 {/* if step complete show this
               <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
                 <img className="checked-gray" src={GrayCheckIcon} alt="check" />
@@ -486,10 +517,17 @@ export default function BrandAssetUpload() {
             defaultValue={viewOptions.find((op) => op.value === params.step)}
             onChange={(event) => {
               history.push({
-                pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-                  ':brandId',
-                  brandId,
-                ),
+                pathname: history.location.pathname.includes(
+                  '/assigned-brand-asset/',
+                )
+                  ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    )
+                  : PATH_BRAND_ASSET.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    ),
                 search: `step=${event.value}`,
               });
             }}
@@ -539,6 +577,29 @@ export default function BrandAssetUpload() {
               </div>
             </div>
             {showDocuments()}
+            {params &&
+            (params.step === 'additional-brand-material' ||
+              params.step === 'iconography') ? (
+              <CheckBox className="mt-4 mb-4">
+                <label
+                  className="check-container customer-pannel "
+                  htmlFor="step">
+                  {params.step === 'iconography'
+                    ? 'We don’t have any special icons'
+                    : 'We don’t have any other branding materials'}
+                  <input
+                    className="checkboxes"
+                    type="checkbox"
+                    id="step"
+                    readOnly
+                    onChange={() => setNoImages(true)}
+                  />
+                  <span className="checkmark" />
+                </label>
+              </CheckBox>
+            ) : (
+              ''
+            )}
           </BrandAssetBody>
         )}
       </div>

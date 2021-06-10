@@ -7,8 +7,9 @@ import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 const requestHandler = (request) => {
   if (!NON_AUTHORIZATION_APIS.includes(request.url)) {
     if (
-      request.url.includes('/customer-onboarding/') &&
-      !request.url.includes('/account-summary/')
+      (request.url.includes('/customer-onboarding/') &&
+        !request.url.includes('/account-summary/')) ||
+      request.url.includes('/assigned-choose-delegate/')
     ) {
       delete request.headers.Authorization;
     } else {
