@@ -2,6 +2,10 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
+
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
@@ -59,10 +63,12 @@ export default function BrandAssetUpload() {
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [uploadProgress, setUploadProgress] = useState();
   const [brandAssetData, setBrandAssetData] = useState([]);
+  const [droppedFiles, setDroppedFiles] = useState([]);
 
   const selectedFiles = [];
 
   const getDocumentList = (docType) => {
+    setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
     getDocuments('BAFNKpr', 'brandassets', docType).then((response) => {
       setDocumentData(response);
@@ -103,14 +109,17 @@ export default function BrandAssetUpload() {
     return null;
   };
 
-  const createDocument = () => {
+  const createDocument = (files) => {
     setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
     axiosInstance
       .post(API_DOCUMENTS, formData, {
         onUploadProgress: (data) => {
-          console.log('>>>>', Math.round((100 * data.loaded) / data.total));
-          setUploadProgress(Math.round((100 * data.loaded) / data.total));
+          files &&
+            files.map((file) => {
+              file.progress = Math.round((100 * data.loaded) / data.total) - 50;
+            });
+          setDroppedFiles(files);
         },
       })
       .then((res) => {
@@ -128,11 +137,34 @@ export default function BrandAssetUpload() {
               .put(request.url, request.meta, { headers: request.headers })
               .then(() => {
                 axiosInstance
-                  .patch(`${API_DOCUMENTS + detail.id}/`, {
-                    status: 'available',
-                  })
-                  .then(() => {
-                    getDocumentList(selectedStep && selectedStep.key);
+                  .patch(
+                    `${API_DOCUMENTS + detail.id}/`,
+                    {
+                      status: 'available',
+                    },
+                    {
+                      onUploadProgress: (data) => {
+                        files &&
+                          files.map((file) => {
+                            file.progress = Math.round(
+                              (100 * data.loaded) / data.total,
+                            );
+                          });
+                        setDroppedFiles(files);
+                      },
+                    },
+                  )
+                  .then((r) => {
+                    const newFiles = documentData || [];
+                    files &&
+                      files.map((file) => {
+                        file.progress = 0;
+                      });
+                    setDroppedFiles(files);
+                    newFiles.push(r.data);
+                    setDocumentData(newFiles);
+                    setDroppedFiles([]);
+                    // getDocumentList(selectedStep && selectedStep.key);
                   });
                 setIsLoading({ loader: false, type: 'button' });
               });
@@ -145,8 +177,13 @@ export default function BrandAssetUpload() {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
+      const files = [];
       selectedFiles.push(acceptedFiles);
-      createDocument();
+      acceptedFiles.map((file) => {
+        files.push({ file, progress: 1 });
+      });
+      setDroppedFiles(files);
+      createDocument(files);
     },
   });
 
@@ -239,6 +276,90 @@ export default function BrandAssetUpload() {
               </CheckBox>
             </li>
           ))}
+
+        {droppedFiles &&
+          droppedFiles.map(
+            (file) => (
+              <li key={file && file.file.lastModified}>
+                <CheckBox className="selected-img mt-4">
+                  <label
+                    className="check-container customer-pannel"
+                    htmlFor="add-addendum">
+                    Uploading file <br />
+                    {file.file.name}
+                    <input type="checkbox" id="add-addendum" />
+                    <span className="checkmark" />
+                    <CheckSelectImage>
+                      <div className="image-thumbnail">
+                        {file && file.progress > 0 && (
+                          <progress
+                            value={file.progress}
+                            label={`${file.progress}%`}
+                          />
+                        )}
+                      </div>
+                    </CheckSelectImage>
+                  </label>
+                </CheckBox>
+              </li>
+            ),
+            // <li key={file.id}>
+            //   <CheckBox className="selected-img mt-4">
+            //     <label
+            //       className="check-container customer-pannel"
+            //       htmlFor="add-addendum">
+            //       <input type="checkbox" id="add-addendum" />
+            //       <span className="checkmark" />
+            //       <CheckSelectImage>
+            //         <img
+            //           src={file && file.presigned_url}
+            //           className="image-thumbnail"
+            //           alt={file.original_name}
+            //         />
+            //         {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
+            //         <div
+            //           className="remove-box"
+            //           role="presentation"
+            //           onClick={() => setShowDeleteMsg({ [file.id]: true })}>
+            //           <img
+            //             className="trash-icon"
+            //             src={TrashIcons}
+            //             alt="check"
+            //           />
+            //         </div>
+            //         {showDeleteMsg[file.id] ? (
+            //           <div
+            //             className="delete-msg"
+            //             onClick={() => {
+            //               deleteImage(file.id);
+            //             }}
+            //             role="presentation">
+            //             {' '}
+            //             <img
+            //               className="red-trash-icon"
+            //               src={RedTrashIcon}
+            //               alt="check"
+            //             />
+            //             Confirm Delete
+            //             <img
+            //               className="confirm-delete-cross"
+            //               src={CloseIcon}
+            //               alt="check"
+            //               onClick={(e) => {
+            //                 e.stopPropagation();
+            //                 setShowDeleteMsg({ [file.id]: false });
+            //               }}
+            //               role="presentation"
+            //             />
+            //           </div>
+            //         ) : (
+            //           ''
+            //         )}
+            //       </CheckSelectImage>
+            //     </label>
+            //   </CheckBox>
+            // </li>
+          )}
       </ul>
     );
   };
@@ -412,14 +533,7 @@ export default function BrandAssetUpload() {
                 Drag and drop your files here or <span>browse </span>
               </div>
             </div>
-            <div className="progress-bar-value">
-              {uploadProgress > 0 && (
-                <progress value={uploadProgress} label={`${uploadProgress}%`} />
-              )}
-
-              {showDocuments()}
-              {/* <Line percent="10" strokeWidth="4" strokeColor="#D3D3D3" /> */}
-            </div>
+            {showDocuments()}
           </BrandAssetBody>
         )}
       </div>
