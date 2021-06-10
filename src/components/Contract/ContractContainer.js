@@ -2430,6 +2430,7 @@ export default function ContractContainer() {
             formData={formData}
             details={details}
             templateData={data}
+            servicesFees={servicesFees}
           />
         </div>
 
