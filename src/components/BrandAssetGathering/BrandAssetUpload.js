@@ -13,6 +13,8 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
+import { toast } from 'react-toastify';
+
 // import { Line } from 'rc-progress';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -64,8 +66,16 @@ export default function BrandAssetUpload() {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [documentData, setDocumentData] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
-  const [brandAssetData, setBrandAssetData] = useState({});
+  const [brandAssetData, setBrandAssetData] = useState([]);
   const [droppedFiles, setDroppedFiles] = useState([]);
+
+  const [uploadCount, setUploadCount] = useState({
+    'brand-logo': 0,
+    'brand-guidelines': 0,
+    'font-files': 0,
+    iconography: 0,
+    'additional-brand-material': 0,
+  });
 
   const selectedFiles = [];
 
@@ -74,6 +84,9 @@ export default function BrandAssetUpload() {
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
+      const newCount = JSON.parse(JSON.stringify(uploadCount));
+      newCount[params.step] = response.length;
+      setUploadCount(newCount);
       setIsLoading({ loader: false, type: 'page' });
     });
   };
@@ -117,6 +130,7 @@ export default function BrandAssetUpload() {
   };
 
   const createDocument = (files) => {
+    const documentError = { error: false, message: '' };
     setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
     axiosInstance
@@ -139,7 +153,17 @@ export default function BrandAssetUpload() {
                 'Content-type': detail.mime_type,
               },
             };
-
+            if (detail && detail.error) {
+              documentError.error = true;
+              documentError.message = detail.error.mime_type
+                ? detail.error.mime_type[0]
+                : detail.error;
+              const validFiles = files.filter((file) => {
+                file.progress = 0;
+                return detail.original_name !== file.original_name;
+              });
+              setDroppedFiles(validFiles);
+            }
             axios
               .put(request.url, request.meta, { headers: request.headers })
               .then(() => {
@@ -171,12 +195,15 @@ export default function BrandAssetUpload() {
                     newFiles.push(r.data);
                     setDocumentData(newFiles);
                     setDroppedFiles([]);
+                    setUploadCount(newFiles.length);
                     // getDocumentList(selectedStep && selectedStep.key);
                   });
                 setIsLoading({ loader: false, type: 'button' });
               });
           }
         }
+        if (documentError && documentError.error)
+          toast.error(documentError && documentError.message);
         return res;
       });
   };
@@ -434,7 +461,8 @@ export default function BrandAssetUpload() {
                 <div className="check-list-item">
                   <div className="check-list-label">{item.label}</div>
                   <div className="check-list-file-uploaded">
-                    {documentData && documentData.length} files uploaded
+                    {item && item.url && uploadCount && uploadCount[item.url]}{' '}
+                    files uploaded
                   </div>
                 </div>
                 {item.url === params.step ? (
