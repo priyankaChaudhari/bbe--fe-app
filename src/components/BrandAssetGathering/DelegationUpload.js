@@ -183,7 +183,7 @@ export default function UploadDelegation() {
           </div>{' '}
         </BackToStep>
       )}
-      <OnBoardingBody className="grey-bg">
+      <OnBoardingBody className="grey-bg-asset">
         <div className="white-card-base  pb-4">
           <UnauthorizedHeader />{' '}
           <h3 className="page-heading ">Upload Your Brand Assets</h3>

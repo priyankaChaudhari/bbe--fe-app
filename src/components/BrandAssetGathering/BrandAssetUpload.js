@@ -504,115 +504,111 @@ export default function BrandAssetUpload() {
           </div>
         </div>{' '}
       </BackToStep>
-      <div className="container-fluid">
-        <BrandAssetSideBar className="d-none d-lg-block">
-          <div className="label-heading mb-3">Your BrandSteps</div>
-          <ul className="asset-check-list">
-            {BrandSteps.map((item) => (
-              <li
-                className="cursor"
-                key={item.key}
-                role="presentation"
-                onClick={() => {
-                  history.push({
-                    pathname: history.location.pathname.includes(
-                      '/assigned-brand-asset/',
-                    )
-                      ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(
-                          ':id',
-                          id,
-                        ).replace(':brandId', brandId)
-                      : PATH_BRAND_ASSET.replace(':id', id).replace(
-                          ':brandId',
-                          brandId,
-                        ),
-                    search: `step=${item.url}`,
-                  });
-                }}>
-                {/* if step complete show this and add active class to item.label and file upload */}
-                {item &&
-                item.url &&
-                uploadCount &&
-                uploadCount[item.url] &&
-                uploadCount[item.url] &&
-                !uploadCount[item.url].includes('Skipped') &&
-                uploadCount[item.url] !== '0 files uploaded' ? (
-                  <img
-                    className="checked-gray"
-                    src={OrangeCheckMark}
-                    alt="check"
-                  />
-                ) : (
-                  <img
-                    className="checked-gray"
-                    src={GrayCheckIcon}
-                    alt="check"
-                  />
-                )}
-                <div className="check-list-item">
-                  <div
-                    className={
-                      item && item.url && uploadCount && uploadCount[item.url]
-                        ? 'check-list-label active'
-                        : 'check-list-label'
-                    }>
-                    {item.label}
-                  </div>
-                  <div
-                    className={
-                      item &&
-                      item.url &&
-                      uploadCount &&
-                      uploadCount[item.url] &&
-                      !uploadCount[item.url].includes('Skipped') &&
-                      uploadCount[item.url] !== '0 files uploaded'
-                        ? 'check-list-file-uploaded active'
-                        : 'check-list-file-uploaded'
-                    }>
-                    {item && item.url && uploadCount && uploadCount[item.url]}{' '}
-                    {/* files uploaded */}
-                  </div>
+
+      <BrandAssetSideBar className="d-none d-lg-block">
+        <div className="label-heading mb-3">Your BrandSteps</div>
+        <ul className="asset-check-list">
+          {BrandSteps.map((item) => (
+            <li
+              className="cursor"
+              key={item.key}
+              role="presentation"
+              onClick={() => {
+                history.push({
+                  pathname: history.location.pathname.includes(
+                    '/assigned-brand-asset/',
+                  )
+                    ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      )
+                    : PATH_BRAND_ASSET.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      ),
+                  search: `step=${item.url}`,
+                });
+              }}>
+              {/* if step complete show this and add active class to item.label and file upload */}
+              {item &&
+              item.url &&
+              uploadCount &&
+              uploadCount[item.url] &&
+              uploadCount[item.url] &&
+              !uploadCount[item.url].includes('Skipped') &&
+              uploadCount[item.url] !== '0 files uploaded' ? (
+                <img
+                  className="checked-gray"
+                  src={OrangeCheckMark}
+                  alt="check"
+                />
+              ) : (
+                <img className="checked-gray" src={GrayCheckIcon} alt="check" />
+              )}
+              <div className="check-list-item">
+                <div
+                  className={
+                    item && item.url && uploadCount && uploadCount[item.url]
+                      ? 'check-list-label active'
+                      : 'check-list-label'
+                  }>
+                  {item.label}
                 </div>
-                {item.url === params.step ? (
-                  <img
-                    className="active-arrow-icon"
-                    src={ArrowRightBlackIcon}
-                    alt="arrow"
-                  />
-                ) : (
-                  ''
-                )}
-                <div className="clear-fix" />
-              </li>
-            ))}
-          </ul>
-        </BrandAssetSideBar>
+                <div
+                  className={
+                    item &&
+                    item.url &&
+                    uploadCount &&
+                    uploadCount[item.url] &&
+                    !uploadCount[item.url].includes('Skipped') &&
+                    uploadCount[item.url] !== '0 files uploaded'
+                      ? 'check-list-file-uploaded active'
+                      : 'check-list-file-uploaded'
+                  }>
+                  {item && item.url && uploadCount && uploadCount[item.url]}{' '}
+                  {/* files uploaded */}
+                </div>
+              </div>
+              {item.url === params.step ? (
+                <img
+                  className="active-arrow-icon"
+                  src={ArrowRightBlackIcon}
+                  alt="arrow"
+                />
+              ) : (
+                ''
+              )}
+              <div className="clear-fix" />
+            </li>
+          ))}
+        </ul>
+      </BrandAssetSideBar>
 
-        <DropDownBrandAsset>
-          <Select
-            options={viewOptions}
-            defaultValue={viewOptions.find((op) => op.value === params.step)}
-            onChange={(event) => {
-              history.push({
-                pathname: history.location.pathname.includes(
-                  '/assigned-brand-asset/',
-                )
-                  ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
-                      ':brandId',
-                      brandId,
-                    )
-                  : PATH_BRAND_ASSET.replace(':id', id).replace(
-                      ':brandId',
-                      brandId,
-                    ),
-                search: `step=${event.value}`,
-              });
-            }}
-            className="customer-dropdown-select d-lg-none d-block mb-3 "
-          />
-        </DropDownBrandAsset>
+      <DropDownBrandAsset>
+        <Select
+          options={viewOptions}
+          defaultValue={viewOptions.find((op) => op.value === params.step)}
+          onChange={(event) => {
+            history.push({
+              pathname: history.location.pathname.includes(
+                '/assigned-brand-asset/',
+              )
+                ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                    ':brandId',
+                    brandId,
+                  )
+                : PATH_BRAND_ASSET.replace(':id', id).replace(
+                    ':brandId',
+                    brandId,
+                  ),
+              search: `step=${event.value}`,
+            });
+          }}
+          className="customer-dropdown-select d-lg-none d-block mb-3 "
+        />
+      </DropDownBrandAsset>
 
-        {/* {isLoading.loader && isLoading.type === 'page' ? (
+      {/* {isLoading.loader && isLoading.type === 'page' ? (
           <PageLoader color="#FF5933" type="page" />
         ) : (
           <BrandAssetBody>
@@ -645,130 +641,129 @@ export default function BrandAssetUpload() {
                 </>
             */}
 
-        {isLoading.loader && isLoading.type === 'page' ? (
-          <PageLoader
-            component="upload-brand-asset"
-            color="#FF5933"
-            type="page"
-          />
-        ) : (
-          <BrandAssetBody>
-            <div className="label-heading">
-              Part {selectedStep && selectedStep.step}/5
-            </div>
-            <h3 className="page-heading ">
-              {selectedStep && selectedStep.label}
-            </h3>
-            <p className="normal-text mt-1 mb-0">
-              {selectedStep && selectedStep.subtitle}
-            </p>
-            <div className="gray-normal-text mt-1 mb-3">
-              {selectedStep && selectedStep.format ? (
-                <>
-                  Preferred format: {selectedStep.format}{' '}
-                  <img
-                    className="gray-info-icon"
-                    width="15px "
-                    src={GrayInfoIcon}
-                    alt=""
-                    data-tip
-                    data-for="format"
-                  />
-                  <ReactTooltip place="bottom" id="format">
-                    <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
-                      All Accepted Formats
-                    </span>
-                    <p
-                      style={{
-                        color: 'white',
-                        fontSize: '12px',
-                        textTransform: 'initial',
-                      }}>
-                      ai, .eps, .png, .jpg or .gif
-                    </p>
-                  </ReactTooltip>
-                </>
-              ) : (
-                ''
-              )}
-            </div>
-            <DragDropImg>
-              {(documentData && documentData.length) ||
-              (droppedFiles && droppedFiles.length) ? (
-                <section className="thumbnail-dropzone mb-3">
-                  <div
-                    className="mb-4"
-                    {...getRootProps({ className: 'dropzone mb-3' })}>
-                    <input {...getInputProps()} />
+      {isLoading.loader && isLoading.type === 'page' ? (
+        <PageLoader
+          component="upload-brand-asset"
+          color="#FF5933"
+          type="page"
+        />
+      ) : (
+        <BrandAssetBody>
+          <div className="label-heading">
+            Part {selectedStep && selectedStep.step}/5
+          </div>
+          <h3 className="page-heading ">
+            {selectedStep && selectedStep.label}
+          </h3>
+          <p className="normal-text mt-1 mb-0">
+            {selectedStep && selectedStep.subtitle}
+          </p>
+          <div className="gray-normal-text mt-1 mb-3">
+            {selectedStep && selectedStep.format ? (
+              <>
+                Preferred format: {selectedStep.format}{' '}
+                <img
+                  className="gray-info-icon"
+                  width="15px "
+                  src={GrayInfoIcon}
+                  alt=""
+                  data-tip
+                  data-for="format"
+                />
+                <ReactTooltip place="bottom" id="format">
+                  <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                    All Accepted Formats
+                  </span>
+                  <p
+                    style={{
+                      color: 'white',
+                      fontSize: '12px',
+                      textTransform: 'initial',
+                    }}>
+                    ai, .eps, .png, .jpg or .gif
+                  </p>
+                </ReactTooltip>
+              </>
+            ) : (
+              ''
+            )}
+          </div>
+          <DragDropImg>
+            {(documentData && documentData.length) ||
+            (droppedFiles && droppedFiles.length) ? (
+              <section className="thumbnail-dropzone mb-3">
+                <div
+                  className="mb-4"
+                  {...getRootProps({ className: 'dropzone mb-3' })}>
+                  <input {...getInputProps()} />
 
-                    <div className="thumbnail-select-files">
-                      <img
-                        className="mb-2"
-                        width="70px"
-                        src={FileCloud}
-                        alt="file-cloud"
-                      />
-                      <br />
-                      Drag and drop your files here or <span>browse </span>
-                    </div>
-                  </div>
-
-                  {showDocuments()}
-                </section>
-              ) : (
-                <section
-                  className={
-                    noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
-                  }>
-                  <div
-                    className="mb-4"
-                    {...getRootProps({ className: 'dropzone mb-3' })}>
-                    <input {...getInputProps()} />
-
-                    <div className=" select-files ">
-                      <img
-                        className="mb-2"
-                        width="70px"
-                        src={FileCloud}
-                        alt="file-cloud"
-                      />
-                      <br />
-                      Drag and drop your files here or <span>browse </span>
-                    </div>
-                  </div>
-
-                  {showDocuments()}
-                </section>
-              )}
-              {params &&
-              (params.step === 'additional-brand-material' ||
-                params.step === 'iconography') &&
-              documentData &&
-              documentData.length === 0 ? (
-                <CheckBox className="mt-4 mb-4">
-                  <label
-                    className="check-container customer-pannel "
-                    htmlFor="step">
-                    {params.step === 'iconography'
-                      ? 'We don’t have any special icons'
-                      : 'We don’t have any other branding materials'}
-                    <input
-                      className="checkboxes"
-                      type="checkbox"
-                      id="step"
-                      readOnly
-                      onChange={() => setNoImages(!noImages)}
+                  <div className="thumbnail-select-files">
+                    <img
+                      className="mb-2"
+                      width="70px"
+                      src={FileCloud}
+                      alt="file-cloud"
                     />
-                    <span className="checkmark" />
-                  </label>
-                </CheckBox>
-              ) : (
-                ''
-              )}
-            </DragDropImg>
-          </BrandAssetBody>
-        )}
-      </div>
+                    <br />
+                    Drag and drop your files here or <span>browse </span>
+                  </div>
+                </div>
+
+                {showDocuments()}
+              </section>
+            ) : (
+              <section
+                className={
+                  noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
+                }>
+                <div
+                  className="mb-4"
+                  {...getRootProps({ className: 'dropzone mb-3' })}>
+                  <input {...getInputProps()} />
+
+                  <div className=" select-files ">
+                    <img
+                      className="mb-2"
+                      width="70px"
+                      src={FileCloud}
+                      alt="file-cloud"
+                    />
+                    <br />
+                    Drag and drop your files here or <span>browse </span>
+                  </div>
+                </div>
+
+                {showDocuments()}
+              </section>
+            )}
+            {params &&
+            (params.step === 'additional-brand-material' ||
+              params.step === 'iconography') &&
+            documentData &&
+            documentData.length === 0 ? (
+              <CheckBox className="mt-4 mb-4">
+                <label
+                  className="check-container customer-pannel "
+                  htmlFor="step">
+                  {params.step === 'iconography'
+                    ? 'We don’t have any special icons'
+                    : 'We don’t have any other branding materials'}
+                  <input
+                    className="checkboxes"
+                    type="checkbox"
+                    id="step"
+                    readOnly
+                    onChange={() => setNoImages(!noImages)}
+                  />
+                  <span className="checkmark" />
+                </label>
+              </CheckBox>
+            ) : (
+              ''
+            )}
+          </DragDropImg>
+        </BrandAssetBody>
+      )}
 
       <BrandAssetFooter>
         <div className="container-fluid">
@@ -817,6 +812,10 @@ const BrandAssetBody = styled.div`
   .gray-info-icon {
     vertical-align: bottom;
     margin-left: 3px;
+  }
+  .gray-normal-text {
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
   }
   .Image-container {
     list-style-type: none;
@@ -1074,7 +1073,7 @@ const DragDropImg = styled.div`
     &.thumbnail-dropzone {
       display: flex;
       flex-flow: wrap;
-      cursor: pointer;
+     
       .dropzone {
         width: 170px;
         height: 170px;
@@ -1083,6 +1082,7 @@ const DragDropImg = styled.div`
         padding: 50px 22px 0 20px;
         text-align: center;
         margin-right: 20px;
+        cursor: pointer;
       }
       .thumbnail-select-files {
         font-size: ${Theme.extraNormal};
@@ -1095,6 +1095,7 @@ const DragDropImg = styled.div`
       }
     }
     &.drag-drop {
+     
       .dropzone {
         max-width: 550px;
         height: 170px;
@@ -1103,6 +1104,7 @@ const DragDropImg = styled.div`
         padding: 50px 22px 0 20px;
         text-align: center;
         margin-right: 20px;
+         cursor: pointer;
       }
       .select-files {
         font-size: ${Theme.extraNormal};

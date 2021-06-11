@@ -19,6 +19,12 @@ const OnBoardingBody = styled.div`
     background: ${Theme.gray8};
     min-height: 100%;
   }
+
+  &.grey-bg-asset {
+    background: ${Theme.gray8};
+    height: calc(100% - 70px);
+  }
+
   .white-card-base {
     background-color: ${Theme.white};
     border-radius: 8px;
