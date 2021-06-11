@@ -57,17 +57,24 @@ export default function BrandAssetSummary() {
                       />
                       Skipped
                     </div>
+                  ) : data &&
+                    data[item.key] &&
+                    data[item.key] === '0 files uploaded' ? (
+                    <div className="pending-status">
+                      <img
+                        className="pending-icon"
+                        src={GrayClockIcon}
+                        alt="clock"
+                      />
+                      {data && data[item.key]}
+                    </div>
                   ) : (
                     <div className="completed-status">
-                      {data && data[item.key] ? (
-                        <img
-                          className="orange-check"
-                          src={OrangeCheckMark}
-                          alt="check"
-                        />
-                      ) : (
-                        ''
-                      )}
+                      <img
+                        className="orange-check"
+                        src={OrangeCheckMark}
+                        alt="check"
+                      />
                       {data && data[item.key]}
                     </div>
                   )}

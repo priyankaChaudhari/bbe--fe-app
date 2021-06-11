@@ -45,7 +45,10 @@ export default function UploadDelegation() {
   const brandAssetData = useCallback(() => {
     getBrandAssetsDetail(brandId).then((response) => {
       setData(response && response.data);
-      if (response && response.data && response.status.steps === null) {
+      if (
+        (response && response.data && response.data.steps === undefined) ||
+        (response && response.data && response.data.steps === null)
+      ) {
         setIfStepsNull(true);
       } else {
         setIfStepsNull(false);

@@ -87,7 +87,6 @@ export default function BillingInfo({
   );
 
   const CheckStep = (step) => {
-    setIsLoading({ loader: true, type: 'button' });
     if (step === 'merchant id' || getIncompleteStep === undefined) {
       history.push(PATH_SUMMARY);
     } else {
@@ -97,7 +96,6 @@ export default function BillingInfo({
         }
       }
     }
-    setIsLoading({ loader: false, type: 'button' });
   };
 
   useEffect(() => {

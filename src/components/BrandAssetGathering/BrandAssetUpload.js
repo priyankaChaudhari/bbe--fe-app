@@ -697,7 +697,9 @@ export default function BrandAssetUpload() {
               )}
               {params &&
               (params.step === 'additional-brand-material' ||
-                params.step === 'iconography') ? (
+                params.step === 'iconography') &&
+              documentData &&
+              documentData.length === 0 ? (
                 <CheckBox className="mt-4 mb-4">
                   <label
                     className="check-container customer-pannel "
@@ -736,8 +738,9 @@ export default function BrandAssetUpload() {
               <Button
                 className="btn-primary"
                 disabled={
-                  isLoading.loader ||
-                  (documentData && documentData.length === 0)
+                  isLoading.loader || noImages
+                    ? false
+                    : documentData && documentData.length === 0
                 }
                 onClick={() => redirectTo('completed')}>
                 {isLoading.loader && isLoading.type === 'button' ? (

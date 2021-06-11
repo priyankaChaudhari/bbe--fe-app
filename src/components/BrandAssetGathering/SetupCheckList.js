@@ -115,10 +115,31 @@ export default function SetupCheckList({ id, brandId }) {
                   <GreenCheckBox className="mt-3">
                     <label className="">
                       Upload Brand Assets
-                      <div className="steps-completed gray-color">
-                        0/1 Steps completed by you{' '}
-                      </div>
-                      <input type="" defaultChecked={false} readOnly />
+                      {agreementData &&
+                      agreementData.assigneeCount &&
+                      agreementData.assigneeCount
+                        .brand_asset_completed_count === 0 ? (
+                        <div className="steps-completed gray-color">
+                          0/5 Steps completed by you
+                        </div>
+                      ) : (
+                        <div className="steps-completed">{`${
+                          agreementData &&
+                          agreementData.assigneeCount &&
+                          agreementData.assigneeCount
+                            .brand_asset_completed_count
+                        }/5 Steps completed by you`}</div>
+                      )}
+                      <input
+                        type=""
+                        defaultChecked={
+                          agreementData &&
+                          agreementData.assigneeCount &&
+                          agreementData.assigneeCount
+                            .brand_asset_completed_count === 5
+                        }
+                        readOnly
+                      />
                       <span className="checkmark" />
                     </label>
                   </GreenCheckBox>
