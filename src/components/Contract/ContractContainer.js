@@ -767,6 +767,31 @@ export default function ContractContainer() {
       return `Enter ${label}`;
     }
 
+    if (key === 'threshold_type') {
+      if (details && details[key] === 'YoY') {
+        return 'YoY: All channel sales above previous year channel sales.';
+      }
+      if (details && details[key] === 'YoY + %') {
+        return `YoY + %: All channel sales above a <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
+          details && details.yoy_percentage
+            ? details && details.yoy_percentage
+            : `Enter ${label}.`
+        }</span> growth on previous year channel sales.`;
+      }
+      if (details && details[key] === 'Fixed') {
+        return `Fixed: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
+          details && details.sales_threshold
+            ? `$${
+                details &&
+                details.sales_threshold
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              }`
+            : `Enter ${label}.`
+        }</span>`;
+      }
+    }
+
     if (type && type.includes('number')) {
       if (details && details[key]) {
         return `${type === 'number-currency' ? '$' : '%'}${details[key]
@@ -792,7 +817,7 @@ export default function ContractContainer() {
   };
 
   const showRevTable = () => {
-    if (details && details.sales_threshold) {
+    if (details && details.threshold_type !== 'None') {
       return `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;
@@ -800,7 +825,7 @@ export default function ContractContainer() {
     padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
     padding: 13px;">Description</th><th style="text-align: left;border: 1px solid black;
     padding: 13px;"> Rev Share %</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;"> Sales Threshold</th>
+    padding: 13px;"> Sales Threshold Type</th>
       </tr><tr style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;"><td style="border: 1px solid black;
@@ -809,7 +834,7 @@ export default function ContractContainer() {
     padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
       threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
     padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
-    padding: 13px; "> <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>REV_THRESHOLD </span></td></tr></table>`;
+    padding: 13px; "> <span >REV_THRESHOLD </span></td></tr></table>`;
     }
     return `<table class="contact-list"  style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
@@ -1549,9 +1574,9 @@ export default function ContractContainer() {
         .replace(
           'REV_THRESHOLD',
           mapDefaultValues(
-            'sales_threshold',
+            'threshold_type',
             'Rev Threshold',
-            'number-currency',
+            // 'number-currency',
           ),
         )
         .replace('SELLER_TYPE', mapDefaultValues('seller_type', 'Seller Type'))

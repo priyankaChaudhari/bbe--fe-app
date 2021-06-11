@@ -44,6 +44,31 @@ export default function Statement({
       }
       return `Enter ${label}.`;
     }
+    if (key === 'threshold_type') {
+      if (formData && formData[key] === 'YoY') {
+        return 'YoY: All channel sales above previous year channel sales.';
+      }
+      if (formData && formData[key] === 'YoY + %') {
+        return `YoY + %: All channel sales above a <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
+          formData && formData.yoy_percentage
+            ? formData && formData.yoy_percentage
+            : `Enter ${label}.`
+        }</span> growth on previous year channel sales.`;
+      }
+      if (formData && formData[key] === 'Fixed') {
+        return `Fixed: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
+          formData && formData.sales_threshold
+            ? `$${
+                formData &&
+                formData.sales_threshold
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              }`
+            : `Enter ${label}.`
+        }</span>`;
+      }
+    }
+
     if (type && type.includes('number')) {
       // ${type === 'number-currency' ? '$' : '%'}
       if (formData && formData[key]) {
@@ -62,13 +87,13 @@ export default function Statement({
         : `Enter ${label}`
       : formData && formData[key];
   };
-
+  // style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"
   const showRevTable = () => {
-    if (formData && formData.sales_threshold) {
-      return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold</th>
+    if (formData && formData.threshold_type !== 'None') {
+      return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold Type</th>
       </tr><tr><td>% Of Incremental Sales</td>
       <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td> <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"">REV_THRESHOLD </span></td></tr></table> </div>`;
+      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td> <span>REV_THRESHOLD </span></td></tr></table> </div>`;
     }
     return `<div class="table-responsive"> <table class="contact-list"><tr><th>Type</th><th>Description</th>
     <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
@@ -868,9 +893,9 @@ export default function Statement({
                 .replace(
                   'REV_THRESHOLD',
                   mapDefaultValues(
-                    'sales_threshold',
+                    'threshold_type',
                     'Rev Threshold',
-                    'number-currency',
+                    // 'number-currency',
                   ),
                 )
                 // .replace(
@@ -1003,6 +1028,8 @@ Statement.propTypes = {
     monthly_discount_amount: PropTypes.number,
     one_time_discount_type: PropTypes.string,
     one_time_discount_amount: PropTypes.number,
+    threshold_type: PropTypes.string,
+    yoy_percentage: PropTypes.string,
   }),
   templateData: PropTypes.shape({
     addendum: PropTypes.string,
