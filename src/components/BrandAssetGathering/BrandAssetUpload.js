@@ -50,6 +50,7 @@ import { API_DOCUMENTS } from '../../constants/ApiConstants';
 import { deleteDocument, getDocuments } from '../../api';
 import {
   getBrandAssetsDetail,
+  getBrandAssetsSummary,
   updateBrandAssetStep,
 } from '../../api/BrandAssestsApi';
 
@@ -74,11 +75,11 @@ export default function BrandAssetUpload() {
   const [noImages, setNoImages] = useState(false);
 
   const [uploadCount, setUploadCount] = useState({
-    'brand-logo': 0,
-    'brand-guidelines': 0,
-    'font-files': 0,
-    iconography: 0,
-    'additional-brand-material': 0,
+    'brand-logo': '0 files uploaded',
+    'brand-guidelines': '0 files uploaded',
+    'font-files': '0 files uploaded',
+    iconography: '0 files uploaded',
+    'additional-brand-material': '0 files uploaded',
   });
 
   const formats = {
@@ -96,9 +97,29 @@ export default function BrandAssetUpload() {
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
       const newCount = uploadCount;
-      newCount[params.step] = response.length;
+      newCount[params.step] = `${response.length  } files uploaded`;
       setUploadCount(newCount);
       setIsLoading({ loader: false, type: 'page' });
+    });
+  };
+
+  const getAssetsSummary = () => {
+    const tempCounts = {
+      'brand-logo': '0 files uploaded',
+      'brand-guidelines': '0 files uploaded',
+      'font-files': '0 files uploaded',
+      iconography: '0 files uploaded',
+      'additional-brand-material': '0 files uploaded',
+    };
+    getBrandAssetsSummary(brandId).then((response) => {
+      if (response && response.data) {
+        // let newCount = uploadCount;
+        Object.keys(response.data).forEach((key) => {
+          const tempKey = key.replace('_', '-');
+          tempCounts[tempKey] = response.data[key];
+        });
+        setUploadCount(tempCounts);
+      }
     });
   };
 
@@ -108,6 +129,7 @@ export default function BrandAssetUpload() {
       BrandSteps.find((op) => op.url === params.step) &&
       BrandSteps.find((op) => op.url === params.step).key;
     getDocumentList(docType);
+    getAssetsSummary();
     getBrandAssetsDetail(brandId).then((response) => {
       setBrandAssetData(response && response.data);
       if (
@@ -129,7 +151,11 @@ export default function BrandAssetUpload() {
           original_name: item.name,
           entity_id: brandId,
           entity_type: 'brandassets',
-          mime_type: item.type,
+          mime_type: item.type
+            ? item.type
+            : params.step === 'font-files'
+            ? `font/${  item.name.split('.')[1]}`
+            : item.name.split('.')[1],
           status: 'requested',
           document_type: selectedStep && selectedStep.key,
         });
@@ -215,7 +241,7 @@ export default function BrandAssetUpload() {
                     setDocumentData(newFiles);
                     setDroppedFiles([]);
                     const newCount = uploadCount;
-                    newCount[params.step] = newFiles.length;
+                    newCount[params.step] = `${newFiles.length  } files uploaded`;
                     setUploadCount(newCount);
                     // getDocumentList(selectedStep && selectedStep.key);
                   });
@@ -504,7 +530,13 @@ export default function BrandAssetUpload() {
                   });
                 }}>
                 {/* if step complete show this and add active class to item.label and file upload */}
-                {item && item.url && uploadCount && uploadCount[item.url] ? (
+                {item &&
+                item.url &&
+                uploadCount &&
+                uploadCount[item.url] &&
+                uploadCount[item.url] &&
+                !uploadCount[item.url].includes('Skipped') &&
+                uploadCount[item.url] !== '0 files uploaded' ? (
                   <img
                     className="checked-gray"
                     src={OrangeCheckMark}
@@ -528,12 +560,17 @@ export default function BrandAssetUpload() {
                   </div>
                   <div
                     className={
-                      item && item.url && uploadCount && uploadCount[item.url]
+                      item &&
+                      item.url &&
+                      uploadCount &&
+                      uploadCount[item.url] &&
+                      !uploadCount[item.url].includes('Skipped') &&
+                      uploadCount[item.url] !== '0 files uploaded'
                         ? 'check-list-file-uploaded active'
                         : 'check-list-file-uploaded'
                     }>
                     {item && item.url && uploadCount && uploadCount[item.url]}{' '}
-                    files uploaded
+                    {/* files uploaded */}
                   </div>
                 </div>
                 {item.url === params.step ? (
