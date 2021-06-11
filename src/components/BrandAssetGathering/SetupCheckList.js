@@ -123,12 +123,19 @@ export default function SetupCheckList({ id, brandId }) {
                           0/5 Steps completed by you
                         </div>
                       ) : (
-                        <div className="steps-completed">{`${
-                          agreementData &&
+                        <div className="steps-completed">
+                          {`${
+                            agreementData &&
+                            agreementData.assigneeCount &&
+                            agreementData.assigneeCount
+                              .brand_asset_completed_count
+                          }/5 Steps completed`}{' '}
+                          {agreementData &&
                           agreementData.assigneeCount &&
-                          agreementData.assigneeCount
-                            .brand_asset_completed_count
-                        }/5 Steps completed by you`}</div>
+                          agreementData.assigneeCount.is_assigned_brand_asset
+                            ? ''
+                            : 'by you'}{' '}
+                        </div>
                       )}
                       <input
                         type=""
