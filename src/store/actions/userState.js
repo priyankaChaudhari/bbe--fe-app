@@ -199,6 +199,7 @@ export const clearToken = () => {
   localStorage.removeItem('filters');
   localStorage.removeItem('role');
   localStorage.removeItem('step');
+  localStorage.removeItem('page');
   window.location.href = PATH_LOGIN;
 };
 
@@ -220,6 +221,7 @@ export const userMe = (history, customer) => {
         localStorage.removeItem('filters');
         localStorage.removeItem('role');
         localStorage.removeItem('step');
+        localStorage.removeItem('page');
         const params = queryString.parse(history.location.search);
         if (history.location.pathname !== '/') {
           const stringified = queryString.stringify({

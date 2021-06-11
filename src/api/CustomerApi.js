@@ -28,7 +28,12 @@ export async function getCustomerList(
   expiringSoon,
 ) {
   let params = {
-    page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
+    page:
+      pageNumber === '' || pageNumber === undefined
+        ? 1
+        : localStorage.getItem('page')
+        ? localStorage.getItem('page')
+        : pageNumber,
     'order-by': sort['order-by'] || '-created_at',
   };
 

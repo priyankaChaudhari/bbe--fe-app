@@ -310,6 +310,7 @@ export default function NewCustomerList() {
   }, [customerList]);
 
   const handlePageChange = (currentPage) => {
+    localStorage.setItem('page', currentPage || 1);
     setPageNumber(currentPage);
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
@@ -2106,7 +2107,9 @@ export default function NewCustomerList() {
               <div className="container-fluid">
                 <CommonPagination
                   count={count}
-                  pageNumber={pageNumber}
+                  pageNumber={
+                    JSON.parse(localStorage.getItem('page')) || pageNumber
+                  }
                   handlePageChange={handlePageChange}
                 />
               </div>

@@ -70,6 +70,7 @@ export default function UploadDelegation() {
   useEffect(() => {
     if (params && params.key) {
       localStorage.setItem('match', params.key);
+      setIsChecked(false);
     }
     brandAssetData();
   }, [brandAssetData]);
@@ -96,7 +97,9 @@ export default function UploadDelegation() {
   };
 
   const redirectTO = () => {
-    if (ifStepsNull) {
+    if (data && data.re_assigned_email) {
+      history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+    } else if (ifStepsNull) {
       updateBrandAssetStep(brandId, {
         steps: {
           brand_logo: null,
@@ -190,90 +193,92 @@ export default function UploadDelegation() {
           {params && params.key ? (
             ''
           ) : (
-            <CheckBox className="mt-1 mb-4">
-              <label
-                className="check-container customer-pannel "
-                htmlFor="step">
-                Ask someone else to complete this section
-                <input
-                  className="checkboxes"
-                  type="checkbox"
-                  id="step"
-                  readOnly
-                  checked={data && data.re_assigned_email}
-                  onChange={(event) =>
-                    event.target.checked
-                      ? updateInput()
-                      : data && data.re_assigned_email
-                      ? updateEmail()
-                      : setIsChecked(false)
-                  }
-                />
-                <span className="checkmark" />
-              </label>
-            </CheckBox>
-          )}
-          {isChecked ? (
-            <fieldset className="shape-without-border w-430 mt-2">
-              <ContractFormField>
-                <label htmlFor="email">
-                  Assign to (email)
+            <>
+              <CheckBox className="mt-1 mb-4">
+                <label
+                  className="check-container customer-pannel "
+                  htmlFor="step">
+                  Ask someone else to complete this section
                   <input
-                    className="form-control"
-                    style={{ opacity: isChecked && !editEmail ? 0.5 : '' }}
-                    defaultValue={data && data.re_assigned_email}
-                    onChange={(event) => {
-                      setFormData({ email: event.target.value });
-                      setApiError({ re_assigned_email: '' });
-                    }}
-                    readOnly={isChecked && !editEmail}
+                    className="checkboxes"
+                    type="checkbox"
+                    id="step"
+                    readOnly
+                    checked={data && data.re_assigned_email}
+                    onChange={(event) =>
+                      event.target.checked
+                        ? updateInput()
+                        : data && data.re_assigned_email
+                        ? updateEmail()
+                        : setIsChecked(false)
+                    }
                   />
+                  <span className="checkmark" />
                 </label>
-                <ErrorMsg>
-                  {apiError &&
-                    apiError.re_assigned_email &&
-                    apiError.re_assigned_email[0]}
-                </ErrorMsg>
-                {data && data.re_assigned_email ? (
-                  <span
-                    className="edit-field cursor"
-                    role="presentation"
-                    onClick={() => setEditEmail(true)}>
-                    <img
-                      className="edit-icon"
-                      src={EditOrangeIcon}
-                      alt="edit"
-                    />{' '}
-                    Edit email address
-                  </span>
-                ) : (
-                  ''
-                )}
-                {data && data.re_assigned_email ? (
-                  <p className="info-text-gray m-0 pt-2 ">
-                    We’ve emailed them a link to submit the information in this
-                    section.
-                  </p>
-                ) : (
-                  <p className="info-text-gray m-0 pt-3 ">
-                    We’ll email them a link to submit the information in this
-                    section.
-                  </p>
-                )}
-                <Button
-                  className="btn-primary w-100  mt-3"
-                  onClick={() => sendEmail()}
-                  disabled={formData.email === ''}>
-                  {isLoading.loader && isLoading.type === 'email' ? (
-                    <PageLoader color="#fff" type="button" />
-                  ) : (
-                    'Send Email'
-                  )}
-                </Button>
-              </ContractFormField>
-            </fieldset>
-          ) : (
-            ''
+              </CheckBox>
+              {isChecked ? (
+                <fieldset className="shape-without-border w-430 mt-2">
+                  <ContractFormField>
+                    <label htmlFor="email">
+                      Assign to (email)
+                      <input
+                        className="form-control"
+                        style={{ opacity: isChecked && !editEmail ? 0.5 : '' }}
+                        defaultValue={data && data.re_assigned_email}
+                        onChange={(event) => {
+                          setFormData({ email: event.target.value });
+                          setApiError({ re_assigned_email: '' });
+                        }}
+                        readOnly={isChecked && !editEmail}
+                      />
+                    </label>
+                    <ErrorMsg>
+                      {apiError &&
+                        apiError.re_assigned_email &&
+                        apiError.re_assigned_email[0]}
+                    </ErrorMsg>
+                    {data && data.re_assigned_email ? (
+                      <span
+                        className="edit-field cursor"
+                        role="presentation"
+                        onClick={() => setEditEmail(true)}>
+                        <img
+                          className="edit-icon"
+                          src={EditOrangeIcon}
+                          alt="edit"
+                        />{' '}
+                        Edit email address
+                      </span>
+                    ) : (
+                      ''
+                    )}
+                    {data && data.re_assigned_email ? (
+                      <p className="info-text-gray m-0 pt-2 ">
+                        We’ve emailed them a link to submit the information in
+                        this section.
+                      </p>
+                    ) : (
+                      <p className="info-text-gray m-0 pt-3 ">
+                        We’ll email them a link to submit the information in
+                        this section.
+                      </p>
+                    )}
+                    <Button
+                      className="btn-primary w-100  mt-3"
+                      onClick={() => sendEmail()}
+                      disabled={formData.email === ''}>
+                      {isLoading.loader && isLoading.type === 'email' ? (
+                        <PageLoader color="#fff" type="button" />
+                      ) : (
+                        'Send Email'
+                      )}
+                    </Button>
+                  </ContractFormField>
+                </fieldset>
+              ) : (
+                ''
+              )}
+            </>
           )}
           <div className="complete-steps mt-3">
             You’ll need the following to complete this step:
@@ -300,15 +305,12 @@ export default function UploadDelegation() {
               Any other brand material
             </li>
           </ul>
-          {!isChecked ? (
-            <Button
-              className="btn-primary w-100 mb-2"
-              onClick={() => redirectTO()}>
-              Continue
-            </Button>
-          ) : (
-            ''
-          )}
+          <Button
+            className="btn-primary w-100 mb-2"
+            onClick={() => redirectTO()}
+            disabled={isChecked && !(data && data.re_assigned_email)}>
+            Continue
+          </Button>
           <p className="info-text-gray security-lock text-center  mb-0">
             <img width="16px" src={SecurityLock} alt="lock" />
             <span>
