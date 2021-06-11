@@ -14,7 +14,6 @@ import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
-// import { Line } from 'rc-progress';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 
@@ -29,6 +28,7 @@ import {
   CloseIcon,
   TrashIcons,
   RedTrashIcon,
+  WhiteArrowRight,
   FileCloud,
 } from '../../theme/images';
 import {
@@ -52,7 +52,6 @@ import {
   getBrandAssetsDetail,
   updateBrandAssetStep,
 } from '../../api/BrandAssestsApi';
-import DragDrop from './DragNDrop';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -83,8 +82,8 @@ export default function BrandAssetUpload() {
   });
 
   const formats = {
-    'brand-logo': 'image/*',
-    'brand-guidelines': 'image/*, .pdf',
+    'brand-logo': 'image/*, .eps, .ai',
+    'brand-guidelines': 'image/*, .pdf, .tif, .psd, .docx',
     'font-files': '.ttf, .otf, .woff',
     iconography: 'image/*',
     'additional-brand-material': '',
@@ -224,17 +223,15 @@ export default function BrandAssetUpload() {
               });
           }
         }
-        if (documentError && documentError.error)
+        if (documentError && documentError.error) {
           toast.error(documentError && documentError.message);
+          setIsLoading({ loader: false, type: 'button' });
+        }
         return res;
       });
   };
 
   const { getRootProps, getInputProps } = useDropzone({
-    // accept:
-    //   params && params.step === 'brand-guidelines'
-    //     ? 'image/*, .pdf'
-    //     : 'image/*',
     accept: params && params.step && formats && formats[params.step],
     onDrop: (acceptedFiles) => {
       const files = [];
@@ -315,7 +312,8 @@ export default function BrandAssetUpload() {
                       src={file && file.presigned_url}
                       className="image-thumbnail"
                       width="250"
-                      height="200" />
+                      height="200"
+                    />
                     {/* <img
                       src={file && file.presigned_url}
                       className="image-thumbnail"
@@ -668,7 +666,10 @@ export default function BrandAssetUpload() {
                   {showDocuments()}
                 </section>
               ) : (
-                <section className="drag-drop mb-4">
+                <section
+                  className={
+                    noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
+                  }>
                   <div
                     className="mb-4"
                     {...getRootProps({ className: 'dropzone mb-3' })}>
@@ -687,31 +688,30 @@ export default function BrandAssetUpload() {
                   </div>
 
                   {showDocuments()}
-
-                  {params &&
-                  (params.step === 'additional-brand-material' ||
-                    params.step === 'iconography') ? (
-                    <CheckBox className="mt-4 mb-4">
-                      <label
-                        className="check-container customer-pannel "
-                        htmlFor="step">
-                        {params.step === 'iconography'
-                          ? 'We don’t have any special icons'
-                          : 'We don’t have any other branding materials'}
-                        <input
-                          className="checkboxes"
-                          type="checkbox"
-                          id="step"
-                          readOnly
-                          onChange={() => setNoImages(true)}
-                        />
-                        <span className="checkmark" />
-                      </label>
-                    </CheckBox>
-                  ) : (
-                    ''
-                  )}
                 </section>
+              )}
+              {params &&
+              (params.step === 'additional-brand-material' ||
+                params.step === 'iconography') ? (
+                <CheckBox className="mt-4 mb-4">
+                  <label
+                    className="check-container customer-pannel "
+                    htmlFor="step">
+                    {params.step === 'iconography'
+                      ? 'We don’t have any special icons'
+                      : 'We don’t have any other branding materials'}
+                    <input
+                      className="checkboxes"
+                      type="checkbox"
+                      id="step"
+                      readOnly
+                      onChange={() => setNoImages(!noImages)}
+                    />
+                    <span className="checkmark" />
+                  </label>
+                </CheckBox>
+              ) : (
+                ''
               )}
             </DragDropImg>
           </BrandAssetBody>
@@ -732,6 +732,7 @@ export default function BrandAssetUpload() {
                 className="btn-primary"
                 disabled={
                   isLoading.loader ||
+                  !noImages ||
                   (documentData && documentData.length === 0)
                 }
                 onClick={() => redirectTo('completed')}>
@@ -740,6 +741,12 @@ export default function BrandAssetUpload() {
                 ) : (
                   'Next Step'
                 )}
+                <img
+                  className="btn-icon ml-2"
+                  width="16px"
+                  src={WhiteArrowRight}
+                  alt=""
+                />{' '}
               </Button>
             </div>
           </div>

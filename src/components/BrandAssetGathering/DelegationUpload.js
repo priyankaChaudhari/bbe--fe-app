@@ -15,6 +15,7 @@ import {
   CheckBox,
   ContractFormField,
   PageLoader,
+  ErrorMsg,
 } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -38,6 +39,7 @@ export default function UploadDelegation() {
   const [ifStepsNull, setIfStepsNull] = useState(false);
   const [data, setData] = useState({});
   const [editEmail, setEditEmail] = useState(false);
+  const [apiError, setApiError] = useState({});
   const params = queryString.parse(history.location.search);
 
   const brandAssetData = useCallback(() => {
@@ -82,6 +84,10 @@ export default function UploadDelegation() {
         toast.success('Request Sent Successfully!');
         setIsLoading({ loader: false, type: 'email' });
         brandAssetData();
+      }
+      if (res && res.status === 400) {
+        setApiError(res && res.data);
+        setIsLoading({ loader: false, type: 'email' });
       }
     });
   };
@@ -213,12 +219,18 @@ export default function UploadDelegation() {
                     className="form-control"
                     style={{ opacity: isChecked && !editEmail ? 0.5 : '' }}
                     defaultValue={data && data.re_assigned_email}
-                    onChange={(event) =>
-                      setFormData({ email: event.target.value })
-                    }
+                    onChange={(event) => {
+                      setFormData({ email: event.target.value });
+                      setApiError({ re_assigned_email: '' });
+                    }}
                     readOnly={isChecked && !editEmail}
                   />
                 </label>
+                <ErrorMsg>
+                  {apiError &&
+                    apiError.re_assigned_email &&
+                    apiError.re_assigned_email[0]}
+                </ErrorMsg>
                 {data && data.re_assigned_email ? (
                   <span
                     className="edit-field cursor"
