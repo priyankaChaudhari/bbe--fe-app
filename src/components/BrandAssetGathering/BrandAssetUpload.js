@@ -675,8 +675,17 @@ export default function BrandAssetUpload() {
                     data-for="format"
                   />
                   <ReactTooltip place="bottom" id="format">
-                    <span>All Accepted Formats</span>
-                    ai, .eps, .png, .jpg or .gif
+                    <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                      All Accepted Formats
+                    </span>
+                    <p
+                      style={{
+                        color: 'white',
+                        fontSize: '12px',
+                        textTransform: 'initial',
+                      }}>
+                      ai, .eps, .png, .jpg or .gif
+                    </p>
                   </ReactTooltip>
                 </>
               ) : (
@@ -865,6 +874,12 @@ const BrandAssetBody = styled.div`
     padding-left: 15px;
     padding-right: 15px;
     margin-top: 50px;
+
+    .Image-container {
+      li {
+        margin-right: 15px;
+      }
+    }
   }
 `;
 
@@ -1005,7 +1020,7 @@ const CheckSelectImage = styled.div`
     width: 12px;
     top: 7px;
   }
-  
+
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
@@ -1025,7 +1040,31 @@ const CheckSelectImage = styled.div`
       vertical-align: text-top;
       margin-right: 6px;
     }
-}
+  }
+
+  @media only screen and (max-width: 767px) {
+    width: 160px;
+    height: 160px;
+    .image-thumbnail {
+      width: 160px;
+      height: 160px;
+    }
+    .blur-bg {
+      width: 160px;
+      height: 160px;
+    }
+    .confirm-delete-cross {
+      right: 4px;
+      top: 4px;
+    }
+    .delete-msg {
+      max-width: 150px;
+      top: 62px;
+      padding: 10px;
+      width: 100%;
+      left: 6px;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -1076,4 +1115,15 @@ const DragDropImg = styled.div`
       }
     }
   }
+   @media only screen and (max-width: 767px) {
+
+    section {
+    &.thumbnail-dropzone {
+      .dropzone {
+        width: 160px;
+        height: 160px;
+         margin-right: 15px;
+      }
+    }
+   }
 `;
