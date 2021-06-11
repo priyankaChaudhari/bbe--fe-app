@@ -22,7 +22,7 @@ const OnBoardingBody = styled.div`
 
   &.grey-bg-asset {
     background: ${Theme.gray8};
-    height: calc(100% - 70px);
+    min-height: calc(100% - 70px);
   }
 
   .white-card-base {
