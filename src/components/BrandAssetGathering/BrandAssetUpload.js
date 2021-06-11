@@ -906,9 +906,16 @@ const BrandAssetFooter = styled.div`
   padding: 8px 0;
 
   .skip-step {
-    color: #556178;
-    font-size: 14px;
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
     margin-right: 20px;
+  }
+  @media only screen and (max-width: 330px) {
+    .skip-step {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+      margin-right: 10px;
+    }
   }
 `;
 
@@ -916,7 +923,7 @@ const DropDownBrandAsset = styled.div`
   margin-top: 100px;
 
   .css-yk16xz-control {
-    background: #f4f6fc;
+    background: ${Theme.gray8};
     border: none;
   }
   .css-1okebmr-indicatorSeparator {
@@ -925,7 +932,7 @@ const DropDownBrandAsset = styled.div`
 `;
 
 const CheckSelectImage = styled.div`
-  background-color: #f4f6fc;
+  background-color: ${Theme.gray8};
   border-radius: 8px;
   width: 170px;
   height: 170px;
@@ -935,8 +942,6 @@ const CheckSelectImage = styled.div`
     width: 170px;
     height: 170px;
     border-radius: 8px;
-    
-    
   }
   .blur-bg {
     background-color: rgba(46, 56, 77, 0.6);
@@ -960,9 +965,9 @@ const CheckSelectImage = styled.div`
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: ${Theme.white};
     max-width: 160px;
-    color: #d60000;
+    color: ${Theme.red};
     font-size: 16px;
     text-align: center;
     position: absolute;
@@ -1008,7 +1013,7 @@ const DragDropImg = styled.div`
     }
     &.drag-drop {
       .dropzone {
-        width: 550px;
+        max-width: 550px;
         height: 170px;
         border: 1px dotted ${Theme.gray40};
         border-radius: 4px;
