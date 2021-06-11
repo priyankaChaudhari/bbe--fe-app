@@ -14,7 +14,6 @@ import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
-
 // import { Line } from 'rc-progress';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -22,6 +21,7 @@ import axios from 'axios';
 import Theme from '../../theme/Theme';
 import {
   GrayCheckIcon,
+  OrangeCheckMark,
   ArrowRightBlackIcon,
   GrayInfoIcon,
   LeftArrowIcon,
@@ -87,7 +87,7 @@ export default function BrandAssetUpload() {
     'brand-guidelines': 'image/*, .pdf',
     'font-files': '.ttf, .otf, .woff',
     iconography: 'image/*',
-    'additional-brand-material': '*',
+    'additional-brand-material': '',
   };
   const selectedFiles = [];
 
@@ -310,11 +310,17 @@ export default function BrandAssetUpload() {
                   <input type="checkbox" id="add-addendum" />
                   <span className="checkmark" />
                   <CheckSelectImage>
-                    <img
+                    <embed
+                      type={file && file.mime_type}
+                      src={file && file.presigned_url}
+                      className="image-thumbnail"
+                      width="250"
+                      height="200" />
+                    {/* <img
                       src={file && file.presigned_url}
                       className="image-thumbnail"
                       alt={file.original_name}
-                    />
+                    /> */}
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
                     <div
                       className="remove-box"
@@ -377,10 +383,12 @@ export default function BrandAssetUpload() {
                       </div>
                       {file && file.progress > 0 && (
                         <div className="uploading-progress-bar ">
-                          <progress
-                            value={file.progress}
+                          file.progress
+                          <progress value={10} label={`${file.progress}%`} />
+                          {/* <ProgressBar
+                            now={file.percent}
                             label={`${file.progress}%`}
-                          />
+                      /> */}
                         </div>
                       )}
                     </div>
@@ -392,7 +400,6 @@ export default function BrandAssetUpload() {
       </ul>
     );
   };
-
   return (
     <>
       {/* <HeaderDownloadFuntionality>
@@ -498,12 +505,35 @@ export default function BrandAssetUpload() {
                     search: `step=${item.url}`,
                   });
                 }}>
-                {/* if step complete show this
-              <img className="checked-gray" src={OrangeCheckMark} alt="check" /> and add active class to item.labe and file upload */}
-                <img className="checked-gray" src={GrayCheckIcon} alt="check" />
+                {/* if step complete show this and add active class to item.label and file upload */}
+                {item && item.url && uploadCount && uploadCount[item.url] ? (
+                  <img
+                    className="checked-gray"
+                    src={OrangeCheckMark}
+                    alt="check"
+                  />
+                ) : (
+                  <img
+                    className="checked-gray"
+                    src={GrayCheckIcon}
+                    alt="check"
+                  />
+                )}
                 <div className="check-list-item">
-                  <div className="check-list-label">{item.label}</div>
-                  <div className="check-list-file-uploaded">
+                  <div
+                    className={
+                      item && item.url && uploadCount && uploadCount[item.url]
+                        ? 'check-list-label active'
+                        : 'check-list-label'
+                    }>
+                    {item.label}
+                  </div>
+                  <div
+                    className={
+                      item && item.url && uploadCount && uploadCount[item.url]
+                        ? 'check-list-file-uploaded active'
+                        : 'check-list-file-uploaded'
+                    }>
                     {item && item.url && uploadCount && uploadCount[item.url]}{' '}
                     files uploaded
                   </div>
@@ -593,7 +623,7 @@ export default function BrandAssetUpload() {
             <p className="normal-text mt-1 mb-0">
               {selectedStep && selectedStep.subtitle}
             </p>
-            <p className="gray-normal-text mt-1">
+            <div className="gray-normal-text mt-1">
               {selectedStep && selectedStep.format ? (
                 <>
                   Preferred format: {selectedStep.format}{' '}
@@ -606,14 +636,14 @@ export default function BrandAssetUpload() {
                     data-for="format"
                   />
                   <ReactTooltip place="bottom" id="format">
-                    <p>All Accepted Formats</p>
+                    <span>All Accepted Formats</span>
                     ai, .eps, .png, .jpg or .gif
                   </ReactTooltip>
                 </>
               ) : (
                 ''
               )}
-            </p>
+            </div>
             <DragDropImg>
               {(documentData && documentData.length) ||
               (droppedFiles && droppedFiles.length) ? (
