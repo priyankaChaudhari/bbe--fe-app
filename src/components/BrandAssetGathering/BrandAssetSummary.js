@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import { getBrandAssetsSummary } from '../../api';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
@@ -11,15 +10,12 @@ import {
 } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
-import { logout } from '../../store/actions';
 
 export default function BrandAssetSummary() {
-  const dispatch = useDispatch();
   const { id, brandId } = useParams();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState({});
-  const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
     getBrandAssetsSummary(brandId).then((response) => {
@@ -30,15 +26,6 @@ export default function BrandAssetSummary() {
         Object.keys(response.data).length > 0
       ) {
         setData(response && response.data);
-
-        const checkSkipped = BrandSteps.filter(
-          (item) =>
-            response.data[item.key] === 'Skipped' ||
-            response.data[item.key] === '',
-        );
-        if (checkSkipped && checkSkipped.length < 0) {
-          setShowDashboard(true);
-        } else setShowDashboard(false);
         setIsLoading({ loader: false, type: 'page' });
       }
     });
@@ -109,29 +96,13 @@ export default function BrandAssetSummary() {
                 </div>
               ))}
             </GreyCard>
-            {showDashboard ? (
-              <Button
-                className="btn-primary w-100 mt-4"
-                onClick={() =>
-                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
-                }>
-                Back to Dashboard
-              </Button>
-            ) : (
-              <GreyCard className="yellow-card mt-2  ">
-                Once all the sections above have been completed you’ll get full
-                access to your account dashboard. Your progress so far has been
-                saved so you can{' '}
-                <u
-                  onClick={() => dispatch(logout())}
-                  role="presentation"
-                  className="cursor">
-                  sign out
-                </u>{' '}
-                or close this tab until you or an assignee provides the
-                remaining information.
-              </GreyCard>
-            )}
+            <Button
+              className="btn-primary w-100 mt-4"
+              onClick={() =>
+                history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
+              }>
+              Back to Dashboard
+            </Button>
           </>
         )}
       </div>
