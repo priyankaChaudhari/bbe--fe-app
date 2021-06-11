@@ -732,21 +732,22 @@ export default function BrandAssetUpload() {
                 className="btn-primary"
                 disabled={
                   isLoading.loader ||
-                  !noImages ||
                   (documentData && documentData.length === 0)
                 }
                 onClick={() => redirectTo('completed')}>
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
-                  'Next Step'
+                  <>
+                    Next Step
+                    <img
+                      className="btn-icon ml-2"
+                      width="16px"
+                      src={WhiteArrowRight}
+                      alt=""
+                    />{' '}
+                  </>
                 )}
-                <img
-                  className="btn-icon ml-2"
-                  width="16px"
-                  src={WhiteArrowRight}
-                  alt=""
-                />{' '}
               </Button>
             </div>
           </div>
