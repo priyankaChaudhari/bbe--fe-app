@@ -621,7 +621,7 @@ export default function BrandAssetUpload() {
             <p className="normal-text mt-1 mb-0">
               {selectedStep && selectedStep.subtitle}
             </p>
-            <div className="gray-normal-text mt-1">
+            <div className="gray-normal-text mt-1 mb-4">
               {selectedStep && selectedStep.format ? (
                 <>
                   Preferred format: {selectedStep.format}{' '}
@@ -634,8 +634,13 @@ export default function BrandAssetUpload() {
                     data-for="format"
                   />
                   <ReactTooltip place="bottom" id="format">
-                    <span>All Accepted Formats</span>
-                    ai, .eps, .png, .jpg or .gif
+                    <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                      All Accepted Formats
+                    </span>
+                    <p style={{ color: 'white', fontSize: '12px' }}>
+                      {' '}
+                      ai, .eps, .png, .jpg or .gif
+                    </p>
                   </ReactTooltip>
                 </>
               ) : (
@@ -765,6 +770,11 @@ const BrandAssetBody = styled.div`
     vertical-align: bottom;
     margin-left: 3px;
   }
+  .gray-normal-text {
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
+  }
+
   .Image-container {
     list-style-type: none;
     padding: 0;
@@ -821,6 +831,23 @@ const BrandAssetBody = styled.div`
     padding-left: 15px;
     padding-right: 15px;
     margin-top: 50px;
+    .Image-container {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: contents;
+
+      li {
+        margin-right: 15px;
+
+        &:hover {
+          .remove-box {
+            bottom: 4px;
+            right: 4px;
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -961,7 +988,7 @@ const CheckSelectImage = styled.div`
     width: 12px;
     top: 7px;
   }
-  
+
   .delete-msg {
     border-radius: 6px;
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
@@ -981,7 +1008,30 @@ const CheckSelectImage = styled.div`
       vertical-align: text-top;
       margin-right: 6px;
     }
-}
+  }
+
+  @media only screen and (max-width: 767px) {
+    width: 160px;
+    height: 160px;
+    .image-thumbnail {
+      width: 160px;
+      height: 160px;
+    }
+    .blur-bg {
+      width: 160px;
+      height: 160px;
+    }
+    .confirm-delete-cross {
+      right: 3px;
+      top: 3px;
+    }
+    .delete-msg {
+      max-width: 150px;
+      top: 62px;
+      padding: 10px;
+      width: 100%;
+      left: 6px;
+    }
   }
 `;
 
@@ -1028,6 +1078,17 @@ const DragDropImg = styled.div`
 
         span {
           color: ${Theme.orange};
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    section {
+      &.thumbnail-dropzone {
+        .dropzone {
+          margin-right: 15px;
+          width: 160px;
+          height: 160px;
         }
       }
     }
