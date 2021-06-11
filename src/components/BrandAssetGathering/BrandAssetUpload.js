@@ -97,7 +97,7 @@ export default function BrandAssetUpload() {
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
       const newCount = uploadCount;
-      newCount[params.step] = `${response.length  } files uploaded`;
+      newCount[params.step] = `${response.length} files uploaded`;
       setUploadCount(newCount);
       setIsLoading({ loader: false, type: 'page' });
     });
@@ -154,7 +154,7 @@ export default function BrandAssetUpload() {
           mime_type: item.type
             ? item.type
             : params.step === 'font-files'
-            ? `font/${  item.name.split('.')[1]}`
+            ? `font/${item.name.split('.')[1]}`
             : item.name.split('.')[1],
           status: 'requested',
           document_type: selectedStep && selectedStep.key,
@@ -237,11 +237,11 @@ export default function BrandAssetUpload() {
                         file.progress = 0;
                       });
                     setDroppedFiles(files);
-                    newFiles.push(r.data);
+                    newFiles.unshift(r.data);
                     setDocumentData(newFiles);
                     setDroppedFiles([]);
                     const newCount = uploadCount;
-                    newCount[params.step] = `${newFiles.length  } files uploaded`;
+                    newCount[params.step] = `${newFiles.length} files uploaded`;
                     setUploadCount(newCount);
                     // getDocumentList(selectedStep && selectedStep.key);
                   });
@@ -323,6 +323,38 @@ export default function BrandAssetUpload() {
   const showDocuments = () => {
     return (
       <ul className="Image-container" key={Math.random()}>
+        {droppedFiles &&
+          droppedFiles.map((file) => (
+            <li key={file && file.file.lastModified}>
+              <CheckBox className="selected-img mb-3">
+                <label
+                  className="check-container customer-pannel"
+                  htmlFor="add-addendum">
+                  <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" />
+                  <CheckSelectImage>
+                    <div className="image-thumbnail">
+                      <div className="uploading-file-name">
+                        Uploading file
+                        <div className="file-path"> {file.file.name}</div>
+                      </div>
+                      {file && file.progress > 0 && (
+                        <div className="uploading-progress-bar ">
+                          file.progress
+                          <progress value={10} label={`${file.progress}%`} />
+                          {/* <ProgressBar
+                          now={file.percent}
+                          label={`${file.progress}%`}
+                    /> */}
+                        </div>
+                      )}
+                    </div>
+                  </CheckSelectImage>
+                </label>
+              </CheckBox>
+            </li>
+          ))}
+
         {documentData &&
           documentData.map((file) => (
             <li key={file.id}>
@@ -384,38 +416,6 @@ export default function BrandAssetUpload() {
                     ) : (
                       ''
                     )}
-                  </CheckSelectImage>
-                </label>
-              </CheckBox>
-            </li>
-          ))}
-
-        {droppedFiles &&
-          droppedFiles.map((file) => (
-            <li key={file && file.file.lastModified}>
-              <CheckBox className="selected-img mb-3">
-                <label
-                  className="check-container customer-pannel"
-                  htmlFor="add-addendum">
-                  <input type="checkbox" id="add-addendum" />
-                  <span className="checkmark" />
-                  <CheckSelectImage>
-                    <div className="image-thumbnail">
-                      <div className="uploading-file-name">
-                        Uploading file
-                        <div className="file-path"> {file.file.name}</div>
-                      </div>
-                      {file && file.progress > 0 && (
-                        <div className="uploading-progress-bar ">
-                          file.progress
-                          <progress value={10} label={`${file.progress}%`} />
-                          {/* <ProgressBar
-                            now={file.percent}
-                            label={`${file.progress}%`}
-                      /> */}
-                        </div>
-                      )}
-                    </div>
                   </CheckSelectImage>
                 </label>
               </CheckBox>
