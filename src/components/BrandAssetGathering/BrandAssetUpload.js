@@ -274,7 +274,7 @@ export default function BrandAssetUpload() {
   };
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: params && params.step && formats && formats[params.step],
+    // accept: params && params.step && formats && formats[params.step],
     onDrop: (acceptedFiles) => {
       const files = [];
       selectedFiles.push(acceptedFiles);
