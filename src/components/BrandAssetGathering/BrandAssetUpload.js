@@ -188,7 +188,7 @@ export default function BrandAssetUpload() {
         onUploadProgress: (data) => {
           files &&
             files.map((file) => {
-              file.progress = 75; // (data.loaded / data.total) * 100;
+              if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
             });
           setDroppedFiles(files);
         },
@@ -227,9 +227,10 @@ export default function BrandAssetUpload() {
                       onUploadProgress: (data) => {
                         files &&
                           files.map((file) => {
-                            file.progress = Math.round(
-                              (100 * data.loaded) / data.total,
-                            );
+                            if (file.progress > 0)
+                              file.progress = Math.round(
+                                (100 * data.loaded) / data.total,
+                              );
                           });
                         setDroppedFiles(files);
                       },
@@ -343,7 +344,7 @@ export default function BrandAssetUpload() {
                         Uploading file
                         <div className="file-path"> {file.file.name}</div>
                       </div>
-                      {file && file.progress > 0 && (
+                      {file && file.progress && file.progress > 0 && (
                         <div className="uploading-progress-bar ">
                           file.progress
                           {/* <progress
@@ -361,6 +362,7 @@ export default function BrandAssetUpload() {
                                 symbol: '',
                                 color: '#ff5933',
                               },
+                              status: '',
                             }}
                           />
                         </div>
