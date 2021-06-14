@@ -13,6 +13,10 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
+
+import { Progress } from 'react-sweet-progress';
+import 'react-sweet-progress/lib/style.css';
+
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -184,7 +188,7 @@ export default function BrandAssetUpload() {
         onUploadProgress: (data) => {
           files &&
             files.map((file) => {
-              file.progress = (data.loaded / data.total) * 100;
+              file.progress = 75; // (data.loaded / data.total) * 100;
             });
           setDroppedFiles(files);
         },
@@ -342,11 +346,23 @@ export default function BrandAssetUpload() {
                       {file && file.progress > 0 && (
                         <div className="uploading-progress-bar ">
                           file.progress
-                          <progress value={10} label={`${file.progress}%`} />
-                          {/* <ProgressBar
-                          now={file.percent}
-                          label={`${file.progress}%`}
-                    /> */}
+                          {/* <progress
+                            value={file.progress}
+                            label={`${file.progress}%`}
+                      /> */}
+                          <Progress
+                            percent={file.progress}
+                            theme={{
+                              active: {
+                                symbol: '',
+                                color: '#ff5933',
+                              },
+                              success: {
+                                symbol: '',
+                                color: '#ff5933',
+                              },
+                            }}
+                          />
                         </div>
                       )}
                     </div>
