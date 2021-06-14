@@ -1718,5 +1718,19 @@ text.cust-label-avg {
    font-weight: bold;
 }
 
+.react-sweet-progress {
+    /* display: flex; */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 15px;
+}
+.react-sweet-progress-line-inner {
+    position: relative;
+    min-height: 4px;
+    border-radius: 100px;
+    transition: width 0.3s ease;
+}
+
 `;
 export default bodyStyles;

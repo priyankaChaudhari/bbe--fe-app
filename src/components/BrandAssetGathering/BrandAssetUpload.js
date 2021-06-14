@@ -872,7 +872,7 @@ const BrandAssetBody = styled.div`
       }
       .uploading-file-name {
         text-align: center;
-        padding-top: 60px;
+        padding-top: 50px;
         color: ${Theme.black};
 
         .file-path {
@@ -948,8 +948,9 @@ const BrandAssetSideBar = styled.div`
           color: ${Theme.black};
           font-size: ${Theme.normal};
           padding-bottom: 2px;
+          font-family: ${Theme.baseFontFamily};
           &.active {
-            font-weight: 600;
+            font-family: ${Theme.titleFontFamily};
           }
         }
         .check-list-file-uploaded {
