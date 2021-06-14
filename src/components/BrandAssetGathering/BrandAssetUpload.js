@@ -145,8 +145,11 @@ export default function BrandAssetUpload() {
         response &&
         response.data &&
         response.data.steps &&
-        (response.data.steps.additional_brand_material === 'none' ||
-          response.data.steps.iconography === 'none')
+        response.data.steps[
+          params.step === 'additional-brand-material'
+            ? 'additional_brand_material'
+            : params.step
+        ] === 'none'
       ) {
         setNoImages(true);
         $('.checkboxes input:checkbox').prop('checked', true);

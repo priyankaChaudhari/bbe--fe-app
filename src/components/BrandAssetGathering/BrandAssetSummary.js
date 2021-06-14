@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -20,6 +21,7 @@ export default function BrandAssetSummary() {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState({});
+  const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
     getBrandAssetsSummary(brandId).then((response) => {
@@ -30,6 +32,17 @@ export default function BrandAssetSummary() {
         Object.keys(response.data).length > 0
       ) {
         setData(response && response.data);
+        const checkSkipped = BrandSteps.filter(
+          (item) =>
+            response.data[item.key] === 'Skipped' ||
+            response.data[item.key] === '0 files uploaded',
+        );
+
+        if (history.location.pathname.includes('/assigned-brand-summary/')) {
+          if (checkSkipped && checkSkipped.length > 0) {
+            setShowDashboard(true);
+          } else setShowDashboard(false);
+        }
         setIsLoading({ loader: false, type: 'page' });
       }
     });
@@ -125,13 +138,17 @@ export default function BrandAssetSummary() {
                 </div>
               ))}
             </GreyCard>
-            <Button
-              className="btn-primary w-100 mt-4"
-              onClick={() => redirectTo()}>
-              {history.location.pathname.includes('/assigned-brand-summary/')
-                ? 'Submit'
-                : 'Back to Dashboard'}
-            </Button>
+            {showDashboard ? (
+              ''
+            ) : (
+              <Button
+                className="btn-primary w-100 mt-4"
+                onClick={() => redirectTo()}>
+                {history.location.pathname.includes('/assigned-brand-summary/')
+                  ? 'Submit'
+                  : 'Back to Dashboard'}
+              </Button>
+            )}
           </>
         )}
       </div>
