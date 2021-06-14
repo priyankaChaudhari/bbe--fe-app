@@ -190,8 +190,9 @@ export default function BrandAssetUpload() {
 
   const createDocument = (files) => {
     const documentError = { error: false, message: '' };
-    setIsLoading({ loader: true, type: 'button' });
+    if (files && files.length) setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
+
     axiosInstance
       .post(API_DOCUMENTS, formData, {
         onUploadProgress: (data) => {
