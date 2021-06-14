@@ -120,11 +120,11 @@ export default function BrandAssetUpload() {
     //   'additional-brand-material': '0 files uploaded',
     // };
     getBrandAssetsSummary(brandId).then((response) => {
-      if (response && response.data) {
+      if (response && response.data && response.data.steps) {
         // let newCount = uploadCount;
-        Object.keys(response.data).forEach((key) => {
+        Object.keys(response.data.steps).forEach((key) => {
           const tempKey = key.replaceAll('_', '-');
-          tempCounts[tempKey] = response.data[key];
+          tempCounts[tempKey] = response.data.steps[key];
         });
         setUploadCount(tempCounts);
       }
