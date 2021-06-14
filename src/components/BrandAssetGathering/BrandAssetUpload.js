@@ -101,12 +101,15 @@ export default function BrandAssetUpload() {
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
-      const newCount = uploadCount;
-      newCount[params.step] =
-        response.length === 1
-          ? '1 file uploaded'
-          : `${response.length} files uploaded`;
-      setUploadCount(newCount);
+
+      // setUploadCount({
+      //   ...uploadCount,
+      //   [params.step]:
+      //     response.length === 1
+      //       ? '1 file uploaded'
+      //       : `${response.length} files uploaded`,
+      // });
+
       setIsLoading({ loader: false, type: 'page' });
     });
   };
@@ -259,10 +262,13 @@ export default function BrandAssetUpload() {
                     newFiles.unshift(r.data);
                     setDocumentData(newFiles);
                     setDroppedFiles([]);
-                    const newCount = uploadCount;
-                    newCount[params.step] = `${newFiles.length} files uploaded`;
-                    setUploadCount(newCount);
-                    // getDocumentList(selectedStep && selectedStep.key);
+                    setUploadCount({
+                      ...uploadCount,
+                      [params.step]:
+                        newFiles.length === 1
+                          ? '1 file uploaded'
+                          : `${newFiles.length} files uploaded`,
+                    });
                   });
                 setIsLoading({ loader: false, type: 'button' });
               });
@@ -275,7 +281,6 @@ export default function BrandAssetUpload() {
         return res;
       });
   };
-
   const { getRootProps, getInputProps } = useDropzone({
     // accept: params && params.step && formats && formats[params.step],
     onDrop: (acceptedFiles) => {
