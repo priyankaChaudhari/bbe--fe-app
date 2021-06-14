@@ -262,7 +262,7 @@ export default function Login() {
                               : 'form-control '
                           }
                           type="text"
-                          placeholder=" Enter your Email Address"
+                          placeholder="Enter your Email Address"
                           onChange={() => handleChange()}
                           id="emailAddress"
                           name="email"
@@ -316,7 +316,7 @@ export default function Login() {
                                   type="password"
                                   name="password"
                                   onChange={() => handleChange()}
-                                  placeholder=" Enter your Password"
+                                  placeholder="Enter your Password"
                                   id="password"
                                   ref={register({
                                     required: {

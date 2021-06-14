@@ -257,7 +257,7 @@ export default function UploadDelegation() {
                       ''
                     )}
                     {data && data.re_assigned_email ? (
-                      <p className="info-text-gray m-0 pt-2 ">
+                      <p className="info-text-gray m-0 pt-2">
                         We’ve emailed them a link to submit the information in
                         this section.
                       </p>

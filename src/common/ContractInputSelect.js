@@ -22,19 +22,19 @@ const ContractInputSelect = styled.div`
       background-color: ${Theme.gray8};
       margin-top: 7px;
       min-height: 40px !important;
-      font-size: color: ${Theme.extraNormal};
+      font-size:  ${Theme.extraNormal};
       font-weight:500;
        cursor: pointer;
 
         .css-g1d714-ValueContainer {
           color: ${Theme.gray85};
-          font-size: color: ${Theme.extraNormal};
+          font-size: ${Theme.extraNormal};
          
         }
           .css-1wa3eu0-placeholder {
             color: ${Theme.gray85};
             font-weight: 500;
-            font-size: color: ${Theme.extraNormal};
+            font-size: ${Theme.extraNormal};
             text-transform: none;
           }
           
@@ -43,8 +43,8 @@ const ContractInputSelect = styled.div`
           }
           
           &.form-control-error {
-          border: 1px solid ${Theme.red} ;
-          background: #FBF2F2;
+          border: 1px solid ${Theme.red};
+          background: ${Theme.lightRed};
       
         }
       }
@@ -62,13 +62,11 @@ const ContractInputSelect = styled.div`
         cursor: pointer;
           &.form-control-error {
             border: 1px solid ${Theme.red} ;
-            background: #FBF2F2;
-        
+            background: ${Theme.lightRed};
           }
           .css-1gtu0rj-indicatorContainer {
             padding: 4px;
           }
-
     }
     .css-1uccc91-singleValue {
        font-size: ${Theme.extraNormal};
