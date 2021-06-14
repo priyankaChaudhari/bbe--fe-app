@@ -342,8 +342,10 @@ export default function CustomerMainContainer() {
       ) {
         oldValue = oldValue.replace('.00', '');
         newValue = newValue.replace('.00', '');
-        oldValue = oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        newValue = newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        oldValue =
+          oldValue && oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        newValue =
+          newValue && newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
       return (
         <>
@@ -468,11 +470,13 @@ export default function CustomerMainContainer() {
             </span>{' '}
             {fromAmount === ''
               ? 'None'
-              : fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : fromAmount &&
+                fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
             {toAmount === ''
               ? 'None'
-              : toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : toAmount &&
+                toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
@@ -496,7 +500,10 @@ export default function CustomerMainContainer() {
     if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
       let value;
-      if (item && item.history_change_reason.includes('Custom')) {
+      if (
+        item &&
+        item.history_change_reason.includes('Amazon Store Package Custom')
+      ) {
         value = activityMessage[1].split('as');
         return (
           <>
