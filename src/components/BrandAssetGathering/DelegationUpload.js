@@ -97,7 +97,11 @@ export default function UploadDelegation() {
   };
 
   const redirectTO = () => {
-    if (data && data.re_assigned_email) {
+    if (
+      !history.location.pathname.includes('/assigned-choose-delegate/') &&
+      data &&
+      data.re_assigned_email
+    ) {
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
     } else if (ifStepsNull) {
       updateBrandAssetStep(brandId, {
@@ -308,7 +312,13 @@ export default function UploadDelegation() {
           <Button
             className="btn-primary w-100 mb-2"
             onClick={() => redirectTO()}
-            disabled={isChecked && !(data && data.re_assigned_email)}>
+            disabled={
+              !history.location.pathname.includes(
+                '/assigned-choose-delegate/',
+              ) &&
+              isChecked &&
+              !(data && data.re_assigned_email)
+            }>
             Continue
           </Button>
           <p className="info-text-gray security-lock text-center  mb-0">

@@ -356,7 +356,7 @@ export default function MainContainer() {
             />
           )}
 
-          {(isLoading.loader && isLoading.type === 'page') || loader ? (
+          {loader || (isLoading.loader && isLoading.type === 'page') ? (
             <PageLoader color="#FF5933" type="page" />
           ) : (
             <OnBoardingBody className="body-white">

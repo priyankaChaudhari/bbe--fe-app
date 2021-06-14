@@ -36,6 +36,7 @@ import {
   CheckBox,
   HeaderDownloadFuntionality,
   PageLoader,
+  UnauthorizedHeader,
 } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -476,34 +477,38 @@ export default function BrandAssetUpload() {
           </div>
         </div>
       </HeaderDownloadFuntionality> */}
-      <BackToStep>
-        {' '}
-        <div className="container-fluid">
+      {history.location.pathname.includes('/assigned-brand-asset/') ? (
+        <UnauthorizedHeader />
+      ) : (
+        <BackToStep>
           {' '}
-          <div className="row">
-            <div className="col-12">
-              <div
-                role="presentation"
-                className="back-link"
-                onClick={() =>
-                  history.push(
-                    PATH_CUSTOMER_DETAILS.replace(':id', id).replace(
-                      ':brandId',
-                      brandId,
-                    ),
-                  )
-                }>
-                <img
-                  src={LeftArrowIcon}
-                  alt="aarow-back"
-                  className="arrow-back-icon "
-                />
-                Back to Dashboard
+          <div className="container-fluid">
+            {' '}
+            <div className="row">
+              <div className="col-12">
+                <div
+                  role="presentation"
+                  className="back-link"
+                  onClick={() =>
+                    history.push(
+                      PATH_CUSTOMER_DETAILS.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      ),
+                    )
+                  }>
+                  <img
+                    src={LeftArrowIcon}
+                    alt="aarow-back"
+                    className="arrow-back-icon "
+                  />
+                  Back to Dashboard
+                </div>
               </div>
             </div>
-          </div>
-        </div>{' '}
-      </BackToStep>
+          </div>{' '}
+        </BackToStep>
+      )}
 
       <BrandAssetSideBar className="d-none d-lg-block">
         <div className="label-heading mb-3">Your BrandSteps</div>

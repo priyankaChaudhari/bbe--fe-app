@@ -83,7 +83,7 @@ export default function Header({ type, userInfo }) {
     if (!history.location.pathname.includes('assigned')) {
       dispatch(userMe(history));
     }
-  }, [dispatch, history.location.pathname]);
+  }, []);
 
   const getInitials = () => {
     const firstName =
