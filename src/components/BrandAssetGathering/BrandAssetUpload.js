@@ -20,6 +20,7 @@ import 'react-sweet-progress/lib/style.css';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
+import $ from 'jquery';
 
 import Theme from '../../theme/Theme';
 import {
@@ -140,14 +141,20 @@ export default function BrandAssetUpload() {
     getAssetsSummary();
     getBrandAssetsDetail(brandId).then((response) => {
       setBrandAssetData(response && response.data);
+
       if (
         response &&
         response.data &&
         response.data.steps &&
-        response.data.steps[params.step] === 'none'
+        (response.data.steps.additional_brand_material === 'none' ||
+          response.data.steps.iconography === 'none')
       ) {
         setNoImages(true);
-      } else setNoImages(false);
+        $('.checkboxes input:checkbox').prop('checked', true);
+      } else {
+        setNoImages(false);
+        $('.checkboxes input:checkbox').prop('checked', false);
+      }
     });
   }, [params.step]);
 
@@ -767,7 +774,7 @@ export default function BrandAssetUpload() {
               params.step === 'iconography') &&
             documentData &&
             documentData.length === 0 ? (
-              <CheckBox className="mt-4 mb-4">
+              <CheckBox className="checkboxes mt-4 mb-4">
                 <label
                   className="check-container customer-pannel "
                   htmlFor="step">
@@ -779,6 +786,7 @@ export default function BrandAssetUpload() {
                     type="checkbox"
                     id="step"
                     readOnly
+                    defaultChecked={noImages}
                     onChange={() => setNoImages(!noImages)}
                   />
                   <span className="checkmark" />

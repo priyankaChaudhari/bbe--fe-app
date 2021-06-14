@@ -56,7 +56,8 @@ export default function UploadDelegation() {
       if (
         response &&
         response.data &&
-        response.data.re_assigned_email === null
+        (response.data.re_assigned_email === null ||
+          response.data.re_assigned_email === '')
       ) {
         setIsChecked(false);
         $('.checkboxes input:checkbox').prop('checked', false);
@@ -145,7 +146,7 @@ export default function UploadDelegation() {
 
   const updateEmail = () => {
     updateBrandAssetStep(brandId, {
-      re_assigned_email: null,
+      re_assigned_email: '',
     }).then((response) => {
       if (response && response.status === 200) {
         setIsChecked(false);

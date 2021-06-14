@@ -77,3 +77,10 @@ export const getContactDetails = (id) => {
       });
   };
 };
+
+export const showBrandAsset = (value) => {
+  return {
+    type: actionTypes.SHOW_BRAND_ASSET_MSG,
+    showBrandAssetMsg: value,
+  };
+};

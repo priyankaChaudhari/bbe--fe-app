@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { getBrandAssetsSummary } from '../../api';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
@@ -10,8 +11,10 @@ import {
 } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
+import { showBrandAsset } from '../../store/actions/customerState';
 
 export default function BrandAssetSummary() {
+  const dispatch = useDispatch();
   const { id, brandId } = useParams();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -31,6 +34,15 @@ export default function BrandAssetSummary() {
     });
   }, [brandId]);
 
+  const redirectTo = () => {
+    if (data && data.is_completed) {
+      dispatch(showBrandAsset(true));
+      history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+    } else {
+      history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+    }
+  };
+
   return (
     <OnBoardingBody className="body-white">
       <div className="white-card-base panel pb-4">
@@ -48,7 +60,10 @@ export default function BrandAssetSummary() {
               {BrandSteps.map((item) => (
                 <div className="information-text mt-2" key={item.key}>
                   {item.label}
-                  {data && data[item.key] && data[item.key] === 'Skipped' ? (
+                  {data &&
+                  data.steps &&
+                  data.steps[item.key] &&
+                  data.steps[item.key] === 'Skipped' ? (
                     <div className="pending-status">
                       <img
                         className="pending-icon"
@@ -58,15 +73,16 @@ export default function BrandAssetSummary() {
                       Skipped
                     </div>
                   ) : data &&
-                    data[item.key] &&
-                    data[item.key] === '0 files uploaded' ? (
+                    data.steps &&
+                    data.steps[item.key] &&
+                    data.steps[item.key] === '0 files uploaded' ? (
                     <div className="pending-status">
                       <img
                         className="pending-icon"
                         src={GrayClockIcon}
                         alt="clock"
                       />
-                      {data && data[item.key]}
+                      {data && data.steps[item.key]}
                     </div>
                   ) : (
                     <div className="completed-status">
@@ -75,7 +91,7 @@ export default function BrandAssetSummary() {
                         src={OrangeCheckMark}
                         alt="check"
                       />
-                      {data && data[item.key]}
+                      {data && data.steps[item.key]}
                     </div>
                   )}
                   <div
@@ -105,9 +121,7 @@ export default function BrandAssetSummary() {
             </GreyCard>
             <Button
               className="btn-primary w-100 mt-4"
-              onClick={() =>
-                history.push(PATH_CUSTOMER_DETAILS.replace(':id', id))
-              }>
+              onClick={() => redirectTo()}>
               Back to Dashboard
             </Button>
           </>

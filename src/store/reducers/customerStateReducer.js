@@ -6,6 +6,7 @@ const initialState = {
   error: null,
   contactData: [],
   customerSelectedTab: '',
+  showBrandAssetMsg: false,
 };
 
 const customerStateReducer = (state = initialState, action) => {
@@ -56,6 +57,12 @@ const customerStateReducer = (state = initialState, action) => {
         isLoading: false,
         contactData: [],
         error: action.error.response,
+      };
+    case actionTypes.SHOW_BRAND_ASSET_MSG:
+      return {
+        ...state,
+
+        showBrandAssetMsg: action.showBrandAssetMsg,
       };
     default:
       return state;

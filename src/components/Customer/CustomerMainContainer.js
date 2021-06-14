@@ -51,6 +51,7 @@ import {
   getContactDetails,
   getCustomerDetails,
   setCustomerSelectedTab,
+  showBrandAsset,
 } from '../../store/actions/customerState';
 import {
   AgreementDetails,
@@ -144,6 +145,9 @@ export default function CustomerMainContainer() {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const showOnBoardingSuccessMsg = useSelector(
     (state) => state.userState.showForgotMsg,
+  );
+  const showBrandAssetSuccessMsg = useSelector(
+    (state) => state.customerState.showBrandAssetMsg,
   );
 
   let statusActions = [
@@ -1328,6 +1332,42 @@ export default function CustomerMainContainer() {
                   </div>
                 </ModalBox>
               </Modal> */}
+              <Modal
+                isOpen={showBrandAssetSuccessMsg}
+                style={AccountSetupcustomStyles}
+                ariaHideApp={false}
+                contentLabel="Edit modal">
+                <ModalBox>
+                  <div className="modal-body account-setup-complete">
+                    <img
+                      className="mt-2"
+                      src={AccountSetupIcon}
+                      alt="company-icon"
+                    />
+
+                    <h3 className="page-heading mb-3 mt-3 ">
+                      Brand Assets Received
+                    </h3>
+                    <p className="extra-bold ">
+                      {' '}
+                      Thank you for uploading your brand assets. Once you’ve
+                      spoken with our Brand Growth Strategist and Creative
+                      Strategist, they will review your products and request
+                      assets for the products we will use in our brand sample,
+                      which will act as a guide for future optimization work.
+                      You will receive an email as well as a notification in
+                      NEXT that will take you to where you can upload the
+                      requested product assets.
+                    </p>
+
+                    <Button
+                      className="btn-primary w-100 on-boarding mt-3"
+                      onClick={() => dispatch(showBrandAsset(false))}>
+                      Ok. Got it!
+                    </Button>
+                  </div>
+                </ModalBox>
+              </Modal>
             </>
           )}
         </>
