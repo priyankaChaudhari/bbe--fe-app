@@ -7,6 +7,7 @@ import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import {
   PATH_BRAND_ASSET,
   PATH_CUSTOMER_DETAILS,
+  PATH_THANKS,
   PATH_UNAUTHORIZED_BRAND_ASSET,
 } from '../../constants';
 import { BrandSteps } from '../../constants/FieldConstants';
@@ -35,7 +36,12 @@ export default function BrandAssetSummary() {
   }, [brandId]);
 
   const redirectTo = () => {
-    if (data && data.is_completed) {
+    if (history.location.pathname.includes('/assigned-brand-summary/')) {
+      history.push({
+        pathname: PATH_THANKS,
+        search: `name=${data && data.user}`,
+      });
+    } else if (data && data.is_completed) {
       dispatch(showBrandAsset(true));
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
     } else {
@@ -122,7 +128,9 @@ export default function BrandAssetSummary() {
             <Button
               className="btn-primary w-100 mt-4"
               onClick={() => redirectTo()}>
-              Back to Dashboard
+              {history.location.pathname.includes('/assigned-brand-summary/')
+                ? 'Submit'
+                : 'Back to Dashboard'}
             </Button>
           </>
         )}

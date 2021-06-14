@@ -13,7 +13,6 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
-
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
