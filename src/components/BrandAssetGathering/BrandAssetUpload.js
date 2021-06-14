@@ -89,7 +89,7 @@ export default function BrandAssetUpload() {
 
   const formats = {
     'brand-logo': 'image/*, .eps, .ai',
-    'brand-guidelines': 'image/*, .pdf, .tif, .psd, .docx',
+    'brand-guidelines': 'image/*, .pdf, .tif, .psd, .docx, .ttf, .otf, .woff',
     'font-files': '.ttf, .otf, .woff',
     iconography: 'image/*',
     'additional-brand-material': '',
@@ -102,25 +102,28 @@ export default function BrandAssetUpload() {
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
       const newCount = uploadCount;
-      newCount[params.step] = `${response.length} files uploaded`;
+      newCount[params.step] =
+        response.length === 1
+          ? '1 file uploaded'
+          : `${response.length} files uploaded`;
       setUploadCount(newCount);
       setIsLoading({ loader: false, type: 'page' });
     });
   };
 
   const getAssetsSummary = () => {
-    const tempCounts = {
-      'brand-logo': '0 files uploaded',
-      'brand-guidelines': '0 files uploaded',
-      'font-files': '0 files uploaded',
-      iconography: '0 files uploaded',
-      'additional-brand-material': '0 files uploaded',
-    };
+    const tempCounts = {};
+    //   'brand-logo': '0 files uploaded',
+    //   'brand-guidelines': '0 files uploaded',
+    //   'font-files': '0 files uploaded',
+    //   iconography: '0 files uploaded',
+    //   'additional-brand-material': '0 files uploaded',
+    // };
     getBrandAssetsSummary(brandId).then((response) => {
       if (response && response.data) {
         // let newCount = uploadCount;
         Object.keys(response.data).forEach((key) => {
-          const tempKey = key.replace('_', '-');
+          const tempKey = key.replaceAll('_', '-');
           tempCounts[tempKey] = response.data[key];
         });
         setUploadCount(tempCounts);
