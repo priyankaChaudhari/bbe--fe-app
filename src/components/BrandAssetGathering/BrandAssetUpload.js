@@ -102,14 +102,14 @@ export default function BrandAssetUpload() {
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
-      const msg =
-        response.length === 1
-          ? '1 file uploaded'
-          : `${response.length} files uploaded`;
-      setUploadCount({
-        ...uploadCount,
-        [params.step]: msg,
-      });
+      // const msg =
+      //   response.length === 1
+      //     ? '1 file uploaded'
+      //     : `${response.length} files uploaded`;
+      // setUploadCount({
+      //   ...uploadCount,
+      //   [params.step]: msg,
+      // });
       setIsLoading({ loader: false, type: 'page' });
     });
   };
@@ -124,7 +124,6 @@ export default function BrandAssetUpload() {
     // };
     getBrandAssetsSummary(brandId).then((response) => {
       if (response && response.data && response.data.steps) {
-        // let newCount = uploadCount;
         Object.keys(response.data.steps).forEach((key) => {
           const tempKey = key.replaceAll('_', '-');
           tempCounts[tempKey] = response.data.steps[key];
@@ -341,7 +340,7 @@ export default function BrandAssetUpload() {
     deleteDocument(imageId).then((res) => {
       if (res && res.status === 204) {
         getDocumentList(selectedStep && selectedStep.key);
-        // getAssetsSummary();
+        getAssetsSummary();
       }
     });
   };
