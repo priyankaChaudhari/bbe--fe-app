@@ -135,7 +135,10 @@ export default function UploadDelegation() {
                     ':brandId',
                     brandId,
                   ),
-            search: 'step=brand-logo',
+            search:
+              data && data.last_visited_step
+                ? `step=${data.last_visited_step}`
+                : 'step=brand-logo',
           });
         }
       });
@@ -148,7 +151,10 @@ export default function UploadDelegation() {
                 brandId,
               )
             : PATH_BRAND_ASSET.replace(':id', id).replace(':brandId', brandId),
-        search: 'step=brand-logo',
+        search:
+          data && data.last_visited_step
+            ? `step=${data.last_visited_step}`
+            : 'step=brand-logo',
       });
     }
   };

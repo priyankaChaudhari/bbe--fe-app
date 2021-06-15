@@ -345,6 +345,13 @@ export default function BrandAssetUpload() {
     });
   };
 
+  const saveLastStep = () => {
+    updateBrandAssetStep(brandId, { last_visited_step: selectedStep.url });
+    history.push(
+      PATH_CUSTOMER_DETAILS.replace(':id', id).replace(':brandId', brandId),
+    );
+  };
+
   const showDocuments = () => {
     return (
       <ul className="Image-container" key={Math.random()}>
@@ -400,8 +407,8 @@ export default function BrandAssetUpload() {
                 <label
                   className="check-container customer-pannel"
                   htmlFor="add-addendum">
-                  <input type="checkbox" id="add-addendum" />
-                  <span className="checkmark" />
+                  {/* <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" /> */}
                   <CheckSelectImage>
                     <embed
                       type={file && file.mime_type}
@@ -526,14 +533,7 @@ export default function BrandAssetUpload() {
                 <div
                   role="presentation"
                   className="back-link"
-                  onClick={() =>
-                    history.push(
-                      PATH_CUSTOMER_DETAILS.replace(':id', id).replace(
-                        ':brandId',
-                        brandId,
-                      ),
-                    )
-                  }>
+                  onClick={() => saveLastStep()}>
                   <img
                     src={LeftArrowIcon}
                     alt="aarow-back"
