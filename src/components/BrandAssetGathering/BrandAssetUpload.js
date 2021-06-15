@@ -88,11 +88,12 @@ export default function BrandAssetUpload() {
   });
 
   const formats = {
-    'brand-logo': 'image/*, .eps, .ai',
-    'brand-guidelines': 'image/*, .pdf, .tif, .psd, .docx, .ttf, .otf, .woff',
-    'font-files': '.ttf, .otf, .woff',
-    iconography: 'image/*',
-    'additional-brand-material': '',
+    'brand-logo': '.ai, .eps, .png, .jpg or .gif',
+    'brand-guidelines':
+      '.jpg, .png, .pdf, .tif, .psd, .docx, .ttf, .otf, or .woff',
+    'font-files': '.ttf, .otf, or .woff',
+    iconography: '.ai, .eps, .svg, .png, .jpg or .gif',
+    'additional-brand-material': 'any',
   };
   const selectedFiles = [];
 
@@ -726,7 +727,7 @@ export default function BrandAssetUpload() {
                       fontSize: '12px',
                       textTransform: 'initial',
                     }}>
-                    ai, .eps, .png, .jpg or .gif
+                    {formats && params.step && formats[params.step]}
                   </p>
                 </ReactTooltip>
               </>
