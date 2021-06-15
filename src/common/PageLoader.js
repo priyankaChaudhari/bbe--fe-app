@@ -65,6 +65,11 @@ const DetailLoaderWrapper = styled.div`
   left: 40%;
   bottom: 0;
   right: 0;
+
+  &.agrement-details {
+    top: 450px;
+  }
+
   @media only screen and (max-width: 991px) {
     left: 0;
   }
@@ -120,7 +125,8 @@ export default function PageLoader({
   }
   if (type === 'detail') {
     return (
-      <DetailLoaderWrapper>
+      <DetailLoaderWrapper
+        className={component === 'agrement-details' ? 'agrement-details' : ''}>
         <Loader type="Bars" color={color} height={height} width={width} />
       </DetailLoaderWrapper>
     );
