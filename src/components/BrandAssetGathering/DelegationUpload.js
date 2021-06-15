@@ -22,6 +22,8 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_THANKS,
   PATH_UNAUTHORIZED_BRAND_ASSET,
+  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
+  PATH_BRAND_ASSET_SUMMARY,
 } from '../../constants';
 import {
   OrangeCheckMark,
@@ -124,24 +126,50 @@ export default function UploadDelegation() {
         },
       }).then((response) => {
         if (response && response.status === 200) {
-          history.push({
-            pathname:
-              params && params.key
-                ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
-                    ':brandId',
-                    brandId,
-                  )
-                : PATH_BRAND_ASSET.replace(':id', id).replace(
+          if (data && data.last_visited_step === 'summary') {
+            history.push(
+              history.location.pathname.includes('/assigned-brand-asset/')
+                ? PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY.replace(
+                    ':id',
+                    id,
+                  ).replace(':brandId', brandId)
+                : PATH_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
                     ':brandId',
                     brandId,
                   ),
-            search:
-              data && data.last_visited_step
-                ? `step=${data.last_visited_step}`
-                : 'step=brand-logo',
-          });
+            );
+          } else {
+            history.push({
+              pathname:
+                params && params.key
+                  ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    )
+                  : PATH_BRAND_ASSET.replace(':id', id).replace(
+                      ':brandId',
+                      brandId,
+                    ),
+              search:
+                data && data.last_visited_step
+                  ? `step=${data.last_visited_step}`
+                  : 'step=brand-logo',
+            });
+          }
         }
       });
+    } else if (data && data.last_visited_step === 'summary') {
+      history.push(
+        history.location.pathname.includes('/assigned-choose-delegate/')
+          ? PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
+              ':brandId',
+              brandId,
+            )
+          : PATH_BRAND_ASSET_SUMMARY.replace(':id', id).replace(
+              ':brandId',
+              brandId,
+            ),
+      );
     } else {
       history.push({
         pathname:

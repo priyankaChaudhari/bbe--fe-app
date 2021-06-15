@@ -4,8 +4,13 @@ import { useSelector } from 'react-redux';
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import copy from 'copy-to-clipboard';
 
-import { EditOrangeIcon, CloseIcon } from '../../theme/images/index';
+import {
+  EditOrangeIcon,
+  CloseIcon,
+  CopyLinkIcon,
+} from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
 import { SocialIcons } from '../../constants/FieldConstants';
 import { GetInitialName, WhiteCard } from '../../common';
@@ -156,6 +161,33 @@ export default function CompanyDetail({
           </div>
           <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
+              <p className="black-heading-title mt-0 ">Amazon Credentials</p>
+              <div
+                className="edit-details"
+                onClick={() => setShowModal(true)}
+                role="presentation">
+                <img src={EditOrangeIcon} alt="" />
+                Edit
+              </div>
+              <div className="copy-info">
+                <div className="label mt-3">Marketplace ID</div>
+                <div className="label-info">
+                  {(customer && customer.merchant_id) || 'No Marketplace ID.'}
+                </div>
+
+                <div
+                  className="copy-text"
+                  onClick={() => copy(customer && customer.merchant_id)}
+                  role="presentation">
+                  <img src={CopyLinkIcon} alt="" />
+                  Copy
+                </div>
+              </div>
+            </WhiteCard>
+          </div>
+
+          <div className="col-lg-6 col-md-6 col-12 mt-3">
+            <WhiteCard>
               <p className="black-heading-title mt-0">Contact Info</p>
               <div
                 className="edit-details"
@@ -175,6 +207,7 @@ export default function CompanyDetail({
               </ul>
             </WhiteCard>
           </div>
+
           {/* <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
               <p className="black-heading-title mt-0 ">Amazon Credentials</p>

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { getBrandAssetsSummary } from '../../api';
+import { getBrandAssetsSummary, updateBrandAssetStep } from '../../api';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -57,7 +57,13 @@ export default function BrandAssetSummary() {
     } else if (data && data.is_completed) {
       dispatch(showBrandAsset(true));
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+      updateBrandAssetStep(brandId, {
+        last_visited_step: 'summary',
+      });
     } else {
+      updateBrandAssetStep(brandId, {
+        last_visited_step: 'summary',
+      });
       history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
     }
   };

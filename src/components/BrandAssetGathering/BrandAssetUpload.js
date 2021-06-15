@@ -302,6 +302,7 @@ export default function BrandAssetUpload() {
         ...brandAssetData.steps,
         [selectedStep && selectedStep.key]: noImages ? 'none' : value,
       },
+      last_visited_step: selectedStep && selectedStep.skip,
     }).then((response) => {
       if (response && response.status === 200)
         if (selectedStep && selectedStep.skip === 'summary') {
