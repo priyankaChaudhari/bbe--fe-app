@@ -67,7 +67,9 @@ const DetailLoaderWrapper = styled.div`
   right: 0;
 
   &.agrement-details {
-    top: 450px;
+    top: 140px;
+    position: relative;
+    left: 0;
   }
 
   @media only screen and (max-width: 991px) {
