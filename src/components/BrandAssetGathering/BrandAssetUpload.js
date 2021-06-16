@@ -362,8 +362,8 @@ export default function BrandAssetUpload() {
                 <label
                   className="check-container customer-pannel"
                   htmlFor="add-addendum">
-                  <input type="checkbox" id="add-addendum" />
-                  <span className="checkmark" />
+                  {/* <input type="checkbox" id="add-addendum" />
+                  <span className="checkmark" /> */}
                   <CheckSelectImage>
                     <div className="image-thumbnail">
                       <div className="uploading-file-name">

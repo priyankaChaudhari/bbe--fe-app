@@ -99,7 +99,7 @@ export default function UploadDelegation() {
         setFormData({ email: '' });
         toast.success('Request Sent Successfully!');
         setIsLoading({ loader: false, type: 'email' });
-        brandAssetData();
+        // brandAssetData();
       }
       if (res && res.status === 400) {
         setApiError(res && res.data);
@@ -284,7 +284,9 @@ export default function UploadDelegation() {
                               setFormData({ email: event.target.value });
                               setApiError({ re_assigned_email: '' });
                             }}
-                            readOnly={isChecked && !editEmail}
+                            readOnly={
+                              (isChecked && !editEmail) || isLoading.loader
+                            }
                           />
                         </label>
                         <ErrorMsg>
@@ -321,7 +323,7 @@ export default function UploadDelegation() {
                         <Button
                           className="btn-primary w-100  mt-3"
                           onClick={() => sendEmail()}
-                          disabled={formData.email === ''}>
+                          disabled={formData.email === '' || isLoading.loader}>
                           {isLoading.loader && isLoading.type === 'email' ? (
                             <PageLoader color="#fff" type="button" />
                           ) : (

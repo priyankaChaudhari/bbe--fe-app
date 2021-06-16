@@ -952,7 +952,7 @@ export const BrandSteps = [
     step: 2,
     subtitle:
       'Please upload a brand style guide. This should include specifics around brand colors, logo usage, fonts, tone of voice and other relevant information.',
-    format: '',
+    format: 'PDF, JPG, PNG, TIF, PSD, DOCX',
     skip: 'font-files',
   },
   {

@@ -98,8 +98,27 @@ export default function SetupCheckList({ id, brandId }) {
               </div>
               <div className="col-lg-6 col-md-6 col-12 text-lg-right text-md-right text-sm-left">
                 <div className="progress-bar-value">
-                  <progress value="67" max="100" />
-                  <div className="progress-range-text"> 67% Complete</div>
+                  <progress
+                    value={
+                      agreementData &&
+                      agreementData.assigneeCount &&
+                      agreementData.assigneeCount
+                        .brand_asset_completed_count === 5
+                        ? '100'
+                        : '67'
+                    }
+                    max="100"
+                  />
+                  <div className="progress-range-text">
+                    {' '}
+                    {agreementData &&
+                    agreementData.assigneeCount &&
+                    agreementData.assigneeCount.brand_asset_completed_count ===
+                      5
+                      ? '100%'
+                      : '67%'}{' '}
+                    Complete
+                  </div>
                 </div>
               </div>
             </div>
@@ -108,7 +127,11 @@ export default function SetupCheckList({ id, brandId }) {
                 <GreenCheckBox className={item.property} key={item.label}>
                   <label className="">
                     {item.label}
-                    <div className="steps-completed">{item.subtitle}</div>
+                    <div className="steps-completed">
+                      {item.subtitle && item.subtitle.includes(undefined)
+                        ? ''
+                        : item.subtitle}
+                    </div>
                     <input type="checkbox" checked={item.active} readOnly />
                     <span className="checkmark" />
                   </label>
@@ -124,36 +147,35 @@ export default function SetupCheckList({ id, brandId }) {
                       {agreementData &&
                       agreementData.assigneeCount &&
                       agreementData.assigneeCount
-                        .brand_asset_completed_count === 0 ? (
-                        <div className="steps-completed gray-color">
-                          0/5 Steps completed by you
-                        </div>
+                        .brand_asset_completed_count ? (
+                        <>
+                          {agreementData.assigneeCount
+                            .brand_asset_completed_count === 0 ? (
+                            <div className="steps-completed gray-color">
+                              0/5 Steps completed by you
+                            </div>
+                          ) : (
+                            <div className="steps-completed">
+                              {`${agreementData.assigneeCount.brand_asset_completed_count}/5 Steps completed`}{' '}
+                              {agreementData.assigneeCount
+                                .is_assigned_brand_asset
+                                ? ''
+                                : 'by you'}{' '}
+                            </div>
+                          )}
+                          <input
+                            type="checkbox"
+                            checked={
+                              agreementData.assigneeCount
+                                .brand_asset_completed_count === 5
+                            }
+                            readOnly
+                          />
+                          <span className="checkmark" />
+                        </>
                       ) : (
-                        <div className="steps-completed">
-                          {`${
-                            agreementData &&
-                            agreementData.assigneeCount &&
-                            agreementData.assigneeCount
-                              .brand_asset_completed_count
-                          }/5 Steps completed`}{' '}
-                          {agreementData &&
-                          agreementData.assigneeCount &&
-                          agreementData.assigneeCount.is_assigned_brand_asset
-                            ? ''
-                            : 'by you'}{' '}
-                        </div>
+                        ''
                       )}
-                      <input
-                        type=""
-                        defaultChecked={
-                          agreementData &&
-                          agreementData.assigneeCount &&
-                          agreementData.assigneeCount
-                            .brand_asset_completed_count === 5
-                        }
-                        readOnly
-                      />
-                      <span className="checkmark" />
                     </label>
                   </GreenCheckBox>
                 </div>
