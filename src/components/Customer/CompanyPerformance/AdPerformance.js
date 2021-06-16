@@ -1404,7 +1404,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-6">
           {' '}
-          <p className="black-heading-title mt-3 mb-2"> DSP Spend</p>
+          <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
         </div>
         <div className="col-6 text-right">
           {' '}
