@@ -416,9 +416,13 @@ export default function BrandAssetUpload() {
                       type={file && file.mime_type}
                       width="250"
                       height="200">
-                      <a href={file && file.presigned_url}>
-                        {file && file.original_name}
-                      </a>
+                      <div className="unsupport-file-name">
+                        <a
+                          className="file-path"
+                          href={file && file.presigned_url}>
+                          {file && file.original_name}
+                        </a>
+                      </div>
                     </object>
 
                     {/*
@@ -1067,6 +1071,21 @@ const CheckSelectImage = styled.div`
     height: 170px;
     border-radius: 8px;
   }
+  .unsupport-file-name {
+    padding-top: 80px;
+    color: ${Theme.black};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 145px;
+    margin: 0 auto;
+    text-align: center;
+
+    .file-path {
+      color: ${Theme.black};
+    }
+  }
+
   .blur-bg {
     background-color: rgba(46, 56, 77, 0.6);
     width: 170px;
