@@ -423,16 +423,20 @@ export default function BrandAssetUpload() {
                       alt={file.original_name}
                     /> */}
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
-                    <div
-                      className="remove-box"
-                      role="presentation"
-                      onClick={() => setShowDeleteMsg({ [file.id]: true })}>
-                      <img
-                        className="trash-icon"
-                        src={TrashIcons}
-                        alt="check"
-                      />
-                    </div>
+                    {showDeleteMsg[file.id] ? (
+                      ''
+                    ) : (
+                      <div
+                        className="remove-box"
+                        role="presentation"
+                        onClick={() => setShowDeleteMsg({ [file.id]: true })}>
+                        <img
+                          className="trash-icon"
+                          src={TrashIcons}
+                          alt="check"
+                        />
+                      </div>
+                    )}
                     {showDeleteMsg[file.id] ? (
                       <div
                         className="delete-msg"
