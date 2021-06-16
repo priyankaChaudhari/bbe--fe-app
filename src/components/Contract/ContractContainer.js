@@ -817,7 +817,11 @@ export default function ContractContainer() {
   };
 
   const showRevTable = () => {
-    if (details && details.threshold_type !== 'None') {
+    if (
+      details &&
+      details.threshold_type &&
+      details.threshold_type !== 'None'
+    ) {
       return `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;

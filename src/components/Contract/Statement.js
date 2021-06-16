@@ -89,7 +89,11 @@ export default function Statement({
   };
   // style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"
   const showRevTable = () => {
-    if (formData && formData.threshold_type !== 'None') {
+    if (
+      formData &&
+      formData.threshold_type &&
+      formData.threshold_type !== 'None'
+    ) {
       return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold Type</th>
       </tr><tr><td>% Of Incremental Sales</td>
       <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
