@@ -410,6 +410,18 @@ export default function BrandAssetUpload() {
                   {/* <input type="checkbox" id="add-addendum" />
                   <span className="checkmark" /> */}
                   <CheckSelectImage>
+                    <object
+                      className="image-thumbnail"
+                      data={file && file.presigned_url}
+                      type={file && file.mime_type}
+                      width="250"
+                      height="200">
+                      <a href={file && file.presigned_url}>
+                        {file && file.original_name}
+                      </a>
+                    </object>
+
+                    {/*
                     <embed
                       type={file && file.mime_type}
                       src={file && file.presigned_url}
@@ -417,6 +429,7 @@ export default function BrandAssetUpload() {
                       width="250"
                       height="200"
                     />
+*/}
                     {/* <img
                       src={file && file.presigned_url}
                       className="image-thumbnail"
