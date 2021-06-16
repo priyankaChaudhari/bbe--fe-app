@@ -351,7 +351,13 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   return (
     <>
       {isLoading.loader && isLoading.type === 'page' ? (
-        <PageLoader type="detail" color="#FF5933" width={40} height={40} />
+        <PageLoader
+          component="customer-details"
+          type="detail"
+          color="#FF5933"
+          width={40}
+          height={40}
+        />
       ) : (
         <div className="col-lg-8 col-12">
           {formData.expiryMessage && formData.expiryMessage.message ? (

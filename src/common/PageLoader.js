@@ -66,12 +66,16 @@ const DetailLoaderWrapper = styled.div`
   bottom: 0;
   right: 0;
 
+  &.customer-details {
+    top: -140px;
+    position: relative;
+    left: 0;
+  }
   &.agrement-details {
     top: 140px;
     position: relative;
     left: 0;
   }
-
   @media only screen and (max-width: 991px) {
     left: 0;
   }
@@ -128,7 +132,13 @@ export default function PageLoader({
   if (type === 'detail') {
     return (
       <DetailLoaderWrapper
-        className={component === 'agrement-details' ? 'agrement-details' : ''}>
+        className={
+          component === 'customer-details'
+            ? 'customer-details'
+            : component === 'agrement-details'
+            ? 'agrement-details'
+            : ''
+        }>
         <Loader type="Bars" color={color} height={height} width={width} />
       </DetailLoaderWrapper>
     );

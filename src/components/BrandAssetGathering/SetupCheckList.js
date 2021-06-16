@@ -82,7 +82,13 @@ export default function SetupCheckList({ id, brandId }) {
   return (
     <div className="col-lg-8  col-12 mb-3">
       {isLoading.loader && isLoading.type === 'page' ? (
-        <PageLoader color="#FF5933" type="detail" width={40} height={40} />
+        <PageLoader
+          component="agrement-details"
+          color="#FF5933"
+          type="detail"
+          width={40}
+          height={40}
+        />
       ) : (
         <>
           <fieldset className="shape-without-border extra-radius">
