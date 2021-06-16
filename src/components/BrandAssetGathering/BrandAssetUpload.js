@@ -383,7 +383,14 @@ export default function BrandAssetUpload() {
         return res;
       })
       .catch((error) => {
-        toast.error('Access Denied, Unable to upload.');
+        toast.error(
+          <div>
+            The person who asked you to complete this section has changed who
+            has access.
+            <br /> Please reach out to onboarding@buyboxexperts.com if you have
+            any questions.
+          </div>,
+        );
         setDroppedFiles([]);
         setIsLoading({ loader: false, type: 'page' });
       });
