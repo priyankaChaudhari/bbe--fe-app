@@ -16,7 +16,7 @@ import Select from 'react-select';
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import $ from 'jquery';
@@ -267,6 +267,15 @@ export default function BrandAssetUpload() {
                           ? '1 file uploaded'
                           : `${newFiles.length} files uploaded`,
                     });
+                  })
+                  .catch((error) => {
+                    toast.error(
+                      error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.detail,
+                    );
+                    setIsLoading({ loader: false, type: 'page' });
                   });
                 setIsLoading({ loader: false, type: 'button' });
               });
@@ -277,6 +286,11 @@ export default function BrandAssetUpload() {
           setIsLoading({ loader: false, type: 'button' });
         }
         return res;
+      })
+      .catch((error) => {
+        toast.error('Access Denied, Unable to upload.');
+        setDroppedFiles([]);
+        setIsLoading({ loader: false, type: 'page' });
       });
   };
   const { getRootProps, getInputProps } = useDropzone({
@@ -341,6 +355,10 @@ export default function BrandAssetUpload() {
         getDocumentList(selectedStep && selectedStep.key);
         getAssetsSummary();
       }
+      if (res && res.status === 401) {
+        setIsLoading({ loader: false, type: 'page' });
+        toast.error('Access Denied, Unable to upload.');
+      }
     });
   };
 
@@ -355,6 +373,7 @@ export default function BrandAssetUpload() {
     return (
       <ul className="Image-container" key={Math.random()}>
         {droppedFiles &&
+          droppedFiles.length > 0 &&
           droppedFiles.map((file) => (
             <li key={file && file.file.lastModified}>
               <CheckBox className="selected-img mb-3">
@@ -400,6 +419,7 @@ export default function BrandAssetUpload() {
           ))}
 
         {documentData &&
+          documentData.length > 0 &&
           documentData.map((file) => (
             <li key={file.id}>
               <CheckBox className="selected-img mb-3">
@@ -491,6 +511,11 @@ export default function BrandAssetUpload() {
   };
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       {/* <HeaderDownloadFuntionality>
         <div className="container-fluid">
           <div className="row">
