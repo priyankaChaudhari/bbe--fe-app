@@ -1669,7 +1669,7 @@ export default function ContractContainer() {
 
     const newAddendumAddedData =
       newAddendumData && newAddendumData.addendum
-        ? newAddendumData.addendum
+        ? newAddendumData.addendum.replaceAll('<p>', '<p style="margin:0">')
         : '';
 
     const addendumSignatureData = AddendumSign.replace(
