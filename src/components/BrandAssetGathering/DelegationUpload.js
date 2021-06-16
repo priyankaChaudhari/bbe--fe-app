@@ -99,7 +99,7 @@ export default function UploadDelegation() {
         setFormData({ email: '' });
         toast.success('Request Sent Successfully!');
         setIsLoading({ loader: false, type: 'email' });
-        // brandAssetData();
+        brandAssetData();
       }
       if (res && res.status === 400) {
         setApiError(res && res.data);
