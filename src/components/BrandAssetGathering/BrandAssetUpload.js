@@ -89,8 +89,7 @@ export default function BrandAssetUpload() {
 
   const formats = {
     'brand-logo': '.ai, .eps, .png, .jpg or .gif',
-    'brand-guidelines':
-      '.jpg, .png, .pdf, .tif, .psd, .docx, .ttf, .otf, or .woff',
+    'brand-guidelines': '.jpg, .png, .pdf, .tif, .psd, .docx',
     'font-files': '.ttf, .otf, or .woff',
     iconography: '.ai, .eps, .svg, .png, .jpg or .gif',
     'additional-brand-material': 'any',
