@@ -316,6 +316,7 @@ export default function NewCustomerList() {
   };
 
   const handleFilters = (event, key, type, action) => {
+    localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
@@ -524,6 +525,7 @@ export default function NewCustomerList() {
   };
 
   const handleSearch = (event, type) => {
+    localStorage.setItem('page', 1);
     if (type === 'view') {
       if (event.value === 'performance') {
         setShowPerformance(true);
@@ -1610,7 +1612,7 @@ export default function NewCustomerList() {
                       ...filters,
                       searchQuery: event.target.value,
                     });
-
+                    localStorage.setItem('page', 1);
                     localStorage.setItem(
                       'filters',
                       JSON.stringify({
