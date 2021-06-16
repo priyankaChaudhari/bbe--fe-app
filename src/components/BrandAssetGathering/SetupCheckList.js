@@ -146,8 +146,7 @@ export default function SetupCheckList({ id, brandId }) {
                       Upload Brand Assets
                       {agreementData &&
                       agreementData.assigneeCount &&
-                      agreementData.assigneeCount
-                        .brand_asset_completed_count ? (
+                      agreementData.assigneeCount ? (
                         <>
                           {agreementData.assigneeCount
                             .brand_asset_completed_count === 0 ? (
