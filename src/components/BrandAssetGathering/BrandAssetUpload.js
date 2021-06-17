@@ -394,6 +394,25 @@ export default function BrandAssetUpload() {
     );
   };
 
+  const navigateStep = (item) => {
+    if (
+      documentData &&
+      documentData.length &&
+      (params && params.step) !== item.url
+    )
+      redirectTo('completed');
+    else
+      history.push({
+        pathname: history.location.pathname.includes('/assigned-brand-asset/')
+          ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+              ':brandId',
+              brandId,
+            )
+          : PATH_BRAND_ASSET.replace(':id', id).replace(':brandId', brandId),
+        search: `step=${item.url}`,
+      });
+  };
+
   const showDocuments = () => {
     return (
       <ul className="Image-container" key={Math.random()}>
@@ -641,22 +660,7 @@ export default function BrandAssetUpload() {
               className="cursor"
               key={item.key}
               role="presentation"
-              onClick={() => {
-                history.push({
-                  pathname: history.location.pathname.includes(
-                    '/assigned-brand-asset/',
-                  )
-                    ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
-                        ':brandId',
-                        brandId,
-                      )
-                    : PATH_BRAND_ASSET.replace(':id', id).replace(
-                        ':brandId',
-                        brandId,
-                      ),
-                  search: `step=${item.url}`,
-                });
-              }}>
+              onClick={() => navigateStep(item)}>
               {/* if step complete show this and add active class to item.label and file upload */}
               {item &&
               item.url &&
