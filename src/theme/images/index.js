@@ -160,6 +160,7 @@ import WhiteArrowRight from './icons/white-arrow-right.png';
 import OrangeDownloadPdf from './icons/orange-download-pdf.png';
 import RedTrashIcon from './icons/red-trash-icon.svg';
 import FileCloud from './icon_upload.svg';
+import ChatBoxIcon from './icons/chat-box.svg';
 
 export {
   BannerBg,
@@ -324,4 +325,5 @@ export {
   OrangeDownloadPdf,
   RedTrashIcon,
   FileCloud,
+  ChatBoxIcon,
 };

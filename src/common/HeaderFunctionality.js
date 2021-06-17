@@ -39,6 +39,12 @@ const HeaderDownloadFuntionality = styled.div`
           }
         }
       }
+
+      .header-icon {
+        vertical-align: text-top;
+        margin-right: 7px;
+        width: 20px;
+      }
       .divide-arrow {
         background-color: ${Theme.gray4};
         width: 1px;
