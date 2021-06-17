@@ -127,6 +127,44 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     chart.paddingRight = 20;
     chart.logo.disabled = true; // disable amchart logo
     chart.data = lineChartData; // bind th data
+    const currentLabel = `label1`;
+    const previousLabel = `label2`;
+    const tooltipDate =
+      '<div style="color: white; font-size: 16px;">{name}</div>';
+
+    function renderTooltip(name, color, value, cs, percent, formatter) {
+      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
+      <li style="display: inline-block;">
+        {' '}
+        <div style="background-color: ${color};
+        border: 1px solid white;
+        border-radius: 100%;
+        width: 10px;
+        height: 10px;" />
+      </li>
+      <li style="display: inline-block;">
+        <div style="color: #f4f6fc;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding-left: 5px;">${name} </div>
+      </li>
+      <li style="display: inline-block; float: right; margin-left: 25px;">
+        <div style=" color: white;
+        font-size: 16px; text-align: right;
+       
+        ">${cs !== null ? cs : ''}${
+        formatter !== null
+          ? `{${value}.formatNumber('${formatter}')}`
+          : `{${value}}`
+      }${percent !== null ? percent : ''}
+      </div>
+      </li>
+    </ul>
+  
+    `;
+
+      return tooltipText;
+    }
 
     // render X axis
     const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -159,24 +197,77 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
 
     // create a tooltip
     const flag = selectedValue !== 'custom';
-    let tooltipHeader = '';
     let tooltipCurrent = '';
     let tooltipPrevious = '';
 
     if (activeSales === 'revenue') {
-      tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
-      tooltipCurrent = `${currencySymbol}{label1}[/]`;
-      tooltipPrevious = flag
-        ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
-        : '';
+      tooltipCurrent = renderTooltip(
+        'Recent',
+        '#FF5933',
+        currentLabel,
+        currencySymbol,
+        null,
+        null,
+      );
+      if (flag) {
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousLabel,
+          currencySymbol,
+          null,
+          null,
+        );
+      }
+      // tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
+      // tooltipCurrent = `${currencySymbol}{label1}[/]`;
+      // tooltipPrevious = flag
+      //   ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
+      //   : '';
     } else if (activeSales === 'conversion') {
-      tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      tooltipCurrent = `{label1}%[/]`;
-      tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
+      tooltipCurrent = renderTooltip(
+        'Recent',
+        '#FF5933',
+        currentLabel,
+        null,
+        '%',
+        null,
+      );
+      if (flag) {
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousLabel,
+          null,
+          '%',
+          null,
+        );
+      }
+      // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+      // tooltipCurrent = `{label1}%[/]`;
+      // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
     } else {
-      tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      tooltipCurrent = `{label1}[/]`;
-      tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
+      tooltipCurrent = renderTooltip(
+        'Recent',
+        '#FF5933',
+        currentLabel,
+        null,
+        null,
+        null,
+      );
+      if (flag) {
+        tooltipPrevious = renderTooltip(
+          'Previous',
+          '#BFC5D2',
+          previousLabel,
+          null,
+          null,
+          null,
+        );
+      }
+      // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+      // tooltipCurrent = `{label1}[/]`;
+      // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
     }
 
     // Create series for previous data
@@ -185,7 +276,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     series.dataFields.dateX = 'name';
     series.strokeWidth = 2;
     series.stroke = am4core.color('#BFC5D2');
-    series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+    series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
     series.fill = am4core.color('#2e384d');
     series.propertyFields.strokeDasharray = 'dashLength';
 
@@ -201,7 +293,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     series2.dataFields.dateX = 'name';
     series2.strokeWidth = 2;
     series2.minBulletDistance = 10;
-    series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+    // series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+    series2.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
     series2.stroke = am4core.color('#FF5933');
     series2.fill = am4core.color('#2e384d');
 

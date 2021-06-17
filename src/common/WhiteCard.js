@@ -697,16 +697,53 @@ export const WhiteCard = styled.div`
 
           .block {
             border-radius: 2px;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+          }
+
+          .circle {
+            border-radius: 7px;
+            width: 12px;
+            height: 12px;
             margin-right: 6px;
           }
           .orange {
             background: ${Theme.baseColor};
           }
+          .adSales { 
+            background:#0045B4
+          };
+          .adSpend { 
+            background: #8C54FF
+          };
+          .adConversion { 
+            background: #30A8BD
+          };
+          .impressions { 
+            background: #D6A307
+          };
+          .adCos { 
+            background: #E05D37
+          };
+          .adRoas { 
+            background: #89A43C
+          };
+          .adClicks { 
+            background: #C84EC6
+          };
+          .adClickRate { 
+            background: #A04848
+          };
+
+          .darkGray{
+            background: ${Theme.gray35};
+            
+          }
           .gray {
             background: ${Theme.gray25};
           }
+
           .black {
             background: ${Theme.black};
           }

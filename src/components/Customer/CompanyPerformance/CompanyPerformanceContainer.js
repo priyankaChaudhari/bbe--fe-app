@@ -30,7 +30,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
               className={viewComponent === 'salePerformance' ? 'active' : ''}
               onClick={() => setViewComponent('salePerformance')}
               role="presentation">
-              Performance Report
+              Sales Performance
             </li>
             <li
               className={viewComponent === 'adPerformance' ? 'active' : ''}

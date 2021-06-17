@@ -835,11 +835,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const setAdBoxClass = (name, classValue) => {
     let selectedClass = '';
     if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
-      if (_.size(selectedAdBox) === 1) {
-        selectedClass = 'order-chart-box active fix-height';
-      } else {
-        selectedClass = `order-chart-box ${classValue} fix-height`;
-      }
+      // if (_.size(selectedAdBox) === 1) {
+      //   selectedClass = 'order-chart-box active fix-height';
+      // } else {
+      selectedClass = `order-chart-box ${classValue} fix-height`;
+      // }
     } else if (_.size(selectedAdBox) === 4) {
       selectedClass = 'order-chart-box fix-height disabled';
     } else {
@@ -1323,19 +1323,32 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const renderAdGroupBy = () => {
     return (
       <>
-        {_.size(selectedAdBox) === 1 ? (
+        {_.size(selectedAdBox) <= 2 ? (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
               <li>
                 <div className="weeks">
-                  <span className="orange block" />
+                  <span
+                    className={
+                      _.size(selectedAdBox) === 1
+                        ? `${_.keys(selectedAdBox)[0]} circle`
+                        : 'darkGray circle'
+                    }
+                  />
+
                   <span>Recent</span>
                 </div>
               </li>
               {selectedAdDF !== 'custom' ? (
                 <li>
                   <div className="weeks">
-                    <span className="gray block" />
+                    <span
+                      className={
+                        _.size(selectedAdBox) === 1
+                          ? `${_.keys(selectedAdBox)[0]} block`
+                          : 'darkGray block'
+                      }
+                    />
                     <span>Previous</span>
                   </div>
                 </li>
@@ -1404,7 +1417,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-6">
           {' '}
-          <p className="black-heading-title mt-3 mb-2"> DSP Spend</p>
+          <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
         </div>
         <div className="col-6 text-right">
           {' '}
