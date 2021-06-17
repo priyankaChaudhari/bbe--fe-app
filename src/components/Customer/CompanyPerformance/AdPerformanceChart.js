@@ -43,8 +43,8 @@ export default function AdPerformanceChart({
       adClickRate: 'CLICK THROUGH RATE',
     };
 
-    const tooltipDate =
-      '<div style="color: white; font-size: 16px;">{date}</div>';
+    // const tooltipDate =
+    //   '<div style="color: white; font-size: 16px;">{date}</div>';
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
@@ -84,7 +84,7 @@ export default function AdPerformanceChart({
         {' '}
         <div style="background-color: ${color};
         border: 1px solid white;
-        border-radius: 100%;
+        border-radius: ${name === 'Previous' ? '2px' : '100%'};
         width: 10px;
         height: 10px;" />
       </li>
@@ -130,156 +130,176 @@ export default function AdPerformanceChart({
       return format;
     }
 
-    // when only one metrics selected
-    if (_.size(selectedBox) === 1) {
-      const selectedKey = _.keys(selectedBox)[0];
-      const previousValue = `${_.keys(selectedBox)[0]}Previous`;
-      const currentValue = `${_.keys(selectedBox)[0]}Current`;
-      const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
-      const previousLabel = `${_.keys(selectedBox)[0]}PreviousLabel`;
-      const dashLine = `${_.keys(selectedBox)[0]}DashLength`;
-      let tooltipCurrent = ``;
-      let tooltipPrevious = '';
+    const selectedMatricsFlag = _.size(selectedBox) <= 2;
+    const selectedMatricsCount = _.size(selectedBox);
 
-      if (
-        selectedKey === 'adSales' ||
-        selectedKey === 'adSpend' ||
-        selectedKey === 'adRoas'
-      ) {
-        if (selectedKey === 'adRoas') {
-          valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#`;
-        } else {
-          valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-        }
-        tooltipCurrent = renderTooltip(
-          'Recent',
-          '#FF5933',
-          currentLabel,
-          currencySymbol,
-          null,
-          null,
-        );
-        if (selectedDF !== 'custom') {
-          tooltipPrevious = renderTooltip(
-            'Previous',
-            '#BFC5D2',
-            previousLabel,
+    if (selectedMatricsFlag) {
+      // create object of 2nd value axis
+      const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
+      valueAxis2.renderer.grid.template.disabled = true;
+      valueAxis2.cursorTooltipEnabled = false;
+      valueAxis2.numberFormatter = new am4core.NumberFormatter();
+      valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      valueAxis2.numberFormatter.bigNumberPrefixes = [
+        { number: 1e3, suffix: 'K' },
+        { number: 1e6, suffix: 'M' },
+        { number: 1e9, suffix: 'B' },
+      ];
+      valueAxis2.numberFormatter.smallNumberPrefixes = [];
+
+      const snapToSeries = [];
+      let tooltipValue = '';
+      const dashLine = ``;
+
+      // loop for genearate tooltip
+      _.keys(selectedBox).map((item) => {
+        const currentLabel = `${item}CurrentLabel`;
+        const previousLabel = `${item}PreviousLabel`;
+        const colorCode = selectedMatricsCount === 1 ? '#FF5933' : colorSet[item];
+        tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
+        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            'Recent',
+            colorCode,
+            currentLabel,
             currencySymbol,
             null,
             null,
-          );
-        }
-      } else if (
-        selectedKey === 'adConversion' ||
-        selectedKey === 'adClickRate' ||
-        selectedKey === 'adCos'
-      ) {
-        valueAxis.numberFormatter.numberFormat = `#.#'%'`;
-        tooltipCurrent = renderTooltip(
-          'Recent',
-          '#FF5933',
-          currentLabel,
-          null,
-          '%',
-          null,
-        );
-        if (selectedDF !== 'custom') {
-          tooltipPrevious = renderTooltip(
-            'Previous',
-            '#BFC5D2',
-            previousLabel,
+          )}`;
+          if (selectedDF !== 'custom') {
+            tooltipValue = `${tooltipValue} ${renderTooltip(
+              'Previous',
+              colorCode,
+              previousLabel,
+              currencySymbol,
+              null,
+              null,
+            )}`;
+          }
+        } else if (
+          item === 'adConversion' ||
+          item === 'adClickRate' ||
+          item === 'adCos'
+        ) {
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            'Recent',
+            colorCode,
+            currentLabel,
             null,
             '%',
             null,
-          );
-        }
-      } else if (selectedKey === 'impressions') {
-        valueAxis.numberFormatter.numberFormat = `#.#a`;
-        tooltipCurrent = renderTooltip(
-          'Recent',
-          '#FF5933',
-          currentLabel,
-          null,
-          null,
-          '#.#a',
-        );
-        if (selectedDF !== 'custom') {
-          tooltipPrevious = renderTooltip(
-            'Previous',
-            '#BFC5D2',
-            previousLabel,
+          )}`;
+          if (selectedDF !== 'custom') {
+            tooltipValue = `${tooltipValue} ${renderTooltip(
+              'Previous',
+              colorCode,
+              previousLabel,
+              null,
+              '%',
+              null,
+            )}`;
+          }
+        } else if (item === 'impressions') {
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            'Recent',
+            colorCode,
+            currentLabel,
             null,
             null,
             '#.#a',
+          )}`;
+          if (selectedDF !== 'custom') {
+            tooltipValue = `${tooltipValue} ${renderTooltip(
+              'Previous',
+              colorCode,
+              previousLabel,
+              null,
+              null,
+              '#.#a',
+            )}`;
+          }
+        } else {
+          tooltipValue = `${tooltipValue} ${renderTooltip(
+            'Recent',
+            colorCode,
+            currentLabel,
+            null,
+            null,
+            null,
+          )}`;
+          if (selectedDF !== 'custom') {
+            tooltipValue = `${tooltipValue} ${renderTooltip(
+              'Previous',
+              colorCode,
+              previousLabel,
+              null,
+              null,
+              null,
+            )}`;
+          }
+        }
+        return '';
+      });
+
+      _.keys(selectedBox).map((item, index) => {
+        const series = chart.current.series.push(new am4charts.LineSeries());
+        const series2 = chart.current.series.push(new am4charts.LineSeries());
+        const currentValue = `${item}Current`;
+        const previousValue = `${item}Previous`;
+        const seriesName = `${item}Series`;
+        const colorCode = selectedMatricsCount === 1 ? '#FF5933' : colorSet[item];
+
+        if (index === 0) {
+          series.yAxis = valueAxis;
+          series2.yAxis = valueAxis;
+          valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+        }
+        if (index === 1) {
+          series.yAxis = valueAxis2;
+          series2.yAxis = valueAxis2;
+          valueAxis2.renderer.opposite = true;
+          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
           );
         }
-      } else {
-        valueAxis.numberFormatter.numberFormat = `#.##a`;
-        tooltipCurrent = renderTooltip(
-          'Recent',
-          '#FF5933',
-          currentLabel,
-          null,
-          null,
-          null,
-        );
-        if (selectedDF !== 'custom') {
-          tooltipPrevious = renderTooltip(
-            'Previous',
-            '#BFC5D2',
-            previousLabel,
-            null,
-            null,
-            null,
-          );
-        }
-      }
 
-      // Create series for previous data
-      const series = chart.current.series.push(new am4charts.LineSeries());
-      series.dataFields.valueY = previousValue;
-      series.name = previousValue;
-      series.dataFields.dateX = 'date';
-      series.strokeWidth = 2;
-      series.stroke = am4core.color('#BFC5D2');
-      series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
-      series.fill = am4core.color('#2e384d');
+        series.dataFields.valueY = currentValue;
+        series.dataFields.dateX = 'date';
+        series.name = seriesName;
+        series.strokeWidth = 2;
+        series.tooltipHTML = `${tooltipValue}`;
+        series.stroke = am4core.color(colorCode);
+        series.fill = am4core.color('#2e384d');
 
-      series.propertyFields.strokeDasharray = dashLine;
+        const circleBullet = series.bullets.push(new am4charts.CircleBullet());
+        circleBullet.circle.fill = am4core.color(colorCode);
+        circleBullet.circle.strokeWidth = 1;
+        circleBullet.circle.radius = 5;
 
-      // add bullet for
-      const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
-      circleBullet2.circle.fill = am4core.color('#BFC5D2');
-      circleBullet2.circle.strokeWidth = 1;
-      circleBullet2.circle.radius = 3;
+        series2.dataFields.valueY = previousValue;
+        series2.name = previousValue;
+        series2.dataFields.dateX = 'date';
+        series2.strokeWidth = 2;
+        series2.stroke = am4core.color(colorCode);
+        series2.tooltipHTML = `${tooltipValue}`;
+        series2.fill = am4core.color('#2e384d');
+        series2.strokeDasharray = '8,4';
+        series2.propertyFields.strokeDasharray = dashLine;
 
-      // circleBullet2.fillOpacity = 0;
-      // circleBullet2.strokeOpacity = 0;
-      // var bulletState = circleBullet2.states.create('hover');
-      // bulletState.properties.fillOpacity = 1;
-      // bulletState.properties.strokeOpacity = 1;
+        const bullet = series2.bullets.push(new am4charts.Bullet());
+        const square = bullet.createChild(am4core.Rectangle);
+        square.fill = am4core.color(colorCode);
+        square.width = 8;
+        square.height = 8;
+        square.horizontalCenter = 'middle';
+        square.verticalCenter = 'middle';
 
-      // series for current data
-      const series2 = chart.current.series.push(new am4charts.LineSeries());
-      series2.dataFields.valueY = currentValue;
-      series2.dataFields.dateX = 'date';
-      series2.name = currentValue;
-      series2.strokeWidth = 2;
-      series2.tooltipHTML = `${tooltipDate}${tooltipCurrent} ${tooltipPrevious}`;
-      series2.stroke = am4core.color('#FF5933');
-      series2.fill = am4core.color('#2e384d');
+        snapToSeries.push(series);
+        snapToSeries.push(series2);
+        return '';
+      });
 
-      const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
-      circleBullet.circle.fill = am4core.color('#FF5933');
-      circleBullet.circle.strokeWidth = 1;
-      circleBullet.circle.radius = 3;
-      // circleBullet.fillOpacity = 0;
-      // circleBullet.strokeOpacity = 0;
-      // var bulletState2 = circleBullet.states.create('hover');
-      // bulletState2.properties.fillOpacity = 1;
-      // bulletState2.properties.strokeOpacity = 1;
-
-      chart.current.cursor.snapToSeries = [series, series2];
+      chart.current.cursor.snapToSeries = snapToSeries;
     } else {
       // else part- for multiple metrics selected
 
@@ -402,14 +422,14 @@ export default function AdPerformanceChart({
         series.dataFields.dateX = 'date';
         series.name = seriesName;
         series.strokeWidth = 2;
-        series.tooltipHTML = `${tooltipDate}${tooltipValue}`;
+        series.tooltipHTML = `${tooltipValue}`;
         series.stroke = am4core.color(colorSet[item]);
         series.fill = am4core.color('#2e384d');
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
         circleBullet.circle.fill = am4core.color(colorSet[item]);
         circleBullet.circle.strokeWidth = 1;
-        circleBullet.circle.radius = 3;
+        circleBullet.circle.radius = 5;
 
         snapToSeries.push(series);
         return '';
@@ -417,7 +437,6 @@ export default function AdPerformanceChart({
 
       chart.current.cursor.snapToSeries = snapToSeries;
     }
-
     return () => chart.current && chart.current.dispose();
   }, [chartId, chartData, currencySymbol, selectedBox, selectedDF]);
 

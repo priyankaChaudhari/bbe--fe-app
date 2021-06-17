@@ -1323,19 +1323,31 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const renderAdGroupBy = () => {
     return (
       <>
-        {_.size(selectedAdBox) === 1 ? (
+        {_.size(selectedAdBox) <= 2 ? (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
               <li>
                 <div className="weeks">
-                  <span className="orange block" />
+                  <span
+                    className={
+                      _.size(selectedAdBox) === 1
+                        ? 'orange circle'
+                        : 'darkGray circle'
+                    }
+                  />
                   <span>Recent</span>
                 </div>
               </li>
               {selectedAdDF !== 'custom' ? (
                 <li>
                   <div className="weeks">
-                    <span className="gray block" />
+                    <span
+                      className={
+                        _.size(selectedAdBox) === 1
+                          ? 'orange block'
+                          : 'darkGray block'
+                      }
+                    />
                     <span>Previous</span>
                   </div>
                 </li>

@@ -697,16 +697,29 @@ export const WhiteCard = styled.div`
 
           .block {
             border-radius: 2px;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+          }
+
+          .circle {
+            border-radius: 7px;
+            width: 12px;
+            height: 12px;
             margin-right: 6px;
           }
           .orange {
             background: ${Theme.baseColor};
           }
+
+          .darkGray{
+            background: ${Theme.gray35};
+            
+          }
           .gray {
             background: ${Theme.gray25};
           }
+
           .black {
             background: ${Theme.black};
           }
