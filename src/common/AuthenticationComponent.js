@@ -29,6 +29,7 @@ import {
   PATH_CHOOSE_BRAND_DELEGATE,
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
+  PATH_BRAND_ASSET_PREVIEW,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -51,6 +52,7 @@ import {
   BrandAssetSummary,
   BrandAssetUpload,
   DelegationUpload,
+  BrandAssetsPreview,
 } from '../components/BrandAssetGathering';
 
 export default function AuthenticationComponent() {
@@ -162,6 +164,10 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_BRAND_ASSET_SUMMARY}
             component={BrandAssetSummary}
+          />
+          <Route
+            path={PATH_BRAND_ASSET_PREVIEW}
+            component={BrandAssetsPreview}
           />
           <Route component={PageNotFound} />
 

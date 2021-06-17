@@ -49,6 +49,8 @@ export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;
 export const PATH_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/brand-asset/:brandId`;
 export const PATH_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/brand-summary/:brandId`;
+export const PATH_BRAND_ASSET_PREVIEW = `${PATH_CUSTOMER_DETAILS}/brand-preview`;
+
 export const PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-choose-delegate/:brandId`;
 export const PATH_UNAUTHORIZED_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/assigned-brand-asset/:brandId`;
 export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/assigned-brand-summary/:brandId`;

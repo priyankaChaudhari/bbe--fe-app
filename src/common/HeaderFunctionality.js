@@ -46,6 +46,11 @@ const HeaderDownloadFuntionality = styled.div`
         border: 1px solid ${Theme.gray4};
         margin: 0 18px;
       }
+      .assets-trash-icon {
+        vertical-align: bottom;
+        right: 21px;
+        width: 20px;
+      }
     }
   }
   @media only screen and (max-width: 767px) {

@@ -88,6 +88,7 @@ export default function Statement({
       : formData && formData[key];
   };
   // style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"
+
   const showRevTable = () => {
     if (
       formData &&

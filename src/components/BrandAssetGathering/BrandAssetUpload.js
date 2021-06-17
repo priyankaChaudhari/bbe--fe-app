@@ -13,6 +13,8 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
+import Modal from 'react-modal';
+
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
@@ -41,6 +43,7 @@ import {
   HeaderDownloadFuntionality,
   PageLoader,
   UnauthorizedHeader,
+  ModalBox,
 } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -58,6 +61,7 @@ import {
   getBrandAssetsSummary,
   updateBrandAssetStep,
 } from '../../api/BrandAssestsApi';
+import BrandAssetsPreview from './BrandAssetsPreview';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -67,6 +71,21 @@ const viewOptions = [
   { value: 'additional-brand-material', label: 'Additional Brand Material' },
 ];
 
+const customStyles = {
+  content: {
+    // top: '0',
+    // left: '0',
+    // right: 'auto',
+    // bottom: 'auto',
+    maxWidth: '100% ',
+    width: '100% ',
+    height: '100%',
+    inset: '0px',
+    // overlay: ' {zIndex: 1000}',
+    // marginRight: '-50%',
+    // transform: 'translate(-50%, -50%)',
+  },
+};
 export default function BrandAssetUpload() {
   const history = useHistory();
   const { id, brandId } = useParams();
@@ -78,6 +97,12 @@ export default function BrandAssetUpload() {
   const [brandAssetData, setBrandAssetData] = useState([]);
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [noImages, setNoImages] = useState(false);
+  const [showAssetPreview, setShowAssetPreview] = useState({
+    selectedFile: null,
+    show: false,
+    documents: documentData,
+    index: 0,
+  });
 
   const [uploadCount, setUploadCount] = useState({
     'brand-logo': '0 files uploaded',
@@ -420,7 +445,7 @@ export default function BrandAssetUpload() {
 
         {documentData &&
           documentData.length > 0 &&
-          documentData.map((file) => (
+          documentData.map((file, i) => (
             <li key={file.id}>
               <CheckBox className="selected-img mb-3">
                 <label
@@ -434,7 +459,16 @@ export default function BrandAssetUpload() {
                       data={file && file.presigned_url}
                       type={file && file.mime_type}
                       width="250"
-                      height="200">
+                      height="200"
+                      role="presentation"
+                      onClick={() =>
+                        setShowAssetPreview({
+                          selectedFile: file,
+                          show: true,
+                          documents: documentData,
+                          index: i,
+                        })
+                      }>
                       <div className="unsupport-file-name">
                         <a
                           className="file-path"
@@ -444,15 +478,22 @@ export default function BrandAssetUpload() {
                       </div>
                     </object>
 
-                    {/*
-                    <embed
+                    {/* <embed
                       type={file && file.mime_type}
                       src={file && file.presigned_url}
                       className="image-thumbnail"
                       width="250"
                       height="200"
-                    />
-*/}
+                      onClick={() =>
+                        setShowAssetPreview({
+                          selectedFile: file,
+                          show: true,
+                          documents: documentData,
+                          index: i,
+                        })
+                      }
+                    /> */}
+
                     {/* <img
                       src={file && file.presigned_url}
                       className="image-thumbnail"
@@ -894,6 +935,31 @@ export default function BrandAssetUpload() {
           </div>
         </div>
       </BrandAssetFooter>
+
+      <Modal
+        isOpen={showAssetPreview && showAssetPreview.show}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowModal(false);
+            removeParams('step');
+            setShowEditor(false);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <BrandAssetsPreview
+            showAssetPreview={showAssetPreview}
+            setShowAssetPreview={setShowAssetPreview}
+            documentData={documentData}
+          />
+        </ModalBox>
+      </Modal>
     </>
   );
 }
