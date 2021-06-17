@@ -711,6 +711,30 @@ export const WhiteCard = styled.div`
           .orange {
             background: ${Theme.baseColor};
           }
+          .adSales { 
+            background:#0045B4
+          };
+          .adSpend { 
+            background: #8C54FF
+          };
+          .adConversion { 
+            background: #30A8BD
+          };
+          .impressions { 
+            background: #D6A307
+          };
+          .adCos { 
+            background: #E05D37
+          };
+          .adRoas { 
+            background: #89A43C
+          };
+          .adClicks { 
+            background: #C84EC6
+          };
+          .adClickRate { 
+            background: #A04848
+          };
 
           .darkGray{
             background: ${Theme.gray35};

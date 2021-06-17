@@ -131,7 +131,6 @@ export default function AdPerformanceChart({
     }
 
     const selectedMatricsFlag = _.size(selectedBox) <= 2;
-    const selectedMatricsCount = _.size(selectedBox);
 
     if (selectedMatricsFlag) {
       // create object of 2nd value axis
@@ -155,7 +154,7 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item) => {
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
-        const colorCode = selectedMatricsCount === 1 ? '#FF5933' : colorSet[item];
+        const colorCode = colorSet[item];
         tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
         if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -247,7 +246,7 @@ export default function AdPerformanceChart({
         const currentValue = `${item}Current`;
         const previousValue = `${item}Previous`;
         const seriesName = `${item}Series`;
-        const colorCode = selectedMatricsCount === 1 ? '#FF5933' : colorSet[item];
+        const colorCode = colorSet[item];
 
         if (index === 0) {
           series.yAxis = valueAxis;

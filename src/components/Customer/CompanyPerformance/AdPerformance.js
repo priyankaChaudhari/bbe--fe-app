@@ -835,11 +835,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const setAdBoxClass = (name, classValue) => {
     let selectedClass = '';
     if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
-      if (_.size(selectedAdBox) === 1) {
-        selectedClass = 'order-chart-box active fix-height';
-      } else {
-        selectedClass = `order-chart-box ${classValue} fix-height`;
-      }
+      // if (_.size(selectedAdBox) === 1) {
+      //   selectedClass = 'order-chart-box active fix-height';
+      // } else {
+      selectedClass = `order-chart-box ${classValue} fix-height`;
+      // }
     } else if (_.size(selectedAdBox) === 4) {
       selectedClass = 'order-chart-box fix-height disabled';
     } else {
@@ -1331,10 +1331,11 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                   <span
                     className={
                       _.size(selectedAdBox) === 1
-                        ? 'orange circle'
+                        ? `${_.keys(selectedAdBox)[0]} circle`
                         : 'darkGray circle'
                     }
                   />
+
                   <span>Recent</span>
                 </div>
               </li>
@@ -1344,7 +1345,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     <span
                       className={
                         _.size(selectedAdBox) === 1
-                          ? 'orange block'
+                          ? `${_.keys(selectedAdBox)[0]} block`
                           : 'darkGray block'
                       }
                     />
