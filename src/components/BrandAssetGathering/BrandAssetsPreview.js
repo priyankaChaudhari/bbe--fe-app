@@ -14,6 +14,7 @@ function BrandAssetsPreview({
   showAssetPreview,
   setShowAssetPreview,
   documentData,
+  setShowConfirmationModal,
 }) {
   const showImg = (type) => {
     if (type === 'prev' && showAssetPreview.index > 0) {
@@ -45,7 +46,6 @@ function BrandAssetsPreview({
       index: 0,
     });
   };
-
   return (
     <div className="on-boarding-container">
       <HeaderDownloadFuntionality>
@@ -62,14 +62,16 @@ function BrandAssetsPreview({
                 <li>
                   {' '}
                   <img className="header-icon" src={ChatBoxIcon} alt="check" />
-                  Comments (0)
+                  <span className="cursor">Comments (0)</span>
                 </li>
                 <li>
                   <span className="divide-arrow" />
                 </li>
-                <li>
+                <li
+                  onClick={() => setShowConfirmationModal(true)}
+                  role="presentation">
                   <img className="header-icon" src={TrashIcons} alt="check" />
-                  <span>Delete</span>
+                  <span className="cursor">Delete</span>
                 </li>
                 <li>
                   <span className="divide-arrow hide-mobile" />
@@ -90,12 +92,15 @@ function BrandAssetsPreview({
         </div>
       </HeaderDownloadFuntionality>
       <BrandAssetsPreviewBody>
-        <div className="pervious-img btn">
-          <div
-            className="rectangle"
-            onClick={() => showImg('prev')}
-            disabled={showAssetPreview.index > 0}
-            role="presentation">
+        <div
+          className={
+            showAssetPreview.index === 0
+              ? 'pervious-img btn disabled'
+              : 'pervious-img btn'
+          }
+          role="presentation"
+          onClick={() => showImg('prev')}>
+          <div className="rectangle" role="presentation">
             <div className="arrow-icon pervious">
               {' '}
               <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
@@ -131,11 +136,17 @@ function BrandAssetsPreview({
             height="200"
           />
         </div>
-        <div className="next-img btn">
-          <div
-            className="rectangle"
-            onClick={() => showImg('next')}
-            role="presentation">
+        <div
+          className={
+            showAssetPreview.index ===
+            (showAssetPreview.documents &&
+              showAssetPreview.documents.length - 1)
+              ? 'next-img btn disabled'
+              : 'next-img btn'
+          }
+          role="presentation"
+          onClick={() => showImg('next')}>
+          <div className="rectangle" role="presentation">
             <div className="arrow-icon">
               {' '}
               <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
@@ -153,6 +164,7 @@ BrandAssetsPreview.defaultProps = {
   showAssetPreview: {},
   setShowAssetPreview: () => {},
   documentData: [],
+  setShowConfirmationModal: () => {},
 };
 
 BrandAssetsPreview.propTypes = {
@@ -168,6 +180,7 @@ BrandAssetsPreview.propTypes = {
     show: PropTypes.bool,
     documents: PropTypes.arrayOf(PropTypes.object),
   }),
+  setShowConfirmationModal: PropTypes.func,
 };
 
 const BrandAssetsPreviewBody = styled.div`

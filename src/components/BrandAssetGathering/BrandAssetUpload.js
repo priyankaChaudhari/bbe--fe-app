@@ -73,30 +73,41 @@ const viewOptions = [
 
 const customStyles = {
   content: {
-    // top: '0',
-    // left: '0',
-    // right: 'auto',
-    // bottom: 'auto',
     maxWidth: '100% ',
     width: '100% ',
     height: '100%',
     inset: '0px',
-    // overlay: ' {zIndex: 1000}',
-    // marginRight: '-50%',
-    // transform: 'translate(-50%, -50%)',
   },
 };
+
+const customStylesForAlert = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '474px ',
+    width: '100% ',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
 export default function BrandAssetUpload() {
   const history = useHistory();
   const { id, brandId } = useParams();
   const params = queryString.parse(history.location.search);
   const [selectedStep, setSelectedStep] = useState(null);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [isLoadingDocument, setIsLoadingDocument] = useState(false);
   const [documentData, setDocumentData] = useState([]);
   const [showDeleteMsg, setShowDeleteMsg] = useState(false);
   const [brandAssetData, setBrandAssetData] = useState([]);
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [noImages, setNoImages] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
   const [showAssetPreview, setShowAssetPreview] = useState({
     selectedFile: null,
     show: false,
@@ -121,11 +132,61 @@ export default function BrandAssetUpload() {
   };
   const selectedFiles = [];
 
+  const setPreviewImageData = (response) => {
+    if (showAssetPreview.selectedFile && response) {
+      // for first element
+      if (showAssetPreview.index === 0) {
+        setShowAssetPreview({
+          selectedFile: response[showAssetPreview.index],
+          show: true,
+          documents: response,
+          index: showAssetPreview.index ? showAssetPreview.index : 0,
+        });
+      }
+
+      // for last element
+      if (showAssetPreview.index === response.length) {
+        setShowAssetPreview({
+          selectedFile: response[showAssetPreview.index - 1],
+          show: true,
+          documents: response,
+          index: showAssetPreview.index ? showAssetPreview.index - 1 : 0,
+        });
+      }
+
+      // for middle
+      if (
+        showAssetPreview.index >= 1 &&
+        showAssetPreview.index < response.length
+      ) {
+        setShowAssetPreview({
+          selectedFile: response[showAssetPreview.index],
+          show: true,
+          documents: response,
+          index: showAssetPreview.index ? showAssetPreview.index : 0,
+        });
+      }
+    }
+    // if docuemnt list is empty
+    if (!(response && response.length)) {
+      setShowAssetPreview({
+        selectedFile: null,
+        show: false,
+        documents: response,
+        index: 0,
+      });
+    }
+    setShowConfirmationModal(false);
+    setIsLoadingDocument(false);
+  };
+
   const getDocumentList = (docType) => {
     setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
+      setPreviewImageData(response);
+
       // const msg =
       //   response.length === 1
       //     ? '1 file uploaded'
@@ -331,7 +392,7 @@ export default function BrandAssetUpload() {
     },
   });
 
-  const redirectTo = (value) => {
+  const redirectTo = (value, step = null) => {
     setIsLoading({ loader: true, type: 'button' });
     updateBrandAssetStep(brandId, {
       steps: {
@@ -366,7 +427,9 @@ export default function BrandAssetUpload() {
                   ':brandId',
                   brandId,
                 ),
-            search: `step=${selectedStep && selectedStep.skip}`,
+            search: step
+              ? `step=${step}`
+              : `step=${selectedStep && selectedStep.skip}`,
           });
 
       setIsLoading({ loader: false, type: 'button' });
@@ -375,6 +438,7 @@ export default function BrandAssetUpload() {
 
   const deleteImage = (imageId) => {
     setIsLoading({ loader: true, type: 'page' });
+    setIsLoadingDocument(true);
     deleteDocument(imageId).then((res) => {
       if (res && res.status === 204) {
         getDocumentList(selectedStep && selectedStep.key);
@@ -400,7 +464,7 @@ export default function BrandAssetUpload() {
       documentData.length &&
       (params && params.step) !== item.url
     )
-      redirectTo('completed');
+      redirectTo('completed', item.url);
     else
       history.push({
         pathname: history.location.pathname.includes('/assigned-brand-asset/')
@@ -961,7 +1025,50 @@ export default function BrandAssetUpload() {
             showAssetPreview={showAssetPreview}
             setShowAssetPreview={setShowAssetPreview}
             documentData={documentData}
+            setShowConfirmationModal={setShowConfirmationModal}
           />
+        </ModalBox>
+      </Modal>
+
+      <Modal
+        isOpen={showConfirmationModal}
+        style={customStylesForAlert}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <ModalBox>
+          <div className="modal-body">
+            <div className="alert-msg ">
+              <span>Are you sure you want to delete this asset?</span>
+            </div>
+            <div className="text-center ">
+              <Button
+                onClick={() => {
+                  deleteImage(
+                    showAssetPreview &&
+                      showAssetPreview.selectedFile &&
+                      showAssetPreview.selectedFile.id,
+                  );
+                }}
+                type="button"
+                className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                {isLoadingDocument ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Yes'
+                )}
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowConfirmationModal(false);
+                }}
+                type="button"
+                className=" btn-transparent w-50 on-boarding ">
+                No
+              </Button>
+
+              {/* </Link> */}
+            </div>
+          </div>
         </ModalBox>
       </Modal>
     </>

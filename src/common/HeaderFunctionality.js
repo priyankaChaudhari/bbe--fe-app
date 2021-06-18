@@ -44,6 +44,7 @@ const HeaderDownloadFuntionality = styled.div`
         vertical-align: text-top;
         margin-right: 7px;
         width: 20px;
+        cursor: pointer;
       }
       .divide-arrow {
         background-color: ${Theme.gray4};
