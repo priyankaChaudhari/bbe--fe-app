@@ -140,17 +140,18 @@ export default function BrandAssetUpload() {
           selectedFile: response[showAssetPreview.index],
           show: true,
           documents: response,
-          index: showAssetPreview.index ? showAssetPreview.index : 0,
+          index: showAssetPreview.index,
         });
       }
 
       // for last element
       if (showAssetPreview.index === response.length) {
+        const index = showAssetPreview.index ? showAssetPreview.index - 1 : 0;
         setShowAssetPreview({
-          selectedFile: response[showAssetPreview.index - 1],
+          selectedFile: response[index],
           show: true,
           documents: response,
-          index: showAssetPreview.index ? showAssetPreview.index - 1 : 0,
+          index,
         });
       }
 
@@ -163,7 +164,7 @@ export default function BrandAssetUpload() {
           selectedFile: response[showAssetPreview.index],
           show: true,
           documents: response,
-          index: showAssetPreview.index ? showAssetPreview.index : 0,
+          index: showAssetPreview.index,
         });
       }
     }
@@ -560,11 +561,12 @@ export default function BrandAssetUpload() {
                         })
                       }>
                       <div className="unsupport-file-name">
-                        <a
+                        <div
                           className="file-path"
-                          href={file && file.presigned_url}>
+                          // href={file && file.presigned_url}
+                        >
                           {file && file.original_name}
-                        </a>
+                        </div>
                       </div>
                     </object>
 
@@ -1034,6 +1036,7 @@ export default function BrandAssetUpload() {
             setShowAssetPreview={setShowAssetPreview}
             documentData={documentData}
             setShowConfirmationModal={setShowConfirmationModal}
+            isLoading={isLoading}
           />
         </ModalBox>
       </Modal>
@@ -1042,6 +1045,7 @@ export default function BrandAssetUpload() {
         isOpen={showConfirmationModal}
         style={customStylesForAlert}
         ariaHideApp={false}
+        onRequestClose={() => setShowConfirmationModal(false)}
         contentLabel="Edit modal">
         <ModalBox>
           <div className="modal-body">
@@ -1071,7 +1075,7 @@ export default function BrandAssetUpload() {
                 }}
                 type="button"
                 className=" btn-transparent w-50 on-boarding ">
-                No
+                Cancel
               </Button>
 
               {/* </Link> */}

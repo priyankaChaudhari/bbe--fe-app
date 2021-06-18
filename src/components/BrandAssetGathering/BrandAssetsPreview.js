@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { HeaderDownloadFuntionality } from '../../common';
+import { HeaderDownloadFuntionality, PageLoader } from '../../common';
 import {
   CloseIcon,
   TrashIcons,
@@ -15,6 +15,7 @@ function BrandAssetsPreview({
   setShowAssetPreview,
   documentData,
   setShowConfirmationModal,
+  isLoading,
 }) {
   const showImg = (type) => {
     if (type === 'prev' && showAssetPreview.index > 0) {
@@ -46,115 +47,133 @@ function BrandAssetsPreview({
       index: 0,
     });
   };
-  return (
-    <div className="on-boarding-container">
-      <HeaderDownloadFuntionality>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-6 col-sm-12">
-              {' '}
-              {showAssetPreview &&
-                showAssetPreview.selectedFile &&
-                showAssetPreview.selectedFile.original_name}
-            </div>
-            <div className="col-md-6 col-sm-12">
-              <ul className="contract-download-nav">
-                <li>
-                  {' '}
-                  <img className="header-icon" src={ChatBoxIcon} alt="check" />
-                  <span className="cursor">Comments (0)</span>
-                </li>
-                <li>
-                  <span className="divide-arrow" />
-                </li>
-                <li
-                  onClick={() => setShowConfirmationModal(true)}
-                  role="presentation">
-                  <img className="header-icon" src={TrashIcons} alt="check" />
-                  <span className="cursor">Delete</span>
-                </li>
-                <li>
-                  <span className="divide-arrow hide-mobile" />
-                </li>
-                <li>
-                  <img
-                    width="18px"
-                    src={CloseIcon}
-                    alt="close"
-                    className="float-right cursor remove-cross-icon"
-                    role="presentation"
-                    onClick={() => closeModal()}
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </HeaderDownloadFuntionality>
-      <BrandAssetsPreviewBody>
-        <div
-          className={
-            showAssetPreview.index === 0
-              ? 'pervious-img btn disabled'
-              : 'pervious-img btn'
-          }
-          role="presentation"
-          onClick={() => showImg('prev')}>
-          <div className="rectangle" role="presentation">
-            <div className="arrow-icon pervious">
-              {' '}
-              <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-            </div>
-          </div>
 
-          {/* <img
-          // width="400px"
-          // height="400px"
-          className="col-10"
-          src={
-            showAssetPreview &&
-            showAssetPreview.selectedFile &&
-            showAssetPreview.selectedFile.presigned_url
-          }
-          alt="asset-preview"
-        /> */}
-        </div>
-        <div className="assetPreviewImg">
-          <embed
-            type={
-              showAssetPreview &&
-              showAssetPreview.selectedFile &&
-              showAssetPreview.selectedFile.mime_type
-            }
-            src={
-              showAssetPreview &&
-              showAssetPreview.selectedFile &&
-              showAssetPreview.selectedFile.presigned_url
-            }
-            className="image-thumbnail preview-img"
-            width="400"
-            height="200"
-          />
-        </div>
-        <div
-          className={
-            showAssetPreview.index ===
-            (showAssetPreview.documents &&
-              showAssetPreview.documents.length - 1)
-              ? 'next-img btn disabled'
-              : 'next-img btn'
-          }
-          role="presentation"
-          onClick={() => showImg('next')}>
-          <div className="rectangle" role="presentation">
-            <div className="arrow-icon">
-              {' '}
-              <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+  return (
+    <>
+      {isLoading.loader && isLoading.type === 'page' ? (
+        <PageLoader color="#FF5933" type="page" />
+      ) : (
+        <div className="on-boarding-container">
+          <HeaderDownloadFuntionality>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-6 col-sm-12">
+                  {' '}
+                  {showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.original_name}
+                </div>
+                <div className="col-md-6 col-sm-12">
+                  <ul className="contract-download-nav">
+                    <li>
+                      {' '}
+                      <img
+                        className="header-icon"
+                        src={ChatBoxIcon}
+                        alt="check"
+                      />
+                      <span className="cursor">Comments (0)</span>
+                    </li>
+                    <li>
+                      <span className="divide-arrow" />
+                    </li>
+                    <li
+                      onClick={() => setShowConfirmationModal(true)}
+                      role="presentation">
+                      <img
+                        className="header-icon"
+                        src={TrashIcons}
+                        alt="check"
+                      />
+                      <span className="cursor">Delete</span>
+                    </li>
+                    <li>
+                      <span className="divide-arrow hide-mobile" />
+                    </li>
+                    <li>
+                      <img
+                        width="18px"
+                        src={CloseIcon}
+                        alt="close"
+                        className="float-right cursor remove-cross-icon"
+                        role="presentation"
+                        onClick={() => closeModal()}
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
+          </HeaderDownloadFuntionality>
+          <BrandAssetsPreviewBody>
+            <div
+              className={
+                showAssetPreview.index === 0
+                  ? 'pervious-img btn disabled'
+                  : 'pervious-img btn'
+              }
+              role="presentation"
+              onClick={() => showImg('prev')}>
+              <div className="rectangle" role="presentation">
+                <div className="arrow-icon pervious">
+                  {' '}
+                  <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                </div>
+              </div>
+            </div>
+            <div className="assetPreviewImg">
+              <object
+                className="image-thumbnail"
+                data={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.presigned_url
+                }
+                type={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.mime_type
+                }
+                width="400"
+                height="200"
+                role="presentation">
+                <div className="unsupport-file-name">
+                  <div
+                    className="file-path"
+                    // href={
+                    //   showAssetPreview &&
+                    //   showAssetPreview.selectedFile &&
+                    //   showAssetPreview.selectedFile.presigned_url
+                    // }
+                  >
+                    {showAssetPreview &&
+                      showAssetPreview.selectedFile &&
+                      showAssetPreview.selectedFile.original_name}
+                  </div>
+                </div>
+              </object>
+            </div>
+            <div
+              className={
+                showAssetPreview.index ===
+                (showAssetPreview.documents &&
+                  showAssetPreview.documents.length - 1)
+                  ? 'next-img btn disabled'
+                  : 'next-img btn'
+              }
+              role="presentation"
+              onClick={() => showImg('next')}>
+              <div className="rectangle" role="presentation">
+                <div className="arrow-icon">
+                  {' '}
+                  <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                </div>
+              </div>
+            </div>
+          </BrandAssetsPreviewBody>
         </div>
-      </BrandAssetsPreviewBody>
-    </div>
+      )}
+    </>
   );
 }
 
@@ -165,6 +184,7 @@ BrandAssetsPreview.defaultProps = {
   setShowAssetPreview: () => {},
   documentData: [],
   setShowConfirmationModal: () => {},
+  isLoading: {},
 };
 
 BrandAssetsPreview.propTypes = {
@@ -181,6 +201,10 @@ BrandAssetsPreview.propTypes = {
     documents: PropTypes.arrayOf(PropTypes.object),
   }),
   setShowConfirmationModal: PropTypes.func,
+  isLoading: PropTypes.shape({
+    loader: PropTypes.string,
+    type: PropTypes.string,
+  }),
 };
 
 const BrandAssetsPreviewBody = styled.div`
