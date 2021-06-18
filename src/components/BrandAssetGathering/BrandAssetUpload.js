@@ -30,7 +30,7 @@ import {
   ArrowRightBlackIcon,
   GrayInfoIcon,
   LeftArrowIcon,
-  OrangeDownloadPdf,
+  //  OrangeDownloadPdf,
   CloseIcon,
   TrashIcons,
   RedTrashIcon,
@@ -40,7 +40,7 @@ import {
 import {
   Button,
   CheckBox,
-  HeaderDownloadFuntionality,
+  // HeaderDownloadFuntionality,
   PageLoader,
   UnauthorizedHeader,
   ModalBox,
@@ -247,6 +247,12 @@ export default function BrandAssetUpload() {
     });
   }, [params.step]);
 
+  $(document).on('click', (e) => {
+    if ($(e.target).closest('#hideDelete').length === 0) {
+      setShowDeleteMsg(false);
+    }
+  });
+
   const destructureselectedFiles = () => {
     const formData = [];
     for (const files of selectedFiles) {
@@ -401,7 +407,7 @@ export default function BrandAssetUpload() {
       },
       last_visited_step: selectedStep && selectedStep.skip,
     }).then((response) => {
-      if (response && response.status === 200)
+      if (response && response.status === 200) {
         if (selectedStep && selectedStep.skip === 'summary') {
           history.push(
             history.location.pathname.includes('/assigned-brand-asset/')
@@ -432,7 +438,8 @@ export default function BrandAssetUpload() {
               : `step=${selectedStep && selectedStep.skip}`,
           });
 
-      setIsLoading({ loader: false, type: 'button' });
+        setIsLoading({ loader: false, type: 'button' });
+      }
     });
   };
 
@@ -599,6 +606,7 @@ export default function BrandAssetUpload() {
                     )}
                     {showDeleteMsg[file.id] ? (
                       <div
+                        id="hideDelete"
                         className="delete-msg"
                         onClick={() => {
                           deleteImage(file.id);
@@ -611,7 +619,7 @@ export default function BrandAssetUpload() {
                           alt="check"
                         />
                         Confirm Delete
-                        <img
+                        {/* <img
                           className="confirm-delete-cross"
                           src={CloseIcon}
                           alt="check"
@@ -620,7 +628,7 @@ export default function BrandAssetUpload() {
                             setShowDeleteMsg({ [file.id]: false });
                           }}
                           role="presentation"
-                        />
+                        /> */}
                       </div>
                     ) : (
                       ''
