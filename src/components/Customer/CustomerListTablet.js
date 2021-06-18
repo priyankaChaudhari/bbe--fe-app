@@ -1091,9 +1091,9 @@ const CustomerListTabletView = styled.div`
     }
   }
   @media (max-width: 991px) {
-    padding-top: 145px;
+    padding-top: 195px;
   }
   @media (max-width: 767px) {
-    padding-top: 190px;
+    padding-top: 300px;
   }
 `;

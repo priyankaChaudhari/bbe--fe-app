@@ -1736,5 +1736,33 @@ text.cust-label-avg {
     transition: width 0.3s ease;
 }
 
+// .right-side-nav {
+//   list-style-type: none;
+//   padding: 0;
+//   margin: 0;
+
+//   li{
+//     display: inline-block;
+//     width: 32.3%;
+//     margin-right: 1%;
+
+//     &:last-child {
+//       margin-right: 0;
+//     }
+//   }
+//    @media only screen and (max-width: 991px)  {
+//     li{
+//       display: inline-block;
+//       width: 48%;
+//       margin-right: 1%;
+
+//       &:last-child {
+//         margin-right: 0;
+//       }
+//    }
+//   }
+// }
+
+
 `;
 export default bodyStyles;

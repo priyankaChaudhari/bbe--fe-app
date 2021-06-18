@@ -1431,7 +1431,7 @@ export default function NewCustomerList() {
           <div className="row">
             <div className="col-lg-2 col-12 ">
               {' '}
-              <p className="black-heading-title ml-3 pt-1"> Customers</p>
+              <p className="black-heading-title  pt-1"> Customers</p>
               <div className=" mb-3  d-lg-none d-block ">
                 <label
                   className="filter-slider mt-3 cursor "
@@ -1601,7 +1601,7 @@ export default function NewCustomerList() {
               </MobileLeftSidebar>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-12 col-8  mb-2 pr-md-2">
+            <div className="col-lg-4 col-md-6 col-12 col-8  mb-2 pr-md-2">
               <InputSearchWithRadius className="customer-list-header w-80">
                 <input
                   className=" form-control search-filter"
@@ -1645,12 +1645,18 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-            <div className="col-lg-2 col-md-3 col-6   mb-2 pl-md-0 pr-lg-2">
+
+            <div className="col-lg-2 col-md-6 col-12 pl-0 pr-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            <div className="col-lg-2 col-md-3  col-6   mb-2 pl-md-0">
+            <div className="col-lg-2 col-md-6 col-12   mb-2 pl-md-0 pr-lg-2 ">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
+            <div className="col-lg-2 col-md-6  col-12 pr-3  mb-2 pl-md-0 ">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('view')}
               </DropDownSelect>{' '}

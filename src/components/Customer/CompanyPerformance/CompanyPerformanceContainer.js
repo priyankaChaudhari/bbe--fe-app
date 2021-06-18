@@ -7,10 +7,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+// import Select from 'react-select';
 
 import PerformanceReport from './PerformanceReport';
 import AdPerformance from './AdPerformance';
 import Theme from '../../../theme/Theme';
+import { WhiteCard } from '../../../common';
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const history = useHistory();
@@ -25,20 +27,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
     <>
       <div className="col-lg-8 col-12">
         <Tab className="mb-3">
-          <ul className="tabs">
-            <li
-              className={viewComponent === 'salePerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('salePerformance')}
-              role="presentation">
-              Sales Performance
-            </li>
-            <li
-              className={viewComponent === 'adPerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('adPerformance')}
-              role="presentation">
-              Ad Performance
-            </li>
-          </ul>
+          <WhiteCard>
+            <ul className="tabs">
+              <li
+                className={viewComponent === 'salePerformance' ? 'active' : ''}
+                onClick={() => setViewComponent('salePerformance')}
+                role="presentation">
+                Sales Performance
+              </li>
+              <li
+                className={viewComponent === 'adPerformance' ? 'active' : ''}
+                onClick={() => setViewComponent('adPerformance')}
+                role="presentation">
+                Ad Performance
+              </li>
+            </ul>
+          </WhiteCard>
         </Tab>
         {viewComponent === 'salePerformance' ? (
           <PerformanceReport marketplaceChoices={marketplaceChoices} id={id} />
@@ -89,6 +93,14 @@ const Tab = styled.div`
       }
     }
   }
+  .view-data {
+    margin-right: 60px;
+    font-weight: normal;
+    color: ${Theme.black};
+    font-size: ${Theme.extraMedium};
+    font-family: ${Theme.baseFontFamily};
+  }
+
   @media only screen and (max-width: 767px) {
     .tabs {
       li {
@@ -96,5 +108,8 @@ const Tab = styled.div`
         margin-right: 25px;
       }
     }
+    .view-data {
+     text-align: center;
+    padding-bottom: 10px;
   }
 `;
