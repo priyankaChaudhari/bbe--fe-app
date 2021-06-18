@@ -109,16 +109,19 @@ function BrandAssetsPreview({
             <div
               className={
                 showAssetPreview.index === 0
-                  ? 'pervious-img btn disabled'
+                  ? 'pervious-img btn disabled-slider-btn'
                   : 'pervious-img btn'
               }
               role="presentation"
               onClick={() => showImg('prev')}>
-              <div className="rectangle" role="presentation">
-                <div className="arrow-icon pervious">
-                  {' '}
-                  <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                </div>
+              <div
+                className={
+                  showAssetPreview.index === 0
+                    ? 'arrow-icon pervious disabled-slider-btn'
+                    : 'arrow-icon pervious'
+                }>
+                {' '}
+                <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
               </div>
             </div>
             <div className="assetPreviewImg">
@@ -134,8 +137,8 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.mime_type
                 }
-                width="400"
-                height="200"
+                // width="400"
+                // height="200"
                 role="presentation">
                 <div className="unsupport-file-name">
                   <div
@@ -158,16 +161,21 @@ function BrandAssetsPreview({
                 showAssetPreview.index ===
                 (showAssetPreview.documents &&
                   showAssetPreview.documents.length - 1)
-                  ? 'next-img btn disabled'
+                  ? 'next-img btn disabled-slider-btn'
                   : 'next-img btn'
               }
               role="presentation"
               onClick={() => showImg('next')}>
-              <div className="rectangle" role="presentation">
-                <div className="arrow-icon">
-                  {' '}
-                  <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                </div>
+              <div
+                className={
+                  showAssetPreview.index ===
+                  (showAssetPreview.documents &&
+                    showAssetPreview.documents.length - 1)
+                    ? 'arrow-icon disabled-slider-btn'
+                    : 'arrow-icon'
+                }>
+                {' '}
+                <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
               </div>
             </div>
           </BrandAssetsPreviewBody>
@@ -216,12 +224,14 @@ const BrandAssetsPreviewBody = styled.div`
   .assetPreviewImg {
     position: absolute;
     top: 40%;
-
     background-color: ${Theme.gray8};
-    border-radius: 8px;
     width: 400px;
     height: 200px;
-    /* position: relative; */
+
+    .image-thumbnail {
+      width: 400px;
+      height: 200px;
+    }
 
     .unsupport-file-name {
       padding: 80px 0;
@@ -262,6 +272,60 @@ const BrandAssetsPreviewBody = styled.div`
       &.pervious {
         transform: rotate(180deg);
         margin: 8px 0px 0px 18px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .assetPreviewImg {
+      max-width: 200px;
+      height: 100px;
+      top: 45%;
+      .image-thumbnail {
+        max-width: 200px;
+        height: 100px;
+      }
+    }
+    .btn {
+      &.pervious-img {
+        left: 15px;
+      }
+      &.next-img {
+        right: 15px;
+      }
+      .arrow-icon {
+        width: 15px;
+        margin: 13px 0px 0px 13px;
+        vertical-align: bottom;
+        top: 5px;
+        &.pervious {
+          transform: rotate(180deg);
+          margin: 8px 0px 0px 18px;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 450px) {
+    .assetPreviewImg {
+      max-width: 170px;
+      height: 100px;
+      top: 45%;
+      left: 24%;
+      .image-thumbnail {
+        max-width: 170px;
+        height: 100px;
+      }
+    }
+    .btn {
+      .arrow-icon {
+        width: 15px;
+        margin: 13px 0px 0px 13px;
+        vertical-align: bottom;
+        top: 5px;
+        &.pervious {
+          transform: rotate(180deg);
+          margin: 8px 0px 0px 18px;
+        }
       }
     }
   }

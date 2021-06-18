@@ -760,7 +760,7 @@ button:disabled {
   }
 
   @media only screen and (max-width: 610px) {
-    width: 90% !important;
+    // width: 90% !important;
     overflow: hidden;
 
     .modal-body {
@@ -1239,6 +1239,11 @@ fieldset {
   opacity: 0.2;
   cursor: not-allowed !important;
   pointer-events: none !important;
+}
+
+.disabled-slider-btn {
+   opacity: 0.4;
+  cursor: not-allowed !important;
 }
 
 .DraftEditor-editorContainer {
