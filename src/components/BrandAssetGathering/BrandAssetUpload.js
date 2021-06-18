@@ -1285,7 +1285,7 @@ const CheckSelectImage = styled.div`
     border-radius: 8px;
   }
   .unsupport-file-name {
-    padding-top: 80px;
+    padding: 80px 0;
     color: ${Theme.black};
     white-space: nowrap;
     overflow: hidden;

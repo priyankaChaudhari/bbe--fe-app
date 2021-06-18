@@ -216,7 +216,29 @@ const BrandAssetsPreviewBody = styled.div`
   .assetPreviewImg {
     position: absolute;
     top: 40%;
+
+    background-color: ${Theme.gray8};
+    border-radius: 8px;
+    width: 400px;
+    height: 200px;
+    /* position: relative; */
+
+    .unsupport-file-name {
+      padding: 80px 0;
+      color: ${Theme.black};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 145px;
+      margin: 0 auto;
+      text-align: center;
+
+      .file-path {
+        color: ${Theme.black};
+      }
+    }
   }
+
   .btn {
     background-color: ${Theme.white};
     border: 1px solid ${Theme.gray4};
