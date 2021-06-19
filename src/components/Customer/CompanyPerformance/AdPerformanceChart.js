@@ -134,21 +134,11 @@ export default function AdPerformanceChart({
 
     if (selectedMatricsFlag) {
       // create object of 2nd value axis
-      const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis2.renderer.grid.template.disabled = true;
-      valueAxis2.cursorTooltipEnabled = false;
-      valueAxis2.numberFormatter = new am4core.NumberFormatter();
-      valueAxis2.numberFormatter.numberFormat = `#.#a`;
-      valueAxis2.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis2.numberFormatter.smallNumberPrefixes = [];
-
+      let valueAxis2;
       const snapToSeries = [];
       let tooltipValue = '';
       const dashLine = ``;
+      let firstAxis = '';
 
       // loop for genearate tooltip
       _.keys(selectedBox).map((item) => {
@@ -252,14 +242,37 @@ export default function AdPerformanceChart({
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+          if (item === 'adSales' || item === 'adSpend') {
+            firstAxis = 'currency';
+          }
         }
         if (index === 1) {
-          series.yAxis = valueAxis2;
-          series2.yAxis = valueAxis2;
-          valueAxis2.renderer.opposite = true;
-          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
+          if (
+            firstAxis === 'currency' &&
+            (item === 'adSales' || item === 'adSpend')
+          ) {
+            series.yAxis = valueAxis;
+            series2.yAxis = valueAxis;
+          } else {
+            valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
+            valueAxis2.renderer.grid.template.disabled = true;
+            valueAxis2.cursorTooltipEnabled = false;
+            valueAxis2.numberFormatter = new am4core.NumberFormatter();
+            valueAxis2.numberFormatter.numberFormat = `#.#a`;
+            valueAxis2.numberFormatter.bigNumberPrefixes = [
+              { number: 1e3, suffix: 'K' },
+              { number: 1e6, suffix: 'M' },
+              { number: 1e9, suffix: 'B' },
+            ];
+            valueAxis2.numberFormatter.smallNumberPrefixes = [];
+
+            series.yAxis = valueAxis2;
+            series2.yAxis = valueAxis2;
+            valueAxis2.renderer.opposite = true;
+            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+          }
         }
 
         series.dataFields.valueY = currentValue;
@@ -303,6 +316,9 @@ export default function AdPerformanceChart({
       // else part- for multiple metrics selected
 
       // create object of 2nd value axis
+      let firstAxis = null;
+      let secondAxis = null;
+
       const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis2.renderer.grid.template.disabled = true;
       valueAxis2.cursorTooltipEnabled = false;
@@ -321,6 +337,12 @@ export default function AdPerformanceChart({
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
       valueAxis3.numberFormatter.numberFormat = `#.#a`;
+      valueAxis3.numberFormatter.bigNumberPrefixes = [
+        { number: 1e3, suffix: 'K' },
+        { number: 1e6, suffix: 'M' },
+        { number: 1e9, suffix: 'B' },
+      ];
+      valueAxis3.numberFormatter.smallNumberPrefixes = [];
 
       // create object of 4th value axis
       const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
@@ -328,6 +350,13 @@ export default function AdPerformanceChart({
       valueAxis4.cursorTooltipEnabled = false;
       valueAxis4.numberFormatter = new am4core.NumberFormatter();
       valueAxis4.numberFormatter.numberFormat = `#.#a`;
+      valueAxis4.numberFormatter.bigNumberPrefixes = [
+        { number: 1e3, suffix: 'K' },
+        { number: 1e6, suffix: 'M' },
+        { number: 1e9, suffix: 'B' },
+      ];
+      valueAxis4.numberFormatter.smallNumberPrefixes = [];
+
       const snapToSeries = [];
       let tooltipValue = '';
 
@@ -382,36 +411,92 @@ export default function AdPerformanceChart({
 
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
+
         if (index === 0) {
+          if (item === 'adSales' || item === 'adSpend') {
+            // console.log('index if');
+            firstAxis = 'currency';
+          } else {
+            // console.log('index else');
+            firstAxis = 'other';
+          }
           series.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-        }
-        if (index === 1) {
-          series.yAxis = valueAxis2;
-          valueAxis2.renderer.opposite = true;
-          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
-        } else if (index === 2) {
-          series.yAxis = valueAxis3;
-          valueAxis3.renderer.opposite = true;
-          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
-          valueAxis.renderer.line.strokeOpacity = 0;
-          valueAxis2.renderer.line.strokeOpacity = 0;
-          valueAxis3.renderer.line.strokeOpacity = 0;
-          valueAxis.renderer.labels.template.disabled = true;
-          valueAxis2.renderer.labels.template.disabled = true;
-          valueAxis3.renderer.labels.template.disabled = true;
-        }
-        if (index === 3) {
-          series.yAxis = valueAxis4;
-          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
-          valueAxis4.renderer.line.strokeOpacity = 0;
-          valueAxis4.renderer.labels.template.disabled = true;
+        } else if (item === 'adSales' || item === 'adSpend') {
+          if (firstAxis === 'currency') {
+            // console.log('if currency');
+            series.yAxis = valueAxis;
+          } else if (secondAxis === null || secondAxis === 'currency') {
+            // console.log('second axis null/currency');
+            series.yAxis = valueAxis2;
+            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            valueAxis2.renderer.opposite = true;
+            secondAxis = 'currency';
+          } else {
+            // console.log('second axis not null/currency');
+            series.yAxis = valueAxis3;
+            valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            valueAxis3.renderer.opposite = true;
+
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+          }
+        } else {
+          if (index === 1) {
+            // console.log('index last else 1');
+            series.yAxis = valueAxis2;
+            valueAxis2.renderer.opposite = true;
+            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            secondAxis = 'other';
+          } else if (index === 2) {
+            if (secondAxis === null) {
+              series.yAxis = valueAxis2;
+              valueAxis2.renderer.opposite = true;
+              valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+                item,
+              );
+            } else {
+              // console.log('index last else 2', secondAxis);
+              series.yAxis = valueAxis3;
+              valueAxis3.renderer.opposite = true;
+              valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+                item,
+              );
+              valueAxis.renderer.line.strokeOpacity = 0;
+              valueAxis2.renderer.line.strokeOpacity = 0;
+              valueAxis3.renderer.line.strokeOpacity = 0;
+              valueAxis.renderer.labels.template.disabled = true;
+              valueAxis2.renderer.labels.template.disabled = true;
+              valueAxis3.renderer.labels.template.disabled = true;
+            }
+          }
+          if (index === 3) {
+            // console.log('index last else 3');
+            series.yAxis = valueAxis4;
+            valueAxis4.renderer.opposite = true;
+            valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis4.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+            valueAxis4.renderer.labels.template.disabled = true;
+          }
         }
 
         const currentValue = `${item}Current`;
