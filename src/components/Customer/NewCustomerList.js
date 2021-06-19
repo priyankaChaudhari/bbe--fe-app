@@ -937,12 +937,33 @@ export default function NewCustomerList() {
     return '';
   };
 
-  const renderAdPerformanceDifference = (value, grayArrow = false) => {
+  const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
+    let flag = '';
+    let value = actualValue;
     if (value) {
-      if (value.toString().includes('-')) {
+      if (matrics === 'ACOS') {
+        if (value.toString().includes('-')) {
+          flag = 'green';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'red';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+      } else if (value.toString().includes('-')) {
+          flag = 'red';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'green';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+
+      if (flag === 'red') {
         return (
           <>
-            <br />
             <span
               className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
               {' '}
@@ -951,16 +972,13 @@ export default function NewCustomerList() {
                 src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
                 alt="arrow-up"
               />
-              {value
-                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
+              {value}
             </span>
           </>
         );
       }
       return (
         <>
-          <br />
           <div className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
             <img
               className="green-arrow"
@@ -968,7 +986,7 @@ export default function NewCustomerList() {
               width="14px"
               alt="arrow-up"
             />
-            {value ? `${value.toFixed(2)} %` : ''}
+            {value}
           </div>
         </>
       );
@@ -1255,6 +1273,8 @@ export default function NewCustomerList() {
                 item.ad_performace &&
                 item.ad_performace.difference_data &&
                 item.ad_performace.difference_data.ad_sales,
+              false,
+              'AdSales',
             )}
           </td>
 
@@ -1275,6 +1295,7 @@ export default function NewCustomerList() {
                   item.ad_performace.difference_data &&
                   item.ad_performace.difference_data.ad_spend,
                 true,
+                'AdSpend',
               )}
             </>
           </td>
@@ -1294,6 +1315,8 @@ export default function NewCustomerList() {
                   item.ad_performace &&
                   item.ad_performace.difference_data &&
                   item.ad_performace.difference_data.impressions,
+                false,
+                'AdImpressions',
               )}
             </>
           </td>
@@ -1311,6 +1334,8 @@ export default function NewCustomerList() {
                   item.ad_performace &&
                   item.ad_performace.difference_data &&
                   item.ad_performace.difference_data.acos,
+                false,
+                'ACOS',
               )}
             </>
           </td>

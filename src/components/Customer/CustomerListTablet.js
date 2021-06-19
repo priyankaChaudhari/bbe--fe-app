@@ -232,46 +232,62 @@ export default function CustomerListTablet({
     return '';
   };
 
-  const renderAdPerformanceDifference = (value, grayArrow = false) => {
+  const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
+    let flag = '';
+    let value = actualValue;
     if (value) {
-      if (value.toString().includes('-')) {
+      if (matrics === 'ACOS') {
+        if (value.toString().includes('-')) {
+          flag = 'green';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'red';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+      } else if (value.toString().includes('-')) {
+          flag = 'red';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'green';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+
+      if (flag === 'red') {
         return (
           <>
             <span
-              className={
-                grayArrow ? 'decrease-rate grey ml-1' : 'decrease-rate ml-1 '
-              }>
+              className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
               {' '}
               <img
                 className="red-arrow"
                 src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
                 alt="arrow-up"
               />
-              {value
-                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
+              {value}
             </span>
           </>
         );
       }
       return (
-        <span
-          className={
-            grayArrow ? 'increase-rate grey ml-1' : 'increase-rate ml-1 '
-          }>
-          <img
-            className="green-arrow"
-            src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
-            width="14px"
-            alt="arrow-up"
-          />
-          {value ? `${value.toFixed(2)} %` : ''}
-        </span>
+        <>
+          <div className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
+            <img
+              className="green-arrow"
+              src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
+              width="14px"
+              alt="arrow-up"
+            />
+            {value}
+          </div>
+        </>
       );
     }
     return '';
   };
-
   const renderCustomerDetails = (item) => {
     if (showPerformance) {
       return (
@@ -507,6 +523,8 @@ export default function CustomerListTablet({
                       item.ad_performace &&
                       item.ad_performace.difference_data &&
                       item.ad_performace.difference_data.ad_sales,
+                    false,
+                    'AdSales',
                   )}
                 </>
               </div>
@@ -530,6 +548,7 @@ export default function CustomerListTablet({
                       item.ad_performace.difference_data &&
                       item.ad_performace.difference_data.ad_spend,
                     true,
+                    'AdSpend',
                   )}
                 </>
               </div>
@@ -554,6 +573,8 @@ export default function CustomerListTablet({
                       item.ad_performace &&
                       item.ad_performace.difference_data &&
                       item.ad_performace.difference_data.impressions,
+                    false,
+                    'AdImpressions',
                   )}
                 </>
               </div>
@@ -574,6 +595,8 @@ export default function CustomerListTablet({
                       item.ad_performace &&
                       item.ad_performace.difference_data &&
                       item.ad_performace.difference_data.acos,
+                    false,
+                    'ACOS',
                   )}
                 </>
               </div>

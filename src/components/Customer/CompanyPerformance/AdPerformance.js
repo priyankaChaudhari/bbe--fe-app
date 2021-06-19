@@ -1168,14 +1168,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 : `vs 0.00%`}
             </div>
             {difference && difference.acos ? (
-              difference.acos >= 0 ? (
+              difference.acos < 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.acos}%
+                  {difference.acos.toString().replace('-', '')}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1184,7 +1184,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.acos.toString().replace('-', '')}%
+                  {difference.acos}%
                 </div>
               )
             ) : (

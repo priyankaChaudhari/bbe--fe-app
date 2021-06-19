@@ -251,9 +251,31 @@ export default function AdManagerDashboard() {
     adManagerCustomerList(currentPage, selectedValue.bgs, selectedValue);
   };
 
-  const renderAdPerformanceDifference = (value, grayArrow = false) => {
+  const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
+    let flag = '';
+    let value = actualValue;
     if (value) {
-      if (value.toString().includes('-')) {
+      if (matrics === 'ACOS') {
+        if (value.toString().includes('-')) {
+          flag = 'green';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'red';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+      } else if (value.toString().includes('-')) {
+          flag = 'red';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'green';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+
+      if (flag === 'red') {
         return (
           <>
             <span
@@ -264,9 +286,7 @@ export default function AdManagerDashboard() {
                 src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
                 alt="arrow-up"
               />
-              {value
-                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
+              {value}
             </span>
           </>
         );
@@ -280,7 +300,7 @@ export default function AdManagerDashboard() {
               width="14px"
               alt="arrow-up"
             />
-            {value ? `${value.toFixed(2)} %` : ''}
+            {value}
           </div>
         </>
       );
@@ -448,6 +468,8 @@ export default function AdManagerDashboard() {
                               item.ad_performace &&
                               item.ad_performace.difference_data &&
                               item.ad_performace.difference_data.ad_sales,
+                            false,
+                            'AdSales',
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -484,6 +506,7 @@ export default function AdManagerDashboard() {
                               item.ad_performace.difference_data &&
                               item.ad_performace.difference_data.ad_spend,
                             true,
+                            'AdSpend',
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -520,6 +543,8 @@ export default function AdManagerDashboard() {
                               item.ad_performace &&
                               item.ad_performace.difference_data &&
                               item.ad_performace.difference_data.impressions,
+                            false,
+                            'AdImpressions',
                           )}
                         </div>
                         <div className="col-6 text-right">
@@ -554,6 +579,8 @@ export default function AdManagerDashboard() {
                               item.ad_performace &&
                               item.ad_performace.difference_data &&
                               item.ad_performace.difference_data.acos,
+                            false,
+                            'ACOS',
                           )}
                         </div>
                         <div className="col-6 text-right">
