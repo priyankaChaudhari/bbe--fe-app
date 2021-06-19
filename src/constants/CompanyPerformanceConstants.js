@@ -2,7 +2,7 @@ export const dateOptions = [
   { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
   { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
   { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-  { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+  // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
   {
     value: 'custom',
     label: 'Custom Range',
