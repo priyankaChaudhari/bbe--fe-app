@@ -145,7 +145,7 @@ export default function AuthenticationComponent() {
             ''
           )}
 
-          {userInfo && userInfo.role === 'Ad Manager' ? (
+          {userInfo && userInfo.role === 'Sponsored Advertising Ad Manager' ? (
             <Route path={PATH_ADM_DASHBOARD} component={AdManagerDashboard} />
           ) : (
             ''

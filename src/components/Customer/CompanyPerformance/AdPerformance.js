@@ -29,7 +29,7 @@ import {
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
-// import { adResData, dspResData } from './DummyApiRes';
+import { dspResData } from './DummyApiRes';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -45,17 +45,22 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const [selectedAdDF, setSelectedAdDF] = useState('week');
   const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
+  const [selectedDspBox, setSelectedDspBox] = useState({
+    dspImpressions: true,
+  });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
-  const [difference, setDifference] = useState([]);
+  const [adDifference, setAdDifference] = useState([]);
   const [isApiCall, setIsApiCall] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
-  const [dspTotal, setDSPTotal] = useState({});
-
+  // const [dspTotal, setDSPTotal] = useState({});
+  const [dspCurrentTotal, setDspCurrentTotal] = useState([]);
+  const [dspPreviousTotal, setDspPreviousTotal] = useState([]);
+  const [dspDifference, setDspDifference] = useState([]);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [adState, setAdState] = useState([
@@ -275,9 +280,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       setAdPreviousTotal([]);
     }
     if (response.daily_facts && response.daily_facts.difference_data) {
-      setDifference(response.daily_facts.difference_data);
+      setAdDifference(response.daily_facts.difference_data);
     } else {
-      setDifference([]);
+      setAdDifference([]);
     }
 
     return tempData;
@@ -296,18 +301,126 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   const bindDSPResponseData = (response) => {
     const tempData = [];
 
+    // // filterout previous data in one temporary object.
+    // if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
+    //   response.dsp_spend.previous.forEach((item) => {
+    //     const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+    //     tempData.push({
+    //       DspPrevious: item.daily_dsp_spend_report,
+    //       previousDate,
+
+    //       DspPreviousLabel:
+    //         item.daily_dsp_spend_report !== null
+    //           ? item.daily_dsp_spend_report.toFixed(2)
+    //           : '0.00',
+    //     });
+    //   });
+    // }
+
+    // // filterout current data in one temporary object.
+    // if (response.dsp_spend.current && response.dsp_spend.current.length) {
+    //   response.dsp_spend.current.forEach((item, index) => {
+    //     const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+    //     // add the current data at same index of prevoius in temporary object
+    //     if (
+    //       response.dsp_spend.previous &&
+    //       index < response.dsp_spend.previous.length
+    //     ) {
+    //       tempData[index].date = currentReportDate;
+    //       tempData[index].DspCurrent = item.daily_dsp_spend_report;
+
+    //       tempData[index].DspCurrentLabel =
+    //         item.daily_dsp_spend_report !== null
+    //           ? item.daily_dsp_spend_report.toFixed(2)
+    //           : '0.00';
+
+    //       // to add the dotted line. we have to check null matrix and add the dummy number like 8
+    //       if (index > 0) {
+    //         tempData[index - 1].DspdashLength =
+    //           item.daily_dsp_spend_report === null ? 8 : null;
+    //       } else {
+    //         tempData[index].DspdashLength =
+    //           item.daily_dsp_spend_report === null ? 8 : null;
+    //       }
+    //     } else {
+    //       // if current data count is larger than previous count then
+    //       // generate separate key for current data and defien previou value null and previous label 0
+    //       tempData.push({
+    //         DspCurrent: item.daily_dsp_spend_report,
+    //         date: currentReportDate,
+    //         DspPrevious: null,
+
+    //         DspCurrentLabel:
+    //           item.daily_dsp_spend_report !== null
+    //             ? item.daily_dsp_spend_report.toFixed(2)
+    //             : '0.00',
+    //         DspPreviousLabel: '0.00',
+    //       });
+    //     }
+    //   });
+    // }
+    // // filterout the dsp current total, previous total, and diffrence
+    // if (response.dsp_spend) {
+    //   let dspTempData = {};
+    //   const dspCurrent =
+    //     response.dsp_spend &&
+    //     response.dsp_spend.current_sum &&
+    //     response.dsp_spend.current_sum.daily_dsp_spend_report;
+    //   const dspPrevious =
+    //     response.dsp_spend &&
+    //     response.dsp_spend.previous_sum &&
+    //     response.dsp_spend.previous_sum.daily_dsp_spend_report;
+    //   const dspDifference =
+    //     response.dsp_spend &&
+    //     response.dsp_spend.difference_data &&
+    //     response.dsp_spend.difference_data.daily_dsp_spend_report;
+
+    //   dspTempData = {
+    //     currentDspTodal: dspCurrent !== null ? dspCurrent : '0.00',
+    //     previousDspTodal: dspPrevious !== null ? dspPrevious : '0.00',
+    //     dspDifference,
+    //   };
+    //   setDSPTotal(dspTempData);
+    // } else {
+    //   setDSPTotal({});
+    // }
+
     // filterout previous data in one temporary object.
     if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
       response.dsp_spend.previous.forEach((item) => {
         const previousDate = dayjs(item.report_date).format('MMM D YYYY');
         tempData.push({
-          DspPrevious: item.daily_dsp_spend_report,
+          dspImpressionsPrevious: item.impressions,
+          dspSpendPrevious: item.dsp_spend,
+          dspTotalProductSalesPrevious: item.total_product_sales,
+          dspTotalRoas: item.total_roas,
+          dspTotalDpvrPrevious: item.total_dpvr,
+          dspTtlNewBrandPurchasesPrevious: item.ttl_new_brand_purchases,
+          dspProductSalesPrevious: item.product_sales,
+          dspRoasPrevious: item.roas,
           previousDate,
 
-          DspPreviousLabel:
-            item.daily_dsp_spend_report !== null
-              ? item.daily_dsp_spend_report.toFixed(2)
+          dspImpressionsPreviousLabel:
+            item.impressions !== null ? item.impressions.toFixed(2) : '0.00',
+          dspSpendPreviousLabel:
+            item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00',
+          dspTotalProductSalesPreviousLabel:
+            item.total_product_sales !== null
+              ? item.total_product_sales.toFixed(2)
               : '0.00',
+          dspTotalRoasLabel: item.total_roas !== null ? item.total_roas : '0',
+          dspTotalDpvrPreviousLabel:
+            item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
+          dspTtlNewBrandPurchasesPreviousLabel:
+            item.ttl_new_brand_purchases !== null
+              ? item.ttl_new_brand_purchases
+              : '0',
+          dspProductSalesPreviousLabel:
+            item.product_sales !== null
+              ? item.product_sales.toFixed(2)
+              : '0.00',
+          dspRoasPreviousLabel:
+            item.roas !== null ? item.roas.toFixed(2) : '0.00',
         });
       });
     }
@@ -315,6 +428,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     // filterout current data in one temporary object.
     if (response.dsp_spend.current && response.dsp_spend.current.length) {
       response.dsp_spend.current.forEach((item, index) => {
+        let indexNumber = index;
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         // add the current data at same index of prevoius in temporary object
         if (
@@ -322,62 +436,131 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           index < response.dsp_spend.previous.length
         ) {
           tempData[index].date = currentReportDate;
-          tempData[index].DspCurrent = item.daily_dsp_spend_report;
+          tempData[index].dspImpressionsCurrent = item.impressions;
+          tempData[index].dspSpendCurrent = item.dsp_spend;
+          tempData[index].dspTotalProductSalesCurrent =
+            item.total_product_sales;
+          tempData[index].dspTotalRoasCurrent = item.total_roas;
+          tempData[index].dspTotalDpvrCurrent = item.total_dpvr;
+          tempData[index].dspTtlNewBrandPurchasesCurrent =
+            item.ttl_new_brand_purchases;
+          tempData[index].dspProductSalesCurrent = item.product_sales;
+          tempData[index].dspRoasCurrent = item.roas;
 
-          tempData[index].DspCurrentLabel =
-            item.daily_dsp_spend_report !== null
-              ? item.daily_dsp_spend_report.toFixed(2)
+          tempData[index].dspImpressionsCurrentLabel =
+            item.impressions !== null ? item.impressions.toFixed(2) : '0.00';
+          tempData[index].dspSpendCurrentLabel =
+            item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00';
+          tempData[index].dspTotalProductSalesCurrentLabel =
+            item.total_product_sales !== null
+              ? item.total_product_sales.toFixed(2)
               : '0.00';
+          tempData[index].dspTotalRoasCurrentLabel =
+            item.total_roas !== null ? item.total_roas : '0';
+          tempData[index].dspTotalDpvrCurrentLabel =
+            item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00';
+          tempData[index].dspTtlNewBrandPurchasesCurrentLabel =
+            item.ttl_new_brand_purchases !== null
+              ? item.ttl_new_brand_purchases.toFixed(2)
+              : '0.00';
+          tempData[index].dspProductSalesCurrentLabel =
+            item.product_sales !== null ? item.product_sales : '0';
+          tempData[index].dspRoasCurrentLabel =
+            item.roas !== null ? item.roas.toFixed(2) : '0.00';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
           if (index > 0) {
-            tempData[index - 1].DspdashLength =
-              item.daily_dsp_spend_report === null ? 8 : null;
+            indexNumber = index - 1;
           } else {
-            tempData[index].DspdashLength =
-              item.daily_dsp_spend_report === null ? 8 : null;
+            indexNumber = index;
           }
+          tempData[indexNumber].dspImpressionsDashLength =
+            item.impressions === null ? 8 : null;
+          tempData[indexNumber].dspSpendDashLength =
+            item.dsp_spend === null ? 8 : null;
+          tempData[indexNumber].dspTotalProductSalesDashLength =
+            item.total_product_sales === null ? 8 : null;
+          tempData[indexNumber].dspTotalRoasDashLength =
+            item.total_roas === null ? 8 : null;
+          tempData[indexNumber].dspTotalDpvrDashLength =
+            item.total_dpvr === null ? 8 : null;
+          tempData[indexNumber].dspTtlNewBrandPurchasesDashLength =
+            item.ttl_new_brand_purchases === null ? 8 : null;
+          tempData[indexNumber].dspProductSalesDashLength =
+            item.product_sales === null ? 8 : null;
+          tempData[indexNumber].dspRoasDashLength =
+            item.roas === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
           tempData.push({
-            DspCurrent: item.daily_dsp_spend_report,
+            dspImpressionsCurrent: item.impressions,
+            dspSpendCurrent: item.dsp_spend,
+            dspTotalProductSalesCurrent: item.total_product_sales,
+            dspTotalRoasCurrent: item.total_roas,
+            dspTotalDpvrCurrent: item.total_dpvr,
+            dspTtlNewBrandPurchasesCurrent: item.ttl_new_brand_purchases,
+            dspProductSalesCurrent: item.product_sales,
+            dspRoasCurrent: item.roas,
             date: currentReportDate,
-            DspPrevious: null,
 
-            DspCurrentLabel:
-              item.daily_dsp_spend_report !== null
-                ? item.daily_dsp_spend_report.toFixed(2)
+            dspImpressionsPrevious: null,
+            dspSpendPrevious: null,
+            dspTotalProductSalesPrevious: null,
+            dspTotalRoasPrevious: null,
+            dspTotalDpvrPrevious: null,
+            dspTtlNewBrandPurchasesPrevious: null,
+            dspProductSalesPrevious: null,
+            dspRoasPrevious: null,
+
+            dspImpressionsCurrentLabel:
+              item.impressions !== null ? item.impressions.toFixed(2) : '0.00',
+            dspSpendCurrentLabel:
+              item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00',
+            dspTotalProductSalesCurrentLabel:
+              item.total_product_sales !== null
+                ? item.total_product_sales.toFixed(2)
                 : '0.00',
-            DspPreviousLabel: '0.00',
+            dspTotalRoasCurrentLabel:
+              item.total_roas !== null ? item.total_roas : '0',
+            dspTotalDpvrCurrentLabel:
+              item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
+            dspTtlNewBrandPurchasesCurrentLabel:
+              item.ttl_new_brand_purchases !== null
+                ? item.ttl_new_brand_purchases.toFixed(2)
+                : '0.00',
+            dspProductSalesCurrentLabel:
+              item.product_sales !== null ? item.product_sales : '0',
+            dspRoasCurrentLabel:
+              item.roas !== null ? item.roas.toFixed(2) : '0.00',
+
+            dspImpressionsPreviousLabel: '0.00',
+            dspSpendPreviousLabel: '0.00',
+            dspTotalProductSalesPreviousLabel: '0.00',
+            dspTotalRoasPreviousLabel: '0',
+            dspTotalDpvrPreviousLabel: '0.00',
+            dspTtlNewBrandPurchasesPreviousLabel: '0.00',
+            dspProductSalesPreviousLabel: '0',
+            dspRoasPreviousLabel: '0.00',
           });
         }
       });
     }
     // filterout the dsp current total, previous total, and diffrence
-    if (response.dsp_spend) {
-      let dspTempData = {};
-      const dspCurrent =
-        response.dsp_spend &&
-        response.dsp_spend.current_sum &&
-        response.dsp_spend.current_sum.daily_dsp_spend_report;
-      const dspPrevious =
-        response.dsp_spend &&
-        response.dsp_spend.previous_sum &&
-        response.dsp_spend.previous_sum.daily_dsp_spend_report;
-      const dspDifference =
-        response.dsp_spend &&
-        response.dsp_spend.difference_data &&
-        response.dsp_spend.difference_data.daily_dsp_spend_report;
-
-      dspTempData = {
-        currentDspTodal: dspCurrent !== null ? dspCurrent : '0.00',
-        previousDspTodal: dspPrevious !== null ? dspPrevious : '0.00',
-        dspDifference,
-      };
-      setDSPTotal(dspTempData);
+    if (response.dsp_spend && response.dsp_spend.current_sum) {
+      setDspCurrentTotal(response.dsp_spend.current_sum);
     } else {
-      setDSPTotal({});
+      setDspCurrentTotal([]);
+    }
+    if (response.dsp_spend && response.dsp_spend.previous_sum) {
+      setDspPreviousTotal(response.dsp_spend.previous_sum);
+    } else {
+      setDspPreviousTotal([]);
+    }
+    if (response.dsp_spend && response.dsp_spend.difference_data) {
+      setDspDifference(response.dsp_spend.difference_data);
+    } else {
+      setDspDifference([]);
     }
     return tempData;
   };
@@ -426,7 +609,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             setAdChartData([]);
             setAdPreviousTotal([]);
             setAdCurrentTotal([]);
-            setDifference([]);
+            setAdDifference([]);
           }
           setIsApiCall(false);
         }
@@ -460,11 +643,12 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         }
         if (res && res.status === 200) {
           if (res.data && res.data.dsp_spend) {
-            const dspGraphData = bindDSPResponseData(res.data);
+            // const dspGraphData = bindDSPResponseData(res.data);
+            const dspGraphData = bindDSPResponseData(dspResData);
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
-            setDSPTotal({});
+            // setDSPTotal({});
           }
           setIsApiCall(false);
         }
@@ -821,52 +1005,77 @@ export default function AdPerformance({ marketplaceChoices, id }) {
     }
   };
 
-  const setBoxToggle = (name) => {
-    if (
-      Object.prototype.hasOwnProperty.call(selectedAdBox, name) &&
-      _.size(selectedAdBox) > 1
-    ) {
-      setSelectedAdBox(_.omit(selectedAdBox, [name]));
-    } else if (_.size(selectedAdBox) < 4) {
-      setSelectedAdBox(_.omit(_.assign(selectedAdBox, { [name]: true })));
+  const setBoxToggle = (name, GraphType) => {
+    if (GraphType === 'ad') {
+      if (
+        Object.prototype.hasOwnProperty.call(selectedAdBox, name) &&
+        _.size(selectedAdBox) > 1
+      ) {
+        setSelectedAdBox(_.omit(selectedAdBox, [name]));
+      } else if (_.size(selectedAdBox) < 4) {
+        setSelectedAdBox(_.omit(_.assign(selectedAdBox, { [name]: true })));
+      }
+    } else if (GraphType === 'dsp') {
+      if (
+        Object.prototype.hasOwnProperty.call(selectedDspBox, name) &&
+        _.size(selectedDspBox) > 1
+      ) {
+        setSelectedDspBox(_.omit(selectedDspBox, [name]));
+      } else if (_.size(selectedDspBox) < 4) {
+        setSelectedDspBox(_.omit(_.assign(selectedDspBox, { [name]: true })));
+      }
     }
   };
 
-  const setAdBoxClass = (name, classValue) => {
+  const setBoxClasses = (name, classValue, graphType) => {
     let selectedClass = '';
-    if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
-      // if (_.size(selectedAdBox) === 1) {
-      //   selectedClass = 'order-chart-box active fix-height';
-      // } else {
-      selectedClass = `order-chart-box ${classValue} fix-height`;
-      // }
-    } else if (_.size(selectedAdBox) === 4) {
-      selectedClass = 'order-chart-box fix-height disabled';
-    } else {
-      selectedClass = 'order-chart-box fix-height';
+    if (graphType === 'ad') {
+      if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
+        // if (_.size(selectedAdBox) === 1) {
+        //   selectedClass = 'order-chart-box active fix-height';
+        // } else {
+        selectedClass = `order-chart-box ${classValue} fix-height`;
+        // }
+      } else if (_.size(selectedAdBox) === 4) {
+        selectedClass = 'order-chart-box fix-height disabled';
+      } else {
+        selectedClass = 'order-chart-box fix-height';
+      }
+    } else if (graphType === 'dsp') {
+      if (Object.prototype.hasOwnProperty.call(selectedDspBox, name)) {
+        // if (_.size(selectedAdBox) === 1) {
+        //   selectedClass = 'order-chart-box active fix-height';
+        // } else {
+        selectedClass = `order-chart-box ${classValue} fix-height`;
+        // }
+      } else if (_.size(selectedDspBox) === 4) {
+        selectedClass = 'order-chart-box fix-height disabled';
+      } else {
+        selectedClass = 'order-chart-box fix-height';
+      }
     }
     return selectedClass;
   };
 
-  const bindValues = (value, fontSize) => {
-    const decimal = _.split(value, '.', 2);
-    if (decimal[1] !== undefined) {
-      return (
-        <span style={{ fontSize }}>
-          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          {/* <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span> */}
-          <span>.{decimal[1].slice(0, 2)}</span>
-        </span>
-      );
-    }
-    return (
-      <span style={{ fontSize }}>
-        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        {/* <span style={{ fontSize: '16px' }}>.00</span> */}
-        <span>.00</span>
-      </span>
-    );
-  };
+  // const bindValues = (value, fontSize) => {
+  //   const decimal = _.split(value, '.', 2);
+  //   if (decimal[1] !== undefined) {
+  //     return (
+  //       <span style={{ fontSize }}>
+  //         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+  //         {/* <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span> */}
+  //         <span>.{decimal[1].slice(0, 2)}</span>
+  //       </span>
+  //     );
+  //   }
+  //   return (
+  //     <span style={{ fontSize }}>
+  //       {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+  //       {/* <span style={{ fontSize: '16px' }}>.00</span> */}
+  //       <span>.00</span>
+  //     </span>
+  //   );
+  // };
 
   /// ////////// start rendering hrml component ///////////
   const renderMarketplaceDropDown = () => {
@@ -983,9 +1192,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div
-            onClick={() => setBoxToggle('adSales')}
+            onClick={() => setBoxToggle('adSales', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adSales', 'ad-sales-active')}>
+            className={setBoxClasses('adSales', 'ad-sales-active', 'ad')}>
             <div className="chart-name">Ad Sales </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ad_sales
@@ -999,15 +1208,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                   )}`
                 : `vs ${currencySign}0.00`}
             </div>
-            {difference && difference.ad_sales ? (
-              difference.ad_sales >= 0 ? (
+            {adDifference && adDifference.ad_sales ? (
+              adDifference.ad_sales >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.ad_sales}%
+                  {adDifference.ad_sales}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1016,7 +1225,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.ad_sales.toString().replace('-', '')}%
+                  {adDifference.ad_sales.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1026,9 +1235,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
-            onClick={() => setBoxToggle('adSpend')}
+            onClick={() => setBoxToggle('adSpend', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adSpend', 'ad-spend-active')}>
+            className={setBoxClasses('adSpend', 'ad-spend-active', 'ad')}>
             <div className="chart-name">Ad Spend </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ad_spend
@@ -1043,15 +1252,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 : `vs ${currencySign}0.00`}
             </div>
 
-            {difference && difference.ad_spend ? (
-              difference.ad_spend >= 0 ? (
+            {adDifference && adDifference.ad_spend ? (
+              adDifference.ad_spend >= 0 ? (
                 <div className="perentage-value grey mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={UpDowGrayArrow}
                     alt="arrow-down"
                   />
-                  {difference.ad_spend}%
+                  {adDifference.ad_spend}%
                 </div>
               ) : (
                 <div className="perentage-value grey mt-3 pt-1">
@@ -1060,7 +1269,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={UpDowGrayArrow}
                     alt="arrow-down"
                   />
-                  {difference.ad_spend.toString().replace('-', '')}%
+                  {adDifference.ad_spend.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1070,9 +1279,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
-            onClick={() => setBoxToggle('adConversion')}
+            onClick={() => setBoxToggle('adConversion', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adConversion', 'ad-conversion-active')}>
+            className={setBoxClasses(
+              'adConversion',
+              'ad-conversion-active',
+              'ad',
+            )}>
             <div className="chart-name">Ad Conversion Rate</div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ad_conversion_rate
@@ -1085,15 +1298,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 : `vs 0.00%`}
             </div>
 
-            {difference && difference.ad_conversion_rate ? (
-              difference.ad_conversion_rate >= 0 ? (
+            {adDifference && adDifference.ad_conversion_rate ? (
+              adDifference.ad_conversion_rate >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.ad_conversion_rate}%
+                  {adDifference.ad_conversion_rate}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1102,7 +1315,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.ad_conversion_rate.toString().replace('-', '')}%
+                  {adDifference.ad_conversion_rate.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1112,9 +1325,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
-            onClick={() => setBoxToggle('impressions')}
+            onClick={() => setBoxToggle('impressions', 'ad')}
             role="presentation"
-            className={setAdBoxClass('impressions', 'impression-active')}>
+            className={setBoxClasses('impressions', 'impression-active', 'ad')}>
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.impressions
@@ -1126,15 +1339,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? `vs ${addThousandComma(adPreviousTotal.impressions, 0)}`
                 : `vs 0`}
             </div>
-            {difference && difference.impressions ? (
-              difference.impressions >= 0 ? (
+            {adDifference && adDifference.impressions ? (
+              adDifference.impressions >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {addThousandComma(difference.impressions)}%
+                  {addThousandComma(adDifference.impressions)}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1143,7 +1356,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.impressions.toString().replace('-', '')}%
+                  {adDifference.impressions.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1153,9 +1366,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
-            onClick={() => setBoxToggle('adCos')}
+            onClick={() => setBoxToggle('adCos', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adCos', 'ad-cos-active')}>
+            className={setBoxClasses('adCos', 'ad-cos-active', 'ad')}>
             <div className="chart-name">Acos</div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.acos
@@ -1167,15 +1380,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? `vs ${addThousandComma(adPreviousTotal.acos)}%`
                 : `vs 0.00%`}
             </div>
-            {difference && difference.acos ? (
-              difference.acos < 0 ? (
+            {adDifference && adDifference.acos ? (
+              adDifference.acos < 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.acos.toString().replace('-', '')}%
+                  {adDifference.acos.toString().replace('-', '')}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1184,7 +1397,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.acos}%
+                  {adDifference.acos}%
                 </div>
               )
             ) : (
@@ -1194,9 +1407,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
-            onClick={() => setBoxToggle('adRoas')}
+            onClick={() => setBoxToggle('adRoas', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adRoas', 'ad-roas-active')}>
+            className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
             <div className="chart-name">RoAS </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.roas
@@ -1209,15 +1422,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? `vs ${currencySign}${addThousandComma(adPreviousTotal.roas)}`
                 : `vs ${currencySign}0.00`}
             </div>
-            {difference && difference.roas ? (
-              difference.roas >= 0 ? (
+            {adDifference && adDifference.roas ? (
+              adDifference.roas >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.roas}%
+                  {adDifference.roas}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1226,7 +1439,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.roas.toString().replace('-', '')}%
+                  {adDifference.roas.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1236,9 +1449,9 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
-            onClick={() => setBoxToggle('adClicks')}
+            onClick={() => setBoxToggle('adClicks', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adClicks', 'ad-click-active')}>
+            className={setBoxClasses('adClicks', 'ad-click-active', 'ad')}>
             <div className="chart-name">Clicks </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.clicks
@@ -1250,15 +1463,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? `vs ${addThousandComma(adPreviousTotal.clicks, 0)}`
                 : `vs 0`}
             </div>
-            {difference && difference.clicks ? (
-              difference.clicks >= 0 ? (
+            {adDifference && adDifference.clicks ? (
+              adDifference.clicks >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.clicks}%
+                  {adDifference.clicks}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1267,7 +1480,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.clicks.toString().replace('-', '')}%
+                  {adDifference.clicks.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1277,9 +1490,13 @@ export default function AdPerformance({ marketplaceChoices, id }) {
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
-            onClick={() => setBoxToggle('adClickRate')}
+            onClick={() => setBoxToggle('adClickRate', 'ad')}
             role="presentation"
-            className={setAdBoxClass('adClickRate', 'ad-clickrate-active')}>
+            className={setBoxClasses(
+              'adClickRate',
+              'ad-clickrate-active',
+              'ad',
+            )}>
             <div className="chart-name">Click through rate </div>
             <div className="number-rate">
               {adCurrentTotal && adCurrentTotal.ctr
@@ -1291,15 +1508,15 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                 ? `vs ${addThousandComma(adPreviousTotal.ctr)}%`
                 : `vs 0.00%`}
             </div>
-            {difference && difference.ctr ? (
-              difference.ctr >= 0 ? (
+            {adDifference && adDifference.ctr ? (
+              adDifference.ctr >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {difference.ctr}%
+                  {adDifference.ctr}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -1308,7 +1525,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {difference.ctr.toString().replace('-', '')}%
+                  {adDifference.ctr.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -1419,6 +1636,7 @@ export default function AdPerformance({ marketplaceChoices, id }) {
           {' '}
           <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
         </div>
+
         <div className="col-6 text-right">
           {' '}
           {DropDown(
@@ -1430,55 +1648,435 @@ export default function AdPerformance({ marketplaceChoices, id }) {
             handleDSPDailyFact,
             isApiCall,
           )}
-          {/* <DropDownSelect className="days-performance">
-            <Select classNamePrefix="react-select" className="active" />
-          </DropDownSelect> */}
         </div>
       </>
     );
   };
 
-  const renderDSPSpendTotals = () => {
+  // const renderDSPSpendTotals = () => {
+  //   return (
+  //     <>
+  //       <div className="number-rate">
+  //         {currencySymbol}
+  //         {dspTotal && dspTotal.currentDspTodal
+  //           ? bindValues(dspTotal.currentDspTodal, '26px')
+  //           : '0.00'}
+  //       </div>
+  //       <div className="vs">
+  //         vs {currencySymbol}
+  //         {dspTotal && dspTotal.previousDspTodal
+  //           ? bindValues(dspTotal.previousDspTodal, '16px')
+  //           : '0.00'}{' '}
+  //         <span
+  //           className={
+  //             dspTotal && dspTotal.dspDifference > 0
+  //               ? 'perentage-value mt-3 ml-1'
+  //               : 'perentage-value down mt-3 ml-1'
+  //           }>
+  //           {!Number.isNaN(dspTotal && dspTotal.dspDifference) &&
+  //           dspTotal &&
+  //           dspTotal.dspDifference > 0 ? (
+  //             <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
+  //           ) : !Number.isNaN(dspTotal && dspTotal.dspDifference) &&
+  //             dspTotal &&
+  //             dspTotal.dspDifference < 0 ? (
+  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+  //           ) : (
+  //             ''
+  //           )}
+  //           {dspTotal &&
+  //           dspTotal.dspDifference &&
+  //           dspTotal &&
+  //           dspTotal.dspDifference !== 'N/A'
+  //             ? `${dspTotal.dspDifference.toString().replace('-', '')}%`
+  //             : 'N/A'}
+
+  //           {/* <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+  //           40.75%{' '} */}
+  //         </span>
+  //       </div>
+  //     </>
+  //   );
+  // };
+
+  const renderDSPBox = () => {
+    const currencySign = currencySymbol !== null ? currencySymbol : '';
     return (
       <>
-        <div className="number-rate">
-          {currencySymbol}
-          {dspTotal && dspTotal.currentDspTodal
-            ? bindValues(dspTotal.currentDspTodal, '26px')
-            : '0.00'}
-        </div>
-        <div className="vs">
-          vs {currencySymbol}
-          {dspTotal && dspTotal.previousDspTodal
-            ? bindValues(dspTotal.previousDspTodal, '16px')
-            : '0.00'}{' '}
-          <span
-            className={
-              dspTotal && dspTotal.dspDifference > 0
-                ? 'perentage-value mt-3 ml-1'
-                : 'perentage-value down mt-3 ml-1'
-            }>
-            {!Number.isNaN(dspTotal && dspTotal.dspDifference) &&
-            dspTotal &&
-            dspTotal.dspDifference > 0 ? (
-              <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-            ) : !Number.isNaN(dspTotal && dspTotal.dspDifference) &&
-              dspTotal &&
-              dspTotal.dspDifference < 0 ? (
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
+        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
+          <div
+            onClick={() => setBoxToggle('dspImpressions', 'dsp')}
+            role="presentation"
+            className={setBoxClasses(
+              'dspImpressions',
+              'ad-sales-active',
+              'dsp',
+            )}>
+            <div className="chart-name">Impressions </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.impressions
+                ? `${addThousandComma(dspCurrentTotal.impressions)}`
+                : `0.00`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.impressions
+                ? `vs ${addThousandComma(dspPreviousTotal.impressions)}`
+                : `vs 0.00`}
+            </div>
+            {dspDifference && dspDifference.impressions ? (
+              dspDifference.impressions >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.impressions}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.impressions.toString().replace('-', '')}%
+                </div>
+              )
             ) : (
-              ''
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
-            {dspTotal &&
-            dspTotal.dspDifference &&
-            dspTotal &&
-            dspTotal.dspDifference !== 'N/A'
-              ? `${dspTotal.dspDifference.toString().replace('-', '')}%`
-              : 'N/A'}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
+          <div
+            onClick={() => setBoxToggle('dspSpend', 'dsp')}
+            role="presentation"
+            className={setBoxClasses('dspSpend', 'ad-spend-active', 'dsp')}>
+            <div className="chart-name">Dsp Spend </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.dsp_spend
+                ? `${currencySign}${addThousandComma(
+                    dspCurrentTotal.dsp_spend,
+                  )}`
+                : `${currencySign}0.00`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.dsp_spend
+                ? `vs ${currencySign}${addThousandComma(
+                    dspPreviousTotal.dsp_spend,
+                  )}`
+                : `vs ${currencySign}0.00`}
+            </div>
 
-            {/* <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-            40.75%{' '} */}
-          </span>
+            {dspDifference && dspDifference.dsp_spend ? (
+              dspDifference.dsp_spend >= 0 ? (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.dsp_spend}%
+                </div>
+              ) : (
+                <div className="perentage-value grey mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={UpDowGrayArrow}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.dsp_spend.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value grey mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
+          <div
+            onClick={() => setBoxToggle('dspTotalProductSales', 'dsp')}
+            role="presentation"
+            className={setBoxClasses(
+              'dspTotalProductSales',
+              'ad-conversion-active',
+              'dsp',
+            )}>
+            <div className="chart-name">Total Product Sales</div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.total_product_sales
+                ? `${currencySign}${addThousandComma(
+                    dspCurrentTotal.total_product_sales,
+                  )}%`
+                : `${currencySign}0.00%`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.total_product_sales
+                ? `vs ${currencySign}${addThousandComma(
+                    dspPreviousTotal.total_product_sales,
+                  )}%`
+                : `vs ${currencySign}0.00%`}
+            </div>
+
+            {dspDifference && dspDifference.total_product_sales ? (
+              dspDifference.total_product_sales >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.total_product_sales}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.total_product_sales
+                    .toString()
+                    .replace('-', '')}
+                  %
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
+          <div
+            onClick={() => setBoxToggle('dspTotalRoas', 'dsp')}
+            role="presentation"
+            className={setBoxClasses(
+              'dspTotalRoas',
+              'impression-active',
+              'dsp',
+            )}>
+            <div className="chart-name">Total ROAS </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.total_roas
+                ? addThousandComma(dspCurrentTotal.total_roas, 0)
+                : `0`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.total_roas
+                ? `vs ${addThousandComma(dspPreviousTotal.total_roas, 0)}`
+                : `vs 0`}
+            </div>
+            {dspDifference && dspDifference.total_roas ? (
+              dspDifference.total_roas >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {addThousandComma(dspDifference.total_roas)}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.total_roas.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+          <div
+            onClick={() => setBoxToggle('dspTotalDpvr', 'dsp')}
+            role="presentation"
+            className={setBoxClasses('dspTotalDpvr', 'ad-cos-active', 'dsp')}>
+            <div className="chart-name">Total DPVR</div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.total_dpvr
+                ? `${addThousandComma(dspCurrentTotal.total_dpvr)}%`
+                : `0.00%`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.total_dpvr
+                ? `vs ${addThousandComma(dspPreviousTotal.total_dpvr)}%`
+                : `vs 0.00%`}
+            </div>
+            {dspDifference && dspDifference.total_dpvr ? (
+              dspDifference.total_dpvr < 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.total_dpvr.toString().replace('-', '')}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.total_dpvr}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div
+            onClick={() => setBoxToggle('dspTtlNewBrandPurchases', 'dsp')}
+            role="presentation"
+            className={setBoxClasses(
+              'dspTtlNewBrandPurchases',
+              'ad-roas-active',
+              'dsp',
+            )}>
+            <div className="chart-name">TTL New Brand Purchases </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.ttl_new_brand_purchases
+                ? `${addThousandComma(
+                    dspCurrentTotal.ttl_new_brand_purchases,
+                  )}%`
+                : `0.00%`}
+            </div>
+            <div className="vs">
+              {' '}
+              {dspPreviousTotal && dspPreviousTotal.ttl_new_brand_purchases
+                ? `vs ${addThousandComma(
+                    dspPreviousTotal.ttl_new_brand_purchases,
+                  )}%`
+                : `vs 0.00%`}
+            </div>
+            {dspDifference && dspDifference.ttl_new_brand_purchases ? (
+              dspDifference.ttl_new_brand_purchases >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.ttl_new_brand_purchases}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.ttl_new_brand_purchases
+                    .toString()
+                    .replace('-', '')}
+                  %
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div
+            onClick={() => setBoxToggle('dspProductSales', 'dsp')}
+            role="presentation"
+            className={setBoxClasses(
+              'dspProductSales',
+              'ad-click-active',
+              'dsp',
+            )}>
+            <div className="chart-name">Product sales </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.product_sales
+                ? `${currencySign}${addThousandComma(
+                    dspCurrentTotal.product_sales,
+                    0,
+                  )}`
+                : `${currencySign}0`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.product_sales
+                ? `vs ${currencySign}${addThousandComma(
+                    dspPreviousTotal.product_sales,
+                    0,
+                  )}`
+                : `vs ${currencySign}0`}
+            </div>
+            {dspDifference && dspDifference.product_sales ? (
+              dspDifference.product_sales >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.product_sales}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.product_sales.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
+        </div>
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
+          <div
+            onClick={() => setBoxToggle('dspRoas', 'dsp')}
+            role="presentation"
+            className={setBoxClasses('dspRoas', 'ad-clickrate-active', 'dsp')}>
+            <div className="chart-name">ROAS </div>
+            <div className="number-rate">
+              {dspCurrentTotal && dspCurrentTotal.roas
+                ? `${addThousandComma(dspCurrentTotal.roas)}`
+                : `0.00`}
+            </div>
+            <div className="vs">
+              {dspPreviousTotal && dspPreviousTotal.roas
+                ? `vs ${addThousandComma(dspPreviousTotal.roas)}`
+                : `vs 0.00`}
+            </div>
+            {dspDifference && dspDifference.roas ? (
+              dspDifference.roas >= 0 ? (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="green-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.roas}%
+                </div>
+              ) : (
+                <div className="perentage-value down mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowDownIcon}
+                    alt="arrow-down"
+                  />
+                  {dspDifference.roas.toString().replace('-', '')}%
+                </div>
+              )
+            ) : (
+              <div className="perentage-value down mt-3 pt-1">N/A</div>
+            )}
+          </div>
         </div>
       </>
     );
@@ -1686,12 +2284,14 @@ export default function AdPerformance({ marketplaceChoices, id }) {
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
         <div className="row">{renderDSPDailyFacts()}</div>
-        {renderDSPSpendTotals()}
+        <div className="row mr-1 ml-1">{renderDSPBox()}</div>
+        {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
         <DSPPerformanceChart
           chartId="dspChart"
           chartData={dspChartData}
           currencySymbol={currencySymbol}
+          selectedBox={selectedDspBox}
           selectedDF={selectedDSPDF}
         />
       </WhiteCard>
