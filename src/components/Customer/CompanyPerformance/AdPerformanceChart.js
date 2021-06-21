@@ -318,6 +318,7 @@ export default function AdPerformanceChart({
       // create object of 2nd value axis
       let firstAxis = null;
       let secondAxis = null;
+      let thirdAxis = null;
 
       const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis2.renderer.grid.template.disabled = true;
@@ -412,20 +413,11 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
 
-        if (index === 0) {
-          if (item === 'adSales' || item === 'adSpend') {
-            // console.log('index if');
-            firstAxis = 'currency';
-          } else {
-            // console.log('index else');
-            firstAxis = 'other';
-          }
-          series.yAxis = valueAxis;
-          valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-        } else if (item === 'adSales' || item === 'adSpend') {
-          if (firstAxis === 'currency') {
+        if (item === 'adSales' || item === 'adSpend') {
+          if (firstAxis === null || firstAxis === 'currency') {
             // console.log('if currency');
             series.yAxis = valueAxis;
+            firstAxis = 'currency';
           } else if (secondAxis === null || secondAxis === 'currency') {
             // console.log('second axis null/currency');
             series.yAxis = valueAxis2;
@@ -434,7 +426,7 @@ export default function AdPerformanceChart({
             );
             valueAxis2.renderer.opposite = true;
             secondAxis = 'currency';
-          } else {
+          } else if (thirdAxis === null || thirdAxis === 'currency') {
             // console.log('second axis not null/currency');
             series.yAxis = valueAxis3;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -448,40 +440,8 @@ export default function AdPerformanceChart({
             valueAxis.renderer.labels.template.disabled = true;
             valueAxis2.renderer.labels.template.disabled = true;
             valueAxis3.renderer.labels.template.disabled = true;
-          }
-        } else {
-          if (index === 1) {
-            // console.log('index last else 1');
-            series.yAxis = valueAxis2;
-            valueAxis2.renderer.opposite = true;
-            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
-              item,
-            );
-            secondAxis = 'other';
-          } else if (index === 2) {
-            if (secondAxis === null) {
-              series.yAxis = valueAxis2;
-              valueAxis2.renderer.opposite = true;
-              valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
-                item,
-              );
-            } else {
-              // console.log('index last else 2', secondAxis);
-              series.yAxis = valueAxis3;
-              valueAxis3.renderer.opposite = true;
-              valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
-                item,
-              );
-              valueAxis.renderer.line.strokeOpacity = 0;
-              valueAxis2.renderer.line.strokeOpacity = 0;
-              valueAxis3.renderer.line.strokeOpacity = 0;
-              valueAxis.renderer.labels.template.disabled = true;
-              valueAxis2.renderer.labels.template.disabled = true;
-              valueAxis3.renderer.labels.template.disabled = true;
-            }
-          }
-          if (index === 3) {
-            // console.log('index last else 3');
+            thirdAxis = 'currency';
+          } else {
             series.yAxis = valueAxis4;
             valueAxis4.renderer.opposite = true;
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -497,6 +457,46 @@ export default function AdPerformanceChart({
             valueAxis3.renderer.labels.template.disabled = true;
             valueAxis4.renderer.labels.template.disabled = true;
           }
+        } else if (index === 0) {
+          series.yAxis = valueAxis;
+          valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+          firstAxis = 'others';
+        } else if (index === 1) {
+          series.yAxis = valueAxis2;
+          valueAxis2.renderer.opposite = true;
+          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+          secondAxis = 'other';
+        } else if (index === 2) {
+          series.yAxis = valueAxis3;
+          valueAxis3.renderer.opposite = true;
+          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+          valueAxis.renderer.line.strokeOpacity = 0;
+          valueAxis2.renderer.line.strokeOpacity = 0;
+          valueAxis3.renderer.line.strokeOpacity = 0;
+          valueAxis.renderer.labels.template.disabled = true;
+          valueAxis2.renderer.labels.template.disabled = true;
+          valueAxis3.renderer.labels.template.disabled = true;
+          thirdAxis = 'others';
+        } else if (index === 3) {
+          // console.log('index last else 3');
+          series.yAxis = valueAxis4;
+          valueAxis4.renderer.opposite = true;
+          valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+
+          valueAxis.renderer.line.strokeOpacity = 0;
+          valueAxis2.renderer.line.strokeOpacity = 0;
+          valueAxis3.renderer.line.strokeOpacity = 0;
+          valueAxis4.renderer.line.strokeOpacity = 0;
+          valueAxis.renderer.labels.template.disabled = true;
+          valueAxis2.renderer.labels.template.disabled = true;
+          valueAxis3.renderer.labels.template.disabled = true;
+          valueAxis4.renderer.labels.template.disabled = true;
         }
 
         const currentValue = `${item}Current`;
