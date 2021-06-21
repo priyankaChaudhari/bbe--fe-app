@@ -20,7 +20,11 @@ import {
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
-export default function SetupCheckList({ id, brandId }) {
+export default function SetupCheckList({
+  id,
+  brandId,
+  setCheckBrandAssetComplete,
+}) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
@@ -29,19 +33,23 @@ export default function SetupCheckList({ id, brandId }) {
   });
 
   useEffect(() => {
+    setIsLoading({ loader: true, type: 'page' });
     getAgreementList(id).then((response) => {
       setAgreementData({
         data: response.data && response.data.results,
         count: response.data && response.data.count,
       });
       getAssigneeCount(id).then((res) => {
+        if (res && res.data && res.data.brand_asset_completed_count === 5) {
+          setCheckBrandAssetComplete(true);
+        } else setCheckBrandAssetComplete(false);
         setAgreementData({
           data: response.data && response.data.results,
           count: response.data && response.data.count,
           assigneeCount: res && res.data,
         });
+        setIsLoading({ loader: false, type: 'page' });
       });
-      setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
 
@@ -180,21 +188,29 @@ export default function SetupCheckList({ id, brandId }) {
                 </div>
 
                 <div className="col-lg-5 col-md-5 col-12 mt-3  text-lg-right text-md-right text-sm-left ">
-                  <Link
-                    to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id).replace(
-                      ':brandId',
-                      brandId,
-                    )}>
-                    <Button className="btn-primary w-sm-100">
-                      Upload Assets{' '}
-                      <img
-                        className="btn-icon ml-2"
-                        width="16px"
-                        src={WhiteArrowRight}
-                        alt=""
-                      />{' '}
-                    </Button>
-                  </Link>
+                  {agreementData &&
+                  agreementData.assigneeCount &&
+                  agreementData.assigneeCount &&
+                  agreementData.assigneeCount.brand_asset_completed_count ===
+                    5 ? (
+                    ''
+                  ) : (
+                    <Link
+                      to={PATH_CHOOSE_BRAND_DELEGATE.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      )}>
+                      <Button className="btn-primary w-sm-100">
+                        Upload Assets{' '}
+                        <img
+                          className="btn-icon ml-2"
+                          width="16px"
+                          src={WhiteArrowRight}
+                          alt=""
+                        />{' '}
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -368,11 +384,13 @@ export default function SetupCheckList({ id, brandId }) {
 
 SetupCheckList.defaultProps = {
   brandId: '',
+  setCheckBrandAssetComplete: () => {},
 };
 
 SetupCheckList.propTypes = {
   id: PropTypes.string.isRequired,
   brandId: PropTypes.string,
+  setCheckBrandAssetComplete: PropTypes.func,
 };
 
 const GreenCheckBox = styled.div`

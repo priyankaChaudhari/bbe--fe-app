@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
@@ -70,10 +70,10 @@ import {
   getMarketPlaceList,
 } from '../../api';
 import { AddTeamMember, EditTeamMember } from '../Team/index';
-import { PATH_CUSTOMER_LIST } from '../../constants';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
-import SetupCheckList from '../BrandAssetGathering/SetupCheckList';
+import { SetupCheckList } from '../BrandAssetGathering/index';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -105,6 +105,7 @@ const alertCustomStyles = {
 };
 
 export default function CustomerMainContainer() {
+  const history = useHistory();
   const { id } = useParams();
   const dispatch = useDispatch();
   const agreement = useSelector((state) => state.accountState.data);
@@ -149,6 +150,7 @@ export default function CustomerMainContainer() {
   const showBrandAssetSuccessMsg = useSelector(
     (state) => state.customerState.showBrandAssetMsg,
   );
+  const [checkBrandAssetComplete, setCheckBrandAssetComplete] = useState(null);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -292,6 +294,7 @@ export default function CustomerMainContainer() {
     viewOptions = [
       { value: 'dashboard', label: 'Dashboard' },
       { value: 'agreement', label: 'Agreements' },
+      { value: 'brand asset', label: 'Brand Assets' },
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
@@ -924,6 +927,30 @@ export default function CustomerMainContainer() {
                               Agreements
                             </div>
                           </li>
+                          {checkBrandAssetComplete ? (
+                            <li
+                              onClick={() => {
+                                setViewComponent('brand asset');
+                                dispatch(setCustomerSelectedTab('brand asset'));
+                              }}
+                              role="presentation">
+                              <div
+                                className={`left-details ${
+                                  viewComponent === 'brand asset'
+                                    ? 'active'
+                                    : ''
+                                }`}>
+                                <img
+                                  className="file-contract"
+                                  src={FileContract}
+                                  alt=""
+                                />
+                                Brand Assets
+                              </div>
+                            </li>
+                          ) : (
+                            ''
+                          )}
 
                           <li
                             onClick={() => {
@@ -1131,7 +1158,16 @@ export default function CustomerMainContainer() {
                       <SetupCheckList
                         id={id}
                         brandId={customer && customer.brand_assets_id}
+                        setCheckBrandAssetComplete={setCheckBrandAssetComplete}
                       />
+                    ) : viewComponent === 'brand asset' ? (
+                      history.push({
+                        pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
+                          ':brandId',
+                          customer && customer.brand_assets_id,
+                        ),
+                        search: 'step=brand-logo',
+                      })
                     ) : viewComponent === 'performance' ? (
                       <CompanyPerformance
                         marketplaceChoices={marketplaceChoices}

@@ -5,6 +5,9 @@ const ActionDropDown = styled.div`
   &.w-150 {
     width: 150px;
   }
+  &.w-170 {
+    width: 170px;
+  }
   .css-2b097c-container {
     width: 100%;
     color: ${Theme.gray85} !important;

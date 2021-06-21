@@ -1,8 +1,7 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 
@@ -30,7 +29,7 @@ import {
   ArrowRightBlackIcon,
   GrayInfoIcon,
   LeftArrowIcon,
-  //  OrangeDownloadPdf,
+  OrangeDownloadPdf,
   CloseIcon,
   TrashIcons,
   RedTrashIcon,
@@ -40,10 +39,11 @@ import {
 import {
   Button,
   CheckBox,
-  // HeaderDownloadFuntionality,
+  HeaderDownloadFuntionality,
   PageLoader,
   UnauthorizedHeader,
   ModalBox,
+  ActionDropDown,
 } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -114,6 +114,7 @@ export default function BrandAssetUpload() {
     documents: documentData,
     index: 0,
   });
+  const [showUpload, setShowUpload] = useState(null);
 
   const [uploadCount, setUploadCount] = useState({
     'brand-logo': '0 files uploaded',
@@ -187,27 +188,12 @@ export default function BrandAssetUpload() {
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       setDocumentData(response);
       setPreviewImageData(response);
-
-      // const msg =
-      //   response.length === 1
-      //     ? '1 file uploaded'
-      //     : `${response.length} files uploaded`;
-      // setUploadCount({
-      //   ...uploadCount,
-      //   [params.step]: msg,
-      // });
       setIsLoading({ loader: false, type: 'page' });
     });
   };
 
   const getAssetsSummary = () => {
     const tempCounts = {};
-    //   'brand-logo': '0 files uploaded',
-    //   'brand-guidelines': '0 files uploaded',
-    //   'font-files': '0 files uploaded',
-    //   iconography: '0 files uploaded',
-    //   'additional-brand-material': '0 files uploaded',
-    // };
     getBrandAssetsSummary(brandId).then((response) => {
       if (response && response.data && response.data.steps) {
         Object.keys(response.data.steps).forEach((key) => {
@@ -228,7 +214,9 @@ export default function BrandAssetUpload() {
     getAssetsSummary();
     getBrandAssetsDetail(brandId).then((response) => {
       setBrandAssetData(response && response.data);
-
+      if (response && response.data && response.data.is_completed)
+        setShowUpload(false);
+      else setShowUpload(true);
       if (
         response &&
         response.data &&
@@ -507,10 +495,6 @@ export default function BrandAssetUpload() {
                       {file && file.progress && file.progress > 0 && (
                         <div className="uploading-progress-bar ">
                           file.progress
-                          {/* <progress
-                            value={file.progress}
-                            label={`${file.progress}%`}
-                      /> */}
                           <Progress
                             percent={file.progress}
                             theme={{
@@ -561,36 +545,12 @@ export default function BrandAssetUpload() {
                         })
                       }>
                       <div className="unsupport-file-name">
-                        <div
-                          className="file-path"
-                          // href={file && file.presigned_url}
-                        >
+                        <div className="file-path">
                           {file && file.original_name}
                         </div>
                       </div>
                     </object>
 
-                    {/* <embed
-                      type={file && file.mime_type}
-                      src={file && file.presigned_url}
-                      className="image-thumbnail"
-                      width="250"
-                      height="200"
-                      onClick={() =>
-                        setShowAssetPreview({
-                          selectedFile: file,
-                          show: true,
-                          documents: documentData,
-                          index: i,
-                        })
-                      }
-                    /> */}
-
-                    {/* <img
-                      src={file && file.presigned_url}
-                      className="image-thumbnail"
-                      alt={file.original_name}
-                    /> */}
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
 
                     <div
@@ -619,16 +579,6 @@ export default function BrandAssetUpload() {
                           alt="check"
                         />
                         Confirm Delete
-                        {/* <img
-                          className="confirm-delete-cross"
-                          src={CloseIcon}
-                          alt="check"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setShowDeleteMsg({ [file.id]: false });
-                          }}
-                          role="presentation"
-                        /> */}
                       </div>
                     ) : (
                       ''
@@ -648,80 +598,86 @@ export default function BrandAssetUpload() {
         autoClose={5000}
         pauseOnFocusLoss={false}
       />
-      {/* <HeaderDownloadFuntionality>
-        <div className="container-fluid">
-          <div className="row">
-            {' '}
-            <div className="col-md-6 col-sm-12"> Contract Management</div>
-            <div className="col-md-6 col-sm-12">
-              <ul className="contract-download-nav ">
-                <li className="download-pdf">
-                  <img
-                    src={OrangeDownloadPdf}
-                    alt="download"
-                    className="download-pdf-icon upload-icon "
-                    role="presentation"
-                  />
-                  Upload
-                </li>
-                <li>
-                  <span className="divide-arrow " />
-                </li>
-                <li className="download-pdf">
-                  <img
-                    src={OrangeDownloadPdf}
-                    alt="download"
-                    className="download-pdf-icon "
-                    role="presentation"
-                  />
-                  Download
-                </li>
-                <li>
-                  <span className="divide-arrow hide-mobile" />
-                </li>
-                <li>
-                  <img
-                    width="18px"
-                    src={CloseIcon}
-                    alt="close"
-                    className="float-right cursor remove-cross-icon"
-                    onClick={() => {
-                      history.push(
-                        history && history.location && history.location.state,
-                      );
-                    }}
-                    role="presentation"
-                  />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </HeaderDownloadFuntionality> */}
-      {history.location.pathname.includes('/assigned-brand-asset/') ? (
-        <UnauthorizedHeader />
-      ) : (
-        <BackToStep>
-          {' '}
+      {brandAssetData && brandAssetData.is_completed ? (
+        <HeaderDownloadFuntionality>
           <div className="container-fluid">
-            {' '}
             <div className="row">
-              <div className="col-12">
-                <div
-                  role="presentation"
-                  className="back-link"
-                  onClick={() => saveLastStep()}>
-                  <img
-                    src={LeftArrowIcon}
-                    alt="aarow-back"
-                    className="arrow-back-icon "
-                  />
-                  Back to Dashboard
-                </div>
+              {' '}
+              <div className="col-md-6 col-sm-12"> Brand Assets</div>
+              <div className="col-md-6 col-sm-12">
+                <ul className="contract-download-nav ">
+                  <li
+                    className="download-pdf"
+                    role="presentation"
+                    onClick={() => setShowUpload(true)}>
+                    <img
+                      src={OrangeDownloadPdf}
+                      alt="download"
+                      className="download-pdf-icon upload-icon "
+                      role="presentation"
+                    />
+                    Upload
+                  </li>
+                  <li>
+                    <span className="divide-arrow " />
+                  </li>
+                  <li className="download-pdf">
+                    <img
+                      src={OrangeDownloadPdf}
+                      alt="download"
+                      className="download-pdf-icon "
+                      role="presentation"
+                    />
+                    Download
+                  </li>
+                  <li>
+                    <span className="divide-arrow hide-mobile" />
+                  </li>
+                  <li>
+                    <img
+                      width="18px"
+                      src={CloseIcon}
+                      alt="close"
+                      className="float-right cursor remove-cross-icon"
+                      onClick={() => {
+                        history.push(PATH_CUSTOMER_DETAILS.replace(':id', id));
+                      }}
+                      role="presentation"
+                    />
+                  </li>
+                </ul>
               </div>
             </div>
-          </div>{' '}
-        </BackToStep>
+          </div>
+        </HeaderDownloadFuntionality>
+      ) : (
+        <>
+          {history.location.pathname.includes('/assigned-brand-asset/') ? (
+            <UnauthorizedHeader />
+          ) : (
+            <BackToStep>
+              {' '}
+              <div className="container-fluid">
+                {' '}
+                <div className="row">
+                  <div className="col-12">
+                    <div
+                      role="presentation"
+                      className="back-link"
+                      onClick={() => saveLastStep()}>
+                      <img
+                        src={LeftArrowIcon}
+                        alt="aarow-back"
+                        className="arrow-back-icon "
+                      />
+                      Back to Dashboard
+                    </div>
+                  </div>
+                </div>
+              </div>{' '}
+            </BackToStep>
+          )}
+        </>
       )}
 
       <BrandAssetSideBar className="d-none d-lg-block">
@@ -817,39 +773,6 @@ export default function BrandAssetUpload() {
         />
       </DropDownBrandAsset>
 
-      {/* {isLoading.loader && isLoading.type === 'page' ? (
-          <PageLoader color="#FF5933" type="page" />
-        ) : (
-          <BrandAssetBody>
-            {' '}
-            <div className="label-heading">
-              Part {selectedStep && selectedStep.step}/5
-            </div>
-            <h3 className="page-heading ">
-              {selectedStep && selectedStep.label}
-            </h3>
-            <p className="normal-text mt-1 mb-0">
-              {selectedStep && selectedStep.subtitle}
-            </p>
-            <p className="gray-normal-text mt-1">
-              {selectedStep && selectedStep.format ? (
-                <>
-                  Preferred format: {selectedStep.format}{' '}
-                  <img
-                    className="gray-info-icon"
-                    width="15px "
-                    src={GrayInfoIcon}
-                    alt=""
-                    data-tip
-                    data-for="format"
-                  />
-                  <ReactTooltip place="bottom" id="format">
-                    <p>All Accepted Formats</p>
-                    ai, .eps, .png, .jpg or .gif
-                  </ReactTooltip>
-                </>
-            */}
-
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="upload-brand-asset"
@@ -858,65 +781,82 @@ export default function BrandAssetUpload() {
         />
       ) : (
         <BrandAssetBody>
-          <div className="label-heading">
-            Part {selectedStep && selectedStep.step}/5
-          </div>
-          <h3 className="page-heading ">
-            {selectedStep && selectedStep.label}
-          </h3>
-          <p className="normal-text mt-1 mb-0">
-            {selectedStep && selectedStep.subtitle}
-          </p>
-          <div className="gray-normal-text mt-1 mb-3">
-            {selectedStep && selectedStep.format ? (
-              <>
-                Preferred format: {selectedStep.format}{' '}
-                <img
-                  className="gray-info-icon"
-                  width="15px "
-                  src={GrayInfoIcon}
-                  alt=""
-                  data-tip
-                  data-for="format"
-                />
-                <ReactTooltip place="bottom" id="format">
-                  <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
-                    All Accepted Formats
-                  </span>
-                  <p
-                    style={{
-                      color: 'white',
-                      fontSize: '12px',
-                      textTransform: 'initial',
-                    }}>
-                    {formats && params.step && formats[params.step]}
-                  </p>
-                </ReactTooltip>
-              </>
-            ) : (
-              ''
-            )}
+          <div className="row">
+            <div className="col-9">
+              <div className="label-heading">
+                Part {selectedStep && selectedStep.step}/5
+              </div>
+
+              <h3 className="page-heading ">
+                {selectedStep && selectedStep.label}
+              </h3>
+              <p className="normal-text mt-1 mb-0">
+                {selectedStep && selectedStep.subtitle}
+              </p>
+              <div className="gray-normal-text mt-1 mb-3">
+                {selectedStep && selectedStep.format ? (
+                  <>
+                    Preferred format: {selectedStep.format}{' '}
+                    <img
+                      className="gray-info-icon"
+                      width="15px "
+                      src={GrayInfoIcon}
+                      alt=""
+                      data-tip
+                      data-for="format"
+                    />
+                    <ReactTooltip place="bottom" id="format">
+                      <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                        All Accepted Formats
+                      </span>
+                      <p
+                        style={{
+                          color: 'white',
+                          fontSize: '12px',
+                          textTransform: 'initial',
+                        }}>
+                        {formats && params.step && formats[params.step]}
+                      </p>
+                    </ReactTooltip>
+                  </>
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="col-3">
+                <ActionDropDown className="">
+                  <Select
+                    classNamePrefix="react-select "
+                    options={viewOptions}
+                  />
+                </ActionDropDown>
+              </div>
+            </div>
           </div>
           <DragDropImg>
             {(documentData && documentData.length) ||
             (droppedFiles && droppedFiles.length) ? (
               <section className="thumbnail-dropzone mb-3">
-                <div
-                  className="mb-4"
-                  {...getRootProps({ className: 'dropzone mb-3' })}>
-                  <input {...getInputProps()} />
+                {showUpload ? (
+                  <div
+                    className="mb-4"
+                    {...getRootProps({ className: 'dropzone mb-3' })}>
+                    <input {...getInputProps()} />
 
-                  <div className="thumbnail-select-files">
-                    <img
-                      className="mb-2"
-                      width="70px"
-                      src={FileCloud}
-                      alt="file-cloud"
-                    />
-                    <br />
-                    Drag and drop your files here or <span>browse </span>
+                    <div className="thumbnail-select-files">
+                      <img
+                        className="mb-2"
+                        width="70px"
+                        src={FileCloud}
+                        alt="file-cloud"
+                      />
+                      <br />
+                      Drag and drop your files here or <span>browse </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ''
+                )}
 
                 {showDocuments()}
               </section>
@@ -925,22 +865,26 @@ export default function BrandAssetUpload() {
                 className={
                   noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
                 }>
-                <div
-                  className="mb-4"
-                  {...getRootProps({ className: 'dropzone mb-3' })}>
-                  <input {...getInputProps()} />
+                {showUpload ? (
+                  <div
+                    className="mb-4"
+                    {...getRootProps({ className: 'dropzone mb-3' })}>
+                    <input {...getInputProps()} />
 
-                  <div className=" select-files ">
-                    <img
-                      className="mb-2"
-                      width="70px"
-                      src={FileCloud}
-                      alt="file-cloud"
-                    />
-                    <br />
-                    Drag and drop your files here or <span>browse </span>
+                    <div className=" select-files ">
+                      <img
+                        className="mb-2"
+                        width="70px"
+                        src={FileCloud}
+                        alt="file-cloud"
+                      />
+                      <br />
+                      Drag and drop your files here or <span>browse </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ''
+                )}
 
                 {showDocuments()}
               </section>
@@ -1021,11 +965,11 @@ export default function BrandAssetUpload() {
           src={CloseIcon}
           alt="close"
           className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowModal(false);
-            removeParams('step');
-            setShowEditor(false);
-          }}
+          // onClick={() => {
+          //   setShowModal(false);
+          //   removeParams('step');
+          //   setShowEditor(false);
+          // }}
           role="presentation"
         />
         <ModalBox>
