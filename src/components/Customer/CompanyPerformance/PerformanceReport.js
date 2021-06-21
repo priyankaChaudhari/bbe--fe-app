@@ -7,12 +7,12 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useLayoutEffect,
+  // useLayoutEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
-import * as am4charts from '@amcharts/amcharts4/charts';
+// import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select, { components } from 'react-select';
 import {
@@ -46,6 +46,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
 import { dateOptions } from '../../../constants/CompanyPerformanceConstants';
+import SalesPerformanceChart from './SalePerformanceGraph';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -53,7 +54,7 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 am4core.useTheme(am4themes_dataviz);
 export default function PerformanceReport({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
-  const [lineChartData, setLineChartData] = useState([{}]);
+  // const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [dspSpend, setDspSpend] = useState(null);
@@ -64,7 +65,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
   ]);
-  const [isApiSuccess, setIsApiSuccess] = useState(false);
+  // const [isApiSuccess, setIsApiSuccess] = useState(false);
   const COLORS = ['#97ca61', '#EAEFF2'];
   // sales performance varibales and BB % start
   const currentDate = new Date();
@@ -84,6 +85,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       key: 'BBselection',
     },
   ]);
+  const [salesChartData, setsalesChartData] = useState([]);
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
   const [showBBCustomDateModal, setShowBBCustomDateModal] = useState(false);
   const [groupBy, setGroupBy] = useState('daily');
@@ -95,10 +97,10 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   // sales performance varibales and BB % end
 
   //
-  const [revenueData, setRevenueData] = useState([{}]);
-  const [unitsSoldData, setUnitsSoldData] = useState([{}]);
-  const [trafficData, setTrafficData] = useState([{}]);
-  const [conversionData, setConversionData] = useState([{}]);
+  // const [revenueData, setRevenueData] = useState([{}]);
+  // const [unitsSoldData, setUnitsSoldData] = useState([{}]);
+  // const [trafficData, setTrafficData] = useState([{}]);
+  // const [conversionData, setConversionData] = useState([{}]);
   const [allSalesTotal, setAllSalesTotal] = useState({});
   const [filters, setFilters] = useState({
     daily: true,
@@ -106,7 +108,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     month: false,
   });
   const [isApiCall, setIsApiCall] = useState(false);
-  const [activeSales, setActiveSales] = useState('revenue');
+  const [activeSales, setActiveSales] = useState({ revenue: true });
   const customStyles = {
     content: {
       top: '50%',
@@ -122,198 +124,198 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     },
   };
 
-  useLayoutEffect(() => {
-    const chart = am4core.create('chartdiv', am4charts.XYChart);
-    chart.paddingRight = 20;
-    chart.logo.disabled = true; // disable amchart logo
-    chart.data = lineChartData; // bind th data
-    const currentLabel = `label1`;
-    const previousLabel = `label2`;
-    const tooltipDate =
-      '<div style="color: white; font-size: 16px;">{name}</div>';
+  // useLayoutEffect(() => {
+  //   // const chart = am4core.create('chartdiv', am4charts.XYChart);
+  //   // chart.paddingRight = 20;
+  //   // chart.logo.disabled = true; // disable amchart logo
+  //   // chart.data = lineChartData; // bind th data
+  //   // const currentLabel = `label1`;
+  //   // const previousLabel = `label2`;
+  //   // const tooltipDate =
+  //   //   '<div style="color: white; font-size: 16px;">{name}</div>';
 
-    function renderTooltip(name, color, value, cs, percent, formatter) {
-      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
-      <li style="display: inline-block;">
-        {' '}
-        <div style="background-color: ${color};
-        border: 1px solid white;
-        border-radius: 100%;
-        width: 10px;
-        height: 10px;" />
-      </li>
-      <li style="display: inline-block;">
-        <div style="color: #f4f6fc;
-        text-transform: uppercase;
-        font-size: 11px;
-        padding-left: 5px;">${name} </div>
-      </li>
-      <li style="display: inline-block; float: right; margin-left: 25px;">
-        <div style=" color: white;
-        font-size: 16px; text-align: right;
-       
-        ">${cs !== null ? cs : ''}${
-        formatter !== null
-          ? `{${value}.formatNumber('${formatter}')}`
-          : `{${value}}`
-      }${percent !== null ? percent : ''}
-      </div>
-      </li>
-    </ul>
-  
-    `;
+  //   // function renderTooltip(name, color, value, cs, percent, formatter) {
+  //   //   const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
+  //   //   <li style="display: inline-block;">
+  //   //     {' '}
+  //   //     <div style="background-color: ${color};
+  //   //     border: 1px solid white;
+  //   //     border-radius: 100%;
+  //   //     width: 10px;
+  //   //     height: 10px;" />
+  //   //   </li>
+  //   //   <li style="display: inline-block;">
+  //   //     <div style="color: #f4f6fc;
+  //   //     text-transform: uppercase;
+  //   //     font-size: 11px;
+  //   //     padding-left: 5px;">${name} </div>
+  //   //   </li>
+  //   //   <li style="display: inline-block; float: right; margin-left: 25px;">
+  //   //     <div style=" color: white;
+  //   //     font-size: 16px; text-align: right;
 
-      return tooltipText;
-    }
+  //   //     ">${cs !== null ? cs : ''}${
+  //   //     formatter !== null
+  //   //       ? `{${value}.formatNumber('${formatter}')}`
+  //   //       : `{${value}}`
+  //   //   }${percent !== null ? percent : ''}
+  //   //   </div>
+  //   //   </li>
+  //   // </ul>
 
-    // render X axis
-    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    dateAxis.renderer.minGridDistance = 50;
-    dateAxis.renderer.grid.template.location = 0.5;
-    dateAxis.renderer.labels.template.location = 0.5;
-    dateAxis.dy = 10;
-    dateAxis.cursorTooltipEnabled = false;
+  //   // `;
 
-    // render y axis
-    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.renderer.grid.template.disabled = true;
-    valueAxis.cursorTooltipEnabled = false;
-    valueAxis.numberFormatter = new am4core.NumberFormatter();
-    valueAxis.numberFormatter.bigNumberPrefixes = [
-      { number: 1e3, suffix: 'K' },
-      { number: 1e6, suffix: 'M' },
-      { number: 1e9, suffix: 'B' },
-    ];
-    valueAxis.numberFormatter.smallNumberPrefixes = [];
-    valueAxis.min = 0;
+  //   //   return tooltipText;
+  //   // }
 
-    // add currency only for revenue
+  //   // // render X axis
+  //   // const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+  //   // dateAxis.renderer.minGridDistance = 50;
+  //   // dateAxis.renderer.grid.template.location = 0.5;
+  //   // dateAxis.renderer.labels.template.location = 0.5;
+  //   // dateAxis.dy = 10;
+  //   // dateAxis.cursorTooltipEnabled = false;
 
-    if (activeSales === 'revenue') {
-      valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-    } else {
-      valueAxis.numberFormatter.numberFormat = '#.#a';
-    }
+  //   // // render y axis
+  //   // const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+  //   // valueAxis.renderer.grid.template.disabled = true;
+  //   // valueAxis.cursorTooltipEnabled = false;
+  //   // valueAxis.numberFormatter = new am4core.NumberFormatter();
+  //   // valueAxis.numberFormatter.bigNumberPrefixes = [
+  //   //   { number: 1e3, suffix: 'K' },
+  //   //   { number: 1e6, suffix: 'M' },
+  //   //   { number: 1e9, suffix: 'B' },
+  //   // ];
+  //   // valueAxis.numberFormatter.smallNumberPrefixes = [];
+  //   // valueAxis.min = 0;
 
-    // create a tooltip
-    const flag = selectedValue !== 'custom';
-    let tooltipCurrent = '';
-    let tooltipPrevious = '';
+  //   // // add currency only for revenue
 
-    if (activeSales === 'revenue') {
-      tooltipCurrent = renderTooltip(
-        'Recent',
-        '#FF5933',
-        currentLabel,
-        currencySymbol,
-        null,
-        null,
-      );
-      if (flag) {
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          currencySymbol,
-          null,
-          null,
-        );
-      }
-      // tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
-      // tooltipCurrent = `${currencySymbol}{label1}[/]`;
-      // tooltipPrevious = flag
-      //   ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
-      //   : '';
-    } else if (activeSales === 'conversion') {
-      tooltipCurrent = renderTooltip(
-        'Recent',
-        '#FF5933',
-        currentLabel,
-        null,
-        '%',
-        null,
-      );
-      if (flag) {
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          null,
-          '%',
-          null,
-        );
-      }
-      // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      // tooltipCurrent = `{label1}%[/]`;
-      // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
-    } else {
-      tooltipCurrent = renderTooltip(
-        'Recent',
-        '#FF5933',
-        currentLabel,
-        null,
-        null,
-        null,
-      );
-      if (flag) {
-        tooltipPrevious = renderTooltip(
-          'Previous',
-          '#BFC5D2',
-          previousLabel,
-          null,
-          null,
-          null,
-        );
-      }
-      // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-      // tooltipCurrent = `{label1}[/]`;
-      // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
-    }
+  //   // if (activeSales === 'revenue') {
+  //   //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+  //   // } else {
+  //   //   valueAxis.numberFormatter.numberFormat = '#.#a';
+  //   // }
 
-    // Create series for previous data
-    const series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = 'value2';
-    series.dataFields.dateX = 'name';
-    series.strokeWidth = 2;
-    series.stroke = am4core.color('#BFC5D2');
-    // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
-    series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
-    series.fill = am4core.color('#2e384d');
-    series.propertyFields.strokeDasharray = 'dashLength';
+  //   // // create a tooltip
+  //   // const flag = selectedValue !== 'custom';
+  //   // let tooltipCurrent = '';
+  //   // let tooltipPrevious = '';
 
-    // add bullet for
-    const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
-    circleBullet2.circle.fill = am4core.color('#fff');
-    circleBullet2.circle.strokeWidth = 1;
-    circleBullet2.circle.radius = 3;
+  //   // if (activeSales === 'revenue') {
+  //   //   tooltipCurrent = renderTooltip(
+  //   //     'Recent',
+  //   //     '#FF5933',
+  //   //     currentLabel,
+  //   //     currencySymbol,
+  //   //     null,
+  //   //     null,
+  //   //   );
+  //   //   if (flag) {
+  //   //     tooltipPrevious = renderTooltip(
+  //   //       'Previous',
+  //   //       '#BFC5D2',
+  //   //       previousLabel,
+  //   //       currencySymbol,
+  //   //       null,
+  //   //       null,
+  //   //     );
+  //   //   }
+  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
+  //   //   // tooltipCurrent = `${currencySymbol}{label1}[/]`;
+  //   //   // tooltipPrevious = flag
+  //   //   //   ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
+  //   //   //   : '';
+  //   // } else if (activeSales === 'conversion') {
+  //   //   tooltipCurrent = renderTooltip(
+  //   //     'Recent',
+  //   //     '#FF5933',
+  //   //     currentLabel,
+  //   //     null,
+  //   //     '%',
+  //   //     null,
+  //   //   );
+  //   //   if (flag) {
+  //   //     tooltipPrevious = renderTooltip(
+  //   //       'Previous',
+  //   //       '#BFC5D2',
+  //   //       previousLabel,
+  //   //       null,
+  //   //       '%',
+  //   //       null,
+  //   //     );
+  //   //   }
+  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+  //   //   // tooltipCurrent = `{label1}%[/]`;
+  //   //   // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
+  //   // } else {
+  //   //   tooltipCurrent = renderTooltip(
+  //   //     'Recent',
+  //   //     '#FF5933',
+  //   //     currentLabel,
+  //   //     null,
+  //   //     null,
+  //   //     null,
+  //   //   );
+  //   //   if (flag) {
+  //   //     tooltipPrevious = renderTooltip(
+  //   //       'Previous',
+  //   //       '#BFC5D2',
+  //   //       previousLabel,
+  //   //       null,
+  //   //       null,
+  //   //       null,
+  //   //     );
+  //   //   }
+  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
+  //   //   // tooltipCurrent = `{label1}[/]`;
+  //   //   // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
+  //   // }
 
-    // series for current data
-    const series2 = chart.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'value1';
-    series2.dataFields.dateX = 'name';
-    series2.strokeWidth = 2;
-    series2.minBulletDistance = 10;
-    // series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
-    series2.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
-    series2.stroke = am4core.color('#FF5933');
-    series2.fill = am4core.color('#2e384d');
+  //   // // Create series for previous data
+  //   // const series = chart.series.push(new am4charts.LineSeries());
+  //   // series.dataFields.valueY = 'value2';
+  //   // series.dataFields.dateX = 'name';
+  //   // series.strokeWidth = 2;
+  //   // series.stroke = am4core.color('#BFC5D2');
+  //   // // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
+  //   // series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
+  //   // series.fill = am4core.color('#2e384d');
+  //   // series.propertyFields.strokeDasharray = 'dashLength';
 
-    const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
-    circleBullet.circle.fill = am4core.color('#fff');
-    circleBullet.circle.strokeWidth = 1;
-    circleBullet.circle.radius = 3;
+  //   // // add bullet for
+  //   // const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
+  //   // circleBullet2.circle.fill = am4core.color('#fff');
+  //   // circleBullet2.circle.strokeWidth = 1;
+  //   // circleBullet2.circle.radius = 3;
 
-    // Add cursor
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.lineY.disabled = true;
-    chart.cursor.lineX.disabled = true;
-    chart.cursor.snapToSeries = [series, series2];
-    chart.cursor.behavior = 'none'; // disable zoom-in func.
+  //   // // series for current data
+  //   // const series2 = chart.series.push(new am4charts.LineSeries());
+  //   // series2.dataFields.valueY = 'value1';
+  //   // series2.dataFields.dateX = 'name';
+  //   // series2.strokeWidth = 2;
+  //   // series2.minBulletDistance = 10;
+  //   // // series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
+  //   // series2.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
+  //   // series2.stroke = am4core.color('#FF5933');
+  //   // series2.fill = am4core.color('#2e384d');
 
-    return () => {
-      chart.dispose();
-    };
-  }, [lineChartData, activeSales, currency, currencySymbol, selectedValue]);
+  //   // const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
+  //   // circleBullet.circle.fill = am4core.color('#fff');
+  //   // circleBullet.circle.strokeWidth = 1;
+  //   // circleBullet.circle.radius = 3;
+
+  //   // // Add cursor
+  //   // chart.cursor = new am4charts.XYCursor();
+  //   // chart.cursor.lineY.disabled = true;
+  //   // chart.cursor.lineX.disabled = true;
+  //   // chart.cursor.snapToSeries = [series, series2];
+  //   // chart.cursor.behavior = 'none'; // disable zoom-in func.
+
+  //   // return () => {
+  //   //   chart.dispose();
+  //   // };
+  // }, [lineChartData, activeSales, currency, currencySymbol, selectedValue]);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -365,18 +367,118 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     return parseFloat(diff.toFixed(2));
   };
 
-  if (isApiSuccess) {
-    if (activeSales === 'traffic') {
-      setLineChartData(trafficData);
-    } else if (activeSales === 'units sold') {
-      setLineChartData(unitsSoldData);
-    } else if (activeSales === 'conversion') {
-      setLineChartData(conversionData);
-    } else if (activeSales === 'revenue') {
-      setLineChartData(revenueData);
+  // if (isApiSuccess) {
+  //   if (activeSales === 'traffic') {
+  //     setLineChartData(trafficData);
+  //   } else if (activeSales === 'unitsSold') {
+  //     setLineChartData(unitsSoldData);
+  //   } else if (activeSales === 'conversion') {
+  //     setLineChartData(conversionData);
+  //   } else if (activeSales === 'revenue') {
+  //     setLineChartData(revenueData);
+  //   }
+  //   setIsApiSuccess(false);
+  // }
+
+  const bindSalesResponseData = (response) => {
+    const tempData = [];
+
+    // filterout previous data in one temporary object.
+    if (response.daily_facts.previous && response.daily_facts.previous.length) {
+      response.daily_facts.previous.forEach((item) => {
+        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        tempData.push({
+          revenuePrevious: item.revenue,
+          unitsSoldPrevious: item.units_sold,
+          trafficPrevious: item.traffic,
+          conversionPrevious: item.conversion,
+          previousDate,
+
+          revenuePreviousLabel:
+            item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+          unitsSoldPreviousLabel:
+            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+          trafficPreviousLabel:
+            item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+          conversionPreviousLabel:
+            item.conversion !== null ? item.conversion : '0',
+        });
+      });
     }
-    setIsApiSuccess(false);
-  }
+
+    // filterout current data in one temporary object.
+    if (response.daily_facts.current && response.daily_facts.current.length) {
+      response.daily_facts.current.forEach((item, index) => {
+        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        let indexNumber = index;
+        // add the current data at same index of prevoius in temporary object
+        if (
+          response.daily_facts.previous &&
+          index < response.daily_facts.previous.length
+        ) {
+          tempData[index].date = currentReportDate;
+          tempData[index].revenueCurrent = item.revenue;
+          tempData[index].unitsSoldCurrent = item.units_sold;
+          tempData[index].trafficCurrent = item.traffic;
+          tempData[index].conversionCurrent = item.conversion;
+
+          tempData[index].revenueCurrentLabel =
+            item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
+          tempData[index].unitsSoldCurrentLabel =
+            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+          tempData[index].trafficCurrentLabel =
+            item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+          tempData[index].conversionCurrentLabel =
+            item.conversion !== null ? item.conversion : '0';
+
+          // to add the dotted line. we have to check null matrix and add the dummy number like 8
+          if (index > 0) {
+            indexNumber = index - 1;
+          } else {
+            indexNumber = index;
+          }
+          tempData[indexNumber].revenueDashLength =
+            item.revenue === null ? 8 : null;
+          tempData[indexNumber].unitsSoldDashLength =
+            item.units_sold === null ? 8 : null;
+          tempData[indexNumber].trafficDashLength =
+            item.traffic === null ? 8 : null;
+          tempData[indexNumber].conversionDashLength =
+            item.conversion === null ? 8 : null;
+        } else {
+          // if current data count is larger than previous count then
+          // generate separate key for current data and defien previous value null and previous label 0
+          tempData.push({
+            revenueCurrent: item.revenue,
+            unitsSoldCurrent: item.units_sold,
+            trafficCurrent: item.traffic,
+            conversionCurrent: item.conversion,
+            date: currentReportDate,
+
+            revenuePrevious: null,
+            unitsSoldPrevious: null,
+            trafficPrevious: null,
+            conversionPrevious: null,
+
+            revenueCurrentLabel:
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+            unitsSoldCurrentLabel:
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            trafficCurrentLabel:
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            conversionCurrentLabel:
+              item.conversion !== null ? item.conversion : '0',
+
+            revenuePreviousLabel: '0.00',
+            unitsSoldPreviousLabel: '0.00',
+            trafficPreviousLabel: '0.00',
+            conversionPreviousLabel: '0',
+          });
+        }
+      });
+    }
+    return tempData;
+  };
 
   const getBBData = useCallback(
     (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
@@ -456,6 +558,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           setIsApiCall(false);
         }
         if (res && res.status === 200 && res.data && res.data.daily_facts) {
+          const salesGraphData = bindSalesResponseData(res.data);
+          setsalesChartData(salesGraphData);
+
           const tempRevenueData = [];
           const tempUnitsSoldData = [];
           const tempTrafficData = [];
@@ -632,11 +737,11 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             conversion: conversionTotal,
           });
           // setLineChartData(tempRevenueData);
-          setRevenueData(tempRevenueData);
-          setUnitsSoldData(tempUnitsSoldData);
-          setTrafficData(tempTrafficData);
-          setConversionData(tempConversionData);
-          setIsApiSuccess(true);
+          // setRevenueData(tempRevenueData);
+          // setUnitsSoldData(tempUnitsSoldData);
+          // setTrafficData(tempTrafficData);
+          // setConversionData(tempConversionData);
+          // setIsApiSuccess(true);
           if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
             const lastUpdated = res.data.pf_oi_is[0].latest_date;
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
@@ -691,23 +796,39 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   );
 
   // when click on any one from revenue, nuit sold, traffic and conversion then set the graph data
-  const setChartData = (value) => {
-    if (value === 'traffic') {
-      setLineChartData(trafficData);
-      setActiveSales('traffic');
+  // const setChartData = (value) => {
+  //   if (value === 'traffic') {
+  //     setLineChartData(trafficData);
+  //     setActiveSales('traffic');
+  //   }
+  //   if (value === 'units sold') {
+  //     setLineChartData(unitsSoldData);
+  //     setActiveSales('units sold');
+  //   }
+  //   if (value === 'conversion') {
+  //     setLineChartData(conversionData);
+  //     setActiveSales('conversion');
+  //   }
+  //   if (value === 'revenue') {
+  //     setLineChartData(revenueData);
+  //     setActiveSales('revenue');
+  //   }
+  // };
+
+  const setSalesBoxClass = (name, classValue) => {
+    let selectedClass = '';
+    if (Object.prototype.hasOwnProperty.call(activeSales, name)) {
+      // if (_.size(selectedAdBox) === 1) {
+      //   selectedClass = 'order-chart-box active fix-height';
+      // } else {
+      selectedClass = `order-chart-box ${classValue} fix-height`;
+      // }
+    } else if (_.size(activeSales) === 4) {
+      selectedClass = 'order-chart-box fix-height disabled';
+    } else {
+      selectedClass = 'order-chart-box fix-height';
     }
-    if (value === 'units sold') {
-      setLineChartData(unitsSoldData);
-      setActiveSales('units sold');
-    }
-    if (value === 'conversion') {
-      setLineChartData(conversionData);
-      setActiveSales('conversion');
-    }
-    if (value === 'revenue') {
-      setLineChartData(revenueData);
-      setActiveSales('revenue');
-    }
+    return selectedClass;
   };
 
   // set the greybox of BB% and value for that
@@ -1031,6 +1152,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     return [];
   };
 
+  const setBoxToggle = (name) => {
+    if (
+      Object.prototype.hasOwnProperty.call(activeSales, name) &&
+      _.size(activeSales) > 1
+    ) {
+      setActiveSales(_.omit(activeSales, [name]));
+    } else if (_.size(activeSales) < 4) {
+      setActiveSales(_.omit(_.assign(activeSales, { [name]: true })));
+    }
+  };
+
   const renderMarketplaceDropDown = () => {
     return (
       <div className="row">
@@ -1099,24 +1231,42 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const rednerSaleGroupBy = () => {
     return (
       <div className="row mt-4">
-        <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-          <ul className="rechart-item">
-            <li>
-              <div className="weeks">
-                <span className="orange block" />
-                <span>Recent</span>
-              </div>
-            </li>
-            {selectedValue !== 'custom' ? (
+        {_.size(activeSales) <= 2 ? (
+          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+            <ul className="rechart-item">
               <li>
                 <div className="weeks">
-                  <span className="gray block" />
-                  <span>Previous</span>
+                  <span
+                    // className="orange block"
+                    className={
+                      _.size(activeSales) === 1
+                        ? `${_.keys(activeSales)[0]} adSales circle`
+                        : 'darkGray circle'
+                    }
+                  />
+                  <span>Recent</span>
                 </div>
               </li>
-            ) : null}
-          </ul>
-        </div>
+              {selectedValue !== 'custom' ? (
+                <li>
+                  <div className="weeks">
+                    <span
+                      // className="gray block"
+                      className={
+                        _.size(activeSales) === 1
+                          ? `${_.keys(activeSales)[0]} block`
+                          : 'darkGray block'
+                      }
+                    />
+                    <span>Previous</span>
+                  </div>
+                </li>
+              ) : null}
+            </ul>
+          </div>
+        ) : (
+          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
+        )}
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
           {' '}
           <div className="days-container ">
@@ -1173,6 +1323,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     let previousTotal = 0;
     let difference = 0;
     let theCurrency = null;
+    let boxActiveClass = '';
     if (name === 'revenue') {
       currentTotal =
         allSalesTotal && allSalesTotal.revenue
@@ -1189,7 +1340,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           ? allSalesTotal.revenue.difference
           : 0;
       theCurrency = currency !== null ? `(${currency})` : null;
-    } else if (name === 'units sold') {
+      boxActiveClass = 'ad-sales-active';
+    } else if (name === 'unitsSold') {
       currentTotal =
         allSalesTotal && allSalesTotal.units
           ? allSalesTotal.units.currentUnitsTotal
@@ -1203,6 +1355,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           ? allSalesTotal.units.difference
           : 0;
       theCurrency = ``;
+      boxActiveClass = 'ad-spend-active';
     } else if (name === 'traffic') {
       currentTotal =
         allSalesTotal && allSalesTotal.traffic
@@ -1219,6 +1372,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           ? allSalesTotal.traffic.difference
           : 0;
       theCurrency = ``;
+      boxActiveClass = 'ad-conversion-active';
     } else if (name === 'conversion') {
       currentTotal =
         allSalesTotal && allSalesTotal.conversion
@@ -1235,16 +1389,13 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           ? allSalesTotal.conversion.difference
           : 0;
       theCurrency = ``;
+      boxActiveClass = 'impression-active';
     }
     return (
       <div className={className}>
         <div
-          className={
-            activeSales === name
-              ? 'order-chart-box active fix-height '
-              : 'order-chart-box fix-height '
-          }
-          onClick={() => setChartData(name)}
+          className={setSalesBoxClass(name, boxActiveClass)}
+          onClick={() => setBoxToggle(name)}
           role="presentation">
           {' '}
           <div className="chart-name">
@@ -1304,7 +1455,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         <div className="row mr-1 ml-1">
           {renderSalesBox('revenue', 'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3')}
           {renderSalesBox(
-            'units sold',
+            'unitsSold',
             'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
           )}
           {renderSalesBox('traffic', 'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3')}
@@ -1316,7 +1467,14 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         {rednerSaleGroupBy()}
         <div className="clear-fix" />
         {/* render sale graph */}
-        <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
+        {/* <div id="chartdiv" style={{ width: '100%', height: '500px' }} /> */}
+        <SalesPerformanceChart
+          chartId="chartdiv"
+          chartData={salesChartData}
+          currencySymbol={currencySymbol}
+          selectedBox={activeSales}
+          selectedDF={selectedValue}
+        />
       </WhiteCard>
     );
   };
