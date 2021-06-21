@@ -736,6 +736,19 @@ export const WhiteCard = styled.div`
             background: #A04848
           };
 
+          .revenue { 
+            background:#0045B4
+          };
+          .unitsSold { 
+            background: #8C54FF
+          };
+          .traffic { 
+            background: #30A8BD
+          };
+          .conversion { 
+            background: #D6A307
+          };
+
           .darkGray{
             background: ${Theme.gray35};
             
