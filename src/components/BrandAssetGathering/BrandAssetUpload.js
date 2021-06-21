@@ -757,7 +757,7 @@ export default function BrandAssetUpload() {
         />
       ) : (
         <BrandAssetBody>
-          <DropDownBrandAsset>
+          <DropDownBrandAsset className="customer-dropdown-select d-lg-none d-block mb-3 ">
             <Select
               options={viewOptions}
               defaultValue={viewOptions.find((op) => op.value === params.step)}
@@ -777,139 +777,143 @@ export default function BrandAssetUpload() {
                   search: `step=${event.value}`,
                 });
               }}
-              className="customer-dropdown-select d-lg-none d-block mb-3 "
             />
           </DropDownBrandAsset>
-          <div className="row">
-            <div className="col-md-9 col-12">
-              <div className="label-heading">
-                Part {selectedStep && selectedStep.step}/5
-              </div>
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-md-9 col-12">
+                <div className="label-heading">
+                  Part {selectedStep && selectedStep.step}/5
+                </div>
 
-              <h3 className="page-heading ">
-                {selectedStep && selectedStep.label}
-              </h3>
-              <p className="normal-text mt-1 mb-0">
-                {selectedStep && selectedStep.subtitle}
-              </p>
-              <div className="gray-normal-text mt-1 mb-3">
-                {selectedStep && selectedStep.format ? (
-                  <>
-                    Preferred format: {selectedStep.format}{' '}
-                    <img
-                      className="gray-info-icon"
-                      width="15px "
-                      src={GrayInfoIcon}
-                      alt=""
-                      data-tip
-                      data-for="format"
-                    />
-                    <ReactTooltip place="bottom" id="format">
-                      <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
-                        All Accepted Formats
-                      </span>
-                      <p
-                        style={{
-                          color: 'white',
-                          fontSize: '12px',
-                          textTransform: 'initial',
-                        }}>
-                        {formats && params.step && formats[params.step]}
-                      </p>
-                    </ReactTooltip>
-                  </>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
-            <DragDropImg>
-              {(documentData && documentData.length) ||
-              (droppedFiles && droppedFiles.length) ? (
-                <section className="thumbnail-dropzone mb-3">
-                  {showUpload ? (
-                    <div
-                      className="mb-4"
-                      {...getRootProps({ className: 'dropzone mb-3' })}>
-                      <input {...getInputProps()} />
-
-                      <div className="thumbnail-select-files">
-                        <img
-                          className="mb-2"
-                          width="70px"
-                          src={FileCloud}
-                          alt="file-cloud"
-                        />
-                        <br />
-                        Drag and drop your files here or <span>browse </span>
-                      </div>
-                    </div>
+                <h3 className="page-heading ">
+                  {selectedStep && selectedStep.label}
+                </h3>
+                <p className="normal-text mt-1 mb-0">
+                  {selectedStep && selectedStep.subtitle}
+                </p>
+                <div className="gray-normal-text mt-1 mb-3">
+                  {selectedStep && selectedStep.format ? (
+                    <>
+                      Preferred format: {selectedStep.format}{' '}
+                      <img
+                        className="gray-info-icon"
+                        width="15px "
+                        src={GrayInfoIcon}
+                        alt=""
+                        data-tip
+                        data-for="format"
+                      />
+                      <ReactTooltip place="bottom" id="format">
+                        <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                          All Accepted Formats
+                        </span>
+                        <p
+                          style={{
+                            color: 'white',
+                            fontSize: '12px',
+                            textTransform: 'initial',
+                          }}>
+                          {formats && params.step && formats[params.step]}
+                        </p>
+                      </ReactTooltip>
+                    </>
                   ) : (
                     ''
                   )}
+                </div>
 
-                  {showDocuments()}
-                </section>
-              ) : (
-                <section
-                  className={
-                    noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
-                  }>
-                  {showUpload ? (
-                    <div
-                      className="mb-4"
-                      {...getRootProps({ className: 'dropzone mb-3' })}>
-                      <input {...getInputProps()} />
+                <DragDropImg>
+                  {(documentData && documentData.length) ||
+                  (droppedFiles && droppedFiles.length) ? (
+                    <section className="thumbnail-dropzone mb-3">
+                      {showUpload ? (
+                        <div
+                          className="mb-4"
+                          {...getRootProps({ className: 'dropzone mb-3' })}>
+                          <input {...getInputProps()} />
 
-                      <div className=" select-files ">
-                        <img
-                          className="mb-2"
-                          width="70px"
-                          src={FileCloud}
-                          alt="file-cloud"
+                          <div className="thumbnail-select-files">
+                            <img
+                              className="mb-2"
+                              width="70px"
+                              src={FileCloud}
+                              alt="file-cloud"
+                            />
+                            <br />
+                            Drag and drop your files here or{' '}
+                            <span>browse </span>
+                          </div>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+
+                      {showDocuments()}
+                    </section>
+                  ) : (
+                    <section
+                      className={
+                        noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
+                      }>
+                      {showUpload ? (
+                        <div
+                          className="mb-4"
+                          {...getRootProps({ className: 'dropzone mb-3' })}>
+                          <input {...getInputProps()} />
+
+                          <div className=" select-files ">
+                            <img
+                              className="mb-2"
+                              width="70px"
+                              src={FileCloud}
+                              alt="file-cloud"
+                            />
+                            <br />
+                            Drag and drop your files here or{' '}
+                            <span>browse </span>
+                          </div>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+
+                      {showDocuments()}
+                    </section>
+                  )}
+                  {params &&
+                  (params.step === 'additional-brand-material' ||
+                    params.step === 'iconography') &&
+                  documentData &&
+                  documentData.length === 0 ? (
+                    <CheckBox className="checkboxes mt-4 mb-4">
+                      <label
+                        className="check-container customer-pannel "
+                        htmlFor="step">
+                        {params.step === 'iconography'
+                          ? 'We don’t have any special icons'
+                          : 'We don’t have any other branding materials'}
+                        <input
+                          className="checkboxes"
+                          type="checkbox"
+                          id="step"
+                          readOnly
+                          defaultChecked={noImages}
+                          onChange={() => setNoImages(!noImages)}
                         />
-                        <br />
-                        Drag and drop your files here or <span>browse </span>
-                      </div>
-                    </div>
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
                   ) : (
                     ''
                   )}
-
-                  {showDocuments()}
-                </section>
-              )}
-              {params &&
-              (params.step === 'additional-brand-material' ||
-                params.step === 'iconography') &&
-              documentData &&
-              documentData.length === 0 ? (
-                <CheckBox className="checkboxes mt-4 mb-4">
-                  <label
-                    className="check-container customer-pannel "
-                    htmlFor="step">
-                    {params.step === 'iconography'
-                      ? 'We don’t have any special icons'
-                      : 'We don’t have any other branding materials'}
-                    <input
-                      className="checkboxes"
-                      type="checkbox"
-                      id="step"
-                      readOnly
-                      defaultChecked={noImages}
-                      onChange={() => setNoImages(!noImages)}
-                    />
-                    <span className="checkmark" />
-                  </label>
-                </CheckBox>
-              ) : (
-                ''
-              )}
-            </DragDropImg>
-            <div className="col-md-3 col-sm-12 text-center">
-              <ActionDropDown className="w-170">
-                <Select classNamePrefix="react-select " />
-              </ActionDropDown>
+                </DragDropImg>
+              </div>
+              <div className="col-md-3 col-sm-12 text-center ">
+                <ActionDropDown className="w-170" style={{ position: 'fixed' }}>
+                  <Select classNamePrefix="react-select " />
+                </ActionDropDown>
+              </div>
             </div>
           </div>
         </BrandAssetBody>
