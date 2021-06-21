@@ -125,4 +125,5 @@ export {
   updateBrandAssetStep,
   getBrandAssetsSummary,
   getBrandAssetsDetail,
+  downloadBrandAssetImages,
 } from './BrandAssestsApi';

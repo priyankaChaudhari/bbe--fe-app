@@ -40,7 +40,7 @@ export default function SetupCheckList({
         count: response.data && response.data.count,
       });
       getAssigneeCount(id).then((res) => {
-        if (res && res.data && res.data.brand_asset_completed_count === 5) {
+        if (res && res.data && res.data.is_completed) {
           setCheckBrandAssetComplete(true);
         } else setCheckBrandAssetComplete(false);
         setAgreementData({
@@ -191,8 +191,7 @@ export default function SetupCheckList({
                   {agreementData &&
                   agreementData.assigneeCount &&
                   agreementData.assigneeCount &&
-                  agreementData.assigneeCount.brand_asset_completed_count ===
-                    5 ? (
+                  agreementData.assigneeCount.is_completed ? (
                     ''
                   ) : (
                     <Link

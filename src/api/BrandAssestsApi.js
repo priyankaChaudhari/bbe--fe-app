@@ -85,3 +85,15 @@ export async function getBrandAssetsDetail(id) {
     });
   return result;
 }
+
+export async function downloadBrandAssetImages(data) {
+  const result = await axiosInstance
+    .post(`${API_DOCUMENTS}download/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

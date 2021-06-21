@@ -48,6 +48,12 @@ function BrandAssetsPreview({
     });
   };
 
+  console.log(
+    showAssetPreview &&
+      showAssetPreview.selectedFile &&
+      showAssetPreview.selectedFile.presigned_url,
+  );
+
   return (
     <>
       {isLoading.loader && isLoading.type === 'page' ? (

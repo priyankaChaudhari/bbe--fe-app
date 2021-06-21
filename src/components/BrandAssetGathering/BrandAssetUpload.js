@@ -57,6 +57,7 @@ import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
 import { deleteDocument, getDocuments } from '../../api';
 import {
+  downloadBrandAssetImages,
   getBrandAssetsDetail,
   getBrandAssetsSummary,
   updateBrandAssetStep,
@@ -114,7 +115,13 @@ export default function BrandAssetUpload() {
     documents: documentData,
     index: 0,
   });
-  const [showUpload, setShowUpload] = useState(null);
+  const [showBtns, setShowBtns] = useState({ upload: null, download: null });
+  const [selectedDropdown, setSelectedDropdown] = useState({});
+  const [downloadIds, setDownloadIds] = useState([]);
+  const downloadOptions = [
+    { value: 'current', label: 'Current asset type only' },
+    { value: 'all', label: 'All asset types' },
+  ];
 
   const [uploadCount, setUploadCount] = useState({
     'brand-logo': '0 files uploaded',
@@ -186,6 +193,9 @@ export default function BrandAssetUpload() {
     setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
+      const ids = [];
+      response.forEach((op) => ids.push(op.id));
+      setDownloadIds(ids);
       setDocumentData(response);
       setPreviewImageData(response);
       setIsLoading({ loader: false, type: 'page' });
@@ -195,6 +205,10 @@ export default function BrandAssetUpload() {
   const getAssetsSummary = () => {
     const tempCounts = {};
     getBrandAssetsSummary(brandId).then((response) => {
+      setSelectedDropdown({
+        ...selectedDropdown,
+        total: response && response.data && response.data.total_images,
+      });
       if (response && response.data && response.data.steps) {
         Object.keys(response.data.steps).forEach((key) => {
           const tempKey = key.replaceAll('_', '-');
@@ -215,8 +229,8 @@ export default function BrandAssetUpload() {
     getBrandAssetsDetail(brandId).then((response) => {
       setBrandAssetData(response && response.data);
       if (response && response.data && response.data.is_completed)
-        setShowUpload(false);
-      else setShowUpload(true);
+        setShowBtns({ ...showBtns, upload: false });
+      else setShowBtns({ ...showBtns, upload: false });
       if (
         response &&
         response.data &&
@@ -454,6 +468,35 @@ export default function BrandAssetUpload() {
     );
   };
 
+  const handleDownloadOptions = (event) => {
+    setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
+  };
+
+  const downloadImages = () => {
+    setShowBtns({ download: false, upload: false });
+    // downloadBrandAssetImages(
+    //   selectedDropdown.dropdownValue &&
+    //     selectedDropdown.dropdownValue.value === 'all'
+    //     ? { customer_id: id }
+    //     : { download_ids: ['2'] },
+    // ).then((res) => console.log(res));
+  };
+
+  const handleDownloadIds = () => {
+    // const ids = [...downloadIds];
+    // let cids = [];
+    // for (const i of ids) {
+    //   const index = ids.findIndex((day) => day === i);
+    //   console.log(index);
+    //   if (index > -1) {
+    //     cids = [...ids.slice(0, index), ...ids.slice(index + 1)];
+    //   } else {
+    //     ids.push(i);
+    //   }
+    // }
+    // console.log(ids, cids);
+  };
+
   const navigateStep = (item) => {
     if (
       documentData &&
@@ -525,9 +568,21 @@ export default function BrandAssetUpload() {
               <CheckBox className="selected-img mb-3">
                 <label
                   className="check-container customer-pannel"
-                  htmlFor="add-addendum">
-                  {/* <input type="checkbox" id="add-addendum" />
-                  <span className="checkmark" /> */}
+                  htmlFor={file.id}>
+                  {showBtns.download ? (
+                    <>
+                      <input
+                        type="checkbox"
+                        name={file.id}
+                        id={file.id}
+                        defaultChecked
+                        onChange={(event) => handleDownloadIds(event)}
+                      />
+                      <span className="checkmark" />{' '}
+                    </>
+                  ) : (
+                    ''
+                  )}
                   <CheckSelectImage>
                     <object
                       className="image-thumbnail"
@@ -607,9 +662,13 @@ export default function BrandAssetUpload() {
               <div className="col-md-6 col-sm-12">
                 <ul className="contract-download-nav ">
                   <li
-                    className="download-pdf"
+                    className={
+                      showBtns.upload ? 'download-pdf disabled' : 'download-pdf'
+                    }
                     role="presentation"
-                    onClick={() => setShowUpload(true)}>
+                    onClick={() =>
+                      setShowBtns({ download: false, upload: true })
+                    }>
                     <img
                       src={OrangeDownloadPdf}
                       alt="download"
@@ -621,7 +680,16 @@ export default function BrandAssetUpload() {
                   <li>
                     <span className="divide-arrow " />
                   </li>
-                  <li className="download-pdf">
+                  <li
+                    className={
+                      showBtns.download
+                        ? 'download-pdf disabled'
+                        : 'download-pdf'
+                    }
+                    role="presentation"
+                    onClick={() =>
+                      setShowBtns({ download: true, upload: false })
+                    }>
                     <img
                       src={OrangeDownloadPdf}
                       alt="download"
@@ -827,7 +895,7 @@ export default function BrandAssetUpload() {
                   {(documentData && documentData.length) ||
                   (droppedFiles && droppedFiles.length) ? (
                     <section className="thumbnail-dropzone mb-3">
-                      {showUpload ? (
+                      {showBtns.upload ? (
                         <div
                           className="mb-4"
                           {...getRootProps({ className: 'dropzone mb-3' })}>
@@ -856,7 +924,7 @@ export default function BrandAssetUpload() {
                       className={
                         noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
                       }>
-                      {showUpload ? (
+                      {showBtns.upload ? (
                         <div
                           className="mb-4"
                           {...getRootProps({ className: 'dropzone mb-3' })}>
@@ -909,52 +977,123 @@ export default function BrandAssetUpload() {
                   )}
                 </DragDropImg>
               </div>
-              <div className="col-md-3 col-sm-12 text-center ">
+              <div className="col-md-3 col-sm-12 ">
                 <ActionDropDown className="w-170" style={{ position: 'fixed' }}>
-                  <Select classNamePrefix="react-select " />
+                  {showBtns.download ? (
+                    <Select
+                      classNamePrefix="react-select "
+                      options={downloadOptions}
+                      defaultValue={
+                        selectedDropdown.dropdownValue === undefined
+                          ? downloadOptions[0]
+                          : selectedDropdown.dropdownValue
+                      }
+                      onChange={(event) => handleDownloadOptions(event)}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </ActionDropDown>
               </div>
             </div>
           </div>
         </BrandAssetBody>
       )}
+      <>
+        {isLoading.loader && isLoading.type === 'page' ? (
+          <PageLoader
+            component="upload-brand-asset"
+            color="#FF5933"
+            type="page"
+          />
+        ) : (
+          <>
+            {showBtns.download ||
+            showBtns.upload ||
+            !(brandAssetData && brandAssetData.is_completed) ? (
+              <BrandAssetFooter>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12 text-right">
+                      {brandAssetData && brandAssetData.is_completed ? (
+                        <span className="skip-step cursor">
+                          {showBtns.download
+                            ? `${
+                                selectedDropdown.dropdownValue &&
+                                selectedDropdown.dropdownValue.value === 'all'
+                                  ? selectedDropdown.total
+                                  : documentData && documentData.length
+                              } files selected`
+                            : ''}
+                        </span>
+                      ) : (
+                        <span
+                          className="skip-step cursor"
+                          onClick={() => redirectTo('skipped', '', '')}
+                          role="presentation">
+                          Skip this step
+                        </span>
+                      )}
 
-      <BrandAssetFooter>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-12 text-right">
-              <span
-                className="skip-step cursor"
-                onClick={() => redirectTo('skipped', '', '')}
-                role="presentation">
-                Skip this step
-              </span>
-              <Button
-                className="btn-primary"
-                disabled={
-                  isLoading.loader || noImages
-                    ? false
-                    : documentData && documentData.length === 0
-                }
-                onClick={() => redirectTo('completed', '', '')}>
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  <>
-                    Next Step
-                    <img
-                      className="btn-icon ml-2"
-                      width="16px"
-                      src={WhiteArrowRight}
-                      alt=""
-                    />{' '}
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </BrandAssetFooter>
+                      <Button
+                        className="btn-primary"
+                        disabled={
+                          isLoading.loader || noImages
+                            ? false
+                            : documentData && documentData.length === 0
+                        }
+                        onClick={() =>
+                          showBtns.download
+                            ? downloadImages()
+                            : showBtns.upload
+                            ? setShowBtns({ download: false, upload: false })
+                            : redirectTo('completed', '', '')
+                        }>
+                        {isLoading.loader && isLoading.type === 'button' ? (
+                          <PageLoader color="#fff" type="button" />
+                        ) : (
+                          <>
+                            {brandAssetData && brandAssetData.is_completed ? (
+                              <>
+                                {showBtns.upload
+                                  ? 'Finish uploading'
+                                  : 'Download Selected'}
+                              </>
+                            ) : (
+                              <>
+                                Next Step
+                                <img
+                                  className="btn-icon ml-2"
+                                  width="16px"
+                                  src={WhiteArrowRight}
+                                  alt=""
+                                />{' '}
+                              </>
+                            )}
+                          </>
+                        )}
+                      </Button>
+                      {showBtns.download ? (
+                        <Button
+                          className="btn-transparent w-50 on-boarding  ml-4"
+                          onClick={() =>
+                            setShowBtns({ download: false, upload: false })
+                          }>
+                          Cancel
+                        </Button>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </BrandAssetFooter>
+            ) : (
+              ''
+            )}
+          </>
+        )}
+      </>
 
       <Modal
         isOpen={showAssetPreview && showAssetPreview.show}
