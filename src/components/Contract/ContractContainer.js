@@ -346,9 +346,11 @@ export default function ContractContainer() {
           formData.contract_type &&
           formData.contract_type.toLowerCase().includes('recurring') &&
           showSection.dspAddendum)) &&
-      firstMonthDate &&
-      secondMonthDate &&
-      thirdMonthDate
+      (!formData.start_date ||
+        (formData.start_date &&
+          firstMonthDate &&
+          secondMonthDate &&
+          thirdMonthDate))
     ) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
@@ -1720,9 +1722,8 @@ export default function ContractContainer() {
 
     const newAddendumAddedData =
       newAddendumData && newAddendumData.addendum
-        ? newAddendumData.addendum
-        : // .replaceAll('<p>', '<p style="margin:0">')
-          '';
+        ? newAddendumData.addendum.replaceAll('<p>', '<p style="margin:0">')
+        : '';
 
     const addendumSignatureData = AddendumSign.replace(
       'CUSTOMER_NAME',
@@ -1754,7 +1755,7 @@ export default function ContractContainer() {
         : dspAddendumSignature
     } ${
       newAddendumAddedData
-        ? newAddendumAddedData.length <= 7
+        ? newAddendumAddedData.length <= 24
           ? ''
           : addendumData + newAddendumAddedData + addendumSignatureData
         : ''
