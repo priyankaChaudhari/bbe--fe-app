@@ -399,7 +399,7 @@ export default function BrandAssetUpload() {
     },
   });
 
-  const redirectTo = (value, step = null) => {
+  const redirectTo = (value, step = null, type) => {
     setIsLoading({ loader: true, type: 'button' });
     updateBrandAssetStep(brandId, {
       steps: {
@@ -409,7 +409,7 @@ export default function BrandAssetUpload() {
       last_visited_step: selectedStep && selectedStep.skip,
     }).then((response) => {
       if (response && response.status === 200) {
-        if (selectedStep && selectedStep.skip === 'summary') {
+        if (type !== 'lhs' && selectedStep && selectedStep.skip === 'summary') {
           history.push(
             history.location.pathname.includes('/assigned-brand-asset/')
               ? PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY.replace(
@@ -472,7 +472,7 @@ export default function BrandAssetUpload() {
       documentData.length &&
       (params && params.step) !== item.url
     )
-      redirectTo('completed', item.url);
+      redirectTo('completed', item.url, 'lhs');
     else
       history.push({
         pathname: history.location.pathname.includes('/assigned-brand-asset/')
@@ -981,7 +981,7 @@ export default function BrandAssetUpload() {
             <div className="col-12 text-right">
               <span
                 className="skip-step cursor"
-                onClick={() => redirectTo('skipped')}
+                onClick={() => redirectTo('skipped', '', '')}
                 role="presentation">
                 Skip this step
               </span>
@@ -992,7 +992,7 @@ export default function BrandAssetUpload() {
                     ? false
                     : documentData && documentData.length === 0
                 }
-                onClick={() => redirectTo('completed')}>
+                onClick={() => redirectTo('completed', '', '')}>
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
