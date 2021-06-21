@@ -48,6 +48,7 @@ export default function DSPPerformanceChart({
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
+    chart.current.data = [];
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
     // render X axis
@@ -466,51 +467,49 @@ export default function DSPPerformanceChart({
             valueAxis4.renderer.labels.template.disabled = true;
           }
         } else if (index === 0) {
-            // console.log('index  0 if');
-            series.yAxis = valueAxis;
-            valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(
-              item,
-            );
-            firstAxis = 'others';
-          } else if (index === 1) {
-            // console.log('index last else 1');
-            series.yAxis = valueAxis2;
-            valueAxis2.renderer.opposite = true;
-            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
-              item,
-            );
-            secondAxis = 'other';
-          } else if (index === 2) {
-            // console.log('index 2 else', secondAxis);
-            series.yAxis = valueAxis3;
-            valueAxis3.renderer.opposite = true;
-            valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
-              item,
-            );
-            valueAxis.renderer.line.strokeOpacity = 0;
-            valueAxis2.renderer.line.strokeOpacity = 0;
-            valueAxis3.renderer.line.strokeOpacity = 0;
-            valueAxis.renderer.labels.template.disabled = true;
-            valueAxis2.renderer.labels.template.disabled = true;
-            valueAxis3.renderer.labels.template.disabled = true;
-            thirdAxis = 'others';
-          } else if (index === 3) {
-            // console.log('index  3 if');
-            series.yAxis = valueAxis4;
-            valueAxis4.renderer.opposite = true;
-            valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
-              item,
-            );
+          // console.log('index  0 if');
+          series.yAxis = valueAxis;
+          valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+          firstAxis = 'others';
+        } else if (index === 1) {
+          // console.log('index last else 1');
+          series.yAxis = valueAxis2;
+          valueAxis2.renderer.opposite = true;
+          valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+          secondAxis = 'other';
+        } else if (index === 2) {
+          // console.log('index 2 else', secondAxis);
+          series.yAxis = valueAxis3;
+          valueAxis3.renderer.opposite = true;
+          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
+          valueAxis.renderer.line.strokeOpacity = 0;
+          valueAxis2.renderer.line.strokeOpacity = 0;
+          valueAxis3.renderer.line.strokeOpacity = 0;
+          valueAxis.renderer.labels.template.disabled = true;
+          valueAxis2.renderer.labels.template.disabled = true;
+          valueAxis3.renderer.labels.template.disabled = true;
+          thirdAxis = 'others';
+        } else if (index === 3) {
+          // console.log('index  3 if');
+          series.yAxis = valueAxis4;
+          valueAxis4.renderer.opposite = true;
+          valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
+            item,
+          );
 
-            valueAxis.renderer.line.strokeOpacity = 0;
-            valueAxis2.renderer.line.strokeOpacity = 0;
-            valueAxis3.renderer.line.strokeOpacity = 0;
-            valueAxis4.renderer.line.strokeOpacity = 0;
-            valueAxis.renderer.labels.template.disabled = true;
-            valueAxis2.renderer.labels.template.disabled = true;
-            valueAxis3.renderer.labels.template.disabled = true;
-            valueAxis4.renderer.labels.template.disabled = true;
-          }
+          valueAxis.renderer.line.strokeOpacity = 0;
+          valueAxis2.renderer.line.strokeOpacity = 0;
+          valueAxis3.renderer.line.strokeOpacity = 0;
+          valueAxis4.renderer.line.strokeOpacity = 0;
+          valueAxis.renderer.labels.template.disabled = true;
+          valueAxis2.renderer.labels.template.disabled = true;
+          valueAxis3.renderer.labels.template.disabled = true;
+          valueAxis4.renderer.labels.template.disabled = true;
+        }
 
         const currentValue = `${item}Current`;
         const seriesName = `${item}Series`;
