@@ -4,6 +4,10 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Modal from 'react-modal';
+import { DateRange } from 'react-date-range';
+import { enGB } from 'react-date-range/src/locale';
+
 import Select, { components } from 'react-select';
 import dayjs from 'dayjs';
 import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
@@ -14,6 +18,8 @@ import {
   PageLoader,
   WhiteCard,
   CommonPagination,
+  ModalBox,
+  Button,
 } from '../../common';
 
 import {
@@ -23,6 +29,7 @@ import {
   ServiceIcon,
   CompanyDefaultUser,
   CaretUp,
+  CloseIcon,
 } from '../../theme/images';
 import getBGSCustomerList from '../../api/BgsApi';
 import { getGrowthStrategist } from '../../api';
@@ -43,26 +50,58 @@ export default function Dashboard() {
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [count, setCount] = useState(null);
+  const [showBgsCustomDateModal, setShowBgsCustomDateModal] = useState(false);
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '420px ',
+      width: '100% ',
+      minHeight: '390px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+  const currentDate = new Date();
+
+  const [bgsData, setBgsData] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'bgsSelection',
+    },
+  ]);
 
   const timeOptions = [
     { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    // { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   const bgsCustomerList = useCallback(
-    (currentPage, selectedUser, dateFilter) => {
+    (
+      currentPage,
+      selectedUser,
+      dateFilter,
+      startDate = null,
+      endDate = null,
+    ) => {
       setIsLoading({ loader: true, type: 'page' });
       getBGSCustomerList(
         currentPage,
         selectedUser || userInfo.id,
         dateFilter,
+        startDate,
+        endDate,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -267,19 +306,110 @@ export default function Dashboard() {
     return '';
   };
 
+  const BgsYearAndCustomDateFilter = (startDate, endDate, type) => {
+    let sd = startDate;
+    let ed = endDate;
+
+    if (type === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+
+      bgsCustomerList(
+        pageNumber,
+        selectedValue.bgs,
+        {
+          type,
+        },
+        sd,
+        ed,
+      );
+    }
+  };
+
+  const applyCustomDate = () => {
+    BgsYearAndCustomDateFilter(
+      bgsData[0].startDate,
+      bgsData[0].endDate,
+      'custom',
+    );
+    setShowBgsCustomDateModal(false);
+  };
+
+  const renderBgsCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showBgsCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowBgsCustomDateModal(false);
+            setBgsData([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'bgsSelection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setBgsData([item.bgsSelection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={bgsData}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={currentDate}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomDate()}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
   const handleOnchange = (event, type) => {
     if (type === 'bgs') {
       setSelectedValue({ ...selectedValue, bgs: event.value });
       bgsCustomerList(1, event.value, selectedValue);
     } else if (type === 'date') {
-      setSelectedValue({
-        ...selectedValue,
-        type: event.value,
-        group: event.group,
-      });
-      bgsCustomerList(pageNumber, selectedValue.bgs, {
-        type: event.value,
-      });
+      if (event && event.value === 'custom') {
+        setShowBgsCustomDateModal(true);
+      } else {
+        setSelectedValue({
+          ...selectedValue,
+          type: event.value,
+          group: event.group,
+        });
+        bgsCustomerList(pageNumber, selectedValue.bgs, {
+          type: event.value,
+        });
+      }
     }
   };
   const handlePageChange = (currentPage) => {
@@ -289,6 +419,7 @@ export default function Dashboard() {
 
   return (
     <BrandPartnerDashboard>
+      {renderBgsCustomDateModal()}
       <div className="dashboard-header-sticky">
         <div className="container-fluid">
           <div className="row">

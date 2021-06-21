@@ -210,7 +210,7 @@ BrandAssetsPreview.propTypes = {
   }),
   setShowConfirmationModal: PropTypes.func,
   isLoading: PropTypes.shape({
-    loader: PropTypes.string,
+    loader: PropTypes.bool,
     type: PropTypes.string,
   }),
 };

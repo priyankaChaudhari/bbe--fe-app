@@ -51,12 +51,12 @@ export default function AdManagerDashboard() {
     { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
     { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
     { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    // { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    // {
-    //   value: 'custom',
-    //   label: 'Custom Range',
-    //   sub: 'Select start and end dates',
-    // },
+    { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
+    {
+      value: 'custom',
+      label: 'Custom Range',
+      sub: 'Select start and end dates',
+    },
   ];
 
   const adManagerCustomerList = useCallback(
