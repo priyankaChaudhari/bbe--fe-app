@@ -7,12 +7,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import Select from 'react-select';
 // import Select from 'react-select';
 
 import PerformanceReport from './PerformanceReport';
 import AdPerformance from './AdPerformance';
 import Theme from '../../../theme/Theme';
-import { WhiteCard } from '../../../common';
+import { WhiteCard, DropDownSelect } from '../../../common';
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const history = useHistory();
@@ -42,6 +43,23 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
                 Ad Performance
               </li>
             </ul>
+            <div className="row">
+              <div className="col-md-4  col-sm-12 ">
+                <div className="view-data-for mt-4 ">View data for</div>{' '}
+              </div>
+              <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
+                {' '}
+                <DropDownSelect className="customer-list-header">
+                  <Select classNamePrefix="react-select" />
+                </DropDownSelect>{' '}
+              </div>
+              <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
+                {' '}
+                <DropDownSelect className="customer-list-header">
+                  <Select classNamePrefix="react-select" />
+                </DropDownSelect>{' '}
+              </div>
+            </div>
           </WhiteCard>
         </Tab>
         {viewComponent === 'salePerformance' ? (
@@ -93,12 +111,13 @@ const Tab = styled.div`
       }
     }
   }
-  .view-data {
+  .view-data-for {
     margin-right: 60px;
     font-weight: normal;
     color: ${Theme.black};
     font-size: ${Theme.extraMedium};
     font-family: ${Theme.baseFontFamily};
+    width: 100%;
   }
 
   @media only screen and (max-width: 767px) {
@@ -108,8 +127,8 @@ const Tab = styled.div`
         margin-right: 25px;
       }
     }
-    .view-data {
-     text-align: center;
-    padding-bottom: 10px;
+    .view-data-for {
+      text-align: center;
+      padding-bottom: 10px;
   }
 `;
