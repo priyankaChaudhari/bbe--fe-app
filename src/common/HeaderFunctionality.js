@@ -4,13 +4,14 @@ import Theme from '../theme/Theme';
 const HeaderDownloadFuntionality = styled.div`
   position: fixed;
   background-color: ${Theme.white};
-  z-index: 2;
   padding: 26px 0 20px 0;
   width: 100%;
   border-bottom: 1px solid ${Theme.gray5};
   min-height: 70px;
   color: ${Theme.black};
   font-size: ${Theme.normal};
+  z-index: 999;
+  top: 0px;
 
   .contract-download-nav {
     list-style-type: none;

@@ -32,6 +32,7 @@ import {
   CaretUp,
   AccountSetupIcon,
   BillingIcon,
+  CatalogBox,
   // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
@@ -942,7 +943,7 @@ export default function CustomerMainContainer() {
                                 }`}>
                                 <img
                                   className="file-contract"
-                                  src={FileContract}
+                                  src={CatalogBox}
                                   alt=""
                                 />
                                 Brand Assets

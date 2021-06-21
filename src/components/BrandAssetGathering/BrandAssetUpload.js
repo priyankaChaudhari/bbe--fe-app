@@ -749,30 +749,6 @@ export default function BrandAssetUpload() {
         </ul>
       </BrandAssetSideBar>
 
-      <DropDownBrandAsset>
-        <Select
-          options={viewOptions}
-          defaultValue={viewOptions.find((op) => op.value === params.step)}
-          onChange={(event) => {
-            history.push({
-              pathname: history.location.pathname.includes(
-                '/assigned-brand-asset/',
-              )
-                ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
-                    ':brandId',
-                    brandId,
-                  )
-                : PATH_BRAND_ASSET.replace(':id', id).replace(
-                    ':brandId',
-                    brandId,
-                  ),
-              search: `step=${event.value}`,
-            });
-          }}
-          className="customer-dropdown-select d-lg-none d-block mb-3 "
-        />
-      </DropDownBrandAsset>
-
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="upload-brand-asset"
@@ -781,8 +757,31 @@ export default function BrandAssetUpload() {
         />
       ) : (
         <BrandAssetBody>
+          <DropDownBrandAsset>
+            <Select
+              options={viewOptions}
+              defaultValue={viewOptions.find((op) => op.value === params.step)}
+              onChange={(event) => {
+                history.push({
+                  pathname: history.location.pathname.includes(
+                    '/assigned-brand-asset/',
+                  )
+                    ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      )
+                    : PATH_BRAND_ASSET.replace(':id', id).replace(
+                        ':brandId',
+                        brandId,
+                      ),
+                  search: `step=${event.value}`,
+                });
+              }}
+              className="customer-dropdown-select d-lg-none d-block mb-3 "
+            />
+          </DropDownBrandAsset>
           <div className="row">
-            <div className="col-9">
+            <div className="col-md-9 col-12">
               <div className="label-heading">
                 Part {selectedStep && selectedStep.step}/5
               </div>
@@ -823,99 +822,96 @@ export default function BrandAssetUpload() {
                   ''
                 )}
               </div>
-              <div className="col-3">
-                <ActionDropDown className="">
-                  <Select
-                    classNamePrefix="react-select "
-                    options={viewOptions}
-                  />
-                </ActionDropDown>
-              </div>
+            </div>
+            <DragDropImg>
+              {(documentData && documentData.length) ||
+              (droppedFiles && droppedFiles.length) ? (
+                <section className="thumbnail-dropzone mb-3">
+                  {showUpload ? (
+                    <div
+                      className="mb-4"
+                      {...getRootProps({ className: 'dropzone mb-3' })}>
+                      <input {...getInputProps()} />
+
+                      <div className="thumbnail-select-files">
+                        <img
+                          className="mb-2"
+                          width="70px"
+                          src={FileCloud}
+                          alt="file-cloud"
+                        />
+                        <br />
+                        Drag and drop your files here or <span>browse </span>
+                      </div>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+
+                  {showDocuments()}
+                </section>
+              ) : (
+                <section
+                  className={
+                    noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
+                  }>
+                  {showUpload ? (
+                    <div
+                      className="mb-4"
+                      {...getRootProps({ className: 'dropzone mb-3' })}>
+                      <input {...getInputProps()} />
+
+                      <div className=" select-files ">
+                        <img
+                          className="mb-2"
+                          width="70px"
+                          src={FileCloud}
+                          alt="file-cloud"
+                        />
+                        <br />
+                        Drag and drop your files here or <span>browse </span>
+                      </div>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+
+                  {showDocuments()}
+                </section>
+              )}
+              {params &&
+              (params.step === 'additional-brand-material' ||
+                params.step === 'iconography') &&
+              documentData &&
+              documentData.length === 0 ? (
+                <CheckBox className="checkboxes mt-4 mb-4">
+                  <label
+                    className="check-container customer-pannel "
+                    htmlFor="step">
+                    {params.step === 'iconography'
+                      ? 'We don’t have any special icons'
+                      : 'We don’t have any other branding materials'}
+                    <input
+                      className="checkboxes"
+                      type="checkbox"
+                      id="step"
+                      readOnly
+                      defaultChecked={noImages}
+                      onChange={() => setNoImages(!noImages)}
+                    />
+                    <span className="checkmark" />
+                  </label>
+                </CheckBox>
+              ) : (
+                ''
+              )}
+            </DragDropImg>
+            <div className="col-md-3 col-sm-12 text-center">
+              <ActionDropDown className="w-170">
+                <Select classNamePrefix="react-select " />
+              </ActionDropDown>
             </div>
           </div>
-          <DragDropImg>
-            {(documentData && documentData.length) ||
-            (droppedFiles && droppedFiles.length) ? (
-              <section className="thumbnail-dropzone mb-3">
-                {showUpload ? (
-                  <div
-                    className="mb-4"
-                    {...getRootProps({ className: 'dropzone mb-3' })}>
-                    <input {...getInputProps()} />
-
-                    <div className="thumbnail-select-files">
-                      <img
-                        className="mb-2"
-                        width="70px"
-                        src={FileCloud}
-                        alt="file-cloud"
-                      />
-                      <br />
-                      Drag and drop your files here or <span>browse </span>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-
-                {showDocuments()}
-              </section>
-            ) : (
-              <section
-                className={
-                  noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
-                }>
-                {showUpload ? (
-                  <div
-                    className="mb-4"
-                    {...getRootProps({ className: 'dropzone mb-3' })}>
-                    <input {...getInputProps()} />
-
-                    <div className=" select-files ">
-                      <img
-                        className="mb-2"
-                        width="70px"
-                        src={FileCloud}
-                        alt="file-cloud"
-                      />
-                      <br />
-                      Drag and drop your files here or <span>browse </span>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-
-                {showDocuments()}
-              </section>
-            )}
-            {params &&
-            (params.step === 'additional-brand-material' ||
-              params.step === 'iconography') &&
-            documentData &&
-            documentData.length === 0 ? (
-              <CheckBox className="checkboxes mt-4 mb-4">
-                <label
-                  className="check-container customer-pannel "
-                  htmlFor="step">
-                  {params.step === 'iconography'
-                    ? 'We don’t have any special icons'
-                    : 'We don’t have any other branding materials'}
-                  <input
-                    className="checkboxes"
-                    type="checkbox"
-                    id="step"
-                    readOnly
-                    defaultChecked={noImages}
-                    onChange={() => setNoImages(!noImages)}
-                  />
-                  <span className="checkmark" />
-                </label>
-              </CheckBox>
-            ) : (
-              ''
-            )}
-          </DragDropImg>
         </BrandAssetBody>
       )}
 
@@ -1031,7 +1027,7 @@ export default function BrandAssetUpload() {
 
 const BrandAssetBody = styled.div`
   padding-left: 400px;
-  margin-top: 100px;
+  margin-top: 50px;
 
   .gray-info-icon {
     vertical-align: bottom;
@@ -1091,12 +1087,12 @@ const BrandAssetBody = styled.div`
   @media only screen and (max-width: 991px) {
     padding-left: 95px;
     padding-right: 95px;
-    margin-top: 50px;
+    margin-top: 80px;
   }
   @media only screen and (max-width: 767px) {
     padding-left: 15px;
     padding-right: 15px;
-    margin-top: 50px;
+    margin-top: 80px;
 
     .Image-container {
       li {
@@ -1111,7 +1107,7 @@ const BrandAssetSideBar = styled.div`
   border-radius: 15px;
   max-width: 340px;
   position: fixed;
-  top: 145px;
+  top: 100px;
   left: 20px;
   padding: 20px;
   width: 100%;
@@ -1203,7 +1199,7 @@ const BrandAssetFooter = styled.div`
 `;
 
 const DropDownBrandAsset = styled.div`
-  margin-top: 100px;
+  margin-top: 50px;
 
   .css-yk16xz-control {
     background: ${Theme.gray8};

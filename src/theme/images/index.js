@@ -161,6 +161,7 @@ import OrangeDownloadPdf from './icons/orange-download-pdf.png';
 import RedTrashIcon from './icons/red-trash-icon.svg';
 import FileCloud from './icon_upload.svg';
 import ChatBoxIcon from './icons/chat-box.svg';
+import CatalogBox from './icons/catalog-box.png';
 
 export {
   BannerBg,
@@ -326,4 +327,5 @@ export {
   RedTrashIcon,
   FileCloud,
   ChatBoxIcon,
+  CatalogBox,
 };
