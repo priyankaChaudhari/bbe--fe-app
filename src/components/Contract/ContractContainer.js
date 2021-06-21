@@ -338,8 +338,45 @@ export default function ContractContainer() {
   }
 
   if (isDocRendered && formData && formData.id) {
-    setIsDocRendered(false);
-    setDownloadApiCall(true);
+    if (
+      ((formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')) ||
+        (formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('recurring') &&
+          showSection.dspAddendum)) &&
+      firstMonthDate &&
+      secondMonthDate &&
+      thirdMonthDate
+    ) {
+      setIsDocRendered(false);
+      setDownloadApiCall(true);
+    }
+
+    if (
+      !(
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) &&
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('recurring') &&
+      !showSection.dspAddendum
+    ) {
+      setIsDocRendered(false);
+      setDownloadApiCall(true);
+    }
+
+    if (
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('one')
+    ) {
+      setIsDocRendered(false);
+      setDownloadApiCall(true);
+    }
   }
 
   const getContractDetails = (showSuccessToastr = false) => {
@@ -1312,7 +1349,12 @@ export default function ContractContainer() {
         <td style="border: 1px solid black;
     padding: 13px;">
      <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
-          ${dayjs(firstMonthDate).format('MM-DD-YYYY')}
+          ${
+            firstMonthDate
+              ? dayjs(firstMonthDate).format('MM-DD-YYYY')
+              : 'MM-DD-YYYY'
+          }
+
           </span>
         </td>
         <td
@@ -1346,20 +1388,25 @@ export default function ContractContainer() {
   const mapBudgetBreakdownTable = () => {
     return `
     
-    
     <div class="table-responsive">  <table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(firstMonthDate).format('MMM D, YYYY')} ${
-      new Date(firstMonthDate).getDate() !== 1 ? '-' : ''
-    } ${
+    padding: 13px;">${
+      firstMonthDate
+        ? dayjs(firstMonthDate).format('MMM D, YYYY')
+        : 'MM-DD-YYYY'
+    } ${new Date(firstMonthDate).getDate() !== 1 ? '-' : ''} ${
       new Date(firstMonthDate).getDate() !== 1
         ? dayjs(endMonthDate).format('MMM D, YYYY')
         : ''
     } </th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(secondMonthDate).format(
-      'MMMM YYYY',
-    )}</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">${dayjs(thirdMonthDate).format('MMMM YYYY')} </th></tr>
+    padding: 13px;">${
+      secondMonthDate
+        ? dayjs(secondMonthDate).format('MMMM YYYY')
+        : 'MM-DD-YYYY'
+    }</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">${
+      thirdMonthDate ? dayjs(thirdMonthDate).format('MMMM YYYY') : 'MM-DD-YYYY'
+    } </th></tr>
     <tr>
         <td style="border: 1px solid black;
     padding: 13px;"> <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayFirstMonthFee()}</span></td>
@@ -1673,8 +1720,9 @@ export default function ContractContainer() {
 
     const newAddendumAddedData =
       newAddendumData && newAddendumData.addendum
-        ? newAddendumData.addendum.replaceAll('<p>', '<p style="margin:0">')
-        : '';
+        ? newAddendumData.addendum
+        : // .replaceAll('<p>', '<p style="margin:0">')
+          '';
 
     const addendumSignatureData = AddendumSign.replace(
       'CUSTOMER_NAME',
@@ -1783,13 +1831,13 @@ export default function ContractContainer() {
       });
     }
 
-    if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('dsp')
-    ) {
-      sectionFlag.dspAddendum = true;
-    }
+    // if (
+    //   details &&
+    //   details.contract_type &&
+    //   details.contract_type.toLowerCase().includes('dsp')
+    // ) {
+    //   sectionFlag.dspAddendum = true;
+    // }
 
     if (
       details &&
@@ -1842,6 +1890,16 @@ export default function ContractContainer() {
     }
 
     if (
+      !(
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('one')
+      ) &&
+      !(
+        formData &&
+        formData.contract_type &&
+        formData.contract_type.toLowerCase().includes('dsp')
+      ) &&
       details &&
       details.additional_monthly_services &&
       details.additional_monthly_services.length &&
@@ -1857,6 +1915,15 @@ export default function ContractContainer() {
     } else {
       sectionFlag.dspAddendum = false;
     }
+
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
+      sectionFlag.dspAddendum = true;
+    }
+
     setIsDocRendered(true);
     setShowCollpase(sectionFlag);
 
