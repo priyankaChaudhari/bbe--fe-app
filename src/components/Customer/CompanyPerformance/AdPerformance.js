@@ -390,7 +390,7 @@ export default function AdPerformance({
           dspImpressionsPrevious: item.impressions,
           dspSpendPrevious: item.dsp_spend,
           dspTotalProductSalesPrevious: item.total_product_sales,
-          dspTotalRoas: item.total_roas,
+          dspTotalRoasPrevious: item.total_roas,
           dspTotalDpvrPrevious: item.total_dpvr,
           dspTtlNewBrandPurchasesPrevious: item.ttl_new_brand_purchases,
           dspProductSalesPrevious: item.product_sales,
@@ -405,7 +405,8 @@ export default function AdPerformance({
             item.total_product_sales !== null
               ? item.total_product_sales.toFixed(2)
               : '0.00',
-          dspTotalRoasLabel: item.total_roas !== null ? item.total_roas : '0',
+          dspTotalRoasPreviousLabel:
+            item.total_roas !== null ? item.total_roas : '0',
           dspTotalDpvrPreviousLabel:
             item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
           dspTtlNewBrandPurchasesPreviousLabel:

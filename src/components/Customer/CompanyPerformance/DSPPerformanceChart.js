@@ -45,7 +45,6 @@ export default function DSPPerformanceChart({
 
     // const tooltipDate =
     //   '<div style="color: white; font-size: 16px;">{date}</div>';
-
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
     // chart.current.data = [];
@@ -114,6 +113,7 @@ export default function DSPPerformanceChart({
     }
 
     function bindValueAxisFormatter(item) {
+      // console.log('item', item);
       let format = '';
       if (
         item === 'dspSpend' ||
@@ -126,9 +126,12 @@ export default function DSPPerformanceChart({
         item === 'dspTotalDpvr'
       ) {
         format = `#.#'%'`;
+      } else if (item === 'dspTotalRoas') {
+        format = `#.#a`;
       } else {
         format = `#.#`;
       }
+      // console.log('format', format);
       return format;
     }
 
@@ -147,7 +150,9 @@ export default function DSPPerformanceChart({
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
-        tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
+        tooltipValue = `${tooltipValue} ${_.startCase(
+          _.lowerCase(tooltipNames[item]),
+        )}`;
         if (
           item === 'dspSpend' ||
           item === 'dspTotalProductSales' ||
@@ -263,7 +268,7 @@ export default function DSPPerformanceChart({
             valueAxis2.renderer.grid.template.disabled = true;
             valueAxis2.cursorTooltipEnabled = false;
             valueAxis2.numberFormatter = new am4core.NumberFormatter();
-            valueAxis2.numberFormatter.numberFormat = `#.#a`;
+            // valueAxis2.numberFormatter.numberFormat = `#.#a`;
             valueAxis2.numberFormatter.bigNumberPrefixes = [
               { number: 1e3, suffix: 'K' },
               { number: 1e6, suffix: 'M' },
@@ -329,7 +334,7 @@ export default function DSPPerformanceChart({
       valueAxis2.renderer.grid.template.disabled = true;
       valueAxis2.cursorTooltipEnabled = false;
       valueAxis2.numberFormatter = new am4core.NumberFormatter();
-      valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      // valueAxis2.numberFormatter.numberFormat = `#.#a`;
       valueAxis2.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -342,7 +347,7 @@ export default function DSPPerformanceChart({
       valueAxis3.renderer.grid.template.disabled = true;
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
-      valueAxis3.numberFormatter.numberFormat = `#.#a`;
+      // valueAxis3.numberFormatter.numberFormat = `#.#a`;
       valueAxis3.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -355,7 +360,7 @@ export default function DSPPerformanceChart({
       valueAxis4.renderer.grid.template.disabled = true;
       valueAxis4.cursorTooltipEnabled = false;
       valueAxis4.numberFormatter = new am4core.NumberFormatter();
-      valueAxis4.numberFormatter.numberFormat = `#.#a`;
+      // valueAxis4.numberFormatter.numberFormat = `#.#a`;
       valueAxis4.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -423,9 +428,12 @@ export default function DSPPerformanceChart({
 
         if (item === 'dspSpend' || item === 'dspProductSales') {
           if (firstAxis === null || firstAxis === 'currency') {
-            // console.log('dspSpend if');
+            // console.log('dspSpend if', item);
             series.yAxis = valueAxis;
             firstAxis = 'currency';
+            valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
           } else if (secondAxis === null || secondAxis === 'currency') {
             // console.log('second axis null/currency');
             series.yAxis = valueAxis2;
@@ -451,6 +459,7 @@ export default function DSPPerformanceChart({
 
             thirdAxis = 'currency';
           } else {
+            // console.log('dsp 4th acis');
             series.yAxis = valueAxis4;
             valueAxis4.renderer.opposite = true;
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -480,8 +489,9 @@ export default function DSPPerformanceChart({
           );
           secondAxis = 'other';
         } else if (index === 2) {
-          // console.log('index 2 else', secondAxis);
+          // console.log('index 2 else');
           if (secondAxis === null) {
+            // console.log('index 2 else 2nd null');
             series.yAxis = valueAxis2;
             valueAxis2.renderer.opposite = true;
             valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -489,6 +499,7 @@ export default function DSPPerformanceChart({
             );
             secondAxis = 'other';
           } else {
+            // console.log('index 2 else secons else');
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -505,6 +516,7 @@ export default function DSPPerformanceChart({
         } else if (index === 3) {
           // console.log('index  3 if');
           if (thirdAxis === null) {
+            // console.log('index  3 if 3rd null');
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -518,6 +530,7 @@ export default function DSPPerformanceChart({
             valueAxis3.renderer.labels.template.disabled = true;
             thirdAxis = 'others';
           } else {
+            // console.log('index  3 if 3rd else');
             series.yAxis = valueAxis4;
             valueAxis4.renderer.opposite = true;
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(

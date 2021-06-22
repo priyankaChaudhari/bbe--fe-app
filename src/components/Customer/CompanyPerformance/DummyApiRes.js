@@ -414,7 +414,7 @@ export const dspResData = {
       impressions: -29.43,
       dsp_spend: 78.96,
       total_product_sales: -17.29,
-      total_roas: 147.0,
+      total_roas: 1470,
       total_dpvr: 42.44,
       ttl_new_brand_purchases: -0.02,
       product_sales: 33.0,
