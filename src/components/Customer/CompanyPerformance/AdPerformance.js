@@ -30,11 +30,17 @@ import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
 import { dspResData } from './DummyApiRes';
+import Theme from '../../../theme/Theme';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({ marketplaceChoices, id }) {
+export default function AdPerformance({
+  marketplaceChoices,
+  id,
+  viewComponent,
+  setViewComponent,
+}) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -1080,43 +1086,99 @@ export default function AdPerformance({ marketplaceChoices, id }) {
   /// ////////// start rendering hrml component ///////////
   const renderMarketplaceDropDown = () => {
     return (
-      <div className="row">
-        <div className="col-12 mb-3">
-          {/* {DropDown(
-            'cursor',
-            marketplaceOptions,
-            marketplaceOptions &&
-              marketplaceOptions[0] &&
-              marketplaceOptions[0].label,
-            DropdownIndicator,
-            marketplaceOptions && marketplaceOptions[0],
-            handleMarketplaceOptions,
-          )} */}
-          <DropDownSelect className="cursor ">
-            <Select
-              classNamePrefix="react-select"
-              className="active"
-              components={DropdownIndicator}
-              options={marketplaceOptions}
-              defaultValue={marketplaceOptions && marketplaceOptions[0]}
-              onChange={(event) => handleMarketplaceOptions(event)}
-              placeholder={
-                marketplaceOptions &&
-                marketplaceOptions[0] &&
-                marketplaceOptions[0].label
-              }
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  neutral50: '#1A1A1A',
-                },
-              })}
-            />
-          </DropDownSelect>
-        </div>
-      </div>
+      <Tab className="mb-3">
+        <WhiteCard>
+          <ul className="tabs">
+            <li
+              className={viewComponent === 'salePerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('salePerformance')}
+              role="presentation">
+              Sales Performance
+            </li>
+            <li
+              className={viewComponent === 'adPerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('adPerformance')}
+              role="presentation">
+              Ad Performance
+            </li>
+          </ul>
+          <div className="row">
+            <div className="col-md-4  col-sm-12 ">
+              <div className="view-data-for mt-4 ">View data for</div>{' '}
+            </div>
+            <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
+              {' '}
+              <DropDownSelect className="cursor ">
+                <Select
+                  classNamePrefix="react-select"
+                  className="active"
+                  components={DropdownIndicator}
+                  options={marketplaceOptions}
+                  defaultValue={marketplaceOptions && marketplaceOptions[0]}
+                  onChange={(event) => handleMarketplaceOptions(event)}
+                  placeholder={
+                    marketplaceOptions &&
+                    marketplaceOptions[0] &&
+                    marketplaceOptions[0].label
+                  }
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      neutral50: '#1A1A1A',
+                    },
+                  })}
+                />
+              </DropDownSelect>
+            </div>
+            <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
+              {' '}
+              <DropDownSelect className="customer-list-header">
+                <Select classNamePrefix="react-select" />
+              </DropDownSelect>{' '}
+            </div>
+          </div>
+        </WhiteCard>
+      </Tab>
     );
+    // return (
+    //   <div className="row">
+    //     <div className="col-12 mb-3">
+    //       {/* {DropDown(
+    //         'cursor',
+    //         marketplaceOptions,
+    //         marketplaceOptions &&
+    //           marketplaceOptions[0] &&
+    //           marketplaceOptions[0].label,
+    //         DropdownIndicator,
+    //         marketplaceOptions && marketplaceOptions[0],
+    //         handleMarketplaceOptions,
+    //       )} */}
+    // <DropDownSelect className="cursor ">
+    //   <Select
+    //     classNamePrefix="react-select"
+    //     className="active"
+    //     components={DropdownIndicator}
+    //     options={marketplaceOptions}
+    //     defaultValue={marketplaceOptions && marketplaceOptions[0]}
+    //     onChange={(event) => handleMarketplaceOptions(event)}
+    //     placeholder={
+    //       marketplaceOptions &&
+    //       marketplaceOptions[0] &&
+    //       marketplaceOptions[0].label
+    //     }
+    //     theme={(theme) => ({
+    //       ...theme,
+    //       colors: {
+    //         ...theme.colors,
+    //         neutral50: '#1A1A1A',
+    //       },
+    //     })}
+    //   />
+    // </DropDownSelect>
+    //     </div>
+    //   </div>
+    // );
   };
 
   const renderAdDailyFacts = () => {
@@ -2376,4 +2438,61 @@ const AddPerformance = styled.div`
         }
       }
    }
+`;
+
+const Tab = styled.div`
+  .tabs {
+    list-style-type: none;
+    position: relative;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid ${Theme.gray11};
+
+    li {
+      display: inline-block;
+      margin-right: 60px;
+      padding-bottom: 15px;
+      font-weight: normal;
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
+      font-family: ${Theme.baseFontFamily};
+      cursor: pointer;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.a {
+        text-decoration: none;
+      }
+
+      &.active {
+        padding-bottom: 16px;
+        border-bottom: 2px solid ${Theme.orange};
+        color: ${Theme.black};
+        font-family: ${Theme.titleFontFamily};
+      }
+    }
+  }
+  .view-data-for {
+    margin-right: 60px;
+    font-weight: normal;
+    color: ${Theme.black};
+    font-size: ${Theme.extraMedium};
+    font-family: ${Theme.baseFontFamily};
+    width: 100%;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .tabs {
+      li {
+        font-size: 14px;
+        margin-right: 25px;
+      }
+    }
+    .view-data-for {
+      text-align: center;
+      padding-bottom: 10px;
+  }
 `;

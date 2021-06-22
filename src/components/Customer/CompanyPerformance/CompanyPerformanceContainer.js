@@ -4,16 +4,10 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable camelcase */
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import Select from 'react-select';
-// import Select from 'react-select';
-
 import PerformanceReport from './PerformanceReport';
 import AdPerformance from './AdPerformance';
-import Theme from '../../../theme/Theme';
-import { WhiteCard, DropDownSelect } from '../../../common';
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const history = useHistory();
@@ -27,45 +21,20 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   return (
     <>
       <div className="col-lg-8 col-12">
-        <Tab className="mb-3">
-          <WhiteCard>
-            <ul className="tabs">
-              <li
-                className={viewComponent === 'salePerformance' ? 'active' : ''}
-                onClick={() => setViewComponent('salePerformance')}
-                role="presentation">
-                Sales Performance
-              </li>
-              <li
-                className={viewComponent === 'adPerformance' ? 'active' : ''}
-                onClick={() => setViewComponent('adPerformance')}
-                role="presentation">
-                Ad Performance
-              </li>
-            </ul>
-            <div className="row">
-              <div className="col-md-4  col-sm-12 ">
-                <div className="view-data-for mt-4 ">View data for</div>{' '}
-              </div>
-              <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
-                {' '}
-                <DropDownSelect className="customer-list-header">
-                  <Select classNamePrefix="react-select" />
-                </DropDownSelect>{' '}
-              </div>
-              <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
-                {' '}
-                <DropDownSelect className="customer-list-header">
-                  <Select classNamePrefix="react-select" />
-                </DropDownSelect>{' '}
-              </div>
-            </div>
-          </WhiteCard>
-        </Tab>
         {viewComponent === 'salePerformance' ? (
-          <PerformanceReport marketplaceChoices={marketplaceChoices} id={id} />
+          <PerformanceReport
+            marketplaceChoices={marketplaceChoices}
+            id={id}
+            viewComponent={viewComponent}
+            setViewComponent={setViewComponent}
+          />
         ) : (
-          <AdPerformance marketplaceChoices={marketplaceChoices} id={id} />
+          <AdPerformance
+            marketplaceChoices={marketplaceChoices}
+            id={id}
+            viewComponent={viewComponent}
+            setViewComponent={setViewComponent}
+          />
         )}
       </div>
     </>
@@ -75,60 +44,3 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 CompanyPerformance.propTypes = {
   id: PropTypes.string.isRequired,
 };
-
-const Tab = styled.div`
-  .tabs {
-    list-style-type: none;
-    position: relative;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid ${Theme.gray11};
-
-    li {
-      display: inline-block;
-      margin-right: 60px;
-      padding-bottom: 15px;
-      font-weight: normal;
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
-      font-family: ${Theme.baseFontFamily};
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.a {
-        text-decoration: none;
-      }
-
-      &.active {
-        padding-bottom: 16px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-  }
-  .view-data-for {
-    margin-right: 60px;
-    font-weight: normal;
-    color: ${Theme.black};
-    font-size: ${Theme.extraMedium};
-    font-family: ${Theme.baseFontFamily};
-    width: 100%;
-  }
-
-  @media only screen and (max-width: 767px) {
-    .tabs {
-      li {
-        font-size: 14px;
-        margin-right: 25px;
-      }
-    }
-    .view-data-for {
-      text-align: center;
-      padding-bottom: 10px;
-  }
-`;
