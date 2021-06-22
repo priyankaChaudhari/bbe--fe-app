@@ -151,7 +151,6 @@ export default function CustomerMainContainer() {
   const showBrandAssetSuccessMsg = useSelector(
     (state) => state.customerState.showBrandAssetMsg,
   );
-  const [checkBrandAssetComplete, setCheckBrandAssetComplete] = useState(null);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -928,7 +927,9 @@ export default function CustomerMainContainer() {
                               Agreements
                             </div>
                           </li>
-                          {checkBrandAssetComplete ? (
+                          {customer &&
+                          customer.brand_assets &&
+                          customer.brand_assets.is_completed ? (
                             <li
                               onClick={() => {
                                 setViewComponent('brand asset');
@@ -1158,14 +1159,19 @@ export default function CustomerMainContainer() {
                     ) : viewComponent === 'dashboard' ? (
                       <SetupCheckList
                         id={id}
-                        brandId={customer && customer.brand_assets_id}
-                        setCheckBrandAssetComplete={setCheckBrandAssetComplete}
+                        brandId={
+                          customer &&
+                          customer.brand_assets &&
+                          customer.brand_assets.id
+                        }
                       />
                     ) : viewComponent === 'brand asset' ? (
                       history.push({
                         pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
                           ':brandId',
-                          customer && customer.brand_assets_id,
+                          customer &&
+                            customer.brand_assets &&
+                            customer.brand_assets.id,
                         ),
                         search: 'step=brand-logo',
                       })

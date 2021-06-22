@@ -20,11 +20,7 @@ import {
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
-export default function SetupCheckList({
-  id,
-  brandId,
-  setCheckBrandAssetComplete,
-}) {
+export default function SetupCheckList({ id, brandId }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
@@ -40,9 +36,6 @@ export default function SetupCheckList({
         count: response.data && response.data.count,
       });
       getAssigneeCount(id).then((res) => {
-        if (res && res.data && res.data.is_completed) {
-          setCheckBrandAssetComplete(true);
-        } else setCheckBrandAssetComplete(false);
         setAgreementData({
           data: response.data && response.data.results,
           count: response.data && response.data.count,
@@ -383,13 +376,11 @@ export default function SetupCheckList({
 
 SetupCheckList.defaultProps = {
   brandId: '',
-  setCheckBrandAssetComplete: () => {},
 };
 
 SetupCheckList.propTypes = {
   id: PropTypes.string.isRequired,
   brandId: PropTypes.string,
-  setCheckBrandAssetComplete: PropTypes.func,
 };
 
 const GreenCheckBox = styled.div`

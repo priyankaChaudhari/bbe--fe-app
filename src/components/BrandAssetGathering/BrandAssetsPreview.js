@@ -48,12 +48,6 @@ function BrandAssetsPreview({
     });
   };
 
-  console.log(
-    showAssetPreview &&
-      showAssetPreview.selectedFile &&
-      showAssetPreview.selectedFile.presigned_url,
-  );
-
   return (
     <>
       {isLoading.loader && isLoading.type === 'page' ? (
@@ -131,9 +125,9 @@ function BrandAssetsPreview({
               </div>
             </div>
             <div className="assetPreviewImg">
-              <object
+              <img
                 className="image-thumbnail"
-                data={
+                src={
                   showAssetPreview &&
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.presigned_url
@@ -143,24 +137,12 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.mime_type
                 }
-                // width="400"
-                // height="200"
-                role="presentation">
-                <div className="unsupport-file-name">
-                  <div
-                    className="file-path"
-                    // href={
-                    //   showAssetPreview &&
-                    //   showAssetPreview.selectedFile &&
-                    //   showAssetPreview.selectedFile.presigned_url
-                    // }
-                  >
-                    {showAssetPreview &&
-                      showAssetPreview.selectedFile &&
-                      showAssetPreview.selectedFile.original_name}
-                  </div>
-                </div>
-              </object>
+                alt={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.original_name
+                }
+              />
             </div>
             <div
               className={
