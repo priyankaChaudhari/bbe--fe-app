@@ -194,7 +194,7 @@ export default function BrandAssetUpload() {
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       const ids = [];
-      response.forEach((op) => ids.push(op.id));
+      response && response.forEach((op) => ids.push(op.id));
       setDownloadIds(ids);
       setDocumentData(response);
       setPreviewImageData(response);
@@ -230,7 +230,7 @@ export default function BrandAssetUpload() {
       setBrandAssetData(response && response.data);
       if (response && response.data && response.data.is_completed)
         setShowBtns({ ...showBtns, upload: false });
-      else setShowBtns({ ...showBtns, upload: false });
+      else setShowBtns({ ...showBtns, upload: true });
       if (
         response &&
         response.data &&
@@ -476,32 +476,48 @@ export default function BrandAssetUpload() {
   };
 
   const handleDownloadOptions = (event) => {
-    setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
+    setIsLoading({ loader: true, type: 'page' });
+    getDocuments(
+      brandId,
+      'brandassets',
+      event.value === 'all' ? '' : selectedStep.key,
+    ).then((response) => {
+      const ids = [];
+      response && response.forEach((op) => ids.push(op.id));
+      setDownloadIds(ids);
+      setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
+      setIsLoading({ loader: false, type: 'page' });
+    });
   };
 
   const downloadImages = () => {
-    setShowBtns({ download: false, upload: false });
-    // downloadBrandAssetImages(
-    //   selectedDropdown.dropdownValue &&
-    //     selectedDropdown.dropdownValue.value === 'all'
-    //     ? { customer_id: id }
-    //     : { download_ids: ['2'] },
-    // ).then((res) => console.log(res));
+    setIsLoading({ loader: true, type: 'button' });
+    downloadBrandAssetImages(
+      selectedDropdown.dropdownValue &&
+        selectedDropdown.dropdownValue.value === 'all' &&
+        selectedDropdown.total === downloadIds &&
+        downloadIds.length
+        ? { customer_id: id }
+        : { document_ids: downloadIds },
+    ).then((res) => {
+      if (res && res.status === 200) {
+        setShowBtns({ download: false, upload: false });
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
   };
 
-  const handleDownloadIds = () => {
-    // const ids = [...downloadIds];
-    // let cids = [];
-    // for (const i of ids) {
-    //   const index = ids.findIndex((day) => day === i);
-    //   console.log(index);
-    //   if (index > -1) {
-    //     cids = [...ids.slice(0, index), ...ids.slice(index + 1)];
-    //   } else {
-    //     ids.push(i);
-    //   }
-    // }
-    // console.log(ids, cids);
+  const handleDownloadIds = (event) => {
+    const ids = [...downloadIds];
+    if (event.target.checked) {
+      const index = ids.indexOf(event.target.name);
+      if (index === -1) ids.push(event.target.name);
+    }
+    if (!event.target.checked) {
+      const index = ids.indexOf(event.target.name);
+      if (index > -1) ids.splice(index, 1);
+    }
+    setDownloadIds(ids);
   };
 
   const navigateStep = (item) => {
@@ -582,7 +598,9 @@ export default function BrandAssetUpload() {
                         type="checkbox"
                         name={file.id}
                         id={file.id}
-                        defaultChecked
+                        defaultChecked={downloadIds.find(
+                          (op) => op === file.id,
+                        )}
                         onChange={(event) => handleDownloadIds(event)}
                       />
                       <span className="checkmark" />{' '}
@@ -755,7 +773,10 @@ export default function BrandAssetUpload() {
         </>
       )}
 
-      <BrandAssetSideBar className="d-none d-lg-block">
+      <BrandAssetSideBar
+        className="d-none d-lg-block"
+        completed={brandAssetData && brandAssetData.is_completed}
+        history={history.location.pathname}>
         <div className="label-heading mb-3">Your BrandSteps</div>
         <ul className="asset-check-list">
           {BrandSteps.map((item) => (
@@ -903,7 +924,10 @@ export default function BrandAssetUpload() {
                   {(documentData && documentData.length) ||
                   (droppedFiles && droppedFiles.length) ? (
                     <section className="thumbnail-dropzone mb-3">
-                      {showBtns.upload ? (
+                      {showBtns.upload ||
+                      history.location.pathname.includes(
+                        '/assigned-brand-asset/',
+                      ) ? (
                         <div
                           className="mb-4"
                           {...getRootProps({ className: 'dropzone mb-3' })}>
@@ -932,7 +956,10 @@ export default function BrandAssetUpload() {
                       className={
                         noImages ? 'drag-drop mb-4 disabled' : 'drag-drop mb-4'
                       }>
-                      {showBtns.upload ? (
+                      {showBtns.upload ||
+                      history.location.pathname.includes(
+                        '/assigned-brand-asset/',
+                      ) ? (
                         <div
                           className="mb-4"
                           {...getRootProps({ className: 'dropzone mb-3' })}>
@@ -1027,10 +1054,7 @@ export default function BrandAssetUpload() {
                         <span className="skip-step cursor">
                           {showBtns.download
                             ? `${
-                                selectedDropdown.dropdownValue &&
-                                selectedDropdown.dropdownValue.value === 'all'
-                                  ? selectedDropdown.total
-                                  : documentData && documentData.length
+                                downloadIds && downloadIds.length
                               } files selected`
                             : ''}
                         </span>
@@ -1048,6 +1072,10 @@ export default function BrandAssetUpload() {
                         disabled={
                           isLoading.loader || noImages
                             ? false
+                            : showBtns.download &&
+                              downloadIds &&
+                              downloadIds.length === 0
+                            ? true
                             : documentData && documentData.length === 0
                         }
                         onClick={() =>
@@ -1178,7 +1206,7 @@ export default function BrandAssetUpload() {
 
 const BrandAssetBody = styled.div`
   padding-left: 400px;
-  margin-top: ${(props) => (props.completed ? '50px' : '75px')};
+  margin-top: ${(props) => (props.completed ? '50px' : '95px')};
   .gray-info-icon {
     vertical-align: bottom;
     margin-left: 3px;
@@ -1257,7 +1285,12 @@ const BrandAssetSideBar = styled.div`
   border-radius: 15px;
   max-width: 340px;
   position: fixed;
-  top: 100px;
+  top: ${(props) =>
+    props.completed
+      ? '100px'
+      : props.history.includes('/assigned-brand-asset/')
+      ? '80px'
+      : '145px'};
   left: 20px;
   padding: 20px;
   width: 100%;
