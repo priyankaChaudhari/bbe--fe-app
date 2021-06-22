@@ -49,7 +49,6 @@ export default function AdPerformance({
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [selectedAdType, setSelectedAdType] = useState('all');
   const [selectedAdDF, setSelectedAdDF] = useState('week');
-  const [selectedDSPDF, setSelectedDSPDF] = useState('week');
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [selectedDspBox, setSelectedDspBox] = useState({
     dspImpressions: true,
@@ -76,13 +75,6 @@ export default function AdPerformance({
       key: 'adSelection',
     },
   ]);
-  const [dspState, setDSPState] = useState([
-    {
-      startDate: currentDate,
-      endDate: currentDate,
-      key: 'dspSelection',
-    },
-  ]);
 
   const [adFilters, setAdFilters] = useState({
     daily: true,
@@ -97,7 +89,6 @@ export default function AdPerformance({
   });
 
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
-  const [showDSPCustomDateModal, setShowDSPCustomDateModal] = useState(false);
   const customStyles = {
     content: {
       top: '50%',
@@ -680,7 +671,7 @@ export default function AdPerformance({
       setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
       getAdData(selectedAdType, selectedAdDF, adGroupBy, list[0].value);
 
-      getDSPData(selectedDSPDF, dspGroupBy, list[0].value);
+      getDSPData(selectedAdDF, dspGroupBy, list[0].value);
       setResponseId('12345');
     }
   }, [
@@ -695,7 +686,6 @@ export default function AdPerformance({
     dspGroupBy,
     selectedAdType,
     selectedAdDF,
-    selectedDSPDF,
   ]);
 
   const getDays = (startDate, endDate) => {
@@ -783,24 +773,22 @@ export default function AdPerformance({
     }
   };
 
-  const applyCustomDate = (flag) => {
-    if (flag === 'AdDate') {
-      ADYearAndCustomDateFilter(
-        adState[0].startDate,
-        adState[0].endDate,
-        'custom',
-        selectedMarketplace,
-        selectedAdType,
-      );
-      setShowAdCustomDateModal(false);
-    } else {
-      DSPYearAndCustomDateFilter(
-        dspState[0].startDate,
-        dspState[0].endDate,
-        'custom',
-      );
-      setShowDSPCustomDateModal(false);
-    }
+  const applyCustomDate = () => {
+    ADYearAndCustomDateFilter(
+      adState[0].startDate,
+      adState[0].endDate,
+      'custom',
+      selectedMarketplace,
+      selectedAdType,
+    );
+
+    DSPYearAndCustomDateFilter(
+      adState[0].startDate,
+      adState[0].endDate,
+      'custom',
+    );
+
+    setShowAdCustomDateModal(false);
   };
 
   const singleFilterOption = (props) => (
@@ -913,18 +901,16 @@ export default function AdPerformance({
         event.value,
         selectedAdType,
       );
-    } else {
-      getAdData(selectedAdType, selectedAdDF, adGroupBy, event.value);
-    }
-    if (selectedDSPDF === 'custom') {
+
       DSPYearAndCustomDateFilter(
-        dspState[0].startDate,
-        dspState[0].endDate,
+        adState[0].startDate,
+        adState[0].endDate,
         'custom',
         event.value,
       );
     } else {
-      getDSPData(selectedDSPDF, dspGroupBy, event.value);
+      getAdData(selectedAdType, selectedAdDF, adGroupBy, event.value);
+      getDSPData(selectedAdDF, dspGroupBy, event.value);
     }
   };
 
@@ -938,7 +924,7 @@ export default function AdPerformance({
   const handleDSPGroupBy = (value) => {
     if (value !== dspGroupBy) {
       setDSPGroupBy(value);
-      // getDSPData(selectedDSPDF, value, selectedMarketplace);
+      getDSPData(selectedAdDF, value, selectedMarketplace);
     }
   };
 
@@ -971,42 +957,10 @@ export default function AdPerformance({
         },
       ]);
     }
-    if (value === 'year') {
-      ADYearAndCustomDateFilter(
-        new Date(new Date().getFullYear(), 0, 1),
-        new Date(),
-        'year',
-        selectedMarketplace,
-        selectedAdType,
-      );
-    } else if (value === 'custom') {
+    if (value === 'custom') {
       setShowAdCustomDateModal(true);
     } else {
       setGropuByFilter(value, 'ad');
-    }
-  };
-
-  const handleDSPDailyFact = (event) => {
-    const { value } = event;
-    setSelectedDSPDF(value);
-    if (value !== 'custom') {
-      setDSPState([
-        {
-          startDate: currentDate,
-          endDate: currentDate,
-          key: 'dspSelection',
-        },
-      ]);
-    }
-    if (value === 'year') {
-      DSPYearAndCustomDateFilter(
-        new Date(new Date().getFullYear(), 0, 1),
-        new Date(),
-        'year',
-      );
-    } else if (value === 'custom') {
-      setShowDSPCustomDateModal(true);
-    } else {
       setGropuByFilter(value, 'dsp');
     }
   };
@@ -1133,9 +1087,15 @@ export default function AdPerformance({
             </div>
             <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
               {' '}
-              <DropDownSelect className="customer-list-header">
-                <Select classNamePrefix="react-select" />
-              </DropDownSelect>{' '}
+              {DropDown(
+                'days-performance',
+                dateOptions,
+                null,
+                getSelectComponents,
+                dateOptions[0],
+                handleAdDailyFact,
+                isApiCall,
+              )}
             </div>
           </div>
         </WhiteCard>
@@ -1202,18 +1162,6 @@ export default function AdPerformance({
                 getSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
-                isApiCall,
-              )}
-            </li>
-            <li className="day-performance">
-              {' '}
-              {DropDown(
-                'days-performance',
-                dateOptions,
-                null,
-                getSelectComponents,
-                dateOptions[0],
-                handleAdDailyFact,
                 isApiCall,
               )}
             </li>
@@ -1691,30 +1639,6 @@ export default function AdPerformance({
     );
   };
 
-  const renderDSPDailyFacts = () => {
-    return (
-      <>
-        <div className="col-6">
-          {' '}
-          <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
-        </div>
-
-        <div className="col-6 text-right">
-          {' '}
-          {DropDown(
-            'days-performance',
-            dateOptions,
-            null,
-            getSelectComponents,
-            dateOptions[0],
-            handleDSPDailyFact,
-            isApiCall,
-          )}
-        </div>
-      </>
-    );
-  };
-
   // const renderDSPSpendTotals = () => {
   //   return (
   //     <>
@@ -2155,7 +2079,7 @@ export default function AdPerformance({
                   <span>Recent</span>
                 </div>
               </li>
-              {selectedDSPDF !== 'custom' ? (
+              {selectedAdDF !== 'custom' ? (
                 <li>
                   <div className="weeks">
                     <span className="gray block" />
@@ -2263,61 +2187,7 @@ export default function AdPerformance({
             />
             <div className="text-center mt-3">
               <Button
-                onClick={() => applyCustomDate('AdDate')}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    );
-  };
-
-  const renderDSPCustomDateModal = () => {
-    return (
-      <Modal
-        isOpen={showDSPCustomDateModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowDSPCustomDateModal(false);
-            setDSPState([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'dspSelection',
-              },
-            ]);
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body">
-            <h4>Select Date Range</h4>
-            <DateRange
-              editableDateInputs
-              onChange={(item) => {
-                setDSPState([item.dspSelection]);
-              }}
-              showMonthAndYearPickers={false}
-              ranges={dspState}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              maxDate={currentDate}
-              rangeColors={['#FF5933']}
-              weekdayDisplayFormat="EEEEE"
-              locale={enGB}
-            />
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => applyCustomDate('DSPDate')}
+                onClick={() => applyCustomDate()}
                 type="button"
                 className="btn-primary on-boarding   w-100">
                 Apply
@@ -2345,7 +2215,12 @@ export default function AdPerformance({
         />
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
-        <div className="row">{renderDSPDailyFacts()}</div>
+        <div className="row">
+          <div className="col-6">
+            {' '}
+            <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
+          </div>
+        </div>
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
         {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
@@ -2354,11 +2229,11 @@ export default function AdPerformance({
           chartData={dspChartData}
           currencySymbol={currencySymbol}
           selectedBox={selectedDspBox}
-          selectedDF={selectedDSPDF}
+          selectedDF={selectedAdDF}
         />
       </WhiteCard>
       {renderAdCustomDateModal()}
-      {renderDSPCustomDateModal()}
+      {/* {renderDSPCustomDateModal()} */}
     </AddPerformance>
   );
 }
