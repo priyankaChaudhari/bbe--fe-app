@@ -460,6 +460,7 @@ export default function BrandAssetUpload() {
       if (res && res.status === 204) {
         getDocumentList(selectedStep && selectedStep.key);
         getAssetsSummary();
+        setShowDeleteMsg(false);
       }
       if (res && res.status === 401) {
         setIsLoading({ loader: false, type: 'page' });
@@ -1081,7 +1082,9 @@ export default function BrandAssetUpload() {
                         onClick={() =>
                           showBtns.download
                             ? downloadImages()
-                            : showBtns.upload
+                            : showBtns.upload &&
+                              brandAssetData &&
+                              brandAssetData.is_completed
                             ? setShowBtns({ download: false, upload: false })
                             : redirectTo('completed', '', '')
                         }>
