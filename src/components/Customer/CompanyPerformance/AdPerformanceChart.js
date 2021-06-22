@@ -469,34 +469,58 @@ export default function AdPerformanceChart({
           );
           secondAxis = 'other';
         } else if (index === 2) {
-          series.yAxis = valueAxis3;
-          valueAxis3.renderer.opposite = true;
-          valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
-          valueAxis.renderer.line.strokeOpacity = 0;
-          valueAxis2.renderer.line.strokeOpacity = 0;
-          valueAxis3.renderer.line.strokeOpacity = 0;
-          valueAxis.renderer.labels.template.disabled = true;
-          valueAxis2.renderer.labels.template.disabled = true;
-          valueAxis3.renderer.labels.template.disabled = true;
-          thirdAxis = 'others';
+          if (secondAxis === null) {
+            series.yAxis = valueAxis2;
+            valueAxis2.renderer.opposite = true;
+            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            secondAxis = 'other';
+          } else {
+            series.yAxis = valueAxis3;
+            valueAxis3.renderer.opposite = true;
+            valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+            thirdAxis = 'others';
+          }
         } else if (index === 3) {
           // console.log('index last else 3');
-          series.yAxis = valueAxis4;
-          valueAxis4.renderer.opposite = true;
-          valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
-            item,
-          );
+          if (thirdAxis === null) {
+            series.yAxis = valueAxis3;
+            valueAxis3.renderer.opposite = true;
+            valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+            thirdAxis = 'others';
+          } else {
+            series.yAxis = valueAxis4;
+            valueAxis4.renderer.opposite = true;
+            valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
 
-          valueAxis.renderer.line.strokeOpacity = 0;
-          valueAxis2.renderer.line.strokeOpacity = 0;
-          valueAxis3.renderer.line.strokeOpacity = 0;
-          valueAxis4.renderer.line.strokeOpacity = 0;
-          valueAxis.renderer.labels.template.disabled = true;
-          valueAxis2.renderer.labels.template.disabled = true;
-          valueAxis3.renderer.labels.template.disabled = true;
-          valueAxis4.renderer.labels.template.disabled = true;
+            valueAxis.renderer.line.strokeOpacity = 0;
+            valueAxis2.renderer.line.strokeOpacity = 0;
+            valueAxis3.renderer.line.strokeOpacity = 0;
+            valueAxis4.renderer.line.strokeOpacity = 0;
+            valueAxis.renderer.labels.template.disabled = true;
+            valueAxis2.renderer.labels.template.disabled = true;
+            valueAxis3.renderer.labels.template.disabled = true;
+            valueAxis4.renderer.labels.template.disabled = true;
+          }
         }
 
         const currentValue = `${item}Current`;
