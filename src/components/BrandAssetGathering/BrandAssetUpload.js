@@ -824,7 +824,8 @@ export default function BrandAssetUpload() {
           type="page"
         />
       ) : (
-        <BrandAssetBody>
+        <BrandAssetBody
+          completed={brandAssetData && brandAssetData.is_completed}>
           <DropDownBrandAsset className="customer-dropdown-select d-lg-none d-block mb-3 ">
             <Select
               options={viewOptions}
@@ -1170,8 +1171,7 @@ export default function BrandAssetUpload() {
 
 const BrandAssetBody = styled.div`
   padding-left: 400px;
-  margin-top: 50px;
-
+  margin-top: ${(props) => (props.completed ? '50px' : '75px')};
   .gray-info-icon {
     vertical-align: bottom;
     margin-left: 3px;
