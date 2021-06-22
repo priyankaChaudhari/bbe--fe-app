@@ -64,7 +64,7 @@ export default function PerformanceReport({
   // const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
-  const [dspSpend, setDspSpend] = useState(null);
+  // const [dspSpend, setDspSpend] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -754,14 +754,14 @@ export default function PerformanceReport({
             res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
               'MMM DD YYYY',
             );
-            if (res.data.dsp_spend && res.data.dsp_spend.length) {
-              setDspSpend({
-                value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
-                date: dayjs(res.data.dsp_spend[0].report_date).format(
-                  'MMM DD YYYY',
-                ),
-              });
-            }
+            // if (res.data.dsp_spend && res.data.dsp_spend.length) {
+            //   setDspSpend({
+            //     value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
+            //     date: dayjs(res.data.dsp_spend[0].report_date).format(
+            //       'MMM DD YYYY',
+            //     ),
+            //   });
+            // }
             setDspData(res.data.pf_oi_is[0]);
             const ipiValue = parseFloat(
               res.data.pf_oi_is[0].inventory_performance_index,
@@ -1535,25 +1535,25 @@ export default function PerformanceReport({
     );
   };
 
-  const renderDSPSpendPanel = () => {
-    return (
-      <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height">
-          <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
-          <div className="speed-rate">
-            {dspSpend && dspSpend.value
-              ? `${currencySymbol}${dspSpend.value
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : 'N/A'}
-          </div>
-          <div className="last-update">
-            Last updated: {dspSpend && dspSpend.date}
-          </div>
-        </WhiteCard>{' '}
-      </div>
-    );
-  };
+  // const renderDSPSpendPanel = () => {
+  //   return (
+  //     <div className="col-md-4 col-sm-12 mb-3">
+  //       <WhiteCard className="fix-height">
+  //         <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
+  //         <div className="speed-rate">
+  //           {dspSpend && dspSpend.value
+  //             ? `${currencySymbol}${dspSpend.value
+  //                 .toString()
+  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  //             : 'N/A'}
+  //         </div>
+  //         <div className="last-update">
+  //           Last updated: {dspSpend && dspSpend.date}
+  //         </div>
+  //       </WhiteCard>{' '}
+  //     </div>
+  //   );
+  // };
 
   const renderPositiveFeedbackPanel = () => {
     return (
@@ -1680,7 +1680,7 @@ export default function PerformanceReport({
 
   const renderBBPercentGraphPanel = () => {
     return (
-      <div className="col-md-8 col-sm-12 mb-3 ">
+      <div className="col-sm-12 mb-3 ">
         <WhiteCard className="fix-height">
           <div className="row">
             <div className="col-6 ">
@@ -1852,14 +1852,12 @@ export default function PerformanceReport({
       {renderMarketplaceDropDown()}
       {renderSalePerformancePanel()}
       <div className="row mt-3">
-        {renderDSPSpendPanel()}
+        {/* {renderDSPSpendPanel()} */}
+        {renderInventoryScorePanel()}
         {renderPositiveFeedbackPanel()}
         {renderOrderIssuesPanel()}
       </div>
-      <div className="row ">
-        {renderInventoryScorePanel()}
-        {renderBBPercentGraphPanel()}
-      </div>
+      <div className="row ">{renderBBPercentGraphPanel()}</div>
       {renderSPCustomDateModal()}
       {renderBBCustomDateModal()}
     </>

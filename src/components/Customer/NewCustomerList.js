@@ -265,7 +265,7 @@ export default function NewCustomerList() {
 
   useEffect(() => {
     getStatus().then((statusResponse) => {
-      if (statusResponse.status === 200) {
+      if (statusResponse && statusResponse.status === 200) {
         setStatus(statusResponse.data);
       }
     });
@@ -952,14 +952,14 @@ export default function NewCustomerList() {
           value = value ? `${value.toFixed(2)} %` : '';
         }
       } else if (value.toString().includes('-')) {
-          flag = 'red';
-          value = value
-            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-            : '';
-        } else {
-          flag = 'green';
-          value = value ? `${value.toFixed(2)} %` : '';
-        }
+        flag = 'red';
+        value = value
+          ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+          : '';
+      } else {
+        flag = 'green';
+        value = value ? `${value.toFixed(2)} %` : '';
+      }
 
       if (flag === 'red') {
         return (
