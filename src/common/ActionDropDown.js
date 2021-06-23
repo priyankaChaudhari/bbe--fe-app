@@ -6,7 +6,7 @@ const ActionDropDown = styled.div`
     width: 150px;
   }
   &.w-170 {
-    width: 170px;
+    max-width: 170px;
   }
   .css-2b097c-container {
     width: 100%;
