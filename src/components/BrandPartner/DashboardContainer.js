@@ -300,6 +300,16 @@ function DashboardContainer() {
     setShowBgsCustomDateModal(false);
   };
 
+  const setMaxDate = () => {
+    const d = currentDate;
+    if (userInfo && userInfo.role === 'Growth Strategist') {
+      d.setDate(d.getDate() - 4);
+    } else {
+      d.setDate(d.getDate() - 3);
+    }
+    return d;
+  };
+
   const renderBgsCustomDateModal = () => {
     return (
       <Modal
@@ -335,7 +345,7 @@ function DashboardContainer() {
               ranges={bgsData}
               moveRangeOnFirstSelection={false}
               showDateDisplay={false}
-              maxDate={currentDate}
+              maxDate={setMaxDate()}
               rangeColors={['#FF5933']}
               weekdayDisplayFormat="EEEEE"
               locale={enGB}
