@@ -156,7 +156,7 @@ export default function AdPerformance({
     if (response.daily_facts.current && response.daily_facts.current.length) {
       response.daily_facts.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-        let indexNumber = index;
+        // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (
           response.daily_facts.previous &&
@@ -191,27 +191,27 @@ export default function AdPerformance({
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
 
-          // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          if (index > 0) {
-            indexNumber = index - 1;
-          } else {
-            indexNumber = index;
-          }
-          tempData[indexNumber].adSalesDashLength =
-            item.ad_sales === null ? 8 : null;
-          tempData[indexNumber].adSpendDashLength =
-            item.ad_spend === null ? 8 : null;
-          tempData[indexNumber].adConversionDashLength =
-            item.ad_conversion_rate === null ? 8 : null;
-          tempData[indexNumber].impressionsDashLength =
-            item.impressions === null ? 8 : null;
-          tempData[indexNumber].adCosDashLength = item.acos === null ? 8 : null;
-          tempData[indexNumber].adRoasDashLength =
-            item.roas === null ? 8 : null;
-          tempData[indexNumber].adClicksDashLength =
-            item.clicks === null ? 8 : null;
-          tempData[indexNumber].adClickRateDashLength =
-            item.ctr === null ? 8 : null;
+          // // to add the dotted line. we have to check null matrix and add the dummy number like 8
+          // if (index > 0) {
+          //   indexNumber = index - 1;
+          // } else {
+          //   indexNumber = index;
+          // }
+          // tempData[indexNumber].adSalesDashLength =
+          //   item.ad_sales === null ? 8 : null;
+          // tempData[indexNumber].adSpendDashLength =
+          //   item.ad_spend === null ? 8 : null;
+          // tempData[indexNumber].adConversionDashLength =
+          //   item.ad_conversion_rate === null ? 8 : null;
+          // tempData[indexNumber].impressionsDashLength =
+          //   item.impressions === null ? 8 : null;
+          // tempData[indexNumber].adCosDashLength = item.acos === null ? 8 : null;
+          // tempData[indexNumber].adRoasDashLength =
+          //   item.roas === null ? 8 : null;
+          // tempData[indexNumber].adClicksDashLength =
+          //   item.clicks === null ? 8 : null;
+          // tempData[indexNumber].adClickRateDashLength =
+          //   item.ctr === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -426,7 +426,7 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.dsp_spend.current && response.dsp_spend.current.length) {
       response.dsp_spend.current.forEach((item, index) => {
-        let indexNumber = index;
+        // let indexNumber = index;
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         // add the current data at same index of prevoius in temporary object
         if (
@@ -467,27 +467,27 @@ export default function AdPerformance({
             item.roas !== null ? item.roas.toFixed(2) : '0.00';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          if (index > 0) {
-            indexNumber = index - 1;
-          } else {
-            indexNumber = index;
-          }
-          tempData[indexNumber].dspImpressionsDashLength =
-            item.impressions === null ? 8 : null;
-          tempData[indexNumber].dspSpendDashLength =
-            item.dsp_spend === null ? 8 : null;
-          tempData[indexNumber].dspTotalProductSalesDashLength =
-            item.total_product_sales === null ? 8 : null;
-          tempData[indexNumber].dspTotalRoasDashLength =
-            item.total_roas === null ? 8 : null;
-          tempData[indexNumber].dspTotalDpvrDashLength =
-            item.total_dpvr === null ? 8 : null;
-          tempData[indexNumber].dspTtlNewBrandPurchasesDashLength =
-            item.ttl_new_brand_purchases === null ? 8 : null;
-          tempData[indexNumber].dspProductSalesDashLength =
-            item.product_sales === null ? 8 : null;
-          tempData[indexNumber].dspRoasDashLength =
-            item.roas === null ? 8 : null;
+          // if (index > 0) {
+          //   indexNumber = index - 1;
+          // } else {
+          //   indexNumber = index;
+          // }
+          // tempData[indexNumber].dspImpressionsDashLength =
+          //   item.impressions === null ? 8 : null;
+          // tempData[indexNumber].dspSpendDashLength =
+          //   item.dsp_spend === null ? 8 : null;
+          // tempData[indexNumber].dspTotalProductSalesDashLength =
+          //   item.total_product_sales === null ? 8 : null;
+          // tempData[indexNumber].dspTotalRoasDashLength =
+          //   item.total_roas === null ? 8 : null;
+          // tempData[indexNumber].dspTotalDpvrDashLength =
+          //   item.total_dpvr === null ? 8 : null;
+          // tempData[indexNumber].dspTtlNewBrandPurchasesDashLength =
+          //   item.ttl_new_brand_purchases === null ? 8 : null;
+          // tempData[indexNumber].dspProductSalesDashLength =
+          //   item.product_sales === null ? 8 : null;
+          // tempData[indexNumber].dspRoasDashLength =
+          //   item.roas === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -612,9 +612,6 @@ export default function AdPerformance({
           setIsApiCall(false);
         }
       });
-
-      // const adGraphData = bindAdResponseData(adResData);
-      // setAdChartData(adGraphData);
     },
     [id],
   );

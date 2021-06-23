@@ -418,6 +418,9 @@ export default function AdPerformanceChart({
             // console.log('if currency');
             series.yAxis = valueAxis;
             firstAxis = 'currency';
+            valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
           } else if (secondAxis === null || secondAxis === 'currency') {
             // console.log('second axis null/currency');
             series.yAxis = valueAxis2;
