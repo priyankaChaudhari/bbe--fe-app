@@ -862,7 +862,7 @@ export default function BrandAssetUpload() {
           </DropDownBrandAsset>
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-9 col-12">
+              <div className="col-9 ">
                 <div className="label-heading">
                   Part {selectedStep && selectedStep.step}/5
                 </div>
@@ -996,8 +996,8 @@ export default function BrandAssetUpload() {
                   )}
                 </DragDropImg>
               </div>
-              <div className="col-md-3 col-sm-12 text-right pr-5 ">
-                <ActionDropDown className="w-170">
+              <div className="col-3  text-right pr-lg-5 ">
+                <ActionDropDown className="w-170 text-left">
                   {showBtns.download ? (
                     <Select
                       classNamePrefix="react-select "
@@ -1514,7 +1514,7 @@ const CheckSelectImage = styled.div`
 `;
 
 const DragDropImg = styled.div`
-  padding-bottom: 220px;
+  padding-bottom: 290px;
   max-height: 100vh;
   overflow: auto;
    section {

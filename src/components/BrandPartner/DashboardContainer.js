@@ -212,16 +212,20 @@ function DashboardContainer() {
           alt="user"
           style={{
             borderRadius: 50,
-            marginRight: '9px',
-            height: '32px',
+            marginRight: '6px',
+            height: '30px',
             verticalAlign: 'middle',
+            float: 'left',
           }}
         />
       ) : (
         <GetInitialName
           userInfo={props.data.label}
           type="list"
-          property="mr-2"
+          property="mr-2 float-left "
+          style={{
+            verticalAlign: 'middle',
+          }}
         />
       )}{' '}
       {props.data.label}
@@ -236,7 +240,7 @@ function DashboardContainer() {
           alt="user"
           style={{
             borderRadius: 50,
-            width: '32px',
+            width: '30px',
             marginBottom: '',
             verticalAlign: 'middle',
           }}

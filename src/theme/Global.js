@@ -166,7 +166,7 @@ export const GroupUser = styled.div`
   }
 `;
 export const BrandPartnerDashboard = styled.div`
-  // padding-left: 62px;
+  //padding-left: 62px;
 
   .partner-select {
     list-style-type: none;
@@ -200,6 +200,9 @@ export const BrandPartnerDashboard = styled.div`
     z-index: 1;
     background-color: ${Theme.white};
   }
+  .footer-sticky {
+    padding-left: 64px;
+  }
   // @media only screen and (max-width: 700px) {
   //   .partner-select {
   //     li {
@@ -230,6 +233,9 @@ export const BrandPartnerDashboard = styled.div`
           width: 208px;
         }
       }
+    }
+    .footer-sticky {
+      padding-left: 0;
     }
   }
   @media only screen and (max-width: 767px) {
@@ -286,6 +292,7 @@ export const DashboardCard = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 270px;
+      min-height: 20px;
     }
 
     .status {
@@ -338,6 +345,8 @@ export const DashboardCard = styled.div`
   @media only screen and (max-width: 991px) {
     .dashboard-body {
       padding-top: 70px;
+      padding-left: 0;
+      padding-right: 15px;
     }
   }
 

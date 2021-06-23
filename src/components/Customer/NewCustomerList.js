@@ -922,7 +922,7 @@ export default function NewCustomerList() {
       return (
         <>
           <br />
-          <div className="increase-rate">
+          <span className="increase-rate">
             <img
               className="green-arrow"
               src={ArrowUpIcon}
@@ -930,7 +930,7 @@ export default function NewCustomerList() {
               alt="arrow-up"
             />
             {percentage ? `${percentage.toFixed(2)} %` : ''}
-          </div>
+          </span>
         </>
       );
     }
@@ -939,7 +939,7 @@ export default function NewCustomerList() {
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
-    let value = actualValue;
+    let value = '-20';
     if (value) {
       if (matrics === 'ACOS') {
         if (value.toString().includes('-')) {
@@ -979,7 +979,8 @@ export default function NewCustomerList() {
       }
       return (
         <>
-          <div className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
+          <span
+            className={grayArrow ? 'increase-rate grey' : 'increase-rate ml-1'}>
             <img
               className="green-arrow"
               src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
@@ -987,7 +988,7 @@ export default function NewCustomerList() {
               alt="arrow-up"
             />
             {value}
-          </div>
+          </span>
         </>
       );
     }
