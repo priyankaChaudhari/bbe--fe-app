@@ -25,6 +25,8 @@ import {
   PATH_BILLING_DETAILS,
   PATH_ADM_DASHBOARD,
   PATH_ACCOUNT_SETUP_CHOOSE,
+  PATH_HYBRID_DASHBOARD,
+  PATH_DSP_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -177,9 +179,21 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
       } else if (
         data.user &&
         data.user.role &&
-        data.user.role.includes('Ad Manager')
+        data.user.role.includes('Sponsored Advertising Ad Manager')
       ) {
         history.push(PATH_ADM_DASHBOARD);
+      } else if (
+        data.user &&
+        data.user.role &&
+        data.user.role.includes('DSP Ad Manager')
+      ) {
+        history.push(PATH_DSP_DASHBOARD);
+      } else if (
+        data.user &&
+        data.user.role &&
+        data.user.role.includes('Hybrid Ad Manager')
+      ) {
+        history.push(PATH_HYBRID_DASHBOARD);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
