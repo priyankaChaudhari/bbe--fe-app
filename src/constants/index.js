@@ -44,6 +44,8 @@ export const PATH_BGS_DASHBOARD = '/bgs-dashboard/';
 export const PATH_TEAM_MEMBER = '/team-member/';
 export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
+export const PATH_DSP_DASHBOARD = '/dsp-dashboard/';
+export const PATH_HYBRID_DASHBOARD = '/hybrid-dashboard/';
 
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;

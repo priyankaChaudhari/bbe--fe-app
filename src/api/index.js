@@ -65,6 +65,7 @@ export {
   getAdManagers,
   getThresholdType,
   getYoyPercentage,
+  getManagersList,
 } from './ChoicesApi';
 
 // Contract

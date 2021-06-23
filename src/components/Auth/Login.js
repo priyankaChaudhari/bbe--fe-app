@@ -27,6 +27,8 @@ import {
   PATH_CUSTOMER_LIST,
   PATH_SUMMARY,
   PATH_ADM_DASHBOARD,
+  PATH_DSP_DASHBOARD,
+  PATH_HYBRID_DASHBOARD,
 } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
@@ -118,8 +120,12 @@ export default function Login() {
     if (localStorage.getItem('token')) {
       if (role.includes('Growth Strategist')) {
         history.push(PATH_BGS_DASHBOARD);
-      } else if (role.includes('Ad Manager')) {
+      } else if (role.includes('Sponsored Advertising Ad Manager')) {
         history.push(PATH_ADM_DASHBOARD);
+      } else if (role.includes('DSP Ad Manager')) {
+        history.push(PATH_DSP_DASHBOARD);
+      } else if (role.includes('Hybrid Ad Manager')) {
+        history.push(PATH_HYBRID_DASHBOARD);
       } else if (role === 'Customer') {
         const id =
           step &&

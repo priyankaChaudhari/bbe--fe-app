@@ -30,6 +30,8 @@ import {
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
   PATH_BRAND_ASSET_PREVIEW,
+  PATH_DSP_DASHBOARD,
+  PATH_HYBRID_DASHBOARD,
 } from '../constants/index';
 
 import { CustomerListTablet } from '../components/Customer';
@@ -42,10 +44,11 @@ import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
 import NewCustomerList from '../components/Customer/NewCustomerList';
 import {
-  Dashboard,
+  // Dashboard,
   TeamMember,
   TabletTeamMember,
-  AdManagerDashboard,
+  // AdManagerDashboard,
+  DashboardContainer,
 } from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';
 import {
@@ -140,13 +143,25 @@ export default function AuthenticationComponent() {
           )}
           {/* Brand Partner */}
           {userInfo && userInfo.role === 'Growth Strategist' ? (
-            <Route path={PATH_BGS_DASHBOARD} component={Dashboard} />
+            <Route path={PATH_BGS_DASHBOARD} component={DashboardContainer} />
           ) : (
             ''
           )}
-
           {userInfo && userInfo.role === 'Sponsored Advertising Ad Manager' ? (
-            <Route path={PATH_ADM_DASHBOARD} component={AdManagerDashboard} />
+            <Route path={PATH_ADM_DASHBOARD} component={DashboardContainer} />
+          ) : (
+            ''
+          )}
+          {userInfo && userInfo.role === 'DSP Ad Manager' ? (
+            <Route path={PATH_DSP_DASHBOARD} component={DashboardContainer} />
+          ) : (
+            ''
+          )}
+          {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
+            <Route
+              path={PATH_HYBRID_DASHBOARD}
+              component={DashboardContainer}
+            />
           ) : (
             ''
           )}
@@ -170,7 +185,6 @@ export default function AuthenticationComponent() {
             component={BrandAssetsPreview}
           />
           <Route component={PageNotFound} />
-
           {/* Brand Asset Gathering */}
           {/* <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} /> */}
         </Switch>

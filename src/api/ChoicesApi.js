@@ -105,6 +105,31 @@ export async function getContactRoles() {
   return result;
 }
 
+export async function getManagersList(type, hybridSelectedDashboard) {
+  const api = type === 'Growth Strategist' ? API_BGS : API_ADM;
+  let params = {};
+  if (type === 'Sponsored Advertising Ad Manager') {
+    params = { dashboard: 'sponsored_ad_dashboard' };
+  }
+  if (type === 'DSP Ad Manager') {
+    params = { dashboard: 'dsp_ad_performance' };
+  }
+
+  if (hybridSelectedDashboard && type === 'Hybrid Ad Manager') {
+    params = { dashboard: hybridSelectedDashboard };
+  }
+
+  const result = await axiosInstance
+    .get(`${api}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getGrowthStrategist() {
   const result = await axiosInstance
     .get(`${API_BGS}`)

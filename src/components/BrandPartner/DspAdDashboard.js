@@ -4,8 +4,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { PageLoader, WhiteCard } from '../../common';
 import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
+
+import { PageLoader, WhiteCard } from '../../common';
 
 import {
   RecurringIcon,
@@ -15,11 +16,10 @@ import {
   CompanyDefaultUser,
   UpDowGrayArrow,
 } from '../../theme/images';
-
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import NoRecordFound from '../../common/NoRecordFound';
 
-export default function AdManagerDashboard({ isLoading, data }) {
+function DspAdDashboard({ isLoading, data }) {
   const history = useHistory();
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
@@ -182,103 +182,102 @@ export default function AdManagerDashboard({ isLoading, data }) {
                       <div className="straight-line horizontal-line spacing " />
                       <div className="row">
                         <div className="col-6">
-                          <div className="card-label">Ad Sales</div>
+                          <div className="card-label">IMPRESSIONS</div>
 
                           {renderAdPerformanceDifference(
                             item &&
-                              item.sponsored_ad_performance &&
-                              item.sponsored_ad_performance.difference_data &&
-                              item.sponsored_ad_performance.difference_data
-                                .ad_sales,
-                            false,
-                            'AdSales',
-                          )}
-                        </div>
-                        <div className="col-6 text-right">
-                          <div className="sold-price ">
-                            {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.current_sum &&
-                            item.sponsored_ad_performance.current_sum.ad_sales
-                              ? `$${item.sponsored_ad_performance.current_sum.ad_sales
-                                  .toFixed(2)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
-                          </div>
-                          <div className="vs">
-                            vs{' '}
-                            {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.previous_sum &&
-                            item.sponsored_ad_performance.previous_sum.ad_sales
-                              ? `$${item.sponsored_ad_performance.previous_sum.ad_sales
-                                  .toFixed(2)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
-                          </div>
-                        </div>
-                        <div className="straight-line horizontal-line spacing" />
-                        <div className="col-6">
-                          <div className="card-label">ad Spend</div>
-                          {renderAdPerformanceDifference(
-                            item &&
-                              item.sponsored_ad_performance &&
-                              item.sponsored_ad_performance.difference_data &&
-                              item.sponsored_ad_performance.difference_data
-                                .ad_spend,
-                            true,
-                            'AdSpend',
-                          )}
-                        </div>
-                        <div className="col-6 text-right">
-                          <div className="sold-price ">
-                            {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.current_sum &&
-                            item.sponsored_ad_performance.current_sum.ad_spend
-                              ? `$${item.sponsored_ad_performance.current_sum.ad_spend
-                                  .toFixed(2)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
-                          </div>
-                          <div className="vs">
-                            vs{' '}
-                            {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.previous_sum &&
-                            item.sponsored_ad_performance.previous_sum.ad_spend
-                              ? `$${item.sponsored_ad_performance.previous_sum.ad_spend
-                                  .toFixed(2)
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                              : '$0'}
-                          </div>
-                        </div>
-                        <div className="straight-line horizontal-line spacing" />
-
-                        <div className="col-6">
-                          <div className="card-label">Ad Impressions</div>
-                          {renderAdPerformanceDifference(
-                            item &&
-                              item.sponsored_ad_performance &&
-                              item.sponsored_ad_performance.difference_data &&
-                              item.sponsored_ad_performance.difference_data
+                              item.dsp_ad_performance &&
+                              item.dsp_ad_performance.difference_data &&
+                              item.dsp_ad_performance.difference_data
                                 .impressions,
                             false,
-                            'AdImpressions',
+                            'impressions',
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price ">
                             {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.current_sum &&
-                            item.sponsored_ad_performance.current_sum
-                              .impressions
-                              ? item.sponsored_ad_performance.current_sum.impressions
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.current_sum &&
+                            item.dsp_ad_performance.current_sum.impressions
+                              ? `$${item.dsp_ad_performance.current_sum.impressions
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.previous_sum &&
+                            item.dsp_ad_performance.previous_sum.impressions
+                              ? `$${item.dsp_ad_performance.previous_sum.impressions
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
+                          </div>
+                        </div>
+                        <div className="straight-line horizontal-line spacing" />
+                        <div className="col-6">
+                          <div className="card-label">DSP Spend</div>
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.dsp_ad_performance &&
+                              item.dsp_ad_performance.difference_data &&
+                              item.dsp_ad_performance.difference_data.dsp_spend,
+                            true,
+                            'dsp_spend',
+                          )}
+                        </div>
+                        <div className="col-6 text-right">
+                          <div className="sold-price ">
+                            {item &&
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.current_sum &&
+                            item.dsp_ad_performance.current_sum.dsp_spend
+                              ? `$${item.dsp_ad_performance.current_sum.dsp_spend
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
+                          </div>
+                          <div className="vs">
+                            vs{' '}
+                            {item &&
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.previous_sum &&
+                            item.dsp_ad_performance.previous_sum.dsp_spend
+                              ? `$${item.dsp_ad_performance.previous_sum.dsp_spend
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
+                          </div>
+                        </div>
+                        <div className="straight-line horizontal-line spacing" />
+
+                        <div className="col-6">
+                          <div className="card-label">TOTAL PRODUCT SALES</div>
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.dsp_ad_performance &&
+                              item.dsp_ad_performance.difference_data &&
+                              item.dsp_ad_performance.difference_data
+                                .total_product_sales,
+                            false,
+                            'total_product_sales',
+                          )}
+                        </div>
+                        <div className="col-6 text-right">
+                          <div className="sold-price ">
+                            {item &&
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.current_sum &&
+                            item.dsp_ad_performance.current_sum
+                              .total_product_sales
+                              ? item.dsp_ad_performance.current_sum.total_product_sales
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                               : 0}
@@ -286,11 +285,11 @@ export default function AdManagerDashboard({ isLoading, data }) {
                           <div className="vs">
                             vs{' '}
                             {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.previous_sum &&
-                            item.sponsored_ad_performance.previous_sum
-                              .impressions
-                              ? item.sponsored_ad_performance.previous_sum.impressions
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.previous_sum &&
+                            item.dsp_ad_performance.previous_sum
+                              .total_product_sales
+                              ? item.dsp_ad_performance.previous_sum.total_product_sales
                                   .toString()
                                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                               : 0}
@@ -299,24 +298,24 @@ export default function AdManagerDashboard({ isLoading, data }) {
 
                         <div className="straight-line horizontal-line spacing" />
                         <div className="col-6">
-                          <div className="card-label">ACOS</div>
+                          <div className="card-label">TOTAL ROAS</div>
                           {renderAdPerformanceDifference(
                             item &&
-                              item.sponsored_ad_performance &&
-                              item.sponsored_ad_performance.difference_data &&
-                              item.sponsored_ad_performance.difference_data
-                                .acos,
+                              item.dsp_ad_performance &&
+                              item.dsp_ad_performance.difference_data &&
+                              item.dsp_ad_performance.difference_data
+                                .total_roas,
                             false,
-                            'ACOS',
+                            'total_roas',
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price">
                             {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.current_sum &&
-                            item.sponsored_ad_performance.current_sum.acos
-                              ? `${item.sponsored_ad_performance.current_sum.acos.toFixed(
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.current_sum &&
+                            item.dsp_ad_performance.current_sum.total_roas
+                              ? `${item.dsp_ad_performance.current_sum.total_roas.toFixed(
                                   2,
                                 )}%`
                               : '0%'}
@@ -324,10 +323,10 @@ export default function AdManagerDashboard({ isLoading, data }) {
                           <div className="vs">
                             vs{' '}
                             {item &&
-                            item.sponsored_ad_performance &&
-                            item.sponsored_ad_performance.previous_sum &&
-                            item.sponsored_ad_performance.previous_sum.acos
-                              ? `${item.sponsored_ad_performance.previous_sum.acos.toFixed(
+                            item.dsp_ad_performance &&
+                            item.dsp_ad_performance.previous_sum &&
+                            item.dsp_ad_performance.previous_sum.total_roas
+                              ? `${item.dsp_ad_performance.previous_sum.total_roas.toFixed(
                                   2,
                                 )}%`
                               : '0%'}
@@ -345,3 +344,5 @@ export default function AdManagerDashboard({ isLoading, data }) {
     </BrandPartnerDashboard>
   );
 }
+
+export default DspAdDashboard;
