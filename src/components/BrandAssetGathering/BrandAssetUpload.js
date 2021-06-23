@@ -491,23 +491,6 @@ export default function BrandAssetUpload() {
     });
   };
 
-  const downloadImages = () => {
-    setIsLoading({ loader: true, type: 'button' });
-    downloadBrandAssetImages(
-      selectedDropdown.dropdownValue &&
-        selectedDropdown.dropdownValue.value === 'all' &&
-        selectedDropdown.total === downloadIds &&
-        downloadIds.length
-        ? { customer_id: id }
-        : { document_ids: downloadIds },
-    ).then((res) => {
-      if (res && res.status === 200) {
-        setShowBtns({ download: false, upload: false });
-        setIsLoading({ loader: false, type: 'button' });
-      }
-    });
-  };
-
   const handleDownloadIds = (event) => {
     const ids = [...downloadIds];
     if (event.target.checked) {
@@ -1068,60 +1051,99 @@ export default function BrandAssetUpload() {
                         </span>
                       )}
 
-                      <Button
-                        className="btn-primary"
-                        disabled={
-                          isLoading.loader || noImages
-                            ? false
-                            : showBtns.download &&
-                              downloadIds &&
-                              downloadIds.length === 0
-                            ? true
-                            : documentData && documentData.length === 0
-                        }
-                        onClick={() =>
-                          showBtns.download
-                            ? downloadImages()
-                            : showBtns.upload &&
-                              brandAssetData &&
-                              brandAssetData.is_completed
-                            ? setShowBtns({ download: false, upload: false })
-                            : redirectTo('completed', '', '')
-                        }>
-                        {isLoading.loader && isLoading.type === 'button' ? (
-                          <PageLoader color="#fff" type="button" />
-                        ) : (
-                          <>
-                            {brandAssetData && brandAssetData.is_completed ? (
-                              <>
-                                {showBtns.upload
-                                  ? 'Finish uploading'
-                                  : 'Download Selected'}
-                              </>
-                            ) : (
-                              <>
-                                Next Step
-                                <img
-                                  className="btn-icon ml-2"
-                                  width="16px"
-                                  src={WhiteArrowRight}
-                                  alt=""
-                                />{' '}
-                              </>
-                            )}
-                          </>
-                        )}
-                      </Button>
                       {showBtns.download ? (
-                        <Button
-                          className="btn-transparent w-50 on-boarding  ml-4"
-                          onClick={() =>
-                            setShowBtns({ download: false, upload: false })
-                          }>
-                          Cancel
-                        </Button>
+                        <>
+                          <a
+                            href={`${
+                              process.env.REACT_APP_BASE_APP_URL +
+                              process.env.REACT_APP_API_VERSION +
+                              API_DOCUMENTS
+                            }download/?${
+                              selectedDropdown &&
+                              selectedDropdown.total === downloadIds &&
+                              downloadIds.length
+                                ? queryString.stringify({
+                                    brand_assets_id: [brandId],
+                                  })
+                                : queryString.stringify({
+                                    document_id: downloadIds,
+                                  })
+                            }`}
+                            target="_self"
+                            onClick={() => {
+                              setIsLoading({
+                                loader: true,
+                                type: 'button',
+                              });
+                              setTimeout(() => {
+                                setIsLoading({
+                                  loader: false,
+                                  type: 'button',
+                                });
+                                setShowBtns({ download: false, upload: false });
+                              }, 3000);
+                            }}>
+                            <Button className="btn-primary">
+                              {isLoading.loader &&
+                              isLoading.type === 'button' ? (
+                                <PageLoader color="#fff" type="button" />
+                              ) : (
+                                'Download Selected'
+                              )}
+                            </Button>
+                          </a>
+                          <Button
+                            className="btn-transparent w-50 on-boarding ml-4"
+                            onClick={() => {
+                              setShowBtns({ download: false, upload: false });
+                              setIsLoading({ loader: false, type: 'button' });
+                            }}>
+                            Cancel
+                          </Button>
+                        </>
                       ) : (
-                        ''
+                        <Button
+                          className="btn-primary"
+                          disabled={
+                            isLoading.loader || noImages
+                              ? false
+                              : showBtns.download &&
+                                downloadIds &&
+                                downloadIds.length === 0
+                              ? true
+                              : documentData && documentData.length === 0
+                          }
+                          onClick={() =>
+                            showBtns.upload &&
+                            brandAssetData &&
+                            brandAssetData.is_completed
+                              ? setShowBtns({ download: false, upload: false })
+                              : redirectTo('completed', '', '')
+                          }>
+                          {isLoading.loader && isLoading.type === 'button' ? (
+                            <PageLoader color="#fff" type="button" />
+                          ) : (
+                            <>
+                              {brandAssetData && brandAssetData.is_completed ? (
+                                <>
+                                  {showBtns.upload
+                                    ? 'Finish uploading'
+                                    : 'Download Selected'}
+                                </>
+                              ) : (
+                                <>
+                                  Next Step
+                                  <img
+                                    className="btn-icon ml-2"
+                                    width="16px"
+                                    src={WhiteArrowRight}
+                                    alt=""
+                                  />{' '}
+                                </>
+                              )}
+                            </>
+                          )}
+                        </Button>
                       )}
                     </div>
                   </div>
