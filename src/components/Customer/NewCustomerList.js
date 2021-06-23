@@ -41,6 +41,7 @@ import {
 import CustomerListTablet from './CustomerListTablet';
 import {
   getCustomerList,
+  getCustomers,
   getGrowthStrategist,
   getStatus,
   getAdManagers,
@@ -48,7 +49,7 @@ import {
 import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
-import { sortOptions } from '../../constants/FieldConstants';
+import { sortOptions, timeFrameFilters } from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
   const history = useHistory();
@@ -66,6 +67,7 @@ export default function NewCustomerList() {
       : '',
   );
   const { Option, MultiValue, SingleValue } = components;
+  // const [customDateModal, setCustomDateModal] = useState(false);
   const [status, setStatus] = useState([]);
   const [selectedValue, setSelectedValue] = useState(
     JSON.parse(localStorage.getItem('filters'))
@@ -98,10 +100,17 @@ export default function NewCustomerList() {
       ? JSON.parse(localStorage.getItem('filters')).showAdPerformance
       : false,
   );
+  const [showDspAdPerformance, setShowDspAdPerformance] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).showDspAdPerformance
+      : false,
+  );
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState('week');
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
     { value: 'performance', label: 'Sales Performance' },
-    { value: 'ad_performance', label: 'Ad Performance' },
+    { value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' },
+    { value: 'dsp_ad_performance', label: 'DSP Ad Performance' },
   ];
   const contractChoices = [
     { value: 'any', label: 'Any' },
@@ -186,6 +195,15 @@ export default function NewCustomerList() {
     </SingleValue>
   );
 
+  const TimeFrameFilters = (props) => (
+    <SingleValue {...props}>
+      Stats For: &nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+      </span>
+    </SingleValue>
+  );
+
   const DropdownIndicator = (props) => {
     return (
       components.DropdownIndicator && (
@@ -221,7 +239,15 @@ export default function NewCustomerList() {
       }
       return DropdownIndicator;
     }
-
+    if (key === 'stats') {
+      if (isDesktop) {
+        return {
+          SingleValue: TimeFrameFilters,
+          DropdownIndicator,
+        };
+      }
+      return DropdownIndicator;
+    }
     if (key === 'view') {
       if (isDesktop) {
         return {
@@ -260,6 +286,33 @@ export default function NewCustomerList() {
       showPerformance,
       expiringSoon,
       showAdPerformance,
+    ],
+  );
+
+  const customerListByView = useCallback(
+    (currentPage, dailyFacts, dashboard, orderBy, sort) => {
+      // daily_facts=[week/month/30days/custom]
+      // order-by=[revenue/units_sold/traffic/converion]
+      // sequence=[asc/desc]
+      // dashboard=sale_performance
+      // setIsLoading({ loader: true, type: 'page' });
+      getCustomers(currentPage, dashboard, dailyFacts, orderBy, sort).then(
+        (response) => {
+          setData(response && response.data && response.data.results);
+          setPageNumber(currentPage);
+          setCount(response && response.data && response.data.count);
+          setIsLoading({ loader: false, type: 'page' });
+        },
+      );
+    },
+    [
+      searchQuery,
+      selectedValue,
+      filters,
+      showPerformance,
+      expiringSoon,
+      showAdPerformance,
+      showDspAdPerformance,
     ],
   );
 
@@ -307,7 +360,7 @@ export default function NewCustomerList() {
       });
     }
     customerList(1);
-  }, [customerList]);
+  }, []);
 
   const handlePageChange = (currentPage) => {
     localStorage.setItem('page', currentPage || 1);
@@ -527,16 +580,29 @@ export default function NewCustomerList() {
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
+      if (event.value === 'contract_details') {
+        customerList(pageNumber);
+      }
       if (event.value === 'performance') {
         setShowPerformance(true);
         setShowAdPerformance(false);
+        setShowDspAdPerformance(false);
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             showPerformance: true,
             showAdPerformance: false,
+            showDspAdPerformance: false,
           }),
+        );
+
+        customerListByView(
+          pageNumber,
+          selectedTimeFrame,
+          'sale_performance',
+          'revenue',
+          'asc',
         );
         // customerList(
         //   pageNumber,
@@ -546,16 +612,53 @@ export default function NewCustomerList() {
         //   true,
         //   false,
         // );
-      } else if (event.value === 'ad_performance') {
+      } else if (event.value === 'sponsored_ad_performance') {
         setShowPerformance(false);
         setShowAdPerformance(true);
+        setShowDspAdPerformance(false);
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             showPerformance: false,
             showAdPerformance: true,
+            showDspAdPerformance: false,
           }),
+        );
+        customerListByView(
+          pageNumber,
+          selectedTimeFrame,
+          'sponsored_ad_performance',
+          'ad_spend',
+          'asc',
+        );
+        // customerList(
+        //   pageNumber,
+        //   selectedValue,
+        //   filters,
+        //   searchQuery,
+        //   false,
+        //   true,
+        // );
+      } else if (event.value === 'dsp_ad_performance') {
+        setShowPerformance(false);
+        setShowAdPerformance(false);
+        setShowDspAdPerformance(true);
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showPerformance: false,
+            showAdPerformance: false,
+            showDspAdPerformance: true,
+          }),
+        );
+        customerListByView(
+          pageNumber,
+          selectedTimeFrame,
+          'dsp_ad_performance',
+          'dsp_spend',
+          'asc',
         );
         // customerList(
         //   pageNumber,
@@ -568,12 +671,14 @@ export default function NewCustomerList() {
       } else {
         setShowPerformance(false);
         setShowAdPerformance(false);
+        setShowDspAdPerformance(false);
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
             showPerformance: false,
             showAdPerformance: false,
+            showDspAdPerformance: false,
           }),
         );
       }
@@ -616,6 +721,20 @@ export default function NewCustomerList() {
         // );
       }
     }
+    if (type === 'stats') {
+      if (event.value === 'custom') {
+        // setCustomDateModal(true);
+      } else {
+        setSelectedTimeFrame(event.value);
+        customerListByView(
+          pageNumber,
+          event.value,
+          'sale_performance',
+          'revenue',
+          'asc',
+        );
+      }
+    }
     if (type === 'search') {
       setTimeout(() => {
         customerList(
@@ -645,6 +764,12 @@ export default function NewCustomerList() {
         return 'View: Contract Details';
       }
       return 'View';
+    }
+    if (item === 'stats') {
+      if (isDesktop) {
+        return 'Stats For: Last 7 days';
+      }
+      return 'Stats For';
     }
     return '';
   };
@@ -828,6 +953,13 @@ export default function NewCustomerList() {
           filters.ad_user.some((op) => op === option.value),
         );
       }
+      if (
+        filters.ad_user &&
+        (showPerformance || showAdPerformance || showDspAdPerformance)
+      ) {
+        return timeFrameFilters;
+      }
+
       return [{ value: 'any', label: 'Any' }];
     }
     if (item === 'sort') {
@@ -836,16 +968,48 @@ export default function NewCustomerList() {
         sortOptions.filter((op) => op.value === filters.sort_by)
       );
     }
+    if (item === 'stats') {
+      return timeFrameFilters.filter((op) => op.value === selectedTimeFrame);
+    }
+
     if (showPerformance) {
       return [{ value: 'performance', label: 'Sales Performance' }];
     }
     if (showAdPerformance) {
-      return [{ value: 'ad_performance', label: 'Ad Performance' }];
+      return [
+        {
+          value: 'sponsored_ad_performance',
+          label: 'Sponsored Ad Performance',
+        },
+      ];
+    }
+    if (showDspAdPerformance) {
+      return [
+        {
+          value: 'dsp_ad_performance',
+          label: 'DSP Ad Performance',
+        },
+      ];
     }
     return [{ value: 'contract_details', label: 'Contract Details' }];
   };
 
+  const getDropDownOptions = (optionsFor) => {
+    switch (optionsFor) {
+      case 'user':
+        return brandGrowthStrategist;
+      case 'sort':
+        return sortOptions;
+      case 'stats':
+        return timeFrameFilters;
+      default:
+        return options;
+    }
+  };
+
   const generateDropdown = (item, reff = null) => {
+    const searchFor =
+      item === 'sort' ? 'sort' : item === 'stats' ? 'stats' : 'view';
     return (
       <>
         <Select
@@ -854,17 +1018,18 @@ export default function NewCustomerList() {
           className="active"
           ref={reff}
           placeholder={getSelectPlaceholder(item)}
-          options={
-            item === 'user'
-              ? brandGrowthStrategist
-              : item === 'sort'
-              ? sortOptions
-              : options
-          }
+          options={getDropDownOptions(item)}
+          // {
+          //   item === 'user'
+          //     ? brandGrowthStrategist
+          //     : item === 'sort'
+          //     ? sortOptions
+          //     : options
+          // }
           onChange={(event, action) =>
             item === 'user'
               ? handleFilters(event, item, 'brand', action)
-              : handleSearch(event, item === 'sort' ? 'sort' : 'view')
+              : handleSearch(event, searchFor)
           }
           value={bindDropDownValue(item)}
           // value={
@@ -880,7 +1045,7 @@ export default function NewCustomerList() {
           //     : showPerformance
           //     ? [{ value: 'performance', label: 'Sales Performance' }]
           //     : showAdPerformance
-          //     ? [{ value: 'ad_performance', label: 'Ad Performance' }]
+          //     ? [{ value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' }]
           //     : [{ value: 'contract_details', label: 'Contract Details' }]
           //   // : selectedValue[item.key] === null
           //   // ? null
@@ -939,7 +1104,7 @@ export default function NewCustomerList() {
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
-    let value = '-20';
+    let value = actualValue; // '-20';
     if (value) {
       if (matrics === 'ACOS') {
         if (value.toString().includes('-')) {
@@ -1018,7 +1183,21 @@ export default function NewCustomerList() {
           <div className="col-lg-2 col-12 unit-sold ">Ad Spend</div>
           <div className="col-lg-2 col-12 traffic">Ad Impressions</div>
           <div className="col-lg-2 col-12 conversion">Acos</div>
-          <div className="col-lg-2 col-12 Brand_Strategist">Ad Manager</div>
+          <div className="col-lg-2 col-12 Brand_Strategist">
+            Sponsored Ad Manager
+          </div>
+        </div>
+      );
+    }
+    if (showDspAdPerformance) {
+      return (
+        <div className="row">
+          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-2 col-12 Revenue">IMPRESSIONS</div>
+          <div className="col-lg-2 col-12 unit-sold ">DSP Spend</div>
+          <div className="col-lg-2 col-12 traffic">TOTAL PRODUCT SALES</div>
+          <div className="col-lg-2 col-12 conversion">TOTAL ROAS</div>
+          <div className="col-lg-2 col-12 Brand_Strategist">DSP AD MANAGER</div>
         </div>
       );
     }
@@ -1369,6 +1548,145 @@ export default function NewCustomerList() {
         </tr>
       );
     }
+    if (showDspAdPerformance) {
+      return (
+        <tr
+          className="cursor"
+          key={Math.random()}
+          onClick={() =>
+            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+          }>
+          <td width="20%">
+            <img
+              className="company-logo"
+              src={
+                item &&
+                item.documents &&
+                item.documents[0] &&
+                Object.values(item.documents[0])
+                  ? Object.values(item.documents[0])[0]
+                  : CompanyDefaultUser
+              }
+              alt="logo"
+            />
+
+            <div className="company-name">{item && item.company_name}</div>
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          </td>
+          <td width="15%">
+            {item &&
+            item.dsp_ad_performance &&
+            item.dsp_ad_performance.current_sum &&
+            item.dsp_ad_performance.current_sum.impressions
+              ? `$${item.dsp_ad_performance.current_sum.impressions
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+              : '$0'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.dsp_ad_performance &&
+                item.dsp_ad_performance.difference_data &&
+                item.dsp_ad_performance.difference_data.impressions,
+              false,
+              'impressions',
+            )}
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.dsp_ad_performance &&
+              item.dsp_ad_performance.current_sum &&
+              item.dsp_ad_performance.current_sum.dsp_spend
+                ? `$${item.dsp_ad_performance.current_sum.dsp_spend
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.difference_data &&
+                  item.dsp_ad_performance.difference_data.dsp_spend,
+                true,
+                'DspSpend',
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.dsp_ad_performance &&
+              item.dsp_ad_performance.current_sum &&
+              item.dsp_ad_performance.current_sum.total_product_sales
+                ? item.dsp_ad_performance.current_sum.total_product_sales
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.difference_data &&
+                  item.dsp_ad_performance.difference_data.total_product_sales,
+                false,
+                'totalProductSales',
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            <>
+              {item &&
+              item.dsp_ad_performance &&
+              item.dsp_ad_performance.current_sum &&
+              item.dsp_ad_performance.current_sum.total_roas
+                ? `${item.dsp_ad_performance.current_sum.total_roas.toFixed(
+                    2,
+                  )}%`
+                : '0%'}
+              {renderAdPerformanceDifference(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.difference_data &&
+                  item.dsp_ad_performance.difference_data.total_roas,
+                false,
+                'totalRoas',
+              )}
+            </>
+          </td>
+
+          <td width="15%">
+            {item && item.ad_manager && item.ad_manager.length !== 0 ? (
+              <>
+                {item.ad_manager.profile_photo ? (
+                  <img
+                    className="user-profile-circle"
+                    src={item.ad_manager.profile_photo}
+                    alt="user"
+                  />
+                ) : (
+                  <GetInitialName
+                    property="float-left mr-3"
+                    userInfo={item.ad_manager}
+                  />
+                )}
+              </>
+            ) : (
+              ''
+            )}
+            <div className="user-name">
+              {item && item.ad_manager && item.ad_manager.first_name}
+              <br />
+              {item && item.ad_manager && item.ad_manager.last_name}
+            </div>
+          </td>
+        </tr>
+      );
+    }
     // for view-contract Details
     return (
       <tr
@@ -1498,7 +1816,7 @@ export default function NewCustomerList() {
                     </div>
 
                     {showAdPerformance ? (
-                      <div className="label">Ad Manager</div>
+                      <div className="label">Sponsored Ad Manager</div>
                     ) : (
                       <div className="label">Brand Strategist</div>
                     )}
@@ -1679,7 +1997,7 @@ export default function NewCustomerList() {
             </div>
             <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
               <DropDownSelect className="customer-list-header">
-                {generateDropdown('sort')}
+                {generateDropdown('stats')}
               </DropDownSelect>{' '}
             </div>
             <div className="col-lg-2 col-md-6  col-12   mb-2  pl-2 pr-2 ">
@@ -1710,7 +2028,7 @@ export default function NewCustomerList() {
         {/* //for ad manager dropdown 
         {showAdPerformance ? (
           <>
-            <div className="label mt-2 mb-2">Ad Manager</div>
+            <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
             <DropDownSelect className="w-250">
               {generateAdManagerDropdown('user', selectInputRef)}
             </DropDownSelect>{' '}
@@ -1724,7 +2042,7 @@ export default function NewCustomerList() {
           </>
         )} */}
         {showAdPerformance ? (
-          <div className="label mt-2 mb-2">Ad Manager</div>
+          <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
         ) : (
           <div className="label mt-2 mb-2">Brand Strategist</div>
         )}

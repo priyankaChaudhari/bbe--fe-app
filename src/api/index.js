@@ -13,6 +13,7 @@ export {
 // customer
 export {
   getCustomerList,
+  getCustomers,
   updateCustomer,
   getCustomerDetails,
   getDocuments,

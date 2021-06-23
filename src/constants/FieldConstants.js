@@ -185,6 +185,13 @@ export const sortOptions = [
   { value: 'expiring_soon', label: 'Expiry Date' },
 ];
 
+export const timeFrameFilters = [
+  { value: 'week', label: 'Recent 7 days' },
+  { value: 'month', label: 'Recent Month' },
+  { value: '30days', label: 'Recent 30 days' },
+  { value: 'custom', label: 'Custom Period' },
+];
+
 export const companyFields = [
   { key: 'description', label: 'Description', section: 1, type: 'textarea' },
   { key: 'website', label: 'Website', section: 1 },

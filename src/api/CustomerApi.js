@@ -633,3 +633,49 @@ export async function getDSPPerformance(
     });
   return result;
 }
+
+export async function getCustomers(
+  pageNumber,
+  dashboard,
+  dailyFacts,
+  orderBy,
+  sequence,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  const page =
+    pageNumber === '' || pageNumber === undefined
+      ? 1
+      : localStorage.getItem('page')
+      ? localStorage.getItem('page')
+      : pageNumber;
+  if (startDate && endDate) {
+    params = {
+      page,
+      dashboard,
+      daily_facts: dailyFacts,
+      'order-by': orderBy,
+      sequence,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      page,
+      dashboard,
+      daily_facts: dailyFacts,
+      'order-by': orderBy,
+      sequence,
+    };
+  }
+  const result = await axiosInstance
+    .get(`${API_CUSTOMER}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
