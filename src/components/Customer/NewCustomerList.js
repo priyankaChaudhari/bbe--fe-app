@@ -46,7 +46,7 @@ import {
   getStatus,
 } from '../../api';
 
-import { getManagersList } from "../../api/ChoicesApi";
+import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -370,7 +370,7 @@ export default function NewCustomerList() {
       });
     }
     customerList(1);
-  }, [customerList]);
+  }, []);
 
   const handlePageChange = (currentPage) => {
     localStorage.setItem('page', currentPage || 1);
@@ -1162,10 +1162,10 @@ export default function NewCustomerList() {
         selectedClass = 'increase-rate grey';
       }
     } else if (value.toString().includes('-')) {
-        selectedClass = 'decrease-rate';
-      } else {
-        selectedClass = 'increase-rate';
-      }
+      selectedClass = 'decrease-rate';
+    } else {
+      selectedClass = 'increase-rate';
+    }
 
     if (value) {
       if (value.toString().includes('-')) {
