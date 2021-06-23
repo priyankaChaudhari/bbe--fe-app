@@ -1013,8 +1013,8 @@ export default function BrandAssetUpload() {
                   )}
                 </DragDropImg>
               </div>
-              <div className="col-md-3 col-sm-12 ">
-                <ActionDropDown className="w-170" style={{ position: 'fixed' }}>
+              <div className="col-md-3 col-sm-12 text-right pr-5 ">
+                <ActionDropDown className="w-170">
                   {showBtns.download ? (
                     <Select
                       classNamePrefix="react-select "
@@ -1411,15 +1411,17 @@ const CheckSelectImage = styled.div`
   .unsupport-file-name {
     padding: 80px 0;
     color: ${Theme.black};
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 145px;
-    margin: 0 auto;
-    text-align: center;
 
     .file-path {
       color: ${Theme.black};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 145px;
+      vertical-align: middle;
+      position: relative;
+      margin: 0 auto;
+      text-align: center;
     }
   }
 
@@ -1490,8 +1492,10 @@ const CheckSelectImage = styled.div`
 `;
 
 const DragDropImg = styled.div`
-  padding-bottom: 60px;
-  section {
+  padding-bottom: 220px;
+  max-height: 100vh;
+  overflow: auto;
+   section {
     &.thumbnail-dropzone {
       display: flex;
       flex-flow: wrap;

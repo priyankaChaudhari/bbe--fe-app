@@ -224,15 +224,17 @@ const BrandAssetsPreviewBody = styled.div`
     .unsupport-file-name {
       padding: 80px 0;
       color: ${Theme.black};
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 145px;
-      margin: 0 auto;
-      text-align: center;
 
       .file-path {
         color: ${Theme.black};
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 145px;
+        vertical-align: middle;
+        position: relative;
+        margin: 0 auto;
+        text-align: center;
       }
     }
   }
