@@ -383,7 +383,7 @@ function DashboardContainer() {
         <div className="dashboard-header-sticky">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md-3 col-sm-12">
+              <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
                   {userInfo && userInfo.role === 'Growth Strategist'
                     ? 'BGS Dashboard'
@@ -394,10 +394,10 @@ function DashboardContainer() {
                     : 'Ad Manager Dashboard'}
                 </p>
               </div>
-              <div className="straight-line horizontal-line spacing d-md-none d-sm-block" />
-              <div className="col-md-9 col-sm-12 text-md-right text-sm-left  mb-2 ">
+              <div className="straight-line horizontal-line spacing d-lg-none d-md-block" />
+              <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
                 <ul className="partner-select">
-                  <li className="partner">
+                  <li className="my-partner">
                     <DropDownSelect>
                       <Select
                         ref={selectInputRef}

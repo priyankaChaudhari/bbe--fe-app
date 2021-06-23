@@ -166,7 +166,7 @@ export const GroupUser = styled.div`
   }
 `;
 export const BrandPartnerDashboard = styled.div`
-  padding-left: 62px;
+  // padding-left: 62px;
 
   .partner-select {
     list-style-type: none;
@@ -174,12 +174,12 @@ export const BrandPartnerDashboard = styled.div`
     margin: 10px 0;
     li {
       display: inline-block;
-      width: 220px;
-      margin-right: 15px;
+      width: 210px;
+      margin-right: 10px;
       vertical-align: top;
 
-      &.partner {
-        width: 230px;
+      &.my-partner {
+        width: 180px;
       }
 
       &:last-child {
@@ -200,22 +200,42 @@ export const BrandPartnerDashboard = styled.div`
     z-index: 1;
     background-color: ${Theme.white};
   }
-  @media only screen and (max-width: 700px) {
-    .partner-select {
-      li {
-        width: 335px;
+  // @media only screen and (max-width: 700px) {
+  //   .partner-select {
+  //     li {
+  //       width: 335px;
 
-        &.partner {
-          width: 335px;
-          margin-bottom: 15px;
+  //       &.partner {
+  //         width: 335px;
+  //         margin-bottom: 15px;
+  //       }
+  //     }
+  //   }
+  // }
+
+  @media only screen and (max-width: 991px) {
+    padding-left: 0;
+
+    .dashboard-header-sticky {
+      left: 0;
+    }
+    .partner-select {
+      list-style-type: none;
+      text-align: left;
+
+      li {
+        width: 240px;
+
+        &.my-partner {
+          width: 208px;
         }
       }
     }
   }
   @media only screen and (max-width: 767px) {
-    .text-md-right {
-      dispaly: none;
-    }
+    // .text-md-right {
+    //   dispaly: none;
+    // }
     .text-sm-left {
       text-align: left;
     }
@@ -224,19 +244,13 @@ export const BrandPartnerDashboard = styled.div`
       text-align: left;
 
       li {
-        width: 335px;
+        width: 100%;
+        margin-bottom: 10px;
 
-        &.partner {
-          width: 335px;
+        &.my-partner {
+          width: 100%;
         }
       }
-    }
-  }
-  @media only screen and (max-width: 991px) {
-    padding-left: 0;
-
-    .dashboard-header-sticky {
-      left: 0;
     }
   }
 `;
@@ -244,7 +258,7 @@ export const BrandPartnerDashboard = styled.div`
 export const DashboardCard = styled.div`
   background: ${Theme.gray6};
   min-height: 100vh;
-  hright: 100%;
+  height: 100%;
   padding-top: 70px;
 
   .dashboard-body {
@@ -252,6 +266,7 @@ export const DashboardCard = styled.div`
     width: 100%;
     margin: 0 auto;
     padding-top: 40px;
+    padding-left: 62px;
 
     .company-logo {
       border-radius: 10px;
@@ -315,10 +330,14 @@ export const DashboardCard = styled.div`
   }
   @media only screen and (max-width: 768px) {
     padding-top: 155px;
+    .dashboard-body {
+      padding-left: 0;
+      padding-top: 40px;
+    }
   }
   @media only screen and (max-width: 991px) {
     .dashboard-body {
-      padding-top: 20px;
+      padding-top: 70px;
     }
   }
 
