@@ -1390,22 +1390,22 @@ export default function AdPerformance({
             </div>
             {adDifference && adDifference.acos ? (
               adDifference.acos >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.acos.toString().replace('-', '')}%
-                </div>
-              ) : (
                 <div className="perentage-value down mt-3 pt-1">
                   <img
-                    className="red-arrow"
+                    className="green-arrow"
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
                   {adDifference.acos}%
+                </div>
+              ) : (
+                <div className="perentage-value mt-3 pt-1">
+                  <img
+                    className="red-arrow"
+                    src={ArrowUpIcon}
+                    alt="arrow-down"
+                  />
+                  {adDifference.acos.toString().replace('-', '')}%
                 </div>
               )
             ) : (

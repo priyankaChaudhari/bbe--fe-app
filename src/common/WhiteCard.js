@@ -236,6 +236,14 @@ export const WhiteCard = styled.div`
       margin-right: 3px;
       vertical-align: bottom;
      }
+
+     .red-arrow {
+      width: 14px;
+      transform: rotate(180deg);
+      vertical-align: middle;
+      margin-left: -2px;
+      margin-right: 3px;
+    }
     &.grey {
       color: ${Theme.gray40};
     }
@@ -252,6 +260,14 @@ export const WhiteCard = styled.div`
       margin-left: -2px;
       margin-right: 3px;
     }
+
+    .green-arrow {
+      width: 14px;
+      vertical-align: middle;
+      margin-left: -2px;
+      margin-right: 3px;
+      vertical-align: bottom;
+     }
     &.grey {
       color: ${Theme.gray40};
     }
