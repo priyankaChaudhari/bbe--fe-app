@@ -240,7 +240,7 @@ const DropDownSelect = styled.div`
       }
 
       .css-1wa3eu0-placeholder {
-        color: #000000;
+        color: ${Theme.black};
       }
 
       .css-1uccc91-singleValue {

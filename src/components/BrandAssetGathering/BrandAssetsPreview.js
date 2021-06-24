@@ -213,12 +213,14 @@ const BrandAssetsPreviewBody = styled.div`
     position: absolute;
     top: 40%;
     background-color: ${Theme.gray8};
-    width: 400px;
-    height: 200px;
+    width: 500px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
 
     .image-thumbnail {
-      width: 400px;
-      height: 200px;
+      max-width: 500px;
+      max-height: 250px;
     }
 
     .unsupport-file-name {

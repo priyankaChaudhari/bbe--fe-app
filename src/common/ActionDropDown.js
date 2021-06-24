@@ -13,7 +13,6 @@ const ActionDropDown = styled.div`
     color: ${Theme.gray85} !important;
     font-size: ${Theme.normal};
     font-weight: 300;
-
     font-family: ${Theme.baseFontFamily};
 
     .css-yk16xz-control {
@@ -28,8 +27,8 @@ const ActionDropDown = styled.div`
       cursor: pointer;
 
       .css-g1d714-ValueContainer {
-        padding: 1px 20px 1px 5px;
-        color: ${Theme.gray85} !important;
+        padding: 1px 20px 1px 5px !important;
+        // color: ${Theme.gray85} !important;
         font-weight: 300px;
         cursor: pointer;
 
@@ -72,32 +71,37 @@ const ActionDropDown = styled.div`
       min-height: 40px;
       font-weight: 300px;
       cursor: pointer;
+      caret-color: transparent;
 
       .css-b8ldur-Input {
-        color: ${Theme.white};
+        color: ${Theme.black};
+        margin: 0;
+      }
+      .css-g1d714-ValueContainer {
+        padding: 1px 20px 1px 5px !important;
       }
 
-      .cross-icon {
-        width: 14px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-      }
+      // .cross-icon {
+      //   width: 14px;
+      //   position: absolute;
+      //   top: 10px;
+      //   right: 10px;
+      // }
 
       .remove-icon {
         display: none;
       }
-      .css-1gtu0rj-indicatorContainer {
-        padding: 5px;
-      }
+      // .css-1gtu0rj-indicatorContainer {
+      //   padding: 5px;
+      // }
 
       .css-1wa3eu0-placeholder {
-        color: #000000;
+        color: ${Theme.black};
       }
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.normal};
-        padding: 4px;
+        // padding: 4px;
         color: ${Theme.gray85} !important;
       }
     }

@@ -1514,14 +1514,14 @@ const CheckSelectImage = styled.div`
 `;
 
 const DragDropImg = styled.div`
-  padding-bottom: 290px;
-  max-height: 100vh;
+  padding-bottom: 80px;
+  max-height: 70vh;
   overflow: auto;
-   section {
+  section {
     &.thumbnail-dropzone {
       display: flex;
       flex-flow: wrap;
-     
+
       .dropzone {
         width: 170px;
         height: 170px;
@@ -1543,7 +1543,6 @@ const DragDropImg = styled.div`
       }
     }
     &.drag-drop {
-     
       .dropzone {
         max-width: 550px;
         height: 170px;
@@ -1552,7 +1551,7 @@ const DragDropImg = styled.div`
         padding: 50px 22px 0 20px;
         text-align: center;
         margin-right: 20px;
-         cursor: pointer;
+        cursor: pointer;
       }
       .select-files {
         font-size: ${Theme.extraNormal};
@@ -1565,15 +1564,18 @@ const DragDropImg = styled.div`
       }
     }
   }
-   @media only screen and (max-width: 767px) {
-
+  @media only screen and (max-width: 767px) {
     section {
-    &.thumbnail-dropzone {
-      .dropzone {
-        width: 160px;
-        height: 160px;
-         margin-right: 15px;
+      &.thumbnail-dropzone {
+        .dropzone {
+          width: 160px;
+          height: 160px;
+          margin-right: 15px;
+        }
       }
     }
-   }
+  }
+  @media only screen and (min-width: 1920px) {
+    max-height: 100vh;
+  }
 `;
