@@ -613,7 +613,6 @@ export default function NewCustomerList() {
   };
 
   const handleSearch = (event, type) => {
-    console.log(selectedView, '******', event, type);
     localStorage.setItem('page', 1);
     if (type === 'view') {
       if (event.value === 'contract_details') {
@@ -1016,20 +1015,23 @@ export default function NewCustomerList() {
           selectedValue[item.key] ||
           performanceSortOptions.filter((op) => op.value === filters.sort_by)
         );
-      } if (selectedView === 'sponsored_ad_performance') {
+      }
+      if (selectedView === 'sponsored_ad_performance') {
         return (
           selectedValue[item.key] ||
           sadSortOptions.filter((op) => op.value === filters.sort_by)
         );
-      } if (selectedView === 'dsp_ad_performance') {
+      }
+      if (selectedView === 'dsp_ad_performance') {
         return (
           selectedValue[item.key] ||
           dadSortOptions.filter((op) => op.value === filters.sort_by)
         );
-      } return (
-          selectedValue[item.key] ||
-          sortOptions.filter((op) => op.value === filters.sort_by)
-        );
+      }
+      return (
+        selectedValue[item.key] ||
+        sortOptions.filter((op) => op.value === filters.sort_by)
+      );
     }
 
     if (item === 'stats') {
@@ -1065,9 +1067,11 @@ export default function NewCustomerList() {
       case 'sort':
         if (selectedView === 'performance') {
           return performanceSortOptions;
-        } if (selectedView === 'sponsored_ad_performance') {
+        }
+        if (selectedView === 'sponsored_ad_performance') {
           return sadSortOptions;
-        } if (selectedView === 'dsp_ad_performance') {
+        }
+        if (selectedView === 'dsp_ad_performance') {
           return dadSortOptions;
         }
         return sortOptions;
@@ -2021,7 +2025,12 @@ export default function NewCustomerList() {
                 <div className="straight-line horizontal-line mb-2" />
               </MobileLeftSidebar>
             </div>
-            <div className="col-lg-4 col-md-6 col-12 col-8  mb-2 pr-2 pl-2">
+            <div
+              className={
+                showAdPerformance || showDspAdPerformance || showPerformance
+                  ? 'col-lg-4 col-md-6 col-12 col-8  mb-2 pr-2 pl-2'
+                  : 'col-lg-6 col-md-6 col-12 col-8  mb-2 pr-2 pl-2'
+              }>
               <InputSearchWithRadius className="customer-list-header w-80">
                 <input
                   className=" form-control search-filter"
@@ -2559,6 +2568,7 @@ export default function NewCustomerList() {
             isLoading={isLoading}
             showPerformance={showPerformance}
             showAdPerformance={showAdPerformance}
+            showDspAdPerformance={showDspAdPerformance}
           />
         )}
       </>

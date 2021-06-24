@@ -27,6 +27,7 @@ export default function CustomerListTablet({
   isLoading,
   showPerformance,
   showAdPerformance,
+  showDspAdPerformance,
 }) {
   const countDays = (item) => {
     const date1 = new Date();
@@ -510,19 +511,19 @@ export default function CustomerListTablet({
               <div className="label-info ">
                 <>
                   {item &&
-                  item.ad_performace &&
-                  item.ad_performace.current_sum &&
-                  item.ad_performace.current_sum.ad_sales
-                    ? `$${item.ad_performace.current_sum.ad_sales
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.current_sum &&
+                  item.sponsored_ad_performance.current_sum.ad_sales
+                    ? `$${item.sponsored_ad_performance.current_sum.ad_sales
                         .toFixed(2)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                     : '$0'}
                   {renderAdPerformanceDifference(
                     item &&
-                      item.ad_performace &&
-                      item.ad_performace.difference_data &&
-                      item.ad_performace.difference_data.ad_sales,
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.difference_data &&
+                      item.sponsored_ad_performance.difference_data.ad_sales,
                     false,
                     'AdSales',
                   )}
@@ -534,19 +535,19 @@ export default function CustomerListTablet({
               <div className="label-info ">
                 <>
                   {item &&
-                  item.ad_performace &&
-                  item.ad_performace.current_sum &&
-                  item.ad_performace.current_sum.ad_spend
-                    ? `$${item.ad_performace.current_sum.ad_spend
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.current_sum &&
+                  item.sponsored_ad_performance.current_sum.ad_spend
+                    ? `$${item.sponsored_ad_performance.current_sum.ad_spend
                         .toFixed(2)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                     : '$0'}
                   {renderAdPerformanceDifference(
                     item &&
-                      item.ad_performace &&
-                      item.ad_performace.difference_data &&
-                      item.ad_performace.difference_data.ad_spend,
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.difference_data &&
+                      item.sponsored_ad_performance.difference_data.ad_spend,
                     true,
                     'AdSpend',
                   )}
@@ -561,18 +562,18 @@ export default function CustomerListTablet({
               <div className="label-info">
                 <>
                   {item &&
-                  item.ad_performace &&
-                  item.ad_performace.current_sum &&
-                  item.ad_performace.current_sum.impressions
-                    ? item.ad_performace.current_sum.impressions
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.current_sum &&
+                  item.sponsored_ad_performance.current_sum.impressions
+                    ? item.sponsored_ad_performance.current_sum.impressions
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                     : 0}
                   {renderAdPerformanceDifference(
                     item &&
-                      item.ad_performace &&
-                      item.ad_performace.difference_data &&
-                      item.ad_performace.difference_data.impressions,
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.difference_data &&
+                      item.sponsored_ad_performance.difference_data.impressions,
                     false,
                     'AdImpressions',
                   )}
@@ -585,16 +586,18 @@ export default function CustomerListTablet({
               <div className="label-info">
                 <>
                   {item &&
-                  item.ad_performace &&
-                  item.ad_performace.current_sum &&
-                  item.ad_performace.current_sum.acos
-                    ? `${item.ad_performace.current_sum.acos.toFixed(2)}%`
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.current_sum &&
+                  item.sponsored_ad_performance.current_sum.acos
+                    ? `${item.sponsored_ad_performance.current_sum.acos.toFixed(
+                        2,
+                      )}%`
                     : '0%'}
                   {renderAdPerformanceDifference(
                     item &&
-                      item.ad_performace &&
-                      item.ad_performace.difference_data &&
-                      item.ad_performace.difference_data.acos,
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.difference_data &&
+                      item.sponsored_ad_performance.difference_data.acos,
                     false,
                     'ACOS',
                   )}
@@ -616,6 +619,142 @@ export default function CustomerListTablet({
         </WhiteCard>
       );
     }
+    if (showDspAdPerformance) {
+      return (
+        <WhiteCard className="mt-2">
+          <img
+            className="company-logo"
+            src={
+              item &&
+              item.documents &&
+              item.documents[0] &&
+              Object.values(item.documents[0])
+                ? Object.values(item.documents[0])[0]
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
+
+          <div className="company-name">{item && item.company_name}</div>
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {item && item.status}
+          </div>
+          <div className="clear-fix" />
+          <div className=" straight-line horizontal-line pt-3 mb-3 " />
+
+          <div className="row">
+            <div className="col-6 pb-2">
+              <div className="label">Ad Sales</div>
+              <div className="label-info ">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.ad_sales
+                    ? `$${item.dsp_ad_performance.current_sum.ad_sales
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data.ad_sales,
+                    false,
+                    'AdSales',
+                  )}
+                </>
+              </div>
+            </div>
+            <div className="col-6 pb-2">
+              <div className="label">Ad Spend</div>
+              <div className="label-info ">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.ad_spend
+                    ? `$${item.dsp_ad_performance.current_sum.ad_spend
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data.ad_spend,
+                    true,
+                    'AdSpend',
+                  )}
+                </>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-6">
+              <div className="label">Ad Impressions</div>
+              <div className="label-info">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.impressions
+                    ? item.dsp_ad_performance.current_sum.impressions
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : 0}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data.impressions,
+                    false,
+                    'AdImpressions',
+                  )}
+                </>
+              </div>
+            </div>
+
+            <div className="col-6">
+              <div className="label">Acos</div>
+              <div className="label-info">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.acos
+                    ? `${item.dsp_ad_performance.current_sum.acos.toFixed(2)}%`
+                    : '0%'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data.acos,
+                    false,
+                    'ACOS',
+                  )}
+                </>
+              </div>
+            </div>
+
+            <div className="straight-line horizontal-line pt-3 " />
+
+            <div className="col-12 mt-3">
+              <div className="label">Ad Manager</div>
+              <div className="label-info">
+                {' '}
+                {item && item.ad_manager && item.ad_manager.first_name}{' '}
+                {item && item.ad_manager && item.ad_manager.last_name}
+              </div>
+            </div>
+          </div>
+        </WhiteCard>
+      );
+    }
+
     // for- view contract details
     return (
       <WhiteCard className="mt-2">
@@ -952,6 +1091,7 @@ CustomerListTablet.defaultProps = {
   handlePageChange: () => {},
   showPerformance: false,
   showAdPerformance: false,
+  showDspAdPerformance: false,
 };
 
 CustomerListTablet.propTypes = {
@@ -969,6 +1109,7 @@ CustomerListTablet.propTypes = {
   }).isRequired,
   showPerformance: PropTypes.bool,
   showAdPerformance: PropTypes.bool,
+  showDspAdPerformance: PropTypes.bool,
 };
 
 const CustomerListTabletView = styled.div`
