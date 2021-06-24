@@ -11,6 +11,9 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
+import Modal from 'react-modal';
+import { DateRange } from 'react-date-range';
+import { enGB } from 'react-date-range/src/locale';
 import Theme from '../../theme/Theme';
 import {
   CheckBox,
@@ -21,6 +24,8 @@ import {
   PageLoader,
   Table,
   ModalRadioCheck,
+  ModalBox,
+  Button,
 } from '../../common';
 import NoRecordFound from '../../common/NoRecordFound';
 import {
@@ -58,6 +63,21 @@ import {
   timeFrameFilters,
 } from '../../constants/FieldConstants';
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '420px ',
+    width: '100% ',
+    minHeight: '390px',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
 export default function NewCustomerList() {
   const history = useHistory();
   const selectInputRef = useRef();
@@ -68,6 +88,7 @@ export default function NewCustomerList() {
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
+  const [showCustomDateModal, setShowCustomDateModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).searchQuery
@@ -114,7 +135,9 @@ export default function NewCustomerList() {
       ? JSON.parse(localStorage.getItem('filters')).showDspAdPerformance
       : false,
   );
-  const [selectedTimeFrame, setSelectedTimeFrame] = useState('week');
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState({
+    daily_facts: 'week',
+  });
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
     { value: 'performance', label: 'Sales Performance' },
@@ -134,6 +157,15 @@ export default function NewCustomerList() {
     { value: 'pending contract', label: 'Pending Contract' },
   ];
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const currentDate = new Date();
+
+  const [customDateData, setCustomDateData] = useState([
+    {
+      startDate: currentDate,
+      endDate: currentDate,
+      key: 'bgsSelection',
+    },
+  ]);
 
   const [expiringSoon, setExpiringSoon] = useState(
     !!(
@@ -141,6 +173,102 @@ export default function NewCustomerList() {
       JSON.parse(localStorage.getItem('filters')).sort_by === 'expiring_soon'
     ),
   );
+
+  const CustomDateFilter = (startDate, endDate, type) => {
+    let sd = startDate;
+    let ed = endDate;
+
+    if (type === 'custom') {
+      sd = `${startDate.getDate()}-${
+        startDate.getMonth() + 1
+      }-${startDate.getFullYear()}`;
+      ed = `${endDate.getDate()}-${
+        endDate.getMonth() + 1
+      }-${endDate.getFullYear()}`;
+
+      setSelectedTimeFrame({
+        daily_facts: 'custom',
+        start_date: sd,
+        end_date: ed,
+      });
+    }
+  };
+
+  const applyCustomDate = () => {
+    CustomDateFilter(
+      customDateData[0].startDate,
+      customDateData[0].endDate,
+      'custom',
+    );
+
+    setShowCustomDateModal(false);
+  };
+
+  const setMaxDate = () => {
+    const d = currentDate;
+    if (showPerformance) {
+      d.setDate(d.getDate() - 4);
+    }
+    if (showAdPerformance || showDspAdPerformance) {
+      d.setDate(d.getDate() - 3);
+    }
+
+    return d;
+  };
+
+  const renderCustomDateModal = () => {
+    return (
+      <Modal
+        isOpen={showCustomDateModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowCustomDateModal(false);
+            setCustomDateData([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'bgsSelection',
+              },
+            ]);
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Select Date Range</h4>
+            <DateRange
+              editableDateInputs
+              onChange={(item) => {
+                setCustomDateData([item.bgsSelection]);
+              }}
+              showMonthAndYearPickers={false}
+              ranges={customDateData}
+              moveRangeOnFirstSelection={false}
+              showDateDisplay={false}
+              maxDate={setMaxDate()}
+              rangeColors={['#FF5933']}
+              weekdayDisplayFormat="EEEEE"
+              locale={enGB}
+            />
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => applyCustomDate()}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Apply
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
 
   const IconOption = (props) => (
     <Option {...props}>
@@ -762,9 +890,10 @@ export default function NewCustomerList() {
     }
     if (type === 'stats') {
       if (event.value === 'custom') {
-        // setCustomDateModal(true);
+        // setSelectedTimeFrame(event.value);
+        setShowCustomDateModal(true);
       } else {
-        setSelectedTimeFrame(event.value);
+        setSelectedTimeFrame({ daily_facts: event.value });
         // customerListByView(
         //   pageNumber,
         //   event.value,
@@ -1035,7 +1164,9 @@ export default function NewCustomerList() {
     }
 
     if (item === 'stats') {
-      return timeFrameFilters.filter((op) => op.value === selectedTimeFrame);
+      return timeFrameFilters.filter(
+        (op) => op.value === selectedTimeFrame.daily_facts,
+      );
     }
 
     if (showPerformance) {
@@ -1849,6 +1980,8 @@ export default function NewCustomerList() {
 
   return (
     <CustomerListPage>
+      {' '}
+      {renderCustomDateModal()}
       <div className="customer-list-header-sticky">
         <div className="container-fluid">
           <div className="row">
@@ -2099,7 +2232,6 @@ export default function NewCustomerList() {
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
         <div className="straight-line horizontal-line  d-lg-none d-block" />
       </div>
-
       <CustomerLeftPannel className="d-none d-lg-block">
         <div className="row mt-2 mb-4">
           <div className="col-4">
@@ -2231,7 +2363,6 @@ export default function NewCustomerList() {
           ))}
         </ul>
       </CustomerLeftPannel>
-
       <>
         {isDesktop ? (
           <div className="table-container">

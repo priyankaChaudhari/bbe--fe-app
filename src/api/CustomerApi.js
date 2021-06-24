@@ -57,21 +57,21 @@ export async function getCustomerList(
   if (performance) {
     params = {
       ...params,
-      daily_facts: dailyFacts,
+      ...dailyFacts,
       dashboard: 'sale_performance',
     };
   }
   if (adPerformance) {
     params = {
       ...params,
-      daily_facts: dailyFacts,
+      ...dailyFacts,
       dashboard: 'sponsored_ad_dashboard',
     };
   }
   if (dspAdPerformance) {
     params = {
       ...params,
-      daily_facts: dailyFacts,
+      ...dailyFacts,
       dashboard: 'dsp_ad_dashboard',
     };
   }
@@ -500,7 +500,7 @@ export async function getPerformance(
   let params = {};
   if (startDate && endDate) {
     params = {
-      daily_facts: dailyFacts,
+      dailyFacts,
       group_by: groupBy,
       marketplace,
       start_date: startDate,
