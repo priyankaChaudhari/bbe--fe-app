@@ -1138,123 +1138,61 @@ export default function NewCustomerList() {
   };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
-    // let flag;
-    const value = -20;
-    let selectedClass = '';
-    // let arrow = '';
-
-    if (matrics === 'ACOS') {
-      // if (value.toString().includes('-')) {
-      //   selectedClass = 'increase-rate';
-      // } else {
-      //   selectedClass = 'decrease-rate';
-      // }
-      if (value.toString().includes('-')) {
-        selectedClass = 'decrease-rate';
-      } else {
-        selectedClass = 'increase-rate';
-      }
-    } else if (grayArrow) {
-      // arrow = UpDowGrayArrow;
-      if (value.toString().includes('-')) {
-        selectedClass = 'decrease-rate grey';
-      } else {
-        selectedClass = 'increase-rate grey';
-      }
-    } else if (value.toString().includes('-')) {
-      selectedClass = 'decrease-rate';
-    } else {
-      selectedClass = 'increase-rate';
-    }
+    let flag;
+    let value = actualValue;
 
     if (value) {
-      if (value.toString().includes('-')) {
+      if (matrics === 'ACOS') {
+        if (value.toString().includes('-')) {
+          flag = 'green';
+          value = value
+            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+            : '';
+        } else {
+          flag = 'red';
+          value = value ? `${value.toFixed(2)} %` : '';
+        }
+      } else if (value.toString().includes('-')) {
+        flag = 'red';
+        value = value
+          ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+          : '';
+      } else {
+        flag = 'green';
+        value = value ? `${value.toFixed(2)} %` : '';
+      }
+
+      if (flag === 'red') {
         return (
           <>
-            <br />
-            <span className={selectedClass}>
+            <span
+              className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
               {' '}
               <img
                 className="red-arrow"
                 src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
                 alt="arrow-up"
               />
-              {value
-                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
+              {value}
             </span>
           </>
         );
       }
       return (
         <>
-          <br />
-          <div className={selectedClass}>
+          <span className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
             <img
               className="green-arrow"
               src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
               width="14px"
               alt="arrow-up"
             />
-            {value ? `${value.toFixed(2)} %` : ''}
-          </div>
+            {value}
+          </span>
         </>
       );
     }
     return '';
-    // if (value) {
-    //   if (matrics === 'ACOS') {
-    //     if (value.toString().includes('-')) {
-    //       flag = 'green';
-    //       value = value
-    //         ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-    //         : '';
-    //     } else {
-    //       flag = 'red';
-    //       value = value ? `${value.toFixed(2)} %` : '';
-    //     }
-    //   } else if (value.toString().includes('-')) {
-    //     flag = 'red';
-    //     value = value
-    //       ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-    //       : '';
-    //   } else {
-    //     flag = 'green';
-    //     value = value ? `${value.toFixed(2)} %` : '';
-    //   }
-
-    //   if (flag === 'red') {
-    //     return (
-    //       <>
-    //         <span
-    //           className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
-    //           {' '}
-    //           <img
-    //             className="red-arrow"
-    //             src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
-    //             alt="arrow-up"
-    //           />
-    //           {value}
-    //         </span>
-    //       </>
-    //     );
-    //   }
-    //   return (
-    //     <>
-    //       <span
-    //         className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
-    //         <img
-    //           className="green-arrow"
-    //           src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
-    //           width="14px"
-    //           alt="arrow-up"
-    //         />
-    //         {value}
-    //       </span>
-    //     </>
-    //   );
-    // }
-    // return '';
   };
 
   const renderHeaders = () => {
