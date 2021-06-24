@@ -265,7 +265,7 @@ export default function AdPerformanceChart({
               { number: 1e9, suffix: 'B' },
             ];
             valueAxis2.numberFormatter.smallNumberPrefixes = [];
-
+            valueAxis2.min = 0;
             series.yAxis = valueAxis2;
             series2.yAxis = valueAxis2;
             valueAxis2.renderer.opposite = true;
@@ -330,6 +330,7 @@ export default function AdPerformanceChart({
         { number: 1e6, suffix: 'M' },
         { number: 1e9, suffix: 'B' },
       ];
+      valueAxis2.min = 0;
       valueAxis2.numberFormatter.smallNumberPrefixes = [];
 
       // create object of 3rd value axis
@@ -344,7 +345,7 @@ export default function AdPerformanceChart({
         { number: 1e9, suffix: 'B' },
       ];
       valueAxis3.numberFormatter.smallNumberPrefixes = [];
-
+      valueAxis3.min = 0;
       // create object of 4th value axis
       const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis4.renderer.grid.template.disabled = true;
@@ -357,7 +358,7 @@ export default function AdPerformanceChart({
         { number: 1e9, suffix: 'B' },
       ];
       valueAxis4.numberFormatter.smallNumberPrefixes = [];
-
+      valueAxis4.min = 0;
       const snapToSeries = [];
       let tooltipValue = '';
 

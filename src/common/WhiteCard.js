@@ -765,6 +765,31 @@ export const WhiteCard = styled.div`
             background: #D6A307
           };
 
+          .dspImpressions { 
+            background:#0045B4
+          };
+          .dspSpend { 
+            background: #8C54FF
+          };
+          .dspTotalProductSales { 
+            background: #30A8BD
+          };
+          .dspTotalRoas { 
+            background: #D6A307
+          };
+          .dspTotalDpvr { 
+            background: #E05D37
+          };
+          .dspTtlNewBrandPurchases { 
+            background: #89A43C
+          };
+          .dspProductSales { 
+            background: #C84EC6
+          };
+          .dspRoas { 
+            background: #A04848
+          };
+
           .darkGray{
             background: ${Theme.gray35};
             

@@ -1195,7 +1195,8 @@ export default function PerformanceReport({
             <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0"> </div>
             <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
               {' '}
-              <DropDownSelect className="cursor ">
+              <DropDownSelect
+                className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
                   className="active"
@@ -1524,13 +1525,19 @@ export default function PerformanceReport({
         <div className="clear-fix" />
         {/* render sale graph */}
         {/* <div id="chartdiv" style={{ width: '100%', height: '500px' }} /> */}
-        <SalesPerformanceChart
-          chartId="chartdiv"
-          chartData={salesChartData}
-          currencySymbol={currencySymbol}
-          selectedBox={activeSales}
-          selectedDF={selectedValue}
-        />
+        {salesChartData.length !== 0 ? (
+          <SalesPerformanceChart
+            chartId="chartdiv"
+            chartData={salesChartData}
+            currencySymbol={currencySymbol}
+            selectedBox={activeSales}
+            selectedDF={selectedValue}
+          />
+        ) : (
+          <div className="text-center mt-5 mb-4">
+            We don&apos;t have any data to show graph
+          </div>
+        )}
       </WhiteCard>
     );
   };
@@ -1728,7 +1735,13 @@ export default function PerformanceReport({
               </ul>
             </div>
           </div>
-          {bBChartData && bBChartData.length > 1 ? renderBBgraph() : null}
+          {bBChartData && bBChartData.length > 1 ? (
+            renderBBgraph()
+          ) : (
+            <div className="text-center mt-5">
+              We don&apos;t have any data to show graph
+            </div>
+          )}
           <br />
           <br />
           <div className="last-update ">

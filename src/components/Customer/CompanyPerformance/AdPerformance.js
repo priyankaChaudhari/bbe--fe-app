@@ -1060,7 +1060,8 @@ export default function AdPerformance({
             </div>
             <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
               {' '}
-              <DropDownSelect className="cursor ">
+              <DropDownSelect
+                className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
                   className="active"
@@ -1099,44 +1100,6 @@ export default function AdPerformance({
         </WhiteCard>
       </Tab>
     );
-    // return (
-    //   <div className="row">
-    //     <div className="col-12 mb-3">
-    //       {/* {DropDown(
-    //         'cursor',
-    //         marketplaceOptions,
-    //         marketplaceOptions &&
-    //           marketplaceOptions[0] &&
-    //           marketplaceOptions[0].label,
-    //         DropdownIndicator,
-    //         marketplaceOptions && marketplaceOptions[0],
-    //         handleMarketplaceOptions,
-    //       )} */}
-    // <DropDownSelect className="cursor ">
-    //   <Select
-    //     classNamePrefix="react-select"
-    //     className="active"
-    //     components={DropdownIndicator}
-    //     options={marketplaceOptions}
-    //     defaultValue={marketplaceOptions && marketplaceOptions[0]}
-    //     onChange={(event) => handleMarketplaceOptions(event)}
-    //     placeholder={
-    //       marketplaceOptions &&
-    //       marketplaceOptions[0] &&
-    //       marketplaceOptions[0].label
-    //     }
-    //     theme={(theme) => ({
-    //       ...theme,
-    //       colors: {
-    //         ...theme.colors,
-    //         neutral50: '#1A1A1A',
-    //       },
-    //     })}
-    //   />
-    // </DropDownSelect>
-    //     </div>
-    //   </div>
-    // );
   };
 
   const renderAdDailyFacts = () => {
@@ -1170,21 +1133,6 @@ export default function AdPerformance({
   };
 
   const addThousandComma = (number, decimalDigits = 2) => {
-    // let returnValue = number;
-    // if (flag) {
-    //   if (number >= 1000000000) {
-    //     returnValue = `${parseInt(number / 1000000000, 10).toString()}B`;
-    //   }
-    //   if (number >= 1000000) {
-    //     returnValue = `${parseInt(number / 1000000, 10).toString()}M`;
-    //   }
-    //   if (number >= 1000) {
-    //     returnValue = `${parseInt(number / 1000, 10).toString()}K`;
-    //   } else {
-    //     returnValue = `${parseInt(number, 10).toString()}`;
-    //   }
-    //   return returnValue;
-    // }
     if (number !== undefined && number !== null) {
       return number
         .toFixed(decimalDigits)
@@ -1792,15 +1740,15 @@ export default function AdPerformance({
               {dspCurrentTotal && dspCurrentTotal.total_product_sales
                 ? `${currencySign}${addThousandComma(
                     dspCurrentTotal.total_product_sales,
-                  )}%`
-                : `${currencySign}0.00%`}
+                  )}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {dspPreviousTotal && dspPreviousTotal.total_product_sales
                 ? `vs ${currencySign}${addThousandComma(
                     dspPreviousTotal.total_product_sales,
-                  )}%`
-                : `vs ${currencySign}0.00%`}
+                  )}`
+                : `vs ${currencySign}0.00`}
             </div>
 
             {dspDifference && dspDifference.total_product_sales ? (
@@ -2069,7 +2017,40 @@ export default function AdPerformance({
     return (
       <>
         <div className="row mt-4 mb-3">
-          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+          {_.size(selectedDspBox) <= 2 ? (
+            <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+              <ul className="rechart-item">
+                <li>
+                  <div className="weeks">
+                    <span
+                      className={
+                        _.size(selectedDspBox) === 1
+                          ? `${_.keys(selectedDspBox)[0]} circle`
+                          : 'darkGray circle'
+                      }
+                    />
+
+                    <span>Recent</span>
+                  </div>
+                </li>
+                {selectedAdDF !== 'custom' ? (
+                  <li>
+                    <div className="weeks">
+                      <span
+                        className={
+                          _.size(selectedDspBox) === 1
+                            ? `${_.keys(selectedDspBox)[0]} block`
+                            : 'darkGray block'
+                        }
+                      />
+                      <span>Previous</span>
+                    </div>
+                  </li>
+                ) : null}
+              </ul>
+            </div>
+          ) : null}
+          {/* <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
               <li>
                 <div className="weeks">
@@ -2086,7 +2067,7 @@ export default function AdPerformance({
                 </li>
               ) : null}
             </ul>
-          </div>
+          </div> */}
 
           <div className="col-md-6 col-sm-12 order-md-2 order-1">
             {' '}
@@ -2204,13 +2185,19 @@ export default function AdPerformance({
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
-        <AdPerformanceChart
-          chartId="adChart"
-          chartData={adChartData}
-          currencySymbol={currencySymbol}
-          selectedBox={selectedAdBox}
-          selectedDF={selectedAdDF}
-        />
+        {adChartData.length > 1 ? (
+          <AdPerformanceChart
+            chartId="adChart"
+            chartData={adChartData}
+            currencySymbol={currencySymbol}
+            selectedBox={selectedAdBox}
+            selectedDF={selectedAdDF}
+          />
+        ) : (
+          <div className="text-center mt-5 mb-4">
+            We don&apos;t have any data to show graph
+          </div>
+        )}
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
         <div className="row">
@@ -2222,13 +2209,19 @@ export default function AdPerformance({
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
         {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
-        <DSPPerformanceChart
-          chartId="dspChart"
-          chartData={dspChartData}
-          currencySymbol={currencySymbol}
-          selectedBox={selectedDspBox}
-          selectedDF={selectedAdDF}
-        />
+        {dspChartData.length > 1 ? (
+          <DSPPerformanceChart
+            chartId="dspChart"
+            chartData={dspChartData}
+            currencySymbol={currencySymbol}
+            selectedBox={selectedDspBox}
+            selectedDF={selectedAdDF}
+          />
+        ) : (
+          <div className="text-center mt-5 mb-4">
+            We don&apos;t have any data to show graph
+          </div>
+        )}
       </WhiteCard>
       {renderAdCustomDateModal()}
       {/* {renderDSPCustomDateModal()} */}
