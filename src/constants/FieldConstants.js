@@ -185,6 +185,36 @@ export const sortOptions = [
   { value: 'expiring_soon', label: 'Expiry Date' },
 ];
 
+export const performanceSortOptions = [
+  { value: '-created_at', label: 'Recently Added' },
+  { value: '-updated_at', label: 'Last Modified' },
+  { value: 'expiring_soon', label: 'Expiry Date' },
+  { value: 'revenue', label: 'Revenue' },
+  { value: 'units_sold', label: 'Units Sold' },
+  { value: 'traffic', label: 'Traffic Date' },
+  { value: 'conversion', label: 'Conversion' },
+];
+
+export const sadSortOptions = [
+  { value: '-created_at', label: 'Recently Added' },
+  { value: '-updated_at', label: 'Last Modified' },
+  { value: 'expiring_soon', label: 'Expiry Date' },
+  { value: 'ad_sales', label: 'Ad Sales' },
+  { value: 'ad_spend', label: 'Ad Spend' },
+  { value: 'impression', label: 'Impressions' },
+  { value: 'acos', label: 'ACOS' },
+];
+
+export const dadSortOptions = [
+  { value: '-created_at', label: 'Recently Added' },
+  { value: '-updated_at', label: 'Last Modified' },
+  { value: 'expiring_soon', label: 'Expiry Date' },
+  { value: 'impressions', label: 'Impressions' },
+  { value: 'dsp_spend', label: 'DSP Spend' },
+  { value: 'total_product_sale', label: 'Total Product Sales' },
+  { value: 'total_roas', label: 'Total ROAS' },
+];
+
 export const timeFrameFilters = [
   { value: 'week', label: 'Recent 7 days' },
   { value: 'month', label: 'Recent Month' },

@@ -50,7 +50,13 @@ import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
-import { sortOptions, timeFrameFilters } from '../../constants/FieldConstants';
+import {
+  sortOptions,
+  performanceSortOptions,
+  sadSortOptions,
+  dadSortOptions,
+  timeFrameFilters,
+} from '../../constants/FieldConstants';
 
 export default function NewCustomerList() {
   const history = useHistory();
@@ -69,6 +75,7 @@ export default function NewCustomerList() {
   );
   const { Option, MultiValue, SingleValue } = components;
   // const [customDateModal, setCustomDateModal] = useState(false);
+  const [selectedView, setSelectedView] = useState('contract_details');
   const [status, setStatus] = useState([]);
   const [selectedValue, setSelectedValue] = useState(
     JSON.parse(localStorage.getItem('filters'))
@@ -606,12 +613,15 @@ export default function NewCustomerList() {
   };
 
   const handleSearch = (event, type) => {
+    console.log(selectedView, '******', event, type);
     localStorage.setItem('page', 1);
     if (type === 'view') {
       if (event.value === 'contract_details') {
+        setSelectedView('contract_details');
         customerList(pageNumber);
       }
       if (event.value === 'performance') {
+        setSelectedView('performance');
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
@@ -641,6 +651,7 @@ export default function NewCustomerList() {
         //   false,
         // );
       } else if (event.value === 'sponsored_ad_performance') {
+        setSelectedView('sponsored_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
@@ -669,6 +680,7 @@ export default function NewCustomerList() {
         //   true,
         // );
       } else if (event.value === 'dsp_ad_performance') {
+        setSelectedView('dsp_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
@@ -997,12 +1009,29 @@ export default function NewCustomerList() {
 
       return [{ value: 'any', label: 'Any' }];
     }
+
     if (item === 'sort') {
-      return (
-        selectedValue[item.key] ||
-        sortOptions.filter((op) => op.value === filters.sort_by)
-      );
+      if (selectedView === 'performance') {
+        return (
+          selectedValue[item.key] ||
+          performanceSortOptions.filter((op) => op.value === filters.sort_by)
+        );
+      } if (selectedView === 'sponsored_ad_performance') {
+        return (
+          selectedValue[item.key] ||
+          sadSortOptions.filter((op) => op.value === filters.sort_by)
+        );
+      } if (selectedView === 'dsp_ad_performance') {
+        return (
+          selectedValue[item.key] ||
+          dadSortOptions.filter((op) => op.value === filters.sort_by)
+        );
+      } return (
+          selectedValue[item.key] ||
+          sortOptions.filter((op) => op.value === filters.sort_by)
+        );
     }
+
     if (item === 'stats') {
       return timeFrameFilters.filter((op) => op.value === selectedTimeFrame);
     }
@@ -1034,7 +1063,15 @@ export default function NewCustomerList() {
       case 'user':
         return brandGrowthStrategist;
       case 'sort':
+        if (selectedView === 'performance') {
+          return performanceSortOptions;
+        } if (selectedView === 'sponsored_ad_performance') {
+          return sadSortOptions;
+        } if (selectedView === 'dsp_ad_performance') {
+          return dadSortOptions;
+        }
         return sortOptions;
+
       case 'stats':
         return timeFrameFilters;
       default:
