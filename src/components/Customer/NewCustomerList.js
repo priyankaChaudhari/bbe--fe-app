@@ -1160,12 +1160,12 @@ export default function NewCustomerList() {
           selectedArrow = UpDowGrayArrow;
         }
       } else if (value.toString().includes('-')) {
-          selectedClass = 'decrease-rate';
-          selectedArrow = ArrowDownIcon;
-        } else {
-          selectedClass = 'increase-rate';
-          selectedArrow = ArrowUpIcon;
-        }
+        selectedClass = 'decrease-rate';
+        selectedArrow = ArrowDownIcon;
+      } else {
+        selectedClass = 'increase-rate';
+        selectedArrow = ArrowUpIcon;
+      }
 
       if (value.toString().includes('-')) {
         return (
@@ -1984,7 +1984,6 @@ export default function NewCustomerList() {
                 <div className="straight-line horizontal-line mb-2" />
               </MobileLeftSidebar>
             </div>
-
             <div className="col-lg-4 col-md-6 col-12 col-8  mb-2 pr-2 pl-2">
               <InputSearchWithRadius className="customer-list-header w-80">
                 <input
@@ -2029,22 +2028,25 @@ export default function NewCustomerList() {
                 />
               </InputSearchWithRadius>
             </div>
-
-            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
-              <DropDownSelect className="customer-list-header">
-                {generateDropdown('sort')}
-              </DropDownSelect>{' '}
-            </div>
-            <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
-              <DropDownSelect className="customer-list-header">
-                {generateDropdown('stats')}
-              </DropDownSelect>{' '}
-            </div>
             <div className="col-lg-2 col-md-6  col-12   mb-2  pl-2 pr-2 ">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
+            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
+            {showAdPerformance || showDspAdPerformance || showPerformance ? (
+              <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
+                <DropDownSelect className="customer-list-header">
+                  {generateDropdown('stats')}
+                </DropDownSelect>{' '}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
