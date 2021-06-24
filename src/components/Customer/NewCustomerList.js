@@ -370,7 +370,7 @@ export default function NewCustomerList() {
       });
     }
     customerList(1);
-  }, []);
+  }, [customerList]);
 
   const handlePageChange = (currentPage) => {
     localStorage.setItem('page', currentPage || 1);
@@ -1138,52 +1138,53 @@ export default function NewCustomerList() {
   };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
-    let flag;
-    let value = actualValue;
+    const value = actualValue;
+    let selectedClass = '';
+    let selectedArrow = '';
 
     if (value) {
       if (matrics === 'ACOS') {
         if (value.toString().includes('-')) {
-          flag = 'green';
-          value = value
-            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-            : '';
+          selectedClass = 'increase-rate';
+          selectedArrow = ArrowUpIcon;
         } else {
-          flag = 'red';
-          value = value ? `${value.toFixed(2)} %` : '';
+          selectedClass = 'decrease-rate';
+          selectedArrow = ArrowDownIcon;
+        }
+      } else if (grayArrow) {
+        if (value.toString().includes('-')) {
+          selectedClass = 'decrease-rate grey';
+          selectedArrow = UpDowGrayArrow;
+        } else {
+          selectedClass = 'increase-rate grey';
+          selectedArrow = UpDowGrayArrow;
         }
       } else if (value.toString().includes('-')) {
-        flag = 'red';
-        value = value
-          ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-          : '';
-      } else {
-        flag = 'green';
-        value = value ? `${value.toFixed(2)} %` : '';
-      }
+          selectedClass = 'decrease-rate';
+          selectedArrow = ArrowDownIcon;
+        } else {
+          selectedClass = 'increase-rate';
+          selectedArrow = ArrowUpIcon;
+        }
 
-      if (flag === 'red') {
+      if (value.toString().includes('-')) {
         return (
           <>
-            <span
-              className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
+            <span className={selectedClass}>
               {' '}
-              <img
-                className="red-arrow"
-                src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
-                alt="arrow-up"
-              />
-              {value}
+              <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
+              {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
             </span>
           </>
         );
       }
+
       return (
         <>
-          <span className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
+          <span className={selectedClass}>
             <img
               className="green-arrow"
-              src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
+              src={selectedArrow}
               width="14px"
               alt="arrow-up"
             />
@@ -1475,19 +1476,19 @@ export default function NewCustomerList() {
           </td>
           <td width="15%">
             {item &&
-            item.ad_performace &&
-            item.ad_performace.current_sum &&
-            item.ad_performace.current_sum.ad_sales
-              ? `$${item.ad_performace.current_sum.ad_sales
+            item.sponsored_ad_performance &&
+            item.sponsored_ad_performance.current_sum &&
+            item.sponsored_ad_performance.current_sum.ad_sales
+              ? `$${item.sponsored_ad_performance.current_sum.ad_sales
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
               : '$0'}
             {renderAdPerformanceDifference(
               item &&
-                item.ad_performace &&
-                item.ad_performace.difference_data &&
-                item.ad_performace.difference_data.ad_sales,
+                item.sponsored_ad_performance &&
+                item.sponsored_ad_performance.difference_data &&
+                item.sponsored_ad_performance.difference_data.ad_sales,
               false,
               'AdSales',
             )}
@@ -1496,19 +1497,19 @@ export default function NewCustomerList() {
           <td width="15%">
             <>
               {item &&
-              item.ad_performace &&
-              item.ad_performace.current_sum &&
-              item.ad_performace.current_sum.ad_spend
-                ? `$${item.ad_performace.current_sum.ad_spend
+              item.sponsored_ad_performance &&
+              item.sponsored_ad_performance.current_sum &&
+              item.sponsored_ad_performance.current_sum.ad_spend
+                ? `$${item.sponsored_ad_performance.current_sum.ad_spend
                     .toFixed(2)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                 : '$0'}
               {renderAdPerformanceDifference(
                 item &&
-                  item.ad_performace &&
-                  item.ad_performace.difference_data &&
-                  item.ad_performace.difference_data.ad_spend,
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.difference_data &&
+                  item.sponsored_ad_performance.difference_data.ad_spend,
                 true,
                 'AdSpend',
               )}
@@ -1518,18 +1519,18 @@ export default function NewCustomerList() {
           <td width="15%">
             <>
               {item &&
-              item.ad_performace &&
-              item.ad_performace.current_sum &&
-              item.ad_performace.current_sum.impressions
-                ? item.ad_performace.current_sum.impressions
+              item.sponsored_ad_performance &&
+              item.sponsored_ad_performance.current_sum &&
+              item.sponsored_ad_performance.current_sum.impressions
+                ? item.sponsored_ad_performance.current_sum.impressions
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 : 0}
               {renderAdPerformanceDifference(
                 item &&
-                  item.ad_performace &&
-                  item.ad_performace.difference_data &&
-                  item.ad_performace.difference_data.impressions,
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.difference_data &&
+                  item.sponsored_ad_performance.difference_data.impressions,
                 false,
                 'AdImpressions',
               )}
@@ -1539,16 +1540,18 @@ export default function NewCustomerList() {
           <td width="15%">
             <>
               {item &&
-              item.ad_performace &&
-              item.ad_performace.current_sum &&
-              item.ad_performace.current_sum.acos
-                ? `${item.ad_performace.current_sum.acos.toFixed(2)}%`
+              item.sponsored_ad_performance &&
+              item.sponsored_ad_performance.current_sum &&
+              item.sponsored_ad_performance.current_sum.acos
+                ? `${item.sponsored_ad_performance.current_sum.acos.toFixed(
+                    2,
+                  )}%`
                 : '0%'}
               {renderAdPerformanceDifference(
                 item &&
-                  item.ad_performace &&
-                  item.ad_performace.difference_data &&
-                  item.ad_performace.difference_data.acos,
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.difference_data &&
+                  item.sponsored_ad_performance.difference_data.acos,
                 false,
                 'ACOS',
               )}

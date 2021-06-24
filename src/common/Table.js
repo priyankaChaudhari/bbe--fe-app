@@ -73,6 +73,14 @@ const Table = styled.table`
           margin-left: -2px;
           margin-right: 3px;
         }
+
+        .red-arrow {
+          width: 14px;
+          transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
+        }
         &.grey {
           color: ${Theme.gray40};
         }
@@ -85,6 +93,14 @@ const Table = styled.table`
         .red-arrow {
           width: 14px;
           transform: rotate(180deg);
+          vertical-align: middle;
+          margin-left: -2px;
+          margin-right: 3px;
+        }
+        .green-arrow {
+          width: 14px;
+          vertical-align: bottom;
+          // transform: rotate(180deg);
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;

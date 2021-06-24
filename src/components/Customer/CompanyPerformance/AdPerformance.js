@@ -1389,7 +1389,7 @@ export default function AdPerformance({
                 : `vs 0.00%`}
             </div>
             {adDifference && adDifference.acos ? (
-              adDifference.acos < 0 ? (
+              adDifference.acos >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
