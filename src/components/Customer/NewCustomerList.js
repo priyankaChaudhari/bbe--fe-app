@@ -1159,7 +1159,7 @@ export default function NewCustomerList() {
       return (
         <>
           <br />
-          <span className="increase-rate">
+          <div className="increase-rate">
             <img
               className="green-arrow"
               src={ArrowUpIcon}
@@ -1167,7 +1167,7 @@ export default function NewCustomerList() {
               alt="arrow-up"
             />
             {percentage ? `${percentage.toFixed(2)} %` : ''}
-          </span>
+          </div>
         </>
       );
     }
@@ -1207,18 +1207,18 @@ export default function NewCustomerList() {
       if (value.toString().includes('-')) {
         return (
           <>
-            <span className={selectedClass}>
+            <div className={selectedClass}>
               {' '}
               <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
               {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
-            </span>
+            </div>
           </>
         );
       }
 
       return (
         <>
-          <span className={selectedClass}>
+          <div className={selectedClass}>
             <img
               className="green-arrow"
               src={selectedArrow}
@@ -1226,7 +1226,7 @@ export default function NewCustomerList() {
               alt="arrow-up"
             />
             {value}
-          </span>
+          </div>
         </>
       );
     }
@@ -2086,6 +2086,7 @@ export default function NewCustomerList() {
             )}
           </div>
         </div>
+
         <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
         <div className="straight-line horizontal-line  d-lg-none d-block" />
       </div>
