@@ -25,7 +25,9 @@ export async function getCustomerList(
   searchQuery,
   performance,
   adPerformance,
+  dspAdPerformance,
   expiringSoon,
+  dailyFacts,
 ) {
   let params = {
     page:
@@ -53,36 +55,25 @@ export async function getCustomerList(
   }
 
   if (performance) {
-    if (filterOptions && filterOptions.user && filterOptions.user.length) {
-      params = {
-        ...params,
-        daily_facts: 'week',
-        role: 'growth_strategist',
-      };
-    } else {
-      params = {
-        ...params,
-        daily_facts: 'week',
-      };
-    }
+    params = {
+      ...params,
+      daily_facts: dailyFacts,
+      dashboard: 'sale_performance',
+    };
   }
   if (adPerformance) {
-    if (
-      filterOptions &&
-      filterOptions.ad_user &&
-      filterOptions.ad_user.length
-    ) {
-      params = {
-        ...params,
-        ad_performace: 'week',
-        role: 'ad_manager',
-      };
-    } else {
-      params = {
-        ...params,
-        ad_performace: 'week',
-      };
-    }
+    params = {
+      ...params,
+      daily_facts: dailyFacts,
+      dashboard: 'sponsored_ad_dashboard',
+    };
+  }
+  if (dspAdPerformance) {
+    params = {
+      ...params,
+      daily_facts: dailyFacts,
+      dashboard: 'dsp_ad_dashboard',
+    };
   }
 
   let statusParams = {};
@@ -106,16 +97,17 @@ export async function getCustomerList(
     });
   }
   let bgsParams = {};
+
   if (
     filterOptions &&
     filterOptions.user &&
     filterOptions.user.length &&
-    !adPerformance
+    !adPerformance &&
+    !dspAdPerformance
   ) {
     bgsParams = queryString.stringify({ user: filterOptions.user });
     params = {
       ...params,
-      role: 'growth_strategist',
     };
   }
 
@@ -126,6 +118,15 @@ export async function getCustomerList(
     adPerformance
   ) {
     bgsParams = queryString.stringify({ user: filterOptions.ad_user });
+  }
+
+  if (
+    filterOptions &&
+    filterOptions.dsp_user &&
+    filterOptions.dsp_user.length &&
+    dspAdPerformance
+  ) {
+    bgsParams = queryString.stringify({ user: filterOptions.dsp_user });
   }
 
   let contract = {};

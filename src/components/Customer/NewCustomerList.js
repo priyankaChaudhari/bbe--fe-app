@@ -41,11 +41,12 @@ import {
 import CustomerListTablet from './CustomerListTablet';
 import {
   getCustomerList,
-  getCustomers,
+  // getCustomers,
   getGrowthStrategist,
   getStatus,
-  getAdManagers,
 } from '../../api';
+
+import { getManagersList } from "../../api/ChoicesApi";
 import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
@@ -86,6 +87,7 @@ export default function NewCustomerList() {
       contract_status: [],
       user: [],
       ad_user: [],
+      dsp_user: [],
       contract_type: [],
     },
   );
@@ -183,9 +185,10 @@ export default function NewCustomerList() {
 
   const SortOption = (props) => (
     <SingleValue {...props}>
-      {props.data.label === 'Performance' ||
+      {props.data.label === 'Sales Performance' ||
       props.data.label === 'Contract Details' ||
-      props.data.label === 'Ad Performance'
+      props.data.label === 'Sponsored Ad Performance' ||
+      props.data.label === 'DSP Ad Performance'
         ? 'View:'
         : 'Sort by:'}
       &nbsp;
@@ -271,7 +274,9 @@ export default function NewCustomerList() {
         searchQuery,
         showPerformance,
         showAdPerformance,
+        showDspAdPerformance,
         expiringSoon,
+        selectedTimeFrame,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -286,35 +291,37 @@ export default function NewCustomerList() {
       showPerformance,
       expiringSoon,
       showAdPerformance,
+      showDspAdPerformance,
+      selectedTimeFrame,
     ],
   );
 
-  const customerListByView = useCallback(
-    (currentPage, dailyFacts, dashboard, orderBy, sort) => {
-      // daily_facts=[week/month/30days/custom]
-      // order-by=[revenue/units_sold/traffic/converion]
-      // sequence=[asc/desc]
-      // dashboard=sale_performance
-      // setIsLoading({ loader: true, type: 'page' });
-      getCustomers(currentPage, dashboard, dailyFacts, orderBy, sort).then(
-        (response) => {
-          setData(response && response.data && response.data.results);
-          setPageNumber(currentPage);
-          setCount(response && response.data && response.data.count);
-          setIsLoading({ loader: false, type: 'page' });
-        },
-      );
-    },
-    [
-      searchQuery,
-      selectedValue,
-      filters,
-      showPerformance,
-      expiringSoon,
-      showAdPerformance,
-      showDspAdPerformance,
-    ],
-  );
+  // const customerListByView = useCallback(
+  //   (currentPage, dailyFacts, dashboard, orderBy, sort) => {
+  //     // daily_facts=[week/month/30days/custom]
+  //     // order-by=[revenue/units_sold/traffic/converion]
+  //     // sequence=[asc/desc]
+  //     // dashboard=sale_performance
+  //     // setIsLoading({ loader: true, type: 'page' });
+  //     getCustomers(currentPage, dashboard, dailyFacts, orderBy, sort).then(
+  //       (response) => {
+  //         setData(response && response.data && response.data.results);
+  //         setPageNumber(currentPage);
+  //         setCount(response && response.data && response.data.count);
+  //         setIsLoading({ loader: false, type: 'page' });
+  //       },
+  //     );
+  //   },
+  //   [
+  //     searchQuery,
+  //     selectedValue,
+  //     filters,
+  //     showPerformance,
+  //     expiringSoon,
+  //     showAdPerformance,
+  //     showDspAdPerformance,
+  //   ],
+  // );
 
   useEffect(() => {
     getStatus().then((statusResponse) => {
@@ -322,8 +329,11 @@ export default function NewCustomerList() {
         setStatus(statusResponse.data);
       }
     });
-    if (showAdPerformance) {
-      getAdManagers().then((adm) => {
+    if (showAdPerformance || showDspAdPerformance) {
+      const type = showAdPerformance
+        ? 'Sponsored Advertising Ad Manager'
+        : 'DSP Ad Manager';
+      getManagersList(type).then((adm) => {
         if (adm && adm.data) {
           const list = [];
           for (const brand of adm.data) {
@@ -360,7 +370,7 @@ export default function NewCustomerList() {
       });
     }
     customerList(1);
-  }, []);
+  }, [customerList]);
 
   const handlePageChange = (currentPage) => {
     localStorage.setItem('page', currentPage || 1);
@@ -392,6 +402,7 @@ export default function NewCustomerList() {
         contract_type: [],
         user: [],
         ad_user: [],
+        dsp_user: [],
         // sort_by: '',
         // searchQuery: '',
         // showPerformance: false
@@ -483,6 +494,7 @@ export default function NewCustomerList() {
           ...filters,
           user: [],
           ad_user: [],
+          dsp_user: [],
         });
         localStorage.setItem(
           'filters',
@@ -490,6 +502,7 @@ export default function NewCustomerList() {
             ...filters,
             user: [],
             ad_user: [],
+            dsp_user: [],
           }),
         );
       }
@@ -501,10 +514,15 @@ export default function NewCustomerList() {
         const adList = filters.ad_user.filter(
           (op) => op !== action.removedValue.value,
         );
+
+        const dspList = filters.dsp_user.filter(
+          (op) => op !== action.removedValue.value,
+        );
         setFilters({
           ...filters,
           user: list,
           ad_user: adList,
+          dsp_user: dspList,
         });
         localStorage.setItem(
           'filters',
@@ -512,14 +530,16 @@ export default function NewCustomerList() {
             ...filters,
             user: list,
             ad_user: adList,
+            dsp_user: dspList,
           }),
         );
       }
       if (event && event.length && action.action === 'select-option') {
         const list = [...filters.user];
         const adList = [...filters.ad_user];
+        const dspList = [...filters.dsp_user];
 
-        if (!showAdPerformance) {
+        if (!showAdPerformance && !showDspAdPerformance) {
           for (const bgs of event) {
             if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
           }
@@ -531,10 +551,17 @@ export default function NewCustomerList() {
           }
         }
 
+        if (showDspAdPerformance) {
+          for (const adm of event) {
+            if (dspList.indexOf(adm.value) === -1) dspList.push(adm.value);
+          }
+        }
+
         setFilters({
           ...filters,
           user: list,
           ad_user: adList,
+          dsp_user: dspList,
         });
         localStorage.setItem(
           'filters',
@@ -542,6 +569,7 @@ export default function NewCustomerList() {
             ...filters,
             user: list,
             ad_user: adList,
+            dsp_user: dspList,
           }),
         );
       }
@@ -597,13 +625,13 @@ export default function NewCustomerList() {
           }),
         );
 
-        customerListByView(
-          pageNumber,
-          selectedTimeFrame,
-          'sale_performance',
-          'revenue',
-          'asc',
-        );
+        // customerListByView(
+        //   pageNumber,
+        //   selectedTimeFrame,
+        //   'sale_performance',
+        //   'revenue',
+        //   'asc',
+        // );
         // customerList(
         //   pageNumber,
         //   selectedValue,
@@ -625,13 +653,13 @@ export default function NewCustomerList() {
             showDspAdPerformance: false,
           }),
         );
-        customerListByView(
-          pageNumber,
-          selectedTimeFrame,
-          'sponsored_ad_performance',
-          'ad_spend',
-          'asc',
-        );
+        // customerListByView(
+        //   pageNumber,
+        //   selectedTimeFrame,
+        //   'sponsored_ad_performance',
+        //   'ad_spend',
+        //   'asc',
+        // );
         // customerList(
         //   pageNumber,
         //   selectedValue,
@@ -653,13 +681,13 @@ export default function NewCustomerList() {
             showDspAdPerformance: true,
           }),
         );
-        customerListByView(
-          pageNumber,
-          selectedTimeFrame,
-          'dsp_ad_performance',
-          'dsp_spend',
-          'asc',
-        );
+        // customerListByView(
+        //   pageNumber,
+        //   selectedTimeFrame,
+        //   'dsp_ad_performance',
+        //   'dsp_spend',
+        //   'asc',
+        // );
         // customerList(
         //   pageNumber,
         //   selectedValue,
@@ -726,13 +754,13 @@ export default function NewCustomerList() {
         // setCustomDateModal(true);
       } else {
         setSelectedTimeFrame(event.value);
-        customerListByView(
-          pageNumber,
-          event.value,
-          'sale_performance',
-          'revenue',
-          'asc',
-        );
+        // customerListByView(
+        //   pageNumber,
+        //   event.value,
+        //   'sale_performance',
+        //   'revenue',
+        //   'asc',
+        // );
       }
     }
     if (type === 'search') {
@@ -943,7 +971,7 @@ export default function NewCustomerList() {
 
   const bindDropDownValue = (item) => {
     if (item === 'user') {
-      if (filters.user && !showAdPerformance) {
+      if (filters.user && !showAdPerformance && !showDspAdPerformance) {
         return brandGrowthStrategist.filter((option) =>
           filters.user.some((op) => op === option.value),
         );
@@ -953,12 +981,19 @@ export default function NewCustomerList() {
           filters.ad_user.some((op) => op === option.value),
         );
       }
-      if (
-        filters.ad_user &&
-        (showPerformance || showAdPerformance || showDspAdPerformance)
-      ) {
-        return timeFrameFilters;
+
+      if (filters.dsp_user && showDspAdPerformance) {
+        return brandGrowthStrategist.filter((option) =>
+          filters.dsp_user.some((op) => op === option.value),
+        );
       }
+
+      // if (
+      //   filters.ad_user &&
+      //   (showPerformance || showAdPerformance || showDspAdPerformance)
+      // ) {
+      //   return timeFrameFilters;
+      // }
 
       return [{ value: 'any', label: 'Any' }];
     }
@@ -1103,61 +1138,123 @@ export default function NewCustomerList() {
   };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
-    let flag = '';
-    let value = actualValue; // '-20';
-    if (value) {
-      if (matrics === 'ACOS') {
-        if (value.toString().includes('-')) {
-          flag = 'green';
-          value = value
-            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-            : '';
-        } else {
-          flag = 'red';
-          value = value ? `${value.toFixed(2)} %` : '';
-        }
-      } else if (value.toString().includes('-')) {
-        flag = 'red';
-        value = value
-          ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-          : '';
+    // let flag;
+    const value = -20;
+    let selectedClass = '';
+    // let arrow = '';
+
+    if (matrics === 'ACOS') {
+      // if (value.toString().includes('-')) {
+      //   selectedClass = 'increase-rate';
+      // } else {
+      //   selectedClass = 'decrease-rate';
+      // }
+      if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate';
       } else {
-        flag = 'green';
-        value = value ? `${value.toFixed(2)} %` : '';
+        selectedClass = 'increase-rate';
+      }
+    } else if (grayArrow) {
+      // arrow = UpDowGrayArrow;
+      if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate grey';
+      } else {
+        selectedClass = 'increase-rate grey';
+      }
+    } else if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate';
+      } else {
+        selectedClass = 'increase-rate';
       }
 
-      if (flag === 'red') {
+    if (value) {
+      if (value.toString().includes('-')) {
         return (
           <>
-            <span
-              className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
+            <br />
+            <span className={selectedClass}>
               {' '}
               <img
                 className="red-arrow"
                 src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
                 alt="arrow-up"
               />
-              {value}
+              {value
+                ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+                : ''}
             </span>
           </>
         );
       }
       return (
         <>
-          <span
-            className={grayArrow ? 'increase-rate grey' : 'increase-rate ml-1'}>
+          <br />
+          <div className={selectedClass}>
             <img
               className="green-arrow"
               src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
               width="14px"
               alt="arrow-up"
             />
-            {value}
-          </span>
+            {value ? `${value.toFixed(2)} %` : ''}
+          </div>
         </>
       );
     }
     return '';
+    // if (value) {
+    //   if (matrics === 'ACOS') {
+    //     if (value.toString().includes('-')) {
+    //       flag = 'green';
+    //       value = value
+    //         ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+    //         : '';
+    //     } else {
+    //       flag = 'red';
+    //       value = value ? `${value.toFixed(2)} %` : '';
+    //     }
+    //   } else if (value.toString().includes('-')) {
+    //     flag = 'red';
+    //     value = value
+    //       ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+    //       : '';
+    //   } else {
+    //     flag = 'green';
+    //     value = value ? `${value.toFixed(2)} %` : '';
+    //   }
+
+    //   if (flag === 'red') {
+    //     return (
+    //       <>
+    //         <span
+    //           className={grayArrow ? 'decrease-rate grey' : 'decrease-rate'}>
+    //           {' '}
+    //           <img
+    //             className="red-arrow"
+    //             src={grayArrow ? UpDowGrayArrow : ArrowDownIcon}
+    //             alt="arrow-up"
+    //           />
+    //           {value}
+    //         </span>
+    //       </>
+    //     );
+    //   }
+    //   return (
+    //     <>
+    //       <span
+    //         className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
+    //         <img
+    //           className="green-arrow"
+    //           src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
+    //           width="14px"
+    //           alt="arrow-up"
+    //         />
+    //         {value}
+    //       </span>
+    //     </>
+    //   );
+    // }
+    // return '';
   };
 
   const renderHeaders = () => {
@@ -1817,6 +1914,8 @@ export default function NewCustomerList() {
 
                     {showAdPerformance ? (
                       <div className="label">Sponsored Ad Manager</div>
+                    ) : showDspAdPerformance ? (
+                      <div className="label">DSP Ad Manager</div>
                     ) : (
                       <div className="label">Brand Strategist</div>
                     )}
@@ -2043,6 +2142,8 @@ export default function NewCustomerList() {
         )} */}
         {showAdPerformance ? (
           <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
+        ) : showDspAdPerformance ? (
+          <div className="label mt-2 mb-2">DSP Ad Manager</div>
         ) : (
           <div className="label mt-2 mb-2">Brand Strategist</div>
         )}
