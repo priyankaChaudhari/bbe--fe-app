@@ -43,7 +43,9 @@ const customStyles = {
 function DashboardContainer() {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const { Option, SingleValue, MultiValue } = components;
+
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
+  const [selectedBgsUser, setSelectedBgsUser] = useState([]);
 
   const [selectedValue, setSelectedValue] = useState({
     type: 'week',
@@ -140,7 +142,13 @@ function DashboardContainer() {
   const handleOnchange = (event, type) => {
     if (type === 'bgs') {
       setSelectedValue({ ...selectedValue, bgs: event && event.value });
+      setSelectedBgsUser({ ...event });
       bgsCustomerList(1, event && event.value, selectedValue, hybridView);
+    } else if (type === 'dashboard') {
+      setHybridView(event.value);
+      setSelectedValue({ ...selectedValue, bgs: '' });
+      setSelectedBgsUser(null);
+      bgsCustomerList(1, event.value, selectedValue, event.value);
     } else if (type === 'date') {
       if (event && event.value === 'custom') {
         setShowBgsCustomDateModal(true);
@@ -263,6 +271,13 @@ function DashboardContainer() {
         DropdownIndicator,
       };
     }
+    if (type === 'dashboard') {
+      return {
+        Option: filterOption,
+        MultiValue: singleFilterOption,
+        DropdownIndicator,
+      };
+    }
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
@@ -372,13 +387,14 @@ function DashboardContainer() {
     setPageNumber(currentPage);
     bgsCustomerList(currentPage, selectedValue.bgs, selectedValue, hybridView);
   };
-  const handleOnHybridDropdown = (event) => {
-    setHybridView(event.value);
-    setSelectedValue({ ...selectedValue, bgs: '' });
-    if (selectInputRef && selectInputRef.current)
-      selectInputRef.current.select.clearValue();
-    bgsCustomerList(1, event.value, selectedValue, event.value);
-  };
+
+  // const handleOnHybridDropdown = (event) => {
+  //   setHybridView(event.value);
+  //   setSelectedValue({ ...selectedValue, bgs: '' });
+  //   if (selectInputRef && selectInputRef.current)
+  //     selectInputRef.current.select.clearValue();
+  //   bgsCustomerList(1, event.value, selectedValue, event.value);
+  // };
 
   const displayHeader = () => {
     return (
@@ -409,15 +425,12 @@ function DashboardContainer() {
                         classNamePrefix="react-select"
                         placeholder="My Partners"
                         options={brandGrowthStrategist}
-                        // defaultValue={[
-                        //   {
-                        //     value: selectedValue && selectedValue.bgs,
-                        //     lable: selectedValue && selectedValue.bgs,
-                        //   },
-                        // ]}
                         components={getSelectComponents('user')}
                         componentsValue={{ Option: IconOption }}
-                        onChange={(event) => handleOnchange(event, 'bgs')}
+                        value={selectedBgsUser}
+                        onChange={(event) => {
+                          handleOnchange(event, 'bgs');
+                        }}
                       />
                     </DropDownSelect>
                   </li>
@@ -429,10 +442,11 @@ function DashboardContainer() {
                           classNamePrefix="react-select"
                           placeholder="Hybrid Dashboard type"
                           options={hybridDropdown}
-                          // components={getSelectComponents('user')}
+                          components={getSelectComponents('dashboard')}
                           defaultValue={hybridDropdown[0]}
-                          componentsValue={{ Option: IconOption }}
-                          onChange={(event) => handleOnHybridDropdown(event)}
+                          onChange={(event) =>
+                            handleOnchange(event, 'dashboard')
+                          }
                         />
                       </DropDownSelect>
                     </li>
