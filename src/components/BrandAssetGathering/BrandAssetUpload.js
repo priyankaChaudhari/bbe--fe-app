@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-loop-func */
@@ -11,7 +13,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import Modal from 'react-modal';
 
 import { Progress } from 'react-sweet-progress';
@@ -35,6 +37,7 @@ import {
   RedTrashIcon,
   WhiteArrowRight,
   FileCloud,
+  CaretUp,
 } from '../../theme/images';
 import {
   Button,
@@ -139,6 +142,24 @@ export default function BrandAssetUpload() {
     'additional-brand-material': 'any',
   };
   const selectedFiles = [];
+
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
   const setPreviewImageData = (response) => {
     if (showAssetPreview.selectedFile && response) {
@@ -264,6 +285,7 @@ export default function BrandAssetUpload() {
           original_name: item.name,
           entity_id: brandId,
           entity_type: 'brandassets',
+          size: item.size,
           mime_type: item.type
             ? item.type
             : params.step === 'font-files'
@@ -858,6 +880,7 @@ export default function BrandAssetUpload() {
                   search: `step=${event.value}`,
                 });
               }}
+              components={{ DropdownIndicator }}
             />
           </DropDownBrandAsset>
           <div className="container-fluid">
@@ -986,7 +1009,20 @@ export default function BrandAssetUpload() {
                           id="step"
                           readOnly
                           defaultChecked={noImages}
-                          onChange={() => setNoImages(!noImages)}
+                          onChange={(event) => {
+                            if (brandAssetData && brandAssetData.is_completed) {
+                              if (event.target.checked) redirectTo('none');
+                              if (
+                                !event.target.checked &&
+                                documentData &&
+                                documentData.length === 0
+                              ) {
+                                setShowBtns({ upload: true, download: false });
+                              }
+                            }
+
+                            setNoImages(!noImages);
+                          }}
                         />
                         <span className="checkmark" />
                       </label>
@@ -1008,6 +1044,7 @@ export default function BrandAssetUpload() {
                           : selectedDropdown.dropdownValue
                       }
                       onChange={(event) => handleDownloadOptions(event)}
+                      components={{ DropdownIndicator }}
                     />
                   ) : (
                     ''
@@ -1058,7 +1095,7 @@ export default function BrandAssetUpload() {
                               process.env.REACT_APP_BASE_APP_URL +
                               process.env.REACT_APP_API_VERSION +
                               API_DOCUMENTS
-                            }download/?${
+                            }download/?token=${localStorage.getItem('token')}&${
                               selectedDropdown &&
                               selectedDropdown.total === downloadIds &&
                               downloadIds.length
