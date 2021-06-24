@@ -247,14 +247,14 @@ export default function CustomerListTablet({
           value = value ? `${value.toFixed(2)} %` : '';
         }
       } else if (value.toString().includes('-')) {
-          flag = 'red';
-          value = value
-            ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
-            : '';
-        } else {
-          flag = 'green';
-          value = value ? `${value.toFixed(2)} %` : '';
-        }
+        flag = 'red';
+        value = value
+          ? `${Number(value.toString().split('-')[1]).toFixed(2)} %`
+          : '';
+      } else {
+        flag = 'green';
+        value = value ? `${value.toFixed(2)} %` : '';
+      }
 
       if (flag === 'red') {
         return (
@@ -677,259 +677,261 @@ export default function CustomerListTablet({
 
   return (
     <CustomerListTabletView>
-      <div className="row cursor">
-        {data &&
-          data.map((item) => (
-            <div
-              key={Math.random()}
-              className="col-md-6 col-12"
-              onClick={() =>
-                history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-              }
-              role="presentation">
-              {isLoading.loader && isLoading.type === 'page' ? (
-                <PageLoader color="#FF5933" type="page" />
-              ) : (
-                renderCustomerDetails(item)
-                // <WhiteCard className="mt-2">
-                //   <img
-                //     className="company-logo"
-                //     src={
-                //       item &&
-                //       item.documents &&
-                //       item.documents[0] &&
-                //       Object.values(item.documents[0])
-                //         ? Object.values(item.documents[0])[0]
-                //         : CompanyDefaultUser
-                //     }
-                //     alt="logo"
-                //   />
+      <div className="container-fluid">
+        <div className="row cursor">
+          {data &&
+            data.map((item) => (
+              <div
+                key={Math.random()}
+                className="col-md-6 col-12"
+                onClick={() =>
+                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+                }
+                role="presentation">
+                {isLoading.loader && isLoading.type === 'page' ? (
+                  <PageLoader color="#FF5933" type="page" />
+                ) : (
+                  renderCustomerDetails(item)
+                  // <WhiteCard className="mt-2">
+                  //   <img
+                  //     className="company-logo"
+                  //     src={
+                  //       item &&
+                  //       item.documents &&
+                  //       item.documents[0] &&
+                  //       Object.values(item.documents[0])
+                  //         ? Object.values(item.documents[0])[0]
+                  //         : CompanyDefaultUser
+                  //     }
+                  //     alt="logo"
+                  //   />
 
-                //   <div className="company-name">
-                //     {item &&
-                //       item.contract &&
-                //       item.contract[0] &&
-                //       item.contract[0].contract_company_name}
-                //   </div>
-                //   <div
-                //     className="status"
-                //     style={{ textTransform: 'capitalize' }}>
-                //     {item && item.status}
-                //   </div>
-                //   <div className="clear-fix" />
-                //   <div className=" straight-line horizontal-line pt-3 mb-3 " />
-                //   {showPerformance ? (
-                //     <div className="row">
-                //       <div className="col-6 pb-2">
-                //         <div className="label">Revenue</div>
-                //         <div className="label-info ">
-                //           <>
-                //             $
-                //             {item &&
-                //               item.daily_facts &&
-                //               item.daily_facts.current &&
-                //               item.daily_facts.current.length &&
-                //               item.daily_facts.current
-                //                 .map((rev) =>
-                //                   rev.revenue === null ? 0 : rev.revenue,
-                //                 )
-                //                 .reduce((val, rev) => rev + val)
-                //                 .toString()
-                //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                //             {calculatePercentage(
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.current &&
-                //                 item.daily_facts.current.length
-                //                 ? item.daily_facts.current
-                //                     .map((rev) => rev.revenue)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.previous &&
-                //                 item.daily_facts.previous.length
-                //                 ? item.daily_facts.previous
-                //                     .map((rev) => rev.revenue)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //             )}
-                //           </>
-                //         </div>
-                //       </div>
-                //       <div className="col-6 pb-2">
-                //         <div className="label">Units Sold</div>
-                //         <div className="label-info ">
-                //           <>
-                //             {item &&
-                //               item.daily_facts &&
-                //               item.daily_facts.current &&
-                //               item.daily_facts.current.length &&
-                //               item.daily_facts.current
-                //                 .map((rev) =>
-                //                   rev.units_sold === null ? 0 : rev.units_sold,
-                //                 )
-                //                 .reduce((val, rev) => rev + val)
-                //                 .toString()
-                //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                //             {calculatePercentage(
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.current &&
-                //                 item.daily_facts.current.length
-                //                 ? item.daily_facts.current
-                //                     .map((rev) => rev.units_sold)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.previous &&
-                //                 item.daily_facts.previous.length
-                //                 ? item.daily_facts.previous
-                //                     .map((rev) => rev.units_sold)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //             )}
-                //           </>
-                //         </div>
-                //       </div>
-                //     </div>
-                //   ) : (
-                //     <>
-                //       <ul
-                //         className="recurring-contact"
-                //         style={{ textTransform: 'capitalize' }}>
-                //         {item && item.contract && item.contract.length ? (
-                //           item &&
-                //           item.contract &&
-                //           item.contract.map((type) => (
-                //             <React.Fragment key={Math.random()}>
-                //               <ReactTooltip />
-                //               {generateContractHTML(type, item.id)}
-                //             </React.Fragment>
-                //           ))
-                //         ) : (
-                //           <li className="no-active-contract">
-                //             No active contracts
-                //           </li>
-                //         )}
-                //       </ul>
-                //     </>
-                //   )}
+                  //   <div className="company-name">
+                  //     {item &&
+                  //       item.contract &&
+                  //       item.contract[0] &&
+                  //       item.contract[0].contract_company_name}
+                  //   </div>
+                  //   <div
+                  //     className="status"
+                  //     style={{ textTransform: 'capitalize' }}>
+                  //     {item && item.status}
+                  //   </div>
+                  //   <div className="clear-fix" />
+                  //   <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                  //   {showPerformance ? (
+                  //     <div className="row">
+                  //       <div className="col-6 pb-2">
+                  //         <div className="label">Revenue</div>
+                  //         <div className="label-info ">
+                  //           <>
+                  //             $
+                  //             {item &&
+                  //               item.daily_facts &&
+                  //               item.daily_facts.current &&
+                  //               item.daily_facts.current.length &&
+                  //               item.daily_facts.current
+                  //                 .map((rev) =>
+                  //                   rev.revenue === null ? 0 : rev.revenue,
+                  //                 )
+                  //                 .reduce((val, rev) => rev + val)
+                  //                 .toString()
+                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  //             {calculatePercentage(
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.current &&
+                  //                 item.daily_facts.current.length
+                  //                 ? item.daily_facts.current
+                  //                     .map((rev) => rev.revenue)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.previous &&
+                  //                 item.daily_facts.previous.length
+                  //                 ? item.daily_facts.previous
+                  //                     .map((rev) => rev.revenue)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //             )}
+                  //           </>
+                  //         </div>
+                  //       </div>
+                  //       <div className="col-6 pb-2">
+                  //         <div className="label">Units Sold</div>
+                  //         <div className="label-info ">
+                  //           <>
+                  //             {item &&
+                  //               item.daily_facts &&
+                  //               item.daily_facts.current &&
+                  //               item.daily_facts.current.length &&
+                  //               item.daily_facts.current
+                  //                 .map((rev) =>
+                  //                   rev.units_sold === null ? 0 : rev.units_sold,
+                  //                 )
+                  //                 .reduce((val, rev) => rev + val)
+                  //                 .toString()
+                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  //             {calculatePercentage(
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.current &&
+                  //                 item.daily_facts.current.length
+                  //                 ? item.daily_facts.current
+                  //                     .map((rev) => rev.units_sold)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.previous &&
+                  //                 item.daily_facts.previous.length
+                  //                 ? item.daily_facts.previous
+                  //                     .map((rev) => rev.units_sold)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //             )}
+                  //           </>
+                  //         </div>
+                  //       </div>
+                  //     </div>
+                  //   ) : (
+                  //     <>
+                  //       <ul
+                  //         className="recurring-contact"
+                  //         style={{ textTransform: 'capitalize' }}>
+                  //         {item && item.contract && item.contract.length ? (
+                  //           item &&
+                  //           item.contract &&
+                  //           item.contract.map((type) => (
+                  //             <React.Fragment key={Math.random()}>
+                  //               <ReactTooltip />
+                  //               {generateContractHTML(type, item.id)}
+                  //             </React.Fragment>
+                  //           ))
+                  //         ) : (
+                  //           <li className="no-active-contract">
+                  //             No active contracts
+                  //           </li>
+                  //         )}
+                  //       </ul>
+                  //     </>
+                  //   )}
 
-                //   {!showPerformance ? (
-                //     <div className=" straight-line horizontal-line pt-3" />
-                //   ) : (
-                //     ''
-                //   )}
-                //   <div className="row">
-                //     {showPerformance ? (
-                //       <div className="col-6">
-                //         <div className="label">Traffic</div>
-                //         <div className="label-info">
-                //           <>
-                //             $
-                //             {item &&
-                //               item.daily_facts &&
-                //               item.daily_facts.current &&
-                //               item.daily_facts.current.length &&
-                //               item.daily_facts.current
-                //                 .map((rev) =>
-                //                   rev.traffic === null ? 0 : rev.traffic,
-                //                 )
-                //                 .reduce((val, rev) => rev + val)
-                //                 .toString()
-                //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                //             {calculatePercentage(
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.current &&
-                //                 item.daily_facts.current.length
-                //                 ? item.daily_facts.current
-                //                     .map((rev) => rev.traffic)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.previous &&
-                //                 item.daily_facts.previous.length
-                //                 ? item.daily_facts.previous
-                //                     .map((rev) => rev.traffic)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //             )}
-                //           </>
-                //         </div>
-                //       </div>
-                //     ) : (
-                //       ''
-                //     )}
+                  //   {!showPerformance ? (
+                  //     <div className=" straight-line horizontal-line pt-3" />
+                  //   ) : (
+                  //     ''
+                  //   )}
+                  //   <div className="row">
+                  //     {showPerformance ? (
+                  //       <div className="col-6">
+                  //         <div className="label">Traffic</div>
+                  //         <div className="label-info">
+                  //           <>
+                  //             $
+                  //             {item &&
+                  //               item.daily_facts &&
+                  //               item.daily_facts.current &&
+                  //               item.daily_facts.current.length &&
+                  //               item.daily_facts.current
+                  //                 .map((rev) =>
+                  //                   rev.traffic === null ? 0 : rev.traffic,
+                  //                 )
+                  //                 .reduce((val, rev) => rev + val)
+                  //                 .toString()
+                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  //             {calculatePercentage(
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.current &&
+                  //                 item.daily_facts.current.length
+                  //                 ? item.daily_facts.current
+                  //                     .map((rev) => rev.traffic)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.previous &&
+                  //                 item.daily_facts.previous.length
+                  //                 ? item.daily_facts.previous
+                  //                     .map((rev) => rev.traffic)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //             )}
+                  //           </>
+                  //         </div>
+                  //       </div>
+                  //     ) : (
+                  //       ''
+                  //     )}
 
-                //     {showPerformance ? (
-                //       <div className="col-6">
-                //         <div className="label">Conversion</div>
-                //         <div className="label-info">
-                //           <>
-                //             $
-                //             {item &&
-                //               item.daily_facts &&
-                //               item.daily_facts.current &&
-                //               item.daily_facts.current.length &&
-                //               item.daily_facts.current
-                //                 .map((rev) =>
-                //                   rev.conversion === null ? 0 : rev.conversion,
-                //                 )
-                //                 .reduce((val, rev) => rev + val)
-                //                 .toString()
-                //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                //             %
-                //             {calculatePercentage(
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.current &&
-                //                 item.daily_facts.current.length
-                //                 ? item.daily_facts.current
-                //                     .map((rev) => rev.conversion)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //               item &&
-                //                 item.daily_facts &&
-                //                 item.daily_facts.previous &&
-                //                 item.daily_facts.previous.length
-                //                 ? item.daily_facts.previous
-                //                     .map((rev) => rev.conversion)
-                //                     .reduce((val, rev) => rev + val)
-                //                 : 0,
-                //               'conversion',
-                //             )}
-                //           </>
-                //         </div>
-                //       </div>
-                //     ) : (
-                //       ''
-                //     )}
-                //     {showPerformance ? (
-                //       <div className="straight-line horizontal-line pt-3 " />
-                //     ) : (
-                //       ''
-                //     )}
-                //     <div className="col-12 mt-3">
-                //       <div className="label">Brand Strategist</div>
-                //       <div className="label-info">
-                //         {' '}
-                //         {item &&
-                //           item.brand_growth_strategist &&
-                //           item.brand_growth_strategist.first_name}{' '}
-                //         {item &&
-                //           item.brand_growth_strategist &&
-                //           item.brand_growth_strategist.last_name}
-                //       </div>
-                //     </div>
-                //   </div>
-                // </WhiteCard>
-              )}
-            </div>
-          ))}
+                  //     {showPerformance ? (
+                  //       <div className="col-6">
+                  //         <div className="label">Conversion</div>
+                  //         <div className="label-info">
+                  //           <>
+                  //             $
+                  //             {item &&
+                  //               item.daily_facts &&
+                  //               item.daily_facts.current &&
+                  //               item.daily_facts.current.length &&
+                  //               item.daily_facts.current
+                  //                 .map((rev) =>
+                  //                   rev.conversion === null ? 0 : rev.conversion,
+                  //                 )
+                  //                 .reduce((val, rev) => rev + val)
+                  //                 .toString()
+                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  //             %
+                  //             {calculatePercentage(
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.current &&
+                  //                 item.daily_facts.current.length
+                  //                 ? item.daily_facts.current
+                  //                     .map((rev) => rev.conversion)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //               item &&
+                  //                 item.daily_facts &&
+                  //                 item.daily_facts.previous &&
+                  //                 item.daily_facts.previous.length
+                  //                 ? item.daily_facts.previous
+                  //                     .map((rev) => rev.conversion)
+                  //                     .reduce((val, rev) => rev + val)
+                  //                 : 0,
+                  //               'conversion',
+                  //             )}
+                  //           </>
+                  //         </div>
+                  //       </div>
+                  //     ) : (
+                  //       ''
+                  //     )}
+                  //     {showPerformance ? (
+                  //       <div className="straight-line horizontal-line pt-3 " />
+                  //     ) : (
+                  //       ''
+                  //     )}
+                  //     <div className="col-12 mt-3">
+                  //       <div className="label">Brand Strategist</div>
+                  //       <div className="label-info">
+                  //         {' '}
+                  //         {item &&
+                  //           item.brand_growth_strategist &&
+                  //           item.brand_growth_strategist.first_name}{' '}
+                  //         {item &&
+                  //           item.brand_growth_strategist &&
+                  //           item.brand_growth_strategist.last_name}
+                  //       </div>
+                  //     </div>
+                  //   </div>
+                  // </WhiteCard>
+                )}
+              </div>
+            ))}
+        </div>
       </div>
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader color="#FF5933" type="page" />

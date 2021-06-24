@@ -1627,7 +1627,7 @@ export default function NewCustomerList() {
               </MobileLeftSidebar>
             </div>
 
-            <div className="col-lg-4 col-md-6 col-12 col-8  mb-2 pr-md-2">
+            <div className="col-lg-4 col-md-6 col-12 col-8  mb-2 pr-2 pl-2">
               <InputSearchWithRadius className="customer-list-header w-80">
                 <input
                   className=" form-control search-filter"
@@ -1672,17 +1672,17 @@ export default function NewCustomerList() {
               </InputSearchWithRadius>
             </div>
 
-            <div className="col-lg-2 col-md-6 col-12 pl-0 pr-2">
+            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            <div className="col-lg-2 col-md-6 col-12   mb-2 pl-md-0 pr-lg-2 ">
+            <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            <div className="col-lg-2 col-md-6  col-12 pr-3  mb-2 pl-md-0 ">
+            <div className="col-lg-2 col-md-6  col-12   mb-2  pl-2 pr-2 ">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
@@ -2273,12 +2273,12 @@ const CustomerListPage = styled.div`
   }
 
   @media only screen and (max-width: 991px) {
-    padding-left: 10px;
+    padding-left: 0px;
 
     .customer-list-header-sticky {
       left: 0;
       right: 0;
-      padding: 0 15px;
+      // padding: 0 15px;
     }
     .customer-list-header {
       &.w-80 {
@@ -2305,9 +2305,6 @@ const CustomerListPage = styled.div`
         vertical-align: text-top;
       }
     }
-  }
-  @media only screen and (max-width: 991px) {
-    padding-left: 10px;
 
     .customer-list-header {
       margin: 5px 0;
