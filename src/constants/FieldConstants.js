@@ -189,30 +189,30 @@ export const performanceSortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
   { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'revenue', label: 'Revenue' },
-  { value: 'units_sold', label: 'Units Sold' },
-  { value: 'traffic', label: 'Traffic Date' },
-  { value: 'conversion', label: 'Conversion' },
+  { value: 'revenue', label: 'Revenue', custom: true },
+  { value: 'units_sold', label: 'Units Sold', custom: true },
+  { value: 'traffic', label: 'Traffic Date', custom: true },
+  { value: 'conversion', label: 'Conversion', custom: true },
 ];
 
 export const sadSortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
   { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'ad_sales', label: 'Ad Sales' },
-  { value: 'ad_spend', label: 'Ad Spend' },
-  { value: 'impression', label: 'Impressions' },
-  { value: 'acos', label: 'ACOS' },
+  { value: 'ad_sales', label: 'Ad Sales', custom: true },
+  { value: 'ad_spend', label: 'Ad Spend', custom: true },
+  { value: 'impression', label: 'Impressions', custom: true },
+  { value: 'acos', label: 'ACOS', custom: true },
 ];
 
 export const dadSortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
   { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'impressions', label: 'Impressions' },
-  { value: 'dsp_spend', label: 'DSP Spend' },
-  { value: 'total_product_sale', label: 'Total Product Sales' },
-  { value: 'total_roas', label: 'Total ROAS' },
+  { value: 'impressions', label: 'Impressions', custom: true },
+  { value: 'dsp_spend', label: 'DSP Spend', custom: true },
+  { value: 'total_product_sale', label: 'Total Product Sales', custom: true },
+  { value: 'total_roas', label: 'Total ROAS', custom: true },
 ];
 
 export const timeFrameFilters = [

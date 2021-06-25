@@ -138,6 +138,8 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
+  const [orderByFlag, setOrderByFlag] = useState({});
+
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
     { value: 'performance', label: 'Sales Performance' },
@@ -375,6 +377,7 @@ export default function NewCustomerList() {
           DropdownIndicator,
         };
       }
+
       return DropdownIndicator;
     }
     if (key === 'stats') {
@@ -412,6 +415,7 @@ export default function NewCustomerList() {
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
+        orderByFlag,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -428,6 +432,7 @@ export default function NewCustomerList() {
       showAdPerformance,
       showDspAdPerformance,
       selectedTimeFrame,
+      orderByFlag,
     ],
   );
 
@@ -1214,6 +1219,78 @@ export default function NewCustomerList() {
     }
   };
 
+  const CustomOption = (props) => {
+    const [submenu, setSubmenu] = useState(false);
+    const [height, setHeight] = useState(0);
+    const handleOption = (e) => {
+      if (submenu) {
+        setSubmenu(false);
+      } else {
+        setHeight(e.clientY);
+        setSubmenu(true);
+      }
+    };
+
+    // eslint-disable-next-line no-shadow
+    const { data } = props;
+    return data.custom ? (
+      <>
+        <div
+          onMouseOver={handleOption}
+          onFocus={handleOption}
+          className="customs">
+          {data.label} <span className="caret" />
+          {submenu && (
+            <div className="dropdown-submenu">
+              <div
+                className="drops"
+                role="presentation"
+                onClick={() => setOrderByFlag({ sequence: 'desc' })}>
+                Highest to Lowest
+              </div>
+              <div
+                className="drops"
+                role="presentation"
+                onClick={() => setOrderByFlag({ sequence: 'asc' })}>
+                Lowest to highest
+              </div>
+            </div>
+          )}
+        </div>
+        <style jsx>{`
+          .customs {
+            height: 36px;
+            padding: 8px;
+            position: relative;
+          }
+
+          .drops {
+            height: 36px;
+            padding: 8px;
+          }
+
+          .customs:hover,
+          .drops:hover {
+            background-color: #17cf76;
+          }
+
+          .dropdown-submenu {
+            /* position: ; */
+            top: ${height - 10}px;
+            left: 410px;
+            min-height: 36px;
+            overflow: auto;
+            border: 1px solid hsl(0, 0%, 80%);
+            border-radius: 4px;
+            color: #212529;
+          }
+        `}</style>
+      </>
+    ) : (
+      <components.Option {...props} />
+    );
+  };
+
   const generateDropdown = (item, reff = null) => {
     const searchFor =
       item === 'sort' ? 'sort' : item === 'stats' ? 'stats' : 'view';
@@ -1226,40 +1303,18 @@ export default function NewCustomerList() {
           ref={reff}
           placeholder={getSelectPlaceholder(item)}
           options={getDropDownOptions(item)}
-          // {
-          //   item === 'user'
-          //     ? brandGrowthStrategist
-          //     : item === 'sort'
-          //     ? sortOptions
-          //     : options
-          // }
           onChange={(event, action) =>
             item === 'user'
               ? handleFilters(event, item, 'brand', action)
               : handleSearch(event, searchFor)
           }
           value={bindDropDownValue(item)}
-          // value={
-          //   item === 'user'
-          //     ? filters.user
-          //       ? brandGrowthStrategist.filter((option) =>
-          //           filters.user.some((op) => op === option.value),
-          //         )
-          //       : ''
-          //     : item === 'sort'
-          //     ? selectedValue[item.key] ||
-          //       sortOptions.filter((op) => op.value === filters.sort_by)
-          //     : showPerformance
-          //     ? [{ value: 'performance', label: 'Sales Performance' }]
-          //     : showAdPerformance
-          //     ? [{ value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' }]
-          //     : [{ value: 'contract_details', label: 'Contract Details' }]
-          //   // : selectedValue[item.key] === null
-          //   // ? null
-          //   // : selectedValue[item.key] || sortOptions.filter(item => item.value === filters.sort_by)
-          // }
           isMulti={item === 'user'}
-          components={getSelectComponents(item)}
+          components={
+            searchFor === 'sort'
+              ? { Option: CustomOption }
+              : getSelectComponents(item)
+          }
           componentsValue={item === 'user' ? { Option: IconOption } : ''}
         />
       </>
