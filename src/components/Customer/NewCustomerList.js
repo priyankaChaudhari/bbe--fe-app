@@ -2299,11 +2299,7 @@ export default function NewCustomerList() {
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
-            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
-              <DropDownSelect className="customer-list-header">
-                {generateDropdown('sort')}
-              </DropDownSelect>{' '}
-            </div>
+
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
               <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
                 <DropDownSelect className="customer-list-header">
@@ -2313,6 +2309,11 @@ export default function NewCustomerList() {
             ) : (
               <></>
             )}
+            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
+              <DropDownSelect className="customer-list-header">
+                {generateDropdown('sort')}
+              </DropDownSelect>{' '}
+            </div>
           </div>
         </div>
 
