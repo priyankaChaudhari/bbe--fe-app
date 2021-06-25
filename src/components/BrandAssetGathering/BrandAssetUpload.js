@@ -209,9 +209,31 @@ export default function BrandAssetUpload() {
     setIsLoadingDocument(false);
   };
 
+  const handleDownloadOptions = (event) => {
+    setIsLoading({ loader: true, type: 'page' });
+    getDocuments(
+      brandId,
+      'brandassets',
+      event.value === 'all' ? '' : selectedStep.key,
+    ).then((response) => {
+      const ids = [];
+      response && response.forEach((op) => ids.push(op.id));
+      setDownloadIds(ids);
+      setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
+
   const getDocumentList = (docType) => {
     setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
+    if (
+      selectedDropdown &&
+      selectedDropdown.dropdownValue &&
+      selectedDropdown.dropdownValue.value === 'all'
+    )
+      handleDownloadOptions({ value: 'all', label: 'All asset types' });
+
     getDocuments(brandId, 'brandassets', docType).then((response) => {
       if (
         (selectedDropdown &&
@@ -243,21 +265,6 @@ export default function BrandAssetUpload() {
         });
         setUploadCount(tempCounts);
       }
-    });
-  };
-
-  const handleDownloadOptions = (event) => {
-    setIsLoading({ loader: true, type: 'page' });
-    getDocuments(
-      brandId,
-      'brandassets',
-      event.value === 'all' ? '' : selectedStep.key,
-    ).then((response) => {
-      const ids = [];
-      response && response.forEach((op) => ids.push(op.id));
-      setDownloadIds(ids);
-      setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
-      setIsLoading({ loader: false, type: 'page' });
     });
   };
 
@@ -669,12 +676,16 @@ export default function BrandAssetUpload() {
                     <div
                       className="clickable"
                       onClick={() =>
-                        setShowAssetPreview({
-                          selectedFile: file,
-                          show: true,
-                          documents: documentData,
-                          index: i,
-                        })
+                        brandAssetData &&
+                        brandAssetData.is_completed &&
+                        (showBtns.upload || showBtns.download)
+                          ? ''
+                          : setShowAssetPreview({
+                              selectedFile: file,
+                              show: true,
+                              documents: documentData,
+                              index: i,
+                            })
                       }
                       role="presentation"
                     />
@@ -1167,18 +1178,19 @@ export default function BrandAssetUpload() {
                               );
                               setIsLoading({
                                 loader: true,
-                                type: 'button',
+                                type: 'page',
                               });
                               setTimeout(() => {
-                                setIsLoading({
-                                  loader: false,
-                                  type: 'button',
-                                });
+                                setShowBtns({ download: false, upload: false });
                                 getDocumentList(
                                   selectedStep && selectedStep.key,
                                 );
-                                setShowBtns({ download: false, upload: false });
-                              }, 3000);
+
+                                setIsLoading({
+                                  loader: false,
+                                  type: 'page',
+                                });
+                              }, 4000);
                             }}>
                             <Button
                               className="btn-primary"
@@ -1197,6 +1209,7 @@ export default function BrandAssetUpload() {
                           <Button
                             className="btn-transparent w-50 on-boarding ml-4"
                             onClick={() => {
+                              getDocumentList(selectedStep && selectedStep.key);
                               setShowBtns({ download: false, upload: false });
                               setIsLoading({ loader: false, type: 'button' });
                             }}>
