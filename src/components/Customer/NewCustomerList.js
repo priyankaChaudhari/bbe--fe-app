@@ -138,7 +138,7 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
-  const [orderByFlag, setOrderByFlag] = useState({});
+  // const [orderByFlag, setOrderByFlag] = useState({});
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -415,7 +415,7 @@ export default function NewCustomerList() {
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
-        orderByFlag,
+        // orderByFlag,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -432,7 +432,7 @@ export default function NewCustomerList() {
       showAdPerformance,
       showDspAdPerformance,
       selectedTimeFrame,
-      orderByFlag,
+      // orderByFlag,
     ],
   );
 
@@ -1144,19 +1144,19 @@ export default function NewCustomerList() {
     }
 
     if (item === 'sort') {
-      if (selectedView === 'performance') {
+      if (selectedView === 'performance' || showPerformance) {
         return (
           selectedValue[item.key] ||
           performanceSortOptions.filter((op) => op.value === filters.sort_by)
         );
       }
-      if (selectedView === 'sponsored_ad_performance') {
+      if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
         return (
           selectedValue[item.key] ||
           sadSortOptions.filter((op) => op.value === filters.sort_by)
         );
       }
-      if (selectedView === 'dsp_ad_performance') {
+      if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
         return (
           selectedValue[item.key] ||
           dadSortOptions.filter((op) => op.value === filters.sort_by)
@@ -1201,13 +1201,13 @@ export default function NewCustomerList() {
       case 'user':
         return brandGrowthStrategist;
       case 'sort':
-        if (selectedView === 'performance') {
+        if (selectedView === 'performance' || showPerformance) {
           return performanceSortOptions;
         }
-        if (selectedView === 'sponsored_ad_performance') {
+        if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
           return sadSortOptions;
         }
-        if (selectedView === 'dsp_ad_performance') {
+        if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
           return dadSortOptions;
         }
         return sortOptions;
@@ -1219,77 +1219,96 @@ export default function NewCustomerList() {
     }
   };
 
-  const CustomOption = (props) => {
-    const [submenu, setSubmenu] = useState(false);
-    const [height, setHeight] = useState(0);
-    const handleOption = (e) => {
-      if (submenu) {
-        setSubmenu(false);
-      } else {
-        setHeight(e.clientY);
-        setSubmenu(true);
-      }
-    };
+  // const getSubMenu = () => {
+  //   return (
+  //     <div className="dropdown-submenu">
+  //       <div
+  //         className="drops"
+  //         role="presentation"
+  //         onClick={() => setOrderByFlag({ sequence: 'desc' })}>
+  //         Highest to Lowest
+  //       </div>
+  //       <div
+  //         className="drops"
+  //         role="presentation"
+  //         onClick={() => setOrderByFlag({ sequence: 'asc' })}>
+  //         Lowest to highest
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
-    // eslint-disable-next-line no-shadow
-    const { data } = props;
-    return data.custom ? (
-      <>
-        <div
-          onMouseOver={handleOption}
-          onFocus={handleOption}
-          className="customs">
-          {data.label} <span className="caret" />
-          {submenu && (
-            <div className="dropdown-submenu">
-              <div
-                className="drops"
-                role="presentation"
-                onClick={() => setOrderByFlag({ sequence: 'desc' })}>
-                Highest to Lowest
-              </div>
-              <div
-                className="drops"
-                role="presentation"
-                onClick={() => setOrderByFlag({ sequence: 'asc' })}>
-                Lowest to highest
-              </div>
-            </div>
-          )}
-        </div>
-        <style jsx>{`
-          .customs {
-            height: 36px;
-            padding: 8px;
-            position: relative;
-          }
+  // const CustomOption = (props) => {
+  //   const [submenu, setSubmenu] = useState(false);
+  //   const [height, setHeight] = useState(0);
+  //   const handleOption = (e) => {
+  //     if (submenu) {
+  //       setSubmenu(false);
+  //     } else {
+  //       setHeight(e.clientY);
+  //       setSubmenu(true);
+  //     }
+  //   };
 
-          .drops {
-            height: 36px;
-            padding: 8px;
-          }
+  //   // eslint-disable-next-line no-shadow
+  //   const { data } = props;
+  //   return data.custom ? (
+  //     <>
+  //       <div
+  //         onMouseOver={handleOption}
+  //         // onFocus={handleOption}
+  //         className="customs">
+  //         {data.label} <span className="caret" />
+  //         {submenu && (
+  //           <div className="dropdown-submenu">
+  //             <div
+  //               className="drops"
+  //               role="presentation"
+  //               onClick={() => setOrderByFlag({ sequence: 'desc' })}>
+  //               Highest to Lowest
+  //             </div>
+  //             <div
+  //               className="drops"
+  //               role="presentation"
+  //               onClick={() => setOrderByFlag({ sequence: 'asc' })}>
+  //               Lowest to highest
+  //             </div>
+  //           </div>
+  //         )}
+  //       </div>
+  //       <style jsx>{`
+  //         .customs {
+  //           height: 36px;
+  //           padding: 8px;
+  //           position: relative;
+  //         }
 
-          .customs:hover,
-          .drops:hover {
-            background-color: #17cf76;
-          }
+  //         .drops {
+  //           height: 36px;
+  //           padding: 8px;
+  //         }
 
-          .dropdown-submenu {
-            /* position: ; */
-            top: ${height - 10}px;
-            left: 410px;
-            min-height: 36px;
-            overflow: auto;
-            border: 1px solid hsl(0, 0%, 80%);
-            border-radius: 4px;
-            color: #212529;
-          }
-        `}</style>
-      </>
-    ) : (
-      <components.Option {...props} />
-    );
-  };
+  //         .customs:hover,
+  //         .drops:hover {
+  //           /* background-color: #17cf76; */
+  //         }
+
+  //         .dropdown-submenu {
+  //           /* position: ; */
+  //           top: ${height - 10}px;
+  //           left: 410px;
+  //           min-height: 36px;
+  //           overflow: auto;
+  //           border: 1px solid hsl(0, 0%, 80%);
+  //           border-radius: 4px;
+  //           color: #212529;
+  //         }
+  //       `}</style>
+  //     </>
+  //   ) : (
+  //     <components.Option {...props} />
+  //   );
+  // };
 
   const generateDropdown = (item, reff = null) => {
     const searchFor =
@@ -1310,11 +1329,7 @@ export default function NewCustomerList() {
           }
           value={bindDropDownValue(item)}
           isMulti={item === 'user'}
-          components={
-            searchFor === 'sort'
-              ? { Option: CustomOption }
-              : getSelectComponents(item)
-          }
+          components={getSelectComponents(item)}
           componentsValue={item === 'user' ? { Option: IconOption } : ''}
         />
       </>
@@ -2037,6 +2052,7 @@ export default function NewCustomerList() {
     <CustomerListPage>
       {' '}
       {renderCustomDateModal()}
+      {/* {getSubMenu()} */}
       <div className="customer-list-header-sticky">
         <div className="container-fluid">
           <div className="row">
