@@ -667,6 +667,7 @@ export default function BrandAssetUpload() {
                         </div>
                       </div>
                     </object>
+                    {/* FOR Objcet tag clickable */}
                     <div
                       className="clickable"
                       onClick={() =>
@@ -676,7 +677,8 @@ export default function BrandAssetUpload() {
                           documents: documentData,
                           index: i,
                         })
-                      } />
+                      }
+                    />
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
 
                     {brandAssetData &&
