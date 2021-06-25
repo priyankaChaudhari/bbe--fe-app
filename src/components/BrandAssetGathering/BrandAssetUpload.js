@@ -60,7 +60,6 @@ import axiosInstance from '../../axios';
 import { API_DOCUMENTS } from '../../constants/ApiConstants';
 import { deleteDocument, getDocuments } from '../../api';
 import {
-  downloadBrandAssetImages,
   getBrandAssetsDetail,
   getBrandAssetsSummary,
   updateBrandAssetStep,
@@ -214,9 +213,16 @@ export default function BrandAssetUpload() {
     setDroppedFiles([]);
     setIsLoading({ loader: true, type: 'page' });
     getDocuments(brandId, 'brandassets', docType).then((response) => {
-      const ids = [];
-      response && response.forEach((op) => ids.push(op.id));
-      setDownloadIds(ids);
+      if (
+        (selectedDropdown &&
+          selectedDropdown.dropdownValue &&
+          selectedDropdown.dropdownValue.event === 'current') ||
+        (selectedDropdown && selectedDropdown.dropdownValue === undefined)
+      ) {
+        const ids = [];
+        response && response.forEach((op) => ids.push(op.id));
+        setDownloadIds(ids);
+      }
       setDocumentData(response);
       setPreviewImageData(response);
       setIsLoading({ loader: false, type: 'page' });
@@ -240,11 +246,33 @@ export default function BrandAssetUpload() {
     });
   };
 
+  const handleDownloadOptions = (event) => {
+    setIsLoading({ loader: true, type: 'page' });
+    getDocuments(
+      brandId,
+      'brandassets',
+      event.value === 'all' ? '' : selectedStep.key,
+    ).then((response) => {
+      const ids = [];
+      response && response.forEach((op) => ids.push(op.id));
+      setDownloadIds(ids);
+      setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
+
   useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
     const docType =
       BrandSteps.find((op) => op.url === params.step) &&
       BrandSteps.find((op) => op.url === params.step).key;
+    if (
+      selectedDropdown &&
+      selectedDropdown.dropdownValue &&
+      selectedDropdown.dropdownValue === 'all'
+    ) {
+      handleDownloadOptions({ value: 'all', label: 'All asset types' });
+    }
     getDocumentList(docType);
     getAssetsSummary();
     getBrandAssetsDetail(brandId).then((response) => {
@@ -498,21 +526,6 @@ export default function BrandAssetUpload() {
     );
   };
 
-  const handleDownloadOptions = (event) => {
-    setIsLoading({ loader: true, type: 'page' });
-    getDocuments(
-      brandId,
-      'brandassets',
-      event.value === 'all' ? '' : selectedStep.key,
-    ).then((response) => {
-      const ids = [];
-      response && response.forEach((op) => ids.push(op.id));
-      setDownloadIds(ids);
-      setSelectedDropdown({ ...selectedDropdown, dropdownValue: event });
-      setIsLoading({ loader: false, type: 'page' });
-    });
-  };
-
   const handleDownloadIds = (event) => {
     const ids = [...downloadIds];
     if (event.target.checked) {
@@ -677,6 +690,7 @@ export default function BrandAssetUpload() {
       </ul>
     );
   };
+
   return (
     <>
       <ToastContainer
@@ -694,7 +708,9 @@ export default function BrandAssetUpload() {
                 <ul className="contract-download-nav ">
                   <li
                     className={
-                      showBtns.upload ? 'download-pdf disabled' : 'download-pdf'
+                      showBtns.upload || showBtns.download
+                        ? 'download-pdf disabled'
+                        : 'download-pdf'
                     }
                     role="presentation"
                     onClick={() =>
@@ -713,14 +729,14 @@ export default function BrandAssetUpload() {
                   </li>
                   <li
                     className={
-                      showBtns.download
+                      showBtns.upload || showBtns.download
                         ? 'download-pdf disabled'
                         : 'download-pdf'
                     }
                     role="presentation"
-                    onClick={() =>
-                      setShowBtns({ download: true, upload: false })
-                    }>
+                    onClick={() => {
+                      setShowBtns({ download: true, upload: false });
+                    }}>
                     <img
                       src={OrangeDownloadPdf}
                       alt="download"
@@ -1120,7 +1136,12 @@ export default function BrandAssetUpload() {
                                 setShowBtns({ download: false, upload: false });
                               }, 3000);
                             }}>
-                            <Button className="btn-primary">
+                            <Button
+                              className="btn-primary"
+                              disabled={
+                                isLoading.loader ||
+                                (downloadIds && downloadIds.length === 0)
+                              }>
                               {isLoading.loader &&
                               isLoading.type === 'button' ? (
                                 <PageLoader color="#fff" type="button" />
@@ -1154,7 +1175,13 @@ export default function BrandAssetUpload() {
                             showBtns.upload &&
                             brandAssetData &&
                             brandAssetData.is_completed
-                              ? setShowBtns({ download: false, upload: false })
+                              ? (setShowBtns({
+                                  download: false,
+                                  upload: false,
+                                }),
+                                getDocumentList(
+                                  selectedStep && selectedStep.key,
+                                ))
                               : redirectTo('completed', '', '')
                           }>
                           {isLoading.loader && isLoading.type === 'button' ? (
