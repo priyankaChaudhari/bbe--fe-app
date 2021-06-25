@@ -47,7 +47,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
 import { dateOptions } from '../../../constants/CompanyPerformanceConstants';
-import SalesPerformanceChart from './SalePerformanceGraph';
+import SalesPerformanceChart from './SalePerformanceChart';
 import Theme from '../../../theme/Theme';
 
 const _ = require('lodash');
@@ -1287,7 +1287,7 @@ export default function PerformanceReport({
 
   const rednerSaleGroupBy = () => {
     return (
-      <div className="row mt-4">
+      <div className="row mt-4 mb-3">
         {_.size(activeSales) <= 2 ? (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">

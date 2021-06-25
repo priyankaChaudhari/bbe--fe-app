@@ -63,6 +63,7 @@ export default function AdPerformanceChart({
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
+    valueAxis.extraMax = 0.005;
     valueAxis.numberFormatter.bigNumberPrefixes = [
       { number: 1e3, suffix: 'K' },
       { number: 1e6, suffix: 'M' },
@@ -259,6 +260,7 @@ export default function AdPerformanceChart({
             valueAxis2.cursorTooltipEnabled = false;
             valueAxis2.numberFormatter = new am4core.NumberFormatter();
             valueAxis2.numberFormatter.numberFormat = `#.#a`;
+            valueAxis2.extraMax = 0.005;
             valueAxis2.numberFormatter.bigNumberPrefixes = [
               { number: 1e3, suffix: 'K' },
               { number: 1e6, suffix: 'M' },
@@ -325,6 +327,7 @@ export default function AdPerformanceChart({
       valueAxis2.cursorTooltipEnabled = false;
       valueAxis2.numberFormatter = new am4core.NumberFormatter();
       valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      valueAxis2.extraMax = 0.005;
       valueAxis2.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -339,6 +342,7 @@ export default function AdPerformanceChart({
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
       valueAxis3.numberFormatter.numberFormat = `#.#a`;
+      valueAxis3.extraMax = 0.005;
       valueAxis3.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -352,6 +356,7 @@ export default function AdPerformanceChart({
       valueAxis4.cursorTooltipEnabled = false;
       valueAxis4.numberFormatter = new am4core.NumberFormatter();
       valueAxis4.numberFormatter.numberFormat = `#.#a`;
+      valueAxis4.extraMax = 0.005;
       valueAxis4.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
