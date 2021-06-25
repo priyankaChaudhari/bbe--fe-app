@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import FileViewer from 'react-file-viewer';
 import { HeaderDownloadFuntionality, PageLoader } from '../../common';
 import {
   CloseIcon,
@@ -125,6 +126,28 @@ function BrandAssetsPreview({
               </div>
             </div>
             <div className="assetPreviewImg">
+              <FileViewer
+                fileType={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.original_name &&
+                  showAssetPreview.selectedFile.original_name.lastIndexOf(
+                    '.',
+                  ) !== -1 &&
+                  showAssetPreview.selectedFile.original_name.slice(
+                    showAssetPreview.selectedFile.original_name.lastIndexOf(
+                      '.',
+                    ) + 1,
+                  )
+                }
+                filePath={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.presigned_url
+                }
+              />
+
+              {/*
               <img
                 className="image-thumbnail"
                 src={
@@ -143,6 +166,7 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile.original_name
                 }
               />
+              */}
             </div>
             <div
               className={

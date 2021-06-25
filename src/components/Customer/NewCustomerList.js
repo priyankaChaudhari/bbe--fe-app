@@ -1512,9 +1512,13 @@ export default function NewCustomerList() {
             />
 
             <div className="company-name">{item && item.company_name}</div>
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+            {item && item.status === 'at risk' ? (
+              <div className="status">AT Risk</div>
+            ) : (
+              <div className="status" style={{ textTransform: 'capitalize' }}>
+                {item && item.status}
+              </div>
+            )}
           </td>
           <td width="15%">
             $
@@ -1712,9 +1716,13 @@ export default function NewCustomerList() {
             />
 
             <div className="company-name">{item && item.company_name}</div>
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+            {item && item.status === 'at risk' ? (
+              <div className="status">AT Risk</div>
+            ) : (
+              <div className="status" style={{ textTransform: 'capitalize' }}>
+                {item && item.status}
+              </div>
+            )}
           </td>
           <td width="15%">
             {item &&
@@ -1851,9 +1859,13 @@ export default function NewCustomerList() {
             />
 
             <div className="company-name">{item && item.company_name}</div>
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+            {item && item.status === 'at risk' ? (
+              <div className="status">AT Risk</div>
+            ) : (
+              <div className="status" style={{ textTransform: 'capitalize' }}>
+                {item && item.status}
+              </div>
+            )}
           </td>
           <td width="15%">
             {item &&
@@ -1990,9 +2002,13 @@ export default function NewCustomerList() {
           />
 
           <div className="company-name">{item && item.company_name}</div>
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
+          {item && item.status === 'at risk' ? (
+            <div className="status">AT Risk</div>
+          ) : (
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          )}
         </td>
         <td width="60%">
           <ul

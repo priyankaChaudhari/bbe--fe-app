@@ -6,6 +6,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -658,7 +660,15 @@ export default function BrandAssetUpload() {
                       type={file && file.mime_type}
                       width="250"
                       height="200"
-                      role="presentation"
+                      role="presentation">
+                      <div className="unsupport-file-name">
+                        <div className="file-path">
+                          {file && file.original_name}
+                        </div>
+                      </div>
+                    </object>
+                    <div
+                      className="clickable"
                       onClick={() =>
                         setShowAssetPreview({
                           selectedFile: file,
@@ -666,14 +676,7 @@ export default function BrandAssetUpload() {
                           documents: documentData,
                           index: i,
                         })
-                      }>
-                      <div className="unsupport-file-name">
-                        <div className="file-path">
-                          {file && file.original_name}
-                        </div>
-                      </div>
-                    </object>
-
+                      } />
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
 
                     {brandAssetData &&
@@ -1590,6 +1593,14 @@ const CheckSelectImage = styled.div`
       vertical-align: text-top;
       margin-right: 6px;
     }
+  }
+
+  .clickable {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
   }
 
   @media only screen and (max-width: 767px) {
