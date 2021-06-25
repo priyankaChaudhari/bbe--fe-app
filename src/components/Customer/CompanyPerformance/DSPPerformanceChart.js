@@ -80,7 +80,7 @@ export default function DSPPerformanceChart({
     chart.current.cursor.behavior = 'none';
 
     function renderTooltip(name, color, value, currency, percent, formatter) {
-      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
+      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 260px;">
       <li style="display: inline-block;">
         {' '}
         <div style="background-color: ${color};
@@ -380,7 +380,6 @@ export default function DSPPerformanceChart({
       _.keys(selectedBox).map((item) => {
         const value = `${item}CurrentLabel`;
         // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
-
         if (
           item === 'dspSpend' ||
           item === 'dspTotalProductSales' ||
