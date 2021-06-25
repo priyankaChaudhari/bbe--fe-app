@@ -1527,7 +1527,9 @@ export default function AdPerformance({
               ) : null}
             </ul>
           </div>
-        ) : null}
+        ) : (
+          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
+        )}
         <div
           className={
             _.size(selectedAdBox) === 1

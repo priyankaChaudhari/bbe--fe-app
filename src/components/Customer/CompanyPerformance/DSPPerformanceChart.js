@@ -151,9 +151,13 @@ export default function DSPPerformanceChart({
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
-        tooltipValue = `${tooltipValue} ${_.startCase(
-          _.lowerCase(tooltipNames[item]),
-        )}`;
+        if (item === 'dspTtlNewBrandPurchases') {
+          tooltipValue = 'TTL New Brand Purchases';
+        } else {
+          tooltipValue = `${tooltipValue} ${_.startCase(
+            _.lowerCase(tooltipNames[item]),
+          )}`;
+        }
         if (
           item === 'dspSpend' ||
           item === 'dspTotalProductSales' ||
