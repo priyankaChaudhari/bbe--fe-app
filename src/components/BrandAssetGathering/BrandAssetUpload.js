@@ -468,7 +468,30 @@ export default function BrandAssetUpload() {
       last_visited_step: selectedStep && selectedStep.skip,
     }).then((response) => {
       if (response && response.status === 200) {
-        if (type !== 'lhs' && selectedStep && selectedStep.skip === 'summary') {
+        if (
+          type === 'brandmaterial' &&
+          params &&
+          params.step === 'additional-brand-material'
+        ) {
+          history.push({
+            pathname: history.location.pathname.includes(
+              '/assigned-brand-asset/',
+            )
+              ? PATH_UNAUTHORIZED_BRAND_ASSET.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                )
+              : PATH_BRAND_ASSET.replace(':id', id).replace(
+                  ':brandId',
+                  brandId,
+                ),
+            search: `step=additional-brand-material`,
+          });
+        } else if (
+          type !== 'lhs' &&
+          selectedStep &&
+          selectedStep.skip === 'summary'
+        ) {
           history.push(
             history.location.pathname.includes('/assigned-brand-asset/')
               ? PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY.replace(
@@ -652,16 +675,22 @@ export default function BrandAssetUpload() {
 
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
 
-                    <div
-                      className="remove-box"
-                      role="presentation"
-                      onClick={() => setShowDeleteMsg({ [file.id]: true })}>
-                      <img
-                        className="trash-icon"
-                        src={TrashIcons}
-                        alt="check"
-                      />
-                    </div>
+                    {brandAssetData &&
+                    brandAssetData.is_completed &&
+                    (showBtns.download || showBtns.upload) ? (
+                      ''
+                    ) : (
+                      <div
+                        className="remove-box"
+                        role="presentation"
+                        onClick={() => setShowDeleteMsg({ [file.id]: true })}>
+                        <img
+                          className="trash-icon"
+                          src={TrashIcons}
+                          alt="check"
+                        />
+                      </div>
+                    )}
 
                     {showDeleteMsg[file.id] ? (
                       <div
@@ -1030,7 +1059,8 @@ export default function BrandAssetUpload() {
                           defaultChecked={noImages}
                           onChange={(event) => {
                             if (brandAssetData && brandAssetData.is_completed) {
-                              if (event.target.checked) redirectTo('none');
+                              if (event.target.checked)
+                                redirectTo('none', '', 'brandmaterial');
                               if (
                                 !event.target.checked &&
                                 documentData &&
@@ -1127,7 +1157,9 @@ export default function BrandAssetUpload() {
                             }`}
                             target="_self"
                             onClick={() => {
-                              toast.success('Files will download shortly.');
+                              toast.success(
+                                'Files will download shortly, Do not close the browser.',
+                              );
                               setIsLoading({
                                 loader: true,
                                 type: 'button',
@@ -1137,6 +1169,9 @@ export default function BrandAssetUpload() {
                                   loader: false,
                                   type: 'button',
                                 });
+                                getDocumentList(
+                                  selectedStep && selectedStep.key,
+                                );
                                 setShowBtns({ download: false, upload: false });
                               }, 3000);
                             }}>
@@ -1279,6 +1314,7 @@ export default function BrandAssetUpload() {
                   'Yes'
                 )}
               </Button>
+
               <Button
                 onClick={() => {
                   setShowConfirmationModal(false);
