@@ -129,7 +129,7 @@ export default function DSPPerformanceChart({
       } else if (item === 'dspTotalRoas') {
         format = `#.#a`;
       } else {
-        format = `#.#`;
+        format = `#.#a`;
       }
       // console.log('format', format);
       return format;

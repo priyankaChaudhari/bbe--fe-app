@@ -29,7 +29,7 @@ import {
 import { getAdPerformance, getDSPPerformance } from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
-import { dspResData } from './DummyApiRes';
+// import { dspResData } from './DummyApiRes';
 import Theme from '../../../theme/Theme';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -297,7 +297,6 @@ export default function AdPerformance({
 
   const bindDSPResponseData = (response) => {
     const tempData = [];
-
     // // filterout previous data in one temporary object.
     // if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
     //   response.dsp_spend.previous.forEach((item) => {
@@ -638,8 +637,8 @@ export default function AdPerformance({
         }
         if (res && res.status === 200) {
           if (res.data && res.data.dsp_spend) {
-            // const dspGraphData = bindDSPResponseData(res.data);
-            const dspGraphData = bindDSPResponseData(dspResData);
+            const dspGraphData = bindDSPResponseData(res.data);
+            // const dspGraphData = bindDSPResponseData(dspResData);
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
@@ -1647,13 +1646,13 @@ export default function AdPerformance({
             <div className="chart-name">Impressions </div>
             <div className="number-rate">
               {dspCurrentTotal && dspCurrentTotal.impressions
-                ? `${addThousandComma(dspCurrentTotal.impressions)}`
-                : `0.00`}
+                ? `${addThousandComma(dspCurrentTotal.impressions, 0)}`
+                : `0`}
             </div>
             <div className="vs">
               {dspPreviousTotal && dspPreviousTotal.impressions
-                ? `vs ${addThousandComma(dspPreviousTotal.impressions)}`
-                : `vs 0.00`}
+                ? `vs ${addThousandComma(dspPreviousTotal.impressions, 0)}`
+                : `vs 0`}
             </div>
             {dspDifference && dspDifference.impressions ? (
               dspDifference.impressions >= 0 ? (
@@ -1791,13 +1790,13 @@ export default function AdPerformance({
             <div className="chart-name">Total ROAS </div>
             <div className="number-rate">
               {dspCurrentTotal && dspCurrentTotal.total_roas
-                ? addThousandComma(dspCurrentTotal.total_roas, 0)
-                : `0`}
+                ? addThousandComma(dspCurrentTotal.total_roas)
+                : `0.00`}
             </div>
             <div className="vs">
               {dspPreviousTotal && dspPreviousTotal.total_roas
-                ? `vs ${addThousandComma(dspPreviousTotal.total_roas, 0)}`
-                : `vs 0`}
+                ? `vs ${addThousandComma(dspPreviousTotal.total_roas)}`
+                : `vs 0.00`}
             </div>
             {dspDifference && dspDifference.total_roas ? (
               dspDifference.total_roas >= 0 ? (
@@ -2049,7 +2048,9 @@ export default function AdPerformance({
                 ) : null}
               </ul>
             </div>
-          ) : null}
+          ) : (
+            <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
+          )}
           {/* <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
               <li>
