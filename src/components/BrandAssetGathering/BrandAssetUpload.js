@@ -6,8 +6,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -667,7 +665,7 @@ export default function BrandAssetUpload() {
                         </div>
                       </div>
                     </object>
-                    {/* FOR Objcet tag clickable */}
+                    {/* FOR Object tag clickable */}
                     <div
                       className="clickable"
                       onClick={() =>
@@ -678,6 +676,7 @@ export default function BrandAssetUpload() {
                           index: i,
                         })
                       }
+                      role="presentation"
                     />
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
 
