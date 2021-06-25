@@ -703,7 +703,10 @@ export default function BrandAssetUpload() {
           <div className="container-fluid">
             <div className="row">
               {' '}
-              <div className="col-md-6 col-sm-12"> Brand Assets</div>
+              <div className="col-md-6 col-sm-12">
+                {' '}
+                <div className="header-title"> Brand Assets</div>
+              </div>
               <div className="col-md-6 col-sm-12">
                 <ul className="contract-download-nav ">
                   <li

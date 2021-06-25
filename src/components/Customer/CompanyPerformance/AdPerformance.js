@@ -1532,7 +1532,7 @@ export default function AdPerformance({
           className={
             _.size(selectedAdBox) === 1
               ? ' col-md-6 col-sm-12 order-md-2 order-1'
-              : 'col-md-12 col-sm-12 order-md-2 order-1'
+              : 'col-md-6 col-sm-12 order-md-2 order-1'
           }>
           {' '}
           <div className="days-container ">

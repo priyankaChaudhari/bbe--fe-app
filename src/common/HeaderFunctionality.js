@@ -12,6 +12,12 @@ const HeaderDownloadFuntionality = styled.div`
   font-size: ${Theme.normal};
   z-index: 999;
   top: 0px;
+  .header-title {
+    font-family: ${Theme.titleFontFamily};
+    font-size: 13px;
+    letter-spacing: 1.21px;
+    text-transform: uppercase;
+  }
 
   .contract-download-nav {
     list-style-type: none;
