@@ -232,7 +232,7 @@ export const WhiteCard = styled.div`
     .green-arrow {
       width: 14px;
       vertical-align: middle;
-      margin-left: -2px;
+      margin-left: 3px;
       margin-right: 3px;
       vertical-align: bottom;
      }

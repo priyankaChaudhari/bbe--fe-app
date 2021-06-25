@@ -235,7 +235,7 @@ export default function CustomerListTablet({
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
-    let value = actualValue;
+    let value = 'actualValue';
     if (value) {
       if (matrics === 'ACOS') {
         if (value.toString().includes('-')) {
@@ -275,7 +275,7 @@ export default function CustomerListTablet({
       }
       return (
         <>
-          <div className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
+          <span className={grayArrow ? 'increase-rate grey' : 'increase-rate'}>
             <img
               className="green-arrow"
               src={grayArrow ? UpDowGrayArrow : ArrowUpIcon}
@@ -283,7 +283,7 @@ export default function CustomerListTablet({
               alt="arrow-up"
             />
             {value}
-          </div>
+          </span>
         </>
       );
     }

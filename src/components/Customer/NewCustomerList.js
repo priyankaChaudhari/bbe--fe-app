@@ -2835,7 +2835,7 @@ const CustomerListPage = styled.div`
       font-size: ${Theme.normal};
       float: right;
       top: -7px;
-      right: 40px;
+      right: 15px;
       position: absolute;
       margin-top: -94px;
       font-weight: 600;
