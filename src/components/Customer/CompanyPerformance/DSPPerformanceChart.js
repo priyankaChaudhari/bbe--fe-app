@@ -119,7 +119,9 @@ export default function DSPPerformanceChart({
       if (
         item === 'dspSpend' ||
         item === 'dspTotalProductSales' ||
-        item === 'dspProductSales'
+        item === 'dspProductSales' ||
+        item === 'dspTotalRoas' ||
+        item === 'dspRoas'
       ) {
         format = `${currencySymbol}#.#a`;
       } else if (
@@ -127,8 +129,6 @@ export default function DSPPerformanceChart({
         item === 'dspTotalDpvr'
       ) {
         format = `#.#'%'`;
-      } else if (item === 'dspTotalRoas') {
-        format = `#.#a`;
       } else {
         format = `#.#a`;
       }
@@ -161,7 +161,9 @@ export default function DSPPerformanceChart({
         if (
           item === 'dspSpend' ||
           item === 'dspTotalProductSales' ||
-          item === 'dspProductSales'
+          item === 'dspProductSales' ||
+          item === 'dspTotalRoas' ||
+          item === 'dspRoas'
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
@@ -222,26 +224,27 @@ export default function DSPPerformanceChart({
               '#.#a',
             )}`;
           }
-        } else {
-          tooltipValue = `${tooltipValue} ${renderTooltip(
-            'Recent',
-            colorCode,
-            currentLabel,
-            null,
-            null,
-            null,
-          )}`;
-          if (selectedDF !== 'custom') {
-            tooltipValue = `${tooltipValue} ${renderTooltip(
-              'Previous',
-              colorCode,
-              previousLabel,
-              null,
-              null,
-              null,
-            )}`;
-          }
         }
+        // else {
+        //   tooltipValue = `${tooltipValue} ${renderTooltip(
+        //     'Recent',
+        //     colorCode,
+        //     currentLabel,
+        //     null,
+        //     null,
+        //     null,
+        //   )}`;
+        //   if (selectedDF !== 'custom') {
+        //     tooltipValue = `${tooltipValue} ${renderTooltip(
+        //       'Previous',
+        //       colorCode,
+        //       previousLabel,
+        //       null,
+        //       null,
+        //       null,
+        //     )}`;
+        //   }
+        // }
         return '';
       });
 

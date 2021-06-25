@@ -297,89 +297,6 @@ export default function AdPerformance({
 
   const bindDSPResponseData = (response) => {
     const tempData = [];
-    // // filterout previous data in one temporary object.
-    // if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
-    //   response.dsp_spend.previous.forEach((item) => {
-    //     const previousDate = dayjs(item.report_date).format('MMM D YYYY');
-    //     tempData.push({
-    //       DspPrevious: item.daily_dsp_spend_report,
-    //       previousDate,
-
-    //       DspPreviousLabel:
-    //         item.daily_dsp_spend_report !== null
-    //           ? item.daily_dsp_spend_report.toFixed(2)
-    //           : '0.00',
-    //     });
-    //   });
-    // }
-
-    // // filterout current data in one temporary object.
-    // if (response.dsp_spend.current && response.dsp_spend.current.length) {
-    //   response.dsp_spend.current.forEach((item, index) => {
-    //     const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-    //     // add the current data at same index of prevoius in temporary object
-    //     if (
-    //       response.dsp_spend.previous &&
-    //       index < response.dsp_spend.previous.length
-    //     ) {
-    //       tempData[index].date = currentReportDate;
-    //       tempData[index].DspCurrent = item.daily_dsp_spend_report;
-
-    //       tempData[index].DspCurrentLabel =
-    //         item.daily_dsp_spend_report !== null
-    //           ? item.daily_dsp_spend_report.toFixed(2)
-    //           : '0.00';
-
-    //       // to add the dotted line. we have to check null matrix and add the dummy number like 8
-    //       if (index > 0) {
-    //         tempData[index - 1].DspdashLength =
-    //           item.daily_dsp_spend_report === null ? 8 : null;
-    //       } else {
-    //         tempData[index].DspdashLength =
-    //           item.daily_dsp_spend_report === null ? 8 : null;
-    //       }
-    //     } else {
-    //       // if current data count is larger than previous count then
-    //       // generate separate key for current data and defien previou value null and previous label 0
-    //       tempData.push({
-    //         DspCurrent: item.daily_dsp_spend_report,
-    //         date: currentReportDate,
-    //         DspPrevious: null,
-
-    //         DspCurrentLabel:
-    //           item.daily_dsp_spend_report !== null
-    //             ? item.daily_dsp_spend_report.toFixed(2)
-    //             : '0.00',
-    //         DspPreviousLabel: '0.00',
-    //       });
-    //     }
-    //   });
-    // }
-    // // filterout the dsp current total, previous total, and diffrence
-    // if (response.dsp_spend) {
-    //   let dspTempData = {};
-    //   const dspCurrent =
-    //     response.dsp_spend &&
-    //     response.dsp_spend.current_sum &&
-    //     response.dsp_spend.current_sum.daily_dsp_spend_report;
-    //   const dspPrevious =
-    //     response.dsp_spend &&
-    //     response.dsp_spend.previous_sum &&
-    //     response.dsp_spend.previous_sum.daily_dsp_spend_report;
-    //   const dspDifference =
-    //     response.dsp_spend &&
-    //     response.dsp_spend.difference_data &&
-    //     response.dsp_spend.difference_data.daily_dsp_spend_report;
-
-    //   dspTempData = {
-    //     currentDspTodal: dspCurrent !== null ? dspCurrent : '0.00',
-    //     previousDspTodal: dspPrevious !== null ? dspPrevious : '0.00',
-    //     dspDifference,
-    //   };
-    //   setDSPTotal(dspTempData);
-    // } else {
-    //   setDSPTotal({});
-    // }
 
     // filterout previous data in one temporary object.
     if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
@@ -1792,13 +1709,17 @@ export default function AdPerformance({
             <div className="chart-name">Total ROAS </div>
             <div className="number-rate">
               {dspCurrentTotal && dspCurrentTotal.total_roas
-                ? addThousandComma(dspCurrentTotal.total_roas)
-                : `0.00`}
+                ? `${currencySign}${addThousandComma(
+                    dspCurrentTotal.total_roas,
+                  )}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {dspPreviousTotal && dspPreviousTotal.total_roas
-                ? `vs ${addThousandComma(dspPreviousTotal.total_roas)}`
-                : `vs 0.00`}
+                ? `vs ${currencySign}${addThousandComma(
+                    dspPreviousTotal.total_roas,
+                  )}`
+                : `vs ${currencySign}0.00`}
             </div>
             {dspDifference && dspDifference.total_roas ? (
               dspDifference.total_roas >= 0 ? (
@@ -1978,13 +1899,13 @@ export default function AdPerformance({
             <div className="chart-name">ROAS </div>
             <div className="number-rate">
               {dspCurrentTotal && dspCurrentTotal.roas
-                ? `${addThousandComma(dspCurrentTotal.roas)}`
-                : `0.00`}
+                ? `${currencySign}${addThousandComma(dspCurrentTotal.roas)}`
+                : `${currencySign}0.00`}
             </div>
             <div className="vs">
               {dspPreviousTotal && dspPreviousTotal.roas
-                ? `vs ${addThousandComma(dspPreviousTotal.roas)}`
-                : `vs 0.00`}
+                ? `vs ${currencySign}${addThousandComma(dspPreviousTotal.roas)}`
+                : `vs ${currencySign}0.00`}
             </div>
             {dspDifference && dspDifference.roas ? (
               dspDifference.roas >= 0 ? (
