@@ -473,6 +473,7 @@ export default function BrandAssetUpload() {
           params &&
           params.step === 'additional-brand-material'
         ) {
+          setShowBtns({ upload: false, download: false });
           history.push({
             pathname: history.location.pathname.includes(
               '/assigned-brand-asset/',
