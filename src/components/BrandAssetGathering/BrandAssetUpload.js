@@ -1124,6 +1124,7 @@ export default function BrandAssetUpload() {
                             }`}
                             target="_self"
                             onClick={() => {
+                              toast.success('Files will download shortly.');
                               setIsLoading({
                                 loader: true,
                                 type: 'button',
