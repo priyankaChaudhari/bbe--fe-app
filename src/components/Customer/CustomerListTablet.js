@@ -307,9 +307,13 @@ export default function CustomerListTablet({
           />
 
           <div className="company-name">{item && item.company_name}</div>
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
+          {item && item.status === 'at risk' ? (
+            <div className="status">AT Risk</div>
+          ) : (
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
 
@@ -499,9 +503,13 @@ export default function CustomerListTablet({
           />
 
           <div className="company-name">{item && item.company_name}</div>
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
+          {item && item.status === 'at risk' ? (
+            <div className="status">AT Risk</div>
+          ) : (
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
 
@@ -636,105 +644,111 @@ export default function CustomerListTablet({
           />
 
           <div className="company-name">{item && item.company_name}</div>
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
+          {item && item.status === 'at risk' ? (
+            <div className="status">AT Risk</div>
+          ) : (
+            <div className="status" style={{ textTransform: 'capitalize' }}>
+              {item && item.status}
+            </div>
+          )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
 
           <div className="row">
             <div className="col-6 pb-2">
-              <div className="label">Ad Sales</div>
+              <div className="label">IMPRESSIONS</div>
               <div className="label-info ">
-                <>
-                  {item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.ad_sales
-                    ? `$${item.dsp_ad_performance.current_sum.ad_sales
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
-                  {renderAdPerformanceDifference(
-                    item &&
-                      item.dsp_ad_performance &&
-                      item.dsp_ad_performance.difference_data &&
-                      item.dsp_ad_performance.difference_data.ad_sales,
-                    false,
-                    'AdSales',
-                  )}
-                </>
-              </div>
-            </div>
-            <div className="col-6 pb-2">
-              <div className="label">Ad Spend</div>
-              <div className="label-info ">
-                <>
-                  {item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.ad_spend
-                    ? `$${item.dsp_ad_performance.current_sum.ad_spend
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
-                  {renderAdPerformanceDifference(
-                    item &&
-                      item.dsp_ad_performance &&
-                      item.dsp_ad_performance.difference_data &&
-                      item.dsp_ad_performance.difference_data.ad_spend,
-                    true,
-                    'AdSpend',
-                  )}
-                </>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-6">
-              <div className="label">Ad Impressions</div>
-              <div className="label-info">
                 <>
                   {item &&
                   item.dsp_ad_performance &&
                   item.dsp_ad_performance.current_sum &&
                   item.dsp_ad_performance.current_sum.impressions
-                    ? item.dsp_ad_performance.current_sum.impressions
+                    ? `${item.dsp_ad_performance.current_sum.impressions
+                        .toFixed(2)
                         .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0}
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '0'}
                   {renderAdPerformanceDifference(
                     item &&
                       item.dsp_ad_performance &&
                       item.dsp_ad_performance.difference_data &&
                       item.dsp_ad_performance.difference_data.impressions,
                     false,
-                    'AdImpressions',
+                    'impressions',
+                  )}
+                </>
+              </div>
+            </div>
+            <div className="col-6 pb-2">
+              <div className="label">DSP Spend</div>
+              <div className="label-info ">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.dsp_spend
+                    ? `$${item.dsp_ad_performance.current_sum.dsp_spend
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data.dsp_spend,
+                    true,
+                    'DspSpend',
+                  )}
+                </>
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-6">
+              <div className="label">Total Product Sales</div>
+              <div className="label-info">
+                <>
+                  {item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.total_product_sales
+                    ? `$${item.dsp_ad_performance.current_sum.total_product_sales
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.difference_data &&
+                      item.dsp_ad_performance.difference_data
+                        .total_product_sales,
+                    false,
+                    'totalProductSales',
                   )}
                 </>
               </div>
             </div>
 
             <div className="col-6">
-              <div className="label">Acos</div>
+              <div className="label">ROAS</div>
               <div className="label-info">
                 <>
                   {item &&
                   item.dsp_ad_performance &&
                   item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.acos
-                    ? `${item.dsp_ad_performance.current_sum.acos.toFixed(2)}%`
-                    : '0%'}
+                  item.dsp_ad_performance.current_sum.total_roas
+                    ? item.dsp_ad_performance.current_sum.total_roas.toFixed(2)
+                    : '0'}
                   {renderAdPerformanceDifference(
                     item &&
                       item.dsp_ad_performance &&
                       item.dsp_ad_performance.difference_data &&
-                      item.dsp_ad_performance.difference_data.acos,
+                      item.dsp_ad_performance.difference_data.total_roas,
                     false,
-                    'ACOS',
+                    'totalRoas',
                   )}
                 </>
               </div>
@@ -772,9 +786,13 @@ export default function CustomerListTablet({
         />
 
         <div className="company-name">{item && item.company_name}</div>
-        <div className="status" style={{ textTransform: 'capitalize' }}>
-          {item && item.status}
-        </div>
+        {item && item.status === 'at risk' ? (
+          <div className="status">AT Risk</div>
+        ) : (
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {item && item.status}
+          </div>
+        )}
         <div className="clear-fix" />
         <div className=" straight-line horizontal-line pt-3 mb-3 " />
 

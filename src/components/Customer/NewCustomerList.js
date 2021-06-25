@@ -1872,11 +1872,11 @@ export default function NewCustomerList() {
             item.dsp_ad_performance &&
             item.dsp_ad_performance.current_sum &&
             item.dsp_ad_performance.current_sum.impressions
-              ? `$${item.dsp_ad_performance.current_sum.impressions
+              ? `${item.dsp_ad_performance.current_sum.impressions
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : '$0'}
+              : '0'}
             {renderAdPerformanceDifference(
               item &&
                 item.dsp_ad_performance &&
@@ -1915,10 +1915,11 @@ export default function NewCustomerList() {
               item.dsp_ad_performance &&
               item.dsp_ad_performance.current_sum &&
               item.dsp_ad_performance.current_sum.total_product_sales
-                ? item.dsp_ad_performance.current_sum.total_product_sales
+                ? `$${item.dsp_ad_performance.current_sum.total_product_sales
+                    .toFixed(2)
                     .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : 0}
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
               {renderAdPerformanceDifference(
                 item &&
                   item.dsp_ad_performance &&
@@ -1936,10 +1937,8 @@ export default function NewCustomerList() {
               item.dsp_ad_performance &&
               item.dsp_ad_performance.current_sum &&
               item.dsp_ad_performance.current_sum.total_roas
-                ? `${item.dsp_ad_performance.current_sum.total_roas.toFixed(
-                    2,
-                  )}%`
-                : '0%'}
+                ? item.dsp_ad_performance.current_sum.total_roas.toFixed(2)
+                : '0'}
               {renderAdPerformanceDifference(
                 item &&
                   item.dsp_ad_performance &&
