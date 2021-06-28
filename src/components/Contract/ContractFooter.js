@@ -156,7 +156,8 @@ export default function ContractFooter({
       <Footer>
         <div className="container-fluid">
           {checkApprovalCondition() ? (
-            userInfo && userInfo.role === 'Team Manager - TAM' ? (
+            (userInfo && userInfo.role === 'Team Manager - TAM') ||
+            (userInfo && userInfo.role === 'Sales Manager') ? (
               showRightTick('service_agreement') &&
               showRightTick('statement') &&
               showRightTick('dspAddendum') ? (

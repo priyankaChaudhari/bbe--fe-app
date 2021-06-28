@@ -106,9 +106,11 @@ export async function getContactRoles() {
 }
 
 export async function getManagersList(type, hybridSelectedDashboard) {
-  const api = type === 'Growth Strategist' ? API_BGS : API_ADM;
+  const api =
+    type === 'Growth Strategist' || type === 'BGS' ? API_BGS : API_ADM;
+
   let params = {};
-  if (type === 'Sponsored Advertising Ad Manager') {
+  if (type === 'Sponsored Advertising Ad Manager' || type === 'Ad Manager') {
     params = { dashboard: 'sponsored_ad_dashboard' };
   }
   if (type === 'DSP Ad Manager') {

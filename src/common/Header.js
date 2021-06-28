@@ -41,6 +41,8 @@ import {
   PATH_BGS_DASHBOARD,
   PATH_CUSTOMER_LIST,
   PATH_ADM_DASHBOARD,
+  PATH_DSP_DASHBOARD,
+  PATH_HYBRID_DASHBOARD,
 } from '../constants';
 
 export default function Header({ type, userInfo }) {
@@ -471,9 +473,10 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
-                {userInfo &&
-                userInfo.role &&
-                userInfo.role.includes('Growth Strategist') ? (
+                {(userInfo &&
+                  userInfo.role &&
+                  userInfo.role.includes('Growth Strategist')) ||
+                (userInfo && userInfo.role && userInfo.role.includes('BGS')) ? (
                   <li
                     className={
                       history.location.pathname &&
@@ -504,9 +507,14 @@ export default function Header({ type, userInfo }) {
                 ) : (
                   ''
                 )}
-                {userInfo &&
-                userInfo.role &&
-                userInfo.role.includes('Ad Manager') ? (
+                {(userInfo &&
+                  userInfo.role &&
+                  userInfo.role === 'Ad Manager') ||
+                (userInfo &&
+                  userInfo.role &&
+                  userInfo.role.includes(
+                    'Sponsored Advertising Ad Manager',
+                  )) ? (
                   <li
                     className={
                       history.location.pathname &&
@@ -519,6 +527,73 @@ export default function Header({ type, userInfo }) {
                     {' '}
                     {history.location.pathname &&
                     history.location.pathname.includes('adm-dashboard') ? (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon active"
+                        src={SpeedometerActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon  disactive"
+                        src={Speedometer}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : (
+                  ''
+                )}
+
+                {userInfo &&
+                userInfo.role &&
+                userInfo.role.includes('DSP Ad Manager') ? (
+                  <li
+                    className={
+                      history.location.pathname &&
+                      history.location.pathname.includes('dsp-dashboard')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_DSP_DASHBOARD)}>
+                    {' '}
+                    {history.location.pathname &&
+                    history.location.pathname.includes('dsp-dashboard') ? (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon active"
+                        src={SpeedometerActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon  disactive"
+                        src={Speedometer}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : (
+                  ''
+                )}
+                {userInfo &&
+                userInfo.role &&
+                userInfo.role.includes('Hybrid Ad Manager') ? (
+                  <li
+                    className={
+                      history.location.pathname &&
+                      history.location.pathname.includes('hybrid-dashboard')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_HYBRID_DASHBOARD)}>
+                    {' '}
+                    {history.location.pathname &&
+                    history.location.pathname.includes('hybrid-dashboard') ? (
                       <img
                         width="32px"
                         className=" speed0meter-icon active"

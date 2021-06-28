@@ -142,12 +142,14 @@ export default function AuthenticationComponent() {
             ''
           )}
           {/* Brand Partner */}
-          {userInfo && userInfo.role === 'Growth Strategist' ? (
+          {(userInfo && userInfo.role === 'Growth Strategist') ||
+          (userInfo && userInfo.role === 'BGS') ? (
             <Route path={PATH_BGS_DASHBOARD} component={DashboardContainer} />
           ) : (
             ''
           )}
-          {userInfo && userInfo.role === 'Sponsored Advertising Ad Manager' ? (
+          {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
+          (userInfo && userInfo.role === 'Ad Manager') ? (
             <Route path={PATH_ADM_DASHBOARD} component={DashboardContainer} />
           ) : (
             ''

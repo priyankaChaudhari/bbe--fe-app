@@ -322,7 +322,10 @@ function DashboardContainer() {
 
   const setMaxDate = () => {
     const d = currentDate;
-    if (userInfo && userInfo.role === 'Growth Strategist') {
+    if (
+      (userInfo && userInfo.role === 'Growth Strategist') ||
+      (userInfo && userInfo.role === 'BGS')
+    ) {
       d.setDate(d.getDate() - 4);
     } else {
       d.setDate(d.getDate() - 3);
@@ -406,12 +409,14 @@ function DashboardContainer() {
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
-                  {userInfo && userInfo.role === 'Growth Strategist'
+                  {(userInfo && userInfo.role === 'Growth Strategist') ||
+                  (userInfo && userInfo.role === 'BGS')
                     ? 'BGS Dashboard'
                     : userInfo && userInfo.role === 'DSP Ad Manager'
                     ? 'Dsp Dashboard'
-                    : userInfo &&
-                      userInfo.role === 'Sponsored Advertising Ad Manager'
+                    : (userInfo &&
+                        userInfo.role === 'Sponsored Advertising Ad Manager') ||
+                      (userInfo && userInfo.role === 'Ad Manager')
                     ? 'Ad Manager Dashboard'
                     : userInfo &&
                       userInfo.role === 'Hybrid Ad Manager' &&
@@ -491,12 +496,14 @@ function DashboardContainer() {
   return (
     <BrandPartnerDashboard>
       {displayHeader()}
-      {userInfo && userInfo.role === 'Growth Strategist' ? (
+      {(userInfo && userInfo.role === 'Growth Strategist') ||
+      (userInfo && userInfo.role === 'BGS') ? (
         <Dashboard isLoading={isLoading} data={data} />
       ) : (
         ''
       )}
-      {userInfo && userInfo.role === 'Sponsored Advertising Ad Manager' ? (
+      {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
+      (userInfo && userInfo.role === 'Ad Manager') ? (
         <AdManagerDashboard isLoading={isLoading} data={data} />
       ) : (
         ''

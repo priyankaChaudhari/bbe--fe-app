@@ -171,15 +171,17 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
       }
     } else {
       if (
-        data.user &&
-        data.user.role &&
-        data.user.role.includes('Growth Strategist')
+        (data.user &&
+          data.user.role &&
+          data.user.role.includes('Growth Strategist')) ||
+        (data.user && data.user.role && data.user.role.includes('BGS'))
       ) {
         history.push(PATH_BGS_DASHBOARD);
       } else if (
-        data.user &&
-        data.user.role &&
-        data.user.role.includes('Sponsored Advertising Ad Manager')
+        (data.user &&
+          data.user.role &&
+          data.user.role === 'Sponsored Advertising Ad Manager') ||
+        (data.user && data.user.role && data.user.role === 'Ad Manager')
       ) {
         history.push(PATH_ADM_DASHBOARD);
       } else if (

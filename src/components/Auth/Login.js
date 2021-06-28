@@ -118,9 +118,12 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      if (role.includes('Growth Strategist')) {
+      if (role.includes('Growth Strategist') || role.includes('BGS')) {
         history.push(PATH_BGS_DASHBOARD);
-      } else if (role.includes('Sponsored Advertising Ad Manager')) {
+      } else if (
+        role === 'Sponsored Advertising Ad Manager' ||
+        role === 'Ad Manager'
+      ) {
         history.push(PATH_ADM_DASHBOARD);
       } else if (role.includes('DSP Ad Manager')) {
         history.push(PATH_DSP_DASHBOARD);

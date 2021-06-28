@@ -29,9 +29,10 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Growth Strategist') ? (
+          {(userInfo &&
+            userInfo.role &&
+            userInfo.role.includes('Growth Strategist')) ||
+          (userInfo && userInfo.role && userInfo.role.includes('BGS')) ? (
             <li
               className={
                 history.location.pathname &&
@@ -58,9 +59,10 @@ export default function LeftSideBar({ userInfo }) {
           ) : (
             ''
           )}
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
+          {(userInfo &&
+            userInfo.role &&
+            userInfo.role.includes('Sponsored Advertising Ad Manager')) ||
+          (userInfo && userInfo.role && userInfo.role === 'Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
