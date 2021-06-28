@@ -410,9 +410,18 @@ function DashboardContainer() {
                     ? 'BGS Dashboard'
                     : userInfo && userInfo.role === 'DSP Ad Manager'
                     ? 'Dsp Dashboard'
-                    : userInfo && userInfo.role === 'Hybrid Ad Manager'
-                    ? 'Dashboard'
-                    : 'Ad Manager Dashboard'}
+                    : userInfo &&
+                      userInfo.role === 'Sponsored Advertising Ad Manager'
+                    ? 'Ad Manager Dashboard'
+                    : userInfo &&
+                      userInfo.role === 'Hybrid Ad Manager' &&
+                      hybridView === 'sponsored_ad_dashboard'
+                    ? 'Ad Manager Dashboard'
+                    : userInfo &&
+                      userInfo.role === 'Hybrid Ad Manager' &&
+                      hybridView === 'dsp_ad_performance'
+                    ? 'Dsp Dashboard'
+                    : 'Dashboard'}
                 </p>
               </div>
               <div className="straight-line horizontal-line spacing d-lg-none d-md-block" />
