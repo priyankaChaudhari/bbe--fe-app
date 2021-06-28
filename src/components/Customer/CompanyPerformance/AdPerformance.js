@@ -2109,7 +2109,7 @@ export default function AdPerformance({
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
-        {adChartData.length > 1 ? (
+        {adChartData.length >= 1 ? (
           <AdPerformanceChart
             chartId="adChart"
             chartData={adChartData}
@@ -2133,7 +2133,7 @@ export default function AdPerformance({
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
         {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
-        {dspChartData.length > 1 ? (
+        {dspChartData.length >= 1 ? (
           <DSPPerformanceChart
             chartId="dspChart"
             chartData={dspChartData}
