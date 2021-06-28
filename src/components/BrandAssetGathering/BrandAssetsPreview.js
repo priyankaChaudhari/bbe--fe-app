@@ -126,52 +126,24 @@ function BrandAssetsPreview({
               </div>
             </div>
             <div className="assetPreviewImg">
-              {showAssetPreview &&
-              showAssetPreview.selectedFile &&
-              showAssetPreview.selectedFile.mime_type.includes('image') ? (
-                <img
-                  className="image-thumbnail"
-                  src={
-                    showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.presigned_url
-                  }
-                  type={
-                    showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type
-                  }
-                  alt={
-                    showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.original_name
-                  }
-                />
-              ) : (
-                <object
-                  className="image-thumbnail"
-                  data={
-                    showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.presigned_url
-                  }
-                  type={
-                    showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type
-                  }
-                  width="250"
-                  height="200"
-                  role="presentation">
-                  <div className="unsupport-file-name">
-                    <div className="file-path">
-                      {showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.original_name}
-                    </div>
-                  </div>
-                </object>
-              )}
+              <img
+                className="image-thumbnail"
+                src={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.presigned_url
+                }
+                type={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.mime_type
+                }
+                alt={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.original_name
+                }
+              />
             </div>
             <div
               className={
