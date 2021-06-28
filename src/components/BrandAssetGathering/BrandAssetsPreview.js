@@ -126,47 +126,52 @@ function BrandAssetsPreview({
               </div>
             </div>
             <div className="assetPreviewImg">
-              {/*  
-            <FileViewer
-                fileType={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.original_name &&
-                  showAssetPreview.selectedFile.original_name.lastIndexOf(
-                    '.',
-                  ) !== -1 &&
-                  showAssetPreview.selectedFile.original_name.slice(
-                    showAssetPreview.selectedFile.original_name.lastIndexOf(
-                      '.',
-                    ) + 1,
-                  )
-                }
-                filePath={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.presigned_url
-                }
-              />
-              */}
-
-              <img
-                className="image-thumbnail"
-                src={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.presigned_url
-                }
-                type={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.mime_type
-                }
-                alt={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.original_name
-                }
-              />
+              {showAssetPreview &&
+              showAssetPreview.selectedFile &&
+              showAssetPreview.selectedFile.mime_type.includes('image') ? (
+                <img
+                  className="image-thumbnail"
+                  src={
+                    showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.presigned_url
+                  }
+                  type={
+                    showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.mime_type
+                  }
+                  alt={
+                    showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.original_name
+                  }
+                />
+              ) : (
+                <object
+                  className="image-thumbnail"
+                  data={
+                    showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.presigned_url
+                  }
+                  type={
+                    showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.mime_type
+                  }
+                  width="250"
+                  height="200"
+                  role="presentation">
+                  <div className="unsupport-file-name">
+                    <div className="file-path">
+                      {showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.original_name}
+                    </div>
+                  </div>
+                </object>
+              )}
             </div>
             <div
               className={
