@@ -7,7 +7,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -141,6 +141,13 @@ export default function BrandAssetUpload() {
     'additional-brand-material': 'any',
   };
   const selectedFiles = [];
+  const ref = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDeleteMsg(false);
+    }
+  };
 
   const DropdownIndicator = (props) => {
     return (
@@ -269,6 +276,13 @@ export default function BrandAssetUpload() {
   };
 
   useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
+  useEffect(() => {
     setSelectedStep(BrandSteps.find((op) => op.url === params.step));
     const docType =
       BrandSteps.find((op) => op.url === params.step) &&
@@ -306,11 +320,11 @@ export default function BrandAssetUpload() {
     });
   }, [params.step]);
 
-  $(document).on('click', (e) => {
-    if ($(e.target).closest('#hideDelete').length === 0) {
-      setShowDeleteMsg(false);
-    }
-  });
+  // $(document).on('click', (e) => {
+  //   if ($(e.target).closest('#hideDelete').length === 0) {
+  //     setShowDeleteMsg(false);
+  //   }
+  // });
 
   const destructureselectedFiles = () => {
     const formData = [];
@@ -711,6 +725,7 @@ export default function BrandAssetUpload() {
                     {showDeleteMsg[file.id] ? (
                       <div
                         id="hideDelete"
+                        ref={ref}
                         className="delete-msg"
                         onClick={() => {
                           deleteImage(file.id);
