@@ -92,7 +92,7 @@ export default function PerformanceReport({
       key: 'BBselection',
     },
   ]);
-  const [salesChartData, setsalesChartData] = useState([]);
+  const [salesChartData, setSalesChartData] = useState([]);
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
   const [showBBCustomDateModal, setShowBBCustomDateModal] = useState(false);
   const [groupBy, setGroupBy] = useState('daily');
@@ -101,14 +101,10 @@ export default function PerformanceReport({
   const [selectedValue, setSelectedValue] = useState('week');
   const [bBDailyFact, setBBDailyFact] = useState('week');
   const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
-  // sales performance varibales and BB % end
 
-  //
-  // const [revenueData, setRevenueData] = useState([{}]);
-  // const [unitsSoldData, setUnitsSoldData] = useState([{}]);
-  // const [trafficData, setTrafficData] = useState([{}]);
-  // const [conversionData, setConversionData] = useState([{}]);
-  const [allSalesTotal, setAllSalesTotal] = useState({});
+  const [salesCurrentTotal, setSalesCurrentTotal] = useState([]);
+  const [salesPreviousTotal, setSalesPreviousTotal] = useState([]);
+  const [salesDifference, setSalesDifference] = useState([]);
   const [filters, setFilters] = useState({
     daily: true,
     weekly: false,
@@ -130,199 +126,6 @@ export default function PerformanceReport({
       transform: 'translate(-50%, -50%)',
     },
   };
-
-  // useLayoutEffect(() => {
-  //   // const chart = am4core.create('chartdiv', am4charts.XYChart);
-  //   // chart.paddingRight = 20;
-  //   // chart.logo.disabled = true; // disable amchart logo
-  //   // chart.data = lineChartData; // bind th data
-  //   // const currentLabel = `label1`;
-  //   // const previousLabel = `label2`;
-  //   // const tooltipDate =
-  //   //   '<div style="color: white; font-size: 16px;">{name}</div>';
-
-  //   // function renderTooltip(name, color, value, cs, percent, formatter) {
-  //   //   const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
-  //   //   <li style="display: inline-block;">
-  //   //     {' '}
-  //   //     <div style="background-color: ${color};
-  //   //     border: 1px solid white;
-  //   //     border-radius: 100%;
-  //   //     width: 10px;
-  //   //     height: 10px;" />
-  //   //   </li>
-  //   //   <li style="display: inline-block;">
-  //   //     <div style="color: #f4f6fc;
-  //   //     text-transform: uppercase;
-  //   //     font-size: 11px;
-  //   //     padding-left: 5px;">${name} </div>
-  //   //   </li>
-  //   //   <li style="display: inline-block; float: right; margin-left: 25px;">
-  //   //     <div style=" color: white;
-  //   //     font-size: 16px; text-align: right;
-
-  //   //     ">${cs !== null ? cs : ''}${
-  //   //     formatter !== null
-  //   //       ? `{${value}.formatNumber('${formatter}')}`
-  //   //       : `{${value}}`
-  //   //   }${percent !== null ? percent : ''}
-  //   //   </div>
-  //   //   </li>
-  //   // </ul>
-
-  //   // `;
-
-  //   //   return tooltipText;
-  //   // }
-
-  //   // // render X axis
-  //   // const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-  //   // dateAxis.renderer.minGridDistance = 50;
-  //   // dateAxis.renderer.grid.template.location = 0.5;
-  //   // dateAxis.renderer.labels.template.location = 0.5;
-  //   // dateAxis.dy = 10;
-  //   // dateAxis.cursorTooltipEnabled = false;
-
-  //   // // render y axis
-  //   // const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  //   // valueAxis.renderer.grid.template.disabled = true;
-  //   // valueAxis.cursorTooltipEnabled = false;
-  //   // valueAxis.numberFormatter = new am4core.NumberFormatter();
-  //   // valueAxis.numberFormatter.bigNumberPrefixes = [
-  //   //   { number: 1e3, suffix: 'K' },
-  //   //   { number: 1e6, suffix: 'M' },
-  //   //   { number: 1e9, suffix: 'B' },
-  //   // ];
-  //   // valueAxis.numberFormatter.smallNumberPrefixes = [];
-  //   // valueAxis.min = 0;
-
-  //   // // add currency only for revenue
-
-  //   // if (activeSales === 'revenue') {
-  //   //   valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-  //   // } else {
-  //   //   valueAxis.numberFormatter.numberFormat = '#.#a';
-  //   // }
-
-  //   // // create a tooltip
-  //   // const flag = selectedValue !== 'custom';
-  //   // let tooltipCurrent = '';
-  //   // let tooltipPrevious = '';
-
-  //   // if (activeSales === 'revenue') {
-  //   //   tooltipCurrent = renderTooltip(
-  //   //     'Recent',
-  //   //     '#FF5933',
-  //   //     currentLabel,
-  //   //     currencySymbol,
-  //   //     null,
-  //   //     null,
-  //   //   );
-  //   //   if (flag) {
-  //   //     tooltipPrevious = renderTooltip(
-  //   //       'Previous',
-  //   //       '#BFC5D2',
-  //   //       previousLabel,
-  //   //       currencySymbol,
-  //   //       null,
-  //   //       null,
-  //   //     );
-  //   //   }
-  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()} (${currency})\n`;
-  //   //   // tooltipCurrent = `${currencySymbol}{label1}[/]`;
-  //   //   // tooltipPrevious = flag
-  //   //   //   ? `\n[#BFC5D2] vs ${currencySymbol}{label2}[/]`
-  //   //   //   : '';
-  //   // } else if (activeSales === 'conversion') {
-  //   //   tooltipCurrent = renderTooltip(
-  //   //     'Recent',
-  //   //     '#FF5933',
-  //   //     currentLabel,
-  //   //     null,
-  //   //     '%',
-  //   //     null,
-  //   //   );
-  //   //   if (flag) {
-  //   //     tooltipPrevious = renderTooltip(
-  //   //       'Previous',
-  //   //       '#BFC5D2',
-  //   //       previousLabel,
-  //   //       null,
-  //   //       '%',
-  //   //       null,
-  //   //     );
-  //   //   }
-  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-  //   //   // tooltipCurrent = `{label1}%[/]`;
-  //   //   // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}%[/]` : '';
-  //   // } else {
-  //   //   tooltipCurrent = renderTooltip(
-  //   //     'Recent',
-  //   //     '#FF5933',
-  //   //     currentLabel,
-  //   //     null,
-  //   //     null,
-  //   //     null,
-  //   //   );
-  //   //   if (flag) {
-  //   //     tooltipPrevious = renderTooltip(
-  //   //       'Previous',
-  //   //       '#BFC5D2',
-  //   //       previousLabel,
-  //   //       null,
-  //   //       null,
-  //   //       null,
-  //   //     );
-  //   //   }
-  //   //   // tooltipHeader = `[bold]${activeSales.toUpperCase()}\n`;
-  //   //   // tooltipCurrent = `{label1}[/]`;
-  //   //   // tooltipPrevious = flag ? `\n[#BFC5D2]vs {label2}[/]` : '';
-  //   // }
-
-  //   // // Create series for previous data
-  //   // const series = chart.series.push(new am4charts.LineSeries());
-  //   // series.dataFields.valueY = 'value2';
-  //   // series.dataFields.dateX = 'name';
-  //   // series.strokeWidth = 2;
-  //   // series.stroke = am4core.color('#BFC5D2');
-  //   // // series.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`; // render tooltip
-  //   // series.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
-  //   // series.fill = am4core.color('#2e384d');
-  //   // series.propertyFields.strokeDasharray = 'dashLength';
-
-  //   // // add bullet for
-  //   // const circleBullet2 = series.bullets.push(new am4charts.CircleBullet());
-  //   // circleBullet2.circle.fill = am4core.color('#fff');
-  //   // circleBullet2.circle.strokeWidth = 1;
-  //   // circleBullet2.circle.radius = 3;
-
-  //   // // series for current data
-  //   // const series2 = chart.series.push(new am4charts.LineSeries());
-  //   // series2.dataFields.valueY = 'value1';
-  //   // series2.dataFields.dateX = 'name';
-  //   // series2.strokeWidth = 2;
-  //   // series2.minBulletDistance = 10;
-  //   // // series2.tooltipText = `${tooltipHeader}${tooltipCurrent}${tooltipPrevious}`;
-  //   // series2.tooltipHTML = `${tooltipDate} ${tooltipCurrent} ${tooltipPrevious}`;
-  //   // series2.stroke = am4core.color('#FF5933');
-  //   // series2.fill = am4core.color('#2e384d');
-
-  //   // const circleBullet = series2.bullets.push(new am4charts.CircleBullet());
-  //   // circleBullet.circle.fill = am4core.color('#fff');
-  //   // circleBullet.circle.strokeWidth = 1;
-  //   // circleBullet.circle.radius = 3;
-
-  //   // // Add cursor
-  //   // chart.cursor = new am4charts.XYCursor();
-  //   // chart.cursor.lineY.disabled = true;
-  //   // chart.cursor.lineX.disabled = true;
-  //   // chart.cursor.snapToSeries = [series, series2];
-  //   // chart.cursor.behavior = 'none'; // disable zoom-in func.
-
-  //   // return () => {
-  //   //   chart.dispose();
-  //   // };
-  // }, [lineChartData, activeSales, currency, currencySymbol, selectedValue]);
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -365,27 +168,6 @@ export default function PerformanceReport({
       )
     );
   };
-
-  const calculateSalesDifference = (currentTotal, previousTotal) => {
-    const diff = ((currentTotal - previousTotal) * 100) / previousTotal;
-    if (diff === -Infinity || diff === Infinity || Number.isNaN(diff)) {
-      return 'N/A';
-    }
-    return parseFloat(diff.toFixed(2));
-  };
-
-  // if (isApiSuccess) {
-  //   if (activeSales === 'traffic') {
-  //     setLineChartData(trafficData);
-  //   } else if (activeSales === 'unitsSold') {
-  //     setLineChartData(unitsSoldData);
-  //   } else if (activeSales === 'conversion') {
-  //     setLineChartData(conversionData);
-  //   } else if (activeSales === 'revenue') {
-  //     setLineChartData(revenueData);
-  //   }
-  //   setIsApiSuccess(false);
-  // }
 
   const bindSalesResponseData = (response) => {
     const tempData = [];
@@ -484,6 +266,23 @@ export default function PerformanceReport({
         }
       });
     }
+
+    // filterout the dsp current total, previous total, and diffrence
+    if (response.daily_facts && response.daily_facts.current_sum) {
+      setSalesCurrentTotal(response.daily_facts.current_sum);
+    } else {
+      setSalesCurrentTotal([]);
+    }
+    if (response.daily_facts && response.daily_facts.previous_sum) {
+      setSalesPreviousTotal(response.daily_facts.previous_sum);
+    } else {
+      setSalesPreviousTotal([]);
+    }
+    if (response.daily_facts && response.daily_facts.difference_data) {
+      setSalesDifference(response.daily_facts.difference_data);
+    } else {
+      setSalesDifference([]);
+    }
     return tempData;
   };
 
@@ -564,236 +363,59 @@ export default function PerformanceReport({
           // setIsLoading({ loader: false, type: 'button' });
           setIsApiCall(false);
         }
-        if (res && res.status === 200 && res.data && res.data.daily_facts) {
-          const salesGraphData = bindSalesResponseData(res.data);
-          setsalesChartData(salesGraphData);
+        if (res && res.status === 200) {
+          if (res.data && res.data.daily_facts) {
+            const salesGraphData = bindSalesResponseData(res.data);
+            setSalesChartData(salesGraphData);
 
-          const tempRevenueData = [];
-          const tempUnitsSoldData = [];
-          const tempTrafficData = [];
-          const tempConversionData = [];
-          const revenueTotal = {
-            previousRevenueTotal: 0,
-            currentRevenueTotal: 0,
-            difference: 0,
-          };
-          const trafficTotal = {
-            previousTrafficTotal: 0,
-            currentTrafficTotal: 0,
-            difference: 0,
-          };
-          const unitsTotal = {
-            previousUnitsTotal: 0,
-            currentUnitsTotal: 0,
-            difference: 0,
-          };
-          const conversionTotal = {
-            previousConversionTotal: 0,
-            currentConversionTotal: 0,
-            difference: 0,
-          };
-          // setIsLoading({ loader: false, type: 'button' });
-          if (
-            res.data.daily_facts.previous &&
-            res.data.daily_facts.previous.length
-          ) {
-            res.data.daily_facts.previous.forEach((resData) => {
-              // revenueTotal.previousRevenueTotal += resData.revenue;
-              // unitsTotal.previousUnitsTotal += resData.units_sold;
-              // trafficTotal.previousTrafficTotal += resData.traffic;
-              // conversionTotal.previousConversionTotal += resData.conversion;
-              // const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              tempRevenueData.push({
-                value2: resData.revenue,
-                label2: resData.revenue !== null ? resData.revenue : '0.00',
-              });
-              tempTrafficData.push({
-                value2: resData.traffic,
-                label2: resData.traffic !== null ? resData.traffic : '0.00',
-              });
-              tempUnitsSoldData.push({
-                value2: resData.units_sold,
-                label2:
-                  resData.units_sold !== null ? resData.units_sold : '0.00',
-              });
-              tempConversionData.push({
-                value2: resData.conversion,
-                label2:
-                  resData.conversion !== null ? resData.conversion : '0.00',
-              });
-            });
-            // conversionTotal.previousConversionTotal /=
-            //   res.data.daily_facts.previous.length;
-          }
-          if (
-            res.data.daily_facts.current &&
-            res.data.daily_facts.current.length
-          ) {
-            let actualCount = 1;
-            res.data.daily_facts.current.forEach((resData, index) => {
-              const dayDate = dayjs(resData.report_date).format('MMM D YYYY');
-              revenueTotal.currentRevenueTotal += resData.revenue;
-              unitsTotal.currentUnitsTotal += resData.units_sold;
-              trafficTotal.currentTrafficTotal += resData.traffic;
-              conversionTotal.currentConversionTotal += resData.conversion;
-              if (
-                res.data.daily_facts.previous &&
-                index < res.data.daily_facts.previous.length
-              ) {
-                tempUnitsSoldData[index].name = dayDate;
-                tempRevenueData[index].name = dayDate;
-                tempTrafficData[index].name = dayDate;
-                tempConversionData[index].name = dayDate;
-                tempRevenueData[index].value1 = resData.revenue;
-                tempUnitsSoldData[index].value1 = resData.units_sold;
-                tempTrafficData[index].value1 = resData.traffic;
-                tempConversionData[index].value1 = resData.conversion;
-
-                if (index > 0) {
-                  tempRevenueData[index - 1].dashLength =
-                    resData.revenue === null ? 8 : null;
-                  tempUnitsSoldData[index - 1].dashLength =
-                    resData.units_sold === null ? 8 : null;
-                  tempTrafficData[index - 1].dashLength =
-                    resData.traffic === null ? 8 : null;
-                  tempConversionData[index - 1].dashLength =
-                    resData.conversion === null ? 8 : null;
-                }
-
-                tempRevenueData[index].dashLength =
-                  resData.revenue === null ? 8 : null;
-                tempUnitsSoldData[index].dashLength =
-                  resData.units_sold === null ? 8 : null;
-                tempTrafficData[index].dashLength =
-                  resData.traffic === null ? 8 : null;
-                tempConversionData[index].dashLength =
-                  resData.conversion === null ? 8 : null;
-
-                tempRevenueData[index].label1 =
-                  resData.revenue !== null ? resData.revenue : '0.00';
-                tempUnitsSoldData[index].label1 =
-                  resData.units_sold !== null ? resData.units_sold : '0.00';
-                tempTrafficData[index].label1 =
-                  resData.traffic !== null ? resData.traffic : '0.00';
-                tempConversionData[index].label1 =
-                  resData.conversion !== null ? resData.conversion : '0.00';
-
-                if (resData.revenue !== null) {
-                  actualCount = index + 1;
-                  conversionTotal.previousConversionTotal +=
-                    res.data.daily_facts.previous[index].conversion;
-                  revenueTotal.previousRevenueTotal +=
-                    res.data.daily_facts.previous[index].revenue;
-                  unitsTotal.previousUnitsTotal +=
-                    res.data.daily_facts.previous[index].units_sold;
-                  trafficTotal.previousTrafficTotal +=
-                    res.data.daily_facts.previous[index].traffic;
-                }
+            if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
+              const lastUpdated = res.data.pf_oi_is[0].latest_date;
+              res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
+                'MMM DD YYYY',
+              );
+              // if (res.data.dsp_spend && res.data.dsp_spend.length) {
+              //   setDspSpend({
+              //     value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
+              //     date: dayjs(res.data.dsp_spend[0].report_date).format(
+              //       'MMM DD YYYY',
+              //     ),
+              //   });
+              // }
+              setDspData(res.data.pf_oi_is[0]);
+              const ipiValue = parseFloat(
+                res.data.pf_oi_is[0].inventory_performance_index,
+              );
+              if (Number.isNaN(ipiValue)) {
+                setPieData([
+                  {
+                    name: 'Inventory',
+                    value: 'N/A',
+                  },
+                  {
+                    name: 'Total',
+                    value: 1000,
+                  },
+                ]);
               } else {
-                tempRevenueData.push({
-                  name: dayDate,
-                  value1: resData.revenue,
-                  label1: resData.revenue !== null ? resData.revenue : '0.00',
-                  label2: '0.00',
-                });
-                tempTrafficData.push({
-                  name: dayDate,
-                  value1: resData.traffic,
-                  label1: resData.traffic !== null ? resData.traffic : '0.00',
-                  label2: '0.00',
-                });
-                tempUnitsSoldData.push({
-                  name: dayDate,
-                  value1: resData.units_sold,
-                  label1:
-                    resData.units_sold !== null ? resData.units_sold : '0.00',
-                  label2: '0.00',
-                });
-                tempConversionData.push({
-                  name: dayDate,
-                  value1: resData.conversion,
-                  label1:
-                    resData.conversion !== null ? resData.conversion : '0.00',
-                  label2: '0.00',
-                });
+                setPieData([
+                  {
+                    name: 'Inventory',
+                    value: ipiValue,
+                  },
+                  {
+                    name: 'Total',
+                    value: 1000 - ipiValue,
+                  },
+                ]);
               }
-            });
-            conversionTotal.currentConversionTotal /= actualCount;
-            conversionTotal.previousConversionTotal /= actualCount;
-          }
-          revenueTotal.difference = calculateSalesDifference(
-            revenueTotal.currentRevenueTotal,
-            revenueTotal.previousRevenueTotal,
-          );
-          unitsTotal.difference = calculateSalesDifference(
-            unitsTotal.currentUnitsTotal,
-            unitsTotal.previousUnitsTotal,
-          );
-          trafficTotal.difference = calculateSalesDifference(
-            trafficTotal.currentTrafficTotal,
-            trafficTotal.previousTrafficTotal,
-          );
-          conversionTotal.difference = calculateSalesDifference(
-            conversionTotal.currentConversionTotal,
-            conversionTotal.previousConversionTotal,
-          );
-          setAllSalesTotal({
-            revenue: revenueTotal,
-            units: unitsTotal,
-            traffic: trafficTotal,
-            conversion: conversionTotal,
-          });
-          // setLineChartData(tempRevenueData);
-          // setRevenueData(tempRevenueData);
-          // setUnitsSoldData(tempUnitsSoldData);
-          // setTrafficData(tempTrafficData);
-          // setConversionData(tempConversionData);
-          // setIsApiSuccess(true);
-          if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
-            const lastUpdated = res.data.pf_oi_is[0].latest_date;
-            res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
-              'MMM DD YYYY',
-            );
-            // if (res.data.dsp_spend && res.data.dsp_spend.length) {
-            //   setDspSpend({
-            //     value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
-            //     date: dayjs(res.data.dsp_spend[0].report_date).format(
-            //       'MMM DD YYYY',
-            //     ),
-            //   });
-            // }
-            setDspData(res.data.pf_oi_is[0]);
-            const ipiValue = parseFloat(
-              res.data.pf_oi_is[0].inventory_performance_index,
-            );
-            if (Number.isNaN(ipiValue)) {
-              setPieData([
-                {
-                  name: 'Inventory',
-                  value: 'N/A',
-                },
-                {
-                  name: 'Total',
-                  value: 1000,
-                },
-              ]);
             } else {
               setPieData([
-                {
-                  name: 'Inventory',
-                  value: ipiValue,
-                },
-                {
-                  name: 'Total',
-                  value: 1000 - ipiValue,
-                },
+                { name: 'Inventory', value: 'N/A' },
+                { name: 'Total', value: 1000 },
               ]);
             }
           } else {
-            setPieData([
-              { name: 'Inventory', value: 'N/A' },
-              { name: 'Total', value: 1000 },
-            ]);
+            setSalesChartData([]);
           }
           setIsApiCall(false);
         }
@@ -801,26 +423,6 @@ export default function PerformanceReport({
     },
     [id],
   );
-
-  // when click on any one from revenue, nuit sold, traffic and conversion then set the graph data
-  // const setChartData = (value) => {
-  //   if (value === 'traffic') {
-  //     setLineChartData(trafficData);
-  //     setActiveSales('traffic');
-  //   }
-  //   if (value === 'units sold') {
-  //     setLineChartData(unitsSoldData);
-  //     setActiveSales('units sold');
-  //   }
-  //   if (value === 'conversion') {
-  //     setLineChartData(conversionData);
-  //     setActiveSales('conversion');
-  //   }
-  //   if (value === 'revenue') {
-  //     setLineChartData(revenueData);
-  //     setActiveSales('revenue');
-  //   }
-  // };
 
   const setSalesBoxClass = (name, classValue) => {
     let selectedClass = '';
@@ -1143,7 +745,7 @@ export default function PerformanceReport({
       <span style={{ fontSize: '26px' }}>
         {name === 'revenue' ? currencySymbol : null}
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        <span style={{ fontSize: '16px' }}>.00</span>
+        {/* <span style={{ fontSize: '16px' }}>.00</span> */}
       </span>
     );
   };
@@ -1375,79 +977,147 @@ export default function PerformanceReport({
     );
   };
 
-  const renderSalesBox = (name, className) => {
+  const renderSalesBox = (matricsName, className) => {
     let currentTotal = 0;
     let previousTotal = 0;
     let difference = 0;
     let theCurrency = null;
     let boxActiveClass = '';
+    const name = matricsName;
+    let displayMatricsName;
+
     if (name === 'revenue') {
       currentTotal =
-        allSalesTotal && allSalesTotal.revenue
-          ? allSalesTotal.revenue.currentRevenueTotal
+        salesCurrentTotal && salesCurrentTotal.revenue
+          ? salesCurrentTotal.revenue
           : 0;
       previousTotal =
-        allSalesTotal && allSalesTotal.revenue
-          ? allSalesTotal.revenue.previousRevenueTotal
+        salesPreviousTotal && salesPreviousTotal.revenue
+          ? salesPreviousTotal.revenue
           : 0;
       difference =
-        allSalesTotal &&
-        allSalesTotal.revenue &&
-        allSalesTotal.revenue.difference
-          ? allSalesTotal.revenue.difference
-          : 0;
+        salesDifference && salesDifference.revenue
+          ? salesDifference.revenue
+          : 'N/A';
       theCurrency = currency !== null ? `(${currency})` : null;
       boxActiveClass = 'ad-sales-active';
+      displayMatricsName = matricsName;
     } else if (name === 'unitsSold') {
       currentTotal =
-        allSalesTotal && allSalesTotal.units
-          ? allSalesTotal.units.currentUnitsTotal
+        salesCurrentTotal && salesCurrentTotal.units_sold
+          ? salesCurrentTotal.units_sold
           : 0;
       previousTotal =
-        allSalesTotal && allSalesTotal.units
-          ? allSalesTotal.units.previousUnitsTotal
+        salesPreviousTotal && salesPreviousTotal.units_sold
+          ? salesPreviousTotal.units_sold
           : 0;
       difference =
-        allSalesTotal && allSalesTotal.units && allSalesTotal.units.difference
-          ? allSalesTotal.units.difference
-          : 0;
+        salesDifference && salesDifference.units_sold
+          ? salesDifference.units_sold
+          : 'N/A';
       theCurrency = ``;
       boxActiveClass = 'ad-spend-active';
+      displayMatricsName = 'Units sold';
     } else if (name === 'traffic') {
       currentTotal =
-        allSalesTotal && allSalesTotal.traffic
-          ? allSalesTotal.traffic.currentTrafficTotal
+        salesCurrentTotal && salesCurrentTotal.traffic
+          ? salesCurrentTotal.traffic
           : 0;
       previousTotal =
-        allSalesTotal && allSalesTotal.traffic
-          ? allSalesTotal.traffic.previousTrafficTotal
+        salesPreviousTotal && salesPreviousTotal.traffic
+          ? salesPreviousTotal.traffic
           : 0;
       difference =
-        allSalesTotal &&
-        allSalesTotal.traffic &&
-        allSalesTotal.traffic.difference
-          ? allSalesTotal.traffic.difference
-          : 0;
+        salesDifference && salesDifference.traffic
+          ? salesDifference.traffic
+          : 'N/A';
       theCurrency = ``;
       boxActiveClass = 'ad-conversion-active';
+      displayMatricsName = matricsName;
     } else if (name === 'conversion') {
       currentTotal =
-        allSalesTotal && allSalesTotal.conversion
-          ? allSalesTotal.conversion.currentConversionTotal
+        salesCurrentTotal && salesCurrentTotal.conversion
+          ? salesCurrentTotal.conversion
           : 0;
       previousTotal =
-        allSalesTotal && allSalesTotal.conversion
-          ? allSalesTotal.conversion.previousConversionTotal
+        salesPreviousTotal && salesPreviousTotal.conversion
+          ? salesPreviousTotal.conversion
           : 0;
       difference =
-        allSalesTotal &&
-        allSalesTotal.conversion &&
-        allSalesTotal.conversion.difference
-          ? allSalesTotal.conversion.difference
-          : 0;
+        salesDifference && salesDifference.conversion
+          ? salesDifference.conversion
+          : 'N/A';
       theCurrency = ``;
       boxActiveClass = 'impression-active';
+      displayMatricsName = matricsName;
     }
+    // if (name === 'revenue') {
+    //   currentTotal =
+    //     allSalesTotal && allSalesTotal.revenue
+    //       ? allSalesTotal.revenue.currentRevenueTotal
+    //       : 0;
+    //   previousTotal =
+    //     allSalesTotal && allSalesTotal.revenue
+    //       ? allSalesTotal.revenue.previousRevenueTotal
+    //       : 0;
+    //   difference =
+    //     allSalesTotal &&
+    //     allSalesTotal.revenue &&
+    //     allSalesTotal.revenue.difference
+    //       ? allSalesTotal.revenue.difference
+    //       : 0;
+    //   theCurrency = currency !== null ? `(${currency})` : null;
+    //   boxActiveClass = 'ad-sales-active';
+    // } else if (name === 'unitsSold') {
+    //   currentTotal =
+    //     allSalesTotal && allSalesTotal.units
+    //       ? allSalesTotal.units.currentUnitsTotal
+    //       : 0;
+    //   previousTotal =
+    //     allSalesTotal && allSalesTotal.units
+    //       ? allSalesTotal.units.previousUnitsTotal
+    //       : 0;
+    //   difference =
+    //     allSalesTotal && allSalesTotal.units && allSalesTotal.units.difference
+    //       ? allSalesTotal.units.difference
+    //       : 0;
+    //   theCurrency = ``;
+    //   boxActiveClass = 'ad-spend-active';
+    // } else if (name === 'traffic') {
+    //   currentTotal =
+    //     allSalesTotal && allSalesTotal.traffic
+    //       ? allSalesTotal.traffic.currentTrafficTotal
+    //       : 0;
+    //   previousTotal =
+    //     allSalesTotal && allSalesTotal.traffic
+    //       ? allSalesTotal.traffic.previousTrafficTotal
+    //       : 0;
+    //   difference =
+    //     allSalesTotal &&
+    //     allSalesTotal.traffic &&
+    //     allSalesTotal.traffic.difference
+    //       ? allSalesTotal.traffic.difference
+    //       : 0;
+    //   theCurrency = ``;
+    //   boxActiveClass = 'ad-conversion-active';
+    // } else if (name === 'conversion') {
+    //   currentTotal =
+    //     allSalesTotal && allSalesTotal.conversion
+    //       ? allSalesTotal.conversion.currentConversionTotal
+    //       : 0;
+    //   previousTotal =
+    //     allSalesTotal && allSalesTotal.conversion
+    //       ? allSalesTotal.conversion.previousConversionTotal
+    //       : 0;
+    //   difference =
+    //     allSalesTotal &&
+    //     allSalesTotal.conversion &&
+    //     allSalesTotal.conversion.difference
+    //       ? allSalesTotal.conversion.difference
+    //       : 0;
+    //   theCurrency = ``;
+    //   boxActiveClass = 'impression-active';
+    // }
     return (
       <div className={className}>
         <div
@@ -1456,7 +1126,7 @@ export default function PerformanceReport({
           role="presentation">
           {' '}
           <div className="chart-name">
-            {name.toUpperCase()} {theCurrency}
+            {displayMatricsName.toUpperCase()} {theCurrency}
           </div>
           <div className="number-rate">
             {name === 'conversion'
@@ -1474,7 +1144,7 @@ export default function PerformanceReport({
                 }${previousTotal
                   .toFixed(2)
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : previousTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : previousTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </div>
           <div
             className={
