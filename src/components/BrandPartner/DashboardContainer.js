@@ -45,7 +45,7 @@ function DashboardContainer() {
   const { Option, SingleValue, MultiValue } = components;
 
   const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
-  const [selectedBgsUser, setSelectedBgsUser] = useState([]);
+  const [selectedBgsUser, setSelectedBgsUser] = useState(userInfo.id);
 
   const [selectedValue, setSelectedValue] = useState({
     type: 'week',
@@ -75,6 +75,7 @@ function DashboardContainer() {
   const [count, setCount] = useState(null);
   const [showBgsCustomDateModal, setShowBgsCustomDateModal] = useState(false);
   const [hybridView, setHybridView] = useState('sponsored_ad_dashboard');
+
   const selectInputRef = useRef();
 
   const currentDate = new Date();
@@ -148,7 +149,7 @@ function DashboardContainer() {
       setHybridView(event.value);
       setSelectedValue({ ...selectedValue, bgs: '' });
       setSelectedBgsUser(null);
-      bgsCustomerList(1, event.value, selectedValue, event.value);
+      bgsCustomerList(1, userInfo.id, selectedValue, event.value);
     } else if (type === 'date') {
       if (event && event.value === 'custom') {
         setShowBgsCustomDateModal(true);
