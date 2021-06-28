@@ -235,7 +235,7 @@ export default function CustomerListTablet({
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
-    let value = 'actualValue';
+    let value = actualValue;
     if (value) {
       if (matrics === 'ACOS') {
         if (value.toString().includes('-')) {
