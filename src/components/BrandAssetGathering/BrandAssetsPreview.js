@@ -225,7 +225,7 @@ const BrandAssetsPreviewBody = styled.div`
     }
 
     .unsupport-file-name {
-      padding: 80px 0;
+      padding: 115px 0;
       color: ${Theme.black};
 
       .file-path {
@@ -277,6 +277,9 @@ const BrandAssetsPreviewBody = styled.div`
       .image-thumbnail {
         max-width: 200px;
         height: 100px;
+      }
+      .unsupport-file-name {
+        padding: 115px 0;
       }
     }
     .btn {
