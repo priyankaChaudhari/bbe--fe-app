@@ -427,7 +427,10 @@ function DashboardContainer() {
               <div className="straight-line horizontal-line spacing d-lg-none d-md-block" />
               <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
                 <ul className="partner-select">
-                  <li className="my-partner">
+                  <li
+                    className={
+                      isLoading.loader ? 'my-partner disabled' : 'my-partner '
+                    }>
                     <DropDownSelect>
                       <Select
                         ref={selectInputRef}
@@ -445,7 +448,7 @@ function DashboardContainer() {
                     </DropDownSelect>
                   </li>
                   {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
-                    <li>
+                    <li className={isLoading.loader ? 'disabled' : ''}>
                       <DropDownSelect>
                         <Select
                           className="text-left active"
@@ -463,7 +466,7 @@ function DashboardContainer() {
                   ) : (
                     ''
                   )}
-                  <li>
+                  <li className={isLoading.loader ? 'disabled' : ''}>
                     <DropDownSelect className="days-performance">
                       <Select
                         classNamePrefix="react-select"

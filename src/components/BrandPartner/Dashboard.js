@@ -58,9 +58,8 @@ export default function Dashboard({ isLoading, data }) {
           </div>
         </>
       );
-    } 
-      return <div className="perentage-value down">N/A</div>;
-    
+    }
+    return <div className="perentage-value down">N/A</div>;
   };
 
   return (
@@ -79,13 +78,14 @@ export default function Dashboard({ isLoading, data }) {
                   <div
                     key={item.id}
                     className="col-lg-3 mb-4 col-md-6 col-sm-12 "
-                    onClick={() =>
-                      history.push(
-                        PATH_CUSTOMER_DETAILS.replace(':id', item.id),
-                      )
-                    }
                     role="presentation">
-                    <WhiteCard className="cursor">
+                    <WhiteCard
+                      className="cursor"
+                      onClick={() =>
+                        history.push(
+                          PATH_CUSTOMER_DETAILS.replace(':id', item.id),
+                        )
+                      }>
                       <img
                         className="company-logo"
                         src={
