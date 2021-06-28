@@ -933,7 +933,7 @@ export default function CustomerMainContainer() {
                             <li
                               onClick={() => {
                                 setViewComponent('brand asset');
-                                dispatch(setCustomerSelectedTab('brand asset'));
+                                // dispatch(setCustomerSelectedTab('brand asset'));
                               }}
                               role="presentation">
                               <div
