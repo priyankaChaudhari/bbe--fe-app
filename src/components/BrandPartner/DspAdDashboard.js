@@ -75,8 +75,9 @@ function DspAdDashboard({ isLoading, data }) {
           </div>
         </>
       );
-    }
-    return '';
+    } 
+      return <div className="perentage-value down">N/A</div>;
+    
   };
 
   return (

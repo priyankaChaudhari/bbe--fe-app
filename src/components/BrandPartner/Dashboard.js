@@ -58,8 +58,9 @@ export default function Dashboard({ isLoading, data }) {
           </div>
         </>
       );
-    }
-    return '';
+    } 
+      return <div className="perentage-value down">N/A</div>;
+    
   };
 
   return (

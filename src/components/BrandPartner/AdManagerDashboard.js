@@ -77,8 +77,9 @@ export default function AdManagerDashboard({ isLoading, data }) {
           </span>
         </>
       );
-    }
-    return '';
+    } 
+      return <div className="perentage-value down">N/A</div>;
+    
     // let flag = '';
     // let value = actualValue;
     // if (value) {
