@@ -70,7 +70,7 @@ export default function DSPPerformanceChart({
     ];
     valueAxis.numberFormatter.smallNumberPrefixes = [];
     valueAxis.min = 0;
-    valueAxis.extraMax = 0.005;
+    valueAxis.extraMax = 0.009;
     valueAxis.numberFormatter.numberFormat = `#.#a`;
 
     // Add cursor
@@ -277,7 +277,7 @@ export default function DSPPerformanceChart({
             valueAxis2.cursorTooltipEnabled = false;
             valueAxis2.numberFormatter = new am4core.NumberFormatter();
             // valueAxis2.numberFormatter.numberFormat = `#.#a`;
-            valueAxis2.extraMax = 0.005;
+            valueAxis2.extraMax = 0.009;
             valueAxis2.numberFormatter.bigNumberPrefixes = [
               { number: 1e3, suffix: 'K' },
               { number: 1e6, suffix: 'M' },
@@ -344,7 +344,7 @@ export default function DSPPerformanceChart({
       valueAxis2.cursorTooltipEnabled = false;
       valueAxis2.numberFormatter = new am4core.NumberFormatter();
       // valueAxis2.numberFormatter.numberFormat = `#.#a`;
-      valueAxis2.extraMax = 0.005;
+      valueAxis2.extraMax = 0.009;
       valueAxis2.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
@@ -357,7 +357,7 @@ export default function DSPPerformanceChart({
       valueAxis3.renderer.grid.template.disabled = true;
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
-      valueAxis3.extraMax = 0.005;
+      valueAxis3.extraMax = 0.009;
       // valueAxis3.numberFormatter.numberFormat = `#.#a`;
       valueAxis3.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
@@ -371,7 +371,7 @@ export default function DSPPerformanceChart({
       valueAxis4.renderer.grid.template.disabled = true;
       valueAxis4.cursorTooltipEnabled = false;
       valueAxis4.numberFormatter = new am4core.NumberFormatter();
-      valueAxis4.extraMax = 0.005;
+      valueAxis4.extraMax = 0.009;
       // valueAxis4.numberFormatter.numberFormat = `#.#a`;
       valueAxis4.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },

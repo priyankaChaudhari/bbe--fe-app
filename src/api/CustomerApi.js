@@ -504,7 +504,7 @@ export async function getPerformance(
   let params = {};
   if (startDate && endDate) {
     params = {
-      dailyFacts,
+      daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
       start_date: startDate,
