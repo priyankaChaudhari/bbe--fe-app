@@ -748,6 +748,15 @@ export default function NewCustomerList() {
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
+      setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sort_by: '-created_at',
+        }),
+      );
+
       if (event.value === 'contract_details') {
         setSelectedView('contract_details');
         customerList(pageNumber);
@@ -858,7 +867,7 @@ export default function NewCustomerList() {
     if (type === 'sort') {
       if (event.value === 'expiring_soon') {
         setExpiringSoon(true);
-        setSelectedValue({ ...selectedValue, 'order-by': '' });
+        setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
         setFilters({
           ...filters,
           sort_by: event.value,
@@ -1147,24 +1156,26 @@ export default function NewCustomerList() {
       if (selectedView === 'performance' || showPerformance) {
         return (
           selectedValue[item.key] ||
-          performanceSortOptions.filter((op) => op.value === filters.sort_by)
+          performanceSortOptions.filter(
+            (op) => op.value === selectedValue['order-by'],
+          )
         );
       }
       if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
         return (
           selectedValue[item.key] ||
-          sadSortOptions.filter((op) => op.value === filters.sort_by)
+          sadSortOptions.filter((op) => op.value === selectedValue['order-by'])
         );
       }
       if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
         return (
           selectedValue[item.key] ||
-          dadSortOptions.filter((op) => op.value === filters.sort_by)
+          dadSortOptions.filter((op) => op.value === selectedValue['order-by'])
         );
       }
       return (
         selectedValue[item.key] ||
-        sortOptions.filter((op) => op.value === filters.sort_by)
+        sortOptions.filter((op) => op.value === selectedValue['order-by'])
       );
     }
 
