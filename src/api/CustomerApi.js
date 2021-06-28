@@ -76,7 +76,7 @@ export async function getCustomerList(
       ...params,
       ...dailyFacts,
       ...orderByFlag,
-      dashboard: 'dsp_ad_dashboard',
+      dashboard: 'dsp_ad_performance',
     };
   }
 
