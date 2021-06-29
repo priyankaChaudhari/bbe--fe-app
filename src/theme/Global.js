@@ -125,7 +125,7 @@ export const GroupUser = styled.div`
     font-size: ${Theme.normal};
     color: ${Theme.black};
     font-weight: 500;
-    line-height: 16px;
+    line-height: 18px;
     overflow-wrap: break-word;
     text-align: left;
     float: left;

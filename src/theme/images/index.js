@@ -162,6 +162,7 @@ import RedTrashIcon from './icons/red-trash-icon.svg';
 import FileCloud from './icon_upload.svg';
 import ChatBoxIcon from './icons/chat-box.svg';
 import CatalogBox from './icons/catalog-box.png';
+import AnnotationGoal from './icons/annotation-goal.png';
 
 export {
   BannerBg,
@@ -328,4 +329,5 @@ export {
   FileCloud,
   ChatBoxIcon,
   CatalogBox,
+  AnnotationGoal,
 };

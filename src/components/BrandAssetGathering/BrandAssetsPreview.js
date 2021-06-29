@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import FileViewer from 'react-file-viewer';
-import { HeaderDownloadFuntionality, PageLoader } from '../../common';
+import {
+  HeaderDownloadFuntionality,
+  PageLoader,
+  FormField,
+  Button,
+} from '../../common';
+import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
   TrashIcons,
   // ChatBoxIcon,
   ArrowRightBlackIcon,
+  AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 
@@ -54,17 +61,58 @@ function BrandAssetsPreview({
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader color="#FF5933" type="page" />
       ) : (
-        <div className="on-boarding-container">
-          <HeaderDownloadFuntionality>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-6 col-sm-12">
-                  {' '}
-                  {showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.original_name}
+        <>
+          <div className="on-boarding-container">
+            <HeaderDownloadFuntionality>
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-md-6 col-sm-12">
+                    {' '}
+                    {showAssetPreview &&
+                      showAssetPreview.selectedFile &&
+                      showAssetPreview.selectedFile.original_name}
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <ul className="contract-download-nav">
+                      <li>
+                        {' '}
+                        <img
+                          className="header-icon"
+                          src={ChatBoxIcon}
+                          alt="check"
+                        />
+                        <span className="cursor">Comments (0)</span>
+                      </li>
+                      <li>
+                        <span className="divide-arrow" />
+                      </li>
+                      <li
+                        onClick={() => setShowConfirmationModal(true)}
+                        role="presentation">
+                        <img
+                          className="header-icon"
+                          src={TrashIcons}
+                          alt="check"
+                        />
+                        <span className="cursor">Delete</span>
+                      </li>
+                      <li>
+                        <span className="divide-arrow hide-mobile" />
+                      </li>
+                      <li>
+                        <img
+                          width="18px"
+                          src={CloseIcon}
+                          alt="close"
+                          className="float-right cursor remove-cross-icon"
+                          role="presentation"
+                          onClick={() => closeModal()}
+                        />
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="col-md-6 col-sm-12">
+                {/* <div className="col-md-6 col-sm-12">
                   <ul className="contract-download-nav">
                     {/* <li>
                       {' '}
@@ -75,7 +123,7 @@ function BrandAssetsPreview({
                       />
                       <span className="cursor">Comments (0)</span>
                     </li> */}
-                    <li>
+                {/* <li>
                       <span className="divide-arrow" />
                     </li>
                     <li
@@ -88,87 +136,132 @@ function BrandAssetsPreview({
                       />
                       <span className="cursor">Delete</span>
                     </li>
+              </div>  */}
+              </div>
+            </HeaderDownloadFuntionality>
+
+            <div className="row">
+              <div className="col-9">
+                <BrandAssetsPreviewBody>
+                  <div
+                    className={
+                      showAssetPreview.index === 0
+                        ? 'pervious-img btn disabled-slider-btn'
+                        : 'pervious-img btn'
+                    }
+                    role="presentation"
+                    onClick={() => showImg('prev')}>
+                    <div
+                      className={
+                        showAssetPreview.index === 0
+                          ? 'arrow-icon pervious disabled-slider-btn'
+                          : 'arrow-icon pervious'
+                      }>
+                      {' '}
+                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                    </div>
+                  </div>
+                  <div className="assetPreviewImg">
+                    <img
+                      className="image-thumbnail"
+                      src={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.presigned_url
+                      }
+                      type={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.mime_type
+                      }
+                      alt={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.original_name
+                      }
+                    />
+                  </div>
+                  <div
+                    className={
+                      showAssetPreview.index ===
+                      (showAssetPreview.documents &&
+                        showAssetPreview.documents.length - 1)
+                        ? 'next-img btn disabled-slider-btn'
+                        : 'next-img btn'
+                    }
+                    role="presentation"
+                    onClick={() => showImg('next')}>
+                    <div
+                      className={
+                        showAssetPreview.index ===
+                        (showAssetPreview.documents &&
+                          showAssetPreview.documents.length - 1)
+                          ? 'arrow-icon disabled-slider-btn'
+                          : 'arrow-icon'
+                      }>
+                      {' '}
+                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                    </div>
+                  </div>
+                </BrandAssetsPreviewBody>
+              </div>
+              <div className="col-3">
+                <CommentAnnotationPanel>
+                  <div className="chat-header">Comments</div>
+                  <ul className="inbox-comment">
                     <li>
-                      <span className="divide-arrow hide-mobile" />
+                      <GroupUser>
+                        <div className="avatarName float-left mr-3">pl</div>
+
+                        <div className="activity-user">
+                          <span className="font-bold"> Natalie Parker:</span>{' '}
+                          “Comment content goes here. This one is an annotation
+                          on the image and so avatar shows number of annotation
+                          rather than initials.”
+                          <div className="time-date  mt-1">
+                            01/14/2021, 5:13:42 PM MST
+                          </div>
+                        </div>
+                        <div className="clear-fix" />
+                      </GroupUser>
                     </li>
                     <li>
-                      <img
-                        width="18px"
-                        src={CloseIcon}
-                        alt="close"
-                        className="float-right cursor remove-cross-icon"
-                        role="presentation"
-                        onClick={() => closeModal()}
-                      />
+                      <GroupUser>
+                        <div className="avatarName float-left mr-3">pl</div>
+
+                        <div className="activity-user">
+                          <span className="font-bold"> Natalie Parker:</span>{' '}
+                          “Comment content goes here. This one is an annotation
+                          on the image and so avatar shows number of annotation
+                          rather than initials.”
+                          <div className="time-date  mt-1">
+                            01/14/2021, 5:13:42 PM MST
+                          </div>
+                        </div>
+                        <div className="clear-fix" />
+                      </GroupUser>
                     </li>
                   </ul>
-                </div>
-              </div>
+
+                  <div className="input-type-box">
+                    <FormField className="m-3">
+                      <textarea
+                        className="text-area-box"
+                        rows="4"
+                        placeholder="Enter comment"
+                      />
+                    </FormField>
+                    <div className="add-annotation">
+                      <img src={AnnotationGoal} alt="annotation" />
+                      Click to add an annotation
+                    </div>
+                  </div>
+                  <Button className="btn-primary w-100"> Add</Button>
+                </CommentAnnotationPanel>
+              </div>{' '}
             </div>
-          </HeaderDownloadFuntionality>
-          <BrandAssetsPreviewBody>
-            <div
-              className={
-                showAssetPreview.index === 0
-                  ? 'pervious-img btn disabled-slider-btn'
-                  : 'pervious-img btn'
-              }
-              role="presentation"
-              onClick={() => showImg('prev')}>
-              <div
-                className={
-                  showAssetPreview.index === 0
-                    ? 'arrow-icon pervious disabled-slider-btn'
-                    : 'arrow-icon pervious'
-                }>
-                {' '}
-                <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-              </div>
-            </div>
-            <div className="assetPreviewImg">
-              <img
-                className="image-thumbnail"
-                src={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.presigned_url
-                }
-                type={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.mime_type
-                }
-                alt={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.original_name
-                }
-              />
-            </div>
-            <div
-              className={
-                showAssetPreview.index ===
-                (showAssetPreview.documents &&
-                  showAssetPreview.documents.length - 1)
-                  ? 'next-img btn disabled-slider-btn'
-                  : 'next-img btn'
-              }
-              role="presentation"
-              onClick={() => showImg('next')}>
-              <div
-                className={
-                  showAssetPreview.index ===
-                  (showAssetPreview.documents &&
-                    showAssetPreview.documents.length - 1)
-                    ? 'arrow-icon disabled-slider-btn'
-                    : 'arrow-icon'
-                }>
-                {' '}
-                <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-              </div>
-            </div>
-          </BrandAssetsPreviewBody>
-        </div>
+          </div>
+        </>
       )}
     </>
   );
@@ -209,6 +302,12 @@ const BrandAssetsPreviewBody = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  margin-top: 700px;
+  // .attach-chat {
+  //   width: 65%;
+  //   float: left;
+  //   display: flex;
+  // }
 
   .assetPreviewImg {
     position: absolute;
@@ -250,6 +349,7 @@ const BrandAssetsPreviewBody = styled.div`
     height: 50px;
     position: absolute;
     top: 50%;
+    margin-top: 40px;
     cursor: pointer;
     &.pervious-img {
       left: 29px;
@@ -322,6 +422,47 @@ const BrandAssetsPreviewBody = styled.div`
           transform: rotate(180deg);
           margin: 8px 0px 0px 18px;
         }
+      }
+    }
+  }
+`;
+
+const CommentAnnotationPanel = styled.div`
+  border-left: 1px solid #e2e2ea;
+  height: 100%;
+  margin-top: 70px;
+
+  .chat-header {
+    border-bottom: 1px solid #e2e2ea;
+    padding: 14px 10px;
+    color: #556178;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .inbox-comment {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: inline-block;
+      padding: 15px 0 0 15px;
+    }
+  }
+  .input-type-box {
+    position: fixed;
+    border-top: 1px solid #e2e2ea;
+    bottom: 10px;
+    width: 25%;
+
+    .add-annotation {
+      color: #171725;
+      font-size: 14px;
+      img {
+        width: 17px;
+        vertical-align: text-top;
+        margin: 0 8px;
       }
     }
   }

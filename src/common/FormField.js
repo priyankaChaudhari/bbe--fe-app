@@ -112,7 +112,6 @@ const FormField = styled.div`
       border: 1px solid ${Theme.gray2};
       border-radius: 5px;
       padding: 4px  10px ;
-     
       display: block;
       width: 100%;
       background-color: rgba(224, 231, 255, 0.2);
@@ -130,6 +129,20 @@ const FormField = styled.div`
           outline: none;
         }
     } 
+    .text-area-box {
+      background-color: ${Theme.gray8};
+      border: 1px solid  ${Theme.gray45};
+      border-radius: 2px;
+      padding: 4px  10px ;
+      font-family: ${Theme.baseFontFamily};
+  
+      width: 100%;
+        &::placeholder {
+          color: ${Theme.gray40};
+          font-weight: 500;
+          font-size: color: ${Theme.extraNormal};
+       }
+    }
    
 
   .css-14jk2my-container {
