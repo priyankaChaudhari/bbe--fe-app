@@ -6,7 +6,7 @@ import { HeaderDownloadFuntionality, PageLoader } from '../../common';
 import {
   CloseIcon,
   TrashIcons,
-  ChatBoxIcon,
+  // ChatBoxIcon,
   ArrowRightBlackIcon,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
@@ -66,7 +66,7 @@ function BrandAssetsPreview({
                 </div>
                 <div className="col-md-6 col-sm-12">
                   <ul className="contract-download-nav">
-                    <li>
+                    {/* <li>
                       {' '}
                       <img
                         className="header-icon"
@@ -74,7 +74,7 @@ function BrandAssetsPreview({
                         alt="check"
                       />
                       <span className="cursor">Comments (0)</span>
-                    </li>
+                    </li> */}
                     <li>
                       <span className="divide-arrow" />
                     </li>

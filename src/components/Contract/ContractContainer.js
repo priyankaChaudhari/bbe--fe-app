@@ -339,6 +339,15 @@ export default function ContractContainer() {
 
   if (isDocRendered && formData && formData.id) {
     if (
+      formData &&
+      formData.contract_status &&
+      formData.contract_status.value === 'active'
+    ) {
+      setIsDocRendered(false);
+      setDownloadApiCall(true);
+    }
+
+    if (
       ((formData &&
         formData.contract_type &&
         formData.contract_type.toLowerCase().includes('dsp')) ||
