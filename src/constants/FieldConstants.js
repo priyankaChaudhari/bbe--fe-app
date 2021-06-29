@@ -220,7 +220,7 @@ export const dadSortOptions = [
   },
   { value: 'dsp_spend', label: 'DSP Spend(Highest to Lowest)', custom: true },
   {
-    value: 'total_product_sale',
+    value: 'total_product_sales',
     label: 'Total Product Sales(Highest to Lowest)',
     custom: true,
   },
