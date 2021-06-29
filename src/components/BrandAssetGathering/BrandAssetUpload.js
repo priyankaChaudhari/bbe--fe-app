@@ -110,7 +110,7 @@ export default function BrandAssetUpload() {
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [noImages, setNoImages] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-
+  // const [imagesAssets, setImagesAssets] = useState([]);
   const [showAssetPreview, setShowAssetPreview] = useState({
     selectedFile: null,
     show: false,
@@ -603,6 +603,20 @@ export default function BrandAssetUpload() {
       });
   };
 
+  const onClickOfObject = (file, i) => {
+    // const result = documentData.filter((item) =>
+    //   item.mime_type.includes('image'),
+    // );
+    // setImagesAssets(result);
+
+    setShowAssetPreview({
+      selectedFile: file,
+      show: true,
+      documents: documentData,
+      index: i,
+    });
+  };
+
   const showDocuments = () => {
     return (
       <ul className="Image-container" key={Math.random()}>
@@ -694,12 +708,7 @@ export default function BrandAssetUpload() {
                         brandAssetData.is_completed &&
                         (showBtns.upload || showBtns.download)
                           ? ''
-                          : setShowAssetPreview({
-                              selectedFile: file,
-                              show: true,
-                              documents: documentData,
-                              index: i,
-                            })
+                          : onClickOfObject(file, i)
                       }
                       role="presentation"
                     />

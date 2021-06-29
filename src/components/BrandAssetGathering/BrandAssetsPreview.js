@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import FileViewer from 'react-file-viewer';
@@ -25,7 +25,10 @@ function BrandAssetsPreview({
   setShowConfirmationModal,
   isLoading,
 }) {
+  const [isImageLoading, setImageLoading] = useState(false);
+
   const showImg = (type) => {
+    setImageLoading(true);
     if (type === 'prev' && showAssetPreview.index > 0) {
       setShowAssetPreview({
         selectedFile: documentData[showAssetPreview.index - 1],
@@ -33,6 +36,7 @@ function BrandAssetsPreview({
         documents: documentData,
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
+      setTimeout(() => setImageLoading(false), 500);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
       setShowAssetPreview({
@@ -44,6 +48,7 @@ function BrandAssetsPreview({
             ? showAssetPreview.index + 1
             : documentData.length - 1,
       });
+      setTimeout(() => setImageLoading(false), 500);
     }
   };
 
@@ -58,7 +63,7 @@ function BrandAssetsPreview({
 
   return (
     <>
-      {isLoading.loader && isLoading.type === 'page' ? (
+      {(isLoading.loader && isLoading.type === 'page') || isImageLoading ? (
         <PageLoader color="#FF5933" type="page" />
       ) : (
         <>
@@ -112,31 +117,6 @@ function BrandAssetsPreview({
                     </ul>
                   </div>
                 </div>
-                {/* <div className="col-md-6 col-sm-12">
-                  <ul className="contract-download-nav">
-                    {/* <li>
-                      {' '}
-                      <img
-                        className="header-icon"
-                        src={ChatBoxIcon}
-                        alt="check"
-                      />
-                      <span className="cursor">Comments (0)</span>
-                    </li> */}
-                {/* <li>
-                      <span className="divide-arrow" />
-                    </li>
-                    <li
-                      onClick={() => setShowConfirmationModal(true)}
-                      role="presentation">
-                      <img
-                        className="header-icon"
-                        src={TrashIcons}
-                        alt="check"
-                      />
-                      <span className="cursor">Delete</span>
-                    </li>
-              </div>  */}
               </div>
             </HeaderDownloadFuntionality>
 
@@ -162,9 +142,27 @@ function BrandAssetsPreview({
                     </div>
                   </div>
                   <div className="assetPreviewImg">
-                    <img
+                    {/* <img
+                className="image-thumbnail"
+                src={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.presigned_url
+                }
+                type={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.mime_type
+                }
+                alt={
+                  showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.original_name
+                }
+              /> */}
+                    <object
                       className="image-thumbnail"
-                      src={
+                      data={
                         showAssetPreview &&
                         showAssetPreview.selectedFile &&
                         showAssetPreview.selectedFile.presigned_url
@@ -174,12 +172,17 @@ function BrandAssetsPreview({
                         showAssetPreview.selectedFile &&
                         showAssetPreview.selectedFile.mime_type
                       }
-                      alt={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.original_name
-                      }
-                    />
+                      // width="550"
+                      // height="250"
+                      role="presentation">
+                      <div className="unsupport-file-name">
+                        <div className="file-path">
+                          {showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.original_name}
+                        </div>
+                      </div>
+                    </object>
                   </div>
                   <div
                     className={
