@@ -5,16 +5,16 @@ import styled from 'styled-components';
 import {
   HeaderDownloadFuntionality,
   PageLoader,
-  FormField,
-  Button,
+  // FormField,
+  // Button,
 } from '../../common';
-import { GroupUser } from '../../theme/Global';
+// import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
   TrashIcons,
   // ChatBoxIcon,
   ArrowRightBlackIcon,
-  AnnotationGoal,
+  // AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 
@@ -141,7 +141,7 @@ function BrandAssetsPreview({
             </HeaderDownloadFuntionality>
 
             <div className="row">
-              <div className="col-9">
+              <div className="col-12">
                 <BrandAssetsPreviewBody>
                   <div
                     className={
@@ -205,7 +205,7 @@ function BrandAssetsPreview({
                   </div>
                 </BrandAssetsPreviewBody>
               </div>
-              <div className="col-3">
+              {/* <div className="col-3">
                 <CommentAnnotationPanel>
                   <div className="chat-header">Comments</div>
                   <ul className="inbox-comment">
@@ -242,23 +242,24 @@ function BrandAssetsPreview({
                       </GroupUser>
                     </li>
                   </ul>
-
-                  <div className="input-type-box">
-                    <FormField className="m-3">
-                      <textarea
-                        className="text-area-box"
-                        rows="4"
-                        placeholder="Enter comment"
-                      />
-                    </FormField>
-                    <div className="add-annotation">
-                      <img src={AnnotationGoal} alt="annotation" />
-                      Click to add an annotation
+                  <div className="chat-footer">
+                    <div className="input-type-box">
+                      <FormField className="mt-2 mb-2">
+                        <textarea
+                          className="text-area-box"
+                          rows="4"
+                          placeholder="Enter comment"
+                        />
+                      </FormField>
+                      <div className="add-annotation ">
+                        <img src={AnnotationGoal} alt="annotation" />
+                        Click to add an annotation
+                      </div>
+                      <Button className="btn-primary w-100 mt-3 "> Add</Button>
                     </div>
                   </div>
-                  <Button className="btn-primary w-100"> Add</Button>
                 </CommentAnnotationPanel>
-              </div>{' '}
+              </div>{' '} */}
             </div>
           </div>
         </>
@@ -303,11 +304,6 @@ const BrandAssetsPreviewBody = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-top: 700px;
-  // .attach-chat {
-  //   width: 65%;
-  //   float: left;
-  //   display: flex;
-  // }
 
   .assetPreviewImg {
     position: absolute;
@@ -427,43 +423,48 @@ const BrandAssetsPreviewBody = styled.div`
   }
 `;
 
-const CommentAnnotationPanel = styled.div`
-  border-left: 1px solid #e2e2ea;
-  height: 100%;
-  margin-top: 70px;
+// const CommentAnnotationPanel = styled.div`
+//   border-left: 1px solid ${Theme.gray4};
+//   height: 100%;
+//   margin-top: 70px;
 
-  .chat-header {
-    border-bottom: 1px solid #e2e2ea;
-    padding: 14px 10px;
-    color: #556178;
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-  .inbox-comment {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+//   .chat-header {
+//     border-bottom: 1px solid ${Theme.gray4};
+//     padding: 17px 10px;
+//     color: ${Theme.gray40};
+//     font-size: ${Theme.verySmall};
+//     text-transform: uppercase;
+//     font-weight: bold;
+//   }
+//   .inbox-comment {
+//     list-style-type: none;
+//     padding: 0;
+//     margin: 0;
+//     overflow: auto;
+//     height: 50%;
 
-    li {
-      display: inline-block;
-      padding: 15px 0 0 15px;
-    }
-  }
-  .input-type-box {
-    position: fixed;
-    border-top: 1px solid #e2e2ea;
-    bottom: 10px;
-    width: 25%;
-
-    .add-annotation {
-      color: #171725;
-      font-size: 14px;
-      img {
-        width: 17px;
-        vertical-align: text-top;
-        margin: 0 8px;
-      }
-    }
-  }
-`;
+//     li {
+//       display: inline-block;
+//       padding: 15px 0 0 15px;
+//     }
+//   }
+//   .chat-footer {
+//     bottom: 10px;
+//     position: fixed;
+//     border-top: 1px solid ${Theme.gray4};
+//     width: 100%;
+//     .input-type-box {
+//       margin: 0 10px;
+//       width: 24%;
+//       .add-annotation {
+//         color: ${Theme.gray85};
+//         font-size: ${Theme.extraNormal};
+//         img {
+//           width: 17px;
+//           vertical-align: text-top;
+//           margin: 0 8px;
+//         }
+//       }
+//     }
+//   }
+// `;
