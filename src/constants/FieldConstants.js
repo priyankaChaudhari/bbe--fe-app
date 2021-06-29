@@ -199,14 +199,14 @@ export const sadSortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
   { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'ad_sales', label: 'Ad Sales(Highest to Lowest)', custom: true },
-  { value: 'ad_spend', label: 'Ad Spend(Highest to Lowest)', custom: true },
+  { value: 'ad_sales', label: 'Ad Sales', custom: true },
+  { value: 'ad_spend', label: 'Ad Spend', custom: true },
   {
     value: 'impressions',
-    label: 'Impressions(Highest to Lowest)',
+    label: 'Ad Impressions',
     custom: true,
   },
-  { value: 'acos', label: 'ACOS(Highest to Lowest)', custom: true },
+  { value: 'acos', label: 'ACOS', custom: true },
 ];
 
 export const dadSortOptions = [
@@ -215,16 +215,16 @@ export const dadSortOptions = [
   { value: 'expiring_soon', label: 'Expiry Date' },
   {
     value: 'impressions',
-    label: 'Impressions(Highest to Lowest)',
+    label: 'Impressions',
     custom: true,
   },
-  { value: 'dsp_spend', label: 'DSP Spend(Highest to Lowest)', custom: true },
+  { value: 'dsp_spend', label: 'DSP Spend', custom: true },
   {
     value: 'total_product_sales',
-    label: 'Total Product Sales(Highest to Lowest)',
+    label: 'Total Product Sales',
     custom: true,
   },
-  { value: 'total_roas', label: 'Total ROAS(Highest to Lowest)', custom: true },
+  { value: 'total_roas', label: 'Total ROAS', custom: true },
 ];
 
 export const timeFrameFilters = [
