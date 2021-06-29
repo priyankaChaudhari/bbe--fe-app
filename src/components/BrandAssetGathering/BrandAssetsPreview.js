@@ -12,7 +12,7 @@ import {
 import {
   CloseIcon,
   TrashIcons,
-  // ChatBoxIcon,
+  ChatBoxIcon,
   ArrowRightBlackIcon,
   // AnnotationGoal,
 } from '../../theme/images';
