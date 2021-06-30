@@ -165,13 +165,15 @@ function BrandAssetsPreview({
                     {showAssetPreview &&
                     showAssetPreview.selectedFile &&
                     showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
-                      <PdfViewer
-                        pdf={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.presigned_url
-                        }
-                      />
+                      <BrandAssetPdf>
+                        <PdfViewer
+                          pdf={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.presigned_url
+                          }
+                        />
+                      </BrandAssetPdf>
                     ) : (
                       <object
                         className="image-thumbnail"
@@ -198,6 +200,7 @@ function BrandAssetsPreview({
                       </object>
                     )}
                   </div>
+
                   <div
                     className={
                       showAssetPreview.index ===
@@ -320,12 +323,12 @@ const BrandAssetsPreviewBody = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin-top: 700px;
+  margin-top: 50%;
 
   .assetPreviewImg {
     position: absolute;
-    top: 40%;
-    background-color: ${Theme.gray8};
+    top: 50%;
+    // background-color: ${Theme.gray8};
     width: 500px;
     height: 250px;
     display: flex;
@@ -337,7 +340,7 @@ const BrandAssetsPreviewBody = styled.div`
     }
 
     .unsupport-file-name {
-      padding: 115px 0;
+      padding: 60px 0;
       color: ${Theme.black};
 
       .file-path {
@@ -390,9 +393,6 @@ const BrandAssetsPreviewBody = styled.div`
       .image-thumbnail {
         max-width: 200px;
         height: 100px;
-      }
-      .unsupport-file-name {
-        padding: 115px 0;
       }
     }
     .btn {
@@ -485,3 +485,64 @@ const BrandAssetsPreviewBody = styled.div`
 //     }
 //   }
 // `;
+
+const BrandAssetPdf = styled.div`
+  min-height: 500px;
+  overflow: auto;
+  // margin-top: -130px;
+  height: 80vh;
+  #ResumeContainer {
+  }
+  .react-pdf__Document {
+    width: 100% !important;
+    background-color: ${Theme.gray3} !important;
+    padding-right: 0;
+
+    .react-pdf__Page {
+      background-color: ${Theme.gray3} !important;
+
+      & .pdf-view {
+        width: 100% !important;
+        background-color: ${Theme.gray3} !important;
+      }
+
+      .react-pdf__Page__canvas {
+        top: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: auto;
+      }
+      &:first-child {
+        top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+    }
+    .feDBFU .not-found {
+      font-weight: 500;
+      color: black;
+      margin-top: -70px;
+    }
+    @media only screen and (min-width: 1500px) {
+      // padding-right: 400px;
+    }
+    @media only screen and (max-width: 991px) {
+      padding-left: 0px !important;
+      padding-right: 0;
+      margin-top: 50px;
+      .react-pdf__Page {
+        &:first-child {
+          top: 110px !important;
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+    @media only screen and (max-width: 767px) {
+      .react-pdf__Page {
+        &:first-child {
+          top: 145px !important;
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+  }
+`;
