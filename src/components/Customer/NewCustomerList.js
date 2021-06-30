@@ -475,7 +475,8 @@ export default function NewCustomerList() {
         : 'DSP Ad Manager';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
-          const list = [{ value: 'any', label: 'Any' }];
+          // const list = []; //for select multiple user
+          const list = [{ value: 'any', label: 'Any' }]; // for select one user
           for (const brand of adm.data) {
             list.push({
               value: brand.id,
@@ -493,7 +494,8 @@ export default function NewCustomerList() {
     } else {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
-          const list = [{ value: 'any', label: 'Any' }];
+          // const list = []; //for select multiple use
+          const list = [{ value: 'any', label: 'Any' }]; // for select one use
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -518,9 +520,10 @@ export default function NewCustomerList() {
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
 
-  const handleFilters = (event, key, type, action) => {
+  // const handleFilters = (event, key, type, action) => {   //for multi select user
+  const handleFilters = (event, key, type) => {
+    // for one select user
     localStorage.setItem('page', 1);
-    console.log('indie filter', event, key, type, action);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
@@ -629,6 +632,7 @@ export default function NewCustomerList() {
       }
     }
 
+    // //for multiple user selection
     // if (type === 'brand') {
     //   if (action.action === 'clear') {
     //     setFilters({
@@ -731,18 +735,19 @@ export default function NewCustomerList() {
               user: [],
             }),
           );
-        }
-        setFilters({
-          ...filters,
-          user: event.value,
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
+        } else {
+          setFilters({
             ...filters,
             user: event.value,
-          }),
-        );
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              user: event.value,
+            }),
+          );
+        }
       }
 
       if (showAdPerformance) {
@@ -758,20 +763,21 @@ export default function NewCustomerList() {
               ad_user: [],
             }),
           );
-        }
-        setFilters({
-          ...filters,
-
-          ad_user: event.value,
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
+        } else {
+          setFilters({
             ...filters,
 
             ad_user: event.value,
-          }),
-        );
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+
+              ad_user: event.value,
+            }),
+          );
+        }
       }
 
       if (showDspAdPerformance) {
@@ -787,21 +793,21 @@ export default function NewCustomerList() {
               dsp_user: [],
             }),
           );
-        }
-
-        setFilters({
-          ...filters,
-
-          dsp_user: event.value,
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
+        } else {
+          setFilters({
             ...filters,
 
             dsp_user: event.value,
-          }),
-        );
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+
+              dsp_user: event.value,
+            }),
+          );
+        }
       }
     }
 
@@ -1245,7 +1251,6 @@ export default function NewCustomerList() {
     // }
 
     if (item === 'user') {
-      console.log('userr', filters);
       if (filters.user && !showAdPerformance && !showDspAdPerformance) {
         return brandGrowthStrategist.filter(
           (option) => filters.user === option.value,
