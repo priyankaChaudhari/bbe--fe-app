@@ -202,7 +202,7 @@ export const sadSortOptions = [
   { value: 'ad_sales', label: 'Ad Sales(Highest to Lowest)', custom: true },
   { value: 'ad_spend', label: 'Ad Spend(Highest to Lowest)', custom: true },
   {
-    value: 'impression',
+    value: 'impressions',
     label: 'Impressions(Highest to Lowest)',
     custom: true,
   },
