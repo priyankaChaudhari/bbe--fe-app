@@ -475,7 +475,7 @@ export default function NewCustomerList() {
         : 'DSP Ad Manager';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
-          const list = [];
+          const list = [{ value: 'any', label: 'Any' }];
           for (const brand of adm.data) {
             list.push({
               value: brand.id,
@@ -493,7 +493,7 @@ export default function NewCustomerList() {
     } else {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
-          const list = [];
+          const list = [{ value: 'any', label: 'Any' }];
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -520,6 +520,7 @@ export default function NewCustomerList() {
 
   const handleFilters = (event, key, type, action) => {
     localStorage.setItem('page', 1);
+    console.log('indie filter', event, key, type, action);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
       $('.checkboxes input:radio').prop('checked', false);
@@ -628,92 +629,182 @@ export default function NewCustomerList() {
       }
     }
 
+    // if (type === 'brand') {
+    //   if (action.action === 'clear') {
+    //     setFilters({
+    //       ...filters,
+    //       user: [],
+    //       ad_user: [],
+    //       dsp_user: [],
+    //     });
+    //     localStorage.setItem(
+    //       'filters',
+    //       JSON.stringify({
+    //         ...filters,
+    //         user: [],
+    //         ad_user: [],
+    //         dsp_user: [],
+    //       }),
+    //     );
+    //   }
+    //   if (action.action === 'remove-value') {
+    //     const list = filters.user.filter(
+    //       (op) => op !== action.removedValue.value,
+    //     );
+
+    //     const adList = filters.ad_user.filter(
+    //       (op) => op !== action.removedValue.value,
+    //     );
+
+    //     const dspList = filters.dsp_user.filter(
+    //       (op) => op !== action.removedValue.value,
+    //     );
+    //     setFilters({
+    //       ...filters,
+    //       user: list,
+    //       ad_user: adList,
+    //       dsp_user: dspList,
+    //     });
+    //     localStorage.setItem(
+    //       'filters',
+    //       JSON.stringify({
+    //         ...filters,
+    //         user: list,
+    //         ad_user: adList,
+    //         dsp_user: dspList,
+    //       }),
+    //     );
+    //   }
+    //   if (event && event.length && action.action === 'select-option') {
+    //     const list = [...filters.user];
+    //     const adList = [...filters.ad_user];
+    //     const dspList = [...filters.dsp_user];
+    //     console.log('inside eventtt');
+    // if (!showAdPerformance && !showDspAdPerformance) {
+    //   for (const bgs of event) {
+    //     if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
+    //   }
+    // }
+
+    // if (showAdPerformance) {
+    //   for (const adm of event) {
+    //     if (adList.indexOf(adm.value) === -1) adList.push(adm.value);
+    //   }
+    // }
+
+    // if (showDspAdPerformance) {
+    //   for (const adm of event) {
+    //     if (dspList.indexOf(adm.value) === -1) dspList.push(adm.value);
+    //   }
+    // }
+
+    //     setFilters({
+    //       ...filters,
+    //       user: list,
+    //       ad_user: adList,
+    //       dsp_user: dspList,
+    //     });
+    //     localStorage.setItem(
+    //       'filters',
+    //       JSON.stringify({
+    //         ...filters,
+    //         user: list,
+    //         ad_user: adList,
+    //         dsp_user: dspList,
+    //       }),
+    //     );
+    //   }
+    // }
+
+    // for single user selected
     if (type === 'brand') {
-      if (action.action === 'clear') {
-        setFilters({
-          ...filters,
-          user: [],
-          ad_user: [],
-          dsp_user: [],
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
+      if (!showAdPerformance && !showDspAdPerformance) {
+        if (event.value === 'any') {
+          setFilters({
             ...filters,
             user: [],
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              user: [],
+            }),
+          );
+        }
+        setFilters({
+          ...filters,
+          user: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            user: event.value,
+          }),
+        );
+      }
+
+      if (showAdPerformance) {
+        if (event.value === 'any') {
+          setFilters({
+            ...filters,
             ad_user: [],
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              ad_user: [],
+            }),
+          );
+        }
+        setFilters({
+          ...filters,
+
+          ad_user: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+
+            ad_user: event.value,
+          }),
+        );
+      }
+
+      if (showDspAdPerformance) {
+        if (event.value === 'any') {
+          setFilters({
+            ...filters,
             dsp_user: [],
-          }),
-        );
-      }
-      if (action.action === 'remove-value') {
-        const list = filters.user.filter(
-          (op) => op !== action.removedValue.value,
-        );
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              dsp_user: [],
+            }),
+          );
+        }
 
-        const adList = filters.ad_user.filter(
-          (op) => op !== action.removedValue.value,
-        );
-
-        const dspList = filters.dsp_user.filter(
-          (op) => op !== action.removedValue.value,
-        );
         setFilters({
           ...filters,
-          user: list,
-          ad_user: adList,
-          dsp_user: dspList,
+
+          dsp_user: event.value,
         });
         localStorage.setItem(
           'filters',
           JSON.stringify({
             ...filters,
-            user: list,
-            ad_user: adList,
-            dsp_user: dspList,
-          }),
-        );
-      }
-      if (event && event.length && action.action === 'select-option') {
-        const list = [...filters.user];
-        const adList = [...filters.ad_user];
-        const dspList = [...filters.dsp_user];
 
-        if (!showAdPerformance && !showDspAdPerformance) {
-          for (const bgs of event) {
-            if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
-          }
-        }
-
-        if (showAdPerformance) {
-          for (const adm of event) {
-            if (adList.indexOf(adm.value) === -1) adList.push(adm.value);
-          }
-        }
-
-        if (showDspAdPerformance) {
-          for (const adm of event) {
-            if (dspList.indexOf(adm.value) === -1) dspList.push(adm.value);
-          }
-        }
-
-        setFilters({
-          ...filters,
-          user: list,
-          ad_user: adList,
-          dsp_user: dspList,
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
-            ...filters,
-            user: list,
-            ad_user: adList,
-            dsp_user: dspList,
+            dsp_user: event.value,
           }),
         );
       }
     }
+
     if (type === 'radio') {
       if (event.target.checked) {
         setFilters({
@@ -1124,21 +1215,51 @@ export default function NewCustomerList() {
   };
 
   const bindDropDownValue = (item) => {
+    // for multi user selected
+    // if (item === 'user') {
+    //   if (filters.user && !showAdPerformance && !showDspAdPerformance) {
+    //     return brandGrowthStrategist.filter((option) =>
+    //       filters.user.some((op) => op === option.value),
+    //     );
+    //   }
+    //   if (filters.ad_user && showAdPerformance) {
+    //     return brandGrowthStrategist.filter((option) =>
+    //       filters.ad_user.some((op) => op === option.value),
+    //     );
+    //   }
+
+    //   if (filters.dsp_user && showDspAdPerformance) {
+    //     return brandGrowthStrategist.filter((option) =>
+    //       filters.dsp_user.some((op) => op === option.value),
+    //     );
+    //   }
+
+    //   // if (
+    //   //   filters.ad_user &&
+    //   //   (showPerformance || showAdPerformance || showDspAdPerformance)
+    //   // ) {
+    //   //   return timeFrameFilters;
+    //   // }
+
+    //   return [{ value: 'any', label: 'Any' }];
+    // }
+
     if (item === 'user') {
+      console.log('userr', filters);
       if (filters.user && !showAdPerformance && !showDspAdPerformance) {
-        return brandGrowthStrategist.filter((option) =>
-          filters.user.some((op) => op === option.value),
+        return brandGrowthStrategist.filter(
+          (option) => filters.user === option.value,
         );
       }
       if (filters.ad_user && showAdPerformance) {
-        return brandGrowthStrategist.filter((option) =>
-          filters.ad_user.some((op) => op === option.value),
+        return brandGrowthStrategist.filter(
+          (option) => filters.ad_user === option.value,
         );
       }
 
       if (filters.dsp_user && showDspAdPerformance) {
-        return brandGrowthStrategist.filter((option) =>
-          filters.dsp_user.some((op) => op === option.value),
+        return brandGrowthStrategist.filter(
+          (option) => filters.dsp_user === option.value,
         );
       }
 
@@ -1339,7 +1460,8 @@ export default function NewCustomerList() {
               : handleSearch(event, searchFor)
           }
           value={bindDropDownValue(item)}
-          isMulti={item === 'user'}
+          // isMulti={item === 'user'}
+          isMulti={false}
           components={getSelectComponents(item)}
           componentsValue={item === 'user' ? { Option: IconOption } : ''}
         />
