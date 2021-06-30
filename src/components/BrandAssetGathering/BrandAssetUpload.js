@@ -1156,7 +1156,7 @@ export default function BrandAssetUpload() {
             {showBtns.download ||
             showBtns.upload ||
             !(brandAssetData && brandAssetData.is_completed) ? (
-              <BrandAssetFooter>
+              <BrandAssetFooter data-test="brandAssetFooter">
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-12 text-right">

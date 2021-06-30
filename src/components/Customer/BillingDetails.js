@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -53,7 +53,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     },
   };
 
-  useEffect(() => {
+  const billingDetails = useCallback(() => {
+    setIsLoading({ loader: true, type: 'page' });
     getBillingDetails(id).then((response) => {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
@@ -81,6 +82,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       });
     });
   }, [id]);
+
+  useEffect(() => {
+    billingDetails();
+  }, [billingDetails]);
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
@@ -132,7 +137,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           : '';
       return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
     }
-
     return '';
   };
 
@@ -149,7 +153,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             ? `Enter ${item.label} (MM/YY)`
             : `Enter ${item.label}`
         }
-        value={
+        defaultValue={
           type === 'card_details' && data && data.id
             ? mapPaymentDefaultValues(item.key)
             : item.key === 'expiration_date'
@@ -162,11 +166,11 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             : ''
         }
         isNumericString
-        readOnly={
-          (type === 'card_details' || type === 'billing_address') &&
-          data &&
-          data.id
-        }
+        // readOnly={
+        //   (type === 'card_details' || type === 'billing_address') &&
+        //   data &&
+        //   data.id
+        // }
       />
     );
   };
@@ -182,13 +186,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         }
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
-        readOnly={
-          (type === 'card_details' ||
-            type === 'billing_address' ||
-            item.key === 'email') &&
-          data &&
-          data.id
-        }
+        readOnly={data && data.id && item.key === 'email'}
       />
     );
   };
@@ -230,7 +228,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const mapAddressDetails = () => {
     return (
-      <div className="row" style={{ opacity: data && data.id ? 0.5 : '' }}>
+      <div className="row">
         {BillingAddress.filter((op) => op.section === 'address').map((item) => {
           return (
             <div
@@ -265,10 +263,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return (
       <>
         {creditCardDetails.map((field) => (
-          <div
-            className="row"
-            key={field}
-            style={{ opacity: data && data.id ? 0.5 : '' }}>
+          <div className="row" key={field}>
             {field.details.map((item) => {
               return (
                 <div className="col-md-6" key={item.key}>
@@ -300,6 +295,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
+
     const getYear = new Date().getFullYear().toString().substring(0, 2);
     let format = '';
     if (
@@ -318,26 +314,38 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       (formData && formData.billing_contact.phone_number === null)
     )
       delete formData.billing_contact.phone_number;
-    if (data && data.id) {
+    if (
+      JSON.stringify(
+        data && data.id && data.card_details && data.card_details[0],
+      ) === JSON.stringify(formData.card_details)
+    ) {
       delete formData.card_details;
-      delete formData.billing_contact.email;
+      delete formData.old_billinginfo_id;
+    } else {
+      formData.old_billinginfo_id = data && data.id;
     }
+
+    if (formData && formData.old_billinginfo_id === '')
+      delete formData.old_billinginfo_id;
     delete formData.billing_contact.expiry_info;
+    delete formData.expiryMessage;
 
     const details = {
       ...formData,
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
-      card_details: formData.card_details,
+      // card_details: formData.card_details,
       customer_onboarding: userInfo.customer_onboarding || onBoardingId,
       payment_type: 'credit card',
     };
-    saveBillingInfo(details, data && data.id).then((res) => {
+
+    saveBillingInfo(
+      details,
+      formData && formData.old_billinginfo_id ? null : data && data.id,
+    ).then((res) => {
       if ((res && res.status === 200) || (res && res.status === 201)) {
         setIsLoading({ loader: false, type: 'button' });
-        getBillingDetails(id).then((contact) => {
-          setData(contact && contact.data);
-        });
+        billingDetails();
         setShowModal(false);
         setShowBtn(false);
       }
@@ -379,17 +387,14 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
-                {data && data.id ? (
-                  ''
-                ) : (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                )}
+
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
 
                 <div className="row">
                   <div className="col-6">
@@ -475,17 +480,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
-                {data && data.id ? (
-                  ''
-                ) : (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                )}
+
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+
                 {/* {formData.expiryMessage && formData.expiryMessage.message ? (
                   <div
                     className="edit-details"
@@ -581,6 +584,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           <div className="modal-body">
             <h4>Payment Details</h4>
             {mapPaymentDetails()}
+            <ErrorMsg style={{ textAlign: 'center' }}>
+              {apiError && apiError[0]}
+            </ErrorMsg>
             <div className="straight-line horizontal-line  mt-3 mb-3" />
             <h4>Billing Address</h4>
             {mapAddressDetails()}
