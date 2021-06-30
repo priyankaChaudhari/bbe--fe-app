@@ -8,6 +8,8 @@ import {
   // FormField,
   // Button,
 } from '../../common';
+import PdfViewer from '../../common/PdfViewer';
+
 // import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
@@ -159,30 +161,42 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.original_name
                 }
-              /> */}
-                    <object
-                      className="image-thumbnail"
-                      data={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.presigned_url
-                      }
-                      type={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.mime_type
-                      }
-                      // width="550"
-                      // height="250"
-                      role="presentation">
-                      <div className="unsupport-file-name">
-                        <div className="file-path">
-                          {showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.original_name}
+              /> */}{' '}
+                    {showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
+                      <PdfViewer
+                        pdf={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                      />
+                    ) : (
+                      <object
+                        className="image-thumbnail"
+                        data={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                        type={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.mime_type
+                        }
+                        // width="550"
+                        // height="250"
+                        role="presentation">
+                        <div className="unsupport-file-name">
+                          <div className="file-path">
+                            {showAssetPreview &&
+                              showAssetPreview.selectedFile &&
+                              showAssetPreview.selectedFile.original_name}
+                          </div>
                         </div>
-                      </div>
-                    </object>
+                      </object>
+                    )}
                   </div>
                   <div
                     className={
