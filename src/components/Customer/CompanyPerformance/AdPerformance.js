@@ -1049,13 +1049,23 @@ export default function AdPerformance({
   };
 
   const addThousandComma = (number, decimalDigits = 2) => {
-    if (number !== undefined && number !== null) {
-      return number
-        .toFixed(decimalDigits)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const decimal = _.split(number, '.', 2);
+    if (decimal[1] !== undefined) {
+      return `${decimal[0].replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ',',
+      )}.${decimal[1].slice(0, decimalDigits)}`;
     }
 
-    return number;
+    return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // if (number !== undefined && number !== null) {
+    //   return number
+    //     .toFixed(decimalDigits)
+    //     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // }
+
+    // return number;
   };
 
   const renderAdBox = () => {
@@ -1854,7 +1864,7 @@ export default function AdPerformance({
               {dspCurrentTotal && dspCurrentTotal.product_sales
                 ? `${currencySign}${addThousandComma(
                     dspCurrentTotal.product_sales,
-                    0,
+                    2,
                   )}`
                 : `${currencySign}0`}
             </div>
@@ -1862,7 +1872,7 @@ export default function AdPerformance({
               {dspPreviousTotal && dspPreviousTotal.product_sales
                 ? `vs ${currencySign}${addThousandComma(
                     dspPreviousTotal.product_sales,
-                    0,
+                    2,
                   )}`
                 : `vs ${currencySign}0`}
             </div>
