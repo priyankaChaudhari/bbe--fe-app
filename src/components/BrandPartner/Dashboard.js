@@ -97,7 +97,7 @@ export default function Dashboard({ isLoading, data }) {
               width="14px"
               alt="arrow-up"
             />
-            {value}
+            {value} %
           </span>
         </>
       );

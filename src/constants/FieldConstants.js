@@ -189,10 +189,10 @@ export const performanceSortOptions = [
   { value: '-created_at', label: 'Recently Added' },
   { value: '-updated_at', label: 'Last Modified' },
   { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'revenue', label: 'Revenue(Highest to Lowest)', custom: true },
-  { value: 'units_sold', label: 'Units Sold(Highest to Lowest)', custom: true },
-  { value: 'traffic', label: 'Traffic Date(Highest to Lowest)', custom: true },
-  { value: 'conversion', label: 'Conversion(Highest to Lowest)', custom: true },
+  { value: 'revenue', label: 'Revenue', custom: true },
+  { value: 'units_sold', label: 'Units Sold', custom: true },
+  { value: 'traffic', label: 'Traffic Date', custom: true },
+  { value: 'conversion', label: 'Conversion', custom: true },
 ];
 
 export const sadSortOptions = [
