@@ -278,25 +278,28 @@ export default function NewCustomerList() {
 
   const IconOption = (props) => (
     <Option {...props}>
-      {props.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={props.data.icon}
-          alt="user"
-          style={{
-            borderRadius: 50,
-            marginRight: '9px',
-            height: '32px',
-            verticalAlign: 'middle',
-          }}
-        />
-      ) : (
-        <GetInitialName
-          userInfo={props.data.label}
-          type="list"
-          property="mr-2"
-        />
-      )}{' '}
+      {/* {props.data.icon ? ( // for multi slect iser */}
+      {props.data && props.data.label !== 'All' ? (
+        props.data.icon ? ( // for single user select
+          <img
+            className="drop-down-user"
+            src={props.data.icon}
+            alt="user"
+            style={{
+              borderRadius: 50,
+              marginRight: '9px',
+              height: '32px',
+              verticalAlign: 'middle',
+            }}
+          />
+        ) : (
+          <GetInitialName
+            userInfo={props.data.label}
+            type="list"
+            property="mr-2"
+          />
+        )
+      ) : null}
       {props.data.label}
     </Option>
   );
@@ -490,8 +493,8 @@ export default function NewCustomerList() {
         : 'DSP Ad Manager';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
-          const list = []; // for select multiple user
-          // const list = [{ value: 'any', label: 'Any' }]; // for select one user
+          // const list = []; // for select multiple user
+          const list = [{ value: 'any', label: 'All' }]; // for select one user
           for (const brand of adm.data) {
             list.push({
               value: brand.id,
@@ -509,8 +512,8 @@ export default function NewCustomerList() {
     } else {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
-          const list = []; // for select multiple use
-          // const list = [{ value: 'any', label: 'Any' }]; // for select one use
+          // const list = []; // for select multiple use
+          const list = [{ value: 'any', label: 'All' }]; // for select one use
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -539,6 +542,7 @@ export default function NewCustomerList() {
     // for multi select user
     // const handleFilters = (event, key, type) => {
     // for one select user
+
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
@@ -575,6 +579,8 @@ export default function NewCustomerList() {
           contract_status: [],
           contract_type: [],
           user: [],
+          ad_user: [],
+          dsp_user: [],
           // sort_by: '',
           // searchQuery: '',
           // showPerformance: false
@@ -699,7 +705,6 @@ export default function NewCustomerList() {
     //     const list = [...filters.user];
     //     const adList = [...filters.ad_user];
     //     const dspList = [...filters.dsp_user];
-    //     console.log('inside eventtt');
     // if (!showAdPerformance && !showDspAdPerformance) {
     //   for (const bgs of event) {
     //     if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
@@ -756,49 +761,91 @@ export default function NewCustomerList() {
         );
       } else {
         if (!showAdPerformance && !showDspAdPerformance) {
-          setFilters({
-            ...filters,
-            user: event.value,
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                user: [],
+              }),
+            );
+          } else {
+            setFilters({
               ...filters,
               user: event.value,
-            }),
-          );
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                user: event.value,
+              }),
+            );
+          }
         }
 
         if (showAdPerformance) {
-          setFilters({
-            ...filters,
-
-            ad_user: event.value,
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              ad_user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                ad_user: [],
+              }),
+            );
+          } else {
+            setFilters({
               ...filters,
 
               ad_user: event.value,
-            }),
-          );
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                ad_user: event.value,
+              }),
+            );
+          }
         }
 
         if (showDspAdPerformance) {
-          setFilters({
-            ...filters,
-
-            dsp_user: event.value,
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              dsp_user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                dsp_user: [],
+              }),
+            );
+          } else {
+            setFilters({
               ...filters,
 
               dsp_user: event.value,
-            }),
-          );
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                dsp_user: event.value,
+              }),
+            );
+          }
         }
       }
     }
@@ -1021,7 +1068,7 @@ export default function NewCustomerList() {
 
   const getSelectPlaceholder = (item) => {
     if (item === 'user') {
-      return 'Any';
+      return 'All';
     }
 
     if (item === 'sort') {
