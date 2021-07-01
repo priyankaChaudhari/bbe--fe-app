@@ -2,21 +2,22 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import FileViewer from 'react-file-viewer';
+import { useForm } from 'react-hook-form';
 import {
   HeaderDownloadFuntionality,
   PageLoader,
-  // FormField,
-  // Button,
+  FormField,
+  Button,
 } from '../../common';
 import PdfViewer from '../../common/PdfViewer';
 
-// import { GroupUser } from '../../theme/Global';
+import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
   TrashIcons,
   ChatBoxIcon,
   ArrowRightBlackIcon,
-  // AnnotationGoal,
+  AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 
@@ -27,7 +28,33 @@ function BrandAssetsPreview({
   setShowConfirmationModal,
   isLoading,
 }) {
+  const { handleSubmit } = useForm();
   const [isImageLoading, setImageLoading] = useState(false);
+  const [showCommentSection, setShowCommentSection] = useState(false);
+  const list = [
+    {
+      id: '1',
+      name: 'Natalie Parker',
+      msg:
+        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
+      timestamp: '01/14/2021, 5:13:42 PM MST',
+    },
+    {
+      id: '2',
+      name: 'Nana Parker',
+      msg:
+        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
+      timestamp: '01/4/2021, 5:13:42 PM MST',
+    },
+    {
+      id: '3',
+      name: 'Natalie Patekar',
+      msg:
+        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
+      timestamp: '01/20/2021, 5:13:42 PM MST',
+    },
+  ];
+  const [commentsData] = useState(list);
 
   const showImg = (type) => {
     setImageLoading(true);
@@ -63,6 +90,83 @@ function BrandAssetsPreview({
     });
   };
 
+  const onSubmit = () => {};
+
+  const renderComments = () => {
+    return commentsData.map((item) => {
+      return (
+        <li key={item.id}>
+          <GroupUser>
+            <div className="avatarName float-left mr-3">pl</div>
+
+            <div className="activity-user">
+              <span className="font-bold"> {item.name}:</span> {item.msg}
+              <div className="time-date  mt-1">{item.timestamp}</div>
+            </div>
+            <div className="clear-fix" />
+          </GroupUser>
+        </li>
+      );
+    });
+
+    // <li>
+    //   <GroupUser>
+    //     <div className="avatarName float-left mr-3">pl</div>
+
+    //     <div className="activity-user">
+    //       <span className="font-bold"> Natalie Parker:</span> “Comment
+    //       content goes here. This one is an annotation on the image and so
+    //       avatar shows number of annotation rather than initials.”
+    //       <div className="time-date  mt-1">01/14/2021, 5:13:42 PM MST</div>
+    //     </div>
+    //     <div className="clear-fix" />
+    //   </GroupUser>
+    // </li>
+  };
+
+  const renderCommentPanel = () => {
+    return (
+      <CommentAnnotationPanel>
+        <div className="chat-header">Comments</div>
+        <ul className="inbox-comment">{renderComments()}</ul>
+        <div className="chat-footer">
+          <div className="input-type-box">
+            <FormField className="mt-2 mb-2">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {/* <textarea
+                  className="text-area-box"
+                  rows="4"
+                  placeholder="Enter comment"
+                  // onChange={() => handleChange()}
+                /> */}
+                <input
+                  className="text-area-box"
+                  type="text"
+                  placeholder="Enter your Email Address"
+                  // onChange={() => handleChange()}
+                  id="emailAddress"
+                  name="email"
+                />
+
+                <div className="add-annotation ">
+                  <img src={AnnotationGoal} alt="annotation" />
+                  Click to add an annotation
+                </div>
+                <Button
+                  className="btn-primary w-100 mt-3 "
+                  // onClick={() => addcomment()}>
+                >
+                  {' '}
+                  Add
+                </Button>
+              </form>
+            </FormField>
+          </div>
+        </div>
+      </CommentAnnotationPanel>
+    );
+  };
+
   return (
     <>
       {(isLoading.loader && isLoading.type === 'page') || isImageLoading ? (
@@ -88,7 +192,14 @@ function BrandAssetsPreview({
                           src={ChatBoxIcon}
                           alt="check"
                         />
-                        <span className="cursor">Comments (0)</span>
+                        <span
+                          className="cursor"
+                          role="presentation"
+                          onClick={() =>
+                            setShowCommentSection(!showCommentSection)
+                          }>
+                          Comments (0)
+                        </span>
                       </li>
                       <li>
                         <span className="divide-arrow" />
@@ -123,7 +234,7 @@ function BrandAssetsPreview({
             </HeaderDownloadFuntionality>
 
             <div className="row">
-              <div className="col-12">
+              <div className={showCommentSection ? 'col-9' : 'col-12'}>
                 <BrandAssetsPreviewBody>
                   <div
                     className={
@@ -225,61 +336,10 @@ function BrandAssetsPreview({
                   </div>
                 </BrandAssetsPreviewBody>
               </div>
-              {/* <div className="col-3">
-                <CommentAnnotationPanel>
-                  <div className="chat-header">Comments</div>
-                  <ul className="inbox-comment">
-                    <li>
-                      <GroupUser>
-                        <div className="avatarName float-left mr-3">pl</div>
 
-                        <div className="activity-user">
-                          <span className="font-bold"> Natalie Parker:</span>{' '}
-                          “Comment content goes here. This one is an annotation
-                          on the image and so avatar shows number of annotation
-                          rather than initials.”
-                          <div className="time-date  mt-1">
-                            01/14/2021, 5:13:42 PM MST
-                          </div>
-                        </div>
-                        <div className="clear-fix" />
-                      </GroupUser>
-                    </li>
-                    <li>
-                      <GroupUser>
-                        <div className="avatarName float-left mr-3">pl</div>
-
-                        <div className="activity-user">
-                          <span className="font-bold"> Natalie Parker:</span>{' '}
-                          “Comment content goes here. This one is an annotation
-                          on the image and so avatar shows number of annotation
-                          rather than initials.”
-                          <div className="time-date  mt-1">
-                            01/14/2021, 5:13:42 PM MST
-                          </div>
-                        </div>
-                        <div className="clear-fix" />
-                      </GroupUser>
-                    </li>
-                  </ul>
-                  <div className="chat-footer">
-                    <div className="input-type-box">
-                      <FormField className="mt-2 mb-2">
-                        <textarea
-                          className="text-area-box"
-                          rows="4"
-                          placeholder="Enter comment"
-                        />
-                      </FormField>
-                      <div className="add-annotation ">
-                        <img src={AnnotationGoal} alt="annotation" />
-                        Click to add an annotation
-                      </div>
-                      <Button className="btn-primary w-100 mt-3 "> Add</Button>
-                    </div>
-                  </div>
-                </CommentAnnotationPanel>
-              </div>{' '} */}
+              {showCommentSection ? (
+                <div className="col-3">{renderCommentPanel()}</div>
+              ) : null}
             </div>
           </div>
         </>
@@ -440,51 +500,51 @@ const BrandAssetsPreviewBody = styled.div`
   }
 `;
 
-// const CommentAnnotationPanel = styled.div`
-//   border-left: 1px solid ${Theme.gray4};
-//   height: 100%;
-//   margin-top: 70px;
+const CommentAnnotationPanel = styled.div`
+  border-left: 1px solid ${Theme.gray4};
+  height: 100%;
+  margin-top: 70px;
 
-//   .chat-header {
-//     border-bottom: 1px solid ${Theme.gray4};
-//     padding: 17px 10px;
-//     color: ${Theme.gray40};
-//     font-size: ${Theme.verySmall};
-//     text-transform: uppercase;
-//     font-weight: bold;
-//   }
-//   .inbox-comment {
-//     list-style-type: none;
-//     padding: 0;
-//     margin: 0;
-//     overflow: auto;
-//     height: 50%;
+  .chat-header {
+    border-bottom: 1px solid ${Theme.gray4};
+    padding: 17px 10px;
+    color: ${Theme.gray40};
+    font-size: ${Theme.verySmall};
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .inbox-comment {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    height: 50%;
 
-//     li {
-//       display: inline-block;
-//       padding: 15px 0 0 15px;
-//     }
-//   }
-//   .chat-footer {
-//     bottom: 10px;
-//     position: fixed;
-//     border-top: 1px solid ${Theme.gray4};
-//     width: 100%;
-//     .input-type-box {
-//       margin: 0 10px;
-//       width: 24%;
-//       .add-annotation {
-//         color: ${Theme.gray85};
-//         font-size: ${Theme.extraNormal};
-//         img {
-//           width: 17px;
-//           vertical-align: text-top;
-//           margin: 0 8px;
-//         }
-//       }
-//     }
-//   }
-// `;
+    li {
+      display: inline-block;
+      padding: 15px 0 0 15px;
+    }
+  }
+  .chat-footer {
+    bottom: 10px;
+    position: fixed;
+    border-top: 1px solid ${Theme.gray4};
+    width: 100%;
+    .input-type-box {
+      margin: 0 10px;
+      width: 24%;
+      .add-annotation {
+        color: ${Theme.gray85};
+        font-size: ${Theme.extraNormal};
+        img {
+          width: 17px;
+          vertical-align: text-top;
+          margin: 0 8px;
+        }
+      }
+    }
+  }
+`;
 
 const BrandAssetPdf = styled.div`
   min-height: 500px;
