@@ -1513,48 +1513,48 @@ export default function NewCustomerList() {
     );
   };
 
-  const calculatePercentage = (current, previous, type) => {
-    if (current && previous) {
-      let percentage = '';
-      if (type === 'conversion') {
-        const diff = current - previous;
-        percentage = diff / 2;
-      }
-      const diff = current - previous;
-      const mean = diff / previous;
-      percentage = mean * 100;
+  // const calculatePercentage = (current, previous, type) => {
+  //   if (current && previous) {
+  //     let percentage = '';
+  //     if (type === 'conversion') {
+  //       const diff = current - previous;
+  //       percentage = diff / 2;
+  //     }
+  //     const diff = current - previous;
+  //     const mean = diff / previous;
+  //     percentage = mean * 100;
 
-      if (percentage.toString().includes('-')) {
-        return (
-          <>
-            <br />
-            <span className="decrease-rate">
-              {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {percentage
-                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
-            </span>
-          </>
-        );
-      }
-      return (
-        <>
-          <br />
-          <div className="increase-rate">
-            <img
-              className="green-arrow"
-              src={ArrowUpIcon}
-              width="14px"
-              alt="arrow-up"
-            />
-            {percentage ? `${percentage.toFixed(2)} %` : ''}
-          </div>
-        </>
-      );
-    }
-    return '';
-  };
+  //     if (percentage.toString().includes('-')) {
+  //       return (
+  //         <>
+  //           <br />
+  //           <span className="decrease-rate">
+  //             {' '}
+  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+  //             {percentage
+  //               ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+  //               : ''}
+  //           </span>
+  //         </>
+  //       );
+  //     }
+  //     return (
+  //       <>
+  //         <br />
+  //         <div className="increase-rate">
+  //           <img
+  //             className="green-arrow"
+  //             src={ArrowUpIcon}
+  //             width="14px"
+  //             alt="arrow-up"
+  //           />
+  //           {percentage ? `${percentage.toFixed(2)} %` : ''}
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  //   return '';
+  // };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     const value = actualValue;
@@ -1607,7 +1607,7 @@ export default function NewCustomerList() {
               width="14px"
               alt="arrow-up"
             />
-            {value}
+            {value} %
           </div>
         </>
       );
@@ -1697,7 +1697,7 @@ export default function NewCustomerList() {
               </div>
             )}
           </td>
-          <td width="15%">
+          {/* <td width="15%">
             $
             {item &&
               item.daily_facts &&
@@ -1726,9 +1726,29 @@ export default function NewCustomerList() {
                     .reduce((val, rev) => rev + val)
                 : 0,
             )}
-          </td>
+          </td> */}
 
           <td width="15%">
+            {item &&
+            item.sales_performance &&
+            item.sales_performance.current_sum &&
+            item.sales_performance.current_sum.revenue
+              ? `$${item.sales_performance.current_sum.revenue
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  .replace('.00', '')}`
+              : '$0'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.difference_data &&
+                item.sales_performance.difference_data.revenue,
+              false,
+              'revenue',
+            )}
+          </td>
+          {/* <td width="15%">
             <>
               {item &&
                 item.daily_facts &&
@@ -1758,9 +1778,29 @@ export default function NewCustomerList() {
                   : 0,
               )}
             </>
-          </td>
+          </td> */}
 
           <td width="15%">
+            {item &&
+            item.sales_performance &&
+            item.sales_performance.current_sum &&
+            item.sales_performance.current_sum.units_sold
+              ? `${item.sales_performance.current_sum.units_sold
+                  .toFixed(0)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+              : '0'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.difference_data &&
+                item.sales_performance.difference_data.units_sold,
+              false,
+              'units_sold',
+            )}
+          </td>
+
+          {/* <td width="15%">
             <>
               {item &&
                 item.daily_facts &&
@@ -1790,9 +1830,29 @@ export default function NewCustomerList() {
                   : 0,
               )}
             </>
-          </td>
+          </td> */}
 
           <td width="15%">
+            {item &&
+            item.sales_performance &&
+            item.sales_performance.current_sum &&
+            item.sales_performance.current_sum.traffic
+              ? `${item.sales_performance.current_sum.traffic
+                  .toFixed(0)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+              : '0'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.difference_data &&
+                item.sales_performance.difference_data.traffic,
+              false,
+              'traffic',
+            )}
+          </td>
+
+          {/* <td width="15%">
             <>
               {item &&
               item.daily_facts &&
@@ -1834,6 +1894,25 @@ export default function NewCustomerList() {
                 ''
               )}
             </>
+          </td> */}
+          <td width="15%">
+            {item &&
+            item.sales_performance &&
+            item.sales_performance.current_sum &&
+            item.sales_performance.current_sum.conversion
+              ? `${item.sales_performance.current_sum.conversion
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
+              : '0%'}
+            {renderAdPerformanceDifference(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.difference_data &&
+                item.sales_performance.difference_data.conversion,
+              false,
+              'conversion',
+            )}
           </td>
 
           <td width="15%">

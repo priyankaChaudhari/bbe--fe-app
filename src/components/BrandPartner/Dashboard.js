@@ -21,41 +21,84 @@ import NoRecordFound from '../../common/NoRecordFound';
 export default function Dashboard({ isLoading, data }) {
   const history = useHistory();
 
-  const calculatePercentage = (current, previous, type) => {
-    if (current && previous) {
-      let percentage = '';
-      if (type === 'conversion') {
-        const diff = current - previous;
-        percentage = diff / 2;
-      }
-      const diff = current - previous;
-      const mean = diff / previous;
-      percentage = mean * 100;
+  // const calculatePercentage = (current, previous, type) => {
+  //   if (current && previous) {
+  //     let percentage = '';
+  //     if (type === 'conversion') {
+  //       const diff = current - previous;
+  //       percentage = diff / 2;
+  //     }
+  //     const diff = current - previous;
+  //     const mean = diff / previous;
+  //     percentage = mean * 100;
 
-      if (percentage.toString().includes('-')) {
+  //     if (percentage.toString().includes('-')) {
+  //       return (
+  //         <>
+  //           <div className="decrease-rate">
+  //             {' '}
+  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+  //             {percentage
+  //               ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+  //               : ''}
+  //           </div>
+  //         </>
+  //       );
+  //     }
+  //     return (
+  //       <>
+  //         <div className="increase-rate">
+  //           <img
+  //             className="green-arrow "
+  //             src={ArrowUpIcon}
+  //             width="14px"
+  //             alt="arrow-up"
+  //           />
+  //           {percentage ? `${percentage.toFixed(2)} %` : ''}
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  //   return <div className="perentage-value down">N/A</div>;
+  // };
+
+  const renderAdPerformanceDifference = (actualValue) => {
+    const value = actualValue;
+    let selectedClass = '';
+    let selectedArrow = '';
+
+    if (value) {
+      if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate';
+        selectedArrow = ArrowDownIcon;
+      } else {
+        selectedClass = 'increase-rate';
+        selectedArrow = ArrowUpIcon;
+      }
+
+      if (value.toString().includes('-')) {
         return (
           <>
-            <div className="decrease-rate">
+            <span className={selectedClass}>
               {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {percentage
-                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
-            </div>
+              <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
+              {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
+            </span>
           </>
         );
       }
+
       return (
         <>
-          <div className="increase-rate">
+          <span className={selectedClass}>
             <img
-              className="green-arrow "
-              src={ArrowUpIcon}
+              className="green-arrow"
+              src={selectedArrow}
               width="14px"
               alt="arrow-up"
             />
-            {percentage ? `${percentage.toFixed(2)} %` : ''}
-          </div>
+            {value}
+          </span>
         </>
       );
     }
@@ -166,7 +209,7 @@ export default function Dashboard({ isLoading, data }) {
                       <div className="row">
                         <div className="col-6">
                           <div className="card-label">Revenue</div>
-                          {calculatePercentage(
+                          {/* {calculatePercentage(
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
@@ -183,11 +226,17 @@ export default function Dashboard({ isLoading, data }) {
                                   .map((rev) => rev.revenue)
                                   .reduce((val, rev) => rev + val)
                               : 0,
+                          )} */}
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.sales_performance &&
+                              item.sales_performance.difference_data &&
+                              item.sales_performance.difference_data.revenue,
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price ">
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
                             item.daily_facts.current.length ? (
@@ -205,11 +254,20 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.current_sum &&
+                            item.sales_performance.current_sum.revenue
+                              ? `$${item.sales_performance.current_sum.revenue
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
                           </div>
                           <div className="vs">
                             vs{' '}
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
                             item.daily_facts.previous.length ? (
@@ -227,13 +285,22 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.previous_sum &&
+                            item.sales_performance.previous_sum.revenue
+                              ? `$${item.sales_performance.previous_sum.revenue
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '$0'}
                           </div>
                         </div>
                         <div className="straight-line horizontal-line spacing" />
                         <div className="col-6">
                           <div className="card-label">Units Sold</div>
-                          {calculatePercentage(
+                          {/* {calculatePercentage(
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
@@ -250,11 +317,17 @@ export default function Dashboard({ isLoading, data }) {
                                   .map((rev) => rev.units_sold)
                                   .reduce((val, rev) => rev + val)
                               : 0,
+                          )} */}
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.sales_performance &&
+                              item.sales_performance.difference_data &&
+                              item.sales_performance.difference_data.units_sold,
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price ">
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
                             item.daily_facts.current.length ? (
@@ -271,11 +344,20 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.current_sum &&
+                            item.sales_performance.current_sum.units_sold
+                              ? `${item.sales_performance.current_sum.units_sold
+                                  .toFixed(0)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '0'}
                           </div>
                           <div className="vs">
                             vs{' '}
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
                             item.daily_facts.previous.length ? (
@@ -292,14 +374,23 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.previous_sum &&
+                            item.sales_performance.previous_sum.units_sold
+                              ? `${item.sales_performance.previous_sum.units_sold
+                                  .toFixed(0)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '0'}
                           </div>
                         </div>
                         <div className="straight-line horizontal-line spacing" />
 
                         <div className="col-6">
                           <div className="card-label">Traffic</div>
-                          {calculatePercentage(
+                          {/* {calculatePercentage(
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
@@ -316,11 +407,18 @@ export default function Dashboard({ isLoading, data }) {
                                   .map((rev) => rev.traffic)
                                   .reduce((val, rev) => rev + val)
                               : 0,
+                          )} */}
+
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.sales_performance &&
+                              item.sales_performance.difference_data &&
+                              item.sales_performance.difference_data.traffic,
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price ">
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
                             item.daily_facts.current.length ? (
@@ -337,11 +435,20 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.current_sum &&
+                            item.sales_performance.current_sum.traffic
+                              ? `${item.sales_performance.current_sum.traffic
+                                  .toFixed()
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '0'}
                           </div>
                           <div className="vs">
                             vs{' '}
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
                             item.daily_facts.previous.length ? (
@@ -358,14 +465,23 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.previous_sum &&
+                            item.sales_performance.previous_sum.traffic
+                              ? `${item.sales_performance.previous_sum.traffic
+                                  .toFixed()
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : '0'}
                           </div>
                         </div>
 
                         <div className="straight-line horizontal-line spacing" />
                         <div className="col-6">
                           <div className="card-label">Conversion</div>
-                          {calculatePercentage(
+                          {/* {calculatePercentage(
                             item &&
                               item.daily_facts &&
                               item.daily_facts.current &&
@@ -383,11 +499,18 @@ export default function Dashboard({ isLoading, data }) {
                                   .reduce((val, rev) => rev + val)
                               : 0,
                             'conversion',
+                          )} */}
+
+                          {renderAdPerformanceDifference(
+                            item &&
+                              item.sales_performance &&
+                              item.sales_performance.difference_data &&
+                              item.sales_performance.difference_data.conversion,
                           )}
                         </div>
                         <div className="col-6 text-right">
                           <div className="sold-price">
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.current &&
                             item.daily_facts.current.length ? (
@@ -405,11 +528,20 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.current_sum &&
+                            item.sales_performance.current_sum.conversion
+                              ? `${item.sales_performance.current_sum.conversion
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
+                              : '0%'}
                           </div>
                           <div className="vs">
                             vs{' '}
-                            {item &&
+                            {/* {item &&
                             item.daily_facts &&
                             item.daily_facts.previous &&
                             item.daily_facts.previous.length ? (
@@ -427,7 +559,16 @@ export default function Dashboard({ isLoading, data }) {
                               </>
                             ) : (
                               0
-                            )}
+                            )} */}
+                            {item &&
+                            item.sales_performance &&
+                            item.sales_performance.previous_sum &&
+                            item.sales_performance.previous_sum.conversion
+                              ? `${item.sales_performance.previous_sum.conversion
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
+                              : '0%'}
                           </div>
                         </div>
                       </div>

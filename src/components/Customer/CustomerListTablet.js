@@ -194,44 +194,44 @@ export default function CustomerListTablet({
     );
   };
 
-  const calculatePercentage = (current, previous, type) => {
-    if (current && previous) {
-      let percentage = '';
-      if (type === 'conversion') {
-        const diff = current - previous;
-        percentage = diff / 2;
-      }
-      const diff = current - previous;
-      const mean = diff / previous;
-      percentage = mean * 100;
+  // const calculatePercentage = (current, previous, type) => {
+  //   if (current && previous) {
+  //     let percentage = '';
+  //     if (type === 'conversion') {
+  //       const diff = current - previous;
+  //       percentage = diff / 2;
+  //     }
+  //     const diff = current - previous;
+  //     const mean = diff / previous;
+  //     percentage = mean * 100;
 
-      if (percentage.toString().includes('-')) {
-        return (
-          <>
-            <span className="decrease-rate ml-1">
-              {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {percentage
-                ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
-                : ''}
-            </span>
-          </>
-        );
-      }
-      return (
-        <span className="increase-rate ml-1">
-          <img
-            className="green-arrow"
-            src={ArrowUpIcon}
-            width="14px"
-            alt="arrow-up"
-          />
-          {percentage ? `${percentage.toFixed(2)} %` : ''}
-        </span>
-      );
-    }
-    return '';
-  };
+  //     if (percentage.toString().includes('-')) {
+  //       return (
+  //         <>
+  //           <span className="decrease-rate ml-1">
+  //             {' '}
+  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+  //             {percentage
+  //               ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
+  //               : ''}
+  //           </span>
+  //         </>
+  //       );
+  //     }
+  //     return (
+  //       <span className="increase-rate ml-1">
+  //         <img
+  //           className="green-arrow"
+  //           src={ArrowUpIcon}
+  //           width="14px"
+  //           alt="arrow-up"
+  //         />
+  //         {percentage ? `${percentage.toFixed(2)} %` : ''}
+  //       </span>
+  //     );
+  //   }
+  //   return '';
+  // };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
@@ -321,7 +321,7 @@ export default function CustomerListTablet({
             <div className="col-6 pb-2">
               <div className="label">Revenue</div>
               <div className="label-info ">
-                <>
+                {/* <>
                   $
                   {item &&
                     item.daily_facts &&
@@ -350,13 +350,32 @@ export default function CustomerListTablet({
                           .reduce((val, rev) => rev + val)
                       : 0,
                   )}
+                </> */}
+                <>
+                  {item &&
+                  item.sales_performance &&
+                  item.sales_performance.current_sum &&
+                  item.sales_performance.current_sum.revenue
+                    ? `$${item.sales_performance.current_sum.revenue
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '$0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.difference_data &&
+                      item.sales_performance.difference_data.revenue,
+                    false,
+                    'revenue',
+                  )}
                 </>
               </div>
             </div>
             <div className="col-6 pb-2">
               <div className="label">Units Sold</div>
               <div className="label-info ">
-                <>
+                {/* <>
                   {item &&
                     item.daily_facts &&
                     item.daily_facts.current &&
@@ -386,6 +405,26 @@ export default function CustomerListTablet({
                           .reduce((val, rev) => rev + val)
                       : 0,
                   )}
+                </> */}
+                <>
+                  {item &&
+                  item.sales_performance &&
+                  item.sales_performance.current_sum &&
+                  item.sales_performance.current_sum.units_sold
+                    ? `${item.sales_performance.current_sum.units_sold
+                        .toFixed(0)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        .replace('.00', '')}`
+                    : '0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.difference_data &&
+                      item.sales_performance.difference_data.units_sold,
+                    false,
+                    'units_sold',
+                  )}
                 </>
               </div>
             </div>
@@ -395,7 +434,7 @@ export default function CustomerListTablet({
             <div className="col-6">
               <div className="label">Traffic</div>
               <div className="label-info">
-                <>
+                {/* <>
                   $
                   {item &&
                     item.daily_facts &&
@@ -424,6 +463,25 @@ export default function CustomerListTablet({
                           .reduce((val, rev) => rev + val)
                       : 0,
                   )}
+                </> */}
+                <>
+                  {item &&
+                  item.sales_performance &&
+                  item.sales_performance.current_sum &&
+                  item.sales_performance.current_sum.traffic
+                    ? `${item.sales_performance.current_sum.traffic
+                        .toFixed(0)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : '0'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.difference_data &&
+                      item.sales_performance.difference_data.traffic,
+                    false,
+                    'traffic',
+                  )}
                 </>
               </div>
             </div>
@@ -431,7 +489,7 @@ export default function CustomerListTablet({
             <div className="col-6">
               <div className="label">Conversion</div>
               <div className="label-info">
-                <>
+                {/* <>
                   $
                   {item &&
                     item.daily_facts &&
@@ -462,6 +520,25 @@ export default function CustomerListTablet({
                           .map((rev) => rev.conversion)
                           .reduce((val, rev) => rev + val)
                       : 0,
+                    'conversion',
+                  )}
+                </> */}
+                <>
+                  {item &&
+                  item.sales_performance &&
+                  item.sales_performance.current_sum &&
+                  item.sales_performance.current_sum.conversion
+                    ? `${item.sales_performance.current_sum.conversion
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
+                    : '0%'}
+                  {renderAdPerformanceDifference(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.difference_data &&
+                      item.sales_performance.difference_data.conversion,
+                    false,
                     'conversion',
                   )}
                 </>
