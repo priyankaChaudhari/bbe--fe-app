@@ -576,6 +576,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           onClick={() => {
             setShowModal(false);
             setShowBtn(false);
+            setApiError({});
           }}
           role="presentation"
         />
@@ -612,6 +613,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   onClick={() => {
                     setShowModal(false);
                     setShowBtn(false);
+                    setApiError({});
                   }}>
                   Discard Changes
                 </Button>
