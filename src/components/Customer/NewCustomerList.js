@@ -94,7 +94,11 @@ export default function NewCustomerList() {
       ? JSON.parse(localStorage.getItem('filters')).searchQuery
       : '',
   );
-  const { Option, MultiValue, SingleValue } = components;
+  const {
+    Option,
+    // MultiValue,
+    SingleValue,
+  } = components;
   // const [customDateModal, setCustomDateModal] = useState(false);
   const [selectedView, setSelectedView] = useState('contract_details');
   const [status, setStatus] = useState([]);
@@ -297,7 +301,9 @@ export default function NewCustomerList() {
     </Option>
   );
   const IconSingleOption = (props) => (
-    <MultiValue {...props}>
+    // <MultiValue {...props}> //for select multiple user
+    // for select onr user
+    <SingleValue {...props}>
       {props.data.icon ? (
         <img
           className="drop-down-user"
@@ -317,7 +323,8 @@ export default function NewCustomerList() {
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
-    </MultiValue>
+    </SingleValue>
+    // </MultiValue>
   );
 
   const SortOption = (props) => (
@@ -364,9 +371,17 @@ export default function NewCustomerList() {
 
   const getSelectComponents = (key) => {
     if (key === 'user') {
+      // for select multiple user
+      // return {
+      //   Option: IconOption,
+      //   MultiValue: IconSingleOption,
+      //   DropdownIndicator,
+      // };
+
+      // for select one user
       return {
-        Option: IconOption,
-        MultiValue: IconSingleOption,
+        // Option: IconOption,
+        SingleValue: IconSingleOption,
         DropdownIndicator,
       };
     }
@@ -475,8 +490,8 @@ export default function NewCustomerList() {
         : 'DSP Ad Manager';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
-          // const list = []; //for select multiple user
-          const list = [{ value: 'any', label: 'Any' }]; // for select one user
+          const list = []; // for select multiple user
+          // const list = [{ value: 'any', label: 'Any' }]; // for select one user
           for (const brand of adm.data) {
             list.push({
               value: brand.id,
@@ -494,8 +509,8 @@ export default function NewCustomerList() {
     } else {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
-          // const list = []; //for select multiple use
-          const list = [{ value: 'any', label: 'Any' }]; // for select one use
+          const list = []; // for select multiple use
+          // const list = [{ value: 'any', label: 'Any' }]; // for select one use
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -520,8 +535,9 @@ export default function NewCustomerList() {
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
 
-  // const handleFilters = (event, key, type, action) => {   //for multi select user
-  const handleFilters = (event, key, type) => {
+  const handleFilters = (event, key, type, action) => {
+    // for multi select user
+    // const handleFilters = (event, key, type) => {
     // for one select user
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
@@ -634,23 +650,23 @@ export default function NewCustomerList() {
 
     // //for multiple user selection
     // if (type === 'brand') {
-    //   if (action.action === 'clear') {
-    //     setFilters({
+    // if (action.action === 'clear') {
+    //   setFilters({
+    //     ...filters,
+    //     user: [],
+    //     ad_user: [],
+    //     dsp_user: [],
+    //   });
+    //   localStorage.setItem(
+    //     'filters',
+    //     JSON.stringify({
     //       ...filters,
     //       user: [],
     //       ad_user: [],
     //       dsp_user: [],
-    //     });
-    //     localStorage.setItem(
-    //       'filters',
-    //       JSON.stringify({
-    //         ...filters,
-    //         user: [],
-    //         ad_user: [],
-    //         dsp_user: [],
-    //       }),
-    //     );
-    //   }
+    //     }),
+    //   );
+    // }
     //   if (action.action === 'remove-value') {
     //     const list = filters.user.filter(
     //       (op) => op !== action.removedValue.value,
@@ -722,20 +738,24 @@ export default function NewCustomerList() {
 
     // for single user selected
     if (type === 'brand') {
-      if (!showAdPerformance && !showDspAdPerformance) {
-        if (event.value === 'any') {
-          setFilters({
+      if (action.action === 'clear') {
+        setFilters({
+          ...filters,
+          user: [],
+          ad_user: [],
+          dsp_user: [],
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
             ...filters,
             user: [],
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
-              ...filters,
-              user: [],
-            }),
-          );
-        } else {
+            ad_user: [],
+            dsp_user: [],
+          }),
+        );
+      } else {
+        if (!showAdPerformance && !showDspAdPerformance) {
           setFilters({
             ...filters,
             user: event.value,
@@ -748,22 +768,8 @@ export default function NewCustomerList() {
             }),
           );
         }
-      }
 
-      if (showAdPerformance) {
-        if (event.value === 'any') {
-          setFilters({
-            ...filters,
-            ad_user: [],
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
-              ...filters,
-              ad_user: [],
-            }),
-          );
-        } else {
+        if (showAdPerformance) {
           setFilters({
             ...filters,
 
@@ -778,22 +784,8 @@ export default function NewCustomerList() {
             }),
           );
         }
-      }
 
-      if (showDspAdPerformance) {
-        if (event.value === 'any') {
-          setFilters({
-            ...filters,
-            dsp_user: [],
-          });
-          localStorage.setItem(
-            'filters',
-            JSON.stringify({
-              ...filters,
-              dsp_user: [],
-            }),
-          );
-        } else {
+        if (showDspAdPerformance) {
           setFilters({
             ...filters,
 
