@@ -38,7 +38,7 @@ import {
 } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
-import { PATH_CUSTOMER_DETAILS } from '../../constants';
+import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
   updateAccountDetails,
@@ -339,9 +339,12 @@ export default function ContractContainer() {
 
   if (isDocRendered && formData && formData.id) {
     if (
-      formData &&
-      formData.contract_status &&
-      formData.contract_status.value === 'active'
+      (formData &&
+        formData.contract_status &&
+        formData.contract_status.value === 'active') ||
+      (formData &&
+        formData.contract_status &&
+        formData.contract_status.value === 'inactive')
     ) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
@@ -2894,7 +2897,7 @@ export default function ContractContainer() {
     });
     setIsEditContract(false);
   };
-
+  console.log(details && details.contract_url);
   return (
     <>
       <ToastContainer
@@ -2993,12 +2996,19 @@ export default function ContractContainer() {
                             alt="close"
                             className="float-right cursor remove-cross-icon"
                             onClick={() => {
-                              // history.goBack('Agreement');
-                              history.push(
+                              if (
                                 history &&
-                                  history.location &&
-                                  history.location.state,
-                              );
+                                history.location &&
+                                history.location.state
+                              ) {
+                                history.push(
+                                  history &&
+                                    history.location &&
+                                    history.location.state,
+                                );
+                              } else {
+                                history.push(PATH_CUSTOMER_LIST);
+                              }
                             }}
                             role="presentation"
                           />
@@ -3105,11 +3115,19 @@ export default function ContractContainer() {
                             className="float-right cursor remove-cross-icon"
                             onClick={() => {
                               // history.goBack('Agreement');
-                              history.push(
+                              if (
                                 history &&
-                                  history.location &&
-                                  history.location.state,
-                              );
+                                history.location &&
+                                history.location.state
+                              ) {
+                                history.push(
+                                  history &&
+                                    history.location &&
+                                    history.location.state,
+                                );
+                              } else {
+                                history.push(PATH_CUSTOMER_LIST);
+                              }
                             }}
                             role="presentation"
                           />
