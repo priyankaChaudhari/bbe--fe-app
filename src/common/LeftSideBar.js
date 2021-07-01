@@ -32,7 +32,8 @@ export default function LeftSideBar({ userInfo }) {
           {(userInfo &&
             userInfo.role &&
             userInfo.role.includes('Growth Strategist')) ||
-          (userInfo && userInfo.role && userInfo.role.includes('BGS')) ? (
+          (userInfo && userInfo.role && userInfo.role === 'BGS') ||
+          (userInfo && userInfo.role && userInfo.role === 'BGS Manager') ? (
             <li
               className={
                 history.location.pathname &&

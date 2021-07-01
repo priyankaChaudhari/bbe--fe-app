@@ -1049,15 +1049,22 @@ export default function AdPerformance({
   };
 
   const addThousandComma = (number, decimalDigits = 2) => {
-    const decimal = _.split(number, '.', 2);
-    if (decimal[1] !== undefined) {
-      return `${decimal[0].replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ',',
-      )}.${decimal[1].slice(0, decimalDigits)}`;
+    // const decimal = _.split(number, '.', 2);
+    // if (decimal[1] !== undefined) {
+    //   return `${decimal[0].replace(
+    //     /\B(?=(\d{3})+(?!\d))/g,
+    //     ',',
+    //   )}.${decimal[1].slice(0, decimalDigits)}`;
+    // }
+    // return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    if (number !== undefined && number !== null) {
+      return number
+        .toFixed(decimalDigits)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     // if (number !== undefined && number !== null) {
     //   return number
@@ -1065,7 +1072,7 @@ export default function AdPerformance({
     //     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     // }
 
-    // return number;
+    return number;
   };
 
   const renderAdBox = () => {

@@ -24,7 +24,11 @@ export default async function getBGSCustomerList(
     params.dashboard = 'sponsored_ad_dashboard';
   }
 
-  if (role === 'Growth Strategist' || role === 'BGS') {
+  if (
+    role === 'Growth Strategist' ||
+    role === 'BGS' ||
+    role === 'BGS Manager'
+  ) {
     params.dashboard = 'sale_performance';
   }
   if (role === 'DSP Ad Manager') {

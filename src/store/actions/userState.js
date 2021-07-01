@@ -174,7 +174,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         (data.user &&
           data.user.role &&
           data.user.role.includes('Growth Strategist')) ||
-        (data.user && data.user.role && data.user.role.includes('BGS'))
+        (data.user && data.user.role && data.user.role === 'BGS') ||
+        (data.user && data.user.role && data.user.role === 'BGS Manager')
       ) {
         history.push(PATH_BGS_DASHBOARD);
       } else if (

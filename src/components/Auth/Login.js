@@ -118,7 +118,11 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      if (role.includes('Growth Strategist') || role.includes('BGS')) {
+      if (
+        role.includes('Growth Strategist') ||
+        role === 'BGS' ||
+        role === 'BGS Manager'
+      ) {
         history.push(PATH_BGS_DASHBOARD);
       } else if (
         role === 'Sponsored Advertising Ad Manager' ||

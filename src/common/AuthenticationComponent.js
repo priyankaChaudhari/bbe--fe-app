@@ -143,7 +143,8 @@ export default function AuthenticationComponent() {
           )}
           {/* Brand Partner */}
           {(userInfo && userInfo.role === 'Growth Strategist') ||
-          (userInfo && userInfo.role === 'BGS') ? (
+          (userInfo && userInfo.role === 'BGS') ||
+          (userInfo && userInfo.role === 'BGS Manager') ? (
             <Route path={PATH_BGS_DASHBOARD} component={DashboardContainer} />
           ) : (
             ''

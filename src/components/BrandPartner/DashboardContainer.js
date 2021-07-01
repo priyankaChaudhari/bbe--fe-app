@@ -324,7 +324,8 @@ function DashboardContainer() {
     const d = currentDate;
     if (
       (userInfo && userInfo.role === 'Growth Strategist') ||
-      (userInfo && userInfo.role === 'BGS')
+      (userInfo && userInfo.role === 'BGS') ||
+      (userInfo && userInfo.role === 'BGS Manager')
     ) {
       d.setDate(d.getDate() - 4);
     } else {
@@ -410,7 +411,8 @@ function DashboardContainer() {
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
                   {(userInfo && userInfo.role === 'Growth Strategist') ||
-                  (userInfo && userInfo.role === 'BGS')
+                  (userInfo && userInfo.role === 'BGS') ||
+                  (userInfo && userInfo.role === 'BGS Manager')
                     ? 'BGS Dashboard'
                     : userInfo && userInfo.role === 'DSP Ad Manager'
                     ? 'Dsp Dashboard'
@@ -497,7 +499,8 @@ function DashboardContainer() {
     <BrandPartnerDashboard>
       {displayHeader()}
       {(userInfo && userInfo.role === 'Growth Strategist') ||
-      (userInfo && userInfo.role === 'BGS') ? (
+      (userInfo && userInfo.role === 'BGS') ||
+      (userInfo && userInfo.role === 'BGS Manager') ? (
         <Dashboard isLoading={isLoading} data={data} />
       ) : (
         ''

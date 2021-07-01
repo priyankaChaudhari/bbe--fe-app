@@ -107,7 +107,9 @@ export async function getContactRoles() {
 
 export async function getManagersList(type, hybridSelectedDashboard) {
   const api =
-    type === 'Growth Strategist' || type === 'BGS' ? API_BGS : API_ADM;
+    type === 'Growth Strategist' || type === 'BGS' || type === 'BGS Manager'
+      ? API_BGS
+      : API_ADM;
 
   let params = {};
   if (type === 'Sponsored Advertising Ad Manager' || type === 'Ad Manager') {
