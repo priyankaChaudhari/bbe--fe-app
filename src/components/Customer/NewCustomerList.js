@@ -380,7 +380,7 @@ export default function NewCustomerList() {
 
       // for select one user
       return {
-        // Option: IconOption,
+        Option: IconOption,
         SingleValue: IconSingleOption,
         DropdownIndicator,
       };
