@@ -35,6 +35,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({
     billing_contact: {},
+    billing_address: {},
+    card_details: {},
   });
   const [showBtn, setShowBtn] = useState(false);
 
@@ -335,14 +337,27 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       delete formData.billing_contact.expiry_info;
     delete formData.expiryMessage;
 
-    const details = {
-      ...formData,
-      billing_address: formData.billing_address,
-      billing_contact: formData.billing_contact,
-      // card_details: formData.card_details,
-      customer_onboarding: userInfo.customer_onboarding || onBoardingId,
-      payment_type: 'credit card',
-    };
+    let details = {};
+
+    if ((data && data.id === undefined) || data.id === '') {
+      details = {
+        ...formData,
+        billing_address: formData.billing_address || {},
+        billing_contact: formData.billing_contact || {},
+        card_details: formData.card_details || {},
+        customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+        payment_type: 'credit card',
+      };
+    } else {
+      details = {
+        ...formData,
+        billing_address: formData.billing_address,
+        billing_contact: formData.billing_contact,
+        // card_details: formData.card_details,
+        customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+        payment_type: 'credit card',
+      };
+    }
 
     saveBillingInfo(
       details,
