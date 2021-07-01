@@ -191,7 +191,7 @@ export const performanceSortOptions = [
   { value: 'expiring_soon', label: 'Expiry Date' },
   { value: 'revenue', label: 'Revenue', custom: true },
   { value: 'units_sold', label: 'Units Sold', custom: true },
-  { value: 'traffic', label: 'Traffic Date', custom: true },
+  { value: 'traffic', label: 'Traffic', custom: true },
   { value: 'conversion', label: 'Conversion', custom: true },
 ];
 
