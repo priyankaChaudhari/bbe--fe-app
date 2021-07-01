@@ -310,8 +310,12 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       }`;
     }
     if (
-      (formData && formData.billing_contact.phone_number === '') ||
-      (formData && formData.billing_contact.phone_number === null)
+      (formData &&
+        formData.billing_contact &&
+        formData.billing_contact.phone_number === '') ||
+      (formData &&
+        formData.billing_contact &&
+        formData.billing_contact.phone_number === null)
     )
       delete formData.billing_contact.phone_number;
     if (
@@ -327,7 +331,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
     if (formData && formData.old_billinginfo_id === '')
       delete formData.old_billinginfo_id;
-    delete formData.billing_contact.expiry_info;
+    if (formData.billing_contact && formData.billing_contact.expiry_info)
+      delete formData.billing_contact.expiry_info;
     delete formData.expiryMessage;
 
     const details = {
