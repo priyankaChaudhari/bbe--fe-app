@@ -18,7 +18,8 @@
           "every": ["id"]
         }
       }
-    ]
+    ],
+    "no-extraneous-dependencies": "off"
   },
   "env": {
     "browser": true,

@@ -2897,7 +2897,7 @@ export default function ContractContainer() {
     });
     setIsEditContract(false);
   };
-  console.log(details && details.contract_url);
+
   return (
     <>
       <ToastContainer

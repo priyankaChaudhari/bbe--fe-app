@@ -41,4 +41,9 @@ const SuccessWrapper = styled.div`
   font-size: ${Theme.small};
   font-family: ${Theme.baseFontFamily};
   display: inline-block;
+
+  .undo-text {
+    color: ${Theme.black};
+    font-size: 13px;
+  }
 `;

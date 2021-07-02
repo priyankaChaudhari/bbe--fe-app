@@ -217,6 +217,7 @@ export const clearToken = () => {
   localStorage.removeItem('role');
   localStorage.removeItem('step');
   localStorage.removeItem('page');
+  localStorage.removeItem('noteFilters');
   window.location.href = PATH_LOGIN;
 };
 

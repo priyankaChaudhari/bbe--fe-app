@@ -59,6 +59,7 @@ import {
   CompanyDetail,
   CustomerStatus,
   EditAccountDetails,
+  Notes,
 } from './index';
 import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
 import BillingDetails from './BillingDetails';
@@ -105,6 +106,22 @@ const alertCustomStyles = {
   },
 };
 
+const customNotesStyles = {
+  content: {
+    top: '50%',
+    right: '0px',
+    bottom: 'auto',
+    maxWidth: '600px ',
+    width: '100% ',
+    maxHeight: '100%',
+    overlay: ' {zIndex: 1000}',
+    inset: '0% 0% 0% auto',
+    marginRight: '0',
+    borderRadius: '0 !important',
+    // transform: 'translate(-50%, -50%)',
+  },
+};
+
 export default function CustomerMainContainer() {
   const history = useHistory();
   const { id } = useParams();
@@ -134,6 +151,8 @@ export default function CustomerMainContainer() {
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
   const [amazonDetails, setAmazonDetails] = useState([]);
+  const [showNotesModal, setShowNotesModal] = useState(false);
+
   const [statusModal, setStatusModal] = useState({
     show: false,
     type: '',
@@ -572,6 +591,25 @@ export default function CustomerMainContainer() {
       return '#74B035';
     }
     return '';
+  };
+
+  const renderNotesModal = () => {
+    return (
+      <Modal
+        isOpen={showNotesModal}
+        style={customNotesStyles}
+        ariaHideApp={false}
+        contentLabel="Add team modal">
+        {/* <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowNotesModal(false)}
+          role="presentation"
+        /> */}
+        <Notes setShowNotesModal={setShowNotesModal} customerId={id} />
+      </Modal>
+    );
   };
 
   return (
@@ -1020,6 +1058,61 @@ export default function CustomerMainContainer() {
                             dispatch(setCustomerSelectedTab('company'));
                           }}
                           role="presentation">
+                          {/* =======
+                          <li
+                            onClick={() => {
+                              // setViewComponent('note');
+                              // dispatch(setCustomerSelectedTab('activity'));
+                              setShowNotesModal(true);
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'activity' ? 'active' : ''
+                              }`}>
+                              <img src={ExchangeIcon} alt="" />
+                              Notes
+                            </div>
+                          </li>
+                        </ul>
+                      </WhiteCard>
+
+                      <Select
+                        options={viewOptions}
+                        className="customer-dropdown-select d-lg-none d-block mb-3 "
+                        onChange={(event) => {
+                          setViewComponent(event.value);
+                          dispatch(setCustomerSelectedTab(event.value));
+                        }}
+                        defaultValue={viewOptions[0]}
+                      />
+
+                      <WhiteCard className="mb-3">
+                        <p className="black-heading-title mt-0 mb-4">
+                          {' '}
+                          Team Members (
+                          {memberCount &&
+                            (memberCount > 10 ? (
+                              <u
+                                className="link-video watch-video cursor"
+                                onClick={() =>
+                                  setShowMemberList({
+                                    show: true,
+                                    add: false,
+                                    modal: true,
+                                  })
+                                }
+                                role="presentation"
+                                title="See more...">
+                                {memberCount}
+                              </u>
+                            ) : (
+                              memberCount
+                            ))}
+                          )
+                        </p>
+                        {userInfo && userInfo.role !== 'Customer' ? (
+>>>>>>> PDV-1539 note functionality is done. */}
                           <div
                             className={`left-details ${
                               viewComponent === 'company' ? 'active' : ''
@@ -1177,7 +1270,10 @@ export default function CustomerMainContainer() {
                         {' '}
                         Notes (4)
                       </p>
-                      <div className="view-all-list">
+                      <div
+                        className="view-all-list"
+                        role="presentation"
+                        onClick={() => setShowNotesModal(true)}>
                         View All
                         <img src={ForwardOrangeIcon} alt="forward-arrow" />
                       </div>
@@ -1194,7 +1290,10 @@ export default function CustomerMainContainer() {
                         <div className="clear-fix" />
                       </GroupUser>
                       <div className="straight-line horizontal-line  mt-3 mb-3" />
-                      <div className="add-note-section">
+                      <div
+                        className="add-note-section"
+                        role="presentation"
+                        onClick={() => setShowNotesModal(true)}>
                         {' '}
                         <img
                           className="red-chat-icon"
@@ -1266,7 +1365,7 @@ export default function CustomerMainContainer() {
                   </div>
                 </div>
               </CustomerDetailsBody>
-
+              {renderNotesModal()}
               <BackToTop />
 
               <Modal

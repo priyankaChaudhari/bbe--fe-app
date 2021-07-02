@@ -164,6 +164,9 @@ import ChatBoxIcon from './icons/chat-box.svg';
 import CatalogBox from './icons/catalog-box.png';
 import AnnotationGoal from './icons/annotation-goal.png';
 import ForwardOrangeIcon from './icons/forward-orange-icon.png';
+import PinIcon from './icons/circle-pin.png';
+import OrangeChat from './icons/orange-chat-icon.png';
+import PinIcons from './icons/pin-icon.png';
 
 export {
   BannerBg,
@@ -332,4 +335,7 @@ export {
   CatalogBox,
   AnnotationGoal,
   ForwardOrangeIcon,
+  PinIcon,
+  OrangeChat,
+  PinIcons,
 };

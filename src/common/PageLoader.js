@@ -30,7 +30,9 @@ const PageLoaderWrapper = styled.div`
   &.upload-brand-asset {
     left: 340px;
   }
-
+  &.Notes-modal-loader {
+    margin-right: 250px;
+  }
   @media only screen and (min-width: 1500px) {
     &.sidebar-loader {
       right: 0;
@@ -88,6 +90,11 @@ const ButtonLoaderCss = styled.div`
   text-align: center;
   padding: 0;
   vertical-align: baseline;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export default function PageLoader({
@@ -110,6 +117,8 @@ export default function PageLoader({
             ? 'modal-loader'
             : component === 'upload-brand-asset'
             ? 'upload-brand-asset'
+            : component === 'Notes-modal-loader'
+            ? 'Notes-modal-loader'
             : ''
         }
         style={{

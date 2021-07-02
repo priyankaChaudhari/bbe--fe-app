@@ -156,7 +156,76 @@ export const GroupUser = styled.div`
     font-weight: 500;
     text-align: left;
     overflow-wrap: break-word;
+
+    .pin {
+      color: ${Theme.black};
+      position: relative;
+
+      .more-action {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: contents;
+        li {
+          display: inline-block;
+          position: relative;
+          margin-left: 18px;
+          cursor: pointer;
+          .dot {
+            background-color: #8798ad;
+            border-radius: 50%;
+            width: 3px;
+            height: 3px;
+            position: absolute;
+            top: 7px;
+            margin-left: -10px;
+          }
+
+          &.delete {
+            cursor: pointer;
+            color: ${Theme.black};
+            /* .delete-msg {
+              display: none;
+            } */
+            .delete {
+              color: ${Theme.black};
+            }
+
+            /* &:hover { */
+            .delete-msg {
+              display: block;
+              border-radius: 6px;
+              box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+              background-color: ${Theme.white};
+              color: ${Theme.red};
+              font-size: 16px;
+              text-align: center;
+              position: absolute;
+              top: 25px;
+              width: 170px;
+              padding: 17px 0;
+
+              font-weight: 600;
+              .red-trash-icon {
+                width: 18px;
+                vertical-align: text-top;
+                margin-right: 6px;
+              }
+            }
+            /* } */
+          }
+        }
+      }
+    }
   }
+  .pin-icon {
+    position: absolute;
+    width: 23px;
+    background: white;
+    top: 20px;
+    left: 42px;
+  }
+
   .user-email-address {
     color: ${Theme.gray85};
     text-align: left;

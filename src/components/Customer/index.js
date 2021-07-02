@@ -9,6 +9,7 @@ import EditCompanyDetails from './EditCompanyDetails';
 import EditAccountDetails from './EditAccountDetails';
 import CustomerStatus from './CustomerStatus';
 import BillingDetails from './BillingDetails';
+import Notes from './Notes';
 // import AdPerformance from './AdPerformance';
 
 export {
@@ -22,5 +23,6 @@ export {
   EditAccountDetails,
   CustomerStatus,
   BillingDetails,
+  Notes,
   // AdPerformance,
 };

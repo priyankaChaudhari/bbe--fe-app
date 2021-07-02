@@ -71,6 +71,9 @@ export const API_BRAND_ASSETS = '/brand-assets/';
 export const API_BRAND_ASSETS_SUMMARY = `${API_BRAND_ASSETS}summary/`;
 export const API_BRAND_ASSETS_COMMENTS = 'comments';
 
+// Notes
+export const API_NOTES = `/notes/`;
+
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,
   API_FORGOT_PASSWORD,

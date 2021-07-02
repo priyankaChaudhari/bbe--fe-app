@@ -220,6 +220,10 @@ const Button = styled.button`
     width: 130px;
   }
 
+  &.w-10 {
+    width: 100px;
+  }
+
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size: ${Theme.normalRes};
     &.btn-add-contact {

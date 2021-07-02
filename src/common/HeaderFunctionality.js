@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const HeaderDownloadFuntionality = styled.div`
-  position: fixed;
+  position: sticky;
   background-color: ${Theme.white};
   padding: 26px 0 20px 0;
   width: 100%;
@@ -49,8 +49,8 @@ const HeaderDownloadFuntionality = styled.div`
 
       .header-icon {
         vertical-align: text-top;
-        margin-right: 7px;
-        width: 20px;
+        margin-right: 3px;
+        width: 18px;
         cursor: pointer;
       }
       .divide-arrow {
