@@ -167,6 +167,105 @@ export default function BrandAssetUpload() {
     );
   };
 
+  const convertBlobToText = (value, type) => {
+    const blb = new Blob([value], {
+      type: 'application/json',
+    });
+    const reader = new FileReader();
+    // This fires after the blob has been read/loaded.
+    reader.addEventListener('loadend', (e) => {
+      const text = e.target.result;
+      text.replace('"', '');
+      if (type === 'error') {
+        toast.error(text);
+      } else toast.success(text);
+    });
+    // Start reading the blob as text.
+    reader.readAsText(blb);
+  };
+
+  const getfromMimeType = (value) => {
+    if (value) {
+      return value.includes('image')
+        ? value.split('image/')[1]
+        : value.includes('font')
+        ? value.split('font/')[1]
+        : value.includes('application')
+        ? value.split('application/')[1]
+        : value;
+    }
+    return value;
+  };
+
+  const downloadImage = () => {
+    let only1File = '';
+    if (downloadIds && downloadIds.length === 1) {
+      only1File =
+        documentData && documentData.find((op) => op.id === downloadIds[0]);
+    }
+    setIsLoading({ loader: true, type: 'button' });
+    const url = `${
+      process.env.REACT_APP_BASE_APP_URL +
+      process.env.REACT_APP_API_VERSION +
+      API_DOCUMENTS
+    }download/`;
+    const method = 'POST';
+    axios
+      .request({
+        url,
+        method,
+        headers: {
+          Authorization: `Token ${localStorage.getItem('token')} `,
+        },
+        responseType:
+          only1File.mime_type && only1File.mime_type.includes('pdf')
+            ? 'arraybuffer'
+            : 'blob',
+        data:
+          selectedDropdown.total === downloadIds.length
+            ? { brand_assets_id: brandId }
+            : { document_ids: downloadIds },
+      })
+      .then(({ data }) => {
+        if (data.type === 'application/json') {
+          convertBlobToText(data, 'succes');
+        } else {
+          const downloadUrl = window.URL.createObjectURL(new Blob([data]));
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          if (downloadIds.length === 1) {
+            const fileType =
+              only1File &&
+              only1File.original_name &&
+              only1File.original_name.includes('.')
+                ? only1File.original_name.split('.')[1]
+                : getfromMimeType(only1File && only1File.mime_type);
+            link.setAttribute(
+              'download',
+              `${
+                only1File.original_name &&
+                only1File.original_name.split('.') &&
+                only1File.original_name.split('.')[0]
+              }.${fileType}`,
+            ); // any other extension
+          } else {
+            link.setAttribute(
+              'download',
+              `${selectedDropdown.company_name}.zip`,
+            ); // any other extension
+          }
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+        setIsLoading({ loader: false, type: 'button' });
+      })
+      .catch((error) => {
+        convertBlobToText(error.response.data, 'error');
+        setIsLoading({ loader: false, type: 'button' });
+      });
+  };
+
   const setPreviewImageData = (response) => {
     if (showAssetPreview.selectedFile && response) {
       // for first element
@@ -264,6 +363,7 @@ export default function BrandAssetUpload() {
       setSelectedDropdown({
         ...selectedDropdown,
         total: response && response.data && response.data.total_images,
+        company_name: response && response.data && response.data.company_name,
       });
       if (response && response.data && response.data.steps) {
         Object.keys(response.data.steps).forEach((key) => {
@@ -1179,57 +1279,20 @@ export default function BrandAssetUpload() {
 
                       {showBtns.download ? (
                         <>
-                          <a
-                            href={`${
-                              process.env.REACT_APP_BASE_APP_URL +
-                              process.env.REACT_APP_API_VERSION +
-                              API_DOCUMENTS
-                            }download/?token=${localStorage.getItem('token')}&${
-                              selectedDropdown &&
-                              selectedDropdown.total === downloadIds &&
-                              downloadIds.length
-                                ? queryString.stringify({
-                                    brand_assets_id: [brandId],
-                                  })
-                                : queryString.stringify({
-                                    document_id: downloadIds,
-                                  })
-                            }`}
-                            target="_self"
-                            onClick={() => {
-                              toast.success(
-                                'Files will download shortly, Do not close the browser.',
-                              );
-                              setIsLoading({
-                                loader: true,
-                                type: 'page',
-                              });
-                              setTimeout(() => {
-                                setShowBtns({ download: false, upload: false });
-                                getDocumentList(
-                                  selectedStep && selectedStep.key,
-                                );
+                          <Button
+                            onClick={() => downloadImage()}
+                            className="btn-primary"
+                            disabled={
+                              isLoading.loader ||
+                              (downloadIds && downloadIds.length === 0)
+                            }>
+                            {isLoading.loader && isLoading.type === 'button' ? (
+                              <PageLoader color="#fff" type="button" />
+                            ) : (
+                              'Download Selected'
+                            )}
+                          </Button>
 
-                                setIsLoading({
-                                  loader: false,
-                                  type: 'page',
-                                });
-                              }, 4000);
-                            }}>
-                            <Button
-                              className="btn-primary"
-                              disabled={
-                                isLoading.loader ||
-                                (downloadIds && downloadIds.length === 0)
-                              }>
-                              {isLoading.loader &&
-                              isLoading.type === 'button' ? (
-                                <PageLoader color="#fff" type="button" />
-                              ) : (
-                                'Download Selected'
-                              )}
-                            </Button>
-                          </a>
                           <Button
                             className="btn-transparent w-50 on-boarding ml-4"
                             onClick={() => {
