@@ -1369,8 +1369,9 @@ export default function BrandAssetUpload() {
         style={customStyles}
         ariaHideApp={false}
         contentLabel="Edit modal">
-        <ModalBox>
+        <ModalBox className="h-100">
           <BrandAssetsPreview
+            className="h-100"
             showAssetPreview={showAssetPreview}
             setShowAssetPreview={setShowAssetPreview}
             documentData={documentData}

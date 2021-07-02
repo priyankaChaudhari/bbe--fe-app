@@ -235,7 +235,12 @@ function BrandAssetsPreview({
   const renderCommentPanel = () => {
     return (
       <CommentAnnotationPanel>
-        <div className="chat-header">Comments</div>
+        <div className="chat-header">
+          Comments
+          <div className="close-panel">
+            <img width="20px" src={ArrowRightBlackIcon} alt="arro" />
+          </div>
+        </div>
         <ul className="inbox-comment">{renderComments()}</ul>
         <div className="chat-footer">
           <div className="input-type-box">
@@ -398,31 +403,32 @@ function BrandAssetsPreview({
                   </div>
                 </div>
               </div>
-            </HeaderDownloadFuntionality>
+            </div>
+          </HeaderDownloadFuntionality>
 
-            <div className="row">
-              <div className={showCommentSection ? 'col-9' : 'col-12'}>
-                <BrandAssetsPreviewBody>
+          <div className="row h-100">
+            <div className={showCommentSection ? 'col-lg-9 col-12' : 'col-12'}>
+              <BrandAssetsPreviewBody>
+                <div
+                  className={
+                    showAssetPreview.index === 0
+                      ? 'pervious-img btn disabled-slider-btn'
+                      : 'pervious-img btn'
+                  }
+                  role="presentation"
+                  onClick={() => showImg('prev')}>
                   <div
                     className={
                       showAssetPreview.index === 0
-                        ? 'pervious-img btn disabled-slider-btn'
-                        : 'pervious-img btn'
-                    }
-                    role="presentation"
-                    onClick={() => showImg('prev')}>
-                    <div
-                      className={
-                        showAssetPreview.index === 0
-                          ? 'arrow-icon pervious disabled-slider-btn'
-                          : 'arrow-icon pervious'
-                      }>
-                      {' '}
-                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                    </div>
+                        ? 'arrow-icon pervious disabled-slider-btn'
+                        : 'arrow-icon pervious'
+                    }>
+                    {' '}
+                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
                   </div>
-                  <div className="assetPreviewImg">
-                    {/* <img
+                </div>
+                <div className="assetPreviewImg">
+                  {/* <img
                 className="image-thumbnail"
                 src={
                   showAssetPreview &&
@@ -440,84 +446,83 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile.original_name
                 }
               /> */}{' '}
-                    {showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
-                      <BrandAssetPdf>
-                        <PdfViewer
-                          pdf={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.presigned_url
-                          }
-                        />
-                      </BrandAssetPdf>
-                    ) : (
-                      <>
-                        <object
-                          onMouseDown={(event) =>
-                            markAnnotaion ? onMouseDown(event) : null
-                          }
-                          id="imgContainer"
-                          className="image-thumbnail"
-                          data={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.presigned_url
-                          }
-                          type={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.mime_type
-                          }
-                          width="550"
-                          height="250"
-                          role="presentation">
-                          <div className="unsupport-file-name">
-                            <div className="file-path">
-                              {showAssetPreview &&
-                                showAssetPreview.selectedFile &&
-                                showAssetPreview.selectedFile.original_name}
-                            </div>
+                  {showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
+                    <BrandAssetPdf>
+                      <PdfViewer
+                        pdf={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                      />
+                    </BrandAssetPdf>
+                  ) : (
+                    <>
+                      <object
+                        onMouseDown={(event) =>
+                          markAnnotaion ? onMouseDown(event) : null
+                        }
+                        id="imgContainer"
+                        className="image-thumbnail"
+                        data={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                        type={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.mime_type
+                        }
+                        // width="550"
+                        // height="250"
+                        role="presentation">
+                        <div className="unsupport-file-name">
+                          <div className="file-path">
+                            {showAssetPreview &&
+                              showAssetPreview.selectedFile &&
+                              showAssetPreview.selectedFile.original_name}
                           </div>
-                        </object>
-                        {/* {showCommentSection
+                        </div>
+                      </object>
+                      {/* {showCommentSection
                           ? renderExistingAnnotations()
                           : null} */}
-                        {renderExistingAnnotations()}
-                      </>
-                    )}
-                  </div>
+                      {renderExistingAnnotations()}
+                    </>
+                  )}
+                </div>
 
+                <div
+                  className={
+                    showAssetPreview.index ===
+                    (showAssetPreview.documents &&
+                      showAssetPreview.documents.length - 1)
+                      ? 'next-img btn disabled-slider-btn'
+                      : 'next-img btn'
+                  }
+                  role="presentation"
+                  onClick={() => showImg('next')}>
                   <div
                     className={
                       showAssetPreview.index ===
                       (showAssetPreview.documents &&
                         showAssetPreview.documents.length - 1)
-                        ? 'next-img btn disabled-slider-btn'
-                        : 'next-img btn'
-                    }
-                    role="presentation"
-                    onClick={() => showImg('next')}>
-                    <div
-                      className={
-                        showAssetPreview.index ===
-                        (showAssetPreview.documents &&
-                          showAssetPreview.documents.length - 1)
-                          ? 'arrow-icon disabled-slider-btn'
-                          : 'arrow-icon'
-                      }>
-                      {' '}
-                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                    </div>
+                        ? 'arrow-icon disabled-slider-btn'
+                        : 'arrow-icon'
+                    }>
+                    {' '}
+                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
                   </div>
-                </BrandAssetsPreviewBody>
-              </div>
-
-              {showCommentSection ? (
-                <div className="col-3">{renderCommentPanel()}</div>
-              ) : null}
+                </div>
+              </BrandAssetsPreviewBody>
             </div>
+
+            {showCommentSection ? (
+              <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
+            ) : null}
           </div>
         </>
       )}
@@ -565,7 +570,7 @@ const BrandAssetsPreviewBody = styled.div`
 
   .assetPreviewImg {
     position: absolute;
-    top: 50%;
+    top: 40%;
     // background-color: ${Theme.gray8};
     width: 500px;
     height: 250px;
@@ -603,7 +608,7 @@ const BrandAssetsPreviewBody = styled.div`
     height: 50px;
     position: absolute;
     top: 50%;
-    margin-top: 40px;
+    // margin-top: 40px;
     cursor: pointer;
     &.pervious-img {
       left: 29px;
@@ -750,6 +755,15 @@ const CommentAnnotationPanel = styled.div`
     .inbox-comment {
       height: calc(100vh - 100px - 545px);
     }
+    .chat-footer {
+    
+
+    .input-type-box {
+      margin: 0 10px;
+      width: 95%;
+     
+    }
+  
   }
   @media only screen and (max-width: 767px) {
     .inbox-comment {
@@ -761,8 +775,8 @@ const CommentAnnotationPanel = styled.div`
 const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
-  margin-top: -130px;
-  height: 75vh;
+  margin-top: -100px;
+  height: 73vh;
 
   .react-pdf__Document {
     width: 100% !important;
