@@ -902,6 +902,12 @@ export default function NewCustomerList() {
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showPerformance: true,
+          showAdPerformance: false,
+          showDspAdPerformance: false,
+        });
         localStorage.setItem(
           'filters',
           JSON.stringify({
@@ -911,27 +917,17 @@ export default function NewCustomerList() {
             showDspAdPerformance: false,
           }),
         );
-
-        // customerListByView(
-        //   pageNumber,
-        //   selectedTimeFrame,
-        //   'sale_performance',
-        //   'revenue',
-        //   'asc',
-        // );
-        // customerList(
-        //   pageNumber,
-        //   selectedValue,
-        //   filters,
-        //   searchQuery,
-        //   true,
-        //   false,
-        // );
       } else if (event.value === 'sponsored_ad_performance') {
         setSelectedView('sponsored_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showPerformance: false,
+          showAdPerformance: true,
+          showDspAdPerformance: false,
+        });
         localStorage.setItem(
           'filters',
           JSON.stringify({
@@ -941,26 +937,17 @@ export default function NewCustomerList() {
             showDspAdPerformance: false,
           }),
         );
-        // customerListByView(
-        //   pageNumber,
-        //   selectedTimeFrame,
-        //   'sponsored_ad_performance',
-        //   'ad_spend',
-        //   'asc',
-        // );
-        // customerList(
-        //   pageNumber,
-        //   selectedValue,
-        //   filters,
-        //   searchQuery,
-        //   false,
-        //   true,
-        // );
       } else if (event.value === 'dsp_ad_performance') {
         setSelectedView('dsp_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
+        setFilters({
+          ...filters,
+          showPerformance: false,
+          showAdPerformance: false,
+          showDspAdPerformance: true,
+        });
         localStorage.setItem(
           'filters',
           JSON.stringify({
@@ -1029,13 +1016,6 @@ export default function NewCustomerList() {
             sort_by: event.value,
           }),
         );
-        // customerList(
-        //   pageNumber,
-        //   event.value,
-        //   filters,
-        //   searchQuery,
-        //   showPerformance,
-        // );
       }
     }
     if (type === 'stats') {
