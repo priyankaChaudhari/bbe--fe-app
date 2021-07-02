@@ -909,14 +909,23 @@ export default function PerformanceReport({
               {selectedValue !== 'custom' ? (
                 <li>
                   <div className="weeks">
-                    <span
-                      // className="gray block"
-                      className={
-                        _.size(activeSales) === 1
-                          ? `${_.keys(activeSales)[0]} block`
-                          : 'darkGray block'
-                      }
-                    />
+                    <ul className="dashed-line">
+                      <li
+                        className={
+                          _.size(activeSales) === 1
+                            ? `${_.keys(activeSales)[0]} block `
+                            : 'darkGray block '
+                        }
+                      />
+                      <li
+                        className={
+                          _.size(activeSales) === 1
+                            ? `${_.keys(activeSales)[0]} block  `
+                            : 'darkGray block '
+                        }
+                      />
+                    </ul>
+
                     <span>Previous</span>
                   </div>
                 </li>

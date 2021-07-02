@@ -700,6 +700,7 @@ export const WhiteCard = styled.div`
       li{
           display: inline-block;
           margin-right: 25px;
+          vertical-align: middle;
 
           &:last-child {
             margin-right: none;
@@ -711,17 +712,29 @@ export const WhiteCard = styled.div`
               flex-direction: row;
           }
 
-          .block {
-            border-radius: 2px;
-            width: 12px;
-            height: 12px;
-            margin-right: 6px;
-          }
+         
+           .dashed-line {
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+
+              li{
+                display: inline-block;
+                  margin-right: 3px;
+                  width: 6px;
+                  height: 2px;
+                  margin-bottom: 3px;
+
+                &:last-child {
+                  margin-right: 6px;
+                }
+              }
+
+           }
 
           .circle {
-            border-radius: 7px;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 2px;
             margin-right: 6px;
           }
           .orange {

@@ -1448,13 +1448,22 @@ export default function AdPerformance({
               {selectedAdDF !== 'custom' ? (
                 <li>
                   <div className="weeks">
-                    <span
-                      className={
-                        _.size(selectedAdBox) === 1
-                          ? `${_.keys(selectedAdBox)[0]} block`
-                          : 'darkGray block'
-                      }
-                    />
+                    <ul className="dashed-line">
+                      <li
+                        className={
+                          _.size(selectedAdBox) === 1
+                            ? `${_.keys(selectedAdBox)[0]} block`
+                            : 'darkGray block'
+                        }
+                      />
+                      <li
+                        className={
+                          _.size(selectedAdBox) === 1
+                            ? `${_.keys(selectedAdBox)[0]} block`
+                            : 'darkGray block'
+                        }
+                      />
+                    </ul>
                     <span>Previous</span>
                   </div>
                 </li>
@@ -1975,13 +1984,22 @@ export default function AdPerformance({
                 {selectedAdDF !== 'custom' ? (
                   <li>
                     <div className="weeks">
-                      <span
-                        className={
-                          _.size(selectedDspBox) === 1
-                            ? `${_.keys(selectedDspBox)[0]} block`
-                            : 'darkGray block'
-                        }
-                      />
+                      <ul className="dashed-line">
+                        <li
+                          className={
+                            _.size(selectedDspBox) === 1
+                              ? `${_.keys(selectedDspBox)[0]} block`
+                              : 'darkGray block'
+                          }
+                        />
+                        <li
+                          className={
+                            _.size(selectedDspBox) === 1
+                              ? `${_.keys(selectedDspBox)[0]} block`
+                              : 'darkGray block'
+                          }
+                        />
+                      </ul>
                       <span>Previous</span>
                     </div>
                   </li>

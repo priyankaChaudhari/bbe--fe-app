@@ -445,11 +445,18 @@ const BrandAssetsPreviewBody = styled.div`
     }
   }
 
+  @media only screen and (max-width: 991px) {
+    margin-top: 40%;
+    .assetPreviewImg {
+      top: 35%;
+    }
+  }
   @media only screen and (max-width: 767px) {
+    margin-top: 50%;
     .assetPreviewImg {
       max-width: 200px;
       height: 100px;
-      top: 45%;
+      top: 50%;
       .image-thumbnail {
         max-width: 200px;
         height: 100px;
@@ -474,12 +481,13 @@ const BrandAssetsPreviewBody = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 450px) {
+  @media only screen and (max-width: 480px) {
+    margin-top: 65%;
     .assetPreviewImg {
       max-width: 170px;
       height: 100px;
-      top: 45%;
-      left: 24%;
+      top: 50%;
+      left: 28%;
       .image-thumbnail {
         max-width: 170px;
         height: 100px;
@@ -502,37 +510,48 @@ const BrandAssetsPreviewBody = styled.div`
 
 const CommentAnnotationPanel = styled.div`
   border-left: 1px solid ${Theme.gray4};
-  height: 100%;
   margin-top: 70px;
+  height: calc(100% - -170px);
 
   .chat-header {
     border-bottom: 1px solid ${Theme.gray4};
-    padding: 17px 10px;
+    padding: 18px 10px;
     color: ${Theme.gray40};
     font-size: ${Theme.verySmall};
     text-transform: uppercase;
     font-weight: bold;
+    position: relative;
   }
+  .close-panel {
+    position: absolute;
+    right: 15px;
+    top: 14px;
+    border-left: 2px solid ${Theme.black};
+    height: 21px;
+  }
+
   .inbox-comment {
     list-style-type: none;
     padding: 0;
     margin: 0;
     overflow: auto;
-    height: 50%;
+    height: calc(100vh - 100px - 240px);
 
     li {
       display: inline-block;
-      padding: 15px 0 0 15px;
+      padding: 15px 15px 0 15px;
     }
   }
   .chat-footer {
-    bottom: 10px;
     position: fixed;
+
+    bottom: 10px;
     border-top: 1px solid ${Theme.gray4};
     width: 100%;
+
     .input-type-box {
       margin: 0 10px;
-      width: 24%;
+      width: 22%;
       .add-annotation {
         color: ${Theme.gray85};
         font-size: ${Theme.extraNormal};
@@ -544,15 +563,28 @@ const CommentAnnotationPanel = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 991px) {
+    border-left: none;
+    height: 100%;
+    margin-top: 20px;
+
+    .inbox-comment {
+      height: calc(100vh - 100px - 545px);
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .inbox-comment {
+      height: calc(100vh - 445px);
+    }
+  }
 `;
 
 const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
-  // margin-top: -130px;
-  height: 80vh;
-  #ResumeContainer {
-  }
+  margin-top: -130px;
+  height: 75vh;
+
   .react-pdf__Document {
     width: 100% !important;
     background-color: ${Theme.gray3} !important;
@@ -588,10 +620,10 @@ const BrandAssetPdf = styled.div`
     @media only screen and (max-width: 991px) {
       padding-left: 0px !important;
       padding-right: 0;
-      margin-top: 50px;
+
       .react-pdf__Page {
         &:first-child {
-          top: 110px !important;
+          top: 0 !important;
           margin-bottom: 0 !important;
         }
       }
@@ -599,10 +631,19 @@ const BrandAssetPdf = styled.div`
     @media only screen and (max-width: 767px) {
       .react-pdf__Page {
         &:first-child {
-          top: 145px !important;
+          top: 0 !important;
           margin-bottom: 0 !important;
         }
       }
     }
+  }
+  @media only screen and (max-width: 991px) {
+    margin-top: -16px;
+    min-height: 100px;
+    height: 40vh;
+  }
+  @media only screen and (max-width: 767px) {
+    min-height: 100px;
+    height: 32vh;
   }
 `;

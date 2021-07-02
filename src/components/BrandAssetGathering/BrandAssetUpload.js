@@ -1306,17 +1306,6 @@ export default function BrandAssetUpload() {
         style={customStyles}
         ariaHideApp={false}
         contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          // onClick={() => {
-          //   setShowModal(false);
-          //   removeParams('step');
-          //   setShowEditor(false);
-          // }}
-          role="presentation"
-        />
         <ModalBox>
           <BrandAssetsPreview
             showAssetPreview={showAssetPreview}

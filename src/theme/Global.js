@@ -121,6 +121,7 @@ import { BannerBg } from './images/index';
 // `;
 
 export const GroupUser = styled.div`
+  display: flex;
   .activity-user {
     font-size: ${Theme.normal};
     color: ${Theme.black};
