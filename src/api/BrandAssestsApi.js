@@ -5,6 +5,7 @@ import {
   API_DOCUMENTS,
   API_BRAND_ASSETS,
   API_BRAND_ASSETS_SUMMARY,
+  API_BRAND_ASSETS_COMMENTS,
 } from '../constants/ApiConstants';
 
 export async function getAgreementList(customer) {
@@ -89,6 +90,41 @@ export async function getBrandAssetsDetail(id) {
 export async function downloadBrandAssetImages(data) {
   const result = await axiosInstance
     .post(`${API_DOCUMENTS}download/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function storeNewCommentData(
+  message,
+  documentId,
+  reAssignedEmail,
+) {
+  const data = {
+    message,
+    document: documentId,
+    re_assigned_email: reAssignedEmail,
+  };
+
+  const result = await axiosInstance
+    .post(`${API_BRAND_ASSETS_COMMENTS}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getCommentsData(documentId) {
+  const params = { document: documentId };
+  const result = await axiosInstance
+    .get(`${API_BRAND_ASSETS_COMMENTS}/`, { params })
     .then((response) => {
       return response;
     })

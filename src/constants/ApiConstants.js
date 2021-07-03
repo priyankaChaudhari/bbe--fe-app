@@ -69,6 +69,7 @@ export const API_VERIFY_USER = `${API_USER}verify-user/`;
 export const API_ACCOUNT_ASSIGNEE_COUNT = `${API_CUSTOMER}:id/account-setup-completion/`;
 export const API_BRAND_ASSETS = '/brand-assets/';
 export const API_BRAND_ASSETS_SUMMARY = `${API_BRAND_ASSETS}summary/`;
+export const API_BRAND_ASSETS_COMMENTS = 'comments';
 
 export const NON_AUTHORIZATION_APIS = [
   API_LOGIN,

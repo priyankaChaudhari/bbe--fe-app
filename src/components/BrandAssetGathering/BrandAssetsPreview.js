@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 // import FileViewer from 'react-file-viewer';
 import { useForm } from 'react-hook-form';
@@ -20,6 +21,10 @@ import {
   AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
+import {
+  storeNewCommentData,
+  getCommentsData,
+} from '../../api/BrandAssestsApi';
 
 function BrandAssetsPreview({
   showAssetPreview,
@@ -31,6 +36,12 @@ function BrandAssetsPreview({
   const { handleSubmit } = useForm();
   const [isImageLoading, setImageLoading] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [newCommentData, setNewCommentData] = useState('');
+  const [commentsCount, setCommentsCount] = useState(0);
+  const [commentsLoader, setCommentsLoader] = useState(false);
+  const [addCommentsLoader, setAddCommentsLoader] = useState(false);
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [responseId, setResponseId] = useState(null);
   const list = [
     {
       id: '1',
@@ -54,7 +65,50 @@ function BrandAssetsPreview({
       timestamp: '01/20/2021, 5:13:42 PM MST',
     },
   ];
-  const [commentsData] = useState(list);
+  const [commentsData, setCommentData] = useState(list);
+
+  const getComments = useCallback((documnetId) => {
+    setCommentsLoader(true);
+    getCommentsData(documnetId).then((res) => {
+      if (res && res.status === 400) {
+        //
+      }
+      if (res && res.status === 200) {
+        setCommentData(res.data.results);
+        setCommentsCount(res.data.count);
+      }
+      setCommentsLoader(false);
+    });
+  }, []);
+
+  const storeCommentData = useCallback(
+    (message, documnetId) => {
+      setAddCommentsLoader(true);
+      storeNewCommentData(message, documnetId, userInfo.email).then((res) => {
+        if (res && res.status === 400) {
+          //
+        }
+        if (res && res.status === 201) {
+          getComments(showAssetPreview.selectedFile.id);
+          setNewCommentData('');
+        }
+        setAddCommentsLoader(false);
+      });
+    },
+    [getComments, showAssetPreview.selectedFile.id, userInfo.email],
+  );
+
+  useEffect(() => {
+    if (
+      showAssetPreview &&
+      showAssetPreview.selectedFile &&
+      showAssetPreview.selectedFile.id &&
+      responseId === null
+    ) {
+      getComments(showAssetPreview.selectedFile.id);
+      setResponseId('123');
+    }
+  }, [getComments, showAssetPreview, responseId]);
 
   const showImg = (type) => {
     setImageLoading(true);
@@ -66,6 +120,7 @@ function BrandAssetsPreview({
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
       setTimeout(() => setImageLoading(false), 500);
+      getComments(documentData[showAssetPreview.index - 1].id);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
       setShowAssetPreview({
@@ -78,6 +133,7 @@ function BrandAssetsPreview({
             : documentData.length - 1,
       });
       setTimeout(() => setImageLoading(false), 500);
+      getComments(documentData[showAssetPreview.index + 1].id);
     }
   };
 
@@ -90,38 +146,57 @@ function BrandAssetsPreview({
     });
   };
 
-  const onSubmit = () => {};
+  const getInitials = (firstName, lastName) => {
+    let first = '';
+    let last = '';
+    if (firstName !== null && firstName !== undefined) {
+      first = firstName.charAt(0) || '';
+    }
+    if (lastName !== null && lastName !== undefined) {
+      last = lastName.charAt(0) || '';
+    }
+    return first + last;
+  };
+
+  const handleChange = (event) => {
+    setNewCommentData(event.target.value);
+  };
+
+  const onSubmit = () => {
+    storeCommentData(newCommentData, showAssetPreview.selectedFile.id);
+  };
 
   const renderComments = () => {
+    if (commentsLoader) {
+      return <PageLoader component="activityLog" color="#FF5933" type="page" />;
+    }
+    if (commentsCount === 0) {
+      return (
+        <div className="mt-5 text-center">
+          No comments added for this image yet.
+        </div>
+      );
+    }
     return commentsData.map((item) => {
       return (
         <li key={item.id}>
           <GroupUser>
-            <div className="avatarName float-left mr-3">pl</div>
-
+            <div className="avatarName float-left mr-3">
+              {getInitials(item.first_name, item.last_name)}
+            </div>
             <div className="activity-user">
-              <span className="font-bold"> {item.name}:</span> {item.msg}
-              <div className="time-date  mt-1">{item.timestamp}</div>
+              <span className="font-bold">
+                {' '}
+                {item.first_name} {item.last_name}:
+              </span>{' '}
+              {item.message}
+              <div className="time-date  mt-1">{item.created_at}</div>
             </div>
             <div className="clear-fix" />
           </GroupUser>
         </li>
       );
     });
-
-    // <li>
-    //   <GroupUser>
-    //     <div className="avatarName float-left mr-3">pl</div>
-
-    //     <div className="activity-user">
-    //       <span className="font-bold"> Natalie Parker:</span> “Comment
-    //       content goes here. This one is an annotation on the image and so
-    //       avatar shows number of annotation rather than initials.”
-    //       <div className="time-date  mt-1">01/14/2021, 5:13:42 PM MST</div>
-    //     </div>
-    //     <div className="clear-fix" />
-    //   </GroupUser>
-    // </li>
   };
 
   const renderCommentPanel = () => {
@@ -133,31 +208,23 @@ function BrandAssetsPreview({
           <div className="input-type-box">
             <FormField className="mt-2 mb-2">
               <form onSubmit={handleSubmit(onSubmit)}>
-                {/* <textarea
+                <textarea
                   className="text-area-box"
                   rows="4"
                   placeholder="Enter comment"
-                  // onChange={() => handleChange()}
-                /> */}
-                <input
-                  className="text-area-box"
-                  type="text"
-                  placeholder="Enter your Email Address"
-                  // onChange={() => handleChange()}
-                  id="emailAddress"
-                  name="email"
-                />
+                  value={newCommentData}
+                  onChange={(event) => handleChange(event)} />
 
                 <div className="add-annotation ">
                   <img src={AnnotationGoal} alt="annotation" />
                   Click to add an annotation
                 </div>
-                <Button
-                  className="btn-primary w-100 mt-3 "
-                  // onClick={() => addcomment()}>
-                >
-                  {' '}
-                  Add
+                <Button className="btn-primary w-100 mt-3 ">
+                  {addCommentsLoader ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Add'
+                  )}
                 </Button>
               </form>
             </FormField>
@@ -198,7 +265,7 @@ function BrandAssetsPreview({
                           onClick={() =>
                             setShowCommentSection(!showCommentSection)
                           }>
-                          Comments (0)
+                          Comments ({commentsCount})
                         </span>
                       </li>
                       <li>
@@ -363,6 +430,7 @@ BrandAssetsPreview.propTypes = {
   documentData: PropTypes.arrayOf(PropTypes.object),
   showAssetPreview: PropTypes.shape({
     selectedFile: PropTypes.shape({
+      id: PropTypes.string,
       presigned_url: PropTypes.string,
       mime_type: PropTypes.string,
       original_name: PropTypes.string,
