@@ -750,7 +750,16 @@ export default function CustomerMainContainer() {
                         </React.Fragment>
                       ))}
 
-                      <div className="add-more-people btn-add-team cursor ">
+                      <div
+                        className="add-more-people btn-add-team cursor"
+                        role="presentation"
+                        onClick={() =>
+                          setShowMemberList({
+                            show: true,
+                            add: true,
+                            modal: true,
+                          })
+                        }>
                         <img src={PlusIcon} alt="add" />
                       </div>
                     </div>
@@ -1214,7 +1223,7 @@ export default function CustomerMainContainer() {
                         <img src={ForwardOrangeIcon} alt="forward-arrow" />
                       </div>
                       {activityData &&
-                        activityData.slice(0, 2).map((item) => (
+                        activityData.slice(0, 3).map((item) => (
                           <GroupUser key={Math.random()}>
                             {images.find(
                               (op) => op.entity_id === item.history_user_id,
