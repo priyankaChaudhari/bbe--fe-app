@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+
 // import FileViewer from 'react-file-viewer';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,7 +19,7 @@ import {
   TrashIcons,
   ChatBoxIcon,
   ArrowRightBlackIcon,
-  AnnotationGoal,
+  // AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 import {
@@ -33,6 +34,50 @@ function BrandAssetsPreview({
   setShowConfirmationModal,
   isLoading,
 }) {
+  // const list = [
+  //   {
+  //     annotation: 1,
+  //     created_at: '07/01/2021, 10:57:40 PM MST',
+  //     document: 'DTGisAZ',
+  //     first_name: 'Aaditi-d',
+  //     id: 'CMTlFbEq',
+  //     last_name: 'Dhadwal',
+  //     message: 'this is for testing',
+  //     re_assigned_email: null,
+  //     updated_at: '07/01/2021, 10:57:40 PM MST',
+  //     user: 'URCu1sI',
+  //     x_coordinate: -0.25,
+  //     y_coordinate: -3.125,
+  //   },
+  //   {
+  //     annotation: null,
+  //     created_at: '07/01/2021, 10:57:40 PM MST',
+  //     document: 'DTGisAZ',
+  //     first_name: 'Aaditi-d',
+  //     id: 'CMTlFbEt',
+  //     last_name: 'Dhadwal',
+  //     message: 'this is for testing',
+  //     re_assigned_email: null,
+  //     updated_at: '07/01/2021, 10:57:40 PM MST',
+  //     user: 'URCu1sI',
+  //     x_coordinate: null,
+  //     y_coordinate: null,
+  //   },
+  //   {
+  //     annotation: 2,
+  //     created_at: '07/01/2021, 10:57:40 PM MST',
+  //     document: 'DTGisAZ',
+  //     first_name: 'Aaditi-d',
+  //     id: 'CMTlFbEr',
+  //     last_name: 'Dhadwal',
+  //     message: 'this is for testing',
+  //     re_assigned_email: null,
+  //     updated_at: '07/01/2021, 10:57:40 PM MST',
+  //     user: 'URCu1sI',
+  //     x_coordinate: 169.31820678710938,
+  //     y_coordinate: 91.40908813476562,
+  //   },
+  // ];
   const { handleSubmit } = useForm();
   const [isImageLoading, setImageLoading] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
@@ -42,30 +87,16 @@ function BrandAssetsPreview({
   const [addCommentsLoader, setAddCommentsLoader] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [responseId, setResponseId] = useState(null);
-  const list = [
-    {
-      id: '1',
-      name: 'Natalie Parker',
-      msg:
-        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
-      timestamp: '01/14/2021, 5:13:42 PM MST',
-    },
-    {
-      id: '2',
-      name: 'Nana Parker',
-      msg:
-        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
-      timestamp: '01/4/2021, 5:13:42 PM MST',
-    },
-    {
-      id: '3',
-      name: 'Natalie Patekar',
-      msg:
-        'Comment content goes here. This one is an annotation on the image and so avatar shows number of annotation rather than initials.',
-      timestamp: '01/20/2021, 5:13:42 PM MST',
-    },
-  ];
-  const [commentsData, setCommentData] = useState(list);
+  const [commentsData, setCommentData] = useState();
+  const [
+    markAnnotaion,
+    // setMarkAnnotaion
+  ] = useState(false);
+
+  const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
+    left: 169.31820678710938,
+    top: 91.40908813476562,
+  });
 
   const getComments = useCallback((documnetId) => {
     setCommentsLoader(true);
@@ -182,7 +213,9 @@ function BrandAssetsPreview({
         <li key={item.id}>
           <GroupUser>
             <div className="avatarName float-left mr-3">
-              {getInitials(item.first_name, item.last_name)}
+              {item.annotation
+                ? item.annotation
+                : getInitials(item.first_name, item.last_name)}
             </div>
             <div className="activity-user">
               <span className="font-bold">
@@ -213,12 +246,15 @@ function BrandAssetsPreview({
                   rows="4"
                   placeholder="Enter comment"
                   value={newCommentData}
-                  onChange={(event) => handleChange(event)} />
+                  onChange={(event) => handleChange(event)}
+                />
 
-                <div className="add-annotation ">
+                {/* <div
+                  className="add-annotation "
+                  onClick={() => setMarkAnnotaion(true)}>
                   <img src={AnnotationGoal} alt="annotation" />
                   Click to add an annotation
-                </div>
+                </div> */}
                 <Button className="btn-primary w-100 mt-3 ">
                   {addCommentsLoader ? (
                     <PageLoader color="#fff" type="button" />
@@ -232,6 +268,70 @@ function BrandAssetsPreview({
         </div>
       </CommentAnnotationPanel>
     );
+  };
+
+  const renderExistingAnnotations = () => {
+    if (showCommentSection) {
+      return (
+        commentsData &&
+        commentsData.map((item) => {
+          if (item.annotation !== null) {
+            return (
+              <div
+                id={item.id}
+                className="avatarName float-left mr-3"
+                style={{
+                  position: 'absolute',
+                  left: `${item.x_coordinate}px`,
+                  top: `${item.y_coordinate}px`,
+                }}>
+                {item.annotation}
+              </div>
+            );
+          }
+          return null;
+        })
+      );
+    }
+    if (markAnnotaion) {
+      return (
+        <div
+          id="thing"
+          className="avatarName float-left mr-3"
+          style={{
+            position: 'absolute',
+            left: `${newAnnotaionPosition.left}px`,
+            top: `${newAnnotaionPosition.top}px`,
+          }}>
+          {/* {item.annotation} */}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const onMouseDown = (e) => {
+    e.preventDefault(true);
+    const theThing = document.querySelector('#thing');
+    const container = document.querySelector('#imgContainer');
+
+    if (theThing && theThing.clientHeight) {
+      const xPosition =
+        e.clientX -
+        container.getBoundingClientRect().left -
+        theThing.clientWidth / 2;
+      const yPosition =
+        e.clientY -
+        container.getBoundingClientRect().top -
+        theThing.clientHeight / 2;
+
+      // console.log(xPosition, '+', yPosition);
+      setNewAnnotaionPosition({
+        left: xPosition,
+        top: yPosition,
+      });
+      // console.log('aaaaaa', xPosition, yPosition);
+    }
   };
 
   return (
@@ -353,29 +453,39 @@ function BrandAssetsPreview({
                         />
                       </BrandAssetPdf>
                     ) : (
-                      <object
-                        className="image-thumbnail"
-                        data={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.presigned_url
-                        }
-                        type={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.mime_type
-                        }
-                        // width="550"
-                        // height="250"
-                        role="presentation">
-                        <div className="unsupport-file-name">
-                          <div className="file-path">
-                            {showAssetPreview &&
-                              showAssetPreview.selectedFile &&
-                              showAssetPreview.selectedFile.original_name}
+                      <>
+                        <object
+                          onMouseDown={(event) =>
+                            markAnnotaion ? onMouseDown(event) : null
+                          }
+                          id="imgContainer"
+                          className="image-thumbnail"
+                          data={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.presigned_url
+                          }
+                          type={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.mime_type
+                          }
+                          width="550"
+                          height="250"
+                          role="presentation">
+                          <div className="unsupport-file-name">
+                            <div className="file-path">
+                              {showAssetPreview &&
+                                showAssetPreview.selectedFile &&
+                                showAssetPreview.selectedFile.original_name}
+                            </div>
                           </div>
-                        </div>
-                      </object>
+                        </object>
+                        {/* {showCommentSection
+                          ? renderExistingAnnotations()
+                          : null} */}
+                        {renderExistingAnnotations()}
+                      </>
                     )}
                   </div>
 
@@ -621,6 +731,7 @@ const CommentAnnotationPanel = styled.div`
       margin: 0 10px;
       width: 22%;
       .add-annotation {
+        cursor: pointer;
         color: ${Theme.gray85};
         font-size: ${Theme.extraNormal};
         img {
