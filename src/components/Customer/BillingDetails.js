@@ -387,7 +387,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           height={40}
         />
       ) : (
-        <div className="col-lg-8 col-12">
+        <div className="col-lg-6 col-12">
           {formData.expiryMessage && formData.expiryMessage.message ? (
             <div
               className="already-user-msg mt-2 mb-3 p-2 text-center"
@@ -405,9 +405,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           )}
           <div className="row">
             <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard>
+              <WhiteCard className="with-less-radius">
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
-
                 <div
                   className="edit-details"
                   role="presentation"
@@ -415,7 +414,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   <img src={EditOrangeIcon} alt="" />
                   Edit
                 </div>
-
                 <div className="row">
                   <div className="col-6">
                     <div className="label">Payment Type</div>

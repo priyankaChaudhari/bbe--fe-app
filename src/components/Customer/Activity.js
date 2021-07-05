@@ -18,8 +18,8 @@ export default function Activity({
 }) {
   return (
     <>
-      <div className="col-lg-8  col-12 mb-3">
-        <WhiteCard className="activity-card">
+      <div className="col-lg-6  col-12 mb-3">
+        <WhiteCard className="activity-card with-less-radius">
           {(isLoading.loader && isLoading.type === 'activityPage') ||
           activityData === null ? (
             <PageLoader

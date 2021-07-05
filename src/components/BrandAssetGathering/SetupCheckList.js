@@ -81,7 +81,7 @@ export default function SetupCheckList({ id, brandId }) {
   };
 
   return (
-    <div className="col-lg-8  col-12 mb-3">
+    <div className="col-lg-6  col-12 mb-3">
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="agrement-details"
@@ -214,7 +214,7 @@ export default function SetupCheckList({ id, brandId }) {
           Your creative schedule is being generated
         </p>
       </WhiteCard> */}
-          <WhiteCard className="mt-3">
+          <WhiteCard className="mt-3 with-less-radius">
             <p className="black-heading-title mt-2 ">
               Active Agreement(s) ({agreementData.count})
             </p>

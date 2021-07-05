@@ -6,6 +6,10 @@ export const WhiteCard = styled.div`
   border-radius: 15px;
   padding: 20px ;
   position: relative;
+
+  &.with-less-radius {
+     border-radius: 10px;
+  }
   
  &.fix-height {
     flex-wrap: wrap;
@@ -17,10 +21,10 @@ export const WhiteCard = styled.div`
     flex: initial;
     height: 100%;
   }
-  &.customer-brand-details {
-    top: -30px;
-    width: 100%;
-  }
+  // &.customer-brand-details {
+  //   top: -30px;
+  //   width: 100%;
+  // }
 
   .company-contract-height {
    max-height: 145px;
@@ -125,45 +129,8 @@ export const WhiteCard = styled.div`
     margin-top: 4px;
   }
 
-  .brand-name {
-    color: ${Theme.gray90};
-    font-size: 32px;
-    font-weight: 500;
+  
    
-    .company-name {
-      margin-right: 15px;
-    }
-  }
-   .company-status {
-      background: ${Theme.darkGreen};
-      border-radius: 19px;
-      padding: 3px 10px;
-      color: ${Theme.gray6};
-      font-size: ${Theme.extraNormal};
-      top: -5px;
-      position:relative;
-      
-
-    &.inactive {
-      background-color: ${Theme.gray60};
-    }
-    &.pending {
-      background-color: ${Theme.yellow};
-      color: ${Theme.black};
-      
-    }
-    &.risk {
-      background-color: #d63649;
-    }
-
-      img{
-        vertical-align: middle;
-        width: 17px;
-        margin-left: 4px;
-        width: 21px;
-        margin-bottom:2px;
-      }
-    }
 
     .dropdown-content-status {
       display: none;
@@ -195,16 +162,91 @@ export const WhiteCard = styled.div`
       }
   
     }
-  .brand-logo {
-     position:relative;
+  .brand-logo-details {
+    position:relative;
+    text-align: center;
+    border-bottom: 1px solid ${Theme.gray11};
+    margin-left: 25px;
       
     img {
-      border: 8px solid ${Theme.gray6};
-      border-radius: 20px;
-      margin-top: -65px;
-      width: 170px;
-      height: 170px;
-      margin-left: 50px;
+      border: 5px solid ${Theme.white};
+      border-radius: 12px;
+      margin-top: -50px;
+      width: 98px;
+      height: 98px;
+    }
+    .brand-name {
+      color: ${Theme.black};
+      font-size: 28px;
+      font-weight: 500; 
+    }
+    .company-status {
+      background: ${Theme.darkGreen};
+      border-radius: 19px;
+      padding: 3px 10px;
+      color: ${Theme.gray6};
+      font-size: ${Theme.extraNormal};
+      margin: 0 auto;
+      top: 0;
+      max-width: 137px;
+      position: relative;
+      
+
+      &.inactive {
+        background-color: ${Theme.gray60};
+      }
+      &.pending {
+        background-color: ${Theme.yellow};
+        color: ${Theme.black};
+        
+      }
+      &.risk {
+        background-color: #d63649;
+      }
+
+      img{
+        vertical-align: middle;
+        width: 17px;
+        margin-left: 4px;
+        width: 21px;
+        margin-bottom:2px;
+      }
+    }
+    .company-label-info {
+     font-size: ${Theme.normal};
+     color: ${Theme.black};
+     line-height: 22px;
+     
+
+     &:first-child {
+        margin-left: 0;
+     }
+
+    //  .brand-label { 
+    //    color: ${Theme.gray40};
+    //    float:left;
+    //   }
+      // span { 
+      //   margin-left: 13px;
+      //   color: ${Theme.black};
+      //   float:left;
+      //   word-break: break-word;
+      //   max-width: 115px;
+      //   width:100%;
+
+      //   &.mid-width {
+      //     max-width: 158px;
+      //     width: 100%;
+
+      //       &.website {
+      //         margin-left: 20px;
+      //       }
+      //   }
+      //   &.company-size{
+      //     margin-left: 24px;
+      //   }
+      // }
+
     }
   }
 
@@ -273,44 +315,7 @@ export const WhiteCard = styled.div`
     }
   }
 
-  .company-label-info {
-     font-size: ${Theme.normal};
-     margin-left: 40px;
-     color: ${Theme.black};
-     line-height: 22px;
-     
-
-     &:first-child {
-        margin-left: 0;
-     }
-
-     .brand-label { 
-       color: ${Theme.gray40};
-       float:left;
-      }
-       span { 
-          margin-left: 13px;
-          color: ${Theme.black};
-          float:left;
-          word-break: break-word;
-          max-width: 115px;
-       
-          width:100%;
-
-          &.mid-width {
-            max-width: 158px;
-            width: 100%;
-
-             &.website {
-                margin-left: 20px;
-              }
-          }
-            &.company-size{
-             margin-left: 24px;
-            }
-        }
-
-  }
+  
   .left-details-card {
     padding: 0;
     margin: 0;
@@ -353,7 +358,7 @@ export const WhiteCard = styled.div`
   }
 
 
-  .add-new-tab {
+  .view-all-list {
     font-size: ${Theme.extraNormal};
     color: ${Theme.gray85};
     position: absolute;
@@ -362,22 +367,25 @@ export const WhiteCard = styled.div`
     cursor: pointer;
 
     img {
-      width: 11px;
+      width: 16px;
+      margin-left: 2px;
+      vertical-align: bottom;
+    }
+  }
+  .add-note-section {
+    font-size: ${Theme.extraNormal};
+    color: ${Theme.gray85};
+    text-align: center;
+
+    .red-chat-icon {
+      width: 16px;
+      vertical-align: middle;
+      margin-right: 2px;
+
     }
   }
 
-  .add-more-people {
-    background-size: 100%;
-    display: inline-block;
-    vertical-align: top;
-
-    img {
-      border-radius: 50%;
-      width: 40px;
-      margin-left: -7px;
-      height: 40px;
-    }
-  }
+  
 
   .recurring-contact {
     padding: 0;
@@ -952,7 +960,7 @@ export const WhiteCard = styled.div`
        }
    }
  @media only screen and (max-width: 991px) {
-  .brand-logo {
+  .brand-logo-details{
     img{
     border-radius: 10px;
     margin-top: -93px;

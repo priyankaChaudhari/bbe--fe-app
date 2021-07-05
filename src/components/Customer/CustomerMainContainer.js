@@ -9,23 +9,20 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
-import NumberFormat from 'react-number-format';
+// import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import {
-  EditOrangeIcon,
   FileContract,
   Organization,
   ExchangeIcon,
-  AddIcons,
   DefaultUser,
   CloseIcon,
   CompanyDefaultUser,
   LeftArrowIcon,
-  GreyBannerBg,
   BackArrowIcon,
   HeartMonitorIcon,
   WhiteCaretUp,
@@ -33,6 +30,9 @@ import {
   AccountSetupIcon,
   BillingIcon,
   CatalogBox,
+  PlusIcon,
+  ForwardOrangeIcon,
+  ChatBoxIcon,
   // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
@@ -138,7 +138,7 @@ export default function CustomerMainContainer() {
     show: false,
     type: '',
   });
-  const [memberCount, setMemberCount] = useState(null);
+  // const [memberCount, setMemberCount] = useState(null);
   const profileLoader = useSelector(
     (state) => state.userState.isActivityLoading,
   );
@@ -235,7 +235,7 @@ export default function CustomerMainContainer() {
     getCustomerMembers(id).then((member) => {
       getActivityLogInfo();
       setMemberData(member && member.data && member.data.results);
-      setMemberCount(member && member.data && member.data.count);
+      // setMemberCount(member && member.data && member.data.count);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id, getActivityLogInfo]);
@@ -620,591 +620,642 @@ export default function CustomerMainContainer() {
               ) : (
                 ''
               )}
-              <CustomerDetailBanner>
-                <div className="banner">
-                  <div className="inner" />
-                </div>
 
-                <CustomerBody>
-                  {userInfo && userInfo.role !== 'Customer' ? (
-                    <Link to={PATH_CUSTOMER_LIST}>
-                      <div className="back-btn-link d-lg-block d-none">
-                        {' '}
-                        <img
-                          className="left-arrow"
-                          src={LeftArrowIcon}
-                          alt=""
-                        />
-                        Back to all customers
+              <CustomerDetailsBody>
+                {/* <WhiteCard className="customer-brand-details mb-n2">
+                  <div className="row">
+                    <div className="col-lg-9 col-md-12 ">
+                      <div
+                        className=" edit-details edit-brand-details "
+                        onClick={() => setShowModal(true)}
+                        role="presentation">
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
                       </div>
-                    </Link>
-                  ) : (
-                    ''
-                  )}
-
-                  <WhiteCard className="customer-brand-details mb-n2">
-                    <div className="row">
-                      <div className="col-lg-3 col-md-12 pr-0">
-                        <div className="brand-logo">
-                          {' '}
-                          {customer &&
-                          customer.documents &&
-                          customer.documents[0] ? (
-                            <img
-                              src={Object.values(customer.documents[0])}
-                              alt="company-logo"
-                            />
-                          ) : (
-                            <img
-                              className="brand-logo"
-                              src={CompanyDefaultUser}
-                              alt="company-logo"
-                            />
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-lg-9 col-md-12 ">
-                        <span className="brand-name ">
-                          <span className="company-name">
+                      <div className="row mt-2">
+                        <div className="col-lg-4 col-12"></div>
+                        <div className="col-lg-4 col-md-6 col-sm-12">
+                          <div className="company-label-info ">
                             {' '}
-                            {customer.company_name}
-                          </span>
-
-                          {customer &&
-                          customer.status &&
-                          customer.status.value !== null ? (
-                            customer &&
-                            customer.status &&
-                            customer.status.value ===
-                              'pending account setup' ? (
-                              <span className="company-status inactive">
-                                {customer &&
-                                  customer.status &&
-                                  customer.status.label}
-                              </span>
-                            ) : userInfo && userInfo.role === 'Customer' ? (
-                              <span
-                                className="company-status"
-                                style={{
-                                  background: checkStatusColor(),
-                                  color:
-                                    customer.status.value ===
-                                    'pending cancellation'
-                                      ? 'black'
-                                      : '',
-                                }}>
-                                {customer &&
-                                  customer.status &&
-                                  customer.status.label}
-                              </span>
-                            ) : (
-                              <DropDownStatus>
-                                {checkStatus()}
-                                <Select
-                                  isSearchable={false}
-                                  styles={{
-                                    control: (base) => ({
-                                      ...base,
-                                      background: checkStatusColor(),
-                                      borderRadius: '50px',
-                                      minHeight: '24px',
-                                      outline: 'none !important',
-                                      boxShadow: 'none  !important',
-                                      outLine: 'none',
-                                      cursor: 'pointer',
-                                      width:
-                                        (customer &&
-                                          customer.status &&
-                                          customer.status.value ===
-                                            'pending cancellation') ||
-                                        (customer &&
-                                          customer.status &&
-                                          customer.status.value ===
-                                            'pending account setup')
-                                          ? '176px !important'
-                                          : customer &&
-                                            customer.status &&
-                                            customer.status.value === 'at risk'
-                                          ? '120px'
-                                          : '88px',
-                                      '&:focus': {
-                                        outline: 'none !important',
-                                        boxShadow: 'none  !important',
-                                      },
-                                      '&:hover': {
-                                        outline: 'none',
-                                      },
-                                    }),
-                                    singleValue: (provided) => {
-                                      const color =
-                                        customer &&
-                                        customer.status &&
-                                        customer.status.value ===
-                                          'pending cancellation'
-                                          ? '#000'
-                                          : '#fff';
-
-                                      return { ...provided, color };
-                                    },
-                                  }}
-                                  classNamePrefix="react-select"
-                                  options={statusActions}
-                                  onChange={(e) =>
-                                    setStatusModal({
-                                      show: true,
-                                      type: e.value,
-                                    })
-                                  }
-                                  value={customer && customer.status}
-                                  components={{
-                                    DropdownIndicator,
-                                  }}
-                                />
-                              </DropDownStatus>
-                            )
-                          ) : (
-                            <span className="company-status inactive capitalize">
-                              {customer && customer.contract_status}
+                            <div className="brand-label ">Category</div>
+                            <span className="mid-width">
+                              {customer &&
+                                customer.category &&
+                                customer.category.label}
                             </span>
-                          )}
-                        </span>
-
-                        <div
-                          className=" edit-details edit-brand-details "
-                          onClick={() => setShowModal(true)}
-                          role="presentation">
-                          <img src={EditOrangeIcon} alt="" />
-                          Edit
-                        </div>
-                        <div className="row mt-2">
-                          <div className="col-lg-4 col-12">
-                            <div className="company-label-info text-left">
-                              {customer && customer.address
-                                ? `${customer.address}`
-                                : ''}
-                              {customer && customer.city
-                                ? `, ${customer.city}`
-                                : ''}
-                              {customer &&
-                              customer.state &&
-                              customer.state.label
-                                ? `, ${customer.state.label}`
-                                : customer && customer.state
-                                ? `, ${customer.state}`
-                                : ''}
-                              {customer && customer.zip_code
-                                ? `, ${customer.zip_code}`
-                                : ''}
-                              {customer &&
-                              customer.country &&
-                              customer.country.label
-                                ? `, ${customer.country.label}`
-                                : `, ${customer.country}`
-                                ? customer.country
-                                : ''}
-                            </div>
-                          </div>
-                          <div className="col-lg-4 col-md-6 col-sm-12">
-                            <div className="company-label-info ">
-                              {' '}
-                              <div className="brand-label ">Category</div>
-                              <span className="mid-width">
-                                {customer &&
-                                  customer.category &&
-                                  customer.category.label}
-                              </span>
-                              <div className="clear-fix" />
-                              <div className="brand-label ">Website</div>
-                              <span className=" mid-width website">
-                                <a
-                                  css="text-transform: initial;"
-                                  href={
-                                    customer &&
-                                    customer.website &&
-                                    customer.website.includes('http')
-                                      ? customer && customer.website
-                                      : `http://www.${
-                                          customer && customer.website
-                                        }`
-                                  }
-                                  target="_blank"
-                                  rel=" noopener noreferrer">
-                                  {customer && customer.website}
-                                </a>
-                              </span>
-                              <div className="clear-fix" />
-                            </div>
-                          </div>{' '}
-                          <div className="col-lg-4 col-md-6 col-sm-12">
-                            <div className="company-label-info">
-                              <div className="brand-label">Annual Revenue</div>
-                              <NumberFormat
-                                displayType="text"
-                                thousandSeparator
-                                value={
-                                  (customer && customer.annual_revenue) || null
+                            <div className="clear-fix" />
+                            <div className="brand-label ">Website</div>
+                            <span className=" mid-width website">
+                              <a
+                                css="text-transform: initial;"
+                                href={
+                                  customer &&
+                                  customer.website &&
+                                  customer.website.includes('http')
+                                    ? customer && customer.website
+                                    : `http://www.${
+                                        customer && customer.website
+                                      }`
                                 }
-                                prefix="$"
-                              />
-                              <div className="clear-fix" />
+                                target="_blank"
+                                rel=" noopener noreferrer">
+                                {customer && customer.website}
+                              </a>
+                            </span>
+                            <div className="clear-fix" />
+                          </div>
+                        </div>{' '}
+                        <div className="col-lg-4 col-md-6 col-sm-12">
+                          <div className="company-label-info">
+                            <div className="brand-label">Annual Revenue</div>
+                            <NumberFormat
+                              displayType="text"
+                              thousandSeparator
+                              value={
+                                (customer && customer.annual_revenue) || null
+                              }
+                              prefix="$"
+                            />
+                            <div className="clear-fix" />
 
-                              <div className="brand-label ">Company Size</div>
-                              <span className="company-size">
-                                {customer && customer.number_of_employees}
-                              </span>
-                              <div className="clear-fix" />
-                            </div>
+                            <div className="brand-label ">Company Size</div>
+                            <span className="company-size">
+                              {customer && customer.number_of_employees}
+                            </span>
+                            <div className="clear-fix" />
                           </div>
                         </div>
                       </div>
                     </div>
-                  </WhiteCard>
-
-                  <div className="row">
-                    <div className="col-lg-4 col-12">
-                      <WhiteCard className="left-border  d-lg-block d-none mb-3">
-                        <ul className="left-details-card">
-                          {userInfo && userInfo.role === 'Customer' ? (
-                            <li
-                              onClick={() => {
-                                setViewComponent('dashboard');
-                              }}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'dashboard' ? 'active' : ''
-                                }`}>
-                                <img
-                                  className="file-contract"
-                                  src={HeartMonitorIcon}
-                                  alt="monitor"
-                                />
-                                Dashboard
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                          {userInfo && userInfo.role !== 'Customer' ? (
-                            <li
-                              onClick={() => {
-                                setViewComponent('performance');
-                                dispatch(setCustomerSelectedTab('performance'));
-                              }}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'performance'
-                                    ? 'active'
-                                    : ''
-                                }`}>
-                                <img
-                                  className="file-contract"
-                                  src={HeartMonitorIcon}
-                                  alt="monitor"
-                                />
-                                Performance
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                          <li
-                            onClick={() => {
-                              setViewComponent('agreement');
-                              dispatch(setCustomerSelectedTab('agreement'));
-                            }}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'agreement' ? 'active' : ''
-                              }`}>
-                              <img
-                                className="file-contract"
-                                src={FileContract}
-                                alt=""
-                              />
-                              Agreements
-                            </div>
-                          </li>
-                          {customer &&
-                          customer.brand_assets &&
-                          customer.brand_assets.is_completed ? (
-                            <li
-                              onClick={() => {
-                                setViewComponent('brand asset');
-                                // dispatch(setCustomerSelectedTab('brand asset'));
-                              }}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'brand asset'
-                                    ? 'active'
-                                    : ''
-                                }`}>
-                                <img
-                                  className="file-contract"
-                                  src={CatalogBox}
-                                  alt=""
-                                />
-                                Brand Assets
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-
-                          <li
-                            onClick={() => {
-                              setViewComponent('company');
-                              dispatch(setCustomerSelectedTab('company'));
-                            }}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'company' ? 'active' : ''
-                              }`}>
-                              <img src={Organization} alt="" />
-                              Company Details
-                            </div>
-                          </li>
-                          {customer && customer.status !== null ? (
-                            <li
-                              onClick={() => setViewComponent('billing')}
-                              role="presentation">
-                              <div
-                                className={`left-details ${
-                                  viewComponent === 'billing' ? 'active' : ''
-                                }`}>
-                                <img src={BillingIcon} alt="dollar-invoice" />
-                                Billing
-                              </div>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                          <li
-                            onClick={() => {
-                              setViewComponent('activity');
-                              dispatch(setCustomerSelectedTab('activity'));
-                            }}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'activity' ? 'active' : ''
-                              }`}>
-                              <img src={ExchangeIcon} alt="" />
-                              Activity
-                            </div>
-                          </li>
-                        </ul>
-                      </WhiteCard>
-
-                      <Select
-                        options={viewOptions}
-                        className="customer-dropdown-select d-lg-none d-block mb-3 "
-                        onChange={(event) => {
-                          setViewComponent(event.value);
-                          dispatch(setCustomerSelectedTab(event.value));
-                        }}
-                        defaultValue={viewOptions[0]}
-                      />
-
-                      <WhiteCard className="mb-3">
-                        <p className="black-heading-title mt-0 mb-4">
+                  </div>
+                </WhiteCard> */}
+                <div className="row">
+                  <div className="col-5 mb-5 mt-4">
+                    {' '}
+                    {userInfo && userInfo.role !== 'Customer' ? (
+                      <Link to={PATH_CUSTOMER_LIST}>
+                        <div className="back-btn-link d-lg-block d-none">
                           {' '}
-                          Team Members (
-                          {memberCount &&
-                            (memberCount > 10 ? (
-                              <u
-                                className="link-video watch-video cursor"
-                                onClick={() =>
-                                  setShowMemberList({
-                                    show: true,
-                                    add: false,
-                                    modal: true,
-                                  })
-                                }
-                                role="presentation"
-                                title="See more...">
-                                {memberCount}
-                              </u>
-                            ) : (
-                              memberCount
-                            ))}
-                          )
-                        </p>
-                        {userInfo && userInfo.role !== 'Customer' ? (
+                          <img
+                            className="left-arrow"
+                            src={LeftArrowIcon}
+                            alt=""
+                          />
+                          Back to all customers
+                        </div>
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  <div className="col-7  mt-4 text-right">
+                    {' '}
+                    <div className="add-more-people">
+                      {memberData.map((item) => (
+                        <React.Fragment key={item.id}>
                           <div
-                            className="add-new-tab"
+                            className="add-more-people cursor "
+                            data-tip
+                            data-for={item.id}
                             onClick={() =>
                               setShowMemberList({
-                                show: false,
-                                add: true,
+                                show: true,
+                                add: false,
                                 modal: true,
                               })
                             }
                             role="presentation">
-                            <img className="mr-1" src={AddIcons} alt="" />
-                            Add new
+                            <GetInitialName
+                              userInfo={item.user_profile}
+                              type="team"
+                            />
                           </div>
+
+                          <ReactTooltip
+                            place="bottom"
+                            id={item.id}
+                            aria-haspopup="true">
+                            <strong>
+                              {(item.user_profile &&
+                                item.user_profile.first_name) ||
+                                ' '}{' '}
+                              {(item.user_profile &&
+                                item.user_profile.last_name) ||
+                                ' '}
+                            </strong>
+                            <p style={{ color: 'white', fontSize: '11px' }}>
+                              {item.user_profile && item.user_profile.role}
+                            </p>
+                          </ReactTooltip>
+                        </React.Fragment>
+                      ))}
+
+                      <div className="add-more-people btn-add-team cursor ">
+                        <img src={PlusIcon} alt="add" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row mt-2">
+                  <div className="col-lg-3 col-12">
+                    <WhiteCard className="left-border  d-lg-block d-none mb-3">
+                      <div className="brand-logo-details mb-3">
+                        {' '}
+                        {customer &&
+                        customer.documents &&
+                        customer.documents[0] ? (
+                          <img
+                            src={Object.values(customer.documents[0])}
+                            alt="company-logo"
+                          />
+                        ) : (
+                          <img
+                            className="brand-logo"
+                            src={CompanyDefaultUser}
+                            alt="company-logo"
+                          />
+                        )}
+                        <div className="brand-name mt-2 mb-1 ">
+                          {' '}
+                          {customer.company_name}
+                        </div>
+                        <div className="company-label-info mb-2">
+                          {customer && customer.address
+                            ? `${customer.address}`
+                            : ''}
+                          {customer && customer.city
+                            ? `, ${customer.city}`
+                            : ''}
+                          {customer && customer.state && customer.state.label
+                            ? `, ${customer.state.label}`
+                            : customer && customer.state
+                            ? `, ${customer.state}`
+                            : ''}
+                          {customer && customer.zip_code
+                            ? `, ${customer.zip_code}`
+                            : ''}
+                          {customer &&
+                          customer.country &&
+                          customer.country.label
+                            ? `, ${customer.country.label}`
+                            : `, ${customer.country}`
+                            ? customer.country
+                            : ''}
+                        </div>
+                        <div className="mb-2">
+                          <a
+                            css="text-transform: initial;"
+                            href={
+                              customer &&
+                              customer.website &&
+                              customer.website.includes('http')
+                                ? customer && customer.website
+                                : `http://www.${customer && customer.website}`
+                            }
+                            target="_blank"
+                            rel=" noopener noreferrer">
+                            {customer && customer.website}
+                          </a>
+                        </div>
+                        {customer &&
+                        customer.status &&
+                        customer.status.value !== null ? (
+                          customer &&
+                          customer.status &&
+                          customer.status.value === 'pending account setup' ? (
+                            <span className="company-status inactive">
+                              {customer &&
+                                customer.status &&
+                                customer.status.label}
+                            </span>
+                          ) : userInfo && userInfo.role === 'Customer' ? (
+                            <span
+                              className="company-status"
+                              style={{
+                                background: checkStatusColor(),
+                                color:
+                                  customer.status.value ===
+                                  'pending cancellation'
+                                    ? 'black'
+                                    : '',
+                              }}>
+                              {customer &&
+                                customer.status &&
+                                customer.status.label}
+                            </span>
+                          ) : (
+                            <DropDownStatus className="mb-3">
+                              {checkStatus()}
+                              <Select
+                                isSearchable={false}
+                                styles={{
+                                  control: (base) => ({
+                                    ...base,
+                                    background: checkStatusColor(),
+                                    borderRadius: '50px',
+                                    minHeight: '24px',
+                                    outline: 'none !important',
+                                    boxShadow: 'none  !important',
+                                    outLine: 'none',
+                                    cursor: 'pointer',
+                                    width:
+                                      (customer &&
+                                        customer.status &&
+                                        customer.status.value ===
+                                          'pending cancellation') ||
+                                      (customer &&
+                                        customer.status &&
+                                        customer.status.value ===
+                                          'pending account setup')
+                                        ? '176px !important'
+                                        : customer &&
+                                          customer.status &&
+                                          customer.status.value === 'at risk'
+                                        ? '120px'
+                                        : '88px',
+                                    '&:focus': {
+                                      outline: 'none !important',
+                                      boxShadow: 'none  !important',
+                                    },
+                                    '&:hover': {
+                                      outline: 'none',
+                                    },
+                                  }),
+                                  singleValue: (provided) => {
+                                    const color =
+                                      customer &&
+                                      customer.status &&
+                                      customer.status.value ===
+                                        'pending cancellation'
+                                        ? '#000'
+                                        : '#fff';
+
+                                    return { ...provided, color };
+                                  },
+                                }}
+                                classNamePrefix="react-select"
+                                options={statusActions}
+                                onChange={(e) =>
+                                  setStatusModal({
+                                    show: true,
+                                    type: e.value,
+                                  })
+                                }
+                                value={customer && customer.status}
+                                components={{
+                                  DropdownIndicator,
+                                }}
+                              />
+                            </DropDownStatus>
+                          )
+                        ) : (
+                          <div className="company-status inactive capitalize mb-3 ">
+                            {customer && customer.contract_status}
+                          </div>
+                        )}
+                      </div>
+                      <ul className="left-details-card">
+                        {userInfo && userInfo.role === 'Customer' ? (
+                          <li
+                            onClick={() => {
+                              setViewComponent('dashboard');
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'dashboard' ? 'active' : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={HeartMonitorIcon}
+                                alt="monitor"
+                              />
+                              Dashboard
+                            </div>
+                          </li>
                         ) : (
                           ''
                         )}
-                        <div className="ml-2">
-                          {memberData.map((item) => (
-                            <React.Fragment key={item.id}>
-                              <div
-                                className="add-more-people cursor "
-                                data-tip
-                                data-for={item.id}
-                                onClick={() =>
-                                  setShowMemberList({
-                                    show: true,
-                                    add: false,
-                                    modal: true,
-                                  })
-                                }
-                                role="presentation">
-                                <GetInitialName
-                                  userInfo={item.user_profile}
-                                  type="team"
-                                />
-                              </div>
-                              <ReactTooltip
-                                place="bottom"
-                                id={item.id}
-                                aria-haspopup="true">
-                                <strong>
-                                  {(item.user_profile &&
-                                    item.user_profile.first_name) ||
-                                    ' '}{' '}
-                                  {(item.user_profile &&
-                                    item.user_profile.last_name) ||
-                                    ' '}
-                                </strong>
-                                <p style={{ color: 'white', fontSize: '11px' }}>
-                                  {item.user_profile && item.user_profile.role}
-                                </p>
-                              </ReactTooltip>
-                            </React.Fragment>
+                        {userInfo && userInfo.role !== 'Customer' ? (
+                          <li
+                            onClick={() => {
+                              setViewComponent('performance');
+                              dispatch(setCustomerSelectedTab('performance'));
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'performance' ? 'active' : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={HeartMonitorIcon}
+                                alt="monitor"
+                              />
+                              Performance
+                            </div>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+                        <li
+                          onClick={() => {
+                            setViewComponent('agreement');
+                            dispatch(setCustomerSelectedTab('agreement'));
+                          }}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'agreement' ? 'active' : ''
+                            }`}>
+                            <img
+                              className="file-contract"
+                              src={FileContract}
+                              alt=""
+                            />
+                            Agreements
+                          </div>
+                        </li>
+                        {customer &&
+                        customer.brand_assets &&
+                        customer.brand_assets.is_completed ? (
+                          <li
+                            onClick={() => {
+                              setViewComponent('brand asset');
+                              // dispatch(setCustomerSelectedTab('brand asset'));
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'brand asset' ? 'active' : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={CatalogBox}
+                                alt=""
+                              />
+                              Brand Assets
+                            </div>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+
+                        <li
+                          onClick={() => {
+                            setViewComponent('company');
+                            dispatch(setCustomerSelectedTab('company'));
+                          }}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'company' ? 'active' : ''
+                            }`}>
+                            <img src={Organization} alt="" />
+                            Company Details
+                          </div>
+                        </li>
+                        {customer && customer.status !== null ? (
+                          <li
+                            onClick={() => setViewComponent('billing')}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'billing' ? 'active' : ''
+                              }`}>
+                              <img src={BillingIcon} alt="dollar-invoice" />
+                              Billing
+                            </div>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+                        <li
+                          onClick={() => {
+                            setViewComponent('activity');
+                            dispatch(setCustomerSelectedTab('activity'));
+                          }}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'activity' ? 'active' : ''
+                            }`}>
+                            <img src={ExchangeIcon} alt="" />
+                            Activity
+                          </div>
+                        </li>
+                      </ul>
+                    </WhiteCard>
+
+                    <Select
+                      options={viewOptions}
+                      className="customer-dropdown-select d-lg-none d-block mb-3 "
+                      onChange={(event) => {
+                        setViewComponent(event.value);
+                        dispatch(setCustomerSelectedTab(event.value));
+                      }}
+                      defaultValue={viewOptions[0]}
+                    />
+
+                    {/* <WhiteCard className="mb-3">
+                      <p className="black-heading-title mt-0 mb-4">
+                        {' '}
+                        Team Members (
+                        {memberCount &&
+                          (memberCount > 10 ? (
+                            <u
+                              className="link-video watch-video cursor"
+                              onClick={() =>
+                                setShowMemberList({
+                                  show: true,
+                                  add: false,
+                                  modal: true,
+                                })
+                              }
+                              role="presentation"
+                              title="See more...">
+                              {memberCount}
+                            </u>
+                          ) : (
+                            memberCount
                           ))}
+                        )
+                      </p>
+                      {userInfo && userInfo.role !== 'Customer' ? (
+                        <div
+                          className="add-new-tab"
+                          onClick={() =>
+                            setShowMemberList({
+                              show: false,
+                              add: true,
+                              modal: true,
+                            })
+                          }
+                          role="presentation">
+                          <img className="mr-1" src={AddIcons} alt="" />
+                          Add new
                         </div>
-                      </WhiteCard>
-
-                      <WhiteCard className="mb-3 d-none d-lg-block">
-                        <p className="black-heading-title mt-0 mb-4">
-                          {' '}
-                          Recent Activity
-                        </p>
-                        {activityData &&
-                          activityData.slice(0, 2).map((item) => (
-                            <GroupUser key={Math.random()}>
-                              {images.find(
-                                (op) => op.entity_id === item.history_user_id,
-                              ) &&
-                              images.find(
-                                (op) => op.entity_id === item.history_user_id,
-                              ).presigned_url ? (
-                                <img
-                                  src={
-                                    isLoading.loader &&
-                                    isLoading.type === 'page'
-                                      ? DefaultUser
-                                      : images.find(
-                                          (op) =>
-                                            op.entity_id ===
-                                            item.history_user_id,
-                                        ).presigned_url
-                                  }
-                                  className="default-user-activity"
-                                  alt="pic"
-                                />
-                              ) : (
-                                <div className="avatarName float-left mr-3">
-                                  {getActivityInitials(
-                                    item.history_change_reason,
-                                  )}
-                                </div>
-                              )}
-                              <div className="activity-user mb-4">
-                                {activityDetail(item)}
-
-                                <div className="time-date mt-1">
-                                  {item && item.history_date
-                                    ? item.history_date
-                                    : ''}
-                                </div>
-                              </div>
-                              <div className="clear-fix" />
-                            </GroupUser>
-                          ))}
-                      </WhiteCard>
-                    </div>
-                    {viewComponent === 'agreement' ? (
-                      <AgreementDetails agreements={agreement} id={id} />
-                    ) : viewComponent === 'company' ? (
-                      <CompanyDetail
-                        id={id}
-                        customer={customer}
-                        amazonDetails={amazonDetails}
-                        seller={
-                          agreement &&
-                          agreement.seller_type &&
-                          agreement.seller_type.value
-                        }
-                        getAmazon={getAmazon}
-                        getActivityLogInfo={getActivityLogInfo}
-                      />
-                    ) : viewComponent === 'dashboard' ? (
-                      <SetupCheckList
-                        id={id}
-                        brandId={
-                          customer &&
-                          customer.brand_assets &&
-                          customer.brand_assets.id
-                        }
-                      />
-                    ) : viewComponent === 'brand asset' ? (
-                      history.push({
-                        pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
-                          ':brandId',
-                          customer &&
-                            customer.brand_assets &&
-                            customer.brand_assets.id,
-                        ),
-                        search: 'step=brand-logo',
-                      })
-                    ) : viewComponent === 'performance' ? (
-                      <CompanyPerformance
-                        marketplaceChoices={marketplaceChoices}
-                        id={id}
-                      />
-                    ) : viewComponent === 'billing' ? (
-                      <BillingDetails
-                        id={id}
-                        userInfo={userInfo}
-                        onBoardingId={
-                          customer && customer.customer_onboarding_id
-                        }
-                      />
-                    ) : (
-                      <Activity
-                        activityData={activityData}
-                        getActivityInitials={getActivityInitials}
-                        activityDetail={activityDetail}
-                        isLoading={isLoading}
-                        images={images}
-                        handlePageChange={handlePageChange}
-                        count={activityCount}
-                        pageNumber={pageNumber || 1}
-                      />
-                    )}
+                      ) : (
+                        ''
+                      )}
+                    </WhiteCard> */}
                   </div>
-                </CustomerBody>
+                  {viewComponent === 'agreement' ? (
+                    <AgreementDetails agreements={agreement} id={id} />
+                  ) : viewComponent === 'company' ? (
+                    <CompanyDetail
+                      id={id}
+                      customer={customer}
+                      amazonDetails={amazonDetails}
+                      seller={
+                        agreement &&
+                        agreement.seller_type &&
+                        agreement.seller_type.value
+                      }
+                      getAmazon={getAmazon}
+                      getActivityLogInfo={getActivityLogInfo}
+                    />
+                  ) : viewComponent === 'dashboard' ? (
+                    <SetupCheckList
+                      id={id}
+                      brandId={
+                        customer &&
+                        customer.brand_assets &&
+                        customer.brand_assets.id
+                      }
+                    />
+                  ) : viewComponent === 'brand asset' ? (
+                    history.push({
+                      pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
+                        ':brandId',
+                        customer &&
+                          customer.brand_assets &&
+                          customer.brand_assets.id,
+                      ),
+                      search: 'step=brand-logo',
+                    })
+                  ) : viewComponent === 'performance' ? (
+                    <CompanyPerformance
+                      marketplaceChoices={marketplaceChoices}
+                      id={id}
+                    />
+                  ) : viewComponent === 'billing' ? (
+                    <BillingDetails
+                      id={id}
+                      userInfo={userInfo}
+                      onBoardingId={customer && customer.customer_onboarding_id}
+                    />
+                  ) : (
+                    <Activity
+                      activityData={activityData}
+                      getActivityInitials={getActivityInitials}
+                      activityDetail={activityDetail}
+                      isLoading={isLoading}
+                      images={images}
+                      handlePageChange={handlePageChange}
+                      count={activityCount}
+                      pageNumber={pageNumber || 1}
+                    />
+                  )}
 
-                <BackToTop />
-              </CustomerDetailBanner>
+                  <div className="col-3">
+                    <WhiteCard className="mb-3 d-none d-lg-block">
+                      <p className="black-heading-title mt-0 mb-4">
+                        {' '}
+                        Notes (4)
+                      </p>
+                      <div className="view-all-list">
+                        View All
+                        <img src={ForwardOrangeIcon} alt="forward-arrow" />
+                      </div>
+                      <GroupUser>
+                        <div className="avatarName float-left mr-3">pl</div>
+                        <div className="activity-user">
+                          <span className="font-bold"> Joe Tati:</span> “Spoke
+                          with BP, they are happy with the ASIN’s we’ve
+                          prioritied for the schedule.”
+                          <div className="time-date  mt-1">
+                            01/14/2021, 5:13:42 PM MST
+                          </div>
+                        </div>
+                        <div className="clear-fix" />
+                      </GroupUser>
+                      <div className="straight-line horizontal-line  mt-3 mb-3" />
+                      <div className="add-note-section">
+                        {' '}
+                        <img
+                          className="red-chat-icon"
+                          src={ChatBoxIcon}
+                          alt="chat"
+                        />{' '}
+                        Add note
+                      </div>
+                    </WhiteCard>
+                    <WhiteCard className="mb-3 d-none d-lg-block">
+                      <p className="black-heading-title mt-0 mb-4">
+                        {' '}
+                        Recent Activity
+                      </p>
+                      <div
+                        className="view-all-list"
+                        onClick={() =>
+                          setShowMemberList({
+                            show: false,
+                            add: true,
+                            modal: true,
+                          })
+                        }
+                        role="presentation">
+                        View All
+                        <img src={ForwardOrangeIcon} alt="forward-arrow" />
+                      </div>
+                      {activityData &&
+                        activityData.slice(0, 2).map((item) => (
+                          <GroupUser key={Math.random()}>
+                            {images.find(
+                              (op) => op.entity_id === item.history_user_id,
+                            ) &&
+                            images.find(
+                              (op) => op.entity_id === item.history_user_id,
+                            ).presigned_url ? (
+                              <img
+                                src={
+                                  isLoading.loader && isLoading.type === 'page'
+                                    ? DefaultUser
+                                    : images.find(
+                                        (op) =>
+                                          op.entity_id === item.history_user_id,
+                                      ).presigned_url
+                                }
+                                className="default-user-activity"
+                                alt="pic"
+                              />
+                            ) : (
+                              <div className="avatarName float-left mr-3">
+                                {getActivityInitials(
+                                  item.history_change_reason,
+                                )}
+                              </div>
+                            )}
+                            <div className="activity-user mb-4">
+                              {activityDetail(item)}
+
+                              <div className="time-date mt-1">
+                                {item && item.history_date
+                                  ? item.history_date
+                                  : ''}
+                              </div>
+                            </div>
+                            <div className="clear-fix" />
+                          </GroupUser>
+                        ))}
+                    </WhiteCard>
+                  </div>
+                </div>
+              </CustomerDetailsBody>
+
+              <BackToTop />
 
               <Modal
                 isOpen={showMemberList.modal}
@@ -1426,57 +1477,80 @@ export default function CustomerMainContainer() {
   );
 }
 
-const CustomerDetailBanner = styled.div`
+// const CustomerDetailBanner = styled.div`
+//   background: ${Theme.gray6};
+//   min-height: 100%;
+//   .banner {
+//     height: 307px;
+//     padding-left: 62px;
+//     background-image: url(${GreyBannerBg});
+//     background-position: top;
+//     background-size: cover;
+//     background-repeat: no-repeat;
+//     width: 100%;
+
+//     .inner {
+//       height: 100%;
+//       top: 0;
+//       max-width: 100%;
+//       padding: 0 20px;
+//     }
+//   }
+
+//   @media only screen and (max-width: 991px) {
+//     .banner {
+//       padding-left: 0;
+//     }
+//   }
+
+//   @media only screen and (max-width: 991px) {
+//     .banner {
+//       padding-left: 0;
+//     }
+//   }
+// `;
+
+const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
   min-height: 100%;
-  .banner {
-    height: 307px;
-    padding-left: 62px;
-    background-image: url(${GreyBannerBg});
-    background-position: top;
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 100%;
-
-    .inner {
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    .banner {
-      padding-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    .banner {
-      padding-left: 0;
-    }
-  }
-`;
-
-const CustomerBody = styled.div`
-  max-width: 1220px;
-  margin: 0 auto;
   width: 100%;
-  padding-left: 65px;
+  padding-left: 69px;
+  padding-right: 45px;
   .back-btn-link {
-    background: ${Theme.white};
-    border-radius: 23px;
-    padding: 13px;
     color: ${Theme.gray85};
-    position: absolute;
-    top: 109px;
+    font-size: ${Theme.extraNormal};
+    text-transform: initial;
     cursor: pointer;
 
     .left-arrow {
-      width: 18px;
-      margin-right: 3px;
+      width: 16px;
+      margin-right: 5px;
       vertical-align: bottom;
+    }
+  }
+  .add-more-people {
+    background-size: 100%;
+    display: inline-block;
+    vertical-align: top;
+
+    img {
+      border-radius: 50%;
+      width: 40px;
+      margin-left: -7px;
+      height: 40px;
+    }
+
+    &.btn-add-team {
+      background-color: ${Theme.white};
+      border: 1px solid ${Theme.gray2};
+      border-radius: 100%;
+      width: 36px;
+      margin-left: 2px;
+      height: 36px;
+      img {
+        width: 15px;
+        margin: -2px 9px 3px 2px;
+      }
     }
   }
 
@@ -1540,20 +1614,20 @@ const CustomerBody = styled.div`
     }
   }
 
-  @media only screen and (max-width: 991px) {
-    padding: 0 20px;
-  }
+  // @media only screen and (max-width: 991px) {
+  //   padding: 0 20px;
+  // }
 
-  @media only screen and (min-width: 1600px) and (max-width: 1920px) {
-    max-width: 1420px !important;
-    margin: 0 auto;
-    width: 100%;
-  }
-  @media only screen and (min-width: 1920px) {
-    max-width: 80% !important;
-    margin: 0 auto;
-    width: 100%;
-  }
+  // @media only screen and (min-width: 1600px) and (max-width: 1920px) {
+  //   max-width: 1420px !important;
+  //   margin: 0 auto;
+  //   width: 100%;
+  // }
+  // @media only screen and (min-width: 1920px) {
+  //   max-width: 80% !important;
+  //   margin: 0 auto;
+  //   width: 100%;
+  // }
 `;
 const BackBtn = styled.div`
   color: ${Theme.black};

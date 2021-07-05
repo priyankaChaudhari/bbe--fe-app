@@ -142,8 +142,8 @@ export const GroupUser = styled.div`
     }
   }
   .default-user-activity {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     float: left;
     margin-right: 15px;

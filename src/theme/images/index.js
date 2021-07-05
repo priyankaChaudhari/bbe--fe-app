@@ -163,6 +163,7 @@ import FileCloud from './icon_upload.svg';
 import ChatBoxIcon from './icons/chat-box.svg';
 import CatalogBox from './icons/catalog-box.png';
 import AnnotationGoal from './icons/annotation-goal.png';
+import ForwardOrangeIcon from './icons/forward-orange-icon.png';
 
 export {
   BannerBg,
@@ -330,4 +331,5 @@ export {
   ChatBoxIcon,
   CatalogBox,
   AnnotationGoal,
+  ForwardOrangeIcon,
 };

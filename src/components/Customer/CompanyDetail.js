@@ -106,8 +106,8 @@ export default function CompanyDetail({
 
   return (
     <>
-      <div className="col-lg-8 col-12 mb-3">
-        <WhiteCard>
+      <div className="col-lg-6 col-12 mb-3">
+        <WhiteCard className="with-less-radius">
           <div className="row">
             <div className="col-10">
               <span className="black-heading-title ">Company Description</span>
