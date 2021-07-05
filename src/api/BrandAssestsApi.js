@@ -103,12 +103,23 @@ export async function storeNewCommentData(
   message,
   documentId,
   reAssignedEmail,
+  position,
+  annotationNumber,
 ) {
-  const data = {
+  let data = {
     message,
     document: documentId,
     re_assigned_email: reAssignedEmail,
   };
+
+  if (position && position.top !== null) {
+    data = {
+      ...data,
+      x_coordinate: position.left,
+      y_coordinate: position.top,
+      annotation: annotationNumber,
+    };
+  }
 
   const result = await axiosInstance
     .post(`${API_BRAND_ASSETS_COMMENTS}/`, data)

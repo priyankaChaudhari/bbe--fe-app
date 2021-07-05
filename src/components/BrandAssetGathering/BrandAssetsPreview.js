@@ -10,8 +10,12 @@ import {
   PageLoader,
   FormField,
   Button,
+  // ModalBox,
+  // CommonPagination,
 } from '../../common';
+import ErrorMsg from '../../common/ErrorMsg';
 import PdfViewer from '../../common/PdfViewer';
+// import Modal from 'react-modal';
 
 import { GroupUser } from '../../theme/Global';
 import {
@@ -19,7 +23,7 @@ import {
   TrashIcons,
   ChatBoxIcon,
   ArrowRightBlackIcon,
-  // AnnotationGoal,
+  AnnotationGoal,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 import {
@@ -34,6 +38,20 @@ function BrandAssetsPreview({
   setShowConfirmationModal,
   isLoading,
 }) {
+  // const customStyles = {
+  //   content: {
+  //     top: '50%',
+  //     left: '50%',
+  //     right: 'auto',
+  //     bottom: 'auto',
+  //     maxWidth: '420px ',
+  //     width: '100% ',
+  //     minHeight: '390px',
+  //     overlay: ' {zIndex: 1000}',
+  //     marginRight: '-50%',
+  //     transform: 'translate(-50%, -50%)',
+  //   },
+  // };
   // const list = [
   //   {
   //     annotation: 1,
@@ -50,7 +68,7 @@ function BrandAssetsPreview({
   //     y_coordinate: -3.125,
   //   },
   //   {
-  //     annotation: null,
+  //     annotation: 3,
   //     created_at: '07/01/2021, 10:57:40 PM MST',
   //     document: 'DTGisAZ',
   //     first_name: 'Aaditi-d',
@@ -60,8 +78,8 @@ function BrandAssetsPreview({
   //     re_assigned_email: null,
   //     updated_at: '07/01/2021, 10:57:40 PM MST',
   //     user: 'URCu1sI',
-  //     x_coordinate: null,
-  //     y_coordinate: null,
+  //     x_coordinate: '167.875',
+  //     y_coordinate: '24.75',
   //   },
   //   {
   //     annotation: 2,
@@ -74,8 +92,8 @@ function BrandAssetsPreview({
   //     re_assigned_email: null,
   //     updated_at: '07/01/2021, 10:57:40 PM MST',
   //     user: 'URCu1sI',
-  //     x_coordinate: 169.31820678710938,
-  //     y_coordinate: 91.40908813476562,
+  //     x_coordinate: '169.31820678710938',
+  //     y_coordinate: '91.40908813476562',
   //   },
   // ];
   const { handleSubmit } = useForm();
@@ -88,45 +106,71 @@ function BrandAssetsPreview({
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [responseId, setResponseId] = useState(null);
   const [commentsData, setCommentData] = useState();
-  const [
-    markAnnotaion,
-    // setMarkAnnotaion
-  ] = useState(false);
+  const [storeCommentError, setStoreCommentError] = useState();
+  const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
+  const [markNewAnnotaion, setMarkNewAnnotaion] = useState(false);
 
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
-    left: 169.31820678710938,
-    top: 91.40908813476562,
+    top: null,
+    left: null,
   });
 
-  const getComments = useCallback((documnetId) => {
-    setCommentsLoader(true);
-    getCommentsData(documnetId).then((res) => {
-      if (res && res.status === 400) {
-        //
-      }
-      if (res && res.status === 200) {
-        setCommentData(res.data.results);
-        setCommentsCount(res.data.count);
-      }
-      setCommentsLoader(false);
-    });
-  }, []);
+  // const findMaxAnnotaionNumber = (res) => {};
+
+  const getComments = useCallback(
+    (documnetId) => {
+      setCommentsLoader(true);
+      getCommentsData(documnetId).then((res) => {
+        if (res && res.status === 400) {
+          setCommentsLoader(false);
+        }
+        if (res && res.status === 200) {
+          setCommentData(res.data.results);
+          setCommentsCount(res.data.count);
+          setCommentsLoader(false);
+          setImageLoading(false);
+          if (maxAnnotaionNumber === null) {
+            let number = maxAnnotaionNumber;
+            if (res && res.length) {
+              for (const item of res) {
+                if (item.annotation !== null && number === null) {
+                  number = item.annotation + 1;
+                }
+              }
+            }
+            if (number === null) number = 1;
+            setMaxAnnotaionNumber(number);
+            // findMaxAnnotaionNumber(res.data.results);
+          }
+        }
+      });
+    },
+    [maxAnnotaionNumber],
+  );
 
   const storeCommentData = useCallback(
-    (message, documnetId) => {
+    (message, documnetId, newPosition, annotationNumber) => {
       setAddCommentsLoader(true);
-      storeNewCommentData(message, documnetId, userInfo.email).then((res) => {
+      storeNewCommentData(
+        message,
+        documnetId,
+        userInfo.email,
+        newPosition,
+        annotationNumber,
+      ).then((res) => {
         if (res && res.status === 400) {
-          //
+          setStoreCommentError(res.data);
         }
         if (res && res.status === 201) {
           getComments(showAssetPreview.selectedFile.id);
           setNewCommentData('');
+          setMarkNewAnnotaion(false);
+          setNewAnnotaionPosition({ left: null, top: null });
         }
         setAddCommentsLoader(false);
       });
     },
-    [getComments, showAssetPreview.selectedFile.id, userInfo.email],
+    [getComments, showAssetPreview, userInfo.email],
   );
 
   useEffect(() => {
@@ -150,7 +194,7 @@ function BrandAssetsPreview({
         documents: documentData,
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
-      setTimeout(() => setImageLoading(false), 500);
+      // setTimeout(() => setImageLoading(false), 500);
       getComments(documentData[showAssetPreview.index - 1].id);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
@@ -163,9 +207,17 @@ function BrandAssetsPreview({
             ? showAssetPreview.index + 1
             : documentData.length - 1,
       });
-      setTimeout(() => setImageLoading(false), 500);
+      // setTimeout(() => setImageLoading(false), 500);
       getComments(documentData[showAssetPreview.index + 1].id);
     }
+    setNewCommentData('');
+    setMarkNewAnnotaion(false);
+    setNewAnnotaionPosition({
+      left: null,
+      top: null,
+    });
+    setStoreCommentError();
+    setMaxAnnotaionNumber(null);
   };
 
   const closeModal = () => {
@@ -175,6 +227,14 @@ function BrandAssetsPreview({
       documents: documentData,
       index: 0,
     });
+    setNewCommentData('');
+    setMarkNewAnnotaion(false);
+    setNewAnnotaionPosition({
+      left: null,
+      top: null,
+    });
+    setStoreCommentError();
+    setMaxAnnotaionNumber(null);
   };
 
   const getInitials = (firstName, lastName) => {
@@ -191,10 +251,16 @@ function BrandAssetsPreview({
 
   const handleChange = (event) => {
     setNewCommentData(event.target.value);
+    setStoreCommentError();
   };
 
   const onSubmit = () => {
-    storeCommentData(newCommentData, showAssetPreview.selectedFile.id);
+    storeCommentData(
+      newCommentData,
+      showAssetPreview.selectedFile.id,
+      newAnnotaionPosition,
+      maxAnnotaionNumber,
+    );
   };
 
   const renderComments = () => {
@@ -202,6 +268,8 @@ function BrandAssetsPreview({
       return <PageLoader component="activityLog" color="#FF5933" type="page" />;
     }
     if (commentsCount === 0) {
+      // if (maxAnnotaionNumber === null) {
+      // }
       return (
         <div className="mt-5 text-center">
           No comments added for this image yet.
@@ -242,6 +310,16 @@ function BrandAssetsPreview({
           </div>
         </div>
         <ul className="inbox-comment">{renderComments()}</ul>
+        {/* {commentsCount > 1 ? (
+          <Footer className="pdf-footer">
+            <CommonPagination
+              count={commentsCount}
+              pageNumber={1}
+              // handlePageChange={handlePageChange}
+              showLessItems
+            />
+           </Footer>
+        ) : null} */}
         <div className="chat-footer">
           <div className="input-type-box">
             <FormField className="mt-2 mb-2">
@@ -253,13 +331,19 @@ function BrandAssetsPreview({
                   value={newCommentData}
                   onChange={(event) => handleChange(event)}
                 />
+                <ErrorMsg>
+                  {storeCommentError &&
+                    storeCommentError.message &&
+                    storeCommentError.message[0]}
+                </ErrorMsg>
 
-                {/* <div
+                <div
                   className="add-annotation "
-                  onClick={() => setMarkAnnotaion(true)}>
+                  onClick={() => setMarkNewAnnotaion(true)}
+                  role="presentation">
                   <img src={AnnotationGoal} alt="annotation" />
                   Click to add an annotation
-                </div> */}
+                </div>
                 <Button className="btn-primary w-100 mt-3 ">
                   {addCommentsLoader ? (
                     <PageLoader color="#fff" type="button" />
@@ -275,8 +359,8 @@ function BrandAssetsPreview({
     );
   };
 
-  const renderExistingAnnotations = () => {
-    if (showCommentSection) {
+  const renderExistingAnnotations = (flag = false) => {
+    if (showCommentSection && flag) {
       return (
         commentsData &&
         commentsData.map((item) => {
@@ -298,17 +382,24 @@ function BrandAssetsPreview({
         })
       );
     }
-    if (markAnnotaion) {
+
+    if (markNewAnnotaion) {
       return (
         <div
           id="thing"
-          className="avatarName float-left mr-3"
+          className={
+            newAnnotaionPosition && newAnnotaionPosition.left !== null
+              ? 'avatarName float-left mr-3'
+              : null
+          }
           style={{
             position: 'absolute',
             left: `${newAnnotaionPosition.left}px`,
             top: `${newAnnotaionPosition.top}px`,
           }}>
-          {/* {item.annotation} */}
+          {newAnnotaionPosition && newAnnotaionPosition.left !== null
+            ? maxAnnotaionNumber
+            : null}
         </div>
       );
     }
@@ -319,24 +410,31 @@ function BrandAssetsPreview({
     e.preventDefault(true);
     const theThing = document.querySelector('#thing');
     const container = document.querySelector('#imgContainer');
-
-    if (theThing && theThing.clientHeight) {
-      const xPosition =
+    if (theThing) {
+      const leftPosition =
         e.clientX -
         container.getBoundingClientRect().left -
         theThing.clientWidth / 2;
-      const yPosition =
+      const topPosition =
         e.clientY -
         container.getBoundingClientRect().top -
         theThing.clientHeight / 2;
-
-      // console.log(xPosition, '+', yPosition);
       setNewAnnotaionPosition({
-        left: xPosition,
-        top: yPosition,
+        left: leftPosition,
+        top: topPosition,
       });
-      // console.log('aaaaaa', xPosition, yPosition);
     }
+  };
+
+  const onCommnetsLabelClick = () => {
+    if (showCommentSection) {
+      setMarkNewAnnotaion(false);
+      setNewAnnotaionPosition({
+        left: null,
+        top: null,
+      });
+    }
+    setShowCommentSection(!showCommentSection);
   };
 
   return (
@@ -357,7 +455,7 @@ function BrandAssetsPreview({
                   </div>
                   <div className="col-md-6 col-sm-12">
                     <ul className="contract-download-nav">
-                      <li>
+                      <li className={commentsLoader ? 'disabled' : null}>
                         {' '}
                         <img
                           className="header-icon"
@@ -367,9 +465,7 @@ function BrandAssetsPreview({
                         <span
                           className="cursor"
                           role="presentation"
-                          onClick={() =>
-                            setShowCommentSection(!showCommentSection)
-                          }>
+                          onClick={() => onCommnetsLabelClick()}>
                           Comments ({commentsCount})
                         </span>
                       </li>
@@ -416,7 +512,9 @@ function BrandAssetsPreview({
                         : 'pervious-img btn'
                     }
                     role="presentation"
-                    onClick={() => showImg('prev')}>
+                    onClick={() =>
+                      showAssetPreview.index !== 0 ? showImg('prev') : null
+                    }>
                     <div
                       className={
                         showAssetPreview.index === 0
@@ -429,23 +527,23 @@ function BrandAssetsPreview({
                   </div>
                   <div className="assetPreviewImg">
                     {/* <img
-                className="image-thumbnail"
-                src={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.presigned_url
-                }
-                type={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.mime_type
-                }
-                alt={
-                  showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.original_name
-                }
-              /> */}{' '}
+                      className="image-thumbnail"
+                      src={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.presigned_url
+                      }
+                      type={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.mime_type
+                      }
+                      alt={
+                        showAssetPreview &&
+                        showAssetPreview.selectedFile &&
+                        showAssetPreview.selectedFile.original_name
+                      }
+                    />{' '} */}
                     {showAssetPreview &&
                     showAssetPreview.selectedFile &&
                     showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
@@ -462,10 +560,14 @@ function BrandAssetsPreview({
                       <>
                         <object
                           onMouseDown={(event) =>
-                            markAnnotaion ? onMouseDown(event) : null
+                            markNewAnnotaion ? onMouseDown(event) : null
                           }
                           id="imgContainer"
-                          className="image-thumbnail"
+                          className={
+                            markNewAnnotaion
+                              ? 'image-thumbnail cursorPointer'
+                              : 'image-thumbnail'
+                          }
                           data={
                             showAssetPreview &&
                             showAssetPreview.selectedFile &&
@@ -487,10 +589,9 @@ function BrandAssetsPreview({
                             </div>
                           </div>
                         </object>
-                        {/* {showCommentSection
-                          ? renderExistingAnnotations()
-                          : null} */}
+                        {renderExistingAnnotations(true)}
                         {renderExistingAnnotations()}
+                        {}
                       </>
                     )}
                   </div>
@@ -504,7 +605,13 @@ function BrandAssetsPreview({
                         : 'next-img btn'
                     }
                     role="presentation"
-                    onClick={() => showImg('next')}>
+                    onClick={() =>
+                      showAssetPreview.index !==
+                      (showAssetPreview.documents &&
+                        showAssetPreview.documents.length - 1)
+                        ? showImg('next')
+                        : null
+                    }>
                     <div
                       className={
                         showAssetPreview.index ===
@@ -523,6 +630,35 @@ function BrandAssetsPreview({
               {showCommentSection ? (
                 <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
               ) : null}
+
+              {/* <Modal
+                isOpen={markNewAnnotaion}
+                style={customStyles}
+                ariaHideApp={false}
+                contentLabel="Edit modal">
+                <img
+                  src={CloseIcon}
+                  alt="close"
+                  className="float-right cursor cross-icon"
+                  onClick={() => {
+                    setMarkNewAnnotaion(false);
+                  }}
+                  role="presentation"
+                />  
+                <ModalBox>
+                  <div className="modal-body">
+                    <h4>Click anywhere on the image to add your annotaion</h4>
+
+                    <div className="text-center mt-3">
+                      <Button
+                        type="button"
+                        className="btn-primary on-boarding   w-100">
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </ModalBox>
+              </Modal> */}
             </div>
           </div>
         </>
@@ -581,6 +717,10 @@ const BrandAssetsPreviewBody = styled.div`
     .image-thumbnail {
       max-width: 500px;
       max-height: 250px;
+    }
+
+    .cursorPointer {
+      cursor: pointer;
     }
 
     .unsupport-file-name {
@@ -841,3 +981,21 @@ const BrandAssetPdf = styled.div`
     height: 32vh;
   }
 `;
+
+// const Footer = styled.div`
+//   // border: 1px solid ${Theme.gray7};
+//   // bottom: 79px;
+//   // background: ${Theme.white};
+//   // box-shadow: ${Theme.boxShadow};
+//   // position: fixed;
+//   // min-height: 60px;
+//   // z-index: 2;
+
+//   // &.pdf-footer {
+//   //   bottom: 0px;
+//   // }
+//   // @media only screen and (max-width: 991px) {
+//   //   width: 100%;
+//   //   bottom: 134px;
+//   // }
+// `;
