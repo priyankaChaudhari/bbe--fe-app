@@ -766,12 +766,13 @@ export default function CustomerMainContainer() {
                         customer.documents &&
                         customer.documents[0] ? (
                           <img
+                            className="brand-logo-image"
                             src={Object.values(customer.documents[0])}
                             alt="company-logo"
                           />
                         ) : (
                           <img
-                            className="brand-logo"
+                            className="brand-logo-image"
                             src={CompanyDefaultUser}
                             alt="company-logo"
                           />
@@ -803,7 +804,7 @@ export default function CustomerMainContainer() {
                             ? customer.country
                             : ''}
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-3">
                           <a
                             css="text-transform: initial;"
                             href={
@@ -910,11 +911,13 @@ export default function CustomerMainContainer() {
                             </DropDownStatus>
                           )
                         ) : (
-                          <div className="company-status inactive capitalize mb-3 ">
+                          <span className="company-status inactive capitalize mb-3 ">
                             {customer && customer.contract_status}
-                          </div>
+                          </span>
                         )}
+                        <div className="straight-line horizontal-line mb-3 mt-4" />
                       </div>
+
                       <ul className="left-details-card">
                         {userInfo && userInfo.role === 'Customer' ? (
                           <li

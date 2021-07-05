@@ -157,7 +157,7 @@ export default function AgreementDetails({ agreements, id }) {
                 agreement.contract_status.value === 'active') &&
               agreement.contract_url === null ? null : (
                 <div
-                  className="col-lg-3 col-md-4 col-12 text-right"
+                  className="col-lg-3  pl-0 col-md-4 col-12 text-right"
                   role="presentation"
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)

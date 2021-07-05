@@ -1025,6 +1025,9 @@ fieldset {
 
   &.team-avatarName {
     margin-left: -10px !important;
+    width: 36px;
+    height: 36px;
+    padding: 7px;
     &:first-child {
       margin-left: 0;
     }

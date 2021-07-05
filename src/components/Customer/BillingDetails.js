@@ -496,7 +496,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               </div>
             </WhiteCard> */}
 
-              <WhiteCard className="mt-3">
+              <WhiteCard className="mt-3 with-less-radius">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
 
                 <div
@@ -543,7 +543,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               </WhiteCard>
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard>
+              <WhiteCard className="with-less-radius">
                 {' '}
                 <p className="black-heading-title mt-0 mb-4">
                   {' '}
@@ -568,12 +568,12 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   <div className="activity-user">
                     {mapDefaultValues('billing_contact', 'first_name')}{' '}
                     {mapDefaultValues('billing_contact', 'last_name')}
-                  </div>
-                  <div className="user-email-address">
-                    {mapDefaultValues('billing_contact', 'email')}
-                  </div>
-                  <div className="user-email-address">
-                    {mapDefaultValues('billing_contact', 'phone_number')}
+                    <div className="user-email-address">
+                      {mapDefaultValues('billing_contact', 'email')}
+                    </div>
+                    <div className="user-email-address">
+                      {mapDefaultValues('billing_contact', 'phone_number')}
+                    </div>
                   </div>
                   <div className="clear-fix" />
                 </GroupUser>

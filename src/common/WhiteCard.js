@@ -127,10 +127,7 @@ export const WhiteCard = styled.div`
     color: ${Theme.gray85};
     font-size: ${Theme.extraNormal};
     margin-top: 4px;
-  }
-
-  
-   
+  }   
 
     .dropdown-content-status {
       display: none;
@@ -165,10 +162,9 @@ export const WhiteCard = styled.div`
   .brand-logo-details {
     position:relative;
     text-align: center;
-    border-bottom: 1px solid ${Theme.gray11};
     margin-left: 25px;
       
-    img {
+    .brand-logo-image {
       border: 5px solid ${Theme.white};
       border-radius: 12px;
       margin-top: -50px;
