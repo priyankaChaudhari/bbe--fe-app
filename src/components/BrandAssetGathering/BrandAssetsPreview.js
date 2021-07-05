@@ -403,32 +403,32 @@ function BrandAssetsPreview({
                   </div>
                 </div>
               </div>
-            </div>
-          </HeaderDownloadFuntionality>
+            </HeaderDownloadFuntionality>
 
-          <div className="row h-100">
-            <div className={showCommentSection ? 'col-lg-9 col-12' : 'col-12'}>
-              <BrandAssetsPreviewBody>
-                <div
-                  className={
-                    showAssetPreview.index === 0
-                      ? 'pervious-img btn disabled-slider-btn'
-                      : 'pervious-img btn'
-                  }
-                  role="presentation"
-                  onClick={() => showImg('prev')}>
+            <div className="row h-100">
+              <div
+                className={showCommentSection ? 'col-lg-9 col-12' : 'col-12'}>
+                <BrandAssetsPreviewBody>
                   <div
                     className={
                       showAssetPreview.index === 0
-                        ? 'arrow-icon pervious disabled-slider-btn'
-                        : 'arrow-icon pervious'
-                    }>
-                    {' '}
-                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                        ? 'pervious-img btn disabled-slider-btn'
+                        : 'pervious-img btn'
+                    }
+                    role="presentation"
+                    onClick={() => showImg('prev')}>
+                    <div
+                      className={
+                        showAssetPreview.index === 0
+                          ? 'arrow-icon pervious disabled-slider-btn'
+                          : 'arrow-icon pervious'
+                      }>
+                      {' '}
+                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                    </div>
                   </div>
-                </div>
-                <div className="assetPreviewImg">
-                  {/* <img
+                  <div className="assetPreviewImg">
+                    {/* <img
                 className="image-thumbnail"
                 src={
                   showAssetPreview &&
@@ -446,83 +446,84 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile.original_name
                 }
               /> */}{' '}
-                  {showAssetPreview &&
-                  showAssetPreview.selectedFile &&
-                  showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
-                    <BrandAssetPdf>
-                      <PdfViewer
-                        pdf={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.presigned_url
-                        }
-                      />
-                    </BrandAssetPdf>
-                  ) : (
-                    <>
-                      <object
-                        onMouseDown={(event) =>
-                          markAnnotaion ? onMouseDown(event) : null
-                        }
-                        id="imgContainer"
-                        className="image-thumbnail"
-                        data={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.presigned_url
-                        }
-                        type={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.mime_type
-                        }
-                        // width="550"
-                        // height="250"
-                        role="presentation">
-                        <div className="unsupport-file-name">
-                          <div className="file-path">
-                            {showAssetPreview &&
-                              showAssetPreview.selectedFile &&
-                              showAssetPreview.selectedFile.original_name}
+                    {showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
+                      <BrandAssetPdf>
+                        <PdfViewer
+                          pdf={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.presigned_url
+                          }
+                        />
+                      </BrandAssetPdf>
+                    ) : (
+                      <>
+                        <object
+                          onMouseDown={(event) =>
+                            markAnnotaion ? onMouseDown(event) : null
+                          }
+                          id="imgContainer"
+                          className="image-thumbnail"
+                          data={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.presigned_url
+                          }
+                          type={
+                            showAssetPreview &&
+                            showAssetPreview.selectedFile &&
+                            showAssetPreview.selectedFile.mime_type
+                          }
+                          // width="550"
+                          // height="250"
+                          role="presentation">
+                          <div className="unsupport-file-name">
+                            <div className="file-path">
+                              {showAssetPreview &&
+                                showAssetPreview.selectedFile &&
+                                showAssetPreview.selectedFile.original_name}
+                            </div>
                           </div>
-                        </div>
-                      </object>
-                      {/* {showCommentSection
+                        </object>
+                        {/* {showCommentSection
                           ? renderExistingAnnotations()
                           : null} */}
-                      {renderExistingAnnotations()}
-                    </>
-                  )}
-                </div>
+                        {renderExistingAnnotations()}
+                      </>
+                    )}
+                  </div>
 
-                <div
-                  className={
-                    showAssetPreview.index ===
-                    (showAssetPreview.documents &&
-                      showAssetPreview.documents.length - 1)
-                      ? 'next-img btn disabled-slider-btn'
-                      : 'next-img btn'
-                  }
-                  role="presentation"
-                  onClick={() => showImg('next')}>
                   <div
                     className={
                       showAssetPreview.index ===
                       (showAssetPreview.documents &&
                         showAssetPreview.documents.length - 1)
-                        ? 'arrow-icon disabled-slider-btn'
-                        : 'arrow-icon'
-                    }>
-                    {' '}
-                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                        ? 'next-img btn disabled-slider-btn'
+                        : 'next-img btn'
+                    }
+                    role="presentation"
+                    onClick={() => showImg('next')}>
+                    <div
+                      className={
+                        showAssetPreview.index ===
+                        (showAssetPreview.documents &&
+                          showAssetPreview.documents.length - 1)
+                          ? 'arrow-icon disabled-slider-btn'
+                          : 'arrow-icon'
+                      }>
+                      {' '}
+                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
+                    </div>
                   </div>
-                </div>
-              </BrandAssetsPreviewBody>
-            </div>
+                </BrandAssetsPreviewBody>
+              </div>
 
-            {showCommentSection ? (
-              <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
-            ) : null}
+              {showCommentSection ? (
+                <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
+              ) : null}
+            </div>
           </div>
         </>
       )}
