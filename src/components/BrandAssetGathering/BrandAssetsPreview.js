@@ -263,6 +263,37 @@ function BrandAssetsPreview({
     );
   };
 
+  const onCommnetsLabelClick = () => {
+    if (showCommentSection) {
+      setMarkNewAnnotaion(false);
+      setNewAnnotaionPosition({
+        left: null,
+        top: null,
+      });
+    }
+    setShowCommentSection(!showCommentSection);
+  };
+
+  const onMouseDown = (e) => {
+    e.preventDefault(true);
+    const theThing = document.querySelector('#thing');
+    const container = document.querySelector('#imgContainer');
+    if (theThing) {
+      const leftPosition =
+        e.clientX -
+        container.getBoundingClientRect().left -
+        theThing.clientWidth / 2;
+      const topPosition =
+        e.clientY -
+        container.getBoundingClientRect().top -
+        theThing.clientHeight / 2;
+      setNewAnnotaionPosition({
+        left: leftPosition,
+        top: topPosition,
+      });
+    }
+  };
+
   const renderComments = () => {
     if (commentsLoader) {
       return <PageLoader component="activityLog" color="#FF5933" type="page" />;
@@ -305,7 +336,10 @@ function BrandAssetsPreview({
       <CommentAnnotationPanel>
         <div className="chat-header">
           Comments
-          <div className="close-panel">
+          <div
+            className="close-panel"
+            role="presentation"
+            onClick={() => onCommnetsLabelClick()}>
             <img width="20px" src={ArrowRightBlackIcon} alt="arro" />
           </div>
         </div>
@@ -404,37 +438,6 @@ function BrandAssetsPreview({
       );
     }
     return null;
-  };
-
-  const onMouseDown = (e) => {
-    e.preventDefault(true);
-    const theThing = document.querySelector('#thing');
-    const container = document.querySelector('#imgContainer');
-    if (theThing) {
-      const leftPosition =
-        e.clientX -
-        container.getBoundingClientRect().left -
-        theThing.clientWidth / 2;
-      const topPosition =
-        e.clientY -
-        container.getBoundingClientRect().top -
-        theThing.clientHeight / 2;
-      setNewAnnotaionPosition({
-        left: leftPosition,
-        top: topPosition,
-      });
-    }
-  };
-
-  const onCommnetsLabelClick = () => {
-    if (showCommentSection) {
-      setMarkNewAnnotaion(false);
-      setNewAnnotaionPosition({
-        left: null,
-        top: null,
-      });
-    }
-    setShowCommentSection(!showCommentSection);
   };
 
   return (
@@ -852,6 +855,7 @@ const CommentAnnotationPanel = styled.div`
     top: 14px;
     border-left: 2px solid ${Theme.black};
     height: 21px;
+    cursor:pointer;
   }
 
   .inbox-comment {
