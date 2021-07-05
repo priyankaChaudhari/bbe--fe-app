@@ -568,9 +568,11 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   <div className="activity-user">
                     {mapDefaultValues('billing_contact', 'first_name')}{' '}
                     {mapDefaultValues('billing_contact', 'last_name')}
+                    <br />
                     <div className="user-email-address">
                       {mapDefaultValues('billing_contact', 'email')}
                     </div>
+                    <br />
                     <div className="user-email-address">
                       {mapDefaultValues('billing_contact', 'phone_number')}
                     </div>

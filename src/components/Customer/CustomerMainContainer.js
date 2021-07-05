@@ -924,7 +924,7 @@ export default function CustomerMainContainer() {
                             {customer && customer.contract_status}
                           </span>
                         )}
-                        <div className="straight-line horizontal-line mb-3 mt-4" />
+                        <div className="straight-line horizontal-line mb-3 mt-3" />
                       </div>
 
                       <ul className="left-details-card">

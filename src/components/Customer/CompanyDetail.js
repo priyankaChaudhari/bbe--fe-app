@@ -94,8 +94,11 @@ export default function CompanyDetail({
                   <GetInitialName userInfo={item} property="float-left mr-3 " />
                   <div className="activity-user">
                     {item.first_name || ' '} {item.last_name || ' '}
+                    <br />
+                    <div className="user-email-address">
+                      {item.email || ' '}
+                    </div>
                   </div>
-                  <div className="user-email-address">{item.email || ' '}</div>
                   <div className="clear-fix" />
                 </GroupUser>
               ))}

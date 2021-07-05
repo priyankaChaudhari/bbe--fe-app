@@ -163,7 +163,7 @@ export const GroupUser = styled.div`
     font-size: ${Theme.normal};
     float: left;
     word-break: break-all;
-    width: 76%;
+    width: 86%;
   }
 `;
 export const BrandPartnerDashboard = styled.div`
