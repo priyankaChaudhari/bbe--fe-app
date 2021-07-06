@@ -131,8 +131,8 @@ function BrandAssetsPreview({
           setImageLoading(false);
           if (maxAnnotaionNumber === null) {
             let number = maxAnnotaionNumber;
-            if (res && res.length) {
-              for (const item of res) {
+            if (res && res.data && res.data.results.length > 0) {
+              for (const item of res.data.results) {
                 if (item.annotation !== null && number === null) {
                   number = item.annotation + 1;
                 }
@@ -195,6 +195,7 @@ function BrandAssetsPreview({
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
       // setTimeout(() => setImageLoading(false), 500);
+      setMaxAnnotaionNumber(null);
       getComments(documentData[showAssetPreview.index - 1].id);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
@@ -208,6 +209,7 @@ function BrandAssetsPreview({
             : documentData.length - 1,
       });
       // setTimeout(() => setImageLoading(false), 500);
+      setMaxAnnotaionNumber(null);
       getComments(documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
@@ -235,6 +237,7 @@ function BrandAssetsPreview({
     });
     setStoreCommentError();
     setMaxAnnotaionNumber(null);
+    setStoreCommentError();
   };
 
   const getInitials = (firstName, lastName) => {
@@ -265,17 +268,21 @@ function BrandAssetsPreview({
 
   const onCommnetsLabelClick = () => {
     if (showCommentSection) {
+      setNewCommentData('');
       setMarkNewAnnotaion(false);
       setNewAnnotaionPosition({
         left: null,
         top: null,
       });
+      setStoreCommentError();
+      setMaxAnnotaionNumber(null);
+      setStoreCommentError();
     }
     setShowCommentSection(!showCommentSection);
   };
 
   const onMouseDown = (e) => {
-    e.preventDefault(true);
+    // e.preventDefault(true);
     const theThing = document.querySelector('#thing');
     const container = document.querySelector('#imgContainer');
     if (theThing) {
@@ -458,7 +465,9 @@ function BrandAssetsPreview({
                   </div>
                   <div className="col-md-6 col-sm-12">
                     <ul className="contract-download-nav">
-                      <li className={commentsLoader ? 'disabled' : null}>
+                      <li
+                        className={commentsLoader ? 'disabled' : null}
+                        key="comment">
                         {' '}
                         <img
                           className="header-icon"
@@ -472,10 +481,11 @@ function BrandAssetsPreview({
                           Comments ({commentsCount})
                         </span>
                       </li>
-                      <li>
+                      <li key="arrow">
                         <span className="divide-arrow" />
                       </li>
                       <li
+                        key="delete"
                         onClick={() => setShowConfirmationModal(true)}
                         role="presentation">
                         <img
@@ -485,10 +495,10 @@ function BrandAssetsPreview({
                         />
                         <span className="cursor">Delete</span>
                       </li>
-                      <li>
+                      <li key="d-arrow">
                         <span className="divide-arrow hide-mobile" />
                       </li>
-                      <li>
+                      <li key="close">
                         <img
                           width="18px"
                           src={CloseIcon}
