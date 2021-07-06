@@ -11,7 +11,7 @@ import {
   FormField,
   Button,
   // ModalBox,
-  // CommonPagination,
+  CommonPagination,
 } from '../../common';
 import ErrorMsg from '../../common/ErrorMsg';
 import PdfViewer from '../../common/PdfViewer';
@@ -109,6 +109,7 @@ function BrandAssetsPreview({
   const [storeCommentError, setStoreCommentError] = useState();
   const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
   const [markNewAnnotaion, setMarkNewAnnotaion] = useState(false);
+  const [pageNumber, setPageNumber] = useState();
 
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
     top: null,
@@ -118,9 +119,9 @@ function BrandAssetsPreview({
   // const findMaxAnnotaionNumber = (res) => {};
 
   const getComments = useCallback(
-    (documnetId) => {
+    (currentPage, documnetId) => {
       setCommentsLoader(true);
-      getCommentsData(documnetId).then((res) => {
+      getCommentsData(currentPage, documnetId).then((res) => {
         if (res && res.status === 400) {
           setCommentsLoader(false);
         }
@@ -162,7 +163,7 @@ function BrandAssetsPreview({
           setStoreCommentError(res.data);
         }
         if (res && res.status === 201) {
-          getComments(showAssetPreview.selectedFile.id);
+          getComments(1, showAssetPreview.selectedFile.id);
           setNewCommentData('');
           setMarkNewAnnotaion(false);
           setNewAnnotaionPosition({ left: null, top: null });
@@ -180,7 +181,7 @@ function BrandAssetsPreview({
       showAssetPreview.selectedFile.id &&
       responseId === null
     ) {
-      getComments(showAssetPreview.selectedFile.id);
+      getComments(1, showAssetPreview.selectedFile.id);
       setResponseId('123');
     }
   }, [getComments, showAssetPreview, responseId]);
@@ -196,7 +197,7 @@ function BrandAssetsPreview({
       });
       // setTimeout(() => setImageLoading(false), 500);
       setMaxAnnotaionNumber(null);
-      getComments(documentData[showAssetPreview.index - 1].id);
+      getComments(1, documentData[showAssetPreview.index - 1].id);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
       setShowAssetPreview({
@@ -210,7 +211,7 @@ function BrandAssetsPreview({
       });
       // setTimeout(() => setImageLoading(false), 500);
       setMaxAnnotaionNumber(null);
-      getComments(documentData[showAssetPreview.index + 1].id);
+      getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
     setMarkNewAnnotaion(false);
@@ -301,6 +302,11 @@ function BrandAssetsPreview({
     }
   };
 
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getComments(currentPage, showAssetPreview.selectedFile.id);
+  };
+
   const renderComments = () => {
     if (commentsLoader) {
       return <PageLoader component="activityLog" color="#FF5933" type="page" />;
@@ -351,16 +357,16 @@ function BrandAssetsPreview({
           </div>
         </div>
         <ul className="inbox-comment">{renderComments()}</ul>
-        {/* {commentsCount > 1 ? (
+        {commentsCount > 10 ? (
           <Footer className="pdf-footer">
             <CommonPagination
               count={commentsCount}
-              pageNumber={1}
-              // handlePageChange={handlePageChange}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
               showLessItems
             />
-           </Footer>
-        ) : null} */}
+          </Footer>
+        ) : null}
         <div className="chat-footer">
           <div className="input-type-box">
             <FormField className="mt-2 mb-2">
@@ -409,7 +415,7 @@ function BrandAssetsPreview({
             return (
               <div
                 id={item.id}
-                className="avatarName float-left mr-3"
+                className="avatarName float-left"
                 style={{
                   position: 'absolute',
                   left: `${item.x_coordinate}px`,
@@ -430,7 +436,7 @@ function BrandAssetsPreview({
           id="thing"
           className={
             newAnnotaionPosition && newAnnotaionPosition.left !== null
-              ? 'avatarName float-left mr-3'
+              ? 'avatarName float-left'
               : null
           }
           style={{
@@ -996,20 +1002,21 @@ const BrandAssetPdf = styled.div`
   }
 `;
 
-// const Footer = styled.div`
-//   // border: 1px solid ${Theme.gray7};
-//   // bottom: 79px;
-//   // background: ${Theme.white};
-//   // box-shadow: ${Theme.boxShadow};
-//   // position: fixed;
-//   // min-height: 60px;
-//   // z-index: 2;
+const Footer = styled.div`
+  border: 1px solid ${Theme.gray7};
+  bottom: 179px;
+  background: ${Theme.white};
+  box-shadow: ${Theme.boxShadow};
+  position: fixed;
+  min-height: 60px;
+  z-index: 2;
 
-//   // &.pdf-footer {
-//   //   bottom: 0px;
-//   // }
-//   // @media only screen and (max-width: 991px) {
-//   //   width: 100%;
-//   //   bottom: 134px;
-//   // }
-// `;
+  // &.pdf-footer {
+  //   width: 23%;
+  //   bottom: 179px;
+  // }
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+    bottom: 134px;
+  }
+`;

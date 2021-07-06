@@ -132,8 +132,8 @@ export async function storeNewCommentData(
   return result;
 }
 
-export async function getCommentsData(documentId) {
-  const params = { document: documentId };
+export async function getCommentsData(pageNumber, documentId) {
+  const params = { document: documentId, page: pageNumber };
   const result = await axiosInstance
     .get(`${API_BRAND_ASSETS_COMMENTS}/`, { params })
     .then((response) => {
