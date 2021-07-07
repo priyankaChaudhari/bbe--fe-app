@@ -95,8 +95,10 @@ EditorComponent.propTypes = {
 };
 
 export const EditorToll = styled.div`
+  .DraftEditor-editorContainer {
+    line-height: 18px;
+  }
   .rdw-editor-wrapper {
-    border: 1px solid #f1f1f1;
     border-radius: 4px;
   }
   .rdw-link-modal {
@@ -109,10 +111,20 @@ export const EditorToll = styled.div`
 
   .rdw-editor-main {
     border: none;
-    background: ${Theme['$base-03']};
+    background: ${Theme.gray8};
+    border: 1px solid ${Theme.gray45};
+    padding: 8px 0;
+    min-height: 110px;
+    margin: 0 5px;
+
+    span {
+      color: ${Theme.gray85};
+      font-size: ${Theme.extraNormal};
+    }
   }
 
   .rdw-editor-toolbar {
     border: none;
+    padding: 0;
   }
 `;

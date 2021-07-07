@@ -870,7 +870,7 @@ const BrandAssetsPreviewBody = styled.div`
 
 const CommentAnnotationPanel = styled.div`
   border-left: 1px solid ${Theme.gray4};
-  margin-top: 70px;
+  margin-top: 0px;
   height: calc(100% - -170px);
 
   .chat-header {
@@ -1027,6 +1027,7 @@ const Footer = styled.div`
   position: fixed;
   min-height: 60px;
   z-index: 2;
+  width: 23%;
 
   // &.pdf-footer {
   //   width: 23%;

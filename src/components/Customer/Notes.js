@@ -324,7 +324,7 @@ function Notes({
 
   const displayUserInfo = (item) => {
     return (
-      <div className=" float-left mt-1">
+      <div className=" float-left mt-1 ">
         {item && item.documents && item.documents.length ? (
           <img
             className="default-user-activity"
@@ -336,7 +336,7 @@ function Notes({
             alt="pic"
           />
         ) : (
-          <div className="avatarName">{getInitials(item)}</div>
+          <div className="avatarName mr-3">{getInitials(item)}</div>
         )}
       </div>
     );
@@ -929,7 +929,7 @@ const NotesSideBar = styled.div`
   @media only screen and (max-width: 767px) {
     .dropdown-select-all-notes {
       width: 100%;
-      max-width: 95%;
+      max-width: 100%;
     }
     .commemt-inbox-body {
       height: 55vh;
