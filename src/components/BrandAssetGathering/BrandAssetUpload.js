@@ -111,6 +111,7 @@ export default function BrandAssetUpload() {
   const [noImages, setNoImages] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   // const [imagesAssets, setImagesAssets] = useState([]);
+  const [isImgDeleted, setIsImgDeleted] = useState(false);
   const [showAssetPreview, setShowAssetPreview] = useState({
     selectedFile: null,
     show: false,
@@ -656,6 +657,7 @@ export default function BrandAssetUpload() {
         getDocumentList(selectedStep && selectedStep.key);
         getAssetsSummary();
         setShowDeleteMsg(false);
+        setIsImgDeleted(true);
       }
       if (res && res.status === 401) {
         setIsLoading({ loader: false, type: 'page' });
@@ -1377,6 +1379,8 @@ export default function BrandAssetUpload() {
             documentData={documentData}
             setShowConfirmationModal={setShowConfirmationModal}
             isLoading={isLoading}
+            isDeleted={isImgDeleted}
+            setIsImgDeleted={setIsImgDeleted}
           />
         </ModalBox>
       </Modal>

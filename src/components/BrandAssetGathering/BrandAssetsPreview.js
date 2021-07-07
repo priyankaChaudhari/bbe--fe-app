@@ -37,6 +37,8 @@ function BrandAssetsPreview({
   documentData,
   setShowConfirmationModal,
   isLoading,
+  isDeleted,
+  setIsImgDeleted,
 }) {
   // const customStyles = {
   //   content: {
@@ -110,44 +112,32 @@ function BrandAssetsPreview({
   const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
   const [markNewAnnotaion, setMarkNewAnnotaion] = useState(false);
   const [pageNumber, setPageNumber] = useState();
+  // const [isImgDeleted, setIsImgDeleted] = useState(false);
 
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
     top: null,
     left: null,
   });
 
-  // const findMaxAnnotaionNumber = (res) => {};
-
-  const getComments = useCallback(
-    (currentPage, documnetId) => {
-      setCommentsLoader(true);
-      getCommentsData(currentPage, documnetId).then((res) => {
-        if (res && res.status === 400) {
-          setCommentsLoader(false);
+  const getComments = useCallback((currentPage, documnetId) => {
+    setCommentsLoader(true);
+    getCommentsData(currentPage, documnetId).then((res) => {
+      if (res && res.status === 400) {
+        setCommentsLoader(false);
+      }
+      if (res && res.status === 200) {
+        setCommentData(res.data.results);
+        setCommentsCount(res.data.count);
+        setCommentsLoader(false);
+        setImageLoading(false);
+        if (res.data.max_annotation === null) {
+          setMaxAnnotaionNumber(1);
+        } else {
+          setMaxAnnotaionNumber(res.data.max_annotation + 1);
         }
-        if (res && res.status === 200) {
-          setCommentData(res.data.results);
-          setCommentsCount(res.data.count);
-          setCommentsLoader(false);
-          setImageLoading(false);
-          if (maxAnnotaionNumber === null) {
-            let number = maxAnnotaionNumber;
-            if (res && res.data && res.data.results.length > 0) {
-              for (const item of res.data.results) {
-                if (item.annotation !== null && number === null) {
-                  number = item.annotation + 1;
-                }
-              }
-            }
-            if (number === null) number = 1;
-            setMaxAnnotaionNumber(number);
-            // findMaxAnnotaionNumber(res.data.results);
-          }
-        }
-      });
-    },
-    [maxAnnotaionNumber],
-  );
+      }
+    });
+  }, []);
 
   const storeCommentData = useCallback(
     (message, documnetId, newPosition, annotationNumber) => {
@@ -175,6 +165,18 @@ function BrandAssetsPreview({
   );
 
   useEffect(() => {
+    if (isDeleted) {
+      setResponseId(null);
+      setCommentData();
+      setNewCommentData('');
+      setMarkNewAnnotaion(false);
+      setNewAnnotaionPosition({
+        left: null,
+        top: null,
+      });
+      setStoreCommentError();
+      setIsImgDeleted(false);
+    }
     if (
       showAssetPreview &&
       showAssetPreview.selectedFile &&
@@ -184,7 +186,7 @@ function BrandAssetsPreview({
       getComments(1, showAssetPreview.selectedFile.id);
       setResponseId('123');
     }
-  }, [getComments, showAssetPreview, responseId]);
+  }, [getComments, showAssetPreview, responseId, isDeleted, setIsImgDeleted]);
 
   const showImg = (type) => {
     setImageLoading(true);
@@ -196,7 +198,7 @@ function BrandAssetsPreview({
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
       // setTimeout(() => setImageLoading(false), 500);
-      setMaxAnnotaionNumber(null);
+
       getComments(1, documentData[showAssetPreview.index - 1].id);
     }
     if (type === 'next' && showAssetPreview.index < documentData.length - 1) {
@@ -210,7 +212,7 @@ function BrandAssetsPreview({
             : documentData.length - 1,
       });
       // setTimeout(() => setImageLoading(false), 500);
-      setMaxAnnotaionNumber(null);
+
       getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
@@ -220,7 +222,6 @@ function BrandAssetsPreview({
       top: null,
     });
     setStoreCommentError();
-    setMaxAnnotaionNumber(null);
   };
 
   const closeModal = () => {
@@ -276,7 +277,6 @@ function BrandAssetsPreview({
         top: null,
       });
       setStoreCommentError();
-      setMaxAnnotaionNumber(null);
       setStoreCommentError();
     }
     setShowCommentSection(!showCommentSection);
@@ -289,7 +289,6 @@ function BrandAssetsPreview({
     const container = document.querySelector('#imgContainer');
 
     if (theThing) {
-      console.log('isnide down iff', newAnnotaionPosition);
       const offset = container.getBoundingClientRect();
       const clickX = e.clientX - offset.left - theThing.clientWidth / 2;
       const clickY = e.clientY - offset.top - theThing.clientHeight / 2;
@@ -711,6 +710,8 @@ BrandAssetsPreview.defaultProps = {
   documentData: [],
   setShowConfirmationModal: () => {},
   isLoading: {},
+  isDeleted: false,
+  setIsImgDeleted: () => {},
 };
 
 BrandAssetsPreview.propTypes = {
@@ -732,6 +733,8 @@ BrandAssetsPreview.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }),
+  isDeleted: PropTypes.bool,
+  setIsImgDeleted: PropTypes.func,
 };
 
 const BrandAssetsPreviewBody = styled.div`
