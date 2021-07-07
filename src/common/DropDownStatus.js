@@ -43,6 +43,23 @@ const DropDownStatus = styled.div`
       }
     }
   }
+
+   @media only screen and (max-width: 991px) { 
+
+    &.customer-details {
+      float: right;
+      margin-top: -64px;
+    }
+   
+   }
+    @media only screen and (max-width: 767px) { 
+
+    &.customer-details {
+      float: inherit;
+      margin-top: 0;
+    }
+   
+   }
 `;
 
 export default DropDownStatus;

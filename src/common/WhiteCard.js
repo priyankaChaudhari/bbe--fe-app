@@ -835,7 +835,7 @@ export const WhiteCard = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.primaryTitleFontSize}; 
     position: absolute;
-    left: 85px;
+    left: 68px;
     top: 142px;
     text-align: center;
 
@@ -905,7 +905,6 @@ export const WhiteCard = styled.div`
 
     @media only screen and (min-width: 1920px) {
     .company-label-info {
-        margin-left: 40px;
         margin-top:10px;
 
         &:first-child {
@@ -938,7 +937,6 @@ export const WhiteCard = styled.div`
     }
   @media only screen and (max-width: 1150px) {
      .company-label-info {
-        margin-left: 40px;
         margin-top:10px;
 
         &:first-child {
@@ -957,18 +955,12 @@ export const WhiteCard = styled.div`
    }
  @media only screen and (max-width: 991px) {
   .brand-logo-details{
-    img{
-    border-radius: 10px;
-    margin-top: -93px;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 15px;
-    margin-left: 5px;
-    }
+   text-align: left;
+  //  max-width: 350px;
   } 
    .company-label-info {
-     margin-left: 40px;
-     margin-top:10px;
+
+     margin-top: 10px;
 
      &:first-child {
         margin-left: 0;
@@ -1004,6 +996,11 @@ export const WhiteCard = styled.div`
    }
  }
    @media only screen and (max-width: 767px) {      
+
+    .brand-logo-details{
+       text-align: center;
+       max-width: 100%;
+      } 
      .order-chart-box { 
         max-width: 100% !important;
       }
@@ -1029,7 +1026,6 @@ export const WhiteCard = styled.div`
 
    @media only screen and (max-width: 407px) {
    .company-label-info {
-     margin-left: 40px;
      margin-top:10px;
 
       span { 

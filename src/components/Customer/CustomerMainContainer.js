@@ -25,7 +25,6 @@ import {
   CloseIcon,
   CompanyDefaultUser,
   LeftArrowIcon,
-  BackArrowIcon,
   HeartMonitorIcon,
   WhiteCaretUp,
   CaretUp,
@@ -685,7 +684,7 @@ export default function CustomerMainContainer() {
                 </Button>
               </AlertMsgUpdate> */}
 
-              {userInfo && userInfo.role !== 'Customer' ? (
+              {/* {userInfo && userInfo.role !== 'Customer' ? (
                 <BackBtn className="d-lg-none d-block ">
                   <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
                     {' '}
@@ -699,15 +698,15 @@ export default function CustomerMainContainer() {
                 </BackBtn>
               ) : (
                 ''
-              )}
+              )} */}
 
               <CustomerDetailsBody>
                 <div className="row">
-                  <div className="col-5 mb-5 mt-4">
+                  <div className="col-6 mb-5 mt-4">
                     {' '}
                     {userInfo && userInfo.role !== 'Customer' ? (
                       <Link to={PATH_CUSTOMER_LIST}>
-                        <div className="back-btn-link d-lg-block d-none">
+                        <div className="back-btn-link ">
                           {' '}
                           <img
                             className="left-arrow"
@@ -721,7 +720,7 @@ export default function CustomerMainContainer() {
                       ''
                     )}
                   </div>
-                  <div className="col-7  mt-4 text-right">
+                  <div className="col-6 mt-4 text-right">
                     {' '}
                     <div className="add-more-people">
                       {memberData &&
@@ -782,7 +781,7 @@ export default function CustomerMainContainer() {
 
                 <div className="row mt-2">
                   <div className="col-lg-3 col-12">
-                    <WhiteCard className="left-border  d-lg-block d-none mb-3">
+                    <WhiteCard className="left-border mb-3">
                       <div
                         className=" edit-details edit-brand-details "
                         onClick={() => setShowModal(true)}
@@ -920,7 +919,7 @@ export default function CustomerMainContainer() {
                                 customer.status.label}
                             </span>
                           ) : (
-                            <DropDownStatus className="mb-3">
+                            <DropDownStatus className="mb-3 customer-details">
                               {checkStatus()}
                               <Select
                                 isSearchable={false}
@@ -1236,8 +1235,8 @@ export default function CustomerMainContainer() {
                     />
                   )}
 
-                  <div className="col-md-3 col-12">
-                    <WhiteCard className="mb-3 d-none d-lg-block">
+                  <div className="col-lg-3 col-12">
+                    <WhiteCard className="mb-3 ">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
                         Recent Notes (
@@ -1349,7 +1348,7 @@ export default function CustomerMainContainer() {
                         Add note
                       </div>
                     </WhiteCard>
-                    <WhiteCard className="mb-3 d-none d-lg-block">
+                    <WhiteCard className="mb-3 ">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
                         Recent Activity
@@ -1786,17 +1785,17 @@ const CustomerDetailsBody = styled.div`
   //   width: 100%;
   // }
 `;
-const BackBtn = styled.div`
-  color: ${Theme.black};
-  padding: 20px;
-  font-size: ${Theme.normal};
-  font-weight: 700;
-  img {
-    vertical-align: middle;
-    width: 19px;
-    margin-right: 6px;
-  }
-`;
+// const BackBtn = styled.div`
+//   color: ${Theme.black};
+//   padding: 20px;
+//   font-size: ${Theme.normal};
+//   font-weight: 700;
+//   img {
+//     vertical-align: middle;
+//     width: 19px;
+//     margin-right: 6px;
+//   }
+// `;
 
 // const AlertMsgUpdate = styled.div`
 //   background: #fdf3d7;

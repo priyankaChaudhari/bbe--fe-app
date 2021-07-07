@@ -1300,7 +1300,7 @@ export default function PerformanceReport({
             <PieChart>
               <Pie
                 data={pieData}
-                cx={90}
+                cx={75}
                 cy={100}
                 startAngle={180}
                 marginBottom={40}

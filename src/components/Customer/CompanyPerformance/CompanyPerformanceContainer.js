@@ -20,7 +20,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   const [viewComponent, setViewComponent] = useState(setTab);
   return (
     <>
-      <div className="col-lg-6 p-0 col-12">
+      <div className="col-lg-6 col-12">
         {viewComponent === 'salePerformance' ? (
           <PerformanceReport
             marketplaceChoices={marketplaceChoices}

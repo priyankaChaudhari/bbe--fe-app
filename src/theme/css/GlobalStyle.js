@@ -569,6 +569,7 @@ a {
   text-transform: capitalize;
   font-size: ${Theme.normal};
   font-family: ${Theme.baseFontFamily};
+  word-break: break-all;
   &:hover {
     text-decoration: none;
   }
@@ -666,6 +667,9 @@ a {
 
 .w-100 {
   width: 100% !important;
+}
+.w-auto {
+  width: auto !important;
 }
 
 .w-sm-100 {
