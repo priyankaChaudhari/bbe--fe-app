@@ -51,6 +51,7 @@ function Notes({
   customerId,
   setNewNoteEditor,
   showNewNoteEditor,
+  showNotesModal,
 }) {
   const [noteContent, setNoteContent] = useState('');
   const [showDelete, setShowDelete] = useState({ show: false });
@@ -257,6 +258,7 @@ function Notes({
 
   const onDeleteNote = (noteId) => {
     deleteNote(noteId).then(() => {
+      setShowNotesModal({ ...showNotesModal, deleteNote: true });
       getData(data.currentPage);
       setData({
         ...data,
@@ -858,6 +860,7 @@ Notes.defaultProps = {
   customerId: '',
   setNewNoteEditor: () => {},
   showNewNoteEditor: false,
+  showNotesModal: {},
 };
 
 Notes.propTypes = {
@@ -865,6 +868,9 @@ Notes.propTypes = {
   customerId: PropTypes.string,
   setNewNoteEditor: PropTypes.func,
   showNewNoteEditor: PropTypes.bool,
+  showNotesModal: PropTypes.shape({
+    deleteNote: PropTypes.bool,
+  }),
 };
 
 export default Notes;

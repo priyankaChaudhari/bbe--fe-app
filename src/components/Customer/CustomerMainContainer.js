@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable import/no-cycle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
@@ -9,10 +10,11 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
-// import NumberFormat from 'react-number-format';
+import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
+import { Collapse } from 'react-collapse';
 
 import Theme from '../../theme/Theme';
 import {
@@ -33,6 +35,7 @@ import {
   PlusIcon,
   ForwardOrangeIcon,
   OrangeChat,
+  EditOrangeIcon,
   // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
@@ -76,6 +79,7 @@ import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
 import { SetupCheckList } from '../BrandAssetGathering/index';
+import { getNotes } from '../../api/NotesApi';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -151,8 +155,12 @@ export default function CustomerMainContainer() {
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
   const [amazonDetails, setAmazonDetails] = useState([]);
-  const [showNotesModal, setShowNotesModal] = useState(false);
   const [showNewNoteEditor, setNewNoteEditor] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState({
+    modal: false,
+    apiCall: false,
+    deleteNote: false,
+  });
 
   const [statusModal, setStatusModal] = useState({
     show: false,
@@ -171,6 +179,8 @@ export default function CustomerMainContainer() {
   const showBrandAssetSuccessMsg = useSelector(
     (state) => state.customerState.showBrandAssetMsg,
   );
+  const [openCollapse, setOpenCollapse] = useState(false);
+  const [noteData, setNoteData] = useState([]);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -302,6 +312,24 @@ export default function CustomerMainContainer() {
     profileLoader,
     userInfo,
   ]);
+
+  const getRecentNotes = useCallback(() => {
+    setIsLoading({ loader: true, type: 'note' });
+    getNotes(id, '', 1).then((res) => {
+      setNoteData(res && res.results);
+      setIsLoading({ loader: false, type: 'note' });
+    });
+  }, [id]);
+
+  useEffect(() => {
+    getRecentNotes();
+    if (showNotesModal.apiCall) {
+      getRecentNotes();
+    }
+    if (showNotesModal.deleteNote) {
+      getActivityLogInfo();
+    }
+  }, [getRecentNotes, showNotesModal, getActivityLogInfo]);
 
   useEffect(() => {
     dispatch(getCustomerDetails(id));
@@ -597,22 +625,16 @@ export default function CustomerMainContainer() {
   const renderNotesModal = () => {
     return (
       <Modal
-        isOpen={showNotesModal}
+        isOpen={showNotesModal.modal}
         style={customNotesStyles}
         ariaHideApp={false}
         contentLabel="Add team modal">
-        {/* <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowNotesModal(false)}
-          role="presentation"
-        /> */}
         <Notes
           setShowNotesModal={setShowNotesModal}
           customerId={id}
           setNewNoteEditor={setNewNoteEditor}
           showNewNoteEditor={showNewNoteEditor}
+          showNotesModal={showNotesModal}
         />
       </Modal>
     );
@@ -666,73 +688,6 @@ export default function CustomerMainContainer() {
               )}
 
               <CustomerDetailsBody>
-                {/* <WhiteCard className="customer-brand-details mb-n2">
-                  <div className="row">
-                    <div className="col-lg-9 col-md-12 ">
-                      <div
-                        className=" edit-details edit-brand-details "
-                        onClick={() => setShowModal(true)}
-                        role="presentation">
-                        <img src={EditOrangeIcon} alt="" />
-                        Edit
-                      </div>
-                      <div className="row mt-2">
-                        <div className="col-lg-4 col-12"></div>
-                        <div className="col-lg-4 col-md-6 col-sm-12">
-                          <div className="company-label-info ">
-                            {' '}
-                            <div className="brand-label ">Category</div>
-                            <span className="mid-width">
-                              {customer &&
-                                customer.category &&
-                                customer.category.label}
-                            </span>
-                            <div className="clear-fix" />
-                            <div className="brand-label ">Website</div>
-                            <span className=" mid-width website">
-                              <a
-                                css="text-transform: initial;"
-                                href={
-                                  customer &&
-                                  customer.website &&
-                                  customer.website.includes('http')
-                                    ? customer && customer.website
-                                    : `http://www.${
-                                        customer && customer.website
-                                      }`
-                                }
-                                target="_blank"
-                                rel=" noopener noreferrer">
-                                {customer && customer.website}
-                              </a>
-                            </span>
-                            <div className="clear-fix" />
-                          </div>
-                        </div>{' '}
-                        <div className="col-lg-4 col-md-6 col-sm-12">
-                          <div className="company-label-info">
-                            <div className="brand-label">Annual Revenue</div>
-                            <NumberFormat
-                              displayType="text"
-                              thousandSeparator
-                              value={
-                                (customer && customer.annual_revenue) || null
-                              }
-                              prefix="$"
-                            />
-                            <div className="clear-fix" />
-
-                            <div className="brand-label ">Company Size</div>
-                            <span className="company-size">
-                              {customer && customer.number_of_employees}
-                            </span>
-                            <div className="clear-fix" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </WhiteCard> */}
                 <div className="row">
                   <div className="col-5 mb-5 mt-4">
                     {' '}
@@ -755,44 +710,45 @@ export default function CustomerMainContainer() {
                   <div className="col-7  mt-4 text-right">
                     {' '}
                     <div className="add-more-people">
-                      {memberData.map((item) => (
-                        <React.Fragment key={item.id}>
-                          <div
-                            className="add-more-people cursor "
-                            data-tip
-                            data-for={item.id}
-                            onClick={() =>
-                              setShowMemberList({
-                                show: true,
-                                add: false,
-                                modal: true,
-                              })
-                            }
-                            role="presentation">
-                            <GetInitialName
-                              userInfo={item.user_profile}
-                              type="team"
-                            />
-                          </div>
+                      {memberData &&
+                        memberData.map((item) => (
+                          <React.Fragment key={item.id}>
+                            <div
+                              className="add-more-people cursor "
+                              data-tip
+                              data-for={item.id}
+                              onClick={() =>
+                                setShowMemberList({
+                                  show: true,
+                                  add: false,
+                                  modal: true,
+                                })
+                              }
+                              role="presentation">
+                              <GetInitialName
+                                userInfo={item.user_profile}
+                                type="team"
+                              />
+                            </div>
 
-                          <ReactTooltip
-                            place="bottom"
-                            id={item.id}
-                            aria-haspopup="true">
-                            <strong>
-                              {(item.user_profile &&
-                                item.user_profile.first_name) ||
-                                ' '}{' '}
-                              {(item.user_profile &&
-                                item.user_profile.last_name) ||
-                                ' '}
-                            </strong>
-                            <p style={{ color: 'white', fontSize: '11px' }}>
-                              {item.user_profile && item.user_profile.role}
-                            </p>
-                          </ReactTooltip>
-                        </React.Fragment>
-                      ))}
+                            <ReactTooltip
+                              place="bottom"
+                              id={item.id}
+                              aria-haspopup="true">
+                              <strong>
+                                {(item.user_profile &&
+                                  item.user_profile.first_name) ||
+                                  ' '}{' '}
+                                {(item.user_profile &&
+                                  item.user_profile.last_name) ||
+                                  ' '}
+                              </strong>
+                              <p style={{ color: 'white', fontSize: '11px' }}>
+                                {item.user_profile && item.user_profile.role}
+                              </p>
+                            </ReactTooltip>
+                          </React.Fragment>
+                        ))}
 
                       <div
                         className="add-more-people btn-add-team cursor"
@@ -813,6 +769,13 @@ export default function CustomerMainContainer() {
                 <div className="row mt-2">
                   <div className="col-lg-3 col-12">
                     <WhiteCard className="left-border  d-lg-block d-none mb-3">
+                      <div
+                        className=" edit-details edit-brand-details "
+                        onClick={() => setShowModal(true)}
+                        role="presentation">
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
+                      </div>
                       <div className="brand-logo-details mb-3">
                         {' '}
                         {customer &&
@@ -857,7 +820,7 @@ export default function CustomerMainContainer() {
                             ? customer.country
                             : ''}
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                           <a
                             css="text-transform: initial;"
                             href={
@@ -872,6 +835,50 @@ export default function CustomerMainContainer() {
                             {customer && customer.website}
                           </a>
                         </div>
+                        <span
+                          className="cursor"
+                          onClick={() => setOpenCollapse(!openCollapse)}
+                          role="presentation">
+                          {openCollapse ? 'see less' : 'see more'}
+                        </span>
+                        <Collapse isOpened={openCollapse}>
+                          <div className="row">
+                            <div className="col-4">
+                              <div className="brand-label ">Category</div>
+                            </div>
+                            <div className="col-8">
+                              <span className="mid-width company-label-info ">
+                                {customer &&
+                                  customer.category &&
+                                  customer.category.label}
+                              </span>{' '}
+                            </div>
+                            <div className="col-5">
+                              <div className="brand-label ">
+                                {' '}
+                                Annual Revenue
+                              </div>
+                            </div>
+                            <div className="col-7 company-label-info">
+                              <NumberFormat
+                                displayType="text"
+                                thousandSeparator
+                                value={
+                                  (customer && customer.annual_revenue) || null
+                                }
+                                prefix="$"
+                              />
+                            </div>
+                            <div className="col-4">
+                              <div className="brand-label ">Company Size</div>
+                            </div>
+                            <div className="col-8">
+                              <span className="mid-width company-label-info">
+                                {customer && customer.number_of_employees}
+                              </span>{' '}
+                            </div>
+                          </div>
+                        </Collapse>
                         {customer &&
                         customer.status &&
                         customer.status.value !== null ? (
@@ -1064,61 +1071,6 @@ export default function CustomerMainContainer() {
                             dispatch(setCustomerSelectedTab('company'));
                           }}
                           role="presentation">
-                          {/* =======
-                          <li
-                            onClick={() => {
-                              // setViewComponent('note');
-                              // dispatch(setCustomerSelectedTab('activity'));
-                              setShowNotesModal(true);
-                            }}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'activity' ? 'active' : ''
-                              }`}>
-                              <img src={ExchangeIcon} alt="" />
-                              Notes
-                            </div>
-                          </li>
-                        </ul>
-                      </WhiteCard>
-
-                      <Select
-                        options={viewOptions}
-                        className="customer-dropdown-select d-lg-none d-block mb-3 "
-                        onChange={(event) => {
-                          setViewComponent(event.value);
-                          dispatch(setCustomerSelectedTab(event.value));
-                        }}
-                        defaultValue={viewOptions[0]}
-                      />
-
-                      <WhiteCard className="mb-3">
-                        <p className="black-heading-title mt-0 mb-4">
-                          {' '}
-                          Team Members (
-                          {memberCount &&
-                            (memberCount > 10 ? (
-                              <u
-                                className="link-video watch-video cursor"
-                                onClick={() =>
-                                  setShowMemberList({
-                                    show: true,
-                                    add: false,
-                                    modal: true,
-                                  })
-                                }
-                                role="presentation"
-                                title="See more...">
-                                {memberCount}
-                              </u>
-                            ) : (
-                              memberCount
-                            ))}
-                          )
-                        </p>
-                        {userInfo && userInfo.role !== 'Customer' ? (
->>>>>>> PDV-1539 note functionality is done. */}
                           <div
                             className={`left-details ${
                               viewComponent === 'company' ? 'active' : ''
@@ -1274,33 +1226,104 @@ export default function CustomerMainContainer() {
                     <WhiteCard className="mb-3 d-none d-lg-block">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
-                        Notes (4)
+                        Recent Notes (
+                        {noteData && noteData.length > 3
+                          ? 3
+                          : noteData && noteData.length}
+                        )
                       </p>
-                      <div
-                        className="view-all-list"
-                        role="presentation"
-                        onClick={() => setShowNotesModal(true)}>
-                        View All
-                        <img src={ForwardOrangeIcon} alt="forward-arrow" />
-                      </div>
-                      <GroupUser>
-                        <div className="avatarName float-left mr-3">pl</div>
-                        <div className="activity-user">
-                          <span className="font-bold"> Joe Tati:</span> “Spoke
-                          with BP, they are happy with the ASIN’s we’ve
-                          prioritied for the schedule.”
-                          <div className="time-date  mt-1">
-                            01/14/2021, 5:13:42 PM MST
-                          </div>
+                      {noteData && noteData.length > 0 ? (
+                        <div
+                          className="view-all-list"
+                          role="presentation"
+                          onClick={() =>
+                            setShowNotesModal({
+                              modal: true,
+                              apiCall: false,
+                            })
+                          }>
+                          View All
+                          <img src={ForwardOrangeIcon} alt="forward-arrow" />
                         </div>
-                        <div className="clear-fix" />
-                      </GroupUser>
+                      ) : (
+                        ''
+                      )}
+                      {isLoading.loader && isLoading.type === 'note' ? (
+                        <PageLoader
+                          component="activity"
+                          color="#FF5933"
+                          type="page"
+                          width={20}
+                          height={20}
+                        />
+                      ) : (
+                        <>
+                          {noteData && noteData.length === 0 ? (
+                            <div className="text-center">No notes found.</div>
+                          ) : (
+                            <>
+                              {noteData &&
+                                noteData.slice(0, 3).map((item) => (
+                                  <GroupUser className="mb-2" key={item.id}>
+                                    {images.find(
+                                      (op) => op.entity_id === item.user.id,
+                                    ) &&
+                                    images.find(
+                                      (op) => op.entity_id === item.user.id,
+                                    ).presigned_url ? (
+                                      <img
+                                        src={
+                                          isLoading.loader &&
+                                          isLoading.type === 'page'
+                                            ? DefaultUser
+                                            : images.find(
+                                                (op) =>
+                                                  op.entity_id === item.user.id,
+                                              ).presigned_url
+                                        }
+                                        className="default-user-activity"
+                                        alt="pic"
+                                      />
+                                    ) : (
+                                      <div className="float-left mr-3">
+                                        <GetInitialName userInfo={item.user} />
+                                      </div>
+                                    )}
+                                    <div className="activity-user">
+                                      <span className="font-bold">
+                                        {item &&
+                                          item.user &&
+                                          item.user.first_name}{' '}
+                                        {item &&
+                                          item.user &&
+                                          item.user.last_name}
+                                        :
+                                      </span>{' '}
+                                      <p
+                                        dangerouslySetInnerHTML={{
+                                          __html: item && item.note,
+                                        }}
+                                      />
+                                      <div className="time-date  mt-1">
+                                        {item && item.created_at}{' '}
+                                      </div>
+                                    </div>
+                                    <div className="clear-fix" />
+                                  </GroupUser>
+                                ))}
+                            </>
+                          )}
+                        </>
+                      )}
                       <div className="straight-line horizontal-line  mt-3 mb-3" />
                       <div
                         className="add-note-section cursor"
                         role="presentation"
                         onClick={() => {
-                          setShowNotesModal(true);
+                          setShowNotesModal({
+                            modal: true,
+                            apiCall: false,
+                          });
                           setNewNoteEditor(true);
                         }}>
                         {' '}
