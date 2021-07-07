@@ -283,23 +283,40 @@ function BrandAssetsPreview({
   };
 
   const onMouseDown = (e) => {
-    // e.preventDefault(true);
+    e.preventDefault(true);
+
     const theThing = document.querySelector('#thing');
     const container = document.querySelector('#imgContainer');
+
     if (theThing) {
-      const leftPosition =
-        e.clientX -
-        container.getBoundingClientRect().left -
-        theThing.clientWidth / 2;
-      const topPosition =
-        e.clientY -
-        container.getBoundingClientRect().top -
-        theThing.clientHeight / 2;
+      console.log('isnide down iff', newAnnotaionPosition);
+      const offset = container.getBoundingClientRect();
+      const clickX = e.clientX - offset.left - theThing.clientWidth / 2;
+      const clickY = e.clientY - offset.top - theThing.clientHeight / 2;
+      const percentXImg = (clickX * 100) / offset.width;
+      const percentYImg = (clickY * 100) / offset.height;
+
       setNewAnnotaionPosition({
-        left: leftPosition,
-        top: topPosition,
+        left: percentXImg,
+        top: percentYImg,
       });
     }
+
+    // if (theThing) {
+    //   const leftPosition =
+    //     e.clientX -
+    //     container.getBoundingClientRect().left -
+    //     theThing.clientWidth / 2;
+    //   const topPosition =
+    //     e.clientY -
+    //     container.getBoundingClientRect().top -
+    //     theThing.clientHeight / 2;
+
+    //   // setNewAnnotaionPosition({
+    //   //   left: leftPosition,
+    //   //   top: topPosition,
+    //   // });
+    // }
   };
 
   const handlePageChange = (currentPage) => {
@@ -418,8 +435,8 @@ function BrandAssetsPreview({
                 className="avatarName float-left"
                 style={{
                   position: 'absolute',
-                  left: `${item.x_coordinate}px`,
-                  top: `${item.y_coordinate}px`,
+                  left: `${item.x_coordinate}%`,
+                  top: `${item.y_coordinate}%`,
                 }}>
                 {item.annotation}
               </div>
@@ -441,8 +458,8 @@ function BrandAssetsPreview({
           }
           style={{
             position: 'absolute',
-            left: `${newAnnotaionPosition.left}px`,
-            top: `${newAnnotaionPosition.top}px`,
+            left: `${newAnnotaionPosition.left}%`,
+            top: `${newAnnotaionPosition.top}%`,
           }}>
           {newAnnotaionPosition && newAnnotaionPosition.left !== null
             ? maxAnnotaionNumber
@@ -728,8 +745,8 @@ const BrandAssetsPreviewBody = styled.div`
     position: absolute;
     top: 40%;
     // background-color: ${Theme.gray8};
-    width: 500px;
-    height: 250px;
+    // width: 500px;
+    // height: 250px;
     display: flex;
     justify-content: center;
 
