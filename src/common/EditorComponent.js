@@ -48,7 +48,7 @@ function EditorComponent({ setData, data }) {
           editorClassName="editorClassName"
           onEditorStateChange={onEditorStateChange}
           stripPastedStyles
-          placeholder="   Add the points you would like to edit in the Standard Agreement"
+          placeholder="   Enter note"
           toolbar={{
             options: [
               'inline',

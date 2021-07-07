@@ -32,7 +32,7 @@ import {
   CatalogBox,
   PlusIcon,
   ForwardOrangeIcon,
-  ChatBoxIcon,
+  OrangeChat,
   // TimesCircle,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
@@ -117,7 +117,7 @@ const customNotesStyles = {
     overlay: ' {zIndex: 1000}',
     inset: '0% 0% 0% auto',
     marginRight: '0',
-    borderRadius: '0 !important',
+    borderRadius: '0px !important',
     // transform: 'translate(-50%, -50%)',
   },
 };
@@ -1264,7 +1264,7 @@ export default function CustomerMainContainer() {
                     />
                   )}
 
-                  <div className="col-3">
+                  <div className="col-md-3 col-12">
                     <WhiteCard className="mb-3 d-none d-lg-block">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
@@ -1297,7 +1297,7 @@ export default function CustomerMainContainer() {
                         {' '}
                         <img
                           className="red-chat-icon"
-                          src={ChatBoxIcon}
+                          src={OrangeChat}
                           alt="chat"
                         />{' '}
                         Add note
@@ -1725,9 +1725,9 @@ const CustomerDetailsBody = styled.div`
     }
   }
 
-  // @media only screen and (max-width: 991px) {
-  //   padding: 0 20px;
-  // }
+  @media only screen and (max-width: 991px) {
+    padding: 0 20px;
+  }
 
   // @media only screen and (min-width: 1600px) and (max-width: 1920px) {
   //   max-width: 1420px !important;

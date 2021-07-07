@@ -130,7 +130,7 @@ export const GroupUser = styled.div`
     overflow-wrap: break-word;
     text-align: left;
     float: left;
-    width: 76%;
+    width: 86%;
     span {
       color: ${Theme.gray35};
       font-weight: 500;
@@ -204,6 +204,7 @@ export const GroupUser = styled.div`
               top: 25px;
               width: 170px;
               padding: 17px 0;
+              z-index: 99999;
 
               font-weight: 600;
               .red-trash-icon {

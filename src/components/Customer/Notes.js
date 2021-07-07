@@ -316,7 +316,7 @@ function Notes({ setShowNotesModal, customerId }) {
 
   const displayUserInfo = (item) => {
     return (
-      <div className=" float-left  mr-3 mt-1">
+      <div className=" float-left mt-1">
         {item && item.documents && item.documents.length ? (
           <img
             className="default-user-activity"
@@ -736,7 +736,7 @@ function Notes({ setShowNotesModal, customerId }) {
       </HeaderDownloadFuntionality>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-7 mt-2 pr-2">
+          <div className="col-md-7  col-sm-12 mt-2 pr-2 pl-2">
             <InputSearchWithRadius className="customer-list-header w-80">
               <input
                 className=" form-control search-filter"
@@ -752,7 +752,7 @@ function Notes({ setShowNotesModal, customerId }) {
               />
             </InputSearchWithRadius>
           </div>
-          <div className="col-5 mt-2 pl-2">
+          <div className="col-md-5 col-sm-12 mt-2 pr-2 pl-2">
             <DropDownSelect>
               <div
                 className="dropdown-select-all-notes"
@@ -907,5 +907,15 @@ const NotesSideBar = styled.div`
   .commemt-inbox-body {
     height: 70vh;
     overflow: scroll;
+  }
+  @media only screen and (max-width: 767px) {
+    .dropdown-select-all-notes {
+      width: 100%;
+      max-width: 95%;
+    }
+    .commemt-inbox-body {
+      height: 55vh;
+      overflow: scroll;
+    }
   }
 `;
