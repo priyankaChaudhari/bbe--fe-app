@@ -103,6 +103,7 @@ function BrandAssetsPreview({
     top: 0,
     left: 0,
   });
+  const fileType = ['application/pdf', 'font/ttf', 'font/otf', 'font/woff'];
 
   const getComments = useCallback((currentPage, documnetId) => {
     setCommentsLoader(true);
@@ -406,16 +407,22 @@ function BrandAssetsPreview({
                     storeCommentError.message[0]}
                 </ErrorMsg>
 
-                <div
-                  className="add-annotation "
-                  onClick={() => {
-                    setShowClickModal(true);
-                    setMarkNewAnnotaion(true);
-                  }}
-                  role="presentation">
-                  <img src={AnnotationGoal} alt="annotation" />
-                  Click to add an annotation
-                </div>
+                {!fileType.includes(
+                  showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.mime_type,
+                ) ? (
+                  <div
+                    className="add-annotation "
+                    onClick={() => {
+                      setShowClickModal(true);
+                      setMarkNewAnnotaion(true);
+                    }}
+                    role="presentation">
+                    <img src={AnnotationGoal} alt="annotation" />
+                    Click to add an annotation
+                  </div>
+                ) : null}
                 <Button className="btn-primary w-100 mt-3 ">
                   {addCommentsLoader ? (
                     <PageLoader color="#fff" type="button" />
