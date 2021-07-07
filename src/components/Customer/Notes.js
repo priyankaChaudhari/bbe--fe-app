@@ -522,6 +522,7 @@ function Notes({
           notes: item.label,
           team: [],
         });
+        setShowDropdown({ show: false });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
@@ -539,6 +540,7 @@ function Notes({
             notes: item.label,
             team: [],
           });
+          setShowDropdown({ show: false });
 
           localStorage.setItem(
             'noteFilters',
@@ -567,6 +569,8 @@ function Notes({
 
     if (section === 'archived') {
       setFilter({ ...filters, archived: item.value });
+      setShowDropdown({ show: false });
+
       localStorage.setItem(
         'noteFilters',
         JSON.stringify({
@@ -784,7 +788,6 @@ function Notes({
               <div
                 className="dropdown-select-all-notes"
                 role="presentation"
-                ref={dropdownRef}
                 id="clickbox"
                 onClick={() =>
                   // setData({
@@ -810,7 +813,7 @@ function Notes({
                 />
               </div>
 
-              <div>{displayFilter()}</div>
+              <div ref={dropdownRef}>{displayFilter()}</div>
             </DropDownSelect>
           </div>
 
