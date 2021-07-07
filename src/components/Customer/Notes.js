@@ -202,50 +202,48 @@ function Notes({
 
   const renderEditor = () => {
     return (
-      <div>
-        <div>
-          <div className="alert-msg mt-3">
-            <EditorComponent
-              setData={setNoteContent}
-              data={data.selectedNote && data.selectedNote.note}
-            />
-          </div>
-          <div className="text-right mt-3 mb-3 ">
-            <Button
-              onClick={() => {
-                setData({
-                  ...data,
-                  showEditor: false,
-                  showNotesEditor: false,
-                  selectedNote: '',
-                });
-                setNewNoteEditor(false);
-              }}
-              type="button"
-              className="btn-borderless on-boarding  mr-2 pb-2 mb-1">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => saveNote()}
-              type="button"
-              className={
-                noteContent.length > 7
-                  ? ' btn-primary  w-10 on-boarding  '
-                  : ' btn-primary  w-10 on-boarding disabled'
-              }>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader width={20} height={20} color="#fff" type="button" />
-              ) : data.selectedNote ? (
-                'Save'
-              ) : (
-                'Add Note'
-              )}
-            </Button>
-
-            {/* </Link> */}
-          </div>
+      <>
+        <div className="alert-msg mt-3">
+          <EditorComponent
+            setData={setNoteContent}
+            data={data.selectedNote && data.selectedNote.note}
+          />
         </div>
-      </div>
+        <div className="text-right mt-3 mb-3 ">
+          <Button
+            onClick={() => {
+              setData({
+                ...data,
+                showEditor: false,
+                showNotesEditor: false,
+                selectedNote: '',
+              });
+              setNewNoteEditor(false);
+            }}
+            type="button"
+            className="btn-borderless on-boarding  mr-2 pb-2 mb-1">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => saveNote()}
+            type="button"
+            className={
+              noteContent.length > 7
+                ? ' btn-primary  w-10 on-boarding  '
+                : ' btn-primary  w-10 on-boarding disabled'
+            }>
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader width={20} height={20} color="#fff" type="button" />
+            ) : data.selectedNote ? (
+              'Save'
+            ) : (
+              'Add Note'
+            )}
+          </Button>
+
+          {/* </Link> */}
+        </div>
+      </>
     );
   };
 
@@ -380,6 +378,7 @@ function Notes({
                 ) : (
                   <>
                     <ReadMoreAndLess
+                      style={{ display: 'contents' }}
                       className="read-more-content"
                       charLimit={150}
                       readMoreText="show more"

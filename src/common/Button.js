@@ -221,7 +221,7 @@ const Button = styled.button`
   }
 
   &.w-10 {
-    width: 100px;
+    width: 110px;
   }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
