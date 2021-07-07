@@ -10,12 +10,10 @@ import {
   PageLoader,
   FormField,
   Button,
-  // ModalBox,
   CommonPagination,
 } from '../../common';
 import ErrorMsg from '../../common/ErrorMsg';
 import PdfViewer from '../../common/PdfViewer';
-// import Modal from 'react-modal';
 
 import { GroupUser } from '../../theme/Global';
 import {
@@ -40,20 +38,6 @@ function BrandAssetsPreview({
   isDeleted,
   setIsImgDeleted,
 }) {
-  // const customStyles = {
-  //   content: {
-  //     top: '50%',
-  //     left: '50%',
-  //     right: 'auto',
-  //     bottom: 'auto',
-  //     maxWidth: '420px ',
-  //     width: '100% ',
-  //     minHeight: '390px',
-  //     overlay: ' {zIndex: 1000}',
-  //     marginRight: '-50%',
-  //     transform: 'translate(-50%, -50%)',
-  //   },
-  // };
   // const list = [
   //   {
   //     annotation: 1,
@@ -112,11 +96,12 @@ function BrandAssetsPreview({
   const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
   const [markNewAnnotaion, setMarkNewAnnotaion] = useState(false);
   const [pageNumber, setPageNumber] = useState();
-  // const [isImgDeleted, setIsImgDeleted] = useState(false);
+  const [showClickModal, setShowClickModal] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
-    top: null,
-    left: null,
+    top: 0,
+    left: 0,
   });
 
   const getComments = useCallback((currentPage, documnetId) => {
@@ -156,7 +141,7 @@ function BrandAssetsPreview({
           getComments(1, showAssetPreview.selectedFile.id);
           setNewCommentData('');
           setMarkNewAnnotaion(false);
-          setNewAnnotaionPosition({ left: null, top: null });
+          setNewAnnotaionPosition({ left: 0, top: 0 });
         }
         setAddCommentsLoader(false);
       });
@@ -171,11 +156,13 @@ function BrandAssetsPreview({
       setNewCommentData('');
       setMarkNewAnnotaion(false);
       setNewAnnotaionPosition({
-        left: null,
-        top: null,
+        left: 0,
+        top: 0,
       });
       setStoreCommentError();
       setIsImgDeleted(false);
+      setIsClicked(false);
+      setShowClickModal(false);
     }
     if (
       showAssetPreview &&
@@ -197,7 +184,6 @@ function BrandAssetsPreview({
         documents: documentData,
         index: showAssetPreview.index > 0 ? showAssetPreview.index - 1 : 0,
       });
-      // setTimeout(() => setImageLoading(false), 500);
 
       getComments(1, documentData[showAssetPreview.index - 1].id);
     }
@@ -211,17 +197,18 @@ function BrandAssetsPreview({
             ? showAssetPreview.index + 1
             : documentData.length - 1,
       });
-      // setTimeout(() => setImageLoading(false), 500);
 
       getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
     setMarkNewAnnotaion(false);
     setNewAnnotaionPosition({
-      left: null,
-      top: null,
+      left: 0,
+      top: 0,
     });
     setStoreCommentError();
+    setShowClickModal(false);
+    setIsClicked(false);
   };
 
   const closeModal = () => {
@@ -234,12 +221,14 @@ function BrandAssetsPreview({
     setNewCommentData('');
     setMarkNewAnnotaion(false);
     setNewAnnotaionPosition({
-      left: null,
-      top: null,
+      left: 0,
+      top: 0,
     });
-    setStoreCommentError();
+
     setMaxAnnotaionNumber(null);
     setStoreCommentError();
+    setShowClickModal(false);
+    setIsClicked(false);
   };
 
   const getInitials = (firstName, lastName) => {
@@ -257,6 +246,8 @@ function BrandAssetsPreview({
   const handleChange = (event) => {
     setNewCommentData(event.target.value);
     setStoreCommentError();
+    setShowClickModal(false);
+    setIsClicked(false);
   };
 
   const onSubmit = () => {
@@ -273,17 +264,24 @@ function BrandAssetsPreview({
       setNewCommentData('');
       setMarkNewAnnotaion(false);
       setNewAnnotaionPosition({
-        left: null,
-        top: null,
+        left: 0,
+        top: 0,
       });
       setStoreCommentError();
-      setStoreCommentError();
+      setShowClickModal(false);
+      setIsClicked(false);
     }
     setShowCommentSection(!showCommentSection);
   };
 
   const onMouseDown = (e) => {
     e.preventDefault(true);
+    if (showClickModal) {
+      setShowClickModal(false);
+    }
+    if (!isClicked) {
+      setIsClicked(true);
+    }
 
     const theThing = document.querySelector('#thing');
     const container = document.querySelector('#imgContainer');
@@ -294,6 +292,16 @@ function BrandAssetsPreview({
       const clickY = e.clientY - offset.top - theThing.clientHeight / 2;
       const percentXImg = (clickX * 100) / offset.width;
       const percentYImg = (clickY * 100) / offset.height;
+
+      // console.log('e.clientX', e.clientX, e.clientY);
+      // console.log('offset.left', offset.left, offset.top);
+
+      // console.log('offset.width', offset.width, offset.height);
+      // console.log(
+      //   'theThing.clientWidth',
+      //   theThing.clientWidth,
+      //   theThing.clientHeight,
+      // );
 
       setNewAnnotaionPosition({
         left: percentXImg,
@@ -328,8 +336,6 @@ function BrandAssetsPreview({
       return <PageLoader component="activityLog" color="#FF5933" type="page" />;
     }
     if (commentsCount === 0) {
-      // if (maxAnnotaionNumber === null) {
-      // }
       return (
         <div className="mt-5 text-center">
           No comments added for this image yet.
@@ -402,7 +408,10 @@ function BrandAssetsPreview({
 
                 <div
                   className="add-annotation "
-                  onClick={() => setMarkNewAnnotaion(true)}
+                  onClick={() => {
+                    setShowClickModal(true);
+                    setMarkNewAnnotaion(true);
+                  }}
                   role="presentation">
                   <img src={AnnotationGoal} alt="annotation" />
                   Click to add an annotation
@@ -431,7 +440,7 @@ function BrandAssetsPreview({
             return (
               <div
                 id={item.id}
-                className="avatarName float-left"
+                className="avatarName"
                 style={{
                   position: 'absolute',
                   left: `${item.x_coordinate}%`,
@@ -450,19 +459,13 @@ function BrandAssetsPreview({
       return (
         <div
           id="thing"
-          className={
-            newAnnotaionPosition && newAnnotaionPosition.left !== null
-              ? 'avatarName float-left'
-              : null
-          }
+          className={isClicked ? 'avatarName' : null}
           style={{
             position: 'absolute',
             left: `${newAnnotaionPosition.left}%`,
             top: `${newAnnotaionPosition.top}%`,
           }}>
-          {newAnnotaionPosition && newAnnotaionPosition.left !== null
-            ? maxAnnotaionNumber
-            : null}
+          {isClicked ? maxAnnotaionNumber : null}
         </div>
       );
     }
@@ -540,6 +543,19 @@ function BrandAssetsPreview({
               <div
                 className={showCommentSection ? 'col-lg-9 col-12' : 'col-12'}>
                 <BrandAssetsPreviewBody>
+                  {showClickModal ? (
+                    <div className="click-for-annotation">
+                      Click anywhere on the image to add your annotaton{' '}
+                      <Button
+                        className="btn-transparent verify-now-btn w-auto"
+                        onClick={() => {
+                          setShowClickModal(false);
+                          setMarkNewAnnotaion(false);
+                        }}>
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : null}
                   <div
                     className={
                       showAssetPreview.index === 0
@@ -665,35 +681,6 @@ function BrandAssetsPreview({
               {showCommentSection ? (
                 <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
               ) : null}
-
-              {/* <Modal
-                isOpen={markNewAnnotaion}
-                style={customStyles}
-                ariaHideApp={false}
-                contentLabel="Edit modal">
-                <img
-                  src={CloseIcon}
-                  alt="close"
-                  className="float-right cursor cross-icon"
-                  onClick={() => {
-                    setMarkNewAnnotaion(false);
-                  }}
-                  role="presentation"
-                />  
-                <ModalBox>
-                  <div className="modal-body">
-                    <h4>Click anywhere on the image to add your annotaion</h4>
-
-                    <div className="text-center mt-3">
-                      <Button
-                        type="button"
-                        className="btn-primary on-boarding   w-100">
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </ModalBox>
-              </Modal> */}
             </div>
           </div>
         </>
@@ -743,6 +730,15 @@ const BrandAssetsPreviewBody = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-top: 50%;
+
+  .click-for-annotation {
+    background-color: #f4f6fc;
+    border-radius: 4px;
+    padding: 10px;
+    color: #2e384d;
+    top: 0;
+    position: absolute;
+  }
 
   .assetPreviewImg {
     position: absolute;
