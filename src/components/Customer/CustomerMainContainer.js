@@ -442,6 +442,20 @@ export default function CustomerMainContainer() {
     }
     if (item.history_change_reason.includes('deleted')) {
       activityMessage = item.history_change_reason.split('deleted');
+      if (item.history_change_reason.includes('deleted note')) {
+        return (
+          <>
+            {activityMessage[0]}
+            <span>deleted</span>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: activityMessage[1],
+              }}
+            />
+            {/* {activityMessage[1]} */}
+          </>
+        );
+      }
       return (
         <>
           {activityMessage[0]}
