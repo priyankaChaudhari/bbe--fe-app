@@ -1314,7 +1314,9 @@ export default function CustomerMainContainer() {
                                       </span>{' '}
                                       <p
                                         dangerouslySetInnerHTML={{
-                                          __html: item && item.note,
+                                          __html: `${
+                                            item && item.note.slice(0, 80)
+                                          }...`,
                                         }}
                                       />
                                       <div className="time-date  mt-1">
