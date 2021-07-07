@@ -114,7 +114,7 @@ export const EditorToll = styled.div`
     background: ${Theme.gray8};
     border: 1px solid ${Theme.gray45};
     padding: 8px 0;
-    min-height: 110px;
+    min-height: 150px;
     margin: 0 5px;
 
     span {
