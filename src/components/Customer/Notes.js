@@ -429,7 +429,6 @@ function Notes({
                                   {' '}
                                   <span
                                     className="delete"
-                                    ref={ref}
                                     role="presentation"
                                     onClick={() => {
                                       setShowDelete({
@@ -448,6 +447,7 @@ function Notes({
                                     {item.id ===
                                     (showDelete && showDelete.id) ? (
                                       <div
+                                        ref={ref}
                                         className="delete-msg"
                                         role="presentation"
                                         onClick={() => onDeleteNote(item.id)}>
