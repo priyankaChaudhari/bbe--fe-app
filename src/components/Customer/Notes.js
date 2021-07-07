@@ -522,7 +522,7 @@ function Notes({
           notes: item.label,
           team: [],
         });
-        setShowDropdown({ show: false });
+        // setShowDropdown({ show: false });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
@@ -540,7 +540,7 @@ function Notes({
             notes: item.label,
             team: [],
           });
-          setShowDropdown({ show: false });
+          // setShowDropdown({ show: false });
 
           localStorage.setItem(
             'noteFilters',
@@ -569,7 +569,7 @@ function Notes({
 
     if (section === 'archived') {
       setFilter({ ...filters, archived: item.value });
-      setShowDropdown({ show: false });
+      // setShowDropdown({ show: false });
 
       localStorage.setItem(
         'noteFilters',
@@ -756,6 +756,7 @@ function Notes({
                     className="float-right cursor remove-cross-icon"
                     onClick={() => {
                       setShowNotesModal(false);
+                      setNewNoteEditor(false);
                     }}
                     role="presentation"
                   />
