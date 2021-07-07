@@ -275,7 +275,9 @@ function Notes({
       ...data,
       selectedNote: item,
       showNotesEditor: true,
+      showEditor: false,
     });
+    setNewNoteEditor(false);
   };
 
   const onArchive = (item, dataToPost) => {
@@ -384,6 +386,7 @@ function Notes({
                       readLessText="show less">
                       {displayMessage(item && item.note)}
                     </ReadMoreAndLess>
+
                     {/* {getText(item && item.note).length >= 100 ? (
                       <>
                         {getText(item && item.note)}
@@ -419,41 +422,49 @@ function Notes({
                                 {' '}
                                 <span className="dot" /> Archive
                               </li>
-                              <li className="delete">
-                                {' '}
-                                <span
-                                  className="delete"
-                                  ref={ref}
-                                  role="presentation"
-                                  onClick={() => {
-                                    setShowDelete({ show: true, id: item.id });
-                                    // setData({
-                                    //   ...data,
-                                    //   selectedNote: item,
-                                    //   deleteNote: {
-                                    //     showDeleteConfirmation: true,
-                                    //   },
-                                    // });
-                                  }}>
-                                  <span className="dot" /> Delete{' '}
-                                  {item.id === (showDelete && showDelete.id) ? (
-                                    <div
-                                      className="delete-msg"
-                                      role="presentation"
-                                      onClick={() => onDeleteNote(item.id)}>
-                                      {' '}
-                                      <img
-                                        className="red-trash-icon"
-                                        src={RedTrashIcon}
-                                        alt="check"
-                                      />
-                                      Confirm Delete
-                                    </div>
-                                  ) : (
-                                    ''
-                                  )}
-                                </span>
-                              </li>
+                              {item.hs_note_id ? (
+                                ''
+                              ) : (
+                                <li className="delete">
+                                  {' '}
+                                  <span
+                                    className="delete"
+                                    ref={ref}
+                                    role="presentation"
+                                    onClick={() => {
+                                      setShowDelete({
+                                        show: true,
+                                        id: item.id,
+                                      });
+                                      // setData({
+                                      //   ...data,
+                                      //   selectedNote: item,
+                                      //   deleteNote: {
+                                      //     showDeleteConfirmation: true,
+                                      //   },
+                                      // });
+                                    }}>
+                                    <span className="dot" /> Delete{' '}
+                                    {item.id ===
+                                    (showDelete && showDelete.id) ? (
+                                      <div
+                                        className="delete-msg"
+                                        role="presentation"
+                                        onClick={() => onDeleteNote(item.id)}>
+                                        {' '}
+                                        <img
+                                          className="red-trash-icon"
+                                          src={RedTrashIcon}
+                                          alt="check"
+                                        />
+                                        Confirm Delete
+                                      </div>
+                                    ) : (
+                                      ''
+                                    )}
+                                  </span>
+                                </li>
+                              )}
                             </>
                           ) : (
                             ''
@@ -715,6 +726,9 @@ function Notes({
             <div className="col-md-6 col-sm-12">
               <ul className="contract-download-nav">
                 <li
+                  className={
+                    data.showEditor || showNewNoteEditor ? 'disabled' : ''
+                  }
                   role="presentation"
                   onClick={() => {
                     setData({
