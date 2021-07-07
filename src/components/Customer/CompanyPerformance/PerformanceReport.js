@@ -126,6 +126,8 @@ export default function PerformanceReport({
       transform: 'translate(-50%, -50%)',
     },
   };
+  const noDataMessage =
+    'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -1213,9 +1215,7 @@ export default function PerformanceReport({
             selectedDF={selectedValue}
           />
         ) : (
-          <div className="text-center mt-5 mb-4">
-            We don&apos;t have any data to show graph
-          </div>
+          <NoData>{noDataMessage}</NoData>
         )}
       </WhiteCard>
     );
@@ -1417,9 +1417,7 @@ export default function PerformanceReport({
           {bBChartData && bBChartData.length > 1 ? (
             renderBBgraph()
           ) : (
-            <div className="text-center mt-5">
-              We don&apos;t have any data to show graph
-            </div>
+            <NoData>{noDataMessage}</NoData>
           )}
           <br />
           <br />
@@ -1666,4 +1664,9 @@ const Tab = styled.div`
       text-align: center;
       padding-bottom: 10px;
   }
+`;
+
+const NoData = styled.div`
+  margin: 3em;
+  text-align: center;
 `;

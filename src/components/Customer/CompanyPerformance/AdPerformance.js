@@ -103,6 +103,8 @@ export default function AdPerformance({
       transform: 'translate(-50%, -50%)',
     },
   };
+  const noDataMessage =
+    'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
   /// ////////////////////////////////////////////////////////////////////////
   //
@@ -2153,9 +2155,7 @@ export default function AdPerformance({
             selectedDF={selectedAdDF}
           />
         ) : (
-          <div className="text-center mt-5 mb-4">
-            We don&apos;t have any data to show graph
-          </div>
+          <NoData>{noDataMessage}</NoData>
         )}
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
@@ -2177,9 +2177,7 @@ export default function AdPerformance({
             selectedDF={selectedAdDF}
           />
         ) : (
-          <div className="text-center mt-5 mb-4">
-            We don&apos;t have any data to show graph
-          </div>
+          <NoData>{noDataMessage}</NoData>
         )}
       </WhiteCard>
       {renderAdCustomDateModal()}
@@ -2216,6 +2214,9 @@ const AddPerformance = styled.div`
       }
     }
   }
+  
+
+
   @media only screen and (max-width: 1255px) {
     .ad-performance-nav {
       li {
@@ -2320,4 +2321,9 @@ const Tab = styled.div`
       text-align: center;
       padding-bottom: 10px;
   }
+`;
+
+const NoData = styled.div`
+  margin: 3em;
+  text-align: center;
 `;

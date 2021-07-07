@@ -427,7 +427,7 @@ function DashboardContainer() {
                     : userInfo &&
                       userInfo.role === 'Hybrid Ad Manager' &&
                       hybridView === 'dsp_ad_performance'
-                    ? 'Dsp Dashboard'
+                    ? 'Ad Manager Dashboard'
                     : 'Dashboard'}
                 </p>
               </div>
