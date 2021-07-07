@@ -140,6 +140,10 @@ export const GroupUser = styled.div`
         color: ${Theme.black};
       }
     }
+    p {
+      margin: 0;
+      font-size: 15px;
+    }
   }
   .default-user-activity {
     width: 40px;

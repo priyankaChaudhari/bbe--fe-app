@@ -849,30 +849,30 @@ export default function CustomerMainContainer() {
                           </a>
                         </div>
                         <span
-                          className="cursor"
+                          className="cursor "
                           onClick={() => setOpenCollapse(!openCollapse)}
                           role="presentation">
-                          {openCollapse ? 'see less' : 'see more'}
+                          {openCollapse ? 'See Less' : 'See More'}
                         </span>
                         <Collapse isOpened={openCollapse}>
-                          <div className="row">
-                            <div className="col-4">
+                          <div className="row mt-3">
+                            <div className="col-5 text-left mb-2 pr-1">
                               <div className="brand-label ">Category</div>
                             </div>
-                            <div className="col-8">
+                            <div className="col-7 mb-2 text-left">
                               <span className="mid-width company-label-info ">
                                 {customer &&
                                   customer.category &&
                                   customer.category.label}
                               </span>{' '}
                             </div>
-                            <div className="col-5">
+                            <div className="col-5 text-left mb-2 pr-1">
                               <div className="brand-label ">
                                 {' '}
                                 Annual Revenue
                               </div>
                             </div>
-                            <div className="col-7 company-label-info">
+                            <div className="col-7 text-left company-label-info mb-2">
                               <NumberFormat
                                 displayType="text"
                                 thousandSeparator
@@ -882,10 +882,10 @@ export default function CustomerMainContainer() {
                                 prefix="$"
                               />
                             </div>
-                            <div className="col-4">
+                            <div className="col-5 text-left mb-2 pr-1">
                               <div className="brand-label ">Company Size</div>
                             </div>
-                            <div className="col-8">
+                            <div className="col-7 text-left mb-2">
                               <span className="mid-width company-label-info">
                                 {customer && customer.number_of_employees}
                               </span>{' '}
@@ -1313,6 +1313,7 @@ export default function CustomerMainContainer() {
                                         :
                                       </span>{' '}
                                       <p
+                                        className="m-0"
                                         dangerouslySetInnerHTML={{
                                           __html: `${
                                             item && item.note.slice(0, 80)
