@@ -11,7 +11,7 @@ import debounce from 'lodash.debounce';
 
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-// import ReadMoreAndLess from 'react-read-more-less';
+import ReadMoreAndLess from 'react-read-more-less';
 // import ReactHtmlParser from 'react-html-parser';
 // import Select from 'react-select';
 import styled from 'styled-components';
@@ -229,8 +229,10 @@ function Notes({ setShowNotesModal, customerId }) {
               }>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader width={20} height={20} color="#fff" type="button" />
-              ) : (
+              ) : data.selectedNote ? (
                 'Save'
+              ) : (
+                'Add Note'
               )}
             </Button>
 
@@ -342,10 +344,10 @@ function Notes({ setShowNotesModal, customerId }) {
 
   const displayMessage = (str) => {
     const messageText = str ? getText(str) : '';
-
-    return messageText.length >= 100
-      ? `${messageText.slice(0, 100)}...`
-      : messageText;
+    return messageText;
+    // return messageText.length >= 100
+    //   ? `${messageText.slice(0, 100)}...`
+    //   : messageText;
   };
 
   const displayNotes = () => {
@@ -369,7 +371,13 @@ function Notes({ setShowNotesModal, customerId }) {
                   renderEditor()
                 ) : (
                   <>
-                    {displayMessage(item && item.note)}
+                    <ReadMoreAndLess
+                      className="read-more-content"
+                      charLimit={150}
+                      readMoreText="show more"
+                      readLessText="show less">
+                      {displayMessage(item && item.note)}
+                    </ReadMoreAndLess>
                     {/* {getText(item && item.note).length >= 100 ? (
                       <>
                         {getText(item && item.note)}
