@@ -11,8 +11,8 @@ import debounce from 'lodash.debounce';
 
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import ReadMoreAndLess from 'react-read-more-less';
-
+// import ReadMoreAndLess from 'react-read-more-less';
+// import ReactHtmlParser from 'react-html-parser';
 // import Select from 'react-select';
 import styled from 'styled-components';
 import { GroupUser } from '../../theme/Global';
@@ -42,6 +42,7 @@ import {
   PinIcons,
   CaretUp,
 } from '../../theme/images/index';
+
 import EditorComponent from '../../common/EditorComponent';
 import Theme from '../../theme/Theme';
 
@@ -105,6 +106,7 @@ function Notes({ setShowNotesModal, customerId }) {
         id: '',
       });
     }
+
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowDropdown({ show: false });
     }
@@ -338,6 +340,14 @@ function Notes({ setShowNotesModal, customerId }) {
     return divContainer.textContent || divContainer.innerText || '';
   }
 
+  const displayMessage = (str) => {
+    const messageText = str ? getText(str) : '';
+
+    return messageText.length >= 100
+      ? `${messageText.slice(0, 100)}...`
+      : messageText;
+  };
+
   const displayNotes = () => {
     return isLoading.loader && isLoading.type === 'page' ? (
       <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
@@ -359,23 +369,18 @@ function Notes({ setShowNotesModal, customerId }) {
                   renderEditor()
                 ) : (
                   <>
-                    <ReadMoreAndLess
-                      className="read-more-content"
-                      charLimit={150}
-                      readMoreText="show more"
-                      readLessText="Read less">
-                      {getText(item && item.note)}
-                      {/* {htmlToText(item && item.note, {
-                        wordwrap: 130,
-                      })} */}
-                      {/* {item && item.note.replace(/<[^>]+>/g, '')} */}
-                      {/* <span
-                      // className="long-text"
-                      dangerouslySetInnerHTML={{
-                        __html: item && item.note,
-                      }}
-                    /> */}
-                    </ReadMoreAndLess>
+                    {displayMessage(item && item.note)}
+                    {/* {getText(item && item.note).length >= 100 ? (
+                      <>
+                        {getText(item && item.note)}
+                        <span onClick={() => console.log('in showmore')}>
+                          {' '}
+                          ... show more
+                        </span>{' '}
+                      </>
+                    ) : (
+                      getText(item && item.note)
+                    )} */}
 
                     <div className="time-date  mt-1">
                       {item && item.created_at}{' '}
@@ -752,15 +757,18 @@ function Notes({ setShowNotesModal, customerId }) {
               <div
                 className="dropdown-select-all-notes"
                 role="presentation"
+                ref={dropdownRef}
                 id="clickbox"
                 onClick={() =>
                   // setData({
                   //   ...data,
                   //   showFilterDropdown: !data.showFilterDropdown,
                   // })
-                  setShowDropdown({ show: !showDropdown.show })
+                  {
+                    setShowDropdown({ show: !showDropdown.show });
+                  }
                 }>
-                All Notes
+                {filters && filters.notes}
                 <img
                   src={CaretUp}
                   alt="caret"
@@ -775,7 +783,7 @@ function Notes({ setShowNotesModal, customerId }) {
                 />
               </div>
 
-              <div ref={dropdownRef}>{displayFilter()}</div>
+              <div>{displayFilter()}</div>
             </DropDownSelect>
           </div>
 
