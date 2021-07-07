@@ -152,6 +152,7 @@ export default function CustomerMainContainer() {
   const [images, setImages] = useState([]);
   const [amazonDetails, setAmazonDetails] = useState([]);
   const [showNotesModal, setShowNotesModal] = useState(false);
+  const [showNewNoteEditor, setNewNoteEditor] = useState(false);
 
   const [statusModal, setStatusModal] = useState({
     show: false,
@@ -607,7 +608,12 @@ export default function CustomerMainContainer() {
           onClick={() => setShowNotesModal(false)}
           role="presentation"
         /> */}
-        <Notes setShowNotesModal={setShowNotesModal} customerId={id} />
+        <Notes
+          setShowNotesModal={setShowNotesModal}
+          customerId={id}
+          setNewNoteEditor={setNewNoteEditor}
+          showNewNoteEditor={showNewNoteEditor}
+        />
       </Modal>
     );
   };
@@ -1291,9 +1297,12 @@ export default function CustomerMainContainer() {
                       </GroupUser>
                       <div className="straight-line horizontal-line  mt-3 mb-3" />
                       <div
-                        className="add-note-section"
+                        className="add-note-section cursor"
                         role="presentation"
-                        onClick={() => setShowNotesModal(true)}>
+                        onClick={() => {
+                          setShowNotesModal(true);
+                          setNewNoteEditor(true);
+                        }}>
                         {' '}
                         <img
                           className="red-chat-icon"

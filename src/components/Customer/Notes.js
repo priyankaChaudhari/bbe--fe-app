@@ -46,7 +46,12 @@ import {
 import EditorComponent from '../../common/EditorComponent';
 import Theme from '../../theme/Theme';
 
-function Notes({ setShowNotesModal, customerId }) {
+function Notes({
+  setShowNotesModal,
+  customerId,
+  setNewNoteEditor,
+  showNewNoteEditor,
+}) {
   const [noteContent, setNoteContent] = useState('');
   const [showDelete, setShowDelete] = useState({ show: false });
   const [showDropdown, setShowDropdown] = useState({ show: false });
@@ -141,8 +146,8 @@ function Notes({ setShowNotesModal, customerId }) {
         (res) => {
           setData({
             ...data,
-            notes: res.results,
-            count: res.count,
+            notes: res && res.results,
+            count: res && res.count,
             currentPage: pageNumber,
           });
           setIsLoading({ loader: false, type: 'page' });
@@ -188,7 +193,7 @@ function Notes({ setShowNotesModal, customerId }) {
       setIsLoading({ loader: true, type: 'button' });
       saveNotes(postData).then(() => {
         setIsLoading({ loader: false, type: 'button' });
-
+        setNewNoteEditor(false);
         setData({ ...data, showNotesEditor: false, showEditor: false });
         getData(data.currentPage);
       });
@@ -207,14 +212,15 @@ function Notes({ setShowNotesModal, customerId }) {
           </div>
           <div className="text-right mt-3 mb-3 ">
             <Button
-              onClick={() =>
+              onClick={() => {
                 setData({
                   ...data,
                   showEditor: false,
                   showNotesEditor: false,
                   selectedNote: '',
-                })
-              }
+                });
+                setNewNoteEditor(false);
+              }}
               type="button"
               className="btn-borderless on-boarding  mr-2 pb-2 mb-1">
               Cancel
@@ -797,7 +803,7 @@ function Notes({ setShowNotesModal, customerId }) {
 
           <div className="straight-line horizontal-line mt-2 mb-2" />
           <div className=" col-12 commemt-inbox-body mt-3">
-            {data.showEditor ? (
+            {data.showEditor || showNewNoteEditor ? (
               <GroupUser>
                 {displayUserInfo(userInfo)}
                 <div className="activity-user">
@@ -833,11 +839,15 @@ function Notes({ setShowNotesModal, customerId }) {
 Notes.defaultProps = {
   setShowNotesModal: () => {},
   customerId: '',
+  setNewNoteEditor: () => {},
+  showNewNoteEditor: false,
 };
 
 Notes.propTypes = {
   setShowNotesModal: PropTypes.func,
   customerId: PropTypes.string,
+  setNewNoteEditor: PropTypes.func,
+  showNewNoteEditor: PropTypes.bool,
 };
 
 export default Notes;
