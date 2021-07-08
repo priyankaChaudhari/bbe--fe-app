@@ -191,15 +191,17 @@ function Notes({
       customer: customerId,
     };
 
+    setIsLoading({ loader: true, type: 'button' });
     if (data && data.selectedNote && data.selectedNote.id) {
       updateNotes(data.selectedNote && data.selectedNote.id, postData).then(
         () => {
+          setIsLoading({ loader: false, type: 'button' });
+
           setData({ ...data, showNotesEditor: false, showEditor: false });
           getData(data.currentPage);
         },
       );
     } else {
-      setIsLoading({ loader: true, type: 'button' });
       saveNotes(postData).then(() => {
         setIsLoading({ loader: false, type: 'button' });
         setNewNoteEditor(false);
@@ -237,7 +239,7 @@ function Notes({
             onClick={() => saveNote()}
             type="button"
             className={
-              noteContent.length > 7
+              noteContent.length > 7 && !isLoading.loader
                 ? ' btn-primary  w-10 on-boarding  '
                 : ' btn-primary  w-10 on-boarding disabled'
             }>
