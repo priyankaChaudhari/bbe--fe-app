@@ -143,6 +143,7 @@ function BrandAssetsPreview({
           setNewCommentData('');
           setMarkNewAnnotaion(false);
           setNewAnnotaionPosition({ left: 0, top: 0 });
+          setIsClicked(false);
         }
         setAddCommentsLoader(false);
       });
@@ -247,8 +248,6 @@ function BrandAssetsPreview({
   const handleChange = (event) => {
     setNewCommentData(event.target.value);
     setStoreCommentError();
-    setShowClickModal(false);
-    setIsClicked(false);
   };
 
   const onSubmit = () => {
@@ -447,7 +446,7 @@ function BrandAssetsPreview({
             return (
               <div
                 id={item.id}
-                className="avatarName"
+                className="annotation"
                 style={{
                   position: 'absolute',
                   left: `${item.x_coordinate}%`,
@@ -550,7 +549,9 @@ function BrandAssetsPreview({
               className={
                 showCommentSection ? 'col-lg-9 col-12 pr-0' : 'col-12'
               }>
-              <BrandAssetsPreviewBody>
+              <BrandAssetsPreviewBody
+              // className={showClickModal ? 'class name' : null}
+              >
                 {showClickModal ? (
                   <div className="click-for-annotation">
                     Click anywhere on the image to add your annotaton{' '}
