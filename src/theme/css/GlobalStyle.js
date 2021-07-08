@@ -1041,16 +1041,16 @@ fieldset {
 .annotation {
   border-radius: 50%;
   text-align: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid ${Theme.lightOrange};
+  width: 36px;
+  height: 36px;
+  border: 4px solid ${Theme.white};
   background: ${Theme.lightOrange};
   color: ${Theme.black};
   text-transform: Uppercase;
   display: inline-block;
   font-size: ${Theme.extraMedium};
   font-weight: 600;
-  padding-top: 10px;
+  padding-top: 5px;
   margin-top: -2px;
 }
 .annotationNone {

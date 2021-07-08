@@ -3083,7 +3083,7 @@ const CustomerListPage = styled.div`
     display: inline;
   }
 
-  padding-left: 62px;
+  // padding-left: 62px;
   .table-container {
     padding-left: 290px;
   }

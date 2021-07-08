@@ -130,7 +130,7 @@ export const GroupUser = styled.div`
     overflow-wrap: break-word;
     text-align: left;
     float: left;
-    width: 86%;
+    width: 80%;
     span {
       color: ${Theme.gray35};
       font-weight: 500;

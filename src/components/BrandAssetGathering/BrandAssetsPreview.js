@@ -413,7 +413,7 @@ function BrandAssetsPreview({
                     showAssetPreview.selectedFile.mime_type,
                 ) ? (
                   <div
-                    className="add-annotation "
+                    className="add-annotation mt-2"
                     onClick={() => {
                       setShowClickModal(true);
                       setMarkNewAnnotaion(true);
@@ -555,7 +555,7 @@ function BrandAssetsPreview({
                   <div className="click-for-annotation">
                     Click anywhere on the image to add your annotaton{' '}
                     <Button
-                      className="btn-transparent verify-now-btn h-30 w-auto ml-3"
+                      className="btn-transparent verify-now-btn h-30 w-auto ml-2"
                       onClick={() => {
                         setShowClickModal(false);
                         setMarkNewAnnotaion(false);
@@ -815,7 +815,7 @@ const BrandAssetsPreviewBody = styled.div`
   }
 
   @media only screen and (max-width: 991px) {
-    margin-top: 40%;
+    // margin-top: 40%;
     .assetPreviewImg {
       top: 35%;
     }
@@ -851,7 +851,7 @@ const BrandAssetsPreviewBody = styled.div`
     }
   }
   @media only screen and (max-width: 480px) {
-    margin-top: 65%;
+    // margin-top: 65%;
     .assetPreviewImg {
       max-width: 170px;
       height: 100px;
@@ -897,7 +897,7 @@ const CommentAnnotationPanel = styled.div`
     top: 14px;
     border-left: 2px solid ${Theme.black};
     height: 21px;
-    cursor:pointer;
+    cursor: pointer;
   }
 
   .inbox-comment {
@@ -906,6 +906,7 @@ const CommentAnnotationPanel = styled.div`
     margin: 0;
     overflow: auto;
     height: calc(100vh - 100px - 240px);
+    padding-bottom: 50px;
 
     li {
       display: inline-block;
@@ -921,7 +922,7 @@ const CommentAnnotationPanel = styled.div`
 
     .input-type-box {
       margin: 0 10px;
-      width: 22%;
+      width: 23%;
       .add-annotation {
         cursor: pointer;
         color: ${Theme.gray85};
@@ -943,14 +944,17 @@ const CommentAnnotationPanel = styled.div`
       height: calc(100vh - 100px - 545px);
     }
     .chat-footer {
-    
-
-    .input-type-box {
-      margin: 0 10px;
-      width: 95%;
-     
+      .input-type-box {
+        margin: 0 10px;
+        width: 95%;
+      }
     }
-  
+    .close-panel {
+      transform: rotate(90deg);
+    }
+    .chat-header {
+      border-top: 1px solid ${Theme.gray4};
+    }
   }
   @media only screen and (max-width: 767px) {
     .inbox-comment {
@@ -962,7 +966,8 @@ const CommentAnnotationPanel = styled.div`
 const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
-  margin-top: -100px;
+  margin-top: -300px;
+  max-width: 650px;
   height: 73vh;
 
   .react-pdf__Document {
