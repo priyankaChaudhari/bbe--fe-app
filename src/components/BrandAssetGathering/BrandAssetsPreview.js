@@ -739,10 +739,10 @@ const BrandAssetsPreviewBody = styled.div`
   margin-top: 50%;
 
   .click-for-annotation {
-    background-color: #f4f6fc;
+    background-color: ${Theme.gray8};
     border-radius: 4px;
     padding: 10px;
-    color: #2e384d;
+    color: ${Theme.gray90};
     top: 0;
     position: absolute;
   }

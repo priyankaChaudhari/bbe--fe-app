@@ -851,7 +851,7 @@ export default function CustomerMainContainer() {
                           customer &&
                           customer.status &&
                           customer.status.value === 'pending account setup' ? (
-                            <span className="company-status inactive">
+                            <span className="company-status inactive ">
                               {customer &&
                                 customer.status &&
                                 customer.status.label}
@@ -872,7 +872,7 @@ export default function CustomerMainContainer() {
                                 customer.status.label}
                             </span>
                           ) : (
-                            <DropDownStatus className="mb-3 customer-details">
+                            <DropDownStatus className="mb-2 customer-details">
                               {checkStatus()}
                               <Select
                                 isSearchable={false}
@@ -941,7 +941,7 @@ export default function CustomerMainContainer() {
                             {customer && customer.contract_status}
                           </span>
                         )}
-                        <div className="straight-line horizontal-line mb-3 mt-3" />
+                        <div className="straight-line horizontal-line mb-3 mt-4" />
                       </div>
 
                       <ul className="left-details-card">

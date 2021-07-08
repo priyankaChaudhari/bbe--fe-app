@@ -810,8 +810,8 @@ function Notes({
                     width: '25px',
                     height: '25px',
                     position: 'absolute',
-                    top: '7px',
-                    right: '18px',
+                    top: '8px',
+                    right: '21px',
                   }}
                 />
               </div>

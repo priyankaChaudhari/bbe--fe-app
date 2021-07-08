@@ -1509,13 +1509,13 @@ const BrandAssetBody = styled.div`
 `;
 
 const BrandAssetSideBar = styled.div`
-  background-color: #f4f6fc;
+  background-color: ${Theme.gray8};
   border-radius: 15px;
   max-width: 340px;
   position: fixed;
   top: ${(props) =>
     props.completed
-      ? '100px'
+      ? '155px'
       : props.history.includes('/assigned-brand-asset/')
       ? '80px'
       : '145px'};

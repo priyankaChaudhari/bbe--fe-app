@@ -255,7 +255,7 @@ export const WhiteCard = styled.div`
     cursor:pointer;
 
     &.edit-brand-details {
-      top:7px;
+      top: 20px;
     }
     img {
       width: 16px;

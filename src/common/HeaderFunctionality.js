@@ -10,7 +10,7 @@ const HeaderDownloadFuntionality = styled.div`
   min-height: 70px;
   color: ${Theme.black};
   font-size: ${Theme.normal};
-  z-index: 999;
+  z-index: 2;
   top: 0px;
   .header-title {
     font-family: ${Theme.titleFontFamily};
