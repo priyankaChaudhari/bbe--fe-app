@@ -16,12 +16,7 @@ import ReadMoreAndLess from 'react-read-more-less';
 // import Select from 'react-select';
 import styled from 'styled-components';
 import { GroupUser } from '../../theme/Global';
-import {
-  getNotes,
-  saveNotes,
-  deleteNote,
-  updateNotes,
-} from '../../api/NotesApi';
+import { getNotes, saveNotes, deleteNote, updateNotes } from '../../api';
 import {
   InputSearchWithRadius,
   DropDownSelect,

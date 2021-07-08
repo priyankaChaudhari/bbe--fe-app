@@ -129,3 +129,11 @@ export {
   getBrandAssetsDetail,
   downloadBrandAssetImages,
 } from './BrandAssestsApi';
+
+export {
+  getNotes,
+  saveNotes,
+  updateNotes,
+  deleteNote,
+  getRecentNotes,
+} from './NotesApi';

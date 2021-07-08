@@ -85,3 +85,16 @@ export async function deleteNote(NoteId) {
     });
   return result;
 }
+
+export async function getRecentNotes(customer) {
+  const params = { customer, recent: '-created_at', expand: 'user' };
+  const result = await axiosInstance
+    .get(API_NOTES, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

@@ -70,13 +70,13 @@ import {
   getCustomerMembers,
   getDocumentList,
   getMarketPlaceList,
+  getRecentNotes,
 } from '../../api';
 import { AddTeamMember, EditTeamMember } from '../Team/index';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
 import { SetupCheckList } from '../BrandAssetGathering/index';
-import { getNotes } from '../../api/NotesApi';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -309,23 +309,23 @@ export default function CustomerMainContainer() {
     userInfo,
   ]);
 
-  const getRecentNotes = useCallback(() => {
+  const getNotes = useCallback(() => {
     setIsLoading({ loader: true, type: 'note' });
-    getNotes(id, '', 1).then((res) => {
-      setNoteData(res && res.results);
+    getRecentNotes(id).then((res) => {
+      setNoteData(res && res.data && res.data.results);
       setIsLoading({ loader: false, type: 'note' });
     });
   }, [id]);
 
   useEffect(() => {
-    getRecentNotes();
+    getNotes();
     if (showNotesModal.apiCall) {
-      getRecentNotes();
+      getNotes();
     }
     if (showNotesModal.deleteNote) {
       getActivityLogInfo();
     }
-  }, [getRecentNotes, showNotesModal, getActivityLogInfo]);
+  }, [getNotes, showNotesModal, getActivityLogInfo]);
 
   useEffect(() => {
     dispatch(getCustomerDetails(id));
@@ -1192,11 +1192,7 @@ export default function CustomerMainContainer() {
                     <WhiteCard className="mb-3 ">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
-                        Recent Notes (
-                        {noteData && noteData.length > 3
-                          ? 3
-                          : noteData && noteData.length}
-                        )
+                        Recent Notes
                       </p>
                       {noteData && noteData.length > 0 ? (
                         <div
@@ -1268,9 +1264,8 @@ export default function CustomerMainContainer() {
                                       <p
                                         className="m-0"
                                         dangerouslySetInnerHTML={{
-                                          __html: `${
-                                            item && item.note.slice(0, 80)
-                                          }...`,
+                                          __html:
+                                            item && item.note.slice(0, 80),
                                         }}
                                       />
                                       <div className="time-date  mt-1">
