@@ -807,7 +807,7 @@ export default function CustomerMainContainer() {
                           {' '}
                           {customer.company_name}
                         </div>
-                        <div className="company-label-info mb-2">
+                        <div className="company-label-info">
                           {customer && customer.address
                             ? `${customer.address}`
                             : ''}
@@ -830,7 +830,7 @@ export default function CustomerMainContainer() {
                             ? customer.country
                             : ''}
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-3">
                           <a
                             css="text-transform: initial;"
                             href={
@@ -1626,7 +1626,7 @@ const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
   min-height: 100%;
   width: 100%;
-  padding-left: 69px;
+  padding-left: 109px;
   padding-right: 45px;
   .back-btn-link {
     color: ${Theme.gray85};

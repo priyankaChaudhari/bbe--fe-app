@@ -82,6 +82,11 @@ const Button = styled.button`
       color: ${Theme.gray90};
       border-radius: 2px;
       width: 120px;
+
+      &.h-30 {
+        min-height: 30px;
+        font-family: ${Theme.baseFontFamily};
+      }
     }
 
     &:focus {

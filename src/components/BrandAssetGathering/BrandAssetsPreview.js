@@ -485,106 +485,107 @@ function BrandAssetsPreview({
         <PageLoader color="#FF5933" type="page" />
       ) : (
         <>
-          <div className="on-boarding-container">
-            <HeaderDownloadFuntionality>
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="col-md-6 col-sm-12">
-                    {' '}
-                    {showAssetPreview &&
-                      showAssetPreview.selectedFile &&
-                      showAssetPreview.selectedFile.original_name}
-                  </div>
-                  <div className="col-md-6 col-sm-12">
-                    <ul className="contract-download-nav">
-                      <li
-                        className={commentsLoader ? 'disabled' : null}
-                        key="comment">
-                        {' '}
-                        <img
-                          className="header-icon"
-                          src={ChatBoxIcon}
-                          alt="check"
-                        />
-                        <span
-                          className="cursor"
-                          role="presentation"
-                          onClick={() => onCommnetsLabelClick()}>
-                          Comments ({commentsCount})
-                        </span>
-                      </li>
-                      <li key="arrow">
-                        <span className="divide-arrow" />
-                      </li>
-                      <li
-                        key="delete"
-                        onClick={() => setShowConfirmationModal(true)}
-                        role="presentation">
-                        <img
-                          className="header-icon"
-                          src={TrashIcons}
-                          alt="check"
-                        />
-                        <span className="cursor">Delete</span>
-                      </li>
-                      <li key="d-arrow">
-                        <span className="divide-arrow hide-mobile" />
-                      </li>
-                      <li key="close">
-                        <img
-                          width="18px"
-                          src={CloseIcon}
-                          alt="close"
-                          className="float-right cursor remove-cross-icon"
-                          role="presentation"
-                          onClick={() => closeModal()}
-                        />
-                      </li>
-                    </ul>
-                  </div>
+          <HeaderDownloadFuntionality>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-6 col-sm-12">
+                  {' '}
+                  {showAssetPreview &&
+                    showAssetPreview.selectedFile &&
+                    showAssetPreview.selectedFile.original_name}
+                </div>
+                <div className="col-md-6 col-sm-12">
+                  <ul className="contract-download-nav">
+                    <li
+                      className={commentsLoader ? 'disabled' : null}
+                      key="comment">
+                      {' '}
+                      <img
+                        className="header-icon"
+                        src={ChatBoxIcon}
+                        alt="check"
+                      />
+                      <span
+                        className="cursor"
+                        role="presentation"
+                        onClick={() => onCommnetsLabelClick()}>
+                        Comments ({commentsCount})
+                      </span>
+                    </li>
+                    <li key="arrow">
+                      <span className="divide-arrow" />
+                    </li>
+                    <li
+                      key="delete"
+                      onClick={() => setShowConfirmationModal(true)}
+                      role="presentation">
+                      <img
+                        className="header-icon"
+                        src={TrashIcons}
+                        alt="check"
+                      />
+                      <span className="cursor">Delete</span>
+                    </li>
+                    <li key="d-arrow">
+                      <span className="divide-arrow hide-mobile" />
+                    </li>
+                    <li key="close">
+                      <img
+                        width="18px"
+                        src={CloseIcon}
+                        alt="close"
+                        className="float-right cursor remove-cross-icon"
+                        role="presentation"
+                        onClick={() => closeModal()}
+                      />
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </HeaderDownloadFuntionality>
+            </div>
+          </HeaderDownloadFuntionality>
 
-            <div className="row h-100">
-              <div
-                className={showCommentSection ? 'col-lg-9 col-12' : 'col-12'}>
-                <BrandAssetsPreviewBody>
-                  {showClickModal ? (
-                    <div className="click-for-annotation">
-                      Click anywhere on the image to add your annotaton{' '}
-                      <Button
-                        className="btn-transparent verify-now-btn w-auto"
-                        onClick={() => {
-                          setShowClickModal(false);
-                          setMarkNewAnnotaion(false);
-                        }}>
-                        Cancel
-                      </Button>
-                    </div>
-                  ) : null}
+          <div className="row h-100">
+            <div
+              className={
+                showCommentSection ? 'col-lg-9 col-12 pr-0' : 'col-12'
+              }>
+              <BrandAssetsPreviewBody>
+                {showClickModal ? (
+                  <div className="click-for-annotation">
+                    Click anywhere on the image to add your annotaton{' '}
+                    <Button
+                      className="btn-transparent verify-now-btn h-30 w-auto ml-3"
+                      onClick={() => {
+                        setShowClickModal(false);
+                        setMarkNewAnnotaion(false);
+                      }}>
+                      Cancel
+                    </Button>
+                  </div>
+                ) : null}
+                <div
+                  className={
+                    showAssetPreview.index === 0
+                      ? 'pervious-img btn disabled-slider-btn'
+                      : 'pervious-img btn'
+                  }
+                  role="presentation"
+                  onClick={() =>
+                    showAssetPreview.index !== 0 ? showImg('prev') : null
+                  }>
                   <div
                     className={
                       showAssetPreview.index === 0
-                        ? 'pervious-img btn disabled-slider-btn'
-                        : 'pervious-img btn'
-                    }
-                    role="presentation"
-                    onClick={() =>
-                      showAssetPreview.index !== 0 ? showImg('prev') : null
+                        ? 'arrow-icon pervious disabled-slider-btn'
+                        : 'arrow-icon pervious'
                     }>
-                    <div
-                      className={
-                        showAssetPreview.index === 0
-                          ? 'arrow-icon pervious disabled-slider-btn'
-                          : 'arrow-icon pervious'
-                      }>
-                      {' '}
-                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                    </div>
+                    {' '}
+                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
                   </div>
-                  <div className="assetPreviewImg">
-                    {/* <img
+                </div>
+                <div className="assetPreviewImg">
+                  {/* <img
                       className="image-thumbnail"
                       src={
                         showAssetPreview &&
@@ -602,93 +603,92 @@ function BrandAssetsPreview({
                         showAssetPreview.selectedFile.original_name
                       }
                     />{' '} */}
-                    {showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
-                      <BrandAssetPdf>
-                        <PdfViewer
-                          pdf={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.presigned_url
-                          }
-                        />
-                      </BrandAssetPdf>
-                    ) : (
-                      <>
-                        <object
-                          onMouseDown={(event) =>
-                            markNewAnnotaion ? onMouseDown(event) : null
-                          }
-                          id="imgContainer"
-                          className={
-                            markNewAnnotaion
-                              ? 'image-thumbnail cursorPointer'
-                              : 'image-thumbnail'
-                          }
-                          data={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.presigned_url
-                          }
-                          type={
-                            showAssetPreview &&
-                            showAssetPreview.selectedFile &&
-                            showAssetPreview.selectedFile.mime_type
-                          }
-                          // width="550"
-                          // height="250"
-                          role="presentation">
-                          <div className="unsupport-file-name">
-                            <div className="file-path">
-                              {showAssetPreview &&
-                                showAssetPreview.selectedFile &&
-                                showAssetPreview.selectedFile.original_name}
-                            </div>
+                  {showAssetPreview &&
+                  showAssetPreview.selectedFile &&
+                  showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
+                    <BrandAssetPdf>
+                      <PdfViewer
+                        pdf={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                      />
+                    </BrandAssetPdf>
+                  ) : (
+                    <>
+                      <object
+                        onMouseDown={(event) =>
+                          markNewAnnotaion ? onMouseDown(event) : null
+                        }
+                        id="imgContainer"
+                        className={
+                          markNewAnnotaion
+                            ? 'image-thumbnail cursorPointer'
+                            : 'image-thumbnail'
+                        }
+                        data={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                        type={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.mime_type
+                        }
+                        // width="550"
+                        // height="250"
+                        role="presentation">
+                        <div className="unsupport-file-name">
+                          <div className="file-path">
+                            {showAssetPreview &&
+                              showAssetPreview.selectedFile &&
+                              showAssetPreview.selectedFile.original_name}
                           </div>
-                        </object>
-                        {renderExistingAnnotations(true)}
-                        {renderExistingAnnotations()}
-                        {}
-                      </>
-                    )}
-                  </div>
+                        </div>
+                      </object>
+                      {renderExistingAnnotations(true)}
+                      {renderExistingAnnotations()}
+                      {}
+                    </>
+                  )}
+                </div>
 
+                <div
+                  className={
+                    showAssetPreview.index ===
+                    (showAssetPreview.documents &&
+                      showAssetPreview.documents.length - 1)
+                      ? 'next-img btn disabled-slider-btn'
+                      : 'next-img btn'
+                  }
+                  role="presentation"
+                  onClick={() =>
+                    showAssetPreview.index !==
+                    (showAssetPreview.documents &&
+                      showAssetPreview.documents.length - 1)
+                      ? showImg('next')
+                      : null
+                  }>
                   <div
                     className={
                       showAssetPreview.index ===
                       (showAssetPreview.documents &&
                         showAssetPreview.documents.length - 1)
-                        ? 'next-img btn disabled-slider-btn'
-                        : 'next-img btn'
-                    }
-                    role="presentation"
-                    onClick={() =>
-                      showAssetPreview.index !==
-                      (showAssetPreview.documents &&
-                        showAssetPreview.documents.length - 1)
-                        ? showImg('next')
-                        : null
+                        ? 'arrow-icon disabled-slider-btn'
+                        : 'arrow-icon'
                     }>
-                    <div
-                      className={
-                        showAssetPreview.index ===
-                        (showAssetPreview.documents &&
-                          showAssetPreview.documents.length - 1)
-                          ? 'arrow-icon disabled-slider-btn'
-                          : 'arrow-icon'
-                      }>
-                      {' '}
-                      <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
-                    </div>
+                    {' '}
+                    <img width="22px" src={ArrowRightBlackIcon} alt="" />{' '}
                   </div>
-                </BrandAssetsPreviewBody>
-              </div>
-
-              {showCommentSection ? (
-                <div className="col-lg-3 col-12">{renderCommentPanel()}</div>
-              ) : null}
+                </div>
+              </BrandAssetsPreviewBody>
             </div>
+
+            {showCommentSection ? (
+              <div className="col-lg-3 col-12 pl-0">{renderCommentPanel()}</div>
+            ) : null}
           </div>
         </>
       )}
@@ -736,14 +736,17 @@ const BrandAssetsPreviewBody = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin-top: 50%;
+  // margin-top: 50%;
+  background: #abafb8;
+  height: 100%;
 
   .click-for-annotation {
     background-color: ${Theme.gray8};
     border-radius: 4px;
-    padding: 10px;
+    padding: 5px 15px;
+    font-size: ${Theme.small};
     color: ${Theme.gray90};
-    top: 0;
+    top: 10px;
     position: absolute;
   }
 
