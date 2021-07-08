@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 
 // import htmlToText from 'html-to-text';
 // const { convert } = require('html-to-text');
@@ -81,9 +81,16 @@ function Notes({
       archived: 'hide',
       team: [],
       notes: 'All Notes',
+      q: JSON.parse(localStorage.getItem('noteFilters'))
+        ? JSON.parse(localStorage.getItem('noteFilters')).q
+        : '',
     },
   );
-
+  // const [queryString, setQueryString] = useState(
+  //   JSON.parse(localStorage.getItem('noteFilters'))
+  //     ? JSON.parse(localStorage.getItem('noteFilters')).q
+  //     : '',
+  // );
   const [data, setData] = useState({
     showNotesEditor: false,
     notes: [],
@@ -92,7 +99,7 @@ function Notes({
     selectedNote: '',
     deleteNote: {},
     showEditor: false,
-    queryString: '',
+    // queryString: '',
     showFilterDropdown: false,
   });
 
@@ -121,12 +128,9 @@ function Notes({
   }, []);
 
   const getData = useCallback(
-    (pageNumber, searchString = '') => {
+    (pageNumber, searchString = filters.q) => {
       setIsLoading({ loader: true, type: 'page' });
-
-      let selectedFilters = {};
-
-      selectedFilters = { ...filters };
+      const selectedFilters = { ...filters };
 
       if (selectedFilters.notes) {
         delete selectedFilters.notes;
@@ -134,7 +138,7 @@ function Notes({
       if (!selectedFilters.archived) {
         delete selectedFilters.archived;
       }
-      if (!selectedFilters.team.length) {
+      if (!(selectedFilters.team && selectedFilters.team.length)) {
         delete selectedFilters.team;
       }
 
@@ -158,18 +162,27 @@ function Notes({
     getData(data.currentPage);
   }, [getData]);
 
-  const debouncedSave = useCallback(
-    debounce((page, nextValue) => getData(page, nextValue), 500),
+  // const debouncedSave = useCallback(
+  //   debounce((page, nextValue) => getData(page, nextValue, filters), 500),
 
-    [], // will be created only once initially
-  );
+  //   [], // will be created only once initially
+  // );
 
   const handleChange = (event) => {
-    setData({
-      ...data,
-      queryString: event.target.value,
-    });
-    debouncedSave(1, event.target.value);
+    // setData({
+    //   ...data,
+    //   queryString: event.target.value,
+    // });
+    setFilter({ ...filters, q: event.target.value });
+    localStorage.setItem(
+      'noteFilters',
+      JSON.stringify({
+        ...filters,
+        q: event.target.value,
+      }),
+    );
+    // setQueryString(event.target.value);
+    // debouncedSave(1, event.target.value, filters);
   };
 
   const saveNote = () => {
@@ -275,7 +288,9 @@ function Notes({
     setNewNoteEditor(false);
   };
 
-  const onArchive = (item, dataToPost) => {
+  const onUpdateNote = (item, dataToPost) => {
+    setIsLoading({ loader: true, type: 'button' });
+
     setData({
       ...data,
       selectedNote: item,
@@ -306,7 +321,7 @@ function Notes({
                 marginLeft: '13px',
               }}
               onClick={() => {
-                onArchive(item, {
+                onUpdateNote(item, {
                   is_archieved: false,
                 });
               }}>
@@ -408,16 +423,41 @@ function Notes({
                                 {' '}
                                 <span className="dot" /> Edit
                               </li>
-                              <li
-                                role="presentation"
-                                onClick={() =>
-                                  onArchive(item, {
-                                    is_archieved: true,
-                                  })
-                                }>
-                                {' '}
-                                <span className="dot" /> Archive
-                              </li>
+                              {item.is_archieved ? (
+                                <li
+                                  role="presentation"
+                                  className={
+                                    isLoading.loader &&
+                                    item.id === data.selectedNote.id
+                                      ? 'disabled'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    onUpdateNote(item, {
+                                      is_archieved: false,
+                                    })
+                                  }>
+                                  {' '}
+                                  <span className="dot" /> UnArchive
+                                </li>
+                              ) : (
+                                <li
+                                  role="presentation"
+                                  className={
+                                    isLoading.loader &&
+                                    item.id === data.selectedNote.id
+                                      ? 'disabled'
+                                      : ''
+                                  }
+                                  onClick={() =>
+                                    onUpdateNote(item, {
+                                      is_archieved: true,
+                                    })
+                                  }>
+                                  {' '}
+                                  <span className="dot" /> Archive
+                                </li>
+                              )}
                               {item.hs_note_id ? (
                                 ''
                               ) : (
@@ -469,7 +509,7 @@ function Notes({
                             <li
                               role="presentation"
                               onClick={() =>
-                                onArchive(item, { is_pinned: false })
+                                onUpdateNote(item, { is_pinned: false })
                               }>
                               <span className="dot" /> Unpin
                             </li>
@@ -477,7 +517,7 @@ function Notes({
                             <li
                               role="presentation"
                               onClick={() =>
-                                onArchive(item, { is_pinned: true })
+                                onUpdateNote(item, { is_pinned: true })
                               }>
                               <span className="dot" /> Pin
                             </li>
@@ -771,7 +811,7 @@ function Notes({
                 className=" form-control search-filter"
                 placeholder="Search"
                 name="search"
-                defaultValue={data.queryString}
+                defaultValue={filters.q}
                 onChange={(e) => handleChange(e)}
               />
               <img
