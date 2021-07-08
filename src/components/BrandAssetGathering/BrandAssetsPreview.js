@@ -466,7 +466,7 @@ function BrandAssetsPreview({
       return (
         <div
           id="thing"
-          className={isClicked ? 'avatarName' : null}
+          className={isClicked ? 'annotation' : 'annotationNone'}
           style={{
             position: 'absolute',
             left: `${newAnnotaionPosition.left}%`,

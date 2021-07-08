@@ -1038,6 +1038,26 @@ fieldset {
   }
 }
 
+.annotation {
+  border-radius: 50%;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid ${Theme.lightOrange};
+  background: ${Theme.lightOrange};
+  color: ${Theme.black};
+  text-transform: Uppercase;
+  display: inline-block;
+  font-size: ${Theme.extraMedium};
+  font-weight: 600;
+  padding-top: 10px;
+  margin-top: -2px;
+}
+.annotationNone {
+  width: 40px;
+  height: 40px;
+  
+}
 .react-calendar__month-view__days__day--weekend {
   color: ${Theme.black};
 }
