@@ -239,7 +239,7 @@ function Notes({
             onClick={() => saveNote()}
             type="button"
             className={
-              noteContent.length > 7 && !isLoading.loader
+              noteContent.length > 8 && !isLoading.loader
                 ? ' btn-primary  w-10 on-boarding  '
                 : ' btn-primary  w-10 on-boarding disabled'
             }>

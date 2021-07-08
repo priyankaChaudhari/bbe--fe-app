@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState, Modifier } from 'draft-js';
 import Theme from '../theme/Theme';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function EditorComponent({ setData, data }) {
   const [editorState, setEditorState] = useState(null);
   const [contentState, setContentState] = useState(null);
+  const maxLength = 2000;
 
   useEffect(() => {
     let contentBlock;
@@ -34,7 +35,25 @@ function EditorComponent({ setData, data }) {
     setEditorState(editorData);
     const content = editorData.getCurrentContent();
     const info = draftToHtml(convertToRaw(content));
+
     setData(info);
+  };
+
+  const handlePastedText = (input) => {
+    const inputLength = editorState.getCurrentContent().getPlainText().length;
+    const remainingLength = maxLength - inputLength;
+    if (input.length + inputLength >= maxLength) {
+      const newContent = Modifier.insertText(
+        editorState.getCurrentContent(),
+        editorState.getSelection(),
+        input.slice(0, remainingLength),
+      );
+      onEditorStateChange(
+        EditorState.push(editorState, newContent, 'insert-characters'),
+      );
+      return true;
+    }
+    return false;
   };
 
   const displayEditor = () => {
@@ -47,6 +66,15 @@ function EditorComponent({ setData, data }) {
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
           onEditorStateChange={onEditorStateChange}
+          handleBeforeInput={(val) => {
+            const textLength = editorState.getCurrentContent().getPlainText()
+              .length;
+            if (val && textLength >= maxLength) {
+              return 'handled';
+            }
+            return 'not-handled';
+          }}
+          handlePastedText={handlePastedText}
           stripPastedStyles
           placeholder="   Enter note"
           toolbar={{
