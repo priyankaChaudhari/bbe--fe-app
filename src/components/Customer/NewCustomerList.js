@@ -2537,9 +2537,32 @@ export default function NewCustomerList() {
 
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
               <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
-                <DropDownSelect className="customer-list-header">
+                {/* <DropDownSelect className="customer-list-header">
                   {generateDropdown('stats')}
-                </DropDownSelect>{' '}
+                </DropDownSelect>{' '} */}
+                <div className="dropdown-select-all-notes" role="presentation">
+                  {' '}
+                  sort
+                </div>
+                <div className="dropdown-notes-filter">
+                  <ul className="notes-option">
+                    <li>Recently Added</li>
+                    <li>Last Modified</li>
+                    <li>Expiry Date</li>
+                    <li className="on-hover">
+                      Impressions
+                      <div className="sub-menu-dropdown">
+                        <ul className="notes-option">
+                          <li>Highest to Lowest</li>
+                          <li>Lowest to Highest</li>
+                        </ul>
+                      </div>
+                    </li>
+                    <li>DSP Spend</li>
+                    <li>Total Product Sales</li>
+                    <li>Total ROAS</li>
+                  </ul>
+                </div>
               </div>
             ) : (
               <></>
@@ -3051,7 +3074,76 @@ const CustomerListPage = styled.div`
     font-weight: 600;
     vertical-align: top;
   }
-
+  .dropdown-select-all-notes {
+    background-color: rgba(224, 231, 255, 0.2);
+    border: 1px solid ${Theme.gray2};
+    border-radius: 20px;
+    width: 230px;
+    height: 40px;
+    color: ${Theme.black};
+    padding: 11px 2px 0 14px;
+  }
+  .dropdown-notes-filter {
+    background-color: ${Theme.white};
+    border-radius: 8px;
+    box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
+    max-width: 220px;
+    padding: 15px;
+    position: absolute;
+    z-index: 99999;
+    top: 45px;
+    width: 100%;
+    color: ${Theme.black};
+    text-align: left;
+    &.hide {
+      display: none;
+    }
+    &.show {
+      display: block;
+    }
+    .notes-option {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      li {
+        padding-bottom: 14px;
+        cursor: pointer;
+        &.on-hover {
+          .sub-menu-dropdown {
+            display: none;
+          }
+        }
+        &:hover {
+          &.on-hover {
+            .sub-menu-dropdown {
+              display: block;
+              background-color: ${Theme.white};
+              border-radius: 8px;
+              box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
+              max-width: 230px;
+              padding: 15px;
+              position: absolute;
+              z-index: 99999;
+              top: 45px;
+              width: 100%;
+              left: -225px;
+              color: ${Theme.black};
+              text-align: left;
+              .notes-option {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                li {
+                  padding-bottom: 14px;
+                  display: block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   .Revenue {
     padding-left: 5%;
   }
