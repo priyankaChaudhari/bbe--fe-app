@@ -10,11 +10,9 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
-import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
-import { Collapse } from 'react-collapse';
 
 import Theme from '../../theme/Theme';
 import {
@@ -178,7 +176,6 @@ export default function CustomerMainContainer() {
   const showBrandAssetSuccessMsg = useSelector(
     (state) => state.customerState.showBrandAssetMsg,
   );
-  const [openCollapse, setOpenCollapse] = useState(false);
   const [noteData, setNoteData] = useState([]);
 
   let statusActions = [
@@ -848,50 +845,6 @@ export default function CustomerMainContainer() {
                             {customer && customer.website}
                           </a>
                         </div>
-                        <span
-                          className="cursor "
-                          onClick={() => setOpenCollapse(!openCollapse)}
-                          role="presentation">
-                          {openCollapse ? 'See Less' : 'See More'}
-                        </span>
-                        <Collapse isOpened={openCollapse}>
-                          <div className="row mt-3">
-                            <div className="col-5 text-left mb-2 pr-1">
-                              <div className="brand-label ">Category</div>
-                            </div>
-                            <div className="col-7 mb-2 text-left">
-                              <span className="mid-width company-label-info ">
-                                {customer &&
-                                  customer.category &&
-                                  customer.category.label}
-                              </span>{' '}
-                            </div>
-                            <div className="col-5 text-left mb-2 pr-1">
-                              <div className="brand-label ">
-                                {' '}
-                                Annual Revenue
-                              </div>
-                            </div>
-                            <div className="col-7 text-left company-label-info mb-2">
-                              <NumberFormat
-                                displayType="text"
-                                thousandSeparator
-                                value={
-                                  (customer && customer.annual_revenue) || null
-                                }
-                                prefix="$"
-                              />
-                            </div>
-                            <div className="col-5 text-left mb-2 pr-1">
-                              <div className="brand-label ">Company Size</div>
-                            </div>
-                            <div className="col-7 text-left mb-2">
-                              <span className="mid-width company-label-info">
-                                {customer && customer.number_of_employees}
-                              </span>{' '}
-                            </div>
-                          </div>
-                        </Collapse>
                         {customer &&
                         customer.status &&
                         customer.status.value !== null ? (

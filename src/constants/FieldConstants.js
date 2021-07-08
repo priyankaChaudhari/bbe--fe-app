@@ -410,28 +410,28 @@ export const editAccountFields = [
   {
     key: 'zip_code',
     label: 'Postal Code',
-    property: 'col-md-6',
+    property: 'col-md-12',
     type: 'text',
   },
-  {
-    key: 'number_of_employees',
-    label: 'Company Size',
-    property: 'col-md-6',
-    type: 'number',
-  },
+  // {
+  //   key: 'number_of_employees',
+  //   label: 'Company Size',
+  //   property: 'col-md-6',
+  //   type: 'number',
+  // },
 
-  {
-    key: 'annual_revenue',
-    label: 'Annual Revenue',
-    type: 'number-currency',
-    property: 'col-md-6',
-  },
-  {
-    key: 'category',
-    label: 'Category',
-    type: 'choice',
-    property: 'col-md-6',
-  },
+  // {
+  //   key: 'annual_revenue',
+  //   label: 'Annual Revenue',
+  //   type: 'number-currency',
+  //   property: 'col-md-6',
+  // },
+  // {
+  //   key: 'category',
+  //   label: 'Category',
+  //   type: 'choice',
+  //   property: 'col-md-6',
+  // },
 ];
 
 export const contactDetails = [
