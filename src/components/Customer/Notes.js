@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
-// import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce';
 import ReactTooltip from 'react-tooltip';
 
 // import htmlToText from 'html-to-text';
@@ -124,9 +124,18 @@ function Notes({
   }, []);
 
   const getData = useCallback(
-    (pageNumber, searchString = filters.q) => {
+    (
+      pageNumber,
+      searchString = JSON.parse(localStorage.getItem('noteFilters'))
+        ? JSON.parse(localStorage.getItem('noteFilters')).q
+        : filters.q,
+    ) => {
       setIsLoading({ loader: true, type: 'page' });
-      const selectedFilters = { ...filters };
+      // const selectedFilters = { ...filters };
+
+      const selectedFilters = JSON.parse(localStorage.getItem('noteFilters'))
+        ? JSON.parse(localStorage.getItem('noteFilters'))
+        : { ...filters };
 
       if (selectedFilters.notes) {
         delete selectedFilters.notes;
@@ -158,14 +167,14 @@ function Notes({
     getData(data.currentPage);
   }, [getData]);
 
-  // const debouncedSave = useCallback(
-  //   debounce((page, nextValue) => getData(page, nextValue, filters), 500),
+  const debouncedSave = useCallback(
+    debounce((page, nextValue) => getData(page, nextValue), 500),
 
-  //   [], // will be created only once initially
-  // );
+    [], // will be created only once initially
+  );
 
   const handleChange = (event) => {
-    setFilter({ ...filters, q: event.target.value });
+    // setFilter({ ...filters, q: event.target.value });
     localStorage.setItem(
       'noteFilters',
       JSON.stringify({
@@ -173,7 +182,7 @@ function Notes({
         q: event.target.value,
       }),
     );
-    // debouncedSave(1, event.target.value, { ...filters, q: event.target.value });
+    debouncedSave(1, event.target.value);
   };
 
   const saveNote = () => {
