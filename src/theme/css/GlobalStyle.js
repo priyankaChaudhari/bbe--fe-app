@@ -69,6 +69,10 @@ body {
   padding-top: 70px;
 }
 
+.header-hide {
+  padding-top:0;
+}
+
 .x-hellosign-embedded__modal-content {
   max-width: 1500px !important;
 }

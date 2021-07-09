@@ -1447,7 +1447,7 @@ export default function BrandAssetUpload() {
 
 const BrandAssetBody = styled.div`
   padding-left: 400px;
-  margin-top: ${(props) => (props.completed ? '50px' : '95px')};
+  padding-top: ${(props) => (props.completed ? '60px' : '170px')};
   .gray-info-icon {
     vertical-align: bottom;
     margin-left: 3px;
@@ -1528,7 +1528,7 @@ const BrandAssetSideBar = styled.div`
   position: fixed;
   top: ${(props) =>
     props.completed
-      ? '155px'
+      ? '110px'
       : props.history.includes('/assigned-brand-asset/')
       ? '80px'
       : '145px'};

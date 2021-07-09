@@ -142,7 +142,13 @@ export default function Header({ type, userInfo }) {
   return (
     <div
       className={
-        userInfo && userInfo.role === 'Customer' ? 'common-header-sticky' : ''
+        userInfo &&
+        userInfo.role === 'Customer' &&
+        !history.location.pathname.includes('/brand-asset/')
+          ? 'common-header-sticky'
+          : history.location.pathname.includes('/brand-asset/')
+          ? 'header-hide  '
+          : ''
       }>
       <ToastContainer
         position="top-center"
