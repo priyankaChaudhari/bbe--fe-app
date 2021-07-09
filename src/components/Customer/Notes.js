@@ -55,6 +55,12 @@ function Notes({
   const [noteContent, setNoteContent] = useState('');
   const [showDelete, setShowDelete] = useState({ show: false });
   const [showDropdown, setShowDropdown] = useState({ show: false });
+  const [searchQuery, setSearchQuery] = useState({
+    q: JSON.parse(localStorage.getItem('noteFilters'))
+      ? JSON.parse(localStorage.getItem('noteFilters')).q
+      : '',
+  });
+
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'page' });
   const filtersOption = {
     notes: [
@@ -128,7 +134,7 @@ function Notes({
       pageNumber,
       searchString = JSON.parse(localStorage.getItem('noteFilters'))
         ? JSON.parse(localStorage.getItem('noteFilters')).q
-        : filters.q,
+        : searchQuery.q,
     ) => {
       setIsLoading({ loader: true, type: 'page' });
       // const selectedFilters = { ...filters };
@@ -175,6 +181,7 @@ function Notes({
 
   const handleChange = (event) => {
     // setFilter({ ...filters, q: event.target.value });
+    setSearchQuery({ q: event.target.value });
     localStorage.setItem(
       'noteFilters',
       JSON.stringify({
@@ -552,6 +559,7 @@ function Notes({
           [item.value]: event.target.checked,
           notes: item.label,
           team: [],
+          q: searchQuery.q,
         });
         // setShowDropdown({ show: false });
         localStorage.setItem(
@@ -561,6 +569,7 @@ function Notes({
             [item.value]: event.target.checked,
             notes: item.label,
             team: [],
+            q: searchQuery.q,
           }),
         );
       } else {
@@ -570,6 +579,7 @@ function Notes({
             ...filters,
             notes: item.label,
             team: [],
+            q: searchQuery.q,
           });
           // setShowDropdown({ show: false });
 
@@ -579,12 +589,14 @@ function Notes({
               ...filters,
               notes: item.label,
               team: [],
+              q: searchQuery.q,
             }),
           );
         } else {
           setFilter({
             ...filters,
             notes: item.label,
+            q: searchQuery.q,
           });
 
           localStorage.setItem(
@@ -592,6 +604,7 @@ function Notes({
             JSON.stringify({
               ...filters,
               notes: item.label,
+              q: searchQuery.q,
             }),
           );
         }
@@ -599,7 +612,7 @@ function Notes({
     }
 
     if (section === 'archived') {
-      setFilter({ ...filters, archived: item.value });
+      setFilter({ ...filters, archived: item.value, q: searchQuery.q });
       // setShowDropdown({ show: false });
 
       localStorage.setItem(
@@ -607,6 +620,7 @@ function Notes({
         JSON.stringify({
           ...filters,
           archived: item.value,
+          q: searchQuery.q,
         }),
       );
     }
@@ -615,12 +629,13 @@ function Notes({
       const list = filters.team;
       if (event.target.checked) {
         list.push(item.team);
-        setFilter({ ...filters, team: list });
+        setFilter({ ...filters, team: list, q: searchQuery.q });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
             ...filters,
             team: list,
+            q: searchQuery.q,
           }),
         );
       } else {
@@ -631,12 +646,13 @@ function Notes({
           }
           return '';
         });
-        setFilter({ ...filters, team: newList });
+        setFilter({ ...filters, team: newList, q: searchQuery.q });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
             ...filters,
             team: newList,
+            q: searchQuery.q,
           }),
         );
       }

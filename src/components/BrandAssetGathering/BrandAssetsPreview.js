@@ -613,6 +613,7 @@ function BrandAssetsPreview({
                           showAssetPreview.selectedFile &&
                           showAssetPreview.selectedFile.presigned_url
                         }
+                        loadingMsg="Loading Document..."
                       />
                     </BrandAssetPdf>
                   ) : (

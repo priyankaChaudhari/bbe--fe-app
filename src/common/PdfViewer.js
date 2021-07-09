@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import PdfLoadingMsg from './PdfLoadingMsg';
 // import styled from 'styled-components';
 
-export default function PdfViewer({ pdf }) {
+export default function PdfViewer({ pdf, loadingMsg }) {
   const [totalPages, setNumPages] = useState(null);
   const isDesktopLarge = useMediaQuery({ minWidth: 1601 });
   const isDesktop = useMediaQuery({ minWidth: 1331, maxWidth: 1600 });
@@ -64,7 +64,7 @@ export default function PdfViewer({ pdf }) {
         options={{ workerSrc: 'pdf.worker.js' }}
         // error={PageNotFound}
         error={() => <PdfLoadingMsg type="error" />}
-        loading={() => <PdfLoadingMsg type="loading" />}
+        loading={() => <PdfLoadingMsg type="loading" message={loadingMsg} />}
         onLoadSuccess={onDocumentLoadSuccess}>
         {Array.from(new Array(totalPages), (el, index) => (
           <Page
@@ -83,8 +83,10 @@ export default function PdfViewer({ pdf }) {
 
 PdfViewer.defaultProps = {
   pdf: '',
+  loadingMsg: '',
 };
 
 PdfViewer.propTypes = {
   pdf: PropTypes.string,
+  loadingMsg: PropTypes.string,
 };

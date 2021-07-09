@@ -3022,7 +3022,10 @@ export default function ContractContainer() {
             {isDesktop ||
             (isTablet && tabInResponsive === 'view-contract') ||
             (isMobile && tabInResponsive === 'view-contract') ? (
-              <PdfViewer pdf={details && details.contract_url} />
+              <PdfViewer
+                pdf={details && details.contract_url}
+                loadingMsg="Loading Contract Document..."
+              />
             ) : (
               ''
             )}

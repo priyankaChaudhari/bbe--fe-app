@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Theme from '../theme/Theme';
 // import PageNotFoundImg from '../theme/images/page-not-found.svg';
 
-export default function PdfLoadingMsg({ type }) {
+export default function PdfLoadingMsg({ type, message = 'Loading...' }) {
   return (
     <PageNotFounds>
       {/* <img src={PageNotFoundImg} alt="emoji" /> */}
@@ -17,11 +17,7 @@ export default function PdfLoadingMsg({ type }) {
       ) : (
         ''
       )}
-      {type === 'loading' ? (
-        <h5 className="not-found">Loading Contract Document...</h5>
-      ) : (
-        ''
-      )}
+      {type === 'loading' ? <h5 className="not-found">{message}</h5> : ''}
     </PageNotFounds>
   );
 }
@@ -41,8 +37,10 @@ const PageNotFounds = styled.div`
 
 PdfLoadingMsg.defaultProps = {
   type: '',
+  message: '',
 };
 
 PdfLoadingMsg.propTypes = {
   type: PropTypes.string,
+  message: PropTypes.string,
 };
