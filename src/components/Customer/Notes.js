@@ -834,7 +834,7 @@ function Notes({
             </InputSearchWithRadius>
           </div>
           <div className="col-md-5 col-sm-12 mt-2 pr-2 pl-2">
-            <DropDownSelect>
+            <DropDownSelect ref={dropdownRef}>
               <div
                 className="dropdown-select-all-notes"
                 role="presentation"
@@ -873,7 +873,7 @@ function Notes({
                 />
               </div>
 
-              <div ref={dropdownRef}>{displayFilter()}</div>
+              <div>{displayFilter()}</div>
             </DropDownSelect>
           </div>
 
