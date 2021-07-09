@@ -1,9 +1,11 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-param-reassign */
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
 // import debounce from 'lodash.debounce';
+import ReactTooltip from 'react-tooltip';
 
 // import htmlToText from 'html-to-text';
 // const { convert } = require('html-to-text');
@@ -11,7 +13,8 @@ import { useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import ReadMoreAndLess from 'react-read-more-less';
+// import ReadMoreAndLess from 'react-read-more-less';
+import $ from 'jquery';
 // import ReactHtmlParser from 'react-html-parser';
 // import Select from 'react-select';
 import styled from 'styled-components';
@@ -36,6 +39,7 @@ import {
   DefaultUser,
   PinIcons,
   CaretUp,
+  InfoIcon,
 } from '../../theme/images/index';
 
 import EditorComponent from '../../common/EditorComponent';
@@ -51,9 +55,6 @@ function Notes({
   const [noteContent, setNoteContent] = useState('');
   const [showDelete, setShowDelete] = useState({ show: false });
   const [showDropdown, setShowDropdown] = useState({ show: false });
-
-  // const [noteContent, setNoteContent] = useState('');
-
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'page' });
   const filtersOption = {
     notes: [
@@ -86,11 +87,7 @@ function Notes({
         : '',
     },
   );
-  // const [queryString, setQueryString] = useState(
-  //   JSON.parse(localStorage.getItem('noteFilters'))
-  //     ? JSON.parse(localStorage.getItem('noteFilters')).q
-  //     : '',
-  // );
+
   const [data, setData] = useState({
     showNotesEditor: false,
     notes: [],
@@ -99,7 +96,6 @@ function Notes({
     selectedNote: '',
     deleteNote: {},
     showEditor: false,
-    // queryString: '',
     showFilterDropdown: false,
   });
 
@@ -169,10 +165,6 @@ function Notes({
   // );
 
   const handleChange = (event) => {
-    // setData({
-    //   ...data,
-    //   queryString: event.target.value,
-    // });
     setFilter({ ...filters, q: event.target.value });
     localStorage.setItem(
       'noteFilters',
@@ -181,8 +173,7 @@ function Notes({
         q: event.target.value,
       }),
     );
-    // setQueryString(event.target.value);
-    // debouncedSave(1, event.target.value, filters);
+    // debouncedSave(1, event.target.value, { ...filters, q: event.target.value });
   };
 
   const saveNote = () => {
@@ -251,8 +242,6 @@ function Notes({
               'Add Note'
             )}
           </Button>
-
-          {/* </Link> */}
         </div>
       </>
     );
@@ -356,18 +345,16 @@ function Notes({
     );
   };
 
-  function getText(html) {
-    const divContainer = document.createElement('div');
-    divContainer.innerHTML = html;
-    return divContainer.textContent || divContainer.innerText || '';
-  }
-
-  const displayMessage = (str) => {
-    const messageText = str ? getText(str) : '';
-    return messageText;
-    // return messageText.length >= 100
-    //   ? `${messageText.slice(0, 100)}...`
-    //   : messageText;
+  const insertShowMoreProp = (note) => {
+    const list = data.notes;
+    list.forEach((item) => {
+      if (item.id === note.id) {
+        item.showMore = !item.showMore;
+      } else if (!item.showMore) {
+        item.showMore = false;
+      }
+    });
+    setData({ ...data, notes: list });
   };
 
   const displayNotes = () => {
@@ -391,26 +378,27 @@ function Notes({
                   renderEditor()
                 ) : (
                   <>
-                    <ReadMoreAndLess
-                      style={{ display: 'contents' }}
-                      className="read-more-content"
-                      charLimit={150}
-                      readMoreText="show more"
-                      readLessText="show less">
-                      {displayMessage(item && item.note)}
-                    </ReadMoreAndLess>
-
-                    {/* {getText(item && item.note).length >= 100 ? (
-                      <>
-                        {getText(item && item.note)}
-                        <span onClick={() => console.log('in showmore')}>
-                          {' '}
-                          ... show more
-                        </span>{' '}
-                      </>
-                    ) : (
-                      getText(item && item.note)
-                    )} */}
+                    <div
+                      className="cursor"
+                      onClick={() => {
+                        insertShowMoreProp(item);
+                      }}
+                      role="presentation">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item.showMore
+                            ? item && item.note
+                            : item && item.note.slice(0, 150),
+                        }}
+                      />
+                      {item && item.note.length > 150 ? (
+                        <span style={{ color: '#FF5933' }}>
+                          {!item.showMore ? '...Read more' : 'Show less'}
+                        </span>
+                      ) : (
+                        ''
+                      )}
+                    </div>
 
                     <div className="time-date  mt-1">
                       {item && item.created_at}{' '}
@@ -473,13 +461,6 @@ function Notes({
                                         show: true,
                                         id: item.id,
                                       });
-                                      // setData({
-                                      //   ...data,
-                                      //   selectedNote: item,
-                                      //   deleteNote: {
-                                      //     showDeleteConfirmation: true,
-                                      //   },
-                                      // });
                                     }}>
                                     <span className="dot" /> Delete{' '}
                                     {item.id ===
@@ -669,8 +650,7 @@ function Notes({
       <div
         className={
           showDropdown.show
-            ? // data.showFilterDropdown
-              'dropdown-notes-filter show'
+            ? 'dropdown-notes-filter show'
             : 'dropdown-notes-filter hide'
         }>
         {' '}
@@ -756,6 +736,24 @@ function Notes({
     );
   };
 
+  const displayTooltip = () => {
+    let message = '';
+    message += filters.notes;
+    if (filters.notes === 'Team Notes' && filters.team.length) {
+      message = `${message  }:(${  filters.team.join(', ')  })`;
+    }
+    if (filters.archived === 'hide') {
+      message += ', Hide Archived';
+    }
+    if (filters.archived === 'only_archived') {
+      message += ', Only Show Archived';
+    }
+    if (filters.archived === '') {
+      message += ', Show Archived';
+    }
+    return message;
+  };
+
   return (
     <NotesSideBar>
       <HeaderDownloadFuntionality>
@@ -779,6 +777,7 @@ function Notes({
                       selectedNote: '',
                     });
                     setNoteContent('');
+                    $('#editor').scrollTop(0);
                   }}>
                   {' '}
                   <img className="header-icon" src={OrangeChat} alt="check" />
@@ -839,6 +838,16 @@ function Notes({
                   }
                 }>
                 {filters && filters.notes}
+
+                <img
+                  src={InfoIcon}
+                  alt="search cursor"
+                  data-tip={displayTooltip()}
+                  data-for="info"
+                  className="info-icon"
+                />
+                <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
+
                 <img
                   src={CaretUp}
                   alt="caret"
@@ -858,7 +867,7 @@ function Notes({
           </div>
 
           <div className="straight-line horizontal-line mt-2 mb-2" />
-          <div className=" col-12 commemt-inbox-body mt-3">
+          <div className=" col-12 commemt-inbox-body mt-3" id="editor">
             {data.showEditor || showNewNoteEditor ? (
               <GroupUser>
                 {displayUserInfo(userInfo)}

@@ -35,7 +35,6 @@ function EditorComponent({ setData, data }) {
     setEditorState(editorData);
     const content = editorData.getCurrentContent();
     const info = draftToHtml(convertToRaw(content));
-
     setData(info);
   };
 
