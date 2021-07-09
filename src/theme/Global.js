@@ -139,10 +139,14 @@ export const GroupUser = styled.div`
         font-weight: 600;
         color: ${Theme.black};
       }
+      &.note-text {
+        color: ${Theme.black};
+      }
     }
     p {
       margin: 0;
       font-size: 15px;
+      display: contents;
     }
   }
   .default-user-activity {

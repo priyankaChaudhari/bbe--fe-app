@@ -378,13 +378,15 @@ function Notes({
                   renderEditor()
                 ) : (
                   <>
-                    <div
+                    <span
+                      // style={{ display: 'inline-grid' }}
                       className="cursor"
                       onClick={() => {
                         insertShowMoreProp(item);
                       }}
                       role="presentation">
-                      <div
+                      <span
+                        className="note-text"
                         dangerouslySetInnerHTML={{
                           __html: item.showMore
                             ? item && item.note
@@ -398,7 +400,7 @@ function Notes({
                       ) : (
                         ''
                       )}
-                    </div>
+                    </span>
 
                     <div className="time-date  mt-1">
                       {item && item.created_at}{' '}
@@ -740,7 +742,7 @@ function Notes({
     let message = '';
     message += filters.notes;
     if (filters.notes === 'Team Notes' && filters.team.length) {
-      message = `${message  }:(${  filters.team.join(', ')  })`;
+      message = `${message}:(${filters.team.join(', ')})`;
     }
     if (filters.archived === 'hide') {
       message += ', Hide Archived';
@@ -844,7 +846,7 @@ function Notes({
                   alt="search cursor"
                   data-tip={displayTooltip()}
                   data-for="info"
-                  className="info-icon"
+                  className=" chat-info-icon"
                 />
                 <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
 
@@ -942,6 +944,10 @@ const NotesSideBar = styled.div`
       left: 25px;
       transform: rotate(-46deg);
     }
+  }
+  .chat-info-icon {
+    position: absolute;
+    right: 47px;
   }
   .dropdown-select-all-notes {
     background-color: rgba(224, 231, 255, 0.2);

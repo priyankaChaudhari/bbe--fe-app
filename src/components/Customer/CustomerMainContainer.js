@@ -1196,7 +1196,7 @@ export default function CustomerMainContainer() {
                       </p>
                       {noteData && noteData.length > 0 ? (
                         <div
-                          className="view-all-list"
+                          className="view-all-list "
                           role="presentation"
                           onClick={() =>
                             setShowNotesModal({
