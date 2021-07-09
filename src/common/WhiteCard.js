@@ -10,6 +10,7 @@ export const WhiteCard = styled.div`
   &.with-less-radius {
      border-radius: 10px;
   }
+   
   
  &.fix-height {
     flex-wrap: wrap;

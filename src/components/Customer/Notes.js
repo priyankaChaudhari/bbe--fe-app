@@ -877,8 +877,8 @@ function Notes({
             </DropDownSelect>
           </div>
 
-          <div className="straight-line horizontal-line mt-2 mb-2" />
-          <div className=" col-12 commemt-inbox-body mt-3" id="editor">
+          <div className="straight-line horizontal-line mt-2 mb-3" />
+          <div className=" col-12 commemt-inbox-body " id="editor">
             {data.showEditor || showNewNoteEditor ? (
               <GroupUser>
                 {displayUserInfo(userInfo)}
@@ -1007,8 +1007,9 @@ const NotesSideBar = styled.div`
     }
   }
   .commemt-inbox-body {
-    height: 70vh;
+    height: 80vh;
     overflow: scroll;
+    padding-bottom: 50px;
   }
   @media only screen and (max-width: 767px) {
     .dropdown-select-all-notes {
@@ -1016,7 +1017,7 @@ const NotesSideBar = styled.div`
       max-width: 100%;
     }
     .commemt-inbox-body {
-      height: 55vh;
+      height: 60vh;
       overflow: scroll;
     }
   }

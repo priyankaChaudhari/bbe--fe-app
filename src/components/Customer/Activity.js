@@ -56,7 +56,7 @@ export default function Activity({
                         {getActivityInitials(item.history_change_reason)}
                       </div>
                     )}
-                    <div className="activity-user mb-4">
+                    <div className="activity-user mb-3">
                       {activityDetail(item)}
 
                       <div className="time-date mt-1">

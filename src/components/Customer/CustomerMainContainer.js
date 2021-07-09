@@ -1189,7 +1189,7 @@ export default function CustomerMainContainer() {
                   )}
 
                   <div className="col-lg-3 col-12">
-                    <WhiteCard className="mb-3 ">
+                    <WhiteCard className="mb-3 note-height-card">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}
                         Recent Notes
@@ -1226,7 +1226,7 @@ export default function CustomerMainContainer() {
                             <>
                               {noteData &&
                                 noteData.slice(0, 3).map((item) => (
-                                  <GroupUser className="mb-2" key={item.id}>
+                                  <GroupUser className="mb-3" key={item.id}>
                                     {images.find(
                                       (op) => op.entity_id === item.user.id,
                                     ) &&
@@ -1345,7 +1345,7 @@ export default function CustomerMainContainer() {
                                 )}
                               </div>
                             )}
-                            <div className="activity-user mb-4">
+                            <div className="activity-user mb-3">
                               {activityDetail(item)}
 
                               <div className="time-date mt-1">
@@ -1666,6 +1666,7 @@ const CustomerDetailsBody = styled.div`
     margin: 0 auto;
     width: 100%;
   }
+
   .customer-dropdown-select {
     color: ${Theme.black};
     padding: 0 0px 0px 25px;

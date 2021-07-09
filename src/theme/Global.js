@@ -147,6 +147,7 @@ export const GroupUser = styled.div`
       margin: 0;
       font-size: 15px;
       display: contents;
+      word-break: break-all;
     }
   }
   .default-user-activity {
