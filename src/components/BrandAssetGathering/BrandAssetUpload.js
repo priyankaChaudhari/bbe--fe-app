@@ -110,7 +110,6 @@ export default function BrandAssetUpload() {
   const [droppedFiles, setDroppedFiles] = useState([]);
   const [noImages, setNoImages] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  // const [imagesAssets, setImagesAssets] = useState([]);
   const [isImgDeleted, setIsImgDeleted] = useState(false);
   const [showAssetPreview, setShowAssetPreview] = useState({
     selectedFile: null,
@@ -534,6 +533,20 @@ export default function BrandAssetUpload() {
                           ? '1 file uploaded'
                           : `${newFiles.length} files uploaded`,
                     });
+                    if (
+                      brandAssetData.is_completed &&
+                      (params.step === 'additional-brand-material' ||
+                        params.step === 'iconography') &&
+                      brandAssetData.steps[selectedStep && selectedStep.key] ===
+                        'none'
+                    ) {
+                      updateBrandAssetStep(brandId, {
+                        steps: {
+                          ...brandAssetData.steps,
+                          [selectedStep && selectedStep.key]: 'completed',
+                        },
+                      });
+                    }
                   })
                   .catch((error) => {
                     toast.error(
