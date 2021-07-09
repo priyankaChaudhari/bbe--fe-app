@@ -955,7 +955,7 @@ export const WhiteCard = styled.div`
    }
  @media only screen and (max-width: 991px) {
   .brand-logo-details{
-   text-align: left;
+    text-align: left;
   //  max-width: 350px;
   } 
    .company-label-info {
@@ -989,11 +989,6 @@ export const WhiteCard = styled.div`
       }   
    }
      
-   .edit-details {
-      &.edit-brand-details {
-        top: -25px;
-      }
-   }
  }
    @media only screen and (max-width: 767px) {      
 

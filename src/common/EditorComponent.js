@@ -147,6 +147,7 @@ export const EditorToll = styled.div`
     span {
       color: inherit;
       font-size: ${Theme.extraNormal};
+      font-weight: unset;
     }
   }
 
