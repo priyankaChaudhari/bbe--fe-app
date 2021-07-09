@@ -56,6 +56,7 @@ import { getcontract } from '../../api/AgreementApi';
 
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import {
+  sortSubMenu,
   sortOptions,
   performanceSortOptions,
   sadSortOptions,
@@ -142,7 +143,7 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
-  // const [orderByFlag, setOrderByFlag] = useState({});
+  const [orderByFlag, setOrderByFlag] = useState({ sequence: 'desc' });
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -172,6 +173,8 @@ export default function NewCustomerList() {
       key: 'bgsSelection',
     },
   ]);
+  const [showSubMenu, setShowSubMenu] = useState({ show: false, value: '' });
+  const dropdownRef = useRef(null);
 
   const [expiringSoon, setExpiringSoon] = useState(
     !!(
@@ -433,7 +436,7 @@ export default function NewCustomerList() {
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
-        // orderByFlag,
+        orderByFlag,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
@@ -450,7 +453,7 @@ export default function NewCustomerList() {
       showAdPerformance,
       showDspAdPerformance,
       selectedTimeFrame,
-      // orderByFlag,
+      orderByFlag,
     ],
   );
 
@@ -531,6 +534,19 @@ export default function NewCustomerList() {
     }
     customerList(1);
   }, [customerList]);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowSubMenu({ show: false, value: '' });
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   const handlePageChange = (currentPage) => {
     localStorage.setItem('page', currentPage || 1);
@@ -879,6 +895,42 @@ export default function NewCustomerList() {
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  };
+
+  const handleSortFilter = (menu, submenu) => {
+    setShowSubMenu({ show: false, value: '' });
+    if (menu.value === 'expiring_soon') {
+      setExpiringSoon(true);
+      setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
+      setFilters({
+        ...filters,
+        sort_by: menu.value,
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sort_by: menu.value,
+        }),
+      );
+    } else {
+      if (submenu) {
+        setOrderByFlag({ sequence: submenu.value });
+      }
+      setExpiringSoon(false);
+      setSelectedValue({ ...selectedValue, 'order-by': menu.value });
+      setFilters({
+        ...filters,
+        sort_by: menu.value,
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sort_by: menu.value,
+        }),
+      );
+    }
   };
 
   const handleSearch = (event, type) => {
@@ -1534,6 +1586,65 @@ export default function NewCustomerList() {
   //     );
   //   }
   //   return '';
+  // };
+
+  // const getSortMenu = (index) => {
+  //   return showPerformance
+  //     ? performanceSortOptions[index] && performanceSortOptions[index].label
+  //     : showAdPerformance
+  //     ? sadSortOptions[index] && sadSortOptions[index].label
+  //     : showDspAdPerformance
+  //     ? dadSortOptions[index] && dadSortOptions[index].label
+  //     : '';
+  // };
+
+  // const getSortSubMenu = () => {
+  //   return (
+  //     <div className="sub-menu-dropdown">
+  //       <ul className="notes-option">
+  //         <li>Highest to Lowest</li>
+  //         <li>Lowest to Highest</li>
+  //       </ul>
+  //     </div>
+  //   );
+  // };
+
+  const getSortOptions = () => {
+    return showPerformance
+      ? performanceSortOptions
+      : showAdPerformance
+      ? sadSortOptions
+      : showDspAdPerformance
+      ? dadSortOptions
+      : sortOptions;
+  };
+
+  // const getSortOptions = () => {
+  //   return (
+  //     <>
+  //       <ul className="notes-option">
+  //         <li>Recently Added</li>
+  //         <li>Last Modified</li>
+  //         <li>Expiry Date</li>
+  //         <li className="on-hover">
+  //           {getSortMenu(0)}
+  //           {getSortSubMenu()}
+  //         </li>
+  //         <li className="on-hover">
+  //           {getSortMenu(1)}
+  //           {getSortSubMenu()}
+  //         </li>
+  //         <li className="on-hover">
+  //           {getSortMenu(2)}
+  //           {getSortSubMenu()}
+  //         </li>
+  //         <li className="on-hover">
+  //           {getSortMenu(3)}
+  //           {getSortSubMenu()}
+  //         </li>
+  //       </ul>
+  //     </>
+  //   );
   // };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
@@ -2537,40 +2648,76 @@ export default function NewCustomerList() {
 
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
               <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
-                {/* <DropDownSelect className="customer-list-header">
+                <DropDownSelect className="customer-list-header">
                   {generateDropdown('stats')}
-                </DropDownSelect>{' '} */}
-                <div className="dropdown-select-all-notes" role="presentation">
-                  {' '}
-                  sort
-                </div>
-                <div className="dropdown-notes-filter">
-                  <ul className="notes-option">
-                    <li>Recently Added</li>
-                    <li>Last Modified</li>
-                    <li>Expiry Date</li>
-                    <li className="on-hover">
-                      Impressions
-                      <div className="sub-menu-dropdown">
-                        <ul className="notes-option">
-                          <li>Highest to Lowest</li>
-                          <li>Lowest to Highest</li>
-                        </ul>
-                      </div>
-                    </li>
-                    <li>DSP Spend</li>
-                    <li>Total Product Sales</li>
-                    <li>Total ROAS</li>
-                  </ul>
-                </div>
+                </DropDownSelect>{' '}
               </div>
             ) : (
               <></>
             )}
             <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
-              <DropDownSelect className="customer-list-header">
+              {/* <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
-              </DropDownSelect>{' '}
+            </DropDownSelect>{' '} */}
+              <div className="dropdown-select-all-notes" role="presentation">
+                {' '}
+                Sort:
+                <img
+                  src={CaretUp}
+                  alt="caret"
+                  style={{
+                    transform: 'rotate(180deg)',
+                    width: '25px',
+                    height: '25px',
+                    position: 'absolute',
+                    top: '8px',
+                    right: '21px',
+                  }}
+                />
+              </div>
+              <div className="dropdown-notes-filter">
+                <ul className="notes-option">
+                  {getSortOptions().map((item) => {
+                    return item.custom ? (
+                      <li
+                        className="on-hover1"
+                        onClick={() => {
+                          setShowSubMenu({ show: true, value: item.value });
+                        }}
+                        role="presentation">
+                        {item.label}
+
+                        {item.value === (showSubMenu && showSubMenu.value) &&
+                        showSubMenu.show ? (
+                          <div className="sub-menu-dropdown" ref={dropdownRef}>
+                            <ul className="notes-option">
+                              {sortSubMenu.map((submenu) => {
+                                return (
+                                  <li
+                                    onClick={() =>
+                                      handleSortFilter(item, submenu)
+                                    }
+                                    role="presentation">
+                                    {submenu.label}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </li>
+                    ) : (
+                      <li
+                        onClick={() => handleSortFilter(item, null)}
+                        role="presentation">
+                        {item.label}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
