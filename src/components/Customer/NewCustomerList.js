@@ -3031,6 +3031,7 @@ export default function NewCustomerList() {
 }
 
 const CustomerListPage = styled.div`
+  padding-left: 62px;
   .table-header {
     box-shadow: none;
     position: sticky !important;
@@ -3083,7 +3084,6 @@ const CustomerListPage = styled.div`
     display: inline;
   }
 
-  // padding-left: 62px;
   .table-container {
     padding-left: 290px;
   }

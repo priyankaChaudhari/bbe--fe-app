@@ -550,8 +550,7 @@ function BrandAssetsPreview({
                 showCommentSection ? 'col-lg-9 col-12 pr-0' : 'col-12'
               }>
               <BrandAssetsPreviewBody
-              // className={showClickModal ? 'class name' : null}
-              >
+                className={showClickModal ? 'annotation-modal' : null}>
                 {showClickModal ? (
                   <div className="click-for-annotation">
                     Click anywhere on the image to add your annotaton{' '}
@@ -688,7 +687,9 @@ function BrandAssetsPreview({
             </div>
 
             {showCommentSection ? (
-              <div className="col-lg-3 col-12 pl-0">{renderCommentPanel()}</div>
+              <div className="col-lg-3 col-12 pl-lg-0">
+                {renderCommentPanel()}
+              </div>
             ) : null}
           </div>
         </>
@@ -738,8 +739,11 @@ const BrandAssetsPreviewBody = styled.div`
   flex-direction: column;
   justify-content: center;
   // margin-top: 50%;
-  background: #abafb8;
-  height: 100%;
+
+  &.annotation-modal {
+    background: #abafb8;
+    height: 100%;
+  }
 
   .click-for-annotation {
     background-color: ${Theme.gray8};
@@ -753,7 +757,7 @@ const BrandAssetsPreviewBody = styled.div`
 
   .assetPreviewImg {
     position: absolute;
-    top: 40%;
+    top: 30%;
     // background-color: ${Theme.gray8};
     // width: 500px;
     // height: 250px;
@@ -794,7 +798,7 @@ const BrandAssetsPreviewBody = styled.div`
     width: 50px;
     height: 50px;
     position: absolute;
-    top: 50%;
+    top: 40%;
     // margin-top: 40px;
     cursor: pointer;
     &.pervious-img {
@@ -822,11 +826,10 @@ const BrandAssetsPreviewBody = styled.div`
     }
   }
   @media only screen and (max-width: 767px) {
-    margin-top: 50%;
+    // margin-top: 50%;
     .assetPreviewImg {
       max-width: 200px;
       height: 100px;
-      top: 50%;
       .image-thumbnail {
         max-width: 200px;
         height: 100px;
@@ -856,7 +859,7 @@ const BrandAssetsPreviewBody = styled.div`
     .assetPreviewImg {
       max-width: 170px;
       height: 100px;
-      top: 50%;
+      // top: 50%;
       left: 28%;
       .image-thumbnail {
         max-width: 170px;
@@ -910,7 +913,6 @@ const CommentAnnotationPanel = styled.div`
     padding-bottom: 50px;
 
     li {
-      display: inline-block;
       padding: 15px 15px 0 15px;
     }
   }
