@@ -3225,10 +3225,11 @@ const CustomerListPage = styled.div`
     background-color: rgba(224, 231, 255, 0.2);
     border: 1px solid ${Theme.gray2};
     border-radius: 20px;
-    width: 230px;
+    width: 100%;
     height: 40px;
     color: ${Theme.black};
     padding: 11px 2px 0 14px;
+    margin-top: 10px;
   }
   .dropdown-notes-filter {
     background-color: ${Theme.white};
@@ -3238,7 +3239,7 @@ const CustomerListPage = styled.div`
     padding: 15px;
     position: absolute;
     z-index: 99999;
-    top: 45px;
+    top: 57px;
     width: 100%;
     color: ${Theme.black};
     text-align: left;
@@ -3253,8 +3254,12 @@ const CustomerListPage = styled.div`
       padding: 0;
       margin: 0;
       li {
-        padding-bottom: 14px;
+        padding-bottom: 17px;
         cursor: pointer;
+
+        &:last-child {
+          padding-bottom: 0px;
+        }
         &.on-hover {
           .sub-menu-dropdown {
             display: none;
