@@ -2670,7 +2670,7 @@ export default function NewCustomerList() {
                     width: '25px',
                     height: '25px',
                     position: 'absolute',
-                    top: '8px',
+                    top: '17px',
                     right: '21px',
                   }}
                 />
@@ -3230,6 +3230,7 @@ const CustomerListPage = styled.div`
     color: ${Theme.black};
     padding: 11px 2px 0 14px;
     margin-top: 10px;
+    margin-bottom: 14px;
   }
   .dropdown-notes-filter {
     background-color: ${Theme.white};
@@ -3260,13 +3261,13 @@ const CustomerListPage = styled.div`
         &:last-child {
           padding-bottom: 0px;
         }
-        &.on-hover {
+        &.on-hover1 {
           .sub-menu-dropdown {
             display: none;
           }
         }
         &:hover {
-          &.on-hover {
+          &.on-hover1 {
             .sub-menu-dropdown {
               display: block;
               background-color: ${Theme.white};
@@ -3288,6 +3289,10 @@ const CustomerListPage = styled.div`
                 li {
                   padding-bottom: 14px;
                   display: block;
+
+                  &:last-child {
+                    padding-bottom: 0;
+                  }
                 }
               }
             }
