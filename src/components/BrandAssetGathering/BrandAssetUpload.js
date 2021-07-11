@@ -1528,7 +1528,7 @@ const BrandAssetSideBar = styled.div`
   position: fixed;
   top: ${(props) =>
     props.completed
-      ? '110px'
+      ? '145px'
       : props.history.includes('/assigned-brand-asset/')
       ? '80px'
       : '145px'};

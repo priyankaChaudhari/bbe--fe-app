@@ -1056,6 +1056,16 @@ fieldset {
   font-weight: 600;
   padding-top: 5px;
   margin-top: -2px;
+
+   @media only screen and (max-width: 768px) {
+      width: 28px;
+      height: 28px;
+      border: 2px solid ${Theme.white};
+      font-size: ${Theme.verySmall};
+      padding-top: 4px;
+      margin-top: -2px;
+    }
+  }
 }
 .annotationNone {
   width: 40px;

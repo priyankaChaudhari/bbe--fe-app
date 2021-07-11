@@ -861,7 +861,7 @@ const BrandAssetsPreviewBody = styled.div`
       max-width: 170px;
       height: 100px;
       // top: 50%;
-      left: 28%;
+      left: 35%;
       .image-thumbnail {
         max-width: 170px;
         height: 100px;
@@ -926,6 +926,7 @@ const CommentAnnotationPanel = styled.div`
 
     .input-type-box {
       margin: 0 10px;
+      background: ${Theme.white};
       width: 23%;
       .add-annotation {
         cursor: pointer;
@@ -943,6 +944,10 @@ const CommentAnnotationPanel = styled.div`
     border-left: none;
     height: 100%;
     margin-top: 20px;
+
+    .chat-header {
+      margin-top: 40px;
+    }
 
     .inbox-comment {
       height: calc(100vh - 100px - 545px);
@@ -963,6 +968,7 @@ const CommentAnnotationPanel = styled.div`
   @media only screen and (max-width: 767px) {
     .inbox-comment {
       height: calc(100vh - 445px);
+      padding-bottom: 180px;
     }
   }
 `;
