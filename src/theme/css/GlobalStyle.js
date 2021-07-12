@@ -804,6 +804,7 @@ fieldset {
   position: absolute;
   color: ${Theme.gray90};
   font-size: ${Theme.normal};
+  border-radius: 8px;
 
   .react-select__option {
     cursor: pointer;

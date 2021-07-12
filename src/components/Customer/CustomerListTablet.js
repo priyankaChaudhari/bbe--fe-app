@@ -1351,7 +1351,7 @@ const CustomerListTabletView = styled.div`
       color: ${Theme.gray40};
     }
   }
-  @media (max-width: 991px) {
+  @media (max-width: 996px) {
     padding-top: 195px;
   }
   @media (max-width: 767px) {

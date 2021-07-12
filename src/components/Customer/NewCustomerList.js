@@ -163,7 +163,7 @@ export default function NewCustomerList() {
     { value: 'pending contract approval', label: 'Pending Approval' },
     { value: 'pending contract', label: 'Pending Contract' },
   ];
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isDesktop = useMediaQuery({ minWidth: 991 });
   const currentDate = new Date();
 
   const [customDateData, setCustomDateData] = useState([
@@ -2673,11 +2673,14 @@ export default function NewCustomerList() {
                 }}>
                 {' '}
                 Sort:
-                {selectedSort &&
-                selectedSort.length > 1 &&
-                selectedSort[1] !== null
-                  ? selectedSort[0] + selectedSort[1]
-                  : selectedSort[0]}
+                <span className="selected-list">
+                  {' '}
+                  {selectedSort &&
+                  selectedSort.length > 1 &&
+                  selectedSort[1] !== null
+                    ? selectedSort[0] + selectedSort[1]
+                    : selectedSort[0]}
+                </span>
                 <img
                   src={CaretUp}
                   alt="caret"
@@ -3252,17 +3255,17 @@ const CustomerListPage = styled.div`
     padding: 11px 2px 0 14px;
     margin-top: 10px;
     margin-bottom: 14px;
+    cursor: pointer;
   }
   .dropdown-notes-filter {
     background-color: ${Theme.white};
     border-radius: 8px;
     box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
-    max-width: 220px;
     padding: 15px;
     position: absolute;
     z-index: 99999;
     top: 57px;
-    width: 100%;
+    width: 94%;
     color: ${Theme.black};
     text-align: left;
     &.hide {
@@ -3271,6 +3274,7 @@ const CustomerListPage = styled.div`
     &.show {
       display: block;
     }
+
     .notes-option {
       list-style-type: none;
       padding: 0;
@@ -3407,7 +3411,20 @@ const CustomerListPage = styled.div`
     }
   }
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 1240px) {
+    .dropdown-select-all-notes {
+      span.selected-list {
+        position: fixed;
+        color: ${Theme.black};
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 70px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 992px) {
     padding-left: 0px;
 
     .customer-list-header-sticky {
@@ -3418,6 +3435,11 @@ const CustomerListPage = styled.div`
     .customer-list-header {
       &.w-80 {
         width: 100%;
+      }
+    }
+    .dropdown-select-all-notes {
+      span.selected-list {
+        max-width: 100%;
       }
     }
 
@@ -3443,6 +3465,13 @@ const CustomerListPage = styled.div`
 
     .customer-list-header {
       margin: 5px 0;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    .dropdown-notes-filter {
+      width: 40%;
+      right: 16px;
     }
   }
 
