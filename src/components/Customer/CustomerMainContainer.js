@@ -703,7 +703,7 @@ export default function CustomerMainContainer() {
 
               <CustomerDetailsBody>
                 <div className="row">
-                  <div className="col-6 mb-5 mt-4">
+                  <div className="col-6 mt-4 pt-1">
                     {' '}
                     {userInfo && userInfo.role !== 'Customer' ? (
                       <Link to={PATH_CUSTOMER_LIST}>
@@ -780,7 +780,7 @@ export default function CustomerMainContainer() {
                   </div>
                 </div>
 
-                <div className="row mt-2">
+                <div className="row mt-5 pt-2">
                   <div className="col-lg-3 col-12">
                     <WhiteCard className="left-border mb-3">
                       <div
@@ -834,7 +834,7 @@ export default function CustomerMainContainer() {
                             ? customer.country
                             : ''}
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                           <a
                             css="text-transform: initial;"
                             href={
@@ -876,7 +876,7 @@ export default function CustomerMainContainer() {
                                 customer.status.label}
                             </span>
                           ) : (
-                            <DropDownStatus className="mb-2 customer-details">
+                            <DropDownStatus className=" customer-details">
                               {checkStatus()}
                               <Select
                                 isSearchable={false}
@@ -941,9 +941,9 @@ export default function CustomerMainContainer() {
                             </DropDownStatus>
                           )
                         ) : (
-                          <span className="company-status inactive capitalize mb-3 ">
+                          <div className="company-status inactive capitalize mb-3 ">
                             {customer && customer.contract_status}
-                          </span>
+                          </div>
                         )}
                         <div className="straight-line horizontal-line mb-3 mt-4" />
                       </div>

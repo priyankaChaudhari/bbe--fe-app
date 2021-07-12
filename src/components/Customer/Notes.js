@@ -909,7 +909,7 @@ function Notes({
           ) : (
             <div className=" col-12 commemt-inbox-body " id="editor">
               {data.showEditor || showNewNoteEditor ? (
-                <GroupUser>
+                <GroupUser className="mb-3">
                   {displayUserInfo(userInfo)}
                   <div className="activity-user">
                     <span className="font-bold">

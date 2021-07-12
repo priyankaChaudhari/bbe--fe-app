@@ -135,6 +135,10 @@ export const EditorToll = styled.div`
   .rdw-embedded-modal {
     min-height: 250px !important;
   }
+  .rdw-link-decorator-icon {
+    left: auto;
+    margin-left: 2px;
+  }
 
   .rdw-editor-main {
     border: none;

@@ -145,7 +145,7 @@ export default function Header({ type, userInfo }) {
         userInfo &&
         userInfo.role === 'Customer' &&
         !history.location.pathname.includes('/brand-asset/')
-          ? 'common-header-sticky header-hide '
+          ? 'common-header-sticky  '
           : history.location.pathname.includes('/brand-asset/')
           ? 'header-hide  '
           : ''
