@@ -459,6 +459,7 @@ export default function BrandAssetUpload() {
   };
 
   const createDocument = (files) => {
+    setIsLoading({ loader: true, type: 'page' });
     const documentError = { error: false, message: '' };
     if (files && files.length) setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
@@ -1013,12 +1014,13 @@ export default function BrandAssetUpload() {
               <div className="check-list-item">
                 <div
                   className={
-                    item &&
-                    item.url &&
-                    uploadCount &&
-                    uploadCount[item.url] &&
-                    !uploadCount[item.url].includes('Skipped') &&
-                    uploadCount[item.url] !== '0 files uploaded'
+                    item.url === params.step ||
+                    (item &&
+                      item.url &&
+                      uploadCount &&
+                      uploadCount[item.url] &&
+                      !uploadCount[item.url].includes('Skipped') &&
+                      uploadCount[item.url] !== '0 files uploaded')
                       ? 'check-list-label active'
                       : 'check-list-label'
                   }>
