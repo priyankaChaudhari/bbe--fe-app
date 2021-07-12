@@ -780,7 +780,7 @@ export default function CustomerMainContainer() {
                   <div className="col-lg-3 col-12">
                     <WhiteCard className="left-border mb-3">
                       <div
-                        className=" edit-details edit-brand-details "
+                        className=" edit-details edit-brand-details cursor "
                         onClick={() => setShowModal(true)}
                         role="presentation">
                         <img src={EditOrangeIcon} alt="" />
@@ -1306,13 +1306,7 @@ export default function CustomerMainContainer() {
                       </p>
                       <div
                         className="view-all-list"
-                        onClick={() =>
-                          setShowMemberList({
-                            show: false,
-                            add: true,
-                            modal: true,
-                          })
-                        }
+                        onClick={() => setViewComponent('activity')}
                         role="presentation">
                         View All
                         <img src={ForwardOrangeIcon} alt="forward-arrow" />
