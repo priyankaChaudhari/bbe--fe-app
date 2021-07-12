@@ -173,6 +173,8 @@ export default function NewCustomerList() {
       key: 'bgsSelection',
     },
   ]);
+  const [selectedSort, setSelectedSort] = useState(['Recenty Added']);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState({ show: false, value: '' });
   const dropdownRef = useRef(null);
 
@@ -538,6 +540,7 @@ export default function NewCustomerList() {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowSubMenu({ show: false, value: '' });
+      setShowSortDropdown(false);
     }
   };
 
@@ -898,7 +901,9 @@ export default function NewCustomerList() {
   };
 
   const handleSortFilter = (menu, submenu) => {
+    setSelectedSort([menu.label, submenu && submenu.label]);
     setShowSubMenu({ show: false, value: '' });
+    setShowSortDropdown(false);
     if (menu.value === 'expiring_soon') {
       setExpiringSoon(true);
       setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
@@ -2659,14 +2664,25 @@ export default function NewCustomerList() {
               {/* <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
             </DropDownSelect>{' '} */}
-              <div className="dropdown-select-all-notes" role="presentation">
+              <div
+                ref={dropdownRef}
+                className="dropdown-select-all-notes"
+                role="presentation"
+                onClick={() => {
+                  setShowSortDropdown(!showSortDropdown);
+                }}>
                 {' '}
                 Sort:
+                {selectedSort &&
+                selectedSort.length > 1 &&
+                selectedSort[1] !== null
+                  ? selectedSort[0] + selectedSort[1]
+                  : selectedSort[0]}
                 <img
                   src={CaretUp}
                   alt="caret"
                   style={{
-                    transform: 'rotate(180deg)',
+                    transform: showSortDropdown ? 'rotate(180deg)' : '',
                     width: '25px',
                     height: '25px',
                     position: 'absolute',
@@ -2675,7 +2691,12 @@ export default function NewCustomerList() {
                   }}
                 />
               </div>
-              <div className="dropdown-notes-filter">
+              <div
+                className={
+                  showSortDropdown
+                    ? 'dropdown-notes-filter show'
+                    : 'dropdown-notes-filter hide'
+                }>
                 <ul className="notes-option">
                   {getSortOptions().map((item) => {
                     return item.custom ? (
