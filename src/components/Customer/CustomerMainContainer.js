@@ -414,7 +414,7 @@ export default function CustomerMainContainer() {
     );
   };
 
-  const activityDetail = (item) => {
+  const activityDetail = (item, showAllActivity = false) => {
     let activityMessage = '';
     let logUser;
     let field;
@@ -443,13 +443,18 @@ export default function CustomerMainContainer() {
           <>
             {activityMessage[0]}
             <span>deleted</span>
+
             <span
               dangerouslySetInnerHTML={{
                 __html:
-                  activityMessage &&
-                  activityMessage.length &&
-                  activityMessage[1] &&
-                  activityMessage[1].slice(0, 80),
+                  viewComponent === 'activity' && showAllActivity
+                    ? activityMessage &&
+                      activityMessage.length &&
+                      activityMessage[1]
+                    : activityMessage &&
+                      activityMessage.length &&
+                      activityMessage[1] &&
+                      activityMessage[1].slice(0, 80),
               }}
             />
             {/* {activityMessage[1]} */}
@@ -1310,7 +1315,9 @@ export default function CustomerMainContainer() {
                       </p>
                       <div
                         className="view-all-list"
-                        onClick={() => setViewComponent('activity')}
+                        onClick={() => {
+                          setViewComponent('activity');
+                        }}
                         role="presentation">
                         View All
                         <img src={ForwardOrangeIcon} alt="forward-arrow" />

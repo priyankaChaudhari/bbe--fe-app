@@ -57,7 +57,7 @@ export default function Activity({
                       </div>
                     )}
                     <div className="activity-user mb-3">
-                      {activityDetail(item)}
+                      {activityDetail(item, true)}
 
                       <div className="time-date mt-1">
                         {item && item.history_date ? item.history_date : ''}
