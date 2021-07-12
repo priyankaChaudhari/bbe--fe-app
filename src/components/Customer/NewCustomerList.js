@@ -2680,7 +2680,14 @@ export default function NewCustomerList() {
                 }}>
                 {' '}
                 Sort:{' '}
-                {selectedSort && selectedSort.length ? selectedSort[0] : ''}
+                <span className="selected-list">
+                  {' '}
+                  {selectedSort &&
+                  selectedSort.length > 1 &&
+                  selectedSort[1] !== null
+                    ? `${selectedSort[0]} / ${selectedSort[1]}`
+                    : selectedSort[0]}
+                </span>
                 <img
                   src={CaretUp}
                   alt="caret"
@@ -2701,11 +2708,13 @@ export default function NewCustomerList() {
                     : 'dropdown-notes-filter hide'
                 }>
                 <ul className="notes-option">
-                  {getSortOptions().map((item) => {
+                  {getSortOptions().map((item, index) => {
                     return item.custom ? (
                       <li
                         className={
-                          showSubMenu ? 'on-hover1 show' : 'on-hover1 hide'
+                          showSubMenu
+                            ? `submenu-${index} on-hover1 show`
+                            : `submenu-${index} on-hover1 hide`
                         }
                         onClick={() => {
                           setShowSubMenu({ show: true, value: item.value });
@@ -3258,12 +3267,21 @@ const CustomerListPage = styled.div`
     margin-top: 10px;
     margin-bottom: 14px;
     cursor: pointer;
+    span.selected-list {
+      position: fixed;
+      color: ${Theme.black};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 9%;
+      margin-left: 6px;
+    }
   }
   .dropdown-notes-filter {
     background-color: ${Theme.white};
     border-radius: 8px;
     box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
-    padding: 15px;
+    padding: 5px 0 5px 0;
     position: absolute;
     z-index: 99999;
     top: 57px;
@@ -3282,12 +3300,9 @@ const CustomerListPage = styled.div`
       padding: 0;
       margin: 0;
       li {
-        padding-bottom: 17px;
+        padding: 9px 15px 9px 15px;
         cursor: pointer;
 
-        &:last-child {
-          padding-bottom: 0px;
-        }
         &.on-hover1 {
           &.hide {
             display: none;
@@ -3302,29 +3317,57 @@ const CustomerListPage = styled.div`
               border-radius: 8px;
               box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
               max-width: 230px;
-              padding: 15px;
+              padding: 5px 0 5px 0;
               position: absolute;
               z-index: 99999;
-              top: 45px;
+              top: 122px;
               width: 100%;
-              left: -225px;
+              left: -101%;
               color: ${Theme.black};
               text-align: left;
+
               .notes-option {
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
                 li {
-                  padding-bottom: 14px;
+                  padding: 9px 15px 9px 15px;
                   display: block;
-
-                  &:last-child {
-                    padding-bottom: 0;
-                  }
                 }
               }
             }
           }
+
+          &.submenu-4 {
+            &.show {
+              .sub-menu-dropdown {
+                top: 155px;
+              }
+            }
+          }
+          &.submenu-5 {
+            &.show {
+              .sub-menu-dropdown {
+                top: 186px;
+              }
+            }
+          }
+          &.submenu-6 {
+            &.show {
+              .sub-menu-dropdown {
+                top: 225px;
+              }
+            }
+          }
+        }
+        &:hover {
+          background: #deebff;
+        }
+        &:active {
+          background: #2684ff;
+        }
+        &:selected {
+          background: #2684ff;
         }
       }
     }
@@ -3411,6 +3454,19 @@ const CustomerListPage = styled.div`
         width: 97%;
       }
     }
+    .dropdown-notes-filter {
+      .notes-option {
+        li {
+          &.on-hover1 {
+            &.show {
+              .sub-menu-dropdown {
+                left: -232px;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   @media only screen and (max-width: 1240px) {
@@ -3421,7 +3477,8 @@ const CustomerListPage = styled.div`
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 70px;
+        // max-width: 70px;
+        width: 6%;
       }
     }
   }
@@ -3441,7 +3498,20 @@ const CustomerListPage = styled.div`
     }
     .dropdown-select-all-notes {
       span.selected-list {
-        max-width: 100%;
+        width: 80%;
+      }
+    }
+    .dropdown-notes-filter {
+      .notes-option {
+        li {
+          &.on-hover1 {
+            &.show {
+              .sub-menu-dropdown {
+                left: -232px;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -3474,6 +3544,22 @@ const CustomerListPage = styled.div`
     .dropdown-notes-filter {
       width: 40%;
       right: 16px;
+    }
+  }
+
+  @media only screen and (max-width: 577px) {
+    .dropdown-notes-filter {
+      .notes-option {
+        li {
+          &.on-hover1 {
+            &.show {
+              .sub-menu-dropdown {
+                left: -101%;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
