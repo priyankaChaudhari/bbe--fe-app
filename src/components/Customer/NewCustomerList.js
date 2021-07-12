@@ -3283,12 +3283,13 @@ const CustomerListPage = styled.div`
           padding-bottom: 0px;
         }
         &.on-hover1 {
-          .sub-menu-dropdown {
+          &.hide {
             display: none;
           }
         }
-        &:hover {
-          &.on-hover1 {
+
+        &.on-hover1 {
+          &.show {
             .sub-menu-dropdown {
               display: block;
               background-color: ${Theme.white};
