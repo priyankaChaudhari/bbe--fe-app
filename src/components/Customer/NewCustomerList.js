@@ -941,7 +941,12 @@ export default function NewCustomerList() {
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
+      setSelectedSort(['Recently Added']);
       setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
+      setFilters({
+        ...filters,
+        sort_by: '-created_at',
+      });
       localStorage.setItem(
         'filters',
         JSON.stringify({
@@ -2660,27 +2665,26 @@ export default function NewCustomerList() {
             ) : (
               <></>
             )}
-            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
+            <div
+              className="col-lg-2 col-md-6 col-12 pl-2 pr-2"
+              ref={dropdownRef}>
               {/* <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
-            </DropDownSelect>{' '} */}
+              </DropDownSelect>{' '} */}
               <div
-                ref={dropdownRef}
                 className="dropdown-select-all-notes"
                 role="presentation"
                 onClick={() => {
                   setShowSortDropdown(!showSortDropdown);
+                  setShowSubMenu({ show: false, value: '' });
                 }}>
                 {' '}
                 Sort:
-                <span className="selected-list">
-                  {' '}
-                  {selectedSort &&
-                  selectedSort.length > 1 &&
-                  selectedSort[1] !== null
-                    ? selectedSort[0] + selectedSort[1]
-                    : selectedSort[0]}
-                </span>
+                {selectedSort &&
+                selectedSort.length > 1 &&
+                selectedSort[1] !== null
+                  ? `${selectedSort[0]} / ${selectedSort[1]}`
+                  : selectedSort[0]}
                 <img
                   src={CaretUp}
                   alt="caret"
@@ -2704,7 +2708,9 @@ export default function NewCustomerList() {
                   {getSortOptions().map((item) => {
                     return item.custom ? (
                       <li
-                        className="on-hover1"
+                        className={
+                          showSubMenu ? 'on-hover1 show' : 'on-hover1 hide'
+                        }
                         onClick={() => {
                           setShowSubMenu({ show: true, value: item.value });
                         }}
@@ -2713,7 +2719,7 @@ export default function NewCustomerList() {
 
                         {item.value === (showSubMenu && showSubMenu.value) &&
                         showSubMenu.show ? (
-                          <div className="sub-menu-dropdown" ref={dropdownRef}>
+                          <div className="sub-menu-dropdown">
                             <ul className="notes-option">
                               {sortSubMenu.map((submenu) => {
                                 return (
