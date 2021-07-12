@@ -445,7 +445,11 @@ export default function CustomerMainContainer() {
             <span>deleted</span>
             <span
               dangerouslySetInnerHTML={{
-                __html: activityMessage[1],
+                __html:
+                  activityMessage &&
+                  activityMessage.length &&
+                  activityMessage[1] &&
+                  activityMessage[1].slice(0, 80),
               }}
             />
             {/* {activityMessage[1]} */}

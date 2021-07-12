@@ -198,11 +198,11 @@ function Notes({
       customer: customerId,
     };
 
-    setIsLoading({ loader: true, type: 'button' });
+    setIsLoading({ loader: true, type: 'page' });
     if (data && data.selectedNote && data.selectedNote.id) {
       updateNotes(data.selectedNote && data.selectedNote.id, postData).then(
         () => {
-          setIsLoading({ loader: false, type: 'button' });
+          setIsLoading({ loader: false, type: 'page' });
 
           setData({ ...data, showNotesEditor: false, showEditor: false });
           getData(data.currentPage);
@@ -210,9 +210,9 @@ function Notes({
       );
     } else {
       saveNotes(postData).then(() => {
-        setIsLoading({ loader: false, type: 'button' });
-        setNewNoteEditor(false);
         setData({ ...data, showNotesEditor: false, showEditor: false });
+        setIsLoading({ loader: false, type: 'page' });
+        setNewNoteEditor(false);
         getData(data.currentPage);
       });
     }
@@ -250,13 +250,12 @@ function Notes({
                 ? ' btn-primary  w-10 on-boarding  '
                 : ' btn-primary  w-10 on-boarding disabled'
             }>
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader width={20} height={20} color="#fff" type="button" />
-            ) : data.selectedNote ? (
-              'Save'
-            ) : (
-              'Add Note'
-            )}
+            {
+              // isLoading.loader && isLoading.type === 'button' ? (
+              //   <PageLoader width={20} height={20} color="#fff" type="button" />
+              // ) :
+              data.selectedNote ? 'Save' : 'Add Note'
+            }
           </Button>
         </div>
       </>
@@ -374,9 +373,7 @@ function Notes({
   };
 
   const displayNotes = () => {
-    return isLoading.loader && isLoading.type === 'page' ? (
-      <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
-    ) : data && data.notes && data.notes.length ? (
+    return data && data.notes && data.notes.length ? (
       data.notes.map((item) => {
         return (
           <div className="notes-pin-unpin">
@@ -405,6 +402,14 @@ function Notes({
                             : item && item.note.slice(0, 150),
                         }}
                       />
+
+                      {item && item.note.length > 150 ? (
+                        <span style={{ color: 'black' }}>
+                          {!item.showMore ? '...' : ''}
+                        </span>
+                      ) : (
+                        ''
+                      )}
                       {item && item.note.length > 150 ? (
                         <span
                           style={{ color: '#FF5933' }}
@@ -412,7 +417,7 @@ function Notes({
                           onClick={() => {
                             insertShowMoreProp(item);
                           }}>
-                          {!item.showMore ? '...Read more' : 'Show less'}
+                          {!item.showMore ? ' show more' : ' show less'}
                         </span>
                       ) : (
                         ''
@@ -447,7 +452,7 @@ function Notes({
                                     })
                                   }>
                                   {' '}
-                                  <span className="dot" /> UnArchive
+                                  <span className="dot" /> Unarchive
                                 </li>
                               ) : (
                                 <li
@@ -895,34 +900,42 @@ function Notes({
           </div>
 
           <div className="straight-line horizontal-line mt-2 mb-3" />
-          <div className=" col-12 commemt-inbox-body " id="editor">
-            {data.showEditor || showNewNoteEditor ? (
-              <GroupUser>
-                {displayUserInfo(userInfo)}
-                <div className="activity-user">
-                  <span className="font-bold">
-                    {' '}
-                    {userInfo && userInfo.first_name}{' '}
-                    {userInfo && userInfo.last_name}:
-                  </span>{' '}
-                  {renderEditor()}
+          {isLoading.loader && isLoading.type === 'page' ? (
+            <PageLoader
+              component="Notes-modal-loader"
+              color="#FF5933"
+              type="page"
+            />
+          ) : (
+            <div className=" col-12 commemt-inbox-body " id="editor">
+              {data.showEditor || showNewNoteEditor ? (
+                <GroupUser>
+                  {displayUserInfo(userInfo)}
+                  <div className="activity-user">
+                    <span className="font-bold">
+                      {' '}
+                      {userInfo && userInfo.first_name}{' '}
+                      {userInfo && userInfo.last_name}:
+                    </span>{' '}
+                    {renderEditor()}
+                  </div>
+                </GroupUser>
+              ) : (
+                ''
+              )}
+              {displayNotes()}
+              <div className="footer-sticky">
+                <div className="straight-line horizontal-line" />
+                <div className="container-fluid">
+                  <CommonPagination
+                    count={data.count}
+                    pageNumber={data.currentPage}
+                    handlePageChange={handlePageChange}
+                  />
                 </div>
-              </GroupUser>
-            ) : (
-              ''
-            )}
-            {displayNotes()}
-          </div>
-        </div>
-      </div>
-      <div className="footer-sticky">
-        <div className="straight-line horizontal-line" />
-        <div className="container-fluid">
-          <CommonPagination
-            count={data.count}
-            pageNumber={data.currentPage}
-            handlePageChange={handlePageChange}
-          />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </NotesSideBar>
