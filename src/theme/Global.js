@@ -141,6 +141,12 @@ export const GroupUser = styled.div`
       }
       &.note-text {
         color: ${Theme.black};
+
+        p {
+          span {
+            color: unset;
+          }
+        }
       }
     }
     p {
@@ -148,6 +154,15 @@ export const GroupUser = styled.div`
       font-size: 15px;
       display: contents;
       word-break: break-all;
+      &.note-text {
+        color: ${Theme.black};
+
+        p {
+          span {
+            color: unset;
+          }
+        }
+      }
     }
   }
   .default-user-activity {

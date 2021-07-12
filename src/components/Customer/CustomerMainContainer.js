@@ -1266,7 +1266,7 @@ export default function CustomerMainContainer() {
                                         :
                                       </span>{' '}
                                       <p
-                                        className="m-0"
+                                        className="m-0 note-text"
                                         dangerouslySetInnerHTML={{
                                           __html:
                                             item && item.note.slice(0, 80),
