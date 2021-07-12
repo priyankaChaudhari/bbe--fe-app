@@ -1740,7 +1740,7 @@ const CheckSelectImage = styled.div`
 `;
 
 const DragDropImg = styled.div`
-  padding-bottom: 80px;
+  padding-bottom: 120px;
   max-height: 70vh;
   overflow: auto;
   section {

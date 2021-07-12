@@ -861,7 +861,7 @@ const BrandAssetsPreviewBody = styled.div`
       max-width: 170px;
       height: 100px;
       // top: 50%;
-      left: 35%;
+      left: auto;
       .image-thumbnail {
         max-width: 170px;
         height: 100px;
@@ -976,7 +976,7 @@ const CommentAnnotationPanel = styled.div`
 const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
-  margin-top: -300px;
+  margin-top: -150px;
   max-width: 650px;
   height: 73vh;
 
@@ -1039,7 +1039,7 @@ const BrandAssetPdf = styled.div`
   }
   @media only screen and (max-width: 767px) {
     min-height: 100px;
-    height: 32vh;
+    height: 26vh;
   }
 `;
 
