@@ -396,11 +396,7 @@ function Notes({
                   <>
                     <span
                       // style={{ display: 'inline-grid' }}
-                      className="cursor"
-                      onClick={() => {
-                        insertShowMoreProp(item);
-                      }}
-                      role="presentation">
+                      className="cursor">
                       <span
                         className="note-text"
                         dangerouslySetInnerHTML={{
@@ -410,7 +406,12 @@ function Notes({
                         }}
                       />
                       {item && item.note.length > 150 ? (
-                        <span style={{ color: '#FF5933' }}>
+                        <span
+                          style={{ color: '#FF5933' }}
+                          role="presentation"
+                          onClick={() => {
+                            insertShowMoreProp(item);
+                          }}>
                           {!item.showMore ? '...Read more' : 'Show less'}
                         </span>
                       ) : (
