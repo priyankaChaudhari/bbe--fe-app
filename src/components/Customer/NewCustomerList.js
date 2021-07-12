@@ -545,13 +545,11 @@ export default function NewCustomerList() {
   };
 
   useEffect(() => {
-    if (showSortDropdown) {
+    if (showSortDropdown)
       document.addEventListener('click', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('click', handleClickOutside, true);
-      };
-    }
-    return null;
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
   }, [showSortDropdown]);
 
   const handlePageChange = (currentPage) => {
