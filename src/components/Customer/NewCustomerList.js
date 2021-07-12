@@ -2679,12 +2679,8 @@ export default function NewCustomerList() {
                   setShowSubMenu({ show: false, value: '' });
                 }}>
                 {' '}
-                Sort:
-                {selectedSort &&
-                selectedSort.length > 1 &&
-                selectedSort[1] !== null
-                  ? `${selectedSort[0]} / ${selectedSort[1]}`
-                  : selectedSort[0]}
+                Sort:{' '}
+                {selectedSort && selectedSort.length ? selectedSort[0] : ''}
                 <img
                   src={CaretUp}
                   alt="caret"
