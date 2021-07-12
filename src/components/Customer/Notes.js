@@ -227,7 +227,7 @@ function Notes({
             data={data.selectedNote && data.selectedNote.note}
           />
         </div>
-        <div className="text-right mt-3 mb-3 ">
+        <div className="text-right mt-2 mb-3 ">
           <Button
             onClick={() => {
               setData({
@@ -239,7 +239,7 @@ function Notes({
               setNewNoteEditor(false);
             }}
             type="button"
-            className="btn-borderless on-boarding  mr-2 pb-2 mb-1">
+            className="btn-borderless on-boarding  mr-2 pb-2 ">
             Cancel
           </Button>
           <Button
