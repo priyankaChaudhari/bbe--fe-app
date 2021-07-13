@@ -140,7 +140,7 @@ export default function SetupCheckList({ id, brandId }) {
               ))}
 
               <div className="row">
-                <div className="col-lg-7 col-md-7 col-12  ">
+                <div className="col-lg-7 col-md-6 col-12  ">
                   {' '}
                   <GreenCheckBox className="mt-3">
                     <label className="">
@@ -180,7 +180,7 @@ export default function SetupCheckList({ id, brandId }) {
                   </GreenCheckBox>
                 </div>
 
-                <div className="col-lg-5 col-md-5 col-12 mt-3  text-lg-right text-md-right text-sm-left ">
+                <div className="col-lg-5 col-md-6 col-12 mt-3  text-lg-right text-md-right text-sm-left ">
                   {agreementData &&
                   agreementData.assigneeCount &&
                   agreementData.assigneeCount &&
@@ -192,7 +192,7 @@ export default function SetupCheckList({ id, brandId }) {
                         ':brandId',
                         brandId,
                       )}>
-                      <Button className="btn-primary w-sm-100">
+                      <Button className="btn-primary upload-asset  w-sm-100">
                         Upload Assets{' '}
                         <img
                           className="btn-icon ml-2"
@@ -456,6 +456,8 @@ const GreenCheckBox = styled.div`
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+  
+
 `;
 
 const ActiveAgreementTable = styled.div`

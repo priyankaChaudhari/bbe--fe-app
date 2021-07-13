@@ -802,7 +802,7 @@ fieldset {
 .css-26l3qy-menu {
   z-index: 9999999 !important;
   position: absolute;
-  color: ${Theme.gray90};
+  color: ${Theme.black};
   font-size: ${Theme.normal};
   border-radius: 8px;
 

@@ -235,6 +235,11 @@ const Button = styled.button`
       font-size: ${Theme.smallRes};
     }
   }
+  @media only screen and (max-width: 1200px) {
+    &.upload-asset {
+      width: 152px;
+    }
+  }
 
   // @media only screen and (max-width: 991px) {
   //   &.btn-primary {

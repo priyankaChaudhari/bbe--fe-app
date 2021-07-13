@@ -352,7 +352,7 @@ export default function NewCustomerList() {
 
   const TimeFrameFilters = (props) => (
     <SingleValue {...props}>
-      Stats For: &nbsp;
+      Stats For:&nbsp;
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
@@ -3275,7 +3275,7 @@ const CustomerListPage = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
       width: 9%;
-      margin-left: 6px;
+      margin-left: 4px;
     }
   }
   .dropdown-notes-filter {
@@ -3366,6 +3366,7 @@ const CustomerListPage = styled.div`
         }
         &:active {
           background: #2684ff;
+          color: ${Theme.white};
         }
         &:selected {
           background: #2684ff;

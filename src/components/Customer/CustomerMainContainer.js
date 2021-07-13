@@ -706,7 +706,7 @@ export default function CustomerMainContainer() {
                 ''
               )} */}
 
-              <CustomerDetailsBody>
+              <CustomerDetailsBody role={userInfo && userInfo.role}>
                 <div className="row">
                   <div className="col-6 mt-4 pt-1">
                     {' '}
@@ -795,7 +795,7 @@ export default function CustomerMainContainer() {
                         <img src={EditOrangeIcon} alt="" />
                         Edit
                       </div>
-                      <div className="brand-logo-details mb-3">
+                      <div className="brand-logo-details mb-3 mt-3">
                         {' '}
                         {customer &&
                         customer.documents &&
@@ -1626,7 +1626,7 @@ const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
   min-height: 100%;
   width: 100%;
-  padding-left: 109px;
+  padding-left: ${(props) => (props.role === 'Customer' ? '45px' : '109px')};
   padding-right: 45px;
   .back-btn-link {
     color: ${Theme.gray85};
