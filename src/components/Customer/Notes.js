@@ -62,7 +62,6 @@ function Notes({
   });
 
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'page' });
-  const [disableBtn, setDisableBtn] = useState(true);
 
   const filtersOption = {
     notes: [
@@ -227,7 +226,6 @@ function Notes({
           <EditorComponent
             setData={setNoteContent}
             data={data.selectedNote && data.selectedNote.note}
-            setDisableBtn={setDisableBtn}
           />
         </div>
         <div className="text-right mt-2 mb-3 ">
@@ -249,9 +247,9 @@ function Notes({
             onClick={() => saveNote()}
             type="button"
             className={
-              disableBtn || isLoading.loader
-                ? ' btn-primary  w-10 on-boarding disabled '
-                : ' btn-primary  w-10 on-boarding '
+              noteContent.length > 8 && !isLoading.loader
+                ? ' btn-primary  w-10 on-boarding  '
+                : ' btn-primary  w-10 on-boarding disabled'
             }>
             {
               // isLoading.loader && isLoading.type === 'button' ? (
