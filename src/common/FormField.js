@@ -135,13 +135,16 @@ const FormField = styled.div`
       border-radius: 2px;
       padding: 4px  10px ;
       font-family: ${Theme.baseFontFamily};
-  
       width: 100%;
+      resize: inherit;
         &::placeholder {
           color: ${Theme.gray40};
           font-weight: 500;
           font-size: color: ${Theme.extraNormal};
        }
+        &:focus {
+          outline: none;
+        }
     }
     .displayNone {
       resize: none;
