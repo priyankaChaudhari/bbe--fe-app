@@ -901,6 +901,14 @@ export default function NewCustomerList() {
     return diffDays;
   };
 
+  const handleMouseEnter = (item, index) => {
+    if (index > 2) {
+      setShowSubMenu({ show: true, value: item.value });
+    } else {
+      setShowSubMenu({ show: false, value: '' });
+    }
+  };
+
   const handleSortFilter = (menu, submenu) => {
     setSelectedSort([menu.label, submenu && submenu.label]);
     setShowSubMenu({ show: false, value: '' });
@@ -955,7 +963,6 @@ export default function NewCustomerList() {
           sort_by: '-created_at',
         }),
       );
-
       if (event.value === 'contract_details') {
         setSelectedView('contract_details');
         customerList(pageNumber);
@@ -2717,10 +2724,10 @@ export default function NewCustomerList() {
                             ? `submenu-${index} on-hover1 show`
                             : `submenu-${index} on-hover1 hide`
                         }
-                        onClick={() => {
-                          setShowSubMenu({ show: true, value: item.value });
-                        }}
-                        role="presentation">
+                        onMouseEnter={() => handleMouseEnter(item, index)}
+                        onMouseLeave={() =>
+                          setShowSubMenu({ show: false, value: '' })
+                        }>
                         {item.label}
 
                         {item.value === (showSubMenu && showSubMenu.value) &&
@@ -2747,6 +2754,9 @@ export default function NewCustomerList() {
                     ) : (
                       <li
                         onClick={() => handleSortFilter(item, null)}
+                        onMouseEnter={() =>
+                          setShowSubMenu({ show: false, value: '' })
+                        }
                         role="presentation">
                         {item.label}
                       </li>
