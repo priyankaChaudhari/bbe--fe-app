@@ -6,10 +6,11 @@ import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw, ContentState, Modifier } from 'draft-js';
-import Theme from '../theme/Theme';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-function EditorComponent({ setData, data }) {
+import Theme from '../theme/Theme';
+
+function EditorComponent({ setData, data, setDisableBtn }) {
   const [editorState, setEditorState] = useState(null);
   const [contentState, setContentState] = useState(null);
   const maxLength = 2000;
@@ -36,6 +37,14 @@ function EditorComponent({ setData, data }) {
     const content = editorData.getCurrentContent();
     const info = draftToHtml(convertToRaw(content));
     setData(info);
+    console.log(info.match(/<p>(.*?)<\/p>/));
+    if (
+      info.match(/<p>(.*?)<\/p>/)[1] === '' ||
+      info.match(/<p>(.*<br>?)<\/p>/) ||
+      info.match(/<p>(.*&nbsp;?)<\/p>/)
+    ) {
+      setDisableBtn(true);
+    } else setDisableBtn(false);
   };
 
   const handlePastedText = (input) => {
@@ -114,11 +123,13 @@ export default EditorComponent;
 EditorComponent.defaultProps = {
   setData: () => {},
   data: '',
+  setDisableBtn: () => {},
 };
 
 EditorComponent.propTypes = {
   setData: PropTypes.func,
   data: PropTypes.string,
+  setDisableBtn: PropTypes.func,
 };
 
 export const EditorToll = styled.div`
