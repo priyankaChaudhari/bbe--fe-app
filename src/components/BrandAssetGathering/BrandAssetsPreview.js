@@ -158,6 +158,7 @@ function BrandAssetsPreview({
     if (isDeleted) {
       setResponseId(null);
       setCommentData();
+      setIsClickedOnImage(false);
       setNewCommentData('');
       setClickOnAddNewAnnotaion(false);
       setNewAnnotaionPosition({
@@ -166,7 +167,7 @@ function BrandAssetsPreview({
       });
       setStoreCommentError();
       setIsImgDeleted(false);
-      setIsClickedOnImage(false);
+
       setShowClickModal(false);
       setResponseId(null);
       setShowAssetPreview({

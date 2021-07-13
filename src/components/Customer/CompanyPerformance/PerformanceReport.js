@@ -499,11 +499,11 @@ export default function PerformanceReport({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 30) {
+    if (diffDays <= 60) {
       temp = 'daily';
       setFilters({ daily: true, weekly: false, month: false });
       setGroupBy('daily');
-    } else if (diffDays > 30 && diffDays <= 180) {
+    } else if (diffDays > 60 && diffDays <= 180) {
       temp = 'weekly';
       setFilters({ daily: false, weekly: true, month: false });
       setGroupBy('weekly');
@@ -535,7 +535,7 @@ export default function PerformanceReport({
     };
   };
 
-  // set group by filter when selected option is, week, month or 30 days
+  // set group by filter when selected option is, week, month or 60 days
   const setGropuByFilter = (value) => {
     switch (value) {
       case 'week':
@@ -568,10 +568,10 @@ export default function PerformanceReport({
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 30) {
+    if (diffDays <= 60) {
       temp = 'daily';
       setBBGroupBy('daily');
-    } else if (diffDays > 30 && diffDays <= 180) {
+    } else if (diffDays > 60 && diffDays <= 180) {
       temp = 'weekly';
       setBBGroupBy('weekly');
     } else if (diffDays > 180) {
