@@ -169,6 +169,10 @@ function BrandAssetsPreview({
       setIsClickedOnImage(false);
       setShowClickModal(false);
       setResponseId(null);
+      setShowAssetPreview({
+        ...showAssetPreview,
+        selectedFile: null,
+      });
     }
     if (
       showAssetPreview &&
@@ -179,7 +183,14 @@ function BrandAssetsPreview({
       getComments(1, showAssetPreview.selectedFile.id);
       setResponseId('123');
     }
-  }, [getComments, showAssetPreview, responseId, isDeleted, setIsImgDeleted]);
+  }, [
+    getComments,
+    showAssetPreview,
+    responseId,
+    isDeleted,
+    setIsImgDeleted,
+    setShowAssetPreview,
+  ]);
 
   const showImg = (type) => {
     setImageLoading(true);
