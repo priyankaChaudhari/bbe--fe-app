@@ -854,6 +854,11 @@ const BrandAssetsPreviewBody = styled.div`
     // margin-top: 40%;
     .assetPreviewImg {
       top: 35%;
+
+      .image-thumbnail {
+        max-width: 500px;
+        max-height: 200px;
+      }
     }
   }
   @media only screen and (max-width: 767px) {
@@ -940,8 +945,8 @@ const CommentAnnotationPanel = styled.div`
     padding: 0;
     margin: 0;
     overflow: auto;
-    height: calc(100vh - 100px - 240px);
-    padding-bottom: 50px;
+    height: calc(100vh - 100px - 235px);
+    padding-bottom: 70px;
 
     li {
       padding: 15px 15px 0 15px;
@@ -1075,13 +1080,13 @@ const BrandAssetPdf = styled.div`
 
 const Footer = styled.div`
   border: 1px solid ${Theme.gray7};
-  bottom: 179px;
+  bottom: 195px;
   background: ${Theme.white};
   box-shadow: ${Theme.boxShadow};
   position: fixed;
   min-height: 60px;
   z-index: 2;
-  width: 23%;
+  width: 24%;
 
   // &.pdf-footer {
   //   width: 23%;
@@ -1089,6 +1094,5 @@ const Footer = styled.div`
   // }
   @media only screen and (max-width: 991px) {
     width: 100%;
-    bottom: 134px;
   }
 `;
