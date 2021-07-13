@@ -357,6 +357,17 @@ function BrandAssetsPreview({
     setNewAnnotaionPosition({ left: 0, top: 0 });
   };
 
+  const setAddButtonClass = () => {
+    if (
+      newCommentData === '' ||
+      (clickOnAddNewAnnotaion && !isClickedOnImage)
+    ) {
+      return 'btn-primary w-100 mt-3 disabled';
+    } 
+      return 'btn-primary w-100 mt-3';
+    
+  };
+
   const renderComments = () => {
     if (commentsLoader) {
       return <PageLoader component="activityLog" color="#FF5933" type="page" />;
@@ -448,12 +459,7 @@ function BrandAssetsPreview({
                     Click to add an annotation
                   </div>
                 ) : null}
-                <Button
-                  className={
-                    newCommentData === ''
-                      ? 'btn-primary w-100 mt-3 disabled'
-                      : 'btn-primary w-100 mt-3'
-                  }>
+                <Button className={setAddButtonClass()}>
                   {addCommentsLoader ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
