@@ -105,6 +105,7 @@ export async function storeNewCommentData(
   reAssignedEmail,
   position,
   annotationNumber,
+  showClickModal,
 ) {
   let data = {
     message,
@@ -112,7 +113,7 @@ export async function storeNewCommentData(
     re_assigned_email: reAssignedEmail,
   };
 
-  if (position && position.top !== null) {
+  if (showClickModal) {
     data = {
       ...data,
       x_coordinate: position.left,

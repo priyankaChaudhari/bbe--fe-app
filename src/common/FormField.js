@@ -143,6 +143,9 @@ const FormField = styled.div`
           font-size: color: ${Theme.extraNormal};
        }
     }
+    .displayNone {
+      resize: none;
+     }
    
 
   .css-14jk2my-container {

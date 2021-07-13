@@ -94,10 +94,10 @@ function BrandAssetsPreview({
   const [commentsData, setCommentData] = useState();
   const [storeCommentError, setStoreCommentError] = useState();
   const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
-  const [markNewAnnotaion, setMarkNewAnnotaion] = useState(false);
+  const [clickOnAddNewAnnotaion, setClickOnAddNewAnnotaion] = useState(false);
   const [pageNumber, setPageNumber] = useState();
   const [showClickModal, setShowClickModal] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClickedOnImage, setIsClickedOnImage] = useState(false);
 
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
     top: 0,
@@ -128,12 +128,14 @@ function BrandAssetsPreview({
   const storeCommentData = useCallback(
     (message, documnetId, newPosition, annotationNumber) => {
       setAddCommentsLoader(true);
+
       storeNewCommentData(
         message,
         documnetId,
         userInfo.email,
         newPosition,
         annotationNumber,
+        showClickModal,
       ).then((res) => {
         if (res && res.status === 400) {
           setStoreCommentError(res.data);
@@ -141,14 +143,15 @@ function BrandAssetsPreview({
         if (res && res.status === 201) {
           getComments(1, showAssetPreview.selectedFile.id);
           setNewCommentData('');
-          setMarkNewAnnotaion(false);
+          setClickOnAddNewAnnotaion(false);
           setNewAnnotaionPosition({ left: 0, top: 0 });
-          setIsClicked(false);
+          setIsClickedOnImage(false);
+          setShowClickModal(false);
         }
         setAddCommentsLoader(false);
       });
     },
-    [getComments, showAssetPreview, userInfo.email],
+    [getComments, showAssetPreview, userInfo.email, showClickModal],
   );
 
   useEffect(() => {
@@ -156,15 +159,16 @@ function BrandAssetsPreview({
       setResponseId(null);
       setCommentData();
       setNewCommentData('');
-      setMarkNewAnnotaion(false);
+      setClickOnAddNewAnnotaion(false);
       setNewAnnotaionPosition({
         left: 0,
         top: 0,
       });
       setStoreCommentError();
       setIsImgDeleted(false);
-      setIsClicked(false);
+      setIsClickedOnImage(false);
       setShowClickModal(false);
+      setResponseId(null);
     }
     if (
       showAssetPreview &&
@@ -203,14 +207,15 @@ function BrandAssetsPreview({
       getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
-    setMarkNewAnnotaion(false);
+    setClickOnAddNewAnnotaion(false);
     setNewAnnotaionPosition({
       left: 0,
       top: 0,
     });
     setStoreCommentError();
+
     setShowClickModal(false);
-    setIsClicked(false);
+    setIsClickedOnImage(false);
   };
 
   const closeModal = () => {
@@ -221,7 +226,7 @@ function BrandAssetsPreview({
       index: 0,
     });
     setNewCommentData('');
-    setMarkNewAnnotaion(false);
+    setClickOnAddNewAnnotaion(false);
     setNewAnnotaionPosition({
       left: 0,
       top: 0,
@@ -229,8 +234,9 @@ function BrandAssetsPreview({
 
     setMaxAnnotaionNumber(null);
     setStoreCommentError();
+
     setShowClickModal(false);
-    setIsClicked(false);
+    setIsClickedOnImage(false);
   };
 
   const getInitials = (firstName, lastName) => {
@@ -262,25 +268,26 @@ function BrandAssetsPreview({
   const onCommnetsLabelClick = () => {
     if (showCommentSection) {
       setNewCommentData('');
-      setMarkNewAnnotaion(false);
+      setClickOnAddNewAnnotaion(false);
       setNewAnnotaionPosition({
         left: 0,
         top: 0,
       });
       setStoreCommentError();
+
       setShowClickModal(false);
-      setIsClicked(false);
+      setIsClickedOnImage(false);
     }
     setShowCommentSection(!showCommentSection);
   };
 
   const onMouseDown = (e) => {
     e.preventDefault(true);
-    if (showClickModal) {
-      setShowClickModal(false);
-    }
-    if (!isClicked) {
-      setIsClicked(true);
+    // if (showClickModal) {
+    //   setShowClickModal(false);
+    // }
+    if (!isClickedOnImage) {
+      setIsClickedOnImage(true);
     }
 
     const theThing = document.querySelector('#thing');
@@ -329,6 +336,12 @@ function BrandAssetsPreview({
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
     getComments(currentPage, showAssetPreview.selectedFile.id);
+  };
+
+  const cancelAnnotaion = () => {
+    setShowClickModal(false);
+    setClickOnAddNewAnnotaion(false);
+    setNewAnnotaionPosition({ left: 0, top: 0 });
   };
 
   const renderComments = () => {
@@ -394,7 +407,7 @@ function BrandAssetsPreview({
             <FormField className="mt-2 mb-2">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <textarea
-                  className="text-area-box"
+                  className="text-area-box displayNone"
                   rows="4"
                   placeholder="Enter comment"
                   value={newCommentData}
@@ -415,7 +428,7 @@ function BrandAssetsPreview({
                     className="add-annotation mt-2"
                     onClick={() => {
                       setShowClickModal(true);
-                      setMarkNewAnnotaion(true);
+                      setClickOnAddNewAnnotaion(true);
                     }}
                     role="presentation">
                     <img src={AnnotationGoal} alt="annotation" />
@@ -461,17 +474,17 @@ function BrandAssetsPreview({
       );
     }
 
-    if (markNewAnnotaion) {
+    if (clickOnAddNewAnnotaion) {
       return (
         <div
           id="thing"
-          className={isClicked ? 'annotation' : 'annotationNone'}
+          className={isClickedOnImage ? 'annotation' : 'annotationNone'}
           style={{
             position: 'absolute',
             left: `${newAnnotaionPosition.left}%`,
             top: `${newAnnotaionPosition.top}%`,
           }}>
-          {isClicked ? maxAnnotaionNumber : null}
+          {isClickedOnImage ? maxAnnotaionNumber : null}
         </div>
       );
     }
@@ -557,8 +570,7 @@ function BrandAssetsPreview({
                     <Button
                       className="btn-transparent verify-now-btn h-30 w-auto ml-2"
                       onClick={() => {
-                        setShowClickModal(false);
-                        setMarkNewAnnotaion(false);
+                        cancelAnnotaion();
                       }}>
                       Cancel
                     </Button>
@@ -620,11 +632,11 @@ function BrandAssetsPreview({
                     <>
                       <object
                         onMouseDown={(event) =>
-                          markNewAnnotaion ? onMouseDown(event) : null
+                          clickOnAddNewAnnotaion ? onMouseDown(event) : null
                         }
                         id="imgContainer"
                         className={
-                          markNewAnnotaion
+                          clickOnAddNewAnnotaion
                             ? 'image-thumbnail cursorPointer'
                             : 'image-thumbnail'
                         }
