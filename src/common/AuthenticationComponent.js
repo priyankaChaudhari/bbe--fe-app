@@ -84,7 +84,8 @@ export default function AuthenticationComponent() {
     if (
       !history.location.pathname.includes('account-setup') &&
       userInfo &&
-      userInfo.role !== 'Customer'
+      userInfo.role !== 'Customer' &&
+      !history.location.pathname.includes('/brand-asset/')
     )
       return (
         <>
