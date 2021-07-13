@@ -353,6 +353,7 @@ function BrandAssetsPreview({
   const cancelAnnotaion = () => {
     setShowClickModal(false);
     setClickOnAddNewAnnotaion(false);
+    setIsClickedOnImage(false);
     setNewAnnotaionPosition({ left: 0, top: 0 });
   };
 
