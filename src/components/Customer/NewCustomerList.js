@@ -2721,7 +2721,9 @@ export default function NewCustomerList() {
                       <li
                         className={
                           showSubMenu
-                            ? `submenu-${index} on-hover1 show`
+                            ? item.label === selectedSort[0]
+                              ? `submenu-${index} on-hover1 show active`
+                              : `submenu-${index} on-hover1 show`
                             : `submenu-${index} on-hover1 hide`
                         }
                         onMouseEnter={() => handleMouseEnter(item, index)}
@@ -2737,6 +2739,14 @@ export default function NewCustomerList() {
                               {sortSubMenu.map((submenu) => {
                                 return (
                                   <li
+                                    className={
+                                      selectedSort &&
+                                      selectedSort.length > 1 &&
+                                      item.label === selectedSort[0] &&
+                                      submenu.label === selectedSort[1]
+                                        ? 'active'
+                                        : ''
+                                    }
                                     onClick={() =>
                                       handleSortFilter(item, submenu)
                                     }
@@ -2753,6 +2763,9 @@ export default function NewCustomerList() {
                       </li>
                     ) : (
                       <li
+                        className={
+                          item.label === selectedSort[0] ? 'active' : ''
+                        }
                         onClick={() => handleSortFilter(item, null)}
                         onMouseEnter={() =>
                           setShowSubMenu({ show: false, value: '' })
@@ -3374,7 +3387,7 @@ const CustomerListPage = styled.div`
         &:hover {
           background: #deebff;
         }
-        &:active {
+        &.active {
           background: #2684ff;
           color: ${Theme.white};
         }
