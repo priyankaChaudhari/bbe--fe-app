@@ -446,7 +446,12 @@ function BrandAssetsPreview({
                     Click to add an annotation
                   </div>
                 ) : null}
-                <Button className="btn-primary w-100 mt-3 ">
+                <Button
+                  className={
+                    newCommentData === ''
+                      ? 'btn-primary w-100 mt-3 disabled'
+                      : 'btn-primary w-100 mt-3'
+                  }>
                   {addCommentsLoader ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
