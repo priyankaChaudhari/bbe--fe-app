@@ -4,17 +4,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 
-import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
-import Select, { components } from 'react-select';
 import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
+import Select, { components } from 'react-select';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
+import { useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+
 import Theme from '../../theme/Theme';
+import NoRecordFound from '../../common/NoRecordFound';
 import {
   CheckBox,
   CommonPagination,
@@ -27,7 +29,6 @@ import {
   ModalBox,
   Button,
 } from '../../common';
-import NoRecordFound from '../../common/NoRecordFound';
 import {
   SearchIcon,
   CountDayClock,
@@ -44,16 +45,9 @@ import {
   UpDowGrayArrow,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import {
-  getCustomerList,
-  // getCustomers,
-  getGrowthStrategist,
-  getStatus,
-} from '../../api';
-
+import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
 import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
-
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import {
   sortSubMenu,
@@ -440,6 +434,7 @@ export default function NewCustomerList() {
         selectedTimeFrame,
         orderByFlag,
       ).then((response) => {
+        // console.log('customer List API', response.data.count);
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
         setCount(response && response.data && response.data.count);
@@ -951,6 +946,7 @@ export default function NewCustomerList() {
     localStorage.setItem('page', 1);
     if (type === 'view') {
       setSelectedSort(['Recently Added']);
+      setExpiringSoon(false);
       setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
       setFilters({
         ...filters,
@@ -965,9 +961,25 @@ export default function NewCustomerList() {
       );
       if (event.value === 'contract_details') {
         setSelectedView('contract_details');
-        customerList(pageNumber);
-      }
-      if (event.value === 'performance') {
+        setShowPerformance(false);
+        setShowAdPerformance(false);
+        setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showPerformance: false,
+          showAdPerformance: false,
+          showDspAdPerformance: false,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showPerformance: false,
+            showAdPerformance: false,
+            showDspAdPerformance: false,
+          }),
+        );
+      } else if (event.value === 'performance') {
         setSelectedView('performance');
         setShowPerformance(true);
         setShowAdPerformance(false);
@@ -1042,19 +1054,6 @@ export default function NewCustomerList() {
         //   false,
         //   true,
         // );
-      } else {
-        setShowPerformance(false);
-        setShowAdPerformance(false);
-        setShowDspAdPerformance(false);
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
-            ...filters,
-            showPerformance: false,
-            showAdPerformance: false,
-            showDspAdPerformance: false,
-          }),
-        );
       }
     }
     if (type === 'sort') {
