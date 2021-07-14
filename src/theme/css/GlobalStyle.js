@@ -746,7 +746,7 @@ button:disabled {
   // max-width: 600px !important;
   // width: 100% !important;
   border: 0 !important;
-  border-radius: 8px !important;
+  border-radius: 8px ;
   overflow: unset !important;
   padding: 0 !important;
 
@@ -1768,6 +1768,10 @@ text.cust-label-avg {
    text-transform: uppercase;
    font-weight: bold;
 }
+ .label-info {
+    color: ${Theme.black};
+    font-size: ${Theme.normal};
+  }
 
 .react-sweet-progress {
     /* display: flex; */

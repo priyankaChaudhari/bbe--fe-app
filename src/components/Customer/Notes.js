@@ -964,6 +964,9 @@ Notes.propTypes = {
 export default Notes;
 
 const NotesSideBar = styled.div`
+  top: 0;
+  background: #ffff;
+  height: 100%;
   .footer-sticky {
     position: fixed;
     bottom: 0;

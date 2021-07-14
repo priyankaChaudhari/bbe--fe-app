@@ -35,6 +35,15 @@ export const WhiteCard = styled.div`
   &.left-border {
     padding: 25px 25px 25px 0;
   }
+
+  .orange-text {
+    color: ${Theme.red};
+    cursor: pointer;
+
+    .right-arrow-icon {
+      vertical-align: middle;
+    }
+  }
   
   .copy-info {
     position: relative;
@@ -53,8 +62,6 @@ export const WhiteCard = styled.div`
     .label-info {
       color: ${Theme.black};
       font-size: ${Theme.normal};
-
-     
     }
 
     &:hover {

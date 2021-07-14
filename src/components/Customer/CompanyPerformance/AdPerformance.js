@@ -19,6 +19,7 @@ import {
   CloseIcon,
   ArrowUpIcon,
   UpDowGrayArrow,
+  ArrowRightBlackIcon,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
 import { ModalBox, Button, WhiteCard, DropDownSelect } from '../../../common';
@@ -31,6 +32,7 @@ import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
 // import { dspResData } from './DummyApiRes';
 import Theme from '../../../theme/Theme';
+import { DspAdPacing } from '../../BrandPartner';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -52,6 +54,9 @@ export default function AdPerformance({
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [selectedDspBox, setSelectedDspBox] = useState({
     dspImpressions: true,
+  });
+  const [showDspAdPacingModal, setShowDspAdPacingModal] = useState({
+    show: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [adChartData, setAdChartData] = useState([]);
@@ -101,6 +106,22 @@ export default function AdPerformance({
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
+    },
+  };
+
+  const customDspAdPacingStyles = {
+    content: {
+      top: '50%',
+      right: '0px',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      maxHeight: '100%',
+      overlay: ' {zIndex: 1000}',
+      inset: '0% 0% 0% auto',
+      marginRight: '0',
+      borderRadius: '1px !important',
+      // transform: 'translate(-50%, -50%)',
     },
   };
   const noDataMessage =
@@ -2138,10 +2159,28 @@ export default function AdPerformance({
       </Modal>
     );
   };
-
+  const renderDspAdPacingModal = () => {
+    return (
+      <Modal
+        isOpen={showDspAdPacingModal.show}
+        style={customDspAdPacingStyles}
+        ariaHideApp={false}
+        contentLabel="Add team modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowDspAdPacingModal({ show: false })}
+          role="presentation"
+        />
+        <DspAdPacing />
+      </Modal>
+    );
+  };
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
+      {renderDspAdPacingModal()}
       <WhiteCard>
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
@@ -2160,9 +2199,24 @@ export default function AdPerformance({
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
         <div className="row">
-          <div className="col-6">
+          <div className="col-12">
             {' '}
-            <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
+            <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
+            <p className="gray-normal-text mb-4 mt-1">
+              Monthly Budget Pacing (January):{' '}
+              <span
+                className="orange-text"
+                role="presentation"
+                onClick={() => setShowDspAdPacingModal({ show: true })}>
+                Overspending
+                <img
+                  className="right-arrow-icon"
+                  width="18px"
+                  src={ArrowRightBlackIcon}
+                  alt="arrow"
+                />
+              </span>
+            </p>
           </div>
         </div>
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
