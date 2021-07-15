@@ -879,6 +879,7 @@ function BrandAssetsPreview({
                         loadingMsg="Loading Document..."
                         onPdfMouseDown={onPdfMouseDown}
                         renderPDFAnnotations={renderPDFAnnotations}
+                        clickOnAddNewAnnotation={clickOnAddNewAnnotation}
                       />
                     </BrandAssetPdf>
                   ) : (

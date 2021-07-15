@@ -12,6 +12,7 @@ export default function PdfAnnotator({
   loadingMsg,
   onPdfMouseDown,
   renderPDFAnnotations,
+  clickOnAddNewAnnotation,
 }) {
   const [totalPages, setNumPages] = useState(null);
   const isDesktopLarge = useMediaQuery({ minWidth: 1601 });
@@ -61,7 +62,9 @@ export default function PdfAnnotator({
   return (
     <div id="ResumeContainer">
       <Document
-        className="PDFDocument"
+        className={
+          clickOnAddNewAnnotation ? 'PDFDocument cursorPointer' : 'PDFDocument'
+        }
         file={pdf}
         options={{ workerSrc: 'pdf.worker.js' }}
         error={() => <PdfLoadingMsg type="error" />}
@@ -89,6 +92,7 @@ PdfAnnotator.defaultProps = {
   loadingMsg: '',
   onPdfMouseDown: () => {},
   renderPDFAnnotations: () => {},
+  clickOnAddNewAnnotation: false,
 };
 
 PdfAnnotator.propTypes = {
@@ -96,4 +100,5 @@ PdfAnnotator.propTypes = {
   loadingMsg: PropTypes.string,
   onPdfMouseDown: PropTypes.func,
   renderPDFAnnotations: PropTypes.func,
+  clickOnAddNewAnnotation: PropTypes.bool,
 };
