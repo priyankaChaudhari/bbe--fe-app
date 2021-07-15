@@ -33,7 +33,7 @@ import {
   ForwardOrangeIcon,
   OrangeChat,
   EditOrangeIcon,
-  // TimesCircle,
+  NextActivityLogo,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
 import {
@@ -45,9 +45,7 @@ import {
   BackToTop,
   Button,
   WhiteCard,
-  // ContractFormField,
 } from '../../common';
-// import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
   getCustomerDetails,
@@ -100,7 +98,6 @@ const alertCustomStyles = {
     bottom: 'auto',
     maxWidth: '474px ',
     width: '100% ',
-    // minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -119,7 +116,6 @@ const customNotesStyles = {
     inset: '0% 0% 0% auto',
     marginRight: '0',
     borderRadius: '0px !important',
-    // transform: 'translate(-50%, -50%)',
   },
 };
 
@@ -163,7 +159,6 @@ export default function CustomerMainContainer() {
     show: false,
     type: '',
   });
-  // const [memberCount, setMemberCount] = useState(null);
   const profileLoader = useSelector(
     (state) => state.userState.isActivityLoading,
   );
@@ -261,7 +256,6 @@ export default function CustomerMainContainer() {
     getCustomerMembers(id).then((member) => {
       getActivityLogInfo();
       setMemberData(member && member.data && member.data.results);
-      // setMemberCount(member && member.data && member.data.count);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id, getActivityLogInfo]);
@@ -1325,16 +1319,33 @@ export default function CustomerMainContainer() {
                       {activityData &&
                         activityData.slice(0, 3).map((item) => (
                           <GroupUser key={Math.random()}>
-                            {images.find(
+                            {(images.find(
                               (op) => op.entity_id === item.history_user_id,
                             ) &&
-                            images.find(
-                              (op) => op.entity_id === item.history_user_id,
-                            ).presigned_url ? (
+                              images.find(
+                                (op) => op.entity_id === item.history_user_id,
+                              ).presigned_url) ||
+                            (item.history_change_reason &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2) &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2)[0] === 'System' &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2)[1] === '') ? (
                               <img
                                 src={
                                   isLoading.loader && isLoading.type === 'page'
                                     ? DefaultUser
+                                    : item.history_change_reason
+                                        .split(' ')
+                                        .slice(0, 2) &&
+                                      item.history_change_reason
+                                        .split(' ')
+                                        .slice(0, 2)[0] === 'System'
+                                    ? NextActivityLogo
                                     : images.find(
                                         (op) =>
                                           op.entity_id === item.history_user_id,
