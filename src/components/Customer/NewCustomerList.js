@@ -557,7 +557,7 @@ export default function NewCustomerList() {
     // for multi select user
     // const handleFilters = (event, key, type) => {
     // for one select user
-
+    if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
@@ -1340,6 +1340,9 @@ export default function NewCustomerList() {
 
     if (item === 'user') {
       if (filters.user && !showAdPerformance && !showDspAdPerformance) {
+        if (localStorage.getItem('bgs')) {
+          return JSON.parse(localStorage.getItem('bgs'));
+        }
         return brandGrowthStrategist.filter(
           (option) => filters.user === option.value,
         );
