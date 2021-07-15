@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="42px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>0E85319B-5CB7-473E-9479-133C3D2BC6A6@3x</title>
+    <defs>
+        <circle id="path-1" cx="21" cy="21" r="21"></circle>
+    </defs>
+    <g id="Contracts-[Desktop]" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Contract-|-Proposed-Header" transform="translate(-1120.000000, -325.000000)">
+            <g id="Onboarding-Fields-/-Service-Agreement" transform="translate(1105.000000, 69.000000)">
+                <g id="Profile-Picture/PP1-Copy" transform="translate(15.000000, 256.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Oval" fill="#F4F6FC" xlink:href="#path-1"></use>
+                    <g id="Logo-/-Next" mask="url(#mask-2)">
+                        <g transform="translate(6.000000, 15.990000)" id="Group-8">
+                            <polygon id="Fill-1" fill="#FF5933" points="14.0769428 0 17.2430758 4.61651517 13.7894366 9.6 16.3553386 9.6 19.7894366 4.61651517 16.6426467 0"></polygon>
+                            <polygon id="Fill-2" fill="#000000" points="6.62478163 0 6.65304395 5.74876366 1.07975515 0 0.28943662 0 0.28943662 9.55776169 2.35402318 9.55776169 2.29749853 3.82314548 7.9116411 9.6 8.68943662 9.6 8.68943662 0"></polygon>
+                            <polygon id="Fill-3" fill="#000000" points="23.8300842 0 22.4894366 1.92837863 25.3861452 1.92837863 25.3861452 9.6 27.4458856 9.6 27.4458856 1.92837863 29.9894366 1.92837863 29.9894366 0"></polygon>
+                            <polygon id="Fill-4" fill="#000000" points="8.98943662 0 8.98943662 1.8 14.9894366 1.8 13.6949422 0"></polygon>
+                            <polygon id="Fill-5" fill="#000000" points="8.98943662 5.7 13.1894366 5.7 13.1894366 3.9 8.98943662 3.9"></polygon>
+                            <polygon id="Fill-6" fill="#000000" points="8.98943662 7.8 8.98943662 9.6 13.384114 9.6 14.6894366 7.8"></polygon>
+                            <path d="M20.5267637,0 L18.8894366,2.39318762 L20.1677704,4.26257167 L23.1013147,0 L20.5267637,0 Z M18.8907613,6.81639512 L20.8149518,9.6 L23.3894366,9.6 L20.1691614,4.96758445 L18.8907613,6.81639512 Z" id="Fill-7" fill="#000000"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
