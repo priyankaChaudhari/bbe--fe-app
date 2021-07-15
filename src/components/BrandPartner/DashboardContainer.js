@@ -415,7 +415,7 @@ function DashboardContainer() {
                   (userInfo && userInfo.role === 'BGS Manager')
                     ? 'BGS Dashboard'
                     : userInfo && userInfo.role === 'DSP Ad Manager'
-                    ? 'Dsp Dashboard'
+                    ? 'Ad Manager Dashboard'
                     : (userInfo &&
                         userInfo.role === 'Sponsored Advertising Ad Manager') ||
                       (userInfo && userInfo.role === 'Ad Manager')
