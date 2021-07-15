@@ -777,7 +777,7 @@ export default function PerformanceReport({
   const renderMarketplaceDropDown = () => {
     return (
       <Tab className="mb-3">
-        <WhiteCard className="with-less-radius">
+        <WhiteCard>
           <ul className="tabs">
             <li
               className={viewComponent === 'salePerformance' ? 'active' : ''}
@@ -1180,7 +1180,7 @@ export default function PerformanceReport({
   };
   const renderSalePerformancePanel = () => {
     return (
-      <WhiteCard className="with-less-radius">
+      <WhiteCard>
         <div className="row">
           <div className="col-md-6 col-sm1-12">
             {' '}
@@ -1244,7 +1244,7 @@ export default function PerformanceReport({
   const renderPositiveFeedbackPanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
           <div className="seller-health positive">
             {dspData && dspData.feedback_30
@@ -1269,7 +1269,7 @@ export default function PerformanceReport({
   const renderOrderIssuesPanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           {' '}
           <p className="black-heading-title mt-0 mb-4">Order Issues</p>
           <div className="seller-health">
@@ -1293,7 +1293,7 @@ export default function PerformanceReport({
   const renderInventoryScorePanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height ">
           <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
           {/* <PiechartResponsive> */}
           <ResponsiveContainer width="99%" height={200}>
@@ -1367,7 +1367,7 @@ export default function PerformanceReport({
   const renderBBPercentGraphPanel = () => {
     return (
       <div className="col-sm-12 mb-3 ">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           <div className="row">
             <div className="col-6 ">
               {' '}

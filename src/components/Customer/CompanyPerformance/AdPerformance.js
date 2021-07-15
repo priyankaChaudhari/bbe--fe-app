@@ -978,7 +978,7 @@ export default function AdPerformance({
   const renderMarketplaceDropDown = () => {
     return (
       <Tab className="mb-3">
-        <WhiteCard className="with-less-radius">
+        <WhiteCard>
           <ul className="tabs">
             <li
               className={viewComponent === 'salePerformance' ? 'active' : ''}

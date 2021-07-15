@@ -298,9 +298,7 @@ export default function AgreementDetails({ agreements, id }) {
     }
 
     return fields && fields.length === 0 ? (
-      <WhiteCard className="text-center with-less-radius">
-        No Agreements Found.
-      </WhiteCard>
+      <WhiteCard className="text-center">No Agreements Found.</WhiteCard>
     ) : (
       fields
     );

@@ -214,7 +214,7 @@ export default function SetupCheckList({ id, brandId }) {
           Your creative schedule is being generated
         </p>
       </WhiteCard> */}
-          <WhiteCard className="mt-3 with-less-radius">
+          <WhiteCard className="mt-3">
             <p className="black-heading-title mt-2 ">
               Active Agreement(s) ({agreementData.count})
             </p>

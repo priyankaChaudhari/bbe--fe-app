@@ -19,7 +19,7 @@ export default function Activity({
   return (
     <>
       <div className="col-lg-6  col-12 mb-3">
-        <WhiteCard className="activity-card with-less-radius">
+        <WhiteCard className="activity-card">
           {(isLoading.loader && isLoading.type === 'activityPage') ||
           activityData === null ? (
             <PageLoader
