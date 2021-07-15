@@ -13,8 +13,8 @@ import {
   CommonPagination,
 } from '../../common';
 import ErrorMsg from '../../common/ErrorMsg';
-import PdfViewer from '../../common/PdfViewer';
-
+// import PdfViewer from '../../common/PdfViewer';
+import PdfAnnotator from '../../common/PdfAnnotator';
 import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
@@ -52,8 +52,8 @@ function BrandAssetsPreview({
   const [responseId, setResponseId] = useState(null);
   const [commentsData, setCommentData] = useState();
   const [storeCommentError, setStoreCommentError] = useState();
-  const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
-  const [clickOnAddNewAnnotaion, setClickOnAddNewAnnotaion] = useState(false);
+  const [maxAnnotationNumber, setMaxAnnotationNumber] = useState(null);
+  const [clickOnAddNewAnnotation, setClickOnAddNewAnnotation] = useState(false);
   const [pageNumber, setPageNumber] = useState();
   const [showClickModal, setShowClickModal] = useState(false);
   const [isClickedOnImage, setIsClickedOnImage] = useState(false);
@@ -90,10 +90,11 @@ function BrandAssetsPreview({
         setCommentsCount(res.data.count);
         setCommentsLoader(false);
         setImageLoading(false);
+        // setMaxAnnotationNumber(commentsData.length + 1);
         if (res.data.max_annotation === null) {
-          setMaxAnnotaionNumber(1);
+          setMaxAnnotationNumber(1);
         } else {
-          setMaxAnnotaionNumber(res.data.max_annotation + 1);
+          setMaxAnnotationNumber(res.data.max_annotation + 1);
         }
       }
     });
@@ -117,8 +118,8 @@ function BrandAssetsPreview({
         if (res && res.status === 201) {
           getComments(1, showAssetPreview.selectedFile.id);
           setNewCommentData('');
-          setClickOnAddNewAnnotaion(false);
-          setNewAnnotaionPosition({ left: 0, top: 0 });
+          setClickOnAddNewAnnotation(false);
+          setNewAnnotationPosition({ left: 0, top: 0 });
           setIsClickedOnImage(false);
           setShowClickModal(false);
         }
@@ -134,8 +135,8 @@ function BrandAssetsPreview({
       setCommentData();
       setIsClickedOnImage(false);
       setNewCommentData('');
-      setClickOnAddNewAnnotaion(false);
-      setNewAnnotaionPosition({
+      setClickOnAddNewAnnotation(false);
+      setNewAnnotationPosition({
         left: 0,
         top: 0,
       });
@@ -193,8 +194,8 @@ function BrandAssetsPreview({
       getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
-    setClickOnAddNewAnnotaion(false);
-    setNewAnnotaionPosition({
+    setClickOnAddNewAnnotation(false);
+    setNewAnnotationPosition({
       left: 0,
       top: 0,
     });
@@ -212,13 +213,13 @@ function BrandAssetsPreview({
       index: 0,
     });
     setNewCommentData('');
-    setClickOnAddNewAnnotaion(false);
-    setNewAnnotaionPosition({
+    setClickOnAddNewAnnotation(false);
+    setNewAnnotationPosition({
       left: 0,
       top: 0,
     });
 
-    setMaxAnnotaionNumber(null);
+    setMaxAnnotationNumber(null);
     setStoreCommentError();
 
     setShowClickModal(false);
@@ -246,16 +247,16 @@ function BrandAssetsPreview({
     storeCommentData(
       newCommentData,
       showAssetPreview.selectedFile.id,
-      newAnnotaionPosition,
-      maxAnnotaionNumber,
+      newAnnotationPosition,
+      maxAnnotationNumber,
     );
   };
 
   const onCommnetsLabelClick = () => {
     if (showCommentSection) {
       setNewCommentData('');
-      setClickOnAddNewAnnotaion(false);
-      setNewAnnotaionPosition({
+      setClickOnAddNewAnnotation(false);
+      setNewAnnotationPosition({
         left: 0,
         top: 0,
       });
@@ -269,9 +270,7 @@ function BrandAssetsPreview({
 
   const onMouseDown = (e) => {
     e.preventDefault(true);
-    // if (showClickModal) {
-    //   setShowClickModal(false);
-    // }
+
     if (!isClickedOnImage) {
       setIsClickedOnImage(true);
     }
@@ -296,7 +295,7 @@ function BrandAssetsPreview({
       //   theThing.clientHeight,
       // );
 
-      setNewAnnotaionPosition({
+      setNewAnnotationPosition({
         left: percentXImg,
         top: percentYImg,
       });
@@ -312,11 +311,38 @@ function BrandAssetsPreview({
     //     container.getBoundingClientRect().top -
     //     theThing.clientHeight / 2;
 
-    //   // setNewAnnotaionPosition({
+    //   // setNewAnnotationPosition({
     //   //   left: leftPosition,
     //   //   top: topPosition,
     //   // });
     // }
+  };
+
+  const onPdfMouseDown = (e, selector) => {
+    if (clickOnAddNewAnnotation) {
+      e.preventDefault(true);
+
+      if (!isClickedOnImage) {
+        setIsClickedOnImage(true);
+      }
+      const container = document.querySelector(`.page_${selector}`);
+      const theThing = document.querySelector('#thing');
+
+      if (theThing) {
+        const offset = container.getBoundingClientRect();
+        const clickX = e.clientX - offset.left - theThing.clientWidth / 2;
+        const clickY = e.clientY - offset.top - theThing.clientHeight / 2;
+        const percentXImg = (clickX * 100) / offset.width;
+        const percentYImg = (clickY * 100) / offset.height;
+
+        setNewAnnotationPosition({
+          page: `${selector}`,
+          left: percentXImg,
+          top: percentYImg,
+        });
+        // console.log('position', percentXImg, percentYImg, `${selector}`);
+      }
+    }
   };
 
   const handlePageChange = (currentPage) => {
@@ -324,17 +350,17 @@ function BrandAssetsPreview({
     getComments(currentPage, showAssetPreview.selectedFile.id);
   };
 
-  const cancelAnnotaion = () => {
+  const cancelAnnotation = () => {
     setShowClickModal(false);
-    setClickOnAddNewAnnotaion(false);
+    setClickOnAddNewAnnotation(false);
     setIsClickedOnImage(false);
-    setNewAnnotaionPosition({ left: 0, top: 0 });
+    setNewAnnotationPosition({ left: 0, top: 0 });
   };
 
   const setAddButtonClass = () => {
     if (
       newCommentData === '' ||
-      (clickOnAddNewAnnotaion && !isClickedOnImage)
+      (clickOnAddNewAnnotation && !isClickedOnImage)
     ) {
       return 'btn-primary w-100 mt-3 disabled';
     }
@@ -608,7 +634,7 @@ function BrandAssetsPreview({
     );
   };
 
-  const renderExistingAnnotations = (flag = false) => {
+  const renderImageAnnotations = (flag = false) => {
     if (showCommentSection && flag) {
       return (
         commentsData &&
@@ -632,17 +658,71 @@ function BrandAssetsPreview({
       );
     }
 
-    if (clickOnAddNewAnnotaion) {
+    if (clickOnAddNewAnnotation) {
       return (
         <div
           id="thing"
           className={isClickedOnImage ? 'annotation' : 'annotationNone'}
           style={{
             position: 'absolute',
-            left: `${newAnnotaionPosition.left}%`,
-            top: `${newAnnotaionPosition.top}%`,
+            left: `${newAnnotationPosition.left}%`,
+            top: `${newAnnotationPosition.top}%`,
           }}>
-          {isClickedOnImage ? maxAnnotaionNumber : null}
+          {isClickedOnImage ? maxAnnotationNumber : null}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderPDFAnnotations = (flag = false, index) => {
+    if (showCommentSection && flag) {
+      return (
+        commentsData &&
+        commentsData.map((item) => {
+          if (item.annotation !== null) {
+            return (
+              <div
+                id={item.id}
+                className={
+                  item.pdf_page_number === index
+                    ? 'annotation'
+                    : 'annotationNone'
+                }
+                style={{
+                  position: 'absolute',
+                  left: `${item.x_coordinate}%`,
+                  top: `${item.y_coordinate}%`,
+                }}>
+                {item.pdf_page_number === index ? item.annotation : ''}
+              </div>
+            );
+          }
+          return null;
+        })
+      );
+    }
+
+    if (clickOnAddNewAnnotation) {
+      return (
+        <div
+          //   id={`thingPage_${index}`}
+          id="thing"
+          className={
+            newAnnotationPosition.page === `${index}`
+              ? 'annotation'
+              : 'annotationNone'
+          }
+          style={{
+            position: 'absolute',
+            left: `${newAnnotationPosition.left}%`,
+            top: `${newAnnotationPosition.top}%`,
+          }}>
+          {isClickedOnImage
+            ? newAnnotationPosition.page === `${index}`
+              ? maxAnnotationNumber
+              : ''
+            : null}
         </div>
       );
     }
@@ -732,7 +812,7 @@ function BrandAssetsPreview({
                     <Button
                       className="btn-transparent verify-now-btn h-30 w-auto ml-2"
                       onClick={() => {
-                        cancelAnnotaion();
+                        cancelAnnotation();
                       }}>
                       Cancel
                     </Button>
@@ -781,24 +861,35 @@ function BrandAssetsPreview({
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
                     <BrandAssetPdf>
-                      <PdfViewer
+                      {/* <PdfViewer
                         pdf={
                           showAssetPreview &&
                           showAssetPreview.selectedFile &&
                           showAssetPreview.selectedFile.presigned_url
                         }
                         loadingMsg="Loading Document..."
+                      /> */}
+
+                      <PdfAnnotator
+                        pdf={
+                          showAssetPreview &&
+                          showAssetPreview.selectedFile &&
+                          showAssetPreview.selectedFile.presigned_url
+                        }
+                        loadingMsg="Loading Document..."
+                        onPdfMouseDown={onPdfMouseDown}
+                        renderPDFAnnotations={renderPDFAnnotations}
                       />
                     </BrandAssetPdf>
                   ) : (
                     <>
                       <object
                         onMouseDown={(event) =>
-                          clickOnAddNewAnnotaion ? onMouseDown(event) : null
+                          clickOnAddNewAnnotation ? onMouseDown(event) : null
                         }
                         id="imgContainer"
                         className={
-                          clickOnAddNewAnnotaion
+                          clickOnAddNewAnnotation
                             ? 'image-thumbnail cursorPointer'
                             : 'image-thumbnail'
                         }
@@ -823,8 +914,8 @@ function BrandAssetsPreview({
                           </div>
                         </div>
                       </object>
-                      {renderExistingAnnotations(true)}
-                      {renderExistingAnnotations()}
+                      {renderImageAnnotations(true)}
+                      {renderImageAnnotations()}
                       {}
                     </>
                   )}
