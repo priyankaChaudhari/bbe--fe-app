@@ -33,7 +33,13 @@ import Modal from 'react-modal';
 
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { DropDownSelect, ModalBox, Button, WhiteCard } from '../../../common';
+import {
+  DropDownSelect,
+  ModalBox,
+  Button,
+  WhiteCard,
+  PageLoader,
+} from '../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../api';
 
 import {
@@ -110,6 +116,9 @@ export default function PerformanceReport({
     weekly: false,
     month: false,
   });
+  const [salesGraphLoader, setSalesGraphLoader] = useState(false);
+  const [bBGraphLoader, setBbGraphLoader] = useState(false);
+
   const [isApiCall, setIsApiCall] = useState(false);
   const [activeSales, setActiveSales] = useState({ revenue: true });
   const customStyles = {
@@ -292,6 +301,7 @@ export default function PerformanceReport({
     (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
       // setIsLoading({ loader: true, type: 'button' });
       setIsApiCall(true);
+      setBbGraphLoader(true);
       getBuyBoxChartData(
         id,
         marketplace,
@@ -304,6 +314,7 @@ export default function PerformanceReport({
           // setApiError(res && res.data);
           // setIsLoading({ loader: false, type: 'button' });
           setIsApiCall(false);
+          setBbGraphLoader(false);
         }
         if (res && res.status === 200 && res.data && res.data.bbep) {
           const avg =
@@ -323,19 +334,9 @@ export default function PerformanceReport({
           for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
             tempBBData.push({ avg: avg.toFixed(2) });
           }
-          // if (tempBBData && tempBBData.length < 64) {
-          //   tempBBData.push({ avg: avg.toFixed(2) }, { avg: avg.toFixed(2) });
-          // } else {
-          //   tempBBData.push(
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //   );
-          // }
           setBBChartData(tempBBData);
           setIsApiCall(false);
+          setBbGraphLoader(false);
         }
       });
     },
@@ -352,6 +353,7 @@ export default function PerformanceReport({
     ) => {
       // setIsLoading({ loader: true, type: 'button' });
       setIsApiCall(true);
+      setSalesGraphLoader(true);
       getPerformance(
         id,
         selectedDailyFact,
@@ -364,6 +366,7 @@ export default function PerformanceReport({
           // setApiError(res && res.data);
           // setIsLoading({ loader: false, type: 'button' });
           setIsApiCall(false);
+          setSalesGraphLoader(false);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.daily_facts) {
@@ -420,6 +423,7 @@ export default function PerformanceReport({
             setSalesChartData([]);
           }
           setIsApiCall(false);
+          setSalesGraphLoader(false);
         }
       });
     },
@@ -1206,7 +1210,9 @@ export default function PerformanceReport({
         <div className="clear-fix" />
         {/* render sale graph */}
         {/* <div id="chartdiv" style={{ width: '100%', height: '500px' }} /> */}
-        {salesChartData.length !== 0 ? (
+        {salesGraphLoader ? (
+          <PageLoader component="" color="#FF5933" type="page" />
+        ) : salesChartData.length !== 0 ? (
           <SalesPerformanceChart
             chartId="chartdiv"
             chartData={salesChartData}
@@ -1414,7 +1420,9 @@ export default function PerformanceReport({
               </ul>
             </div>
           </div>
-          {bBChartData && bBChartData.length > 1 ? (
+          {bBGraphLoader ? (
+            <PageLoader component="" color="#FF5933" type="page" />
+          ) : bBChartData && bBChartData.length > 1 ? (
             renderBBgraph()
           ) : (
             <NoData>{noDataMessage}</NoData>

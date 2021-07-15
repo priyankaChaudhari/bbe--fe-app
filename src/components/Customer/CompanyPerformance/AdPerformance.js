@@ -22,7 +22,13 @@ import {
   ArrowRightBlackIcon,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button, WhiteCard, DropDownSelect } from '../../../common';
+import {
+  ModalBox,
+  Button,
+  WhiteCard,
+  DropDownSelect,
+  PageLoader,
+} from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
@@ -64,6 +70,8 @@ export default function AdPerformance({
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
   const [adDifference, setAdDifference] = useState([]);
   const [isApiCall, setIsApiCall] = useState(false);
+  const [adGraphLoader, setAdGraphLoader] = useState(false);
+  const [dspGraphLoader, setDspGraphLoader] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
@@ -526,6 +534,7 @@ export default function AdPerformance({
       endDate = null,
     ) => {
       setIsApiCall(true);
+      setAdGraphLoader(true);
       getAdPerformance(
         id,
         adType,
@@ -537,6 +546,7 @@ export default function AdPerformance({
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
+          setAdGraphLoader(false);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.daily_facts) {
@@ -549,6 +559,7 @@ export default function AdPerformance({
             setAdDifference([]);
           }
           setIsApiCall(false);
+          setAdGraphLoader(false);
         }
       });
     },
@@ -564,6 +575,7 @@ export default function AdPerformance({
       endDate = null,
     ) => {
       setIsApiCall(true);
+      setDspGraphLoader(true);
       getDSPPerformance(
         id,
         selectedDailyFact,
@@ -574,6 +586,7 @@ export default function AdPerformance({
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
+          setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.dsp_spend) {
@@ -585,6 +598,7 @@ export default function AdPerformance({
             // setDSPTotal({});
           }
           setIsApiCall(false);
+          setDspGraphLoader(false);
         }
       });
     },
@@ -2201,7 +2215,10 @@ export default function AdPerformance({
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
-        {adChartData.length >= 1 ? (
+
+        {adGraphLoader ? (
+          <PageLoader component="" color="#FF5933" type="page" />
+        ) : adChartData.length >= 1 ? (
           <AdPerformanceChart
             chartId="adChart"
             chartData={adChartData}
@@ -2238,7 +2255,9 @@ export default function AdPerformance({
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
         {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
-        {dspChartData.length >= 1 ? (
+        {dspGraphLoader ? (
+          <PageLoader component="" color="#FF5933" type="page" />
+        ) : dspChartData.length >= 1 ? (
           <DSPPerformanceChart
             chartId="dspChart"
             chartData={dspChartData}
