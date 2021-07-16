@@ -14,6 +14,7 @@ import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { DebounceInput } from 'react-debounce-input';
 
 import Theme from '../../theme/Theme';
 import NoRecordFound from '../../common/NoRecordFound';
@@ -2618,7 +2619,9 @@ export default function NewCustomerList() {
                   : 'col-lg-6 col-md-6 col-12 col-8  mb-2 pr-2 pl-2'
               }>
               <InputSearchWithRadius className="customer-list-header w-80">
-                <input
+                <DebounceInput
+                  // minLength={2}
+                  debounceTimeout={600}
                   className=" form-control search-filter"
                   placeholder="Search"
                   onChange={(event) => {
