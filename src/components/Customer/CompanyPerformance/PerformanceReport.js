@@ -1211,7 +1211,13 @@ export default function PerformanceReport({
         {/* render sale graph */}
         {/* <div id="chartdiv" style={{ width: '100%', height: '500px' }} /> */}
         {salesGraphLoader ? (
-          <PageLoader component="" color="#FF5933" type="page" />
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
         ) : salesChartData.length !== 0 ? (
           <SalesPerformanceChart
             chartId="chartdiv"
@@ -1421,7 +1427,13 @@ export default function PerformanceReport({
             </div>
           </div>
           {bBGraphLoader ? (
-            <PageLoader component="" color="#FF5933" type="page" />
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
           ) : bBChartData && bBChartData.length > 1 ? (
             renderBBgraph()
           ) : (

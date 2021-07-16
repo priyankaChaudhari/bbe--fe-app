@@ -2215,9 +2215,14 @@ export default function AdPerformance({
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
-
         {adGraphLoader ? (
-          <PageLoader component="" color="#FF5933" type="page" />
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
         ) : adChartData.length >= 1 ? (
           <AdPerformanceChart
             chartId="adChart"
@@ -2256,7 +2261,13 @@ export default function AdPerformance({
         {/* {renderDSPSpendTotals()} */}
         {renderDSPGroupBy()}
         {dspGraphLoader ? (
-          <PageLoader component="" color="#FF5933" type="page" />
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
         ) : dspChartData.length >= 1 ? (
           <DSPPerformanceChart
             chartId="dspChart"

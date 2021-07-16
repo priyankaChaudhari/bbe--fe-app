@@ -84,56 +84,56 @@ export default function ProductCatalog() {
                   <th width="25%" className="product-catalog-header">
                     Status
                   </th>
-                  {/* <th width="15%" className="product-catalog-header"/> */}
+                  {/* <th width="15%" className="product-catalog-header" /> */}
                 </tr>
 
-                {/* <label
+                <label
                   style={{ display: 'contents' }}
                   className="check-container customer-pannel"
-                  htmlFor="add-addendum"> */}
-                <tr width="100%">
-                  <td className="product-catalog-body">
-                    {' '}
-                    <div className="product-catalog-image">
-                      {/* <input
+                  htmlFor="add-addendum">
+                  <tr width="100%">
+                    <td className="product-catalog-body">
+                      {' '}
+                      <div className="product-catalog-image">
+                        <input
                           className="check-box-product-list"
                           type="checkbox"
                           id="add-addendum"
                         />
-                        <span className="checkmark" /> */}
-                      <img className="product-image" src={Logo} alt="" />{' '}
-                    </div>
-                    <div className="product-data">
-                      <div className="product-name">
-                        Threadmill Home Linen Twin Blanket - 1 Piece Herringbone
-                        Cotton Blanket
+                        <span className="checkmark" />
+                        <img className="product-image" src={Logo} alt="" />{' '}
                       </div>
-                      <div className="product-id">
-                        B000000001 / 6291108300282 / 8 Variations
+                      <div className="product-data">
+                        <div className="product-name">
+                          Threadmill Home Linen Twin Blanket - 1 Piece
+                          Herringbone Cotton Blanket
+                        </div>
+                        <div className="product-id">
+                          B000000001 / 6291108300282 / 8 Variations
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="product-catalog-body">
-                    <div className="status">
-                      {' '}
-                      <span className="bullet-point" />
-                      <span className="status-text"> Optimized</span>
-                    </div>
-                  </td>
-                  <td className="product-catalog-body">
-                    <div className="request">
-                      {' '}
-                      <img
-                        className="request-plan"
-                        width="18px"
-                        src={RequestPlan}
-                        alt="plan"
-                      />{' '}
-                      Request
-                    </div>
-                  </td>
-                </tr>
-                {/* </label> */}
+                    </td>
+                    <td className="product-catalog-body">
+                      <div className="status">
+                        {' '}
+                        <span className="bullet-point" />
+                        <span className="status-text"> Optimized</span>
+                      </div>
+                    </td>
+                    <td className="product-catalog-body">
+                      <div className="request">
+                        {' '}
+                        <img
+                          className="request-plan"
+                          width="18px"
+                          src={RequestPlan}
+                          alt="plan"
+                        />{' '}
+                        Request
+                      </div>
+                    </td>
+                  </tr>
+                </label>
                 <tr width="100%">
                   <td width="60%" className="product-catalog-body">
                     {' '}

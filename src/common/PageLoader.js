@@ -78,6 +78,12 @@ const DetailLoaderWrapper = styled.div`
     position: relative;
     left: 0;
   }
+  &.performance-graph {
+    top: 0;
+    position: relative;
+    left: 0;
+  }
+
   @media only screen and (max-width: 991px) {
     left: 0;
   }
@@ -146,6 +152,8 @@ export default function PageLoader({
             ? 'customer-details'
             : component === 'agrement-details'
             ? 'agrement-details'
+            : component === 'performance-graph'
+            ? 'performance-graph'
             : ''
         }>
         <Loader type="Bars" color={color} height={height} width={width} />

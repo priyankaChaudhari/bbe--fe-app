@@ -50,9 +50,7 @@ const Table = styled.table`
             left: 0;
             border-radius: 4px;
             width: 20px;
-            background-color: ${Theme.white};
             height: 20px;
-            border: 1px solid ${Theme.gray35};
             top: 20px;
             left: 10px;
           }
