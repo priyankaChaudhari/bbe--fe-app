@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -22,11 +22,14 @@ import {
   ChatBoxIcon,
   ArrowRightBlackIcon,
   AnnotationGoal,
+  RedTrashIcon,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 import {
   storeNewCommentData,
   getCommentsData,
+  deleteComment,
+  updateComment,
 } from '../../api/BrandAssestsApi';
 
 function BrandAssetsPreview({
@@ -38,50 +41,6 @@ function BrandAssetsPreview({
   isDeleted,
   setIsImgDeleted,
 }) {
-  // const list = [
-  //   {
-  //     annotation: 1,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEq',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: -0.25,
-  //     y_coordinate: -3.125,
-  //   },
-  //   {
-  //     annotation: 3,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEt',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: '167.875',
-  //     y_coordinate: '24.75',
-  //   },
-  //   {
-  //     annotation: 2,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEr',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: '169.31820678710938',
-  //     y_coordinate: '91.40908813476562',
-  //   },
-  // ];
   const { handleSubmit } = useForm();
   const [isImageLoading, setImageLoading] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
@@ -98,12 +57,27 @@ function BrandAssetsPreview({
   const [pageNumber, setPageNumber] = useState();
   const [showClickModal, setShowClickModal] = useState(false);
   const [isClickedOnImage, setIsClickedOnImage] = useState(false);
-
   const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
     top: 0,
     left: 0,
   });
   const fileType = ['application/pdf', 'font/ttf', 'font/otf', 'font/woff'];
+  const [showDelete, setShowDelete] = useState(false);
+  const [showTextArea, setShowTextArea] = useState(false);
+  const ref = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDelete(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   const getComments = useCallback((currentPage, documnetId) => {
     setCommentsLoader(true);
@@ -363,9 +337,79 @@ function BrandAssetsPreview({
       (clickOnAddNewAnnotaion && !isClickedOnImage)
     ) {
       return 'btn-primary w-100 mt-3 disabled';
-    } 
-      return 'btn-primary w-100 mt-3';
-    
+    }
+    return 'btn-primary w-100 mt-3';
+  };
+
+  const onDeleteComment = (id) => {
+    deleteComment(id).then(() => {
+      getComments(1, showAssetPreview.selectedFile.id);
+      setShowDelete({ [id]: false });
+    });
+  };
+
+  const editComment = (id) => {
+    setAddCommentsLoader(true);
+    updateComment(id, { message: newCommentData }).then((res) => {
+      if (res && res.status === 200) {
+        getComments(1, showAssetPreview.selectedFile.id);
+        setShowTextArea(false);
+        setNewCommentData('');
+        setAddCommentsLoader(false);
+      }
+      if (res && res.status === 400) {
+        setStoreCommentError(res.data);
+        setAddCommentsLoader(false);
+      }
+    });
+  };
+
+  const generateTextArea = (item) => {
+    return (
+      <FormField className="mt-2 mb-2">
+        <textarea
+          className="text-area-box displayNone"
+          rows="4"
+          placeholder="Enter comment"
+          defaultValue={item.message}
+          onChange={(event) => handleChange(event)}
+        />
+        <ErrorMsg>
+          {storeCommentError &&
+            storeCommentError.message &&
+            storeCommentError.message[0]}
+        </ErrorMsg>{' '}
+        <div className="row">
+          <div className="col-6">
+            <Button
+              className="btn-transparent w-25 mt-3"
+              type="button"
+              onClick={() => {
+                setShowTextArea(false);
+                setNewCommentData('');
+              }}>
+              {addCommentsLoader ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Cancel'
+              )}
+            </Button>
+          </div>
+          <div className="col-6">
+            <Button
+              className="btn-primary w-25 mt-3"
+              type="button"
+              onClick={() => editComment(item.id)}>
+              {addCommentsLoader ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Update'
+              )}
+            </Button>
+          </div>
+        </div>
+      </FormField>
+    );
   };
 
   const renderComments = () => {
@@ -393,8 +437,51 @@ function BrandAssetsPreview({
                 {' '}
                 {item.first_name} {item.last_name}:
               </span>{' '}
-              {item.message}
+              {showTextArea && showTextArea[item.id] ? (
+                <>{generateTextArea(item)}</>
+              ) : (
+                <>{item.message}</>
+              )}
               <div className="time-date  mt-1">{item.created_at}</div>
+              {item.user === userInfo.id ? (
+                <>
+                  <div
+                    className="time-date  mt-1 cursor"
+                    onClick={() => setShowTextArea({ [item.id]: true })}
+                    role="presentation">
+                    Edit
+                  </div>
+                  <div
+                    className="time-date  mt-1 cursor"
+                    onClick={() =>
+                      setShowDelete({
+                        [item.id]: true,
+                      })
+                    }
+                    role="presentation">
+                    Delete
+                    {showDelete && showDelete[item.id] ? (
+                      <div
+                        ref={ref}
+                        className="delete-msg"
+                        role="presentation"
+                        onClick={() => onDeleteComment(item.id)}>
+                        {' '}
+                        <img
+                          className="red-trash-icon"
+                          src={RedTrashIcon}
+                          alt="check"
+                        />
+                        Confirm Delete
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </>
+              ) : (
+                ''
+              )}
             </div>
             <div className="clear-fix" />
           </GroupUser>
@@ -426,50 +513,54 @@ function BrandAssetsPreview({
             />
           </Footer>
         ) : null}
-        <div className="chat-footer">
-          <div className="input-type-box">
-            <FormField className="mt-2 mb-2">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <textarea
-                  className="text-area-box displayNone"
-                  rows="4"
-                  placeholder="Enter comment"
-                  value={newCommentData}
-                  onChange={(event) => handleChange(event)}
-                />
-                <ErrorMsg>
-                  {storeCommentError &&
-                    storeCommentError.message &&
-                    storeCommentError.message[0]}
-                </ErrorMsg>
+        {!showTextArea ? (
+          <div className="chat-footer">
+            <div className="input-type-box">
+              <FormField className="mt-2 mb-2">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <textarea
+                    className="text-area-box displayNone"
+                    rows="4"
+                    placeholder="Enter comment"
+                    value={newCommentData}
+                    onChange={(event) => handleChange(event)}
+                  />
+                  <ErrorMsg>
+                    {storeCommentError &&
+                      storeCommentError.message &&
+                      storeCommentError.message[0]}
+                  </ErrorMsg>
 
-                {!fileType.includes(
-                  showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type,
-                ) ? (
-                  <div
-                    className="add-annotation mt-2"
-                    onClick={() => {
-                      setShowClickModal(true);
-                      setClickOnAddNewAnnotaion(true);
-                    }}
-                    role="presentation">
-                    <img src={AnnotationGoal} alt="annotation" />
-                    Click to add an annotation
-                  </div>
-                ) : null}
-                <Button className={setAddButtonClass()}>
-                  {addCommentsLoader ? (
-                    <PageLoader color="#fff" type="button" />
-                  ) : (
-                    'Add'
-                  )}
-                </Button>
-              </form>
-            </FormField>
+                  {!fileType.includes(
+                    showAssetPreview &&
+                      showAssetPreview.selectedFile &&
+                      showAssetPreview.selectedFile.mime_type,
+                  ) ? (
+                    <div
+                      className="add-annotation mt-2"
+                      onClick={() => {
+                        setShowClickModal(true);
+                        setClickOnAddNewAnnotaion(true);
+                      }}
+                      role="presentation">
+                      <img src={AnnotationGoal} alt="annotation" />
+                      Click to add an annotation
+                    </div>
+                  ) : null}
+                  <Button className={setAddButtonClass()}>
+                    {addCommentsLoader ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : (
+                      'Add'
+                    )}
+                  </Button>
+                </form>
+              </FormField>
+            </div>
           </div>
-        </div>
+        ) : (
+          ''
+        )}
       </CommentAnnotationPanel>
     );
   };
@@ -544,7 +635,11 @@ function BrandAssetsPreview({
                       <span
                         className="cursor"
                         role="presentation"
-                        onClick={() => onCommnetsLabelClick()}>
+                        onClick={() => {
+                          onCommnetsLabelClick();
+                          setNewCommentData('');
+                          setShowTextArea(false);
+                        }}>
                         Comments ({commentsCount})
                       </span>
                     </li>

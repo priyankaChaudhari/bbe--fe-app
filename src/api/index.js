@@ -128,6 +128,8 @@ export {
   getBrandAssetsSummary,
   getBrandAssetsDetail,
   downloadBrandAssetImages,
+  deleteComment,
+  updateComment,
 } from './BrandAssestsApi';
 
 export {
