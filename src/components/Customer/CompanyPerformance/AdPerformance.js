@@ -1104,6 +1104,7 @@ export default function AdPerformance({
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div
+            id="BT-sponsored-adsalescard"
             onClick={() => setBoxToggle('adSales', 'ad')}
             role="presentation"
             className={setBoxClasses('adSales', 'ad-sales-active', 'ad')}>
@@ -1147,6 +1148,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-adspendcard"
             onClick={() => setBoxToggle('adSpend', 'ad')}
             role="presentation"
             className={setBoxClasses('adSpend', 'ad-spend-active', 'ad')}>
@@ -1191,6 +1193,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-adconversioncard"
             onClick={() => setBoxToggle('adConversion', 'ad')}
             role="presentation"
             className={setBoxClasses(
@@ -1237,6 +1240,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-impressionscard"
             onClick={() => setBoxToggle('impressions', 'ad')}
             role="presentation"
             className={setBoxClasses('impressions', 'impression-active', 'ad')}>
@@ -1278,6 +1282,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-sponsored-Acoscard"
             onClick={() => setBoxToggle('adCos', 'ad')}
             role="presentation"
             className={setBoxClasses('adCos', 'ad-cos-active', 'ad')}>
@@ -1319,6 +1324,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-Roascard"
             onClick={() => setBoxToggle('adRoas', 'ad')}
             role="presentation"
             className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
@@ -1361,6 +1367,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickcard"
             onClick={() => setBoxToggle('adClicks', 'ad')}
             role="presentation"
             className={setBoxClasses('adClicks', 'ad-click-active', 'ad')}>
@@ -1402,6 +1409,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickratecard"
             onClick={() => setBoxToggle('adClickRate', 'ad')}
             role="presentation"
             className={setBoxClasses(
@@ -1604,6 +1612,7 @@ export default function AdPerformance({
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div
+            id="BT-dspad-impressioncard"
             onClick={() => setBoxToggle('dspImpressions', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1649,6 +1658,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-dspspendcard"
             onClick={() => setBoxToggle('dspSpend', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspSpend', 'ad-spend-active', 'dsp')}>
@@ -1695,6 +1705,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-totalproductcard"
             onClick={() => setBoxToggle('dspTotalProductSales', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1748,6 +1759,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-totalroascard"
             onClick={() => setBoxToggle('dspTotalRoas', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1797,6 +1809,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-dspad-totaldpvrcard"
             onClick={() => setBoxToggle('dspTotalDpvr', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspTotalDpvr', 'ad-cos-active', 'dsp')}>
@@ -1838,6 +1851,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-TTLBrandcard"
             onClick={() => setBoxToggle('dspTtlNewBrandPurchases', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1891,6 +1905,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-productsalescard"
             onClick={() => setBoxToggle('dspProductSales', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1942,6 +1957,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-roascard"
             onClick={() => setBoxToggle('dspRoas', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspRoas', 'ad-clickrate-active', 'dsp')}>

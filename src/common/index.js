@@ -31,6 +31,7 @@ import CheckBoxList from './CheckBoxList';
 import BackToTop from './BackToTop';
 import { WhiteCard } from './WhiteCard';
 import HeaderDownloadFuntionality from './HeaderFunctionality';
+import Tabs from './Tabs';
 
 export {
   Button,
@@ -66,4 +67,5 @@ export {
   BackToTop,
   WhiteCard,
   HeaderDownloadFuntionality,
+  Tabs,
 };

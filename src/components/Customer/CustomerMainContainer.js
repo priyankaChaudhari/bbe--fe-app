@@ -58,6 +58,7 @@ import {
   CustomerStatus,
   EditAccountDetails,
   Notes,
+  ProductCatalog,
 } from './index';
 import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
 import BillingDetails from './BillingDetails';
@@ -336,6 +337,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
+      { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -346,6 +348,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
+      { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -1009,6 +1012,26 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
+                        <li
+                          onClick={() => {
+                            setViewComponent('product catalog');
+                            dispatch(setCustomerSelectedTab('product catalog'));
+                          }}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'product catalog'
+                                ? 'active'
+                                : ''
+                            }`}>
+                            <img
+                              className="file-contract"
+                              src={FileContract}
+                              alt=""
+                            />
+                            Product Catalog
+                          </div>
+                        </li>
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
@@ -1135,6 +1158,8 @@ export default function CustomerMainContainer() {
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails agreements={agreement} id={id} />
+                  ) : viewComponent === 'product catalog' ? (
+                    <ProductCatalog id={id} />
                   ) : viewComponent === 'company' ? (
                     <CompanyDetail
                       id={id}

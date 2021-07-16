@@ -10,6 +10,7 @@ import EditAccountDetails from './EditAccountDetails';
 import CustomerStatus from './CustomerStatus';
 import BillingDetails from './BillingDetails';
 import Notes from './Notes';
+import ProductCatalog from './ProductCatalog';
 // import AdPerformance from './AdPerformance';
 
 export {
@@ -24,5 +25,6 @@ export {
   CustomerStatus,
   BillingDetails,
   Notes,
+  ProductCatalog,
   // AdPerformance,
 };
