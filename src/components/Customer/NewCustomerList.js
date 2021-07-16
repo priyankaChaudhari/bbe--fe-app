@@ -51,7 +51,6 @@ import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import {
-  sortSubMenu,
   sortOptions,
   performanceSortOptions,
   sadSortOptions,
@@ -133,7 +132,7 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
-  const [orderByFlag, setOrderByFlag] = useState({ sequence: 'desc' });
+  // const [orderByFlag, setOrderByFlag] = useState({ sequence: 'desc' });
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -163,9 +162,7 @@ export default function NewCustomerList() {
       key: 'bgsSelection',
     },
   ]);
-  const [selectedSort, setSelectedSort] = useState(['Recenty Added']);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [showSubMenu, setShowSubMenu] = useState({ show: false, value: '' });
   const dropdownRef = useRef(null);
 
   const [expiringSoon, setExpiringSoon] = useState(
@@ -415,7 +412,6 @@ export default function NewCustomerList() {
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
-        orderByFlag,
       ).then((response) => {
         // console.log('customer List API', response.data.count);
         setData(response && response.data && response.data.results);
@@ -433,7 +429,6 @@ export default function NewCustomerList() {
       showAdPerformance,
       showDspAdPerformance,
       selectedTimeFrame,
-      orderByFlag,
     ],
   );
 
@@ -488,7 +483,6 @@ export default function NewCustomerList() {
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setShowSubMenu({ show: false, value: '' });
       setShowSortDropdown(false);
     }
   };
@@ -750,56 +744,10 @@ export default function NewCustomerList() {
     return diffDays;
   };
 
-  const handleMouseEnter = (item, index) => {
-    if (index > 2) {
-      setShowSubMenu({ show: true, value: item.value });
-    } else {
-      setShowSubMenu({ show: false, value: '' });
-    }
-  };
-
-  const handleSortFilter = (menu, submenu) => {
-    setSelectedSort([menu.label, submenu && submenu.label]);
-    setShowSubMenu({ show: false, value: '' });
-    setShowSortDropdown(false);
-    if (menu.value === 'expiring_soon') {
-      setExpiringSoon(true);
-      setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
-      setFilters({
-        ...filters,
-        sort_by: menu.value,
-      });
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          sort_by: menu.value,
-        }),
-      );
-    } else {
-      if (submenu) {
-        setOrderByFlag({ sequence: submenu.value });
-      }
-      setExpiringSoon(false);
-      setSelectedValue({ ...selectedValue, 'order-by': menu.value });
-      setFilters({
-        ...filters,
-        sort_by: menu.value,
-      });
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          sort_by: menu.value,
-        }),
-      );
-    }
-  };
-
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
-      setSelectedSort(['Recently Added']);
+      // setSelectedSort(['Recently Added']);
       setExpiringSoon(false);
       setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
       setFilters({
@@ -1262,16 +1210,6 @@ export default function NewCustomerList() {
         />
       </>
     );
-  };
-
-  const getSortOptions = () => {
-    return showPerformance
-      ? performanceSortOptions
-      : showAdPerformance
-      ? sadSortOptions
-      : showDspAdPerformance
-      ? dadSortOptions
-      : sortOptions;
   };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
@@ -2146,110 +2084,10 @@ export default function NewCustomerList() {
             ) : (
               <></>
             )}
-            <div
-              className="col-lg-2 col-md-6 col-12 pl-2 pr-2"
-              ref={dropdownRef}>
-              {/* <DropDownSelect className="customer-list-header">
+            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
+              <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
-              </DropDownSelect>{' '} */}
-              <div
-                className="dropdown-select-all-notes"
-                role="presentation"
-                onClick={() => {
-                  setShowSortDropdown(!showSortDropdown);
-                  setShowSubMenu({ show: false, value: '' });
-                }}>
-                {' '}
-                Sort:{' '}
-                <span className="selected-list">
-                  {' '}
-                  {selectedSort &&
-                  selectedSort.length > 1 &&
-                  selectedSort[1] !== null
-                    ? `${selectedSort[0]} / ${selectedSort[1]}`
-                    : selectedSort[0]}
-                </span>
-                <img
-                  src={CaretUp}
-                  alt="caret"
-                  style={{
-                    transform: showSortDropdown ? 'rotate(180deg)' : '',
-                    width: '25px',
-                    height: '25px',
-                    position: 'absolute',
-                    top: '17px',
-                    right: '21px',
-                  }}
-                />
-              </div>
-              <div
-                className={
-                  showSortDropdown
-                    ? 'dropdown-notes-filter show'
-                    : 'dropdown-notes-filter hide'
-                }>
-                <ul className="notes-option">
-                  {getSortOptions().map((item, index) => {
-                    return item.custom ? (
-                      <li
-                        className={
-                          showSubMenu
-                            ? item.label === selectedSort[0]
-                              ? `submenu-${index} on-hover1 show active`
-                              : `submenu-${index} on-hover1 show`
-                            : `submenu-${index} on-hover1 hide`
-                        }
-                        onMouseEnter={() => handleMouseEnter(item, index)}
-                        onMouseLeave={() =>
-                          setShowSubMenu({ show: false, value: '' })
-                        }>
-                        {item.label}
-
-                        {item.value === (showSubMenu && showSubMenu.value) &&
-                        showSubMenu.show ? (
-                          <div className="sub-menu-dropdown">
-                            <ul className="notes-option">
-                              {sortSubMenu.map((submenu) => {
-                                return (
-                                  <li
-                                    className={
-                                      selectedSort &&
-                                      selectedSort.length > 1 &&
-                                      item.label === selectedSort[0] &&
-                                      submenu.label === selectedSort[1]
-                                        ? 'active'
-                                        : ''
-                                    }
-                                    onClick={() =>
-                                      handleSortFilter(item, submenu)
-                                    }
-                                    role="presentation">
-                                    {submenu.label}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        ) : (
-                          ''
-                        )}
-                      </li>
-                    ) : (
-                      <li
-                        className={
-                          item.label === selectedSort[0] ? 'active' : ''
-                        }
-                        onClick={() => handleSortFilter(item, null)}
-                        onMouseEnter={() =>
-                          setShowSubMenu({ show: false, value: '' })
-                        }
-                        role="presentation">
-                        {item.label}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+              </DropDownSelect>{' '}
             </div>
           </div>
         </div>

@@ -28,7 +28,7 @@ export async function getCustomerList(
   dspAdPerformance,
   expiringSoon,
   dailyFacts,
-  orderByFlag,
+  // orderByFlag,
 ) {
   let params = {
     page:
@@ -59,7 +59,7 @@ export async function getCustomerList(
     params = {
       ...params,
       ...dailyFacts,
-      ...orderByFlag,
+      // ...orderByFlag,
       dashboard: 'sale_performance',
     };
   }
@@ -67,7 +67,7 @@ export async function getCustomerList(
     params = {
       ...params,
       ...dailyFacts,
-      ...orderByFlag,
+      // ...orderByFlag,
       dashboard: 'sponsored_ad_dashboard',
     };
   }
@@ -75,7 +75,7 @@ export async function getCustomerList(
     params = {
       ...params,
       ...dailyFacts,
-      ...orderByFlag,
+      // ...orderByFlag,
       dashboard: 'dsp_ad_performance',
     };
   }
