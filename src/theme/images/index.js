@@ -341,4 +341,5 @@ export {
   OrangeChat,
   PinIcons,
   RequestPlan,
+  NextActivityLogo,
 };
