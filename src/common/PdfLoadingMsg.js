@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Theme from '../theme/Theme';
 // import PageNotFoundImg from '../theme/images/page-not-found.svg';
 
-export default function PdfLoadingMsg({ type, message = 'Loading...' }) {
+export default function PdfLoadingMsg({
+  type,
+  setIsLoader,
+  message = 'Loading...',
+}) {
+  useEffect(() => {
+    setIsLoader({ loader: true });
+  }, [setIsLoader]);
+
   return (
     <PageNotFounds>
       {/* <img src={PageNotFoundImg} alt="emoji" /> */}
@@ -38,9 +46,11 @@ const PageNotFounds = styled.div`
 PdfLoadingMsg.defaultProps = {
   type: '',
   message: '',
+  setIsLoader: () => {},
 };
 
 PdfLoadingMsg.propTypes = {
   type: PropTypes.string,
   message: PropTypes.string,
+  setIsLoader: PropTypes.func,
 };
