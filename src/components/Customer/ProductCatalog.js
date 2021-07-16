@@ -86,7 +86,7 @@ export default function ProductCatalog() {
                   </th>
                   <th width="15%" className="product-catalog-header">
                     {' '}
-                    dff
+                    &nbsp;
                   </th>
                 </tr>
 

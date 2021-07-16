@@ -1534,7 +1534,7 @@ export default function AdPerformance({
             <ul className="days-tab">
               <li id=" BT-adperformance-days">
                 {' '}
-                className={adFilters.daily === false ? 'disabled-tab' : ''}{' '}
+                {adFilters.daily === false ? 'disabled-tab' : ''}{' '}
                 <input
                   className="d-none"
                   type="radio"
