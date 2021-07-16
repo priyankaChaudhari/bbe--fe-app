@@ -1621,6 +1621,25 @@ export default function CustomerMainContainer() {
           )}
         </>
       )}
+      {/* <div className=" pt-5">
+        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-12 text-right">
+                <span className="skip-step cursor" role="presentation">
+                  1 product selected
+                </span>
+
+                <Button className="btn-primary">Request Assets</Button>
+
+                <Button className="btn-transparent w-50 on-boarding ml-4">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CustomerDetailsFooter>
+      </div> */}
     </>
   );
 }
@@ -1654,6 +1673,32 @@ export default function CustomerMainContainer() {
 //   @media only screen and (max-width: 991px) {
 //     .banner {
 //       padding-left: 0;
+//     }
+//   }
+// `;
+
+// const CustomerDetailsFooter = styled.div`
+//   border: 1px solid ${Theme.gray7};
+//   bottom: 0px;
+//   background: ${Theme.white};
+//   position: fixed;
+//   min-height: 60px;
+//   z-index: 2;
+//   box-shadow: inset 0 1px 0 0 #e2e2ea;
+//   padding-top: 270px;
+//   width: 100%;
+//   padding: 8px 0;
+
+//   .skip-step {
+//     color: ${Theme.gray40};
+//     font-size: ${Theme.extraNormal};
+//     margin-right: 20px;
+//   }
+//   @media only screen and (max-width: 330px) {
+//     .skip-step {
+//       color: ${Theme.gray40};
+//       font-size: ${Theme.extraNormal};
+//       margin-right: 10px;
 //     }
 //   }
 // `;

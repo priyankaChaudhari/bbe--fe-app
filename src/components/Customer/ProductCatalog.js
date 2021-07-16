@@ -84,13 +84,13 @@ export default function ProductCatalog() {
                   <th width="25%" className="product-catalog-header">
                     Status
                   </th>
-                  {/* <th width="15%" className="product-catalog-header" /> */}
+                  <th width="15%" className="product-catalog-header">
+                    {' '}
+                    dff
+                  </th>
                 </tr>
 
-                <label
-                  style={{ display: 'contents' }}
-                  className="check-container customer-pannel"
-                  htmlFor="add-addendum">
+                <label style={{ display: 'contents' }} htmlFor="add-addendum">
                   <tr width="100%">
                     <td className="product-catalog-body">
                       {' '}
@@ -134,38 +134,53 @@ export default function ProductCatalog() {
                     </td>
                   </tr>
                 </label>
-                <tr width="100%">
-                  <td width="60%" className="product-catalog-body">
-                    {' '}
-                    <img
-                      className="product-image"
-                      src={DefaultUser}
-                      alt=""
-                    />{' '}
-                    <div className="product-name">
-                      Threadmill Home Linen Twin Blanket - 1
-                    </div>
-                  </td>
-                  <td width="25%" className="product-catalog-body">
-                    <div className="status un-optimized scheduled assets-received">
+                <label style={{ display: 'contents' }} htmlFor="2">
+                  <tr width="100%">
+                    <td className="product-catalog-body">
                       {' '}
-                      <span className="bullet-point gray light-yellow light-blue" />
-                      <span className="status-text"> Assets Received </span>
-                    </div>
-                  </td>
-                  <td width="15%" className="product-catalog-body">
-                    <div className="request">
-                      {' '}
-                      <img
-                        className="request-plan"
-                        width="18px"
-                        src={RequestPlan}
-                        alt="plan"
-                      />{' '}
-                      Request
-                    </div>
-                  </td>
-                </tr>
+                      <div className="product-catalog-image">
+                        <input
+                          className="check-box-product-list"
+                          type="checkbox"
+                          id="2"
+                        />
+                        <span className="checkmark" />
+                        <img
+                          className="product-image"
+                          src={DefaultUser}
+                          alt=""
+                        />{' '}
+                      </div>
+                      <div className="product-data">
+                        <div className="product-name">
+                          Threadmill Home Linen Twin Blanket - 1
+                        </div>
+                        <div className="product-id">
+                          B000000001 / 6291108300282 / 8 Variations
+                        </div>
+                      </div>
+                    </td>
+                    <td className="product-catalog-body">
+                      <div className="status un-optimized scheduled assets-received">
+                        {' '}
+                        <span className="bullet-point gray light-yellow light-blue" />
+                        <span className="status-text"> Assets Received </span>
+                      </div>
+                    </td>
+                    <td className="product-catalog-body">
+                      <div className="request">
+                        {' '}
+                        <img
+                          className="request-plan"
+                          width="18px"
+                          src={RequestPlan}
+                          alt="plan"
+                        />{' '}
+                        Request
+                      </div>
+                    </td>
+                  </tr>
+                </label>
               </Table>
             </>
           ) : (

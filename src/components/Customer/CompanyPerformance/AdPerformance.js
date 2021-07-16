@@ -1014,6 +1014,7 @@ export default function AdPerformance({
             <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
               {' '}
               <DropDownSelect
+                id="BT-adperformancedata-countryfilter"
                 className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
@@ -1037,7 +1038,9 @@ export default function AdPerformance({
                 />
               </DropDownSelect>
             </div>
-            <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
+            <div
+              className="col-md-4 col-sm-6  mt-2 pt-1 pl-0 "
+              id="BT-adperformancedata-daysfilter">
               {' '}
               {DropDown(
                 'days-performance',
@@ -1067,7 +1070,9 @@ export default function AdPerformance({
         </div>
         <div className="col-md-8 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
-            <li className="ad-performance">
+            <li
+              className="ad-performance"
+              id="BT-adperformancedata-alltypesfilter">
               {' '}
               {DropDown(
                 'days-performance',
@@ -1477,7 +1482,7 @@ export default function AdPerformance({
         {_.size(selectedAdBox) <= 2 ? (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
-              <li>
+              <li id="BT-adperformance-recentgraph">
                 <div className="weeks">
                   <span
                     className={
@@ -1491,7 +1496,7 @@ export default function AdPerformance({
                 </div>
               </li>
               {selectedAdDF !== 'custom' ? (
-                <li>
+                <li id="BT-adperformance-perviousgraph">
                   <div className="weeks">
                     <ul className="dashed-line">
                       <li
@@ -1527,8 +1532,9 @@ export default function AdPerformance({
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
-              <li className={adFilters.daily === false ? 'disabled-tab' : ''}>
+              <li id=" BT-adperformance-days">
                 {' '}
+                className={adFilters.daily === false ? 'disabled-tab' : ''}{' '}
                 <input
                   className="d-none"
                   type="radio"
@@ -1542,7 +1548,9 @@ export default function AdPerformance({
                 <label htmlFor="daysCheck">Daily</label>
               </li>
 
-              <li className={adFilters.weekly === false ? 'disabled-tab' : ''}>
+              <li
+                id=" BT-adperformance-weekly"
+                className={adFilters.weekly === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
@@ -1555,7 +1563,9 @@ export default function AdPerformance({
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
 
-              <li className={adFilters.month === false ? 'disabled-tab' : ''}>
+              <li
+                id=" BT-adperformance-monthly"
+                className={adFilters.month === false ? 'disabled-tab' : ''}>
                 <input
                   className=" d-none"
                   type="radio"

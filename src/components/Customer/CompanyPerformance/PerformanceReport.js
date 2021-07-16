@@ -804,6 +804,7 @@ export default function PerformanceReport({
             <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
               {' '}
               <DropDownSelect
+                id="BT-salesperformancedata-countryfilter"
                 className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
