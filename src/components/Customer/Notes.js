@@ -214,7 +214,7 @@ function Notes({
         setData({ ...data, showNotesEditor: false, showEditor: false });
         setIsLoading({ loader: false, type: 'page' });
         setNewNoteEditor(false);
-        getData(data.currentPage);
+        getData(1);
       });
     }
   };
