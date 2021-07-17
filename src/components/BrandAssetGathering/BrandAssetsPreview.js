@@ -382,7 +382,7 @@ function BrandAssetsPreview({
         <div className="row">
           <div className="col-6">
             <Button
-              className="btn-transparent w-25 mt-3"
+              className="btn-transparent w-100 mt-3"
               type="button"
               onClick={() => {
                 setShowTextArea(false);
@@ -397,7 +397,7 @@ function BrandAssetsPreview({
           </div>
           <div className="col-6">
             <Button
-              className="btn-primary w-25 mt-3"
+              className="btn-primary w-100 mt-3"
               type="button"
               onClick={() => editComment(item.id)}>
               {addCommentsLoader ? (
@@ -442,44 +442,87 @@ function BrandAssetsPreview({
               ) : (
                 <>{item.message}</>
               )}
-              <div className="time-date  mt-1">{item.created_at}</div>
               {item.user === userInfo.id ? (
-                <>
-                  <div
-                    className="time-date  mt-1 cursor"
-                    onClick={() => setShowTextArea({ [item.id]: true })}
-                    role="presentation">
-                    Edit
-                  </div>
-                  <div
-                    className="time-date  mt-1 cursor"
-                    onClick={() =>
-                      setShowDelete({
-                        [item.id]: true,
-                      })
-                    }
-                    role="presentation">
-                    Delete
-                    {showDelete && showDelete[item.id] ? (
-                      <div
-                        ref={ref}
-                        className="delete-msg"
-                        role="presentation"
-                        onClick={() => onDeleteComment(item.id)}>
-                        {' '}
-                        <img
-                          className="red-trash-icon"
-                          src={RedTrashIcon}
-                          alt="check"
-                        />
-                        Confirm Delete
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                </>
+                <div className="time-date  mt-1">
+                  {item.created_at}
+                  <span className="pin">
+                    <ul className="more-action">
+                      <>
+                        <li
+                          role="presentation"
+                          onClick={() => setShowTextArea({ [item.id]: true })}>
+                          {' '}
+                          <span className="dot" /> Edit
+                        </li>
+                        <li className="delete">
+                          <div
+                            className="delete cursor"
+                            onClick={() =>
+                              setShowDelete({
+                                [item.id]: true,
+                              })
+                            }
+                            role="presentation">
+                            <span className="dot" /> Delete{' '}
+                            {showDelete && showDelete[item.id] ? (
+                              <div
+                                ref={ref}
+                                className="delete-msg"
+                                role="presentation"
+                                onClick={() => onDeleteComment(item.id)}>
+                                {' '}
+                                <img
+                                  className="red-trash-icon"
+                                  src={RedTrashIcon}
+                                  alt="check"
+                                />
+                                Confirm Delete
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                        </li>
+                      </>
+                    </ul>
+                  </span>
+                </div>
               ) : (
+                // <>
+                //   <div
+                //     className="time-date  mt-1 cursor"
+                //     onClick={() => setShowTextArea({ [item.id]: true })}
+                //     role="presentation">
+                //     Edit
+                //   </div>
+                //   <div
+                //     className="time-date  mt-1 cursor"
+                //     onClick={() =>
+                //       setShowDelete({
+                //         [item.id]: true,
+                //       })
+                //     }
+                //     role="presentation">
+                //     Delete
+                //     {showDelete && showDelete[item.id] ? (
+                //       <div
+                //         ref={ref}
+                //         className="delete-msg"
+                //         role="presentation"
+                //         onClick={() => onDeleteComment(item.id)}>
+                //         {' '}
+                //         <img
+                //           className="red-trash-icon"
+                //           src={RedTrashIcon}
+                //           alt="check"
+                //         />
+                //         Confirm Delete
+                //       </div>
+                //     ) : (
+                //       ''
+                //     )}
+                //   </div>
+                // </>
                 ''
               )}
             </div>

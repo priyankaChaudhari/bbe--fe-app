@@ -195,6 +195,7 @@ export const GroupUser = styled.div`
           position: relative;
           margin-left: 18px;
           cursor: pointer;
+          padding: 0;
           .dot {
             background-color: #8798ad;
             border-radius: 50%;
