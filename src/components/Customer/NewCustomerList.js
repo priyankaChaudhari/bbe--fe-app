@@ -44,6 +44,7 @@ import {
   FileIcon,
   ArrowDownIcon,
   UpDowGrayArrow,
+  SortUp,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
@@ -90,7 +91,6 @@ export default function NewCustomerList() {
       : '',
   );
   const { Option, SingleValue } = components;
-  const [selectedView, setSelectedView] = useState('contract_details');
   const [status, setStatus] = useState([]);
   const [selectedValue, setSelectedValue] = useState(
     JSON.parse(localStorage.getItem('filters'))
@@ -132,7 +132,7 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
-  // const [orderByFlag, setOrderByFlag] = useState({ sequence: 'desc' });
+  const [orderByFlag, setOrderByFlag] = useState(true);
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -412,6 +412,7 @@ export default function NewCustomerList() {
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
+        orderByFlag ? { sequence: 'desc' } : { sequence: 'asc' },
       ).then((response) => {
         // console.log('customer List API', response.data.count);
         setData(response && response.data && response.data.results);
@@ -499,6 +500,11 @@ export default function NewCustomerList() {
     localStorage.setItem('page', currentPage || 1);
     setPageNumber(currentPage);
     customerList(currentPage, selectedValue, filters, searchQuery);
+  };
+  const handleSortFilters = (orderKey) => {
+    setOrderByFlag(!orderByFlag);
+    setSelectedValue({ ...selectedValue, 'order-by': orderKey });
+    console.log('handle sort filter', orderKey);
   };
 
   const handleFilters = (event, key, type, action) => {
@@ -762,7 +768,6 @@ export default function NewCustomerList() {
         }),
       );
       if (event.value === 'contract_details') {
-        setSelectedView('contract_details');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
@@ -782,7 +787,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'performance') {
-        setSelectedView('performance');
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
@@ -802,7 +806,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'sponsored_ad_performance') {
-        setSelectedView('sponsored_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
@@ -822,7 +825,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'dsp_ad_performance') {
-        setSelectedView('dsp_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
@@ -1108,26 +1110,6 @@ export default function NewCustomerList() {
     }
 
     if (item === 'sort') {
-      if (selectedView === 'performance' || showPerformance) {
-        return (
-          selectedValue[item.key] ||
-          performanceSortOptions.filter(
-            (op) => op.value === selectedValue['order-by'],
-          )
-        );
-      }
-      if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
-        return (
-          selectedValue[item.key] ||
-          sadSortOptions.filter((op) => op.value === selectedValue['order-by'])
-        );
-      }
-      if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
-        return (
-          selectedValue[item.key] ||
-          dadSortOptions.filter((op) => op.value === selectedValue['order-by'])
-        );
-      }
       return (
         selectedValue[item.key] ||
         sortOptions.filter((op) => op.value === selectedValue['order-by'])
@@ -1167,17 +1149,7 @@ export default function NewCustomerList() {
       case 'user':
         return brandGrowthStrategist;
       case 'sort':
-        if (selectedView === 'performance' || showPerformance) {
-          return performanceSortOptions;
-        }
-        if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
-          return sadSortOptions;
-        }
-        if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
-          return dadSortOptions;
-        }
         return sortOptions;
-
       case 'stats':
         return timeFrameFilters;
       default:
@@ -1274,12 +1246,36 @@ export default function NewCustomerList() {
   const renderHeaders = () => {
     if (showPerformance) {
       return (
-        <div className="row">
+        <div className="row position-relative">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">Revenue</div>
-          <div className="col-lg-2 col-12 unit-sold ">Units Sold</div>
-          <div className="col-lg-2 col-12 traffic">Traffic</div>
-          <div className="col-lg-2 col-12 conversion">Conversion</div>
+
+          {performanceSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">
             Brand Strategist
           </div>
@@ -1290,10 +1286,33 @@ export default function NewCustomerList() {
       return (
         <div className="row">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">Ad Sales</div>
-          <div className="col-lg-2 col-12 unit-sold ">Ad Spend</div>
-          <div className="col-lg-2 col-12 traffic">Ad Impressions</div>
-          <div className="col-lg-2 col-12 conversion">Acos</div>
+          {sadSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">
             Sponsored Ad Manager
           </div>
@@ -1304,10 +1323,33 @@ export default function NewCustomerList() {
       return (
         <div className="row">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">IMPRESSIONS</div>
-          <div className="col-lg-2 col-12 unit-sold ">DSP Spend</div>
-          <div className="col-lg-2 col-12 traffic">TOTAL PRODUCT SALES</div>
-          <div className="col-lg-2 col-12 conversion">TOTAL ROAS</div>
+          {dadSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">DSP AD MANAGER</div>
         </div>
       );
@@ -2405,7 +2447,7 @@ const CustomerListPage = styled.div`
       }
     }
   }
-  .Revenue {
+  .revenue {
     padding-left: 5%;
   }
 
@@ -2598,6 +2640,15 @@ const CustomerListPage = styled.div`
 
   .selectAll {
     border-right: 1px solid black;
+  }
+  .sort-arrow-up {
+    position: absolute;
+    bottom: -6px;
+    margin-left: 2px;
+  }
+  .sort-arrow-up.rotate {
+    transform: rotate(180deg);
+    bottom: -4px;
   }
 `;
 

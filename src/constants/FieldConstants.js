@@ -191,45 +191,54 @@ export const sortOptions = [
 ];
 
 export const performanceSortOptions = [
-  { value: '-created_at', label: 'Recently Added' },
-  { value: '-updated_at', label: 'Last Modified' },
-  { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'revenue', label: 'Revenue', custom: true },
-  { value: 'units_sold', label: 'Units Sold', custom: true },
-  { value: 'traffic', label: 'Traffic', custom: true },
-  { value: 'conversion', label: 'Conversion', custom: true },
+  { value: 'revenue', label: 'Revenue', custom: true, class: 'revenue' },
+  {
+    value: 'units_sold',
+    label: 'Units Sold',
+    custom: true,
+    class: 'units_sold',
+  },
+  { value: 'traffic', label: 'Traffic', custom: true, class: 'traffic' },
+  {
+    value: 'conversion',
+    label: 'Conversion',
+    custom: true,
+    class: 'conversion',
+  },
 ];
 
 export const sadSortOptions = [
-  { value: '-created_at', label: 'Recently Added' },
-  { value: '-updated_at', label: 'Last Modified' },
-  { value: 'expiring_soon', label: 'Expiry Date' },
-  { value: 'ad_sales', label: 'Ad Sales', custom: true },
-  { value: 'ad_spend', label: 'Ad Spend', custom: true },
+  { value: 'ad_sales', label: 'Ad Sales', custom: true, class: 'revenue' },
+  { value: 'ad_spend', label: 'Ad Spend', custom: true, class: 'units_sold' },
   {
     value: 'impressions',
     label: 'Ad Impressions',
     custom: true,
+    class: 'traffic',
   },
-  { value: 'acos', label: 'ACOS', custom: true },
+  { value: 'acos', label: 'ACOS', custom: true, class: 'conversion' },
 ];
 
 export const dadSortOptions = [
-  { value: '-created_at', label: 'Recently Added' },
-  { value: '-updated_at', label: 'Last Modified' },
-  { value: 'expiring_soon', label: 'Expiry Date' },
   {
     value: 'impressions',
     label: 'Impressions',
     custom: true,
+    class: 'revenue',
   },
-  { value: 'dsp_spend', label: 'DSP Spend', custom: true },
+  { value: 'dsp_spend', label: 'DSP Spend', custom: true, class: 'units_sold' },
   {
     value: 'total_product_sales',
     label: 'Total Product Sales',
     custom: true,
+    class: 'traffic',
   },
-  { value: 'total_roas', label: 'Total ROAS', custom: true },
+  {
+    value: 'total_roas',
+    label: 'Total ROAS',
+    custom: true,
+    class: 'conversion',
+  },
 ];
 
 export const timeFrameFilters = [
