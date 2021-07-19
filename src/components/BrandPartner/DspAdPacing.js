@@ -15,7 +15,7 @@ export default function DspAdPacing() {
       <div className="straight-line horizontal-line  mt-3 mb-3" />
       <div className="modal-body-section">
         <div className="label-heading mb-2 pb-1">Spend Status</div>
-        <div className="status-heading-red">Overspending</div>
+        <div className="status-heading-red ">Overspending</div>
         <p className="basic-text">
           {' '}
           You are currently overspending by an average of $237 per day.
