@@ -57,7 +57,7 @@ function BrandAssetsPreview({
   const [pageNumber, setPageNumber] = useState();
   const [showClickModal, setShowClickModal] = useState(false);
   const [isClickedOnImage, setIsClickedOnImage] = useState(false);
-  const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
+  const [newAnnotationPosition, setNewAnnotationPosition] = useState({
     top: 0,
     left: 0,
   });
@@ -609,7 +609,7 @@ function BrandAssetsPreview({
                       className="add-annotation mt-2"
                       onClick={() => {
                         setShowClickModal(true);
-                        setClickOnAddNewAnnotaion(true);
+                        setClickOnAddNewAnnotation(true);
                       }}
                       role="presentation">
                       <img src={AnnotationGoal} alt="annotation" />
