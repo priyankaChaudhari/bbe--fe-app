@@ -119,6 +119,7 @@ export async function storeNewCommentData(
       x_coordinate: position.left,
       y_coordinate: position.top,
       annotation: annotationNumber,
+      pdf_page_number: position.page,
     };
   }
 
