@@ -135,7 +135,9 @@ export default function NewCustomerList() {
       : false,
   );
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
-    daily_facts: 'week',
+    daily_facts: JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).daily_facts
+      : 'week',
   });
   const [orderByFlag, setOrderByFlag] = useState(
     JSON.parse(localStorage.getItem('filters'))
@@ -411,7 +413,6 @@ export default function NewCustomerList() {
 
   const customerList = useCallback(
     (currentPage) => {
-      console.log('---order by flag', orderByFlag);
       setIsLoading({ loader: true, type: 'page' });
       getCustomerList(
         currentPage,
@@ -425,7 +426,6 @@ export default function NewCustomerList() {
         selectedTimeFrame,
         orderByFlag ? { sequence: 'desc' } : { sequence: 'asc' },
       ).then((response) => {
-        // console.log('customer List API', response.data.count);
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
         setCount(response && response.data && response.data.count);
@@ -543,7 +543,6 @@ export default function NewCustomerList() {
         sequence: !orderByFlag,
       }),
     );
-    // console.log('handle sort filter', orderKey);
   };
 
   const handleFilters = (event, key, type, action) => {
@@ -927,6 +926,17 @@ export default function NewCustomerList() {
         setShowCustomDateModal(true);
       } else {
         setSelectedTimeFrame({ daily_facts: event.value });
+        setFilters({
+          ...filters,
+          daily_facts: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            daily_facts: event.value,
+          }),
+        );
       }
     }
     if (type === 'search') {
