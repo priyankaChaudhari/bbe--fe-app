@@ -15,6 +15,7 @@ import {
   ServiceIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
+  ArrowRightBlackIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import NoRecordFound from '../../common/NoRecordFound';
@@ -177,6 +178,47 @@ function DspAdDashboard({ isLoading, data }) {
                               </p>
                             </li>
                           </ul>
+                        </div>
+                        <div className="straight-line horizontal-line spacing " />
+                        <div className="col-12">
+                          <div className="card-label">Monthly DSP Budget</div>
+                          <div className="monthly-dsp-budget">
+                            <span className="currency-amount on-track">
+                              $
+                              {item &&
+                                item.dsp_ad_pacing &&
+                                item.dsp_ad_pacing.total_budget
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            </span>{' '}
+                            <span className="dot" />
+                            &nbsp;&nbsp;{' '}
+                            <span
+                              className={
+                                item &&
+                                item.dsp_ad_pacing &&
+                                item.dsp_ad_pacing.dsp_pacing_flag === 0
+                                  ? 'on-track'
+                                  : ''
+                              }>
+                              {item &&
+                              item.dsp_ad_pacing &&
+                              item.dsp_ad_pacing.dsp_pacing_flag === 0
+                                ? 'On Track'
+                                : item &&
+                                  item.dsp_ad_pacing &&
+                                  item.dsp_ad_pacing.dsp_pacing_flag === 1
+                                ? 'Overspending'
+                                : 'Underspending'}{' '}
+                            </span>
+                            <img
+                              className="right-arrow-icon"
+                              width="18px"
+                              src={ArrowRightBlackIcon}
+                              alt="arrow"
+                            />
+                          </div>
                         </div>
                       </div>
 

@@ -75,7 +75,7 @@ export default function AdPerformance({
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
-  // const [dspTotal, setDSPTotal] = useState({});
+  const [dspData, setDspData] = useState({});
   const [dspCurrentTotal, setDspCurrentTotal] = useState([]);
   const [dspPreviousTotal, setDspPreviousTotal] = useState([]);
   const [dspDifference, setDspDifference] = useState([]);
@@ -589,6 +589,7 @@ export default function AdPerformance({
           setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
+          setDspData(res.data);
           if (res.data && res.data.dsp_spend) {
             const dspGraphData = bindDSPResponseData(res.data);
             // const dspGraphData = bindDSPResponseData(dspResData);
@@ -2213,10 +2214,66 @@ export default function AdPerformance({
           onClick={() => setShowDspAdPacingModal({ show: false })}
           role="presentation"
         />
-        <DspAdPacing />
+        <DspAdPacing dspData={dspData} />
       </Modal>
     );
   };
+
+  const displayDspPacingLabel = () => {
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === 1
+    ) {
+      return (
+        <span>
+          Overspending
+          <img
+            className="right-arrow-icon"
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === 0
+    ) {
+      return (
+        <span>
+          On Track
+          <img
+            className="right-arrow-icon"
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === -1
+    ) {
+      return (
+        <span>
+          Underspending
+          <img
+            className="right-arrow-icon"
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    return '';
+  };
+
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
@@ -2256,13 +2313,7 @@ export default function AdPerformance({
                 className="orange-text"
                 role="presentation"
                 onClick={() => setShowDspAdPacingModal({ show: true })}>
-                Overspending
-                <img
-                  className="right-arrow-icon"
-                  width="18px"
-                  src={ArrowRightBlackIcon}
-                  alt="arrow"
-                />
+                {displayDspPacingLabel()}
               </span>
             </p>
           </div>
