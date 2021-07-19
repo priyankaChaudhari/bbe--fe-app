@@ -57,6 +57,7 @@ import {
   sadSortOptions,
   dadSortOptions,
   timeFrameFilters,
+  sortByOrderOptions,
 } from '../../constants/FieldConstants';
 
 const customStyles = {
@@ -73,6 +74,10 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
   },
 };
+
+const salesSortOptions = sortOptions.concat(performanceSortOptions);
+const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);
+const dspAdSortOptions = sortOptions.concat(dadSortOptions);
 
 export default function NewCustomerList() {
   const history = useHistory();
@@ -132,7 +137,12 @@ export default function NewCustomerList() {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
     daily_facts: 'week',
   });
-  const [orderByFlag, setOrderByFlag] = useState(true);
+  const [orderByFlag, setOrderByFlag] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).sequence
+      : false,
+  );
+  const [showOrderOption, setShowOrderOption] = useState(false);
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -250,7 +260,7 @@ export default function NewCustomerList() {
               moveRangeOnFirstSelection={false}
               showDateDisplay={false}
               maxDate={setMaxDate()}
-              rangeColors={['#FF5933']}
+              rangeColors={[Theme.baseColor]}
               weekdayDisplayFormat="EEEEE"
               locale={enGB}
             />
@@ -401,6 +411,7 @@ export default function NewCustomerList() {
 
   const customerList = useCallback(
     (currentPage) => {
+      console.log('---order by flag', orderByFlag);
       setIsLoading({ loader: true, type: 'page' });
       getCustomerList(
         currentPage,
@@ -482,6 +493,16 @@ export default function NewCustomerList() {
     customerList(1);
   }, [customerList]);
 
+  useEffect(() => {
+    if (!isDesktop && selectedValue['order-by'] !== null) {
+      sortOptions.forEach((element) => {
+        if (selectedValue['order-by'] !== element.value) {
+          setShowOrderOption(true);
+        }
+      });
+    }
+  }, []);
+
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowSortDropdown(false);
@@ -503,8 +524,26 @@ export default function NewCustomerList() {
   };
   const handleSortFilters = (orderKey) => {
     setOrderByFlag(!orderByFlag);
-    setSelectedValue({ ...selectedValue, 'order-by': orderKey });
-    console.log('handle sort filter', orderKey);
+    setExpiringSoon(false);
+    setSelectedValue({
+      ...selectedValue,
+      'order-by': orderKey,
+      sequence: !orderByFlag,
+    });
+    setFilters({
+      ...filters,
+      sort_by: orderKey,
+      sequence: !orderByFlag,
+    });
+    localStorage.setItem(
+      'filters',
+      JSON.stringify({
+        ...filters,
+        sort_by: orderKey,
+        sequence: !orderByFlag,
+      }),
+    );
+    // console.log('handle sort filter', orderKey);
   };
 
   const handleFilters = (event, key, type, action) => {
@@ -753,9 +792,12 @@ export default function NewCustomerList() {
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
-      // setSelectedSort(['Recently Added']);
+      setShowOrderOption(false);
       setExpiringSoon(false);
-      setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
+      setSelectedValue({
+        ...selectedValue,
+        'order-by': '-created_at',
+      });
       setFilters({
         ...filters,
         sort_by: '-created_at',
@@ -846,6 +888,10 @@ export default function NewCustomerList() {
       }
     }
     if (type === 'sort') {
+      setShowOrderOption(false);
+      if (event && event.order) {
+        setShowOrderOption(true);
+      }
       if (event.value === 'expiring_soon') {
         setExpiringSoon(true);
         setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
@@ -894,6 +940,25 @@ export default function NewCustomerList() {
         );
       }, 1000);
     }
+
+    if (type === 'order') {
+      setOrderByFlag(event.value);
+      setSelectedValue({
+        ...selectedValue,
+        sequence: event.value,
+      });
+      setFilters({
+        ...filters,
+        sequence: event.value,
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sequence: event.value,
+        }),
+      );
+    }
   };
 
   const getSelectPlaceholder = (item) => {
@@ -918,6 +983,9 @@ export default function NewCustomerList() {
         return 'Stats For: Last 7 days';
       }
       return 'Stats For';
+    }
+    if (item === 'order') {
+      return 'Highest to Lowest';
     }
     return '';
   };
@@ -1110,6 +1178,36 @@ export default function NewCustomerList() {
     }
 
     if (item === 'sort') {
+      if (!isDesktop) {
+        if (showPerformance) {
+          return (
+            selectedValue[item.key] ||
+            salesSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            sponsorAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showDspAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            dspAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        return (
+          selectedValue[item.key] ||
+          sortOptions.filter((op) => op.value === selectedValue['order-by'])
+        );
+      }
       return (
         selectedValue[item.key] ||
         sortOptions.filter((op) => op.value === selectedValue['order-by'])
@@ -1120,6 +1218,10 @@ export default function NewCustomerList() {
       return timeFrameFilters.filter(
         (op) => op.value === selectedTimeFrame.daily_facts,
       );
+    }
+
+    if (item === 'order') {
+      return sortByOrderOptions.filter((op) => op.value === orderByFlag);
     }
 
     if (showPerformance) {
@@ -1149,9 +1251,24 @@ export default function NewCustomerList() {
       case 'user':
         return brandGrowthStrategist;
       case 'sort':
+        if (!isDesktop) {
+          if (showPerformance) {
+            return salesSortOptions;
+          }
+          if (showAdPerformance) {
+            return sponsorAdSortOptions;
+          }
+          if (showDspAdPerformance) {
+            return dspAdSortOptions;
+          }
+          return sortOptions;
+        }
         return sortOptions;
       case 'stats':
         return timeFrameFilters;
+
+      case 'order':
+        return sortByOrderOptions;
       default:
         return options;
     }
@@ -1159,7 +1276,13 @@ export default function NewCustomerList() {
 
   const generateDropdown = (item, reff = null) => {
     const searchFor =
-      item === 'sort' ? 'sort' : item === 'stats' ? 'stats' : 'view';
+      item === 'order'
+        ? 'order'
+        : item === 'sort'
+        ? 'sort'
+        : item === 'stats'
+        ? 'stats'
+        : 'view';
     return (
       <>
         <Select
@@ -2116,9 +2239,8 @@ export default function NewCustomerList() {
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
-
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
-              <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
+              <div className="col-lg-2 col-md-4 col-12   mb-2 pl-2 pr-2 ">
                 <DropDownSelect className="customer-list-header">
                   {generateDropdown('stats')}
                 </DropDownSelect>{' '}
@@ -2126,11 +2248,18 @@ export default function NewCustomerList() {
             ) : (
               <></>
             )}
-            <div className="col-lg-2 col-md-6 col-12 pl-2 pr-2">
+            <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
               <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
+            {showOrderOption && !isDesktop ? (
+              <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
+                <DropDownSelect className="customer-list-header">
+                  {generateDropdown('order')}
+                </DropDownSelect>
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -2262,7 +2391,7 @@ export default function NewCustomerList() {
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader
                   component="customer-list-loader"
-                  color="#FF5933"
+                  color={Theme.baseColor}
                   type="page"
                 />
               ) : (
@@ -2451,7 +2580,7 @@ const CustomerListPage = styled.div`
     padding-left: 5%;
   }
 
-  .unit-sold {
+  .units_sold {
     padding-left: 4%;
   }
   .traffic {
@@ -2643,12 +2772,13 @@ const CustomerListPage = styled.div`
   }
   .sort-arrow-up {
     position: absolute;
-    bottom: -6px;
+    bottom: -4px;
     margin-left: 2px;
+    transform: rotate(180deg);
   }
   .sort-arrow-up.rotate {
-    transform: rotate(180deg);
-    bottom: -4px;
+    transform: rotate(360deg);
+    bottom: -6px;
   }
 `;
 

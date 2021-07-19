@@ -179,9 +179,9 @@ export const sliderSettings = {
   ],
 };
 
-export const sortSubMenu = [
-  { value: 'desc', label: 'Highest to Lowest' },
-  { value: 'asc', label: 'Lowest to Highest' },
+export const sortByOrderOptions = [
+  { value: true, label: 'Highest to Lowest' },
+  { value: false, label: 'Lowest to Highest' },
 ];
 
 export const sortOptions = [
@@ -191,52 +191,52 @@ export const sortOptions = [
 ];
 
 export const performanceSortOptions = [
-  { value: 'revenue', label: 'Revenue', custom: true, class: 'revenue' },
+  { value: 'revenue', label: 'Revenue', order: true, class: 'revenue' },
   {
     value: 'units_sold',
     label: 'Units Sold',
-    custom: true,
+    order: true,
     class: 'units_sold',
   },
-  { value: 'traffic', label: 'Traffic', custom: true, class: 'traffic' },
+  { value: 'traffic', label: 'Traffic', order: true, class: 'traffic' },
   {
     value: 'conversion',
     label: 'Conversion',
-    custom: true,
+    order: true,
     class: 'conversion',
   },
 ];
 
 export const sadSortOptions = [
-  { value: 'ad_sales', label: 'Ad Sales', custom: true, class: 'revenue' },
-  { value: 'ad_spend', label: 'Ad Spend', custom: true, class: 'units_sold' },
+  { value: 'ad_sales', label: 'Ad Sales', order: true, class: 'revenue' },
+  { value: 'ad_spend', label: 'Ad Spend', order: true, class: 'units_sold' },
   {
     value: 'impressions',
     label: 'Ad Impressions',
-    custom: true,
+    order: true,
     class: 'traffic',
   },
-  { value: 'acos', label: 'ACOS', custom: true, class: 'conversion' },
+  { value: 'acos', label: 'ACOS', order: true, class: 'conversion' },
 ];
 
 export const dadSortOptions = [
   {
     value: 'impressions',
     label: 'Impressions',
-    custom: true,
+    order: true,
     class: 'revenue',
   },
-  { value: 'dsp_spend', label: 'DSP Spend', custom: true, class: 'units_sold' },
+  { value: 'dsp_spend', label: 'DSP Spend', order: true, class: 'units_sold' },
   {
     value: 'total_product_sales',
     label: 'Total Product Sales',
-    custom: true,
+    order: true,
     class: 'traffic',
   },
   {
     value: 'total_roas',
     label: 'Total ROAS',
-    custom: true,
+    order: true,
     class: 'conversion',
   },
 ];
