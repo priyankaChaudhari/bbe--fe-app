@@ -408,29 +408,26 @@ function BrandAssetsPreview({
         <div className="row">
           <div className="col-6">
             <Button
+              className="btn-primary w-100 mt-3"
+              type="button"
+              onClick={() => editComment(item.id)}
+              disabled={addCommentsLoader || newCommentData === ''}>
+              {addCommentsLoader ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Update'
+              )}
+            </Button>
+          </div>
+          <div className="col-6">
+            <Button
               className="btn-transparent w-100 mt-3"
               type="button"
               onClick={() => {
                 setShowTextArea(false);
                 setNewCommentData('');
               }}>
-              {addCommentsLoader ? (
-                <PageLoader color="#FF5933" type="button" />
-              ) : (
-                'Cancel'
-              )}
-            </Button>
-          </div>
-          <div className="col-6">
-            <Button
-              className="btn-primary w-100 mt-3"
-              type="button"
-              onClick={() => editComment(item.id)}>
-              {addCommentsLoader ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Update'
-              )}
+              Cancel
             </Button>
           </div>
         </div>
