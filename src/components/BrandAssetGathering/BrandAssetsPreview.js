@@ -61,7 +61,7 @@ function BrandAssetsPreview({
     top: 0,
     left: 0,
   });
-  const fileType = ['application/pdf', 'font/ttf', 'font/otf', 'font/woff'];
+  const fileType = ['font/ttf', 'font/otf', 'font/woff'];
   const [showDelete, setShowDelete] = useState(false);
   const [showTextArea, setShowTextArea] = useState(false);
   const ref = useRef(null);
