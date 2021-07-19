@@ -230,12 +230,26 @@ export const GroupUser = styled.div`
               width: 170px;
               padding: 17px 0;
               z-index: 99999;
-
               font-weight: 600;
               .red-trash-icon {
                 width: 18px;
                 vertical-align: text-top;
                 margin-right: 6px;
+              }
+              @media only screen and (max-width: 1900px) and (min-width: 1495px) {
+                &.confirm-delete-anno {
+                  left: -100px;
+                }
+              }
+              @media only screen and (max-width: 1200px) and (min-width: 991px) {
+                &.confirm-delete-anno {
+                  left: -100px;
+                }
+              }
+              @media only screen and (max-width: 477px) and (min-width: 366px) {
+                &.confirm-delete-anno {
+                  left: -100px;
+                }
               }
             }
             /* } */

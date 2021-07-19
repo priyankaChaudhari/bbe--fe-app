@@ -88,6 +88,16 @@ const DetailLoaderWrapper = styled.div`
     left: 0;
   }
 `;
+const SideBarLoader = styled.div`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0;
+  position: relative;
+  vertical-align: baseline;
+  top: 50%;
+`;
 
 const ButtonLoaderCss = styled.div`
   display: block;
@@ -158,6 +168,14 @@ export default function PageLoader({
         }>
         <Loader type="Bars" color={color} height={height} width={width} />
       </DetailLoaderWrapper>
+    );
+  }
+  if (type === 'sidebar') {
+    return (
+      <SideBarLoader
+        className={component === 'comment-side-bar' ? 'comment-side-bar' : ''}>
+        <Loader type="Bars" color={color} height={height} width={width} />
+      </SideBarLoader>
     );
   }
   return (

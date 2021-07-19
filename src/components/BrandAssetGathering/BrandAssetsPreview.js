@@ -415,7 +415,7 @@ function BrandAssetsPreview({
                 setNewCommentData('');
               }}>
               {addCommentsLoader ? (
-                <PageLoader color="#fff" type="button" />
+                <PageLoader color="#FF5933" type="button" />
               ) : (
                 'Cancel'
               )}
@@ -440,7 +440,15 @@ function BrandAssetsPreview({
 
   const renderComments = () => {
     if (commentsLoader) {
-      return <PageLoader component="activityLog" color="#FF5933" type="page" />;
+      return (
+        <PageLoader
+          component="comment-side-bar"
+          color="#FF5933"
+          height="40"
+          width="40"
+          type="sidebar"
+        />
+      );
     }
     if (commentsCount === 0) {
       return (
@@ -493,7 +501,7 @@ function BrandAssetsPreview({
                             {showDelete && showDelete[item.id] ? (
                               <div
                                 ref={ref}
-                                className="delete-msg"
+                                className="delete-msg confirm-delete-anno"
                                 role="presentation"
                                 onClick={() => onDeleteComment(item.id)}>
                                 {' '}
