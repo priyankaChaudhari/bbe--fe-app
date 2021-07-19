@@ -44,6 +44,7 @@ import {
   FileIcon,
   ArrowDownIcon,
   UpDowGrayArrow,
+  SortUp,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
@@ -51,12 +52,12 @@ import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import {
-  sortSubMenu,
   sortOptions,
   performanceSortOptions,
   sadSortOptions,
   dadSortOptions,
   timeFrameFilters,
+  sortByOrderOptions,
 } from '../../constants/FieldConstants';
 
 const customStyles = {
@@ -74,6 +75,10 @@ const customStyles = {
   },
 };
 
+const salesSortOptions = sortOptions.concat(performanceSortOptions);
+const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);
+const dspAdSortOptions = sortOptions.concat(dadSortOptions);
+
 export default function NewCustomerList() {
   const history = useHistory();
   const selectInputRef = useRef();
@@ -90,13 +95,7 @@ export default function NewCustomerList() {
       ? JSON.parse(localStorage.getItem('filters')).searchQuery
       : '',
   );
-  const {
-    Option,
-    // MultiValue,
-    SingleValue,
-  } = components;
-  // const [customDateModal, setCustomDateModal] = useState(false);
-  const [selectedView, setSelectedView] = useState('contract_details');
+  const { Option, SingleValue } = components;
   const [status, setStatus] = useState([]);
   const [selectedValue, setSelectedValue] = useState(
     JSON.parse(localStorage.getItem('filters'))
@@ -136,9 +135,16 @@ export default function NewCustomerList() {
       : false,
   );
   const [selectedTimeFrame, setSelectedTimeFrame] = useState({
-    daily_facts: 'week',
+    daily_facts: JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).daily_facts
+      : 'week',
   });
-  const [orderByFlag, setOrderByFlag] = useState({ sequence: 'desc' });
+  const [orderByFlag, setOrderByFlag] = useState(
+    JSON.parse(localStorage.getItem('filters'))
+      ? JSON.parse(localStorage.getItem('filters')).sequence
+      : false,
+  );
+  const [showOrderOption, setShowOrderOption] = useState(false);
 
   const options = [
     { value: 'contract_details', label: 'Contract Details' },
@@ -168,9 +174,7 @@ export default function NewCustomerList() {
       key: 'bgsSelection',
     },
   ]);
-  const [selectedSort, setSelectedSort] = useState(['Recenty Added']);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [showSubMenu, setShowSubMenu] = useState({ show: false, value: '' });
   const dropdownRef = useRef(null);
 
   const [expiringSoon, setExpiringSoon] = useState(
@@ -258,7 +262,7 @@ export default function NewCustomerList() {
               moveRangeOnFirstSelection={false}
               showDateDisplay={false}
               maxDate={setMaxDate()}
-              rangeColors={['#FF5933']}
+              rangeColors={[Theme.baseColor]}
               weekdayDisplayFormat="EEEEE"
               locale={enGB}
             />
@@ -304,8 +308,6 @@ export default function NewCustomerList() {
     </Option>
   );
   const IconSingleOption = (props) => (
-    // <MultiValue {...props}> //for select multiple user
-    // for select onr user
     <SingleValue {...props}>
       {props.data.icon ? (
         <img
@@ -322,12 +324,10 @@ export default function NewCustomerList() {
       ) : (
         <GetInitialName userInfo={props.data.label} type="list" property="" />
       )}{' '}
-      {/* &nbsp; */}
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
     </SingleValue>
-    // </MultiValue>
   );
 
   const SortOption = (props) => (
@@ -374,14 +374,6 @@ export default function NewCustomerList() {
 
   const getSelectComponents = (key) => {
     if (key === 'user') {
-      // for select multiple user
-      // return {
-      //   Option: IconOption,
-      //   MultiValue: IconSingleOption,
-      //   DropdownIndicator,
-      // };
-
-      // for select one user
       return {
         Option: IconOption,
         SingleValue: IconSingleOption,
@@ -426,16 +418,14 @@ export default function NewCustomerList() {
         currentPage,
         selectedValue,
         JSON.parse(localStorage.getItem('filters')),
-        // filters,
         searchQuery,
         showPerformance,
         showAdPerformance,
         showDspAdPerformance,
         expiringSoon,
         selectedTimeFrame,
-        orderByFlag,
+        orderByFlag ? { sequence: 'desc' } : { sequence: 'asc' },
       ).then((response) => {
-        // console.log('customer List API', response.data.count);
         setData(response && response.data && response.data.results);
         setPageNumber(currentPage);
         setCount(response && response.data && response.data.count);
@@ -451,36 +441,8 @@ export default function NewCustomerList() {
       showAdPerformance,
       showDspAdPerformance,
       selectedTimeFrame,
-      orderByFlag,
     ],
   );
-
-  // const customerListByView = useCallback(
-  //   (currentPage, dailyFacts, dashboard, orderBy, sort) => {
-  //     // daily_facts=[week/month/30days/custom]
-  //     // order-by=[revenue/units_sold/traffic/converion]
-  //     // sequence=[asc/desc]
-  //     // dashboard=sale_performance
-  //     // setIsLoading({ loader: true, type: 'page' });
-  //     getCustomers(currentPage, dashboard, dailyFacts, orderBy, sort).then(
-  //       (response) => {
-  //         setData(response && response.data && response.data.results);
-  //         setPageNumber(currentPage);
-  //         setCount(response && response.data && response.data.count);
-  //         setIsLoading({ loader: false, type: 'page' });
-  //       },
-  //     );
-  //   },
-  //   [
-  //     searchQuery,
-  //     selectedValue,
-  //     filters,
-  //     showPerformance,
-  //     expiringSoon,
-  //     showAdPerformance,
-  //     showDspAdPerformance,
-  //   ],
-  // );
 
   useEffect(() => {
     getStatus().then((statusResponse) => {
@@ -494,7 +456,6 @@ export default function NewCustomerList() {
         : 'DSP Ad Manager';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
-          // const list = []; // for select multiple user
           const list = [{ value: 'any', label: 'All' }]; // for select one user
           for (const brand of adm.data) {
             list.push({
@@ -513,7 +474,6 @@ export default function NewCustomerList() {
     } else {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
-          // const list = []; // for select multiple use
           const list = [{ value: 'any', label: 'All' }]; // for select one use
           for (const brand of gs.data) {
             list.push({
@@ -533,9 +493,18 @@ export default function NewCustomerList() {
     customerList(1);
   }, [customerList]);
 
+  useEffect(() => {
+    if (!isDesktop && selectedValue['order-by'] !== null) {
+      sortOptions.forEach((element) => {
+        if (selectedValue['order-by'] !== element.value) {
+          setShowOrderOption(true);
+        }
+      });
+    }
+  }, []);
+
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setShowSubMenu({ show: false, value: '' });
       setShowSortDropdown(false);
     }
   };
@@ -553,6 +522,28 @@ export default function NewCustomerList() {
     setPageNumber(currentPage);
     customerList(currentPage, selectedValue, filters, searchQuery);
   };
+  const handleSortFilters = (orderKey) => {
+    setOrderByFlag(!orderByFlag);
+    setExpiringSoon(false);
+    setSelectedValue({
+      ...selectedValue,
+      'order-by': orderKey,
+      sequence: !orderByFlag,
+    });
+    setFilters({
+      ...filters,
+      sort_by: orderKey,
+      sequence: !orderByFlag,
+    });
+    localStorage.setItem(
+      'filters',
+      JSON.stringify({
+        ...filters,
+        sort_by: orderKey,
+        sequence: !orderByFlag,
+      }),
+    );
+  };
 
   const handleFilters = (event, key, type, action) => {
     // for multi select user
@@ -568,13 +559,6 @@ export default function NewCustomerList() {
       if (selectInputRefMobile && selectInputRefMobile.current)
         selectInputRefMobile.current.select.clearValue();
 
-      // setShowPerformance(false);
-      // setSearchQuery('');
-      // setSelectedValue({
-      //     'view': null,
-      //     'order-by': null,
-      //   });
-
       setFilters({
         ...filters,
         status: [],
@@ -583,9 +567,6 @@ export default function NewCustomerList() {
         user: [],
         ad_user: [],
         dsp_user: [],
-        // sort_by: '',
-        // searchQuery: '',
-        // showPerformance: false
       });
       localStorage.setItem(
         'filters',
@@ -597,9 +578,6 @@ export default function NewCustomerList() {
           user: [],
           ad_user: [],
           dsp_user: [],
-          // sort_by: '',
-          // searchQuery: '',
-          // showPerformance: false
         }),
       );
     }
@@ -669,93 +647,6 @@ export default function NewCustomerList() {
         );
       }
     }
-
-    // //for multiple user selection
-    // if (type === 'brand') {
-    // if (action.action === 'clear') {
-    //   setFilters({
-    //     ...filters,
-    //     user: [],
-    //     ad_user: [],
-    //     dsp_user: [],
-    //   });
-    //   localStorage.setItem(
-    //     'filters',
-    //     JSON.stringify({
-    //       ...filters,
-    //       user: [],
-    //       ad_user: [],
-    //       dsp_user: [],
-    //     }),
-    //   );
-    // }
-    //   if (action.action === 'remove-value') {
-    //     const list = filters.user.filter(
-    //       (op) => op !== action.removedValue.value,
-    //     );
-
-    //     const adList = filters.ad_user.filter(
-    //       (op) => op !== action.removedValue.value,
-    //     );
-
-    //     const dspList = filters.dsp_user.filter(
-    //       (op) => op !== action.removedValue.value,
-    //     );
-    //     setFilters({
-    //       ...filters,
-    //       user: list,
-    //       ad_user: adList,
-    //       dsp_user: dspList,
-    //     });
-    //     localStorage.setItem(
-    //       'filters',
-    //       JSON.stringify({
-    //         ...filters,
-    //         user: list,
-    //         ad_user: adList,
-    //         dsp_user: dspList,
-    //       }),
-    //     );
-    //   }
-    //   if (event && event.length && action.action === 'select-option') {
-    //     const list = [...filters.user];
-    //     const adList = [...filters.ad_user];
-    //     const dspList = [...filters.dsp_user];
-    // if (!showAdPerformance && !showDspAdPerformance) {
-    //   for (const bgs of event) {
-    //     if (list.indexOf(bgs.value) === -1) list.push(bgs.value);
-    //   }
-    // }
-
-    // if (showAdPerformance) {
-    //   for (const adm of event) {
-    //     if (adList.indexOf(adm.value) === -1) adList.push(adm.value);
-    //   }
-    // }
-
-    // if (showDspAdPerformance) {
-    //   for (const adm of event) {
-    //     if (dspList.indexOf(adm.value) === -1) dspList.push(adm.value);
-    //   }
-    // }
-
-    //     setFilters({
-    //       ...filters,
-    //       user: list,
-    //       ad_user: adList,
-    //       dsp_user: dspList,
-    //     });
-    //     localStorage.setItem(
-    //       'filters',
-    //       JSON.stringify({
-    //         ...filters,
-    //         user: list,
-    //         ad_user: adList,
-    //         dsp_user: dspList,
-    //       }),
-    //     );
-    //   }
-    // }
 
     // for single user selected
     if (type === 'brand') {
@@ -897,58 +788,15 @@ export default function NewCustomerList() {
     return diffDays;
   };
 
-  const handleMouseEnter = (item, index) => {
-    if (index > 2) {
-      setShowSubMenu({ show: true, value: item.value });
-    } else {
-      setShowSubMenu({ show: false, value: '' });
-    }
-  };
-
-  const handleSortFilter = (menu, submenu) => {
-    setSelectedSort([menu.label, submenu && submenu.label]);
-    setShowSubMenu({ show: false, value: '' });
-    setShowSortDropdown(false);
-    if (menu.value === 'expiring_soon') {
-      setExpiringSoon(true);
-      setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
-      setFilters({
-        ...filters,
-        sort_by: menu.value,
-      });
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          sort_by: menu.value,
-        }),
-      );
-    } else {
-      if (submenu) {
-        setOrderByFlag({ sequence: submenu.value });
-      }
-      setExpiringSoon(false);
-      setSelectedValue({ ...selectedValue, 'order-by': menu.value });
-      setFilters({
-        ...filters,
-        sort_by: menu.value,
-      });
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          sort_by: menu.value,
-        }),
-      );
-    }
-  };
-
   const handleSearch = (event, type) => {
     localStorage.setItem('page', 1);
     if (type === 'view') {
-      setSelectedSort(['Recently Added']);
+      setShowOrderOption(false);
       setExpiringSoon(false);
-      setSelectedValue({ ...selectedValue, 'order-by': '-created_at' });
+      setSelectedValue({
+        ...selectedValue,
+        'order-by': '-created_at',
+      });
       setFilters({
         ...filters,
         sort_by: '-created_at',
@@ -961,7 +809,6 @@ export default function NewCustomerList() {
         }),
       );
       if (event.value === 'contract_details') {
-        setSelectedView('contract_details');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
@@ -981,7 +828,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'performance') {
-        setSelectedView('performance');
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
@@ -1001,7 +847,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'sponsored_ad_performance') {
-        setSelectedView('sponsored_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
@@ -1021,7 +866,6 @@ export default function NewCustomerList() {
           }),
         );
       } else if (event.value === 'dsp_ad_performance') {
-        setSelectedView('dsp_ad_performance');
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
@@ -1040,24 +884,13 @@ export default function NewCustomerList() {
             showDspAdPerformance: true,
           }),
         );
-        // customerListByView(
-        //   pageNumber,
-        //   selectedTimeFrame,
-        //   'dsp_ad_performance',
-        //   'dsp_spend',
-        //   'asc',
-        // );
-        // customerList(
-        //   pageNumber,
-        //   selectedValue,
-        //   filters,
-        //   searchQuery,
-        //   false,
-        //   true,
-        // );
       }
     }
     if (type === 'sort') {
+      setShowOrderOption(false);
+      if (event && event.order) {
+        setShowOrderOption(true);
+      }
       if (event.value === 'expiring_soon') {
         setExpiringSoon(true);
         setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
@@ -1090,17 +923,20 @@ export default function NewCustomerList() {
     }
     if (type === 'stats') {
       if (event.value === 'custom') {
-        // setSelectedTimeFrame(event.value);
         setShowCustomDateModal(true);
       } else {
         setSelectedTimeFrame({ daily_facts: event.value });
-        // customerListByView(
-        //   pageNumber,
-        //   event.value,
-        //   'sale_performance',
-        //   'revenue',
-        //   'asc',
-        // );
+        setFilters({
+          ...filters,
+          daily_facts: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            daily_facts: event.value,
+          }),
+        );
       }
     }
     if (type === 'search') {
@@ -1113,6 +949,25 @@ export default function NewCustomerList() {
           showPerformance,
         );
       }, 1000);
+    }
+
+    if (type === 'order') {
+      setOrderByFlag(event.value);
+      setSelectedValue({
+        ...selectedValue,
+        sequence: event.value,
+      });
+      setFilters({
+        ...filters,
+        sequence: event.value,
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sequence: event.value,
+        }),
+      );
     }
   };
 
@@ -1138,6 +993,9 @@ export default function NewCustomerList() {
         return 'Stats For: Last 7 days';
       }
       return 'Stats For';
+    }
+    if (item === 'order') {
+      return 'Highest to Lowest';
     }
     return '';
   };
@@ -1278,8 +1136,6 @@ export default function NewCustomerList() {
           onClickCapture={(e) => {
             e.stopPropagation();
             redirectIfContractExists(type, id);
-            // history.push(PATH_AGREEMENT.replace(':id', id));
-            // localStorage.setItem('agreementID', type.contract_id);
           }}
           role="presentation">
           <div className="recurring-service agreement">
@@ -1295,9 +1151,6 @@ export default function NewCustomerList() {
         onClickCapture={(e) => {
           e.stopPropagation();
           redirectIfContractExists(type, id);
-
-          // history.push(PATH_AGREEMENT.replace(':id', id));
-          // localStorage.setItem('agreementID', type.contract_id);
         }}
         role="presentation"
         data-tip={type.contract_status}
@@ -1310,35 +1163,6 @@ export default function NewCustomerList() {
   };
 
   const bindDropDownValue = (item) => {
-    // for multi user selected
-    // if (item === 'user') {
-    //   if (filters.user && !showAdPerformance && !showDspAdPerformance) {
-    //     return brandGrowthStrategist.filter((option) =>
-    //       filters.user.some((op) => op === option.value),
-    //     );
-    //   }
-    //   if (filters.ad_user && showAdPerformance) {
-    //     return brandGrowthStrategist.filter((option) =>
-    //       filters.ad_user.some((op) => op === option.value),
-    //     );
-    //   }
-
-    //   if (filters.dsp_user && showDspAdPerformance) {
-    //     return brandGrowthStrategist.filter((option) =>
-    //       filters.dsp_user.some((op) => op === option.value),
-    //     );
-    //   }
-
-    //   // if (
-    //   //   filters.ad_user &&
-    //   //   (showPerformance || showAdPerformance || showDspAdPerformance)
-    //   // ) {
-    //   //   return timeFrameFilters;
-    //   // }
-
-    //   return [{ value: 'any', label: 'Any' }];
-    // }
-
     if (item === 'user') {
       if (filters.user && !showAdPerformance && !showDspAdPerformance) {
         if (localStorage.getItem('bgs')) {
@@ -1360,35 +1184,38 @@ export default function NewCustomerList() {
         );
       }
 
-      // if (
-      //   filters.ad_user &&
-      //   (showPerformance || showAdPerformance || showDspAdPerformance)
-      // ) {
-      //   return timeFrameFilters;
-      // }
-
       return [{ value: 'any', label: 'Any' }];
     }
 
     if (item === 'sort') {
-      if (selectedView === 'performance' || showPerformance) {
+      if (!isDesktop) {
+        if (showPerformance) {
+          return (
+            selectedValue[item.key] ||
+            salesSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            sponsorAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showDspAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            dspAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
         return (
           selectedValue[item.key] ||
-          performanceSortOptions.filter(
-            (op) => op.value === selectedValue['order-by'],
-          )
-        );
-      }
-      if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
-        return (
-          selectedValue[item.key] ||
-          sadSortOptions.filter((op) => op.value === selectedValue['order-by'])
-        );
-      }
-      if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
-        return (
-          selectedValue[item.key] ||
-          dadSortOptions.filter((op) => op.value === selectedValue['order-by'])
+          sortOptions.filter((op) => op.value === selectedValue['order-by'])
         );
       }
       return (
@@ -1401,6 +1228,10 @@ export default function NewCustomerList() {
       return timeFrameFilters.filter(
         (op) => op.value === selectedTimeFrame.daily_facts,
       );
+    }
+
+    if (item === 'order') {
+      return sortByOrderOptions.filter((op) => op.value === orderByFlag);
     }
 
     if (showPerformance) {
@@ -1430,118 +1261,38 @@ export default function NewCustomerList() {
       case 'user':
         return brandGrowthStrategist;
       case 'sort':
-        if (selectedView === 'performance' || showPerformance) {
-          return performanceSortOptions;
-        }
-        if (selectedView === 'sponsored_ad_performance' || showAdPerformance) {
-          return sadSortOptions;
-        }
-        if (selectedView === 'dsp_ad_performance' || showDspAdPerformance) {
-          return dadSortOptions;
+        if (!isDesktop) {
+          if (showPerformance) {
+            return salesSortOptions;
+          }
+          if (showAdPerformance) {
+            return sponsorAdSortOptions;
+          }
+          if (showDspAdPerformance) {
+            return dspAdSortOptions;
+          }
+          return sortOptions;
         }
         return sortOptions;
-
       case 'stats':
         return timeFrameFilters;
+
+      case 'order':
+        return sortByOrderOptions;
       default:
         return options;
     }
   };
 
-  // const getSubMenu = () => {
-  //   return (
-  //     <div className="dropdown-submenu">
-  //       <div
-  //         className="drops"
-  //         role="presentation"
-  //         onClick={() => setOrderByFlag({ sequence: 'desc' })}>
-  //         Highest to Lowest
-  //       </div>
-  //       <div
-  //         className="drops"
-  //         role="presentation"
-  //         onClick={() => setOrderByFlag({ sequence: 'asc' })}>
-  //         Lowest to highest
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // const CustomOption = (props) => {
-  //   const [submenu, setSubmenu] = useState(false);
-  //   const [height, setHeight] = useState(0);
-  //   const handleOption = (e) => {
-  //     if (submenu) {
-  //       setSubmenu(false);
-  //     } else {
-  //       setHeight(e.clientY);
-  //       setSubmenu(true);
-  //     }
-  //   };
-
-  //   // eslint-disable-next-line no-shadow
-  //   const { data } = props;
-  //   return data.custom ? (
-  //     <>
-  //       <div
-  //         onMouseOver={handleOption}
-  //         // onFocus={handleOption}
-  //         className="customs">
-  //         {data.label} <span className="caret" />
-  //         {submenu && (
-  //           <div className="dropdown-submenu">
-  //             <div
-  //               className="drops"
-  //               role="presentation"
-  //               onClick={() => setOrderByFlag({ sequence: 'desc' })}>
-  //               Highest to Lowest
-  //             </div>
-  //             <div
-  //               className="drops"
-  //               role="presentation"
-  //               onClick={() => setOrderByFlag({ sequence: 'asc' })}>
-  //               Lowest to highest
-  //             </div>
-  //           </div>
-  //         )}
-  //       </div>
-  //       <style jsx>{`
-  //         .customs {
-  //           height: 36px;
-  //           padding: 8px;
-  //           position: relative;
-  //         }
-
-  //         .drops {
-  //           height: 36px;
-  //           padding: 8px;
-  //         }
-
-  //         .customs:hover,
-  //         .drops:hover {
-  //           /* background-color: #17cf76; */
-  //         }
-
-  //         .dropdown-submenu {
-  //           /* position: ; */
-  //           top: ${height - 10}px;
-  //           left: 410px;
-  //           min-height: 36px;
-  //           overflow: auto;
-  //           border: 1px solid hsl(0, 0%, 80%);
-  //           border-radius: 4px;
-  //           color: #212529;
-  //         }
-  //       `}</style>
-  //     </>
-  //   ) : (
-  //     <components.Option {...props} />
-  //   );
-  // };
-
   const generateDropdown = (item, reff = null) => {
     const searchFor =
-      item === 'sort' ? 'sort' : item === 'stats' ? 'stats' : 'view';
+      item === 'order'
+        ? 'order'
+        : item === 'sort'
+        ? 'sort'
+        : item === 'stats'
+        ? 'stats'
+        : 'view';
     return (
       <>
         <Select
@@ -1565,108 +1316,6 @@ export default function NewCustomerList() {
       </>
     );
   };
-
-  // const calculatePercentage = (current, previous, type) => {
-  //   if (current && previous) {
-  //     let percentage = '';
-  //     if (type === 'conversion') {
-  //       const diff = current - previous;
-  //       percentage = diff / 2;
-  //     }
-  //     const diff = current - previous;
-  //     const mean = diff / previous;
-  //     percentage = mean * 100;
-
-  //     if (percentage.toString().includes('-')) {
-  //       return (
-  //         <>
-  //           <br />
-  //           <span className="decrease-rate">
-  //             {' '}
-  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-  //             {percentage
-  //               ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
-  //               : ''}
-  //           </span>
-  //         </>
-  //       );
-  //     }
-  //     return (
-  //       <>
-  //         <br />
-  //         <div className="increase-rate">
-  //           <img
-  //             className="green-arrow"
-  //             src={ArrowUpIcon}
-  //             width="14px"
-  //             alt="arrow-up"
-  //           />
-  //           {percentage ? `${percentage.toFixed(2)} %` : ''}
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  //   return '';
-  // };
-
-  // const getSortMenu = (index) => {
-  //   return showPerformance
-  //     ? performanceSortOptions[index] && performanceSortOptions[index].label
-  //     : showAdPerformance
-  //     ? sadSortOptions[index] && sadSortOptions[index].label
-  //     : showDspAdPerformance
-  //     ? dadSortOptions[index] && dadSortOptions[index].label
-  //     : '';
-  // };
-
-  // const getSortSubMenu = () => {
-  //   return (
-  //     <div className="sub-menu-dropdown">
-  //       <ul className="notes-option">
-  //         <li>Highest to Lowest</li>
-  //         <li>Lowest to Highest</li>
-  //       </ul>
-  //     </div>
-  //   );
-  // };
-
-  const getSortOptions = () => {
-    return showPerformance
-      ? performanceSortOptions
-      : showAdPerformance
-      ? sadSortOptions
-      : showDspAdPerformance
-      ? dadSortOptions
-      : sortOptions;
-  };
-
-  // const getSortOptions = () => {
-  //   return (
-  //     <>
-  //       <ul className="notes-option">
-  //         <li>Recently Added</li>
-  //         <li>Last Modified</li>
-  //         <li>Expiry Date</li>
-  //         <li className="on-hover">
-  //           {getSortMenu(0)}
-  //           {getSortSubMenu()}
-  //         </li>
-  //         <li className="on-hover">
-  //           {getSortMenu(1)}
-  //           {getSortSubMenu()}
-  //         </li>
-  //         <li className="on-hover">
-  //           {getSortMenu(2)}
-  //           {getSortSubMenu()}
-  //         </li>
-  //         <li className="on-hover">
-  //           {getSortMenu(3)}
-  //           {getSortSubMenu()}
-  //         </li>
-  //       </ul>
-  //     </>
-  //   );
-  // };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     const value = actualValue;
@@ -1730,12 +1379,36 @@ export default function NewCustomerList() {
   const renderHeaders = () => {
     if (showPerformance) {
       return (
-        <div className="row">
+        <div className="row position-relative">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">Revenue</div>
-          <div className="col-lg-2 col-12 unit-sold ">Units Sold</div>
-          <div className="col-lg-2 col-12 traffic">Traffic</div>
-          <div className="col-lg-2 col-12 conversion">Conversion</div>
+
+          {performanceSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">
             Brand Strategist
           </div>
@@ -1746,10 +1419,33 @@ export default function NewCustomerList() {
       return (
         <div className="row">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">Ad Sales</div>
-          <div className="col-lg-2 col-12 unit-sold ">Ad Spend</div>
-          <div className="col-lg-2 col-12 traffic">Ad Impressions</div>
-          <div className="col-lg-2 col-12 conversion">Acos</div>
+          {sadSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">
             Sponsored Ad Manager
           </div>
@@ -1760,10 +1456,33 @@ export default function NewCustomerList() {
       return (
         <div className="row">
           <div className="col-lg-2 col-12 customer-header">Customer</div>
-          <div className="col-lg-2 col-12 Revenue">IMPRESSIONS</div>
-          <div className="col-lg-2 col-12 unit-sold ">DSP Spend</div>
-          <div className="col-lg-2 col-12 traffic">TOTAL PRODUCT SALES</div>
-          <div className="col-lg-2 col-12 conversion">TOTAL ROAS</div>
+          {dadSortOptions.map((item) => {
+            return (
+              <div
+                key={item.label}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    item.value === selectedValue['order-by']
+                      ? Theme.red
+                      : Theme.gray40,
+                }}
+                className={`col-lg-2 col-12 ${item.class}`}
+                onClick={() => handleSortFilters(item.value)}
+                aria-hidden="true">
+                {item.label}
+                <img
+                  className={`sort-arrow-up ${
+                    item.value === selectedValue['order-by'] && orderByFlag
+                      ? 'rotate'
+                      : ''
+                  }`}
+                  src={SortUp}
+                  alt="arrow-up"
+                />
+              </div>
+            );
+          })}
           <div className="col-lg-2 col-12 Brand_Strategist">DSP AD MANAGER</div>
         </div>
       );
@@ -1809,36 +1528,6 @@ export default function NewCustomerList() {
               </div>
             )}
           </td>
-          {/* <td width="15%">
-            $
-            {item &&
-              item.daily_facts &&
-              item.daily_facts.current &&
-              item.daily_facts.current.length &&
-              item.daily_facts.current
-                .map((rev) => (rev.revenue === null ? 0 : rev.revenue))
-                .reduce((val, rev) => rev + val)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            {calculatePercentage(
-              item &&
-                item.daily_facts &&
-                item.daily_facts.current &&
-                item.daily_facts.current.length
-                ? item.daily_facts.current
-                    .map((rev) => rev.revenue)
-                    .reduce((val, rev) => rev + val)
-                : 0,
-              item &&
-                item.daily_facts &&
-                item.daily_facts.previous &&
-                item.daily_facts.previous.length
-                ? item.daily_facts.previous
-                    .map((rev) => rev.revenue)
-                    .reduce((val, rev) => rev + val)
-                : 0,
-            )}
-          </td> */}
 
           <td width="15%">
             {item &&
@@ -1860,37 +1549,6 @@ export default function NewCustomerList() {
               'revenue',
             )}
           </td>
-          {/* <td width="15%">
-            <>
-              {item &&
-                item.daily_facts &&
-                item.daily_facts.current &&
-                item.daily_facts.current.length &&
-                item.daily_facts.current
-                  .map((rev) => (rev.units_sold === null ? 0 : rev.units_sold))
-                  .reduce((val, rev) => rev + val)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              {calculatePercentage(
-                item &&
-                  item.daily_facts &&
-                  item.daily_facts.current &&
-                  item.daily_facts.current.length
-                  ? item.daily_facts.current
-                      .map((rev) => rev.units_sold)
-                      .reduce((val, rev) => rev + val)
-                  : 0,
-                item &&
-                  item.daily_facts &&
-                  item.daily_facts.previous &&
-                  item.daily_facts.previous.length
-                  ? item.daily_facts.previous
-                      .map((rev) => rev.units_sold)
-                      .reduce((val, rev) => rev + val)
-                  : 0,
-              )}
-            </>
-          </td> */}
 
           <td width="15%">
             {item &&
@@ -1912,38 +1570,6 @@ export default function NewCustomerList() {
             )}
           </td>
 
-          {/* <td width="15%">
-            <>
-              {item &&
-                item.daily_facts &&
-                item.daily_facts.current &&
-                item.daily_facts.current.length &&
-                item.daily_facts.current
-                  .map((rev) => (rev.traffic === null ? 0 : rev.traffic))
-                  .reduce((val, rev) => rev + val)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              {calculatePercentage(
-                item &&
-                  item.daily_facts &&
-                  item.daily_facts.current &&
-                  item.daily_facts.current.length
-                  ? item.daily_facts.current
-                      .map((rev) => rev.traffic)
-                      .reduce((val, rev) => rev + val)
-                  : 0,
-                item &&
-                  item.daily_facts &&
-                  item.daily_facts.previous &&
-                  item.daily_facts.previous.length
-                  ? item.daily_facts.previous
-                      .map((rev) => rev.traffic)
-                      .reduce((val, rev) => rev + val)
-                  : 0,
-              )}
-            </>
-          </td> */}
-
           <td width="15%">
             {item &&
             item.sales_performance &&
@@ -1963,50 +1589,6 @@ export default function NewCustomerList() {
               'traffic',
             )}
           </td>
-
-          {/* <td width="15%">
-            <>
-              {item &&
-              item.daily_facts &&
-              item.daily_facts.current &&
-              item.daily_facts.current.length &&
-              item.daily_facts.current !== null ? (
-                <>
-                  {item &&
-                    item.daily_facts.current
-                      .map((rev) =>
-                        rev.conversion === null ? 0 : rev.conversion,
-                      )
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  %
-                  {calculatePercentage(
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item &&
-                          item.daily_facts.current
-                            .map((rev) => rev.conversion)
-                            .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.conversion)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    'conversion',
-                  )}
-                </>
-              ) : (
-                ''
-              )}
-            </>
-          </td> */}
           <td width="15%">
             {item &&
             item.sales_performance &&
@@ -2435,7 +2017,6 @@ export default function NewCustomerList() {
     <CustomerListPage>
       {' '}
       {renderCustomDateModal()}
-      {/* {getSubMenu()} */}
       <div className="customer-list-header-sticky">
         <div className="container-fluid">
           <div className="row">
@@ -2668,9 +2249,8 @@ export default function NewCustomerList() {
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
-
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
-              <div className="col-lg-2 col-md-6 col-12   mb-2 pl-2 pr-2 ">
+              <div className="col-lg-2 col-md-4 col-12   mb-2 pl-2 pr-2 ">
                 <DropDownSelect className="customer-list-header">
                   {generateDropdown('stats')}
                 </DropDownSelect>{' '}
@@ -2678,111 +2258,18 @@ export default function NewCustomerList() {
             ) : (
               <></>
             )}
-            <div
-              className="col-lg-2 col-md-6 col-12 pl-2 pr-2"
-              ref={dropdownRef}>
-              {/* <DropDownSelect className="customer-list-header">
+            <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
+              <DropDownSelect className="customer-list-header">
                 {generateDropdown('sort')}
-              </DropDownSelect>{' '} */}
-              <div
-                className="dropdown-select-all-notes"
-                role="presentation"
-                onClick={() => {
-                  setShowSortDropdown(!showSortDropdown);
-                  setShowSubMenu({ show: false, value: '' });
-                }}>
-                {' '}
-                Sort:{' '}
-                <span className="selected-list">
-                  {' '}
-                  {selectedSort &&
-                  selectedSort.length > 1 &&
-                  selectedSort[1] !== null
-                    ? `${selectedSort[0]} / ${selectedSort[1]}`
-                    : selectedSort[0]}
-                </span>
-                <img
-                  src={CaretUp}
-                  alt="caret"
-                  style={{
-                    transform: showSortDropdown ? 'rotate(180deg)' : '',
-                    width: '25px',
-                    height: '25px',
-                    position: 'absolute',
-                    top: '17px',
-                    right: '21px',
-                  }}
-                />
-              </div>
-              <div
-                className={
-                  showSortDropdown
-                    ? 'dropdown-notes-filter show'
-                    : 'dropdown-notes-filter hide'
-                }>
-                <ul className="notes-option">
-                  {getSortOptions().map((item, index) => {
-                    return item.custom ? (
-                      <li
-                        className={
-                          showSubMenu
-                            ? item.label === selectedSort[0]
-                              ? `submenu-${index} on-hover1 show active`
-                              : `submenu-${index} on-hover1 show`
-                            : `submenu-${index} on-hover1 hide`
-                        }
-                        onMouseEnter={() => handleMouseEnter(item, index)}
-                        onMouseLeave={() =>
-                          setShowSubMenu({ show: false, value: '' })
-                        }>
-                        {item.label}
-
-                        {item.value === (showSubMenu && showSubMenu.value) &&
-                        showSubMenu.show ? (
-                          <div className="sub-menu-dropdown">
-                            <ul className="notes-option">
-                              {sortSubMenu.map((submenu) => {
-                                return (
-                                  <li
-                                    className={
-                                      selectedSort &&
-                                      selectedSort.length > 1 &&
-                                      item.label === selectedSort[0] &&
-                                      submenu.label === selectedSort[1]
-                                        ? 'active'
-                                        : ''
-                                    }
-                                    onClick={() =>
-                                      handleSortFilter(item, submenu)
-                                    }
-                                    role="presentation">
-                                    {submenu.label}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        ) : (
-                          ''
-                        )}
-                      </li>
-                    ) : (
-                      <li
-                        className={
-                          item.label === selectedSort[0] ? 'active' : ''
-                        }
-                        onClick={() => handleSortFilter(item, null)}
-                        onMouseEnter={() =>
-                          setShowSubMenu({ show: false, value: '' })
-                        }
-                        role="presentation">
-                        {item.label}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+              </DropDownSelect>{' '}
             </div>
+            {showOrderOption && !isDesktop ? (
+              <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
+                <DropDownSelect className="customer-list-header">
+                  {generateDropdown('order')}
+                </DropDownSelect>
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -2803,22 +2290,6 @@ export default function NewCustomerList() {
             </div>
           </div>
         </div>
-        {/* //for ad manager dropdown 
-        {showAdPerformance ? (
-          <>
-            <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
-            <DropDownSelect className="w-250">
-              {generateAdManagerDropdown('user', selectInputRef)}
-            </DropDownSelect>{' '}
-          </>
-        ) : (
-          <>
-            <div className="label mt-2 mb-2">Brand Strategist</div>
-            <DropDownSelect className="w-250">
-              {generateDropdown('user', selectInputRef)}
-            </DropDownSelect>{' '}
-          </>
-        )} */}
         {showAdPerformance ? (
           <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
         ) : showDspAdPerformance ? (
@@ -2925,51 +2396,12 @@ export default function NewCustomerList() {
           <div className="table-container">
             <div className="table-part">
               <div className="sticky-header">
-                <div className="table-header">
-                  {renderHeaders()}
-                  {/* <div className="row">
-                    <div
-                      // className="customer-header "
-                      // width={showPerformance ? '20%' : '25%'}
-                      className={
-                        showPerformance
-                          ? 'col-lg-2 col-12 customer-header'
-                          : 'col-lg-3 col-12 customer-header'
-                      }>
-                      Customer
-                    </div>
-                    <div
-                      // width={showPerformance ? '15%' : '60%'}
-                      className={
-                        showPerformance
-                          ? 'col-lg-2 col-12 Revenue'
-                          : 'col-lg-7 col-12'
-                      }>
-                      {showPerformance ? 'Revenue' : 'Active Contracts'}
-                    </div>
-                    {showPerformance ? (
-                      <div className="col-lg-2 col-12 unit-sold ">
-                        Units Sold
-                      </div>
-                    ) : null}
-                    {showPerformance ? (
-                      <div className="col-lg-2 col-12 traffic">Traffic</div>
-                    ) : null}
-                    {showPerformance ? (
-                      <div className="col-lg-2 col-12 conversion">
-                        Conversion
-                      </div>
-                    ) : null}
-                    <div className="col-lg-2 col-12 Brand_Strategist">
-                      Brand Strategist
-                    </div>
-                  </div> */}
-                </div>
+                <div className="table-header">{renderHeaders()}</div>
               </div>
               {isLoading.loader && isLoading.type === 'page' ? (
                 <PageLoader
                   component="customer-list-loader"
-                  color="#FF5933"
+                  color={Theme.baseColor}
                   type="page"
                 />
               ) : (
@@ -2978,255 +2410,7 @@ export default function NewCustomerList() {
                     {data && data.length === 0 ? (
                       <NoRecordFound />
                     ) : (
-                      data &&
-                      data.map(
-                        (item) => renderCustomerDetails(item),
-                        // <tr
-                        //   className="cursor"
-                        //   key={Math.random()}
-                        //   onClick={() =>
-                        //     history.push(
-                        //       PATH_CUSTOMER_DETAILS.replace(':id', item.id),
-                        //     )
-                        //   }>
-                        //   <td width={showPerformance ? '20%' : '25%'}>
-                        //     <img
-                        //       className="company-logo"
-                        //       src={
-                        //         item &&
-                        //         item.documents &&
-                        //         item.documents[0] &&
-                        //         Object.values(item.documents[0])
-                        //           ? Object.values(item.documents[0])[0]
-                        //           : CompanyDefaultUser
-                        //       }
-                        //       alt="logo"
-                        //     />
-
-                        //     <div className="company-name">
-                        //       {item &&
-                        //         item.contract &&
-                        //         item.contract[0] &&
-                        //         item.contract[0].contract_company_name}
-                        //     </div>
-                        //     <div
-                        //       className="status"
-                        //       style={{ textTransform: 'capitalize' }}>
-                        //       {item && item.status}
-                        //     </div>
-                        //   </td>
-                        //   <td width={showPerformance ? '15%' : '60%'}>
-                        //     {showPerformance ? (
-                        //       <>
-                        //         $
-                        //         {item &&
-                        //           item.daily_facts &&
-                        //           item.daily_facts.current &&
-                        //           item.daily_facts.current.length &&
-                        //           item.daily_facts.current
-                        //             .map((rev) =>
-                        //               rev.revenue === null ? 0 : rev.revenue,
-                        //             )
-                        //             .reduce((val, rev) => rev + val)
-                        //             .toString()
-                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        //         {calculatePercentage(
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.current &&
-                        //             item.daily_facts.current.length
-                        //             ? item.daily_facts.current
-                        //                 .map((rev) => rev.revenue)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.previous &&
-                        //             item.daily_facts.previous.length
-                        //             ? item.daily_facts.previous
-                        //                 .map((rev) => rev.revenue)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //         )}
-                        //       </>
-                        //     ) : (
-                        //       <ul
-                        //         className="recurring-contact"
-                        //         style={{ textTransform: 'capitalize' }}>
-                        //         {item &&
-                        //         item.contract &&
-                        //         item.contract.length ? (
-                        //           item &&
-                        //           item.contract &&
-                        //           item.contract.map((type) => (
-                        //             <React.Fragment key={Math.random()}>
-                        //               <ReactTooltip />
-                        //               {generateContractHTML(type, item.id)}
-                        //             </React.Fragment>
-                        //           ))
-                        //         ) : (
-                        //           <li className="no-active-contract">
-                        //             No active contracts
-                        //           </li>
-                        //         )}
-                        //       </ul>
-                        //     )}
-                        //   </td>
-                        //   {showPerformance ? (
-                        //     <td width="15%">
-                        //       <>
-                        //         {item &&
-                        //           item.daily_facts &&
-                        //           item.daily_facts.current &&
-                        //           item.daily_facts.current.length &&
-                        //           item.daily_facts.current
-                        //             .map((rev) =>
-                        //               rev.units_sold === null
-                        //                 ? 0
-                        //                 : rev.units_sold,
-                        //             )
-                        //             .reduce((val, rev) => rev + val)
-                        //             .toString()
-                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        //         {calculatePercentage(
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.current &&
-                        //             item.daily_facts.current.length
-                        //             ? item.daily_facts.current
-                        //                 .map((rev) => rev.units_sold)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.previous &&
-                        //             item.daily_facts.previous.length
-                        //             ? item.daily_facts.previous
-                        //                 .map((rev) => rev.units_sold)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //         )}
-                        //       </>
-                        //     </td>
-                        //   ) : null}
-                        //   {showPerformance ? (
-                        //     <td width="15%">
-                        //       <>
-                        //         {item &&
-                        //           item.daily_facts &&
-                        //           item.daily_facts.current &&
-                        //           item.daily_facts.current.length &&
-                        //           item.daily_facts.current
-                        //             .map((rev) =>
-                        //               rev.traffic === null ? 0 : rev.traffic,
-                        //             )
-                        //             .reduce((val, rev) => rev + val)
-                        //             .toString()
-                        //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        //         {calculatePercentage(
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.current &&
-                        //             item.daily_facts.current.length
-                        //             ? item.daily_facts.current
-                        //                 .map((rev) => rev.traffic)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //           item &&
-                        //             item.daily_facts &&
-                        //             item.daily_facts.previous &&
-                        //             item.daily_facts.previous.length
-                        //             ? item.daily_facts.previous
-                        //                 .map((rev) => rev.traffic)
-                        //                 .reduce((val, rev) => rev + val)
-                        //             : 0,
-                        //         )}
-                        //       </>
-                        //     </td>
-                        //   ) : null}
-                        //   {showPerformance ? (
-                        //     <td width="15%">
-                        //       <>
-                        //         {item &&
-                        //         item.daily_facts &&
-                        //         item.daily_facts.current &&
-                        //         item.daily_facts.current.length &&
-                        //         item.daily_facts.current !== null ? (
-                        //           <>
-                        //             {item &&
-                        //               item.daily_facts.current
-                        //                 .map((rev) =>
-                        //                   rev.conversion === null
-                        //                     ? 0
-                        //                     : rev.conversion,
-                        //                 )
-                        //                 .reduce((val, rev) => rev + val)
-                        //                 .toString()
-                        //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        //             %
-                        //             {calculatePercentage(
-                        //               item &&
-                        //                 item.daily_facts &&
-                        //                 item.daily_facts.current &&
-                        //                 item.daily_facts.current.length
-                        //                 ? item &&
-                        //                     item.daily_facts.current
-                        //                       .map((rev) => rev.conversion)
-                        //                       .reduce((val, rev) => rev + val)
-                        //                 : 0,
-                        //               item &&
-                        //                 item.daily_facts &&
-                        //                 item.daily_facts.previous &&
-                        //                 item.daily_facts.previous.length
-                        //                 ? item.daily_facts.previous
-                        //                     .map((rev) => rev.conversion)
-                        //                     .reduce((val, rev) => rev + val)
-                        //                 : 0,
-                        //               'conversion',
-                        //             )}
-                        //           </>
-                        //         ) : (
-                        //           ''
-                        //         )}
-                        //       </>
-                        //     </td>
-                        //   ) : null}
-
-                        //   <td width="15%">
-                        //     {item &&
-                        //     item.brand_growth_strategist &&
-                        //     item.brand_growth_strategist.length !== 0 ? (
-                        //       <>
-                        //         {item.brand_growth_strategist.profile_photo ? (
-                        //           <img
-                        //             className="user-profile-circle"
-                        //             src={
-                        //               item.brand_growth_strategist.profile_photo
-                        //             }
-                        //             alt="user"
-                        //           />
-                        //         ) : (
-                        //           <GetInitialName
-                        //             property="float-left mr-3"
-                        //             userInfo={item.brand_growth_strategist}
-                        //           />
-                        //         )}
-                        //       </>
-                        //     ) : (
-                        //       ''
-                        //     )}
-                        //     <div className="user-name">
-                        //       {item &&
-                        //         item.brand_growth_strategist &&
-                        //         item.brand_growth_strategist.first_name}
-                        //       <br />
-                        //       {item &&
-                        //         item.brand_growth_strategist &&
-                        //         item.brand_growth_strategist.last_name}
-                        //     </div>
-                        //   </td>
-                        // </tr>
-                      )
+                      data && data.map((item) => renderCustomerDetails(item))
                     )}
                   </tbody>
                 </Table>
@@ -3402,11 +2586,11 @@ const CustomerListPage = styled.div`
       }
     }
   }
-  .Revenue {
+  .revenue {
     padding-left: 5%;
   }
 
-  .unit-sold {
+  .units_sold {
     padding-left: 4%;
   }
   .traffic {
@@ -3596,6 +2780,16 @@ const CustomerListPage = styled.div`
   .selectAll {
     border-right: 1px solid black;
   }
+  .sort-arrow-up {
+    position: absolute;
+    bottom: -4px;
+    margin-left: 2px;
+    transform: rotate(180deg);
+  }
+  .sort-arrow-up.rotate {
+    transform: rotate(360deg);
+    bottom: -6px;
+  }
 `;
 
 const CustomerLeftPannel = styled.div`
@@ -3632,20 +2826,6 @@ const CustomerLeftPannel = styled.div`
       margin-bottom: 15px;
     }
   }
-
-  // .unselected {
-  //   color: ${Theme.gray40};
-  //   font-size: 14px;
-  //   float: right;
-  //   cursor: pointer;
-  // }
-  // .selected {
-  //   float: right;
-  //   color: ${Theme.gray40};
-  //   border-right: 2px solid ${Theme.gray4};
-  //   padding-right: 8px;
-  //   cursor: pointer;
-  // }
   .customer-list-filter {
     color: ${Theme.black};
     font-size: 16px;

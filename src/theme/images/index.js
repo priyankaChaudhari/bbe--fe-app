@@ -169,6 +169,7 @@ import OrangeChat from './icons/orange-chat-icon.png';
 import PinIcons from './icons/pin-icon.png';
 import NextActivityLogo from './next-activity-logo.svg';
 import RequestPlan from './icons/request-plane.png';
+import SortArrowDown from './icons/icons-sort-down.png';
 
 export {
   BannerBg,
@@ -342,4 +343,5 @@ export {
   PinIcons,
   RequestPlan,
   NextActivityLogo,
+  SortArrowDown,
 };
