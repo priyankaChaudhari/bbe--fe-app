@@ -789,10 +789,18 @@ export default function NewCustomerList() {
   };
 
   const handleSearch = (event, type) => {
+    console.log('event, type', event, type);
     localStorage.setItem('page', 1);
     if (type === 'view') {
       setShowOrderOption(false);
       setExpiringSoon(false);
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sort_by: '-created_at',
+        }),
+      );
       setSelectedValue({
         ...selectedValue,
         'order-by': '-created_at',
@@ -801,13 +809,7 @@ export default function NewCustomerList() {
         ...filters,
         sort_by: '-created_at',
       });
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          sort_by: '-created_at',
-        }),
-      );
+
       if (event.value === 'contract_details') {
         setShowPerformance(false);
         setShowAdPerformance(false);
@@ -817,6 +819,9 @@ export default function NewCustomerList() {
           showPerformance: false,
           showAdPerformance: false,
           showDspAdPerformance: false,
+          sort_by: '-created_at',
+          sequence: false,
+          daily_facts: 'week',
         });
         localStorage.setItem(
           'filters',
@@ -825,6 +830,9 @@ export default function NewCustomerList() {
             showPerformance: false,
             showAdPerformance: false,
             showDspAdPerformance: false,
+            sort_by: '-created_at',
+            sequence: false,
+            daily_facts: 'week',
           }),
         );
       } else if (event.value === 'performance') {
