@@ -40,7 +40,9 @@ export const WhiteCard = styled.div`
 
     .right-arrow-icon {
       vertical-align: middle;
-    }
+      margin-left: 4px;
+      width: 15px;
+   }
   }
   .monthly-dsp-budget {
     color: ${Theme.red};

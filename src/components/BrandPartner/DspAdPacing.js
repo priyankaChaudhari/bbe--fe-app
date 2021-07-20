@@ -95,7 +95,7 @@ export default function DspAdPacing({ dspData }) {
           {' '}
           {dayjs(new Date()).format('MMMM')} 1 -{' '}
           {dsp_pacing && dsp_pacing.last_day} <span className="dot" />{' '}
-          &nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;
           {dsp_pacing && dsp_pacing.days_remains} days remaining
         </p>
       </div>
@@ -292,7 +292,7 @@ const DspAdPacingModal = styled.div`
       height: 3px;
       position: absolute;
       top: 38px;
-      margin-left: 2px;
+      margin-left: 3px;
     }
   }
   .modal-body-section {
