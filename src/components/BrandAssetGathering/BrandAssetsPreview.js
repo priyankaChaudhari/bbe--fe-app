@@ -576,9 +576,12 @@ function BrandAssetsPreview({
             <img width="20px" src={ArrowRightBlackIcon} alt="arro" />
           </div>
         </div>
-        <ul className="inbox-comment">{renderComments()}</ul>
+        <ul className={!showTextArea ? 'inbox-coment' : 'inbox-height'}>
+          {renderComments()}
+        </ul>
         {commentsCount > 10 ? (
-          <Footer className="pdf-footer">
+          <Footer
+            className={!showTextArea ? 'pdf-footer' : 'pdf-footer-height'}>
             <CommonPagination
               count={commentsCount}
               pageNumber={pageNumber}
@@ -1181,7 +1184,7 @@ const CommentAnnotationPanel = styled.div`
     cursor: pointer;
   }
 
-  .inbox-comment {
+  .inbox-coment {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -1189,6 +1192,16 @@ const CommentAnnotationPanel = styled.div`
     height: calc(100vh - 100px - 235px);
     padding-bottom: 70px;
 
+    li {
+      padding: 15px 15px 0 15px;
+    }
+  }
+  .inbox-height {
+    height: calc(100vh - 200px);
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
     li {
       padding: 15px 15px 0 15px;
     }
@@ -1328,6 +1341,10 @@ const Footer = styled.div`
   min-height: 60px;
   z-index: 2;
   width: 24%;
+
+  &.pdf-footer-height {
+    bottom: 0px;
+  }
 
   // &.pdf-footer {
   //   width: 23%;
