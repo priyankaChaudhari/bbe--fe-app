@@ -29,7 +29,6 @@ export default function ProductCatalog({ id }) {
   }, [id]);
 
   const generateHTML = (item) => {
-    console.log(item.status);
     return (
       <label style={{ display: 'contents' }} htmlFor="add-addendum">
         <tr width="100%">
