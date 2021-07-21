@@ -10,6 +10,18 @@ export const dateOptions = [
   },
 ];
 
+export const bbDateOptions = [
+  { value: 'week', label: 'Recent 7 days' },
+  { value: 'month', label: 'Recent Month' },
+  { value: '30days', label: 'Recent 30 Days' },
+  // { value: 'year', label: 'Year to Date' },
+  {
+    value: 'custom',
+    label: 'Custom Range',
+    sub: 'Select start and end dates',
+  },
+];
+
 export const AdTypesOptions = [
   { value: 'all', label: 'All Ad Types' },
   { value: 'product_campaign_report', label: 'Sponsored Product' },
