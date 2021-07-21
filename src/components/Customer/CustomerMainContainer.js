@@ -1026,7 +1026,7 @@ export default function CustomerMainContainer() {
                             }`}>
                             <img
                               className="file-contract"
-                              src={FileContract}
+                              src={CatalogBox}
                               alt=""
                             />
                             Product Catalog

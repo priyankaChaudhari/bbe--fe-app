@@ -157,7 +157,7 @@ export default function DspAdPacing({ dspData }) {
           </div>
           <div className="col-5">
             {' '}
-            <div className="label-info text-right">
+            <div className="label-info text-right mt-2">
               {' '}
               $
               {dsp_pacing &&
@@ -181,7 +181,7 @@ export default function DspAdPacing({ dspData }) {
           </div>
           <div className="col-5">
             {' '}
-            <div className="label-info text-right">
+            <div className="label-info text-right mt-2">
               {' '}
               $
               {dsp_pacing &&
@@ -220,8 +220,8 @@ export default function DspAdPacing({ dspData }) {
                 dspData &&
                 dspData.dsp_pacing &&
                 dspData.dsp_pacing.dsp_pacing_flag === 0
-                  ? 'label-info text-right'
-                  : 'label-info text-right text-red'
+                  ? 'label-info text-right mt-2'
+                  : 'label-info text-right text-red mt-2'
               }>
               {' '}
               $
