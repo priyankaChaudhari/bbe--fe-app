@@ -1380,6 +1380,11 @@ fieldset {
   }
 }
 
+.rdrDayPassive {
+  visibility:hidden
+}
+
+
 .PDFPageOne {
   margin-bottom: 25px;
 }

@@ -7,6 +7,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import styled from 'styled-components';
 import $ from 'jquery';
+import dayjs from 'dayjs';
 import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -166,7 +167,7 @@ export default function NewCustomerList() {
   ];
   const isDesktop = useMediaQuery({ minWidth: 991 });
   const currentDate = new Date();
-
+  const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const [customDateData, setCustomDateData] = useState([
     {
       startDate: currentDate,
@@ -200,6 +201,8 @@ export default function NewCustomerList() {
         daily_facts: 'custom',
         start_date: sd,
         end_date: ed,
+        startDate,
+        endDate,
       });
     }
   };
@@ -210,7 +213,7 @@ export default function NewCustomerList() {
       customDateData[0].endDate,
       'custom',
     );
-
+    setIsCustomDateApply(true);
     setShowCustomDateModal(false);
   };
 
@@ -345,12 +348,39 @@ export default function NewCustomerList() {
     </SingleValue>
   );
 
+  const renderCustomDateSubLabel = (props) => {
+    if (selectedTimeFrame.daily_facts === 'custom' && isCustomDateApply) {
+      return `From- ${dayjs(selectedTimeFrame.startDate).format(
+        'D MMM YYYY',
+      )}  To- ${dayjs(selectedTimeFrame.endDate).format('D MMM YYYY')}`;
+    }
+
+    return props.data.sub;
+  };
+
+  const filterOption = (props) => (
+    <Option {...props}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {props.data.sub}
+        </div>
+      </div>
+    </Option>
+  );
+
   const TimeFrameFilters = (props) => (
     <SingleValue {...props}>
       Stats For:&nbsp;
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {props.data.label}
       </span>
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(props)}
+      </div>
     </SingleValue>
   );
 
@@ -393,6 +423,7 @@ export default function NewCustomerList() {
     if (key === 'stats') {
       if (isDesktop) {
         return {
+          Option: filterOption,
           SingleValue: TimeFrameFilters,
           DropdownIndicator,
         };
@@ -789,7 +820,6 @@ export default function NewCustomerList() {
   };
 
   const handleSearch = (event, type) => {
-    console.log('event, type', event, type);
     localStorage.setItem('page', 1);
     if (type === 'view') {
       setShowOrderOption(false);
@@ -930,6 +960,7 @@ export default function NewCustomerList() {
       }
     }
     if (type === 'stats') {
+      setIsCustomDateApply(false);
       if (event.value === 'custom') {
         setShowCustomDateModal(true);
       } else {

@@ -245,7 +245,11 @@ export const timeFrameFilters = [
   { value: 'week', label: 'Recent 7 days' },
   { value: 'month', label: 'Recent Month' },
   { value: '30days', label: 'Recent 30 days' },
-  { value: 'custom', label: 'Custom Period' },
+  {
+    value: 'custom',
+    label: 'Custom Period',
+    sub: 'Select start and end dates',
+  },
 ];
 
 export const companyFields = [
