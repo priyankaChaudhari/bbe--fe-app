@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -27,8 +28,10 @@ import {
   BillingAddress,
   creditCardDetails,
 } from '../../constants/FieldConstants';
+import { showProfileLoader } from '../../store/actions/userState';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
@@ -368,6 +371,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         billingDetails();
         setShowModal(false);
         setShowBtn(false);
+        dispatch(showProfileLoader(true));
+        dispatch(showProfileLoader(false));
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });

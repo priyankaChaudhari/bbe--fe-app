@@ -1,270 +1,284 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import Select from 'react-select';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import {
   Tabs,
   WhiteCard,
   InputSearchWithRadius,
   DropDownSelect,
   Table,
+  PageLoader,
 } from '../../common';
-import {
-  SearchIcon,
-  Logo,
-  RequestPlan,
-  DefaultUser,
-} from '../../theme/images/index';
+import { SearchIcon, Logo, RequestPlan } from '../../theme/images/index';
 import Theme from '../../theme/Theme';
-// import styled from 'styled-components';
+import { getProductCatalog } from '../../api';
 
-export default function ProductCatalog() {
-  const [viewComponent, setViewComponent] = useState('current');
+export default function ProductCatalog({ id }) {
+  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [viewComponent, setViewComponent] = useState('product');
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getProductCatalog(id).then((response) => {
+      setData(response && response.data && response.data.results);
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  }, [id]);
+
+  const generateHTML = (item) => {
+    console.log(item.status);
+    return (
+      <label style={{ display: 'contents' }} htmlFor="add-addendum">
+        <tr width="100%">
+          <td className="product-catalog-body">
+            {' '}
+            <div className="product-catalog-image">
+              <input
+                className="check-box-product-list"
+                type="checkbox"
+                id="add-addendum"
+              />
+              <span className="checkmark" />
+              <img
+                className="product-image "
+                src={item.main_image || Logo}
+                alt=""
+              />{' '}
+              <img
+                className=" product-image-large"
+                src={item.main_image || Logo}
+                alt=""
+              />{' '}
+            </div>
+            <div className="product-data">
+              <div className="product-name">{item.title || ''}</div>
+              <div className="product-id">
+                {item.brand || ''} / {item.asin || ''} /{' '}
+                {item.total_variant || 0} Variations
+              </div>
+            </div>
+          </td>
+          <td className="product-catalog-body">
+            <div
+              className={`status ${
+                item.status.includes('received') ||
+                item.status.includes('requested')
+                  ? item.status.replace(' ', '-')
+                  : item.status
+              }`}>
+              <span className="bullet-point assets-requested" />
+              <span className="status-text capitalize"> {item.status}</span>
+            </div>
+          </td>
+          <td className="product-catalog-body">
+            {item.status === 'unoptimized' ? (
+              <div className="request">
+                {' '}
+                <img
+                  className="request-plan"
+                  width="18px"
+                  src={RequestPlan}
+                  alt="plan"
+                />{' '}
+                Request
+              </div>
+            ) : (
+              ''
+            )}
+          </td>
+        </tr>
+      </label>
+    );
+  };
+
   return (
     <div className="col-lg-6 col-12">
-      {' '}
       <WhiteCard>
         {' '}
         <Tabs>
           <ul className="tabs">
             <li
-              className={viewComponent === 'current' ? 'active' : ''}
-              onClick={() => setViewComponent('current')}
+              className={viewComponent === 'product' ? 'active' : ''}
+              onClick={() => setViewComponent('product')}
               role="presentation">
               Product Catalog
             </li>
-            <li role="presentation">Schedule</li>
+            <li
+              className={viewComponent === 'schedule' ? 'active' : ''}
+              onClick={() => setViewComponent('schedule')}
+              role="presentation">
+              Schedule
+            </li>
           </ul>
         </Tabs>
-        <>
-          {viewComponent === 'current' ? (
-            <>
-              <div className="row mt-2 mb-2">
-                <div className="col-6 pl-1 pr-1">
-                  {' '}
-                  <InputSearchWithRadius className="customer-list-header">
-                    <input
-                      className=" form-control search-filter"
-                      placeholder="Search"
-                    />
+        {(data && data.length === 0) || data === undefined ? (
+          <div className="text-center mt-3">No record found.</div>
+        ) : (
+          <>
+            {viewComponent === 'product' ? (
+              <>
+                <div className="row mt-2 mb-2">
+                  <div className="col-6 pl-1 pr-1">
+                    {' '}
+                    <InputSearchWithRadius className="customer-list-header">
+                      <input
+                        className=" form-control search-filter"
+                        placeholder="Search"
+                      />
 
-                    <img
-                      src={SearchIcon}
-                      alt="search"
-                      className="search-input-icon"
-                    />
-                  </InputSearchWithRadius>
-                </div>
-                <div className="col-3 pl-1 pr-1">
-                  {' '}
-                  <DropDownSelect className=" w-100">
+                      <img
+                        src={SearchIcon}
+                        alt="search"
+                        className="search-input-icon"
+                      />
+                    </InputSearchWithRadius>
+                  </div>
+                  <div className="col-3 pl-1 pr-1">
                     {' '}
-                    <Select
-                      classNamePrefix="react-select"
-                      isClearable={false}
-                      className="active"
-                    />
-                  </DropDownSelect>
-                </div>
-                <div className="col-3 pl-1 pr-1">
-                  {' '}
-                  <DropDownSelect>
+                    <DropDownSelect className=" w-100">
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        isClearable={false}
+                        className="active"
+                      />
+                    </DropDownSelect>
+                  </div>
+                  <div className="col-3 pl-1 pr-1">
                     {' '}
-                    <Select
-                      classNamePrefix="react-select"
-                      isClearable={false}
-                      className="active"
-                    />
-                  </DropDownSelect>
-                </div>
-              </div>
-
-              <Table className="mt-0 product-catalog-laptop ">
-                <tr>
-                  <th width="55%" className="product-catalog-header">
-                    Product Name / ASIN / SKU
-                  </th>
-                  <th width="25%" className="product-catalog-header">
-                    Status
-                  </th>
-                  <th width="20%" className="product-catalog-header">
-                    {' '}
-                    &nbsp;
-                  </th>
-                </tr>
-                <tbody>
-                  <label style={{ display: 'contents' }} htmlFor="add-addendum">
-                    <tr width="100%">
-                      <td className="product-catalog-body">
-                        {' '}
-                        <div className="product-catalog-image">
-                          <input
-                            className="check-box-product-list"
-                            type="checkbox"
-                            id="add-addendum"
-                          />
-                          <span className="checkmark" />
-                          <img
-                            className="product-image "
-                            src={Logo}
-                            alt=""
-                          />{' '}
-                          <img
-                            className=" product-image-large"
-                            src={Logo}
-                            alt=""
-                          />{' '}
-                        </div>
-                        <div className="product-data">
-                          <div className="product-name">
-                            Threadmill Home Linen Twin Blanket - 1 Piece
-                            Herringbone Cotton Blanket
-                          </div>
-                          <div className="product-id">
-                            B000000001 / 6291108300282 / 8 Variations
-                          </div>
-                        </div>
-                      </td>
-                      <td className="product-catalog-body">
-                        <div className="status">
-                          {' '}
-                          <span className="bullet-point" />
-                          <span className="status-text"> Optimized</span>
-                        </div>
-                      </td>
-                      <td className="product-catalog-body">
-                        <div className="request">
-                          {' '}
-                          <img
-                            className="request-plan"
-                            width="18px"
-                            src={RequestPlan}
-                            alt="plan"
-                          />{' '}
-                          Request
-                        </div>
-                      </td>
-                    </tr>
-                  </label>
-                  <label style={{ display: 'contents' }} htmlFor="2">
-                    <tr width="100%">
-                      <td className="product-catalog-body">
-                        {' '}
-                        <div className="product-catalog-image">
-                          <input
-                            className="check-box-product-list"
-                            type="checkbox"
-                            id="2"
-                          />
-                          <span className="checkmark" />
-                          <img
-                            className="product-image"
-                            src={DefaultUser}
-                            alt=""
-                          />{' '}
-                          <img
-                            className="product-image-large"
-                            src={DefaultUser}
-                            alt=""
-                          />
-                        </div>
-                        <div className="product-data">
-                          <div className="product-name">
-                            Threadmill Home Linen Twin Blanket - 1
-                          </div>
-                          <div className="product-id">
-                            B000000001 / 6291108300282 / 8 Variations
-                          </div>
-                        </div>
-                      </td>
-                      <td className="product-catalog-body">
-                        <div className="status un-optimized scheduled assets-received">
-                          {' '}
-                          <span className="bullet-point gray light-yellow light-blue" />
-                          <span className="status-text"> Assets Received </span>
-                        </div>
-                      </td>
-                      <td className="product-catalog-body">
-                        <div className="request">
-                          {' '}
-                          <img
-                            className="request-plan"
-                            width="18px"
-                            src={RequestPlan}
-                            alt="plan"
-                          />{' '}
-                          Request
-                        </div>
-                      </td>
-                    </tr>
-                  </label>
-                </tbody>
-              </Table>
-              <TableMobileView className="mt-0 product-catalog-mobile ">
-                <div className="table-mob-header">
-                  <div className="row">
-                    <div className="col-8">Product Name / ASIN / SKU</div>
-                    <div className="col-4">Status</div>
+                    <DropDownSelect>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        isClearable={false}
+                        className="active"
+                      />
+                    </DropDownSelect>
                   </div>
                 </div>
-                <div className="table-mob-body">
-                  <label style={{ display: 'contents' }} htmlFor="12">
-                    <div className="row">
-                      <div className="col-12">
-                        <div className="product-catalog-image">
-                          <input
-                            className="check-box-product-list"
-                            type="checkbox"
-                            id="12"
-                          />
-                          <span className="checkmark" />
-                          <img
-                            className="product-image"
-                            src={Logo}
-                            alt=""
-                          />{' '}
-                        </div>
-                        <div className="product-data">
-                          <div className="product-name">
-                            Threadmill Home Linen Twin Blanket - 1 Piece
-                            Herringbone Cotton Blanket
-                          </div>
-                          <div className="product-id">
-                            B000000001 / 6291108300282 / 8 Variations
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-8 mt-3">
-                        <div className="status ml-5">
+
+                {isLoading.loader && isLoading.type === 'page' ? (
+                  <PageLoader
+                    component="agrement-details"
+                    color="#FF5933"
+                    type="detail"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <>
+                    <Table className="mt-0 product-catalog-laptop ">
+                      <tr>
+                        <th width="55%" className="product-catalog-header">
+                          Product Name / ASIN / SKU
+                        </th>
+                        <th width="25%" className="product-catalog-header">
+                          Status
+                        </th>
+                        <th width="20%" className="product-catalog-header">
                           {' '}
-                          <span className="bullet-point" />
-                          <span className="status-text"> Optimized</span>
+                          &nbsp;
+                        </th>
+                      </tr>
+                      <tbody>
+                        {data &&
+                          data.map((item) => (
+                            <React.Fragment key={item.id}>
+                              {generateHTML(item)}
+                            </React.Fragment>
+                          ))}
+                      </tbody>
+                    </Table>
+                    <TableMobileView className="mt-0 product-catalog-mobile ">
+                      <div className="table-mob-header">
+                        <div className="row">
+                          <div className="col-8">Product Name / ASIN / SKU</div>
+                          <div className="col-4">Status</div>
                         </div>
                       </div>
-                      <div className="col-4 mt-3 text-center">
-                        <div className="request">
-                          {' '}
-                          <img
-                            className="request-plan"
-                            width="18px"
-                            src={RequestPlan}
-                            alt="plan"
-                          />{' '}
-                          Request
-                        </div>
+                      <div className="table-mob-body">
+                        {data &&
+                          data.map((item) => (
+                            <React.Fragment key={item.id}>
+                              <label
+                                style={{ display: 'contents' }}
+                                htmlFor="12">
+                                <div className="row">
+                                  <div className="col-12">
+                                    <div className="product-catalog-image">
+                                      <input
+                                        className="check-box-product-list"
+                                        type="checkbox"
+                                        id="12"
+                                      />
+                                      <span className="checkmark" />
+                                      <img
+                                        className="product-image"
+                                        src={item.main_image || Logo}
+                                        alt=""
+                                      />{' '}
+                                    </div>
+                                    <div className="product-data">
+                                      <div className="product-name">
+                                        {item.title || ''}
+                                      </div>
+                                      <div className="product-id">
+                                        {item.brand || ''} / {item.asin || ''} /{' '}
+                                        {item.total_variant || 0} Variations
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-8 mt-3">
+                                    <div className="status ml-5">
+                                      {' '}
+                                      <span className="bullet-point" />
+                                      <span className="status-text">
+                                        {' '}
+                                        {item.status}{' '}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="col-4 mt-3 text-center">
+                                    {item.status === 'unoptimized' ? (
+                                      <div className="request">
+                                        {' '}
+                                        <img
+                                          className="request-plan"
+                                          width="18px"
+                                          src={RequestPlan}
+                                          alt="plan"
+                                        />{' '}
+                                        Request
+                                      </div>
+                                    ) : (
+                                      ''
+                                    )}
+                                  </div>
+                                </div>
+                              </label>
+                            </React.Fragment>
+                          ))}
                       </div>
-                    </div>
-                  </label>
-                </div>
-              </TableMobileView>
-            </>
-          ) : (
-            ''
-          )}
-        </>
+                    </TableMobileView>
+                  </>
+                )}
+              </>
+            ) : (
+              ''
+            )}
+          </>
+        )}
       </WhiteCard>
     </div>
   );
 }
+
+ProductCatalog.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 
 const TableMobileView = styled.div`
   display: none;
@@ -365,7 +379,7 @@ const TableMobileView = styled.div`
         color: ${Theme.black};
         position: relative;
 
-        &.un-optimized {
+        &.unoptimized {
           background-color: ${Theme.gray8};
           max-width: 113px;
         }
@@ -377,9 +391,13 @@ const TableMobileView = styled.div`
           background-color: #d6eef2;
           max-width: 132px;
         }
+        &.assets-requested {
+          background-color: ${Theme.lightOrange};
+          max-width: 132px;
+        }
 
         .bullet-point {
-          background-color: ${Theme.lighterGreen};
+          //  background-color: ${Theme.lighterGreen};
           border-radius: 100%;
           width: 8px;
           height: 8px;
@@ -387,14 +405,17 @@ const TableMobileView = styled.div`
           top: 9px;
           left: 11px;
 
-          &.gray {
+          &.unoptimized {
             background-color: ${Theme.gray25};
           }
-          &.light-yellow {
+          &.scheduled {
             background-color: ${Theme.yellow};
           }
-          &.light-blue {
-            background: #30a8bd;
+          &.assets-received {
+            background-color: #30a8bd;
+          }
+          &.assets-requested {
+            background-color: ${Theme.orange};
           }
         }
         .status-text {

@@ -139,3 +139,5 @@ export {
   deleteNote,
   getRecentNotes,
 } from './NotesApi';
+
+export { getProductCatalog, requestData } from './ProductCatalogApi';
