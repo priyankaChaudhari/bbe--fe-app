@@ -609,16 +609,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           {' '}
           <div className="modal-body">
             <h4>Payment Details</h4>
-            {mapPaymentDetails()}
-            <ErrorMsg style={{ textAlign: 'center' }}>
-              {apiError && apiError[0]}
-            </ErrorMsg>
-            <div className="straight-line horizontal-line  mt-3 mb-3" />
-            <h4>Billing Address</h4>
-            {mapAddressDetails()}
-            <div className="straight-line horizontal-line  mt-3 mb-3" />
-            <h4>Billing Contact</h4>
-            {mapContactDetails()}
+            <div className="body-content mt-3 ">
+              {mapPaymentDetails()}
+              <ErrorMsg style={{ textAlign: 'center' }}>
+                {apiError && apiError[0]}
+              </ErrorMsg>
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              <h4>Billing Address</h4>
+              {mapAddressDetails()}
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              <h4>Billing Contact</h4>
+              {mapContactDetails()}
+            </div>
           </div>
           {showBtn ? (
             <>
