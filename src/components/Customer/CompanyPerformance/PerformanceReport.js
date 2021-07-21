@@ -138,7 +138,6 @@ export default function PerformanceReport({
     'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
   const renderCustomDateSubLabel = (props, flag) => {
-    console.log('selectedValue', selectedValue, state);
     if (flag === 'sp') {
       if (selectedValue === 'custom' && isSPCustomDateApply) {
         return `From- ${dayjs(state[0].startDate).format(
@@ -146,10 +145,10 @@ export default function PerformanceReport({
         )}  To- ${dayjs(state[0].endDate).format('MMM D YYYY')}`;
       }
     } else if (bBDailyFact === 'custom' && isBBCustomDateApply) {
-        return `From- ${dayjs(BBstate[0].startDate).format(
-          'MMM D YYYY',
-        )}  To- ${dayjs(BBstate[0].endDate).format('MMM D YYYY')}`;
-      }
+      return `From- ${dayjs(BBstate[0].startDate).format(
+        'MMM D YYYY',
+      )}  To- ${dayjs(BBstate[0].endDate).format('MMM D YYYY')}`;
+    }
 
     return props.data.sub;
   };
