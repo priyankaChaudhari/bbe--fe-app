@@ -1,8 +1,12 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+
 import React, { useState, useEffect } from 'react';
 
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { DebounceInput } from 'react-debounce-input';
 
 import {
   Tabs,
@@ -12,7 +16,12 @@ import {
   Table,
   PageLoader,
 } from '../../common';
-import { SearchIcon, Logo, RequestPlan } from '../../theme/images/index';
+import {
+  SearchIcon,
+  Logo,
+  RequestPlan,
+  CaretUp,
+} from '../../theme/images/index';
 import Theme from '../../theme/Theme';
 import { getProductCatalog } from '../../api';
 
@@ -20,13 +29,47 @@ export default function ProductCatalog({ id }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [viewComponent, setViewComponent] = useState('product');
   const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({ 'order-by': 'title' });
+  const sortOptions = [
+    { label: 'Name (A-Z)', value: 'title' },
+    {
+      label: 'Name (Z-A)',
+      value: '-title',
+    },
+  ];
+
+  const statusOptions = [
+    { label: 'Any Status', value: '' },
+    {
+      label: 'Scheduled',
+      value: 'scheduled',
+    },
+    {
+      label: 'Optimized',
+      value: 'optimized',
+    },
+    {
+      label: 'Assets Received',
+      value: 'assets received',
+    },
+    {
+      label: 'Assets Requested',
+      value: 'assets requested',
+    },
+    {
+      label: 'Unoptimized',
+      value: 'unoptimized',
+    },
+  ];
 
   useEffect(() => {
-    getProductCatalog(id).then((response) => {
+    setIsLoading({ loader: true, type: 'page' });
+
+    getProductCatalog(id, filters).then((response) => {
       setData(response && response.data && response.data.results);
       setIsLoading({ loader: false, type: 'page' });
     });
-  }, [id]);
+  }, [id, filters]);
 
   const generateHTML = (item) => {
     return (
@@ -92,7 +135,151 @@ export default function ProductCatalog({ id }) {
       </label>
     );
   };
+  const getSelectPlaceholder = (item) => {
+    if (item === 'sort') {
+      return 'Sort by';
+    }
+    if (item === 'sort') {
+      return 'Any Status';
+    }
 
+    return '';
+  };
+  const { SingleValue } = components;
+
+  const SortOption = (props) => (
+    <SingleValue {...props}>
+      {props.data.label === 'Name (A-Z)' || props.data.label === 'Name (Z-A)'
+        ? 'Sort by:'
+        : ''}
+      &nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {props.data.label}
+      </span>
+    </SingleValue>
+  );
+
+  const getDropDownOptions = (optionsFor) => {
+    if (optionsFor === 'sort') {
+      return sortOptions;
+    }
+
+    if (optionsFor === 'status') {
+      return statusOptions;
+    }
+    return '';
+  };
+
+  const handleFilters = (event, item) => {
+    if (item === 'sort') {
+      setFilters({
+        ...filters,
+        'order-by': event.value,
+      });
+    }
+    if (item === 'status') {
+      setFilters({
+        ...filters,
+        status: event.value,
+      });
+    }
+  };
+  const DropdownIndicator = (props) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
+  const getSelectComponents = (key) => {
+    if (key === 'sort') {
+      return {
+        SingleValue: SortOption,
+        DropdownIndicator,
+      };
+    }
+
+    if (key === 'status') {
+      return {
+        SingleValue: SortOption,
+        DropdownIndicator,
+      };
+    }
+    return '';
+  };
+
+  const bindDropDownValue = (item) => {
+    if (item === 'sort') {
+      return sortOptions[0];
+    }
+    if (item === 'status') {
+      return statusOptions[0];
+    }
+    return '';
+  };
+  const generateDropdown = (item) => {
+    return (
+      <>
+        <Select
+          classNamePrefix="react-select"
+          isClearable={false}
+          className="active"
+          placeholder={getSelectPlaceholder(item)}
+          options={getDropDownOptions(item)}
+          onChange={(event, action) => handleFilters(event, item, action)}
+          defaultValue={bindDropDownValue(item)}
+          isMulti={false}
+          components={getSelectComponents(item)}
+        />
+      </>
+    );
+  };
+
+  const displaySearchSortPanel = () => {
+    return (
+      <div className="row mt-2 mb-2">
+        <div className="col-6 pl-1 pr-1">
+          {' '}
+          <InputSearchWithRadius className="customer-list-header">
+            <DebounceInput
+              debounceTimeout={600}
+              className=" form-control search-filter"
+              placeholder="Search"
+              onChange={(event) => {
+                setFilters({
+                  ...filters,
+                  q: event.target.value,
+                });
+              }}
+            />
+            <img src={SearchIcon} alt="search" className="search-input-icon" />
+          </InputSearchWithRadius>
+        </div>
+        <div className="col-3 pl-1 pr-1">
+          {' '}
+          <DropDownSelect className=" w-100">
+            {' '}
+            {generateDropdown('sort')}
+          </DropDownSelect>
+        </div>
+        <div className="col-3 pl-1 pr-1">
+          {' '}
+          <DropDownSelect>{generateDropdown('status')}</DropDownSelect>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="col-lg-6 col-12">
       <WhiteCard>
@@ -113,52 +300,13 @@ export default function ProductCatalog({ id }) {
             </li>
           </ul>
         </Tabs>
+        {displaySearchSortPanel()}
         {(data && data.length === 0) || data === undefined ? (
           <div className="text-center mt-3">No record found.</div>
         ) : (
           <>
             {viewComponent === 'product' ? (
               <>
-                <div className="row mt-2 mb-2">
-                  <div className="col-6 pl-1 pr-1">
-                    {' '}
-                    <InputSearchWithRadius className="customer-list-header">
-                      <input
-                        className=" form-control search-filter"
-                        placeholder="Search"
-                      />
-
-                      <img
-                        src={SearchIcon}
-                        alt="search"
-                        className="search-input-icon"
-                      />
-                    </InputSearchWithRadius>
-                  </div>
-                  <div className="col-3 pl-1 pr-1">
-                    {' '}
-                    <DropDownSelect className=" w-100">
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        isClearable={false}
-                        className="active"
-                      />
-                    </DropDownSelect>
-                  </div>
-                  <div className="col-3 pl-1 pr-1">
-                    {' '}
-                    <DropDownSelect>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        isClearable={false}
-                        className="active"
-                      />
-                    </DropDownSelect>
-                  </div>
-                </div>
-
                 {isLoading.loader && isLoading.type === 'page' ? (
                   <PageLoader
                     component="agrement-details"

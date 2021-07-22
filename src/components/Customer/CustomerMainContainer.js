@@ -135,7 +135,7 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'product catalog',
+    customerSelectedTab || 'performance',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
