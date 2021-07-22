@@ -701,8 +701,8 @@ export default function AdPerformance({
   const renderCustomDateSubLabel = (props) => {
     if (selectedAdDF === 'custom' && isCustomDateApply) {
       return `From- ${dayjs(adState[0].startDate).format(
-        'MMM D YYYY',
-      )}  To- ${dayjs(adState[0].endDate).format('MMM D YYYY')}`;
+        'MMM D, YYYY',
+      )}  To- ${dayjs(adState[0].endDate).format('MMM D, YYYY')}`;
     }
 
     return props.data.sub;

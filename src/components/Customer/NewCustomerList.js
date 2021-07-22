@@ -351,8 +351,8 @@ export default function NewCustomerList() {
   const renderCustomDateSubLabel = (props) => {
     if (selectedTimeFrame.daily_facts === 'custom' && isCustomDateApply) {
       return `From- ${dayjs(selectedTimeFrame.startDate).format(
-        'D MMM YYYY',
-      )}  To- ${dayjs(selectedTimeFrame.endDate).format('D MMM YYYY')}`;
+        'D MMM, YYYY',
+      )}  To- ${dayjs(selectedTimeFrame.endDate).format('D MMM, YYYY')}`;
     }
 
     return props.data.sub;

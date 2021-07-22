@@ -141,13 +141,13 @@ export default function PerformanceReport({
     if (flag === 'sp') {
       if (selectedValue === 'custom' && isSPCustomDateApply) {
         return `From- ${dayjs(state[0].startDate).format(
-          'MMM D YYYY',
-        )}  To- ${dayjs(state[0].endDate).format('MMM D YYYY')}`;
+          'MMM D, YYYY',
+        )}  To- ${dayjs(state[0].endDate).format('MMM D, YYYY')}`;
       }
     } else if (bBDailyFact === 'custom' && isBBCustomDateApply) {
       return `From- ${dayjs(BBstate[0].startDate).format(
-        'MMM D YYYY',
-      )}  To- ${dayjs(BBstate[0].endDate).format('MMM D YYYY')}`;
+        'MMM D, YYYY',
+      )}  To- ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`;
     }
 
     return props.data.sub;

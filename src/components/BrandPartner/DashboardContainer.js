@@ -177,8 +177,8 @@ function DashboardContainer() {
   const renderCustomDateSubLabel = (props) => {
     if (selectedValue.type === 'custom' && isCustomDateApply) {
       return `From- ${dayjs(bgsData[0].startDate).format(
-        'MMM D YYYY',
-      )}  To- ${dayjs(bgsData[0].endDate).format('MMM D YYYY')}`;
+        'MMM D, YYYY',
+      )}  To- ${dayjs(bgsData[0].endDate).format('MMM D, YYYY')}`;
     }
 
     return props.data.sub;
