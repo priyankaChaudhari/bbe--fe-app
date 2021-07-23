@@ -1218,61 +1218,73 @@ const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
   margin-top: -150px;
-  max-width: 650px;
+  max-width: 790px;
   height: 73vh;
-
-  .react-pdf__Document {
-    width: 100% !important;
-    background-color: ${Theme.gray3} !important;
-    padding-right: 0;
-
-    .react-pdf__Page {
-      background-color: ${Theme.gray3} !important;
-
-      & .pdf-view {
-        width: 100% !important;
-        background-color: ${Theme.gray3} !important;
-      }
-
-      .react-pdf__Page__canvas {
-        top: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        overflow: auto;
-      }
-      &:first-child {
-        top: 0 !important;
-        margin-bottom: 0 !important;
-      }
-    }
-    .feDBFU .not-found {
-      font-weight: 500;
-      color: black;
-      margin-top: -70px;
-    }
-    @media only screen and (min-width: 1500px) {
-      // padding-right: 400px;
-    }
-    @media only screen and (max-width: 991px) {
-      padding-left: 0px !important;
+  #ResumeContainer {
+    width: 98%;
+    .react-pdf__Document {
+      width: 100% !important;
       padding-right: 0;
+      background: ${Theme.white} !important;
 
+      // .react-pdf__Page {
+      //
+      // }
       .react-pdf__Page {
+       box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1); !important;
+        background: ${Theme.white} !important;
+        margin-bottom: 10px !important;
+
+        .react-pdf__Page__textContent {
+          box-shadow: none;
+        }
+        & .pdf-view {
+          width: 100% !important;
+        }
+
+        .react-pdf__Page__canvas {
+          top: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          overflow: auto;
+        }
         &:first-child {
           top: 0 !important;
-          margin-bottom: 0 !important;
         }
       }
-    }
-    @media only screen and (max-width: 767px) {
-      .react-pdf__Page {
-        &:first-child {
-          top: 0 !important;
-          margin-bottom: 0 !important;
+      .feDBFU .not-found {
+        font-weight: 500;
+        color: black;
+        margin-top: -70px;
+      }
+      @media only screen and (min-width: 1500px) {
+        // padding-right: 400px;
+      }
+      @media only screen and (max-width: 991px) {
+        padding-left: 0px !important;
+        padding-right: 0;
+         max-width: 550px;
+
+        .react-pdf__Page {
+          &:first-child {
+            top: 0 !important;
+            margin-bottom: 0 !important;
+          }
+        }
+      }
+      @media only screen and (max-width: 767px) {
+        .react-pdf__Page {
+          &:first-child {
+            top: 0 !important;
+            margin-bottom: 0 !important;
+          }
         }
       }
     }
   }
+   @media only screen and (min-width: 1920px) {
+     max-width: 950px;
+   }
   @media only screen and (max-width: 991px) {
     margin-top: -16px;
     min-height: 100px;

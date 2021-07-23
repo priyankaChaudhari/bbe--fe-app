@@ -295,7 +295,7 @@ export default function NewCustomerList() {
             style={{
               borderRadius: 50,
               marginRight: '9px',
-              height: '32px',
+              height: '28px',
               verticalAlign: 'middle',
             }}
           />
@@ -319,7 +319,7 @@ export default function NewCustomerList() {
           alt="user"
           style={{
             borderRadius: 50,
-            width: '32px',
+            width: '28px',
             verticalAlign: 'middle',
             marginBottom: '',
           }}
