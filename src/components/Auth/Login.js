@@ -388,15 +388,6 @@ export default function Login() {
                 ) : (
                   ''
                 )}
-
-                {/* <Button className=" btn-secondary w-100 mt-2">
-                    <img
-                      className="google-icon"
-                      src={GoogleIcons}
-                      alt="google "
-                    />
-                    Login with Google
-                  </Button> */}
               </form>
             </div>
           </div>

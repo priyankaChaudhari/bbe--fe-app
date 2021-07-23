@@ -35,23 +35,6 @@ const Button = styled.button`
     }
   }
 
-  &.btn-secondary {
-    background-color: ${Theme.blue};
-    color: ${Theme.white};
-    position: relative;
-    border: 1px solid ${Theme.blue};
-    width: 150px;
-
-    &:hover {
-      background-color: ${Theme.blue};
-      color: ${Theme.white};
-    }
-    &:focus {
-      outline: none;
-      border: none;
-    }
-  }
-
   &.btn-transparent {
     background-color: ${Theme.white};
     // padding: 11px 25px;
@@ -240,23 +223,6 @@ const Button = styled.button`
       width: 152px;
     }
   }
-
-  // @media only screen and (max-width: 991px) {
-  //   &.btn-primary {
-  //     width: 172px;
-  //   }
-  //   &.btn-gray {
-  //     width: 172px;
-  //   }
-  //   &.light-orange {
-  //     &.on-boarding {
-  //       width: 172px;
-  //     }
-  //   }
-  //   &.w-50 {
-  //     width: 172px;
-  //   }
-  // }
 `;
 
 export default Button;

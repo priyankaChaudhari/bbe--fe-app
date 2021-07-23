@@ -2,124 +2,6 @@ import styled from 'styled-components';
 import Theme from './Theme';
 import { BannerBg } from './images/index';
 
-// export const BodyWhite = styled.div`
-//   height: 100%;
-
-//   .arrow-icon {
-//     width: 13px;
-//     margin-right: 5px;
-//     vertical-align: baseline;
-//     cursor: pointer;
-//   }
-
-//   .edit-icon {
-//     width: 15px;
-//   }
-
-//   .brand-title {
-//     display: flex;
-//     .blue-logo {
-//       width: 120px;
-//       height: 120px;
-//       border-radius: 50%;
-//       float: left;
-//       margin-right: 40px;
-//     }
-
-//     .add-more-people {
-//       .add-mores {
-//         background-size: 100%;
-//         border-radius: 50%;
-//         width: 40px;
-//         height: 40px;
-//         display: inline-block;
-//         vertical-align: top;
-//         margin-left: -10px;
-
-//         &:hover {
-//           background: rgba(5, 20, 34, 0.2);
-//         }
-//       }
-//       .add-more-icon {
-//         width: 16px;
-//         margin: 13px 0 10px 20px;
-//       }
-//     }
-//   }
-//   .horizontal-line {
-//     margin-top: -17px;
-//     border-bottom: 1px solid #dee2ed;
-//   }
-
-//   .button-modal {
-//     margin-left: 30px;
-//   }
-
-//   .edit-costomer-profile {
-//     width: 40px;
-//     height: 40px;
-//     position: absolute;
-//     bottom: 13px;
-//     left: 98px;
-//     padding: 8px;
-//     border-radius: 50%;
-//     background: white;
-//     border: 1px solid rgba(46, 91, 255, 0.08);
-//     cursor: pointer;
-//     box-shadow: 0 2px 12px 0 rgba(46, 56, 77, 0.5);
-//   }
-
-//   @media only screen and (max-width: 767px) {
-//     .button-modal {
-//       margin-left: 0;
-//     }
-//   }
-
-//   @media only screen and (max-width: 991px) {
-//     padding: 20px 100px 20px 10px;
-//   }
-//   @media only screen and (max-width: 767px) {
-//     padding: 20px 100px 20px 10px;
-//     .brand-title {
-//       .blue-logo {
-//         width: 80px;
-//         height: 80px;
-//         margin-right: 10px;
-//       }
-
-//       h1 {
-//         font-size: 28px;
-//       }
-//       .add-more-people {
-//         .add-mores {
-//           width: 40px;
-//           height: 40px;
-//         }
-//       }
-//     }
-//   }
-//   @media only screen and (max-width: 540px) {
-//     padding: 20px 100px 20px 10px;
-//     .brand-title {
-//       .blue-logo {
-//         width: 50px;
-//         height: 50px;
-//         margin-right: 10px;
-//       }
-
-//       h1 {
-//         font-size: 20px;
-//       }
-//       .add-more-people {
-//         .add-mores {
-//           width: 30px;
-//           height: 30px;
-//         }
-//       }
-//     }
-//   }
-// `;
-
 export const GroupUser = styled.div`
   display: flex;
   .activity-user {
@@ -284,12 +166,12 @@ export const BrandPartnerDashboard = styled.div`
     margin: 10px 0;
     li {
       display: inline-block;
-      width: 210px;
+      width: 250px;
       margin-right: 10px;
       vertical-align: top;
 
       &.my-partner {
-        width: 180px;
+        width: 220px;
       }
 
       &:last-child {
@@ -313,18 +195,6 @@ export const BrandPartnerDashboard = styled.div`
   .footer-sticky {
     padding-left: 64px;
   }
-  // @media only screen and (max-width: 700px) {
-  //   .partner-select {
-  //     li {
-  //       width: 335px;
-
-  //       &.partner {
-  //         width: 335px;
-  //         margin-bottom: 15px;
-  //       }
-  //     }
-  //   }
-  // }
 
   @media only screen and (max-width: 991px) {
     padding-left: 0;
@@ -349,9 +219,6 @@ export const BrandPartnerDashboard = styled.div`
     }
   }
   @media only screen and (max-width: 767px) {
-    // .text-md-right {
-    //   dispaly: none;
-    // }
     .text-sm-left {
       text-align: left;
     }

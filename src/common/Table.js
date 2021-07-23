@@ -102,8 +102,8 @@ const Table = styled.table`
              
               .product-image-large {
                 display: block;
-                background-color: #F4F6FC;
-                border: 4px solid #FFFFFF;
+                background-color: ${Theme.gray8};
+                border: 4px solid ${Theme.white};
                 position: absolute;
                 z-index: 2;
                 border-radius: 8px;
