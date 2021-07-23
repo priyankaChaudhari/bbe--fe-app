@@ -2,8 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-// import FileViewer from 'react-file-viewer';
 import { useForm } from 'react-hook-form';
 import {
   HeaderDownloadFuntionality,
@@ -13,7 +11,6 @@ import {
   CommonPagination,
 } from '../../common';
 import ErrorMsg from '../../common/ErrorMsg';
-// import PdfViewer from '../../common/PdfViewer';
 import PdfAnnotator from '../../common/PdfAnnotator';
 import { GroupUser } from '../../theme/Global';
 import {
@@ -90,7 +87,6 @@ function BrandAssetsPreview({
         setCommentsCount(res.data.count);
         setCommentsLoader(false);
         setImageLoading(false);
-        // setMaxAnnotationNumber(commentsData.length + 1);
         if (res.data.max_annotation === null) {
           setMaxAnnotationNumber(1);
         } else {
@@ -117,6 +113,7 @@ function BrandAssetsPreview({
         }
         if (res && res.status === 201) {
           getComments(1, showAssetPreview.selectedFile.id);
+          setPageNumber(1);
           setNewCommentData('');
           setClickOnAddNewAnnotation(false);
           setNewAnnotationPosition({ left: 0, top: 0 });
@@ -285,37 +282,11 @@ function BrandAssetsPreview({
       const percentXImg = (clickX * 100) / offset.width;
       const percentYImg = (clickY * 100) / offset.height;
 
-      // console.log('e.clientX', e.clientX, e.clientY);
-      // console.log('offset.left', offset.left, offset.top);
-
-      // console.log('offset.width', offset.width, offset.height);
-      // console.log(
-      //   'theThing.clientWidth',
-      //   theThing.clientWidth,
-      //   theThing.clientHeight,
-      // );
-
       setNewAnnotationPosition({
         left: percentXImg,
         top: percentYImg,
       });
     }
-
-    // if (theThing) {
-    //   const leftPosition =
-    //     e.clientX -
-    //     container.getBoundingClientRect().left -
-    //     theThing.clientWidth / 2;
-    //   const topPosition =
-    //     e.clientY -
-    //     container.getBoundingClientRect().top -
-    //     theThing.clientHeight / 2;
-
-    //   // setNewAnnotationPosition({
-    //   //   left: leftPosition,
-    //   //   top: topPosition,
-    //   // });
-    // }
   };
 
   const onPdfMouseDown = (e, selector) => {
@@ -340,7 +311,6 @@ function BrandAssetsPreview({
           left: percentXImg,
           top: percentYImg,
         });
-        // console.log('position', percentXImg, percentYImg, `${selector}`);
       }
     }
   };
@@ -369,7 +339,17 @@ function BrandAssetsPreview({
 
   const onDeleteComment = (id) => {
     deleteComment(id).then(() => {
-      getComments(1, showAssetPreview.selectedFile.id);
+      let pageNo = pageNumber;
+      if (commentsCount % 10 === 1) {
+        if (pageNumber === 1) {
+          pageNo = 1;
+        } else {
+          pageNo = pageNumber - 1;
+        }
+      }
+
+      getComments(pageNo, showAssetPreview.selectedFile.id);
+      setPageNumber(pageNo);
       setShowDelete({ [id]: false });
     });
   };
@@ -378,7 +358,7 @@ function BrandAssetsPreview({
     setAddCommentsLoader(true);
     updateComment(id, { message: newCommentData }).then((res) => {
       if (res && res.status === 200) {
-        getComments(1, showAssetPreview.selectedFile.id);
+        getComments(pageNumber, showAssetPreview.selectedFile.id);
         setShowTextArea(false);
         setNewCommentData('');
         setAddCommentsLoader(false);
@@ -714,7 +694,6 @@ function BrandAssetsPreview({
     if (clickOnAddNewAnnotation) {
       return (
         <div
-          //   id={`thingPage_${index}`}
           id="thing"
           className={
             newAnnotationPosition.page === `${index}`
@@ -847,37 +826,10 @@ function BrandAssetsPreview({
                   </div>
                 </div>
                 <div className="assetPreviewImg">
-                  {/* <img
-                      className="image-thumbnail"
-                      src={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.presigned_url
-                      }
-                      type={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.mime_type
-                      }
-                      alt={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.original_name
-                      }
-                    />{' '} */}
                   {showAssetPreview &&
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
                     <BrandAssetPdf>
-                      {/* <PdfViewer
-                        pdf={
-                          showAssetPreview &&
-                          showAssetPreview.selectedFile &&
-                          showAssetPreview.selectedFile.presigned_url
-                        }
-                        loadingMsg="Loading Document..."
-                      /> */}
-
                       <PdfAnnotator
                         pdf={
                           showAssetPreview &&
