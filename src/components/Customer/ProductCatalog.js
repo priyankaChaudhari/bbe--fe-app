@@ -111,7 +111,14 @@ export default function ProductCatalog({ id }) {
                   ? item.status.replace(' ', '-')
                   : item.status
               }`}>
-              <span className="bullet-point assets-requested" />
+              <span
+                className={`bullet-point ${
+                  item.status.includes('received') ||
+                  item.status.includes('requested')
+                    ? item.status.replace(' ', '-')
+                    : item.status
+                }`}
+              />
               <span className="status-text capitalize"> {item.status}</span>
             </div>
           </td>
@@ -379,9 +386,22 @@ export default function ProductCatalog({ id }) {
                                     </div>
                                   </div>
                                   <div className="col-8 mt-3">
-                                    <div className="status ml-5">
+                                    <div
+                                      className={`status ml-5 ${
+                                        item.status.includes('received') ||
+                                        item.status.includes('requested')
+                                          ? item.status.replace(' ', '-')
+                                          : item.status
+                                      }`}>
                                       {' '}
-                                      <span className="bullet-point" />
+                                      <span
+                                        className={`bullet-point ${
+                                          item.status.includes('received') ||
+                                          item.status.includes('requested')
+                                            ? item.status.replace(' ', '-')
+                                            : item.status
+                                        }`}
+                                      />
                                       <span className="status-text">
                                         {' '}
                                         {item.status}{' '}
@@ -530,6 +550,7 @@ const TableMobileView = styled.div`
           background-color: ${Theme.gray8};
           max-width: 113px;
         }
+
         &.scheduled {
           background-color: ${Theme.extraLightYellow};
           max-width: 99px;
@@ -544,7 +565,7 @@ const TableMobileView = styled.div`
         }
 
         .bullet-point {
-          //  background-color: ${Theme.lighterGreen};
+          background-color: ${Theme.lighterGreen};
           border-radius: 100%;
           width: 8px;
           height: 8px;

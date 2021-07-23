@@ -143,7 +143,7 @@ const Table = styled.table`
           color: ${Theme.black};
           position: relative;
 
-          &.un-optimized {
+          &.unoptimized {
             background-color: ${Theme.gray8};
             max-width: 113px;
           }
@@ -155,7 +155,10 @@ const Table = styled.table`
             background-color: #d6eef2;
             max-width: 132px;
           }
-
+&.assets-requested {
+          background-color: ${Theme.lightOrange};
+          max-width: 132px;
+        }
           .bullet-point {
             background-color: ${Theme.lighterGreen};
             border-radius: 100%;
@@ -165,15 +168,18 @@ const Table = styled.table`
             top: 9px;
             left: 11px;
 
-            &.gray {
-              background-color: ${Theme.gray25};
-            }
-            &.light-yellow {
-              background-color: ${Theme.yellow};
-            }
-            &.light-blue {
-              background: #30a8bd;
-            }
+            &.unoptimized {
+            background-color: ${Theme.gray25};
+          }
+          &.scheduled {
+            background-color: ${Theme.yellow};
+          }
+          &.assets-received {
+            background-color: #30a8bd;
+          }
+          &.assets-requested {
+            background-color: ${Theme.orange};
+          }
           }
           .status-text {
             color: ${Theme.black};
