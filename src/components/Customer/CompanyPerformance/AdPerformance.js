@@ -52,6 +52,7 @@ export default function AdPerformance({
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -572,12 +573,18 @@ export default function AdPerformance({
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      setSelectedMarketplace(list[0].value);
-      setCurrency(list[0].currency);
-      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      getAdData(selectedAdType, selectedAdDF, adGroupBy, list[0].value);
+      let marketplace = list[0];
+      marketplace = list.filter((op) => op.value === 'Amazon.com');
+      if (marketplace.length === 0) {
+        marketplace[0] = _.nth(list, 0);
+      }
+      setMarketplaceDefaultValue(marketplace);
+      setSelectedMarketplace(marketplace[0].value);
+      setCurrency(marketplace[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
+      getAdData(selectedAdType, selectedAdDF, adGroupBy, marketplace[0].value);
 
-      getDSPData(selectedAdDF, dspGroupBy, list[0].value);
+      getDSPData(selectedAdDF, dspGroupBy, marketplace[0].value);
       setResponseId('12345');
     }
   }, [
@@ -980,12 +987,18 @@ export default function AdPerformance({
                   className="active"
                   components={DropdownIndicator}
                   options={marketplaceOptions}
-                  defaultValue={marketplaceOptions && marketplaceOptions[0]}
+                  defaultValue={
+                    marketplaceDefaultValue && marketplaceDefaultValue[0]
+                    // marketplaceOptions && marketplaceOptions[0]
+                  }
                   onChange={(event) => handleMarketplaceOptions(event)}
                   placeholder={
-                    marketplaceOptions &&
-                    marketplaceOptions[0] &&
-                    marketplaceOptions[0].label
+                    marketplaceDefaultValue &&
+                    marketplaceDefaultValue[0] &&
+                    marketplaceDefaultValue[0].label
+                    // marketplaceOptions &&
+                    // marketplaceOptions[0] &&
+                    // marketplaceOptions[0].label
                   }
                   theme={(theme) => ({
                     ...theme,

@@ -78,7 +78,7 @@ export default function PerformanceReport({
   ]);
 
   const COLORS = ['#97ca61', '#EAEFF2'];
-
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
   // sales performance varibales and BB % start
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -758,11 +758,18 @@ export default function PerformanceReport({
     setAmazonOptions(list);
 
     if (responseId === null && list.length && list[0].value !== null) {
-      setSelectedAmazonValue(list[0].value);
-      setCurrency(list[0].currency);
-      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      getData(selectedValue, groupBy, list[0].value);
-      getBBData(list[0].value, bBDailyFact, 'daily');
+      let marketplace = list[0];
+      marketplace = list.filter((op) => op.value === 'Amazon.com');
+      if (marketplace.length === 0) {
+        marketplace[0] = _.nth(list, 0);
+      }
+
+      setMarketplaceDefaultValue(marketplace);
+      setSelectedAmazonValue(marketplace[0].value);
+      setCurrency(marketplace[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
+      getData(selectedValue, groupBy, marketplace[0].value);
+      getBBData(marketplace[0].value, bBDailyFact, 'daily');
       setResponseId('12345');
     }
   }, [
@@ -850,10 +857,15 @@ export default function PerformanceReport({
                   className="active"
                   components={DropdownIndicator}
                   options={amazonOptions}
-                  defaultValue={amazonOptions && amazonOptions[0]}
+                  defaultValue={
+                    // amazonOptions && amazonOptions[0]
+                    marketplaceDefaultValue && marketplaceDefaultValue[0]
+                  }
                   onChange={(event) => handleAmazonOptions(event)}
                   placeholder={
-                    amazonOptions && amazonOptions[0] && amazonOptions[0].label
+                    marketplaceDefaultValue &&
+                    marketplaceDefaultValue[0] &&
+                    marketplaceDefaultValue[0].label
                   }
                   theme={(theme) => ({
                     ...theme,
