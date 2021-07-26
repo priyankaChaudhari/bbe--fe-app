@@ -42,6 +42,7 @@ export {
   getBuyBoxChartData,
   getAdPerformance,
   getDSPPerformance,
+  getDspPacingData,
 } from './CustomerApi';
 
 // Choices

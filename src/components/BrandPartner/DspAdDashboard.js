@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 
 import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
 import { PageLoader, WhiteCard } from '../../common';
-import { getDSPPerformance } from '../../api';
+import { getDspPacingData } from '../../api';
 
 import {
   ArrowUpIcon,
@@ -27,7 +27,7 @@ const customDspAdPacingStyles = {
     right: '0px',
     bottom: 'auto',
     maxWidth: '600px ',
-    width: '100% ',
+    width: '100%',
     maxHeight: '100%',
     overlay: ' {zIndex: 1000}',
     inset: '0% 0% 0% auto',
@@ -50,8 +50,8 @@ function DspAdDashboard({ isLoading, data }) {
 
   const getDspData = (id) => {
     setDspData({});
-
-    getDSPPerformance(id, 'week').then((res) => {
+    console.log(id);
+    getDspPacingData(id).then((res) => {
       setDspPacingLoading({ loader: true, type: 'modal' });
       if (res && res.status === 200) {
         setDspPacingLoading({ loader: false, type: 'modal' });
@@ -169,6 +169,7 @@ function DspAdDashboard({ isLoading, data }) {
                     key={item.id}
                     className="col-lg-3 mb-4 col-md-6 col-sm-12 "
                     role="presentation">
+                    {renderDspAdPacingModal()}
                     <WhiteCard
                       className="cursor"
                       onClick={() =>
@@ -254,7 +255,6 @@ function DspAdDashboard({ isLoading, data }) {
 
                         {item && item.dsp_ad_pacing ? (
                           <>
-                            {renderDspAdPacingModal()}
                             <div className="straight-line horizontal-line spacing " />
                             <div className="col-12">
                               <div className="card-label">

@@ -93,7 +93,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
     isDspPacingLoading.type === 'modal' ? (
     <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
   ) : Object.keys(dspData).length ? (
-    <DspAdPacingModal id="BT-dsp-adpacing">
+    <DspAdPacingModal id="BT-dsp-adpacing" onClick={(e) => e.stopPropagation()}>
       <div className="modal-header">
         <h4 className="on-boarding ">DSP Monthly Budget Pacing</h4>
         <p className="basic-text">

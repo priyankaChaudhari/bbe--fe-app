@@ -684,3 +684,16 @@ export async function getCustomers(
     });
   return result;
 }
+
+export async function getDspPacingData(id) {
+  const params = { dsp_pacing: 'month' };
+  const result = await axiosInstance
+    .get(`${API_AD_PERFORMANCE + id}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

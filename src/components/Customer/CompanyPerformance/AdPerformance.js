@@ -33,7 +33,11 @@ import {
   dateOptions,
   AdTypesOptions,
 } from '../../../constants/CompanyPerformanceConstants';
-import { getAdPerformance, getDSPPerformance } from '../../../api';
+import {
+  getAdPerformance,
+  getDSPPerformance,
+  getDspPacingData,
+} from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
 
@@ -545,7 +549,7 @@ export default function AdPerformance({
           setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
-          setDspData(res.data);
+          // setDspData(res.data);
           if (res.data && res.data.dsp_spend) {
             const dspGraphData = bindDSPResponseData(res.data);
 
@@ -560,6 +564,14 @@ export default function AdPerformance({
     },
     [id],
   );
+
+  const getDSPPacing = useCallback(() => {
+    getDspPacingData(id).then((res) => {
+      if (res && res.status === 200) {
+        setDspData(res.data);
+      }
+    });
+  }, [id]);
 
   useEffect(() => {
     const list = [];
@@ -585,11 +597,13 @@ export default function AdPerformance({
       getAdData(selectedAdType, selectedAdDF, adGroupBy, marketplace[0].value);
 
       getDSPData(selectedAdDF, dspGroupBy, marketplace[0].value);
+      getDSPPacing();
       setResponseId('12345');
     }
   }, [
     getAdData,
     getDSPData,
+    getDSPPacing,
     marketplaceChoices,
     responseId,
     selectedMarketplace,
@@ -837,6 +851,7 @@ export default function AdPerformance({
     setSelectedMarketplace(event.value);
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
+    // getDSPPacing();
     if (selectedAdDF === 'custom') {
       ADYearAndCustomDateFilter(
         adState[0].startDate,
