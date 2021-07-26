@@ -2214,7 +2214,7 @@ export default function AdPerformance({
             {' '}
             <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
             <p className="gray-normal-text mb-4 mt-1">
-              Monthly Budget Pacing (January):{' '}
+              Monthly Budget Pacing ( {dayjs(new Date()).format('MMMM')} ):{' '}
               <span
                 className="orange-text"
                 role="presentation"
