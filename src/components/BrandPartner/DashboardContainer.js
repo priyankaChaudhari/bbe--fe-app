@@ -116,7 +116,7 @@ function DashboardContainer() {
           userInfo && userInfo.role,
           hybridSelectedDashboard,
         ).then((gs) => {
-          if (gs && gs.data) {
+          if (gs && gs.data && gs.data.length) {
             const list = [];
             for (const brand of gs.data) {
               list.push({
@@ -555,16 +555,20 @@ function DashboardContainer() {
       ) : (
         ''
       )}
-      <div className="footer-sticky">
-        <div className="straight-line horizontal-line" />
-        <div className="container-fluid">
-          <CommonPagination
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
+      {isLoading.loader ? (
+        ''
+      ) : (
+        <div className="footer-sticky">
+          <div className="straight-line horizontal-line" />
+          <div className="container-fluid">
+            <CommonPagination
+              count={count}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </BrandPartnerDashboard>
   );
 }

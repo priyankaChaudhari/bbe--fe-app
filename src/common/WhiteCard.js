@@ -7,8 +7,10 @@ export const WhiteCard = styled.div`
   padding: 20px ;
   position: relative;
 
+  .green {
+        color: ${Theme.lighterGreen};
+      }
   
-   
   
  &.fix-height {
     flex-wrap: wrap;
@@ -42,7 +44,12 @@ export const WhiteCard = styled.div`
       vertical-align: middle;
       margin-left: 4px;
       width: 15px;
+
+    &.green {
+        color: ${Theme.lighterGreen};
+      }
    }
+
   }
   .monthly-dsp-budget {
     color: ${Theme.red};
@@ -58,7 +65,12 @@ export const WhiteCard = styled.div`
     }
     .right-arrow-icon {
       vertical-align: middle;
+
+       &.green {
+        color: ${Theme.lighterGreen};
+      }
     }
+    
     .dot {
       background-color:  ${Theme.gray35};
       border-radius: 50%;

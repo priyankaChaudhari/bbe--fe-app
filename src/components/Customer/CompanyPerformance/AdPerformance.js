@@ -2096,6 +2096,7 @@ export default function AdPerformance({
         isOpen={showDspAdPacingModal.show}
         style={customDspAdPacingStyles}
         ariaHideApp={false}
+        onRequestClose={() => setShowDspAdPacingModal({ show: false })}
         contentLabel="Add team modal">
         <img
           src={CloseIcon}
@@ -2133,10 +2134,10 @@ export default function AdPerformance({
       dspData.dsp_pacing.dsp_pacing_flag === 0
     ) {
       return (
-        <span>
+        <span className="green">
           On Track
           <img
-            className="right-arrow-icon"
+            className="right-arrow-icon "
             width="18px"
             src={ArrowRightBlackIcon}
             alt="arrow"

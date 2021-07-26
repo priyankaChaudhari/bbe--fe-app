@@ -1,27 +1,64 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import dayjs from 'dayjs';
-import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
+import Modal from 'react-modal';
 
+import { DashboardCard, BrandPartnerDashboard } from '../../theme/Global';
 import { PageLoader, WhiteCard } from '../../common';
+import { getDSPPerformance } from '../../api';
 
 import {
-  RecurringIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  ServiceIcon,
+  CloseIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
   ArrowRightBlackIcon,
 } from '../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import NoRecordFound from '../../common/NoRecordFound';
+import DspAdPacing from './DspAdPacing';
+
+const customDspAdPacingStyles = {
+  content: {
+    top: '50%',
+    right: '0px',
+    bottom: 'auto',
+    maxWidth: '600px ',
+    width: '100% ',
+    maxHeight: '100%',
+    overlay: ' {zIndex: 1000}',
+    inset: '0% 0% 0% auto',
+    marginRight: '0',
+    borderRadius: '1px !important',
+    // transform: 'translate(-50%, -50%)',
+  },
+};
 
 function DspAdDashboard({ isLoading, data }) {
   const history = useHistory();
+  const [showDspAdPacingModal, setShowDspAdPacingModal] = useState({
+    show: false,
+  });
+  const [dspData, setDspData] = useState({});
+  const [isDspPacingLoading, setDspPacingLoading] = useState({
+    loader: false,
+    type: 'modal',
+  });
+
+  const getDspData = (id) => {
+    setDspData({});
+
+    getDSPPerformance(id, 'week').then((res) => {
+      setDspPacingLoading({ loader: true, type: 'modal' });
+      if (res && res.status === 200) {
+        setDspPacingLoading({ loader: false, type: 'modal' });
+        setDspData(res.data);
+      }
+    });
+  };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
@@ -80,6 +117,41 @@ function DspAdDashboard({ isLoading, data }) {
     return <div className="perentage-value down">N/A</div>;
   };
 
+  const renderDspAdPacingModal = () => {
+    return (
+      <Modal
+        isOpen={showDspAdPacingModal.show}
+        style={customDspAdPacingStyles}
+        ariaHideApp={false}
+        onRequestClose={(e) => {
+          setShowDspAdPacingModal({ show: false });
+          e.stopPropagation();
+        }}
+        contentLabel="Add team modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={(e) => {
+            setShowDspAdPacingModal({ show: false });
+            e.stopPropagation();
+          }}
+          role="presentation"
+        />
+        <DspAdPacing
+          dspData={dspData}
+          isDspPacingLoading={isDspPacingLoading}
+        />
+      </Modal>
+    );
+  };
+
+  const onPacingClick = (e, id) => {
+    getDspData(id);
+    setShowDspAdPacingModal({ show: true });
+    e.stopPropagation();
+  };
+
   return (
     <BrandPartnerDashboard>
       <DashboardCard>
@@ -128,8 +200,8 @@ function DspAdDashboard({ isLoading, data }) {
                         title={item && item.category && item.category.label}>
                         {item && item.category && item.category.label}
                       </div>
-                      <div className="straight-line horizontal-line spacing " />
                       <div className="row">
+                        {/* <div className="straight-line horizontal-line spacing " />
                         <div className="col-12 pt-1 pb-1">
                           <img
                             className="solid-icon "
@@ -178,16 +250,20 @@ function DspAdDashboard({ isLoading, data }) {
                               </p>
                             </li>
                           </ul>
-                        </div>
+                        </div> */}
 
                         {item && item.dsp_ad_pacing ? (
                           <>
+                            {renderDspAdPacingModal()}
                             <div className="straight-line horizontal-line spacing " />
                             <div className="col-12">
                               <div className="card-label">
                                 Monthly DSP Budget
                               </div>
-                              <div className="monthly-dsp-budget">
+                              <div
+                                className="monthly-dsp-budget"
+                                role="presentation"
+                                onClick={(e) => onPacingClick(e, item.id)}>
                                 <span className="currency-amount on-track">
                                   $
                                   {item &&

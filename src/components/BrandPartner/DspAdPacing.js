@@ -5,8 +5,9 @@ import React from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Theme from '../../theme/Theme';
+import { PageLoader } from '../../common';
 
-export default function DspAdPacing({ dspData }) {
+export default function DspAdPacing({ dspData, isDspPacingLoading }) {
   const { dsp_pacing } = dspData;
 
   const displayDspPacingLabel = () => {
@@ -87,7 +88,11 @@ export default function DspAdPacing({ dspData }) {
     return '';
   };
 
-  return (
+  return isDspPacingLoading &&
+    isDspPacingLoading.loader &&
+    isDspPacingLoading.type === 'modal' ? (
+    <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
+  ) : Object.keys(dspData).length ? (
     <DspAdPacingModal id="BT-dsp-adpacing">
       <div className="modal-header">
         <h4 className="on-boarding ">DSP Monthly Budget Pacing</h4>
@@ -227,14 +232,16 @@ export default function DspAdPacing({ dspData }) {
               $
               {dsp_pacing &&
                 dsp_pacing.dsp_pacing_diff &&
-                dsp_pacing.dsp_pacing_diff
+                dsp_pacing.dsp_pacing_diff &&
+                Math.abs(dsp_pacing.dsp_pacing_diff)
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
               (
               {dsp_pacing &&
                 dsp_pacing.dsp_pacing_diff_percentage &&
-                dsp_pacing.dsp_pacing_diff_percentage
+                dsp_pacing.dsp_pacing_diff_percentage &&
+                Math.abs(dsp_pacing.dsp_pacing_diff_percentage)
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -275,6 +282,8 @@ export default function DspAdPacing({ dspData }) {
         <div className="straight-line horizontal-line  mt-3 mb-3" />
       </div>
     </DspAdPacingModal>
+  ) : (
+    <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
   );
 }
 
