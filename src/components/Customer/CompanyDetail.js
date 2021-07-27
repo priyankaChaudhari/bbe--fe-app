@@ -173,9 +173,9 @@ export default function CompanyDetail({
                 Edit
               </div>
               <div className="copy-info">
-                <div className="label mt-3">Marketplace ID</div>
+                <div className="label mt-3">Merchant ID</div>
                 <div className="label-info">
-                  {(customer && customer.merchant_id) || 'No Marketplace ID.'}
+                  {(customer && customer.merchant_id) || 'No Merchant ID.'}
                 </div>
 
                 <div
