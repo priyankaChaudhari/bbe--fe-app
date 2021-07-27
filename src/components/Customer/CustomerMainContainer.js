@@ -337,7 +337,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      { value: 'product catalog', label: 'Product Catalog' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -348,7 +348,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      { value: 'product catalog', label: 'Product Catalog' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -1012,7 +1012,7 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
-                        <li
+                        {/* <li
                           onClick={() => {
                             setViewComponent('product catalog');
                             dispatch(setCustomerSelectedTab('product catalog'));
@@ -1031,7 +1031,7 @@ export default function CustomerMainContainer() {
                             />
                             Product Catalog
                           </div>
-                        </li>
+                        </li> */}
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
