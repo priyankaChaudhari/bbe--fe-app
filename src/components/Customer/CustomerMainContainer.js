@@ -33,7 +33,7 @@ import {
   ForwardOrangeIcon,
   OrangeChat,
   EditOrangeIcon,
-  // TimesCircle,
+  NextActivityLogo,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
 import {
@@ -45,9 +45,7 @@ import {
   BackToTop,
   Button,
   WhiteCard,
-  // ContractFormField,
 } from '../../common';
-// import { getAccountDetails } from '../../store/actions/accountState';
 import {
   getContactDetails,
   getCustomerDetails,
@@ -60,6 +58,7 @@ import {
   CustomerStatus,
   EditAccountDetails,
   Notes,
+  ProductCatalog,
 } from './index';
 import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
 import BillingDetails from './BillingDetails';
@@ -100,7 +99,6 @@ const alertCustomStyles = {
     bottom: 'auto',
     maxWidth: '474px ',
     width: '100% ',
-    // minHeight: '200px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -119,7 +117,6 @@ const customNotesStyles = {
     inset: '0% 0% 0% auto',
     marginRight: '0',
     borderRadius: '0px !important',
-    // transform: 'translate(-50%, -50%)',
   },
 };
 
@@ -163,7 +160,6 @@ export default function CustomerMainContainer() {
     show: false,
     type: '',
   });
-  // const [memberCount, setMemberCount] = useState(null);
   const profileLoader = useSelector(
     (state) => state.userState.isActivityLoading,
   );
@@ -261,7 +257,6 @@ export default function CustomerMainContainer() {
     getCustomerMembers(id).then((member) => {
       getActivityLogInfo();
       setMemberData(member && member.data && member.data.results);
-      // setMemberCount(member && member.data && member.data.count);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id, getActivityLogInfo]);
@@ -342,6 +337,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -352,6 +348,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -1015,6 +1012,26 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
+                        {/* <li
+                          onClick={() => {
+                            setViewComponent('product catalog');
+                            dispatch(setCustomerSelectedTab('product catalog'));
+                          }}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'product catalog'
+                                ? 'active'
+                                : ''
+                            }`}>
+                            <img
+                              className="file-contract"
+                              src={CatalogBox}
+                              alt=""
+                            />
+                            Product Catalog
+                          </div>
+                        </li> */}
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
@@ -1141,6 +1158,8 @@ export default function CustomerMainContainer() {
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails agreements={agreement} id={id} />
+                  ) : viewComponent === 'product catalog' ? (
+                    <ProductCatalog id={id} />
                   ) : viewComponent === 'company' ? (
                     <CompanyDetail
                       id={id}
@@ -1325,16 +1344,33 @@ export default function CustomerMainContainer() {
                       {activityData &&
                         activityData.slice(0, 3).map((item) => (
                           <GroupUser key={Math.random()}>
-                            {images.find(
+                            {(images.find(
                               (op) => op.entity_id === item.history_user_id,
                             ) &&
-                            images.find(
-                              (op) => op.entity_id === item.history_user_id,
-                            ).presigned_url ? (
+                              images.find(
+                                (op) => op.entity_id === item.history_user_id,
+                              ).presigned_url) ||
+                            (item.history_change_reason &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2) &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2)[0] === 'System' &&
+                              item.history_change_reason
+                                .split(' ')
+                                .slice(0, 2)[1] === '') ? (
                               <img
                                 src={
                                   isLoading.loader && isLoading.type === 'page'
                                     ? DefaultUser
+                                    : item.history_change_reason
+                                        .split(' ')
+                                        .slice(0, 2) &&
+                                      item.history_change_reason
+                                        .split(' ')
+                                        .slice(0, 2)[0] === 'System'
+                                    ? NextActivityLogo
                                     : images.find(
                                         (op) =>
                                           op.entity_id === item.history_user_id,
@@ -1585,6 +1621,25 @@ export default function CustomerMainContainer() {
           )}
         </>
       )}
+      {/* <div className=" pt-5">
+        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-12 text-right">
+                <span className="skip-step cursor" role="presentation">
+                  1 product selected
+                </span>
+
+                <Button className="btn-primary">Request Assets</Button>
+
+                <Button className="btn-transparent w-50 on-boarding ml-4">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CustomerDetailsFooter>
+      </div> */}
     </>
   );
 }
@@ -1618,6 +1673,32 @@ export default function CustomerMainContainer() {
 //   @media only screen and (max-width: 991px) {
 //     .banner {
 //       padding-left: 0;
+//     }
+//   }
+// `;
+
+// const CustomerDetailsFooter = styled.div`
+//   border: 1px solid ${Theme.gray7};
+//   bottom: 0px;
+//   background: ${Theme.white};
+//   position: fixed;
+//   min-height: 60px;
+//   z-index: 2;
+//   box-shadow: inset 0 1px 0 0 #e2e2ea;
+//   padding-top: 270px;
+//   width: 100%;
+//   padding: 8px 0;
+
+//   .skip-step {
+//     color: ${Theme.gray40};
+//     font-size: ${Theme.extraNormal};
+//     margin-right: 20px;
+//   }
+//   @media only screen and (max-width: 330px) {
+//     .skip-step {
+//       color: ${Theme.gray40};
+//       font-size: ${Theme.extraNormal};
+//       margin-right: 10px;
 //     }
 //   }
 // `;

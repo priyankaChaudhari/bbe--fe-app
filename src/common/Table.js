@@ -13,6 +13,17 @@ const Table = styled.table`
     border-radius: 1px;
     font-family: ${Theme.baseFontFamily};
     width: 100%;
+    th {
+      &.product-catalog-header {
+        border-top: 1px solid ${Theme.gray11};
+        padding: 13px 0px;
+        text-transform: uppercase;
+        color: ${Theme.gray40};
+        font-size: 11px;
+        background: ${Theme.white};
+        font-family: ${Theme.baseFontFamily};
+      }
+    }
 
     td {
       padding: 20px 10px 3px 10px;
@@ -22,6 +33,179 @@ const Table = styled.table`
       font-size: ${Theme.extraMedium};
       font-weight: 600;
       vertical-align: top;
+
+      &.product-catalog-body {
+        border-top: 1px solid ${Theme.gray11};
+        padding: 13px 4px 13px 0;
+        // display: inline-flex;
+        cursor: pointer;
+        font-size: ${Theme.extraNormal};
+        .product-catalog-image {
+          input.check-box-product-list {
+            display: none;
+          }
+
+          .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 4px;
+            width: 20px;
+            height: 20px;
+            top: 20px;
+            left: 10px;
+          }
+
+          input:checked ~ .checkmark {
+            background-color: ${Theme.orange};
+            color: white;
+            border: none;
+            top: 20px;
+            left: 10px;
+          }
+
+          .checkmark:after {
+            content: '';
+            position: absolute;
+            display: none;
+          }
+
+          input:checked ~ .checkmark:after {
+            display: block;
+          }
+
+          .checkmark:after {
+            left: 6px;
+            top: 3px;
+            width: 6px;
+            height: 11px;
+            border: solid ${Theme.white};
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+          }
+
+          .product-image {
+            width: 37px;
+            height: 37px;
+            margin-right: 10px;
+            float: left;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+          }
+          .product-image-large {
+            display: none;
+          }
+           &:hover{
+             
+              .product-image-large {
+                display: block;
+                background-color: ${Theme.gray8};
+                border: 4px solid ${Theme.white};
+                position: absolute;
+                z-index: 2;
+                border-radius: 8px;
+                width: 180px;
+                height: 180px;
+                left: 20px;
+              }
+            } 
+         
+        }
+        .product-data {
+          float: left;
+          width: inherit;
+          .product-name {
+            color: ${Theme.black};
+            font-size: ${Theme.normal};
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 270px;
+          }
+          .product-id {
+            color: ${Theme.gray90};
+            font-weight: 500;
+          }
+          @media only screen and (min-width: 991px) and (max-width: 1362px) {
+            max-width: 150px;
+          }
+        }
+        .status {
+          background-color: #e3f2d2;
+          border-radius: 5px;
+          max-width: 99px;
+          text-align: right;
+          padding: 5px 12px;
+          color: ${Theme.black};
+          position: relative;
+
+          &.unoptimized {
+            background-color: ${Theme.gray8};
+            max-width: 113px;
+          }
+          &.scheduled {
+            background-color: ${Theme.extraLightYellow};
+            max-width: 99px;
+          }
+          &.assets-received {
+            background-color: #d6eef2;
+            max-width: 132px;
+          }
+&.assets-requested {
+          background-color: ${Theme.lightOrange};
+          max-width: 132px;
+        }
+          .bullet-point {
+            background-color: ${Theme.lighterGreen};
+            border-radius: 100%;
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            top: 9px;
+            left: 11px;
+
+            &.unoptimized {
+            background-color: ${Theme.gray25};
+          }
+          &.scheduled {
+            background-color: ${Theme.yellow};
+          }
+          &.assets-received {
+            background-color: #30a8bd;
+          }
+          &.assets-requested {
+            background-color: ${Theme.orange};
+          }
+          }
+          .status-text {
+            color: ${Theme.black};
+            margin-left: 3px;
+          }
+          @media only screen and (min-width: 991px) and (max-width: 1362px) {
+            padding: 5px;
+
+            .bullet-point {
+              left: 5px;
+            }
+          }
+          @media only screen and (max-width: 767px) {
+            display: flow-root;
+          }
+        }
+        .request {
+          color: ${Theme.gray85};
+          font-weight: 300;
+
+          .request-plan {
+            vertical-align: bottom;
+            margin-right: 2px;
+          }
+        }
+      }
 
       .company-logo {
         border-radius: 10px;
@@ -221,6 +405,16 @@ const Table = styled.table`
       }
     }
   }
+  &.product-catalog-laptop {
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+  &.product-catalog-mobile {
+    display: none;
+    @media only screen and (min-width: 767px) {
+      display: none;
+    }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     tbody {
@@ -239,6 +433,19 @@ const Table = styled.table`
           }
           .company-name {
             font-size: ${Theme.medium};
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (min-width: 991px) and (max-width: 1362px) {
+    tbody {
+      tr {
+        td {
+          &.product-catalog-body {
+            .product-data {
+              max-width: 150px;
+            }
           }
         }
       }

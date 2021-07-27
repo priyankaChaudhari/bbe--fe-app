@@ -7,6 +7,7 @@ import Select, { components } from 'react-select';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
+import dayjs from 'dayjs';
 import Dashboard from './Dashboard';
 import AdManagerDashboard from './AdManagerDashboard';
 import DspAdDashboard from './DspAdDashboard';
@@ -53,6 +54,7 @@ function DashboardContainer() {
     bgs: '',
   });
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [isCustomDateApply, setIsCustomDateApply] = useState(false);
 
   const timeOptions = [
     { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
@@ -114,7 +116,7 @@ function DashboardContainer() {
           userInfo && userInfo.role,
           hybridSelectedDashboard,
         ).then((gs) => {
-          if (gs && gs.data) {
+          if (gs && gs.data && gs.data.length) {
             const list = [];
             for (const brand of gs.data) {
               list.push({
@@ -151,14 +153,15 @@ function DashboardContainer() {
       setSelectedBgsUser(null);
       bgsCustomerList(1, userInfo.id, selectedValue, event.value);
     } else if (type === 'date') {
+      setIsCustomDateApply(false);
+      setSelectedValue({
+        ...selectedValue,
+        type: event.value,
+        group: event.group,
+      });
       if (event && event.value === 'custom') {
         setShowBgsCustomDateModal(true);
       } else {
-        setSelectedValue({
-          ...selectedValue,
-          type: event.value,
-          group: event.group,
-        });
         bgsCustomerList(
           pageNumber,
           selectedValue.bgs,
@@ -169,6 +172,16 @@ function DashboardContainer() {
         );
       }
     }
+  };
+
+  const renderCustomDateSubLabel = (props) => {
+    if (selectedValue.type === 'custom' && isCustomDateApply) {
+      return `From- ${dayjs(bgsData[0].startDate).format(
+        'MMM D, YYYY',
+      )}  To- ${dayjs(bgsData[0].endDate).format('MMM D, YYYY')}`;
+    }
+
+    return props.data.sub;
   };
 
   const filterOption = (props) => (
@@ -192,6 +205,18 @@ function DashboardContainer() {
       </span>
 
       <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
+  const dateSingleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(props)}
+      </div>
     </SingleValue>
   );
 
@@ -281,7 +306,7 @@ function DashboardContainer() {
     }
     return {
       Option: filterOption,
-      SingleValue: singleFilterOption,
+      SingleValue: dateSingleFilterOption,
       DropdownIndicator,
     };
   };
@@ -317,6 +342,7 @@ function DashboardContainer() {
       bgsData[0].endDate,
       'custom',
     );
+    setIsCustomDateApply(true);
     setShowBgsCustomDateModal(false);
   };
 
@@ -415,7 +441,7 @@ function DashboardContainer() {
                   (userInfo && userInfo.role === 'BGS Manager')
                     ? 'BGS Dashboard'
                     : userInfo && userInfo.role === 'DSP Ad Manager'
-                    ? 'Dsp Dashboard'
+                    ? 'Ad Manager Dashboard'
                     : (userInfo &&
                         userInfo.role === 'Sponsored Advertising Ad Manager') ||
                       (userInfo && userInfo.role === 'Ad Manager')
@@ -529,16 +555,20 @@ function DashboardContainer() {
       ) : (
         ''
       )}
-      <div className="footer-sticky">
-        <div className="straight-line horizontal-line" />
-        <div className="container-fluid">
-          <CommonPagination
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
+      {isLoading.loader ? (
+        ''
+      ) : (
+        <div className="footer-sticky">
+          <div className="straight-line horizontal-line" />
+          <div className="container-fluid">
+            <CommonPagination
+              count={count}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </BrandPartnerDashboard>
   );
 }

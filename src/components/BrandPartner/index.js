@@ -3,6 +3,7 @@ import TeamMember from './TeamMember';
 import TabletTeamMember from './TabletTeamMember';
 import AdManagerDashboard from './AdManagerDashboard';
 import DashboardContainer from './DashboardContainer';
+import DspAdPacing from './DspAdPacing';
 
 export {
   Dashboard,
@@ -10,4 +11,5 @@ export {
   TabletTeamMember,
   AdManagerDashboard,
   DashboardContainer,
+  DspAdPacing,
 };

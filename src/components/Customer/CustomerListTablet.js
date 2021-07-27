@@ -194,45 +194,6 @@ export default function CustomerListTablet({
     );
   };
 
-  // const calculatePercentage = (current, previous, type) => {
-  //   if (current && previous) {
-  //     let percentage = '';
-  //     if (type === 'conversion') {
-  //       const diff = current - previous;
-  //       percentage = diff / 2;
-  //     }
-  //     const diff = current - previous;
-  //     const mean = diff / previous;
-  //     percentage = mean * 100;
-
-  //     if (percentage.toString().includes('-')) {
-  //       return (
-  //         <>
-  //           <span className="decrease-rate ml-1">
-  //             {' '}
-  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-  //             {percentage
-  //               ? `${Number(percentage.toString().split('-')[1]).toFixed(2)} %`
-  //               : ''}
-  //           </span>
-  //         </>
-  //       );
-  //     }
-  //     return (
-  //       <span className="increase-rate ml-1">
-  //         <img
-  //           className="green-arrow"
-  //           src={ArrowUpIcon}
-  //           width="14px"
-  //           alt="arrow-up"
-  //         />
-  //         {percentage ? `${percentage.toFixed(2)} %` : ''}
-  //       </span>
-  //     );
-  //   }
-  //   return '';
-  // };
-
   const renderAdPerformanceDifference = (actualValue, grayArrow, matrics) => {
     let flag = '';
     let value = actualValue;
@@ -321,36 +282,6 @@ export default function CustomerListTablet({
             <div className="col-6 pb-2">
               <div className="label">Revenue</div>
               <div className="label-info ">
-                {/* <>
-                  $
-                  {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) => (rev.revenue === null ? 0 : rev.revenue))
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.revenue)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.revenue)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                  )}
-                </> */}
                 <>
                   {item &&
                   item.sales_performance &&
@@ -375,37 +306,6 @@ export default function CustomerListTablet({
             <div className="col-6 pb-2">
               <div className="label">Units Sold</div>
               <div className="label-info ">
-                {/* <>
-                  {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) =>
-                        rev.units_sold === null ? 0 : rev.units_sold,
-                      )
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.units_sold)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.units_sold)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                  )}
-                </> */}
                 <>
                   {item &&
                   item.sales_performance &&
@@ -434,36 +334,6 @@ export default function CustomerListTablet({
             <div className="col-6">
               <div className="label">Traffic</div>
               <div className="label-info">
-                {/* <>
-                  $
-                  {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) => (rev.traffic === null ? 0 : rev.traffic))
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  {calculatePercentage(
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.traffic)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.traffic)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                  )}
-                </> */}
                 <>
                   {item &&
                   item.sales_performance &&
@@ -489,40 +359,6 @@ export default function CustomerListTablet({
             <div className="col-6">
               <div className="label">Conversion</div>
               <div className="label-info">
-                {/* <>
-                  $
-                  {item &&
-                    item.daily_facts &&
-                    item.daily_facts.current &&
-                    item.daily_facts.current.length &&
-                    item.daily_facts.current
-                      .map((rev) =>
-                        rev.conversion === null ? 0 : rev.conversion,
-                      )
-                      .reduce((val, rev) => rev + val)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  %
-                  {calculatePercentage(
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.current &&
-                      item.daily_facts.current.length
-                      ? item.daily_facts.current
-                          .map((rev) => rev.conversion)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    item &&
-                      item.daily_facts &&
-                      item.daily_facts.previous &&
-                      item.daily_facts.previous.length
-                      ? item.daily_facts.previous
-                          .map((rev) => rev.conversion)
-                          .reduce((val, rev) => rev + val)
-                      : 0,
-                    'conversion',
-                  )}
-                </> */}
                 <>
                   {item &&
                   item.sales_performance &&
@@ -926,242 +762,6 @@ export default function CustomerListTablet({
                   <PageLoader color="#FF5933" type="page" />
                 ) : (
                   renderCustomerDetails(item)
-                  // <WhiteCard className="mt-2">
-                  //   <img
-                  //     className="company-logo"
-                  //     src={
-                  //       item &&
-                  //       item.documents &&
-                  //       item.documents[0] &&
-                  //       Object.values(item.documents[0])
-                  //         ? Object.values(item.documents[0])[0]
-                  //         : CompanyDefaultUser
-                  //     }
-                  //     alt="logo"
-                  //   />
-
-                  //   <div className="company-name">
-                  //     {item &&
-                  //       item.contract &&
-                  //       item.contract[0] &&
-                  //       item.contract[0].contract_company_name}
-                  //   </div>
-                  //   <div
-                  //     className="status"
-                  //     style={{ textTransform: 'capitalize' }}>
-                  //     {item && item.status}
-                  //   </div>
-                  //   <div className="clear-fix" />
-                  //   <div className=" straight-line horizontal-line pt-3 mb-3 " />
-                  //   {showPerformance ? (
-                  //     <div className="row">
-                  //       <div className="col-6 pb-2">
-                  //         <div className="label">Revenue</div>
-                  //         <div className="label-info ">
-                  //           <>
-                  //             $
-                  //             {item &&
-                  //               item.daily_facts &&
-                  //               item.daily_facts.current &&
-                  //               item.daily_facts.current.length &&
-                  //               item.daily_facts.current
-                  //                 .map((rev) =>
-                  //                   rev.revenue === null ? 0 : rev.revenue,
-                  //                 )
-                  //                 .reduce((val, rev) => rev + val)
-                  //                 .toString()
-                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  //             {calculatePercentage(
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.current &&
-                  //                 item.daily_facts.current.length
-                  //                 ? item.daily_facts.current
-                  //                     .map((rev) => rev.revenue)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.previous &&
-                  //                 item.daily_facts.previous.length
-                  //                 ? item.daily_facts.previous
-                  //                     .map((rev) => rev.revenue)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //             )}
-                  //           </>
-                  //         </div>
-                  //       </div>
-                  //       <div className="col-6 pb-2">
-                  //         <div className="label">Units Sold</div>
-                  //         <div className="label-info ">
-                  //           <>
-                  //             {item &&
-                  //               item.daily_facts &&
-                  //               item.daily_facts.current &&
-                  //               item.daily_facts.current.length &&
-                  //               item.daily_facts.current
-                  //                 .map((rev) =>
-                  //                   rev.units_sold === null ? 0 : rev.units_sold,
-                  //                 )
-                  //                 .reduce((val, rev) => rev + val)
-                  //                 .toString()
-                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  //             {calculatePercentage(
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.current &&
-                  //                 item.daily_facts.current.length
-                  //                 ? item.daily_facts.current
-                  //                     .map((rev) => rev.units_sold)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.previous &&
-                  //                 item.daily_facts.previous.length
-                  //                 ? item.daily_facts.previous
-                  //                     .map((rev) => rev.units_sold)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //             )}
-                  //           </>
-                  //         </div>
-                  //       </div>
-                  //     </div>
-                  //   ) : (
-                  //     <>
-                  //       <ul
-                  //         className="recurring-contact"
-                  //         style={{ textTransform: 'capitalize' }}>
-                  //         {item && item.contract && item.contract.length ? (
-                  //           item &&
-                  //           item.contract &&
-                  //           item.contract.map((type) => (
-                  //             <React.Fragment key={Math.random()}>
-                  //               <ReactTooltip />
-                  //               {generateContractHTML(type, item.id)}
-                  //             </React.Fragment>
-                  //           ))
-                  //         ) : (
-                  //           <li className="no-active-contract">
-                  //             No active contracts
-                  //           </li>
-                  //         )}
-                  //       </ul>
-                  //     </>
-                  //   )}
-
-                  //   {!showPerformance ? (
-                  //     <div className=" straight-line horizontal-line pt-3" />
-                  //   ) : (
-                  //     ''
-                  //   )}
-                  //   <div className="row">
-                  //     {showPerformance ? (
-                  //       <div className="col-6">
-                  //         <div className="label">Traffic</div>
-                  //         <div className="label-info">
-                  //           <>
-                  //             $
-                  //             {item &&
-                  //               item.daily_facts &&
-                  //               item.daily_facts.current &&
-                  //               item.daily_facts.current.length &&
-                  //               item.daily_facts.current
-                  //                 .map((rev) =>
-                  //                   rev.traffic === null ? 0 : rev.traffic,
-                  //                 )
-                  //                 .reduce((val, rev) => rev + val)
-                  //                 .toString()
-                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  //             {calculatePercentage(
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.current &&
-                  //                 item.daily_facts.current.length
-                  //                 ? item.daily_facts.current
-                  //                     .map((rev) => rev.traffic)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.previous &&
-                  //                 item.daily_facts.previous.length
-                  //                 ? item.daily_facts.previous
-                  //                     .map((rev) => rev.traffic)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //             )}
-                  //           </>
-                  //         </div>
-                  //       </div>
-                  //     ) : (
-                  //       ''
-                  //     )}
-
-                  //     {showPerformance ? (
-                  //       <div className="col-6">
-                  //         <div className="label">Conversion</div>
-                  //         <div className="label-info">
-                  //           <>
-                  //             $
-                  //             {item &&
-                  //               item.daily_facts &&
-                  //               item.daily_facts.current &&
-                  //               item.daily_facts.current.length &&
-                  //               item.daily_facts.current
-                  //                 .map((rev) =>
-                  //                   rev.conversion === null ? 0 : rev.conversion,
-                  //                 )
-                  //                 .reduce((val, rev) => rev + val)
-                  //                 .toString()
-                  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  //             %
-                  //             {calculatePercentage(
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.current &&
-                  //                 item.daily_facts.current.length
-                  //                 ? item.daily_facts.current
-                  //                     .map((rev) => rev.conversion)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //               item &&
-                  //                 item.daily_facts &&
-                  //                 item.daily_facts.previous &&
-                  //                 item.daily_facts.previous.length
-                  //                 ? item.daily_facts.previous
-                  //                     .map((rev) => rev.conversion)
-                  //                     .reduce((val, rev) => rev + val)
-                  //                 : 0,
-                  //               'conversion',
-                  //             )}
-                  //           </>
-                  //         </div>
-                  //       </div>
-                  //     ) : (
-                  //       ''
-                  //     )}
-                  //     {showPerformance ? (
-                  //       <div className="straight-line horizontal-line pt-3 " />
-                  //     ) : (
-                  //       ''
-                  //     )}
-                  //     <div className="col-12 mt-3">
-                  //       <div className="label">Brand Strategist</div>
-                  //       <div className="label-info">
-                  //         {' '}
-                  //         {item &&
-                  //           item.brand_growth_strategist &&
-                  //           item.brand_growth_strategist.first_name}{' '}
-                  //         {item &&
-                  //           item.brand_growth_strategist &&
-                  //           item.brand_growth_strategist.last_name}
-                  //       </div>
-                  //     </div>
-                  //   </div>
-                  // </WhiteCard>
                 )}
               </div>
             ))}
@@ -1231,9 +831,6 @@ const CustomerListTabletView = styled.div`
         padding: 10px 4px 10px 12px;
         color: ${Theme.gray85};
         font-size: 14px;
-        // flex-wrap: wrap;
-        // flex: initial;
-        // height: 100%;
 
         &.agreement {
           border: 1px solid ${Theme.gray45};

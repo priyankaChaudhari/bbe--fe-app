@@ -19,18 +19,30 @@ import {
   CloseIcon,
   ArrowUpIcon,
   UpDowGrayArrow,
+  ArrowRightBlackIcon,
 } from '../../../theme/images/index';
 import { DropDown } from './DropDown';
-import { ModalBox, Button, WhiteCard, DropDownSelect } from '../../../common';
+import {
+  ModalBox,
+  Button,
+  WhiteCard,
+  DropDownSelect,
+  PageLoader,
+} from '../../../common';
 import {
   dateOptions,
   AdTypesOptions,
 } from '../../../constants/CompanyPerformanceConstants';
-import { getAdPerformance, getDSPPerformance } from '../../../api';
+import {
+  getAdPerformance,
+  getDSPPerformance,
+  getDspPacingData,
+} from '../../../api';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import AdPerformanceChart from './AdPerformanceChart';
-// import { dspResData } from './DummyApiRes';
+
 import Theme from '../../../theme/Theme';
+import { DspAdPacing } from '../../BrandPartner';
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -44,6 +56,7 @@ export default function AdPerformance({
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -53,19 +66,25 @@ export default function AdPerformance({
   const [selectedDspBox, setSelectedDspBox] = useState({
     dspImpressions: true,
   });
+  const [showDspAdPacingModal, setShowDspAdPacingModal] = useState({
+    show: false,
+  });
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
   const [adDifference, setAdDifference] = useState([]);
   const [isApiCall, setIsApiCall] = useState(false);
+  const [adGraphLoader, setAdGraphLoader] = useState(false);
+  const [dspGraphLoader, setDspGraphLoader] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
-  // const [dspTotal, setDSPTotal] = useState({});
+  const [dspData, setDspData] = useState({});
   const [dspCurrentTotal, setDspCurrentTotal] = useState([]);
   const [dspPreviousTotal, setDspPreviousTotal] = useState([]);
   const [dspDifference, setDspDifference] = useState([]);
+  const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [adState, setAdState] = useState([
@@ -101,6 +120,22 @@ export default function AdPerformance({
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
+    },
+  };
+
+  const customDspAdPacingStyles = {
+    content: {
+      top: '50%',
+      right: '0px',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      maxHeight: '100%',
+      overlay: ' {zIndex: 1000}',
+      inset: '0% 0% 0% auto',
+      marginRight: '0',
+      borderRadius: '1px !important',
+      // transform: 'translate(-50%, -50%)',
     },
   };
   const noDataMessage =
@@ -192,28 +227,6 @@ export default function AdPerformance({
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
-
-          // // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          // if (index > 0) {
-          //   indexNumber = index - 1;
-          // } else {
-          //   indexNumber = index;
-          // }
-          // tempData[indexNumber].adSalesDashLength =
-          //   item.ad_sales === null ? 8 : null;
-          // tempData[indexNumber].adSpendDashLength =
-          //   item.ad_spend === null ? 8 : null;
-          // tempData[indexNumber].adConversionDashLength =
-          //   item.ad_conversion_rate === null ? 8 : null;
-          // tempData[indexNumber].impressionsDashLength =
-          //   item.impressions === null ? 8 : null;
-          // tempData[indexNumber].adCosDashLength = item.acos === null ? 8 : null;
-          // tempData[indexNumber].adRoasDashLength =
-          //   item.roas === null ? 8 : null;
-          // tempData[indexNumber].adClicksDashLength =
-          //   item.clicks === null ? 8 : null;
-          // tempData[indexNumber].adClickRateDashLength =
-          //   item.ctr === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -344,7 +357,6 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.dsp_spend.current && response.dsp_spend.current.length) {
       response.dsp_spend.current.forEach((item, index) => {
-        // let indexNumber = index;
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         // add the current data at same index of prevoius in temporary object
         if (
@@ -383,29 +395,6 @@ export default function AdPerformance({
             item.product_sales !== null ? item.product_sales : '0';
           tempData[index].dspRoasCurrentLabel =
             item.roas !== null ? item.roas.toFixed(2) : '0.00';
-
-          // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          // if (index > 0) {
-          //   indexNumber = index - 1;
-          // } else {
-          //   indexNumber = index;
-          // }
-          // tempData[indexNumber].dspImpressionsDashLength =
-          //   item.impressions === null ? 8 : null;
-          // tempData[indexNumber].dspSpendDashLength =
-          //   item.dsp_spend === null ? 8 : null;
-          // tempData[indexNumber].dspTotalProductSalesDashLength =
-          //   item.total_product_sales === null ? 8 : null;
-          // tempData[indexNumber].dspTotalRoasDashLength =
-          //   item.total_roas === null ? 8 : null;
-          // tempData[indexNumber].dspTotalDpvrDashLength =
-          //   item.total_dpvr === null ? 8 : null;
-          // tempData[indexNumber].dspTtlNewBrandPurchasesDashLength =
-          //   item.ttl_new_brand_purchases === null ? 8 : null;
-          // tempData[indexNumber].dspProductSalesDashLength =
-          //   item.product_sales === null ? 8 : null;
-          // tempData[indexNumber].dspRoasDashLength =
-          //   item.roas === null ? 8 : null;
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -505,6 +494,7 @@ export default function AdPerformance({
       endDate = null,
     ) => {
       setIsApiCall(true);
+      setAdGraphLoader(true);
       getAdPerformance(
         id,
         adType,
@@ -516,6 +506,7 @@ export default function AdPerformance({
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
+          setAdGraphLoader(false);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.daily_facts) {
@@ -528,6 +519,7 @@ export default function AdPerformance({
             setAdDifference([]);
           }
           setIsApiCall(false);
+          setAdGraphLoader(false);
         }
       });
     },
@@ -543,6 +535,7 @@ export default function AdPerformance({
       endDate = null,
     ) => {
       setIsApiCall(true);
+      setDspGraphLoader(true);
       getDSPPerformance(
         id,
         selectedDailyFact,
@@ -553,22 +546,32 @@ export default function AdPerformance({
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
+          setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
+          // setDspData(res.data);
           if (res.data && res.data.dsp_spend) {
             const dspGraphData = bindDSPResponseData(res.data);
-            // const dspGraphData = bindDSPResponseData(dspResData);
+
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
-            // setDSPTotal({});
           }
           setIsApiCall(false);
+          setDspGraphLoader(false);
         }
       });
     },
     [id],
   );
+
+  const getDSPPacing = useCallback(() => {
+    getDspPacingData(id).then((res) => {
+      if (res && res.status === 200) {
+        setDspData(res.data);
+      }
+    });
+  }, [id]);
 
   useEffect(() => {
     const list = [];
@@ -582,17 +585,25 @@ export default function AdPerformance({
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      setSelectedMarketplace(list[0].value);
-      setCurrency(list[0].currency);
-      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      getAdData(selectedAdType, selectedAdDF, adGroupBy, list[0].value);
+      let marketplace = list[0];
+      marketplace = list.filter((op) => op.value === 'Amazon.com');
+      if (marketplace.length === 0) {
+        marketplace[0] = _.nth(list, 0);
+      }
+      setMarketplaceDefaultValue(marketplace);
+      setSelectedMarketplace(marketplace[0].value);
+      setCurrency(marketplace[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
+      getAdData(selectedAdType, selectedAdDF, adGroupBy, marketplace[0].value);
 
-      getDSPData(selectedAdDF, dspGroupBy, list[0].value);
+      getDSPData(selectedAdDF, dspGroupBy, marketplace[0].value);
+      getDSPPacing();
       setResponseId('12345');
     }
   }, [
     getAdData,
     getDSPData,
+    getDSPPacing,
     marketplaceChoices,
     responseId,
     selectedMarketplace,
@@ -690,6 +701,7 @@ export default function AdPerformance({
   };
 
   const applyCustomDate = () => {
+    setIsCustomDateApply(true);
     ADYearAndCustomDateFilter(
       adState[0].startDate,
       adState[0].endDate,
@@ -707,13 +719,25 @@ export default function AdPerformance({
     setShowAdCustomDateModal(false);
   };
 
+  const renderCustomDateSubLabel = (props) => {
+    if (selectedAdDF === 'custom' && isCustomDateApply) {
+      return `From- ${dayjs(adState[0].startDate).format(
+        'MMM D, YYYY',
+      )}  To- ${dayjs(adState[0].endDate).format('MMM D, YYYY')}`;
+    }
+
+    return props.data.sub;
+  };
+
   const singleFilterOption = (props) => (
     <SingleValue {...props}>
       <span style={{ fontSize: '15px', color: '#000000' }}>
         {props.data.label}
       </span>
 
-      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(props)}
+      </div>
     </SingleValue>
   );
 
@@ -729,6 +753,16 @@ export default function AdPerformance({
         </div>
       </div>
     </Option>
+  );
+
+  const adTypesSingleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
   );
 
   const DropdownIndicator = (props) => {
@@ -753,6 +787,14 @@ export default function AdPerformance({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
+      DropdownIndicator,
+    };
+  };
+
+  const getAdTypesSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: adTypesSingleFilterOption,
       DropdownIndicator,
     };
   };
@@ -809,6 +851,7 @@ export default function AdPerformance({
     setSelectedMarketplace(event.value);
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
+    // getDSPPacing();
     if (selectedAdDF === 'custom') {
       ADYearAndCustomDateFilter(
         adState[0].startDate,
@@ -864,6 +907,7 @@ export default function AdPerformance({
   const handleAdDailyFact = (event) => {
     const { value } = event;
     setSelectedAdDF(value);
+    setIsCustomDateApply(false);
     if (value !== 'custom') {
       setAdState([
         {
@@ -907,11 +951,7 @@ export default function AdPerformance({
     let selectedClass = '';
     if (graphType === 'ad') {
       if (Object.prototype.hasOwnProperty.call(selectedAdBox, name)) {
-        // if (_.size(selectedAdBox) === 1) {
-        //   selectedClass = 'order-chart-box active fix-height';
-        // } else {
         selectedClass = `order-chart-box ${classValue} fix-height`;
-        // }
       } else if (_.size(selectedAdBox) === 4) {
         selectedClass = 'order-chart-box fix-height disabled';
       } else {
@@ -919,11 +959,7 @@ export default function AdPerformance({
       }
     } else if (graphType === 'dsp') {
       if (Object.prototype.hasOwnProperty.call(selectedDspBox, name)) {
-        // if (_.size(selectedAdBox) === 1) {
-        //   selectedClass = 'order-chart-box active fix-height';
-        // } else {
         selectedClass = `order-chart-box ${classValue} fix-height`;
-        // }
       } else if (_.size(selectedDspBox) === 4) {
         selectedClass = 'order-chart-box fix-height disabled';
       } else {
@@ -933,31 +969,11 @@ export default function AdPerformance({
     return selectedClass;
   };
 
-  // const bindValues = (value, fontSize) => {
-  //   const decimal = _.split(value, '.', 2);
-  //   if (decimal[1] !== undefined) {
-  //     return (
-  //       <span style={{ fontSize }}>
-  //         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-  //         {/* <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span> */}
-  //         <span>.{decimal[1].slice(0, 2)}</span>
-  //       </span>
-  //     );
-  //   }
-  //   return (
-  //     <span style={{ fontSize }}>
-  //       {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-  //       {/* <span style={{ fontSize: '16px' }}>.00</span> */}
-  //       <span>.00</span>
-  //     </span>
-  //   );
-  // };
-
   /// ////////// start rendering hrml component ///////////
   const renderMarketplaceDropDown = () => {
     return (
       <Tab className="mb-3">
-        <WhiteCard className="with-less-radius">
+        <WhiteCard>
           <ul className="tabs">
             <li
               className={viewComponent === 'salePerformance' ? 'active' : ''}
@@ -979,18 +995,25 @@ export default function AdPerformance({
             <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0">
               {' '}
               <DropDownSelect
+                id="BT-adperformancedata-countryfilter"
                 className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
                   className="active"
                   components={DropdownIndicator}
                   options={marketplaceOptions}
-                  defaultValue={marketplaceOptions && marketplaceOptions[0]}
+                  defaultValue={
+                    marketplaceDefaultValue && marketplaceDefaultValue[0]
+                    // marketplaceOptions && marketplaceOptions[0]
+                  }
                   onChange={(event) => handleMarketplaceOptions(event)}
                   placeholder={
-                    marketplaceOptions &&
-                    marketplaceOptions[0] &&
-                    marketplaceOptions[0].label
+                    marketplaceDefaultValue &&
+                    marketplaceDefaultValue[0] &&
+                    marketplaceDefaultValue[0].label
+                    // marketplaceOptions &&
+                    // marketplaceOptions[0] &&
+                    // marketplaceOptions[0].label
                   }
                   theme={(theme) => ({
                     ...theme,
@@ -1002,7 +1025,9 @@ export default function AdPerformance({
                 />
               </DropDownSelect>
             </div>
-            <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
+            <div
+              className="col-md-4 col-sm-6  mt-2 pt-1 pl-0 "
+              id="BT-adperformancedata-daysfilter">
               {' '}
               {DropDown(
                 'days-performance',
@@ -1032,13 +1057,15 @@ export default function AdPerformance({
         </div>
         <div className="col-md-8 col-sm1-12  mb-3 pl-0">
           <ul className="ad-performance-nav">
-            <li className="ad-performance">
+            <li
+              className="ad-performance"
+              id="BT-adperformancedata-alltypesfilter">
               {' '}
               {DropDown(
                 'days-performance',
                 AdTypesOptions,
                 null,
-                getSelectComponents,
+                getAdTypesSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
                 isApiCall,
@@ -1051,28 +1078,11 @@ export default function AdPerformance({
   };
 
   const addThousandComma = (number, decimalDigits = 2) => {
-    // const decimal = _.split(number, '.', 2);
-    // if (decimal[1] !== undefined) {
-    //   return `${decimal[0].replace(
-    //     /\B(?=(\d{3})+(?!\d))/g,
-    //     ',',
-    //   )}.${decimal[1].slice(0, decimalDigits)}`;
-    // }
-    // return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
     if (number !== undefined && number !== null) {
       return number
         .toFixed(decimalDigits)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-
-    // return decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    // if (number !== undefined && number !== null) {
-    //   return number
-    //     .toFixed(decimalDigits)
-    //     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    // }
 
     return number;
   };
@@ -1083,6 +1093,7 @@ export default function AdPerformance({
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div
+            id="BT-sponsored-adsalescard"
             onClick={() => setBoxToggle('adSales', 'ad')}
             role="presentation"
             className={setBoxClasses('adSales', 'ad-sales-active', 'ad')}>
@@ -1126,6 +1137,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-adspendcard"
             onClick={() => setBoxToggle('adSpend', 'ad')}
             role="presentation"
             className={setBoxClasses('adSpend', 'ad-spend-active', 'ad')}>
@@ -1170,6 +1182,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-adconversioncard"
             onClick={() => setBoxToggle('adConversion', 'ad')}
             role="presentation"
             className={setBoxClasses(
@@ -1216,6 +1229,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-sponsored-impressionscard"
             onClick={() => setBoxToggle('impressions', 'ad')}
             role="presentation"
             className={setBoxClasses('impressions', 'impression-active', 'ad')}>
@@ -1257,6 +1271,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-sponsored-Acoscard"
             onClick={() => setBoxToggle('adCos', 'ad')}
             role="presentation"
             className={setBoxClasses('adCos', 'ad-cos-active', 'ad')}>
@@ -1298,6 +1313,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-Roascard"
             onClick={() => setBoxToggle('adRoas', 'ad')}
             role="presentation"
             className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
@@ -1340,6 +1356,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickcard"
             onClick={() => setBoxToggle('adClicks', 'ad')}
             role="presentation"
             className={setBoxClasses('adClicks', 'ad-click-active', 'ad')}>
@@ -1381,6 +1398,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickratecard"
             onClick={() => setBoxToggle('adClickRate', 'ad')}
             role="presentation"
             className={setBoxClasses(
@@ -1434,7 +1452,7 @@ export default function AdPerformance({
         {_.size(selectedAdBox) <= 2 ? (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
-              <li>
+              <li id="BT-adperformance-recentgraph">
                 <div className="weeks">
                   <span
                     className={
@@ -1448,7 +1466,7 @@ export default function AdPerformance({
                 </div>
               </li>
               {selectedAdDF !== 'custom' ? (
-                <li>
+                <li id="BT-adperformance-perviousgraph">
                   <div className="weeks">
                     <ul className="dashed-line">
                       <li
@@ -1484,8 +1502,9 @@ export default function AdPerformance({
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
-              <li className={adFilters.daily === false ? 'disabled-tab' : ''}>
-                {' '}
+              <li
+                id=" BT-adperformance-days"
+                className={adFilters.daily === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
@@ -1499,7 +1518,9 @@ export default function AdPerformance({
                 <label htmlFor="daysCheck">Daily</label>
               </li>
 
-              <li className={adFilters.weekly === false ? 'disabled-tab' : ''}>
+              <li
+                id=" BT-adperformance-weekly"
+                className={adFilters.weekly === false ? 'disabled-tab' : ''}>
                 <input
                   className="d-none"
                   type="radio"
@@ -1512,7 +1533,9 @@ export default function AdPerformance({
                 <label htmlFor="weeklyCheck">Weekly</label>
               </li>
 
-              <li className={adFilters.month === false ? 'disabled-tab' : ''}>
+              <li
+                id=" BT-adperformance-monthly"
+                className={adFilters.month === false ? 'disabled-tab' : ''}>
                 <input
                   className=" d-none"
                   type="radio"
@@ -1531,58 +1554,13 @@ export default function AdPerformance({
     );
   };
 
-  // const renderDSPSpendTotals = () => {
-  //   return (
-  //     <>
-  //       <div className="number-rate">
-  //         {currencySymbol}
-  //         {dspTotal && dspTotal.currentDspTodal
-  //           ? bindValues(dspTotal.currentDspTodal, '26px')
-  //           : '0.00'}
-  //       </div>
-  //       <div className="vs">
-  //         vs {currencySymbol}
-  //         {dspTotal && dspTotal.previousDspTodal
-  //           ? bindValues(dspTotal.previousDspTodal, '16px')
-  //           : '0.00'}{' '}
-  //         <span
-  //           className={
-  //             dspTotal && dspTotal.dspDifference > 0
-  //               ? 'perentage-value mt-3 ml-1'
-  //               : 'perentage-value down mt-3 ml-1'
-  //           }>
-  //           {!Number.isNaN(dspTotal && dspTotal.dspDifference) &&
-  //           dspTotal &&
-  //           dspTotal.dspDifference > 0 ? (
-  //             <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-  //           ) : !Number.isNaN(dspTotal && dspTotal.dspDifference) &&
-  //             dspTotal &&
-  //             dspTotal.dspDifference < 0 ? (
-  //             <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-  //           ) : (
-  //             ''
-  //           )}
-  //           {dspTotal &&
-  //           dspTotal.dspDifference &&
-  //           dspTotal &&
-  //           dspTotal.dspDifference !== 'N/A'
-  //             ? `${dspTotal.dspDifference.toString().replace('-', '')}%`
-  //             : 'N/A'}
-
-  //           {/* <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-  //           40.75%{' '} */}
-  //         </span>
-  //       </div>
-  //     </>
-  //   );
-  // };
-
   const renderDSPBox = () => {
     const currencySign = currencySymbol !== null ? currencySymbol : '';
     return (
       <>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-2">
           <div
+            id="BT-dspad-impressioncard"
             onClick={() => setBoxToggle('dspImpressions', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1628,6 +1606,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-dspspendcard"
             onClick={() => setBoxToggle('dspSpend', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspSpend', 'ad-spend-active', 'dsp')}>
@@ -1674,6 +1653,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-totalproductcard"
             onClick={() => setBoxToggle('dspTotalProductSales', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1727,6 +1707,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-2">
           <div
+            id="BT-dspad-totalroascard"
             onClick={() => setBoxToggle('dspTotalRoas', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1776,6 +1757,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-dspad-totaldpvrcard"
             onClick={() => setBoxToggle('dspTotalDpvr', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspTotalDpvr', 'ad-cos-active', 'dsp')}>
@@ -1817,6 +1799,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-TTLBrandcard"
             onClick={() => setBoxToggle('dspTtlNewBrandPurchases', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1870,6 +1853,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-productsalescard"
             onClick={() => setBoxToggle('dspProductSales', 'dsp')}
             role="presentation"
             className={setBoxClasses(
@@ -1921,6 +1905,7 @@ export default function AdPerformance({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-dspad-roascard"
             onClick={() => setBoxToggle('dspRoas', 'dsp')}
             role="presentation"
             className={setBoxClasses('dspRoas', 'ad-clickrate-active', 'dsp')}>
@@ -2011,24 +1996,6 @@ export default function AdPerformance({
           ) : (
             <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
           )}
-          {/* <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
-            <ul className="rechart-item">
-              <li>
-                <div className="weeks">
-                  <span className="black block" />
-                  <span>Recent</span>
-                </div>
-              </li>
-              {selectedAdDF !== 'custom' ? (
-                <li>
-                  <div className="weeks">
-                    <span className="gray block" />
-                    <span>Previous</span>
-                  </div>
-                </li>
-              ) : null}
-            </ul>
-          </div> */}
 
           <div className="col-md-6 col-sm-12 order-md-2 order-1">
             {' '}
@@ -2138,15 +2105,98 @@ export default function AdPerformance({
       </Modal>
     );
   };
+  const renderDspAdPacingModal = () => {
+    return (
+      <Modal
+        isOpen={showDspAdPacingModal.show}
+        style={customDspAdPacingStyles}
+        ariaHideApp={false}
+        onRequestClose={() => setShowDspAdPacingModal({ show: false })}
+        contentLabel="Add team modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => setShowDspAdPacingModal({ show: false })}
+          role="presentation"
+        />
+        <DspAdPacing dspData={dspData} />
+      </Modal>
+    );
+  };
+
+  const displayDspPacingLabel = () => {
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === 1
+    ) {
+      return (
+        <span>
+          Overspending
+          <img
+            className="right-arrow-icon"
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === 0
+    ) {
+      return (
+        <span className="green">
+          On Track
+          <img
+            className="right-arrow-icon "
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    if (
+      dspData &&
+      dspData.dsp_pacing &&
+      dspData.dsp_pacing.dsp_pacing_flag === -1
+    ) {
+      return (
+        <span>
+          Underspending
+          <img
+            className="right-arrow-icon"
+            width="18px"
+            src={ArrowRightBlackIcon}
+            alt="arrow"
+          />
+        </span>
+      );
+    }
+    return '';
+  };
 
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
+      {renderDspAdPacingModal()}
       <WhiteCard>
         <div className="row">{renderAdDailyFacts()}</div>
         <div className="row mr-1 ml-1">{renderAdBox()}</div>
         <div className="row mt-4 mb-3">{renderAdGroupBy()}</div>
-        {adChartData.length >= 1 ? (
+        {adGraphLoader ? (
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
+        ) : adChartData.length >= 1 ? (
           <AdPerformanceChart
             chartId="adChart"
             chartData={adChartData}
@@ -2160,15 +2210,32 @@ export default function AdPerformance({
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
         <div className="row">
-          <div className="col-6">
+          <div className="col-12">
             {' '}
-            <p className="black-heading-title mt-3 mb-2"> DSP Ad Performance</p>
+            <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
+            <p className="gray-normal-text mb-4 mt-1">
+              Monthly Budget Pacing ( {dayjs(new Date()).format('MMMM')} ):{' '}
+              <span
+                className="orange-text"
+                role="presentation"
+                onClick={() => setShowDspAdPacingModal({ show: true })}>
+                {displayDspPacingLabel()}
+              </span>
+            </p>
           </div>
         </div>
         <div className="row mr-1 ml-1">{renderDSPBox()}</div>
-        {/* {renderDSPSpendTotals()} */}
+
         {renderDSPGroupBy()}
-        {dspChartData.length >= 1 ? (
+        {dspGraphLoader ? (
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
+        ) : dspChartData.length >= 1 ? (
           <DSPPerformanceChart
             chartId="dspChart"
             chartData={dspChartData}
@@ -2181,7 +2248,6 @@ export default function AdPerformance({
         )}
       </WhiteCard>
       {renderAdCustomDateModal()}
-      {/* {renderDSPCustomDateModal()} */}
     </AddPerformance>
   );
 }
@@ -2214,8 +2280,6 @@ const AddPerformance = styled.div`
       }
     }
   }
-  
-
 
   @media only screen and (max-width: 1255px) {
     .ad-performance-nav {
@@ -2231,12 +2295,10 @@ const AddPerformance = styled.div`
         }
       }
     }
-
   }
   @media only screen and (max-width: 1084px) {
     .ad-performance-nav {
       li {
-        
         &.ad-performance {
           max-width: 165px;
           width: 100%;
@@ -2247,7 +2309,6 @@ const AddPerformance = styled.div`
         }
       }
     }
-
   }
    @media only screen and (max-width: 767px) { 
 

@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const ModalBox = styled.div`
- 
   width: 100%;
   margin: 0 auto;
   border-radius: 8px;
 
+  
   .modal-back-arrow {
     margin-top: -2px;
     margin-right: 4px;

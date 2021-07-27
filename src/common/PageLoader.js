@@ -78,9 +78,25 @@ const DetailLoaderWrapper = styled.div`
     position: relative;
     left: 0;
   }
+  &.performance-graph {
+    top: 0;
+    position: relative;
+    left: 0;
+  }
+
   @media only screen and (max-width: 991px) {
     left: 0;
   }
+`;
+const SideBarLoader = styled.div`
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0;
+  position: relative;
+  vertical-align: baseline;
+  top: 50%;
 `;
 
 const ButtonLoaderCss = styled.div`
@@ -146,10 +162,20 @@ export default function PageLoader({
             ? 'customer-details'
             : component === 'agrement-details'
             ? 'agrement-details'
+            : component === 'performance-graph'
+            ? 'performance-graph'
             : ''
         }>
         <Loader type="Bars" color={color} height={height} width={width} />
       </DetailLoaderWrapper>
+    );
+  }
+  if (type === 'sidebar') {
+    return (
+      <SideBarLoader
+        className={component === 'comment-side-bar' ? 'comment-side-bar' : ''}>
+        <Loader type="Bars" color={color} height={height} width={width} />
+      </SideBarLoader>
     );
   }
   return (

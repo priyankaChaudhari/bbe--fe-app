@@ -42,6 +42,7 @@ export {
   getBuyBoxChartData,
   getAdPerformance,
   getDSPPerformance,
+  getDspPacingData,
 } from './CustomerApi';
 
 // Choices
@@ -128,6 +129,8 @@ export {
   getBrandAssetsSummary,
   getBrandAssetsDetail,
   downloadBrandAssetImages,
+  deleteComment,
+  updateComment,
 } from './BrandAssestsApi';
 
 export {
@@ -137,3 +140,5 @@ export {
   deleteNote,
   getRecentNotes,
 } from './NotesApi';
+
+export { getProductCatalog, requestData } from './ProductCatalogApi';

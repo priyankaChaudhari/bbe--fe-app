@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
@@ -27,8 +28,10 @@ import {
   BillingAddress,
   creditCardDetails,
 } from '../../constants/FieldConstants';
+import { showProfileLoader } from '../../store/actions/userState';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
@@ -368,6 +371,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         billingDetails();
         setShowModal(false);
         setShowBtn(false);
+        dispatch(showProfileLoader(true));
+        dispatch(showProfileLoader(false));
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -405,7 +410,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           )}
           <div className="row">
             <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard className="with-less-radius">
+              <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Billing Details</p>
                 <div
                   className="edit-details"
@@ -496,7 +501,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               </div>
             </WhiteCard> */}
 
-              <WhiteCard className="mt-3 with-less-radius">
+              <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
 
                 <div
@@ -543,7 +548,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               </WhiteCard>
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard className="with-less-radius">
+              <WhiteCard>
                 {' '}
                 <p className="black-heading-title mt-0 mb-4">
                   {' '}
@@ -604,16 +609,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           {' '}
           <div className="modal-body">
             <h4>Payment Details</h4>
-            {mapPaymentDetails()}
-            <ErrorMsg style={{ textAlign: 'center' }}>
-              {apiError && apiError[0]}
-            </ErrorMsg>
-            <div className="straight-line horizontal-line  mt-3 mb-3" />
-            <h4>Billing Address</h4>
-            {mapAddressDetails()}
-            <div className="straight-line horizontal-line  mt-3 mb-3" />
-            <h4>Billing Contact</h4>
-            {mapContactDetails()}
+            <div className="body-content mt-3 ">
+              {mapPaymentDetails()}
+              <ErrorMsg style={{ textAlign: 'center' }}>
+                {apiError && apiError[0]}
+              </ErrorMsg>
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              <h4>Billing Address</h4>
+              {mapAddressDetails()}
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              <h4>Billing Contact</h4>
+              {mapContactDetails()}
+            </div>
           </div>
           {showBtn ? (
             <>

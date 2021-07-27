@@ -110,7 +110,7 @@ export default function CompanyDetail({
   return (
     <>
       <div className="col-lg-6 col-12 mb-3">
-        <WhiteCard className="with-less-radius">
+        <WhiteCard>
           <div className="row">
             <div className="col-10">
               <span className="black-heading-title ">Company Description</span>
@@ -173,9 +173,9 @@ export default function CompanyDetail({
                 Edit
               </div>
               <div className="copy-info">
-                <div className="label mt-3">Marketplace ID</div>
+                <div className="label mt-3">Merchant ID</div>
                 <div className="label-info">
-                  {(customer && customer.merchant_id) || 'No Marketplace ID.'}
+                  {(customer && customer.merchant_id) || 'No Merchant ID.'}
                 </div>
 
                 <div

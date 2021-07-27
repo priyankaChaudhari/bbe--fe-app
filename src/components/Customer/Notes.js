@@ -214,7 +214,7 @@ function Notes({
         setData({ ...data, showNotesEditor: false, showEditor: false });
         setIsLoading({ loader: false, type: 'page' });
         setNewNoteEditor(false);
-        getData(data.currentPage);
+        getData(1);
       });
     }
   };
@@ -964,6 +964,9 @@ Notes.propTypes = {
 export default Notes;
 
 const NotesSideBar = styled.div`
+  top: 0;
+  background: #ffff;
+  height: 100%;
   .footer-sticky {
     position: fixed;
     bottom: 0;

@@ -2,7 +2,7 @@
 /* eslint consistent-return: "error" */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -423,6 +423,15 @@ export default function ContractContainer() {
       history.push(path);
     }
   };
+  const isMounted = useRef(false);
+  useEffect(() => {
+    if (isMounted.current) {
+      setIsLoading({ loader: true, type: 'page' });
+      setTimeout(() => setIsLoading({ loader: false, type: 'page' }), 500);
+    } else {
+      isMounted.current = true;
+    }
+  }, [isTablet, isMobile]);
 
   useEffect(() => {
     agreementTemplate().then((response) => {
@@ -496,36 +505,7 @@ export default function ContractContainer() {
           item.label = serviceName;
           return item;
         });
-        // =======
-        //     if (details && details.contract_type === 'dsp only') {
-        //       setShowCollpase({ ...showSection, dspAddendum: true });
-        //     }
-
-        //     if (newAddendumData && newAddendumData.id) {
-        //       setShowCollpase({ ...showSection, addendum: true });
-        //     }
-        //     if (
-        //       details &&
-        //       details.primary_marketplace &&
-        //       details.primary_marketplace.name
-        //     ) {
-        //       setAdditionalMarketplaces(
-        //         marketplacesResult.filter(
-        //           (op) => op.value !== details.primary_marketplace.name,
-        //         ),
-        //       );
-        //     } else {
-        //       setAdditionalMarketplaces(marketplacesResult);
-        //     }
-        // >>>>>>> PDV-1179 UI update in addendum in progress.
-
         setAmazonStoreOptions(list);
-
-        // fetchUncommonOptions(
-        //   r && r.data,
-        //   formData.additional_one_time_services,
-        //   'one_time_service',
-        // );
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -3019,21 +2999,34 @@ export default function ContractContainer() {
                 </div>
               </div>
             </HeaderDownloadFuntionality>
-            {isDesktop ||
-            (isTablet && tabInResponsive === 'view-contract') ||
-            (isMobile && tabInResponsive === 'view-contract') ? (
-              <PdfViewer
-                pdf={details && details.contract_url}
-                loadingMsg="Loading Contract Document..."
+
+            {isLoading.loader && isLoading.type === 'page' ? (
+              <PageLoader
+                className="modal-loader"
+                color="#FF5933"
+                type="page"
+                width={40}
+                component="agreement"
               />
             ) : (
-              ''
+              <>
+                {isDesktop ||
+                (isTablet && tabInResponsive === 'view-contract') ||
+                (isMobile && tabInResponsive === 'view-contract') ? (
+                  <PdfViewer
+                    pdf={details && details.contract_url}
+                    loadingMsg="Loading Contract Document..."
+                  />
+                ) : (
+                  ''
+                )}
+                {isDesktop ||
+                (isTablet && tabInResponsive === 'edit-fields') ||
+                (isMobile && tabInResponsive === 'edit-fields')
+                  ? displayRightSidePanel()
+                  : ''}
+              </>
             )}
-            {isDesktop ||
-            (isTablet && tabInResponsive === 'edit-fields') ||
-            (isMobile && tabInResponsive === 'edit-fields')
-              ? displayRightSidePanel()
-              : ''}
           </div>
         </>
       ) : (
@@ -3340,67 +3333,3 @@ const ContractTab = styled.div`
     padding-top: 107px;
   }
 `;
-
-// const HeaderDownloadFuntionality = styled.div`
-//   position: fixed;
-//   background-color: ${Theme.white};
-//   z-index: 2;
-//   padding: 26px 0 20px 0;
-//   width: 100%;
-//   border-bottom: 1px solid ${Theme.gray5};
-//   min-height: 70px;
-//   color: ${Theme.black};
-//   font-size: 15px;
-
-//   .contract-download-nav {
-//     list-style-type: none;
-//     padding: 0;
-//     margin: 0;
-//     text-align: end;
-
-//     li {
-//       display: inline-block;
-//       vertical-align: bottom;
-
-//       &.download-pdf {
-//         cursor: pointer;
-//         font-size: 14px;
-//         .download-pdf-link {
-//           color: ${Theme.black};
-//         }
-
-//         .download-pdf-icon {
-//           width: 18px;
-//           margin-right: 11px;
-//           vertical-align: text-top;
-//         }
-//       }
-//       .divide-arrow {
-//         background-color: #e2e2ea;
-//         width: 1px;
-//         height: 32px;
-//         border: 1px solid #e2e2ea;
-//         margin: 0 18px;
-//       }
-//     }
-//   }
-//   @media only screen and (max-width: 767px) {
-//     .contract-download-nav {
-//       text-align: center;
-//       border-top: 1px solid ${Theme.gray5};
-//       margin-top: 20px;
-//       padding-top: 15px;
-//       li {
-//         .divide-arrow {
-//           display: none;
-//         }
-
-//         .remove-cross-icon {
-//           position: absolute;
-//           top: -20px;
-//           right: 14px;
-//         }
-//       }
-//     }
-//   }
-// `;

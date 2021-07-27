@@ -3,16 +3,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable camelcase */
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  // useLayoutEffect,
-} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
-// import * as am4charts from '@amcharts/amcharts4/charts';
+
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select, { components } from 'react-select';
 import styled from 'styled-components';
@@ -33,7 +28,13 @@ import Modal from 'react-modal';
 
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { DropDownSelect, ModalBox, Button, WhiteCard } from '../../../common';
+import {
+  DropDownSelect,
+  ModalBox,
+  Button,
+  WhiteCard,
+  PageLoader,
+} from '../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../api';
 
 import {
@@ -46,7 +47,10 @@ import {
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DropDown } from './DropDown';
-import { dateOptions } from '../../../constants/CompanyPerformanceConstants';
+import {
+  dateOptions,
+  bbDateOptions,
+} from '../../../constants/CompanyPerformanceConstants';
 import SalesPerformanceChart from './SalePerformanceChart';
 import Theme from '../../../theme/Theme';
 
@@ -61,10 +65,10 @@ export default function PerformanceReport({
   setViewComponent,
 }) {
   const { Option, SingleValue } = components;
-  // const [lineChartData, setLineChartData] = useState([{}]);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
-  // const [dspSpend, setDspSpend] = useState(null);
+  const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
+  const [isBBCustomDateApply, setIsBBCustomDateApply] = useState(false);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -72,8 +76,9 @@ export default function PerformanceReport({
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
   ]);
-  // const [isApiSuccess, setIsApiSuccess] = useState(false);
+
   const COLORS = ['#97ca61', '#EAEFF2'];
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
   // sales performance varibales and BB % start
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -110,6 +115,9 @@ export default function PerformanceReport({
     weekly: false,
     month: false,
   });
+  const [salesGraphLoader, setSalesGraphLoader] = useState(false);
+  const [bBGraphLoader, setBbGraphLoader] = useState(false);
+
   const [isApiCall, setIsApiCall] = useState(false);
   const [activeSales, setActiveSales] = useState({ revenue: true });
   const customStyles = {
@@ -128,6 +136,22 @@ export default function PerformanceReport({
   };
   const noDataMessage =
     'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
+
+  const renderCustomDateSubLabel = (props, flag) => {
+    if (flag === 'sp') {
+      if (selectedValue === 'custom' && isSPCustomDateApply) {
+        return `From- ${dayjs(state[0].startDate).format(
+          'MMM D, YYYY',
+        )}  To- ${dayjs(state[0].endDate).format('MMM D, YYYY')}`;
+      }
+    } else if (bBDailyFact === 'custom' && isBBCustomDateApply) {
+      return `From- ${dayjs(BBstate[0].startDate).format(
+        'MMM D, YYYY',
+      )}  To- ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`;
+    }
+
+    return props.data.sub;
+  };
 
   const filterOption = (props) => (
     <Option {...props}>
@@ -149,7 +173,36 @@ export default function PerformanceReport({
         {props.data.label}
       </span>
 
-      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(props, 'sp')}
+      </div>
+    </SingleValue>
+  );
+
+  const bbFilterOption = (props) => (
+    <Option {...props}>
+      <div className="">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
+        {props.data.value === 'custom' ? (
+          <div style={{ fontSize: '12px', color: '#556178' }}>
+            {props.data.sub}
+          </div>
+        ) : null}
+      </div>
+    </Option>
+  );
+
+  const bbSingleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(props, 'bb')}
+      </div>
     </SingleValue>
   );
 
@@ -169,6 +222,22 @@ export default function PerformanceReport({
         </components.DropdownIndicator>
       )
     );
+  };
+
+  const getSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropdownIndicator,
+    };
+  };
+
+  const getBBSelectComponents = () => {
+    return {
+      Option: bbFilterOption,
+      SingleValue: bbSingleFilterOption,
+      DropdownIndicator,
+    };
   };
 
   const bindSalesResponseData = (response) => {
@@ -290,8 +359,8 @@ export default function PerformanceReport({
 
   const getBBData = useCallback(
     (marketplace, BBdailyFact, bBGroupBy, startDate = null, endDate = null) => {
-      // setIsLoading({ loader: true, type: 'button' });
       setIsApiCall(true);
+      setBbGraphLoader(true);
       getBuyBoxChartData(
         id,
         marketplace,
@@ -301,9 +370,8 @@ export default function PerformanceReport({
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          // setApiError(res && res.data);
-          // setIsLoading({ loader: false, type: 'button' });
           setIsApiCall(false);
+          setBbGraphLoader(false);
         }
         if (res && res.status === 200 && res.data && res.data.bbep) {
           const avg =
@@ -323,19 +391,9 @@ export default function PerformanceReport({
           for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
             tempBBData.push({ avg: avg.toFixed(2) });
           }
-          // if (tempBBData && tempBBData.length < 64) {
-          //   tempBBData.push({ avg: avg.toFixed(2) }, { avg: avg.toFixed(2) });
-          // } else {
-          //   tempBBData.push(
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //     { avg: avg.toFixed(2) },
-          //   );
-          // }
           setBBChartData(tempBBData);
           setIsApiCall(false);
+          setBbGraphLoader(false);
         }
       });
     },
@@ -350,8 +408,8 @@ export default function PerformanceReport({
       startDate = null,
       endDate = null,
     ) => {
-      // setIsLoading({ loader: true, type: 'button' });
       setIsApiCall(true);
+      setSalesGraphLoader(true);
       getPerformance(
         id,
         selectedDailyFact,
@@ -361,9 +419,8 @@ export default function PerformanceReport({
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          // setApiError(res && res.data);
-          // setIsLoading({ loader: false, type: 'button' });
           setIsApiCall(false);
+          setSalesGraphLoader(false);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.daily_facts) {
@@ -375,14 +432,7 @@ export default function PerformanceReport({
               res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
                 'MMM DD YYYY',
               );
-              // if (res.data.dsp_spend && res.data.dsp_spend.length) {
-              //   setDspSpend({
-              //     value: res.data.dsp_spend[0].monthly_spend.toFixed(2),
-              //     date: dayjs(res.data.dsp_spend[0].report_date).format(
-              //       'MMM DD YYYY',
-              //     ),
-              //   });
-              // }
+
               setDspData(res.data.pf_oi_is[0]);
               const ipiValue = parseFloat(
                 res.data.pf_oi_is[0].inventory_performance_index,
@@ -420,6 +470,7 @@ export default function PerformanceReport({
             setSalesChartData([]);
           }
           setIsApiCall(false);
+          setSalesGraphLoader(false);
         }
       });
     },
@@ -429,11 +480,7 @@ export default function PerformanceReport({
   const setSalesBoxClass = (name, classValue) => {
     let selectedClass = '';
     if (Object.prototype.hasOwnProperty.call(activeSales, name)) {
-      // if (_.size(selectedAdBox) === 1) {
-      //   selectedClass = 'order-chart-box active fix-height';
-      // } else {
       selectedClass = `order-chart-box ${classValue} fix-height`;
-      // }
     } else if (_.size(activeSales) === 4) {
       selectedClass = 'order-chart-box fix-height disabled';
     } else {
@@ -466,7 +513,7 @@ export default function PerformanceReport({
 
           <text
             className="cust-label-avg"
-            x={data.x} // {dataLength === 0 ? data.x : data.x * dataLength}
+            x={data.x}
             y={data.y}
             dy={-10}
             fontSize={14}
@@ -525,14 +572,6 @@ export default function PerformanceReport({
       // flag==='year
       getData(flag, temp, marketplace);
     }
-  };
-
-  const getSelectComponents = () => {
-    return {
-      Option: filterOption,
-      SingleValue: singleFilterOption,
-      DropdownIndicator,
-    };
   };
 
   // set group by filter when selected option is, week, month or 60 days
@@ -596,6 +635,7 @@ export default function PerformanceReport({
     const { value } = event;
     setSelectedValue(value);
     if (value !== 'custom') {
+      setIsSPCustomDateApply(false);
       setState([
         {
           startDate: currentDate,
@@ -622,6 +662,7 @@ export default function PerformanceReport({
     setBBDailyFact(value);
 
     if (value !== 'custom') {
+      setIsBBCustomDateApply(false);
       setBBState([
         {
           startDate: currentDate,
@@ -668,7 +709,7 @@ export default function PerformanceReport({
     }
   };
 
-  const applyCustomeDate = (flag) => {
+  const applyCustomDate = (flag) => {
     if (flag === 'BBDate') {
       BBYearAndCustomDateFilter(
         BBstate[0].startDate,
@@ -676,6 +717,8 @@ export default function PerformanceReport({
         'custom',
       );
       setShowBBCustomDateModal(false);
+
+      setIsBBCustomDateApply(true);
     } else {
       checkDifferenceBetweenDates(
         state[0].startDate,
@@ -683,6 +726,7 @@ export default function PerformanceReport({
         'custom',
       );
       setShowCustomDateModal(false);
+      setIsSPCustomDateApply(true);
     }
   };
 
@@ -692,7 +736,7 @@ export default function PerformanceReport({
         return (
           <div className="custom-tooltip">
             <p className="label-1">{payload[0].payload.date}</p>
-            {/* <p className="label-2">{payload[0].payload.avg}%</p> */}
+
             <p className="label-2">{payload[1].payload.value}%</p>
           </div>
         );
@@ -714,11 +758,18 @@ export default function PerformanceReport({
     setAmazonOptions(list);
 
     if (responseId === null && list.length && list[0].value !== null) {
-      setSelectedAmazonValue(list[0].value);
-      setCurrency(list[0].currency);
-      setCurrencySymbol(getSymbolFromCurrency(list[0].currency));
-      getData(selectedValue, groupBy, list[0].value);
-      getBBData(list[0].value, bBDailyFact, 'daily');
+      let marketplace = list[0];
+      marketplace = list.filter((op) => op.value === 'Amazon.com');
+      if (marketplace.length === 0) {
+        marketplace[0] = _.nth(list, 0);
+      }
+
+      setMarketplaceDefaultValue(marketplace);
+      setSelectedAmazonValue(marketplace[0].value);
+      setCurrency(marketplace[0].currency);
+      setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
+      getData(selectedValue, groupBy, marketplace[0].value);
+      getBBData(marketplace[0].value, bBDailyFact, 'daily');
       setResponseId('12345');
     }
   }, [
@@ -747,7 +798,6 @@ export default function PerformanceReport({
       <span style={{ fontSize: '26px' }}>
         {name === 'revenue' ? currencySymbol : null}
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        {/* <span style={{ fontSize: '16px' }}>.00</span> */}
       </span>
     );
   };
@@ -777,7 +827,7 @@ export default function PerformanceReport({
   const renderMarketplaceDropDown = () => {
     return (
       <Tab className="mb-3">
-        <WhiteCard className="with-less-radius">
+        <WhiteCard>
           <ul className="tabs">
             <li
               className={viewComponent === 'salePerformance' ? 'active' : ''}
@@ -800,16 +850,22 @@ export default function PerformanceReport({
             <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
               {' '}
               <DropDownSelect
+                id="BT-salesperformancedata-countryfilter"
                 className={isApiCall ? `cursor  disabled` : 'cursor '}>
                 <Select
                   classNamePrefix="react-select"
                   className="active"
                   components={DropdownIndicator}
                   options={amazonOptions}
-                  defaultValue={amazonOptions && amazonOptions[0]}
+                  defaultValue={
+                    // amazonOptions && amazonOptions[0]
+                    marketplaceDefaultValue && marketplaceDefaultValue[0]
+                  }
                   onChange={(event) => handleAmazonOptions(event)}
                   placeholder={
-                    amazonOptions && amazonOptions[0] && amazonOptions[0].label
+                    marketplaceDefaultValue &&
+                    marketplaceDefaultValue[0] &&
+                    marketplaceDefaultValue[0].label
                   }
                   theme={(theme) => ({
                     ...theme,
@@ -825,41 +881,6 @@ export default function PerformanceReport({
         </WhiteCard>
       </Tab>
     );
-    // return (
-    //   <div className="row">
-    //     <div className="col-12 mb-3">
-    //       {/* {DropDown(
-    //         'cursor',
-    //         amazonOptions,
-    //         amazonOptions && amazonOptions[0] && amazonOptions[0].label,
-    //         DropdownIndicator,
-    //         amazonOptions && amazonOptions[0],
-    //         handleAmazonOptions,
-    //       )} */}
-
-    // <DropDownSelect className="cursor ">
-    //   <Select
-    //     classNamePrefix="react-select"
-    //     className="active"
-    //     components={DropdownIndicator}
-    //     options={amazonOptions}
-    //     defaultValue={amazonOptions && amazonOptions[0]}
-    //     onChange={(event) => handleAmazonOptions(event)}
-    //     placeholder={
-    //       amazonOptions && amazonOptions[0] && amazonOptions[0].label
-    //     }
-    //     theme={(theme) => ({
-    //       ...theme,
-    //       colors: {
-    //         ...theme.colors,
-    //         neutral50: '#1A1A1A',
-    //       },
-    //     })}
-    //   />
-    // </DropDownSelect>
-    //     </div>
-    //   </div>
-    // );
   };
 
   const renderFilterDropDown = () => {
@@ -874,16 +895,6 @@ export default function PerformanceReport({
           handleDailyFact,
           isApiCall,
         )}
-        {/* <DropDownSelect className="days-performance ">
-          <Select
-            classNamePrefix="react-select"
-            className="active"
-            components={getSelectComponents()}
-            options={dateOptions}
-            defaultValue={dateOptions[0]}
-            onChange={(event) => handleDailyFact(event.value)}
-          />
-        </DropDownSelect>{' '} */}
         <div className="clear-fix" />
       </div>
     );
@@ -1062,73 +1073,7 @@ export default function PerformanceReport({
       boxActiveClass = 'impression-active';
       displayMatricsName = matricsName;
     }
-    // if (name === 'revenue') {
-    //   currentTotal =
-    //     allSalesTotal && allSalesTotal.revenue
-    //       ? allSalesTotal.revenue.currentRevenueTotal
-    //       : 0;
-    //   previousTotal =
-    //     allSalesTotal && allSalesTotal.revenue
-    //       ? allSalesTotal.revenue.previousRevenueTotal
-    //       : 0;
-    //   difference =
-    //     allSalesTotal &&
-    //     allSalesTotal.revenue &&
-    //     allSalesTotal.revenue.difference
-    //       ? allSalesTotal.revenue.difference
-    //       : 0;
-    //   theCurrency = currency !== null ? `(${currency})` : null;
-    //   boxActiveClass = 'ad-sales-active';
-    // } else if (name === 'unitsSold') {
-    //   currentTotal =
-    //     allSalesTotal && allSalesTotal.units
-    //       ? allSalesTotal.units.currentUnitsTotal
-    //       : 0;
-    //   previousTotal =
-    //     allSalesTotal && allSalesTotal.units
-    //       ? allSalesTotal.units.previousUnitsTotal
-    //       : 0;
-    //   difference =
-    //     allSalesTotal && allSalesTotal.units && allSalesTotal.units.difference
-    //       ? allSalesTotal.units.difference
-    //       : 0;
-    //   theCurrency = ``;
-    //   boxActiveClass = 'ad-spend-active';
-    // } else if (name === 'traffic') {
-    //   currentTotal =
-    //     allSalesTotal && allSalesTotal.traffic
-    //       ? allSalesTotal.traffic.currentTrafficTotal
-    //       : 0;
-    //   previousTotal =
-    //     allSalesTotal && allSalesTotal.traffic
-    //       ? allSalesTotal.traffic.previousTrafficTotal
-    //       : 0;
-    //   difference =
-    //     allSalesTotal &&
-    //     allSalesTotal.traffic &&
-    //     allSalesTotal.traffic.difference
-    //       ? allSalesTotal.traffic.difference
-    //       : 0;
-    //   theCurrency = ``;
-    //   boxActiveClass = 'ad-conversion-active';
-    // } else if (name === 'conversion') {
-    //   currentTotal =
-    //     allSalesTotal && allSalesTotal.conversion
-    //       ? allSalesTotal.conversion.currentConversionTotal
-    //       : 0;
-    //   previousTotal =
-    //     allSalesTotal && allSalesTotal.conversion
-    //       ? allSalesTotal.conversion.previousConversionTotal
-    //       : 0;
-    //   difference =
-    //     allSalesTotal &&
-    //     allSalesTotal.conversion &&
-    //     allSalesTotal.conversion.difference
-    //       ? allSalesTotal.conversion.difference
-    //       : 0;
-    //   theCurrency = ``;
-    //   boxActiveClass = 'impression-active';
-    // }
+
     return (
       <div className={className}>
         <div
@@ -1180,14 +1125,13 @@ export default function PerformanceReport({
   };
   const renderSalePerformancePanel = () => {
     return (
-      <WhiteCard className="with-less-radius">
+      <WhiteCard>
         <div className="row">
           <div className="col-md-6 col-sm1-12">
             {' '}
             <p className="black-heading-title mt-2 mb-4"> Sales Performance</p>
           </div>
           {renderFilterDropDown()}
-          {/* <div className="col-12 text-right mb-3" /> */}
         </div>
 
         <div className="row mr-1 ml-1">
@@ -1204,9 +1148,16 @@ export default function PerformanceReport({
         </div>
         {rednerSaleGroupBy()}
         <div className="clear-fix" />
-        {/* render sale graph */}
-        {/* <div id="chartdiv" style={{ width: '100%', height: '500px' }} /> */}
-        {salesChartData.length !== 0 ? (
+
+        {salesGraphLoader ? (
+          <PageLoader
+            component="performance-graph"
+            color="#FF5933"
+            type="detail"
+            width={40}
+            height={40}
+          />
+        ) : salesChartData.length !== 0 ? (
           <SalesPerformanceChart
             chartId="chartdiv"
             chartData={salesChartData}
@@ -1221,30 +1172,10 @@ export default function PerformanceReport({
     );
   };
 
-  // const renderDSPSpendPanel = () => {
-  //   return (
-  //     <div className="col-md-4 col-sm-12 mb-3">
-  //       <WhiteCard className="fix-height">
-  //         <p className="black-heading-title mt-0 mb-4">DSP Spend</p>
-  //         <div className="speed-rate">
-  //           {dspSpend && dspSpend.value
-  //             ? `${currencySymbol}${dspSpend.value
-  //                 .toString()
-  //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-  //             : 'N/A'}
-  //         </div>
-  //         <div className="last-update">
-  //           Last updated: {dspSpend && dspSpend.date}
-  //         </div>
-  //       </WhiteCard>{' '}
-  //     </div>
-  //   );
-  // };
-
   const renderPositiveFeedbackPanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
           <div className="seller-health positive">
             {dspData && dspData.feedback_30
@@ -1269,7 +1200,7 @@ export default function PerformanceReport({
   const renderOrderIssuesPanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           {' '}
           <p className="black-heading-title mt-0 mb-4">Order Issues</p>
           <div className="seller-health">
@@ -1293,9 +1224,9 @@ export default function PerformanceReport({
   const renderInventoryScorePanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height ">
           <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
-          {/* <PiechartResponsive> */}
+
           <ResponsiveContainer width="99%" height={200}>
             <PieChart>
               <Pie
@@ -1315,7 +1246,6 @@ export default function PerformanceReport({
               </Pie>
             </PieChart>
           </ResponsiveContainer>
-          {/* </PiechartResponsive> */}
 
           <div className="average">
             {pieData && pieData.length && !Number.isNaN(pieData[0].value)
@@ -1367,7 +1297,7 @@ export default function PerformanceReport({
   const renderBBPercentGraphPanel = () => {
     return (
       <div className="col-sm-12 mb-3 ">
-        <WhiteCard className="fix-height with-less-radius">
+        <WhiteCard className="fix-height">
           <div className="row">
             <div className="col-6 ">
               {' '}
@@ -1376,24 +1306,13 @@ export default function PerformanceReport({
             <div className="col-6 text-right mb-1">
               {DropDown(
                 'days-performance',
-                dateOptions,
+                bbDateOptions,
                 null,
-                // getSelectComponents,
-                null,
-                dateOptions[0],
+                getBBSelectComponents,
+                bbDateOptions[0],
                 handleBBDailyFact,
                 isApiCall,
               )}
-              {/* <DropDownSelect className="days-performance ">
-                <Select
-                  classNamePrefix="react-select"
-                  className="active"
-                  components={getSelectComponents()}
-                  options={dateOptions}
-                  defaultValue={dateOptions[0]}
-                  onChange={(event) => handleBBDailyFact(event.value)}
-                />
-              </DropDownSelect>{' '} */}
             </div>
           </div>
           <div className="row">
@@ -1414,7 +1333,15 @@ export default function PerformanceReport({
               </ul>
             </div>
           </div>
-          {bBChartData && bBChartData.length > 1 ? (
+          {bBGraphLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : bBChartData && bBChartData.length > 1 ? (
             renderBBgraph()
           ) : (
             <NoData>{noDataMessage}</NoData>
@@ -1471,7 +1398,7 @@ export default function PerformanceReport({
             />
             <div className="text-center mt-3">
               <Button
-                onClick={() => applyCustomeDate('SPDate')}
+                onClick={() => applyCustomDate('SPDate')}
                 type="button"
                 className="btn-primary on-boarding   w-100">
                 Apply
@@ -1525,7 +1452,7 @@ export default function PerformanceReport({
             />
             <div className="text-center mt-3">
               <Button
-                onClick={() => applyCustomeDate('BBDate')}
+                onClick={() => applyCustomDate('BBDate')}
                 type="button"
                 className="btn-primary on-boarding   w-100">
                 Apply
@@ -1542,7 +1469,6 @@ export default function PerformanceReport({
       {renderMarketplaceDropDown()}
       {renderSalePerformancePanel()}
       <div className="row mt-3">
-        {/* {renderDSPSpendPanel()} */}
         {renderInventoryScorePanel()}
         {renderPositiveFeedbackPanel()}
         {renderOrderIssuesPanel()}

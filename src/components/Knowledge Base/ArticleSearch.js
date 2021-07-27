@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import { DebounceInput } from 'react-debounce-input';
+
 import { InputSearchWithRadius } from '../../common';
 import { SearchIcon, RemoveIcon, ReadBookIcon } from '../../theme/images/index';
 import { getArticleBoards, getArticleSearch } from '../../api/index';
@@ -86,7 +88,8 @@ export default function ArticleSearch({
 
   return (
     <InputSearchWithRadius className="mb-3">
-      <input
+      <DebounceInput
+        debounceTimeout={500}
         className={
           searchQuery &&
           searchQuery.length > 0 &&

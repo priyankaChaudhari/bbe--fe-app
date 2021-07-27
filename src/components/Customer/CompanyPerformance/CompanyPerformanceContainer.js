@@ -21,6 +21,22 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   return (
     <>
       <div className="col-lg-6 col-12">
+        {/* <Tab className="mb-3">
+          <ul className="tabs">
+            <li
+              className={viewComponent === 'salePerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('salePerformance')}
+              role="presentation">
+              Performance Report
+            </li> */}
+        {/* <li
+              className={viewComponent === 'adPerformance' ? 'active' : ''}
+              onClick={() => setViewComponent('adPerformance')}
+              role="presentation">
+              Ad Performance
+            </li> */}
+        {/* </ul>
+        </Tab> */}
         {viewComponent === 'salePerformance' ? (
           <PerformanceReport
             marketplaceChoices={marketplaceChoices}

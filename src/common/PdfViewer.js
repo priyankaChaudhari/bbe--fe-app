@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 // import { Document, Page } from 'react-pdf';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
+import { Document, Page, pdfjs } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import PdfLoadingMsg from './PdfLoadingMsg';
 // import styled from 'styled-components';
-
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 export default function PdfViewer({ pdf, loadingMsg }) {
   const [totalPages, setNumPages] = useState(null);
+  const [isLoader, setIsLoader] = useState({ loader: false });
+  const pdfFile = useMemo(() => {
+    return pdf;
+  }, [pdf]);
+
   const isDesktopLarge = useMediaQuery({ minWidth: 1601 });
   const isDesktop = useMediaQuery({ minWidth: 1331, maxWidth: 1600 });
   const isDesktopView = useMediaQuery({ minWidth: 992, maxWidth: 1330 });
@@ -17,10 +22,7 @@ export default function PdfViewer({ pdf, loadingMsg }) {
   const isMobileView = useMediaQuery({ minWidth: 455, maxWidth: 591 });
   const isMobileSmallView = useMediaQuery({ minWidth: 320, maxWidth: 456 });
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
-  const giveWidth = () => {
+  const giveWidth = useCallback(() => {
     if (isDesktopLarge) {
       return 1000;
     }
@@ -55,30 +57,59 @@ export default function PdfViewer({ pdf, loadingMsg }) {
 
     //   return document.getElementById('root').clientWidth;
     // }
-  };
-  return (
-    <div id="ResumeContainer">
-      <Document
-        className="PDFDocument"
-        file={pdf}
-        options={{ workerSrc: 'pdf.worker.js' }}
-        // error={PageNotFound}
-        error={() => <PdfLoadingMsg type="error" />}
-        loading={() => <PdfLoadingMsg type="loading" message={loadingMsg} />}
-        onLoadSuccess={onDocumentLoadSuccess}>
-        {Array.from(new Array(totalPages), (el, index) => (
-          <Page
-            className="PDFPage PDFPageOne pdf-view"
-            key={`page_${index + 1}`}
-            pageNumber={index + 1}
-            // scale={1.2}
-            width={giveWidth()}
-            // maxWidth={giveWidth()}
-          />
-        ))}
-      </Document>
-    </div>
-  );
+  }, [
+    isDesktopLarge,
+    isDesktop,
+    isDesktopView,
+    isTablet,
+    isMobile,
+    isMobileView,
+    isMobileSmallView,
+  ]);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+    setIsLoader({ loader: false });
+  }
+
+  const displayPdf = useCallback(() => {
+    return (
+      <>
+        {isLoader.loader ? '' : ''}
+        <Document
+          className="PDFDocument"
+          file={pdfFile}
+          options={{ workerSrc: 'pdf.worker.js' }}
+          // error={PageNotFound}
+          error={() => <PdfLoadingMsg type="error" />}
+          loading={() => (
+            <PdfLoadingMsg
+              type="loading"
+              message={loadingMsg}
+              setIsLoader={setIsLoader}
+            />
+          )}
+          onLoadSuccess={onDocumentLoadSuccess}>
+          {Array.from(new Array(totalPages), (el, index) => (
+            <Page
+              className="PDFPage PDFPageOne pdf-view"
+              key={`page_${index + 1}`}
+              pageNumber={index + 1}
+              // scale={1.2}
+              width={giveWidth()}
+              // maxWidth={giveWidth()}
+            />
+          ))}
+        </Document>
+      </>
+    );
+  }, [pdfFile, giveWidth, totalPages, loadingMsg, isLoader]);
+
+  useEffect(() => {
+    displayPdf();
+  }, [displayPdf]);
+
+  return <div id="ResumeContainer">{displayPdf()}</div>;
 }
 
 PdfViewer.defaultProps = {

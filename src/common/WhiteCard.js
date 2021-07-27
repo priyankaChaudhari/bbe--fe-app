@@ -7,10 +7,10 @@ export const WhiteCard = styled.div`
   padding: 20px ;
   position: relative;
 
-  &.with-less-radius {
-     border-radius: 10px;
-  }
-   
+  .green {
+        color: ${Theme.lighterGreen};
+      }
+  
   
  &.fix-height {
     flex-wrap: wrap;
@@ -35,6 +35,53 @@ export const WhiteCard = styled.div`
   &.left-border {
     padding: 25px 25px 25px 0;
   }
+
+  .orange-text {
+    color: ${Theme.red};
+    cursor: pointer;
+
+    .right-arrow-icon {
+      vertical-align: middle;
+      margin-left: 4px;
+      width: 15px;
+
+    &.green {
+        color: ${Theme.lighterGreen};
+      }
+   }
+
+  }
+  .monthly-dsp-budget {
+    color: ${Theme.red};
+    font-size: ${Theme.normal};
+    font-weight: 600;
+
+    .on-track {
+      color: ${Theme.lighterGreen};
+    }
+
+    .currency-amount {
+      color: ${Theme.black};
+    }
+    .right-arrow-icon {
+      vertical-align: middle;
+
+       &.green {
+        color: ${Theme.lighterGreen};
+      }
+    }
+    
+    .dot {
+      background-color:  ${Theme.gray35};
+      border-radius: 50%;
+      width: 3px;
+      height: 3px;
+      position: absolute;
+      top: 26px;
+      margin-left: 2px;
+    }
+
+  }
   
   .copy-info {
     position: relative;
@@ -53,8 +100,6 @@ export const WhiteCard = styled.div`
     .label-info {
       color: ${Theme.black};
       font-size: ${Theme.normal};
-
-     
     }
 
     &:hover {
@@ -878,6 +923,7 @@ export const WhiteCard = styled.div`
     margin-right: 10px;
     vertical-align: middle;
   }
+  
 
   .social-media-icons {
     padding: 0;
@@ -903,6 +949,7 @@ export const WhiteCard = styled.div`
     }
     
   }
+   
 
     @media only screen and (min-width: 1920px) {
     .company-label-info {

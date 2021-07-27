@@ -746,7 +746,7 @@ button:disabled {
   // max-width: 600px !important;
   // width: 100% !important;
   border: 0 !important;
-  border-radius: 8px !important;
+  border-radius: 8px ;
   overflow: unset !important;
   padding: 0 !important;
 
@@ -1095,16 +1095,7 @@ fieldset {
 .ck.ck-editor__main > .ck-editor__editable {
   height: 200px !important;
 }
-// .ReactCollapse--content {
-//   max-width: 335px;
 
-//   @media only screen and (max-width: 991px) {
-//     max-width: 100%;
-//   }
-//   @media only screen and (min-width: 1500px) {
-//     max-width: 380px;
-//   }
-// }
 
 .text-container {
   padding-right: 368px;
@@ -1151,12 +1142,6 @@ fieldset {
     }
   }
 }
-
-// .address {
-//   font-size: small;
-//   color: #b0bac9;
-//   font-weight: bold;
-// }
 
 .ReactModal__Body--open {
   overflow-y: hidden;
@@ -1222,55 +1207,6 @@ fieldset {
   height: 0;
 }
 
-// .slider {
-//   position: absolute;
-//   cursor: pointer;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   background-color: #ccc;
-//   -webkit-transition: 0.4s;
-//   transition: 0.4s;
-// }
-
-// .slider:before {
-//   position: absolute;
-//   content: '';
-//   height: 15px;
-//   width: 15px;
-//   left: 2px;
-//   bottom: 4px;
-//   background-color: white;
-//   -webkit-transition: 0.4s;
-//   transition: 0.4s;
-// }
-
-// input:checked + .slider {
-//   background-color: #2196f3;
-//   right: 1px;
-//   width: 40px;
-//   height: 22px;
-// }
-
-// input:focus + .slider {
-//   box-shadow: 0 0 1px #2196f3;
-// }
-
-// input:checked + .slider:before {
-//   -webkit-transform: translateX(22px);
-//   -ms-transform: translateX(22px);
-//   transform: translateX(22px);
-// }
-
-// /* Rounded sliders */
-// .slider.round {
-//   border-radius: 34px;
-// }
-
-// .slider.round:before {
-//   border-radius: 50%;
-// }
 
 .disabled {
   opacity: 0.6;
@@ -1374,7 +1310,16 @@ fieldset {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .cursorPointer {
+    cursor: pointer;
+  }
 }
+
+.rdrDayPassive {
+  visibility:hidden
+}
+
 
 .PDFPageOne {
   margin-bottom: 25px;
@@ -1415,27 +1360,6 @@ fieldset {
   padding: 0;
 }
 
-// g .recharts-cartesian-grid-horizontal {
-//   display: none;
-// }
-
-// g .recharts-cartesian-grid-vertical {
-//   border: 1px solid #f1f1f5;
-//   stroke-dasharray: 0;
-
-//   line {
-//     stroke: #f1f1f5;
-//     outline: 1px solid #f1f1f5;
-//   }
-// }
-// g .recharts-cartesian-axis-ticks {
-//   color: #556178;
-//   font-size: ${Theme.normal};
-// }
-
-// g .recharts-layer .recharts-line-dots {
-//   color: red;
-// }
 
 .recharts-legend-wrapper {
   bottom: 20px !important;
@@ -1768,6 +1692,10 @@ text.cust-label-avg {
    text-transform: uppercase;
    font-weight: bold;
 }
+ .label-info {
+    color: ${Theme.black};
+    font-size: ${Theme.normal};
+  }
 
 .react-sweet-progress {
     /* display: flex; */

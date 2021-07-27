@@ -119,6 +119,7 @@ export async function storeNewCommentData(
       x_coordinate: position.left,
       y_coordinate: position.top,
       annotation: annotationNumber,
+      pdf_page_number: position.page,
     };
   }
 
@@ -137,6 +138,30 @@ export async function getCommentsData(pageNumber, documentId) {
   const params = { document: documentId, page: pageNumber };
   const result = await axiosInstance
     .get(`${API_BRAND_ASSETS_COMMENTS}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function deleteComment(id) {
+  const result = await axiosInstance
+    .delete(`${API_BRAND_ASSETS_COMMENTS}/${id}/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function updateComment(id, data) {
+  const result = await axiosInstance
+    .patch(`${API_BRAND_ASSETS_COMMENTS}/${id}/`, data)
     .then((response) => {
       return response;
     })

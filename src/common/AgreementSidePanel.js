@@ -35,6 +35,7 @@ import {
   CheckFileIcon,
   EditFileIcon,
   SignatureIcon,
+  NextActivityLogo,
 } from '../theme/images/index';
 import { Button, ContractFormField, CommonPagination } from './index';
 import {
@@ -3394,17 +3395,27 @@ export default function AgreementSidePanel({
             {activityData.map((item) => (
               <ul className="menu">
                 <li>
-                  {images &&
-                  images.find((op) => op.entity_id === item.history_user_id) &&
-                  images.find((op) => op.entity_id === item.history_user_id)
-                    .presigned_url ? (
+                  {(images &&
+                    images.find(
+                      (op) => op.entity_id === item.history_user_id,
+                    ) &&
+                    images.find((op) => op.entity_id === item.history_user_id)
+                      .presigned_url) ||
+                  (item.history_change_reason &&
+                    item.history_change_reason.split(' ').slice(0, 2) &&
+                    item.history_change_reason.split(' ').slice(0, 2)[0] ===
+                      'System' &&
+                    item.history_change_reason.split(' ').slice(0, 2)[1] ===
+                      '') ? (
                     <img
                       src={
-                        // isLoading.loader && isLoading.type === 'page'
-                        // ? DefaultUser:
-                        images.find(
-                          (op) => op.entity_id === item.history_user_id,
-                        ).presigned_url
+                        item.history_change_reason.split(' ').slice(0, 2) &&
+                        item.history_change_reason.split(' ').slice(0, 2)[0] ===
+                          'System'
+                          ? NextActivityLogo
+                          : images.find(
+                              (op) => op.entity_id === item.history_user_id,
+                            ).presigned_url
                       }
                       className="default-user-activity"
                       alt="pic"

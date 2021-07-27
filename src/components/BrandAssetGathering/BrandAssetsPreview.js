@@ -1,9 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-// import FileViewer from 'react-file-viewer';
 import { useForm } from 'react-hook-form';
 import {
   HeaderDownloadFuntionality,
@@ -13,8 +11,7 @@ import {
   CommonPagination,
 } from '../../common';
 import ErrorMsg from '../../common/ErrorMsg';
-import PdfViewer from '../../common/PdfViewer';
-
+import PdfAnnotator from '../../common/PdfAnnotator';
 import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
@@ -22,11 +19,14 @@ import {
   ChatBoxIcon,
   ArrowRightBlackIcon,
   AnnotationGoal,
+  RedTrashIcon,
 } from '../../theme/images';
 import Theme from '../../theme/Theme';
 import {
   storeNewCommentData,
   getCommentsData,
+  deleteComment,
+  updateComment,
 } from '../../api/BrandAssestsApi';
 
 function BrandAssetsPreview({
@@ -38,50 +38,6 @@ function BrandAssetsPreview({
   isDeleted,
   setIsImgDeleted,
 }) {
-  // const list = [
-  //   {
-  //     annotation: 1,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEq',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: -0.25,
-  //     y_coordinate: -3.125,
-  //   },
-  //   {
-  //     annotation: 3,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEt',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: '167.875',
-  //     y_coordinate: '24.75',
-  //   },
-  //   {
-  //     annotation: 2,
-  //     created_at: '07/01/2021, 10:57:40 PM MST',
-  //     document: 'DTGisAZ',
-  //     first_name: 'Aaditi-d',
-  //     id: 'CMTlFbEr',
-  //     last_name: 'Dhadwal',
-  //     message: 'this is for testing',
-  //     re_assigned_email: null,
-  //     updated_at: '07/01/2021, 10:57:40 PM MST',
-  //     user: 'URCu1sI',
-  //     x_coordinate: '169.31820678710938',
-  //     y_coordinate: '91.40908813476562',
-  //   },
-  // ];
   const { handleSubmit } = useForm();
   const [isImageLoading, setImageLoading] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
@@ -93,17 +49,32 @@ function BrandAssetsPreview({
   const [responseId, setResponseId] = useState(null);
   const [commentsData, setCommentData] = useState();
   const [storeCommentError, setStoreCommentError] = useState();
-  const [maxAnnotaionNumber, setMaxAnnotaionNumber] = useState(null);
-  const [clickOnAddNewAnnotaion, setClickOnAddNewAnnotaion] = useState(false);
+  const [maxAnnotationNumber, setMaxAnnotationNumber] = useState(null);
+  const [clickOnAddNewAnnotation, setClickOnAddNewAnnotation] = useState(false);
   const [pageNumber, setPageNumber] = useState();
   const [showClickModal, setShowClickModal] = useState(false);
   const [isClickedOnImage, setIsClickedOnImage] = useState(false);
-
-  const [newAnnotaionPosition, setNewAnnotaionPosition] = useState({
+  const [newAnnotationPosition, setNewAnnotationPosition] = useState({
     top: 0,
     left: 0,
   });
-  const fileType = ['application/pdf', 'font/ttf', 'font/otf', 'font/woff'];
+  const fileType = ['font/ttf', 'font/otf', 'font/woff'];
+  const [showDelete, setShowDelete] = useState(false);
+  const [showTextArea, setShowTextArea] = useState(false);
+  const ref = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShowDelete(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
 
   const getComments = useCallback((currentPage, documnetId) => {
     setCommentsLoader(true);
@@ -117,9 +88,9 @@ function BrandAssetsPreview({
         setCommentsLoader(false);
         setImageLoading(false);
         if (res.data.max_annotation === null) {
-          setMaxAnnotaionNumber(1);
+          setMaxAnnotationNumber(1);
         } else {
-          setMaxAnnotaionNumber(res.data.max_annotation + 1);
+          setMaxAnnotationNumber(res.data.max_annotation + 1);
         }
       }
     });
@@ -142,9 +113,10 @@ function BrandAssetsPreview({
         }
         if (res && res.status === 201) {
           getComments(1, showAssetPreview.selectedFile.id);
+          setPageNumber(1);
           setNewCommentData('');
-          setClickOnAddNewAnnotaion(false);
-          setNewAnnotaionPosition({ left: 0, top: 0 });
+          setClickOnAddNewAnnotation(false);
+          setNewAnnotationPosition({ left: 0, top: 0 });
           setIsClickedOnImage(false);
           setShowClickModal(false);
         }
@@ -160,8 +132,8 @@ function BrandAssetsPreview({
       setCommentData();
       setIsClickedOnImage(false);
       setNewCommentData('');
-      setClickOnAddNewAnnotaion(false);
-      setNewAnnotaionPosition({
+      setClickOnAddNewAnnotation(false);
+      setNewAnnotationPosition({
         left: 0,
         top: 0,
       });
@@ -219,8 +191,8 @@ function BrandAssetsPreview({
       getComments(1, documentData[showAssetPreview.index + 1].id);
     }
     setNewCommentData('');
-    setClickOnAddNewAnnotaion(false);
-    setNewAnnotaionPosition({
+    setClickOnAddNewAnnotation(false);
+    setNewAnnotationPosition({
       left: 0,
       top: 0,
     });
@@ -238,13 +210,13 @@ function BrandAssetsPreview({
       index: 0,
     });
     setNewCommentData('');
-    setClickOnAddNewAnnotaion(false);
-    setNewAnnotaionPosition({
+    setClickOnAddNewAnnotation(false);
+    setNewAnnotationPosition({
       left: 0,
       top: 0,
     });
 
-    setMaxAnnotaionNumber(null);
+    setMaxAnnotationNumber(null);
     setStoreCommentError();
 
     setShowClickModal(false);
@@ -272,16 +244,16 @@ function BrandAssetsPreview({
     storeCommentData(
       newCommentData,
       showAssetPreview.selectedFile.id,
-      newAnnotaionPosition,
-      maxAnnotaionNumber,
+      newAnnotationPosition,
+      maxAnnotationNumber,
     );
   };
 
   const onCommnetsLabelClick = () => {
     if (showCommentSection) {
       setNewCommentData('');
-      setClickOnAddNewAnnotaion(false);
-      setNewAnnotaionPosition({
+      setClickOnAddNewAnnotation(false);
+      setNewAnnotationPosition({
         left: 0,
         top: 0,
       });
@@ -295,9 +267,7 @@ function BrandAssetsPreview({
 
   const onMouseDown = (e) => {
     e.preventDefault(true);
-    // if (showClickModal) {
-    //   setShowClickModal(false);
-    // }
+
     if (!isClickedOnImage) {
       setIsClickedOnImage(true);
     }
@@ -312,37 +282,37 @@ function BrandAssetsPreview({
       const percentXImg = (clickX * 100) / offset.width;
       const percentYImg = (clickY * 100) / offset.height;
 
-      // console.log('e.clientX', e.clientX, e.clientY);
-      // console.log('offset.left', offset.left, offset.top);
-
-      // console.log('offset.width', offset.width, offset.height);
-      // console.log(
-      //   'theThing.clientWidth',
-      //   theThing.clientWidth,
-      //   theThing.clientHeight,
-      // );
-
-      setNewAnnotaionPosition({
+      setNewAnnotationPosition({
         left: percentXImg,
         top: percentYImg,
       });
     }
+  };
 
-    // if (theThing) {
-    //   const leftPosition =
-    //     e.clientX -
-    //     container.getBoundingClientRect().left -
-    //     theThing.clientWidth / 2;
-    //   const topPosition =
-    //     e.clientY -
-    //     container.getBoundingClientRect().top -
-    //     theThing.clientHeight / 2;
+  const onPdfMouseDown = (e, selector) => {
+    if (clickOnAddNewAnnotation) {
+      e.preventDefault(true);
 
-    //   // setNewAnnotaionPosition({
-    //   //   left: leftPosition,
-    //   //   top: topPosition,
-    //   // });
-    // }
+      if (!isClickedOnImage) {
+        setIsClickedOnImage(true);
+      }
+      const container = document.querySelector(`.page_${selector}`);
+      const theThing = document.querySelector('#thing');
+
+      if (theThing) {
+        const offset = container.getBoundingClientRect();
+        const clickX = e.clientX - offset.left - theThing.clientWidth / 2;
+        const clickY = e.clientY - offset.top - theThing.clientHeight / 2;
+        const percentXImg = (clickX * 100) / offset.width;
+        const percentYImg = (clickY * 100) / offset.height;
+
+        setNewAnnotationPosition({
+          page: `${selector}`,
+          left: percentXImg,
+          top: percentYImg,
+        });
+      }
+    }
   };
 
   const handlePageChange = (currentPage) => {
@@ -350,27 +320,112 @@ function BrandAssetsPreview({
     getComments(currentPage, showAssetPreview.selectedFile.id);
   };
 
-  const cancelAnnotaion = () => {
+  const cancelAnnotation = () => {
     setShowClickModal(false);
-    setClickOnAddNewAnnotaion(false);
+    setClickOnAddNewAnnotation(false);
     setIsClickedOnImage(false);
-    setNewAnnotaionPosition({ left: 0, top: 0 });
+    setNewAnnotationPosition({ left: 0, top: 0 });
   };
 
   const setAddButtonClass = () => {
     if (
       newCommentData === '' ||
-      (clickOnAddNewAnnotaion && !isClickedOnImage)
+      (clickOnAddNewAnnotation && !isClickedOnImage)
     ) {
       return 'btn-primary w-100 mt-3 disabled';
-    } 
-      return 'btn-primary w-100 mt-3';
-    
+    }
+    return 'btn-primary w-100 mt-3';
+  };
+
+  const onDeleteComment = (id) => {
+    deleteComment(id).then(() => {
+      let pageNo = pageNumber;
+      if (commentsCount % 10 === 1) {
+        if (pageNumber === 1) {
+          pageNo = 1;
+        } else {
+          pageNo = pageNumber - 1;
+        }
+      }
+
+      getComments(pageNo, showAssetPreview.selectedFile.id);
+      setPageNumber(pageNo);
+      setShowDelete({ [id]: false });
+    });
+  };
+
+  const editComment = (id) => {
+    setAddCommentsLoader(true);
+    updateComment(id, { message: newCommentData }).then((res) => {
+      if (res && res.status === 200) {
+        getComments(pageNumber, showAssetPreview.selectedFile.id);
+        setShowTextArea(false);
+        setNewCommentData('');
+        setAddCommentsLoader(false);
+      }
+      if (res && res.status === 400) {
+        setStoreCommentError(res.data);
+        setAddCommentsLoader(false);
+      }
+    });
+  };
+
+  const generateTextArea = (item) => {
+    return (
+      <FormField className="mt-2 mb-2">
+        <textarea
+          className="text-area-box displayNone"
+          rows="4"
+          placeholder="Enter comment"
+          defaultValue={item.message}
+          onChange={(event) => handleChange(event)}
+        />
+        <ErrorMsg>
+          {storeCommentError &&
+            storeCommentError.message &&
+            storeCommentError.message[0]}
+        </ErrorMsg>{' '}
+        <div className="row">
+          <div className="col-6">
+            <Button
+              className="btn-primary w-100 mt-3"
+              type="button"
+              onClick={() => editComment(item.id)}
+              disabled={addCommentsLoader || newCommentData === ''}>
+              {addCommentsLoader ? (
+                <PageLoader color="#fff" type="button" />
+              ) : (
+                'Update'
+              )}
+            </Button>
+          </div>
+          <div className="col-6">
+            <Button
+              className="btn-transparent w-100 mt-3"
+              type="button"
+              onClick={() => {
+                setShowTextArea(false);
+                setNewCommentData('');
+              }}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </FormField>
+    );
   };
 
   const renderComments = () => {
     if (commentsLoader) {
-      return <PageLoader component="activityLog" color="#FF5933" type="page" />;
+      return (
+        <PageLoader
+          component="comment-side-bar"
+          color="#FF5933"
+          height="40"
+          width="40"
+          type="sidebar"
+        />
+      );
     }
     if (commentsCount === 0) {
       return (
@@ -393,8 +448,94 @@ function BrandAssetsPreview({
                 {' '}
                 {item.first_name} {item.last_name}:
               </span>{' '}
-              {item.message}
-              <div className="time-date  mt-1">{item.created_at}</div>
+              {showTextArea && showTextArea[item.id] ? (
+                <>{generateTextArea(item)}</>
+              ) : (
+                <>{item.message}</>
+              )}
+              {item.user === userInfo.id ? (
+                <div className="time-date  mt-1">
+                  {item.created_at}
+                  <span className="pin">
+                    <ul className="more-action">
+                      <>
+                        <li
+                          role="presentation"
+                          onClick={() => setShowTextArea({ [item.id]: true })}>
+                          {' '}
+                          <span className="dot" /> Edit
+                        </li>
+                        <li className="delete">
+                          <div
+                            className="delete cursor"
+                            onClick={() =>
+                              setShowDelete({
+                                [item.id]: true,
+                              })
+                            }
+                            role="presentation">
+                            <span className="dot" /> Delete{' '}
+                            {showDelete && showDelete[item.id] ? (
+                              <div
+                                ref={ref}
+                                className="delete-msg confirm-delete-anno"
+                                role="presentation"
+                                onClick={() => onDeleteComment(item.id)}>
+                                {' '}
+                                <img
+                                  className="red-trash-icon"
+                                  src={RedTrashIcon}
+                                  alt="check"
+                                />
+                                Confirm Delete
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                        </li>
+                      </>
+                    </ul>
+                  </span>
+                </div>
+              ) : (
+                // <>
+                //   <div
+                //     className="time-date  mt-1 cursor"
+                //     onClick={() => setShowTextArea({ [item.id]: true })}
+                //     role="presentation">
+                //     Edit
+                //   </div>
+                //   <div
+                //     className="time-date  mt-1 cursor"
+                //     onClick={() =>
+                //       setShowDelete({
+                //         [item.id]: true,
+                //       })
+                //     }
+                //     role="presentation">
+                //     Delete
+                //     {showDelete && showDelete[item.id] ? (
+                //       <div
+                //         ref={ref}
+                //         className="delete-msg"
+                //         role="presentation"
+                //         onClick={() => onDeleteComment(item.id)}>
+                //         {' '}
+                //         <img
+                //           className="red-trash-icon"
+                //           src={RedTrashIcon}
+                //           alt="check"
+                //         />
+                //         Confirm Delete
+                //       </div>
+                //     ) : (
+                //       ''
+                //     )}
+                //   </div>
+                // </>
+                ''
+              )}
             </div>
             <div className="clear-fix" />
           </GroupUser>
@@ -415,9 +556,12 @@ function BrandAssetsPreview({
             <img width="20px" src={ArrowRightBlackIcon} alt="arro" />
           </div>
         </div>
-        <ul className="inbox-comment">{renderComments()}</ul>
+        <ul className={!showTextArea ? 'inbox-coment' : 'inbox-height'}>
+          {renderComments()}
+        </ul>
         {commentsCount > 10 ? (
-          <Footer className="pdf-footer">
+          <Footer
+            className={!showTextArea ? 'pdf-footer' : 'pdf-footer-height'}>
             <CommonPagination
               count={commentsCount}
               pageNumber={pageNumber}
@@ -426,55 +570,59 @@ function BrandAssetsPreview({
             />
           </Footer>
         ) : null}
-        <div className="chat-footer">
-          <div className="input-type-box">
-            <FormField className="mt-2 mb-2">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <textarea
-                  className="text-area-box displayNone"
-                  rows="4"
-                  placeholder="Enter comment"
-                  value={newCommentData}
-                  onChange={(event) => handleChange(event)}
-                />
-                <ErrorMsg>
-                  {storeCommentError &&
-                    storeCommentError.message &&
-                    storeCommentError.message[0]}
-                </ErrorMsg>
+        {!showTextArea ? (
+          <div className="chat-footer">
+            <div className="input-type-box">
+              <FormField className="mt-2 mb-2">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <textarea
+                    className="text-area-box displayNone"
+                    rows="4"
+                    placeholder="Enter comment"
+                    value={newCommentData}
+                    onChange={(event) => handleChange(event)}
+                  />
+                  <ErrorMsg>
+                    {storeCommentError &&
+                      storeCommentError.message &&
+                      storeCommentError.message[0]}
+                  </ErrorMsg>
 
-                {!fileType.includes(
-                  showAssetPreview &&
-                    showAssetPreview.selectedFile &&
-                    showAssetPreview.selectedFile.mime_type,
-                ) ? (
-                  <div
-                    className="add-annotation mt-2"
-                    onClick={() => {
-                      setShowClickModal(true);
-                      setClickOnAddNewAnnotaion(true);
-                    }}
-                    role="presentation">
-                    <img src={AnnotationGoal} alt="annotation" />
-                    Click to add an annotation
-                  </div>
-                ) : null}
-                <Button className={setAddButtonClass()}>
-                  {addCommentsLoader ? (
-                    <PageLoader color="#fff" type="button" />
-                  ) : (
-                    'Add'
-                  )}
-                </Button>
-              </form>
-            </FormField>
+                  {!fileType.includes(
+                    showAssetPreview &&
+                      showAssetPreview.selectedFile &&
+                      showAssetPreview.selectedFile.mime_type,
+                  ) ? (
+                    <div
+                      className="add-annotation mt-2"
+                      onClick={() => {
+                        setShowClickModal(true);
+                        setClickOnAddNewAnnotation(true);
+                      }}
+                      role="presentation">
+                      <img src={AnnotationGoal} alt="annotation" />
+                      Click to add an annotation
+                    </div>
+                  ) : null}
+                  <Button className={setAddButtonClass()}>
+                    {addCommentsLoader ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : (
+                      'Add'
+                    )}
+                  </Button>
+                </form>
+              </FormField>
+            </div>
           </div>
-        </div>
+        ) : (
+          ''
+        )}
       </CommentAnnotationPanel>
     );
   };
 
-  const renderExistingAnnotations = (flag = false) => {
+  const renderImageAnnotations = (flag = false) => {
     if (showCommentSection && flag) {
       return (
         commentsData &&
@@ -498,17 +646,70 @@ function BrandAssetsPreview({
       );
     }
 
-    if (clickOnAddNewAnnotaion) {
+    if (clickOnAddNewAnnotation) {
       return (
         <div
           id="thing"
           className={isClickedOnImage ? 'annotation' : 'annotationNone'}
           style={{
             position: 'absolute',
-            left: `${newAnnotaionPosition.left}%`,
-            top: `${newAnnotaionPosition.top}%`,
+            left: `${newAnnotationPosition.left}%`,
+            top: `${newAnnotationPosition.top}%`,
           }}>
-          {isClickedOnImage ? maxAnnotaionNumber : null}
+          {isClickedOnImage ? maxAnnotationNumber : null}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderPDFAnnotations = (flag = false, index) => {
+    if (showCommentSection && flag) {
+      return (
+        commentsData &&
+        commentsData.map((item) => {
+          if (item.annotation !== null) {
+            return (
+              <div
+                id={item.id}
+                className={
+                  item.pdf_page_number === index
+                    ? 'annotation'
+                    : 'annotationNone'
+                }
+                style={{
+                  position: 'absolute',
+                  left: `${item.x_coordinate}%`,
+                  top: `${item.y_coordinate}%`,
+                }}>
+                {item.pdf_page_number === index ? item.annotation : ''}
+              </div>
+            );
+          }
+          return null;
+        })
+      );
+    }
+
+    if (clickOnAddNewAnnotation) {
+      return (
+        <div
+          id="thing"
+          className={
+            newAnnotationPosition.page === `${index}`
+              ? 'annotation'
+              : 'annotationNone'
+          }
+          style={{
+            position: 'absolute',
+            left: `${newAnnotationPosition.left}%`,
+            top: `${newAnnotationPosition.top}%`,
+          }}>
+          {isClickedOnImage
+            ? newAnnotationPosition.page === `${index}`
+              ? maxAnnotationNumber
+              : ''
+            : null}
         </div>
       );
     }
@@ -544,7 +745,11 @@ function BrandAssetsPreview({
                       <span
                         className="cursor"
                         role="presentation"
-                        onClick={() => onCommnetsLabelClick()}>
+                        onClick={() => {
+                          onCommnetsLabelClick();
+                          setNewCommentData('');
+                          setShowTextArea(false);
+                        }}>
                         Comments ({commentsCount})
                       </span>
                     </li>
@@ -594,7 +799,7 @@ function BrandAssetsPreview({
                     <Button
                       className="btn-transparent verify-now-btn h-30 w-auto ml-2"
                       onClick={() => {
-                        cancelAnnotaion();
+                        cancelAnnotation();
                       }}>
                       Cancel
                     </Button>
@@ -621,46 +826,31 @@ function BrandAssetsPreview({
                   </div>
                 </div>
                 <div className="assetPreviewImg">
-                  {/* <img
-                      className="image-thumbnail"
-                      src={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.presigned_url
-                      }
-                      type={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.mime_type
-                      }
-                      alt={
-                        showAssetPreview &&
-                        showAssetPreview.selectedFile &&
-                        showAssetPreview.selectedFile.original_name
-                      }
-                    />{' '} */}
                   {showAssetPreview &&
                   showAssetPreview.selectedFile &&
                   showAssetPreview.selectedFile.mime_type.includes('pdf') ? (
                     <BrandAssetPdf>
-                      <PdfViewer
+                      <PdfAnnotator
                         pdf={
                           showAssetPreview &&
                           showAssetPreview.selectedFile &&
                           showAssetPreview.selectedFile.presigned_url
                         }
                         loadingMsg="Loading Document..."
+                        onPdfMouseDown={onPdfMouseDown}
+                        renderPDFAnnotations={renderPDFAnnotations}
+                        clickOnAddNewAnnotation={clickOnAddNewAnnotation}
                       />
                     </BrandAssetPdf>
                   ) : (
                     <>
                       <object
                         onMouseDown={(event) =>
-                          clickOnAddNewAnnotaion ? onMouseDown(event) : null
+                          clickOnAddNewAnnotation ? onMouseDown(event) : null
                         }
                         id="imgContainer"
                         className={
-                          clickOnAddNewAnnotaion
+                          clickOnAddNewAnnotation
                             ? 'image-thumbnail cursorPointer'
                             : 'image-thumbnail'
                         }
@@ -685,8 +875,8 @@ function BrandAssetsPreview({
                           </div>
                         </div>
                       </object>
-                      {renderExistingAnnotations(true)}
-                      {renderExistingAnnotations()}
+                      {renderImageAnnotations(true)}
+                      {renderImageAnnotations()}
                       {}
                     </>
                   )}
@@ -946,7 +1136,7 @@ const CommentAnnotationPanel = styled.div`
     cursor: pointer;
   }
 
-  .inbox-comment {
+  .inbox-coment {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -954,6 +1144,16 @@ const CommentAnnotationPanel = styled.div`
     height: calc(100vh - 100px - 235px);
     padding-bottom: 70px;
 
+    li {
+      padding: 15px 15px 0 15px;
+    }
+  }
+  .inbox-height {
+    height: calc(100vh - 200px);
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
     li {
       padding: 15px 15px 0 15px;
     }
@@ -1018,61 +1218,73 @@ const BrandAssetPdf = styled.div`
   min-height: 500px;
   overflow: auto;
   margin-top: -150px;
-  max-width: 650px;
+  max-width: 790px;
   height: 73vh;
-
-  .react-pdf__Document {
-    width: 100% !important;
-    background-color: ${Theme.gray3} !important;
-    padding-right: 0;
-
-    .react-pdf__Page {
-      background-color: ${Theme.gray3} !important;
-
-      & .pdf-view {
-        width: 100% !important;
-        background-color: ${Theme.gray3} !important;
-      }
-
-      .react-pdf__Page__canvas {
-        top: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        overflow: auto;
-      }
-      &:first-child {
-        top: 0 !important;
-        margin-bottom: 0 !important;
-      }
-    }
-    .feDBFU .not-found {
-      font-weight: 500;
-      color: black;
-      margin-top: -70px;
-    }
-    @media only screen and (min-width: 1500px) {
-      // padding-right: 400px;
-    }
-    @media only screen and (max-width: 991px) {
-      padding-left: 0px !important;
+  #ResumeContainer {
+    width: 98%;
+    .react-pdf__Document {
+      width: 100% !important;
       padding-right: 0;
+      background: ${Theme.white} !important;
 
+      // .react-pdf__Page {
+      //
+      // }
       .react-pdf__Page {
+       box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1); !important;
+        background: ${Theme.white} !important;
+        margin-bottom: 10px !important;
+
+        .react-pdf__Page__textContent {
+          box-shadow: none;
+        }
+        & .pdf-view {
+          width: 100% !important;
+        }
+
+        .react-pdf__Page__canvas {
+          top: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          overflow: auto;
+        }
         &:first-child {
           top: 0 !important;
-          margin-bottom: 0 !important;
         }
       }
-    }
-    @media only screen and (max-width: 767px) {
-      .react-pdf__Page {
-        &:first-child {
-          top: 0 !important;
-          margin-bottom: 0 !important;
+      .feDBFU .not-found {
+        font-weight: 500;
+        color: black;
+        margin-top: -70px;
+      }
+      @media only screen and (min-width: 1500px) {
+        // padding-right: 400px;
+      }
+      @media only screen and (max-width: 991px) {
+        padding-left: 0px !important;
+        padding-right: 0;
+         max-width: 550px;
+
+        .react-pdf__Page {
+          &:first-child {
+            top: 0 !important;
+            margin-bottom: 0 !important;
+          }
+        }
+      }
+      @media only screen and (max-width: 767px) {
+        .react-pdf__Page {
+          &:first-child {
+            top: 0 !important;
+            margin-bottom: 0 !important;
+          }
         }
       }
     }
   }
+   @media only screen and (min-width: 1920px) {
+     max-width: 950px;
+   }
   @media only screen and (max-width: 991px) {
     margin-top: -16px;
     min-height: 100px;
@@ -1093,6 +1305,10 @@ const Footer = styled.div`
   min-height: 60px;
   z-index: 2;
   width: 24%;
+
+  &.pdf-footer-height {
+    bottom: 0px;
+  }
 
   // &.pdf-footer {
   //   width: 23%;
