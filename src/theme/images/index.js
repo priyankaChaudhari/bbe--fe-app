@@ -170,6 +170,7 @@ import PinIcons from './icons/pin-icon.png';
 import NextActivityLogo from './next-activity-logo.svg';
 import RequestPlan from './icons/request-plane.png';
 import SortArrowDown from './icons/icons-sort-down.png';
+import StageFavicon from './favicon.ico';
 
 export {
   BannerBg,
@@ -344,4 +345,5 @@ export {
   RequestPlan,
   NextActivityLogo,
   SortArrowDown,
+  StageFavicon,
 };

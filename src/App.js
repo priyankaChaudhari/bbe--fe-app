@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import GlobalStyle from './theme/css/GlobalStyle';
 
@@ -43,8 +43,19 @@ import {
   BrandAssetUpload,
   DelegationUpload,
 } from './components/BrandAssetGathering';
+import { StageFavicon } from './theme/images';
 
 export default function App() {
+  useEffect(() => {
+    const favicon = document.getElementById('favicon');
+    if (
+      process.env.REACT_APP_BASE_APP_URL &&
+      process.env.REACT_APP_BASE_APP_URL.includes('staging')
+    ) {
+      favicon.href = StageFavicon;
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <GlobalStyle />
