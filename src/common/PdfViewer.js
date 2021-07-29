@@ -81,7 +81,13 @@ export default function PdfViewer({ pdf, loadingMsg }) {
           file={pdfFile}
           options={{ workerSrc: 'pdf.worker.js' }}
           // error={PageNotFound}
-          error={() => <PdfLoadingMsg type="error" />}
+          error={() => (
+            <PdfLoadingMsg
+              type="error"
+              message="Please wait while contract document is being ready!! check this page
+          after few minutes."
+            />
+          )}
           loading={() => (
             <PdfLoadingMsg
               type="loading"

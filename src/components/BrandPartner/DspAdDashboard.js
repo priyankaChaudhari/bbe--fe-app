@@ -122,10 +122,10 @@ function DspAdDashboard({ isLoading, data }) {
         isOpen={showDspAdPacingModal.show}
         style={customDspAdPacingStyles}
         ariaHideApp={false}
-        onRequestClose={(e) => {
-          setShowDspAdPacingModal({ show: false });
-          e.stopPropagation();
-        }}
+        // onRequestClose={(e) => {
+        //   setShowDspAdPacingModal({ show: false });
+        //   e.stopPropagation();
+        // }}
         contentLabel="Add team modal">
         <img
           src={CloseIcon}

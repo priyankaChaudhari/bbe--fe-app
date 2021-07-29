@@ -17,14 +17,7 @@ export default function PdfLoadingMsg({
     <PageNotFounds>
       {/* <img src={PageNotFoundImg} alt="emoji" /> */}
       {/* <h5 className="mt-3">Page not found</h5> */}
-      {type === 'error' ? (
-        <p className="not-found">
-          Please wait while contract document is being ready!! check this page
-          after few minutes.
-        </p>
-      ) : (
-        ''
-      )}
+      {type === 'error' ? <p className="not-found">{message}</p> : ''}
       {type === 'loading' ? <h5 className="not-found">{message}</h5> : ''}
     </PageNotFounds>
   );

@@ -2117,7 +2117,7 @@ export default function AdPerformance({
         isOpen={showDspAdPacingModal.show}
         style={customDspAdPacingStyles}
         ariaHideApp={false}
-        onRequestClose={() => setShowDspAdPacingModal({ show: false })}
+        // onRequestClose={() => setShowDspAdPacingModal({ show: false })}
         contentLabel="Add team modal">
         <img
           src={CloseIcon}
