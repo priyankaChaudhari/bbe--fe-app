@@ -43,16 +43,16 @@ import {
   BrandAssetUpload,
   DelegationUpload,
 } from './components/BrandAssetGathering';
-import { StageFavicon } from './theme/images';
+import { ProdFavicon } from './theme/images';
 
 export default function App() {
   useEffect(() => {
     const favicon = document.getElementById('favicon');
     if (
-      process.env.REACT_APP_BASE_APP_URL &&
-      process.env.REACT_APP_BASE_APP_URL.includes('staging')
+      process.env.REACT_APP_ENVIRONMENT &&
+      process.env.REACT_APP_ENVIRONMENT.includes('production')
     ) {
-      favicon.href = StageFavicon;
+      favicon.href = ProdFavicon;
     }
   }, []);
 
