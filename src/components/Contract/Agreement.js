@@ -623,7 +623,10 @@ Agreement.propTypes = {
     ),
   }),
   formData: PropTypes.shape({
-    length: PropTypes.string,
+    length: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
     sales_threshold: PropTypes.string,
 
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),

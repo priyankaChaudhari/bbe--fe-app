@@ -10,15 +10,15 @@
 /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
 
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { Collapse } from 'react-collapse';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
-
-import Theme from '../theme/Theme';
+import SidePanel from './AgreementSidePanelStyle';
+// import Theme from '../theme/Theme';
 import {
   ServiceAgreement,
   CreateAddendum,
@@ -30,14 +30,8 @@ import {
   Advertise,
   CaretUp,
   RedCross,
-  // DefaultUser,
-  FileIcon,
-  CheckFileIcon,
-  EditFileIcon,
-  SignatureIcon,
-  NextActivityLogo,
 } from '../theme/images/index';
-import { Button, ContractFormField, CommonPagination } from './index';
+import { Button, ContractFormField } from './index';
 import {
   AgreementDetails,
   StatementDetails,
@@ -46,12 +40,9 @@ import {
 } from '../constants/FieldConstants';
 import { getLength, getRevenueShare, createAddendum } from '../api';
 import ContractInputSelect from './ContractInputSelect';
-
-import PageLoader from './PageLoader';
+import ContractActivityLog from '../components/Contract/ContractActivityLog';
 import ErrorMsg from './ErrorMsg';
 import CheckBox from './CheckBox';
-
-const _ = require('lodash');
 
 export default function AgreementSidePanel({
   id,
@@ -139,245 +130,6 @@ export default function AgreementSidePanel({
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
 
   const [selectedThreshold, setSelectedThreshold] = useState('');
-
-  const getActivityInitials = (userInfo) => {
-    if (userInfo && userInfo === 'Contract initiated') {
-      return 'SU';
-    }
-    const firstName =
-      (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[0].charAt(0)) ||
-      '';
-    const lastName =
-      (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[1].charAt(0)) ||
-      '';
-
-    return firstName + lastName;
-  };
-
-  const displayMixedLog = (logUser, msg) => {
-    return msg.map((item, index) => {
-      const field = item.split('from')[0];
-      let oldValue = item.split('from')[1].split(' to ')[0];
-      let newValue = item.split('from')[1].split(' to ')[1].split(', ,')[0];
-
-      if (
-        item.includes('annual revenue') ||
-        item.includes('number of employees') ||
-        item.includes('monthly retainer') ||
-        item.includes('sales threshold') ||
-        item.includes('fee') ||
-        item.includes('discount amount') ||
-        item.includes('billing cap')
-      ) {
-        oldValue = oldValue.replace('.00', '');
-        newValue = newValue.replace('.00', '');
-        oldValue =
-          oldValue && oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        newValue =
-          newValue && newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      }
-      return (
-        <>
-          {index === 0 ? logUser : ''}
-          <span>updated {field || ''} from </span> {oldValue || ''}
-          <span> to </span> {newValue === '' ? 'None' : newValue}
-        </>
-      );
-    });
-  };
-
-  const displayLog = (logUser, field, oldValue, newValue) => {
-    return (
-      <>
-        {logUser || ''}
-        <span>updated {field || ''} from </span> {oldValue || ''}
-        <span> to </span> {newValue === '' ? 'None' : newValue}
-      </>
-    );
-  };
-
-  const activityDetail = (item) => {
-    let activityMessage = '';
-    let logUser;
-    let field;
-    let oldValue;
-    let newValue = '';
-    let mixedLog = false;
-    if (
-      item &&
-      item.history_change_reason.includes('created new record by company name')
-    ) {
-      activityMessage = item.history_change_reason.split(
-        'created new record by company name',
-      );
-      return (
-        <>
-          {activityMessage[0]}
-          <span>created new record by company name</span>
-          {activityMessage[1]}
-        </>
-      );
-    }
-    if (item.history_change_reason.includes('deleted')) {
-      activityMessage = item.history_change_reason.split('deleted');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>deleted</span>
-          {activityMessage[1]}
-        </>
-      );
-    }
-
-    if (item.history_change_reason.includes('updated addendum')) {
-      activityMessage = item.history_change_reason.split('updated addendum');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>updated </span>
-          addendum
-        </>
-      );
-    }
-
-    if (item && item.history_change_reason.includes('updated')) {
-      activityMessage = item.history_change_reason.split('updated');
-      logUser = activityMessage[0];
-      field = activityMessage[1].split('from')[0];
-      oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
-      newValue = activityMessage[1]
-        .split('from')[1]
-        .split(' to ')[1]
-        .split(', ,')[0];
-
-      if (activityMessage.length > 2) {
-        mixedLog = true;
-        activityMessage.shift();
-      }
-      if (
-        !mixedLog &&
-        ((item && item.history_change_reason.includes('annual revenue')) ||
-          (item &&
-            item.history_change_reason.includes('number of employees')) ||
-          (item && item.history_change_reason.includes('monthly retainer')) ||
-          (item && item.history_change_reason.includes('sales threshold')) ||
-          (item && item.history_change_reason.includes('fee')) ||
-          (item && item.history_change_reason.includes('discount amount')) ||
-          (item &&
-            item.history_change_reason.includes('custom amazon store price')) ||
-          (item && item.history_change_reason.includes('billing cap')))
-      ) {
-        let fromAmount = '';
-        let toAmount = '';
-        let rowAmount = [];
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
-        ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[0];
-          if (rowAmount.split('.')[1] === '00') {
-            fromAmount = rowAmount.split('.')[0];
-          } else {
-            fromAmount = rowAmount;
-          }
-        }
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
-        ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[1];
-          if (rowAmount.split('.')[1] === '00') {
-            toAmount = rowAmount.split('.')[0];
-          } else {
-            toAmount = rowAmount;
-          }
-        }
-        return (
-          <>
-            {activityMessage && activityMessage[0]}
-            <span>
-              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
-              from{' '}
-            </span>{' '}
-            {fromAmount === ''
-              ? 'None'
-              : fromAmount &&
-                fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            <span> to </span>{' '}
-            {toAmount === ''
-              ? 'None'
-              : toAmount &&
-                toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </>
-        );
-      }
-
-      return activityMessage && activityMessage[1].includes('addendum')
-        ? item && item.history_change_reason
-        : mixedLog
-        ? displayMixedLog(logUser, activityMessage)
-        : displayLog(logUser, field, oldValue, newValue);
-    }
-    if (item && item.history_change_reason.includes('requested for')) {
-      activityMessage = item.history_change_reason.split('requested for');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>requested for</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    if (item && item.history_change_reason.includes('added')) {
-      activityMessage = item.history_change_reason.split('added');
-      let value;
-      if (
-        item &&
-        item.history_change_reason.includes('Amazon Store Package Custom')
-      ) {
-        // activityMessage = item.history_change_reason.split('as')[1];
-        value = activityMessage[1].split('as');
-        return (
-          <>
-            {activityMessage && activityMessage[0]}
-            <span>added</span>
-            {value && value[0]}
-            as
-            {value &&
-              value[1] &&
-              value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </>
-        );
-      }
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>added</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    if (item && item.history_change_reason.includes('removed')) {
-      activityMessage = item.history_change_reason.split('removed');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>removed</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    return item && item.history_change_reason ? item.history_change_reason : '';
-  };
-
-  const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    getContractActivityLogInfo(currentPage);
-  };
 
   useEffect(() => {
     getLength().then((len) => {
@@ -2121,74 +1873,6 @@ export default function AgreementSidePanel({
     return accountLength;
   };
 
-  const getContractStatusData = (type) => {
-    const status =
-      (agreementData &&
-        agreementData.contract_status &&
-        agreementData.contract_status.value) ||
-      '';
-    let statusClass = '';
-    let statusSrc = '';
-    let dispalyStatus = '';
-
-    if (status !== '') {
-      switch (status) {
-        case 'pending contract':
-          statusClass = 'pending-contract';
-          statusSrc = FileIcon;
-          dispalyStatus = 'Pending Contract';
-          break;
-
-        case 'pending contract approval':
-          statusClass = '';
-          statusSrc = CheckFileIcon;
-          dispalyStatus = 'Pending Approval';
-          break;
-
-        case 'pending contract signature':
-          statusClass = 'pending-signature';
-          statusSrc = EditFileIcon;
-          dispalyStatus = 'Pending Signature';
-          break;
-
-        case 'pending account setup':
-          statusClass = 'signature';
-          statusSrc = SignatureIcon;
-          dispalyStatus = 'Signed';
-          break;
-
-        case 'active':
-          statusClass = 'signature';
-          statusSrc = SignatureIcon;
-          dispalyStatus = 'Signed';
-          break;
-
-        case 'inactive':
-          statusClass = '';
-          statusSrc = '';
-          dispalyStatus = 'Inactive';
-          break;
-
-        default:
-          statusClass = 'pending-contract';
-          statusSrc = 'FileIcon';
-          dispalyStatus = 'Signed';
-          break;
-      }
-    }
-
-    if (type === 'class') {
-      return statusClass;
-    }
-    if (type === 'src') {
-      return statusSrc;
-    }
-    if (type === 'status') {
-      return dispalyStatus;
-    }
-    return '';
-  };
-
   const generateMultiChoice = (item) => {
     return (
       <Select
@@ -2579,14 +2263,6 @@ export default function AgreementSidePanel({
 
   const changeQuantity = (oneTimeServiceData, flag) => {
     showFooter(true);
-    // setSectionError({ ...sectionError, statement: 0 });
-    // if (
-    //   formData &&
-    //   formData.contract_type &&
-    //   formData.contract_type.toLowerCase().includes('one')
-    // ) {
-    //   setSectionError({ ...sectionError, agreement: 0 });
-    // }
 
     clearOneTimeQntyError(oneTimeServiceData);
     if (
@@ -2884,16 +2560,6 @@ export default function AgreementSidePanel({
                                     oneTimeServiceData.value) ||
                                 item.service_id === oneTimeServiceData.value,
                             )
-                            //    ||
-                            // (agreementData &&
-                            //   agreementData.additional_one_time_services &&
-                            //   agreementData.additional_one_time_services
-                            //     .length &&
-                            //   agreementData.additional_one_time_services.find(
-                            //     (item) =>
-                            //       item.service &&
-                            //       item.service.id === oneTimeServiceData.value,
-                            //   ))
                           }
                         />
                         <span className="checkmark" />
@@ -2916,12 +2582,6 @@ export default function AgreementSidePanel({
                           className="decrement"
                           onClick={() => {
                             changeQuantity(oneTimeServiceData, 'minus');
-                            // handleChange(
-                            //   event,
-                            //   'additional_one_time_services',
-                            //   'quantity',
-                            //   oneTimeServiceData,
-                            // );
                           }}>
                           {' '}
                           <img className="minus-icon" src={MinusIcon} alt="" />
@@ -3371,89 +3031,6 @@ export default function AgreementSidePanel({
     );
   };
 
-  const renderContractActivityPanel = () => {
-    return (
-      <>
-        {agreementData &&
-        agreementData.contract_status &&
-        agreementData.contract_status.value ? (
-          <div className={`contract-status ${getContractStatusData('class')}`}>
-            <img
-              width="16px"
-              className="contract-file-icon"
-              src={getContractStatusData('src')}
-              alt=""
-            />
-            {_.startCase(getContractStatusData('status'))}
-          </div>
-        ) : null}
-        <div className="activity-log">Contract Activity</div>
-        {activityLoader === true || loader ? (
-          <PageLoader component="activityLog" color="#FF5933" type="page" />
-        ) : activityData && activityData.length !== 0 ? (
-          <>
-            {activityData.map((item) => (
-              <ul className="menu">
-                <li>
-                  {(images &&
-                    images.find(
-                      (op) => op.entity_id === item.history_user_id,
-                    ) &&
-                    images.find((op) => op.entity_id === item.history_user_id)
-                      .presigned_url) ||
-                  (item.history_change_reason &&
-                    item.history_change_reason.split(' ').slice(0, 2) &&
-                    item.history_change_reason.split(' ').slice(0, 2)[0] ===
-                      'System' &&
-                    item.history_change_reason.split(' ').slice(0, 2)[1] ===
-                      '') ? (
-                    <img
-                      src={
-                        item.history_change_reason.split(' ').slice(0, 2) &&
-                        item.history_change_reason.split(' ').slice(0, 2)[0] ===
-                          'System'
-                          ? NextActivityLogo
-                          : images.find(
-                              (op) => op.entity_id === item.history_user_id,
-                            ).presigned_url
-                      }
-                      className="default-user-activity"
-                      alt="pic"
-                    />
-                  ) : (
-                    <div className="avatarName float-left mr-3">
-                      {getActivityInitials(item.history_change_reason)}
-                    </div>
-                  )}
-
-                  <div className="activity-user">
-                    {activityDetail(item)}
-                    <div className="time-date mt-1">
-                      {item && item.history_date ? item.history_date : ''}
-                    </div>
-                  </div>
-                  <div className="clear-fix" />
-                </li>
-              </ul>
-            ))}
-            {activityCount > 10 ? (
-              <Footer className="pdf-footer">
-                <CommonPagination
-                  count={activityCount}
-                  pageNumber={pageNumber || 1}
-                  handlePageChange={handlePageChange}
-                  showLessItems
-                />
-              </Footer>
-            ) : null}
-          </>
-        ) : isApicalled ? (
-          <div className="ml-3 mt-3">No activity log found.</div>
-        ) : null}
-      </>
-    );
-  };
-
   const displayListingOptimizations = () => {
     return (
       <>
@@ -3551,11 +3128,6 @@ export default function AgreementSidePanel({
       }>
       <div className="sidebar">
         <>
-          {/* {formData &&
-          formData.contract_status &&
-          formData.contract_status.value === 'pending contract signature' ? (
-            ''
-          ) :  */}
           {isEditContract ? (
             <>
               <div
@@ -3668,59 +3240,10 @@ export default function AgreementSidePanel({
                   )}
                 </h4>
 
-                {/* <h4
-                  className={
-                    sectionError && sectionError.agreement
-                      ? 'sendar-details error-container'
-                      : 'sendar-details'
-                  }>
-                  {formData &&
-                  formData.contract_type &&
-                  formData.contract_type.toLowerCase().includes('one')
-                    ? 'One Time Service Agreement'
-                    : 'Service Agreement'}
-                  {sectionError && sectionError.agreement ? (
-                    openCollapse.agreement ? (
-                      <img
-                        className="red-cross  "
-                        src={RedCross}
-                        alt="right-check"
-                      />
-                    ) : (
-                      <div className="error-bg">
-                        <img
-                          className="red-cross "
-                          src={RedCross}
-                          alt="right-check"
-                        />
-                      </div>
-                    )
-                  ) : showRightTick('service_agreement') ? (
-                    <img
-                      className="green-check-select"
-                      src={GreenCheck}
-                      alt="right-check"
-                    />
-                  ) : (
-                    ''
-                  )}
-                  <div className="error-found">
-                    {sectionError && sectionError.agreement
-                      ? `${sectionError.agreement} ${
-                          sectionError.agreement === 1
-                            ? 'error found'
-                            : 'errors found'
-                        }`
-                      : ''}
-                  </div>
-                  {/* {checkError()} *
-                  {/* {isSectionError ? } 
-                </h4> */}
-
                 <div className="clear-fix" />
               </div>
               <Collapse isOpened={openCollapse.agreement}>
-                {loader ? null : ( // /> //   type="page" //   color="#FF5933" //   component="activityLog" // <PageLoader
+                {loader ? null : (
                   <ul className="collapse-inner">
                     {AgreementDetails.map((item) =>
                       item.key !== 'contract_address' ? (
@@ -4319,25 +3842,6 @@ export default function AgreementSidePanel({
                             <li key={item.key}>
                               <ContractFormField>
                                 <label htmlFor={item.key}>{item.label}</label>
-                                {/* {item.key === 'dsp_fee' ? (
-                                  <>
-                                    <img
-                                      src={InfoIcon}
-                                      alt="search cursor"
-                                      data-tip="The minimum monthly budget is $10,000."
-                                      data-for={item.key}
-                                      className="info-icon"
-                                    />
-                                    <ReactTooltip
-                                      id={item.key}
-                                      aria-haspopup="true"
-                                      place="bottom"
-                                    />
-                                  </>
-                                ) : (
-                                  ''
-                                )} */}
-
                                 {generateHTML(item)}
                                 {displayError(item)}
                               </ContractFormField>
@@ -4431,7 +3935,18 @@ export default function AgreementSidePanel({
               </Collapse>
             </>
           ) : (
-            renderContractActivityPanel()
+            <ContractActivityLog
+              activityLoader={activityLoader}
+              activityData={activityData}
+              images={images}
+              activityCount={activityCount}
+              pageNumber={pageNumber}
+              isApicalled={isApicalled}
+              agreementData={agreementData}
+              setPageNumber={setPageNumber}
+              getContractActivityLogInfo={getContractActivityLogInfo}
+              loader={loader}
+            />
           )}
         </>
       </div>
@@ -4520,7 +4035,11 @@ AgreementSidePanel.propTypes = {
     additional_services: PropTypes.arrayOf(PropTypes.array),
     start_date: PropTypes.string,
     company_name: PropTypes.string,
-    primary_marketplace: PropTypes.string,
+    primary_marketplace: PropTypes.shape({
+      fee: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
     additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
     additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
@@ -4574,7 +4093,7 @@ AgreementSidePanel.propTypes = {
     additional_services: PropTypes.arrayOf(PropTypes.array),
     start_date: PropTypes.string,
     company_name: PropTypes.string,
-    primary_marketplace: PropTypes.string,
+    primary_marketplace: PropTypes.shape(PropTypes.object),
     additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
     additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
@@ -4588,7 +4107,11 @@ AgreementSidePanel.propTypes = {
     additional_services: PropTypes.arrayOf(PropTypes.array),
     start_date: PropTypes.string,
     company_name: PropTypes.string,
-    primary_marketplace: PropTypes.string,
+    primary_marketplace: PropTypes.shape({
+      fee: PropTypes.number,
+      name: PropTypes.string,
+      id: PropTypes.string,
+    }),
     additional_marketplaces: PropTypes.arrayOf(PropTypes.array),
     additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
     additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
@@ -4649,455 +4172,3 @@ AgreementSidePanel.propTypes = {
   fetchUncommonOptions: PropTypes.func,
   originalAddendumData: PropTypes.shape(PropTypes.object),
 };
-
-const SidePanel = styled.div`
-    min-width: 60px;
-    z-index: 1;
-    width: 336px;
-    position: fixed;
-    top: 70px;
-    right: 0;
-    height: 85%;
-    background: ${Theme.white};
-    border-left: 1px solid ${Theme.gray7};
-    overflow-y: auto;
-   
-    
-    &.pdf-sidebar {
-      padding-bottom: 70px;
-      height: 90%;
-    }
-
-    &.contract-sidebar {
-     padding-bottom: 270px;
-
-    }
-
-    .sidebar {
-      /* width: 335px; */
-    }
-    
-    .error-found {
-      color: ${Theme.red};
-      font-size: ${Theme.small};
-      word-spacing: normal;
-      font-weight: 300;
-    }
-    
-  .sendar-details {
-    color: ${Theme.black};
-    font-size: ${Theme.extraMedium};
-    font-family: ${Theme.baseFontFamily};
-    text-transform: inherit;
-    margin-top: 6px;
-    margin-left: 16px;
-    float: left;
-    word-spacing: 3px;
-    max-width: 237px;
-   
-    &.error-container {
-     margin-top: -3px;
-    }
-   
-  
-   .green-check-select {
-     width: 16px;
-     position: absolute;
-     right: 21px;
-     top: 22px;
-    }
-
-    .red-cross {
-      width: 16px;
-      position: absolute;
-      right: 21px;
-      top: 25px;
-    }
-    
-   .error-bg {
-      height: 63px;
-      background: ${Theme.lightRed};
-      right: 0px;
-      border-right: 2px solid #D63649;
-      z-index: -2;
-      top: 0px;
-      position: absolute;
-      width: 46px;
-
-      .red-cross {
-        width: 16px;
-        position: absolute;
-        right: 13px;
-        top: 25px;
-      }
-    }
-    .one-time-service {
-      height: 85px;
-      .red-cross {
-       top: 35px;
-      }
-    }
- }
-
-  .sender-profile {
-    border: 1px solid ${Theme.gray9};
-    border-radius: 100%;
-    width: 48px;
-    height: 48px;
-  }
-  .sender-name {
-    text-transform: capitalize;
-    color: ${Theme.gray90};
-    font-size: ${Theme.medium};
-  }
-
-  .sticky-btn {
-    bottom: 100px;
-    position: absolute;
-  }
-  .service-detail {
-    padding:20px 20px 0 20px;
-  }
-  .service-agre {
-    float: left;
-    width: 32px;
-  }
-  h4 .sendar-details {
-    float: left;
-    margin: 9px 0px 0px 20px;
-  }
-}
-  
-.add-market-place {
-  font-size: 12px;
-  color:${Theme.orange};
-}
-
-.collapse-btn {
-  width:100%;
-  padding: 15px;
-  cursor:pointer;
-  position: relative;
-
-}
-.collapse-container {
-  padding: 15px;
-}
-
-.collapse-inner {
-    margin:0;
-    padding:0;
-    list-style-type:none;
-   
-    li {
-        padding: 8px 20px;
-
-        &:focus {
-          background: ${Theme.lightOrange};
-        }
-         .small-para {
-          font-size: ${Theme.extraNormal};
-          color: ${Theme.gray40};
-          line-height: 22px;
-         }
-        .edit-folder-icon {
-          vertical-align: text-top;
-          width: 17px;
-        }
-
-        .label-heading {
-          color: ${Theme.gray40};
-          font-size:${Theme.verySmall};
-          text-transform: uppercase;
-          font-weight: bold;
-        }
-        .listing-optimazation {
-          color:  ${Theme.gray85};
-          font-size: ${Theme.extraNormal};
-        }
-
-        .text-end {
-          text-align: end;
-        }
-
-        .increment {
-           border: 1px solid ${Theme.gray45};
-            border-radius: 0 2px 2px 0;
-            width: 26px;
-            height: 26px;
-            padding 4px;
-            background: ${Theme.gray8};
-            vertical-align: bottom;
-            cursor: pointer;
-
-           .plus-icon{
-             width: 10px;
-           }
-
-           &:focus{
-             outline: none;
-           }
-        }
-        .decrement {
-           border: 1px solid ${Theme.gray45};
-            border-radius: 2px 0 0 2px;
-            width: 26px;
-            height: 26px;
-            vertical-align: bottom;
-            padding: 4px;
-            background: ${Theme.gray8};
-            font-family: ${Theme.titleFontFamily};
-            cursor:pointer;
-
-           .minus-icon {
-              width: 10px;
-           }
-             &:focus{
-             outline:none;
-           }
-        }
-        .max-min-number {
-          width: 26px;
-          border: 1px solid ${Theme.gray45};
-          vertical-align: bottom;
-          color: ${Theme.black};
-          height: 26px;
-          font-size: 14px;
-          font-family: ${Theme.titleFontFamily};
-          text-align: center;
-        }
-
-        .contract-info-date {
-          line-height: 22px;
-          font-size: 14px;
-          color: ${Theme.gray40};
-        }
-        .add-discount {
-          color: #FF4817;
-          font-size: 11px;
-          position: absolute;
-          right: 0;
-          top: 4px;
-          cursor: pointer;
-        }
-        .thershold {
-          background-color: ${Theme.gray8};
-           border-radius: 2px;
-          
-          .days-tab {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-           
-            .thresholdChecked {
-              background-color: ${Theme.white};
-              border: 1px solid ${Theme.gray90};
-              color: ${Theme.gray90};
-              /* width: 100%; */
-              font-family: ${Theme.titleFontFamily};
-                 
-            }
-           
-            li{
-              display: inline-block;
-              text-align: center;
-              width: 25%;
-              border: 1px solid ${Theme.gray45};
-            
-              label {
-                color: ${Theme.black};
-                padding: 9px 8px;
-                height: 36px;
-                font-size: ${Theme.extraNormal};
-                display: inline-block;
-                cursor: pointer;
-
-                  &.thresholdLable {
-                    text-transform: uppercase;
-                  }
-              }
-            }
-          }
-        }
-     }
-   } 
-   .contract-status {
-      color: ${Theme.gray85};
-      font-size: 14px;
-      border-radius: 2px;
-      text-align: center;
-      background: ${Theme.extraLightYellow};
-      padding: 12px 0;
-      min-height: 40px;
-      margin: 10px 0px 10px 10px;
-
-      &.pending-contract {
-        background: ${Theme.gray8};
-      }
-      &.pending-signature {
-        background: #FFDED6;
-      }
-      &.signature {
-        background: ${Theme.white};
-        border: 1px solid ${Theme.gray45};
-      }
-   }
-
-   .contract-file-icon {
-      vertical-align: bottom;
-      margin-right: 7px;
-   }
-
-  .activity-log {
-    font-size: ${Theme.extraMedium};
-    padding: 20px 20px 0 15px;
-    color: ${Theme.black};
-    font-weight: 600;
-  }
-  .current-agreement-title {
-      padding: 20px;
-      text-transform: uppercase;
-      border-bottom: 1px solid ${Theme.gray9};
-  }
-  .menu{
-     padding:0;
-      li {
-        color:${Theme.white};
-        text-align: center;
-        font-size: 18px;
-        font-weight: 900;
-        list-style: none;
-        display: flex;
-        text-decoration: none;
-        padding: 10px 0px 15px 15px;
-      
-        &:last-child {
-          border-bottom:none;
-        }
-
-        .default-user-activity {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          float: left;
-          margin-right: 15px;
-          margin-top: -2px;
-        }
-
-        .activity-user {
-          font-size: ${Theme.normal};
-          color:${Theme.gray90};
-          float: left;
-          word-break: break-word;
-          width: 85%;
-          text-align: left;
-          span {
-            color:${Theme.gray35};
-            font-weight: 500;
-          }
-        }
-
-        .default-user {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          float: left;
-          margin-right: 10px;
-        }
-
-        .time-date {
-          color:${Theme.gray40};
-          font-size: ${Theme.small};
-          font-weight: 500;
-          text-align: left;
-        }
-         .pdf-download {
-          width:33px;
-          height:33px;
-          margin-left: 10px;
-          padding:6px;
-          cursor:pointer;
-          float:right;
-
-          &:hover{
-            background:${Theme.gray8};
-            border-radius: 50%;
-            width:33px;
-            height:33px;
-            padding:6px;
-          }
-          
-        }
-        
-      }
-
-    }
-  }
-  @media only screen and (max-width: 350px) {  
-  
-    .sendar-details {
-      max-width: 237px !important;
-      .one-time-service {
-        height: 85px !important; 
-        .red-cross {
-          top: 35px !important;
-        }
-      }
-    }
-  }
-
-
-  @media only screen and (max-width: 991px) {  
-    z-index: 1;
-    padding-bottom: 390px;
-    width: 100%;
-    position: fixed;
-    top: 163px;
-    right: 0;
-    left:0;
-  .sendar-details {
-    max-width: 100%;
-      .one-time-service {
-        height: 63px;
-        .red-cross {
-          top: 25px;
-        }
-      }
-    }
-  }
-
-   @media only screen and (min-width: 1500px)  {
-     width: 406px;
-     height: 90%;
-     .sidebar {
-      width: 400px;
-    }
-    .sendar-details {
-      max-width: 100%;
-      .one-time-service {
-        height: 63px;
-        .red-cross {
-          top: 25px;
-        }
-      }
-    }
-   }
-`;
-
-const Footer = styled.div`
-  // border: 1px solid ${Theme.gray7};
-  // bottom: 79px;
-  // background: ${Theme.white};
-  // box-shadow: ${Theme.boxShadow};
-  // position: fixed;
-  // min-height: 60px;
-  // z-index: 2;
-
-  // &.pdf-footer {
-  //   bottom: 0px;
-  // }
-  // @media only screen and (max-width: 991px) {
-  //   width: 100%;
-  //   bottom: 134px;
-  // }
-`;
