@@ -918,6 +918,10 @@ export const WhiteCard = styled.div`
     vertical-align: middle;
     float: left;
   }
+  .image-title {
+    float: left;
+    font-size: ${Theme.extraNormal};
+  }
 
   .service-icon {
     margin-right: 10px;

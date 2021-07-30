@@ -16,6 +16,7 @@ import {
   ServiceIcon,
   SignatureIcon,
   WhiteArrowRight,
+  CircleBellIcon,
 } from '../../theme/images';
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
@@ -207,13 +208,45 @@ export default function SetupCheckList({ id, brandId }) {
               </div>
             </div>
           </fieldset>
-          {/* <WhiteCard className="mt-3">
-        <p className="black-heading-title mt-2 ">Creative Schedule</p>
+          <WhiteCard className="mt-3">
+            <p className="black-heading-title mt-2 ">Creative Schedule</p>
+            <fieldset className="shape-without-border extra-radius">
+              <div className="row">
+                <div className="col-5">
+                  <img
+                    className="solid-icon"
+                    width="34px"
+                    src={CircleBellIcon}
+                    alt="bell"
+                  />
+                  <div className="image-title">
+                    <p className="black-heading-title recurring-service mt-0  mb-0">
+                      Product Assets Requested
+                    </p>
+                    <p className="gray-normal-text m-0">
+                      0/5 product assets uploaded
+                    </p>
+                  </div>
+                </div>
 
-        <p className="no-result-found  text-center mt-4 mb-4">
-          Your creative schedule is being generated
-        </p>
-      </WhiteCard> */}
+                <div className="col-7 text-right">
+                  {' '}
+                  <Button className="btn-primary upload-asset  w-sm-100">
+                    Upload Assets{' '}
+                    <img
+                      className="btn-icon ml-2"
+                      width="16px"
+                      src={WhiteArrowRight}
+                      alt=""
+                    />{' '}
+                  </Button>
+                </div>
+              </div>
+            </fieldset>
+            <p style={{ fontSize: '14px' }} className="  text-center mt-5 mb-4">
+              Your creative schedule is being generated
+            </p>
+          </WhiteCard>
           <WhiteCard className="mt-3">
             <p className="black-heading-title mt-2 ">
               Active Agreement(s) ({agreementData.count})
