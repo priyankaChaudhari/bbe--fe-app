@@ -328,7 +328,7 @@ export default function Statement({
         ? `<tr>
             <td class="total-service-bordless"> Sub-total</td>
             <td class="total-service-bordless text-right">
-            ${totalFees.monthlySubTotal
+            $${totalFees.monthlySubTotal
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </td>
