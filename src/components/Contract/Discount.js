@@ -17,6 +17,7 @@ function Discount({
   setShowDiscountModal,
   formData,
   setFormData,
+  setDetails,
   // getContractDetails,
   // setIsEditContract,
 }) {
@@ -171,6 +172,7 @@ function Discount({
 
       if (res && res.status === 200) {
         setShowDiscountModal(false);
+        setDetails(res.data);
         // dispatch(getAccountDetails(id));
         // getContractDetails();
         // setIsEditContract(false);
@@ -427,6 +429,7 @@ Discount.defaultProps = {
   setShowDiscountModal: () => {},
   formData: {},
   setFormData: () => {},
+  setDetails: () => {},
   // getContractDetails: () => {},
   // setIsEditContract: () => {},
 };
@@ -447,7 +450,7 @@ Discount.propTypes = {
     one_time_discount_amount: PropTypes.string,
   }),
   setFormData: PropTypes.func,
-  // getContractDetails: PropTypes.func,
+  setDetails: PropTypes.func,
   // setIsEditContract: PropTypes.func,
 };
 
