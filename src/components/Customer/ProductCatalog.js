@@ -30,6 +30,8 @@ export default function ProductCatalog({ id }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [viewComponent, setViewComponent] = useState('product');
   const [data, setData] = useState([]);
+  const [requestedProducts, setRequestedProducts] = useState([]);
+
   const [filters, setFilters] = useState({ 'order-by': 'title' });
   const sortOptions = [
     { label: 'Name (A-Z)', value: 'title' },
@@ -72,9 +74,17 @@ export default function ProductCatalog({ id }) {
     });
   }, [id, filters]);
 
+  const onRequestClick = (item) => {
+    setRequestedProducts([...requestedProducts, item.id]);
+  };
+
   const generateHTML = (item) => {
     return (
-      <label style={{ display: 'contents' }} htmlFor="add-addendum">
+      <div
+        style={{ display: 'contents' }}
+        htmlFor={item.id}
+        // className={requestedProducts.length && item.status !== 'unoptimized' ? 'disabled' : ''}
+      >
         <tr width="100%">
           <td className="product-catalog-body">
             {' '}
@@ -82,7 +92,8 @@ export default function ProductCatalog({ id }) {
               <input
                 className="check-box-product-list"
                 type="checkbox"
-                id="add-addendum"
+                id={item.id}
+                checked={requestedProducts.includes(item.id)}
               />
               <span className="checkmark" />
               <img
@@ -125,22 +136,29 @@ export default function ProductCatalog({ id }) {
           </td>
           <td className="product-catalog-body">
             {item.status === 'unoptimized' ? (
-              <div className="request">
-                {' '}
-                <img
-                  className="request-plan"
-                  width="18px"
-                  src={RequestPlan}
-                  alt="plan"
-                />{' '}
-                Request
-              </div>
+              requestedProducts.includes(item.id) ? (
+                <div className="request">Selected</div>
+              ) : (
+                <div
+                  className="request"
+                  role="presentation"
+                  onClick={() => onRequestClick(item)}>
+                  {' '}
+                  <img
+                    className="request-plan"
+                    width="18px"
+                    src={RequestPlan}
+                    alt="plan"
+                  />{' '}
+                  Request
+                </div>
+              )
             ) : (
               ''
             )}
           </td>
         </tr>
-      </label>
+      </div>
     );
   };
   const getSelectPlaceholder = (item) => {
@@ -288,178 +306,196 @@ export default function ProductCatalog({ id }) {
       </div>
     );
   };
+
   return (
-    <div className="col-lg-6 col-12">
-      <WhiteCard>
-        {' '}
-        <Tabs>
-          <ul className="tabs">
-            <li
-              className={viewComponent === 'product' ? 'active' : ''}
-              onClick={() => setViewComponent('product')}
-              role="presentation">
-              Product Catalog
-            </li>
-            <li
-              className={viewComponent === 'schedule' ? 'active' : ''}
-              onClick={() => setViewComponent('schedule')}
-              role="presentation">
-              Schedule
-            </li>
-          </ul>
-        </Tabs>
-        {displaySearchSortPanel()}
-        {(data && data.length === 0) || data === undefined ? (
-          <div className="text-center mt-3">No record found.</div>
-        ) : (
-          <>
-            {viewComponent === 'product' ? (
-              <>
-                {isLoading.loader && isLoading.type === 'page' ? (
-                  <PageLoader
-                    component="agrement-details"
-                    color="#FF5933"
-                    type="detail"
-                    width={40}
-                    height={40}
-                  />
-                ) : (
-                  <>
-                    <Table className="mt-0 product-catalog-laptop ">
-                      <tr>
-                        <th width="55%" className="product-catalog-header">
-                          Product Name / ASIN / SKU
-                        </th>
-                        <th width="25%" className="product-catalog-header">
-                          Status
-                        </th>
-                        <th width="20%" className="product-catalog-header">
-                          {' '}
-                          &nbsp;
-                        </th>
-                      </tr>
-                      <tbody>
-                        {data &&
-                          data.map((item) => (
-                            <React.Fragment key={item.id}>
-                              {generateHTML(item)}
-                            </React.Fragment>
-                          ))}
-                      </tbody>
-                    </Table>
-                    <TableMobileView className="mt-0 product-catalog-mobile ">
-                      <div className="table-mob-header">
-                        <div className="row">
-                          <div className="col-8">Product Name / ASIN / SKU</div>
-                          <div className="col-4">Status</div>
+    <>
+      <div className="col-lg-6 col-12">
+        <WhiteCard>
+          {' '}
+          <Tabs>
+            <ul className="tabs">
+              <li
+                className={viewComponent === 'product' ? 'active' : ''}
+                onClick={() => setViewComponent('product')}
+                role="presentation">
+                Product Catalog
+              </li>
+              <li
+                className={viewComponent === 'schedule' ? 'active' : ''}
+                onClick={() => setViewComponent('schedule')}
+                role="presentation">
+                Schedule
+              </li>
+            </ul>
+          </Tabs>
+          {displaySearchSortPanel()}
+          {(data && data.length === 0) || data === undefined ? (
+            <div className="text-center mt-3">No record found.</div>
+          ) : (
+            <>
+              {viewComponent === 'product' ? (
+                <>
+                  {isLoading.loader && isLoading.type === 'page' ? (
+                    <PageLoader
+                      component="agrement-details"
+                      color="#FF5933"
+                      type="detail"
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <>
+                      <Table className="mt-0 product-catalog-laptop ">
+                        <tr>
+                          <th width="55%" className="product-catalog-header">
+                            Product Name / ASIN / SKU
+                          </th>
+                          <th width="25%" className="product-catalog-header">
+                            Status
+                          </th>
+                          <th width="20%" className="product-catalog-header">
+                            {' '}
+                            &nbsp;
+                          </th>
+                        </tr>
+                        <tbody>
+                          {data &&
+                            data.map((item) => (
+                              <React.Fragment key={item.id}>
+                                {generateHTML(item)}
+                              </React.Fragment>
+                            ))}
+                        </tbody>
+                      </Table>
+                      <TableMobileView className="mt-0 product-catalog-mobile ">
+                        <div className="table-mob-header">
+                          <div className="row">
+                            <div className="col-8">
+                              Product Name / ASIN / SKU
+                            </div>
+                            <div className="col-4">Status</div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="table-mob-body">
-                        {data &&
-                          data.map((item) => (
-                            <React.Fragment key={item.id}>
-                              <label
-                                style={{ display: 'contents' }}
-                                htmlFor="12">
-                                <div className="row">
-                                  <div className="col-12">
-                                    <div className="product-catalog-image">
-                                      <input
-                                        className="check-box-product-list"
-                                        type="checkbox"
-                                        id="12"
-                                      />
-                                      <span className="checkmark" />
-                                      <img
-                                        className="product-image"
-                                        src={item.main_image || Logo}
-                                        alt=""
-                                      />{' '}
-                                    </div>
-                                    <div className="product-data">
-                                      <div className="product-name">
-                                        {item.title || ''}
+                        <div className="table-mob-body">
+                          {data &&
+                            data.map((item) => (
+                              <React.Fragment key={item.id}>
+                                <label
+                                  style={{ display: 'contents' }}
+                                  htmlFor={item.id}>
+                                  <div className="row">
+                                    <div className="col-12">
+                                      <div className="product-catalog-image">
+                                        <input
+                                          className="check-box-product-list"
+                                          type="checkbox"
+                                          id={item.id}
+                                        />
+                                        <span className="checkmark" />
+                                        <img
+                                          className="product-image"
+                                          src={item.main_image || Logo}
+                                          alt=""
+                                        />{' '}
                                       </div>
-                                      <div className="product-id">
-                                        {item.brand || ''} / {item.asin || ''} /{' '}
-                                        {item.total_variant || 0} Variations
+                                      <div className="product-data">
+                                        <div className="product-name">
+                                          {item.title || ''}
+                                        </div>
+                                        <div className="product-id">
+                                          {item.brand || ''} / {item.asin || ''}{' '}
+                                          / {item.total_variant || 0} Variations
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                  <div className="col-8 mt-3">
-                                    <div
-                                      className={`status ml-5 ${
-                                        item.status.includes('received') ||
-                                        item.status.includes('requested')
-                                          ? item.status.replace(' ', '-')
-                                          : item.status
-                                      }`}>
-                                      {' '}
-                                      <span
-                                        className={`bullet-point ${
+                                    <div className="col-8 mt-3">
+                                      <div
+                                        className={`status ml-5 ${
                                           item.status.includes('received') ||
                                           item.status.includes('requested')
                                             ? item.status.replace(' ', '-')
                                             : item.status
-                                        }`}
-                                      />
-                                      <span className="status-text">
+                                        }`}>
                                         {' '}
-                                        {item.status}{' '}
-                                      </span>
+                                        <span
+                                          className={`bullet-point ${
+                                            item.status.includes('received') ||
+                                            item.status.includes('requested')
+                                              ? item.status.replace(' ', '-')
+                                              : item.status
+                                          }`}
+                                        />
+                                        <span className="status-text">
+                                          {' '}
+                                          {item.status}{' '}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="col-4 mt-3 text-center">
+                                      {item.status === 'unoptimized' ? (
+                                        <div
+                                          className="request"
+                                          role="presentation"
+                                          onClick={() => onRequestClick(item)}>
+                                          {' '}
+                                          <img
+                                            className="request-plan"
+                                            width="18px"
+                                            src={RequestPlan}
+                                            alt="plan"
+                                          />{' '}
+                                          Request
+                                        </div>
+                                      ) : (
+                                        ''
+                                      )}
                                     </div>
                                   </div>
-                                  <div className="col-4 mt-3 text-center">
-                                    {item.status === 'unoptimized' ? (
-                                      <div className="request">
-                                        {' '}
-                                        <img
-                                          className="request-plan"
-                                          width="18px"
-                                          src={RequestPlan}
-                                          alt="plan"
-                                        />{' '}
-                                        Request
-                                      </div>
-                                    ) : (
-                                      ''
-                                    )}
-                                  </div>
-                                </div>
-                              </label>
-                            </React.Fragment>
-                          ))}
-                      </div>
-                    </TableMobileView>
-                  </>
-                )}
-              </>
-            ) : (
-              ''
-            )}
-          </>
-        )}
-      </WhiteCard>
-      <div style={{ paddingTop: '20rem' }}>
-        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12 text-right">
-                <span className="skip-step cursor" role="presentation">
-                  1 product selected
-                </span>
+                                </label>
+                              </React.Fragment>
+                            ))}
+                        </div>
+                      </TableMobileView>
+                    </>
+                  )}
+                </>
+              ) : (
+                ''
+              )}
+            </>
+          )}
+        </WhiteCard>
+        {requestedProducts.length ? (
+          <div style={{ paddingTop: '20rem' }}>
+            <CustomerDetailsFooter
+              className="mt-5"
+              data-test="brandAssetFooter">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-12 text-right">
+                    <span className="skip-step cursor" role="presentation">
+                      {requestedProducts.length === 1
+                        ? `${requestedProducts.length} product selected`
+                        : `${requestedProducts.length} products selected`}
+                    </span>
 
-                <Button className="btn-primary">Request Assets</Button>
+                    <Button className="btn-primary">Request Assets</Button>
 
-                <Button className="btn-transparent w-50 on-boarding ml-4">
-                  Cancel
-                </Button>
+                    <Button
+                      className="btn-transparent w-50 on-boarding ml-4"
+                      onClick={() => setRequestedProducts([])}>
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            </CustomerDetailsFooter>
           </div>
-        </CustomerDetailsFooter>
+        ) : (
+          ''
+        )}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -470,14 +506,13 @@ ProductCatalog.propTypes = {
 const CustomerDetailsFooter = styled.div`
   border: 1px solid ${Theme.gray7};
   bottom: 0px;
-  left: 0;
   background: ${Theme.white};
   position: fixed;
   min-height: 60px;
   z-index: 2;
   box-shadow: inset 0 1px 0 0 #e2e2ea;
   padding-top: 270px;
-  width: 100%;
+  /* width: 100%; */
   padding: 8px 0;
 
   .skip-step {
@@ -493,6 +528,7 @@ const CustomerDetailsFooter = styled.div`
     }
   }
 `;
+
 const TableMobileView = styled.div`
   display: none;
   @media only screen and (max-width: 767px) {

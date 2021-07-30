@@ -135,7 +135,8 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'performance',
+    customerSelectedTab || 'product catalog',
+    // 'performance',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
@@ -337,7 +338,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      // { value: 'product catalog', label: 'Product Catalog' },
+      { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -348,7 +349,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      // { value: 'product catalog', label: 'Product Catalog' },
+      { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
