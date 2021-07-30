@@ -32,6 +32,7 @@ import BackToTop from './BackToTop';
 import { WhiteCard } from './WhiteCard';
 import HeaderDownloadFuntionality from './HeaderFunctionality';
 import Tabs from './Tabs';
+import Status from './Status';
 
 export {
   Button,
@@ -68,4 +69,5 @@ export {
   WhiteCard,
   HeaderDownloadFuntionality,
   Tabs,
+  Status,
 };
