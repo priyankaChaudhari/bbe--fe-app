@@ -685,8 +685,8 @@ export async function getCustomers(
   return result;
 }
 
-export async function getDspPacingData(id) {
-  const params = { dsp_pacing: 'month' };
+export async function getDspPacingData(id, marketplace) {
+  const params = { dsp_pacing: 'month', dsp_marketplace: marketplace };
   const result = await axiosInstance
     .get(`${API_AD_PERFORMANCE + id}/`, { params })
     .then((response) => {

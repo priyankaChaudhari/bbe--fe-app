@@ -1,15 +1,18 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable camelcase */
 
 import React from 'react';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Theme from '../../theme/Theme';
 import { PageLoader } from '../../common';
 
-export default function DspAdPacing({ dspData, isDspPacingLoading }) {
+export default function DspAdPacing({
+  dspData,
+  isDspPacingLoading,
+  currencySymbol,
+}) {
   const { dsp_pacing } = dspData;
-
   const displayDspPacingLabel = () => {
     if (
       dspData &&
@@ -21,7 +24,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
           <div className="status-heading-red">Overspending</div>
           <p className="basic-text">
             {' '}
-            You are currently overspending by an average of $
+            You are currently overspending by an average of {currencySymbol}
             {dsp_pacing &&
               dsp_pacing.current_spend_status &&
               dsp_pacing.current_spend_status
@@ -59,7 +62,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
           <div className="status-heading-red">Underspending</div>
           <p className="basic-text">
             {' '}
-            You are currently underspending by an average of $
+            You are currently underspending by an average of {currencySymbol}
             {dsp_pacing &&
               dsp_pacing.current_spend_status &&
               dsp_pacing.current_spend_status
@@ -88,6 +91,16 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
     return '';
   };
 
+  const displayMonth = () => {
+    const currentDateOfMonth = new Date().getDate();
+    if (currentDateOfMonth === 1 || currentDateOfMonth === 2) {
+      const currentDate = new Date();
+      currentDate.setMonth(currentDate.getMonth() - 1, 1);
+      return dayjs(new Date(currentDate)).format('MMMM');
+    }
+    return dayjs(new Date()).format('MMMM');
+  };
+
   return isDspPacingLoading &&
     isDspPacingLoading.loader &&
     isDspPacingLoading.type === 'modal' ? (
@@ -98,9 +111,8 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
         <h4 className="on-boarding ">DSP Monthly Budget Pacing</h4>
         <p className="basic-text">
           {' '}
-          {dayjs(new Date()).format('MMMM')} 1 -{' '}
-          {dsp_pacing && dsp_pacing.last_day} <span className="dot" />{' '}
-          &nbsp;&nbsp;&nbsp;
+          {displayMonth()} 1 - {dsp_pacing && dsp_pacing.last_day}{' '}
+          <span className="dot" /> &nbsp;&nbsp;&nbsp;
           {dsp_pacing && dsp_pacing.days_remains} days remaining
         </p>
       </div>
@@ -119,7 +131,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
             {' '}
             <div className="label-info text-right">
               {' '}
-              $
+              {currencySymbol}
               {dsp_pacing &&
                 dsp_pacing.total_budget &&
                 dsp_pacing.total_budget
@@ -135,7 +147,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
             {' '}
             <div className="label-info text-right">
               {' '}
-              $
+              {currencySymbol}
               {dsp_pacing &&
                 dsp_pacing.daily_budget &&
                 dsp_pacing.daily_budget
@@ -164,7 +176,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
             {' '}
             <div className="label-info text-right mt-2">
               {' '}
-              $
+              {currencySymbol}
               {dsp_pacing &&
                 dsp_pacing.planed_to_spend &&
                 dsp_pacing.planed_to_spend
@@ -188,7 +200,7 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
             {' '}
             <div className="label-info text-right mt-2">
               {' '}
-              $
+              {currencySymbol}
               {dsp_pacing &&
                 dsp_pacing.total_spend &&
                 dsp_pacing.total_spend
@@ -229,19 +241,17 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
                   : 'label-info text-right text-red mt-2'
               }>
               {' '}
-              $
+              {currencySymbol}
               {dsp_pacing &&
                 dsp_pacing.dsp_pacing_diff &&
-                dsp_pacing.dsp_pacing_diff &&
-                Math.abs(dsp_pacing.dsp_pacing_diff)
+                dsp_pacing.dsp_pacing_diff
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
               (
               {dsp_pacing &&
                 dsp_pacing.dsp_pacing_diff_percentage &&
-                dsp_pacing.dsp_pacing_diff_percentage &&
-                Math.abs(dsp_pacing.dsp_pacing_diff_percentage)
+                dsp_pacing.dsp_pacing_diff_percentage
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -258,13 +268,17 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
             {' '}
             <div className="label-info text-bold text-right">
               {' '}
-              $
+              {isNaN(dsp_pacing && dsp_pacing.suggested_spend)
+                ? ''
+                : currencySymbol}
               {dsp_pacing &&
-                dsp_pacing.suggested_spend &&
-                dsp_pacing.suggested_spend
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              dsp_pacing.suggested_spend &&
+              isNaN(dsp_pacing && dsp_pacing.suggested_spend)
+                ? dsp_pacing && dsp_pacing.suggested_spend
+                : dsp_pacing.suggested_spend
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </div>{' '}
           </div>
           <div className="col-7">
@@ -272,12 +286,16 @@ export default function DspAdPacing({ dspData, isDspPacingLoading }) {
               For rest of month to hit budget
             </div>
           </div>
-          <div className="col-5">
-            {' '}
-            <div className="label-info budget-text text-right mt-1">
-              Per day
+          {isNaN(dsp_pacing && dsp_pacing.suggested_spend) ? (
+            ''
+          ) : (
+            <div className="col-5">
+              {' '}
+              <div className="label-info budget-text text-right mt-1">
+                Per day
+              </div>
             </div>
-          </div>{' '}
+          )}
         </div>
         <div className="straight-line horizontal-line  mt-3 mb-3" />
       </div>
@@ -331,3 +349,15 @@ const DspAdPacingModal = styled.div`
     }
   }
 `;
+
+DspAdPacing.defaultProps = {
+  dspData: {},
+  isDspPacingLoading: false,
+  currencySymbol: '',
+};
+
+DspAdPacing.propTypes = {
+  dspData: PropTypes.shape(PropTypes.object),
+  isDspPacingLoading: PropTypes.bool,
+  currencySymbol: PropTypes.string,
+};

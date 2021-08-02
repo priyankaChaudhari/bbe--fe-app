@@ -19,7 +19,8 @@
         }
       }
     ],
-    "no-extraneous-dependencies": "off"
+    "no-extraneous-dependencies": "off",
+    "no-restricted-globals": ["error", "event", "fdescribe"]
   },
   "env": {
     "browser": true,

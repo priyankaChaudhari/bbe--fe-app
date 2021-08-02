@@ -556,6 +556,9 @@ export default function AdPerformance({
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
+            setDspCurrentTotal([]);
+            setDspPreviousTotal([]);
+            setDspDifference([]);
           }
           setIsApiCall(false);
           setDspGraphLoader(false);
@@ -565,13 +568,16 @@ export default function AdPerformance({
     [id],
   );
 
-  const getDSPPacing = useCallback(() => {
-    getDspPacingData(id).then((res) => {
-      if (res && res.status === 200) {
-        setDspData(res.data);
-      }
-    });
-  }, [id]);
+  const getDSPPacing = useCallback(
+    (marketplace) => {
+      getDspPacingData(id, marketplace).then((res) => {
+        if (res && res.status === 200) {
+          setDspData(res.data);
+        }
+      });
+    },
+    [id],
+  );
 
   useEffect(() => {
     const list = [];
@@ -597,7 +603,7 @@ export default function AdPerformance({
       getAdData(selectedAdType, selectedAdDF, adGroupBy, marketplace[0].value);
 
       getDSPData(selectedAdDF, dspGroupBy, marketplace[0].value);
-      getDSPPacing();
+      getDSPPacing(marketplace[0].value);
       setResponseId('12345');
     }
   }, [
@@ -851,7 +857,7 @@ export default function AdPerformance({
     setSelectedMarketplace(event.value);
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
-    // getDSPPacing();
+    getDSPPacing(event.value);
     if (selectedAdDF === 'custom') {
       ADYearAndCustomDateFilter(
         adState[0].startDate,
@@ -2120,7 +2126,7 @@ export default function AdPerformance({
           onClick={() => setShowDspAdPacingModal({ show: false })}
           role="presentation"
         />
-        <DspAdPacing dspData={dspData} />
+        <DspAdPacing dspData={dspData} currencySymbol={currencySymbol} />
       </Modal>
     );
   };
@@ -2180,6 +2186,16 @@ export default function AdPerformance({
     return '';
   };
 
+  const displayMonth = () => {
+    const currentDateOfMonth = new Date().getDate();
+    if (currentDateOfMonth === 1 || currentDateOfMonth === 2) {
+      const todayDate = new Date();
+      todayDate.setMonth(todayDate.getMonth() - 1, 1);
+      return dayjs(new Date(todayDate)).format('MMMM');
+    }
+    return dayjs(new Date()).format('MMMM');
+  };
+
   return (
     <AddPerformance>
       {renderMarketplaceDropDown()}
@@ -2214,7 +2230,9 @@ export default function AdPerformance({
             {' '}
             <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
             <p className="gray-normal-text mb-4 mt-1">
-              Monthly Budget Pacing ( {dayjs(new Date()).format('MMMM')} ):{' '}
+              {dspData && dspData.dsp_pacing
+                ? `Monthly Budget Pacing ( ${displayMonth()} )`
+                : ''}{' '}
               <span
                 className="orange-text"
                 role="presentation"

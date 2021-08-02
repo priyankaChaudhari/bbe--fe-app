@@ -140,6 +140,7 @@ function DspAdDashboard({ isLoading, data }) {
         <DspAdPacing
           dspData={dspData}
           isDspPacingLoading={isDspPacingLoading}
+          currencySymbol="$"
         />
       </Modal>
     );
