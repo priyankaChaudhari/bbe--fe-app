@@ -556,9 +556,15 @@ export default function AdPerformance({
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
+<<<<<<< HEAD
             setDspCurrentTotal([]);
             setDspPreviousTotal([]);
             setDspDifference([]);
+=======
+            setDspCurrentTotal();
+            setDspPreviousTotal();
+            setDspDifference();
+>>>>>>> PDv-1826 DSPBox values cleared if no data exists.
           }
           setIsApiCall(false);
           setDspGraphLoader(false);
