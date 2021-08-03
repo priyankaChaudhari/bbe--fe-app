@@ -420,12 +420,6 @@ export default function BrandAssetUpload() {
     });
   }, [params.step]);
 
-  // $(document).on('click', (e) => {
-  //   if ($(e.target).closest('#hideDelete').length === 0) {
-  //     setShowDeleteMsg(false);
-  //   }
-  // });
-
   const destructureselectedFiles = () => {
     const formData = [];
     for (const files of selectedFiles) {
@@ -463,16 +457,17 @@ export default function BrandAssetUpload() {
     const documentError = { error: false, message: '' };
     if (files && files.length) setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
-    const matchedNameArray = documentData.filter(function fun1(object1) {
-      return formData.some(function fun2(object2) {
+    const matchedNameArray = documentData.filter((object1) => {
+      return formData.some((object2) => {
         return object1.original_name === object2.original_name;
       });
     });
-    const filterFormData = formData.filter(function fun1(object1) {
-      return !matchedNameArray.some(function fun2(object2) {
+    const filterFormData = formData.filter((object1) => {
+      return !matchedNameArray.some((object2) => {
         return object1.original_name === object2.original_name;
       });
     });
+
     matchedNameArray.map((obj) => {
       const getmatchedName = obj.original_name;
       if (getmatchedName) {
@@ -481,12 +476,10 @@ export default function BrandAssetUpload() {
       }
     });
 
-    console.log(filterFormData);
-
     if (filterFormData && filterFormData.length > 0) {
       axiosInstance
         .post(API_DOCUMENTS, filterFormData, {
-          onUploadProgress: (data) => {
+          onUploadProgress: () => {
             files &&
               files.map((file) => {
                 if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
@@ -601,6 +594,8 @@ export default function BrandAssetUpload() {
           setDroppedFiles([]);
           setIsLoading({ loader: false, type: 'page' });
         });
+    } else {
+      setDroppedFiles([]);
     }
   };
   const { getRootProps, getInputProps } = useDropzone({
