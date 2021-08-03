@@ -463,123 +463,145 @@ export default function BrandAssetUpload() {
     const documentError = { error: false, message: '' };
     if (files && files.length) setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
-
-    axiosInstance
-      .post(API_DOCUMENTS, formData, {
-        onUploadProgress: (data) => {
-          files &&
-            files.map((file) => {
-              if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
-            });
-          setDroppedFiles(files);
-        },
-      })
-      .then((res) => {
-        for (const detail of res.data) {
-          if (detail && detail.presigned_url !== '') {
-            const request = {
-              meta: createMetaData(detail.original_name),
-              url: detail.presigned_url,
-              headers: {
-                'Content-type': detail.mime_type,
-              },
-            };
-            if (detail && detail.error) {
-              documentError.error = true;
-              documentError.message = detail.error.mime_type
-                ? detail.error.mime_type[0]
-                : detail.error;
-              const validFiles = files.filter((file) => {
-                file.progress = 0;
-                return detail.original_name !== file.original_name;
-              });
-              setDroppedFiles(validFiles);
-            }
-            axios
-              .put(request.url, request.meta, { headers: request.headers })
-              .then(() => {
-                axiosInstance
-                  .patch(
-                    `${API_DOCUMENTS + detail.id}/`,
-                    {
-                      status: 'available',
-                    },
-                    {
-                      onUploadProgress: (data) => {
-                        files &&
-                          files.map((file) => {
-                            if (file.progress > 0)
-                              file.progress = Math.round(
-                                (100 * data.loaded) / data.total,
-                              );
-                          });
-                        setDroppedFiles(files);
-                      },
-                    },
-                  )
-                  .then((r) => {
-                    const newFiles = documentData || [];
-                    files &&
-                      files.map((file) => {
-                        file.progress = 0;
-                      });
-                    setDroppedFiles(files);
-                    newFiles.unshift(r.data);
-                    setDocumentData(newFiles);
-                    setDroppedFiles([]);
-                    setUploadCount({
-                      ...uploadCount,
-                      [params.step]:
-                        newFiles.length === 1
-                          ? '1 file uploaded'
-                          : `${newFiles.length} files uploaded`,
-                    });
-                    if (
-                      brandAssetData.is_completed &&
-                      (params.step === 'additional-brand-material' ||
-                        params.step === 'iconography') &&
-                      brandAssetData.steps[selectedStep && selectedStep.key] ===
-                        'none'
-                    ) {
-                      updateBrandAssetStep(brandId, {
-                        steps: {
-                          ...brandAssetData.steps,
-                          [selectedStep && selectedStep.key]: 'completed',
-                        },
-                      });
-                    }
-                  })
-                  .catch((error) => {
-                    toast.error(
-                      error &&
-                        error.response &&
-                        error.response.data &&
-                        error.response.data.detail,
-                    );
-                    setIsLoading({ loader: false, type: 'page' });
-                  });
-                setIsLoading({ loader: false, type: 'button' });
-              });
-          }
-        }
-        if (documentError && documentError.error) {
-          toast.error(documentError && documentError.message);
-          setIsLoading({ loader: false, type: 'button' });
-        }
-        return res;
-      })
-      .catch((error) => {
-        toast.error(
-          <div>
-            The person who asked you to complete this section has changed who
-            has access.
-            <br /> Please reach out to onboarding@buyboxexperts.com if you have
-            any questions.
-          </div>,
-        );
-        setDroppedFiles([]);
-        setIsLoading({ loader: false, type: 'page' });
+    const matchedNameArray = documentData.filter(function fun1(object1) {
+      return formData.some(function fun2(object2) {
+        return object1.original_name === object2.original_name;
       });
+    });
+    const filterFormData = formData.filter(function fun1(object1) {
+      return !matchedNameArray.some(function fun2(object2) {
+        return object1.original_name === object2.original_name;
+      });
+    });
+    matchedNameArray.map((obj) => {
+      const getmatchedName = obj.original_name;
+      if (getmatchedName) {
+        setIsLoading({ loader: false, type: 'button' });
+        toast.error(`The file "${getmatchedName}" already exists.`);
+      }
+    });
+
+    console.log(filterFormData);
+
+    if (filterFormData && filterFormData.length > 0) {
+      axiosInstance
+        .post(API_DOCUMENTS, filterFormData, {
+          onUploadProgress: (data) => {
+            files &&
+              files.map((file) => {
+                if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
+              });
+            setDroppedFiles(files);
+          },
+        })
+        .then((res) => {
+          for (const detail of res.data) {
+            if (detail && detail.presigned_url !== '') {
+              const request = {
+                meta: createMetaData(detail.original_name),
+                url: detail.presigned_url,
+                headers: {
+                  'Content-type': detail.mime_type,
+                },
+              };
+              if (detail && detail.error) {
+                documentError.error = true;
+                documentError.message = detail.error.mime_type
+                  ? detail.error.mime_type[0]
+                  : detail.error;
+                const validFiles = files.filter((file) => {
+                  file.progress = 0;
+                  return detail.original_name !== file.original_name;
+                });
+                setDroppedFiles(validFiles);
+              }
+              axios
+                .put(request.url, request.meta, { headers: request.headers })
+                .then(() => {
+                  axiosInstance
+                    .patch(
+                      `${API_DOCUMENTS + detail.id}/`,
+                      {
+                        status: 'available',
+                      },
+                      {
+                        onUploadProgress: (data) => {
+                          files &&
+                            files.map((file) => {
+                              if (file.progress > 0)
+                                file.progress = Math.round(
+                                  (100 * data.loaded) / data.total,
+                                );
+                            });
+                          setDroppedFiles(files);
+                        },
+                      },
+                    )
+                    .then((r) => {
+                      const newFiles = documentData || [];
+                      files &&
+                        files.map((file) => {
+                          file.progress = 0;
+                        });
+                      setDroppedFiles(files);
+                      newFiles.unshift(r.data);
+                      setDocumentData(newFiles);
+                      setDroppedFiles([]);
+                      setUploadCount({
+                        ...uploadCount,
+                        [params.step]:
+                          newFiles.length === 1
+                            ? '1 file uploaded'
+                            : `${newFiles.length} files uploaded`,
+                      });
+                      if (
+                        brandAssetData.is_completed &&
+                        (params.step === 'additional-brand-material' ||
+                          params.step === 'iconography') &&
+                        brandAssetData.steps[
+                          selectedStep && selectedStep.key
+                        ] === 'none'
+                      ) {
+                        updateBrandAssetStep(brandId, {
+                          steps: {
+                            ...brandAssetData.steps,
+                            [selectedStep && selectedStep.key]: 'completed',
+                          },
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      toast.error(
+                        error &&
+                          error.response &&
+                          error.response.data &&
+                          error.response.data.detail,
+                      );
+                      setIsLoading({ loader: false, type: 'page' });
+                    });
+                  setIsLoading({ loader: false, type: 'button' });
+                });
+            }
+          }
+          if (documentError && documentError.error) {
+            toast.error(documentError && documentError.message);
+            setIsLoading({ loader: false, type: 'button' });
+          }
+          return res;
+        })
+        .catch((error) => {
+          toast.error(
+            <div>
+              The person who asked you to complete this section has changed who
+              has access.
+              <br /> Please reach out to onboarding@buyboxexperts.com if you
+              have any questions.
+            </div>,
+          );
+          setDroppedFiles([]);
+          setIsLoading({ loader: false, type: 'page' });
+        });
+    }
   };
   const { getRootProps, getInputProps } = useDropzone({
     // accept: params && params.step && formats && formats[params.step],
