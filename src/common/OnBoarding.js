@@ -253,6 +253,48 @@ const OnBoardingBody = styled.div`
       color: ${Theme.gray85};
       line-height: 20px;
     }
+    .upload-product-asset {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: inline-block;
+        border-bottom: 1px solid ${Theme.gray7};
+        padding: 7px 0 12px 0;
+        .product-asset-image {
+          border: 2px solid #bfc5d2;
+          border-radius: 6px;
+          width: 36px;
+          height: 36px;
+          vertical-align: middle;
+          float: left;
+          margin-right: 15px;
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+        .image-title {
+          float: left;
+          font-size: ${Theme.extraNormal};
+          .product-asset-title {
+            font-size: ${Theme.normal};
+            color: ${Theme.black};
+            font-weight: 600;
+            max-width: 340px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+          }
+          .product-asset-subtitle {
+            font-size: ${Theme.extraSmall};
+            color: ${Theme.gray40};
+          }
+        }
+      }
+    }
   }
 
   .w-430 {

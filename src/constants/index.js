@@ -56,3 +56,6 @@ export const PATH_BRAND_ASSET_PREVIEW = `${PATH_CUSTOMER_DETAILS}/brand-preview`
 export const PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-choose-delegate/:brandId`;
 export const PATH_UNAUTHORIZED_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/assigned-brand-asset/:brandId`;
 export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/assigned-brand-summary/:brandId`;
+
+// Product Assets
+export const PATH_UPLOAD_PRODUCT_ASSET = '/upload-product-asset';

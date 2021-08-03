@@ -21,6 +21,8 @@ import {
 import { getAgreementList, getAssigneeCount } from '../../api';
 import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
+// import { UploadProductAsset } from '../../components/Customer/UploadProductAsset';
+
 export default function SetupCheckList({ id, brandId }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
@@ -230,16 +232,18 @@ export default function SetupCheckList({ id, brandId }) {
                 </div>
 
                 <div className="col-7 text-right">
-                  {' '}
-                  <Button className="btn-primary upload-asset  w-sm-100">
-                    Upload Assets{' '}
-                    <img
-                      className="btn-icon ml-2"
-                      width="16px"
-                      src={WhiteArrowRight}
-                      alt=""
-                    />{' '}
-                  </Button>
+                  <Link to="upload-product-asset">
+                    <Button className="btn-primary upload-asset w-sm-100">
+                      {' '}
+                      Upload Assets{' '}
+                      <img
+                        className="btn-icon ml-2"
+                        width="16px"
+                        src={WhiteArrowRight}
+                        alt=""
+                      />{' '}
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </fieldset>

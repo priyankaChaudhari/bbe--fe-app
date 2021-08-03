@@ -32,9 +32,10 @@ import {
   PATH_BRAND_ASSET_PREVIEW,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
+  PATH_UPLOAD_PRODUCT_ASSET,
 } from '../constants/index';
 
-import { CustomerListTablet } from '../components/Customer';
+import { CustomerListTablet, UploadProductAsset } from '../components/Customer';
 
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
@@ -187,6 +188,10 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_BRAND_ASSET_PREVIEW}
             component={BrandAssetsPreview}
+          />
+          <Route
+            path={PATH_UPLOAD_PRODUCT_ASSET}
+            component={UploadProductAsset}
           />
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}
