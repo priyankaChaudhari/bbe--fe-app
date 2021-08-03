@@ -26,11 +26,15 @@ import {
 import Theme from '../../theme/Theme';
 import { getProductCatalog } from '../../api';
 
-export default function ProductCatalog({ id }) {
+export default function ProductCatalog({
+  id,
+  requestedProducts,
+  setRequestedProducts,
+}) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [viewComponent, setViewComponent] = useState('product');
   const [data, setData] = useState([]);
-  const [requestedProducts, setRequestedProducts] = useState([]);
+  // const [requestedProducts, setRequestedProducts] = useState([]);
 
   const [filters, setFilters] = useState({ 'order-by': 'title' });
   const sortOptions = [
@@ -77,15 +81,21 @@ export default function ProductCatalog({ id }) {
   const onRequestClick = (item) => {
     setRequestedProducts([...requestedProducts, item.id]);
   };
-
+  // const onClickOfCheckbox = (event, item) => {
+  //   console.log(event, item);
+  // };
   const generateHTML = (item) => {
     return (
-      <div
-        style={{ display: 'contents' }}
-        htmlFor={item.id}
-        // className={requestedProducts.length && item.status !== 'unoptimized' ? 'disabled' : ''}
-      >
-        <tr width="100%">
+      <div style={{ display: 'contents' }} htmlFor={item.id}>
+        <tr
+          width="100%"
+          className={
+            requestedProducts.length &&
+            !requestedProducts.includes(item.id) &&
+            item.status !== 'unoptimized'
+              ? 'disabled'
+              : ''
+          }>
           <td className="product-catalog-body">
             {' '}
             <div className="product-catalog-image">
@@ -94,6 +104,7 @@ export default function ProductCatalog({ id }) {
                 type="checkbox"
                 id={item.id}
                 checked={requestedProducts.includes(item.id)}
+                // onChecked={(e) => onClickOfCheckbox(e, item)}
               />
               <span className="checkmark" />
               <img
@@ -502,7 +513,6 @@ export default function ProductCatalog({ id }) {
 ProductCatalog.propTypes = {
   id: PropTypes.string.isRequired,
 };
-
 const CustomerDetailsFooter = styled.div`
   border: 1px solid ${Theme.gray7};
   bottom: 0px;
@@ -512,7 +522,7 @@ const CustomerDetailsFooter = styled.div`
   z-index: 2;
   box-shadow: inset 0 1px 0 0 #e2e2ea;
   padding-top: 270px;
-  /* width: 100%; */
+  width: 100%;
   padding: 8px 0;
 
   .skip-step {

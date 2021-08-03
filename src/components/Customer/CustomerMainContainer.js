@@ -174,6 +174,7 @@ export default function CustomerMainContainer() {
     (state) => state.customerState.showBrandAssetMsg,
   );
   const [noteData, setNoteData] = useState([]);
+  const [requestedProducts, setRequestedProducts] = useState([]);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -1160,7 +1161,11 @@ export default function CustomerMainContainer() {
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails agreements={agreement} id={id} />
                   ) : viewComponent === 'product catalog' ? (
-                    <ProductCatalog id={id} />
+                    <ProductCatalog
+                      id={id}
+                      requestedProducts={requestedProducts}
+                      setRequestedProducts={setRequestedProducts}
+                    />
                   ) : viewComponent === 'company' ? (
                     <CompanyDetail
                       id={id}
@@ -1622,25 +1627,33 @@ export default function CustomerMainContainer() {
           )}
         </>
       )}
-      {/* <div className=" pt-5">
-        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12 text-right">
-                <span className="skip-step cursor" role="presentation">
-                  1 product selected
-                </span>
+      {/* {requestedProducts.length ? (
+        <div className=" pt-5">
+          <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-12 text-right">
+                  <span className="skip-step cursor" role="presentation">
+                    {requestedProducts.length === 1
+                      ? `${requestedProducts.length} product selected`
+                      : `${requestedProducts.length} products selected`}
+                  </span>
 
-                <Button className="btn-primary">Request Assets</Button>
+                  <Button className="btn-primary">Request Assets</Button>
 
-                <Button className="btn-transparent w-50 on-boarding ml-4">
-                  Cancel
-                </Button>
+                  <Button
+                    className="btn-transparent w-50 on-boarding ml-4"
+                    onClick={() => setRequestedProducts([])}>
+                    Cancel
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </CustomerDetailsFooter>
-      </div> */}
+          </CustomerDetailsFooter>
+        </div>
+      ) : (
+        ''
+      )} */}
     </>
   );
 }
