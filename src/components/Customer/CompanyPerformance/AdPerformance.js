@@ -2230,9 +2230,13 @@ export default function AdPerformance({
             {' '}
             <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
             <p className="gray-normal-text mb-4 mt-1">
+<<<<<<< HEAD
               {dspData && dspData.dsp_pacing
                 ? `Monthly Budget Pacing ( ${displayMonth()} )`
                 : ''}{' '}
+=======
+              Monthly Budget Pacing ( {displayMonth()} ):{' '}
+>>>>>>> PDV-1826 logic for 1, 2 date changed for showing month.
               <span
                 className="orange-text"
                 role="presentation"
