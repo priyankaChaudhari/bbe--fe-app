@@ -570,16 +570,18 @@ export default function ProductCatalog({
           style={AccountSetupcustomStyles}
           ariaHideApp={false}
           contentLabel="Edit modal">
-          <ModalBox>
+          <ModalBox className="text-center">
             <div className="modal-body account-setup-complete">
-              <h3 className="page-heading mb-3 mt-3 ">Confirm Request</h3>
-              <p className="extra-bold ">
+              <div className="black-heading-title text-center">
+                Confirm Request
+              </div>
+              <p className="alert-msg p-0 mb-0 ">
                 {' '}
                 You&apos;re about to trigger an email to the brand partner
-                requesting product assets for {requestedProducts.length}{' '}
-                ASIN&apos;s
+                requesting product assets for
+                <strong> {requestedProducts.length} ASIN&apos;s</strong>
               </p>
-              <p className="extra-bold ">
+              <p className="alert-msg p-0 mt-2">
                 This action cannot be undone once sent
               </p>
 

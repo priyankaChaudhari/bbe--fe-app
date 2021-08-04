@@ -259,9 +259,9 @@ const OnBoardingBody = styled.div`
       margin: 0;
 
       li {
-        display: inline-block;
+        display: -webkit-box;
+        padding: 10px 0 10px 0;
         border-bottom: 1px solid ${Theme.gray7};
-        padding: 7px 0 12px 0;
         .product-asset-image {
           border: 2px solid #bfc5d2;
           border-radius: 6px;
