@@ -15,6 +15,7 @@ import {
   DropDownSelect,
   Table,
   PageLoader,
+  Button,
 } from '../../common';
 import {
   SearchIcon,
@@ -439,6 +440,25 @@ export default function ProductCatalog({ id }) {
           </>
         )}
       </WhiteCard>
+      <div style={{ paddingTop: '20rem' }}>
+        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-12 text-right">
+                <span className="skip-step cursor" role="presentation">
+                  1 product selected
+                </span>
+
+                <Button className="btn-primary">Request Assets</Button>
+
+                <Button className="btn-transparent w-50 on-boarding ml-4">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CustomerDetailsFooter>
+      </div>
     </div>
   );
 }
@@ -447,6 +467,32 @@ ProductCatalog.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
+const CustomerDetailsFooter = styled.div`
+  border: 1px solid ${Theme.gray7};
+  bottom: 0px;
+  left: 0;
+  background: ${Theme.white};
+  position: fixed;
+  min-height: 60px;
+  z-index: 2;
+  box-shadow: inset 0 1px 0 0 #e2e2ea;
+  padding-top: 270px;
+  width: 100%;
+  padding: 8px 0;
+
+  .skip-step {
+    color: ${Theme.gray40};
+    font-size: ${Theme.extraNormal};
+    margin-right: 20px;
+  }
+  @media only screen and (max-width: 330px) {
+    .skip-step {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+      margin-right: 10px;
+    }
+  }
+`;
 const TableMobileView = styled.div`
   display: none;
   @media only screen and (max-width: 767px) {

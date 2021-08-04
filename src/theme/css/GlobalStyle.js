@@ -1710,6 +1710,8 @@ text.cust-label-avg {
     border-radius: 100px;
     transition: width 0.3s ease;
 }
+ 
+
 
 // .right-side-nav {
 //   list-style-type: none;
@@ -1738,7 +1740,13 @@ text.cust-label-avg {
 //   }
 // }
 
- 
+  .dot {
+    background-color: ${Theme.gray35};
+    border-radius: 50%;
+    width: 3px;
+    height: 3px;
+    position: absolute;
+  }
 
 `;
 export default bodyStyles;

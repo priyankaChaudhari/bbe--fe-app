@@ -1012,7 +1012,7 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
-                        {/* <li
+                        <li
                           onClick={() => {
                             setViewComponent('product catalog');
                             dispatch(setCustomerSelectedTab('product catalog'));
@@ -1031,7 +1031,7 @@ export default function CustomerMainContainer() {
                             />
                             Product Catalog
                           </div>
-                        </li> */}
+                        </li>
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (

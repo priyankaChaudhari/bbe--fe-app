@@ -38,6 +38,9 @@ import {
   WhiteArrowRight,
   FileCloud,
   CaretUp,
+  DefaultUser,
+  ForwardOrangeIcon,
+  ArrowRightIcon,
 } from '../../theme/images';
 import {
   Button,
@@ -1107,6 +1110,55 @@ export default function BrandAssetUpload() {
           </DropDownBrandAsset>
           <div className="container-fluid">
             <div className="row">
+              {/* <div className="col-12 ">
+                <AmazonProduct>
+                  <div className="amazon-product-image">
+                    <img src={DefaultUser} alt="product-pic" />
+                  </div>
+                  <div className="amazon-product-details">
+                    <ul className="other-details">
+                      <li>
+                        ASIN: <span>6291108300282 </span>
+                      </li>
+
+                      <li>
+                        <span className="dot" /> SKU:{' '}
+                        <span>6291108300282 </span>
+                      </li>
+
+                      <li className="amazon-link">
+                        {' '}
+                        <span className="dot" />
+                        View on Amazon
+                        <img
+                          className="forward-arrow"
+                          src={LeftArrowIcon}
+                          alt="arrow"
+                        />
+                      </li>
+                    </ul>
+                    Threadmill Home Linen 100% Combed Cotton Blanket Herringbone
+                    Soft Breathable Full/Queen Size Sage
+                  </div>
+                </AmazonProduct>
+                <ul className="steps-additional-asset">
+                  <li className="step-completed"> Product Images</li>
+                  <li>
+                    {' '}
+                    {/* <img
+                      className="forward-step-arrow"
+                      src={ArrowRightIcon}
+                      alt="arrow"
+                    />{' '} */}
+              {/* <img
+                      className="forward-step-arrow"
+                      src={ArrowRightBlackIcon}
+                      alt="arrow"
+                    />{' '}
+                  </li>
+                  <li className="active">Additional Assets</li>
+                </ul>
+              </div> */}
               <div className="col-9 ">
                 <div className="label-heading">
                   Part {selectedStep && selectedStep.step}/5
@@ -1475,6 +1527,30 @@ const BrandAssetBody = styled.div`
     color: ${Theme.gray40};
     font-size: ${Theme.extraNormal};
   }
+  .steps-additional-asset {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+    li {
+      display: inline-block;
+      margin-right: 10px;
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+
+      .forward-step-arrow {
+        width: 17px;
+        vertical-align: middle;
+      }
+      &.active {
+        color: #ff4817;
+        font-weight: 600;
+      }
+      &.step-completed {
+        color: ${Theme.black};
+        font-weight: 600;
+      }
+    }
+  }
   .Image-container {
     list-style-type: none;
     padding: 0;
@@ -1822,3 +1898,52 @@ const DragDropImg = styled.div`
     max-height: 100vh;
   }
 `;
+
+// const AmazonProduct = styled.div`
+//   flex-wrap: wrap;
+//   display: flex;
+//   .amazon-product-image {
+//     border: 2px solid #bfc5d2;
+//     border-radius: 6px;
+//     width: 82px;
+//     height: 83px;
+//     margin-right: 15px;
+//   }
+//   .amazon-product-details {
+//     color: ${Theme.black};
+//     font-size: ${Theme.extraMedium};
+//   }
+//   .other-details {
+//     list-style-type: none;
+//     padding: 0;
+//     margin: 10px 0 3px 0;
+
+//     li {
+//       display: inline-block;
+//       margin-right: 20px;
+//       color: ${Theme.gray40};
+//       font-size: ${Theme.extraSmall};
+//       font-weight: bold;
+
+//       .dot {
+//         top: 19px;
+//         margin-left: -11px;
+//       }
+
+//       span {
+//         font-weight: 300;
+//       }
+//       &.amazon-link {
+//         color: ${Theme.orange};
+//         font-weight: 300;
+
+//         .forward-arrow {
+//           width: 14px;
+//           vertical-align: middle;
+//           transform: rotate(180deg);
+//           margin-left: 3px;
+//         }
+//       }
+//     }
+//   }
+// `;
