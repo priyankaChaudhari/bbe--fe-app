@@ -1061,3 +1061,22 @@ export const managementLink =
   'https://docs.google.com/forms/d/e/1FAIpQLScmUYT0PQqs5aYX1p4PefdccjArf7sbyWyh-7rRbC5gptAEwQ/viewform';
 export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
+// added by vikas
+export const options = [
+  { value: 'contract_details', label: 'Contract Details' },
+  { value: 'performance', label: 'Sales Performance' },
+  { value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' },
+  { value: 'dsp_ad_performance', label: 'DSP Ad Performance' },
+];
+export const contractChoices = [
+  { value: 'any', label: 'Any' },
+  { value: 'recurring', label: 'Recurring' },
+  { value: 'one time', label: 'One Time' },
+  { value: 'dsp only', label: 'DSP Only' },
+];
+export const contractStatus = [
+  { value: 'active', label: 'Signed' },
+  { value: 'pending contract signature', label: 'Pending Signature' },
+  { value: 'pending contract approval', label: 'Pending Approval' },
+  { value: 'pending contract', label: 'Pending Contract' },
+];
