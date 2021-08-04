@@ -141,4 +141,8 @@ export {
   getRecentNotes,
 } from './NotesApi';
 
-export { getProductCatalog, requestData } from './ProductCatalogApi';
+export {
+  getProductCatalog,
+  requestProductAssets,
+  getRequestedProducts,
+} from './ProductCatalogApi';

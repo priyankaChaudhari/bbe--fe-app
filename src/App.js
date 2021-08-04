@@ -21,6 +21,7 @@ import {
   PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE,
   PATH_UNAUTHORIZED_BRAND_ASSET,
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
+  PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED,
 } from './constants/index';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
@@ -37,6 +38,7 @@ import {
   Info,
   Thanks,
 } from './components/OnBoardingCustomer';
+import { UploadProductAsset } from './components/Customer';
 import MainContainer from './components/OnBoardingCustomer/MainContainer';
 import {
   BrandAssetSummary,
@@ -103,6 +105,11 @@ export default function App() {
         <Route
           path={PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY}
           component={BrandAssetSummary}
+        />
+
+        <Route
+          path={PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED}
+          component={UploadProductAsset}
         />
 
         {/*  Default */}

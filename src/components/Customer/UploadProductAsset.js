@@ -1,6 +1,8 @@
-import React from 'react';
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+
 import {
   UnauthorizedHeader,
   OnBoardingBody,
@@ -15,8 +17,20 @@ import {
   OrangeCheckMark,
   SecurityLock,
 } from '../../theme/images';
+import { getRequestedProducts } from '../../api';
 
 export default function UploadProductAsset() {
+  const [productAsset, setProductAsset] = useState({});
+  const location = useLocation();
+  const splittedPath =
+    location && location.pathname && location.pathname.split('/');
+
+  useEffect(() => {
+    getRequestedProducts(splittedPath && splittedPath[4]).then((res) => {
+      setProductAsset(res && res.data);
+    });
+  }, []);
+
   return (
     <div>
       {' '}
@@ -62,7 +76,11 @@ export default function UploadProductAsset() {
           <ul className="account-steps-check">
             <li>
               <img src={OrangeCheckMark} alt="check" />
-              Imagery for the 5 products listed below
+              Imagery for the{' '}
+              {productAsset &&
+                productAsset.products &&
+                productAsset.products.length}{' '}
+              products listed below
             </li>
             <li>
               <img src={OrangeCheckMark} alt="check" /> Any Instructions/specs
@@ -70,7 +88,24 @@ export default function UploadProductAsset() {
             </li>
           </ul>
           <ul className="upload-product-asset">
-            <li>
+            {productAsset &&
+              productAsset.products &&
+              productAsset.products.length &&
+              productAsset.products.map((item) => (
+                <li>
+                  <div className="product-asset-image">
+                    <img src={DefaultUser} alt="product" />
+                  </div>
+                  <div className="image-title">
+                    <p className="product-asset-title recurring-service mt-0  mb-0">
+                      {item.title}
+                    </p>
+                    <p className="product-asset-subtitle m-0">{item.asin}</p>
+                  </div>
+                </li>
+              ))}
+
+            {/* <li>
               <div className="product-asset-image">
                 <img src={DefaultUser} alt="product" />
               </div>
@@ -91,18 +126,7 @@ export default function UploadProductAsset() {
                 </p>
                 <p className="product-asset-subtitle m-0">B000000001</p>
               </div>
-            </li>
-            <li>
-              <div className="product-asset-image">
-                <img src={DefaultUser} alt="product" />
-              </div>
-              <div className="image-title">
-                <p className="product-asset-title recurring-service mt-0  mb-0">
-                  Threadmill Home Linen Twin Blanket - 1 Piece Herring…
-                </p>
-                <p className="product-asset-subtitle m-0">B000000001</p>
-              </div>
-            </li>
+            </li> */}
           </ul>
           <Button className="btn-primary w-100 mb-2 mt-3">Continue</Button>
           <p className="info-text-gray security-lock text-center  mb-0">

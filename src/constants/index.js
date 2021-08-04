@@ -59,3 +59,4 @@ export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/a
 
 // Product Assets
 export const PATH_UPLOAD_PRODUCT_ASSET = '/upload-product-asset';
+export const PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED = `${PATH_CUSTOMER_DETAILS}/product-assets-requested/`;

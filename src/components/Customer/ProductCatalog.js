@@ -1,12 +1,15 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
+import { toast } from 'react-toastify';
+import Modal from 'react-modal';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   Tabs,
@@ -16,6 +19,7 @@ import {
   Table,
   PageLoader,
   Button,
+  ModalBox,
 } from '../../common';
 import {
   SearchIcon,
@@ -24,17 +28,35 @@ import {
   CaretUp,
 } from '../../theme/images/index';
 import Theme from '../../theme/Theme';
-import { getProductCatalog } from '../../api';
 
+import { getProductCatalog, requestProductAssets } from '../../api';
+
+const AccountSetupcustomStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '480px ',
+    width: '100% ',
+    minHeight: '200px',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 export default function ProductCatalog({
   id,
-  requestedProducts,
-  setRequestedProducts,
+  // requestedProducts,
+  // setRequestedProducts,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [viewComponent, setViewComponent] = useState('product');
   const [data, setData] = useState([]);
-  // const [requestedProducts, setRequestedProducts] = useState([]);
+  const [productAssetsRequest, setProductAssetsRequest] = useState({
+    showModal: false,
+  });
+  const [requestedProducts, setRequestedProducts] = useState([]);
 
   const [filters, setFilters] = useState({ 'order-by': 'title' });
   const sortOptions = [
@@ -44,6 +66,33 @@ export default function ProductCatalog({
       value: '-title',
     },
   ];
+
+  const getData = useCallback(() => {
+    setIsLoading({ loader: true, type: 'page' });
+
+    getProductCatalog(id, filters).then((response) => {
+      setData(response && response.data && response.data.results);
+      setIsLoading({ loader: false, type: 'page' });
+      setRequestedProducts([]);
+    });
+  }, [id, filters]);
+
+  const onRequestAssets = () => {
+    setIsLoading({ loader: true, type: 'button' });
+
+    const requestData = { customer: id, products: requestedProducts };
+    requestProductAssets(requestData).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+
+      setProductAssetsRequest({ showModal: false });
+      if (res && res.status === 200) {
+        toast.success(
+          `Product assets have been requested for ${requestedProducts.length} ASIN's`,
+        );
+        getData();
+      }
+    });
+  };
 
   const statusOptions = [
     { label: 'Any Status', value: '' },
@@ -70,23 +119,20 @@ export default function ProductCatalog({
   ];
 
   useEffect(() => {
-    setIsLoading({ loader: true, type: 'page' });
-
-    getProductCatalog(id, filters).then((response) => {
-      setData(response && response.data && response.data.results);
-      setIsLoading({ loader: false, type: 'page' });
-    });
-  }, [id, filters]);
+    getData();
+  }, [getData]);
 
   const onRequestClick = (item) => {
     setRequestedProducts([...requestedProducts, item.id]);
   };
-  // const onClickOfCheckbox = (event, item) => {
-  //   console.log(event, item);
-  // };
+  const onClickOfCheckbox = (event, item) => {
+    setRequestedProducts(
+      requestedProducts.filter((product) => product !== item.id),
+    );
+  };
   const generateHTML = (item) => {
     return (
-      <div style={{ display: 'contents' }} htmlFor={item.id}>
+      <div style={{ display: 'contents' }}>
         <tr
           width="100%"
           className={
@@ -99,14 +145,20 @@ export default function ProductCatalog({
           <td className="product-catalog-body">
             {' '}
             <div className="product-catalog-image">
-              <input
-                className="check-box-product-list"
-                type="checkbox"
-                id={item.id}
-                checked={requestedProducts.includes(item.id)}
-                // onChecked={(e) => onClickOfCheckbox(e, item)}
-              />
-              <span className="checkmark" />
+              <label htmlFor={item.id}>
+                <input
+                  className="check-box-product-list"
+                  type="checkbox"
+                  id={item.id}
+                  onClick={(event) => onClickOfCheckbox(event, item)}
+                  checked={
+                    requestedProducts.length &&
+                    requestedProducts.includes(item.id)
+                  }
+                  // onChecked={(e) => onClickOfCheckbox(e, item)}
+                />
+                <span className="checkmark" />
+              </label>
               <img
                 className="product-image "
                 src={item.main_image || Logo}
@@ -147,6 +199,7 @@ export default function ProductCatalog({
           </td>
           <td className="product-catalog-body">
             {item.status === 'unoptimized' ? (
+              requestedProducts.length &&
               requestedProducts.includes(item.id) ? (
                 <div className="request">Selected</div>
               ) : (
@@ -490,7 +543,13 @@ export default function ProductCatalog({
                         : `${requestedProducts.length} products selected`}
                     </span>
 
-                    <Button className="btn-primary">Request Assets</Button>
+                    <Button
+                      className="btn-primary"
+                      onClick={() =>
+                        setProductAssetsRequest({ showModal: true })
+                      }>
+                      Request Assets
+                    </Button>
 
                     <Button
                       className="btn-transparent w-50 on-boarding ml-4"
@@ -505,6 +564,46 @@ export default function ProductCatalog({
         ) : (
           ''
         )}
+
+        <Modal
+          isOpen={productAssetsRequest.showModal}
+          style={AccountSetupcustomStyles}
+          ariaHideApp={false}
+          contentLabel="Edit modal">
+          <ModalBox>
+            <div className="modal-body account-setup-complete">
+              <h3 className="page-heading mb-3 mt-3 ">Confirm Request</h3>
+              <p className="extra-bold ">
+                {' '}
+                You&apos;re about to trigger an email to the brand partner
+                requesting product assets for {requestedProducts.length}{' '}
+                ASIN&apos;s
+              </p>
+              <p className="extra-bold ">
+                This action cannot be undone once sent
+              </p>
+
+              <div className="text-center ">
+                <Button
+                  onClick={() => onRequestAssets()}
+                  type="button"
+                  className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Request Assets'
+                  )}
+                </Button>
+                <Button
+                  onClick={() => setProductAssetsRequest({ showModal: false })}
+                  type="button"
+                  className=" btn-transparent w-50 on-boarding ">
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </ModalBox>
+        </Modal>
       </div>
     </>
   );
@@ -513,9 +612,12 @@ export default function ProductCatalog({
 ProductCatalog.propTypes = {
   id: PropTypes.string.isRequired,
 };
+
 const CustomerDetailsFooter = styled.div`
   border: 1px solid ${Theme.gray7};
   bottom: 0px;
+  left: 0px;
+
   background: ${Theme.white};
   position: fixed;
   min-height: 60px;
