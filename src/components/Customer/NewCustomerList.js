@@ -252,7 +252,7 @@ export default function NewCustomerList() {
       getCustomerList(
         currentPage,
         selectedValue,
-        JSON.parse(localStorage.getItem('filters')),
+        JSON.parse(localStorage.getItem('filters')) || filters,
         searchQuery,
         showPerformance,
         showAdPerformance,
@@ -271,7 +271,7 @@ export default function NewCustomerList() {
     [
       searchQuery,
       selectedValue,
-      // filters,
+      filters,
       orderByFlag,
       showPerformance,
       expiringSoon,
@@ -602,6 +602,21 @@ export default function NewCustomerList() {
     return '';
   };
 
+  const generateCompanyNameAndStatus = (name, companyStatus) => {
+    return (
+      <>
+        <div className="company-name">{name}</div>
+        {companyStatus === 'at risk' ? (
+          <div className="status">At Risk</div>
+        ) : (
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {companyStatus}
+          </div>
+        )}
+      </>
+    );
+  };
+
   const renderHeaders = () => {
     if (showPerformance) {
       return (
@@ -745,13 +760,9 @@ export default function NewCustomerList() {
               alt="logo"
             />
 
-            <div className="company-name">{item && item.company_name}</div>
-            {item && item.status === 'at risk' ? (
-              <div className="status">AT Risk</div>
-            ) : (
-              <div className="status" style={{ textTransform: 'capitalize' }}>
-                {item && item.status}
-              </div>
+            {generateCompanyNameAndStatus(
+              item && item.company_name,
+              item.status,
             )}
           </td>
 
@@ -891,13 +902,9 @@ export default function NewCustomerList() {
               alt="logo"
             />
 
-            <div className="company-name">{item && item.company_name}</div>
-            {item && item.status === 'at risk' ? (
-              <div className="status">AT Risk</div>
-            ) : (
-              <div className="status" style={{ textTransform: 'capitalize' }}>
-                {item && item.status}
-              </div>
+            {generateCompanyNameAndStatus(
+              item && item.company_name,
+              item.status,
             )}
           </td>
           <td width="15%">
@@ -1034,13 +1041,9 @@ export default function NewCustomerList() {
               alt="logo"
             />
 
-            <div className="company-name">{item && item.company_name}</div>
-            {item && item.status === 'at risk' ? (
-              <div className="status">AT Risk</div>
-            ) : (
-              <div className="status" style={{ textTransform: 'capitalize' }}>
-                {item && item.status}
-              </div>
+            {generateCompanyNameAndStatus(
+              item && item.company_name,
+              item.status,
             )}
           </td>
           <td width="15%">
@@ -1176,14 +1179,7 @@ export default function NewCustomerList() {
             alt="logo"
           />
 
-          <div className="company-name">{item && item.company_name}</div>
-          {item && item.status === 'at risk' ? (
-            <div className="status">AT Risk</div>
-          ) : (
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
-          )}
+          {generateCompanyNameAndStatus(item && item.company_name, item.status)}
         </td>
         <td width="60%">
           <ul
@@ -1238,11 +1234,7 @@ export default function NewCustomerList() {
       </tr>
     );
   };
-  console.log('1-brandGrowthStrategist', typeof setExpiringSoon);
-  console.log('1-status', typeof setExpiringSoon);
-  console.log('1-salesSortOptions', typeof salesSortOptions);
-  console.log('1-sponsorAdSortOptions', typeof sponsorAdSortOptions);
-  console.log('1-dspAdSortOptions', typeof dspAdSortOptions);
+
   return (
     <CustomerListPage>
       {' '}

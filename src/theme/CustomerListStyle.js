@@ -60,7 +60,6 @@ export const CustomerListPage = styled.div`
     &.show {
       display: block;
     }
-
     .notes-option {
       list-style-type: none;
       padding: 0;
@@ -68,13 +67,11 @@ export const CustomerListPage = styled.div`
       li {
         padding: 9px 15px 9px 15px;
         cursor: pointer;
-
         &.on-hover1 {
           &.hide {
             display: none;
           }
         }
-
         &.on-hover1 {
           &.show {
             .sub-menu-dropdown {
@@ -91,7 +88,6 @@ export const CustomerListPage = styled.div`
               left: -101%;
               color: ${Theme.black};
               text-align: left;
-
               .notes-option {
                 list-style-type: none;
                 padding: 0;
@@ -103,7 +99,6 @@ export const CustomerListPage = styled.div`
               }
             }
           }
-
           &.submenu-4 {
             &.show {
               .sub-menu-dropdown {
@@ -142,7 +137,6 @@ export const CustomerListPage = styled.div`
   .revenue {
     padding-left: 5%;
   }
-
   .units_sold {
     padding-left: 4%;
   }
@@ -155,11 +149,9 @@ export const CustomerListPage = styled.div`
   .Brand_Strategist {
     padding-left: 2%;
   }
-
   .customer-header {
     padding-left: 66px;
   }
-
   .sticky-header {
     position: fixed;
     top: 130px;
@@ -170,11 +162,9 @@ export const CustomerListPage = styled.div`
     z-index: 1;
     display: inline;
   }
-
   .table-container {
     padding-left: 290px;
   }
-
   .customer-list-header-sticky {
     position: fixed;
     left: 64px;
@@ -182,14 +172,12 @@ export const CustomerListPage = styled.div`
     z-index: 2;
     background-color: ${Theme.white};
   }
-
   .table-part {
     // min-height: 560px;
     padding-top: 65px;
     overflow: auto;
     min-height: 892px;
     height: 100%;
-
     padding-bottom: 69px;
     position: relative;
   }
@@ -200,7 +188,6 @@ export const CustomerListPage = styled.div`
       width: 94%;
     }
   }
-
   .footer-sticky {
     position: fixed;
     bottom: 0;
@@ -235,7 +222,6 @@ export const CustomerListPage = styled.div`
       }
     }
   }
-
   @media only screen and (max-width: 1240px) {
     .dropdown-select-all-notes {
       span.selected-list {
@@ -249,10 +235,8 @@ export const CustomerListPage = styled.div`
       }
     }
   }
-
   @media only screen and (max-width: 992px) {
     padding-left: 0px;
-
     .customer-list-header-sticky {
       left: 0;
       right: 0;
@@ -281,7 +265,6 @@ export const CustomerListPage = styled.div`
         }
       }
     }
-
     .filter-slider {
       border: 1px solid #8798ad;
       padding: 8px 15px;
@@ -294,26 +277,22 @@ export const CustomerListPage = styled.div`
       position: absolute;
       margin-top: -94px;
       font-weight: 600;
-
       img {
         width: 16px;
         margin-right: 7px;
         vertical-align: text-top;
       }
     }
-
     .customer-list-header {
       margin: 5px 0;
     }
   }
-
   @media only screen and (max-width: 767px) {
     .dropdown-notes-filter {
       width: 40%;
       right: 16px;
     }
   }
-
   @media only screen and (max-width: 577px) {
     .dropdown-notes-filter {
       .notes-option {
@@ -329,7 +308,6 @@ export const CustomerListPage = styled.div`
       }
     }
   }
-
   .selectAll {
     border-right: 1px solid black;
   }
@@ -358,7 +336,6 @@ export const CustomerLeftPannel = styled.div`
   padding: 15px;
   padding-bottom: 80px;
   border-right: 1px solid ${Theme.gray5};
-
   .label {
     color: ${Theme.gray40};
     text-transform: uppercase;
@@ -367,12 +344,10 @@ export const CustomerLeftPannel = styled.div`
     font-size: 11px;
     margin-bottom: 3px;
   }
-
   .check-box-list {
     list-style-type: none;
     padding: 0;
     margin: 10px 0 5px 0;
-
     li {
       color: ${Theme.gray85};
       font-size: 14px;
@@ -404,7 +379,6 @@ export const MobileLeftSidebar = styled.div`
   #tabletmenu-check {
     display: none;
   }
-
   @media only screen and (max-width: 991px) {
     background-color: ${Theme['$base-color']};
     display: block;
@@ -435,7 +409,6 @@ export const MobileLeftSidebar = styled.div`
         right: 20px;
         top: 10px;
         z-index: 999;
-
         img {
           width: 18px;
           margin-top: 8px;
@@ -486,7 +459,6 @@ export const SideContent = styled.div`
     background: white;
     padding: 15px;
     box-shadow: ${Theme.commonShadow};
-
     .label {
       color: ${Theme.gray40};
       text-transform: uppercase;
@@ -495,19 +467,16 @@ export const SideContent = styled.div`
       font-size: 11px;
       margin-bottom: 3px;
     }
-
     .check-box-list {
       list-style-type: none;
       padding: 0;
       margin: 0;
-
       li {
         color: ${Theme.gray85};
         font-size: 14px;
         margin-bottom: 15px;
       }
     }
-
     .unselected {
       color: ${Theme.gray40};
       font-size: 14px;

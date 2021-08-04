@@ -74,7 +74,7 @@ function CustomerListFilters({
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>
-      {/* {props.data.icon ? ( // for multi slect iser */}
+      {/* {props.data.icon ? ( // for multi select user */}
       {dataProps.data && dataProps.data.label !== 'All' ? (
         dataProps.data.icon ? ( // for single user select
           <img
@@ -1245,11 +1245,27 @@ function CustomerListFilters({
 }
 
 export default CustomerListFilters;
-CustomerListFilters.defaultProps = {};
+CustomerListFilters.defaultProps = {
+  searchQuery: null,
+  pageNumber: 1,
+  orderByFlag: false,
+};
 CustomerListFilters.propTypes = {
-  filters: PropTypes.objectOf(PropTypes.object).isRequired,
+  filters: PropTypes.shape({
+    status: PropTypes.arrayOf(PropTypes.string),
+    contract_type: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    contract_status: PropTypes.arrayOf(PropTypes.string),
+    searchQuery: PropTypes.arrayOf(PropTypes.array),
+    user: PropTypes.arrayOf(PropTypes.array),
+    ad_user: PropTypes.arrayOf(PropTypes.array),
+    dsp_user: PropTypes.arrayOf(PropTypes.array),
+  }).isRequired,
+
   setFilters: PropTypes.func.isRequired,
-  searchQuery: PropTypes.string.isRequired,
+  searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func.isRequired,
   showPerformance: PropTypes.bool.isRequired,
   setShowPerformance: PropTypes.func.isRequired,
@@ -1259,22 +1275,33 @@ CustomerListFilters.propTypes = {
   setShowDspAdPerformance: PropTypes.func.isRequired,
   showOrderOption: PropTypes.bool.isRequired,
   setShowOrderOption: PropTypes.func.isRequired,
-  orderByFlag: PropTypes.bool.isRequired,
+  orderByFlag: PropTypes.bool,
   setOrderByFlag: PropTypes.func.isRequired,
   isCustomDateApply: PropTypes.bool.isRequired,
   setIsCustomDateApply: PropTypes.func.isRequired,
-  selectedTimeFrame: PropTypes.arrayOf(PropTypes.array).isRequired,
+
+  selectedTimeFrame: PropTypes.shape({
+    daily_facts: PropTypes.string,
+    startDate: PropTypes.instanceOf(Date),
+    endDate: PropTypes.instanceOf(Date),
+  }).isRequired,
+
   setSelectedTimeFrame: PropTypes.func.isRequired,
-  selectedValue: PropTypes.arrayOf(PropTypes.array).isRequired,
+
+  selectedValue: PropTypes.shape({
+    'order-by': PropTypes.string,
+  }).isRequired,
+
   setSelectedValue: PropTypes.func.isRequired,
   setExpiringSoon: PropTypes.func.isRequired,
   setShowCustomDateModal: PropTypes.func.isRequired,
-  brandGrowthStrategist: PropTypes.arrayOf(PropTypes.array).isRequired,
-  status: PropTypes.func.isRequired,
+
   selectInputRefMobile: PropTypes.objectOf(PropTypes.object).isRequired,
-  salesSortOptions: PropTypes.objectOf(PropTypes.object).isRequired,
-  sponsorAdSortOptions: PropTypes.objectOf(PropTypes.object).isRequired,
-  dspAdSortOptions: PropTypes.objectOf(PropTypes.object).isRequired,
+  brandGrowthStrategist: PropTypes.arrayOf(PropTypes.object).isRequired,
+  status: PropTypes.arrayOf(PropTypes.object).isRequired,
+  salesSortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sponsorAdSortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  dspAdSortOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   customerList: PropTypes.func.isRequired,
-  pageNumber: PropTypes.number.isRequired,
+  pageNumber: PropTypes.number,
 };
