@@ -27,8 +27,7 @@ export default function DspAdPacing({
             You are currently overspending by an average of {currencySymbol}
             {dsp_pacing &&
               dsp_pacing.current_spend_status &&
-              dsp_pacing.current_spend_status &&
-              Math.abs(dsp_pacing.current_spend_status)
+              dsp_pacing.current_spend_status
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
@@ -66,8 +65,7 @@ export default function DspAdPacing({
             You are currently underspending by an average of {currencySymbol}
             {dsp_pacing &&
               dsp_pacing.current_spend_status &&
-              dsp_pacing.current_spend_status &&
-              Math.abs(dsp_pacing.current_spend_status)
+              dsp_pacing.current_spend_status
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
