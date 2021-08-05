@@ -602,21 +602,6 @@ export default function NewCustomerList() {
     return '';
   };
 
-  const generateCompanyNameAndStatus = (name, companyStatus) => {
-    return (
-      <>
-        <div className="company-name">{name}</div>
-        {companyStatus === 'at risk' ? (
-          <div className="status">At Risk</div>
-        ) : (
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {companyStatus}
-          </div>
-        )}
-      </>
-    );
-  };
-
   const renderHeaders = () => {
     if (showPerformance) {
       return (
@@ -736,6 +721,41 @@ export default function NewCustomerList() {
       </div>
     );
   };
+  const generateCompanyNameAndStatus = (name, companyStatus) => {
+    return (
+      <>
+        <div className="company-name">{name}</div>
+        {companyStatus === 'at risk' ? (
+          <div className="status">At Risk</div>
+        ) : (
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {companyStatus}
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const generatePerformance = (value, toFixedValue, isTwiceReplace, prefix) => {
+    if (isTwiceReplace) {
+      return value
+        ? `${
+            prefix +
+            value
+              .toFixed(toFixedValue)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              .replace('.00', '')
+          }`
+        : `${prefix}0`;
+    }
+    return value
+      ? `${prefix === '$' ? '$' : ''} ${value
+          .toFixed(toFixedValue)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${prefix === '%' ? '%' : ''}`
+      : `${prefix === '$' ? '$0' : prefix === '%' ? '0%' : 0}`;
+  };
 
   const renderCustomerDetails = (item) => {
     if (showPerformance) {
@@ -767,16 +787,15 @@ export default function NewCustomerList() {
           </td>
 
           <td width="15%">
-            {item &&
-            item.sales_performance &&
-            item.sales_performance.current_sum &&
-            item.sales_performance.current_sum.revenue
-              ? `$${item.sales_performance.current_sum.revenue
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  .replace('.00', '')}`
-              : '$0'}
+            {generatePerformance(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.current_sum &&
+                item.sales_performance.current_sum.revenue,
+              2,
+              'isTwiceReplace',
+              '$',
+            )}
             {renderAdPerformanceDifference(
               item &&
                 item.sales_performance &&
@@ -788,15 +807,15 @@ export default function NewCustomerList() {
           </td>
 
           <td width="15%">
-            {item &&
-            item.sales_performance &&
-            item.sales_performance.current_sum &&
-            item.sales_performance.current_sum.units_sold
-              ? `${item.sales_performance.current_sum.units_sold
-                  .toFixed(0)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : '0'}
+            {generatePerformance(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.current_sum &&
+                item.sales_performance.current_sum.units_sold,
+              0,
+              '',
+              '',
+            )}
             {renderAdPerformanceDifference(
               item &&
                 item.sales_performance &&
@@ -808,15 +827,15 @@ export default function NewCustomerList() {
           </td>
 
           <td width="15%">
-            {item &&
-            item.sales_performance &&
-            item.sales_performance.current_sum &&
-            item.sales_performance.current_sum.traffic
-              ? `${item.sales_performance.current_sum.traffic
-                  .toFixed(0)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : '0'}
+            {generatePerformance(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.current_sum &&
+                item.sales_performance.current_sum.traffic,
+              0,
+              '',
+              '',
+            )}
             {renderAdPerformanceDifference(
               item &&
                 item.sales_performance &&
@@ -827,15 +846,15 @@ export default function NewCustomerList() {
             )}
           </td>
           <td width="15%">
-            {item &&
-            item.sales_performance &&
-            item.sales_performance.current_sum &&
-            item.sales_performance.current_sum.conversion
-              ? `${item.sales_performance.current_sum.conversion
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
-              : '0%'}
+            {generatePerformance(
+              item &&
+                item.sales_performance &&
+                item.sales_performance.current_sum &&
+                item.sales_performance.current_sum.conversion,
+              2,
+              '',
+              '%',
+            )}
             {renderAdPerformanceDifference(
               item &&
                 item.sales_performance &&
@@ -908,15 +927,15 @@ export default function NewCustomerList() {
             )}
           </td>
           <td width="15%">
-            {item &&
-            item.sponsored_ad_performance &&
-            item.sponsored_ad_performance.current_sum &&
-            item.sponsored_ad_performance.current_sum.ad_sales
-              ? `$${item.sponsored_ad_performance.current_sum.ad_sales
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : '$0'}
+            {generatePerformance(
+              item &&
+                item.dsp_ad_performance &&
+                item.dsp_ad_performance.current_sum &&
+                item.dsp_ad_performance.current_sum.total_product_sales,
+              2,
+              '',
+              '$',
+            )}
             {renderAdPerformanceDifference(
               item &&
                 item.sponsored_ad_performance &&
@@ -929,15 +948,15 @@ export default function NewCustomerList() {
 
           <td width="15%">
             <>
-              {item &&
-              item.sponsored_ad_performance &&
-              item.sponsored_ad_performance.current_sum &&
-              item.sponsored_ad_performance.current_sum.ad_spend
-                ? `$${item.sponsored_ad_performance.current_sum.ad_spend
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+              {generatePerformance(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.total_product_sales,
+                2,
+                '',
+                '$',
+              )}
               {renderAdPerformanceDifference(
                 item &&
                   item.sponsored_ad_performance &&
@@ -1047,15 +1066,15 @@ export default function NewCustomerList() {
             )}
           </td>
           <td width="15%">
-            {item &&
-            item.dsp_ad_performance &&
-            item.dsp_ad_performance.current_sum &&
-            item.dsp_ad_performance.current_sum.impressions
-              ? `${item.dsp_ad_performance.current_sum.impressions
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : '0'}
+            {generatePerformance(
+              item.dsp_ad_performance &&
+                item.dsp_ad_performance.current_sum &&
+                item.dsp_ad_performance.current_sum.impressions,
+              2,
+              '',
+              '',
+            )}
+
             {renderAdPerformanceDifference(
               item &&
                 item.dsp_ad_performance &&
@@ -1068,15 +1087,15 @@ export default function NewCustomerList() {
 
           <td width="15%">
             <>
-              {item &&
-              item.dsp_ad_performance &&
-              item.dsp_ad_performance.current_sum &&
-              item.dsp_ad_performance.current_sum.dsp_spend
-                ? `$${item.dsp_ad_performance.current_sum.dsp_spend
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+              {generatePerformance(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.total_product_sales,
+                2,
+                '',
+                '$',
+              )}
               {renderAdPerformanceDifference(
                 item &&
                   item.dsp_ad_performance &&
@@ -1090,15 +1109,15 @@ export default function NewCustomerList() {
 
           <td width="15%">
             <>
-              {item &&
-              item.dsp_ad_performance &&
-              item.dsp_ad_performance.current_sum &&
-              item.dsp_ad_performance.current_sum.total_product_sales
-                ? `$${item.dsp_ad_performance.current_sum.total_product_sales
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+              {generatePerformance(
+                item &&
+                  item.dsp_ad_performance &&
+                  item.dsp_ad_performance.current_sum &&
+                  item.dsp_ad_performance.current_sum.total_product_sales,
+                2,
+                '',
+                '$',
+              )}
               {renderAdPerformanceDifference(
                 item &&
                   item.dsp_ad_performance &&
