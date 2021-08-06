@@ -14,7 +14,7 @@ const Status = ({
 }) => (
   <StatusWrapper
     style={{ 'background-color': backgroundColor }}
-    className={['status_container', className]}>
+    className={['status_container capitalize', className]}>
     {pointColor ? (
       <div
         style={{ 'background-color': pointColor }}
@@ -30,6 +30,7 @@ const Status = ({
 export default Status;
 
 const StatusWrapper = styled.div`
+  float: left;
   border-radius: 5px;
   width: fit-content;
   padding: 5px 10px;

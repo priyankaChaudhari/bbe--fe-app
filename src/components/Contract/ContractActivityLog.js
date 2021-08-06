@@ -10,8 +10,9 @@ import {
   SignatureIcon,
   NextActivityLogo,
 } from '../../theme/images/index';
-import { CommonPagination } from '../../common/index';
+import { CommonPagination, Status } from '../../common/index';
 import PageLoader from '../../common/PageLoader';
+import Theme from '../../theme/Theme';
 
 const _ = require('lodash');
 
@@ -394,6 +395,42 @@ function ContractActivityLog({
                     <div className="time-date mt-1">
                       {item && item.history_date ? item.history_date : ''}
                     </div>
+                    {item && item.status ? (
+                      <>
+                        <Status
+                          label={item.status}
+                          backgroundColor={
+                            item.status === 'delivered'
+                              ? Theme.lightGreen
+                              : item.status === 'processed'
+                              ? Theme.lightYellow
+                              : Theme.lightRed
+                          }
+                          pointColor={
+                            item.status === 'delivered'
+                              ? Theme.green
+                              : item.status === 'processed'
+                              ? Theme.yellow
+                              : Theme.red
+                          }
+                        />
+                        {item.status === 'delivered' ? (
+                          <div className="email-clicks">
+                            <span className="email-opens">
+                              Opens: {item.opens || 0}
+                            </span>{' '}
+                            <span className="email-opens">
+                              {' '}
+                              Clicks: {item.clicks || 0}{' '}
+                            </span>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </>
+                    ) : (
+                      ''
+                    )}
                   </div>
                   <div className="clear-fix" />
                 </li>

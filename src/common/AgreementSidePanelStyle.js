@@ -346,7 +346,22 @@ const SidePanel = styled.div`
             color:${Theme.gray35};
             font-weight: 500;
           }
+          .email-clicks {
+          float: left;
+          margin-top: 10px;
+          margin-left: 5px;
+          .email-opens {
+            border-right: 1px solid ${Theme.gray35};
+            padding: 0 8px;
+            color: ${Theme.black};
+            &:last-child {
+              border-right: none;
+            }
+          }
         }
+      }
+
+      
 
         .default-user {
           width: 42px;

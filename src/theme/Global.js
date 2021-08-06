@@ -47,6 +47,19 @@ export const GroupUser = styled.div`
       }
     }
   }
+  .email-clicks {
+    float: left;
+    margin-top: 10px;
+    margin-left: 5px;
+    .email-opens {
+      border-right: 1px solid ${Theme.gray35};
+      padding: 0 8px;
+      color: ${Theme.black};
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
   .default-user-activity {
     width: 40px;
     height: 40px;
