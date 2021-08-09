@@ -36,7 +36,7 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants/index';
 
-import { CustomerListTablet, UploadProductAsset } from '../components/Customer';
+import { CustomerListTablet, ProductDelegation } from '../components/Customer';
 
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
@@ -199,10 +199,15 @@ export default function AuthenticationComponent() {
             path={PATH_BRAND_ASSET_PREVIEW}
             component={BrandAssetsPreview}
           />
+          {/* {userInfo && userInfo.role === 'Customer' ? ( */}
           <Route
             path={PATH_UPLOAD_PRODUCT_ASSET}
-            component={UploadProductAsset}
+            component={ProductDelegation}
           />
+          {/* ) : (
+            ''
+          )} */}
+
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}
           {/* <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} /> */}

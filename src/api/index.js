@@ -147,4 +147,5 @@ export {
   getProductCatalog,
   requestProductAssets,
   getRequestedProducts,
+  updateProductAsset,
 } from './ProductCatalogApi';

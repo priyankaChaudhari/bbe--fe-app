@@ -20,16 +20,16 @@ import {
   PageLoader,
   Button,
   ModalBox,
-} from '../../common';
+} from '../../../common';
 import {
   SearchIcon,
   Logo,
   RequestPlan,
   CaretUp,
-} from '../../theme/images/index';
-import Theme from '../../theme/Theme';
+} from '../../../theme/images/index';
+import Theme from '../../../theme/Theme';
 
-import { getProductCatalog, requestProductAssets } from '../../api';
+import { getProductCatalog, requestProductAssets } from '../../../api';
 
 const AccountSetupcustomStyles = {
   content: {

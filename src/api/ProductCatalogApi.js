@@ -39,3 +39,15 @@ export async function getRequestedProducts(id) {
     });
   return result;
 }
+
+export async function updateProductAsset(id, data) {
+  const result = await axiosInstance
+    .patch(`product-assets/${id}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

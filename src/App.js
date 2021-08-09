@@ -21,7 +21,7 @@ import {
   PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE,
   PATH_UNAUTHORIZED_BRAND_ASSET,
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
-  PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED,
+  PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE,
 } from './constants/index';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
@@ -38,13 +38,13 @@ import {
   Info,
   Thanks,
 } from './components/OnBoardingCustomer';
-import { UploadProductAsset } from './components/Customer';
 import MainContainer from './components/OnBoardingCustomer/MainContainer';
 import {
   BrandAssetSummary,
   BrandAssetUpload,
   DelegationUpload,
 } from './components/BrandAssetGathering';
+import { ProductDelegation } from './components/Customer';
 import { ProdFavicon } from './theme/images';
 
 export default function App() {
@@ -67,11 +67,9 @@ export default function App() {
         <Route path={PATH_FORGOT_PASSWORD} component={ForgotPassword} />
         <Route path={PATH_RESET_PASSWORD} component={ResetPassword} />
         <Route path={PATH_UNAUTHORIZED_HEADER} component={UnauthorizedHeader} />
-
         {/* Contract */}
         <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
         <Route path={PATH_WARNING} component={WarningComponent} />
-
         {/* Onboarding Customer */}
         <Route path={PATH_ACCOUNT_SETUP_CHOOSE} exact component={Info} />
         <Route path={PATH_ACCOUNT_SETUP} component={MainContainer} />
@@ -92,7 +90,6 @@ export default function App() {
           path={PATH_UNAUTHORIZED_AMAZON_ACCOUNT}
           component={AmazonDeveloperAccess}
         />
-
         <Route path={PATH_THANKS} component={Thanks} />
         <Route
           path={PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE}
@@ -106,10 +103,9 @@ export default function App() {
           path={PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY}
           component={BrandAssetSummary}
         />
-
         <Route
-          path={PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED}
-          component={UploadProductAsset}
+          path={PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE}
+          component={ProductDelegation}
         />
 
         {/*  Default */}

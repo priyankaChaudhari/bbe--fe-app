@@ -59,5 +59,6 @@ export const PATH_UNAUTHORIZED_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/assigned-
 export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/assigned-brand-summary/:brandId`;
 
 // Product Assets
-export const PATH_UPLOAD_PRODUCT_ASSET = '/upload-product-asset';
-export const PATH_UNAUTHORIZED_PRODUCT_ASSETS_REQUESTED = `${PATH_CUSTOMER_DETAILS}/product-assets-requested/`;
+export const PATH_UPLOAD_PRODUCT_ASSET = `${PATH_CUSTOMER_DETAILS}/product-assets-requested/:productId`;
+
+export const PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-product-delegate/:productId`;

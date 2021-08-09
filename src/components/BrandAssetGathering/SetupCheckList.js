@@ -19,7 +19,10 @@ import {
   CircleBellIcon,
 } from '../../theme/images';
 import { getAgreementList, getAssigneeCount } from '../../api';
-import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
+import {
+  PATH_CHOOSE_BRAND_DELEGATE,
+  PATH_UPLOAD_PRODUCT_ASSET,
+} from '../../constants';
 
 // import { UploadProductAsset } from '../../components/Customer/UploadProductAsset';
 
@@ -232,7 +235,11 @@ export default function SetupCheckList({ id, brandId }) {
                 </div>
 
                 <div className="col-7 text-right">
-                  <Link to="upload-product-asset">
+                  <Link
+                    to={PATH_UPLOAD_PRODUCT_ASSET.replace(':id', id).replace(
+                      ':productId',
+                      'PApIELt',
+                    )}>
                     <Button className="btn-primary upload-asset w-sm-100">
                       {' '}
                       Upload Assets{' '}
