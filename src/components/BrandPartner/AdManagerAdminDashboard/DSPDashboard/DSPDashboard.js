@@ -27,7 +27,7 @@ import {
   noGraphDataMessage,
 } from '../../../../constants/CompanyPerformanceConstants';
 import DSPMetrics from './DSPMetrics';
-import DSPPacing from './DSPPacing';
+// import DSPPacing from './DSPPacing';
 import DSPKeyContributors from './DSPKeyContributors';
 import DSPFilter from './DSPFilter';
 import Theme from '../../../../theme/Theme';
@@ -734,7 +734,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           loader={keyContributionLoader}
           data={contributionData}
         />
-        <DSPPacing />
+        {/* <DSPPacing /> */}
       </div>
     </div>
   );
