@@ -52,7 +52,11 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     label: 'All Ad Manager',
   });
   const [selectedMarketplace, setSelectedMarketplace] = useState('all');
-  const [selectedAdDF, setSelectedAdDF] = useState('week');
+  const [selectedAdDF, setSelectedAdDF] = useState({
+    value: 'week',
+    label: 'Recent 7 days',
+    sub: 'vs Previous 7 days',
+  });
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
 
   const [currency, setCurrency] = useState(null);
