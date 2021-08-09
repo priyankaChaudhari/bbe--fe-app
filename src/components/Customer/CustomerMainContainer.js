@@ -1188,6 +1188,11 @@ export default function CustomerMainContainer() {
                         customer.brand_assets &&
                         customer.brand_assets.id
                       }
+                      productAssetsId={
+                        customer &&
+                        customer.product_assets &&
+                        customer.product_assets.id
+                      }
                     />
                   ) : viewComponent === 'brand asset' ? (
                     history.push({

@@ -26,7 +26,7 @@ import {
 
 // import { UploadProductAsset } from '../../components/Customer/UploadProductAsset';
 
-export default function SetupCheckList({ id, brandId }) {
+export default function SetupCheckList({ id, brandId, productAssetsId }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
@@ -238,7 +238,7 @@ export default function SetupCheckList({ id, brandId }) {
                   <Link
                     to={PATH_UPLOAD_PRODUCT_ASSET.replace(':id', id).replace(
                       ':productId',
-                      'PApIELt',
+                      productAssetsId,
                     )}>
                     <Button className="btn-primary upload-asset w-sm-100">
                       {' '}
@@ -420,11 +420,13 @@ export default function SetupCheckList({ id, brandId }) {
 
 SetupCheckList.defaultProps = {
   brandId: '',
+  productAssetsId: '',
 };
 
 SetupCheckList.propTypes = {
   id: PropTypes.string.isRequired,
   brandId: PropTypes.string,
+  productAssetsId: PropTypes.string,
 };
 
 const GreenCheckBox = styled.div`
