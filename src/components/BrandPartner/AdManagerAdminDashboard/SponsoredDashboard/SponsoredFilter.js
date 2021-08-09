@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Select from 'react-select';
 import { arrayOf, bool, func, string } from 'prop-types';
@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { CaretUp } from '../../../../theme/images/index';
 
 const SponsoredFilter = ({
   handleResetFilter,
@@ -24,7 +25,7 @@ const SponsoredFilter = ({
   selectedMarketplace,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
-
+  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
   const renderAdManagerDropdown = (className) => {
     return (
       <div className="col-12 ">
@@ -135,7 +136,7 @@ const SponsoredFilter = ({
           <div className="col-6">
             <div className="black-heading-title ">Filters</div>
           </div>
-          <div className="col-6 text-right">
+          <div className="col-4 text-right">
             <p
               className="gray-normal-text m-0 cursor "
               role="presentation"
@@ -143,24 +144,43 @@ const SponsoredFilter = ({
               Reset filters
             </p>
           </div>
+          <div
+            className="col-2"
+            role="presentation"
+            onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
+            <div className="black-heading-title ">
+              <img
+                src={CaretUp}
+                alt="caret"
+                style={{
+                  transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                  width: '25px',
+                  height: '25px',
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <div className="row ">
-          <div className="col-lg-6 col-md-6 col-sm-12">
-            <div className="row">
-              {renderAdManagerDropdown('customer-list-header')}
 
-              {renderMarketplaceDropdown('customer-list-header')}
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
-            <div className="row ">
-              <div className="col-12">
-                <div className="label mt-4 mb-2">Sponsored Ad Type</div>
+        {isCollapseOpen ? (
+          <div className="row ">
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="row">
+                {renderAdManagerDropdown('customer-list-header')}
+
+                {renderMarketplaceDropdown('customer-list-header')}
               </div>
-              <div className="col-12">{renderSponsoredAdTypes()}</div>
+            </div>
+            <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
+              <div className="row ">
+                <div className="col-12">
+                  <div className="label mt-4 mb-2">Sponsored Ad Type</div>
+                </div>
+                <div className="col-12">{renderSponsoredAdTypes()}</div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </WhiteCard>
     );
   };
