@@ -2,21 +2,20 @@
 import _ from 'lodash';
 import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
 import {
   contributionColorSet,
   dspTabOptions,
 } from '../../../../constants/AdManagerAdminDashboardConstants';
-import {
-  keyContributionHeaders,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { noGraphDataMessage } from '../../../../constants/CompanyPerformanceConstants';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
+  UpDowGrayArrow,
 } from '../../../../theme/images';
 
 const DSPKeyContributors = ({
@@ -28,9 +27,9 @@ const DSPKeyContributors = ({
   selectedTabMatrics,
   data,
   loader,
-  currencySymbol,
-  isDesktop,
+  // currencySymbol,
 }) => {
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const [keyContribution, setKeyContribution] = useState({
     id: 'positive',
     label: 'Positive',
@@ -54,112 +53,289 @@ const DSPKeyContributors = ({
         label2: 'Negative',
       });
     }
-  }, [loader, selectedAdManager]);
+  }, [loader, selectedAdManager, selectedKeyContribution]);
 
-  const renderContribution = () => {
+  const renderAdPerformanceDifference = (actualValue, grayArrow, metrics) => {
+    const value = actualValue;
+    let selectedClass = '';
+    let selectedArrow = '';
+
+    if (value) {
+      if (metrics === 'ACOS') {
+        if (value.toString().includes('-')) {
+          selectedClass = 'increase-rate';
+          selectedArrow = ArrowUpIcon;
+        } else {
+          selectedClass = 'decrease-rate';
+          selectedArrow = ArrowDownIcon;
+        }
+      } else if (grayArrow) {
+        if (value.toString().includes('-')) {
+          selectedClass = 'decrease-rate grey';
+          selectedArrow = UpDowGrayArrow;
+        } else {
+          selectedClass = 'increase-rate grey';
+          selectedArrow = UpDowGrayArrow;
+        }
+      } else if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate';
+        selectedArrow = ArrowDownIcon;
+      } else {
+        selectedClass = 'increase-rate';
+        selectedArrow = ArrowUpIcon;
+      }
+
+      if (value.toString().includes('-')) {
+        return (
+          <>
+            <div className={selectedClass}>
+              {' '}
+              <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
+              {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
+            </div>
+          </>
+        );
+      }
+
+      return (
+        <>
+          <div className={selectedClass}>
+            <img
+              className="green-arrow"
+              src={selectedArrow}
+              width="14px"
+              alt="arrow-up"
+            />
+            {value} %
+          </div>
+        </>
+      );
+    }
+    return '';
+  };
+
+  const renderTableHeader = () => {
+    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+      <tr>
+        <th width="40%" className="product-header">
+          CUSTOMER
+        </th>
+        <th width="20%" className="product-header">
+          Impressions
+        </th>
+        <th width="20%" className="product-header">
+          DSP Spend
+        </th>
+        <th width="20%" className="product-header">
+          {' '}
+          Total Product Sales
+        </th>
+        <th width="60%" className="product-header">
+          {' '}
+          Total ROAS
+        </th>
+      </tr>
+    ) : (
+      <tr>
+        <th width="40%" className="product-header">
+          Customer
+        </th>
+        <th width="20%" className="product-header">
+          This Period
+        </th>
+        <th width="20%" className="product-header">
+          {' '}
+          Prev. Period
+        </th>
+        <th width="20%" className="product-header">
+          {' '}
+          Change
+        </th>
+        <th width="60%" className="product-header">
+          Contribution
+        </th>
+      </tr>
+    );
+  };
+
+  const renderTableData = (itemData) => {
+    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+      <tr>
+        <td className="product-body">
+          {' '}
+          <img
+            className="company-logo"
+            src={
+              itemData &&
+              itemData.documents &&
+              itemData.documents[0] &&
+              Object.values(itemData.documents[0])
+                ? Object.values(itemData.documents[0])[0]
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
+          <div className="company-name">
+            {itemData && itemData.company_name}
+          </div>
+          <div className="status">
+            {itemData && itemData.ad_manager && itemData.ad_manager.first_name}
+            {itemData && itemData.ad_manager && itemData.ad_manager.last_name}
+          </div>
+        </td>
+        <td className="product-body">
+          {' '}
+          {itemData &&
+          itemData.dsp_ad_performance &&
+          itemData.dsp_ad_performance.current_sum &&
+          itemData.dsp_ad_performance.current_sum.impressions
+            ? `$${itemData.dsp_ad_performance.current_sum.impressions
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+            : '$0'}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.dsp_ad_performance &&
+              itemData.dsp_ad_performance.difference_data &&
+              itemData.dsp_ad_performance.difference_data.impressions,
+            false,
+            'Impresion',
+          )}
+        </td>
+        <td className="product-body">
+          {itemData &&
+          itemData.dsp_ad_performance &&
+          itemData.dsp_ad_performance.current_sum &&
+          itemData.dsp_ad_performance.current_sum.dsp_spend
+            ? `$${itemData.dsp_ad_performance.current_sum.dsp_spend
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+            : '$0'}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.dsp_ad_performance &&
+              itemData.dsp_ad_performance.difference_data &&
+              itemData.dsp_ad_performance.difference_data.dsp_spend,
+            true,
+            'DspSpend',
+          )}
+        </td>
+        <td>
+          {itemData &&
+          itemData.dsp_ad_performance &&
+          itemData.dsp_ad_performance.current_sum &&
+          itemData.dsp_ad_performance.current_sum.total_product_sales
+            ? itemData.dsp_ad_performance.current_sum.total_product_sales
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            : 0}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.dsp_ad_performance &&
+              itemData.dsp_ad_performance.difference_data &&
+              itemData.dsp_ad_performance.difference_data.total_product_sales,
+            false,
+            'ProductSale',
+          )}
+        </td>
+        <td>
+          {itemData &&
+          itemData.dsp_ad_performance &&
+          itemData.dsp_ad_performance.current_sum &&
+          itemData.dsp_ad_performance.current_sum.total_roas
+            ? `${itemData.dsp_ad_performance.current_sum.total_roas.toFixed(
+                2,
+              )}%`
+            : '0%'}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.dsp_ad_performance &&
+              itemData.dsp_ad_performance.difference_data &&
+              itemData.dsp_ad_performance.difference_data.total_roas,
+            false,
+            'TotalACOS',
+          )}
+        </td>
+      </tr>
+    ) : (
+      <tr>
+        <td className="product-body">
+          {' '}
+          <img
+            className="company-logo"
+            src={
+              itemData && itemData.document
+                ? itemData.document
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
+          <div className="company-name">{itemData.customer_name}</div>
+          <div className="status">{itemData.ad_manager}</div>
+        </td>
+        <td className="product-body">
+          {' '}
+          {itemData && itemData.current
+            ? `$${itemData.current
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+            : '$0'}
+        </td>
+        <td className="product-body">
+          {' '}
+          {itemData && itemData.previous
+            ? `$${itemData.previous
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+            : '$0'}
+        </td>
+        <td className="product-body">
+          {' '}
+          {itemData && itemData.change.toString().includes('-') ? (
+            <div className="decrease-rate large">
+              {' '}
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow" />
+              {itemData && itemData.change
+                ? `$${Number(itemData.change.toString().split('-')[1])
+                    .toFixed(2)
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
+            </div>
+          ) : (
+            <div className="increase-rate large">
+              {' '}
+              <img className="green-arrow" src={ArrowUpIcon} alt="arrow" />
+              {itemData && itemData.change
+                ? `$${itemData.change
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : '$0'}
+            </div>
+          )}
+        </td>
+        <td className="product-body">
+          <Status
+            label={itemData.contribution_bracket}
+            backgroundColor={
+              contributionColorSet[itemData.contribution_bracket]
+            }
+          />
+        </td>
+      </tr>
+    );
+  };
+
+  const renderDesktopKeyContributions = () => {
     return (
       <Table className="mt-0 d-md-none d-sm-none d-lg-block">
-        <tr>
-          <th width="40%" className="product-header">
-            Customer
-          </th>
-          <th width="20%" className="product-header">
-            This Period
-          </th>
-          <th width="20%" className="product-header">
-            {' '}
-            Prev. Period
-          </th>
-          <th width="20%" className="product-header">
-            {' '}
-            Change
-          </th>
-          <th width="60%" className="product-header">
-            Contribution
-          </th>
-        </tr>
-
-        {data && data.length >= 1 ? (
-          <tbody>
-            {data &&
-              data.map((item) => {
-                return (
-                  <tr>
-                    <td className="product-body">
-                      {' '}
-                      <img
-                        className="company-logo"
-                        src={CompanyDefaultUser}
-                        alt="logo"
-                      />
-                      <div className="company-name">{item.customer_name}</div>
-                      <div className="status">{item.ad_manager}</div>
-                    </td>
-                    <td className="product-body">
-                      {' '}
-                      {item && item.current
-                        ? `${currencySymbol}${item.current
-                            .toFixed(2)
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                        : `${currencySymbol}0`}
-                    </td>
-                    <td className="product-body">
-                      {' '}
-                      {item && item.previous
-                        ? `${currencySymbol}${item.previous
-                            .toFixed(2)
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                        : `${currencySymbol}0`}
-                    </td>
-                    <td className="product-body">
-                      {item && item.change.toString().includes('-') ? (
-                        <div className="decrease-rate large">
-                          {' '}
-                          <img
-                            className="red-arrow"
-                            src={ArrowDownIcon}
-                            alt="arrow"
-                          />
-                          {item && item.change
-                            ? `${currencySymbol}${Number(
-                                item.change.toString().split('-')[1],
-                              )
-                                .toFixed(2)
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
-                        </div>
-                      ) : (
-                        <div className="increase-rate large">
-                          {' '}
-                          <img
-                            className="green-arrow"
-                            src={ArrowUpIcon}
-                            alt="arrow"
-                          />
-                          {item && item.change
-                            ? `${currencySymbol}${item.change
-                                .toFixed(2)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
-                        </div>
-                      )}
-                    </td>
-                    <td className="product-body">
-                      <Status
-                        className="statusContainer"
-                        label={item.contribution_bracket}
-                        backgroundColor={
-                          contributionColorSet[item.contribution_bracket]
-                        }
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
+        {renderTableHeader()}
+        {data ? (
+          <tbody>{data.map((item) => renderTableData(item))}</tbody>
         ) : (
           <NoData>{noGraphDataMessage}</NoData>
         )}
@@ -167,7 +343,7 @@ const DSPKeyContributors = ({
     );
   };
 
-  const renderContributionTablet = () => {
+  const renderTabletKeyContributions = () => {
     return (
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
         <div className="container-fluid">
@@ -195,11 +371,11 @@ const DSPKeyContributors = ({
                       <div className="label">This Period</div>
                       <div className="label-info ">
                         {itemData && itemData.current
-                          ? `${currencySymbol}${itemData.current
+                          ? `$${itemData.current
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
+                          : '$0'}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -207,11 +383,11 @@ const DSPKeyContributors = ({
                       <div className="label">Prev. Period</div>
                       <div className="label-info ">
                         {itemData && itemData.previous
-                          ? `${currencySymbol}${itemData.previous
+                          ? `$${itemData.previous
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
+                          : '$0'}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -226,12 +402,12 @@ const DSPKeyContributors = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `${currencySymbol}${Number(
+                            ? `$${Number(
                                 itemData.change.toString().split('-')[1],
                               )
                                 .toFixed(2)
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
+                            : '$0'}
                         </div>
                       ) : (
                         <div className="increase-rate large">
@@ -242,11 +418,11 @@ const DSPKeyContributors = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `${currencySymbol}${itemData.change
+                            ? `$${itemData.change
                                 .toFixed(2)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
+                            : '$0'}
                         </div>
                       )}
                     </div>
@@ -274,11 +450,11 @@ const DSPKeyContributors = ({
       <WhiteCard className="mb-3">
         <div className="row">
           <div className="col-md-6 col-sm1-12">
-            <p className="black-heading-title mt-2 mb-4">
+            {/* <p className="black-heading-title mt-2 mb-4">
               {selectedKeyContribution
                 ? keyContributionHeaders[keyContribution.id]
                 : keyContributionHeaders[keyContribution.id2]}
-            </p>
+            </p> */}
           </div>
           <div className="col-md-6 col-sm1-12  mb-3">
             <div className="days-container ">
@@ -341,10 +517,12 @@ const DSPKeyContributors = ({
             width={40}
             height={40}
           />
-        ) : isDesktop ? (
-          renderContribution()
-        ) : data && data.length >= 1 ? (
-          renderContributionTablet()
+        ) : data ? (
+          isDesktop ? (
+            renderDesktopKeyContributions()
+          ) : (
+            renderTabletKeyContributions()
+          )
         ) : (
           <NoData>{noGraphDataMessage}</NoData>
         )}
@@ -365,8 +543,7 @@ DSPKeyContributors.defaultProps = {
   handleOnMatricsTabChange: () => {},
   selectedTabMatrics: 'dspImpression',
   data: null,
-  currencySymbol: '',
-  isDesktop: false,
+  // currencySymbol: '',
 };
 
 DSPKeyContributors.propTypes = {
@@ -378,14 +555,13 @@ DSPKeyContributors.propTypes = {
   selectedTabMatrics: string,
   data: arrayOf(Array),
   loader: bool.isRequired,
-  currencySymbol: string,
-  isDesktop: bool,
+  // currencySymbol: string,
 };
 
 const Wrapper = styled.div`
-  td {
+  /* td {
     padding: 20px 10px 3px 0px !important;
-  }
+  } */
   .statusContainer {
     margin-top: 0px !important;
   }
