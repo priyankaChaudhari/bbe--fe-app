@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Select from 'react-select';
 import { arrayOf, bool, func, shape } from 'prop-types';
@@ -10,6 +10,7 @@ import {
   DropDownIndicator,
 } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { CaretUp } from '../../../../theme/images/index';
 
 const DSPFilter = ({
   options,
@@ -21,6 +22,50 @@ const DSPFilter = ({
   handleResetFilter,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
+
+  const renderFilters = () => {
+    return (
+      <>
+        <div className="col-lg-12 col-md-6">
+          <div className="label mt-3">Ad Manager</div>
+          {DropDown(
+            'cursor',
+            adManagerList,
+            adManagerList && adManagerList[0] && adManagerList[0].label,
+            getSelectComponents,
+            adManagerList && adManagerList[0],
+            handleAdManagerFilter,
+            isApiCall,
+          )}
+        </div>
+        <div className="col-lg-12 col-md-6">
+          <div className="label mt-3">Marketplace</div>
+          <DropDownSelect
+            id="BT-DSPadver-countryfilter"
+            // className={isApiCall ? `cursor  disabled` : 'cursor '}>
+            className="cursor">
+            <Select
+              classNamePrefix="react-select"
+              className="active"
+              components={DropDownIndicator}
+              options={options}
+              defaultValue={options && options[0]}
+              onChange={(event) => handleMarketplaceOptions(event)}
+              placeholder={options && options[0] && options[0].label}
+              theme={(theme) => ({
+                ...theme,
+                colors: {
+                  ...theme.colors,
+                  neutral50: '#1A1A1A',
+                },
+              })}
+            />
+          </DropDownSelect>
+        </div>
+      </>
+    );
+  };
   return (
     <div>
       <WhiteCard
@@ -31,50 +76,38 @@ const DSPFilter = ({
           <div className="col-6">
             <div className="black-heading-title ">Filters</div>
           </div>
-          <div className="col-6 text-right">
+          <div className={isDesktop ? 'col-6 text-right' : 'col-4 text-right'}>
             <div
               onClick={() => handleResetFilter()}
               role="presentation"
-              className="gray-normal-text cursor ">
+              className="gray-normal-text cursor">
               Reset filters
             </div>
           </div>
-          <div className="col-lg-12 col-md-6">
-            <div className="label mt-3">Ad Manager</div>
-            {DropDown(
-              'cursor',
-              adManagerList,
-              adManagerList && adManagerList[0] && adManagerList[0].label,
-              getSelectComponents,
-              adManagerList && adManagerList[0],
-              handleAdManagerFilter,
-              isApiCall,
-            )}
-          </div>
-          <div className="col-lg-12 col-md-6">
-            <div className="label mt-3">Marketplace</div>
-            <DropDownSelect
-              id="BT-DSPadver-countryfilter"
-              // className={isApiCall ? `cursor  disabled` : 'cursor '}>
-              className="cursor">
-              <Select
-                classNamePrefix="react-select"
-                className="active"
-                components={DropDownIndicator}
-                options={options}
-                defaultValue={options && options[0]}
-                onChange={(event) => handleMarketplaceOptions(event)}
-                placeholder={options && options[0] && options[0].label}
-                theme={(theme) => ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    neutral50: '#1A1A1A',
-                  },
-                })}
-              />
-            </DropDownSelect>
-          </div>
+          {!isDesktop ? (
+            <div
+              className="col-2"
+              role="presentation"
+              onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
+              <div className="black-heading-title ">
+                <img
+                  src={CaretUp}
+                  alt="caret"
+                  style={{
+                    transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                    width: '25px',
+                    height: '25px',
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {isDesktop
+            ? renderFilters()
+            : isCollapseOpen
+            ? renderFilters()
+            : null}
         </div>
       </WhiteCard>
       {/* <WhiteCard className="mb-3 d-lg-none d-block">

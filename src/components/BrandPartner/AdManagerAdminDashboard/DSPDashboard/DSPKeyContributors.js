@@ -9,7 +9,10 @@ import {
   contributionColorSet,
   dspTabOptions,
 } from '../../../../constants/AdManagerAdminDashboardConstants';
-import { noGraphDataMessage } from '../../../../constants/CompanyPerformanceConstants';
+import {
+  noGraphDataMessage,
+  keyContributionHeaders,
+} from '../../../../constants/CompanyPerformanceConstants';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
   ArrowDownIcon,
@@ -450,11 +453,11 @@ const DSPKeyContributors = ({
       <WhiteCard className="mb-3">
         <div className="row">
           <div className="col-md-6 col-sm1-12">
-            {/* <p className="black-heading-title mt-2 mb-4">
+            <p className="black-heading-title mt-2 mb-4">
               {selectedKeyContribution
                 ? keyContributionHeaders[keyContribution.id]
                 : keyContributionHeaders[keyContribution.id2]}
-            </p> */}
+            </p>
           </div>
           <div className="col-md-6 col-sm1-12  mb-3">
             <div className="days-container ">
@@ -497,18 +500,21 @@ const DSPKeyContributors = ({
             </div>
           </div>
         </div>
-        <Tabs>
-          <ul className="tabs">
-            {_.keys(selectedDSPMatrics).map((item) => (
-              <li
-                className={selectedTabMatrics === item ? 'active' : ''}
-                onClick={() => handleOnMatricsTabChange(item)}
-                role="presentation">
-                {dspTabOptions[item]}
-              </li>
-            ))}
-          </ul>
-        </Tabs>
+        {selectedKeyContribution === false &&
+        keyContribution.id2 === 'keyMetrics' ? null : (
+          <Tabs>
+            <ul className="tabs">
+              {_.keys(selectedDSPMatrics).map((item) => (
+                <li
+                  className={selectedTabMatrics === item ? 'active' : ''}
+                  onClick={() => handleOnMatricsTabChange(item)}
+                  role="presentation">
+                  {dspTabOptions[item]}
+                </li>
+              ))}
+            </ul>
+          </Tabs>
+        )}
         {loader ? (
           <PageLoader
             component="performance-graph"

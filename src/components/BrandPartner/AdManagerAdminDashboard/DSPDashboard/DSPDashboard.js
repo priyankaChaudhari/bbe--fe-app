@@ -200,8 +200,10 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
           } else {
-            setContributionData();
+            setContributionData([]);
           }
           setKeyContributionLoader(false);
         }
