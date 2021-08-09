@@ -31,7 +31,7 @@ const DSPFilter = ({
             <div className="black-heading-title ">Filters</div>
           </div>
           <div className="col-6 text-right">
-            <div className="gray-normal-text ">Reset filters</div>
+            <div className="gray-normal-text cursor ">Reset filters</div>
           </div>
           <div className="col-lg-12 col-md-6">
             <div className="label mt-3">Ad Manager</div>
@@ -48,7 +48,7 @@ const DSPFilter = ({
           <div className="col-lg-12 col-md-6">
             <div className="label mt-3">Marketplace</div>
             <DropDownSelect
-              id="BT-adperformancedata-countryfilter"
+              id="BT-DSPadver-countryfilter"
               // className={isApiCall ? `cursor  disabled` : 'cursor '}>
               className="cursor">
               <Select

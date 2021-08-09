@@ -49,7 +49,7 @@ const SponsoredFilter = ({
       <div className="col-12 ">
         <div className="label mt-3">Marketplace</div>
         <DropDownSelect
-          id="BT-adperformancedata-countryfilter"
+          id="BT-sponsoredadver-countryfilter"
           className={isApiCall ? `${className}  disabled` : className}>
           <Select
             classNamePrefix="react-select"
@@ -113,7 +113,7 @@ const SponsoredFilter = ({
             <p
               role="presentation"
               onClick={() => handleResetFilter()}
-              className="gray-normal-text m-0">
+              className="gray-normal-text m-0 cursor">
               Reset filters
             </p>
           </div>
@@ -133,11 +133,11 @@ const SponsoredFilter = ({
       <WhiteCard className="mb-3 d-lg-none d-block">
         <div className="row ">
           <div className="col-6">
-            <div className="black-heading-title ">Filters for tablet</div>
+            <div className="black-heading-title ">Filters</div>
           </div>
           <div className="col-6 text-right">
             <p
-              className="gray-normal-text m-0 "
+              className="gray-normal-text m-0 cursor "
               role="presentation"
               onClick={() => handleResetFilter()}>
               Reset filters
@@ -152,8 +152,8 @@ const SponsoredFilter = ({
               {renderMarketplaceDropdown('customer-list-header')}
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-sm-12">
-            <div className="row">
+          <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
+            <div className="row ">
               <div className="col-12">
                 <div className="label mt-4 mb-2">Sponsored Ad Type</div>
               </div>
