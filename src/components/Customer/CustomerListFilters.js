@@ -41,6 +41,8 @@ function CustomerListFilters({
   setFilters,
   searchQuery,
   setSearchQuery,
+  showContractDetails,
+  setShowContractDetails,
   showPerformance,
   setShowPerformance,
   showAdPerformance,
@@ -102,25 +104,27 @@ function CustomerListFilters({
 
   const IconSingleOption = (dataProps) => (
     <SingleValue {...dataProps}>
-      {dataProps.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={dataProps.data.icon}
-          alt="user"
-          style={{
-            borderRadius: 50,
-            width: '28px',
-            verticalAlign: 'middle',
-            marginBottom: '',
-          }}
-        />
-      ) : (
-        <GetInitialName
-          userInfo={dataProps.data.label}
-          type="list"
-          property=""
-        />
-      )}{' '}
+      {dataProps.data && dataProps.data.label !== 'All' ? (
+        dataProps.data.icon ? (
+          <img
+            className="drop-down-user"
+            src={dataProps.data.icon}
+            alt="user"
+            style={{
+              borderRadius: 50,
+              width: '28px',
+              verticalAlign: 'middle',
+              marginBottom: '',
+            }}
+          />
+        ) : (
+          <GetInitialName
+            userInfo={dataProps.data.label}
+            type="list"
+            property=""
+          />
+        )
+      ) : null}
       <span style={{ lineHeight: 0, fontSize: '15px' }}>
         {dataProps.data.label}
       </span>
@@ -164,11 +168,17 @@ function CustomerListFilters({
       });
 
       if (event.value === 'contract_details') {
+        //
+        setShowContractDetails(true);
+        //
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
+          //
+          showContractDetails: true,
+          //
           showPerformance: false,
           showAdPerformance: false,
           showDspAdPerformance: false,
@@ -180,6 +190,9 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
+            //
+            showContractDetails: true,
+            //
             showPerformance: false,
             showAdPerformance: false,
             showDspAdPerformance: false,
@@ -189,11 +202,17 @@ function CustomerListFilters({
           }),
         );
       } else if (event.value === 'performance') {
+        //
+        setShowContractDetails(false);
+        //
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
+          //
+          showContractDetails: false,
+          //
           showPerformance: true,
           showAdPerformance: false,
           showDspAdPerformance: false,
@@ -202,17 +221,26 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
+            //
+            showContractDetails: false,
+            //
             showPerformance: true,
             showAdPerformance: false,
             showDspAdPerformance: false,
           }),
         );
       } else if (event.value === 'sponsored_ad_performance') {
+        //
+        setShowContractDetails(false);
+        //
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
+          //
+          showContractDetails: false,
+          //
           showPerformance: false,
           showAdPerformance: true,
           showDspAdPerformance: false,
@@ -221,17 +249,26 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
+            //
+            showContractDetails: false,
+            //
             showPerformance: false,
             showAdPerformance: true,
             showDspAdPerformance: false,
           }),
         );
       } else if (event.value === 'dsp_ad_performance') {
+        //
+        setShowContractDetails(false);
+        //
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
         setFilters({
           ...filters,
+          //
+          showContractDetails: false,
+          //
           showPerformance: false,
           showAdPerformance: false,
           showDspAdPerformance: true,
@@ -240,6 +277,9 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
+            //
+            showContractDetails: false,
+            //
             showPerformance: false,
             showAdPerformance: false,
             showDspAdPerformance: true,
@@ -337,6 +377,7 @@ function CustomerListFilters({
     // const handleFilters = (event, key, type) => {
     // for one select user
     if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
+    // console.log('bgs', JSON.stringify(event));
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
@@ -349,8 +390,11 @@ function CustomerListFilters({
       setFilters({
         ...filters,
         status: [],
-        contract_status: [],
         contract_type: [],
+        contract_status: [],
+        //
+        contract_details: [],
+        //
         user: [],
         ad_user: [],
         dsp_user: [],
@@ -362,6 +406,9 @@ function CustomerListFilters({
           status: [],
           contract_status: [],
           contract_type: [],
+          //
+          contract_details: [],
+          //
           user: [],
           ad_user: [],
           dsp_user: [],
@@ -440,6 +487,9 @@ function CustomerListFilters({
       if (action.action === 'clear') {
         setFilters({
           ...filters,
+          //
+          contract_details: [],
+          //
           user: [],
           ad_user: [],
           dsp_user: [],
@@ -448,13 +498,45 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
+            //
+            contract_details: [],
+            //
             user: [],
             ad_user: [],
             dsp_user: [],
           }),
         );
       } else {
-        if (!showAdPerformance && !showDspAdPerformance) {
+        // new code for showContractDetails added below
+        if (showContractDetails) {
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              contract_details: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                contract_details: [],
+              }),
+            );
+          } else {
+            setFilters({
+              ...filters,
+              contract_details: event.value,
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                contract_details: event.value,
+              }),
+            );
+          }
+        }
+        //
+        if (showPerformance) {
           if (event.value === 'any') {
             setFilters({
               ...filters,
@@ -498,14 +580,12 @@ function CustomerListFilters({
           } else {
             setFilters({
               ...filters,
-
               ad_user: event.value,
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
-
                 ad_user: event.value,
               }),
             );
@@ -528,14 +608,12 @@ function CustomerListFilters({
           } else {
             setFilters({
               ...filters,
-
               dsp_user: event.value,
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
-
                 dsp_user: event.value,
               }),
             );
@@ -690,11 +768,16 @@ function CustomerListFilters({
     return DropdownIndicator;
   };
   const bindDropDownValue = (item) => {
+    // new code added below
     if (item === 'user') {
-      if (filters.user && !showAdPerformance && !showDspAdPerformance) {
-        if (localStorage.getItem('bgs')) {
-          return JSON.parse(localStorage.getItem('bgs'));
-        }
+      if (filters.contract_details && showContractDetails) {
+        return brandGrowthStrategist.filter(
+          (option) => filters.contract_details === option.value,
+          // console.log('filters.contract_details', filters.contract_details),
+          console.log('filters', filters),
+        );
+      }
+      if (filters.user && showPerformance) {
         return brandGrowthStrategist.filter(
           (option) => filters.user === option.value,
         );
@@ -712,7 +795,37 @@ function CustomerListFilters({
       }
 
       return [{ value: 'any', label: 'Any' }];
+      // return brandGrowthStrategist.filter(
+      //   (option) => filters.contract_details === option.value,
+      //   // console.log('filters', filters),
+      // );
     }
+
+    // original code commented below
+
+    // if (item === 'user') {
+    //   if (filters.user && !showAdPerformance && !showDspAdPerformance) {
+    //     if (localStorage.getItem('bgs')) {
+    //       return JSON.parse(localStorage.getItem('bgs'));
+    //     }
+    //     return brandGrowthStrategist.filter(
+    //       (option) => filters.user === option.value,
+    //     );
+    //   }
+    //   if (filters.ad_user && showAdPerformance) {
+    //     return brandGrowthStrategist.filter(
+    //       (option) => filters.ad_user === option.value,
+    //     );
+    //   }
+
+    //   if (filters.dsp_user && showDspAdPerformance) {
+    //     return brandGrowthStrategist.filter(
+    //       (option) => filters.dsp_user === option.value,
+    //     );
+    //   }
+
+    //   return [{ value: 'any', label: 'Any' }];
+    // }
 
     if (item === 'sort') {
       if (!isDesktop) {
@@ -1259,14 +1372,31 @@ CustomerListFilters.propTypes = {
     ]),
     contract_status: PropTypes.arrayOf(PropTypes.string),
     searchQuery: PropTypes.arrayOf(PropTypes.array),
-    user: PropTypes.arrayOf(PropTypes.array),
-    ad_user: PropTypes.arrayOf(PropTypes.array),
-    dsp_user: PropTypes.arrayOf(PropTypes.array),
+    contract_details: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    ad_user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    dsp_user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
   }).isRequired,
 
   setFilters: PropTypes.func.isRequired,
   searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func.isRequired,
+  //
+  showContractDetails: PropTypes.bool.isRequired,
+  setShowContractDetails: PropTypes.func.isRequired,
+  //
   showPerformance: PropTypes.bool.isRequired,
   setShowPerformance: PropTypes.func.isRequired,
   showAdPerformance: PropTypes.bool.isRequired,
