@@ -1013,26 +1013,32 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
-                        <li
-                          onClick={() => {
-                            setViewComponent('product catalog');
-                            dispatch(setCustomerSelectedTab('product catalog'));
-                          }}
-                          role="presentation">
-                          <div
-                            className={`left-details ${
-                              viewComponent === 'product catalog'
-                                ? 'active'
-                                : ''
-                            }`}>
-                            <img
-                              className="file-contract"
-                              src={CatalogBox}
-                              alt=""
-                            />
-                            Product Catalog
-                          </div>
-                        </li>
+                        {userInfo && userInfo.role === 'Customer' ? (
+                          ''
+                        ) : (
+                          <li
+                            onClick={() => {
+                              setViewComponent('product catalog');
+                              dispatch(
+                                setCustomerSelectedTab('product catalog'),
+                              );
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'product catalog'
+                                  ? 'active'
+                                  : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={CatalogBox}
+                                alt=""
+                              />
+                              Product Catalog
+                            </div>
+                          </li>
+                        )}
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
