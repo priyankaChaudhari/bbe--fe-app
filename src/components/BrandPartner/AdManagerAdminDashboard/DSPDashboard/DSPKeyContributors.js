@@ -25,7 +25,9 @@ const DSPKeyContributors = ({
   selectedTabMatrics,
   data,
   loader,
+  currencySymbol,
 }) => {
+  console.log('loader', loader);
   const [keyContribution, setKeyContribution] = useState({
     id: 'positive',
     label: 'Positive',
@@ -91,20 +93,20 @@ const DSPKeyContributors = ({
                   <td className="product-body">
                     {' '}
                     {item && item.current
-                      ? `$${item.current
+                      ? `${currencySymbol}${item.current
                           .toFixed(2)
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                      : '$0'}
+                      : `${currencySymbol}0`}
                   </td>
                   <td className="product-body">
                     {' '}
                     {item && item.previous
-                      ? `$${item.previous
+                      ? `${currencySymbol}${item.previous
                           .toFixed(2)
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                      : '$0'}
+                      : `${currencySymbol}0`}
                   </td>
                   <td className="product-body">
                     {item && item.change.toString().includes('-') ? (
@@ -116,10 +118,12 @@ const DSPKeyContributors = ({
                           alt="arrow"
                         />
                         {item && item.change
-                          ? `$${Number(item.change.toString().split('-')[1])
+                          ? `${currencySymbol}${Number(
+                              item.change.toString().split('-')[1],
+                            )
                               .toFixed(2)
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     ) : (
                       <div className="increase-rate large">
@@ -130,11 +134,11 @@ const DSPKeyContributors = ({
                           alt="arrow"
                         />
                         {item && item.change
-                          ? `$${item.change
+                          ? `${currencySymbol}${item.change
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     )}
                   </td>
@@ -348,6 +352,7 @@ DSPKeyContributors.defaultProps = {
   handleOnMatricsTabChange: () => {},
   selectedTabMatrics: 'dspImpression',
   data: null,
+  currencySymbol: '',
 };
 
 DSPKeyContributors.propTypes = {
@@ -359,6 +364,7 @@ DSPKeyContributors.propTypes = {
   selectedTabMatrics: string,
   data: arrayOf(Array),
   loader: bool.isRequired,
+  currencySymbol: string,
 };
 
 const Wrapper = styled.div`

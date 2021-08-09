@@ -204,7 +204,6 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           setKeyContributionLoader(false);
         }
       });
-      setKeyContributionLoader(false);
     },
     [],
   );
@@ -230,6 +229,8 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
       );
+      setCurrency('USD');
+      setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
     }
   }, [
@@ -737,6 +738,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           handleOnMatricsTabChange={handleOnMatricsTabChange}
           loader={keyContributionLoader}
           data={contributionData}
+          currencySymbol={currencySymbol}
         />
         {/* <DSPPacing /> */}
       </div>
