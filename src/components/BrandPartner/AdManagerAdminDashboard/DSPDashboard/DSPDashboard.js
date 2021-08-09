@@ -8,6 +8,7 @@ import getSymbolFromCurrency from 'currency-symbol-map';
 import styled from 'styled-components';
 import { arrayOf, bool, shape, string } from 'prop-types';
 import { components } from 'react-select';
+import { useMediaQuery } from 'react-responsive';
 
 import {
   CustomDateModal,
@@ -37,6 +38,7 @@ const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 3);
 
 const DSPDashboard = ({ marketplaceChoices }) => {
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [dspGraphLoader, setDspGraphLoader] = useState(false);
   const [selectedKeyContribution, setSelectedKeyContribution] = useState(true);
@@ -739,6 +741,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           loader={keyContributionLoader}
           data={contributionData}
           currencySymbol={currencySymbol}
+          isDesktop={isDesktop}
         />
         {/* <DSPPacing /> */}
       </div>

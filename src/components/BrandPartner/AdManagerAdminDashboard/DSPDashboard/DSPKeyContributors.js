@@ -8,13 +8,16 @@ import {
   contributionColorSet,
   dspTabOptions,
 } from '../../../../constants/AdManagerAdminDashboardConstants';
+import {
+  keyContributionHeaders,
+  noGraphDataMessage,
+} from '../../../../constants/CompanyPerformanceConstants';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
 } from '../../../../theme/images';
-import Theme from '../../../../theme/Theme';
 
 const DSPKeyContributors = ({
   selectedKeyContribution,
@@ -26,8 +29,8 @@ const DSPKeyContributors = ({
   data,
   loader,
   currencySymbol,
+  isDesktop,
 }) => {
-  console.log('loader', loader);
   const [keyContribution, setKeyContribution] = useState({
     id: 'positive',
     label: 'Positive',
@@ -75,86 +78,91 @@ const DSPKeyContributors = ({
             Contribution
           </th>
         </tr>
-        <tbody>
-          {data &&
-            data.map((item) => {
-              return (
-                <tr>
-                  <td className="product-body">
-                    {' '}
-                    <img
-                      className="company-logo"
-                      src={CompanyDefaultUser}
-                      alt="logo"
-                    />
-                    <div className="company-name">{item.customer_name}</div>
-                    <div className="status">{item.ad_manager}</div>
-                  </td>
-                  <td className="product-body">
-                    {' '}
-                    {item && item.current
-                      ? `${currencySymbol}${item.current
-                          .toFixed(2)
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                      : `${currencySymbol}0`}
-                  </td>
-                  <td className="product-body">
-                    {' '}
-                    {item && item.previous
-                      ? `${currencySymbol}${item.previous
-                          .toFixed(2)
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                      : `${currencySymbol}0`}
-                  </td>
-                  <td className="product-body">
-                    {item && item.change.toString().includes('-') ? (
-                      <div className="decrease-rate large">
-                        {' '}
-                        <img
-                          className="red-arrow"
-                          src={ArrowDownIcon}
-                          alt="arrow"
-                        />
-                        {item && item.change
-                          ? `${currencySymbol}${Number(
-                              item.change.toString().split('-')[1],
-                            )
-                              .toFixed(2)
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
-                      </div>
-                    ) : (
-                      <div className="increase-rate large">
-                        {' '}
-                        <img
-                          className="green-arrow"
-                          src={ArrowUpIcon}
-                          alt="arrow"
-                        />
-                        {item && item.change
-                          ? `${currencySymbol}${item.change
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
-                      </div>
-                    )}
-                  </td>
-                  <td className="product-body">
-                    <Status
-                      className="statusContainer"
-                      label={item.contribution_bracket}
-                      backgroundColor={
-                        contributionColorSet[item.contribution_bracket]
-                      }
-                    />
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
+
+        {data && data.length >= 1 ? (
+          <tbody>
+            {data &&
+              data.map((item) => {
+                return (
+                  <tr>
+                    <td className="product-body">
+                      {' '}
+                      <img
+                        className="company-logo"
+                        src={CompanyDefaultUser}
+                        alt="logo"
+                      />
+                      <div className="company-name">{item.customer_name}</div>
+                      <div className="status">{item.ad_manager}</div>
+                    </td>
+                    <td className="product-body">
+                      {' '}
+                      {item && item.current
+                        ? `${currencySymbol}${item.current
+                            .toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        : `${currencySymbol}0`}
+                    </td>
+                    <td className="product-body">
+                      {' '}
+                      {item && item.previous
+                        ? `${currencySymbol}${item.previous
+                            .toFixed(2)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        : `${currencySymbol}0`}
+                    </td>
+                    <td className="product-body">
+                      {item && item.change.toString().includes('-') ? (
+                        <div className="decrease-rate large">
+                          {' '}
+                          <img
+                            className="red-arrow"
+                            src={ArrowDownIcon}
+                            alt="arrow"
+                          />
+                          {item && item.change
+                            ? `${currencySymbol}${Number(
+                                item.change.toString().split('-')[1],
+                              )
+                                .toFixed(2)
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                        </div>
+                      ) : (
+                        <div className="increase-rate large">
+                          {' '}
+                          <img
+                            className="green-arrow"
+                            src={ArrowUpIcon}
+                            alt="arrow"
+                          />
+                          {item && item.change
+                            ? `${currencySymbol}${item.change
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                        </div>
+                      )}
+                    </td>
+                    <td className="product-body">
+                      <Status
+                        className="statusContainer"
+                        label={item.contribution_bracket}
+                        backgroundColor={
+                          contributionColorSet[item.contribution_bracket]
+                        }
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        ) : (
+          <NoData>{noGraphDataMessage}</NoData>
+        )}
       </Table>
     );
   };
@@ -164,94 +172,97 @@ const DSPKeyContributors = ({
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
         <div className="container-fluid">
           <div className="row cursor">
-            <div className="col-md-6 col-12 mt-4" role="presentation">
-              {' '}
-              <img
-                className="company-logo"
-                src={CompanyDefaultUser}
-                alt="logo"
-              />
-              <div className="company-name">TRX Training</div>
-              <div className="status">Anton Brownstein</div>
-              <div className="clear-fix" />
-              <div className=" straight-line horizontal-line pt-3 mb-3 " />
-              <div className="row">
-                <div className="col-6 pb-3">
+            {data &&
+              data.map((itemData) => (
+                <div className="col-md-6 col-12 mt-4" role="presentation">
                   {' '}
-                  <div className="label">This Period</div>
-                  <div className="label-info ">1,077,958</div>
+                  <img
+                    className="company-logo"
+                    src={
+                      itemData && itemData.document
+                        ? itemData.document
+                        : CompanyDefaultUser
+                    }
+                    alt="logo"
+                  />
+                  <div className="company-name">{itemData.customer_name}</div>
+                  <div className="status">{itemData.ad_manager}</div>
+                  <div className="clear-fix" />
+                  <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                  <div className="row">
+                    <div className="col-6 pb-3">
+                      {' '}
+                      <div className="label">This Period</div>
+                      <div className="label-info ">
+                        {itemData && itemData.current
+                          ? `${currencySymbol}${itemData.current
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                          : `${currencySymbol}0`}
+                      </div>
+                    </div>
+                    <div className="col-6 pb-3">
+                      {' '}
+                      <div className="label">Prev. Period</div>
+                      <div className="label-info ">
+                        {itemData && itemData.previous
+                          ? `${currencySymbol}${itemData.previous
+                              .toFixed(2)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                          : `${currencySymbol}0`}
+                      </div>
+                    </div>
+                    <div className="col-6 pb-3">
+                      {' '}
+                      <div className="label">Change</div>
+                      {itemData && itemData.change.toString().includes('-') ? (
+                        <div className="decrease-rate large">
+                          {' '}
+                          <img
+                            className="red-arrow"
+                            src={ArrowDownIcon}
+                            alt="arrow"
+                          />{' '}
+                          {itemData && itemData.change
+                            ? `${currencySymbol}${Number(
+                                itemData.change.toString().split('-')[1],
+                              )
+                                .toFixed(2)
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                        </div>
+                      ) : (
+                        <div className="increase-rate large">
+                          {' '}
+                          <img
+                            className="green-arrow"
+                            src={ArrowUpIcon}
+                            alt="arrow"
+                          />{' '}
+                          {itemData && itemData.change
+                            ? `${currencySymbol}${itemData.change
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-6 pb-3">
+                      {' '}
+                      <div className="label">Contribution</div>
+                      <Status
+                        label={itemData.contribution_bracket}
+                        backgroundColor={
+                          contributionColorSet[itemData.contribution_bracket]
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Prev. Period</div>
-                  <div className="label-info ">1,077,958</div>
-                </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Change</div>
-                  <div className="increase-rate large">
-                    {' '}
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow"
-                    />{' '}
-                    $52,849.49
-                  </div>{' '}
-                </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Contribution</div>
-                  {/* <Status label="High" backgroundColor="#E3F2D2" />
-                   <Status label="Medium" backgroundColor="#FDF3D7" /> */}
-                  <Status label="Low" backgroundColor="#F4F6FC" />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12 mt-4" role="presentation">
-              {' '}
-              <img
-                className="company-logo"
-                src={CompanyDefaultUser}
-                alt="logo"
-              />
-              <div className="company-name">TRX Training</div>
-              <div className="status">Anton Brownstein</div>
-              <div className="clear-fix" />
-              <div className=" straight-line horizontal-line pt-3 mb-3 " />
-              <div className="row">
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">This Period</div>
-                  <div className="label-info ">1,077,958</div>
-                </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Prev. Period</div>
-                  <div className="label-info ">1,077,958</div>
-                </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Change</div>
-                  <div className="increase-rate large">
-                    {' '}
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow"
-                    />{' '}
-                    $52,849.49
-                  </div>{' '}
-                </div>
-                <div className="col-6 pb-3">
-                  {' '}
-                  <div className="label">Contribution</div>
-                  {/* <Status label="High" backgroundColor="#E3F2D2" />
-                   <Status label="Medium" backgroundColor="#FDF3D7" /> */}
-                  <Status label="Low" backgroundColor="#F4F6FC" />
-                </div>
-              </div>
-            </div>
+              ))}
           </div>
         </div>
       </TabletViewManager>
@@ -263,7 +274,11 @@ const DSPKeyContributors = ({
       <WhiteCard className="mb-3">
         <div className="row">
           <div className="col-md-6 col-sm1-12">
-            <p className="black-heading-title mt-2 mb-4"> Contribution</p>
+            <p className="black-heading-title mt-2 mb-4">
+              {selectedKeyContribution
+                ? keyContributionHeaders[keyContribution.id]
+                : keyContributionHeaders[keyContribution.id2]}
+            </p>
           </div>
           <div className="col-md-6 col-sm1-12  mb-3">
             <div className="days-container ">
@@ -318,22 +333,20 @@ const DSPKeyContributors = ({
             ))}
           </ul>
         </Tabs>
-
         {loader ? (
           <PageLoader
             component="performance-graph"
-            color={Theme.orange}
+            color="#FF5933"
             type="detail"
             width={40}
             height={40}
           />
+        ) : isDesktop ? (
+          renderContribution()
         ) : data && data.length >= 1 ? (
-          <>
-            {renderContribution()}
-            {renderContributionTablet()}
-          </>
+          renderContributionTablet()
         ) : (
-          <NoData>No data avilable!</NoData>
+          <NoData>{noGraphDataMessage}</NoData>
         )}
       </WhiteCard>
     </Wrapper>
@@ -353,6 +366,7 @@ DSPKeyContributors.defaultProps = {
   selectedTabMatrics: 'dspImpression',
   data: null,
   currencySymbol: '',
+  isDesktop: false,
 };
 
 DSPKeyContributors.propTypes = {
@@ -365,6 +379,7 @@ DSPKeyContributors.propTypes = {
   data: arrayOf(Array),
   loader: bool.isRequired,
   currencySymbol: string,
+  isDesktop: bool,
 };
 
 const Wrapper = styled.div`

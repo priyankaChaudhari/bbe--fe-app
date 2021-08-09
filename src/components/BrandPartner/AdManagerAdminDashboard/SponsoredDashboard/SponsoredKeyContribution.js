@@ -423,11 +423,11 @@ const SponsoredKeyContribution = ({
                       <div className="label">This Period</div>
                       <div className="label-info ">
                         {itemData && itemData.current
-                          ? `$${itemData.current
+                          ? `${currencySymbol}${itemData.current
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -435,11 +435,11 @@ const SponsoredKeyContribution = ({
                       <div className="label">Prev. Period</div>
                       <div className="label-info ">
                         {itemData && itemData.previous
-                          ? `$${itemData.previous
+                          ? `${currencySymbol}${itemData.previous
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -454,12 +454,12 @@ const SponsoredKeyContribution = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `$${Number(
+                            ? `${currencySymbol}${Number(
                                 itemData.change.toString().split('-')[1],
                               )
                                 .toFixed(2)
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : '$0'}
+                            : `${currencySymbol}0`}
                         </div>
                       ) : (
                         <div className="increase-rate large">
@@ -470,11 +470,11 @@ const SponsoredKeyContribution = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `$${itemData.change
+                            ? `${currencySymbol}${itemData.change
                                 .toFixed(2)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : '$0'}
+                            : `${currencySymbol}0`}
                         </div>
                       )}
                     </div>
