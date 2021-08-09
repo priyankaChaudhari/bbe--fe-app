@@ -549,94 +549,100 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
   const handleAdManagerFilter = (event) => {
     const { value } = event;
     let tabOption = '';
-    setSelectedAdManager(event);
+    if (event.value !== selectedAdManager.value) {
+      setSelectedAdManager(event);
 
-    if (value === 'all') {
-      setSelectedContributionOption('positive');
-      tabOption = 'positive';
-    } else {
-      setSelectedContributionOption('contribution');
-      tabOption = 'contribution';
-    }
-    if (selectedAdDF.value === 'custom') {
-      ADYearAndCustomDateFilter(
-        adState[0].startDate,
-        adState[0].endDate,
-        'custom',
-        selectedMarketplace.value,
-        selectedAdType,
-        value,
-        tabOption,
-      );
-    } else {
-      getAdData(
-        selectedAdType,
-        selectedAdDF.value,
-        adGroupBy,
-        selectedMarketplace.value,
-        value,
-      );
-      getContributionData(
-        selectedAdType,
-        selectedAdDF.value,
-        selectedMarketplace.value,
-        value,
-        tabOption,
-        selectedTabMetrics,
-      );
+      if (value === 'all') {
+        setSelectedContributionOption('positive');
+        tabOption = 'positive';
+      } else {
+        setSelectedContributionOption('contribution');
+        tabOption = 'contribution';
+      }
+      if (selectedAdDF.value === 'custom') {
+        ADYearAndCustomDateFilter(
+          adState[0].startDate,
+          adState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          selectedAdType,
+          value,
+          tabOption,
+        );
+      } else {
+        getAdData(
+          selectedAdType,
+          selectedAdDF.value,
+          adGroupBy,
+          selectedMarketplace.value,
+          value,
+        );
+        getContributionData(
+          selectedAdType,
+          selectedAdDF.value,
+          selectedMarketplace.value,
+          value,
+          tabOption,
+          selectedTabMetrics,
+        );
+      }
     }
   };
 
   const handleMarketplace = (event) => {
-    setSelectedMarketplace(event);
-    setCurrency(event.currency);
-    setCurrencySymbol(getSymbolFromCurrency(event.currency));
+    if (event.value !== selectedMarketplace.value) {
+      setSelectedMarketplace(event);
+      setCurrency(event.currency);
+      setCurrencySymbol(getSymbolFromCurrency(event.currency));
 
-    if (selectedAdDF.value === 'custom') {
-      ADYearAndCustomDateFilter(
-        adState[0].startDate,
-        adState[0].endDate,
-        'custom',
-        event.value,
-        selectedAdType,
-        selectedContributionOption,
-      );
-    } else {
-      getAdData(
-        selectedAdType,
-        selectedAdDF.value,
-        adGroupBy,
-        event.value,
-        selectedAdManager.value,
-      );
-      getContributionData(
-        selectedAdType,
-        selectedAdDF.value,
-        event.value,
-        selectedAdManager.value,
-        selectedContributionOption,
-        selectedTabMetrics,
-      );
+      if (selectedAdDF.value === 'custom') {
+        ADYearAndCustomDateFilter(
+          adState[0].startDate,
+          adState[0].endDate,
+          'custom',
+          event.value,
+          selectedAdType,
+          selectedContributionOption,
+        );
+      } else {
+        getAdData(
+          selectedAdType,
+          selectedAdDF.value,
+          adGroupBy,
+          event.value,
+          selectedAdManager.value,
+        );
+        getContributionData(
+          selectedAdType,
+          selectedAdDF.value,
+          event.value,
+          selectedAdManager.value,
+          selectedContributionOption,
+          selectedTabMetrics,
+        );
+      }
     }
   };
 
   const handleAdDailyFact = (event) => {
     const { value } = event;
-    setSelectedAdDF(event);
-    setIsCustomDateApply(false);
-    if (value !== 'custom') {
-      setAdState([
-        {
-          startDate: currentDate,
-          endDate: currentDate,
-          key: 'adSelection',
-        },
-      ]);
-    }
-    if (value === 'custom') {
-      setShowAdCustomDateModal(true);
-    } else {
-      setGropuByFilter(value);
+    if (value !== selectedAdDF) {
+      setSelectedAdDF(event);
+      setIsCustomDateApply(false);
+      if (value !== 'custom') {
+        setAdState([
+          {
+            startDate: currentDate,
+            endDate: currentDate,
+            key: 'adSelection',
+          },
+        ]);
+      }
+      if (value === 'custom') {
+        setShowAdCustomDateModal(true);
+      } else {
+        setGropuByFilter(value);
+      }
     }
   };
 
@@ -724,15 +730,17 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
   };
 
   const handleOnMetricsTabChange = (value) => {
-    setSelectedTabMetrics(value);
-    getContributionData(
-      selectedAdType,
-      selectedAdDF.value,
-      selectedMarketplace.value,
-      selectedAdManager.value,
-      selectedContributionOption,
-      value,
-    );
+    if (value !== selectedTabMetrics) {
+      setSelectedTabMetrics(value);
+      getContributionData(
+        selectedAdType,
+        selectedAdDF.value,
+        selectedMarketplace.value,
+        selectedAdManager.value,
+        selectedContributionOption,
+        value,
+      );
+    }
   };
   const renderCustomDateSubLabel = (props) => {
     if (selectedAdDF.value === 'custom' && isCustomDateApply) {

@@ -535,25 +535,29 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   };
 
   const handleContribution = (value) => {
-    setSelectedKeyContribution(value);
-    getContributionData(
-      selectedAdDF.value,
-      selectedMarketplace,
-      selectedAdManager.value,
-      keyContributionValue(selectedAdManager.value, value),
-      selectedTabMatrics,
-    );
+    if (value !== selectedKeyContribution) {
+      setSelectedKeyContribution(value);
+      getContributionData(
+        selectedAdDF.value,
+        selectedMarketplace,
+        selectedAdManager.value,
+        keyContributionValue(selectedAdManager.value, value),
+        selectedTabMatrics,
+      );
+    }
   };
 
   const handleOnMatricsTabChange = (value) => {
-    setSelectedTabMetrics(value);
-    getContributionData(
-      selectedAdDF.value,
-      selectedMarketplace,
-      selectedAdManager.value,
-      keyContributionValue(selectedAdManager.value, selectedKeyContribution),
-      value,
-    );
+    if (value !== selectedTabMatrics) {
+      setSelectedTabMetrics(value);
+      getContributionData(
+        selectedAdDF.value,
+        selectedMarketplace,
+        selectedAdManager.value,
+        keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+        value,
+      );
+    }
   };
 
   const renderDspDailyFact = () => {

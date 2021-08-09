@@ -18,7 +18,7 @@ export default function AdManagerAdminContainer() {
       if (res && res.data && res.data.length) {
         const list = [
           {
-            value: 'all',
+            name: 'all',
             country: 'All Marketplaces',
             currency: 'USD',
           },

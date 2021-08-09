@@ -18,6 +18,7 @@ const DSPFilter = ({
   getSelectComponents,
   handleAdManagerFilter,
   isApiCall,
+  handleResetFilter,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   return (
@@ -31,7 +32,12 @@ const DSPFilter = ({
             <div className="black-heading-title ">Filters</div>
           </div>
           <div className="col-6 text-right">
-            <div className="gray-normal-text cursor ">Reset filters</div>
+            <div
+              onClick={() => handleResetFilter()}
+              role="presentation"
+              className="gray-normal-text cursor ">
+              Reset filters
+            </div>
           </div>
           <div className="col-lg-12 col-md-6">
             <div className="label mt-3">Ad Manager</div>
@@ -113,6 +119,7 @@ DSPFilter.defaultProps = {
   getSelectComponents: null,
   handleAdManagerFilter: () => {},
   isApiCall: false,
+  handleResetFilter: () => {},
 };
 
 DSPFilter.propTypes = {
@@ -126,4 +133,5 @@ DSPFilter.propTypes = {
   getSelectComponents: func,
   handleAdManagerFilter: func,
   isApiCall: bool,
+  handleResetFilter: func,
 };
