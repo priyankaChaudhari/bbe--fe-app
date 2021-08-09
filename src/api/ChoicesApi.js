@@ -4,6 +4,7 @@ import {
   API_CHOICES,
   API_SERVICE_TYPE,
   API_MARKETPLACES,
+  API_ALL_MARKETPLACES,
   API_ADM,
   API_THRESHOLD_TYPE,
   API_YOY_PERCENTAGE,
@@ -232,9 +233,14 @@ export async function getContractStatus() {
 }
 
 export const getMarketPlaceList = async (id) => {
-  const response = await axiosInstance.get(API_MARKETPLACES, {
-    params: { customer_id: id },
-  });
+  let response;
+  if (id === undefined) {
+    response = await axiosInstance.get(API_ALL_MARKETPLACES);
+  } else {
+    response = await axiosInstance.get(API_MARKETPLACES, {
+      params: { customer_id: id },
+    });
+  }
   return response;
 };
 

@@ -10,6 +10,8 @@ export const DropDown = (
   defaultValue,
   handleOnChange,
   isDisabled,
+  reff = null,
+  selectedValue,
 ) => {
   return (
     <DropDownSelect
@@ -18,6 +20,7 @@ export const DropDown = (
         classNamePrefix="react-select"
         className="active"
         options={options}
+        ref={reff}
         placeholder={placeholder}
         components={components !== null ? components() : null}
         theme={(theme) => ({
@@ -27,7 +30,8 @@ export const DropDown = (
             neutral50: '#1A1A1A',
           },
         })}
-        defaultValue={defaultValue}
+        value={selectedValue}
+        // defaultValue={defaultValue}
         onChange={(event) => handleOnChange(event)}
       />
     </DropDownSelect>

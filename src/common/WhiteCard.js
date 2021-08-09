@@ -538,7 +538,7 @@ export const WhiteCard = styled.div`
       background-color: ${Theme.white};
       border: 1px solid ${Theme.gray45};
       border-radius: 8px;
-      max-width: 180px;
+      max-width: 197px;
       width: 100%;
       padding: 18px 15px;
       cursor: pointer;
@@ -702,6 +702,17 @@ export const WhiteCard = styled.div`
     border-radius: 18px;
     max-width: 243px;
     float: right;
+    width: fit-content;
+    &.spending {
+      max-width: fit-content;
+      .days-tab { 
+         li{
+          label {
+            padding: 7px 10px;
+          }
+        }
+      }
+    }
 
     .days-tab {
       list-style-type: none;
@@ -726,6 +737,31 @@ export const WhiteCard = styled.div`
           color: ${Theme.orange};
         }
 
+        #positive:checked + label{
+          background-color: ${Theme.white};
+           border: 1px solid ${Theme.orange};
+           border-radius: 18px;
+           color: ${Theme.orange};
+         }
+         #negative:checked + label{
+           background-color:  ${Theme.white};
+           border: 1px solid ${Theme.orange};
+           border-radius: 18px;
+           color:${Theme.orange};
+         }
+         #contribution:checked + label{
+           background-color: ${Theme.white};
+           border: 1px solid ${Theme.orange};
+           border-radius: 18px;
+           color: ${Theme.orange};
+         }
+         #keyMetrics:checked + label{
+          background-color: ${Theme.white};
+          border: 1px solid ${Theme.orange};
+          border-radius: 18px;
+          color: ${Theme.orange};
+        }
+
       li{
         display: inline-block;
       
@@ -736,16 +772,22 @@ export const WhiteCard = styled.div`
             display: inline-block;
             cursor: pointer;
          }
-
-        
       }
     }
   }
+  .dsp-spent-date {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    li{
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
  .rechart-item {
-   
    list-style-type: none;
-      padding: 0;
-      margin: 0;
+   padding: 0;
+   margin: 0;
 
       li{
           display: inline-block;
@@ -1040,6 +1082,24 @@ export const WhiteCard = styled.div`
           }
       }   
    }
+    .dsp-spent-date {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    li{
+      display: inline-block;
+      margin-right: 20px;
+
+      .label-range {
+        font-size: 16px;
+      }
+    }
+  }
+  .increase-rate {
+    .green-arrow {
+      margin-left:0;
+    }
+  }
      
  }
    @media only screen and (max-width: 767px) {      

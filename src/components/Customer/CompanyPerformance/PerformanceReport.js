@@ -50,6 +50,7 @@ import { DropDown } from './DropDown';
 import {
   dateOptions,
   bbDateOptions,
+  noGraphDataMessage,
 } from '../../../constants/CompanyPerformanceConstants';
 import SalesPerformanceChart from './SalePerformanceChart';
 import Theme from '../../../theme/Theme';
@@ -79,6 +80,7 @@ export default function PerformanceReport({
 
   const COLORS = ['#97ca61', '#EAEFF2'];
   const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
+
   // sales performance varibales and BB % start
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -134,17 +136,15 @@ export default function PerformanceReport({
       transform: 'translate(-50%, -50%)',
     },
   };
-  const noDataMessage =
-    'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
   const renderCustomDateSubLabel = (props, flag) => {
     if (flag === 'sp') {
-      if (selectedValue === 'custom' && isSPCustomDateApply) {
+      if (selectedValue.value === 'custom' && isSPCustomDateApply) {
         return `From- ${dayjs(state[0].startDate).format(
           'MMM D, YYYY',
         )}  To- ${dayjs(state[0].endDate).format('MMM D, YYYY')}`;
       }
-    } else if (bBDailyFact === 'custom' && isBBCustomDateApply) {
+    } else if (bBDailyFact.value === 'custom' && isBBCustomDateApply) {
       return `From- ${dayjs(BBstate[0].startDate).format(
         'MMM D, YYYY',
       )}  To- ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`;
@@ -633,7 +633,7 @@ export default function PerformanceReport({
 
   const handleDailyFact = (event) => {
     const { value } = event;
-    setSelectedValue(value);
+    setSelectedValue(event);
     if (value !== 'custom') {
       setIsSPCustomDateApply(false);
       setState([
@@ -659,7 +659,7 @@ export default function PerformanceReport({
 
   const handleBBDailyFact = (event) => {
     const { value } = event;
-    setBBDailyFact(value);
+    setBBDailyFact(event);
 
     if (value !== 'custom') {
       setIsBBCustomDateApply(false);
@@ -689,7 +689,7 @@ export default function PerformanceReport({
     setSelectedAmazonValue(event.value);
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
-    if (selectedValue === 'custom') {
+    if (selectedValue.value === 'custom') {
       checkDifferenceBetweenDates(
         state[0].startDate,
         state[0].endDate,
@@ -697,15 +697,15 @@ export default function PerformanceReport({
         event.value,
       );
     } else {
-      getData(selectedValue, groupBy, event.value);
-      getBBData(event.value, bBDailyFact, BBGroupBy);
+      getData(selectedValue.value, groupBy, event.value);
+      getBBData(event.value, bBDailyFact.value, BBGroupBy);
     }
   };
 
   const handleGroupBy = (value) => {
     if (value !== groupBy) {
       setGroupBy(value);
-      getData(selectedValue, value, selectedAmazonValue);
+      getData(selectedValue.value, value, selectedAmazonValue);
     }
   };
 
@@ -768,8 +768,8 @@ export default function PerformanceReport({
       setSelectedAmazonValue(marketplace[0].value);
       setCurrency(marketplace[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
-      getData(selectedValue, groupBy, marketplace[0].value);
-      getBBData(marketplace[0].value, bBDailyFact, 'daily');
+      getData(selectedValue.value, groupBy, marketplace[0].value);
+      getBBData(marketplace[0].value, bBDailyFact.value, 'daily');
       setResponseId('12345');
     }
   }, [
@@ -889,11 +889,13 @@ export default function PerformanceReport({
         {DropDown(
           'days-performance',
           dateOptions,
-          null,
+          dateOptions[0].label,
           getSelectComponents,
           dateOptions[0],
           handleDailyFact,
           isApiCall,
+          null,
+          selectedValue,
         )}
         <div className="clear-fix" />
       </div>
@@ -919,7 +921,7 @@ export default function PerformanceReport({
                   <span>Recent</span>
                 </div>
               </li>
-              {selectedValue !== 'custom' ? (
+              {selectedValue.value !== 'custom' ? (
                 <li>
                   <div className="weeks">
                     <ul className="dashed-line">
@@ -1163,10 +1165,10 @@ export default function PerformanceReport({
             chartData={salesChartData}
             currencySymbol={currencySymbol}
             selectedBox={activeSales}
-            selectedDF={selectedValue}
+            selectedDF={selectedValue.value}
           />
         ) : (
-          <NoData>{noDataMessage}</NoData>
+          <NoData>{noGraphDataMessage}</NoData>
         )}
       </WhiteCard>
     );
@@ -1307,11 +1309,13 @@ export default function PerformanceReport({
               {DropDown(
                 'days-performance',
                 bbDateOptions,
-                null,
+                dateOptions[0].label,
                 getBBSelectComponents,
                 bbDateOptions[0],
                 handleBBDailyFact,
                 isApiCall,
+                null,
+                bBDailyFact,
               )}
             </div>
           </div>
@@ -1344,7 +1348,7 @@ export default function PerformanceReport({
           ) : bBChartData && bBChartData.length > 1 ? (
             renderBBgraph()
           ) : (
-            <NoData>{noDataMessage}</NoData>
+            <NoData>{noGraphDataMessage}</NoData>
           )}
           <br />
           <br />

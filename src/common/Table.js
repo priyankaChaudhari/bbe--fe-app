@@ -14,14 +14,18 @@ const Table = styled.table`
     font-family: ${Theme.baseFontFamily};
     width: 100%;
     th {
-      &.product-catalog-header {
-        border-top: 1px solid ${Theme.gray11};
-        padding: 13px 0px;
+       padding: 13px 0px;
         text-transform: uppercase;
         color: ${Theme.gray40};
         font-size: 11px;
         background: ${Theme.white};
         font-family: ${Theme.baseFontFamily};
+      &.product-catalog-header {
+        border-top: 1px solid ${Theme.gray11};
+      }
+       &.product-header {
+        border-bottom: 1px solid ${Theme.gray11};
+       
       }
     }
 
@@ -32,8 +36,11 @@ const Table = styled.table`
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
       font-weight: 600;
-      vertical-align: top;
+      // vertical-align: top;
 
+      &.product-body {
+         padding: 13px 4px 13px 0;
+      }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};
         padding: 13px 4px 13px 0;
@@ -154,8 +161,8 @@ const Table = styled.table`
           &.assets-received {
             background-color: #d6eef2;
             max-width: 132px;
-          }
-&.assets-requested {
+          }  
+        &.assets-requested {
           background-color: ${Theme.lightOrange};
           max-width: 132px;
         }
@@ -249,6 +256,11 @@ const Table = styled.table`
         font-weight: 300;
         margin-left: -2px;
 
+        &.large {
+          font-size: ${Theme.extraMedium};
+          font-weight: 600;
+        }
+
         .green-arrow {
           width: 14px;
           vertical-align: bottom;
@@ -256,6 +268,7 @@ const Table = styled.table`
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;
+          margin-top: -4px;
         }
 
         .red-arrow {
@@ -264,6 +277,7 @@ const Table = styled.table`
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;
+          margin-top: -4px;
         }
         &.grey {
           color: ${Theme.gray40};
@@ -291,6 +305,10 @@ const Table = styled.table`
         }
         &.grey {
           color: ${Theme.gray40};
+        }
+        &.large {
+          font-size: ${Theme.extraMedium};
+          font-weight: 600;
         }
       }
 

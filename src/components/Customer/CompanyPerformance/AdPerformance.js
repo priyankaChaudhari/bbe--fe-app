@@ -32,6 +32,7 @@ import {
 import {
   dateOptions,
   AdTypesOptions,
+  noGraphDataMessage,
 } from '../../../constants/CompanyPerformanceConstants';
 import {
   getAdPerformance,
@@ -138,8 +139,6 @@ export default function AdPerformance({
       // transform: 'translate(-50%, -50%)',
     },
   };
-  const noDataMessage =
-    'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
   /// ////////////////////////////////////////////////////////////////////////
   //
@@ -600,9 +599,14 @@ export default function AdPerformance({
       setSelectedMarketplace(marketplace[0].value);
       setCurrency(marketplace[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
-      getAdData(selectedAdType, selectedAdDF, adGroupBy, marketplace[0].value);
+      getAdData(
+        selectedAdType.value,
+        selectedAdDF.value,
+        adGroupBy,
+        marketplace[0].value,
+      );
 
-      getDSPData(selectedAdDF, dspGroupBy, marketplace[0].value);
+      getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
       getDSPPacing(marketplace[0].value);
       setResponseId('12345');
     }
@@ -713,7 +717,7 @@ export default function AdPerformance({
       adState[0].endDate,
       'custom',
       selectedMarketplace,
-      selectedAdType,
+      selectedAdType.value,
     );
 
     DSPYearAndCustomDateFilter(
@@ -726,7 +730,7 @@ export default function AdPerformance({
   };
 
   const renderCustomDateSubLabel = (props) => {
-    if (selectedAdDF === 'custom' && isCustomDateApply) {
+    if (selectedAdDF.value === 'custom' && isCustomDateApply) {
       return `From- ${dayjs(adState[0].startDate).format(
         'MMM D, YYYY',
       )}  To- ${dayjs(adState[0].endDate).format('MMM D, YYYY')}`;
@@ -811,12 +815,12 @@ export default function AdPerformance({
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
           setDSPGroupBy('daily');
-          getDSPData(selectedAdType, value, 'daily', selectedMarketplace);
+          getDSPData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         }
 
@@ -824,7 +828,7 @@ export default function AdPerformance({
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
@@ -838,7 +842,7 @@ export default function AdPerformance({
         if (type === 'ad') {
           setAdFilters({ daily: true, weekly: false, month: false });
           setAdGroupBy('daily');
-          getAdData(selectedAdType, value, 'daily', selectedMarketplace);
+          getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
@@ -858,13 +862,13 @@ export default function AdPerformance({
     setCurrency(event.currency);
     setCurrencySymbol(getSymbolFromCurrency(event.currency));
     getDSPPacing(event.value);
-    if (selectedAdDF === 'custom') {
+    if (selectedAdDF.value === 'custom') {
       ADYearAndCustomDateFilter(
         adState[0].startDate,
         adState[0].endDate,
         'custom',
         event.value,
-        selectedAdType,
+        selectedAdType.value,
       );
 
       DSPYearAndCustomDateFilter(
@@ -874,30 +878,40 @@ export default function AdPerformance({
         event.value,
       );
     } else {
-      getAdData(selectedAdType, selectedAdDF, adGroupBy, event.value);
-      getDSPData(selectedAdDF, dspGroupBy, event.value);
+      getAdData(
+        selectedAdType.value,
+        selectedAdDF.value,
+        adGroupBy,
+        event.value,
+      );
+      getDSPData(selectedAdDF.value, dspGroupBy, event.value);
     }
   };
 
   const handleAdGroupBy = (value) => {
     if (value !== adGroupBy) {
       setAdGroupBy(value);
-      getAdData(selectedAdType, selectedAdDF, value, selectedMarketplace);
+      getAdData(
+        selectedAdType.value,
+        selectedAdDF.value,
+        value,
+        selectedMarketplace,
+      );
     }
   };
 
   const handleDSPGroupBy = (value) => {
     if (value !== dspGroupBy) {
       setDSPGroupBy(value);
-      getDSPData(selectedAdDF, value, selectedMarketplace);
+      getDSPData(selectedAdDF.value, value, selectedMarketplace);
     }
   };
 
   const handleAdType = (event) => {
     const { value } = event;
-    setSelectedAdType(value);
+    setSelectedAdType(event);
 
-    if (selectedAdDF === 'custom') {
+    if (selectedAdDF.value === 'custom') {
       ADYearAndCustomDateFilter(
         adState[0].startDate,
         adState[0].endDate,
@@ -906,13 +920,13 @@ export default function AdPerformance({
         value,
       );
     } else {
-      getAdData(value, selectedAdDF, adGroupBy, selectedMarketplace);
+      getAdData(value, selectedAdDF.value, adGroupBy, selectedMarketplace);
     }
   };
 
   const handleAdDailyFact = (event) => {
     const { value } = event;
-    setSelectedAdDF(value);
+    setSelectedAdDF(event);
     setIsCustomDateApply(false);
     if (value !== 'custom') {
       setAdState([
@@ -1038,11 +1052,13 @@ export default function AdPerformance({
               {DropDown(
                 'days-performance',
                 dateOptions,
-                null,
+                dateOptions[0].label,
                 getSelectComponents,
                 dateOptions[0],
                 handleAdDailyFact,
                 isApiCall,
+                null,
+                selectedAdDF,
               )}
             </div>
           </div>
@@ -1070,11 +1086,13 @@ export default function AdPerformance({
               {DropDown(
                 'days-performance',
                 AdTypesOptions,
-                null,
+                AdTypesOptions[0].label,
                 getAdTypesSelectComponents,
                 AdTypesOptions[0],
                 handleAdType,
                 isApiCall,
+                null,
+                selectedAdType,
               )}
             </li>
           </ul>{' '}
@@ -1471,7 +1489,7 @@ export default function AdPerformance({
                   <span>Recent</span>
                 </div>
               </li>
-              {selectedAdDF !== 'custom' ? (
+              {selectedAdDF.value !== 'custom' ? (
                 <li id="BT-adperformance-perviousgraph">
                   <div className="weeks">
                     <ul className="dashed-line">
@@ -1499,12 +1517,7 @@ export default function AdPerformance({
         ) : (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
         )}
-        <div
-          className={
-            _.size(selectedAdBox) === 1
-              ? ' col-md-6 col-sm-12 order-md-2 order-1'
-              : 'col-md-6 col-sm-12 order-md-2 order-1'
-          }>
+        <div className="col-md-6 col-sm-12 order-md-2 order-1">
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
@@ -1974,7 +1987,7 @@ export default function AdPerformance({
                     <span>Recent</span>
                   </div>
                 </li>
-                {selectedAdDF !== 'custom' ? (
+                {selectedAdDF.value !== 'custom' ? (
                   <li>
                     <div className="weeks">
                       <ul className="dashed-line">
@@ -2218,10 +2231,10 @@ export default function AdPerformance({
             chartData={adChartData}
             currencySymbol={currencySymbol}
             selectedBox={selectedAdBox}
-            selectedDF={selectedAdDF}
+            selectedDF={selectedAdDF.value}
           />
         ) : (
-          <NoData>{noDataMessage}</NoData>
+          <NoData>{noGraphDataMessage}</NoData>
         )}
       </WhiteCard>
       <WhiteCard className="mt-3 mb-3">
@@ -2259,10 +2272,10 @@ export default function AdPerformance({
             chartData={dspChartData}
             currencySymbol={currencySymbol}
             selectedBox={selectedDspBox}
-            selectedDF={selectedAdDF}
+            selectedDF={selectedAdDF.value}
           />
         ) : (
-          <NoData>{noDataMessage}</NoData>
+          <NoData>{noGraphDataMessage}</NoData>
         )}
       </WhiteCard>
       {renderAdCustomDateModal()}

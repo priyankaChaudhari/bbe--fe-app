@@ -13,6 +13,7 @@ const Status = ({
   labelColor,
 }) => (
   <StatusWrapper
+    pointColor={pointColor}
     style={{ 'background-color': backgroundColor }}
     className={['status_container capitalize', className]}>
     {pointColor ? (
@@ -33,6 +34,7 @@ const StatusWrapper = styled.div`
   float: left;
   border-radius: 5px;
   width: fit-content;
+  min-width: 80px;
   padding: 5px 10px;
   display: flex;
   align-content: center;
@@ -47,8 +49,9 @@ const StatusWrapper = styled.div`
     z-index: 20 !important;
   }
   span.status_text {
-    margin-left: 8px;
+    margin-left: ${(props) => (props.pointColor ? 8 : 0)}px;
     font-size: ${Theme.extraNormal};
+    font-weight: 500;
   }
 `;
 

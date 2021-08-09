@@ -79,9 +79,11 @@ const DetailLoaderWrapper = styled.div`
     left: 0;
   }
   &.performance-graph {
-    top: 0;
+    top: 30px;
     position: relative;
     left: 0;
+    width: 60px;
+    margin: 0 auto;
   }
 
   @media only screen and (max-width: 991px) {

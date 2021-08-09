@@ -84,8 +84,8 @@ const ModalRadioCheck = styled.div`
     position: absolute;
     top: 3px;
     left: 0;
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
     background-color: ${Theme.white};
     border: 1px solid ${Theme.gray9};
     border-radius: 50%;
@@ -106,8 +106,8 @@ const ModalRadioCheck = styled.div`
   }
 
   .radio-container .checkmark:after {
-    top: 3px;
-    left: 3px;
+    top: 4px;
+    left: 4px;
     width: 8px;
     height: 8px;
     border-radius: 50%;

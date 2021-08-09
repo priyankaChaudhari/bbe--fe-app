@@ -256,7 +256,13 @@ export const DashboardCard = styled.div`
   min-height: 100vh;
   height: 100%;
   padding-top: 70px;
-
+  .dashboard-container-body {
+    max-width: 1220px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-left: 64px;
+  }
   .dashboard-body {
     max-width: 1334px;
     width: 100%;
@@ -331,8 +337,17 @@ export const DashboardCard = styled.div`
       padding-left: 0;
       padding-top: 40px;
     }
+    &.ad-manager-dashboard {
+      padding-top: 50px;
+    }
+    .dashboard-container-body {
+      padding: 20px 15px 0 15px;
+    }
   }
   @media only screen and (max-width: 991px) {
+    .dashboard-container-body {
+      padding: 30px 15px 0 15px;
+    }
     .dashboard-body {
       padding-top: 70px;
       padding-left: 0;
@@ -344,11 +359,17 @@ export const DashboardCard = styled.div`
     .dashboard-body {
       max-width: 1434px;
     }
+    .dashboard-container-body {
+      max-width: 1320px;
+    }
   }
 
   @media only screen and (min-width: 1700px) and (min-width: 1920px) {
     .dashboard-body {
       max-width: 85%;
+    }
+    .dashboard-container-body {
+      max-width: 80%;
     }
   }
 `;
@@ -445,6 +466,34 @@ export const FormContainer = styled.div`
         color: ${Theme.white};
       }
     }
+  }
+`;
+export const TabletViewManager = styled.div`
+  .company-logo {
+    width: 47px;
+    height: 47px;
+    margin-right: 14px;
+    float: left;
+  }
+  .company-name {
+    vertical-align: middle;
+    position: relative;
+    color: ${Theme.black};
+    font-size: ${Theme.title};
+    font-weight: 600;
+  }
+  .increase-rate {
+    font-weight: 600;
+  }
+  .label-info {
+    font-weight: 600;
+  }
+  .status {
+    color: ${Theme.gray85};
+    font-size: ${Theme.extraNormal};
+  }
+  @media only screen and (max-width: 768px) {
+    padding-top: 20px;
   }
 `;
 

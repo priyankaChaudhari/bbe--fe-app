@@ -33,6 +33,7 @@ import {
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_UPLOAD_PRODUCT_ASSET,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants/index';
 
 import { CustomerListTablet, UploadProductAsset } from '../components/Customer';
@@ -165,6 +166,15 @@ export default function AuthenticationComponent() {
           {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
             <Route
               path={PATH_HYBRID_DASHBOARD}
+              component={DashboardContainer}
+            />
+          ) : (
+            ''
+          )}
+
+          {userInfo && userInfo.role === 'Ad Manager Admin' ? (
+            <Route
+              path={PATH_AD_MANAGER_ADMIN_DASHBOARD}
               component={DashboardContainer}
             />
           ) : (

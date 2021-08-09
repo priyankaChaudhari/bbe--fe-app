@@ -1,11 +1,13 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import PropTypes from 'prop-types';
+import { dspColorSet } from '../../../constants/AdManagerAdminDashboardConstants';
 
 am4core.useTheme(am4themes_dataviz);
 // am4core.useTheme(am4themes_animated);
@@ -21,17 +23,6 @@ export default function DSPPerformanceChart({
 }) {
   const chart = useRef(null);
   useEffect(() => {
-    const colorSet = {
-      dspImpressions: '#0045B4',
-      dspSpend: '#8C54FF',
-      dspTotalProductSales: '#30A8BD',
-      dspTotalRoas: '#D6A307',
-      dspTotalDpvr: '#E05D37',
-      dspTtlNewBrandPurchases: '#89A43C',
-      dspProductSales: '#C84EC6',
-      dspRoas: '#A04848',
-    };
-
     const tooltipNames = {
       dspImpressions: 'IMPRESSIONS',
       dspSpend: 'DSP SPEND',
@@ -150,7 +141,7 @@ export default function DSPPerformanceChart({
       _.keys(selectedBox).map((item) => {
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
-        const colorCode = colorSet[item];
+        const colorCode = dspColorSet[item];
         if (item === 'dspTtlNewBrandPurchases') {
           tooltipValue = 'TTL New Brand Purchases';
         } else {
@@ -208,7 +199,7 @@ export default function DSPPerformanceChart({
         } else if (item === 'dspImpressions') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
-            colorSet[item],
+            dspColorSet[item],
             currentLabel,
             null,
             null,
@@ -254,7 +245,7 @@ export default function DSPPerformanceChart({
         const currentValue = `${item}Current`;
         const previousValue = `${item}Previous`;
         const seriesName = `${item}Series`;
-        const colorCode = colorSet[item];
+        const colorCode = dspColorSet[item];
 
         if (index === 0) {
           series.yAxis = valueAxis;
@@ -394,7 +385,7 @@ export default function DSPPerformanceChart({
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             currencySymbol,
             null,
@@ -406,7 +397,7 @@ export default function DSPPerformanceChart({
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             '%',
@@ -415,7 +406,7 @@ export default function DSPPerformanceChart({
         } else if (item === 'dspImpressions') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             null,
@@ -424,7 +415,7 @@ export default function DSPPerformanceChart({
         } else {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             null,
@@ -567,11 +558,11 @@ export default function DSPPerformanceChart({
         series.name = seriesName;
         series.strokeWidth = 2;
         series.tooltipHTML = `${tooltipValue}`;
-        series.stroke = am4core.color(colorSet[item]);
+        series.stroke = am4core.color(dspColorSet[item]);
         series.fill = am4core.color('#2e384d');
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
-        circleBullet.circle.fill = am4core.color(colorSet[item]);
+        circleBullet.circle.fill = am4core.color(dspColorSet[item]);
         circleBullet.circle.strokeWidth = 1;
         circleBullet.circle.radius = 5;
 

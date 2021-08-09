@@ -29,6 +29,7 @@ import {
   PATH_ADM_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
@@ -133,6 +134,8 @@ export default function Login() {
         history.push(PATH_DSP_DASHBOARD);
       } else if (role.includes('Hybrid Ad Manager')) {
         history.push(PATH_HYBRID_DASHBOARD);
+      } else if (role.includes('Ad Manager Admin')) {
+        history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
       } else if (role === 'Customer') {
         const id =
           step &&

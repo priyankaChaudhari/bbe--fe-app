@@ -43,6 +43,8 @@ export {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
+  getAdManagerAdminGraphData,
+  getKeyContributionData,
 } from './CustomerApi';
 
 // Choices

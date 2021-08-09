@@ -1696,6 +1696,15 @@ text.cust-label-avg {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
+  .label-range {
+    color: ${Theme.black};
+    font-size: 20px;
+    font-weight: 600;
+
+    &.red-range {
+      color: ${Theme.red};
+    }
+  }
 
 .react-sweet-progress {
     /* display: flex; */
