@@ -13,6 +13,7 @@ import {
 import {
   keyContributionConstant,
   noGraphDataMessage,
+  keyContributionHeaders,
 } from '../../../../constants/CompanyPerformanceConstants';
 
 const _ = require('lodash');
@@ -27,6 +28,7 @@ const SponsoredKeyContribution = ({
   selectedAdMetrics,
   selectedTabMetrics,
   handleOnMetricsTabChange,
+  currencySymbol,
 }) => {
   const contributionColorSet = {
     High: '#E3F2D2',
@@ -234,11 +236,11 @@ const SponsoredKeyContribution = ({
           itemData.sponsored_ad_performance &&
           itemData.sponsored_ad_performance.current_sum &&
           itemData.sponsored_ad_performance.current_sum.ad_sales
-            ? `$${itemData.sponsored_ad_performance.current_sum.ad_sales
+            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_sales
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
               itemData.sponsored_ad_performance &&
@@ -253,11 +255,11 @@ const SponsoredKeyContribution = ({
           itemData.sponsored_ad_performance &&
           itemData.sponsored_ad_performance.current_sum &&
           itemData.sponsored_ad_performance.current_sum.ad_spend
-            ? `$${itemData.sponsored_ad_performance.current_sum.ad_spend
+            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_spend
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
               itemData.sponsored_ad_performance &&
@@ -323,20 +325,20 @@ const SponsoredKeyContribution = ({
         <td className="product-body">
           {' '}
           {itemData && itemData.current
-            ? `$${itemData.current
+            ? `${currencySymbol}${itemData.current
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
         </td>
         <td className="product-body">
           {' '}
           {itemData && itemData.previous
-            ? `$${itemData.previous
+            ? `${currencySymbol}${itemData.previous
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
         </td>
         <td className="product-body">
           {' '}
@@ -345,21 +347,23 @@ const SponsoredKeyContribution = ({
               {' '}
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow" />
               {itemData && itemData.change
-                ? `$${Number(itemData.change.toString().split('-')[1])
+                ? `${currencySymbol}${Number(
+                    itemData.change.toString().split('-')[1],
+                  )
                     .toFixed(2)
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+                : `${currencySymbol}0`}
             </div>
           ) : (
             <div className="increase-rate large">
               {' '}
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow" />
               {itemData && itemData.change
-                ? `$${itemData.change
+                ? `${currencySymbol}${itemData.change
                     .toFixed(2)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+                : `${currencySymbol}0`}
             </div>
           )}
         </td>
@@ -499,7 +503,9 @@ const SponsoredKeyContribution = ({
         <div className="row">
           <div className="col-md-6 col-sm1-12">
             {' '}
-            <p className="black-heading-title mt-2 mb-4">Key Contributors</p>
+            <p className="black-heading-title mt-2 mb-4">
+              {keyContributionHeaders[selectedContributionOption]}
+            </p>
           </div>
           {renderKeyContributionOptions()}
         </div>

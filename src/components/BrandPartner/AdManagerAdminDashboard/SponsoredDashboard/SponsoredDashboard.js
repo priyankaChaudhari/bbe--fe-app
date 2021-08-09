@@ -43,7 +43,6 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 export default function SponsoredDashboard({ marketplaceChoices }) {
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
-  // const selectInputRefMobile = useRef();
   const { Option, SingleValue } = components;
   const [isApiCall, setIsApiCall] = useState(false);
 
@@ -1045,6 +1044,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
           selectedAdMetrics={selectedAdMetrics}
           selectedTabMetrics={selectedTabMetrics}
           handleOnMetricsTabChange={handleOnMetricsTabChange}
+          currencySymbol={currencySymbol}
         />
         {renderAdCustomDateModal()}
       </div>

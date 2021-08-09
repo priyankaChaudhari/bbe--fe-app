@@ -86,3 +86,10 @@ export const metricsNameForAPI = {
   dspProductSales: 'total_purchases',
   dspRoas: 'roas',
 };
+
+export const keyContributionHeaders = {
+  positive: 'Key Contributors',
+  negative: 'Key Contributors',
+  contribution: 'Contribution',
+  keyMetrics: 'Key Metrics',
+};
