@@ -43,6 +43,7 @@ import {
   PATH_ADM_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants';
 
 export default function Header({ type, userInfo }) {
@@ -621,6 +622,45 @@ export default function Header({ type, userInfo }) {
                 ) : (
                   ''
                 )}
+
+                {userInfo &&
+                userInfo.role &&
+                userInfo.role.includes('Ad Manager Admin') ? (
+                  <li
+                    className={
+                      history.location.pathname &&
+                      history.location.pathname.includes('admanager-dashboard')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() =>
+                      history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD)
+                    }>
+                    {' '}
+                    {history.location.pathname &&
+                    history.location.pathname.includes(
+                      'admanager-dashboard',
+                    ) ? (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon active"
+                        src={SpeedometerActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className=" speed0meter-icon  disactive"
+                        src={Speedometer}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : (
+                  ''
+                )}
+
                 <li
                   className={
                     history.location.pathname &&
