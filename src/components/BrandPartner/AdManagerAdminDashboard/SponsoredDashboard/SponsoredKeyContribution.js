@@ -49,8 +49,8 @@ const SponsoredKeyContribution = ({
     adSpend: 'Ad Spend',
     adConversion: 'Ad Conversion Rate',
     impressions: 'Impressions',
-    adCos: 'ACOS',
-    adRoas: 'ROAS',
+    adCos: 'Acos',
+    adRoas: 'Roas',
     adClicks: 'Clicks',
     adClickRate: 'Click Through Rate',
   };
@@ -240,20 +240,20 @@ const SponsoredKeyContribution = ({
   const renderTableHeader = () => {
     return selectedContributionOption === 'keyMetrics' ? (
       <tr>
-        <th width="40%" className="product-header">
+        <th width="39%" className="product-header">
           CUSTOMER
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           AD SALES
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           AD SPEND
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           {' '}
           AD IMPRESSIONS
         </th>
-        <th width="60%" className="product-header">
+        <th width="28%" className="product-header">
           {' '}
           ACOS
         </th>
@@ -561,7 +561,7 @@ const SponsoredKeyContribution = ({
       </WhiteCard>
     );
   };
-  return renderKeyContributors();
+  return <Wrapper>{renderKeyContributors()}</Wrapper>;
 };
 
 export default SponsoredKeyContribution;
@@ -577,6 +577,7 @@ SponsoredKeyContribution.defaultProps = {
   selectedTabMetrics: {},
   selectedAdDF: {},
   handleOnMetricsTabChange: () => {},
+  currencySymbol: '',
 };
 
 SponsoredKeyContribution.propTypes = {
@@ -590,7 +591,17 @@ SponsoredKeyContribution.propTypes = {
   selectedTabMetrics: string,
   handleOnMetricsTabChange: func,
   selectedAdDF: objectOf(Object),
+  currencySymbol: string,
 };
+
+const Wrapper = styled.div`
+  td {
+    padding: 20px 10px 3px 0px !important;
+  }
+  .statusContainer {
+    margin-top: 0px !important;
+  }
+`;
 
 const NoData = styled.div`
   margin: 3em;

@@ -82,7 +82,7 @@ const DSPKeyContributors = ({
         return `${value
           .toFixed(decimalDigits)
           .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} %`;
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`;
       }
       return `${value
         .toFixed(decimalDigits)
@@ -193,20 +193,20 @@ const DSPKeyContributors = ({
   const renderTableHeader = () => {
     return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
       <tr>
-        <th width="40%" className="product-header">
+        <th width="38%" className="product-header">
           CUSTOMER
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           Impressions
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           DSP Spend
         </th>
-        <th width="20%" className="product-header">
+        <th width="18%" className="product-header">
           {' '}
           Total Product Sales
         </th>
-        <th width="60%" className="product-header">
+        <th width="28%" className="product-header">
           {' '}
           Total ROAS
         </th>
@@ -388,7 +388,7 @@ const DSPKeyContributors = ({
 
   const renderDesktopKeyContributions = () => {
     return (
-      <Table className="mt-0 d-md-none d-sm-none d-lg-block">
+      <Table className="mt-0">
         {renderTableHeader()}
         {data ? (
           <tbody>{data.map((item) => renderTableData(item))}</tbody>
