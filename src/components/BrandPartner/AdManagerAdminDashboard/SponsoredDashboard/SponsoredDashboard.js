@@ -758,7 +758,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
       'custom',
       selectedMarketplace.value,
       selectedAdType,
-      selectedContributionOption,
+      selectedAdManager.value,
     );
 
     setShowAdCustomDateModal(false);
