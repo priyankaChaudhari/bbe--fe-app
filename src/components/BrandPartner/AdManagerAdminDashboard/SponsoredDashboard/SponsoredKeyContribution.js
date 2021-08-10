@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { arrayOf, bool, func, string } from 'prop-types';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
+
 import { Tabs, WhiteCard, Table, PageLoader, Status } from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -15,6 +18,7 @@ import {
   noGraphDataMessage,
   keyContributionHeaders,
 } from '../../../../constants/CompanyPerformanceConstants';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 const _ = require('lodash');
 
@@ -30,6 +34,8 @@ const SponsoredKeyContribution = ({
   handleOnMetricsTabChange,
   currencySymbol,
 }) => {
+  const history = useHistory();
+
   const contributionColorSet = {
     High: '#E3F2D2',
     Medium: '#FDF3D7',
@@ -207,7 +213,11 @@ const SponsoredKeyContribution = ({
 
   const renderTableData = (itemData) => {
     return selectedContributionOption === 'keyMetrics' ? (
-      <tr>
+      <tr
+        className="cursor"
+        onClick={() =>
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
+        }>
         <td className="product-body">
           {' '}
           <img
@@ -307,7 +317,13 @@ const SponsoredKeyContribution = ({
         </td>
       </tr>
     ) : (
-      <tr>
+      <tr
+        className="cursor"
+        onClick={() =>
+          history.push(
+            PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
+          )
+        }>
         <td className="product-body">
           {' '}
           <img
