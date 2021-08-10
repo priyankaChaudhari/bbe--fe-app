@@ -28,7 +28,7 @@ import {
   noGraphDataMessage,
 } from '../../../../constants/CompanyPerformanceConstants';
 import DSPMetrics from './DSPMetrics';
-import DSPPacing from './DSPPacing';
+// import DSPPacing from './DSPPacing';
 import DSPKeyContributors from './DSPKeyContributors';
 import DSPFilter from './DSPFilter';
 import Theme from '../../../../theme/Theme';
@@ -47,7 +47,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
-  const [dspPacingLoader, setDspPacingLoader] = useState(false);
+  const [, setDspPacingLoader] = useState(false);
 
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [dspManagerList, setDSPManagerList] = useState([]);
@@ -63,15 +63,15 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     sub: 'vs Previous 7 days',
   });
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
-  const [selectedSpendingOption, setSelectedSpendingOption] = useState(
-    'overSpending',
-  );
+  // const [selectedSpendingOption, setSelectedSpendingOption] = useState(
+  //   'overSpending',
+  // );
 
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [contributionData, setContributionData] = useState(null);
   const [tempDspChartData, setTempDSPChartData] = useState(null);
-  const [dspPacingData, setDspPacingData] = useState(null);
+  const [, setDspPacingData] = useState(null);
   const [responseId, setResponseId] = useState(null);
 
   const [selectedDspMetrics, setSelectedDspMetrics] = useState({
@@ -601,16 +601,16 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     }
   };
 
-  const handleSpendingOptions = (type) => {
-    if (type !== selectedSpendingOption) {
-      setSelectedSpendingOption(type);
-      getDSPPacingData(
-        selectedAdDF.value,
-        selectedMarketplace.value,
-        selectedAdManager.value,
-      );
-    }
-  };
+  // const handleSpendingOptions = (type) => {
+  //   if (type !== selectedSpendingOption) {
+  //     setSelectedSpendingOption(type);
+  //     getDSPPacingData(
+  //       selectedAdDF.value,
+  //       selectedMarketplace.value,
+  //       selectedAdManager.value,
+  //     );
+  //   }
+  // };
 
   const renderDspDailyFact = () => {
     return (
@@ -620,15 +620,6 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           <p className="black-heading-title mt-2 mb-4"> DSP Ad Performance</p>
         </div>
         <div className="col-md-6 col-sm1-12  mb-3">
-          {/* {DropDown(
-            'days-performance',
-            dateOptions,
-            null,
-            getSelectComponents,
-            dateOptions[0],
-            handleAdDailyFact,
-          )} */}
-
           {DropDown(
             'days-performance',
             dateOptions,
@@ -800,14 +791,14 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
         />
-        <DSPPacing
+        {/* <DSPPacing
           currencySymbol={currencySymbol}
           loader={dspPacingLoader}
           // data={dspPacingData}
           data={dspPacingData}
           handleSpendingOptions={handleSpendingOptions}
           selectedOption={selectedSpendingOption}
-        />
+        /> */}
       </div>
     </div>
   );

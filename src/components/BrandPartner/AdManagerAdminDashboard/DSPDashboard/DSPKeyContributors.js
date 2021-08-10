@@ -15,6 +15,7 @@ import {
 import {
   noGraphDataMessage,
   keyContributionHeaders,
+  metricsCurrency,
 } from '../../../../constants/CompanyPerformanceConstants';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -64,6 +65,33 @@ const DSPKeyContributors = ({
       });
     }
   }, [loader, selectedAdManager, selectedKeyContribution]);
+
+  const returnMetricsValue = (value) => {
+    if (metricsCurrency[selectedTabMatrics]) {
+      console.log(
+        'metricsCurrency[selectedDSPMatrics]',
+        selectedDSPMatrics,
+        metricsCurrency[selectedTabMatrics],
+      );
+      if (metricsCurrency[selectedTabMatrics].type === 'currency') {
+        return `${currencySymbol}${value
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      }
+      if (metricsCurrency[selectedTabMatrics].type === 'percentage') {
+        return `${value
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} %`;
+      }
+      return `${value
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `;
+    }
+    return '0';
+  };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, metrics) => {
     const value = actualValue;
@@ -149,21 +177,16 @@ const DSPKeyContributors = ({
         {' '}
         <img className="red-arrow" src={selectedArrow} alt="arrow" />
         {itemData && itemData.change
-          ? `${currencySymbol}${Number(itemData.change.toString().split('-')[1])
-              .toFixed(2)
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-          : `${currencySymbol}0`}
+          ? returnMetricsValue(Number(itemData.change.toString().split('-')[1]))
+          : returnMetricsValue(0)}
       </div>
     ) : (
       <div className={selectedClass}>
         {' '}
         <img className="green-arrow" src={selectedArrow} alt="arrow" />
         {itemData && itemData.change
-          ? `${currencySymbol}${itemData.change
-              .toFixed(2)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-          : `${currencySymbol}0`}
+          ? returnMetricsValue(itemData.change)
+          : returnMetricsValue(0)}
       </div>
     );
   };
@@ -215,6 +238,7 @@ const DSPKeyContributors = ({
   const renderTableData = (itemData) => {
     return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
       <tr
+        key={itemData.id}
         className="cursor"
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
@@ -319,6 +343,7 @@ const DSPKeyContributors = ({
       </tr>
     ) : (
       <tr
+        key={itemData.customer_id}
         className="cursor"
         onClick={() =>
           history.push(
@@ -340,22 +365,14 @@ const DSPKeyContributors = ({
           <div className="status">{itemData.ad_manager}</div>
         </td>
         <td className="product-body">
-          {' '}
           {itemData && itemData.current
-            ? `${currencySymbol}${itemData.current
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            ? returnMetricsValue(itemData.current)
+            : returnMetricsValue(0)}
         </td>
         <td className="product-body">
-          {' '}
           {itemData && itemData.previous
-            ? `${currencySymbol}${itemData.previous
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            ? returnMetricsValue(itemData.previous)
+            : returnMetricsValue(0)}
         </td>
         <td className="product-body"> {renderChangeValue(itemData)}</td>
         <td className="product-body">

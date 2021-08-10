@@ -93,3 +93,22 @@ export const keyContributionHeaders = {
   contribution: 'Contribution',
   keyMetrics: 'Key Metrics',
 };
+
+export const metricsCurrency = {
+  adSales: { type: 'currency' },
+  adSpend: { type: 'currency' },
+  adConversion: { type: 'percentage' },
+  impressions: { type: 'nocurrency' },
+  adCos: { type: 'percentage' },
+  adRoas: { type: 'currency' },
+  adClicks: { type: 'nocurrency' },
+  adClickRate: { type: 'percentage' },
+  dspImpressions: { type: 'nocurrency' },
+  dspSpend: { type: 'currency' },
+  dspTotalProductSales: { type: 'currency' },
+  dspTotalRoas: { type: 'nocurrency' },
+  dspTotalDpvr: { type: 'percentage' },
+  dspTtlNewBrandPurchases: { type: 'percentage' },
+  dspProductSales: { type: 'currency' },
+  dspRoas: { type: 'nocurrency' },
+};

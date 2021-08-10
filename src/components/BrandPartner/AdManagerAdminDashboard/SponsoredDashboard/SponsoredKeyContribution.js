@@ -17,6 +17,7 @@ import {
   keyContributionConstant,
   noGraphDataMessage,
   keyContributionHeaders,
+  metricsCurrency,
 } from '../../../../constants/CompanyPerformanceConstants';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
@@ -52,6 +53,28 @@ const SponsoredKeyContribution = ({
     adRoas: 'Roas',
     adClicks: 'Clicks',
     adClickRate: 'Click Through Rate',
+  };
+
+  const returnMetricsValue = (value) => {
+    if (metricsCurrency[selectedTabMetrics]) {
+      if (metricsCurrency[selectedTabMetrics].type === 'currency') {
+        return `${currencySymbol}${value
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      }
+      if (metricsCurrency[selectedTabMetrics].type === 'percentage') {
+        return `${value
+          .toFixed(2)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} %`;
+      }
+      return `${value
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `;
+    }
+    return '0';
   };
 
   const renderAdPerformanceDifference = (actualValue, grayArrow, metrics) => {
@@ -193,10 +216,8 @@ const SponsoredKeyContribution = ({
         {' '}
         <img className="red-arrow" src={selectedArrow} alt="arrow" />
         {itemData && itemData.change
-          ? `${currencySymbol}${Number(itemData.change.toString().split('-')[1])
-              .toFixed(2)
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-          : `${currencySymbol}0`}
+          ? returnMetricsValue(Number(itemData.change.toString().split('-')[1]))
+          : returnMetricsValue(0)}
       </div>
     ) : (
       <div className={selectedClass}>
@@ -363,6 +384,7 @@ const SponsoredKeyContribution = ({
       </tr>
     ) : (
       <tr
+        key={itemData.customer_id}
         className="cursor"
         onClick={() =>
           history.push(
@@ -384,22 +406,14 @@ const SponsoredKeyContribution = ({
           <div className="status">{itemData.ad_manager}</div>
         </td>
         <td className="product-body">
-          {' '}
           {itemData && itemData.current
-            ? `${currencySymbol}${itemData.current
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            ? returnMetricsValue(itemData.current)
+            : returnMetricsValue(0)}
         </td>
         <td className="product-body">
-          {' '}
           {itemData && itemData.previous
-            ? `${currencySymbol}${itemData.previous
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            ? returnMetricsValue(itemData.previous)
+            : returnMetricsValue(0)}
         </td>
         <td className="product-body"> {renderChangeValue(itemData)}</td>
         <td className="product-body">
