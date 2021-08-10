@@ -15,9 +15,9 @@ export const dspTabOptions = {
   dspProductSales: 'Product Sales',
   dspRoas: 'ROAS',
   dspTotalDpvr: 'Total DPVR',
-  dspTtlNewBrandPurchases: 'Ttl New Brand Purchases',
+  dspTtlNewBrandPurchases: 'TTL New Brand Purchases',
   dspTotalProductSales: 'Total Product Sales',
-  dspTotalRoas: 'Total RoAS',
+  dspTotalRoas: 'Total ROAS',
 };
 
 export const contributionColorSet = {

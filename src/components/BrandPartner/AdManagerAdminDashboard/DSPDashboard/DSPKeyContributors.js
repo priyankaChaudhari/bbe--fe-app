@@ -466,6 +466,30 @@ const DSPKeyContributors = ({
     );
   };
 
+  const renderKeyContributionTabs = () => {
+    let selectedTab = selectedTabMatrics;
+    if (selectedDSPMatrics[selectedTabMatrics] === undefined) {
+      const selctedArray = _.keys(selectedDSPMatrics);
+      // eslint-disable-next-line prefer-destructuring
+      selectedTab = selctedArray[0];
+      handleOnMatricsTabChange(selectedTab);
+    }
+    return (
+      <Tabs>
+        <ul className="tabs">
+          {_.keys(selectedDSPMatrics).map((item) => (
+            <li
+              className={selectedTabMatrics === item ? 'active' : ''}
+              onClick={() => handleOnMatricsTabChange(item)}
+              role="presentation">
+              {dspTabOptions[item]}
+            </li>
+          ))}
+        </ul>
+      </Tabs>
+    );
+  };
+
   return (
     <Wrapper>
       <WhiteCard className="mb-3">
@@ -525,20 +549,9 @@ const DSPKeyContributors = ({
         ) : (
           <>
             {selectedKeyContribution === false &&
-            keyContribution.id2 === 'keyMetrics' ? null : (
-              <Tabs>
-                <ul className="tabs">
-                  {_.keys(selectedDSPMatrics).map((item) => (
-                    <li
-                      className={selectedTabMatrics === item ? 'active' : ''}
-                      onClick={() => handleOnMatricsTabChange(item)}
-                      role="presentation">
-                      {dspTabOptions[item]}
-                    </li>
-                  ))}
-                </ul>
-              </Tabs>
-            )}
+            keyContribution.id2 === 'keyMetrics'
+              ? null
+              : renderKeyContributionTabs()}
             {loader ? (
               <PageLoader
                 component="performance-graph"
