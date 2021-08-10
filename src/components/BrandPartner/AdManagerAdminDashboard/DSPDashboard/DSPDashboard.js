@@ -772,6 +772,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
               currencySymbol={currencySymbol}
               selectedBox={selectedDspMetrics}
               selectedDF={selectedAdDF.value}
+              isDashboard
             />
           ) : (
             <NoData>{noGraphDataMessage}</NoData>

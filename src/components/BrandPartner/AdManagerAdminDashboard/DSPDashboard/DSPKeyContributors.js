@@ -68,11 +68,6 @@ const DSPKeyContributors = ({
 
   const returnMetricsValue = (value) => {
     if (metricsCurrency[selectedTabMatrics]) {
-      console.log(
-        'metricsCurrency[selectedDSPMatrics]',
-        selectedDSPMatrics,
-        metricsCurrency[selectedTabMatrics],
-      );
       if (metricsCurrency[selectedTabMatrics].type === 'currency') {
         return `${currencySymbol}${value
           .toFixed(2)

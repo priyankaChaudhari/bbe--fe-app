@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { dspColorSet } from '../../../constants/AdManagerAdminDashboardConstants';
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
 const _ = require('lodash');
 
@@ -20,6 +19,7 @@ export default function DSPPerformanceChart({
   currencySymbol,
   selectedBox,
   selectedDF,
+  isDashboard = false,
 }) {
   const chart = useRef(null);
   useEffect(() => {
@@ -34,11 +34,8 @@ export default function DSPPerformanceChart({
       dspRoas: 'ROAS',
     };
 
-    // const tooltipDate =
-    //   '<div style="color: white; font-size: 16px;">{date}</div>';
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
-    // chart.current.data = [];
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
     // render X axis
@@ -216,26 +213,7 @@ export default function DSPPerformanceChart({
             )}`;
           }
         }
-        // else {
-        //   tooltipValue = `${tooltipValue} ${renderTooltip(
-        //     'Recent',
-        //     colorCode,
-        //     currentLabel,
-        //     null,
-        //     null,
-        //     null,
-        //   )}`;
-        //   if (selectedDF !== 'custom') {
-        //     tooltipValue = `${tooltipValue} ${renderTooltip(
-        //       'Previous',
-        //       colorCode,
-        //       previousLabel,
-        //       null,
-        //       null,
-        //       null,
-        //     )}`;
-        //   }
-        // }
+
         return '';
       });
 
@@ -251,14 +229,20 @@ export default function DSPPerformanceChart({
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-          if (item === 'dspSpend' || item === 'dspProductSales') {
+          if (
+            item === 'dspSpend' ||
+            item === 'dspProductSales' ||
+            (isDashboard && item === 'dspTotalProductSales')
+          ) {
             firstAxis = 'currency';
           }
         }
         if (index === 1) {
           if (
             firstAxis === 'currency' &&
-            (item === 'dspSpend' || item === 'dspProductSales')
+            (item === 'dspSpend' ||
+              item === 'dspProductSales' ||
+              (isDashboard && item === 'dspTotalProductSales'))
           ) {
             series.yAxis = valueAxis;
             series2.yAxis = valueAxis;
@@ -428,7 +412,11 @@ export default function DSPPerformanceChart({
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
 
-        if (item === 'dspSpend' || item === 'dspProductSales') {
+        if (
+          item === 'dspSpend' ||
+          item === 'dspProductSales' ||
+          (isDashboard && item === 'dspTotalProductSales')
+        ) {
           if (firstAxis === null || firstAxis === 'currency') {
             // console.log('dspSpend if', item);
             series.yAxis = valueAxis;
@@ -572,8 +560,16 @@ export default function DSPPerformanceChart({
 
       chart.current.cursor.snapToSeries = snapToSeries;
     }
+
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol, selectedDF, selectedBox]);
+  }, [
+    chartId,
+    chartData,
+    currencySymbol,
+    selectedDF,
+    selectedBox,
+    isDashboard,
+  ]);
 
   return <div id={chartId} style={{ width: '100%', height: '500px' }} />;
 }
@@ -583,6 +579,7 @@ DSPPerformanceChart.defaultProps = {
   currencySymbol: '',
   selectedDF: '',
   selectedBox: {},
+  isDashboard: '',
 };
 
 DSPPerformanceChart.propTypes = {
@@ -591,4 +588,5 @@ DSPPerformanceChart.propTypes = {
   currencySymbol: PropTypes.string,
   selectedDF: PropTypes.string,
   selectedBox: PropTypes.shape(PropTypes.object),
+  isDashboard: PropTypes.bool,
 };
