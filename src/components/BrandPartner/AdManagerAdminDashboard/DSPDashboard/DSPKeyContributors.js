@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import _ from 'lodash';
-import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
+
+import _ from 'lodash';
 import styled from 'styled-components';
+import { arrayOf, bool, func, objectOf, string } from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
+
 import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
 import {
   contributionColorSet,
@@ -20,6 +22,7 @@ import {
   CompanyDefaultUser,
   UpDowGrayArrow,
 } from '../../../../theme/images';
+import Theme from '../../../../theme/Theme';
 
 const DSPKeyContributors = ({
   selectedKeyContribution,
@@ -30,7 +33,7 @@ const DSPKeyContributors = ({
   selectedTabMatrics,
   data,
   loader,
-  // currencySymbol,
+  currencySymbol,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [keyContribution, setKeyContribution] = useState({
@@ -192,18 +195,18 @@ const DSPKeyContributors = ({
           itemData.dsp_ad_performance &&
           itemData.dsp_ad_performance.current_sum &&
           itemData.dsp_ad_performance.current_sum.impressions
-            ? `$${itemData.dsp_ad_performance.current_sum.impressions
+            ? `${itemData.dsp_ad_performance.current_sum.impressions
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `0`}
           {renderAdPerformanceDifference(
             itemData &&
               itemData.dsp_ad_performance &&
               itemData.dsp_ad_performance.difference_data &&
               itemData.dsp_ad_performance.difference_data.impressions,
             false,
-            'Impresion',
+            'impressions',
           )}
         </td>
         <td className="product-body">
@@ -211,11 +214,11 @@ const DSPKeyContributors = ({
           itemData.dsp_ad_performance &&
           itemData.dsp_ad_performance.current_sum &&
           itemData.dsp_ad_performance.current_sum.dsp_spend
-            ? `$${itemData.dsp_ad_performance.current_sum.dsp_spend
+            ? `${currencySymbol}${itemData.dsp_ad_performance.current_sum.dsp_spend
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
               itemData.dsp_ad_performance &&
@@ -230,17 +233,17 @@ const DSPKeyContributors = ({
           itemData.dsp_ad_performance &&
           itemData.dsp_ad_performance.current_sum &&
           itemData.dsp_ad_performance.current_sum.total_product_sales
-            ? itemData.dsp_ad_performance.current_sum.total_product_sales
+            ? `${currencySymbol}${itemData.dsp_ad_performance.current_sum.total_product_sales
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            : 0}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+            : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
               itemData.dsp_ad_performance &&
               itemData.dsp_ad_performance.difference_data &&
               itemData.dsp_ad_performance.difference_data.total_product_sales,
             false,
-            'ProductSale',
+            'totalProductSales',
           )}
         </td>
         <td>
@@ -258,7 +261,7 @@ const DSPKeyContributors = ({
               itemData.dsp_ad_performance.difference_data &&
               itemData.dsp_ad_performance.difference_data.total_roas,
             false,
-            'TotalACOS',
+            'totalRoas',
           )}
         </td>
       </tr>
@@ -281,20 +284,20 @@ const DSPKeyContributors = ({
         <td className="product-body">
           {' '}
           {itemData && itemData.current
-            ? `$${itemData.current
+            ? `${currencySymbol}${itemData.current
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
         </td>
         <td className="product-body">
           {' '}
           {itemData && itemData.previous
-            ? `$${itemData.previous
+            ? `${currencySymbol}${itemData.previous
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : '$0'}
+            : `${currencySymbol}0`}
         </td>
         <td className="product-body">
           {' '}
@@ -303,21 +306,23 @@ const DSPKeyContributors = ({
               {' '}
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow" />
               {itemData && itemData.change
-                ? `$${Number(itemData.change.toString().split('-')[1])
+                ? `${currencySymbol}${Number(
+                    itemData.change.toString().split('-')[1],
+                  )
                     .toFixed(2)
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+                : `${currencySymbol}0`}
             </div>
           ) : (
             <div className="increase-rate large">
               {' '}
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow" />
               {itemData && itemData.change
-                ? `$${itemData.change
+                ? `${currencySymbol}${itemData.change
                     .toFixed(2)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : '$0'}
+                : `${currencySymbol}0`}
             </div>
           )}
         </td>
@@ -374,11 +379,11 @@ const DSPKeyContributors = ({
                       <div className="label">This Period</div>
                       <div className="label-info ">
                         {itemData && itemData.current
-                          ? `$${itemData.current
+                          ? `${currencySymbol}${itemData.current
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -386,11 +391,11 @@ const DSPKeyContributors = ({
                       <div className="label">Prev. Period</div>
                       <div className="label-info ">
                         {itemData && itemData.previous
-                          ? `$${itemData.previous
+                          ? `${currencySymbol}${itemData.previous
                               .toFixed(2)
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : '$0'}
+                          : `${currencySymbol}0`}
                       </div>
                     </div>
                     <div className="col-6 pb-3">
@@ -405,12 +410,12 @@ const DSPKeyContributors = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `$${Number(
+                            ? `${currencySymbol}${Number(
                                 itemData.change.toString().split('-')[1],
                               )
                                 .toFixed(2)
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : '$0'}
+                            : `${currencySymbol}0`}
                         </div>
                       ) : (
                         <div className="increase-rate large">
@@ -421,11 +426,11 @@ const DSPKeyContributors = ({
                             alt="arrow"
                           />{' '}
                           {itemData && itemData.change
-                            ? `$${itemData.change
+                            ? `${currencySymbol}${itemData.change
                                 .toFixed(2)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : '$0'}
+                            : `${currencySymbol}0`}
                         </div>
                       )}
                     </div>
@@ -518,7 +523,7 @@ const DSPKeyContributors = ({
         {loader ? (
           <PageLoader
             component="performance-graph"
-            color="#FF5933"
+            color={Theme.orange}
             type="detail"
             width={40}
             height={40}
@@ -549,7 +554,7 @@ DSPKeyContributors.defaultProps = {
   handleOnMatricsTabChange: () => {},
   selectedTabMatrics: 'dspImpression',
   data: null,
-  // currencySymbol: '',
+  currencySymbol: '',
 };
 
 DSPKeyContributors.propTypes = {
@@ -561,13 +566,13 @@ DSPKeyContributors.propTypes = {
   selectedTabMatrics: string,
   data: arrayOf(Array),
   loader: bool.isRequired,
-  // currencySymbol: string,
+  currencySymbol: string,
 };
 
 const Wrapper = styled.div`
-  /* td {
+  td {
     padding: 20px 10px 3px 0px !important;
-  } */
+  }
   .statusContainer {
     margin-top: 0px !important;
   }
