@@ -15,9 +15,15 @@ import { useMediaQuery } from 'react-responsive';
 
 import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceChart';
 
-import { WhiteCard, ModalBox, Button, PageLoader } from '../../../../common';
+import {
+  WhiteCard,
+  ModalBox,
+  Button,
+  PageLoader,
+  DropDownIndicator,
+} from '../../../../common';
 
-import { CaretUp, CloseIcon } from '../../../../theme/images/index';
+import { CloseIcon } from '../../../../theme/images/index';
 import {
   dateOptions,
   SponsoredAdTypeOptions,
@@ -43,7 +49,6 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 export default function SponsoredDashboard({ marketplaceChoices }) {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
-  const [isApiCall, setIsApiCall] = useState(false);
 
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
@@ -289,7 +294,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
       startDate = null,
       endDate = null,
     ) => {
-      setIsApiCall(true);
       setAdGraphLoader(true);
       getAdManagerAdminGraphData(
         'sponsored-dashboard',
@@ -302,7 +306,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          setIsApiCall(false);
           setAdGraphLoader(false);
         }
         if (res && res.status === 200) {
@@ -315,7 +318,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
             setAdCurrentTotal([]);
             setAdDifference([]);
           }
-          setIsApiCall(false);
           setAdGraphLoader(false);
         }
       });
@@ -334,7 +336,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
       startDate = null,
       endDate = null,
     ) => {
-      setIsApiCall(true);
       setKeyContributionLoader(true);
       getKeyContributionData(
         'sponsored_ad_dashboard',
@@ -348,7 +349,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
         endDate,
       ).then((res) => {
         if (res && res.status === 400) {
-          setIsApiCall(false);
           setKeyContributionLoader(false);
         }
         if (res && res.status === 200) {
@@ -359,7 +359,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
           } else {
             setContributionData([]);
           }
-          setIsApiCall(false);
           setKeyContributionLoader(false);
         }
       });
@@ -791,29 +790,11 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
     </SingleValue>
   );
 
-  const DropdownIndicator = (props) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
-
   const getSelectComponents = () => {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropdownIndicator,
+      DropDownIndicator,
     };
   };
 
@@ -923,7 +904,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
             getSelectComponents,
             dateOptions[0],
             handleAdDailyFact,
-            isApiCall,
+            adGraphLoader,
             null,
             selectedAdDF,
           )}
@@ -992,7 +973,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
       <div className="col-lg-3 col-md-12">
         <SponsoredFilter
           handleResetFilter={handleResetFilter}
-          DropdownIndicator={DropdownIndicator}
+          DropdownIndicator={DropDownIndicator}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}
           adManagerList={adManagerList}
@@ -1001,7 +982,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
           SponsoredAdTypeOptions={SponsoredAdTypeOptions}
           handleAdType={handleAdType}
           selectedAdType={selectedAdType}
-          isApiCall={isApiCall}
+          isApiCall={adGraphLoader}
           selectedAdManager={selectedAdManager}
           selectedMarketplace={selectedMarketplace}
         />
@@ -1017,6 +998,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
             addThousandComma={addThousandComma}
             adPreviousTotal={adPreviousTotal}
             adDifference={adDifference}
+            DropDownIndicator={DropDownIndicator}
           />
           {renderAdGroupBy()}
           {adGraphLoader ? (

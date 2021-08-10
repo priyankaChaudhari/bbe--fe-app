@@ -43,18 +43,19 @@ const SponsoredFilter = ({
     );
   };
 
-  const renderMarketplaceDropdown = (className) => {
+  const renderMarketplaceDropdown = () => {
     return (
       <div className="col-12 ">
         <div className="label mt-3">Marketplace</div>
         <DropDownSelect
           id="BT-sponsoredadver-countryfilter"
-          className={isApiCall ? `${className}  disabled` : className}>
+          className={isApiCall ? `cursor  disabled` : 'cursor '}>
           <Select
             classNamePrefix="react-select"
             className="active"
             components={DropdownIndicator}
             options={marketplaceOptions}
+            defaultValue={marketplaceOptions && marketplaceOptions[0]}
             value={selectedMarketplace}
             onChange={(event) => handleMarketplace(event)}
             placeholder={
@@ -117,7 +118,7 @@ const SponsoredFilter = ({
             </p>
           </div>
           {renderAdManagerDropdown('cursor')}
-          {renderMarketplaceDropdown('cursor')}
+          {renderMarketplaceDropdown()}
           <div className="col-12">
             <div className="label mt-4 mb-2">Sponsored Ad Type</div>
           </div>
