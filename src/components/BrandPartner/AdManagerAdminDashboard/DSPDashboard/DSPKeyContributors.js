@@ -67,21 +67,25 @@ const DSPKeyContributors = ({
   }, [loader, selectedAdManager, selectedKeyContribution]);
 
   const returnMetricsValue = (value) => {
+    let decimalDigits = 2;
+    if (selectedTabMatrics === 'dspImpressions') {
+      decimalDigits = 0;
+    }
     if (metricsCurrency[selectedTabMatrics]) {
       if (metricsCurrency[selectedTabMatrics].type === 'currency') {
         return `${currencySymbol}${value
-          .toFixed(2)
+          .toFixed(decimalDigits)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
       if (metricsCurrency[selectedTabMatrics].type === 'percentage') {
         return `${value
-          .toFixed(2)
+          .toFixed(decimalDigits)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} %`;
       }
       return `${value
-        .toFixed(2)
+        .toFixed(decimalDigits)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `;
     }

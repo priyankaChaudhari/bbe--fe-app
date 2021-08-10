@@ -56,21 +56,28 @@ const SponsoredKeyContribution = ({
   };
 
   const returnMetricsValue = (value) => {
+    let decimalDigits = 2;
+    if (
+      selectedTabMetrics === 'adClicks' ||
+      selectedTabMetrics === 'impressions'
+    ) {
+      decimalDigits = 0;
+    }
     if (metricsCurrency[selectedTabMetrics]) {
       if (metricsCurrency[selectedTabMetrics].type === 'currency') {
         return `${currencySymbol}${value
-          .toFixed(2)
+          .toFixed(decimalDigits)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
       if (metricsCurrency[selectedTabMetrics].type === 'percentage') {
         return `${value
-          .toFixed(2)
+          .toFixed(decimalDigits)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} %`;
       }
       return `${value
-        .toFixed(2)
+        .toFixed(decimalDigits)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `;
     }
