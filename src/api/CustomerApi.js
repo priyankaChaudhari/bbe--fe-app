@@ -2,7 +2,7 @@
 /* eslint-disable guard-for-in */
 
 import queryString from 'query-string';
-
+import { metricsNameForAPI } from '../constants/CompanyPerformanceConstants';
 import axiosInstance from '../axios';
 import {
   API_ACTIVITY_LOG,
@@ -16,6 +16,7 @@ import {
   API_DOCUMENTS,
   API_PERFORMANCE,
   API_AD_PERFORMANCE,
+  API_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -689,6 +690,167 @@ export async function getDspPacingData(id, marketplace) {
   const params = { dsp_pacing: 'month', dsp_marketplace: marketplace };
   const result = await axiosInstance
     .get(`${API_AD_PERFORMANCE + id}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAdManagerAdminGraphData(
+  dashboardType,
+  adType,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  user,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  if (startDate && endDate) {
+    if (dashboardType === 'sponsored-dashboard') {
+      params = {
+        sponsored_type: adType,
+        daily_facts: dailyFacts,
+        group_by: groupBy,
+        marketplace,
+        user,
+        start_date: startDate,
+        end_date: endDate,
+      };
+    } else {
+      params = {
+        daily_facts: dailyFacts,
+        group_by: groupBy,
+        marketplace,
+        user,
+        start_date: startDate,
+        end_date: endDate,
+      };
+    }
+  } else if (dashboardType === 'sponsored-dashboard') {
+    params = {
+      sponsored_type: adType,
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      user,
+    };
+  } else {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      user,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}${dashboardType}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getKeyContributionData(
+  dashboardType,
+  adType,
+  dailyFacts,
+  marketplace,
+  user,
+  contributionType,
+  selectedMetric,
+  startDate,
+  endDate,
+) {
+  const metricName = metricsNameForAPI[selectedMetric];
+
+  let params = {
+    dashboard: dashboardType,
+    daily_facts: dailyFacts,
+    marketplace,
+    user,
+  };
+
+  if (startDate && endDate) {
+    params = {
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  if (contributionType === 'keyMetrics') {
+    if (dashboardType === 'sponsored_ad_dashboard') {
+      params = {
+        ...params,
+        page: 1,
+        sequence: 'desc',
+        'order-by': 'ad_sales',
+      };
+    } else {
+      params = {
+        ...params,
+        page: 1,
+        sequence: 'desc',
+        'order-by': 'dsp_spend',
+      };
+    }
+  } else {
+    params = {
+      ...params,
+      order_by: contributionType,
+      metric: metricName,
+    };
+  }
+
+  if (dashboardType === 'sponsored_ad_dashboard') {
+    params = {
+      ...params,
+      sponsored_type: adType,
+    };
+  }
+
+  let result = {};
+  if (contributionType === 'keyMetrics') {
+    result = await axiosInstance
+      .get(`${API_CUSTOMER}`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  } else {
+    result = await axiosInstance
+      .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
+  return result;
+}
+
+export async function getDspPacindgData(dailyFacts, marketplace, user) {
+  const params = {
+    dsp_daily_facts: dailyFacts,
+    dsp_marketplace: marketplace,
+    user,
+  };
+
+  let result = {};
+  result = await axiosInstance
+    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}dsp-pacing/`, { params })
     .then((response) => {
       return response;
     })

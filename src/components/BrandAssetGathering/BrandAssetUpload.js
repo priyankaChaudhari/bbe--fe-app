@@ -38,6 +38,9 @@ import {
   WhiteArrowRight,
   FileCloud,
   CaretUp,
+  DefaultUser,
+  ForwardOrangeIcon,
+  ArrowRightIcon,
 } from '../../theme/images';
 import {
   Button,
@@ -420,12 +423,6 @@ export default function BrandAssetUpload() {
     });
   }, [params.step]);
 
-  // $(document).on('click', (e) => {
-  //   if ($(e.target).closest('#hideDelete').length === 0) {
-  //     setShowDeleteMsg(false);
-  //   }
-  // });
-
   const destructureselectedFiles = () => {
     const formData = [];
     for (const files of selectedFiles) {
@@ -463,123 +460,146 @@ export default function BrandAssetUpload() {
     const documentError = { error: false, message: '' };
     if (files && files.length) setIsLoading({ loader: true, type: 'button' });
     const formData = destructureselectedFiles();
-
-    axiosInstance
-      .post(API_DOCUMENTS, formData, {
-        onUploadProgress: (data) => {
-          files &&
-            files.map((file) => {
-              if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
-            });
-          setDroppedFiles(files);
-        },
-      })
-      .then((res) => {
-        for (const detail of res.data) {
-          if (detail && detail.presigned_url !== '') {
-            const request = {
-              meta: createMetaData(detail.original_name),
-              url: detail.presigned_url,
-              headers: {
-                'Content-type': detail.mime_type,
-              },
-            };
-            if (detail && detail.error) {
-              documentError.error = true;
-              documentError.message = detail.error.mime_type
-                ? detail.error.mime_type[0]
-                : detail.error;
-              const validFiles = files.filter((file) => {
-                file.progress = 0;
-                return detail.original_name !== file.original_name;
-              });
-              setDroppedFiles(validFiles);
-            }
-            axios
-              .put(request.url, request.meta, { headers: request.headers })
-              .then(() => {
-                axiosInstance
-                  .patch(
-                    `${API_DOCUMENTS + detail.id}/`,
-                    {
-                      status: 'available',
-                    },
-                    {
-                      onUploadProgress: (data) => {
-                        files &&
-                          files.map((file) => {
-                            if (file.progress > 0)
-                              file.progress = Math.round(
-                                (100 * data.loaded) / data.total,
-                              );
-                          });
-                        setDroppedFiles(files);
-                      },
-                    },
-                  )
-                  .then((r) => {
-                    const newFiles = documentData || [];
-                    files &&
-                      files.map((file) => {
-                        file.progress = 0;
-                      });
-                    setDroppedFiles(files);
-                    newFiles.unshift(r.data);
-                    setDocumentData(newFiles);
-                    setDroppedFiles([]);
-                    setUploadCount({
-                      ...uploadCount,
-                      [params.step]:
-                        newFiles.length === 1
-                          ? '1 file uploaded'
-                          : `${newFiles.length} files uploaded`,
-                    });
-                    if (
-                      brandAssetData.is_completed &&
-                      (params.step === 'additional-brand-material' ||
-                        params.step === 'iconography') &&
-                      brandAssetData.steps[selectedStep && selectedStep.key] ===
-                        'none'
-                    ) {
-                      updateBrandAssetStep(brandId, {
-                        steps: {
-                          ...brandAssetData.steps,
-                          [selectedStep && selectedStep.key]: 'completed',
-                        },
-                      });
-                    }
-                  })
-                  .catch((error) => {
-                    toast.error(
-                      error &&
-                        error.response &&
-                        error.response.data &&
-                        error.response.data.detail,
-                    );
-                    setIsLoading({ loader: false, type: 'page' });
-                  });
-                setIsLoading({ loader: false, type: 'button' });
-              });
-          }
-        }
-        if (documentError && documentError.error) {
-          toast.error(documentError && documentError.message);
-          setIsLoading({ loader: false, type: 'button' });
-        }
-        return res;
-      })
-      .catch((error) => {
-        toast.error(
-          <div>
-            The person who asked you to complete this section has changed who
-            has access.
-            <br /> Please reach out to onboarding@buyboxexperts.com if you have
-            any questions.
-          </div>,
-        );
-        setDroppedFiles([]);
-        setIsLoading({ loader: false, type: 'page' });
+    const matchedNameArray = documentData.filter((object1) => {
+      return formData.some((object2) => {
+        return object1.original_name === object2.original_name;
       });
+    });
+    const filterFormData = formData.filter((object1) => {
+      return !matchedNameArray.some((object2) => {
+        return object1.original_name === object2.original_name;
+      });
+    });
+
+    matchedNameArray.map((obj) => {
+      const getmatchedName = obj.original_name;
+      if (getmatchedName) {
+        setIsLoading({ loader: false, type: 'button' });
+        toast.error(`The file "${getmatchedName}" already exists.`);
+      }
+    });
+
+    if (filterFormData && filterFormData.length > 0) {
+      axiosInstance
+        .post(API_DOCUMENTS, filterFormData, {
+          onUploadProgress: () => {
+            files &&
+              files.map((file) => {
+                if (file.progress > 0) file.progress = 50; // (data.loaded / data.total) * 100;
+              });
+            setDroppedFiles(files);
+          },
+        })
+        .then((res) => {
+          for (const detail of res.data) {
+            if (detail && detail.presigned_url !== '') {
+              const request = {
+                meta: createMetaData(detail.original_name),
+                url: detail.presigned_url,
+                headers: {
+                  'Content-type': detail.mime_type,
+                },
+              };
+              if (detail && detail.error) {
+                documentError.error = true;
+                documentError.message = detail.error.mime_type
+                  ? detail.error.mime_type[0]
+                  : detail.error;
+                const validFiles = files.filter((file) => {
+                  file.progress = 0;
+                  return detail.original_name !== file.original_name;
+                });
+                setDroppedFiles(validFiles);
+              }
+              axios
+                .put(request.url, request.meta, { headers: request.headers })
+                .then(() => {
+                  axiosInstance
+                    .patch(
+                      `${API_DOCUMENTS + detail.id}/`,
+                      {
+                        status: 'available',
+                      },
+                      {
+                        onUploadProgress: (data) => {
+                          files &&
+                            files.map((file) => {
+                              if (file.progress > 0)
+                                file.progress = Math.round(
+                                  (100 * data.loaded) / data.total,
+                                );
+                            });
+                          setDroppedFiles(files);
+                        },
+                      },
+                    )
+                    .then((r) => {
+                      const newFiles = documentData || [];
+                      files &&
+                        files.map((file) => {
+                          file.progress = 0;
+                        });
+                      setDroppedFiles(files);
+                      newFiles.unshift(r.data);
+                      setDocumentData(newFiles);
+                      setDroppedFiles([]);
+                      setUploadCount({
+                        ...uploadCount,
+                        [params.step]:
+                          newFiles.length === 1
+                            ? '1 file uploaded'
+                            : `${newFiles.length} files uploaded`,
+                      });
+                      if (
+                        brandAssetData.is_completed &&
+                        (params.step === 'additional-brand-material' ||
+                          params.step === 'iconography') &&
+                        brandAssetData.steps[
+                          selectedStep && selectedStep.key
+                        ] === 'none'
+                      ) {
+                        updateBrandAssetStep(brandId, {
+                          steps: {
+                            ...brandAssetData.steps,
+                            [selectedStep && selectedStep.key]: 'completed',
+                          },
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      toast.error(
+                        error &&
+                          error.response &&
+                          error.response.data &&
+                          error.response.data.detail,
+                      );
+                      setIsLoading({ loader: false, type: 'page' });
+                    });
+                  setIsLoading({ loader: false, type: 'button' });
+                });
+            }
+          }
+          if (documentError && documentError.error) {
+            toast.error(documentError && documentError.message);
+            setIsLoading({ loader: false, type: 'button' });
+          }
+          return res;
+        })
+        .catch((error) => {
+          toast.error(
+            <div>
+              The person who asked you to complete this section has changed who
+              has access.
+              <br /> Please reach out to onboarding@buyboxexperts.com if you
+              have any questions.
+            </div>,
+          );
+          setDroppedFiles([]);
+          setIsLoading({ loader: false, type: 'page' });
+        });
+    } else {
+      setDroppedFiles([]);
+    }
   };
   const { getRootProps, getInputProps } = useDropzone({
     // accept: params && params.step && formats && formats[params.step],
@@ -1090,6 +1110,55 @@ export default function BrandAssetUpload() {
           </DropDownBrandAsset>
           <div className="container-fluid">
             <div className="row">
+              {/* <div className="col-12 ">
+                <AmazonProduct>
+                  <div className="amazon-product-image">
+                    <img src={DefaultUser} alt="product-pic" />
+                  </div>
+                  <div className="amazon-product-details">
+                    <ul className="other-details">
+                      <li>
+                        ASIN: <span>6291108300282 </span>
+                      </li>
+
+                      <li>
+                        <span className="dot" /> SKU:{' '}
+                        <span>6291108300282 </span>
+                      </li>
+
+                      <li className="amazon-link">
+                        {' '}
+                        <span className="dot" />
+                        View on Amazon
+                        <img
+                          className="forward-arrow"
+                          src={LeftArrowIcon}
+                          alt="arrow"
+                        />
+                      </li>
+                    </ul>
+                    Threadmill Home Linen 100% Combed Cotton Blanket Herringbone
+                    Soft Breathable Full/Queen Size Sage
+                  </div>
+                </AmazonProduct>
+                <ul className="steps-additional-asset">
+                  <li className="step-completed"> Product Images</li>
+                  <li>
+                    {' '}
+                    {/* <img
+                      className="forward-step-arrow"
+                      src={ArrowRightIcon}
+                      alt="arrow"
+                    />{' '} */}
+              {/* <img
+                      className="forward-step-arrow"
+                      src={ArrowRightBlackIcon}
+                      alt="arrow"
+                    />{' '}
+                  </li>
+                  <li className="active">Additional Assets</li>
+                </ul>
+              </div> */}
               <div className="col-9 ">
                 <div className="label-heading">
                   Part {selectedStep && selectedStep.step}/5
@@ -1458,6 +1527,30 @@ const BrandAssetBody = styled.div`
     color: ${Theme.gray40};
     font-size: ${Theme.extraNormal};
   }
+  .steps-additional-asset {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+    li {
+      display: inline-block;
+      margin-right: 10px;
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
+
+      .forward-step-arrow {
+        width: 17px;
+        vertical-align: middle;
+      }
+      &.active {
+        color: #ff4817;
+        font-weight: 600;
+      }
+      &.step-completed {
+        color: ${Theme.black};
+        font-weight: 600;
+      }
+    }
+  }
   .Image-container {
     list-style-type: none;
     padding: 0;
@@ -1805,3 +1898,52 @@ const DragDropImg = styled.div`
     max-height: 100vh;
   }
 `;
+
+// const AmazonProduct = styled.div`
+//   flex-wrap: wrap;
+//   display: flex;
+//   .amazon-product-image {
+//     border: 2px solid #bfc5d2;
+//     border-radius: 6px;
+//     width: 82px;
+//     height: 83px;
+//     margin-right: 15px;
+//   }
+//   .amazon-product-details {
+//     color: ${Theme.black};
+//     font-size: ${Theme.extraMedium};
+//   }
+//   .other-details {
+//     list-style-type: none;
+//     padding: 0;
+//     margin: 10px 0 3px 0;
+
+//     li {
+//       display: inline-block;
+//       margin-right: 20px;
+//       color: ${Theme.gray40};
+//       font-size: ${Theme.extraSmall};
+//       font-weight: bold;
+
+//       .dot {
+//         top: 19px;
+//         margin-left: -11px;
+//       }
+
+//       span {
+//         font-weight: 300;
+//       }
+//       &.amazon-link {
+//         color: ${Theme.orange};
+//         font-weight: 300;
+
+//         .forward-arrow {
+//           width: 14px;
+//           vertical-align: middle;
+//           transform: rotate(180deg);
+//           margin-left: 3px;
+//         }
+//       }
+//     }
+//   }
+// `;

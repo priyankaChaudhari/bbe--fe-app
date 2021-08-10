@@ -43,6 +43,8 @@ export {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
+  getAdManagerAdminGraphData,
+  getKeyContributionData,
 } from './CustomerApi';
 
 // Choices
@@ -141,4 +143,9 @@ export {
   getRecentNotes,
 } from './NotesApi';
 
-export { getProductCatalog, requestData } from './ProductCatalogApi';
+export {
+  getProductCatalog,
+  requestProductAssets,
+  getRequestedProducts,
+  updateProductAsset,
+} from './ProductCatalogApi';

@@ -1696,6 +1696,15 @@ text.cust-label-avg {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
+  .label-range {
+    color: ${Theme.black};
+    font-size: 20px;
+    font-weight: 600;
+
+    &.red-range {
+      color: ${Theme.red};
+    }
+  }
 
 .react-sweet-progress {
     /* display: flex; */
@@ -1710,6 +1719,8 @@ text.cust-label-avg {
     border-radius: 100px;
     transition: width 0.3s ease;
 }
+ 
+
 
 // .right-side-nav {
 //   list-style-type: none;
@@ -1738,7 +1749,13 @@ text.cust-label-avg {
 //   }
 // }
 
- 
+  .dot {
+    background-color: ${Theme.gray35};
+    border-radius: 50%;
+    width: 3px;
+    height: 3px;
+    position: absolute;
+  }
 
 `;
 export default bodyStyles;

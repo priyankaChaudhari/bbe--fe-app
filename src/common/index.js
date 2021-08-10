@@ -32,6 +32,9 @@ import BackToTop from './BackToTop';
 import { WhiteCard } from './WhiteCard';
 import HeaderDownloadFuntionality from './HeaderFunctionality';
 import Tabs from './Tabs';
+import Status from './Status';
+import DropDownIndicator from './DropDownIndicator';
+import CustomDateModal from './CustomDateModal';
 
 export {
   Button,
@@ -68,4 +71,7 @@ export {
   WhiteCard,
   HeaderDownloadFuntionality,
   Tabs,
+  Status,
+  DropDownIndicator,
+  CustomDateModal,
 };

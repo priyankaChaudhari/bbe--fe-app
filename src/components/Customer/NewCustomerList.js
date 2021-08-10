@@ -2108,7 +2108,9 @@ export default function NewCustomerList() {
                     ) : (
                       <div className="label">Brand Strategist</div>
                     )}
-                    <DropDownSelect className="w-250">
+                    <DropDownSelect
+                      id="BT-order-customerlist-dropdown"
+                      className="w-250">
                       {generateDropdown('user', selectInputRefMobile)}
                     </DropDownSelect>
 
@@ -2284,13 +2286,17 @@ export default function NewCustomerList() {
               </InputSearchWithRadius>
             </div>
             <div className="col-lg-2 col-md-6  col-12   mb-2  pl-2 pr-2 ">
-              <DropDownSelect className="customer-list-header">
+              <DropDownSelect
+                id="BT-view-customerlist-dropdown"
+                className="customer-list-header">
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
             {showAdPerformance || showDspAdPerformance || showPerformance ? (
               <div className="col-lg-2 col-md-4 col-12   mb-2 pl-2 pr-2 ">
-                <DropDownSelect className="customer-list-header">
+                <DropDownSelect
+                  id="BT-stats-customerlist-dropdown"
+                  className="customer-list-header">
                   {generateDropdown('stats')}
                 </DropDownSelect>{' '}
               </div>
@@ -2298,13 +2304,17 @@ export default function NewCustomerList() {
               <></>
             )}
             <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
-              <DropDownSelect className="customer-list-header">
+              <DropDownSelect
+                id="BT-sort-customerlist-dropdown"
+                className="customer-list-header">
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
             {showOrderOption && !isDesktop ? (
               <div className="col-lg-2 col-md-4 col-12 pl-2 pr-2">
-                <DropDownSelect className="customer-list-header">
+                <DropDownSelect
+                  id="BT-order-customerlist-dropdown"
+                  className="customer-list-header">
                   {generateDropdown('order')}
                 </DropDownSelect>
               </div>
@@ -2336,7 +2346,7 @@ export default function NewCustomerList() {
         ) : (
           <div className="label mt-2 mb-2">Brand Strategist</div>
         )}
-        <DropDownSelect className="w-250">
+        <DropDownSelect id="BT-user-customerlist-dropdown" className="w-250">
           {generateDropdown('user', selectInputRef)}
         </DropDownSelect>{' '}
         <div className="label mt-4 pt-2">Customer Status</div>

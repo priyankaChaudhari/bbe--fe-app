@@ -3249,6 +3249,7 @@ export default function ContractContainer() {
                 discountFlag={discountFlag}
                 // getContractDetails={getContractDetails}
                 setIsEditContract={setIsEditContract}
+                setDetails={setDetails}
               />
             </ModalBox>
           </Modal>

@@ -12,7 +12,7 @@ const Tabs = styled.div`
 
     li {
       display: inline-block;
-      margin-right: 60px;
+      margin-right: 50px;
       padding-bottom: 15px;
       font-weight: normal;
       color: ${Theme.black};
@@ -36,6 +36,12 @@ const Tabs = styled.div`
       }
     }
   }
+   @media only screen and (max-width: 768px) { 
+     .tabs {
+    li {
+      margin-right: 20px;
+    }
+   }
 `;
 
 export default Tabs;

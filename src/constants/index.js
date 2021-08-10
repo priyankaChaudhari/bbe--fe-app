@@ -46,6 +46,7 @@ export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
 export const PATH_DSP_DASHBOARD = '/dsp-dashboard/';
 export const PATH_HYBRID_DASHBOARD = '/hybrid-dashboard/';
+export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/admanager-dashboard/';
 
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;
@@ -56,3 +57,8 @@ export const PATH_BRAND_ASSET_PREVIEW = `${PATH_CUSTOMER_DETAILS}/brand-preview`
 export const PATH_UNAUTHORIZED_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-choose-delegate/:brandId`;
 export const PATH_UNAUTHORIZED_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/assigned-brand-asset/:brandId`;
 export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/assigned-brand-summary/:brandId`;
+
+// Product Assets
+export const PATH_UPLOAD_PRODUCT_ASSET = `${PATH_CUSTOMER_DETAILS}/product-assets-requested/:productId`;
+
+export const PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-product-delegate/:productId`;

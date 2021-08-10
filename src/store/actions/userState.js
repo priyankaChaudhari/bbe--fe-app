@@ -27,6 +27,7 @@ import {
   PATH_ACCOUNT_SETUP_CHOOSE,
   PATH_HYBRID_DASHBOARD,
   PATH_DSP_DASHBOARD,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -197,6 +198,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         data.user.role.includes('Hybrid Ad Manager')
       ) {
         history.push(PATH_HYBRID_DASHBOARD);
+      } else if (
+        data.user &&
+        data.user.role &&
+        data.user.role.includes('Ad Manager Admin')
+      ) {
+        history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }

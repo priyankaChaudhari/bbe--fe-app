@@ -224,35 +224,6 @@ export default function Statement({
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
-  // <tr>
-  //           <td class="total-service"> Total</td>
-  //           <td class="total-service text-right">${mapServiceTotal(
-  //           'additional_monthly_services',
-  //     )}
-  //                             </td></tr>`
-
-  // const mapServiceTotal = (key) => {
-  //   if (key === 'additional_one_time_services') {
-  //     return `$${
-  //       details && details.total_fee.onetime_service
-  //         ? details.total_fee.onetime_service
-  //             .toString()
-  //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  //         : 0
-  //     }`;
-  //   }
-  //   const market = details.total_fee.additional_marketplaces
-  //     ? details.total_fee.additional_marketplaces
-  //     : 0;
-  //   const month = details.total_fee.monthly_service
-  //     ? details.total_fee.monthly_service
-  //     : 0;
-
-  //   return `$${(market + month)
-  //     .toString()
-  //     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  // };
-
   const calculateTodalFee = (type) => {
     let oneTimeSubTotal = 0;
     let monthlySubTotal = 0;
@@ -357,7 +328,9 @@ export default function Statement({
         ? `<tr>
             <td class="total-service-bordless"> Sub-total</td>
             <td class="total-service-bordless text-right">
-            ${totalFees.monthlySubTotal}
+            $${totalFees.monthlySubTotal
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </td>
          </tr>`
         : ''
@@ -398,59 +371,6 @@ export default function Statement({
             </td>
          </tr>
          `;
-    // return `
-    // ${
-    //   details && details.total_fee && details.total_fee.monthly_service_discount
-    //     ? `<tr>
-    //         <td class="total-service-bordless"> Sub-total</td>
-    //         <td class="total-service-bordless text-right">${mapServiceTotal(
-    //           'additional_monthly_servces',
-    //         )}
-    //         </td>
-    //      </tr>`
-    //     : ''
-    // }
-    // ${
-    //   details && details.total_fee && details.total_fee.monthly_service_discount
-    //     ? `<tr>
-    //         <td class="total-service-bordless"> Discount ${
-    //           details &&
-    //           details.monthly_discount_amount &&
-    //           details &&
-    //           details.monthly_discount_type === 'percentage'
-    //             ? `(${details && details.monthly_discount_amount}%)`
-    //             : ''
-    //         }</td>
-    //         <td class="total-service-bordless text-right"> -$${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.monthly_service_discount
-    //             ? details &&
-    //               details.total_fee &&
-    //               details.total_fee.monthly_service_discount
-    //                 .toString()
-    //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //             : 0
-    //         }
-    //         </td>
-    //      </tr>`
-    //     : ''
-    // }
-
-    //      <tr>
-    //         <td class="total-service" style="padding-top: 5px"> Total</td>
-    //         <td class="total-service text-right" style="padding-top: 5px;"> $${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.monthly_service_after_discount
-    //             ? details.total_fee.monthly_service_after_discount
-    //                 .toString()
-    //                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //             : 0
-    //         }
-    //         </td>
-    //      </tr>
-    //      `;
   };
 
   const showStandardServicesTable = () => {
@@ -544,59 +464,6 @@ export default function Statement({
             </td>
          </tr>
          `;
-    // return `
-    // ${
-    //   details && details.total_fee && details.total_fee.onetime_service_discount
-    //     ? `<tr>
-    //         <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
-    //         <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>`
-    //     : ''
-    // }
-    //      ${
-    //        details &&
-    //        details.total_fee &&
-    //        details.total_fee.onetime_service_discount
-    //          ? `<tr>
-    //         <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
-    //           details &&
-    //           details.one_time_discount_amount &&
-    //           details &&
-    //           details.one_time_discount_type === 'percentage'
-    //             ? `(${details && details.one_time_discount_amount}%)`
-    //             : ''
-    //         }</td>
-    //         <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service_discount
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>`
-    //          : ''
-    //      }
-
-    //      <tr>
-    //         <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
-    //         <td class="total-service text-right"style="padding-top: 5px "> $${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service_after_discount
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>
-    //      `;
   };
 
   const mapMonthlyServices = (key) => {
@@ -610,9 +477,6 @@ export default function Statement({
             item.name !== undefined
           ) {
             if (
-              // (item.name
-              //   ? item.name !== 'DSP Advertising'
-              //   : item.service.name !== 'DSP Advertising') &&
               item.name
                 ? item.name !== 'Inventory Reconciliation'
                 : item.service.name !== 'Inventory Reconciliation'
@@ -627,13 +491,9 @@ export default function Statement({
                     ? `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
                           ? `${displayNumber(item.service.fee)}`
-                          : // .toString()
-                          // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          item.fee
+                          : item.fee
                           ? displayNumber(item.fee)
-                          : // .toString()
-                            // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                            ''
+                          : ''
                       } /month
                   </td>`
                     : (
@@ -642,8 +502,7 @@ export default function Statement({
                           : item.service.name === 'DSP Advertising'
                       )
                     ? `<td>N/A</td>`
-                    : // <td>Yet to save 423</td>
-                      `<td>
+                    : `<td>
                     ${
                       fixedFee && fixedFee[0] && fixedFee[0].fee
                         ? `$${displayNumber(fixedFee[0].fee)} /month`
@@ -693,16 +552,11 @@ export default function Statement({
                     )
                       ? service.custom_amazon_store_price
                         ? `<td>
-                                $${
-                                  displayNumber(
-                                    service.custom_amazon_store_price,
-                                  )
-                                  // .toString()
-                                  // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                }
+                                $${displayNumber(
+                                  service.custom_amazon_store_price,
+                                )}
                                </td>`
-                        : // <td>Yet to save 465</td>
-                          `<td>${
+                        : `<td>${
                             fixedFee && fixedFee[0] && fixedFee[0].fee
                               ? `$${displayNumber(fixedFee[0].fee)}`
                               : '$0' // for amazon store option
@@ -714,8 +568,7 @@ export default function Statement({
                                ? displayNumber(service.service.fee)
                                : ''
                            } </td>`
-                      : // <td>Yet to save</td>
-                        `<td>
+                      : `<td>
                       ${
                         fixedFee && fixedFee[0] && fixedFee[0].fee
                           ? `$${displayNumber(fixedFee[0].fee)}`
@@ -787,12 +640,6 @@ export default function Statement({
 
   const showMonthlyServiceTable = () => {
     if (
-      // (details &&
-      //   details.additional_monthly_services &&
-      //   details.additional_monthly_services.length) ||
-      // (details &&
-      //   details.additional_marketplaces &&
-      //   details.additional_marketplaces.length) ||
       (formData &&
         formData.additional_monthly_services &&
         formData.additional_monthly_services.length) ||
@@ -903,10 +750,7 @@ export default function Statement({
                     // 'number-currency',
                   ),
                 )
-                // .replace(
-                //   'SELLER_TYPE',
-                //   mapDefaultValues('seller_type', 'Seller Type'),
-                // )
+
                 .replace(
                   'PRIMARY_MARKETPLACE',
                   mapDefaultValues(
@@ -932,14 +776,6 @@ export default function Statement({
                     'number-currency',
                   ),
                 ),
-            // .replace(
-            //   'BILLING_CAP_AMOUNT',
-            //   mapDefaultValues(
-            //     'billing_cap',
-            //     'Billing Cap',
-            //     'number-currency',
-            //   ),
-            // ),
           }}
         />
       </Paragraph>
@@ -994,7 +830,10 @@ Statement.propTypes = {
     ),
   }),
   formData: PropTypes.shape({
-    length: PropTypes.string,
+    length: PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
     sales_threshold: PropTypes.string,
     billing_cap: PropTypes.string,
     additional_marketplaces: PropTypes.arrayOf(

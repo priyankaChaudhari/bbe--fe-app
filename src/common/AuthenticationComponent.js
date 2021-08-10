@@ -32,9 +32,11 @@ import {
   PATH_BRAND_ASSET_PREVIEW,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
+  PATH_UPLOAD_PRODUCT_ASSET,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants/index';
 
-import { CustomerListTablet } from '../components/Customer';
+import { CustomerListTablet, ProductDelegation } from '../components/Customer';
 
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
@@ -170,6 +172,15 @@ export default function AuthenticationComponent() {
             ''
           )}
 
+          {userInfo && userInfo.role === 'Ad Manager Admin' ? (
+            <Route
+              path={PATH_AD_MANAGER_ADMIN_DASHBOARD}
+              component={DashboardContainer}
+            />
+          ) : (
+            ''
+          )}
+
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}
@@ -188,6 +199,15 @@ export default function AuthenticationComponent() {
             path={PATH_BRAND_ASSET_PREVIEW}
             component={BrandAssetsPreview}
           />
+          {/* {userInfo && userInfo.role === 'Customer' ? ( */}
+          <Route
+            path={PATH_UPLOAD_PRODUCT_ASSET}
+            component={ProductDelegation}
+          />
+          {/* ) : (
+            ''
+          )} */}
+
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}
           {/* <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} /> */}

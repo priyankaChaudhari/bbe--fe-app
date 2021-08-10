@@ -25,6 +25,7 @@ import {
 } from '../../common';
 
 import { CaretUp, CloseIcon } from '../../theme/images';
+import AdManagerAdminContainer from './AdManagerAdminDashboard/AdManagerAdminContainer';
 
 const customStyles = {
   content: {
@@ -454,68 +455,73 @@ function DashboardContainer() {
                       userInfo.role === 'Hybrid Ad Manager' &&
                       hybridView === 'dsp_ad_performance'
                     ? 'Ad Manager Dashboard'
+                    : userInfo && userInfo.role === 'Ad Manager Admin'
+                    ? 'Advertising Dashboard'
                     : 'Dashboard'}
                 </p>
               </div>
-              <div className="straight-line horizontal-line spacing d-lg-none d-md-block" />
-              <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
-                <ul className="partner-select">
-                  <li
-                    className={
-                      isLoading.loader ? 'my-partner disabled' : 'my-partner '
-                    }>
-                    <DropDownSelect>
-                      <Select
-                        ref={selectInputRef}
-                        className="text-left active"
-                        classNamePrefix="react-select"
-                        placeholder="My Partners"
-                        options={brandGrowthStrategist}
-                        components={getSelectComponents('user')}
-                        componentsValue={{ Option: IconOption }}
-                        value={selectedBgsUser}
-                        onChange={(event) => {
-                          handleOnchange(event, 'bgs');
-                        }}
-                      />
-                    </DropDownSelect>
-                  </li>
-                  {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
-                    <li className={isLoading.loader ? 'disabled' : ''}>
+              <div className="straight-line horizontal-line  d-lg-none d-md-block" />
+              {userInfo && userInfo.role !== 'Ad Manager Admin' ? (
+                <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
+                  <ul className="partner-select">
+                    <li
+                      className={
+                        isLoading.loader ? 'my-partner disabled' : 'my-partner '
+                      }>
                       <DropDownSelect>
                         <Select
+                          ref={selectInputRef}
                           className="text-left active"
                           classNamePrefix="react-select"
-                          placeholder="Hybrid Dashboard type"
-                          options={hybridDropdown}
-                          components={getSelectComponents('dashboard')}
-                          defaultValue={hybridDropdown[0]}
-                          onChange={(event) =>
-                            handleOnchange(event, 'dashboard')
-                          }
+                          placeholder="My Partners"
+                          options={brandGrowthStrategist}
+                          components={getSelectComponents('user')}
+                          componentsValue={{ Option: IconOption }}
+                          value={selectedBgsUser}
+                          onChange={(event) => {
+                            handleOnchange(event, 'bgs');
+                          }}
                         />
                       </DropDownSelect>
                     </li>
-                  ) : (
-                    ''
-                  )}
-                  <li className={isLoading.loader ? 'disabled' : ''}>
-                    <DropDownSelect className="days-performance">
-                      <Select
-                        classNamePrefix="react-select"
-                        className="active"
-                        components={getSelectComponents()}
-                        options={timeOptions}
-                        defaultValue={timeOptions[0]}
-                        onChange={(event) => handleOnchange(event, 'date')}
-                      />
-                    </DropDownSelect>
-                  </li>
-                </ul>
-              </div>
+                    {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
+                      <li className={isLoading.loader ? 'disabled' : ''}>
+                        <DropDownSelect>
+                          <Select
+                            className="text-left active"
+                            classNamePrefix="react-select"
+                            placeholder="Hybrid Dashboard type"
+                            options={hybridDropdown}
+                            components={getSelectComponents('dashboard')}
+                            defaultValue={hybridDropdown[0]}
+                            onChange={(event) =>
+                              handleOnchange(event, 'dashboard')
+                            }
+                          />
+                        </DropDownSelect>
+                      </li>
+                    ) : (
+                      ''
+                    )}
+                    <li className={isLoading.loader ? 'disabled' : ''}>
+                      <DropDownSelect className="days-performance">
+                        <Select
+                          classNamePrefix="react-select"
+                          className="active"
+                          components={getSelectComponents()}
+                          options={timeOptions}
+                          defaultValue={timeOptions[0]}
+                          onChange={(event) => handleOnchange(event, 'date')}
+                        />
+                      </DropDownSelect>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
           </div>
-          <div className="straight-line horizontal-line mt-n2" />
         </div>
       </>
     );
@@ -552,6 +558,11 @@ function DashboardContainer() {
       {userInfo.role === 'Hybrid Ad Manager' &&
       hybridView === 'dsp_ad_performance' ? (
         <DspAdDashboard isLoading={isLoading} data={data} />
+      ) : (
+        ''
+      )}
+      {userInfo && userInfo.role === 'Ad Manager Admin' ? (
+        <AdManagerAdminContainer isLoading={isLoading} data={data} />
       ) : (
         ''
       )}

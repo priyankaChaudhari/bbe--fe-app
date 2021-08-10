@@ -67,7 +67,7 @@ export default function PdfAnnotator({
         }
         file={pdf}
         options={{ workerSrc: 'pdf.worker.js' }}
-        error={() => <PdfLoadingMsg type="error" />}
+        error={() => <PdfLoadingMsg type="error" message="Loading error" />}
         loading={() => <PdfLoadingMsg type="loading" message={loadingMsg} />}
         onLoadSuccess={onDocumentLoadSuccess}>
         {Array.from(new Array(totalPages), (el, index) => (

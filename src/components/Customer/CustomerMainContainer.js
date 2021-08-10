@@ -7,12 +7,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
-import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import {
@@ -136,6 +136,7 @@ export default function CustomerMainContainer() {
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
     customerSelectedTab || 'performance',
+    // 'performance',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
@@ -1012,26 +1013,32 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
-                        {/* <li
-                          onClick={() => {
-                            setViewComponent('product catalog');
-                            dispatch(setCustomerSelectedTab('product catalog'));
-                          }}
-                          role="presentation">
-                          <div
-                            className={`left-details ${
-                              viewComponent === 'product catalog'
-                                ? 'active'
-                                : ''
-                            }`}>
-                            <img
-                              className="file-contract"
-                              src={CatalogBox}
-                              alt=""
-                            />
-                            Product Catalog
-                          </div>
-                        </li> */}
+                        {/* {userInfo && userInfo.role === 'Customer' ? (
+                          ''
+                        ) : (
+                          <li
+                            onClick={() => {
+                              setViewComponent('product catalog');
+                              dispatch(
+                                setCustomerSelectedTab('product catalog'),
+                              );
+                            }}
+                            role="presentation">
+                            <div
+                              className={`left-details ${
+                                viewComponent === 'product catalog'
+                                  ? 'active'
+                                  : ''
+                              }`}>
+                              <img
+                                className="file-contract"
+                                src={CatalogBox}
+                                alt=""
+                              />
+                              Product Catalog
+                            </div>
+                          </li>
+                        )} */}
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
@@ -1180,6 +1187,11 @@ export default function CustomerMainContainer() {
                         customer &&
                         customer.brand_assets &&
                         customer.brand_assets.id
+                      }
+                      productAssetsId={
+                        customer &&
+                        customer.product_assets &&
+                        customer.product_assets.id
                       }
                     />
                   ) : viewComponent === 'brand asset' ? (
@@ -1621,25 +1633,6 @@ export default function CustomerMainContainer() {
           )}
         </>
       )}
-      {/* <div className=" pt-5">
-        <CustomerDetailsFooter className="mt-5" data-test="brandAssetFooter">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12 text-right">
-                <span className="skip-step cursor" role="presentation">
-                  1 product selected
-                </span>
-
-                <Button className="btn-primary">Request Assets</Button>
-
-                <Button className="btn-transparent w-50 on-boarding ml-4">
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </CustomerDetailsFooter>
-      </div> */}
     </>
   );
 }
