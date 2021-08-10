@@ -12,7 +12,7 @@ import Theme from '../theme/Theme';
 
 const currentDate = new Date();
 // const [adGraphLoader, setAdGraphLoader] = useState(false);
-currentDate.setDate(currentDate.getDate() - 3);
+currentDate.setDate(currentDate.getDate() - 2);
 
 const customStyles = {
   content: {
