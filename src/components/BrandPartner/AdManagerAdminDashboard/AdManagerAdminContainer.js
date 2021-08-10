@@ -9,7 +9,7 @@ import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
 import { getMarketPlaceList } from '../../../api';
 
 export default function AdManagerAdminContainer() {
-  const [viewComponent, setViewComponent] = useState('dsp');
+  const [viewComponent, setViewComponent] = useState('sponsored');
 
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
 

@@ -123,6 +123,50 @@ const DSPKeyContributors = ({
     return '';
   };
 
+  const renderChangeValue = (itemData) => {
+    let selectedArrow = '';
+    let selectedClass = '';
+    const value = itemData.change;
+    if (selectedTabMatrics === 'dspSpend') {
+      if (value.toString().includes('-')) {
+        selectedClass = 'decrease-rate large grey';
+        selectedArrow = UpDowGrayArrow;
+      } else {
+        selectedClass = 'increase-rate large grey';
+        selectedArrow = UpDowGrayArrow;
+      }
+    } else if (value.toString().includes('-')) {
+      selectedClass = 'decrease-rate large';
+      selectedArrow = ArrowDownIcon;
+    } else {
+      selectedClass = 'increase-rate large';
+      selectedArrow = ArrowUpIcon;
+    }
+
+    return itemData && itemData.change.toString().includes('-') ? (
+      <div className={selectedClass}>
+        {' '}
+        <img className="red-arrow" src={selectedArrow} alt="arrow" />
+        {itemData && itemData.change
+          ? `${currencySymbol}${Number(itemData.change.toString().split('-')[1])
+              .toFixed(2)
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+          : `${currencySymbol}0`}
+      </div>
+    ) : (
+      <div className={selectedClass}>
+        {' '}
+        <img className="green-arrow" src={selectedArrow} alt="arrow" />
+        {itemData && itemData.change
+          ? `${currencySymbol}${itemData.change
+              .toFixed(2)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+          : `${currencySymbol}0`}
+      </div>
+    );
+  };
+
   const renderTableHeader = () => {
     return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
       <tr>
@@ -312,33 +356,7 @@ const DSPKeyContributors = ({
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
             : `${currencySymbol}0`}
         </td>
-        <td className="product-body">
-          {' '}
-          {itemData && itemData.change.toString().includes('-') ? (
-            <div className="decrease-rate large">
-              {' '}
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow" />
-              {itemData && itemData.change
-                ? `${currencySymbol}${Number(
-                    itemData.change.toString().split('-')[1],
-                  )
-                    .toFixed(2)
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : `${currencySymbol}0`}
-            </div>
-          ) : (
-            <div className="increase-rate large">
-              {' '}
-              <img className="green-arrow" src={ArrowUpIcon} alt="arrow" />
-              {itemData && itemData.change
-                ? `${currencySymbol}${itemData.change
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                : `${currencySymbol}0`}
-            </div>
-          )}
-        </td>
+        <td className="product-body"> {renderChangeValue(itemData)}</td>
         <td className="product-body">
           <Status
             label={itemData.contribution_bracket}
@@ -414,38 +432,7 @@ const DSPKeyContributors = ({
                     <div className="col-6 pb-3">
                       {' '}
                       <div className="label">Change</div>
-                      {itemData && itemData.change.toString().includes('-') ? (
-                        <div className="decrease-rate large">
-                          {' '}
-                          <img
-                            className="red-arrow"
-                            src={ArrowDownIcon}
-                            alt="arrow"
-                          />{' '}
-                          {itemData && itemData.change
-                            ? `${currencySymbol}${Number(
-                                itemData.change.toString().split('-')[1],
-                              )
-                                .toFixed(2)
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
-                        </div>
-                      ) : (
-                        <div className="increase-rate large">
-                          {' '}
-                          <img
-                            className="green-arrow"
-                            src={ArrowUpIcon}
-                            alt="arrow"
-                          />{' '}
-                          {itemData && itemData.change
-                            ? `${currencySymbol}${itemData.change
-                                .toFixed(2)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                            : `${currencySymbol}0`}
-                        </div>
-                      )}
+                      {renderChangeValue(itemData)}
                     </div>
                     <div className="col-6 pb-3">
                       {' '}
