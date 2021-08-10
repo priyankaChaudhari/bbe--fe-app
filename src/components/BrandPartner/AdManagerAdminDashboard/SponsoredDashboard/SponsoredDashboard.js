@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { components } from 'react-select';
 import $ from 'jquery';
 import styled from 'styled-components';
@@ -41,7 +41,6 @@ import SponsoredKeyContribution from './SponsoredKeyContribution';
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices }) {
-  const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [isApiCall, setIsApiCall] = useState(false);
@@ -993,7 +992,6 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
       <div className="col-lg-3 col-md-12">
         <SponsoredFilter
           handleResetFilter={handleResetFilter}
-          selectInputRef={selectInputRef}
           DropdownIndicator={DropdownIndicator}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}

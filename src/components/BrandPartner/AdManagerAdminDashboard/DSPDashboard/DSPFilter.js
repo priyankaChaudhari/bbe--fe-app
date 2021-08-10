@@ -43,8 +43,7 @@ const DSPFilter = ({
           <div className="label mt-3">Marketplace</div>
           <DropDownSelect
             id="BT-DSPadver-countryfilter"
-            // className={isApiCall ? `cursor  disabled` : 'cursor '}>
-            className="cursor">
+            className={isApiCall ? `cursor  disabled` : 'cursor '}>
             <Select
               classNamePrefix="react-select"
               className="active"

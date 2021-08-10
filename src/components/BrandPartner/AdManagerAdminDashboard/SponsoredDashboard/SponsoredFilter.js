@@ -10,7 +10,6 @@ import { CaretUp } from '../../../../theme/images/index';
 
 const SponsoredFilter = ({
   handleResetFilter,
-  selectInputRef,
   DropdownIndicator,
   marketplaceOptions,
   handleMarketplace,
@@ -38,7 +37,6 @@ const SponsoredFilter = ({
           adManagerList && adManagerList[0],
           handleAdManagerFilter,
           isApiCall,
-          selectInputRef,
           selectedAdManager,
         )}
       </div>
@@ -197,7 +195,6 @@ SponsoredFilter.defaultProps = {
   SponsoredAdTypeOptions: [],
   adManagerList: [],
   getSelectComponents: null,
-  selectInputRef: {},
   DropdownIndicator: () => {},
   handleAdManagerFilter: () => {},
   handleAdType: () => {},
@@ -213,7 +210,6 @@ SponsoredFilter.propTypes = {
   marketplaceOptions: arrayOf(Array),
   SponsoredAdTypeOptions: arrayOf(Array),
   adManagerList: arrayOf(Array),
-  selectInputRef: arrayOf(Array),
   DropdownIndicator: func,
   getSelectComponents: func,
   handleAdManagerFilter: func,
