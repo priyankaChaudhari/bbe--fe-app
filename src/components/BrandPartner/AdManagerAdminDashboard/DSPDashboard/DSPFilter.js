@@ -69,6 +69,7 @@ const DSPFilter = ({
   return (
     <div>
       <WhiteCard
+        onClick={() => setIsCollapseOpen(!isCollapseOpen)}
         className={
           isDesktop ? 'mb-3 d-lg-block d-none' : 'mb-3 d-lg-none d-block'
         }>
@@ -76,7 +77,7 @@ const DSPFilter = ({
           <div className="col-6">
             <div className="black-heading-title ">Filters</div>
           </div>
-          <div className={isDesktop ? 'col-6 text-right' : 'col-4 text-right'}>
+          <div className={isDesktop ? 'col-6 text-right' : 'col-5 text-right'}>
             <div
               onClick={() => handleResetFilter()}
               role="presentation"
@@ -85,10 +86,7 @@ const DSPFilter = ({
             </div>
           </div>
           {!isDesktop ? (
-            <div
-              className="col-2"
-              role="presentation"
-              onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
+            <div className="col-1" role="presentation">
               <div className="black-heading-title ">
                 <img
                   src={CaretUp}

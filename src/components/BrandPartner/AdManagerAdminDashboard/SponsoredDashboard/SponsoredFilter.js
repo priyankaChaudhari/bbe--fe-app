@@ -131,12 +131,14 @@ const SponsoredFilter = ({
 
   const renderTabletView = () => {
     return (
-      <WhiteCard className="mb-3 d-lg-none d-block">
+      <WhiteCard
+        onClick={() => setIsCollapseOpen(!isCollapseOpen)}
+        className="mb-3 d-lg-none d-block">
         <div className="row ">
           <div className="col-6">
             <div className="black-heading-title ">Filters</div>
           </div>
-          <div className="col-4 text-right">
+          <div className="col-5 text-right">
             <p
               className="gray-normal-text m-0 cursor "
               role="presentation"
@@ -145,7 +147,7 @@ const SponsoredFilter = ({
             </p>
           </div>
           <div
-            className="col-2"
+            className="col-1"
             role="presentation"
             onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
             <div className="black-heading-title ">
@@ -161,7 +163,6 @@ const SponsoredFilter = ({
             </div>
           </div>
         </div>
-
         {isCollapseOpen ? (
           <div className="row ">
             <div className="col-lg-6 col-md-6 col-sm-12">
