@@ -830,3 +830,22 @@ export async function getKeyContributionData(
   }
   return result;
 }
+
+export async function getDspPacindgData(dailyFacts, marketplace, user) {
+  const params = {
+    dsp_daily_facts: dailyFacts,
+    dsp_marketplace: marketplace,
+    user,
+  };
+
+  let result = {};
+  result = await axiosInstance
+    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}dsp-pacing/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

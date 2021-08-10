@@ -5,6 +5,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { useHistory } from 'react-router-dom';
 
 import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
 import {
@@ -23,6 +24,7 @@ import {
   UpDowGrayArrow,
 } from '../../../../theme/images';
 import Theme from '../../../../theme/Theme';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 const DSPKeyContributors = ({
   selectedKeyContribution,
@@ -36,6 +38,7 @@ const DSPKeyContributors = ({
   currencySymbol,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
+  const history = useHistory();
   const [keyContribution, setKeyContribution] = useState({
     id: 'positive',
     label: 'Positive',
@@ -166,7 +169,11 @@ const DSPKeyContributors = ({
 
   const renderTableData = (itemData) => {
     return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
-      <tr>
+      <tr
+        className="cursor"
+        onClick={() =>
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
+        }>
         <td className="product-body">
           {' '}
           <img
@@ -266,7 +273,13 @@ const DSPKeyContributors = ({
         </td>
       </tr>
     ) : (
-      <tr>
+      <tr
+        className="cursor"
+        onClick={() =>
+          history.push(
+            PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
+          )
+        }>
         <td className="product-body">
           {' '}
           <img

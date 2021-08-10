@@ -1,5 +1,6 @@
-import { array, func, object, oneOfType, string } from 'prop-types';
 import React, { useCallback } from 'react';
+
+import { array, func, object, oneOfType, string } from 'prop-types';
 
 import {
   ArrowDownIcon,
