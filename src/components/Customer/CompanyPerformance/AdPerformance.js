@@ -62,7 +62,11 @@ export default function AdPerformance({
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [selectedAdType, setSelectedAdType] = useState('all');
-  const [selectedAdDF, setSelectedAdDF] = useState('week');
+  const [selectedAdDF, setSelectedAdDF] = useState({
+    value: 'week',
+    label: 'Recent 7 days',
+    sub: 'vs Previous 7 days',
+  });
   const [selectedAdBox, setSelectedAdBox] = useState({ adSales: true });
   const [selectedDspBox, setSelectedDspBox] = useState({
     dspImpressions: true,
