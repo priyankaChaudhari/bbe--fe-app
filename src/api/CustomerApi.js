@@ -788,11 +788,21 @@ export async function getKeyContributionData(
   }
 
   if (contributionType === 'keyMetrics') {
-    params = {
-      ...params,
-      page: 1,
-      sequence: 'asc',
-    };
+    if (dashboardType === 'sponsored_ad_dashboard') {
+      params = {
+        ...params,
+        page: 1,
+        sequence: 'desc',
+        'order-by': 'ad_sales',
+      };
+    } else {
+      params = {
+        ...params,
+        page: 1,
+        sequence: 'desc',
+        'order-by': 'dsp_spend',
+      };
+    }
   } else {
     params = {
       ...params,
