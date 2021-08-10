@@ -224,11 +224,8 @@ const SponsoredKeyContribution = ({
         {' '}
         <img className="green-arrow" src={selectedArrow} alt="arrow" />
         {itemData && itemData.change
-          ? `${currencySymbol}${itemData.change
-              .toFixed(2)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-          : `${currencySymbol}0`}
+          ? returnMetricsValue(itemData.change)
+          : returnMetricsValue(0)}
       </div>
     );
   };
