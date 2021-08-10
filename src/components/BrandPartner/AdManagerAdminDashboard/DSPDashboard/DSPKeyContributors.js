@@ -36,6 +36,7 @@ const DSPKeyContributors = ({
   data,
   loader,
   currencySymbol,
+  selectedAdDF,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
@@ -505,37 +506,45 @@ const DSPKeyContributors = ({
             </div>
           </div>
         </div>
-        {selectedKeyContribution === false &&
-        keyContribution.id2 === 'keyMetrics' ? null : (
-          <Tabs>
-            <ul className="tabs">
-              {_.keys(selectedDSPMatrics).map((item) => (
-                <li
-                  className={selectedTabMatrics === item ? 'active' : ''}
-                  onClick={() => handleOnMatricsTabChange(item)}
-                  role="presentation">
-                  {dspTabOptions[item]}
-                </li>
-              ))}
-            </ul>
-          </Tabs>
-        )}
-        {loader ? (
-          <PageLoader
-            component="performance-graph"
-            color={Theme.orange}
-            type="detail"
-            width={40}
-            height={40}
-          />
-        ) : data ? (
-          isDesktop ? (
-            renderDesktopKeyContributions()
-          ) : (
-            renderTabletKeyContributions()
-          )
+        {selectedAdDF.value === 'custom' ? (
+          <NoData>
+            Top contributors cannot be calculated when using custom dates.
+          </NoData>
         ) : (
-          <NoData>{noGraphDataMessage}</NoData>
+          <>
+            {selectedKeyContribution === false &&
+            keyContribution.id2 === 'keyMetrics' ? null : (
+              <Tabs>
+                <ul className="tabs">
+                  {_.keys(selectedDSPMatrics).map((item) => (
+                    <li
+                      className={selectedTabMatrics === item ? 'active' : ''}
+                      onClick={() => handleOnMatricsTabChange(item)}
+                      role="presentation">
+                      {dspTabOptions[item]}
+                    </li>
+                  ))}
+                </ul>
+              </Tabs>
+            )}
+            {loader ? (
+              <PageLoader
+                component="performance-graph"
+                color={Theme.orange}
+                type="detail"
+                width={40}
+                height={40}
+              />
+            ) : data ? (
+              isDesktop ? (
+                renderDesktopKeyContributions()
+              ) : (
+                renderTabletKeyContributions()
+              )
+            ) : (
+              <NoData>{noGraphDataMessage}</NoData>
+            )}
+          </>
         )}
       </WhiteCard>
     </Wrapper>
@@ -555,6 +564,7 @@ DSPKeyContributors.defaultProps = {
   selectedTabMatrics: 'dspImpression',
   data: null,
   currencySymbol: '',
+  selectedAdDF: {},
 };
 
 DSPKeyContributors.propTypes = {
@@ -567,6 +577,7 @@ DSPKeyContributors.propTypes = {
   data: arrayOf(Array),
   loader: bool.isRequired,
   currencySymbol: string,
+  selectedAdDF: objectOf(Object),
 };
 
 const Wrapper = styled.div`

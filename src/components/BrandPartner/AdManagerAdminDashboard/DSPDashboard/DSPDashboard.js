@@ -798,6 +798,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           data={contributionData}
           currencySymbol={currencySymbol}
           isDesktop={isDesktop}
+          selectedAdDF={selectedAdDF}
         />
         <DSPPacing
           currencySymbol={currencySymbol}

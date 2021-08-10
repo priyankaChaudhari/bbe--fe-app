@@ -497,7 +497,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
     marketplace,
     adType,
     adManagerUser,
-    tabOption,
+    // tabOption,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -533,16 +533,16 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
         sd,
         ed,
       );
-      getContributionData(
-        adType,
-        dailyFactFlag,
-        marketplace,
-        selectedAdManager.value,
-        tabOption,
-        selectedTabMetrics,
-        sd,
-        ed,
-      );
+      // getContributionData(
+      //   adType,
+      //   dailyFactFlag,
+      //   marketplace,
+      //   selectedAdManager.value,
+      //   tabOption,
+      //   selectedTabMetrics,
+      //   sd,
+      //   ed,
+      // );
     }
   };
 
@@ -1053,6 +1053,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
           selectedTabMetrics={selectedTabMetrics}
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
+          selectedAdDF={selectedAdDF}
         />
         {renderAdCustomDateModal()}
       </div>

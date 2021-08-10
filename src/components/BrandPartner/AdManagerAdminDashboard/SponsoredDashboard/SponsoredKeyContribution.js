@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { arrayOf, bool, func, string } from 'prop-types';
+import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
@@ -33,6 +33,7 @@ const SponsoredKeyContribution = ({
   selectedTabMetrics,
   handleOnMetricsTabChange,
   currencySymbol,
+  selectedAdDF,
 }) => {
   const history = useHistory();
 
@@ -512,24 +513,32 @@ const SponsoredKeyContribution = ({
           </div>
           {renderKeyContributionOptions()}
         </div>
-        {selectedContributionOption !== 'keyMetrics'
-          ? renderKeyContributionTabs()
-          : ''}
-
-        {keyContributionLoader ? (
-          <PageLoader
-            component="performance-graph"
-            color="#FF5933"
-            type="detail"
-            width={40}
-            height={40}
-          />
-        ) : isDesktop ? (
-          renderDesktopKeyContributions()
-        ) : contributionData.length >= 1 ? (
-          renderTabletKeyContributions()
+        {selectedAdDF.value === 'custom' ? (
+          <NoData>
+            Top contributors cannot be calculated when using custom dates.
+          </NoData>
         ) : (
-          <NoData>{noGraphDataMessage}</NoData>
+          <>
+            {selectedContributionOption !== 'keyMetrics'
+              ? renderKeyContributionTabs()
+              : ''}
+
+            {keyContributionLoader ? (
+              <PageLoader
+                component="performance-graph"
+                color="#FF5933"
+                type="detail"
+                width={40}
+                height={40}
+              />
+            ) : isDesktop ? (
+              renderDesktopKeyContributions()
+            ) : contributionData.length >= 1 ? (
+              renderTabletKeyContributions()
+            ) : (
+              <NoData>{noGraphDataMessage}</NoData>
+            )}
+          </>
         )}
       </WhiteCard>
     );
@@ -548,6 +557,7 @@ SponsoredKeyContribution.defaultProps = {
   handleContributionOptions: () => {},
   selectedAdMetrics: {},
   selectedTabMetrics: {},
+  selectedAdDF: {},
   handleOnMetricsTabChange: () => {},
 };
 
@@ -561,6 +571,7 @@ SponsoredKeyContribution.propTypes = {
   selectedAdMetrics: string,
   selectedTabMetrics: string,
   handleOnMetricsTabChange: func,
+  selectedAdDF: objectOf(Object),
 };
 
 const NoData = styled.div`
