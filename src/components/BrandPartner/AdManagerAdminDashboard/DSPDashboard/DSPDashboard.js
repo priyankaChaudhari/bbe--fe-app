@@ -33,8 +33,8 @@ import DSPKeyContributors from './DSPKeyContributors';
 import DSPFilter from './DSPFilter';
 import Theme from '../../../../theme/Theme';
 import DSPPerformanceChart from '../../../Customer/CompanyPerformance/DSPPerformanceChart';
-import { getDspPacindgData } from '../../../../api/CustomerApi';
-import { dspPacingTestData } from '../../../../constants/DSPPacingData';
+// import { getDspPacindgData } from '../../../../api/CustomerApi';
+// import { dspPacingTestData } from '../../../../constants/DSPPacingData';
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 3);
@@ -47,7 +47,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
-  const [, setDspPacingLoader] = useState(false);
+  // const [dspPacingData, setDspPacingLoader] = useState(false);
 
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [dspManagerList, setDSPManagerList] = useState([]);
@@ -71,7 +71,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [contributionData, setContributionData] = useState(null);
   const [tempDspChartData, setTempDSPChartData] = useState(null);
-  const [, setDspPacingData] = useState(null);
+  // const [dspPacingData, setDspPacingData] = useState(null);
   const [responseId, setResponseId] = useState(null);
 
   const [selectedDspMetrics, setSelectedDspMetrics] = useState({
@@ -219,32 +219,32 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     [],
   );
 
-  const getDSPPacingData = useCallback(
-    (selectedDailyFact, marketplace, selectedAdManagerUser) => {
-      setDspPacingLoader(true);
-      getDspPacindgData(
-        selectedDailyFact,
-        marketplace,
-        selectedAdManagerUser,
-      ).then((res) => {
-        if (res && res.status === 400) {
-          setDspPacingLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            // setDspPacingData(res.data.result);
-          } else if (res.data && res.data.results) {
-            // setDspPacingData(res.data.results);
-          } else {
-            setDspPacingData(null);
-          }
-        }
-        setDspPacingLoader(false);
-        setDspPacingData(dspPacingTestData.result);
-      });
-    },
-    [],
-  );
+  // const getDSPPacingData = useCallback(
+  //   (selectedDailyFact, marketplace, selectedAdManagerUser) => {
+  //     setDspPacingLoader(true);
+  //     getDspPacindgData(
+  //       selectedDailyFact,
+  //       marketplace,
+  //       selectedAdManagerUser,
+  //     ).then((res) => {
+  //       if (res && res.status === 400) {
+  //         setDspPacingLoader(false);
+  //       }
+  //       if (res && res.status === 200) {
+  //         if (res.data && res.data.result) {
+  //           // setDspPacingData(res.data.result);
+  //         } else if (res.data && res.data.results) {
+  //           // setDspPacingData(res.data.results);
+  //         } else {
+  //           setDspPacingData(null);
+  //         }
+  //       }
+  //       setDspPacingLoader(false);
+  //       setDspPacingData(dspPacingTestData.result);
+  //     });
+  //   },
+  //   [],
+  // );
 
   useEffect(() => {
     const list = [];
@@ -267,11 +267,11 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
       );
-      getDSPPacingData(
-        selectedAdDF.value,
-        selectedMarketplace,
-        selectedAdManager.value,
-      );
+      // getDSPPacingData(
+      //   selectedAdDF.value,
+      //   selectedMarketplace,
+      //   selectedAdManager.value,
+      // );
       setCurrency('USD');
       setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
@@ -290,7 +290,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     selectedTabMatrics,
     keyContributionValue,
     selectedKeyContribution,
-    getDSPPacingData,
+    // getDSPPacingData,
   ]);
 
   const DSPYearAndCustomDateFilter = (
