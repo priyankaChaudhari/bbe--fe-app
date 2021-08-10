@@ -87,7 +87,7 @@ export default function SponsoredDashboard({ marketplaceChoices }) {
   const [contributionData, setContributionData] = useState([]);
 
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 3);
+  currentDate.setDate(currentDate.getDate() - 2);
   const [adState, setAdState] = useState([
     {
       startDate: currentDate,

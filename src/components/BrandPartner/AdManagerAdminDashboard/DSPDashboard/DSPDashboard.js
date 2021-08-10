@@ -37,7 +37,7 @@ import DSPPerformanceChart from '../../../Customer/CompanyPerformance/DSPPerform
 // import { dspPacingTestData } from '../../../../constants/DSPPacingData';
 
 const currentDate = new Date();
-currentDate.setDate(currentDate.getDate() - 3);
+currentDate.setDate(currentDate.getDate() - 2);
 
 const DSPDashboard = ({ marketplaceChoices }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
