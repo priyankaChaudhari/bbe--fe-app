@@ -338,7 +338,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      { value: 'product catalog', label: 'Product Catalog' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -349,7 +349,7 @@ export default function CustomerMainContainer() {
       { value: 'company', label: 'Company Details' },
       { value: 'billing', label: 'Billing' },
       { value: 'activity', label: 'Activity' },
-      { value: 'product catalog', label: 'Product Catalog' },
+      // { value: 'product catalog', label: 'Product Catalog' },
     ];
   }
 
@@ -1013,7 +1013,7 @@ export default function CustomerMainContainer() {
                             Agreements
                           </div>
                         </li>
-                        {userInfo && userInfo.role === 'Customer' ? (
+                        {/* {userInfo && userInfo.role === 'Customer' ? (
                           ''
                         ) : (
                           <li
@@ -1038,7 +1038,7 @@ export default function CustomerMainContainer() {
                               Product Catalog
                             </div>
                           </li>
-                        )}
+                        )} */}
                         {customer &&
                         customer.brand_assets &&
                         customer.brand_assets.is_completed ? (
