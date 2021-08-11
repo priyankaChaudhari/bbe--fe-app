@@ -34,6 +34,7 @@ import {
   OrangeChat,
   EditOrangeIcon,
   NextActivityLogo,
+  ContractEmailIcon,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
 import {
@@ -1371,26 +1372,42 @@ export default function CustomerMainContainer() {
                                 .slice(0, 2)[0] === 'System' &&
                               item.history_change_reason
                                 .split(' ')
-                                .slice(0, 2)[1] === '') ? (
-                              <img
-                                src={
-                                  isLoading.loader && isLoading.type === 'page'
-                                    ? DefaultUser
-                                    : item.history_change_reason
-                                        .split(' ')
-                                        .slice(0, 2) &&
-                                      item.history_change_reason
-                                        .split(' ')
-                                        .slice(0, 2)[0] === 'System'
-                                    ? NextActivityLogo
-                                    : images.find(
-                                        (op) =>
-                                          op.entity_id === item.history_user_id,
-                                      ).presigned_url
-                                }
-                                className="default-user-activity"
-                                alt="pic"
-                              />
+                                .slice(0, 2)[1] === '') ||
+                            (item && item.status !== undefined) ? (
+                              <div
+                                className={
+                                  item && item.status !== undefined
+                                    ? 'contract-email'
+                                    : ''
+                                }>
+                                <img
+                                  src={
+                                    isLoading.loader &&
+                                    isLoading.type === 'page'
+                                      ? DefaultUser
+                                      : item.history_change_reason
+                                          .split(' ')
+                                          .slice(0, 2) &&
+                                        item.history_change_reason
+                                          .split(' ')
+                                          .slice(0, 2)[0] === 'System'
+                                      ? NextActivityLogo
+                                      : item && item.status !== undefined
+                                      ? ContractEmailIcon
+                                      : images.find(
+                                          (op) =>
+                                            op.entity_id ===
+                                            item.history_user_id,
+                                        ).presigned_url
+                                  }
+                                  className={
+                                    item && item.status !== undefined
+                                      ? 'default-user-activity contract-mail'
+                                      : 'default-user-activity '
+                                  }
+                                  alt="pic"
+                                />
+                              </div>
                             ) : (
                               <div className="avatarName float-left mr-3">
                                 {getActivityInitials(

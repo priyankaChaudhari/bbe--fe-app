@@ -333,7 +333,23 @@ const SidePanel = styled.div`
           float: left;
           margin-right: 15px;
           margin-top: -2px;
+
+        &.contract-mail {
+          width: 20px;
+          height: 20px;
+          margin-top: 0px;
+          margin: 10px;
         }
+      }
+
+      .contract-email {
+        background-color: #f4f6fc;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        float: left;
+        margin-right: 10px;
+    }
 
         .activity-user {
           font-size: ${Theme.normal};
