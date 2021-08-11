@@ -83,7 +83,7 @@ export const metricsNameForAPI = {
   dspTotalRoas: 'total_roas',
   dspTotalDpvr: 'total_dpvr',
   dspTtlNewBrandPurchases: 'ttl_new_brand_purchases',
-  dspProductSales: 'total_purchases',
+  dspProductSales: 'product_sales',
   dspRoas: 'roas',
 };
 

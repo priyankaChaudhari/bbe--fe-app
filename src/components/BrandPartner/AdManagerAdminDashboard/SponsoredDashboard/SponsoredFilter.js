@@ -22,6 +22,7 @@ const SponsoredFilter = ({
   isApiCall,
   selectedAdManager,
   selectedMarketplace,
+  selectInputRef,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
@@ -37,6 +38,7 @@ const SponsoredFilter = ({
           adManagerList && adManagerList[0],
           handleAdManagerFilter,
           isApiCall,
+          selectInputRef,
           selectedAdManager,
         )}
       </div>
@@ -203,6 +205,7 @@ SponsoredFilter.defaultProps = {
   isApiCall: false,
   selectedAdManager: {},
   selectedMarketplace: {},
+  selectInputRef: {},
 };
 
 SponsoredFilter.propTypes = {
@@ -219,4 +222,5 @@ SponsoredFilter.propTypes = {
   isApiCall: bool,
   selectedAdManager: arrayOf(Array),
   selectedMarketplace: string,
+  selectInputRef: arrayOf(Array),
 };

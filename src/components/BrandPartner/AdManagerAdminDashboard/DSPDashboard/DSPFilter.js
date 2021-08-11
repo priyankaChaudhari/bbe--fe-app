@@ -20,6 +20,9 @@ const DSPFilter = ({
   handleAdManagerFilter,
   isApiCall,
   handleResetFilter,
+  selectInputRef,
+  selectedAdManager,
+  selectedMarketplace,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
@@ -37,6 +40,8 @@ const DSPFilter = ({
             adManagerList && adManagerList[0],
             handleAdManagerFilter,
             isApiCall,
+            selectInputRef,
+            selectedAdManager,
           )}
         </div>
         <div className="col-lg-12 col-md-6">
@@ -50,6 +55,7 @@ const DSPFilter = ({
               components={DropDownIndicator}
               options={options}
               defaultValue={options && options[0]}
+              value={selectedMarketplace}
               onChange={(event) => handleMarketplaceOptions(event)}
               placeholder={options && options[0] && options[0].label}
               theme={(theme) => ({
@@ -150,6 +156,9 @@ DSPFilter.defaultProps = {
   handleAdManagerFilter: () => {},
   isApiCall: false,
   handleResetFilter: () => {},
+  selectInputRef: {},
+  selectedAdManager: {},
+  selectedMarketplace: {},
 };
 
 DSPFilter.propTypes = {
@@ -164,4 +173,7 @@ DSPFilter.propTypes = {
   handleAdManagerFilter: func,
   isApiCall: bool,
   handleResetFilter: func,
+  selectInputRef: arrayOf(Array),
+  selectedAdManager: arrayOf(Array),
+  selectedMarketplace: arrayOf(Array),
 };
