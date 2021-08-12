@@ -171,7 +171,6 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
-          // setDspData(res.data);
           if (res.data && res.data.result) {
             setTempDSPChartData(res.data.result);
           } else {
@@ -355,7 +354,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
       getDSPData(selectedAdDF.value, dspGroupBy, event.value);
       getContributionData(
         selectedAdDF.value,
-        selectedMarketplace.value,
+        event.value,
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 
-const tempData = [];
+let tempData = [];
 const useBindDSPResponseData = (response) => {
   const [dspCurrentTotal, setDspCurrentTotal] = useState([]);
   const [dspPreviousTotal, setDspPreviousTotal] = useState([]);
@@ -165,6 +165,11 @@ const useBindDSPResponseData = (response) => {
       } else {
         setDspDifference([]);
       }
+    } else {
+      setDspCurrentTotal([]);
+      setDspPreviousTotal([]);
+      setDspDifference([]);
+      tempData = [];
     }
   }, [response]);
   return {

@@ -365,7 +365,9 @@ export default function DSPPerformanceChart({
         if (
           item === 'dspSpend' ||
           item === 'dspTotalProductSales' ||
-          item === 'dspProductSales'
+          item === 'dspProductSales' ||
+          item === 'dspTotalRoas' ||
+          item === 'dspRoas'
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],

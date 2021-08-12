@@ -106,9 +106,9 @@ export const metricsCurrency = {
   dspImpressions: { type: 'nocurrency' },
   dspSpend: { type: 'currency' },
   dspTotalProductSales: { type: 'currency' },
-  dspTotalRoas: { type: 'nocurrency' },
+  dspTotalRoas: { type: 'currency' },
   dspTotalDpvr: { type: 'percentage' },
   dspTtlNewBrandPurchases: { type: 'percentage' },
   dspProductSales: { type: 'currency' },
-  dspRoas: { type: 'nocurrency' },
+  dspRoas: { type: 'currency' },
 };
