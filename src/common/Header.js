@@ -342,11 +342,17 @@ export default function Header({ type, userInfo }) {
                           onClick={() => setShowModal(true)}>
                           <img src={EditIcons} alt="edit" /> Edit profile
                         </li>
-                        <li
-                          role="presentation"
-                          onClick={() => window.open(managementLink, '_blank')}>
-                          <img src={HelpIcon} alt="edit" /> Management Q&A
-                        </li>
+                        {userInfo && userInfo.role !== 'Customer' ? (
+                          <li
+                            role="presentation"
+                            onClick={() =>
+                              window.open(managementLink, '_blank')
+                            }>
+                            <img src={HelpIcon} alt="edit" /> Management Q&A
+                          </li>
+                        ) : (
+                          ''
+                        )}
                         <li
                           role="presentation"
                           style={{ cursor: 'pointer' }}
