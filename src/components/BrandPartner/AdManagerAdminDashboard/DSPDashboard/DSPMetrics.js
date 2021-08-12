@@ -176,13 +176,15 @@ const DSPMetrics = ({
           <div className="chart-name">Total ROAS </div>
           <div className="number-rate">
             {dspCurrentTotal && dspCurrentTotal.total_roas
-              ? `${addThousandComma(dspCurrentTotal.total_roas)}`
-              : `0.00`}
+              ? `${currencySign}${addThousandComma(dspCurrentTotal.total_roas)}`
+              : `${currencySign}0.00`}
           </div>
           <div className="vs">
             {dspPreviousTotal && dspPreviousTotal.total_roas
-              ? `vs ${addThousandComma(dspPreviousTotal.total_roas)}`
-              : `vs 0.00`}
+              ? `vs ${currencySign}${addThousandComma(
+                  dspPreviousTotal.total_roas,
+                )}`
+              : `vs ${currencySign}0.00`}
           </div>
           {dspDifference && dspDifference.total_roas ? (
             dspDifference.total_roas >= 0 ? (
@@ -364,13 +366,13 @@ const DSPMetrics = ({
           <div className="chart-name">ROAS </div>
           <div className="number-rate">
             {dspCurrentTotal && dspCurrentTotal.roas
-              ? `${addThousandComma(dspCurrentTotal.roas)}`
-              : `0.00`}
+              ? `${currencySign}${addThousandComma(dspCurrentTotal.roas)}`
+              : `${currencySign}0.00`}
           </div>
           <div className="vs">
             {dspPreviousTotal && dspPreviousTotal.roas
-              ? `vs ${addThousandComma(dspPreviousTotal.roas)}`
-              : `vs 0.00`}
+              ? `vs ${currencySign}${addThousandComma(dspPreviousTotal.roas)}`
+              : `vs ${currencySign}0.00`}
           </div>
           {dspDifference && dspDifference.roas ? (
             dspDifference.roas >= 0 ? (

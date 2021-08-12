@@ -564,7 +564,7 @@ const DSPKeyContributors = ({
                 width={40}
                 height={40}
               />
-            ) : data ? (
+            ) : data && data.length >= 1 ? (
               isDesktop ? (
                 renderDesktopKeyContributions()
               ) : (

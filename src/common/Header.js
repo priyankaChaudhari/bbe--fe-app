@@ -30,6 +30,7 @@ import {
   OrganizationActiveIcon,
   SpeedometerActive,
   Speedometer,
+  HelpIcon,
 } from '../theme/images/index';
 
 import { logout, showProfileLoader, userMe } from '../store/actions/userState';
@@ -45,6 +46,7 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants';
+import { managementLink } from '../constants/FieldConstants';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();
@@ -340,6 +342,17 @@ export default function Header({ type, userInfo }) {
                           onClick={() => setShowModal(true)}>
                           <img src={EditIcons} alt="edit" /> Edit profile
                         </li>
+                        {userInfo && userInfo.role !== 'Customer' ? (
+                          <li
+                            role="presentation"
+                            onClick={() =>
+                              window.open(managementLink, '_blank')
+                            }>
+                            <img src={HelpIcon} alt="edit" /> Management Q&A
+                          </li>
+                        ) : (
+                          ''
+                        )}
                         <li
                           role="presentation"
                           style={{ cursor: 'pointer' }}

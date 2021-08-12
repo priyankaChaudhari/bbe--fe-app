@@ -240,7 +240,7 @@ const SponsoredKeyContribution = ({
   const renderTableHeader = () => {
     return selectedContributionOption === 'keyMetrics' ? (
       <tr>
-        <th width="39%" className="product-header">
+        <th width="38%" className="product-header">
           CUSTOMER
         </th>
         <th width="18%" className="product-header">

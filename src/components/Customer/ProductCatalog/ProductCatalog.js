@@ -20,6 +20,7 @@ import {
   PageLoader,
   Button,
   ModalBox,
+  Status,
 } from '../../../common';
 import {
   SearchIcon,
@@ -44,6 +45,22 @@ const AccountSetupcustomStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
+};
+const productStatusColor = {
+  scheduled: {
+    backgroundColor: Theme.extraLightYellow,
+    pointColor: Theme.yellow,
+  },
+  optimized: {
+    backgroundColor: '#E3F2D2',
+    pointColor: Theme.lightGreen,
+  },
+  'assets received': { backgroundColor: '#D6EEF2', pointColor: '#30A8BD' },
+  'assets requested': {
+    backgroundColor: Theme.lightOrange,
+    pointColor: Theme.orange,
+  },
+  unoptimized: { backgroundColor: Theme.gray8, pointColor: Theme.gray25 },
 };
 export default function ProductCatalog({
   id,
@@ -179,7 +196,7 @@ export default function ProductCatalog({
             </div>
           </td>
           <td className="product-catalog-body">
-            <div
+            {/* <div
               className={`status ${
                 item.status.includes('received') ||
                 item.status.includes('requested')
@@ -195,7 +212,12 @@ export default function ProductCatalog({
                 }`}
               />
               <span className="status-text capitalize"> {item.status}</span>
-            </div>
+            </div> */}
+            <Status
+              backgroundColor={productStatusColor[item.status].backgroundColor}
+              pointColor={productStatusColor[item.status].pointColor}
+              label={item.status}
+            />
           </td>
           <td className="product-catalog-body">
             {item.status === 'unoptimized' ? (
@@ -733,60 +755,60 @@ const TableMobileView = styled.div`
           font-weight: 500;
         }
       }
-      .status {
-        background-color: #e3f2d2;
-        border-radius: 5px;
-        max-width: 99px;
-        text-align: right;
-        padding: 5px 12px;
-        color: ${Theme.black};
-        position: relative;
+      // .status {
+      //   background-color: #e3f2d2;
+      //   border-radius: 5px;
+      //   max-width: 99px;
+      //   text-align: right;
+      //   padding: 5px 12px;
+      //   color: ${Theme.black};
+      //   position: relative;
 
-        &.unoptimized {
-          background-color: ${Theme.gray8};
-          max-width: 113px;
-        }
+      //   &.unoptimized {
+      //     background-color: ${Theme.gray8};
+      //     max-width: 113px;
+      //   }
 
-        &.scheduled {
-          background-color: ${Theme.extraLightYellow};
-          max-width: 99px;
-        }
-        &.assets-received {
-          background-color: #d6eef2;
-          max-width: 132px;
-        }
-        &.assets-requested {
-          background-color: ${Theme.lightOrange};
-          max-width: 132px;
-        }
+      //   &.scheduled {
+      //     background-color: ${Theme.extraLightYellow};
+      //     max-width: 99px;
+      //   }
+      //   &.assets-received {
+      //     background-color: #d6eef2;
+      //     max-width: 132px;
+      //   }
+      //   &.assets-requested {
+      //     background-color: ${Theme.lightOrange};
+      //     max-width: 132px;
+      //   }
 
-        .bullet-point {
-          background-color: ${Theme.lighterGreen};
-          border-radius: 100%;
-          width: 8px;
-          height: 8px;
-          position: absolute;
-          top: 9px;
-          left: 11px;
+      //   .bullet-point {
+      //     background-color: ${Theme.lighterGreen};
+      //     border-radius: 100%;
+      //     width: 8px;
+      //     height: 8px;
+      //     position: absolute;
+      //     top: 9px;
+      //     left: 11px;
 
-          &.unoptimized {
-            background-color: ${Theme.gray25};
-          }
-          &.scheduled {
-            background-color: ${Theme.yellow};
-          }
-          &.assets-received {
-            background-color: #30a8bd;
-          }
-          &.assets-requested {
-            background-color: ${Theme.orange};
-          }
-        }
-        .status-text {
-          color: ${Theme.black};
-          margin-left: 3px;
-        }
-      }
+      //     &.unoptimized {
+      //       background-color: ${Theme.gray25};
+      //     }
+      //     &.scheduled {
+      //       background-color: ${Theme.yellow};
+      //     }
+      //     &.assets-received {
+      //       background-color: #30a8bd;
+      //     }
+      //     &.assets-requested {
+      //       background-color: ${Theme.orange};
+      //     }
+      //   }
+      //   .status-text {
+      //     color: ${Theme.black};
+      //     margin-left: 3px;
+      //   }
+      // }
       .request {
         color: ${Theme.gray85};
         font-weight: 300;

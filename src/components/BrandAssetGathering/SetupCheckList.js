@@ -16,17 +16,18 @@ import {
   ServiceIcon,
   SignatureIcon,
   WhiteArrowRight,
-  CircleBellIcon,
+  // CircleBellIcon,
 } from '../../theme/images';
 import { getAgreementList, getAssigneeCount } from '../../api';
 import {
   PATH_CHOOSE_BRAND_DELEGATE,
-  PATH_UPLOAD_PRODUCT_ASSET,
+  // PATH_UPLOAD_PRODUCT_ASSET,
 } from '../../constants';
 
 // import { UploadProductAsset } from '../../components/Customer/UploadProductAsset';
 
-export default function SetupCheckList({ id, brandId, productAssetsId }) {
+export default function SetupCheckList({ id, brandId }) {
+  // productAssetsId;
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
@@ -213,7 +214,7 @@ export default function SetupCheckList({ id, brandId, productAssetsId }) {
               </div>
             </div>
           </fieldset>
-          <WhiteCard className="mt-3">
+          {/* <WhiteCard className="mt-3">
             <p className="black-heading-title mt-2 ">Creative Schedule</p>
             <fieldset className="shape-without-border extra-radius">
               <div className="row">
@@ -257,7 +258,7 @@ export default function SetupCheckList({ id, brandId, productAssetsId }) {
             <p style={{ fontSize: '14px' }} className="  text-center mt-5 mb-4">
               Your creative schedule is being generated
             </p>
-          </WhiteCard>
+          </WhiteCard> */}
           <WhiteCard className="mt-3">
             <p className="black-heading-title mt-2 ">
               Active Agreement(s) ({agreementData.count})
@@ -420,13 +421,13 @@ export default function SetupCheckList({ id, brandId, productAssetsId }) {
 
 SetupCheckList.defaultProps = {
   brandId: '',
-  productAssetsId: '',
+  // productAssetsId: '',
 };
 
 SetupCheckList.propTypes = {
   id: PropTypes.string.isRequired,
   brandId: PropTypes.string,
-  productAssetsId: PropTypes.string,
+  // productAssetsId: PropTypes.string,
 };
 
 const GreenCheckBox = styled.div`

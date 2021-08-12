@@ -93,7 +93,8 @@ export default function CompanyDetail({
                 <GroupUser key={item.id} className="mb-3">
                   <GetInitialName userInfo={item} property="float-left mr-3 " />
                   <div className="activity-user">
-                    {item.first_name || ' '} {item.last_name || ' '}
+                    {item.first_name || ' '} {item.last_name || ' '}{' '}
+                    {item.role ? <>({item.role})</> : ''}
                     <br />
                     <div className="user-email-address">
                       {item.email || ' '}
