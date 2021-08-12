@@ -377,7 +377,7 @@ function CustomerListFilters({
     // const handleFilters = (event, key, type) => {
     // for one select user
     if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
-    // console.log('bgs', JSON.stringify(event));
+
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
@@ -773,8 +773,8 @@ function CustomerListFilters({
       if (filters.contract_details && showContractDetails) {
         return brandGrowthStrategist.filter(
           (option) => filters.contract_details === option.value,
-          // console.log('filters.contract_details', filters.contract_details),
-          console.log('filters', filters),
+          console.log('filters.contract_details', filters.contract_details),
+          // console.log('filters', filters),
         );
       }
       if (filters.user && showPerformance) {
@@ -794,11 +794,11 @@ function CustomerListFilters({
         );
       }
 
-      return [{ value: 'any', label: 'Any' }];
-      // return brandGrowthStrategist.filter(
-      //   (option) => filters.contract_details === option.value,
-      //   // console.log('filters', filters),
-      // );
+      // return [{ value: 'any', label: 'Any' }];
+      return brandGrowthStrategist.filter(
+        (option) => filters.contract_details === option.value,
+        // console.log('filters', filters),
+      );
     }
 
     // original code commented below

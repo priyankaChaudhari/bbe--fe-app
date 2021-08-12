@@ -94,19 +94,22 @@ export default function NewCustomerList() {
     JSON.parse(localStorage.getItem('filters')) || {
       status: [],
       contract_status: [],
+      //
       contract_detail: [],
+      //
       user: [],
       ad_user: [],
       dsp_user: [],
       contract_type: [],
     },
   );
-
+  //
   const [showContractDetails, setShowContractDetails] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
       : false,
   );
+  //
   const [showPerformance, setShowPerformance] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showPerformance
@@ -261,7 +264,7 @@ export default function NewCustomerList() {
         selectedValue,
         JSON.parse(localStorage.getItem('filters')) || filters,
         searchQuery,
-        // showContractDetails,
+        showContractDetails,
         showPerformance,
         showAdPerformance,
         showDspAdPerformance,
@@ -282,7 +285,7 @@ export default function NewCustomerList() {
       filters,
       orderByFlag,
       expiringSoon,
-      // showContractDetails,
+      showContractDetails,
       showPerformance,
       showAdPerformance,
       showDspAdPerformance,
@@ -321,6 +324,7 @@ export default function NewCustomerList() {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
           const list = [{ value: 'any', label: 'All' }]; // for select one use
+
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -338,6 +342,8 @@ export default function NewCustomerList() {
     }
     customerList(1);
   }, [customerList, showAdPerformance, showDspAdPerformance]);
+
+  console.log('brandGrowthStrategist', brandGrowthStrategist);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -1186,168 +1192,168 @@ export default function NewCustomerList() {
       );
     }
     // for view-contract Details
-    if (showContractDetails) {
-      console.log('item.brand_growth_strategist', item.brand_growth_strategist);
-      return (
-        <tr
-          className="cursor"
-          key={Math.random()}
-          onClick={() =>
-            history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-          }>
-          <td width="25%">
-            <img
-              className="company-logo"
-              src={
-                item &&
-                item.documents &&
-                item.documents[0] &&
-                Object.values(item.documents[0])
-                  ? Object.values(item.documents[0])[0]
-                  : CompanyDefaultUser
-              }
-              alt="logo"
-            />
+    // if (showContractDetails) {
+    //   // console.log('item.brand_growth_strategist', item.brand_growth_strategist);
+    //   return (
+    //     <tr
+    //       className="cursor"
+    //       key={Math.random()}
+    //       onClick={() =>
+    //         history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+    //       }>
+    //       <td width="25%">
+    //         <img
+    //           className="company-logo"
+    //           src={
+    //             item &&
+    //             item.documents &&
+    //             item.documents[0] &&
+    //             Object.values(item.documents[0])
+    //               ? Object.values(item.documents[0])[0]
+    //               : CompanyDefaultUser
+    //           }
+    //           alt="logo"
+    //         />
 
-            {generateCompanyNameAndStatus(
-              item && item.company_name,
-              item.status,
-            )}
-          </td>
-          <td width="60%">
-            <ul
-              className="recurring-contact"
-              style={{ textTransform: 'capitalize' }}>
-              {item && item.contract && item.contract.length ? (
-                item &&
-                item.contract &&
-                item.contract.map((type) => (
-                  <React.Fragment key={Math.random()}>
-                    <ReactTooltip />
-                    {generateContractHTML(type, item.id)}
-                  </React.Fragment>
-                ))
-              ) : (
-                <li className="no-active-contract">No active contracts</li>
-              )}
-            </ul>
-          </td>
+    //         {generateCompanyNameAndStatus(
+    //           item && item.company_name,
+    //           item.status,
+    //         )}
+    //       </td>
+    //       <td width="60%">
+    //         <ul
+    //           className="recurring-contact"
+    //           style={{ textTransform: 'capitalize' }}>
+    //           {item && item.contract && item.contract.length ? (
+    //             item &&
+    //             item.contract &&
+    //             item.contract.map((type) => (
+    //               <React.Fragment key={Math.random()}>
+    //                 <ReactTooltip />
+    //                 {generateContractHTML(type, item.id)}
+    //               </React.Fragment>
+    //             ))
+    //           ) : (
+    //             <li className="no-active-contract">No active contracts</li>
+    //           )}
+    //         </ul>
+    //       </td>
 
-          <td width="15%">
-            {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.length !== 0 ? (
-              <>
-                {item.brand_growth_strategist.profile_photo ? (
-                  <img
-                    className="user-profile-circle"
-                    src={item.brand_growth_strategist.profile_photo}
-                    alt="user"
-                  />
-                ) : (
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={item.brand_growth_strategist}
-                  />
-                )}
-              </>
-            ) : (
-              ''
-            )}
-            <div className="user-name">
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.first_name}
+    //       <td width="15%">
+    //         {item &&
+    //         item.brand_growth_strategist &&
+    //         item.brand_growth_strategist.length !== 0 ? (
+    //           <>
+    //             {item.brand_growth_strategist.profile_photo ? (
+    //               <img
+    //                 className="user-profile-circle"
+    //                 src={item.brand_growth_strategist.profile_photo}
+    //                 alt="user"
+    //               />
+    //             ) : (
+    //               <GetInitialName
+    //                 property="float-left mr-3"
+    //                 userInfo={item.brand_growth_strategist}
+    //               />
+    //             )}
+    //           </>
+    //         ) : (
+    //           ''
+    //         )}
+    //         <div className="user-name">
+    //           {item &&
+    //             item.brand_growth_strategist &&
+    //             item.brand_growth_strategist.first_name}
 
-              <br />
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.last_name}
-            </div>
-          </td>
-        </tr>
-      );
-    }
-    return '';
+    //           <br />
+    //           {item &&
+    //             item.brand_growth_strategist &&
+    //             item.brand_growth_strategist.last_name}
+    //         </div>
+    //       </td>
+    //     </tr>
+    //   );
+    // }
+    // return '';
 
     // original code commented below
 
-    // return (
-    //   <tr
-    //     className="cursor"
-    //     key={Math.random()}
-    //     onClick={() =>
-    //       history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-    //     }>
-    //     <td width="25%">
-    //       <img
-    //         className="company-logo"
-    //         src={
-    //           item &&
-    //           item.documents &&
-    //           item.documents[0] &&
-    //           Object.values(item.documents[0])
-    //             ? Object.values(item.documents[0])[0]
-    //             : CompanyDefaultUser
-    //         }
-    //         alt="logo"
-    //       />
+    return (
+      <tr
+        className="cursor"
+        key={Math.random()}
+        onClick={() =>
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+        }>
+        <td width="25%">
+          <img
+            className="company-logo"
+            src={
+              item &&
+              item.documents &&
+              item.documents[0] &&
+              Object.values(item.documents[0])
+                ? Object.values(item.documents[0])[0]
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
 
-    //       {generateCompanyNameAndStatus(item && item.company_name, item.status)}
-    //     </td>
-    //     <td width="60%">
-    //       <ul
-    //         className="recurring-contact"
-    //         style={{ textTransform: 'capitalize' }}>
-    //         {item && item.contract && item.contract.length ? (
-    //           item &&
-    //           item.contract &&
-    //           item.contract.map((type) => (
-    //             <React.Fragment key={Math.random()}>
-    //               <ReactTooltip />
-    //               {generateContractHTML(type, item.id)}
-    //             </React.Fragment>
-    //           ))
-    //         ) : (
-    //           <li className="no-active-contract">No active contracts</li>
-    //         )}
-    //       </ul>
-    //     </td>
+          {generateCompanyNameAndStatus(item && item.company_name, item.status)}
+        </td>
+        <td width="60%">
+          <ul
+            className="recurring-contact"
+            style={{ textTransform: 'capitalize' }}>
+            {item && item.contract && item.contract.length ? (
+              item &&
+              item.contract &&
+              item.contract.map((type) => (
+                <React.Fragment key={Math.random()}>
+                  <ReactTooltip />
+                  {generateContractHTML(type, item.id)}
+                </React.Fragment>
+              ))
+            ) : (
+              <li className="no-active-contract">No active contracts</li>
+            )}
+          </ul>
+        </td>
 
-    //     <td width="15%">
-    //       {item &&
-    //       item.brand_growth_strategist &&
-    //       item.brand_growth_strategist.length !== 0 ? (
-    //         <>
-    //           {item.brand_growth_strategist.profile_photo ? (
-    //             <img
-    //               className="user-profile-circle"
-    //               src={item.brand_growth_strategist.profile_photo}
-    //               alt="user"
-    //             />
-    //           ) : (
-    //             <GetInitialName
-    //               property="float-left mr-3"
-    //               userInfo={item.brand_growth_strategist}
-    //             />
-    //           )}
-    //         </>
-    //       ) : (
-    //         ''
-    //       )}
-    //       <div className="user-name">
-    //         {item &&
-    //           item.brand_growth_strategist &&
-    //           item.brand_growth_strategist.first_name}
+        <td width="15%">
+          {item &&
+          item.brand_growth_strategist &&
+          item.brand_growth_strategist.length !== 0 ? (
+            <>
+              {item.brand_growth_strategist.profile_photo ? (
+                <img
+                  className="user-profile-circle"
+                  src={item.brand_growth_strategist.profile_photo}
+                  alt="user"
+                />
+              ) : (
+                <GetInitialName
+                  property="float-left mr-3"
+                  userInfo={item.brand_growth_strategist}
+                />
+              )}
+            </>
+          ) : (
+            ''
+          )}
+          <div className="user-name">
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.first_name}
 
-    //         <br />
-    //         {item &&
-    //           item.brand_growth_strategist &&
-    //           item.brand_growth_strategist.last_name}
-    //       </div>
-    //     </td>
-    //   </tr>
-    // );
+            <br />
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.last_name}
+          </div>
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -1438,12 +1444,12 @@ export default function NewCustomerList() {
             handlePageChange={handlePageChange}
             isLoading={isLoading}
             showContractDetails={showContractDetails}
+            setShowContractDetails={setShowContractDetails}
             showPerformance={showPerformance}
-            showAdPerformance={showAdPerformance}
-            showDspAdPerformance={showDspAdPerformance}
-            setShowContractDetails={showContractDetails}
             setShowPerformance={setShowPerformance}
+            showAdPerformance={showAdPerformance}
             setShowAdPerformance={setShowAdPerformance}
+            showDspAdPerformance={showDspAdPerformance}
             setShowDspAdPerformance={setShowDspAdPerformance}
             setStatus={status}
             brandGrowthStrategist={brandGrowthStrategist}
