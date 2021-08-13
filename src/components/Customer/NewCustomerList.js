@@ -94,22 +94,20 @@ export default function NewCustomerList() {
     JSON.parse(localStorage.getItem('filters')) || {
       status: [],
       contract_status: [],
-      //
-      contract_detail: [],
-      //
+      cd_user: [],
       user: [],
       ad_user: [],
       dsp_user: [],
       contract_type: [],
     },
   );
-  //
+
   const [showContractDetails, setShowContractDetails] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
       : false,
   );
-  //
+
   const [showPerformance, setShowPerformance] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showPerformance
@@ -324,7 +322,6 @@ export default function NewCustomerList() {
       getGrowthStrategist().then((gs) => {
         if (gs && gs.data) {
           const list = [{ value: 'any', label: 'All' }]; // for select one use
-
           for (const brand of gs.data) {
             list.push({
               value: brand.id,
@@ -340,10 +337,9 @@ export default function NewCustomerList() {
         }
       });
     }
+
     customerList(1);
   }, [customerList, showAdPerformance, showDspAdPerformance]);
-
-  console.log('brandGrowthStrategist', brandGrowthStrategist);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -771,7 +767,81 @@ export default function NewCustomerList() {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${prefix === '%' ? '%' : ''}`
       : `${prefix === '$' ? '$0' : prefix === '%' ? '0%' : 0}`;
   };
-
+  const generateContractDetails = (item) => {
+    return (
+      <tr
+        className="cursor"
+        key={Math.random()}
+        onClick={() =>
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+        }>
+        <td width="25%">
+          <img
+            className="company-logo"
+            src={
+              item &&
+              item.documents &&
+              item.documents[0] &&
+              Object.values(item.documents[0])
+                ? Object.values(item.documents[0])[0]
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
+          {generateCompanyNameAndStatus(item && item.company_name, item.status)}
+        </td>
+        <td width="60%">
+          <ul
+            className="recurring-contact"
+            style={{ textTransform: 'capitalize' }}>
+            {item && item.contract && item.contract.length ? (
+              item &&
+              item.contract &&
+              item.contract.map((type) => (
+                <React.Fragment key={Math.random()}>
+                  <ReactTooltip />
+                  {generateContractHTML(type, item.id)}
+                </React.Fragment>
+              ))
+            ) : (
+              <li className="no-active-contract">No active contracts</li>
+            )}
+          </ul>
+        </td>
+        <td width="15%">
+          {item &&
+          item.brand_growth_strategist &&
+          item.brand_growth_strategist.length !== 0 ? (
+            <>
+              {item.brand_growth_strategist.profile_photo ? (
+                <img
+                  className="user-profile-circle"
+                  src={item.brand_growth_strategist.profile_photo}
+                  alt="user"
+                />
+              ) : (
+                <GetInitialName
+                  property="float-left mr-3"
+                  userInfo={item.brand_growth_strategist}
+                />
+              )}
+            </>
+          ) : (
+            ''
+          )}
+          <div className="user-name">
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.first_name}
+            <br />
+            {item &&
+              item.brand_growth_strategist &&
+              item.brand_growth_strategist.last_name}
+          </div>
+        </td>
+      </tr>
+    );
+  };
   const renderCustomerDetails = (item) => {
     if (showPerformance) {
       return (
@@ -944,9 +1014,9 @@ export default function NewCustomerList() {
           <td width="15%">
             {generatePerformance(
               item &&
-                item.dsp_ad_performance &&
-                item.dsp_ad_performance.current_sum &&
-                item.dsp_ad_performance.current_sum.total_product_sales,
+                item.sponsored_ad_performance &&
+                item.sponsored_ad_performance.current_sum &&
+                item.sponsored_ad_performance.current_sum.ad_sales,
               2,
               '',
               '$',
@@ -965,9 +1035,9 @@ export default function NewCustomerList() {
             <>
               {generatePerformance(
                 item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.total_product_sales,
+                  item.sponsored_ad_performance &&
+                  item.sponsored_ad_performance.current_sum &&
+                  item.sponsored_ad_performance.current_sum.ad_spend,
                 2,
                 '',
                 '$',
@@ -1191,171 +1261,12 @@ export default function NewCustomerList() {
         </tr>
       );
     }
-    // for view-contract Details
-    // if (showContractDetails) {
-    //   // console.log('item.brand_growth_strategist', item.brand_growth_strategist);
-    //   return (
-    //     <tr
-    //       className="cursor"
-    //       key={Math.random()}
-    //       onClick={() =>
-    //         history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-    //       }>
-    //       <td width="25%">
-    //         <img
-    //           className="company-logo"
-    //           src={
-    //             item &&
-    //             item.documents &&
-    //             item.documents[0] &&
-    //             Object.values(item.documents[0])
-    //               ? Object.values(item.documents[0])[0]
-    //               : CompanyDefaultUser
-    //           }
-    //           alt="logo"
-    //         />
-
-    //         {generateCompanyNameAndStatus(
-    //           item && item.company_name,
-    //           item.status,
-    //         )}
-    //       </td>
-    //       <td width="60%">
-    //         <ul
-    //           className="recurring-contact"
-    //           style={{ textTransform: 'capitalize' }}>
-    //           {item && item.contract && item.contract.length ? (
-    //             item &&
-    //             item.contract &&
-    //             item.contract.map((type) => (
-    //               <React.Fragment key={Math.random()}>
-    //                 <ReactTooltip />
-    //                 {generateContractHTML(type, item.id)}
-    //               </React.Fragment>
-    //             ))
-    //           ) : (
-    //             <li className="no-active-contract">No active contracts</li>
-    //           )}
-    //         </ul>
-    //       </td>
-
-    //       <td width="15%">
-    //         {item &&
-    //         item.brand_growth_strategist &&
-    //         item.brand_growth_strategist.length !== 0 ? (
-    //           <>
-    //             {item.brand_growth_strategist.profile_photo ? (
-    //               <img
-    //                 className="user-profile-circle"
-    //                 src={item.brand_growth_strategist.profile_photo}
-    //                 alt="user"
-    //               />
-    //             ) : (
-    //               <GetInitialName
-    //                 property="float-left mr-3"
-    //                 userInfo={item.brand_growth_strategist}
-    //               />
-    //             )}
-    //           </>
-    //         ) : (
-    //           ''
-    //         )}
-    //         <div className="user-name">
-    //           {item &&
-    //             item.brand_growth_strategist &&
-    //             item.brand_growth_strategist.first_name}
-
-    //           <br />
-    //           {item &&
-    //             item.brand_growth_strategist &&
-    //             item.brand_growth_strategist.last_name}
-    //         </div>
-    //       </td>
-    //     </tr>
-    //   );
-    // }
+    if (showContractDetails) {
+      return <>{generateContractDetails(item)}</>;
+    }
+    return <>{generateContractDetails(item)}</>;
     // return '';
-
-    // original code commented below
-
-    return (
-      <tr
-        className="cursor"
-        key={Math.random()}
-        onClick={() =>
-          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-        }>
-        <td width="25%">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
-
-          {generateCompanyNameAndStatus(item && item.company_name, item.status)}
-        </td>
-        <td width="60%">
-          <ul
-            className="recurring-contact"
-            style={{ textTransform: 'capitalize' }}>
-            {item && item.contract && item.contract.length ? (
-              item &&
-              item.contract &&
-              item.contract.map((type) => (
-                <React.Fragment key={Math.random()}>
-                  <ReactTooltip />
-                  {generateContractHTML(type, item.id)}
-                </React.Fragment>
-              ))
-            ) : (
-              <li className="no-active-contract">No active contracts</li>
-            )}
-          </ul>
-        </td>
-
-        <td width="15%">
-          {item &&
-          item.brand_growth_strategist &&
-          item.brand_growth_strategist.length !== 0 ? (
-            <>
-              {item.brand_growth_strategist.profile_photo ? (
-                <img
-                  className="user-profile-circle"
-                  src={item.brand_growth_strategist.profile_photo}
-                  alt="user"
-                />
-              ) : (
-                <GetInitialName
-                  property="float-left mr-3"
-                  userInfo={item.brand_growth_strategist}
-                />
-              )}
-            </>
-          ) : (
-            ''
-          )}
-          <div className="user-name">
-            {item &&
-              item.brand_growth_strategist &&
-              item.brand_growth_strategist.first_name}
-
-            <br />
-            {item &&
-              item.brand_growth_strategist &&
-              item.brand_growth_strategist.last_name}
-          </div>
-        </td>
-      </tr>
-    );
   };
-
   return (
     <CustomerListPage>
       {' '}
@@ -1365,10 +1276,8 @@ export default function NewCustomerList() {
         setFilters={setFilters}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        //
         showContractDetails={showContractDetails}
         setShowContractDetails={setShowContractDetails}
-        //
         showPerformance={showPerformance}
         showAdPerformance={showAdPerformance}
         showDspAdPerformance={showDspAdPerformance}

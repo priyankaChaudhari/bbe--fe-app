@@ -24,6 +24,7 @@ export async function getCustomerList(
   sort,
   filterOptions,
   searchQuery,
+  contractDetails,
   performance,
   adPerformance,
   dspAdPerformance,
@@ -55,7 +56,11 @@ export async function getCustomerList(
       q: searchQuery,
     };
   }
-
+  if (contractDetails) {
+    params = {
+      ...params,
+    };
+  }
   if (performance) {
     params = {
       ...params,
@@ -105,10 +110,21 @@ export async function getCustomerList(
 
   if (
     filterOptions &&
+    filterOptions.cd_user &&
+    filterOptions.cd_user.length &&
+    contractDetails
+  ) {
+    bgsParams = queryString.stringify({ user: filterOptions.cd_user });
+    params = {
+      ...params,
+    };
+  }
+
+  if (
+    filterOptions &&
     filterOptions.user &&
     filterOptions.user.length &&
-    !adPerformance &&
-    !dspAdPerformance
+    performance
   ) {
     bgsParams = queryString.stringify({ user: filterOptions.user });
     params = {
@@ -790,14 +806,14 @@ export async function getKeyContributionData(
     if (dashboardType === 'sponsored_ad_dashboard') {
       params = {
         ...params,
-        no_page: '',
+        page: 1,
         sequence: 'desc',
         'order-by': 'ad_sales',
       };
     } else {
       params = {
         ...params,
-        no_page: '',
+        page: 1,
         sequence: 'desc',
         'order-by': 'dsp_spend',
       };

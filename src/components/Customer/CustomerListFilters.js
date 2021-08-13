@@ -76,7 +76,7 @@ function CustomerListFilters({
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>
-      {/* {props.data.icon ? ( // for multi select user */}
+      {/* {props.data.icon ? ( // for multi slect iser */}
       {dataProps.data && dataProps.data.label !== 'All' ? (
         dataProps.data.icon ? ( // for single user select
           <img
@@ -130,7 +130,6 @@ function CustomerListFilters({
       </span>
     </SingleValue>
   );
-
   const SortOption = (dataProps) => (
     <SingleValue {...dataProps}>
       {dataProps.data.label === 'Sales Performance' ||
@@ -168,17 +167,13 @@ function CustomerListFilters({
       });
 
       if (event.value === 'contract_details') {
-        //
         setShowContractDetails(true);
-        //
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
-          //
           showContractDetails: true,
-          //
           showPerformance: false,
           showAdPerformance: false,
           showDspAdPerformance: false,
@@ -190,9 +185,7 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
-            //
             showContractDetails: true,
-            //
             showPerformance: false,
             showAdPerformance: false,
             showDspAdPerformance: false,
@@ -202,17 +195,13 @@ function CustomerListFilters({
           }),
         );
       } else if (event.value === 'performance') {
-        //
         setShowContractDetails(false);
-        //
         setShowPerformance(true);
         setShowAdPerformance(false);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
-          //
           showContractDetails: false,
-          //
           showPerformance: true,
           showAdPerformance: false,
           showDspAdPerformance: false,
@@ -221,26 +210,20 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
-            //
             showContractDetails: false,
-            //
             showPerformance: true,
             showAdPerformance: false,
             showDspAdPerformance: false,
           }),
         );
       } else if (event.value === 'sponsored_ad_performance') {
-        //
         setShowContractDetails(false);
-        //
         setShowPerformance(false);
         setShowAdPerformance(true);
         setShowDspAdPerformance(false);
         setFilters({
           ...filters,
-          //
           showContractDetails: false,
-          //
           showPerformance: false,
           showAdPerformance: true,
           showDspAdPerformance: false,
@@ -249,26 +232,20 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
-            //
             showContractDetails: false,
-            //
             showPerformance: false,
             showAdPerformance: true,
             showDspAdPerformance: false,
           }),
         );
       } else if (event.value === 'dsp_ad_performance') {
-        //
         setShowContractDetails(false);
-        //
         setShowPerformance(false);
         setShowAdPerformance(false);
         setShowDspAdPerformance(true);
         setFilters({
           ...filters,
-          //
           showContractDetails: false,
-          //
           showPerformance: false,
           showAdPerformance: false,
           showDspAdPerformance: true,
@@ -277,9 +254,7 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
-            //
             showContractDetails: false,
-            //
             showPerformance: false,
             showAdPerformance: false,
             showDspAdPerformance: true,
@@ -377,7 +352,6 @@ function CustomerListFilters({
     // const handleFilters = (event, key, type) => {
     // for one select user
     if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
-
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
@@ -390,11 +364,9 @@ function CustomerListFilters({
       setFilters({
         ...filters,
         status: [],
-        contract_type: [],
         contract_status: [],
-        //
-        contract_details: [],
-        //
+        contract_type: [],
+        cd_user: [],
         user: [],
         ad_user: [],
         dsp_user: [],
@@ -406,9 +378,7 @@ function CustomerListFilters({
           status: [],
           contract_status: [],
           contract_type: [],
-          //
-          contract_details: [],
-          //
+          cd_user: [],
           user: [],
           ad_user: [],
           dsp_user: [],
@@ -487,9 +457,7 @@ function CustomerListFilters({
       if (action.action === 'clear') {
         setFilters({
           ...filters,
-          //
-          contract_details: [],
-          //
+          cd_user: [],
           user: [],
           ad_user: [],
           dsp_user: [],
@@ -498,44 +466,42 @@ function CustomerListFilters({
           'filters',
           JSON.stringify({
             ...filters,
-            //
-            contract_details: [],
-            //
+            cd_user: [],
             user: [],
             ad_user: [],
             dsp_user: [],
           }),
         );
       } else {
-        // new code for showContractDetails added below
         if (showContractDetails) {
           if (event.value === 'any') {
             setFilters({
               ...filters,
-              contract_details: [],
+              cd_user: [],
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
-                contract_details: [],
+                cd_user: [],
               }),
             );
           } else {
             setFilters({
               ...filters,
-              contract_details: event.value,
+
+              cd_user: event.value,
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
-                contract_details: event.value,
+
+                cd_user: event.value,
               }),
             );
           }
         }
-        //
         if (showPerformance) {
           if (event.value === 'any') {
             setFilters({
@@ -558,6 +524,7 @@ function CustomerListFilters({
               'filters',
               JSON.stringify({
                 ...filters,
+
                 user: event.value,
               }),
             );
@@ -580,12 +547,14 @@ function CustomerListFilters({
           } else {
             setFilters({
               ...filters,
+
               ad_user: event.value,
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
+
                 ad_user: event.value,
               }),
             );
@@ -608,12 +577,14 @@ function CustomerListFilters({
           } else {
             setFilters({
               ...filters,
+
               dsp_user: event.value,
             });
             localStorage.setItem(
               'filters',
               JSON.stringify({
                 ...filters,
+
                 dsp_user: event.value,
               }),
             );
@@ -768,13 +739,10 @@ function CustomerListFilters({
     return DropdownIndicator;
   };
   const bindDropDownValue = (item) => {
-    // new code added below
     if (item === 'user') {
-      if (filters.contract_details && showContractDetails) {
+      if (filters.cd_user && showContractDetails) {
         return brandGrowthStrategist.filter(
-          (option) => filters.contract_details === option.value,
-          console.log('filters.contract_details', filters.contract_details),
-          // console.log('filters', filters),
+          (option) => filters.cd_user === option.value,
         );
       }
       if (filters.user && showPerformance) {
@@ -793,39 +761,11 @@ function CustomerListFilters({
           (option) => filters.dsp_user === option.value,
         );
       }
-
       // return [{ value: 'any', label: 'Any' }];
       return brandGrowthStrategist.filter(
-        (option) => filters.contract_details === option.value,
-        // console.log('filters', filters),
+        (option) => filters.cd_user === option.value,
       );
     }
-
-    // original code commented below
-
-    // if (item === 'user') {
-    //   if (filters.user && !showAdPerformance && !showDspAdPerformance) {
-    //     if (localStorage.getItem('bgs')) {
-    //       return JSON.parse(localStorage.getItem('bgs'));
-    //     }
-    //     return brandGrowthStrategist.filter(
-    //       (option) => filters.user === option.value,
-    //     );
-    //   }
-    //   if (filters.ad_user && showAdPerformance) {
-    //     return brandGrowthStrategist.filter(
-    //       (option) => filters.ad_user === option.value,
-    //     );
-    //   }
-
-    //   if (filters.dsp_user && showDspAdPerformance) {
-    //     return brandGrowthStrategist.filter(
-    //       (option) => filters.dsp_user === option.value,
-    //     );
-    //   }
-
-    //   return [{ value: 'any', label: 'Any' }];
-    // }
 
     if (item === 'sort') {
       if (!isDesktop) {
@@ -1376,6 +1316,10 @@ CustomerListFilters.propTypes = {
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
+    cd_user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
     user: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
@@ -1393,10 +1337,8 @@ CustomerListFilters.propTypes = {
   setFilters: PropTypes.func.isRequired,
   searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func.isRequired,
-  //
   showContractDetails: PropTypes.bool.isRequired,
   setShowContractDetails: PropTypes.func.isRequired,
-  //
   showPerformance: PropTypes.bool.isRequired,
   setShowPerformance: PropTypes.func.isRequired,
   showAdPerformance: PropTypes.bool.isRequired,
