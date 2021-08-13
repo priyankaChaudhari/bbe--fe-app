@@ -174,6 +174,7 @@ import ProdFavicon from './faviconProd.ico';
 import CircleBellIcon from './icons/circle-bell-icon.png';
 import HelpIcon from './icons/help.png';
 import ContractEmailIcon from './icons/contractEmail.png';
+import HelpDeskIcon from './icons/helpdesk.png';
 
 export {
   BannerBg,
@@ -352,4 +353,5 @@ export {
   CircleBellIcon,
   HelpIcon,
   ContractEmailIcon,
+  HelpDeskIcon,
 };

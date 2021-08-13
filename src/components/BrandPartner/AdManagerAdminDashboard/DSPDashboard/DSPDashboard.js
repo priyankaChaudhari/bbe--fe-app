@@ -211,8 +211,8 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
+          } else if (res.data && res.data.length > 0) {
+            setContributionData(res.data);
           } else {
             setContributionData([]);
           }
@@ -305,7 +305,6 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     adManagerUser,
   ) => {
     let temp = '';
-
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
@@ -492,8 +491,18 @@ const DSPDashboard = ({ marketplaceChoices }) => {
       currency: 'USD',
     });
     setSelectedKeyContribution(true);
+    if (selectedAdDF.value === 'custom') {
+      DSPYearAndCustomDateFilter(
+        adState[0].startDate,
+        adState[0].endDate,
+        'custom',
+        'all',
+        'all',
+      );
+    } else {
+      getDSPData(selectedAdDF.value, dspGroupBy, 'all', 'all');
+    }
 
-    getDSPData(selectedAdDF.value, dspGroupBy, 'all', 'all');
     getContributionData(
       selectedAdDF.value,
       'all',
@@ -533,10 +542,28 @@ const DSPDashboard = ({ marketplaceChoices }) => {
     </SingleValue>
   );
 
+  const adMnagerFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
   const getSelectComponents = () => {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
+      DropDownIndicator,
+    };
+  };
+
+  const getAdManagerComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: adMnagerFilterOption,
       DropDownIndicator,
     };
   };
@@ -659,7 +686,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           options={marketplaceOptions}
           handleMarketplaceOptions={handleMarketplaceOptions}
           adManagerList={dspManagerList}
-          getSelectComponents={getSelectComponents}
+          getAdManagerComponents={getAdManagerComponents}
           handleAdManagerFilter={handleAdManagerFilter}
           isApiCall={dspGraphLoader}
           handleResetFilter={handleResetFilter}

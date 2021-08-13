@@ -10,6 +10,10 @@ const useBindDSPResponseData = (response) => {
 
   // filterout previous data in one temporary object.
   useEffect(() => {
+    tempData = [];
+    setDspCurrentTotal([]);
+    setDspPreviousTotal([]);
+    setDspDifference([]);
     if (response !== null) {
       if (response.previous && response.previous.length) {
         response.previous.forEach((item) => {

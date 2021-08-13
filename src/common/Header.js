@@ -31,6 +31,7 @@ import {
   SpeedometerActive,
   Speedometer,
   HelpIcon,
+  HelpDeskIcon,
 } from '../theme/images/index';
 
 import { logout, showProfileLoader, userMe } from '../store/actions/userState';
@@ -46,7 +47,7 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants';
-import { managementLink } from '../constants/FieldConstants';
+import { helpDeskLink, managementLink } from '../constants/FieldConstants';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();
@@ -343,13 +344,22 @@ export default function Header({ type, userInfo }) {
                           <img src={EditIcons} alt="edit" /> Edit profile
                         </li>
                         {userInfo && userInfo.role !== 'Customer' ? (
-                          <li
-                            role="presentation"
-                            onClick={() =>
-                              window.open(managementLink, '_blank')
-                            }>
-                            <img src={HelpIcon} alt="edit" /> Management Q&A
-                          </li>
+                          <>
+                            <li
+                              role="presentation"
+                              onClick={() =>
+                                window.open(managementLink, '_blank')
+                              }>
+                              <img src={HelpIcon} alt="edit" /> Management Q&A
+                            </li>
+                            <li
+                              role="presentation"
+                              onClick={() =>
+                                window.open(helpDeskLink, '_blank')
+                              }>
+                              <img src={HelpDeskIcon} alt="edit" /> Helpdesk
+                            </li>
+                          </>
                         ) : (
                           ''
                         )}

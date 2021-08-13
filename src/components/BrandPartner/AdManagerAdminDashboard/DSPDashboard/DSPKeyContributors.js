@@ -260,8 +260,12 @@ const DSPKeyContributors = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {itemData && itemData.ad_manager && itemData.ad_manager.first_name}
-            {itemData && itemData.ad_manager && itemData.ad_manager.last_name}
+            {`${
+              itemData && itemData.ad_manager && itemData.ad_manager.first_name
+            }
+            ${
+              itemData && itemData.ad_manager && itemData.ad_manager.last_name
+            }`}
           </div>
         </td>
         <td className="product-body">
@@ -388,85 +392,98 @@ const DSPKeyContributors = ({
 
   const renderDesktopKeyContributions = () => {
     return (
-      <Table className="mt-0">
-        {renderTableHeader()}
-        {data ? (
-          <tbody>{data.map((item) => renderTableData(item))}</tbody>
-        ) : (
+      <>
+        <Table className="mt-0">
+          {renderTableHeader()}
+          {data && data.length >= 1 ? (
+            <tbody>{data.map((item) => renderTableData(item))}</tbody>
+          ) : null}
+        </Table>
+        {!data || (data && data.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
-        )}
-      </Table>
+        ) : null}
+      </>
     );
   };
 
   const renderTabletKeyContributions = () => {
     return (
-      <TabletViewManager className="d-lg-none d-md-block d-sm-block">
-        <div className="container-fluid">
-          <div className="row cursor">
-            {data &&
-              data.map((itemData) => (
-                <div className="col-md-6 col-12 mt-4" role="presentation">
-                  {' '}
-                  <img
-                    className="company-logo"
-                    src={
-                      itemData && itemData.document
-                        ? itemData.document
-                        : CompanyDefaultUser
-                    }
-                    alt="logo"
-                  />
-                  <div className="company-name">{itemData.customer_name}</div>
-                  <div className="status">{itemData.ad_manager}</div>
-                  <div className="clear-fix" />
-                  <div className=" straight-line horizontal-line pt-3 mb-3 " />
-                  <div className="row">
-                    <div className="col-6 pb-3">
+      <>
+        {data && data.length >= 1 ? (
+          <TabletViewManager className="d-lg-none d-md-block d-sm-block">
+            <div className="container-fluid">
+              <div className="row cursor">
+                {data &&
+                  data.map((itemData) => (
+                    <div className="col-md-6 col-12 mt-4" role="presentation">
                       {' '}
-                      <div className="label">This Period</div>
-                      <div className="label-info ">
-                        {itemData && itemData.current
-                          ? `${currencySymbol}${itemData.current
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
-                      </div>
-                    </div>
-                    <div className="col-6 pb-3">
-                      {' '}
-                      <div className="label">Prev. Period</div>
-                      <div className="label-info ">
-                        {itemData && itemData.previous
-                          ? `${currencySymbol}${itemData.previous
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                          : `${currencySymbol}0`}
-                      </div>
-                    </div>
-                    <div className="col-6 pb-3">
-                      {' '}
-                      <div className="label">Change</div>
-                      {renderChangeValue(itemData)}
-                    </div>
-                    <div className="col-6 pb-3">
-                      {' '}
-                      <div className="label">Contribution</div>
-                      <Status
-                        label={itemData.contribution_bracket}
-                        backgroundColor={
-                          contributionColorSet[itemData.contribution_bracket]
+                      <img
+                        className="company-logo"
+                        src={
+                          itemData && itemData.document
+                            ? itemData.document
+                            : CompanyDefaultUser
                         }
+                        alt="logo"
                       />
+                      <div className="company-name">
+                        {itemData.customer_name}
+                      </div>
+                      <div className="status">{itemData.ad_manager}</div>
+                      <div className="clear-fix" />
+                      <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                      <div className="row">
+                        <div className="col-6 pb-3">
+                          {' '}
+                          <div className="label">This Period</div>
+                          <div className="label-info ">
+                            {itemData && itemData.current
+                              ? `${currencySymbol}${itemData.current
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : `${currencySymbol}0`}
+                          </div>
+                        </div>
+                        <div className="col-6 pb-3">
+                          {' '}
+                          <div className="label">Prev. Period</div>
+                          <div className="label-info ">
+                            {itemData && itemData.previous
+                              ? `${currencySymbol}${itemData.previous
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                              : `${currencySymbol}0`}
+                          </div>
+                        </div>
+                        <div className="col-6 pb-3">
+                          {' '}
+                          <div className="label">Change</div>
+                          {renderChangeValue(itemData)}
+                        </div>
+                        <div className="col-6 pb-3">
+                          {' '}
+                          <div className="label">Contribution</div>
+                          <Status
+                            label={itemData.contribution_bracket}
+                            backgroundColor={
+                              contributionColorSet[
+                                itemData.contribution_bracket
+                              ]
+                            }
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </TabletViewManager>
+                  ))}
+              </div>
+            </div>
+          </TabletViewManager>
+        ) : (
+          <NoData>{noGraphDataMessage}</NoData>
+        )}
+      </>
     );
   };
 
@@ -564,14 +581,10 @@ const DSPKeyContributors = ({
                 width={40}
                 height={40}
               />
-            ) : data && data.length >= 1 ? (
-              isDesktop ? (
-                renderDesktopKeyContributions()
-              ) : (
-                renderTabletKeyContributions()
-              )
+            ) : isDesktop ? (
+              renderDesktopKeyContributions()
             ) : (
-              <NoData>{noGraphDataMessage}</NoData>
+              renderTabletKeyContributions()
             )}
           </>
         )}

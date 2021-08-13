@@ -306,8 +306,12 @@ const SponsoredKeyContribution = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {itemData && itemData.ad_manager && itemData.ad_manager.first_name}
-            {itemData && itemData.ad_manager && itemData.ad_manager.last_name}
+            {`${
+              itemData && itemData.ad_manager && itemData.ad_manager.first_name
+            }
+            ${
+              itemData && itemData.ad_manager && itemData.ad_manager.last_name
+            }`}
           </div>
         </td>
         <td className="product-body">
@@ -434,17 +438,21 @@ const SponsoredKeyContribution = ({
 
   const renderDesktopKeyContributions = () => {
     return (
-      <Table className="mt-0 d-md-none d-sm-none d-lg-block">
-        {renderTableHeader()}
-        {contributionData.length >= 1 ? (
-          <tbody>
-            {contributionData &&
-              contributionData.map((item) => renderTableData(item))}
-          </tbody>
-        ) : (
+      <>
+        <Table className="mt-0 ">
+          {renderTableHeader()}
+          {contributionData.length >= 1 ? (
+            <tbody>
+              {contributionData &&
+                contributionData.map((item) => renderTableData(item))}
+            </tbody>
+          ) : null}
+        </Table>
+        {!contributionData ||
+        (contributionData && contributionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
-        )}
-      </Table>
+        ) : null}
+      </>
     );
   };
 
