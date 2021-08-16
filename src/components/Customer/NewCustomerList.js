@@ -727,8 +727,9 @@ export default function NewCustomerList() {
     return (
       <div className="row">
         <div className="col-lg-3 col-12 customer-header">Customer</div>
-        <div className="col-lg-7 col-12">Active Contracts</div>
-        <div className="col-lg-2 col-12 Brand_Strategist">Brand Strategist</div>
+        <div className="col-lg-2 col-12 account-type">Account Type</div>
+        <div className="col-lg-2 col-12 status">Status</div>
+        <div className="col-lg-5 col-12">Active Contracts</div>
       </div>
     );
   };
@@ -746,7 +747,55 @@ export default function NewCustomerList() {
       </>
     );
   };
-
+  const generateCompanyNameAndGs = (name, item) => {
+    return (
+      <>
+        <div className="company-name">{name}</div>
+        {item &&
+        item.brand_growth_strategist &&
+        item.brand_growth_strategist.length !== 0 ? (
+          <>
+            {item.brand_growth_strategist.profile_photo ? (
+              <img
+                className="user-profile-circle"
+                src={item.brand_growth_strategist.profile_photo}
+                alt="user"
+              />
+            ) : (
+              <GetInitialName
+                property="float-left mr-3"
+                userInfo={item.brand_growth_strategist}
+              />
+            )}
+          </>
+        ) : (
+          ''
+        )}
+        <div className="user-name">
+          {item &&
+            item.brand_growth_strategist &&
+            item.brand_growth_strategist.first_name}
+          <br />
+          {item &&
+            item.brand_growth_strategist &&
+            item.brand_growth_strategist.last_name}
+        </div>
+      </>
+    );
+  };
+  const generateCompanyStatus = (companyStatus) => {
+    return (
+      <>
+        {companyStatus === 'at risk' ? (
+          <div className="status">At Risk</div>
+        ) : (
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {companyStatus}
+          </div>
+        )}
+      </>
+    );
+  };
   const generatePerformance = (value, toFixedValue, isTwiceReplace, prefix) => {
     if (isTwiceReplace) {
       return value
@@ -788,9 +837,12 @@ export default function NewCustomerList() {
             }
             alt="logo"
           />
-          {generateCompanyNameAndStatus(item && item.company_name, item.status)}
+          {/* {generateCompanyNameAndStatus(item && item.company_name, item.status)} */}
+          {generateCompanyNameAndGs(item && item.company_name, item)}
         </td>
-        <td width="60%">
+        <td width="15%">seller</td>
+        <td width="20%">{generateCompanyStatus(item.status)}</td>
+        <td width="40%">
           <ul
             className="recurring-contact"
             style={{ textTransform: 'capitalize' }}>
@@ -808,7 +860,7 @@ export default function NewCustomerList() {
             )}
           </ul>
         </td>
-        <td width="15%">
+        {/* <td width="15%">
           {item &&
           item.brand_growth_strategist &&
           item.brand_growth_strategist.length !== 0 ? (
@@ -838,7 +890,7 @@ export default function NewCustomerList() {
               item.brand_growth_strategist &&
               item.brand_growth_strategist.last_name}
           </div>
-        </td>
+        </td> */}
       </tr>
     );
   };

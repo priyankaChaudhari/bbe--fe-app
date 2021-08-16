@@ -953,7 +953,60 @@ function CustomerListFilters({
                         </div>
                       </div>
                     </div>
+                    <div className="col-12">
+                      <InputSearchWithRadius className="customer-list-header w-80">
+                        <DebounceInput
+                          // minLength={2}
+                          debounceTimeout={600}
+                          className=" form-control search-filter"
+                          placeholder="Search"
+                          onChange={(event) => {
+                            setSearchQuery(event.target.value);
+                            setFilters({
+                              ...filters,
+                              searchQuery: event.target.value,
+                            });
+                            localStorage.setItem('page', 1);
+                            localStorage.setItem(
+                              'filters',
+                              JSON.stringify({
+                                ...filters,
+                                searchQuery: event.target.value,
+                              }),
+                            );
+                          }}
+                          onKeyPress={(event) => {
+                            if (event.key === 'Enter') {
+                              handleSearch(event, 'search');
+                            }
+                          }}
+                          value={
+                            searchQuery ||
+                            (filters && filters.searchQuery) ||
+                            ''
+                          }
+                        />
 
+                        <img
+                          src={InfoIcon}
+                          alt="search cursor"
+                          data-tip="Search by Company Name, Contact First, Last Name or Email"
+                          data-for="info"
+                          className="info-icon"
+                        />
+                        <ReactTooltip
+                          id="info"
+                          aria-haspopup="true"
+                          place="bottom"
+                        />
+
+                        <img
+                          src={SearchIcon}
+                          alt="search"
+                          className="search-input-icon"
+                        />
+                      </InputSearchWithRadius>
+                    </div>
                     {showAdPerformance ? (
                       <div className="label">Sponsored Ad Manager</div>
                     ) : showDspAdPerformance ? (
@@ -1087,7 +1140,7 @@ function CustomerListFilters({
                 <div className="straight-line horizontal-line mb-2" />
               </MobileLeftSidebar>
             </div>
-            <div
+            {/* <div
               className={
                 showAdPerformance || showDspAdPerformance || showPerformance
                   ? 'col-lg-4 col-md-6 col-12 col-8  mb-2 pr-2 pl-2'
@@ -1137,7 +1190,7 @@ function CustomerListFilters({
                   className="search-input-icon"
                 />
               </InputSearchWithRadius>
-            </div>
+            </div> */}
             <div className="col-lg-2 col-md-6  col-12   mb-2  pl-2 pr-2 ">
               <DropDownSelect
                 id="BT-view-customerlist-dropdown"
@@ -1191,6 +1244,48 @@ function CustomerListFilters({
               Clear filters
             </div>
           </div>
+        </div>
+        <div className="col-12">
+          <InputSearchWithRadius className="customer-list-header w-80">
+            <DebounceInput
+              // minLength={2}
+              debounceTimeout={600}
+              className=" form-control search-filter"
+              placeholder="Search"
+              onChange={(event) => {
+                setSearchQuery(event.target.value);
+                setFilters({
+                  ...filters,
+                  searchQuery: event.target.value,
+                });
+                localStorage.setItem('page', 1);
+                localStorage.setItem(
+                  'filters',
+                  JSON.stringify({
+                    ...filters,
+                    searchQuery: event.target.value,
+                  }),
+                );
+              }}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  handleSearch(event, 'search');
+                }
+              }}
+              value={searchQuery || (filters && filters.searchQuery) || ''}
+            />
+
+            <img
+              src={InfoIcon}
+              alt="search cursor"
+              data-tip="Search by Company Name, Contact First, Last Name or Email"
+              data-for="info"
+              className="info-icon"
+            />
+            <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
+
+            <img src={SearchIcon} alt="search" className="search-input-icon" />
+          </InputSearchWithRadius>
         </div>
         {showAdPerformance ? (
           <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
