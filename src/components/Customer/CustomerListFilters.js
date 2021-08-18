@@ -13,6 +13,7 @@ import {
   ModalRadioCheck,
 } from '../../common';
 import {
+  accountType,
   contractChoices,
   contractStatus,
 } from '../../constants/FieldConstants';
@@ -158,7 +159,6 @@ function CustomerListFilters({
                     </DropDownSelect>
 
                     <div className="label mt-4 pt-2">Customer Status</div>
-
                     <div className="clear-fix" />
                     {!isDesktop ? (
                       <ul className="check-box-list checkboxes">
@@ -194,6 +194,47 @@ function CustomerListFilters({
                     ) : (
                       ''
                     )}
+
+                    <div className="label mt-4 pt-2">Account Type</div>
+                    <div className="clear-fix" />
+                    {!isDesktop ? (
+                      <ul className="check-box-list checkboxes">
+                        {accountType.map((item) => (
+                          <li key={item.value}>
+                            <CheckBox>
+                              <label
+                                className="check-container customer-pannel"
+                                htmlFor={item.value}>
+                                {item.label}
+                                <input
+                                  type="checkbox"
+                                  id={item.value}
+                                  name={item.value}
+                                  onChange={(event) =>
+                                    handleFilters(
+                                      event,
+                                      item,
+                                      'customer_account_type',
+                                    )
+                                  }
+                                  defaultChecked={
+                                    filters.customer_account_type
+                                      ? filters.customer_account_type.find(
+                                          (op) => op === item.value,
+                                        )
+                                      : ''
+                                  }
+                                />
+                                <span className="checkmark" />
+                              </label>
+                            </CheckBox>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      ''
+                    )}
+
                     <div className="label mt-4">Contract Type</div>
                     <div className="clear-fix" />
                     {!isDesktop ? (
@@ -339,6 +380,10 @@ CustomerListFilters.propTypes = {
   filters: PropTypes.shape({
     status: PropTypes.arrayOf(PropTypes.string),
     contract_type: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    customer_account_type: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
