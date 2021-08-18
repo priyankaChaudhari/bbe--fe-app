@@ -25,7 +25,7 @@ import {
   PATH_TEAM_MEMBER,
   PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
-  PATH_ADM_DASHBOARD,
+  PATH_SPONSORED_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
@@ -59,6 +59,8 @@ import {
   DelegationUpload,
   BrandAssetsPreview,
 } from '../components/BrandAssetGathering';
+
+const _ = require('lodash');
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -99,6 +101,13 @@ export default function AuthenticationComponent() {
         </>
       );
     return '';
+  };
+
+  const adManagerRolePaths = {
+    'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
+    'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
+    'DSP Ad Manager': PATH_DSP_DASHBOARD,
+    'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
   };
 
   if (isAuthenticated && Object.keys(userInfo).length > 0) {
@@ -152,7 +161,18 @@ export default function AuthenticationComponent() {
           ) : (
             ''
           )}
-          {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
+
+          {/* AD MANAGER DASHBOARD PATH */}
+          {_.has(adManagerRolePaths, userInfo && userInfo.role) ? (
+            <Route
+              path={adManagerRolePaths[userInfo.role]}
+              component={DashboardContainer}
+            />
+          ) : (
+            ''
+          )}
+
+          {/* {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
           (userInfo && userInfo.role === 'Ad Manager') ? (
             <Route path={PATH_ADM_DASHBOARD} component={DashboardContainer} />
           ) : (
@@ -179,7 +199,7 @@ export default function AuthenticationComponent() {
             />
           ) : (
             ''
-          )}
+          )} */}
 
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
@@ -204,9 +224,6 @@ export default function AuthenticationComponent() {
             path={PATH_UPLOAD_PRODUCT_ASSET}
             component={ProductDelegation}
           />
-          {/* ) : (
-            ''
-          )} */}
 
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}

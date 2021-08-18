@@ -17,7 +17,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
   PATH_BGS_DASHBOARD,
-  PATH_ADM_DASHBOARD,
+  PATH_SPONSORED_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
@@ -61,19 +61,18 @@ export default function LeftSideBar({ userInfo }) {
           ) : (
             ''
           )}
-          {(userInfo &&
-            userInfo.role &&
-            userInfo.role.includes('Sponsored Advertising Ad Manager')) ||
-          (userInfo && userInfo.role && userInfo.role === 'Ad Manager') ? (
+          {userInfo &&
+          userInfo.role &&
+          userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('adm-dashboard')
+                history.location.pathname.includes('sponsored')
                   ? ' cursor active'
                   : ' cursor'
               }
               role="presentation"
-              onClick={() => history.push(PATH_ADM_DASHBOARD)}>
+              onClick={() => history.push(PATH_SPONSORED_DASHBOARD)}>
               {' '}
               <img
                 width="32px"
@@ -97,7 +96,7 @@ export default function LeftSideBar({ userInfo }) {
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('dsp-dashboard')
+                history.location.pathname.includes('dsp')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -129,7 +128,7 @@ export default function LeftSideBar({ userInfo }) {
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('hybrid-dashboard')
+                history.location.pathname.includes('hybrid')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -159,7 +158,7 @@ export default function LeftSideBar({ userInfo }) {
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('admanager-dashboard')
+                history.location.pathname.includes('adManager/admin')
                   ? ' cursor active'
                   : ' cursor'
               }

@@ -23,9 +23,11 @@ const SponsoredFilter = ({
   selectedAdManager,
   selectedMarketplace,
   selectInputRef,
+  isAdManagerAdmin,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
+
   const renderAdManagerDropdown = (className) => {
     return (
       <div className="col-12 ">
@@ -119,7 +121,8 @@ const SponsoredFilter = ({
               Reset filters
             </p>
           </div>
-          {renderAdManagerDropdown('cursor')}
+
+          {isAdManagerAdmin ? renderAdManagerDropdown('cursor') : null}
           {renderMarketplaceDropdown()}
           <div className="col-12">
             <div className="label mt-4 mb-2">Sponsored Ad Type</div>
@@ -206,6 +209,7 @@ SponsoredFilter.defaultProps = {
   selectedAdManager: {},
   selectedMarketplace: {},
   selectInputRef: {},
+  isAdManagerAdmin: {},
 };
 
 SponsoredFilter.propTypes = {
@@ -223,4 +227,5 @@ SponsoredFilter.propTypes = {
   selectedAdManager: arrayOf(Array),
   selectedMarketplace: string,
   selectInputRef: arrayOf(Array),
+  isAdManagerAdmin: string,
 };

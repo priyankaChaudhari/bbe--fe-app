@@ -23,13 +23,15 @@ import {
   PATH_AMAZON_MERCHANT,
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
-  PATH_ADM_DASHBOARD,
+  PATH_SPONSORED_DASHBOARD,
   PATH_ACCOUNT_SETUP_CHOOSE,
   PATH_HYBRID_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
+
+const _ = require('lodash');
 
 export const userRequestInitiated = () => {
   return {
@@ -67,6 +69,14 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
   const params = queryString.parse(history.location.search);
   localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
+  const adManagerRolePaths = {
+    'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
+    'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
+    'DSP Ad Manager': PATH_DSP_DASHBOARD,
+    'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
+    BGS: PATH_BGS_DASHBOARD,
+    'BGS Manager': PATH_BGS_DASHBOARD,
+  };
 
   if (params && params.callback) {
     if (params && params.customer && params.step) {
@@ -171,40 +181,44 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }
       }
     } else {
-      if (
-        (data.user &&
-          data.user.role &&
-          data.user.role.includes('Growth Strategist')) ||
-        (data.user && data.user.role && data.user.role === 'BGS') ||
-        (data.user && data.user.role && data.user.role === 'BGS Manager')
-      ) {
-        history.push(PATH_BGS_DASHBOARD);
-      } else if (
-        (data.user &&
-          data.user.role &&
-          data.user.role === 'Sponsored Advertising Ad Manager') ||
-        (data.user && data.user.role && data.user.role === 'Ad Manager')
-      ) {
-        history.push(PATH_ADM_DASHBOARD);
-      } else if (
-        data.user &&
-        data.user.role &&
-        data.user.role.includes('DSP Ad Manager')
-      ) {
-        history.push(PATH_DSP_DASHBOARD);
-      } else if (
-        data.user &&
-        data.user.role &&
-        data.user.role.includes('Hybrid Ad Manager')
-      ) {
-        history.push(PATH_HYBRID_DASHBOARD);
-      } else if (
-        data.user &&
-        data.user.role &&
-        data.user.role.includes('Ad Manager Admin')
-      ) {
-        history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
+      if (_.has(adManagerRolePaths, data.user && data.user.role)) {
+        history.push(adManagerRolePaths[data.user.role]);
       } else history.push(PATH_CUSTOMER_LIST);
+
+      // if (
+      //   (data.user &&
+      //     data.user.role &&
+      //     data.user.role.includes('Growth Strategist')) ||
+      //   (data.user && data.user.role && data.user.role === 'BGS') ||
+      //   (data.user && data.user.role && data.user.role === 'BGS Manager')
+      // ) {
+      //   history.push(PATH_BGS_DASHBOARD);
+      // } else if (
+      //   (data.user &&
+      //     data.user.role &&
+      //     data.user.role === 'Sponsored Advertising Ad Manager') ||
+      //   (data.user && data.user.role && data.user.role === 'Ad Manager')
+      // ) {
+      //   history.push(PATH_ADM_DASHBOARD);
+      // } else if (
+      //   data.user &&
+      //   data.user.role &&
+      //   data.user.role.includes('DSP Ad Manager')
+      // ) {
+      //   history.push(PATH_DSP_DASHBOARD);
+      // } else if (
+      //   data.user &&
+      //   data.user.role &&
+      //   data.user.role.includes('Hybrid Ad Manager')
+      // ) {
+      //   history.push(PATH_HYBRID_DASHBOARD);
+      // } else if (
+      //   data.user &&
+      //   data.user.role &&
+      //   data.user.role.includes('Ad Manager Admin')
+      // ) {
+      //   history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
+      // } else history.push(PATH_CUSTOMER_LIST);
     }
   }
 

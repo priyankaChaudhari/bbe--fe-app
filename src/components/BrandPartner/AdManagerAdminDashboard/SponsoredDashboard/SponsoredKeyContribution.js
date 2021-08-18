@@ -49,8 +49,8 @@ const SponsoredKeyContribution = ({
     adSpend: 'Ad Spend',
     adConversion: 'Ad Conversion Rate',
     impressions: 'Impressions',
-    adCos: 'Acos',
-    adRoas: 'Roas',
+    adCos: 'ACOS',
+    adRoas: 'ROAS',
     adClicks: 'Clicks',
     adClickRate: 'Click Through Rate',
   };

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes, { string } from 'prop-types';
 
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
@@ -8,11 +9,16 @@ import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
 import { getMarketPlaceList } from '../../../api';
 
-export default function AdManagerAdminContainer() {
-  const [viewComponent, setViewComponent] = useState('sponsored');
-
+export default function AdManagerAdminContainer({ userInfo }) {
+  const setTab =
+    userInfo &&
+    (userInfo.role === 'Ad Manager Admin' ||
+      userInfo.role === 'Sponsored Advertising Ad Manager' ||
+      userInfo.role === 'Hybrid Ad Manager')
+      ? 'sponsored'
+      : 'dsp';
+  const [viewComponent, setViewComponent] = useState(setTab);
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
-
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList().then((res) => {
       if (res && res.data && res.data.length) {
@@ -56,11 +62,26 @@ export default function AdManagerAdminContainer() {
           </ul>
         </Tabs>
         {viewComponent === 'sponsored' ? (
-          <SponsoredDashboard marketplaceChoices={marketplaceChoices} />
+          <SponsoredDashboard
+            marketplaceChoices={marketplaceChoices}
+            userInfo={userInfo}
+          />
         ) : (
-          <DSPDashboard marketplaceChoices={marketplaceChoices} />
+          <DSPDashboard
+            marketplaceChoices={marketplaceChoices}
+            userInfo={userInfo}
+          />
         )}
       </div>
     </DashboardCard>
   );
 }
+
+AdManagerAdminContainer.defaultProps = {
+  userInfo: {},
+};
+AdManagerAdminContainer.propTypes = {
+  userInfo: PropTypes.shape({
+    role: string,
+  }),
+};

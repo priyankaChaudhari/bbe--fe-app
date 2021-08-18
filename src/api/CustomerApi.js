@@ -708,43 +708,34 @@ export async function getAdManagerAdminGraphData(
   user,
   startDate,
   endDate,
+  userInfo,
 ) {
-  let params = {};
-  if (startDate && endDate) {
-    if (dashboardType === 'sponsored-dashboard') {
-      params = {
-        sponsored_type: adType,
-        daily_facts: dailyFacts,
-        group_by: groupBy,
-        marketplace,
-        user,
-        start_date: startDate,
-        end_date: endDate,
-      };
-    } else {
-      params = {
-        daily_facts: dailyFacts,
-        group_by: groupBy,
-        marketplace,
-        user,
-        start_date: startDate,
-        end_date: endDate,
-      };
-    }
-  } else if (dashboardType === 'sponsored-dashboard') {
-    params = {
-      sponsored_type: adType,
-      daily_facts: dailyFacts,
-      group_by: groupBy,
-      marketplace,
-      user,
-    };
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+    selectedUser = user;
   } else {
+    selectedUser = userInfo && userInfo.id;
+  }
+
+  let params = {
+    daily_facts: dailyFacts,
+    group_by: groupBy,
+    marketplace,
+    user: selectedUser,
+  };
+
+  if (startDate && endDate) {
     params = {
-      daily_facts: dailyFacts,
-      group_by: groupBy,
-      marketplace,
-      user,
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  if (dashboardType === 'sponsored-dashboard') {
+    params = {
+      ...params,
+      sponsored_type: adType,
     };
   }
 
@@ -769,14 +760,22 @@ export async function getKeyContributionData(
   selectedMetric,
   startDate,
   endDate,
+  userInfo,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
+
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+    selectedUser = user;
+  } else {
+    selectedUser = userInfo && userInfo.id;
+  }
 
   let params = {
     dashboard: dashboardType,
     daily_facts: dailyFacts,
     marketplace,
-    user,
+    user: selectedUser,
   };
 
   if (startDate && endDate) {

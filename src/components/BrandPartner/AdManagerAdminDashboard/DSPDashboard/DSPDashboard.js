@@ -39,11 +39,17 @@ import DSPPerformanceChart from '../../../Customer/CompanyPerformance/DSPPerform
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 2);
 
-const DSPDashboard = ({ marketplaceChoices }) => {
+const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
+  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [dspGraphLoader, setDspGraphLoader] = useState(false);
+  // const tab = isAdManagerAdmin ? 'positive' : 'contribution';
+  // const [selectedContributionOption, setSelectedContributionOption] = useState(
+  //   tab,
+  // );
+
   const [selectedKeyContribution, setSelectedKeyContribution] = useState(true);
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
@@ -52,11 +58,15 @@ const DSPDashboard = ({ marketplaceChoices }) => {
 
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [dspManagerList, setDSPManagerList] = useState([]);
+  const [selectedAdManager, setSelectedAdManager] = useState(
+    isAdManagerAdmin
+      ? {
+          value: 'all',
+          label: 'All Ad Manager',
+        }
+      : { value: userInfo.id, label: '' },
+  );
 
-  const [selectedAdManager, setSelectedAdManager] = useState({
-    value: 'all',
-    label: 'All Ad Manager',
-  });
   const [selectedMarketplace, setSelectedMarketplace] = useState({
     value: 'all',
     label: 'All Marketplaces',
@@ -166,6 +176,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         selectedAdManagerUser,
         startDate,
         endDate,
+        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setDspGraphLoader(false);
@@ -180,7 +191,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         }
       });
     },
-    [],
+    [userInfo],
   );
 
   const getContributionData = useCallback(
@@ -204,6 +215,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         selectedMatrics,
         startDate,
         endDate,
+        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
@@ -220,7 +232,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
         }
       });
     },
-    [],
+    [userInfo],
   );
 
   // const getDSPPacingData = useCallback(
@@ -481,16 +493,26 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   };
 
   const handleResetFilter = () => {
-    setSelectedAdManager({
-      value: 'all',
-      label: 'All Ad Manager',
-    });
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',
       currency: 'USD',
     });
-    setSelectedKeyContribution(true);
+
+    if (isAdManagerAdmin) {
+      setSelectedAdManager({
+        value: 'all',
+        label: 'All Ad Manager',
+      });
+    } else {
+      setSelectedAdManager({
+        value: userInfo.id,
+        label: '',
+      });
+    }
+
+    setSelectedKeyContribution(!isAdManagerAdmin);
+
     if (selectedAdDF.value === 'custom') {
       DSPYearAndCustomDateFilter(
         adState[0].startDate,
@@ -501,15 +523,14 @@ const DSPDashboard = ({ marketplaceChoices }) => {
       );
     } else {
       getDSPData(selectedAdDF.value, dspGroupBy, 'all', 'all');
+      getContributionData(
+        selectedAdDF.value,
+        'all',
+        'all',
+        keyContributionValue(isAdManagerAdmin ? 'all' : '', true),
+        selectedTabMatrics,
+      );
     }
-
-    getContributionData(
-      selectedAdDF.value,
-      'all',
-      'all',
-      keyContributionValue('all', true),
-      selectedTabMatrics,
-    );
   };
 
   const renderCustomDateSubLabel = (data) => {
@@ -620,13 +641,15 @@ const DSPDashboard = ({ marketplaceChoices }) => {
   const handleContribution = (value) => {
     if (value !== selectedKeyContribution) {
       setSelectedKeyContribution(value);
-      getContributionData(
-        selectedAdDF.value,
-        selectedMarketplace.value,
-        selectedAdManager.value,
-        keyContributionValue(selectedAdManager.value, value),
-        selectedTabMatrics,
-      );
+      if (selectedAdDF.value !== 'custom') {
+        getContributionData(
+          selectedAdDF.value,
+          selectedMarketplace.value,
+          selectedAdManager.value,
+          keyContributionValue(selectedAdManager.value, value),
+          selectedTabMatrics,
+        );
+      }
     }
   };
 
@@ -693,6 +716,7 @@ const DSPDashboard = ({ marketplaceChoices }) => {
           selectInputRef={selectInputRef}
           selectedAdManager={selectedAdManager}
           selectedMarketplace={selectedMarketplace}
+          isAdManagerAdmin={isAdManagerAdmin}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -866,6 +890,7 @@ DSPDashboard.defaultProps = {
   selectProps: {
     menuIsOpen: false,
   },
+  userInfo: {},
 };
 
 DSPDashboard.propTypes = {
@@ -877,4 +902,8 @@ DSPDashboard.propTypes = {
     menuIsOpen: bool,
   }),
   marketplaceChoices: arrayOf(Array),
+  userInfo: shape({
+    role: string,
+    id: string,
+  }),
 };

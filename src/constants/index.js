@@ -43,10 +43,12 @@ export const PATH_ARTICLE_DETAILS = `${PATH_ARTICLE_LIST}:id/`;
 export const PATH_BGS_DASHBOARD = '/bgs-dashboard/';
 export const PATH_TEAM_MEMBER = '/team-member/';
 export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
-export const PATH_ADM_DASHBOARD = '/adm-dashboard/';
-export const PATH_DSP_DASHBOARD = '/dsp-dashboard/';
-export const PATH_HYBRID_DASHBOARD = '/hybrid-dashboard/';
-export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/admanager-dashboard/';
+
+// Ad manager
+export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/adManager/admin/';
+export const PATH_SPONSORED_DASHBOARD = '/adManager/sponsored/';
+export const PATH_DSP_DASHBOARD = '/adManager/dsp/';
+export const PATH_HYBRID_DASHBOARD = '/adManager/hybrid/';
 
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;

@@ -9,8 +9,8 @@ import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import dayjs from 'dayjs';
 import Dashboard from './Dashboard';
-import AdManagerDashboard from './AdManagerDashboard';
-import DspAdDashboard from './DspAdDashboard';
+// import AdManagerDashboard from './AdManagerDashboard';
+// import DspAdDashboard from './DspAdDashboard';
 
 import { BrandPartnerDashboard } from '../../theme/Global';
 import getBGSCustomerList from '../../api/BgsApi';
@@ -26,6 +26,8 @@ import {
 
 import { CaretUp, CloseIcon } from '../../theme/images';
 import AdManagerAdminContainer from './AdManagerAdminDashboard/AdManagerAdminContainer';
+
+const _ = require('lodash');
 
 const customStyles = {
   content: {
@@ -69,10 +71,10 @@ function DashboardContainer() {
     },
   ];
 
-  const hybridDropdown = [
-    { value: 'sponsored_ad_dashboard', label: 'Sponsored Ad Partners' },
-    { value: 'dsp_ad_performance', label: 'DSP Ad Partners' },
-  ];
+  // const hybridDropdown = [
+  //   { value: 'sponsored_ad_dashboard', label: 'Sponsored Ad Partners' },
+  //   { value: 'dsp_ad_performance', label: 'DSP Ad Partners' },
+  // ];
   const [data, setData] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [count, setCount] = useState(null);
@@ -90,6 +92,15 @@ function DashboardContainer() {
       key: 'bgsSelection',
     },
   ]);
+
+  const adManagerRoleHeaders = {
+    'Ad Manager Admin': 'Ad Manager Dashboard',
+    'Sponsored Advertising Ad Manager': 'Ad Manager Dashboard',
+    'DSP Ad Manager': 'Ad Manager Dashboard',
+    'Hybrid Ad Manager': 'Ad Manager Dashboard',
+    BGS: 'BGS Dashboard',
+    'BGS Manager': 'BGS Dashboard',
+  };
 
   const bgsCustomerList = useCallback(
     (
@@ -420,14 +431,6 @@ function DashboardContainer() {
     bgsCustomerList(currentPage, selectedValue.bgs, selectedValue, hybridView);
   };
 
-  // const handleOnHybridDropdown = (event) => {
-  //   setHybridView(event.value);
-  //   setSelectedValue({ ...selectedValue, bgs: '' });
-  //   if (selectInputRef && selectInputRef.current)
-  //     selectInputRef.current.select.clearValue();
-  //   bgsCustomerList(1, event.value, selectedValue, event.value);
-  // };
-
   const displayHeader = () => {
     return (
       <>
@@ -437,31 +440,11 @@ function DashboardContainer() {
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
-                  {(userInfo && userInfo.role === 'Growth Strategist') ||
-                  (userInfo && userInfo.role === 'BGS') ||
-                  (userInfo && userInfo.role === 'BGS Manager')
-                    ? 'BGS Dashboard'
-                    : userInfo && userInfo.role === 'DSP Ad Manager'
-                    ? 'Ad Manager Dashboard'
-                    : (userInfo &&
-                        userInfo.role === 'Sponsored Advertising Ad Manager') ||
-                      (userInfo && userInfo.role === 'Ad Manager')
-                    ? 'Ad Manager Dashboard'
-                    : userInfo &&
-                      userInfo.role === 'Hybrid Ad Manager' &&
-                      hybridView === 'sponsored_ad_dashboard'
-                    ? 'Ad Manager Dashboard'
-                    : userInfo &&
-                      userInfo.role === 'Hybrid Ad Manager' &&
-                      hybridView === 'dsp_ad_performance'
-                    ? 'Ad Manager Dashboard'
-                    : userInfo && userInfo.role === 'Ad Manager Admin'
-                    ? 'Advertising Dashboard'
-                    : 'Dashboard'}
+                  {adManagerRoleHeaders[userInfo && userInfo.role]}
                 </p>
               </div>
               <div className="straight-line horizontal-line  d-lg-none d-md-block" />
-              {userInfo && userInfo.role !== 'Ad Manager Admin' ? (
+              {!userInfo && userInfo.role.includes('Ad Manager') ? (
                 <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
                   <ul className="partner-select">
                     <li
@@ -484,7 +467,7 @@ function DashboardContainer() {
                         />
                       </DropDownSelect>
                     </li>
-                    {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
+                    {/* {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
                       <li className={isLoading.loader ? 'disabled' : ''}>
                         <DropDownSelect>
                           <Select
@@ -502,7 +485,7 @@ function DashboardContainer() {
                       </li>
                     ) : (
                       ''
-                    )}
+                    )} */}
                     <li className={isLoading.loader ? 'disabled' : ''}>
                       <DropDownSelect className="days-performance">
                         <Select
@@ -537,35 +520,13 @@ function DashboardContainer() {
       ) : (
         ''
       )}
-      {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
-      (userInfo && userInfo.role === 'Ad Manager') ? (
-        <AdManagerDashboard isLoading={isLoading} data={data} />
-      ) : (
-        ''
-      )}
-      {userInfo && userInfo.role === 'DSP Ad Manager' ? (
-        <DspAdDashboard isLoading={isLoading} data={data} />
+
+      {_.has(adManagerRoleHeaders, userInfo && userInfo.role) ? (
+        <AdManagerAdminContainer userInfo={userInfo} />
       ) : (
         ''
       )}
 
-      {userInfo.role === 'Hybrid Ad Manager' &&
-      hybridView === 'sponsored_ad_dashboard' ? (
-        <AdManagerDashboard isLoading={isLoading} data={data} />
-      ) : (
-        ''
-      )}
-      {userInfo.role === 'Hybrid Ad Manager' &&
-      hybridView === 'dsp_ad_performance' ? (
-        <DspAdDashboard isLoading={isLoading} data={data} />
-      ) : (
-        ''
-      )}
-      {userInfo && userInfo.role === 'Ad Manager Admin' ? (
-        <AdManagerAdminContainer isLoading={isLoading} data={data} />
-      ) : (
-        ''
-      )}
       {isLoading.loader ? (
         ''
       ) : (

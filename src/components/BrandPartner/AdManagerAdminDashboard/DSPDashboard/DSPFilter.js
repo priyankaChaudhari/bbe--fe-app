@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, shape } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import {
@@ -23,6 +23,7 @@ const DSPFilter = ({
   selectInputRef,
   selectedAdManager,
   selectedMarketplace,
+  isAdManagerAdmin,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
@@ -30,20 +31,22 @@ const DSPFilter = ({
   const renderFilters = () => {
     return (
       <>
-        <div className="col-lg-12 col-md-6">
-          <div className="label mt-3">Ad Manager</div>
-          {DropDown(
-            'cursor',
-            adManagerList,
-            adManagerList && adManagerList[0] && adManagerList[0].label,
-            getAdManagerComponents,
-            adManagerList && adManagerList[0],
-            handleAdManagerFilter,
-            isApiCall,
-            selectInputRef,
-            selectedAdManager,
-          )}
-        </div>
+        {isAdManagerAdmin ? (
+          <div className="col-lg-12 col-md-6">
+            <div className="label mt-3">Ad Manager</div>
+            {DropDown(
+              'cursor',
+              adManagerList,
+              adManagerList && adManagerList[0] && adManagerList[0].label,
+              getAdManagerComponents,
+              adManagerList && adManagerList[0],
+              handleAdManagerFilter,
+              isApiCall,
+              selectInputRef,
+              selectedAdManager,
+            )}
+          </div>
+        ) : null}
         <div className="col-lg-12 col-md-6">
           <div className="label mt-3">Marketplace</div>
           <DropDownSelect
@@ -159,6 +162,7 @@ DSPFilter.defaultProps = {
   selectInputRef: {},
   selectedAdManager: {},
   selectedMarketplace: {},
+  isAdManagerAdmin: {},
 };
 
 DSPFilter.propTypes = {
@@ -176,4 +180,5 @@ DSPFilter.propTypes = {
   selectInputRef: arrayOf(Array),
   selectedAdManager: arrayOf(Array),
   selectedMarketplace: arrayOf(Array),
+  isAdManagerAdmin: string,
 };

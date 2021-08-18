@@ -113,7 +113,7 @@ export async function getManagersList(type, hybridSelectedDashboard) {
       : API_ADM;
 
   let params = {};
-  if (type === 'Sponsored Advertising Ad Manager' || type === 'Ad Manager') {
+  if (type === 'Sponsored Advertising Ad Manager') {
     params = { dashboard: 'sponsored_ad_dashboard' };
   }
   if (type === 'DSP Ad Manager') {

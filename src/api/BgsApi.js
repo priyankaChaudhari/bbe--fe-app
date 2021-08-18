@@ -20,7 +20,7 @@ export default async function getBGSCustomerList(
     params.end_date = endDate;
   }
 
-  if (role === 'Sponsored Advertising Ad Manager' || role === 'Ad Manager') {
+  if (role === 'Sponsored Advertising Ad Manager') {
     params.dashboard = 'sponsored_ad_dashboard';
   }
 

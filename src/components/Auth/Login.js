@@ -26,7 +26,7 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_CUSTOMER_LIST,
   PATH_SUMMARY,
-  PATH_ADM_DASHBOARD,
+  PATH_SPONSORED_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
@@ -125,11 +125,8 @@ export default function Login() {
         role === 'BGS Manager'
       ) {
         history.push(PATH_BGS_DASHBOARD);
-      } else if (
-        role === 'Sponsored Advertising Ad Manager' ||
-        role === 'Ad Manager'
-      ) {
-        history.push(PATH_ADM_DASHBOARD);
+      } else if (role === 'Sponsored Advertising Ad Manager') {
+        history.push(PATH_SPONSORED_DASHBOARD);
       } else if (role.includes('DSP Ad Manager')) {
         history.push(PATH_DSP_DASHBOARD);
       } else if (role.includes('Hybrid Ad Manager')) {
