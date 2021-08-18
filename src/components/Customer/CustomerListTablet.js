@@ -25,9 +25,12 @@ export default function CustomerListTablet({
   pageNumber,
   handlePageChange,
   isLoading,
+  showContractDetails,
   showPerformance,
   showAdPerformance,
   showDspAdPerformance,
+  showContracts,
+  setShowContracts,
 }) {
   const countDays = (item) => {
     const date1 = new Date();
@@ -250,30 +253,111 @@ export default function CustomerListTablet({
     }
     return '';
   };
+  const generateLogoCompanyNameAndGs = (item, name, bgs) => {
+    return (
+      <>
+        <img
+          className="company-logo"
+          src={
+            item &&
+            item.documents &&
+            item.documents[0] &&
+            Object.values(item.documents[0])
+              ? Object.values(item.documents[0])[0]
+              : CompanyDefaultUser
+          }
+          alt="logo"
+        />
+        <div className="company-name">{name}</div>
+        <div className="user-name">
+          {bgs.first_name} {bgs.last_name}
+        </div>
+      </>
+    );
+  };
+  const generatePerformance = (value, toFixedValue, isTwiceReplace, prefix) => {
+    if (isTwiceReplace) {
+      return value
+        ? `${
+            prefix +
+            value
+              .toFixed(toFixedValue)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              .replace('.00', '')
+          }`
+        : `${prefix}0`;
+    }
+    return value
+      ? `${prefix === '$' ? '$' : ''} ${value
+          .toFixed(toFixedValue)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${prefix === '%' ? '%' : ''}`
+      : `${prefix === '$' ? '$0' : prefix === '%' ? '0%' : 0}`;
+  };
+
+  const showContractsList = (item) => {
+    const contractLength = item.contract.length;
+    const reduceContractLength = item.contract.length - 2;
+
+    return (
+      <ul className="recurring-contact" style={{ textTransform: 'capitalize' }}>
+        {item && item.contract && item.contract.length ? (
+          <>
+            {!showContracts
+              ? item.contract.slice(0, 2).map((type) => (
+                  <React.Fragment key={Math.random()}>
+                    <ReactTooltip />
+                    {generateContractHTML(type, item.id)}
+                  </React.Fragment>
+                ))
+              : item.contract.map((type) => (
+                  <React.Fragment key={Math.random()}>
+                    <ReactTooltip />
+                    {generateContractHTML(type, item.id)}
+                  </React.Fragment>
+                ))}
+          </>
+        ) : (
+          <li className="no-active-contract">No active contracts</li>
+        )}
+        {reduceContractLength > 0 ? (
+          <span
+            onClickCapture={(e) => {
+              e.stopPropagation();
+              setShowContracts(!showContracts);
+            }}
+            aria-hidden="true">
+            {showContracts ? 'show less' : `+ ${contractLength - 2} more`}
+          </span>
+        ) : (
+          ''
+        )}
+      </ul>
+    );
+  };
+  const generateContractDetails = (item) => {
+    return (
+      <WhiteCard className="mt-2">
+        {generateLogoCompanyNameAndGs(
+          item,
+          item && item.company_name,
+          item && item.brand_growth_strategist,
+        )}
+        <div className="clear-fix" />
+        <div className=" straight-line horizontal-line pt-3 mb-3 " />
+        {showContractsList(item)}
+      </WhiteCard>
+    );
+  };
   const renderCustomerDetails = (item) => {
     if (showPerformance) {
       return (
         <WhiteCard className="mt-2">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
-
-          <div className="company-name">{item && item.company_name}</div>
-          {item && item.status === 'at risk' ? (
-            <div className="status">AT Risk</div>
-          ) : (
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+          {generateLogoCompanyNameAndGs(
+            item,
+            item && item.company_name,
+            item && item.brand_growth_strategist,
           )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
@@ -283,15 +367,15 @@ export default function CustomerListTablet({
               <div className="label">Revenue</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.sales_performance &&
-                  item.sales_performance.current_sum &&
-                  item.sales_performance.current_sum.revenue
-                    ? `$${item.sales_performance.current_sum.revenue
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                  {generatePerformance(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.current_sum &&
+                      item.sales_performance.current_sum.revenue,
+                    2,
+                    'isTwiceReplace',
+                    '$',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sales_performance &&
@@ -307,16 +391,15 @@ export default function CustomerListTablet({
               <div className="label">Units Sold</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.sales_performance &&
-                  item.sales_performance.current_sum &&
-                  item.sales_performance.current_sum.units_sold
-                    ? `${item.sales_performance.current_sum.units_sold
-                        .toFixed(0)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        .replace('.00', '')}`
-                    : '0'}
+                  {generatePerformance(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.current_sum &&
+                      item.sales_performance.current_sum.units_sold,
+                    0,
+                    '',
+                    '',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sales_performance &&
@@ -335,15 +418,15 @@ export default function CustomerListTablet({
               <div className="label">Traffic</div>
               <div className="label-info">
                 <>
-                  {item &&
-                  item.sales_performance &&
-                  item.sales_performance.current_sum &&
-                  item.sales_performance.current_sum.traffic
-                    ? `${item.sales_performance.current_sum.traffic
-                        .toFixed(0)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '0'}
+                  {generatePerformance(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.current_sum &&
+                      item.sales_performance.current_sum.traffic,
+                    0,
+                    '',
+                    '',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sales_performance &&
@@ -360,15 +443,15 @@ export default function CustomerListTablet({
               <div className="label">Conversion</div>
               <div className="label-info">
                 <>
-                  {item &&
-                  item.sales_performance &&
-                  item.sales_performance.current_sum &&
-                  item.sales_performance.current_sum.conversion
-                    ? `${item.sales_performance.current_sum.conversion
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}%`
-                    : '0%'}
+                  {generatePerformance(
+                    item &&
+                      item.sales_performance &&
+                      item.sales_performance.current_sum &&
+                      item.sales_performance.current_sum.conversion,
+                    2,
+                    '',
+                    '%',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sales_performance &&
@@ -382,19 +465,6 @@ export default function CustomerListTablet({
             </div>
 
             <div className="straight-line horizontal-line pt-3 " />
-
-            <div className="col-12 mt-3">
-              <div className="label">Brand Strategist</div>
-              <div className="label-info">
-                {' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.first_name}{' '}
-                {item &&
-                  item.brand_growth_strategist &&
-                  item.brand_growth_strategist.last_name}
-              </div>
-            </div>
           </div>
         </WhiteCard>
       );
@@ -402,26 +472,10 @@ export default function CustomerListTablet({
     if (showAdPerformance) {
       return (
         <WhiteCard className="mt-2">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
-
-          <div className="company-name">{item && item.company_name}</div>
-          {item && item.status === 'at risk' ? (
-            <div className="status">AT Risk</div>
-          ) : (
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+          {generateLogoCompanyNameAndGs(
+            item,
+            item && item.company_name,
+            item && item.ad_manager,
           )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
@@ -431,15 +485,15 @@ export default function CustomerListTablet({
               <div className="label">Ad Sales</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.sponsored_ad_performance &&
-                  item.sponsored_ad_performance.current_sum &&
-                  item.sponsored_ad_performance.current_sum.ad_sales
-                    ? `$${item.sponsored_ad_performance.current_sum.ad_sales
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                  {generatePerformance(
+                    item &&
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.current_sum &&
+                      item.sponsored_ad_performance.current_sum.ad_sales,
+                    2,
+                    '',
+                    '$',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sponsored_ad_performance &&
@@ -455,15 +509,15 @@ export default function CustomerListTablet({
               <div className="label">Ad Spend</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.sponsored_ad_performance &&
-                  item.sponsored_ad_performance.current_sum &&
-                  item.sponsored_ad_performance.current_sum.ad_spend
-                    ? `$${item.sponsored_ad_performance.current_sum.ad_spend
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                  {generatePerformance(
+                    item &&
+                      item.sponsored_ad_performance &&
+                      item.sponsored_ad_performance.current_sum &&
+                      item.sponsored_ad_performance.current_sum.ad_spend,
+                    2,
+                    '',
+                    '$',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.sponsored_ad_performance &&
@@ -525,17 +579,6 @@ export default function CustomerListTablet({
                 </>
               </div>
             </div>
-
-            <div className="straight-line horizontal-line pt-3 " />
-
-            <div className="col-12 mt-3">
-              <div className="label">Ad Manager</div>
-              <div className="label-info">
-                {' '}
-                {item && item.ad_manager && item.ad_manager.first_name}{' '}
-                {item && item.ad_manager && item.ad_manager.last_name}
-              </div>
-            </div>
           </div>
         </WhiteCard>
       );
@@ -543,26 +586,10 @@ export default function CustomerListTablet({
     if (showDspAdPerformance) {
       return (
         <WhiteCard className="mt-2">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
-
-          <div className="company-name">{item && item.company_name}</div>
-          {item && item.status === 'at risk' ? (
-            <div className="status">AT Risk</div>
-          ) : (
-            <div className="status" style={{ textTransform: 'capitalize' }}>
-              {item && item.status}
-            </div>
+          {generateLogoCompanyNameAndGs(
+            item,
+            item && item.company_name,
+            item && item.ad_manager,
           )}
           <div className="clear-fix" />
           <div className=" straight-line horizontal-line pt-3 mb-3 " />
@@ -572,15 +599,15 @@ export default function CustomerListTablet({
               <div className="label">IMPRESSIONS</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.impressions
-                    ? `${item.dsp_ad_performance.current_sum.impressions
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '0'}
+                  {generatePerformance(
+                    item.dsp_ad_performance &&
+                      item.dsp_ad_performance.current_sum &&
+                      item.dsp_ad_performance.current_sum.impressions,
+                    2,
+                    '',
+                    '',
+                  )}
+
                   {renderAdPerformanceDifference(
                     item &&
                       item.dsp_ad_performance &&
@@ -596,15 +623,15 @@ export default function CustomerListTablet({
               <div className="label">DSP Spend</div>
               <div className="label-info ">
                 <>
-                  {item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.dsp_spend
-                    ? `$${item.dsp_ad_performance.current_sum.dsp_spend
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                  {generatePerformance(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.current_sum &&
+                      item.dsp_ad_performance.current_sum.dsp_spend,
+                    2,
+                    '',
+                    '$',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.dsp_ad_performance &&
@@ -623,15 +650,15 @@ export default function CustomerListTablet({
               <div className="label">Total Product Sales</div>
               <div className="label-info">
                 <>
-                  {item &&
-                  item.dsp_ad_performance &&
-                  item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.total_product_sales
-                    ? `$${item.dsp_ad_performance.current_sum.total_product_sales
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : '$0'}
+                  {generatePerformance(
+                    item &&
+                      item.dsp_ad_performance &&
+                      item.dsp_ad_performance.current_sum &&
+                      item.dsp_ad_performance.current_sum.total_product_sales,
+                    2,
+                    '',
+                    '$',
+                  )}
                   {renderAdPerformanceDifference(
                     item &&
                       item.dsp_ad_performance &&
@@ -666,83 +693,16 @@ export default function CustomerListTablet({
                 </>
               </div>
             </div>
-
-            <div className="straight-line horizontal-line pt-3 " />
-
-            <div className="col-12 mt-3">
-              <div className="label">Ad Manager</div>
-              <div className="label-info">
-                {' '}
-                {item && item.ad_manager && item.ad_manager.first_name}{' '}
-                {item && item.ad_manager && item.ad_manager.last_name}
-              </div>
-            </div>
           </div>
         </WhiteCard>
       );
     }
 
     // for- view contract details
-    return (
-      <WhiteCard className="mt-2">
-        <img
-          className="company-logo"
-          src={
-            item &&
-            item.documents &&
-            item.documents[0] &&
-            Object.values(item.documents[0])
-              ? Object.values(item.documents[0])[0]
-              : CompanyDefaultUser
-          }
-          alt="logo"
-        />
-
-        <div className="company-name">{item && item.company_name}</div>
-        {item && item.status === 'at risk' ? (
-          <div className="status">AT Risk</div>
-        ) : (
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {item && item.status}
-          </div>
-        )}
-        <div className="clear-fix" />
-        <div className=" straight-line horizontal-line pt-3 mb-3 " />
-
-        <ul
-          className="recurring-contact"
-          style={{ textTransform: 'capitalize' }}>
-          {item && item.contract && item.contract.length ? (
-            item &&
-            item.contract &&
-            item.contract.map((type) => (
-              <React.Fragment key={Math.random()}>
-                <ReactTooltip />
-                {generateContractHTML(type, item.id)}
-              </React.Fragment>
-            ))
-          ) : (
-            <li className="no-active-contract">No active contracts</li>
-          )}
-        </ul>
-
-        <div className=" straight-line horizontal-line pt-3" />
-        <div className="row">
-          <div className="col-12 mt-3">
-            <div className="label">Brand Strategist</div>
-            <div className="label-info">
-              {' '}
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.first_name}{' '}
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.last_name}
-            </div>
-          </div>
-        </div>
-      </WhiteCard>
-    );
+    if (showContractDetails) {
+      return <>{generateContractDetails(item)}</>;
+    }
+    return <>{generateContractDetails(item)}</>;
   };
 
   return (
@@ -802,9 +762,12 @@ CustomerListTablet.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
+  showContractDetails: PropTypes.bool.isRequired,
   showPerformance: PropTypes.bool,
   showAdPerformance: PropTypes.bool,
   showDspAdPerformance: PropTypes.bool,
+  showContracts: PropTypes.bool.isRequired,
+  setShowContracts: PropTypes.func.isRequired,
 };
 
 const CustomerListTabletView = styled.div`

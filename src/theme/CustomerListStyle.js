@@ -162,15 +162,16 @@ export const CustomerListPage = styled.div`
     z-index: 1;
     display: inline;
   }
-  .table-container {
-    padding-left: 290px;
-  }
+  //.table-container {
+  //  padding-left: 290px;
+  // }
   .customer-list-header-sticky {
     position: fixed;
-    left: 64px;
-    right: 0;
+    // left: 64px;
+    // right: 0;
     z-index: 2;
     background-color: ${Theme.white};
+    width: 100%;
   }
   .table-part {
     // min-height: 560px;
@@ -330,7 +331,7 @@ export const CustomerLeftPannel = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   // padding-bottom: 200px;
-  top: 130px;
+  // top: 130px;
   width: 100%;
   left: 62px;
   padding: 15px;

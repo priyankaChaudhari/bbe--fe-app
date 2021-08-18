@@ -6,24 +6,29 @@ import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import $ from 'jquery';
+import dayjs from 'dayjs';
+import Select, { components } from 'react-select';
 
 import Theme from '../../theme/Theme';
 import NoRecordFound from '../../common/NoRecordFound';
 import {
   CommonPagination,
-  GetInitialName,
   PageLoader,
   Table,
   ModalBox,
   Button,
+  GetInitialName,
 } from '../../common';
 import {
   performanceSortOptions,
   sadSortOptions,
   dadSortOptions,
   sortOptions,
+  sortByOrderOptions,
+  options,
+  timeFrameFilters,
 } from '../../constants/FieldConstants';
-
 import {
   CountDayClock,
   CloseIcon,
@@ -35,15 +40,16 @@ import {
   ArrowDownIcon,
   UpDowGrayArrow,
   SortUp,
+  CaretUp,
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
 import { getManagersList } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
-
 import { CustomerListPage } from '../../theme/CustomerListStyle';
 import CustomerListFilters from './CustomerListFilters';
+import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 
 const salesSortOptions = sortOptions.concat(performanceSortOptions);
 const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);
@@ -65,6 +71,7 @@ const customStyles = {
 };
 
 export default function NewCustomerList() {
+  const [showContracts, setShowContracts] = useState(false);
   const history = useHistory();
   const selectInputRefMobile = useRef();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -105,7 +112,7 @@ export default function NewCustomerList() {
   const [showContractDetails, setShowContractDetails] = useState(
     JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
-      : false,
+      : true,
   );
 
   const [showPerformance, setShowPerformance] = useState(
@@ -155,7 +162,8 @@ export default function NewCustomerList() {
       JSON.parse(localStorage.getItem('filters')).sort_by === 'expiring_soon'
     ),
   );
-
+  const selectInputRef = useRef();
+  const { Option, SingleValue } = components;
   const CustomDateFilter = (startDate, endDate, type) => {
     let sd = startDate;
     let ed = endDate;
@@ -391,6 +399,838 @@ export default function NewCustomerList() {
     return diffDays;
   };
 
+  const IconOption = (dataProps) => (
+    <Option {...dataProps}>
+      {/* {props.data.icon ? ( // for multi slect iser */}
+      {dataProps.data && dataProps.data.label !== 'All' ? (
+        dataProps.data.icon ? ( // for single user select
+          <img
+            className="drop-down-user"
+            src={dataProps.data.icon}
+            alt="user"
+            style={{
+              borderRadius: 50,
+              marginRight: '9px',
+              height: '28px',
+              verticalAlign: 'middle',
+            }}
+          />
+        ) : (
+          <GetInitialName
+            userInfo={dataProps.data.label}
+            type="list"
+            property="mr-2"
+          />
+        )
+      ) : null}
+      {dataProps.data.label}
+    </Option>
+  );
+
+  const IconSingleOption = (dataProps) => (
+    <SingleValue {...dataProps}>
+      {dataProps.data && dataProps.data.label !== 'All' ? (
+        dataProps.data.icon ? (
+          <img
+            className="drop-down-user"
+            src={dataProps.data.icon}
+            alt="user"
+            style={{
+              borderRadius: 50,
+              width: '28px',
+              verticalAlign: 'middle',
+              marginBottom: '',
+            }}
+          />
+        ) : (
+          <GetInitialName
+            userInfo={dataProps.data.label}
+            type="list"
+            property=""
+          />
+        )
+      ) : null}
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {dataProps.data.label}
+      </span>
+    </SingleValue>
+  );
+  const SortOption = (dataProps) => (
+    <SingleValue {...dataProps}>
+      {dataProps.data.label === 'Sales Performance' ||
+      dataProps.data.label === 'Contract Details' ||
+      dataProps.data.label === 'Sponsored Ad Performance' ||
+      dataProps.data.label === 'DSP Ad Performance'
+        ? 'View:'
+        : 'Sort by:'}
+      &nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {dataProps.data.label}
+      </span>
+    </SingleValue>
+  );
+
+  const handleSearch = (event, type) => {
+    localStorage.setItem('page', 1);
+    if (type === 'view') {
+      setShowOrderOption(false);
+      setExpiringSoon(false);
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sort_by: '-created_at',
+        }),
+      );
+      setSelectedValue({
+        ...selectedValue,
+        'order-by': '-created_at',
+      });
+      setFilters({
+        ...filters,
+        sort_by: '-created_at',
+      });
+
+      if (event.value === 'contract_details') {
+        setShowContractDetails(true);
+        setShowPerformance(false);
+        setShowAdPerformance(false);
+        setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showContractDetails: true,
+          showPerformance: false,
+          showAdPerformance: false,
+          showDspAdPerformance: false,
+          sort_by: '-created_at',
+          sequence: false,
+          daily_facts: 'week',
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showContractDetails: true,
+            showPerformance: false,
+            showAdPerformance: false,
+            showDspAdPerformance: false,
+            sort_by: '-created_at',
+            sequence: false,
+            daily_facts: 'week',
+          }),
+        );
+      } else if (event.value === 'performance') {
+        setShowContractDetails(false);
+        setShowPerformance(true);
+        setShowAdPerformance(false);
+        setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showContractDetails: false,
+          showPerformance: true,
+          showAdPerformance: false,
+          showDspAdPerformance: false,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showContractDetails: false,
+            showPerformance: true,
+            showAdPerformance: false,
+            showDspAdPerformance: false,
+          }),
+        );
+      } else if (event.value === 'sponsored_ad_performance') {
+        setShowContractDetails(false);
+        setShowPerformance(false);
+        setShowAdPerformance(true);
+        setShowDspAdPerformance(false);
+        setFilters({
+          ...filters,
+          showContractDetails: false,
+          showPerformance: false,
+          showAdPerformance: true,
+          showDspAdPerformance: false,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showContractDetails: false,
+            showPerformance: false,
+            showAdPerformance: true,
+            showDspAdPerformance: false,
+          }),
+        );
+      } else if (event.value === 'dsp_ad_performance') {
+        setShowContractDetails(false);
+        setShowPerformance(false);
+        setShowAdPerformance(false);
+        setShowDspAdPerformance(true);
+        setFilters({
+          ...filters,
+          showContractDetails: false,
+          showPerformance: false,
+          showAdPerformance: false,
+          showDspAdPerformance: true,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            showContractDetails: false,
+            showPerformance: false,
+            showAdPerformance: false,
+            showDspAdPerformance: true,
+          }),
+        );
+      }
+    }
+    if (type === 'sort') {
+      setShowOrderOption(false);
+      if (event && event.order) {
+        setShowOrderOption(true);
+      }
+      if (event.value === 'expiring_soon') {
+        setExpiringSoon(true);
+        setSelectedValue({ ...selectedValue, 'order-by': 'expiring_soon' });
+        setFilters({
+          ...filters,
+          sort_by: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            sort_by: event.value,
+          }),
+        );
+      } else {
+        setExpiringSoon(false);
+        setSelectedValue({ ...selectedValue, 'order-by': event.value });
+        setFilters({
+          ...filters,
+          sort_by: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            sort_by: event.value,
+          }),
+        );
+      }
+    }
+    if (type === 'stats') {
+      setIsCustomDateApply(false);
+      if (event.value === 'custom') {
+        setShowCustomDateModal(true);
+      } else {
+        setSelectedTimeFrame({ daily_facts: event.value });
+        setFilters({
+          ...filters,
+          daily_facts: event.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            daily_facts: event.value,
+          }),
+        );
+      }
+    }
+    if (type === 'search') {
+      setTimeout(() => {
+        customerList(
+          pageNumber,
+          selectedValue,
+          filters,
+          event && event.target && event.target.value ? event.target.value : '',
+          showPerformance,
+        );
+      }, 1000);
+    }
+
+    if (type === 'order') {
+      setOrderByFlag(event.value);
+      setSelectedValue({
+        ...selectedValue,
+        sequence: event.value,
+      });
+      setFilters({
+        ...filters,
+        sequence: event.value,
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          sequence: event.value,
+        }),
+      );
+    }
+  };
+  const handleFilters = (event, key, type, action) => {
+    // for multi select user
+    // const handleFilters = (event, key, type) => {
+    // for one select user
+    if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
+    localStorage.setItem('page', 1);
+    if (key === 'unselected') {
+      $('.checkboxes input:checkbox').prop('checked', false);
+      $('.checkboxes input:radio').prop('checked', false);
+      if (selectInputRef && selectInputRef.current)
+        selectInputRef.current.select.clearValue();
+      if (selectInputRefMobile && selectInputRefMobile.current)
+        selectInputRefMobile.current.select.clearValue();
+
+      setFilters({
+        ...filters,
+        status: [],
+        contract_status: [],
+        contract_type: [],
+        cd_user: [],
+        user: [],
+        ad_user: [],
+        dsp_user: [],
+      });
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          status: [],
+          contract_status: [],
+          contract_type: [],
+          cd_user: [],
+          user: [],
+          ad_user: [],
+          dsp_user: [],
+        }),
+      );
+    }
+
+    if (type === 'status' && key !== 'unselected') {
+      if (
+        event.target.checked &&
+        filters.status.indexOf(event.target.name) === -1
+      ) {
+        setFilters({
+          ...filters,
+          status: [...filters.status, event.target.name],
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            status: [...filters.status, event.target.name],
+          }),
+        );
+      } else {
+        setFilters({
+          ...filters,
+          status: filters.status.filter((op) => op !== event.target.name),
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            status: filters.status.filter((op) => op !== event.target.name),
+          }),
+        );
+      }
+    }
+
+    if (type === 'contract_status' && key !== 'unselected') {
+      if (
+        event.target.checked &&
+        filters.contract_status.indexOf(event.target.name) === -1
+      ) {
+        setFilters({
+          ...filters,
+          contract_status: [...filters.contract_status, event.target.name],
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_status: [...filters.contract_status, event.target.name],
+          }),
+        );
+      } else {
+        setFilters({
+          ...filters,
+          contract_status: filters.contract_status.filter(
+            (op) => op !== event.target.name,
+          ),
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_status: filters.contract_status.filter(
+              (op) => op !== event.target.name,
+            ),
+          }),
+        );
+      }
+    }
+
+    // for single user selected
+    if (type === 'brand') {
+      if (action.action === 'clear') {
+        setFilters({
+          ...filters,
+          cd_user: [],
+          user: [],
+          ad_user: [],
+          dsp_user: [],
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            cd_user: [],
+            user: [],
+            ad_user: [],
+            dsp_user: [],
+          }),
+        );
+      } else {
+        if (showContractDetails) {
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              cd_user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                cd_user: [],
+              }),
+            );
+          } else {
+            setFilters({
+              ...filters,
+
+              cd_user: event.value,
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                cd_user: event.value,
+              }),
+            );
+          }
+        }
+        if (showPerformance) {
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                user: [],
+              }),
+            );
+          } else {
+            setFilters({
+              ...filters,
+              user: event.value,
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                user: event.value,
+              }),
+            );
+          }
+        }
+
+        if (showAdPerformance) {
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              ad_user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                ad_user: [],
+              }),
+            );
+          } else {
+            setFilters({
+              ...filters,
+
+              ad_user: event.value,
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                ad_user: event.value,
+              }),
+            );
+          }
+        }
+
+        if (showDspAdPerformance) {
+          if (event.value === 'any') {
+            setFilters({
+              ...filters,
+              dsp_user: [],
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+                dsp_user: [],
+              }),
+            );
+          } else {
+            setFilters({
+              ...filters,
+
+              dsp_user: event.value,
+            });
+            localStorage.setItem(
+              'filters',
+              JSON.stringify({
+                ...filters,
+
+                dsp_user: event.value,
+              }),
+            );
+          }
+        }
+      }
+    }
+
+    if (type === 'radio') {
+      if (event.target.checked) {
+        setFilters({
+          ...filters,
+          contract_type:
+            event.target.value === 'any'
+              ? event.target.value
+              : event.target.value,
+        });
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            contract_type:
+              event.target.value === 'any'
+                ? event.target.value
+                : event.target.value,
+          }),
+        );
+      }
+    }
+  };
+
+  const getSelectPlaceholder = (item) => {
+    if (item === 'user') {
+      return 'All';
+    }
+
+    if (item === 'sort') {
+      if (isDesktop) {
+        return 'Sort by: Recently Added';
+      }
+      return 'Sort by';
+    }
+    if (item === 'view') {
+      if (isDesktop) {
+        return 'View: Contract Details';
+      }
+      return 'View';
+    }
+    if (item === 'stats') {
+      if (isDesktop) {
+        return 'Stats For: Last 7 days';
+      }
+      return 'Stats For';
+    }
+    if (item === 'order') {
+      return 'Highest to Lowest';
+    }
+    return '';
+  };
+  const DropdownIndicator = (dataProps) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...dataProps}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
+  const renderCustomDateSubLabel = (dataProps) => {
+    if (selectedTimeFrame.daily_facts === 'custom' && isCustomDateApply) {
+      return `From- ${dayjs(selectedTimeFrame.startDate).format(
+        'D MMM, YYYY',
+      )}  To- ${dayjs(selectedTimeFrame.endDate).format('D MMM, YYYY')}`;
+    }
+
+    return dataProps.data.sub;
+  };
+
+  const filterOption = (dataProps) => (
+    <Option {...dataProps}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {dataProps.data.label}
+        </span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {dataProps.data.sub}
+        </div>
+      </div>
+    </Option>
+  );
+
+  const TimeFrameFilters = (dataProps) => (
+    <SingleValue {...dataProps}>
+      Stats For:&nbsp;
+      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+        {dataProps.data.label}
+      </span>
+      <div style={{ fontSize: '12px', color: '#556178' }}>
+        {renderCustomDateSubLabel(dataProps)}
+      </div>
+    </SingleValue>
+  );
+  const getSelectComponents = (key) => {
+    if (key === 'user') {
+      return {
+        Option: IconOption,
+        SingleValue: IconSingleOption,
+        DropdownIndicator,
+      };
+    }
+    if (key === 'sort') {
+      if (isDesktop) {
+        return {
+          SingleValue: SortOption,
+          DropdownIndicator,
+        };
+      }
+
+      return DropdownIndicator;
+    }
+    if (key === 'stats') {
+      if (isDesktop) {
+        return {
+          Option: filterOption,
+          SingleValue: TimeFrameFilters,
+          DropdownIndicator,
+        };
+      }
+      return DropdownIndicator;
+    }
+    if (key === 'view') {
+      if (isDesktop) {
+        return {
+          SingleValue: SortOption,
+          DropdownIndicator,
+        };
+      }
+      return DropdownIndicator;
+    }
+    return DropdownIndicator;
+  };
+  const bindDropDownValue = (item) => {
+    if (item === 'user') {
+      if (filters.cd_user && showContractDetails) {
+        return brandGrowthStrategist.filter(
+          (option) => filters.cd_user === option.value,
+        );
+      }
+      if (filters.user && showPerformance) {
+        return brandGrowthStrategist.filter(
+          (option) => filters.user === option.value,
+        );
+      }
+      if (filters.ad_user && showAdPerformance) {
+        return brandGrowthStrategist.filter(
+          (option) => filters.ad_user === option.value,
+        );
+      }
+
+      if (filters.dsp_user && showDspAdPerformance) {
+        return brandGrowthStrategist.filter(
+          (option) => filters.dsp_user === option.value,
+        );
+      }
+      // return [{ value: 'any', label: 'Any' }];
+      return brandGrowthStrategist.filter(
+        (option) => filters.cd_user === option.value,
+      );
+    }
+
+    if (item === 'sort') {
+      if (!isDesktop) {
+        if (showPerformance) {
+          return (
+            selectedValue[item.key] ||
+            salesSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            sponsorAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        if (showDspAdPerformance) {
+          return (
+            selectedValue[item.key] ||
+            dspAdSortOptions.filter(
+              (op) => op.value === selectedValue['order-by'],
+            )
+          );
+        }
+        return (
+          selectedValue[item.key] ||
+          sortOptions.filter((op) => op.value === selectedValue['order-by'])
+        );
+      }
+      return (
+        selectedValue[item.key] ||
+        sortOptions.filter((op) => op.value === selectedValue['order-by'])
+      );
+    }
+
+    if (item === 'stats') {
+      return timeFrameFilters.filter(
+        (op) => op.value === selectedTimeFrame.daily_facts,
+      );
+    }
+
+    if (item === 'order') {
+      return sortByOrderOptions.filter((op) => op.value === orderByFlag);
+    }
+
+    if (showPerformance) {
+      return [{ value: 'performance', label: 'Sales Performance' }];
+    }
+    if (showAdPerformance) {
+      return [
+        {
+          value: 'sponsored_ad_performance',
+          label: 'Sponsored Ad Performance',
+        },
+      ];
+    }
+    if (showDspAdPerformance) {
+      return [
+        {
+          value: 'dsp_ad_performance',
+          label: 'DSP Ad Performance',
+        },
+      ];
+    }
+    return [{ value: 'contract_details', label: 'Contract Details' }];
+  };
+
+  const getDropDownOptions = (optionsFor) => {
+    switch (optionsFor) {
+      case 'user':
+        return brandGrowthStrategist;
+      case 'sort':
+        if (!isDesktop) {
+          if (showPerformance) {
+            return salesSortOptions;
+          }
+          if (showAdPerformance) {
+            return sponsorAdSortOptions;
+          }
+          if (showDspAdPerformance) {
+            return dspAdSortOptions;
+          }
+          return sortOptions;
+        }
+        return sortOptions;
+      case 'stats':
+        return timeFrameFilters;
+
+      case 'order':
+        return sortByOrderOptions;
+      default:
+        return options;
+    }
+  };
+  const generateDropdown = (item, reff = null) => {
+    const searchFor =
+      item === 'order'
+        ? 'order'
+        : item === 'sort'
+        ? 'sort'
+        : item === 'stats'
+        ? 'stats'
+        : 'view';
+    return (
+      <>
+        <Select
+          classNamePrefix="react-select"
+          isClearable={false}
+          className="active"
+          ref={reff}
+          placeholder={getSelectPlaceholder(item)}
+          options={getDropDownOptions(item)}
+          onChange={(event, action) =>
+            item === 'user'
+              ? handleFilters(event, item, 'brand', action)
+              : handleSearch(event, searchFor)
+          }
+          value={bindDropDownValue(item)}
+          // isMulti={item === 'user'}
+          isMulti={false}
+          components={getSelectComponents(item)}
+          componentsValue={item === 'user' ? { Option: IconOption } : ''}
+        />
+      </>
+    );
+  };
+
+  useEffect(() => {
+    if (!isDesktop && selectedValue['order-by'] !== null) {
+      sortOptions.forEach((element) => {
+        if (selectedValue['order-by'] !== element.value) {
+          setShowOrderOption(true);
+        }
+      });
+    }
+  }, [isDesktop, selectedValue, setShowOrderOption]);
+
   const redirectIfContractExists = (type, id) => {
     getcontract(type.contract_id).then((res) => {
       if (res && res.status === 200) {
@@ -431,6 +1271,7 @@ export default function NewCustomerList() {
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
               : `${type.contract_type} Service Agreement`}
+
             <span className="count-clock-icon active-contract-icon">
               <img className="clock-icon" src={CountDayClock} alt="clock" />
               {countDays(type.end_date)}d
@@ -459,8 +1300,9 @@ export default function NewCustomerList() {
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
               : `${type.contract_type} Service Agreement`}
+
             <span className=" active-contract-icon file-icon">
-              <img src={FileIcon} alt="file" />{' '}
+              <img src={FileIcon} alt="file" />
             </span>
           </div>
         </li>
@@ -486,8 +1328,9 @@ export default function NewCustomerList() {
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
               : `${type.contract_type} Service Agreement`}
+
             <span className=" active-contract-icon file-check-icon ">
-              <img src={CheckFileIcon} alt="check-file" />{' '}
+              <img src={CheckFileIcon} alt="check-file" />
             </span>
           </div>
         </li>
@@ -513,6 +1356,7 @@ export default function NewCustomerList() {
             {type.contract_type === 'dsp only'
               ? 'DSP only Service Agreement'
               : `${type.contract_type} Service Agreement`}
+
             <span className="edit-file-icon  active-contract-icon">
               <img width="16px" src={EditFileIcon} alt="edit" />{' '}
             </span>
@@ -548,7 +1392,7 @@ export default function NewCustomerList() {
         data-tip={type.contract_status}
         style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
-          {type.contract_type} Service Agreement
+          {type.contract_type} Service Agreement 2+ More
         </div>
       </li>
     );
@@ -617,7 +1461,7 @@ export default function NewCustomerList() {
     if (showPerformance) {
       return (
         <div className="row position-relative">
-          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-4 col-12 customer-header">Customer</div>
 
           {performanceSortOptions.map((item) => {
             return (
@@ -646,16 +1490,13 @@ export default function NewCustomerList() {
               </div>
             );
           })}
-          <div className="col-lg-2 col-12 Brand_Strategist">
-            Brand Strategist
-          </div>
         </div>
       );
     }
     if (showAdPerformance) {
       return (
         <div className="row">
-          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-4 col-12 customer-header">Customer</div>
           {sadSortOptions.map((item) => {
             return (
               <div
@@ -683,16 +1524,13 @@ export default function NewCustomerList() {
               </div>
             );
           })}
-          <div className="col-lg-2 col-12 Brand_Strategist">
-            Sponsored Ad Manager
-          </div>
         </div>
       );
     }
     if (showDspAdPerformance) {
       return (
         <div className="row">
-          <div className="col-lg-2 col-12 customer-header">Customer</div>
+          <div className="col-lg-4 col-12 customer-header">Customer</div>
           {dadSortOptions.map((item) => {
             return (
               <div
@@ -720,7 +1558,6 @@ export default function NewCustomerList() {
               </div>
             );
           })}
-          <div className="col-lg-2 col-12 Brand_Strategist">DSP AD MANAGER</div>
         </div>
       );
     }
@@ -733,52 +1570,25 @@ export default function NewCustomerList() {
       </div>
     );
   };
-  const generateCompanyNameAndStatus = (name, companyStatus) => {
+
+  const generateLogoCompanyNameAndGs = (item, name, bgs) => {
     return (
       <>
+        <img
+          className="company-logo"
+          src={
+            item &&
+            item.documents &&
+            item.documents[0] &&
+            Object.values(item.documents[0])
+              ? Object.values(item.documents[0])[0]
+              : CompanyDefaultUser
+          }
+          alt="logo"
+        />
         <div className="company-name">{name}</div>
-        {companyStatus === 'at risk' ? (
-          <div className="status">At Risk</div>
-        ) : (
-          <div className="status" style={{ textTransform: 'capitalize' }}>
-            {companyStatus}
-          </div>
-        )}
-      </>
-    );
-  };
-  const generateCompanyNameAndGs = (name, item) => {
-    return (
-      <>
-        <div className="company-name">{name}</div>
-        {item &&
-        item.brand_growth_strategist &&
-        item.brand_growth_strategist.length !== 0 ? (
-          <>
-            {item.brand_growth_strategist.profile_photo ? (
-              <img
-                className="user-profile-circle"
-                src={item.brand_growth_strategist.profile_photo}
-                alt="user"
-              />
-            ) : (
-              <GetInitialName
-                property="float-left mr-3"
-                userInfo={item.brand_growth_strategist}
-              />
-            )}
-          </>
-        ) : (
-          ''
-        )}
         <div className="user-name">
-          {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.first_name}
-          <br />
-          {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.last_name}
+          {bgs.first_name} {bgs.last_name}
         </div>
       </>
     );
@@ -816,6 +1626,47 @@ export default function NewCustomerList() {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${prefix === '%' ? '%' : ''}`
       : `${prefix === '$' ? '$0' : prefix === '%' ? '0%' : 0}`;
   };
+
+  const showContractsList = (item) => {
+    const contractLength = item.contract.length;
+    const reduceContractLength = item.contract.length - 2;
+
+    return (
+      <ul className="recurring-contact" style={{ textTransform: 'capitalize' }}>
+        {item && item.contract && item.contract.length ? (
+          <>
+            {!showContracts
+              ? item.contract.slice(0, 2).map((type) => (
+                  <React.Fragment key={Math.random()}>
+                    <ReactTooltip />
+                    {generateContractHTML(type, item.id)}
+                  </React.Fragment>
+                ))
+              : item.contract.map((type) => (
+                  <React.Fragment key={Math.random()}>
+                    <ReactTooltip />
+                    {generateContractHTML(type, item.id)}
+                  </React.Fragment>
+                ))}
+          </>
+        ) : (
+          <li className="no-active-contract">No active contracts</li>
+        )}
+        {reduceContractLength > 0 ? (
+          <span
+            onClickCapture={(e) => {
+              e.stopPropagation();
+              setShowContracts(!showContracts);
+            }}
+            aria-hidden="true">
+            {showContracts ? 'show less' : `+ ${contractLength - 2} more`}
+          </span>
+        ) : (
+          ''
+        )}
+      </ul>
+    );
+  };
   const generateContractDetails = (item) => {
     return (
       <tr
@@ -824,73 +1675,16 @@ export default function NewCustomerList() {
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
         }>
-        <td width="25%">
-          <img
-            className="company-logo"
-            src={
-              item &&
-              item.documents &&
-              item.documents[0] &&
-              Object.values(item.documents[0])
-                ? Object.values(item.documents[0])[0]
-                : CompanyDefaultUser
-            }
-            alt="logo"
-          />
-          {/* {generateCompanyNameAndStatus(item && item.company_name, item.status)} */}
-          {generateCompanyNameAndGs(item && item.company_name, item)}
-        </td>
-        <td width="15%">seller</td>
-        <td width="20%">{generateCompanyStatus(item.status)}</td>
-        <td width="40%">
-          <ul
-            className="recurring-contact"
-            style={{ textTransform: 'capitalize' }}>
-            {item && item.contract && item.contract.length ? (
-              item &&
-              item.contract &&
-              item.contract.map((type) => (
-                <React.Fragment key={Math.random()}>
-                  <ReactTooltip />
-                  {generateContractHTML(type, item.id)}
-                </React.Fragment>
-              ))
-            ) : (
-              <li className="no-active-contract">No active contracts</li>
-            )}
-          </ul>
-        </td>
-        {/* <td width="15%">
-          {item &&
-          item.brand_growth_strategist &&
-          item.brand_growth_strategist.length !== 0 ? (
-            <>
-              {item.brand_growth_strategist.profile_photo ? (
-                <img
-                  className="user-profile-circle"
-                  src={item.brand_growth_strategist.profile_photo}
-                  alt="user"
-                />
-              ) : (
-                <GetInitialName
-                  property="float-left mr-3"
-                  userInfo={item.brand_growth_strategist}
-                />
-              )}
-            </>
-          ) : (
-            ''
+        <td width="25.5%">
+          {generateLogoCompanyNameAndGs(
+            item,
+            item && item.company_name,
+            item && item.brand_growth_strategist,
           )}
-          <div className="user-name">
-            {item &&
-              item.brand_growth_strategist &&
-              item.brand_growth_strategist.first_name}
-            <br />
-            {item &&
-              item.brand_growth_strategist &&
-              item.brand_growth_strategist.last_name}
-          </div>
-        </td> */}
+        </td>
+        <td width="16%">seller</td>
+        <td width="17%">{generateCompanyStatus(item.status)}</td>
+        <td width="41%">{showContractsList(item)}</td>
       </tr>
     );
   };
@@ -903,27 +1697,14 @@ export default function NewCustomerList() {
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
-          <td width="20%">
-            <img
-              className="company-logo"
-              src={
-                item &&
-                item.documents &&
-                item.documents[0] &&
-                Object.values(item.documents[0])
-                  ? Object.values(item.documents[0])[0]
-                  : CompanyDefaultUser
-              }
-              alt="logo"
-            />
-
-            {generateCompanyNameAndStatus(
+          <td width="38%">
+            {generateLogoCompanyNameAndGs(
+              item,
               item && item.company_name,
-              item.status,
+              item && item.brand_growth_strategist,
             )}
           </td>
-
-          <td width="15%">
+          <td width="15.5%">
             {generatePerformance(
               item &&
                 item.sales_performance &&
@@ -942,8 +1723,7 @@ export default function NewCustomerList() {
               'revenue',
             )}
           </td>
-
-          <td width="15%">
+          <td width="15.5%">
             {generatePerformance(
               item &&
                 item.sales_performance &&
@@ -962,8 +1742,7 @@ export default function NewCustomerList() {
               'units_sold',
             )}
           </td>
-
-          <td width="15%">
+          <td width="16%">
             {generatePerformance(
               item &&
                 item.sales_performance &&
@@ -1001,38 +1780,6 @@ export default function NewCustomerList() {
               'conversion',
             )}
           </td>
-
-          <td width="15%">
-            {item &&
-            item.brand_growth_strategist &&
-            item.brand_growth_strategist.length !== 0 ? (
-              <>
-                {item.brand_growth_strategist.profile_photo ? (
-                  <img
-                    className="user-profile-circle"
-                    src={item.brand_growth_strategist.profile_photo}
-                    alt="user"
-                  />
-                ) : (
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={item.brand_growth_strategist}
-                  />
-                )}
-              </>
-            ) : (
-              ''
-            )}
-            <div className="user-name">
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.first_name}
-              <br />
-              {item &&
-                item.brand_growth_strategist &&
-                item.brand_growth_strategist.last_name}
-            </div>
-          </td>
         </tr>
       );
     }
@@ -1044,26 +1791,14 @@ export default function NewCustomerList() {
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
-          <td width="20%">
-            <img
-              className="company-logo"
-              src={
-                item &&
-                item.documents &&
-                item.documents[0] &&
-                Object.values(item.documents[0])
-                  ? Object.values(item.documents[0])[0]
-                  : CompanyDefaultUser
-              }
-              alt="logo"
-            />
-
-            {generateCompanyNameAndStatus(
+          <td width="38%">
+            {generateLogoCompanyNameAndGs(
+              item,
               item && item.company_name,
-              item.status,
+              item && item.ad_manager,
             )}
           </td>
-          <td width="15%">
+          <td width="15.5%">
             {generatePerformance(
               item &&
                 item.sponsored_ad_performance &&
@@ -1082,8 +1817,7 @@ export default function NewCustomerList() {
               'AdSales',
             )}
           </td>
-
-          <td width="15%">
+          <td width="15.5%">
             <>
               {generatePerformance(
                 item &&
@@ -1104,8 +1838,7 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
-          <td width="15%">
+          <td width="16%">
             <>
               {item &&
               item.sponsored_ad_performance &&
@@ -1125,7 +1858,6 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
           <td width="15%">
             <>
               {item &&
@@ -1146,32 +1878,6 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
-          <td width="15%">
-            {item && item.ad_manager && item.ad_manager.length !== 0 ? (
-              <>
-                {item.ad_manager.profile_photo ? (
-                  <img
-                    className="user-profile-circle"
-                    src={item.ad_manager.profile_photo}
-                    alt="user"
-                  />
-                ) : (
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={item.ad_manager}
-                  />
-                )}
-              </>
-            ) : (
-              ''
-            )}
-            <div className="user-name">
-              {item && item.ad_manager && item.ad_manager.first_name}
-              <br />
-              {item && item.ad_manager && item.ad_manager.last_name}
-            </div>
-          </td>
         </tr>
       );
     }
@@ -1183,26 +1889,14 @@ export default function NewCustomerList() {
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
-          <td width="20%">
-            <img
-              className="company-logo"
-              src={
-                item &&
-                item.documents &&
-                item.documents[0] &&
-                Object.values(item.documents[0])
-                  ? Object.values(item.documents[0])[0]
-                  : CompanyDefaultUser
-              }
-              alt="logo"
-            />
-
-            {generateCompanyNameAndStatus(
+          <td width="38%">
+            {generateLogoCompanyNameAndGs(
+              item,
               item && item.company_name,
-              item.status,
+              item && item.ad_manager,
             )}
           </td>
-          <td width="15%">
+          <td width="15.5%">
             {generatePerformance(
               item.dsp_ad_performance &&
                 item.dsp_ad_performance.current_sum &&
@@ -1221,14 +1915,13 @@ export default function NewCustomerList() {
               'impressions',
             )}
           </td>
-
-          <td width="15%">
+          <td width="15.5%">
             <>
               {generatePerformance(
                 item &&
                   item.dsp_ad_performance &&
                   item.dsp_ad_performance.current_sum &&
-                  item.dsp_ad_performance.current_sum.total_product_sales,
+                  item.dsp_ad_performance.current_sum.dsp_spend,
                 2,
                 '',
                 '$',
@@ -1243,8 +1936,7 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
-          <td width="15%">
+          <td width="16%">
             <>
               {generatePerformance(
                 item &&
@@ -1265,7 +1957,6 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
           <td width="15%">
             <>
               {item &&
@@ -1284,32 +1975,6 @@ export default function NewCustomerList() {
               )}
             </>
           </td>
-
-          <td width="15%">
-            {item && item.ad_manager && item.ad_manager.length !== 0 ? (
-              <>
-                {item.ad_manager.profile_photo ? (
-                  <img
-                    className="user-profile-circle"
-                    src={item.ad_manager.profile_photo}
-                    alt="user"
-                  />
-                ) : (
-                  <GetInitialName
-                    property="float-left mr-3"
-                    userInfo={item.ad_manager}
-                  />
-                )}
-              </>
-            ) : (
-              ''
-            )}
-            <div className="user-name">
-              {item && item.ad_manager && item.ad_manager.first_name}
-              <br />
-              {item && item.ad_manager && item.ad_manager.last_name}
-            </div>
-          </td>
         </tr>
       );
     }
@@ -1317,109 +1982,116 @@ export default function NewCustomerList() {
       return <>{generateContractDetails(item)}</>;
     }
     return <>{generateContractDetails(item)}</>;
-    // return '';
   };
   return (
     <CustomerListPage>
       {' '}
       {renderCustomDateModal()}
-      <CustomerListFilters
-        filters={filters}
-        setFilters={setFilters}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        showContractDetails={showContractDetails}
-        setShowContractDetails={setShowContractDetails}
-        showPerformance={showPerformance}
-        showAdPerformance={showAdPerformance}
-        showDspAdPerformance={showDspAdPerformance}
-        setShowPerformance={setShowPerformance}
-        setShowAdPerformance={setShowAdPerformance}
-        setShowDspAdPerformance={setShowDspAdPerformance}
-        showOrderOption={showOrderOption}
-        setShowOrderOption={setShowOrderOption}
-        orderByFlag={orderByFlag}
-        setOrderByFlag={setOrderByFlag}
-        selectedTimeFrame={selectedTimeFrame}
-        setSelectedTimeFrame={setSelectedTimeFrame}
-        setExpiringSoon={setExpiringSoon}
-        setSelectedValue={setSelectedValue}
-        isCustomDateApply={isCustomDateApply}
-        setIsCustomDateApply={setIsCustomDateApply}
-        setShowCustomDateModal={setShowCustomDateModal}
-        brandGrowthStrategist={brandGrowthStrategist}
-        status={status}
-        selectInputRefMobile={selectInputRefMobile}
-        salesSortOptions={salesSortOptions}
-        sponsorAdSortOptions={sponsorAdSortOptions}
-        dspAdSortOptions={dspAdSortOptions}
-        selectedValue={selectedValue}
-        customerList={customerList}
-        pageNumber={pageNumber}
-      />
-      <>
-        {isDesktop ? (
-          <div className="table-container">
-            <div className="table-part">
-              <div className="sticky-header">
-                <div className="table-header">{renderHeaders()}</div>
-              </div>
-              {isLoading.loader && isLoading.type === 'page' ? (
-                <PageLoader
-                  component="customer-list-loader"
-                  color={Theme.baseColor}
-                  type="page"
-                />
-              ) : (
-                <Table>
-                  <tbody>
-                    {data && data.length === 0 ? (
-                      <NoRecordFound />
-                    ) : (
-                      data && data.map((item) => renderCustomerDetails(item))
-                    )}
-                  </tbody>
-                </Table>
-              )}
-            </div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-12 col-lg-2">
+            <CustomerListLeftSidePanel
+              handleFilters={handleFilters}
+              handleSearch={handleSearch}
+              generateDropdown={generateDropdown}
+              filters={filters}
+              setFilters={setFilters}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              status={status}
+              showAdPerformance={showAdPerformance}
+              showDspAdPerformance={showDspAdPerformance}
+            />
+          </div>
+          <div className="col-12 col-lg-10">
+            <div className="container-fluid">
+              <CustomerListFilters
+                handleFilter={handleFilters}
+                handleSearch={handleSearch}
+                generateDropdown={generateDropdown}
+                filters={filters}
+                setFilters={setFilters}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                showContractDetails={showContractDetails}
+                showPerformance={showPerformance}
+                showAdPerformance={showAdPerformance}
+                showDspAdPerformance={showDspAdPerformance}
+                showOrderOption={showOrderOption}
+                status={status}
+                selectInputRefMobile={selectInputRefMobile}
+              />
+              <>
+                {isDesktop ? (
+                  <div className="table-container">
+                    <div className="table-part">
+                      <div className="sticky-header">
+                        <div className="table-header">{renderHeaders()}</div>
+                      </div>
+                      {isLoading.loader && isLoading.type === 'page' ? (
+                        <PageLoader
+                          component="customer-list-loader"
+                          color={Theme.baseColor}
+                          type="page"
+                        />
+                      ) : (
+                        <Table>
+                          <tbody>
+                            {data && data.length === 0 ? (
+                              <NoRecordFound />
+                            ) : (
+                              data &&
+                              data.map((item) => renderCustomerDetails(item))
+                            )}
+                          </tbody>
+                        </Table>
+                      )}
+                    </div>
 
-            <div className="footer-sticky">
-              <div className="straight-line horizontal-line" />
-              <div className="container-fluid">
-                <CommonPagination
-                  count={count}
-                  pageNumber={
-                    JSON.parse(localStorage.getItem('page')) || pageNumber
-                  }
-                  handlePageChange={handlePageChange}
-                />
-              </div>
+                    <div className="footer-sticky">
+                      <div className="straight-line horizontal-line" />
+                      <div className="container-fluid">
+                        <CommonPagination
+                          count={count}
+                          pageNumber={
+                            JSON.parse(localStorage.getItem('page')) ||
+                            pageNumber
+                          }
+                          handlePageChange={handlePageChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <CustomerListTablet
+                    data={data}
+                    history={history}
+                    count={count}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                    isLoading={isLoading}
+                    showContractDetails={showContractDetails}
+                    setShowContractDetails={setShowContractDetails}
+                    showPerformance={showPerformance}
+                    setShowPerformance={setShowPerformance}
+                    showAdPerformance={showAdPerformance}
+                    setShowAdPerformance={setShowAdPerformance}
+                    showDspAdPerformance={showDspAdPerformance}
+                    setShowDspAdPerformance={setShowDspAdPerformance}
+                    setStatus={status}
+                    brandGrowthStrategist={brandGrowthStrategist}
+                    salesSortOptions={salesSortOptions}
+                    sponsorAdSortOptions={sponsorAdSortOptions}
+                    dspAdSortOptions={dspAdSortOptions}
+                    showContracts={showContracts}
+                    setShowContracts={setShowContracts}
+                  />
+                )}
+              </>
             </div>
           </div>
-        ) : (
-          <CustomerListTablet
-            data={data}
-            history={history}
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-            isLoading={isLoading}
-            showContractDetails={showContractDetails}
-            setShowContractDetails={setShowContractDetails}
-            showPerformance={showPerformance}
-            setShowPerformance={setShowPerformance}
-            showAdPerformance={showAdPerformance}
-            setShowAdPerformance={setShowAdPerformance}
-            showDspAdPerformance={showDspAdPerformance}
-            setShowDspAdPerformance={setShowDspAdPerformance}
-            setStatus={status}
-            brandGrowthStrategist={brandGrowthStrategist}
-            salesSortOptions={salesSortOptions}
-            sponsorAdSortOptions={sponsorAdSortOptions}
-            dspAdSortOptions={dspAdSortOptions}
-          />
-        )}
-      </>
+        </div>
+      </div>
     </CustomerListPage>
   );
 }
