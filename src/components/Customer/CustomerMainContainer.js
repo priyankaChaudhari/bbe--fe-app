@@ -46,6 +46,7 @@ import {
   BackToTop,
   Button,
   WhiteCard,
+  Status,
 } from '../../common';
 import {
   getContactDetails,
@@ -815,6 +816,13 @@ export default function CustomerMainContainer() {
                           {' '}
                           {customer.company_name}
                         </div>
+                        {customer.customer_account_type ? (
+                          <Status
+                            className=" account-type mt-2 mb-1"
+                            backgroundColor={Theme.gray15}
+                            label={customer.customer_account_type}
+                          />
+                        ) : null}
                         <div className="company-label-info">
                           {customer && customer.address
                             ? `${customer.address}`
@@ -1761,6 +1769,11 @@ const CustomerDetailsBody = styled.div`
     max-width: 1220px;
     margin: 0 auto;
     width: 100%;
+  }
+
+  .account-type {
+    float: none !important;
+    margin: 0 auto;
   }
 
   .customer-dropdown-select {
