@@ -1061,7 +1061,7 @@ export const managementLink =
   'https://docs.google.com/forms/d/e/1FAIpQLScmUYT0PQqs5aYX1p4PefdccjArf7sbyWyh-7rRbC5gptAEwQ/viewform';
 export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
-// added by vikas
+
 export const options = [
   { value: 'contract_details', label: 'Contract Details' },
   { value: 'performance', label: 'Sales Performance' },

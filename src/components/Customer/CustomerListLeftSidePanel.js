@@ -131,15 +131,26 @@ function CustomerListLeftSidePanel({
         <div className="clear-fix" />
         <ul className="check-box-list checkboxes">
           {accountType.map((item) => (
-            <li>
+            <li key={item.value}>
               <CheckBox>
                 <label
                   className="check-container customer-pannel"
-                  htmlFor="account">
+                  htmlFor={item.value}>
                   {item.label}
                   <input
                     type="checkbox"
-                    onChange={(event) => handleFilters(event, 'account_type')}
+                    id={item.value}
+                    name={item.value}
+                    onChange={(event) =>
+                      handleFilters(event, item, 'customer_account_type')
+                    }
+                    defaultChecked={
+                      filters.customer_account_type
+                        ? filters.customer_account_type.find(
+                            (op) => op === item.value,
+                          )
+                        : ''
+                    }
                   />
                   <span className="checkmark" />
                 </label>
@@ -219,6 +230,8 @@ CustomerListLeftSidePanel.defaultProps = {
   handleFilters: () => {},
   handleSearch: () => {},
   generateDropdown: () => {},
+  showAdPerformance: false,
+  showDspAdPerformance: false,
 };
 export default CustomerListLeftSidePanel;
 CustomerListLeftSidePanel.propTypes = {
@@ -234,11 +247,15 @@ CustomerListLeftSidePanel.propTypes = {
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
+    customer_account_type: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func.isRequired,
   status: PropTypes.arrayOf(PropTypes.object).isRequired,
-  showAdPerformance: PropTypes.bool.isRequired,
-  showDspAdPerformance: PropTypes.bool.isRequired,
+  showAdPerformance: PropTypes.bool,
+  showDspAdPerformance: PropTypes.bool,
 };

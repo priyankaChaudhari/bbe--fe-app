@@ -44,7 +44,7 @@ import LeftSideBar from './LeftSideBar';
 import { ContractContainer } from '../components/Contract';
 import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
 import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
-import NewCustomerList from '../components/Customer/NewCustomerList';
+import CustomerList from '../components/Customer/CustomerList';
 import {
   // Dashboard,
   TeamMember,
@@ -117,11 +117,7 @@ export default function AuthenticationComponent() {
         <Switch>
           {/* Customer */}
           {userInfo && userInfo.role !== 'Customer' ? (
-            <Route
-              path={PATH_CUSTOMER_LIST}
-              exact
-              component={NewCustomerList}
-            />
+            <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
           ) : (
             ''
           )}

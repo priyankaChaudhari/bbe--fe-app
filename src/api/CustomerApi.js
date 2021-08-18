@@ -86,6 +86,16 @@ export async function getCustomerList(
     };
   }
 
+  let accountTypeParams = {};
+  if (
+    filterOptions &&
+    filterOptions.customer_account_type &&
+    filterOptions.customer_account_type.length
+  ) {
+    accountTypeParams = queryString.stringify({
+      customer_account_type: filterOptions.customer_account_type,
+    });
+  }
   let statusParams = {};
   if (filterOptions && filterOptions.status && filterOptions.status.length) {
     statusParams = queryString.stringify({
@@ -106,6 +116,7 @@ export async function getCustomerList(
       contract_status: filterOptions.contract_status,
     });
   }
+
   let bgsParams = {};
 
   if (
@@ -173,6 +184,10 @@ export async function getCustomerList(
       }${
         contractStatusParams && contractStatusParams.length
           ? `&${contractStatusParams}`
+          : ''
+      }${
+        accountTypeParams && accountTypeParams.length
+          ? `&${accountTypeParams}`
           : ''
       }`,
       { params },
