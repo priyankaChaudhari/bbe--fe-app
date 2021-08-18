@@ -275,6 +275,19 @@ export default function CustomerListTablet({
       </>
     );
   };
+  const generateCompanyStatus = (companyStatus) => {
+    return (
+      <>
+        {companyStatus === 'at risk' ? (
+          <div className="status">At Risk</div>
+        ) : (
+          <div className="status" style={{ textTransform: 'capitalize' }}>
+            {companyStatus}
+          </div>
+        )}
+      </>
+    );
+  };
   const generatePerformance = (value, toFixedValue, isTwiceReplace, prefix) => {
     if (isTwiceReplace) {
       return value
@@ -347,6 +360,21 @@ export default function CustomerListTablet({
         <div className="clear-fix" />
         <div className=" straight-line horizontal-line pt-3 mb-3 " />
         {showContractsList(item)}
+        <div className=" straight-line horizontal-line pt-3" />
+        <div className="row">
+          <div className="col-12 col-md-6 mt-3">
+            <div className="label">Account type</div>
+            <div className="label-info">
+              {item && item.customer_account_type}
+            </div>
+          </div>
+          <div className="col-12 col-md-6 mt-3">
+            <div className="label">Status</div>
+            <div className="label-info">
+              {generateCompanyStatus(item.status)}
+            </div>
+          </div>
+        </div>
       </WhiteCard>
     );
   };
@@ -697,7 +725,6 @@ export default function CustomerListTablet({
         </WhiteCard>
       );
     }
-
     // for- view contract details
     if (showContractDetails) {
       return <>{generateContractDetails(item)}</>;
@@ -744,6 +771,7 @@ CustomerListTablet.defaultProps = {
   count: null,
   pageNumber: 1,
   handlePageChange: () => {},
+  showContractDetails: true,
   showPerformance: false,
   showAdPerformance: false,
   showDspAdPerformance: false,
@@ -762,7 +790,7 @@ CustomerListTablet.propTypes = {
     loader: PropTypes.bool,
     type: PropTypes.string,
   }).isRequired,
-  showContractDetails: PropTypes.bool.isRequired,
+  showContractDetails: PropTypes.bool,
   showPerformance: PropTypes.bool,
   showAdPerformance: PropTypes.bool,
   showDspAdPerformance: PropTypes.bool,
