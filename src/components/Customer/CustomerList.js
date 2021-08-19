@@ -2073,6 +2073,7 @@ export default function CustomerList() {
                 showOrderOption={showOrderOption}
                 status={status}
                 selectInputRefMobile={selectInputRefMobile}
+                accountType={accountType}
               />
               <>
                 {isDesktop ? (
