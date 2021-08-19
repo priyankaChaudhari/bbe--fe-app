@@ -163,8 +163,6 @@ export default function AskSomeone({
     }
   };
 
-  console.log(isChecked);
-
   return (
     <>
       <CheckBox

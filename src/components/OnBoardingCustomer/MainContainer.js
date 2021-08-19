@@ -41,6 +41,11 @@ import {
   CreateAccount,
 } from '.';
 import { stepPath, whichStep } from '../../constants/FieldConstants';
+import {
+  getAmazonAccountDetails,
+  getAmazonSeller,
+  getAmazonVendor,
+} from '../../api/OnboardingCustomerApi';
 
 export default function MainContainer() {
   const history = useHistory();
@@ -61,6 +66,15 @@ export default function MainContainer() {
   const [disableBtn, setDisableBtn] = useState(false);
   const [billingData, setBillingData] = useState({});
   const [noAmazonAccount, setNoAmazonAccount] = useState(false);
+  const [marketplaceDetails, setMarketplaceDetails] = useState({
+    marketplace: '',
+    type: '',
+  });
+  const [showAmazonVideo, setShowAmazonVideo] = useState({});
+  const [amazonDetails, setAmazonDetails] = useState({
+    Seller: {},
+    Vendor: {},
+  });
 
   const customStyles = {
     content: {
@@ -77,6 +91,41 @@ export default function MainContainer() {
     },
   };
 
+  const getVendorDetails = (id, sellerData) => {
+    getAmazonVendor(id).then((vendor) => {
+      setAmazonDetails({
+        Seller: sellerData,
+        Vendor:
+          vendor &&
+          vendor.data &&
+          vendor.data.results &&
+          vendor.data.results[0],
+      });
+    });
+  };
+
+  const getSellerDetails = (id, type) => {
+    getAmazonSeller(id).then((seller) => {
+      setAmazonDetails({
+        ...amazonDetails,
+        Seller:
+          seller &&
+          seller.data &&
+          seller.data.results &&
+          seller.data.results[0],
+      });
+      if (type === 'Hybrid') {
+        getVendorDetails(
+          id,
+          seller &&
+            seller.data &&
+            seller.data.results &&
+            seller.data.results[0],
+        );
+      }
+    });
+  };
+
   const getStepName = () => {
     for (const item of whichStep) {
       if (history.location.pathname.includes(item.path)) {
@@ -84,6 +133,41 @@ export default function MainContainer() {
       }
     }
     return '';
+  };
+
+  const getAccountDetails = (id) => {
+    getAmazonAccountDetails(4, localStorage.getItem('customer') || id).then(
+      (response) => {
+        if (response && response.data) {
+          setMarketplaceDetails({
+            marketplace:
+              response.data.marketplace &&
+              response.data.marketplace.name &&
+              response.data.marketplace.name.label,
+            type: response.data.account_type,
+            marketplaceId:
+              response.data.marketplace && response.data.marketplace.id,
+          });
+          const marketplaceID =
+            response.data.marketplace && response.data.marketplace.id;
+
+          if (
+            response.data.account_type === 'Seller' ||
+            response.data.account_type === 'Hybrid'
+          ) {
+            getSellerDetails(marketplaceID, response.data.account_type);
+          } else if (response.data.account_type === 'Vendor') {
+            getVendorDetails(marketplaceID, '');
+          }
+          getVideoLink(localStorage.getItem('customer'), 'hybrid').then(
+            (res) => {
+              setVideoData(res.data);
+            },
+          );
+          setIsLoading({ loader: false, type: 'page' });
+        }
+      },
+    );
   };
 
   useEffect(() => {
@@ -135,20 +219,14 @@ export default function MainContainer() {
           });
 
           if (
-            history.location.pathname.includes('/account-setup/amazon-merchant')
-          )
-            setIsLoading({ loader: true, type: 'page' });
-          if (
             history.location.pathname.includes(
               '/account-setup/assigned-amazon-merchant',
             )
           ) {
-            localStorage.setItem(
-              'customer',
+            getAccountDetails(
               (verify && verify.data && verify.data.customer_id) ||
                 (userInfo && userInfo.customer),
             );
-            setIsLoading({ loader: true, type: 'page' });
           }
 
           if (
@@ -247,6 +325,14 @@ export default function MainContainer() {
                 ),
               );
             }
+
+            if (
+              history.location.pathname.includes(
+                '/account-setup/amazon-merchant',
+              )
+            ) {
+              getAccountDetails();
+            }
             if (
               history.location.pathname.includes(
                 '/account-setup/billing-details',
@@ -311,11 +397,15 @@ export default function MainContainer() {
           stepData={stepData}
           verifiedStepData={verifiedStepData}
           userInfo={userInfo}
-          data={data}
           isLoading={isLoading}
           isChecked={isChecked}
           customStyles={customStyles}
           noAmazonAccount={noAmazonAccount}
+          marketplaceDetails={marketplaceDetails}
+          amazonDetails={amazonDetails}
+          showVideo={showAmazonVideo}
+          videoData={videoData}
+          setShowVideo={setShowAmazonVideo}
         />
       );
     if (path === 'amazon-account')

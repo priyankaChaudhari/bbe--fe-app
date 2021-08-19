@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -18,10 +18,6 @@ import { askSomeoneData, updateAskSomeoneData, updateUserMe } from '../../api';
 import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
 import { userMe } from '../../store/actions';
 import {
-  getAmazonAccountDetails,
-  getAmazonSeller,
-  getAmazonVendor,
-  getVideoLink,
   saveAmazonSellerAccount,
   saveAmazonVendorAccount,
 } from '../../api/OnboardingCustomerApi';
@@ -41,91 +37,16 @@ export default function AmazonMerchant({
   isChecked,
   customStyles,
   noAmazonAccount,
+  amazonDetails,
+  showVideo,
+  marketplaceDetails,
+  videoData,
+  setShowVideo,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ Seller: {}, Vendor: {} });
+  const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
-  const [marketplaceDetails, setMarketplaceDetails] = useState({
-    marketplace: '',
-    type: '',
-  });
-  const [videoData, setVideoData] = useState();
-  const [showVideo, setShowVideo] = useState({});
-  const [amazonDetails, setAmazonDetails] = useState({
-    Seller: {},
-    Vendor: {},
-  });
-
-  const getVendorDetails = (id, sellerData) => {
-    getAmazonVendor(id).then((vendor) => {
-      setAmazonDetails({
-        Seller: sellerData,
-        Vendor:
-          vendor &&
-          vendor.data &&
-          vendor.data.results &&
-          vendor.data.results[0],
-      });
-    });
-  };
-
-  const getSellerDetails = (id, type) => {
-    getAmazonSeller(id).then((seller) => {
-      setAmazonDetails({
-        ...amazonDetails,
-        Seller:
-          seller &&
-          seller.data &&
-          seller.data.results &&
-          seller.data.results[0],
-      });
-      if (type === 'Hybrid') {
-        getVendorDetails(
-          id,
-          seller &&
-            seller.data &&
-            seller.data.results &&
-            seller.data.results[0],
-        );
-      }
-    });
-  };
-
-  useEffect(() => {
-    getAmazonAccountDetails(4, localStorage.getItem('customer')).then(
-      (response) => {
-        if (response && response.data) {
-          setMarketplaceDetails({
-            marketplace:
-              response.data.marketplace &&
-              response.data.marketplace.name &&
-              response.data.marketplace.name.label,
-            type: response.data.account_type,
-            marketplaceId:
-              response.data.marketplace && response.data.marketplace.id,
-          });
-          const marketplaceID =
-            response.data.marketplace && response.data.marketplace.id;
-
-          if (
-            response.data.account_type === 'Seller' ||
-            response.data.account_type === 'Hybrid'
-          ) {
-            getSellerDetails(marketplaceID, response.data.account_type);
-          } else if (response.data.account_type === 'Vendor') {
-            getVendorDetails(marketplaceID, '');
-          }
-          getVideoLink(localStorage.getItem('customer'), 'hybrid').then(
-            (res) => {
-              setVideoData(res.data);
-            },
-          );
-          setIsLoading({ loader: false, type: 'page' });
-        }
-      },
-    );
-  }, []);
 
   const mapVideoData = () => {
     if (marketplaceDetails.type === 'Hybrid') {
@@ -232,12 +153,9 @@ export default function AmazonMerchant({
     }
   };
 
-  const vendorAccount = () => {
+  const vendorAccount = (vendor) => {
     saveAmazonVendorAccount(
-      {
-        ...formData.Vendor,
-        marketplace: [marketplaceDetails.marketplaceID],
-      },
+      vendor,
       amazonDetails.Vendor && amazonDetails.Vendor.id,
     ).then((re) => {
       if ((re && re.status === 201) || (re && re.status === 200)) saveDetails();
@@ -249,26 +167,36 @@ export default function AmazonMerchant({
 
   const saveAccountDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
+    const seller = {
+      ...formData.Seller,
+      marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
+    };
+    const vendor = {
+      ...formData.Vendor,
+      marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
+    };
+
     if (
       marketplaceDetails.type === 'Seller' ||
       marketplaceDetails.type === 'Hybrid'
     ) {
       return saveAmazonSellerAccount(
-        { ...formData.Seller, marketplace: [marketplaceDetails.marketplaceID] },
+        seller,
         amazonDetails.Seller && amazonDetails.Seller.id,
       ).then((res) => {
         if ((res && res.status === 201) || (res && res.status === 200))
-          saveDetails();
+          if (marketplaceDetails.type === 'Hybrid') {
+            vendorAccount(vendor);
+          } else {
+            saveDetails();
+          }
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
-        }
-        if (marketplaceDetails.type === 'Hybrid') {
-          vendorAccount();
         }
       });
     }
     if (marketplaceDetails.type === 'Vendor') {
-      vendorAccount();
+      vendorAccount(vendor);
     }
     return '';
   };
@@ -454,8 +382,8 @@ export default function AmazonMerchant({
                 onClick={() => saveAccountDetails()}
                 disabled={
                   formData &&
-                  Object.keys(formData.Seller) &&
-                  Object.keys(formData.Seller).length === 0
+                  Object.values(formData) &&
+                  Object.values(formData).length === 0
                 }>
                 {' '}
                 {isLoading.loader && isLoading.type === 'button' ? (
@@ -545,6 +473,8 @@ export default function AmazonMerchant({
 
 AmazonMerchant.defaultProps = {
   stepData: {},
+  setShowVideo: () => {},
+  showVideo: {},
 };
 
 AmazonMerchant.propTypes = {
@@ -568,10 +498,6 @@ AmazonMerchant.propTypes = {
       user_step: PropTypes.objectOf(PropTypes.object),
     }),
   ).isRequired,
-  data: PropTypes.shape({
-    id: PropTypes.string,
-    merchant_id: PropTypes.string,
-  }).isRequired,
   isLoading: PropTypes.shape({
     loader: PropTypes.bool,
     type: PropTypes.string,
@@ -579,4 +505,18 @@ AmazonMerchant.propTypes = {
   isChecked: PropTypes.bool.isRequired,
   customStyles: PropTypes.objectOf(PropTypes.object).isRequired,
   noAmazonAccount: PropTypes.bool.isRequired,
+  setShowVideo: PropTypes.func,
+  amazonDetails: PropTypes.objectOf(PropTypes.object).isRequired,
+  showVideo: PropTypes.objectOf(PropTypes.object),
+  marketplaceDetails: PropTypes.shape({
+    type: PropTypes.string,
+    marketplace: PropTypes.string,
+    marketplaceId: PropTypes.string,
+  }).isRequired,
+  videoData: PropTypes.shape({
+    seller_central_info: PropTypes.string,
+    seller_ad_info: PropTypes.string,
+    vendor_central_info: PropTypes.string,
+    vendor_ad_info: PropTypes.string,
+  }).isRequired,
 };
