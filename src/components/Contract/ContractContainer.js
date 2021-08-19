@@ -59,7 +59,12 @@ import {
   getThresholdType,
   getYoyPercentage,
 } from '../../api';
-import { AgreementSign, AddendumSign } from '../../constants/AgreementSign';
+import {
+  AgreementSign,
+  AddendumSign,
+  RecurringLanguage,
+  Recurring90DaysLanguage,
+} from '../../constants/AgreementSign';
 import {
   AgreementDetails,
   StatementDetails,
@@ -1562,6 +1567,17 @@ export default function ContractContainer() {
   `;
   };
 
+  const mapLanguage = () => {
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('recurring (90 day notice)')
+    ) {
+      return Recurring90DaysLanguage;
+    }
+    return RecurringLanguage;
+  };
+
   const createAgreementDoc = () => {
     setContractDesignLoader(true);
 
@@ -1583,7 +1599,8 @@ export default function ContractContainer() {
         .replace(
           'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
           `${mapServiceTotal('additional_one_time_services')}`,
-        );
+        )
+        .replace('LANGUAGE_ACCORDING_TO_CONTRACT_TYPE', `${mapLanguage()}`);
 
     const agreementSignatureData = AgreementSign.replace(
       'CUSTOMER_NAME',

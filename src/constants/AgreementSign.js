@@ -106,3 +106,7 @@ export const AddendumSign = `<br><br> <p class="long-text " style="color: #00000
         </tr>
         
     </table>`;
+
+export const RecurringLanguage = `Opportunity to Cure:  In the event that either Party (the "Notifying Party") believes that the other Party (the "Responding Party") is in breach of a material term of this Agreement, the Responding Party shall have thirty (30) days from receipt of written notice from the Notifying Party to cure the breach. Upon initiating the 30 day cure period, the Parties shall mutually agree in good faith to an objective standard by which to measure whether the breach has been cured prior to the end of the 30 day period. If at the end of the 30 days, the objective criteria have not been met, then the Notifying Party may terminate this Agreement.`;
+
+export const Recurring90DaysLanguage = `90 Day Notice:  Either Party may terminate this Agreement at any time with 90 days prior written notice to the other Party.  Unless the Parties agree otherwise, this Agreement shall terminate at the end of the 90 day period; provided that, the covenants in this Agreement which are intended to survive termination shall continue to be in effect as set forth herein.`;

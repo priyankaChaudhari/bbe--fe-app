@@ -4,6 +4,10 @@ import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import {
+  RecurringLanguage,
+  Recurring90DaysLanguage,
+} from '../../constants/AgreementSign';
 
 export default function Agreement({
   formData,
@@ -415,65 +419,8 @@ export default function Agreement({
             </td>
          </tr>
          `;
-    // return `
-    // ${
-    //   details && details.total_fee && details.total_fee.onetime_service_discount
-    //     ? `<tr style="display: table-row;
-    // vertical-align: inherit;
-    // border-color: inherit;">
-    //         <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left"> Sub-total</td>
-    //         <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">$${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>`
-    //     : ''
-    // }
-    //     ${
-    //       details &&
-    //       details.total_fee &&
-    //       details.total_fee.onetime_service_discount
-    //         ? `<tr style="display: table-row;
-    // vertical-align: inherit;
-    // border-color: inherit;">
-    //         <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px; text-align:left;"> Discount ${
-    //           details &&
-    //           details.one_time_discount_amount &&
-    //           details &&
-    //           details.one_time_discount_type === 'percentage'
-    //             ? `(${details && details.one_time_discount_amount}%)`
-    //             : ''
-    //         }</td>
-    //         <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px;text-align: right;"> -$${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service_discount
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>`
-    //         : ''
-    //     }
-    //      <tr style="display: table-row;
-    // vertical-align: inherit;
-    // border-color: inherit;">
-    //         <td class="total-service" colspan="3" style="border: 1px solid black;padding-top: 5px; text-align:left"> Total</td>
-    //         <td class="total-service text-right" style="border: 1px solid black;padding-top: 5px; text-align: right;"> $${
-    //           details &&
-    //           details.total_fee &&
-    //           details.total_fee.onetime_service_after_discount
-    //             .toString()
-    //             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //         }
-    //         </td>
-    //      </tr>
-    //      `;
   };
+
   const showOneTimeServiceTable = () => {
     if (
       formData &&
@@ -497,6 +444,17 @@ export default function Agreement({
     return '';
   };
 
+  const mapLanguage = () => {
+    if (
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('recurring (90 day notice)')
+    ) {
+      return Recurring90DaysLanguage;
+    }
+    return RecurringLanguage;
+  };
+
   return (
     <>
       <Paragraph>
@@ -518,12 +476,6 @@ export default function Agreement({
                   'CUSTOMER_ADDRESS',
                   mapDefaultValues('address', 'Address'),
                 )
-                // .replace('CUSTOMER_CITY', mapDefaultValues('city', 'City'))
-                // .replace('CUSTOMER_STATE', mapDefaultValues('state', 'State'))
-                // .replace(
-                //   'CUSTOMER_POSTAL',
-                //   mapDefaultValues('zip_code', 'Postal Code'),
-                // )
                 .replace(
                   'AGREEMENT_LENGTH',
                   mapDefaultValues('length', 'Contract Length'),
@@ -532,6 +484,10 @@ export default function Agreement({
                 .replace(
                   'ADDITIONAL_ONE_TIME_SERVICES_TOTAL',
                   `${mapServiceTotal('additional_one_time_services')}`,
+                )
+                .replace(
+                  'LANGUAGE_ACCORDING_TO_CONTRACT_TYPE',
+                  `${mapLanguage()}`,
                 ),
           }}
         />
