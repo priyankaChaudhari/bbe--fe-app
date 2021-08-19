@@ -44,7 +44,7 @@ import {
 } from '../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
-import { getManagersList } from '../../api/ChoicesApi';
+import { getManagersList, getSellerType } from '../../api/ChoicesApi';
 import { getcontract } from '../../api/AgreementApi';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CustomerListPage } from '../../theme/CustomerListStyle';
@@ -71,7 +71,6 @@ const customStyles = {
 };
 
 export default function CustomerList() {
-  const [showContracts, setShowContracts] = useState(false);
   const history = useHistory();
   const selectInputRefMobile = useRef();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -165,6 +164,9 @@ export default function CustomerList() {
   );
   const selectInputRef = useRef();
   const { Option, SingleValue } = components;
+  const [showContracts, setShowContracts] = useState(false);
+  const [accountType, setAccountType] = useState([]);
+
   const CustomDateFilter = (startDate, endDate, type) => {
     let sd = startDate;
     let ed = endDate;
@@ -346,10 +348,14 @@ export default function CustomerList() {
         }
       });
     }
+    getSellerType().then((sellerResponse) => {
+      if (sellerResponse && sellerResponse.status === 200) {
+        setAccountType(sellerResponse.data);
+      }
+    });
 
     customerList(1);
   }, [customerList, showAdPerformance, showDspAdPerformance]);
-
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowSortDropdown(false);
@@ -677,6 +683,7 @@ export default function CustomerList() {
     // for multi select user
     // const handleFilters = (event, key, type) => {
     // for one select user
+    console.log('handleFilters', event, key, type);
     if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
@@ -686,7 +693,7 @@ export default function CustomerList() {
         selectInputRef.current.select.clearValue();
       if (selectInputRefMobile && selectInputRefMobile.current)
         selectInputRefMobile.current.select.clearValue();
-
+      setSearchQuery('');
       setFilters({
         ...filters,
         status: [],
@@ -697,6 +704,7 @@ export default function CustomerList() {
         user: [],
         ad_user: [],
         dsp_user: [],
+        searchQuery: '',
       });
       localStorage.setItem(
         'filters',
@@ -710,6 +718,7 @@ export default function CustomerList() {
           user: [],
           ad_user: [],
           dsp_user: [],
+          searchQuery: '',
         }),
       );
     }
@@ -2045,12 +2054,13 @@ export default function CustomerList() {
               status={status}
               showAdPerformance={showAdPerformance}
               showDspAdPerformance={showDspAdPerformance}
+              accountType={accountType}
             />
           </div>
           <div className="col-12 col-lg-10">
             <div className="container-fluid">
               <CustomerListFilters
-                handleFilter={handleFilters}
+                handleFilters={handleFilters}
                 handleSearch={handleSearch}
                 generateDropdown={generateDropdown}
                 filters={filters}
@@ -2129,6 +2139,7 @@ export default function CustomerList() {
                     dspAdSortOptions={dspAdSortOptions}
                     showContracts={showContracts}
                     setShowContracts={setShowContracts}
+                    accountType={accountType}
                   />
                 )}
               </>

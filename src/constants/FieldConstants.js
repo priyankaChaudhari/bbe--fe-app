@@ -1080,9 +1080,3 @@ export const contractStatus = [
   { value: 'pending contract approval', label: 'Pending Approval' },
   { value: 'pending contract', label: 'Pending Contract' },
 ];
-
-export const accountType = [
-  { value: 'seller', label: 'Seller' },
-  { value: 'vendor', label: 'Vendor' },
-  { value: 'hybrid', label: 'Hybrid' },
-];

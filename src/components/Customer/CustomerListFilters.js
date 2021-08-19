@@ -13,7 +13,6 @@ import {
   ModalRadioCheck,
 } from '../../common';
 import {
-  accountType,
   contractChoices,
   contractStatus,
 } from '../../constants/FieldConstants';
@@ -40,6 +39,7 @@ function CustomerListFilters({
   showOrderOption,
   status,
   selectInputRefMobile,
+  accountType,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 991 });
 
@@ -86,9 +86,16 @@ function CustomerListFilters({
                             handleFilters(event, 'unselected')
                           }
                           role="presentation">
-                          {' '}
                           Clear filters
                         </div>
+                        {/* <div
+                          className="clear-filter"
+                          onClick={(event) =>
+                            handleFilters(event, 'unselected', 'status')
+                          }
+                          role="presentation">
+                          Clear filters
+                        </div> */}
                       </div>
                     </div>
                     <div className="col-12">
@@ -199,37 +206,38 @@ function CustomerListFilters({
                     <div className="clear-fix" />
                     {!isDesktop ? (
                       <ul className="check-box-list checkboxes">
-                        {accountType.map((item) => (
-                          <li key={item.value}>
-                            <CheckBox>
-                              <label
-                                className="check-container customer-pannel"
-                                htmlFor={item.value}>
-                                {item.label}
-                                <input
-                                  type="checkbox"
-                                  id={item.value}
-                                  name={item.value}
-                                  onChange={(event) =>
-                                    handleFilters(
-                                      event,
-                                      item,
-                                      'customer_account_type',
-                                    )
-                                  }
-                                  defaultChecked={
-                                    filters.customer_account_type
-                                      ? filters.customer_account_type.find(
-                                          (op) => op === item.value,
-                                        )
-                                      : ''
-                                  }
-                                />
-                                <span className="checkmark" />
-                              </label>
-                            </CheckBox>
-                          </li>
-                        ))}
+                        {accountType &&
+                          accountType.map((item) => (
+                            <li key={item.value}>
+                              <CheckBox>
+                                <label
+                                  className="check-container customer-pannel"
+                                  htmlFor={item.value}>
+                                  {item.label}
+                                  <input
+                                    type="checkbox"
+                                    id={item.value}
+                                    name={item.value}
+                                    onChange={(event) =>
+                                      handleFilters(
+                                        event,
+                                        item,
+                                        'customer_account_type',
+                                      )
+                                    }
+                                    defaultChecked={
+                                      filters.customer_account_type
+                                        ? filters.customer_account_type.find(
+                                            (op) => op === item.value,
+                                          )
+                                        : ''
+                                    }
+                                  />
+                                  <span className="checkmark" />
+                                </label>
+                              </CheckBox>
+                            </li>
+                          ))}
                       </ul>
                     ) : (
                       ''
@@ -372,6 +380,7 @@ CustomerListFilters.defaultProps = {
   showPerformance: false,
   showAdPerformance: false,
   showDspAdPerformance: false,
+  accountType: null,
 };
 CustomerListFilters.propTypes = {
   handleFilters: PropTypes.func,
@@ -388,7 +397,10 @@ CustomerListFilters.propTypes = {
       PropTypes.arrayOf(PropTypes.string),
     ]),
     contract_status: PropTypes.arrayOf(PropTypes.string),
-    searchQuery: PropTypes.arrayOf(PropTypes.array),
+    searchQuery: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
     contract_details: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
@@ -420,4 +432,5 @@ CustomerListFilters.propTypes = {
   showOrderOption: PropTypes.bool.isRequired,
   selectInputRefMobile: PropTypes.objectOf(PropTypes.object).isRequired,
   status: PropTypes.arrayOf(PropTypes.object).isRequired,
+  accountType: PropTypes.arrayOf(PropTypes.object),
 };
