@@ -4,7 +4,10 @@ import Theme from '../theme/Theme';
 const Table = styled.table`
   position: relative;
   width: 100%;
-  margin-top: 40px;
+
+  &.customer-list {
+    margin-top: 85px;
+  }
 
   tr {
     text-align: left;

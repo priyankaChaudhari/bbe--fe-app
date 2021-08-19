@@ -1513,7 +1513,7 @@ export default function CustomerList() {
     if (showPerformance) {
       return (
         <div className="row position-relative">
-          <div className="col-lg-4 col-12 customer-header">Customer</div>
+          <div className="col-lg-4 col-md-12 customer-header">Customer</div>
 
           {performanceSortOptions.map((item) => {
             return (
@@ -2037,11 +2037,11 @@ export default function CustomerList() {
   };
   return (
     <CustomerListPage>
-      {' '}
-      {renderCustomDateModal()}
-      <div className="container-fluid">
+      <div className="main-body-container">
+        {' '}
+        {renderCustomDateModal()}
         <div className="row">
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-3">
             <CustomerListLeftSidePanel
               handleFilters={handleFilters}
               handleSearch={handleSearch}
@@ -2056,28 +2056,30 @@ export default function CustomerList() {
               accountType={accountType}
             />
           </div>
-          <div className="col-12 col-lg-10">
-            <div className="container-fluid">
-              <CustomerListFilters
-                handleFilters={handleFilters}
-                handleSearch={handleSearch}
-                generateDropdown={generateDropdown}
-                filters={filters}
-                setFilters={setFilters}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                showContractDetails={showContractDetails}
-                showPerformance={showPerformance}
-                showAdPerformance={showAdPerformance}
-                showDspAdPerformance={showDspAdPerformance}
-                showOrderOption={showOrderOption}
-                status={status}
-                selectInputRefMobile={selectInputRefMobile}
-                accountType={accountType}
-              />
+          <div className="col-md-12 col-lg-9">
+            <div className="table-container">
+              <div className="fixed-customer-header ">
+                <CustomerListFilters
+                  handleFilters={handleFilters}
+                  handleSearch={handleSearch}
+                  generateDropdown={generateDropdown}
+                  filters={filters}
+                  setFilters={setFilters}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  showContractDetails={showContractDetails}
+                  showPerformance={showPerformance}
+                  showAdPerformance={showAdPerformance}
+                  showDspAdPerformance={showDspAdPerformance}
+                  showOrderOption={showOrderOption}
+                  status={status}
+                  selectInputRefMobile={selectInputRefMobile}
+                  accountType={accountType}
+                />
+              </div>
               <>
                 {isDesktop ? (
-                  <div className="table-container">
+                  <>
                     <div className="table-part">
                       <div className="sticky-header">
                         <div className="table-header">{renderHeaders()}</div>
@@ -2089,7 +2091,7 @@ export default function CustomerList() {
                           type="page"
                         />
                       ) : (
-                        <Table>
+                        <Table className="customer-list">
                           <tbody>
                             {data && data.length === 0 ? (
                               <NoRecordFound />
@@ -2115,7 +2117,7 @@ export default function CustomerList() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : (
                   <CustomerListTablet
                     data={data}

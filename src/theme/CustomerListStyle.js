@@ -3,15 +3,52 @@ import Theme from './Theme';
 
 export const CustomerListPage = styled.div`
   padding-left: 62px;
+  padding-left: 62px;
+  background-color: ${Theme.gray6};
+  padding-top: 60px;
+  height: 100%;
+
+  .main-body-container {
+    width: 93%;
+    margin: 0 auto;
+    height: 100%;
+    .table-container {
+      // position: fixed;
+      height: 90%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overflow: auto;
+      border-radius: 15px;
+      top: 130px;
+      width: 66%;
+      position: fixed;
+      padding-bottom: 140px;
+      padding: 15px;
+      background: #ffff;
+      .fixed-customer-header {
+        position: fixed;
+        max-width: 64%;
+        width: 100%;
+        background-color: ${Theme.white};
+        z-index: 2;
+        top: 130px;
+        padding-top: 5px;
+      }
+    }
+  }
+
   .table-header {
     box-shadow: none;
-    position: sticky !important;
-    top: 130px;
-    left: 353px;
-    right: 0px;
+    position: fixed !important;
+    // top: 130px;
+    // left: 32%;
+    z-index: 1;
+    max-width: 64%;
+    // right: 0px;
+    width: 100%;
     margin: 0;
     height: 40px;
-    margin-top: 3px;
+    margin-top: 51px;
     color: ${Theme.gray40};
     font-size: 11px;
     background: ${Theme.white};
@@ -149,11 +186,11 @@ export const CustomerListPage = styled.div`
   .Brand_Strategist {
     padding-left: 2%;
   }
-  .customer-header {
-    padding-left: 66px;
-  }
+  // .customer-header {
+  //   padding-left: 66px;
+  // }
   .sticky-header {
-    position: fixed;
+    // position: fixed;
     top: 130px;
     left: 353px;
     right: 0;
@@ -165,21 +202,22 @@ export const CustomerListPage = styled.div`
   //.table-container {
   //  padding-left: 290px;
   // }
+
   .customer-list-header-sticky {
-    position: fixed;
-    // left: 64px;
-    // right: 0;
+    // position: fixed;
+    left: 64px;
+    right: 0;
     z-index: 2;
     background-color: ${Theme.white};
     width: 100%;
   }
   .table-part {
     // min-height: 560px;
-    padding-top: 65px;
+    // padding-top: 65px;
     overflow: auto;
     min-height: 892px;
     height: 100%;
-    padding-bottom: 69px;
+    // padding-bottom: 69px;
     position: relative;
   }
   .customer-list-header {
@@ -192,8 +230,7 @@ export const CustomerListPage = styled.div`
   .footer-sticky {
     position: fixed;
     bottom: 0;
-    left: 353px;
-    right: 0;
+    width: 64%;
     background: white;
   }
   @media only screen and (min-width: 1920px) {
@@ -238,10 +275,27 @@ export const CustomerListPage = styled.div`
   }
   @media only screen and (max-width: 992px) {
     padding-left: 0px;
+    .main-body-container {
+      width: 100%;
+      .table-container {
+        width: 100%;
+      }
+      .table-container {
+        background-color: transparent;
+        padding: 0;
+        .fixed-customer-header {
+          max-width: 100%;
+          background: ${Theme.gray6};
+          top: 80px;
+        }
+      }
+    }
+
     .customer-list-header-sticky {
-      left: 0;
-      right: 0;
+      // left: 0;
+      // right: 0;
       // padding: 0 15px;
+      background-color: transparent;
     }
     .customer-list-header {
       &.w-80 {
@@ -266,24 +320,10 @@ export const CustomerListPage = styled.div`
         }
       }
     }
-    .filter-slider {
-      border: 1px solid #8798ad;
-      padding: 8px 15px;
-      border-radius: 25px;
-      color: ${Theme.black};
-      font-size: ${Theme.normal};
-      float: right;
-      top: -7px;
-      right: 15px;
-      position: absolute;
-      margin-top: -94px;
-      font-weight: 600;
-      img {
-        width: 16px;
-        margin-right: 7px;
-        vertical-align: text-top;
-      }
-    }
+    // .filter-slider {
+    //   color: ${Theme.gray40};
+    //   font-size: ${Theme.extraNormal};
+    // }
     .customer-list-header {
       margin: 5px 0;
     }
@@ -325,18 +365,38 @@ export const CustomerListPage = styled.div`
 `;
 
 export const CustomerLeftPannel = styled.div`
-  max-width: 290px;
-  height: 85%;
-  position: fixed;
+  //max-width: 290px;
+  height: 80%;
+  //position: fixed;
   overflow-y: auto;
   overflow-x: hidden;
   // padding-bottom: 200px;
-  // top: 130px;
+  overflow: auto;
+  border-radius: 15px;
+  top: 130px;
   width: 100%;
-  left: 62px;
+  position: fixed;
+  max-width: 21.5%;
+  padding-bottom: 140px;
+  // left: 62px;
+  // position: fixed;
+  //left: 117px;
   padding: 15px;
-  padding-bottom: 80px;
-  border-right: 1px solid ${Theme.gray5};
+  // padding-bottom: 80px;
+  background: #ffff;
+  //border-right: 1px solid ${Theme.gray5};
+  .customer-list-pannel {
+    // height: 85%;
+    height: 80%;
+    overflow: auto;
+    padding-top: 20px;
+
+    top: 130px;
+    width: 100%;
+    position: fixed;
+    max-width: 20%;
+    padding-bottom: 20px;
+  }
   .label {
     color: ${Theme.gray40};
     text-transform: uppercase;
@@ -402,6 +462,7 @@ export const MobileLeftSidebar = styled.div`
       z-index: 999;
       top: 0px;
       left: 0;
+      right: 0;
       .close-icon {
         color: ${Theme.white};
         font-size: ${Theme.normalRes};
@@ -451,12 +512,12 @@ export const MobileLeftSidebar = styled.div`
 
 export const SideContent = styled.div`
   @media (max-width: 991px) {
-    width: 300px;
+    width: 100%;
     min-height: 100%;
-    position: absolute;
+    // position: absolute;
     top: 10px;
-    left: 10px;
-    right: 10px;
+    left: 0;
+    right: 0;
     background: white;
     padding: 15px;
     box-shadow: ${Theme.commonShadow};

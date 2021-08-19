@@ -753,16 +753,17 @@ export default function CustomerListTablet({
               </div>
             ))}
         </div>
+
+        {isLoading.loader && isLoading.type === 'page' ? (
+          <PageLoader color="#FF5933" type="page" />
+        ) : (
+          <CommonPagination
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+          />
+        )}
       </div>
-      {isLoading.loader && isLoading.type === 'page' ? (
-        <PageLoader color="#FF5933" type="page" />
-      ) : (
-        <CommonPagination
-          count={count}
-          pageNumber={pageNumber}
-          handlePageChange={handlePageChange}
-        />
-      )}
     </CustomerListTabletView>
   );
 }
@@ -822,6 +823,7 @@ const CustomerListTabletView = styled.div`
         padding: 10px 4px 10px 12px;
         color: ${Theme.gray85};
         font-size: 14px;
+        display: flex;
 
         &.agreement {
           border: 1px solid ${Theme.gray45};
@@ -940,9 +942,9 @@ const CustomerListTabletView = styled.div`
     }
   }
   @media (max-width: 996px) {
-    padding-top: 195px;
+    padding-top: 300px;
   }
   @media (max-width: 767px) {
-    padding-top: 300px;
+    padding-top: 360px;
   }
 `;
