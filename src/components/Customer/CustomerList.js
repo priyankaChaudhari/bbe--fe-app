@@ -683,7 +683,6 @@ export default function CustomerList() {
     // for multi select user
     // const handleFilters = (event, key, type) => {
     // for one select user
-    console.log('handleFilters', event, key, type);
     if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
     localStorage.setItem('page', 1);
     if (key === 'unselected') {

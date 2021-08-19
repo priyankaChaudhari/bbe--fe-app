@@ -1073,6 +1073,7 @@ export const contractChoices = [
   { value: 'recurring', label: 'Recurring' },
   { value: 'one time', label: 'One Time' },
   { value: 'dsp only', label: 'DSP Only' },
+  { value: 'recurring (90 day notice)', label: 'Recurring (90 day notice)' },
 ];
 export const contractStatus = [
   { value: 'active', label: 'Signed' },

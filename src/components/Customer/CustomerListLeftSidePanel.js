@@ -30,7 +30,6 @@ function CustomerListLeftSidePanel({
   accountType,
 }) {
   const selectInputRef = useRef();
-  console.log('handleFiltersleftside', handleFilters);
   return (
     <>
       <CustomerLeftPannel className="d-none d-lg-block">
