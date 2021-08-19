@@ -223,8 +223,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data && res.data.length > 0) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
           } else {
             setContributionData([]);
           }

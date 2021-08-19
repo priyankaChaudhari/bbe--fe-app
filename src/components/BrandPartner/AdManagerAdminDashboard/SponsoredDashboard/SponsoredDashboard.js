@@ -363,8 +363,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data && res.data.length > 0) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
           } else {
             setContributionData([]);
           }
@@ -504,7 +504,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     marketplace,
     adType,
     adManagerUser,
-    // tabOption,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -540,16 +539,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         sd,
         ed,
       );
-      // getContributionData(
-      //   adType,
-      //   dailyFactFlag,
-      //   marketplace,
-      //   selectedAdManager.value,
-      //   tabOption,
-      //   selectedTabMetrics,
-      //   sd,
-      //   ed,
-      // );
     }
   };
 
@@ -745,7 +734,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleContributionOptions = (type) => {
-    console.log('aaaaaaa', selectedContributionOption, selectedAdDF);
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
       if (selectedAdDF.value !== 'custom') {

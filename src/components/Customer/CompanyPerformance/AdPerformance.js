@@ -824,7 +824,7 @@ export default function AdPerformance({
         } else {
           setDSPFilters({ daily: true, weekly: false, month: false });
           setDSPGroupBy('daily');
-          getDSPData(selectedAdType.value, value, 'daily', selectedMarketplace);
+          getDSPData(value, 'daily', selectedMarketplace);
           break;
         }
 
