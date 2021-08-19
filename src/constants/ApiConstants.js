@@ -66,6 +66,9 @@ export const API_BILLING_INFO = '/billing-info/';
 export const API_VIDEO_LINKS = '/customer/:id/get-video-link/';
 export const API_EDIT_EMAIL = `${API_STEPS_ASSIGNED}edit-email/`;
 export const API_VERIFY_USER = `${API_USER}verify-user/`;
+export const API_AMAZON_ACCOUNT_DETAILS = `${API_CUSTOMER}:id/account-step-details/`;
+export const API_AMAZON_SELLER_ACCOUNT = '/seller-central/';
+export const API_AMAZON_VENDOR_ACCOUNT = '/vendor-central/';
 
 // Brand Assets
 export const API_ACCOUNT_ASSIGNEE_COUNT = `${API_CUSTOMER}:id/account-setup-completion/`;

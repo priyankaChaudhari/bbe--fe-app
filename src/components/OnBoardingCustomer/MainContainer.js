@@ -16,6 +16,7 @@ import {
   GreyCard,
   PageLoader,
   ModalBox,
+  CheckBox,
 } from '../../common';
 import { CaretUp, CloseIcon } from '../../theme/images';
 import AskSomeone from './AskSomeone';
@@ -59,6 +60,7 @@ export default function MainContainer() {
   const [summaryData, setSummaryData] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
   const [billingData, setBillingData] = useState({});
+  const [noAmazonAccount, setNoAmazonAccount] = useState(false);
 
   const customStyles = {
     content: {
@@ -133,8 +135,25 @@ export default function MainContainer() {
           });
 
           if (
-            !history.location.pathname.includes(
-              '/account-setup/assigned-billing-details',
+            history.location.pathname.includes('/account-setup/amazon-merchant')
+          )
+            setIsLoading({ loader: true, type: 'page' });
+          if (
+            history.location.pathname.includes(
+              '/account-setup/assigned-amazon-merchant',
+            )
+          ) {
+            localStorage.setItem(
+              'customer',
+              (verify && verify.data && verify.data.customer_id) ||
+                (userInfo && userInfo.customer),
+            );
+            setIsLoading({ loader: true, type: 'page' });
+          }
+
+          if (
+            history.location.pathname.includes(
+              '/account-setup/assigned-company-details',
             )
           ) {
             dispatch(
@@ -217,8 +236,8 @@ export default function MainContainer() {
               setIsLoading({ loader: false, type: 'page' });
             });
             if (
-              !history.location.pathname.includes(
-                '/account-setup/billing-details',
+              history.location.pathname.includes(
+                '/account-setup/company-details',
               )
             ) {
               dispatch(
@@ -295,6 +314,8 @@ export default function MainContainer() {
           data={data}
           isLoading={isLoading}
           isChecked={isChecked}
+          customStyles={customStyles}
+          noAmazonAccount={noAmazonAccount}
         />
       );
     if (path === 'amazon-account')
@@ -318,6 +339,12 @@ export default function MainContainer() {
     getVideoLink(
       (verifiedStepData && verifiedStepData.customer_id) ||
         (userInfo && userInfo.customer),
+      history.location.pathname.includes('/account-setup/company-details') ||
+        history.location.pathname.includes(
+          '/account-setup/assigned-company-details',
+        )
+        ? 4
+        : 2,
     ).then((response) => {
       setVideoData(response && response.data);
       setIsLoading({ loader: false, type: 'video ' });
@@ -421,7 +448,43 @@ export default function MainContainer() {
                     userInfo={userInfo}
                     setDisableBtn={setDisableBtn}
                     setOpenCollapse={setOpenCollapse}
+                    history={history}
+                    setNoAmazonAccount={setNoAmazonAccount}
+                    noAmazonAccount={noAmazonAccount}
                   />
+                )}
+                {!isChecked &&
+                (history.location.pathname.includes(
+                  '/account-setup/amazon-merchant',
+                ) ||
+                  history.location.pathname.includes(
+                    '/account-setup/assigned-amazon-merchant/',
+                  )) ? (
+                  <CheckBox
+                    className={
+                      isLoading.loader && isLoading.type === 'check'
+                        ? 'mt-1 mb-4 isDisabled'
+                        : 'mt-1 mb-4'
+                    }>
+                    <label
+                      className="check-container customer-pannel "
+                      htmlFor="noamazon">
+                      I don’t have an Amazon account yet
+                      <input
+                        type="checkbox"
+                        id="noamazon"
+                        name="noamazon"
+                        onChange={(event) => {
+                          setNoAmazonAccount(event.target.checked);
+                          setDisableBtn(false);
+                        }}
+                        readOnly
+                      />
+                      <span className="checkmark" />
+                    </label>
+                  </CheckBox>
+                ) : (
+                  ''
                 )}
                 {assignedToSomeone || !isChecked ? (
                   <>{generateHTML(item.path)}</>
@@ -429,6 +492,7 @@ export default function MainContainer() {
                   ''
                 )}
               </div>
+
               {!assignedToSomeone && isChecked ? (
                 <div className="white-card-base panel gap-none">
                   <div
@@ -456,6 +520,16 @@ export default function MainContainer() {
                     summaryData={summaryData}
                     step={item.key}
                     disableBtn={disableBtn}
+                    noAmazonAccount={noAmazonAccount}
+                  />
+                </div>
+              ) : noAmazonAccount ? (
+                <div className="white-card-base panel gap-none">
+                  <CheckSteps
+                    summaryData={summaryData}
+                    step={item.key}
+                    disableBtn={disableBtn}
+                    noAmazonAccount={noAmazonAccount}
                   />
                 </div>
               ) : (
@@ -480,31 +554,6 @@ export default function MainContainer() {
                 <PageLoader color="#FF5933" type="page" />
               ) : (
                 <div className="modal-body">
-                  {/* <video
-                    title="video "
-                    className="embed-responsive-item w-100"
-                    allow="accelerometer; autoplay;"
-                    allowFullScreen
-                    name="media"
-                    preload="auto"
-                    controls
-                    autoPlay>
-                    <source
-                      src={
-                        videoData
-                          ? history.location.pathname.includes(
-                              '/account-setup/company-details',
-                            ) ||
-                            history.location.pathname.includes(
-                              '/account-setup/assigned-company-details',
-                            )
-                            ? videoData.step_4_video
-                            : videoData.step_2_video
-                          : ''
-                      }
-                    />
-                  </video> */}
-
                   <iframe
                     title="video "
                     className="embed-responsive-item w-100 "

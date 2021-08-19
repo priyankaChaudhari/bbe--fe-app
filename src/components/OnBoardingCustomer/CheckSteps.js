@@ -7,12 +7,18 @@ import { Button } from '../../common';
 import { PATH_SUMMARY } from '../../constants/index';
 import { stepPath } from '../../constants/FieldConstants';
 
-export default function CheckSteps({ summaryData, step, disableBtn }) {
+export default function CheckSteps({
+  summaryData,
+  step,
+  disableBtn,
+  noAmazonAccount,
+}) {
   const history = useHistory();
 
   const getIncompleteStep = summaryData.find(
     (op) => Object.keys(op)[0] !== step && Object.values(op)[0] === false,
   );
+
   const CheckStep = () => {
     if (step === 'merchant id' || getIncompleteStep === undefined) {
       history.push(PATH_SUMMARY);
@@ -34,7 +40,12 @@ export default function CheckSteps({ summaryData, step, disableBtn }) {
         className="btn-primary w-100  mt-4 mb-4"
         onClick={() => CheckStep()}
         disabled={disableBtn}>
-        Continue
+        {noAmazonAccount &&
+        history.location.pathname.includes(
+          '/account-setup/assigned-amazon-merchant/',
+        )
+          ? 'Submit'
+          : 'Continue'}
       </Button>
     </div>
   );
@@ -44,4 +55,5 @@ CheckSteps.propTypes = {
   step: PropTypes.string.isRequired,
   summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableBtn: PropTypes.bool.isRequired,
+  noAmazonAccount: PropTypes.bool.isRequired,
 };

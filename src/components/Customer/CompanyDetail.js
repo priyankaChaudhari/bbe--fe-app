@@ -3,32 +3,30 @@ import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
 import copy from 'copy-to-clipboard';
+import Select from 'react-select';
+import Modal from 'react-modal';
 
 import {
   EditOrangeIcon,
-  CloseIcon,
   CopyLinkIcon,
+  CloseIcon,
 } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
-import { SocialIcons } from '../../constants/FieldConstants';
-import { GetInitialName, WhiteCard } from '../../common';
+import {
+  AmazonSellerAccountDetails,
+  SocialIcons,
+} from '../../constants/FieldConstants';
+import { DropDownSelect, GetInitialName, WhiteCard } from '../../common';
 import EditCompanyDetails from './EditCompanyDetails';
+import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
 export default function CompanyDetail({
   customer,
-  // amazonDetails,
-  // seller,
   id,
   getAmazon,
   getActivityLogInfo,
 }) {
-  const contactInfo = useSelector((state) => state.customerState.contactData);
-  const [showModal, setShowModal] = useState(false);
-  const userInfo = useSelector((state) => state.userState.userInfo);
-  const [scrollDown, setScrollDown] = useState(false);
-
   const customStyles = {
     content: {
       top: '50%',
@@ -43,6 +41,11 @@ export default function CompanyDetail({
       transform: 'translate(-50%, -50%)',
     },
   };
+  const contactInfo = useSelector((state) => state.customerState.contactData);
+  const [showModal, setShowModal] = useState(false);
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [scrollDown, setScrollDown] = useState(false);
+  const [showAmazonModal, setShowAmazonModal] = useState(false);
 
   const generateSocialIcon = (item) => {
     const fields = [];
@@ -108,6 +111,30 @@ export default function CompanyDetail({
     );
   };
 
+  const getSocialIcons = () => {
+    return (
+      <WhiteCard className="mt-3">
+        <p className="black-heading-title mt-0">Contact Info</p>
+        <div
+          className="edit-details"
+          onClick={() => setShowModal(true)}
+          role="presentation">
+          <img src={EditOrangeIcon} alt="" />
+          Edit
+        </div>
+
+        <div className="label">Phone Number</div>
+        <div className="label-info">{customer.phone_number}</div>
+
+        <div className="label mt-3">Social Accounts</div>
+
+        <ul className="social-media-icons">
+          {SocialIcons.map((item) => generateSocialIcon(item))}
+        </ul>
+      </WhiteCard>
+    );
+  };
+
   return (
     <>
       <div className="col-lg-6 col-12 mb-3">
@@ -160,167 +187,54 @@ export default function CompanyDetail({
             {userInfo && userInfo.role !== 'Customer' ? (
               <>{getContactCard()}</>
             ) : (
-              ''
+              <>{getSocialIcons()}</>
             )}
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <WhiteCard>
-              <p className="black-heading-title mt-0 ">Amazon Credentials</p>
-              <div
-                className="edit-details"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              <div className="copy-info">
-                <div className="label mt-3">Merchant ID</div>
-                <div className="label-info">
-                  {(customer && customer.merchant_id) || 'No Merchant ID.'}
-                </div>
-
-                <div
-                  className="copy-text"
-                  onClick={() => copy(customer && customer.merchant_id)}
-                  role="presentation">
-                  <img src={CopyLinkIcon} alt="" />
-                  Copy
-                </div>
-              </div>
-            </WhiteCard>
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <WhiteCard>
-              <p className="black-heading-title mt-0">Contact Info</p>
-              <div
-                className="edit-details"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-
-              <div className="label">Phone Number</div>
-              <div className="label-info">{customer.phone_number}</div>
-
-              <div className="label mt-3">Social Accounts</div>
-
-              <ul className="social-media-icons">
-                {SocialIcons.map((item) => generateSocialIcon(item))}
-              </ul>
-            </WhiteCard>
-          </div>
-
-          {/* <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <WhiteCard>
-              <p className="black-heading-title mt-0 ">Amazon Credentials</p>
-              <div
-                className="edit-details"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              {AmazonMarketplaceDetails.filter((op) => op.section === 1).map(
-                (market) => (
-                  <div className="copy-info" key={market.key}>
-                    <div className="label mt-3">{market.label || ''}</div>
-                    <div className="label-info">
-                      {market.key === 'merchant_id' ? (
-                        <>{customer[market.key]}</>
-                      ) : (
-                        <>
-                          {(amazonDetails && amazonDetails[market.key]) ||
-                            `No ${market.label}.`}
-                        </>
-                      )}
-                    </div>
-
-                    <div
-                      className="copy-text"
-                      onClick={() => copy(customer && customer.merchant_id)}
-                      role="presentation">
-                      <img src={CopyLinkIcon} alt="" />
-                      Copy
-                    </div>
-                  </div>
-                ),
-              )}
-
-              {userInfo && userInfo.role !== 'Customer' ? (
-                <>
-                  <div className="straight-line horizontal-line pt-3 mb-3" />
-
-                  {AmazonMarketplaceDetails.filter(
-                    (op) => op.section === 2,
-                  ).map((item) => (
-                    <React.Fragment key={item.key}>
-                      <div className="label mt-3">
-                        {item.label}
-                        <img className="info-icon" src={InfoIcons} alt="" />
-                      </div>
-                      <div className="label-info">
-                        {(amazonDetails && amazonDetails[item.key]) ||
-                          `No ${item.label}.`}
-                      </div>
-                      <div className="straight-line horizontal-line pt-3 mb-3" />
-                    </React.Fragment>
-                  ))}
-
-                  <div className="label mt-3">
-                    {seller === 'Seller' || seller === 'Hybrid'
-                      ? 'Seller Central Username and Password'
-                      : 'Vendor Central Username and Password'}{' '}
-                    <br />
-                    <a
-                      href="https://my.1password.com/signin?l=en"
-                      target="_BLANK"
-                      rel="noopener noreferrer">
-                      {' '}
-                      View Credentials
-                      <img
-                        className="external-link-icon"
-                        src={ExternalLink}
-                        alt="link"
-                      />
-                    </a>
-                  </div>
-                  <>
-                    {userInfo &&
-                    userInfo.role !== 'Customer' &&
-                    seller === 'Hybrid' ? (
-                      <div className="label mt-3">
-                        Vendor Central Username & password
-                        <br />
-                        <a
-                          href="https://my.1password.com/signin?l=en"
-                          target="_BLANK"
-                          rel="noopener noreferrer">
-                          {' '}
-                          View Credentials
-                          <img
-                            className="external-link-icon"
-                            src={ExternalLink}
-                            alt="link"
-                          />
-                        </a>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </>
-                </>
-              ) : (
-                ''
-              )}
-            </WhiteCard>
-            {userInfo && userInfo.role === 'Customer' ? (
-              <>{getContactCard()}</>
+            {userInfo && userInfo.role !== 'Customer' ? (
+              <>{getSocialIcons()}</>
             ) : (
               ''
             )}
-          </div> */}
+          </div>
+
+          <div className="col-lg-6 col-md-6 col-12 mt-3">
+            <WhiteCard>
+              <p className="black-heading-title mt-0 ">
+                Amazon Account Names & IDs
+              </p>
+              <div
+                className="edit-details"
+                onClick={() => setShowAmazonModal(true)}
+                role="presentation">
+                <img src={EditOrangeIcon} alt="" />
+                Edit
+              </div>
+              <div className="label mt-3">Marketplace</div>
+              <div className="label-info">
+                <DropDownSelect>
+                  <Select
+                    classNamePrefix="react-select"
+                    className="active"
+                    options={AmazonSellerAccountDetails}
+                  />
+                </DropDownSelect>
+              </div>
+              {AmazonSellerAccountDetails.map((item) => (
+                <div className="copy-info">
+                  <div className="label mt-3">{item.label}</div>
+                  <div className="label-info">
+                    {(customer && customer[item.key]) || `No ${item.label}.`}
+                  </div>
+                  <div
+                    className="copy-text"
+                    onClick={() => copy(customer && customer[item.key])}
+                    role="presentation">
+                    <img src={CopyLinkIcon} alt="" />
+                    Copy
+                  </div>
+                </div>
+              ))}
+            </WhiteCard>
+          </div>
         </div>
         <Modal
           isOpen={showModal}
@@ -344,6 +258,29 @@ export default function CompanyDetail({
             getActivityLogInfo={getActivityLogInfo}
             scrollDown={scrollDown}
             setScrollDown={setScrollDown}
+            userInfo={userInfo}
+          />
+        </Modal>
+
+        <Modal
+          isOpen={showAmazonModal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <img
+            src={CloseIcon}
+            alt="close"
+            className="float-right cursor cross-icon"
+            onClick={() => setShowAmazonModal(false)}
+            role="presentation"
+          />
+          <EditAmazonAccountDetails
+            setShowAmazonModal={setShowAmazonModal}
+            id={id}
+            customer={customer}
+            showAmazonModal={showAmazonModal}
+            getAmazon={getAmazon}
+            getActivityLogInfo={getActivityLogInfo}
           />
         </Modal>
       </div>
@@ -353,7 +290,6 @@ export default function CompanyDetail({
 
 CompanyDetail.defaultProps = {
   id: '',
-  // amazonDetails: [],
 };
 
 CompanyDetail.propTypes = {
@@ -365,8 +301,6 @@ CompanyDetail.propTypes = {
     phone_number: PropTypes.string,
     merchant_id: PropTypes.string,
   }).isRequired,
-  // amazonDetails: PropTypes.arrayOf(PropTypes.array),
-  // seller: PropTypes.string.isRequired,
   getAmazon: PropTypes.func.isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
 };

@@ -1,6 +1,9 @@
 import axiosInstance from '../axios';
 import {
   API_ACCOUNT_SUMMARY,
+  API_AMAZON_ACCOUNT_DETAILS,
+  API_AMAZON_SELLER_ACCOUNT,
+  API_AMAZON_VENDOR_ACCOUNT,
   API_BILLING_INFO,
   API_EDIT_EMAIL,
   API_ONBOARD_CUSTOMER,
@@ -84,9 +87,10 @@ export async function accountSummary(id) {
   return result;
 }
 
-export async function getVideoLink(id) {
+export async function getVideoLink(id, step) {
+  const params = { step };
   const result = await axiosInstance
-    .get(API_VIDEO_LINKS.replace(':id', id))
+    .get(API_VIDEO_LINKS.replace(':id', id), { params })
     .then((response) => {
       return response;
     })
@@ -150,6 +154,91 @@ export async function saveBillingInfo(data, id) {
   }
   const result = await axiosInstance
     .post(API_BILLING_INFO, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAmazonAccountDetails(step, id) {
+  const params = { step };
+  const result = await axiosInstance
+    .get(API_AMAZON_ACCOUNT_DETAILS.replace(':id', id), { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function saveAmazonSellerAccount(data, id) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_AMAZON_SELLER_ACCOUNT + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_AMAZON_SELLER_ACCOUNT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function saveAmazonVendorAccount(data, id) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_AMAZON_VENDOR_ACCOUNT + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_AMAZON_VENDOR_ACCOUNT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAmazonSeller(marketplace) {
+  const params = { marketplace };
+  const result = await axiosInstance
+    .get(API_AMAZON_SELLER_ACCOUNT, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAmazonVendor(marketplace) {
+  const params = { marketplace };
+  const result = await axiosInstance
+    .get(API_AMAZON_VENDOR_ACCOUNT, { params })
     .then((response) => {
       return response;
     })

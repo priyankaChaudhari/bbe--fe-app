@@ -30,8 +30,13 @@ import {
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_LOGIN,
 } from '../../constants';
-import { clearErrorMessage, login } from '../../store/actions/userState';
+import {
+  clearErrorMessage,
+  login,
+  logout,
+} from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
 
 export default function Login() {
@@ -41,6 +46,7 @@ export default function Login() {
   const loader = useSelector((state) => state.userState.isLoading);
   const apiError = useSelector((state) => state.userState.error);
   const resetPasswordMsg = useSelector((state) => state.userState.showResetMsg);
+  const userData = useSelector((state) => state.userState.userInfo);
   const [showPassword, setShowPassword] = useState({
     password: false,
     name: false,
@@ -119,6 +125,7 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
+      console.log('role', role);
       if (
         role.includes('Growth Strategist') ||
         role === 'BGS' ||
@@ -133,6 +140,12 @@ export default function Login() {
         history.push(PATH_HYBRID_DASHBOARD);
       } else if (role.includes('Ad Manager Admin')) {
         history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
+      } else if (
+        userData.role === 'Customer' &&
+        userData.customer_onboarding === null
+      ) {
+        history.push(PATH_LOGIN);
+        dispatch(logout());
       } else if (role === 'Customer') {
         const id =
           step &&
@@ -144,15 +157,9 @@ export default function Login() {
         if (step[id] === 1) {
           history.push(PATH_COMPANY_DETAILS);
         }
-        // if (step[id] === 2) {
-        //   history.push(PATH_BILLING_DETAILS);
-        // }
         if (step[id] === 2 || step[id] === 3) {
           history.push(PATH_AMAZON_MERCHANT);
         }
-        // if (step[id] === 4) {
-        //   history.push(PATH_AMAZON_ACCOUNT);
-        // }
         if (step[id] === 4 || step[id] === 5) {
           history.push(PATH_SUMMARY);
         }
@@ -161,7 +168,7 @@ export default function Login() {
         }
       } else history.push(PATH_CUSTOMER_LIST);
     }
-  }, [history, role, customerId, step]);
+  }, [history, role, customerId, step, userData, dispatch]);
 
   const handleChange = () => {
     dispatch(clearErrorMessage());

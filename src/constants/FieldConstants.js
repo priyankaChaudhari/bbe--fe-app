@@ -374,8 +374,7 @@ export const editCompanyFields = [
     property: 'col-md-12',
   },
   { key: 'brand', label: 'Brands', property: 'col-md-6' },
-  { key: 'merchant_id', label: 'Merchant ID', property: 'col-md-6' },
-  { key: 'phone_number', label: 'Phone', property: 'col-md-12', type: 'text' },
+  { key: 'phone_number', label: 'Phone', property: 'col-md-6', type: 'text' },
   {
     key: 'social',
     label: 'Social',
@@ -956,14 +955,14 @@ export const whichStep = [
   {
     key: 'merchant id',
     stepof: 4,
-    title: 'Your Amazon Merchant ID',
+    title: 'Amazon Account Names & IDs',
     skip: PATH_SUMMARY,
     back: PATH_BILLING_DETAILS,
     bar: '80',
     path: 'amazon-merchant',
     subTitle:
-      'This information will be used by our data BOTS to access data we will use to best manage your account. For a quick tutorial on how to access this information, watch the video below.',
-    video: true,
+      'If you don’t have access to your Amazon Seller Central and Vender Central admin accounts then you can use the checkbox below to assign this step to someone that does.',
+    video: false,
   },
   // {
   //   key: 'developer access',
@@ -992,7 +991,7 @@ export const stepPath = [
   },
   {
     key: 'merchant id',
-    title: 'Your Amazon merchant ID',
+    title: 'Amazon Account Names & IDs',
     view: PATH_AMAZON_MERCHANT,
   },
   // {
@@ -1080,4 +1079,25 @@ export const contractStatus = [
   { value: 'pending contract signature', label: 'Pending Signature' },
   { value: 'pending contract approval', label: 'Pending Approval' },
   { value: 'pending contract', label: 'Pending Contract' },
+];
+export const AmazonSellerAccountDetails = [
+  {
+    key: 'seller_central_name',
+    label: 'Seller Central Account Name',
+    section: 1,
+  },
+  { key: 'merchant_id', label: 'Merchant ID', section: 1 },
+  { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
+];
+
+export const AmazonVendorAccountDetails = [
+  {
+    key: 'vendor_central_name',
+    label: 'Vendor Central Account Name',
+    section: 1,
+  },
+  { key: 'vendor_code', label: 'Vendor Code', section: 1 },
+  { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
 ];

@@ -27,6 +27,8 @@ export default function NavigationHeader({
   const redirect = (type) => {
     if (type === 'back') {
       if (backStep === '1') {
+        const originalEmail = params.email;
+        delete params.email;
         const stringified =
           queryString &&
           queryString.stringify({
@@ -35,7 +37,7 @@ export default function NavigationHeader({
 
         history.push({
           pathname: PATH_ACCOUNT_SETUP_CHOOSE,
-          search: stringified,
+          search: `${stringified}&email=${originalEmail}`,
         });
       } else {
         history.push(backStep);
