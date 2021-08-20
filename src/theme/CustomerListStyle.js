@@ -407,83 +407,11 @@ export const CustomerLeftPannel = styled.div`
     dispaly: none;
   }
 `;
-export const MobileLeftSidebar = styled.div`
-  display: none;
-  #tabletmenu-check {
-    display: none;
-  }
-  @media only screen and (max-width: 991px) {
-    background-color: ${Theme['$base-color']};
-    display: block;
-    #responsive-button {
-      display: block;
-      position: absolute;
-      left: 0px;
-      top: 43px;
-      z-index: 999;
-      .menu-icon {
-        width: 24px;
-        margin-top: -52px;
-        margin-left: -20px;
-      }
-    }
-    #ifp-sidebar-responsive {
-      display: none;
-      height: 100%;
-      position: absolute;
-      z-index: 999;
-      top: 0px;
-      left: 0;
-      right: 0;
-      .close-icon {
-        color: ${Theme.white};
-        font-size: ${Theme.normalRes};
-        font-family: ${Theme.titleFontFamily};
-        position: absolute;
-        right: 20px;
-        top: 10px;
-        z-index: 999;
-        img {
-          width: 18px;
-          margin-top: 8px;
-        }
-      }
-    }
-    #tabletmenu-check:checked ~ #ifp-sidebar-responsive {
-      display: block;
-    }
-    #mobilemenu-close:checked ~ #ifp-sidebar-responsive {
-      display: none;
-    }
-    .content-header {
-      padding: 30px 30px 10px !important;
-    }
-    .customer-list-filter {
-      color: ${Theme.black};
-      font-size: 16px;
-      font-weight: 600;
-    }
-    .clear-filter {
-      color: ${Theme.gray40};
-      font-size: ${Theme.extraNormal};
-      font-family: ${Theme.baseFontFamily};
-      cursor: pointer;
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    #responsive-button {
-      .menu-icon {
-        width: 24px;
-        margin-top: -16px;
-        position: absolute;
-        margin-left: -20px;
-      }
-    }
-  }
-`;
 
 export const SideContent = styled.div`
+  display: none;
   @media (max-width: 991px) {
+    display: block;
     width: 100%;
     min-height: 100%;
     top: 10px;
