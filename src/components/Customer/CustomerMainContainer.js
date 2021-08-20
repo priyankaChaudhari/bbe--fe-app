@@ -819,7 +819,7 @@ export default function CustomerMainContainer() {
                         {customer.customer_account_type ? (
                           <Status
                             className=" account-type mt-2 mb-1"
-                            backgroundColor={Theme.gray15}
+                            backgroundColor={Theme.gray8}
                             label={customer.customer_account_type}
                           />
                         ) : null}

@@ -490,8 +490,7 @@ export const SideContent = styled.div`
     left: 0;
     right: 0;
     background: white;
-    padding: 15px;
-    box-shadow: ${Theme.commonShadow};
+
     .label {
       color: ${Theme.gray40};
       text-transform: uppercase;
