@@ -319,7 +319,12 @@ const DSPPacing = ({
               </li>
               <li>
                 {' '}
-                <div className="label ">Overspend to date</div>
+                <div className="label ">
+                  {selectedOption === 'overspending'
+                    ? 'Overspend'
+                    : 'Underspend'}{' '}
+                  to date
+                </div>
                 <div className="label-range red-range">
                   {!loader && dspSpendData && dspSpendData.change_to_date_all
                     ? `${currencySymbol}${dspSpendData.change_to_date_all
