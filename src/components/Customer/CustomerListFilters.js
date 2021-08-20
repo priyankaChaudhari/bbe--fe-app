@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 import ReactTooltip from 'react-tooltip';
 import { useMediaQuery } from 'react-responsive';
-
-import PropTypes from 'prop-types';
 
 import {
   CheckBox,
