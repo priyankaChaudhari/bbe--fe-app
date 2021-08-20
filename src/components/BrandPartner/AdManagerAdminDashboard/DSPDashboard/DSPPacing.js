@@ -1,16 +1,16 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { arrayOf, bool, func, string } from 'prop-types';
+import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
+import Theme from '../../../../theme/Theme';
 import { PageLoader, Status, Table, WhiteCard } from '../../../../common';
 import { CompanyDefaultUser } from '../../../../theme/images';
 import { TabletViewManager } from '../../../../theme/Global';
 import { noGraphDataMessage } from '../../../../constants/CompanyPerformanceConstants';
 import { contributionColorSet } from '../../../../constants/AdManagerAdminDashboardConstants';
-import Theme from '../../../../theme/Theme';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 const DSPPacing = ({
@@ -19,6 +19,8 @@ const DSPPacing = ({
   currencySymbol,
   selectedOption,
   handleSpendingOptions,
+  dspSpendData,
+  month,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
@@ -160,7 +162,8 @@ const DSPPacing = ({
             ? `${currencySymbol}${itemData.planned_spend_to_date
                 .toFixed(2)
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                .replace('-', '')}`
             : `${currencySymbol}0`}
         </td>
         <td className="product-body">
@@ -169,7 +172,8 @@ const DSPPacing = ({
             ? `${currencySymbol}${itemData.actual_spend_to_date
                 .toFixed(2)
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                .replace('-', '')}`
             : `${currencySymbol}0`}
         </td>
         <td className="product-body">
@@ -180,7 +184,8 @@ const DSPPacing = ({
                 ? `${currencySymbol}${itemData.change_to_date
                     .toFixed(2)
                     .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    .replace('-', '')}`
                 : `${currencySymbol}0`}
             </div>
           ) : null}
@@ -213,11 +218,11 @@ const DSPPacing = ({
   const renderDspPacingOptions = () => {
     const keyTabOptions = [
       {
-        id: 'overSpending',
+        id: 'overspending',
         label: 'Overspending',
       },
       {
-        id: 'underSpending',
+        id: 'underspending',
         label: 'Underspending',
       },
     ];
@@ -252,10 +257,12 @@ const DSPPacing = ({
           <div className="col-12">
             <p className="black-heading-title mt-2 mb-0"> DSP Pacing</p>
             <p className="gray-normal-text mb-4 mt-1">
-              Monthly Budget Pacing (January):
-              <span className="orange-text">
+              Monthly Budget Pacing ({month}):
+              <span style={{ cursor: 'auto' }} className="orange-text">
                 {' '}
-                <span>Underspending</span>
+                <span style={{ textTransform: 'capitalize' }}>
+                  {selectedOption}
+                </span>
               </span>
             </p>
           </div>
@@ -266,44 +273,69 @@ const DSPPacing = ({
                 <div className="label ">Planned Spend to date</div>
                 <div className="label-range">
                   {' '}
-                  {data &&
-                  data.dsp_pacing_all &&
-                  data.dsp_pacing_all.planned_spend_to_date_all
-                    ? `${currencySymbol}${data.dsp_pacing_all.planned_spend_to_date_all
+                  {!loader &&
+                  dspSpendData &&
+                  dspSpendData.planned_spend_to_date_all
+                    ? `${currencySymbol}${dspSpendData.planned_spend_to_date_all
                         .toFixed(2)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                     : `${currencySymbol}0`}{' '}
-                  (68%)
+                  (
+                  {!loader &&
+                  dspSpendData &&
+                  dspSpendData.planned_spend_to_date_percentage_all !== 'N/A'
+                    ? dspSpendData.planned_spend_to_date_percentage_all
+                        .toFixed(2)
+                        .toString()
+                        .replace('-', '')
+                    : '0'}
+                  %)
                 </div>
               </li>
               <li>
                 <div className="label ">Actual Spend to date</div>
                 <div className="label-range">
-                  {data &&
-                  data.dsp_pacing_all &&
-                  data.dsp_pacing_all.actual_spend_to_date_all
-                    ? `${currencySymbol}${data.dsp_pacing_all.actual_spend_to_date_all
+                  {!loader &&
+                  dspSpendData &&
+                  dspSpendData.actual_spend_to_date_all
+                    ? `${currencySymbol}${dspSpendData.actual_spend_to_date_all
                         .toFixed(2)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                     : `${currencySymbol}0`}{' '}
-                  (68%)
+                  (
+                  {!loader &&
+                  dspSpendData &&
+                  dspSpendData.actual_spend_to_date_percentage_all !== 'N/A'
+                    ? dspSpendData.actual_spend_to_date_percentage_all
+                        .toFixed(2)
+                        .toString()
+                        .replace('-', '')
+                    : '0'}
+                  %)
                 </div>
               </li>
               <li>
                 {' '}
                 <div className="label ">Overspend to date</div>
                 <div className="label-range red-range">
-                  {data &&
-                  data.dsp_pacing_all &&
-                  data.dsp_pacing_all.change_to_date_all
-                    ? `${currencySymbol}${data.dsp_pacing_all.change_to_date_all
+                  {!loader && dspSpendData && dspSpendData.change_to_date_all
+                    ? `${currencySymbol}${dspSpendData.change_to_date_all
                         .toFixed(2)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
                     : `${currencySymbol}0`}{' '}
-                  (68%)
+                  (
+                  {!loader &&
+                  dspSpendData &&
+                  dspSpendData.change_to_date_percentage_all !== 'N/A'
+                    ? dspSpendData.change_to_date_percentage_all
+                        .toFixed(2)
+                        .toString()
+                        .replace('-', '')
+                    : '0'}
+                  %)
                 </div>
               </li>
             </ul>
@@ -342,6 +374,7 @@ DSPPacing.defaultProps = {
   currencySymbol: '',
   handleSpendingOptions: () => {},
   selectedOption: 'overSpending',
+  dspSpendData: null,
 };
 
 DSPPacing.propTypes = {
@@ -350,6 +383,8 @@ DSPPacing.propTypes = {
   currencySymbol: string,
   handleSpendingOptions: func,
   selectedOption: string,
+  dspSpendData: objectOf(Object),
+  month: string.isRequired,
 };
 
 const Wrapper = styled.div`

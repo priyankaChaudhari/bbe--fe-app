@@ -761,13 +761,13 @@ export const WhiteCard = styled.div`
           border-radius: 18px;
           color: ${Theme.orange};
         }
-        #overSpending:checked + label{
+        #overspending:checked + label{
           background-color: ${Theme.white};
            border: 1px solid ${Theme.orange};
            border-radius: 18px;
            color: ${Theme.orange};
          }
-         #underSpending:checked + label{
+         #underspending:checked + label{
            background-color:  ${Theme.white};
            border: 1px solid ${Theme.orange};
            border-radius: 18px;

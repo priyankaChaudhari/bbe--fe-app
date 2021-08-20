@@ -42,13 +42,14 @@ export {
   getBuyBoxChartData,
   getAdPerformance,
   getDSPPerformance,
+  getDspPacingData,
 } from './CustomerApi';
 
 // Ad dashboard API
 export {
   getAdManagerAdminGraphData,
   getKeyContributionData,
-  getDspPacindgData,
+  getDspPacingDahboardData,
 } from './AdDashboradApi';
 
 // Choices

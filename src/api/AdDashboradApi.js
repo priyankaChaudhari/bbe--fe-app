@@ -146,11 +146,16 @@ export async function getKeyContributionData(
   return result;
 }
 
-export async function getDspPacindgData(dailyFacts, marketplace, user) {
+export async function getDspPacingDahboardData(
+  marketplace,
+  user,
+  spendingType,
+) {
   const params = {
-    dsp_daily_facts: dailyFacts,
-    dsp_marketplace: marketplace,
+    daily_facts: 'month',
+    marketplace,
     user,
+    order_by: spendingType,
   };
 
   let result = {};
