@@ -41,11 +41,7 @@ import {
   CreateAccount,
 } from '.';
 import { stepPath, whichStep } from '../../constants/FieldConstants';
-import {
-  getAmazonAccountDetails,
-  getAmazonSeller,
-  getAmazonVendor,
-} from '../../api/OnboardingCustomerApi';
+import { getAmazonAccountDetails } from '../../api/OnboardingCustomerApi';
 
 export default function MainContainer() {
   const history = useHistory();
@@ -66,15 +62,8 @@ export default function MainContainer() {
   const [disableBtn, setDisableBtn] = useState(false);
   const [billingData, setBillingData] = useState({});
   const [noAmazonAccount, setNoAmazonAccount] = useState(false);
-  const [marketplaceDetails, setMarketplaceDetails] = useState({
-    marketplace: '',
-    type: '',
-  });
+  const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
-  const [amazonDetails, setAmazonDetails] = useState({
-    Seller: {},
-    Vendor: {},
-  });
 
   const customStyles = {
     content: {
@@ -91,41 +80,6 @@ export default function MainContainer() {
     },
   };
 
-  const getVendorDetails = (id, sellerData) => {
-    getAmazonVendor(id).then((vendor) => {
-      setAmazonDetails({
-        Seller: sellerData,
-        Vendor:
-          vendor &&
-          vendor.data &&
-          vendor.data.results &&
-          vendor.data.results[0],
-      });
-    });
-  };
-
-  const getSellerDetails = (id, type) => {
-    getAmazonSeller(id).then((seller) => {
-      setAmazonDetails({
-        ...amazonDetails,
-        Seller:
-          seller &&
-          seller.data &&
-          seller.data.results &&
-          seller.data.results[0],
-      });
-      if (type === 'Hybrid') {
-        getVendorDetails(
-          id,
-          seller &&
-            seller.data &&
-            seller.data.results &&
-            seller.data.results[0],
-        );
-      }
-    });
-  };
-
   const getStepName = () => {
     for (const item of whichStep) {
       if (history.location.pathname.includes(item.path)) {
@@ -136,38 +90,40 @@ export default function MainContainer() {
   };
 
   const getAccountDetails = (id) => {
-    getAmazonAccountDetails(4, localStorage.getItem('customer') || id).then(
-      (response) => {
-        if (response && response.data) {
-          setMarketplaceDetails({
-            marketplace:
-              response.data.marketplace &&
-              response.data.marketplace.name &&
-              response.data.marketplace.name.label,
-            type: response.data.account_type,
-            marketplaceId:
-              response.data.marketplace && response.data.marketplace.id,
-          });
-          const marketplaceID =
-            response.data.marketplace && response.data.marketplace.id;
-
-          if (
-            response.data.account_type === 'Seller' ||
-            response.data.account_type === 'Hybrid'
-          ) {
-            getSellerDetails(marketplaceID, response.data.account_type);
-          } else if (response.data.account_type === 'Vendor') {
-            getVendorDetails(marketplaceID, '');
-          }
-          getVideoLink(localStorage.getItem('customer'), 'hybrid').then(
-            (res) => {
-              setVideoData(res.data);
-            },
-          );
-          setIsLoading({ loader: false, type: 'page' });
-        }
-      },
-    );
+    getAmazonAccountDetails(
+      'amazon-account-details',
+      localStorage.getItem('customer') || id,
+    ).then((response) => {
+      if (response && response.data) {
+        if (
+          (response.data &&
+            response.data.Seller &&
+            response.data.Seller.no_amazon_account) ||
+          (response.data &&
+            response.data.Vendor &&
+            response.data.Vendor.no_amazon_account)
+        ) {
+          setNoAmazonAccount(true);
+        } else setNoAmazonAccount(false);
+        setMarketplaceDetails({
+          marketplace:
+            response.data.marketplace &&
+            response.data.marketplace.name &&
+            response.data.marketplace.name.label,
+          type: response.data.account_type,
+          marketplaceId:
+            response.data.marketplace && response.data.marketplace.id,
+          Seller: response.data.marketplace && response.data.Seller,
+          Vendor: response.data.marketplace && response.data.Vendor,
+        });
+        getVideoLink(localStorage.getItem('customer') || id, 'hybrid').then(
+          (res) => {
+            setVideoData(res.data);
+          },
+        );
+        setIsLoading({ loader: false, type: 'page' });
+      }
+    });
   };
 
   useEffect(() => {
@@ -331,7 +287,10 @@ export default function MainContainer() {
                 '/account-setup/amazon-merchant',
               )
             ) {
-              getAccountDetails();
+              getAccountDetails(
+                (res && res.data && res.data.customer) ||
+                  (userInfo && userInfo.customer),
+              );
             }
             if (
               history.location.pathname.includes(
@@ -402,7 +361,6 @@ export default function MainContainer() {
           customStyles={customStyles}
           noAmazonAccount={noAmazonAccount}
           marketplaceDetails={marketplaceDetails}
-          amazonDetails={amazonDetails}
           showVideo={showAmazonVideo}
           videoData={videoData}
           setShowVideo={setShowAmazonVideo}
@@ -569,6 +527,7 @@ export default function MainContainer() {
                           setDisableBtn(false);
                         }}
                         readOnly
+                        checked={noAmazonAccount}
                       />
                       <span className="checkmark" />
                     </label>
@@ -610,16 +569,6 @@ export default function MainContainer() {
                     summaryData={summaryData}
                     step={item.key}
                     disableBtn={disableBtn}
-                    noAmazonAccount={noAmazonAccount}
-                  />
-                </div>
-              ) : noAmazonAccount ? (
-                <div className="white-card-base panel gap-none">
-                  <CheckSteps
-                    summaryData={summaryData}
-                    step={item.key}
-                    disableBtn={disableBtn}
-                    noAmazonAccount={noAmazonAccount}
                   />
                 </div>
               ) : (

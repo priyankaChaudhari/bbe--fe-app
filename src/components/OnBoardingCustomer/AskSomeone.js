@@ -167,7 +167,8 @@ export default function AskSomeone({
     <>
       <CheckBox
         className={
-          (isLoading.loader && isLoading.type === 'check') || noAmazonAccount
+          (isLoading.loader && isLoading.type === 'check') ||
+          (noAmazonAccount && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'
         }>
