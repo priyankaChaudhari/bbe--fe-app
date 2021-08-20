@@ -47,24 +47,17 @@ function CustomerListFilters({
             <div className="col-3">
               <p className="black-heading-title pt-3 m-0"> Customers</p>
             </div>
-            <div className="col-lg-3 col-md-6  col-12   mb-2  pl-2 pr-2 ">
-              <DropDownSelect
-                id="BT-view-customerlist-dropdown"
-                className="customer-list-header">
-                {generateDropdown('view')}
-              </DropDownSelect>{' '}
-            </div>
-            {showAdPerformance || showDspAdPerformance || showPerformance ? (
-              <div className="col-lg-3 col-md-4 col-12   mb-2 pl-2 pr-2 ">
+            <div className="col-lg-3 col-md-4 col-12   mb-2 pl-2 pr-2 ">
+              {showAdPerformance || showDspAdPerformance || showPerformance ? (
                 <DropDownSelect
                   id="BT-stats-customerlist-dropdown"
                   className="customer-list-header">
                   {generateDropdown('stats')}
-                </DropDownSelect>{' '}
-              </div>
-            ) : (
-              <></>
-            )}
+                </DropDownSelect>
+              ) : (
+                <></>
+              )}
+            </div>
             <div className="col-lg-3 col-md-4 col-12  pl-2 pr-2">
               <DropDownSelect
                 id="BT-sort-customerlist-dropdown"
@@ -81,6 +74,13 @@ function CustomerListFilters({
                 </DropDownSelect>
               </div>
             ) : null}
+            <div className="col-lg-3 col-md-6  col-12   mb-2  pl-2 pr-2 ">
+              <DropDownSelect
+                id="BT-view-customerlist-dropdown"
+                className="customer-list-header">
+                {generateDropdown('view')}
+              </DropDownSelect>{' '}
+            </div>
           </div>
         ) : (
           ''
@@ -94,7 +94,7 @@ function CustomerListFilters({
                 }>
                 <div className="row">
                   <div className="col-6">
-                    <p className="black-heading-title pt-1 m-0"> Customers</p>
+                    <p className="black-heading-title pt-1 m-0"> Filters</p>
                   </div>
 
                   <div className="col-6 text-right">

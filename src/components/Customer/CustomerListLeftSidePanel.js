@@ -45,7 +45,7 @@ function CustomerListLeftSidePanel({
                   handleFilters(event, 'unselected', 'status')
                 }
                 role="presentation">
-                Clear filters
+                Reset filters
               </div>
             </div>
 

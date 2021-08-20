@@ -1616,7 +1616,7 @@ export default function CustomerList() {
     return (
       <div className="row">
         <div className="col-lg-3 col-12 customer-header">Customer</div>
-        <div className="col-lg-2 col-12 account-type">Account Type</div>
+        <div className="col-lg-2 col-12 account-type ">Account Type</div>
         <div className="col-lg-2 col-12 status">Status</div>
         <div className="col-lg-5 col-12">Active Contracts</div>
       </div>
@@ -1706,6 +1706,7 @@ export default function CustomerList() {
         )}
         {reduceContractLength > 0 ? (
           <span
+            style={{ fontSize: '14px', color: '#000000', fontWeight: '300 ' }}
             onClickCapture={(e) => {
               e.stopPropagation();
               setShowContracts(!showContracts);
@@ -1734,7 +1735,9 @@ export default function CustomerList() {
             item && item.brand_growth_strategist,
           )}
         </td>
-        <td width="16%">{item && item.customer_account_type}</td>
+        <td width="16%">
+          <div className="status"> {item && item.customer_account_type}</div>
+        </td>
         <td width="17%">{generateCompanyStatus(item.status)}</td>
         <td width="41%">{showContractsList(item)}</td>
       </tr>

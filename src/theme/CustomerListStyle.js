@@ -14,7 +14,9 @@ export const CustomerListPage = styled.div`
     height: 100%;
     .table-container {
       // position: fixed;
-      height: 90%;
+      height: calc(100% - 120px);
+      min-height: 600px;
+      padding-bottom: 100px;
       overflow-y: auto;
       overflow-x: hidden;
       overflow: auto;
@@ -22,7 +24,7 @@ export const CustomerListPage = styled.div`
       top: 130px;
       width: 66%;
       position: fixed;
-      padding-bottom: 140px;
+
       padding: 15px;
       background: #ffff;
       .fixed-customer-header {
@@ -229,7 +231,7 @@ export const CustomerListPage = styled.div`
   }
   .footer-sticky {
     position: fixed;
-    bottom: 0;
+    bottom: 0px;
     width: 64%;
     background: white;
   }

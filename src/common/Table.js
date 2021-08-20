@@ -403,9 +403,10 @@ const Table = styled.table`
           }
           &.no-active-contract {
             color: ${Theme.gray40};
-            font-size: 14px;
+            font-size: ${Theme.extraNormal};
             text-transform: initial;
           }
+         
         }
       }
 
