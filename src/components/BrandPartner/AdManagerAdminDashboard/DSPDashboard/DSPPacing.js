@@ -116,15 +116,15 @@ const DSPPacing = ({
           Customer
         </th>
         <th width="20%" className="product-header">
-          This Period
+          PLANNED
         </th>
         <th width="20%" className="product-header">
           {' '}
-          Prev. Period
+          ACTUAL
         </th>
         <th width="20%" className="product-header">
           {' '}
-          Change
+          {selectedOption === 'overspending' ? 'OVERSPEND' : 'UNDERSPEND'}
         </th>
         <th width="20%" className="product-header">
           Contribution
