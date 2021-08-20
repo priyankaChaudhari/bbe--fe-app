@@ -83,7 +83,6 @@ export default function CustomerListTablet({
     }
     return '';
   };
-
   const generateContractDetails = (item) => {
     return (
       <WhiteCard className="mt-2">
