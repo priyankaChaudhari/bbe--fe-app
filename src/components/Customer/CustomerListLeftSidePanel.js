@@ -89,7 +89,12 @@ function CustomerListLeftSidePanel({
                     data-for="info"
                     className="info-icon"
                   />
-                  <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
+                  <ReactTooltip
+                    className="customer-list-tooltip"
+                    id="info"
+                    aria-haspopup="true"
+                    place="bottom"
+                  />
 
                   <img
                     src={SearchIcon}

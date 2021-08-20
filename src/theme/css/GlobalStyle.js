@@ -1152,6 +1152,10 @@ fieldset {
   font-size: 12px;
   font-weight: 400;
 }
+ .customer-list-tooltip{
+    max-width: 16%;
+    left: 14% !important;
+ }
 
 .contract_td {
   border: 1px solid ${Theme.black};

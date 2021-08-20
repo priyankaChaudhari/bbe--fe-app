@@ -346,7 +346,7 @@ export const CustomerListPage = styled.div`
 `;
 
 export const CustomerLeftPannel = styled.div`
-  height: 80%;
+  height: 82%;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: auto;
@@ -666,7 +666,7 @@ export const CustomerListTabletView = styled.div`
     }
   }
   @media (max-width: 996px) {
-    padding-top: 300px;
+    padding-top: 260px;
   }
   @media (max-width: 767px) {
     padding-top: 360px;
