@@ -123,6 +123,9 @@ function CustomerListFilters({
                               transform: isCollapseOpen ? 'rotate(180deg)' : '',
                               width: '25px',
                               height: '25px',
+                              position: ' absolute',
+                              right: '7px',
+                              top: '10px',
                             }}
                             aria-hidden="true"
                             onClick={() => setIsCollapseOpen(!isCollapseOpen)}
