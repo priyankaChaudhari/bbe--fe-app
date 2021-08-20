@@ -2145,6 +2145,10 @@ export default function CustomerList() {
                     showContracts={showContracts}
                     setShowContracts={setShowContracts}
                     accountType={accountType}
+                    generateLogoCompanyNameAndGs={generateLogoCompanyNameAndGs}
+                    generateCompanyStatus={generateCompanyStatus}
+                    generatePerformance={generatePerformance}
+                    showContractsList={showContractsList}
                   />
                 )}
               </>

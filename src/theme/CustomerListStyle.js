@@ -451,3 +451,152 @@ export const SideContent = styled.div`
     }
   }
 `;
+export const CustomerListTabletView = styled.div`
+  background: ${Theme.gray6};
+  height: 100%;
+  padding-top: 130px;
+
+  .black-heading-title {
+    font-size: ${Theme.extraNormal};
+  }
+  .solid-icon {
+    width: 36px;
+    margin-right: 15px;
+  }
+  .recurring-contact {
+    li {
+      margin-right: 7px;
+      margin-bottom: 6px;
+
+      .recurring-service {
+        border: 1px solid ${Theme.gray45};
+        border-radius: 5px;
+        border: none;
+        padding: 10px 4px 10px 12px;
+        color: ${Theme.gray85};
+        font-size: 14px;
+        display: flex;
+
+        &.agreement {
+          border: 1px solid ${Theme.gray45};
+          padding: 9px 12px;
+          background-color: ${Theme.white};
+        }
+
+        &.edit {
+          background: ${Theme.lightPink};
+        }
+
+        &.count-days {
+          background: ${Theme.lighterOrange};
+        }
+
+        &.file-check {
+          background: ${Theme.extraLightYellow};
+        }
+
+        &.file {
+          background: ${Theme.gray8};
+        }
+
+        .active-contract-icon {
+          padding: 8px 10px;
+          border-radius: 3px;
+          margin-left: 10px;
+          font-size: 14px;
+
+          &.edit-file-icon {
+            background: ${Theme.pink};
+
+            img {
+              vertical-align: middle;
+              width: 16px;
+            }
+          }
+          &.count-clock-icon {
+            background: ${Theme.extraLighOrange};
+            margin-left: 10px;
+
+            img {
+              vertical-align: text-top;
+              width: 14px;
+              margin-right: 3px;
+            }
+          }
+          &.file-check-icon {
+            background: ${Theme.lightYellow};
+            img {
+              vertical-align: text-top;
+              width: 13px;
+            }
+          }
+          &.file-icon {
+            background: ${Theme.gray12};
+
+            img {
+              vertical-align: text-top;
+              width: 14px;
+            }
+          }
+        }
+      }
+      &.no-active-contract {
+        color: ${Theme.gray40};
+        font-size: 14px;
+        text-transform: initial;
+      }
+    }
+  }
+  .company-logo {
+    border-radius: 10px;
+    width: 45px;
+    height: 45px;
+    margin-right: 14px;
+    float: left;
+  }
+  .company-name {
+    vertical-align: middle;
+    position: relative;
+    color: ${Theme.black};
+    font-size: ${Theme.title};
+    font-weight: 600;
+  }
+
+  .status {
+    color: ${Theme.gray85};
+    font-size: ${Theme.extraNormal};
+  }
+  .label-info {
+    font-weight: 600;
+  }
+  .increase-rate {
+    color: ${Theme.lighterGreen};
+    font-size: ${Theme.extraNormal};
+    font-weight: 300;
+    img {
+      vertical-align: bottom;
+    }
+    &.grey {
+      color: ${Theme.gray40};
+    }
+  }
+  .decrease-rate {
+    color: ${Theme.darkRed};
+    font-size: ${Theme.extraNormal};
+    font-weight: 300;
+    .red-arrow {
+      width: 14px;
+      transform: rotate(180deg);
+      vertical-align: middle;
+    }
+    &.grey {
+      color: ${Theme.gray40};
+    }
+  }
+  @media (max-width: 996px) {
+    padding-top: 300px;
+  }
+  @media (max-width: 767px) {
+    padding-top: 360px;
+  }
+`;

@@ -94,7 +94,9 @@ function CustomerListFilters({
                 className={
                   showContractDetails ? 'col-lg-3 col-md-12' : 'col-lg-3 col-12'
                 }>
-                <div>
+                <div
+                  aria-hidden="true"
+                  onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
                   <div className="row">
                     <div className={isDesktop ? 'col-6' : 'col-5'}>
                       <p className="black-heading-title pt-3 m-0"> Filters</p>
@@ -115,21 +117,21 @@ function CustomerListFilters({
                       </p>
                     </div>
                     {!isDesktop ? (
-                      <div role="presentation">
-                        <img
-                          src={CaretUp}
-                          alt="caret"
-                          style={{
-                            transform: isCollapseOpen ? 'rotate(180deg)' : '',
-                            width: '25px',
-                            height: '25px',
-                            position: ' absolute',
-                            right: '7px',
-                            top: '10px',
-                          }}
-                          aria-hidden="true"
-                          onClick={() => setIsCollapseOpen(!isCollapseOpen)}
-                        />
+                      <div className="col-1" role="presentation">
+                        <div className="black-heading-title ">
+                          <img
+                            src={CaretUp}
+                            alt="caret"
+                            style={{
+                              transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                              width: '25px',
+                              height: '25px',
+                              position: ' absolute',
+                              right: '7px',
+                              top: '10px',
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : null}
                   </div>
