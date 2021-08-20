@@ -816,7 +816,7 @@ fieldset {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background-color: ${Theme.white};
+  background-color: transparent;
   border-radius: 3px;
   position: absolute;
   user-select: none;
@@ -828,7 +828,7 @@ fieldset {
   user-select: none;
   opacity: 0;
   transition: opacity 300ms ease-in-out 0s;
-  background-color: ${Theme.white};
+  background-color: transparent;
 }
 
 .readMoreText {

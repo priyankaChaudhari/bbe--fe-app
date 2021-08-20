@@ -457,7 +457,7 @@ export default function CustomerList() {
           />
         )
       ) : null}
-      <span style={{ lineHeight: 0, fontSize: '15px' }}>
+      <span style={{ lineHeight: 0, fontSize: '15px', marginLeft: '8px' }}>
         {dataProps.data.label}
       </span>
     </SingleValue>

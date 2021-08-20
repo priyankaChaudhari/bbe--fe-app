@@ -58,6 +58,13 @@ function CustomerListFilters({
                 <></>
               )}
             </div>
+            <div className="col-lg-3 col-md-6  col-12   mb-2  pl-2 pr-2 ">
+              <DropDownSelect
+                id="BT-view-customerlist-dropdown"
+                className="customer-list-header">
+                {generateDropdown('view')}
+              </DropDownSelect>{' '}
+            </div>
 
             <div className="col-lg-3 col-md-4 col-12  pl-2 pr-2">
               <DropDownSelect
@@ -66,8 +73,9 @@ function CustomerListFilters({
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
+
             {showOrderOption && !isDesktop ? (
-              <div className="col-lg-3 col-md-4 col-12 pl-2 pr-2">
+              <div className="col-lg-3 col-md-4 col-12 pl-2 ">
                 <DropDownSelect
                   id="BT-order-customerlist-dropdown"
                   className="customer-list-header">
@@ -75,13 +83,6 @@ function CustomerListFilters({
                 </DropDownSelect>
               </div>
             ) : null}
-            <div className="col-lg-3 col-md-6  col-12   mb-2  pl-2 pr-2 ">
-              <DropDownSelect
-                id="BT-view-customerlist-dropdown"
-                className="customer-list-header">
-                {generateDropdown('view')}
-              </DropDownSelect>{' '}
-            </div>
           </div>
         ) : (
           ''
@@ -179,7 +180,8 @@ function CustomerListFilters({
                           <ReactTooltip
                             id="info"
                             aria-haspopup="true"
-                            place="bottom"
+                            place="left"
+                            style={{ left: '5%!important' }}
                           />
                           <img
                             src={SearchIcon}

@@ -356,7 +356,6 @@ export const CustomerLeftPannel = styled.div`
   position: fixed;
   max-width: 21.5%;
   padding-bottom: 140px;
-  padding: 15px;
   background: ${Theme.white};
   .customer-list-pannel {
     height: 80%;
@@ -366,7 +365,7 @@ export const CustomerLeftPannel = styled.div`
     top: 130px;
     width: 100%;
     position: fixed;
-    max-width: 20%;
+    max-width: 21.5%;
     padding-bottom: 20px;
   }
   .label {
