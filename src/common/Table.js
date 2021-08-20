@@ -245,6 +245,8 @@ const Table = styled.table`
 
       .user-name {
         font-weight: 300;
+        font-size: ${Theme.extraNormal};
+        text-transform: capitalize;
         margin-top: 0;
       }
 

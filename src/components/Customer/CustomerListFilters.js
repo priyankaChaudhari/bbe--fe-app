@@ -58,6 +58,7 @@ function CustomerListFilters({
                 <></>
               )}
             </div>
+
             <div className="col-lg-3 col-md-4 col-12  pl-2 pr-2">
               <DropDownSelect
                 id="BT-sort-customerlist-dropdown"
@@ -86,7 +87,7 @@ function CustomerListFilters({
           ''
         )}
         <div className="container-fluid">
-          <WhiteCard className="mb-3 d-lg-none d-block">
+          <WhiteCard className="mb-3 d-lg-none d-block ">
             <div className="row">
               <div
                 className={
@@ -94,7 +95,7 @@ function CustomerListFilters({
                 }>
                 <div className="row">
                   <div className="col-6">
-                    <p className="black-heading-title pt-1 m-0"> Filters</p>
+                    <p className="black-heading-title pt-3 m-0"> Filters</p>
                   </div>
 
                   <div className="col-6 text-right">
@@ -119,21 +120,6 @@ function CustomerListFilters({
                         <img width="25px" src={CloseIcon} alt="cross" />
                       </label>
                       <div className="row ">
-                        {/* <div className="col-4">
-                          <div className="customer-list-filter">Filters</div>
-                        </div>
-                        <div className="col-8 text-right">
-                          <div
-                            className="clear-filter"
-                            onClick={(event) =>
-                              handleFilters(event, 'unselected')
-                            }
-                            role="presentation">
-                            {' '}
-                            Clear filters
-                          </div>
-                        </div> */}
-
                         <div className="col-12 mb-3">
                           <InputSearchWithRadius className="customer-list-header w-80">
                             <DebounceInput

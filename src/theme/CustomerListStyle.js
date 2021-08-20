@@ -13,7 +13,6 @@ export const CustomerListPage = styled.div`
     margin: 0 auto;
     height: 100%;
     .table-container {
-      // position: fixed;
       height: calc(100% - 120px);
       min-height: 600px;
       padding-bottom: 100px;
@@ -42,11 +41,8 @@ export const CustomerListPage = styled.div`
   .table-header {
     box-shadow: none;
     position: fixed !important;
-    // top: 130px;
-    // left: 32%;
     z-index: 1;
     max-width: 64%;
-    // right: 0px;
     width: 100%;
     margin: 0;
     height: 40px;
@@ -188,11 +184,8 @@ export const CustomerListPage = styled.div`
   .Brand_Strategist {
     padding-left: 2%;
   }
-  // .customer-header {
-  //   padding-left: 66px;
-  // }
+
   .sticky-header {
-    // position: fixed;
     top: 130px;
     left: 353px;
     right: 0;
@@ -201,12 +194,8 @@ export const CustomerListPage = styled.div`
     z-index: 1;
     display: inline;
   }
-  //.table-container {
-  //  padding-left: 290px;
-  // }
 
   .customer-list-header-sticky {
-    // position: fixed;
     left: 64px;
     right: 0;
     z-index: 2;
@@ -214,12 +203,9 @@ export const CustomerListPage = styled.div`
     width: 100%;
   }
   .table-part {
-    // min-height: 560px;
-    // padding-top: 65px;
     overflow: auto;
     min-height: 892px;
     height: 100%;
-    // padding-bottom: 69px;
     position: relative;
   }
   .customer-list-header {
@@ -270,7 +256,6 @@ export const CustomerListPage = styled.div`
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        // max-width: 70px;
         width: 6%;
       }
     }
@@ -294,9 +279,6 @@ export const CustomerListPage = styled.div`
     }
 
     .customer-list-header-sticky {
-      // left: 0;
-      // right: 0;
-      // padding: 0 15px;
       background-color: transparent;
     }
     .customer-list-header {
@@ -322,10 +304,7 @@ export const CustomerListPage = styled.div`
         }
       }
     }
-    // .filter-slider {
-    //   color: ${Theme.gray40};
-    //   font-size: ${Theme.extraNormal};
-    // }
+
     .customer-list-header {
       margin: 5px 0;
     }
@@ -367,12 +346,9 @@ export const CustomerListPage = styled.div`
 `;
 
 export const CustomerLeftPannel = styled.div`
-  //max-width: 290px;
   height: 80%;
-  //position: fixed;
   overflow-y: auto;
   overflow-x: hidden;
-  // padding-bottom: 200px;
   overflow: auto;
   border-radius: 15px;
   top: 130px;
@@ -380,15 +356,9 @@ export const CustomerLeftPannel = styled.div`
   position: fixed;
   max-width: 21.5%;
   padding-bottom: 140px;
-  // left: 62px;
-  // position: fixed;
-  //left: 117px;
   padding: 15px;
-  // padding-bottom: 80px;
-  background: #ffff;
-  //border-right: 1px solid ${Theme.gray5};
+  background: ${Theme.white};
   .customer-list-pannel {
-    // height: 85%;
     height: 80%;
     overflow: auto;
     padding-top: 20px;
@@ -516,7 +486,6 @@ export const SideContent = styled.div`
   @media (max-width: 991px) {
     width: 100%;
     min-height: 100%;
-    // position: absolute;
     top: 10px;
     left: 0;
     right: 0;
