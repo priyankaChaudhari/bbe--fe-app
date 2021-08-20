@@ -94,6 +94,7 @@ function CustomerListFilters({
                   showContractDetails ? 'col-lg-3 col-md-12' : 'col-lg-3 col-12'
                 }>
                 <div
+                  className="cursor"
                   aria-hidden="true"
                   onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
                   <div className="row">
@@ -407,7 +408,9 @@ function CustomerListFilters({
                 {generateDropdown('sort')}
               </DropDownSelect>{' '}
             </div>
-            {showOrderOption && !isDesktop ? (
+            {(showOrderOption && !isDesktop && showAdPerformance) ||
+            showDspAdPerformance ||
+            showPerformance ? (
               <div className="col-lg-3 col-md-6 col-12 ">
                 <DropDownSelect
                   id="BT-order-customerlist-dropdown"

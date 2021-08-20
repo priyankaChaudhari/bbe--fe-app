@@ -92,8 +92,6 @@ export default function CustomerListTablet({
           item && item.brand_growth_strategist,
         )}
         <div className="clear-fix" />
-        <div className=" straight-line horizontal-line pt-3 mb-3 " />
-        {showContractsList(item)}
         <div className=" straight-line horizontal-line pt-3" />
         <div className="row">
           <div className="col-12 col-md-6 mt-3">
@@ -109,6 +107,8 @@ export default function CustomerListTablet({
             </div>
           </div>
         </div>
+        <div className=" straight-line horizontal-line pt-3 mb-3 " />
+        {showContractsList(item)}
       </WhiteCard>
     );
   };
