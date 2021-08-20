@@ -99,141 +99,143 @@ function CustomerListLeftSidePanel({
                 </InputSearchWithRadius>
               </div>
             </div>
-          </div>
-          {showAdPerformance ? (
-            <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
-          ) : showDspAdPerformance ? (
-            <div className="label mt-2 mb-2">DSP Ad Manager</div>
-          ) : (
-            <div className="label mt-2 mb-2">Brand Strategist</div>
-          )}
-          <DropDownSelect id="BT-user-customerlist-dropdown">
-            {generateDropdown('user', selectInputRef)}
-          </DropDownSelect>{' '}
-          <div className="label mt-4 pt-2">Customer Status</div>
-          <div className="clear-fix" />
-          <ul className="check-box-list checkboxes">
-            {status &&
-              status.map((item) => (
+            {showAdPerformance ? (
+              <div className="label mt-2 mb-2">Sponsored Ad Manager</div>
+            ) : showDspAdPerformance ? (
+              <div className="label mt-2 mb-2">DSP Ad Manager</div>
+            ) : (
+              <div className="label mt-2 mb-2">Brand Strategist</div>
+            )}
+            <DropDownSelect id="BT-user-customerlist-dropdown">
+              {generateDropdown('user', selectInputRef)}
+            </DropDownSelect>{' '}
+            <div className="label mt-4 pt-2">Customer Status</div>
+            <div className="clear-fix" />
+            <ul className="check-box-list checkboxes">
+              {status &&
+                status.map((item) => (
+                  <li key={item.value}>
+                    <CheckBox>
+                      <label
+                        className="check-container customer-pannel"
+                        htmlFor={item.value}>
+                        {item.label}
+                        <input
+                          type="checkbox"
+                          id={item.value}
+                          name={item.value}
+                          onChange={(event) =>
+                            handleFilters(event, item, 'status')
+                          }
+                          defaultChecked={
+                            filters.status
+                              ? filters.status.find((op) => op === item.value)
+                              : ''
+                          }
+                        />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                ))}
+            </ul>
+            <div className="label mt-4 pt-2">Account Type</div>
+            <div className="clear-fix" />
+            <ul className="check-box-list checkboxes">
+              {accountType &&
+                accountType.map((item) => (
+                  <li key={item.value}>
+                    <CheckBox>
+                      <label
+                        className="check-container customer-pannel"
+                        htmlFor={item.value}>
+                        {item.label}
+                        <input
+                          type="checkbox"
+                          id={item.value}
+                          name={item.value}
+                          onChange={(event) =>
+                            handleFilters(event, item, 'customer_account_type')
+                          }
+                          defaultChecked={
+                            filters.customer_account_type
+                              ? filters.customer_account_type.find(
+                                  (op) => op === item.value,
+                                )
+                              : ''
+                          }
+                        />
+                        <span className="checkmark" />
+                      </label>
+                    </CheckBox>
+                  </li>
+                ))}
+            </ul>
+            <div className="label mt-4 pt-2">Contract Type</div>
+            <div className="clear-fix" />
+            <ul className="check-box-list">
+              {contractChoices.map((item) => (
                 <li key={item.value}>
-                  <CheckBox>
+                  {' '}
+                  <ModalRadioCheck>
                     <label
-                      className="check-container customer-pannel"
+                      className=" checkboxes radio-container customer-list"
                       htmlFor={item.value}>
                       {item.label}
                       <input
-                        type="checkbox"
+                        type="radio"
+                        name="radio"
                         id={item.value}
-                        name={item.value}
+                        value={item.value}
                         onChange={(event) =>
-                          handleFilters(event, item, 'status')
+                          handleFilters(event, item, 'radio')
                         }
                         defaultChecked={
-                          filters.status
-                            ? filters.status.find((op) => op === item.value)
+                          filters && filters.contract_type
+                            ? filters &&
+                              filters.contract_type &&
+                              filters.contract_type === item.value
                             : ''
                         }
                       />
-                      <span className="checkmark" />
+                      <span className="checkmark checkmark-customer-list" />
                     </label>
-                  </CheckBox>
+                  </ModalRadioCheck>
                 </li>
               ))}
-          </ul>
-          <div className="label mt-4 pt-2">Account Type</div>
-          <div className="clear-fix" />
-          <ul className="check-box-list checkboxes">
-            {accountType &&
-              accountType.map((item) => (
+            </ul>
+            <div className="label mt-4 pt-2">Contract Status</div>
+            <div className="clear-fix" />
+            <ul className="check-box-list checkboxes">
+              {contractStatus.map((item) => (
                 <li key={item.value}>
                   <CheckBox>
                     <label
                       className="check-container customer-pannel"
-                      htmlFor={item.value}>
-                      {item.label}
+                      htmlFor={item.label}>
                       <input
                         type="checkbox"
-                        id={item.value}
+                        id={item.label}
                         name={item.value}
                         onChange={(event) =>
-                          handleFilters(event, item, 'customer_account_type')
+                          handleFilters(event, item, 'contract_status')
                         }
                         defaultChecked={
-                          filters.customer_account_type
-                            ? filters.customer_account_type.find(
+                          filters.status
+                            ? filters.contract_status.find(
                                 (op) => op === item.value,
                               )
                             : ''
                         }
                       />
                       <span className="checkmark" />
+                      {item.label}
                     </label>
                   </CheckBox>
                 </li>
               ))}
-          </ul>
-          <div className="label mt-4 pt-2">Contract Type</div>
-          <div className="clear-fix" />
-          <ul className="check-box-list">
-            {contractChoices.map((item) => (
-              <li key={item.value}>
-                {' '}
-                <ModalRadioCheck>
-                  <label
-                    className=" checkboxes radio-container customer-list"
-                    htmlFor={item.value}>
-                    {item.label}
-                    <input
-                      type="radio"
-                      name="radio"
-                      id={item.value}
-                      value={item.value}
-                      onChange={(event) => handleFilters(event, item, 'radio')}
-                      defaultChecked={
-                        filters && filters.contract_type
-                          ? filters &&
-                            filters.contract_type &&
-                            filters.contract_type === item.value
-                          : ''
-                      }
-                    />
-                    <span className="checkmark checkmark-customer-list" />
-                  </label>
-                </ModalRadioCheck>
-              </li>
-            ))}
-          </ul>
-          <div className="label mt-4 pt-2">Contract Status</div>
-          <div className="clear-fix" />
-          <ul className="check-box-list checkboxes">
-            {contractStatus.map((item) => (
-              <li key={item.value}>
-                <CheckBox>
-                  <label
-                    className="check-container customer-pannel"
-                    htmlFor={item.label}>
-                    <input
-                      type="checkbox"
-                      id={item.label}
-                      name={item.value}
-                      onChange={(event) =>
-                        handleFilters(event, item, 'contract_status')
-                      }
-                      defaultChecked={
-                        filters.status
-                          ? filters.contract_status.find(
-                              (op) => op === item.value,
-                            )
-                          : ''
-                      }
-                    />
-                    <span className="checkmark" />
-                    {item.label}
-                  </label>
-                </CheckBox>
-              </li>
-            ))}
-          </ul>
+            </ul>
+          </div>
         </div>
       </CustomerLeftPannel>
     </>
