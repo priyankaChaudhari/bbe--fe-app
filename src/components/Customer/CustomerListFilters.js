@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { DebounceInput } from 'react-debounce-input';
 import ReactTooltip from 'react-tooltip';
@@ -18,7 +18,7 @@ import {
   contractStatus,
 } from '../../constants/FieldConstants';
 import { MobileLeftSidebar, SideContent } from '../../theme/CustomerListStyle';
-import { InfoIcon, SearchIcon } from '../../theme/images';
+import { CaretUp, InfoIcon, SearchIcon } from '../../theme/images';
 
 function CustomerListFilters({
   handleFilters,
@@ -38,7 +38,7 @@ function CustomerListFilters({
   accountType,
 }) {
   const isDesktop = useMediaQuery({ minWidth: 991 });
-
+  const [isCollapseOpen, setIsCollapseOpen] = useState(false);
   return (
     <>
       <div className="customer-list-header-sticky">
@@ -93,263 +93,282 @@ function CustomerListFilters({
                 className={
                   showContractDetails ? 'col-lg-3 col-md-12' : 'col-lg-3 col-12'
                 }>
-                <div className="row">
-                  <div className="col-6">
-                    <p className="black-heading-title pt-3 m-0"> Filters</p>
-                  </div>
+                <div>
+                  <div className="row">
+                    <div className={isDesktop ? 'col-6' : 'col-5'}>
+                      <p className="black-heading-title pt-3 m-0"> Filters</p>
+                    </div>
 
-                  <div className="col-6 text-right">
-                    <p className=" gray-normal-text  d-lg-none d-block ">
-                      <label
-                        className=" cursor "
-                        htmlFor="tabletmenu-check"
-                        id="responsive-button">
-                        Reset filters
-                      </label>
-                    </p>
+                    <div className="col-6 text-right">
+                      <p className=" gray-normal-text  d-lg-none d-block ">
+                        <label
+                          className=" cursor "
+                          htmlFor="tabletmenu-check"
+                          id="responsive-button"
+                          onClickCapture={(event) => {
+                            event.stopPropagation();
+                            handleFilters(event, 'unselected');
+                          }}>
+                          Reset filters
+                        </label>
+                      </p>
+                    </div>
+                    {!isDesktop ? (
+                      <div className="col-1" role="presentation">
+                        <div className="black-heading-title ">
+                          <img
+                            src={CaretUp}
+                            alt="caret"
+                            style={{
+                              transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                              width: '25px',
+                              height: '25px',
+                            }}
+                            aria-hidden="true"
+                            onClick={() => setIsCollapseOpen(!isCollapseOpen)}
+                          />
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-                <MobileLeftSidebar>
-                  <input type="checkbox" id="tabletmenu-check" />
-                  {/* <div id="ifp-sidebar-responsive"> */}
-                  <SideContent>
-                    {/* <p className="black-heading-title mt-0 mb-4"> Filters</p> */}
-                    {/* <label
-                      htmlFor="tabletmenu-check"
-                      className="close-icon d-xl-none d-block cursor">
-                      <img width="25px" src={CloseIcon} alt="cross" />
-                    </label> */}
-                    <div className="row ">
-                      <div className="col-12 mb-3">
-                        <InputSearchWithRadius className="customer-list-header w-80">
-                          <DebounceInput
-                            // minLength={2}
-                            debounceTimeout={600}
-                            className=" form-control search-filter"
-                            placeholder="Search"
-                            onChange={(event) => {
-                              setSearchQuery(event.target.value);
-                              setFilters({
-                                ...filters,
-                                searchQuery: event.target.value,
-                              });
-                              localStorage.setItem('page', 1);
-                              localStorage.setItem(
-                                'filters',
-                                JSON.stringify({
+                {isCollapseOpen ? (
+                  <MobileLeftSidebar>
+                    <SideContent>
+                      <div className="row ">
+                        <div className="col-12 mb-3">
+                          <InputSearchWithRadius className="customer-list-header w-80">
+                            <DebounceInput
+                              // minLength={2}
+                              debounceTimeout={600}
+                              className=" form-control search-filter"
+                              placeholder="Search"
+                              onChange={(event) => {
+                                setSearchQuery(event.target.value);
+                                setFilters({
                                   ...filters,
                                   searchQuery: event.target.value,
-                                }),
-                              );
-                            }}
-                            onKeyPress={(event) => {
-                              if (event.key === 'Enter') {
-                                handleSearch(event, 'search');
+                                });
+                                localStorage.setItem('page', 1);
+                                localStorage.setItem(
+                                  'filters',
+                                  JSON.stringify({
+                                    ...filters,
+                                    searchQuery: event.target.value,
+                                  }),
+                                );
+                              }}
+                              onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                  handleSearch(event, 'search');
+                                }
+                              }}
+                              value={
+                                searchQuery ||
+                                (filters && filters.searchQuery) ||
+                                ''
                               }
-                            }}
-                            value={
-                              searchQuery ||
-                              (filters && filters.searchQuery) ||
-                              ''
-                            }
-                          />
-                          <img
-                            src={InfoIcon}
-                            alt="search cursor"
-                            data-tip="Search by Company Name, Contact First, Last Name or Email"
-                            data-for="info"
-                            className="info-icon"
-                          />
-                          <ReactTooltip
-                            id="info"
-                            aria-haspopup="true"
-                            place="bottom"
-                          />
-                          <img
-                            src={SearchIcon}
-                            alt="search"
-                            className="search-input-icon"
-                          />
-                        </InputSearchWithRadius>
+                            />
+                            <img
+                              src={InfoIcon}
+                              alt="search cursor"
+                              data-tip="Search by Company Name, Contact First, Last Name or Email"
+                              data-for="info"
+                              className="info-icon"
+                            />
+                            <ReactTooltip
+                              id="info"
+                              aria-haspopup="true"
+                              place="bottom"
+                            />
+                            <img
+                              src={SearchIcon}
+                              alt="search"
+                              className="search-input-icon"
+                            />
+                          </InputSearchWithRadius>
+                        </div>
                       </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-6">
-                        {showAdPerformance ? (
-                          <div className="label">Sponsored Ad Manager</div>
-                        ) : showDspAdPerformance ? (
-                          <div className="label">DSP Ad Manager</div>
-                        ) : (
-                          <div className="label">Brand Strategist</div>
-                        )}
-                        <DropDownSelect id="BT-order-customerlist-dropdown">
-                          {generateDropdown('user', selectInputRefMobile)}
-                        </DropDownSelect>
+                      <div className="row">
+                        <div className="col-6">
+                          {showAdPerformance ? (
+                            <div className="label">Sponsored Ad Manager</div>
+                          ) : showDspAdPerformance ? (
+                            <div className="label">DSP Ad Manager</div>
+                          ) : (
+                            <div className="label">Brand Strategist</div>
+                          )}
+                          <DropDownSelect id="BT-order-customerlist-dropdown">
+                            {generateDropdown('user', selectInputRefMobile)}
+                          </DropDownSelect>
 
-                        <div className="label mt-4 pt-2">Customer Status</div>
-                        <div className="clear-fix" />
-                        {!isDesktop ? (
-                          <ul className="check-box-list checkboxes">
-                            {status &&
-                              status.map((item) => (
-                                <li key={item.value}>
-                                  <CheckBox>
-                                    <label
-                                      className="check-container customer-pannel"
-                                      htmlFor={item.value}>
-                                      {item.label}
-                                      <input
-                                        type="checkbox"
-                                        id={item.value}
-                                        name={item.value}
-                                        onChange={(event) =>
-                                          handleFilters(event, item, 'status')
-                                        }
-                                        defaultChecked={
-                                          filters.status
-                                            ? filters.status.find(
-                                                (op) => op === item.value,
-                                              )
-                                            : ''
-                                        }
-                                      />
-                                      <span className="checkmark" />
-                                    </label>
-                                  </CheckBox>
-                                </li>
-                              ))}
-                          </ul>
-                        ) : (
-                          ''
-                        )}
-
-                        <div className="label mt-4 pt-2">Account Type</div>
-                        <div className="clear-fix" />
-                        {!isDesktop ? (
-                          <ul className="check-box-list checkboxes">
-                            {accountType &&
-                              accountType.map((item) => (
-                                <li key={item.value}>
-                                  <CheckBox>
-                                    <label
-                                      className="check-container customer-pannel"
-                                      htmlFor={item.value}>
-                                      {item.label}
-                                      <input
-                                        type="checkbox"
-                                        id={item.value}
-                                        name={item.value}
-                                        onChange={(event) =>
-                                          handleFilters(
-                                            event,
-                                            item,
-                                            'customer_account_type',
-                                          )
-                                        }
-                                        defaultChecked={
-                                          filters.customer_account_type
-                                            ? filters.customer_account_type.find(
-                                                (op) => op === item.value,
-                                              )
-                                            : ''
-                                        }
-                                      />
-                                      <span className="checkmark" />
-                                    </label>
-                                  </CheckBox>
-                                </li>
-                              ))}
-                          </ul>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                      <div className="col-6">
-                        <div className="label mt-4">Contract Type</div>
-                        <div className="clear-fix" />
-                        {!isDesktop ? (
-                          <ul className="check-box-list">
-                            {contractChoices.map((item) => (
-                              <li key={item.value}>
-                                {' '}
-                                <ModalRadioCheck>
-                                  <label
-                                    className="checkboxes radio-container customer-list"
-                                    htmlFor={item.value}>
-                                    {item.label}
-                                    <input
-                                      type="radio"
-                                      name="radio"
-                                      id={item.value}
-                                      value={item.value}
-                                      onChange={(event) =>
-                                        handleFilters(event, item, 'radio')
-                                      }
-                                      defaultChecked={
-                                        filters.contract_type
-                                          ? filters.contract_type === item.value
-                                          : ''
-                                      }
-                                    />
-                                    <span className="checkmark checkmark-customer-list" />
-                                  </label>
-                                </ModalRadioCheck>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          ''
-                        )}
-
-                        {!isDesktop ? (
-                          <>
-                            {' '}
-                            <div className="label mt-4 pt-2">
-                              Contract Status
-                            </div>
-                            <div className="clear-fix" />
+                          <div className="label mt-4 pt-2">Customer Status</div>
+                          <div className="clear-fix" />
+                          {!isDesktop ? (
                             <ul className="check-box-list checkboxes">
-                              {contractStatus.map((item) => (
+                              {status &&
+                                status.map((item) => (
+                                  <li key={item.value}>
+                                    <CheckBox>
+                                      <label
+                                        className="check-container customer-pannel"
+                                        htmlFor={item.value}>
+                                        {item.label}
+                                        <input
+                                          type="checkbox"
+                                          id={item.value}
+                                          name={item.value}
+                                          onChange={(event) =>
+                                            handleFilters(event, item, 'status')
+                                          }
+                                          defaultChecked={
+                                            filters.status
+                                              ? filters.status.find(
+                                                  (op) => op === item.value,
+                                                )
+                                              : ''
+                                          }
+                                        />
+                                        <span className="checkmark" />
+                                      </label>
+                                    </CheckBox>
+                                  </li>
+                                ))}
+                            </ul>
+                          ) : (
+                            ''
+                          )}
+
+                          <div className="label mt-4 pt-2">Account Type</div>
+                          <div className="clear-fix" />
+                          {!isDesktop ? (
+                            <ul className="check-box-list checkboxes">
+                              {accountType &&
+                                accountType.map((item) => (
+                                  <li key={item.value}>
+                                    <CheckBox>
+                                      <label
+                                        className="check-container customer-pannel"
+                                        htmlFor={item.value}>
+                                        {item.label}
+                                        <input
+                                          type="checkbox"
+                                          id={item.value}
+                                          name={item.value}
+                                          onChange={(event) =>
+                                            handleFilters(
+                                              event,
+                                              item,
+                                              'customer_account_type',
+                                            )
+                                          }
+                                          defaultChecked={
+                                            filters.customer_account_type
+                                              ? filters.customer_account_type.find(
+                                                  (op) => op === item.value,
+                                                )
+                                              : ''
+                                          }
+                                        />
+                                        <span className="checkmark" />
+                                      </label>
+                                    </CheckBox>
+                                  </li>
+                                ))}
+                            </ul>
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                        <div className="col-6">
+                          <div className="label mt-4">Contract Type</div>
+                          <div className="clear-fix" />
+                          {!isDesktop ? (
+                            <ul className="check-box-list">
+                              {contractChoices.map((item) => (
                                 <li key={item.value}>
-                                  <CheckBox>
+                                  {' '}
+                                  <ModalRadioCheck>
                                     <label
-                                      className="check-container customer-pannel"
-                                      htmlFor={item.label}>
+                                      className="checkboxes radio-container customer-list"
+                                      htmlFor={item.value}>
+                                      {item.label}
                                       <input
-                                        type="checkbox"
-                                        id={item.label}
-                                        name={item.value}
+                                        type="radio"
+                                        name="radio"
+                                        id={item.value}
+                                        value={item.value}
                                         onChange={(event) =>
-                                          handleFilters(
-                                            event,
-                                            item,
-                                            'contract_status',
-                                          )
+                                          handleFilters(event, item, 'radio')
                                         }
                                         defaultChecked={
-                                          filters.contract_status
-                                            ? filters.contract_status.find(
-                                                (op) => op === item.value,
-                                              )
+                                          filters.contract_type
+                                            ? filters.contract_type ===
+                                              item.value
                                             : ''
                                         }
                                       />
-                                      <span className="checkmark" />
-                                      {item.label}
+                                      <span className="checkmark checkmark-customer-list" />
                                     </label>
-                                  </CheckBox>
+                                  </ModalRadioCheck>
                                 </li>
                               ))}
                             </ul>
-                          </>
-                        ) : (
-                          ''
-                        )}
+                          ) : (
+                            ''
+                          )}
+
+                          {!isDesktop ? (
+                            <>
+                              {' '}
+                              <div className="label mt-4 pt-2">
+                                Contract Status
+                              </div>
+                              <div className="clear-fix" />
+                              <ul className="check-box-list checkboxes">
+                                {contractStatus.map((item) => (
+                                  <li key={item.value}>
+                                    <CheckBox>
+                                      <label
+                                        className="check-container customer-pannel"
+                                        htmlFor={item.label}>
+                                        <input
+                                          type="checkbox"
+                                          id={item.label}
+                                          name={item.value}
+                                          onChange={(event) =>
+                                            handleFilters(
+                                              event,
+                                              item,
+                                              'contract_status',
+                                            )
+                                          }
+                                          defaultChecked={
+                                            filters.contract_status
+                                              ? filters.contract_status.find(
+                                                  (op) => op === item.value,
+                                                )
+                                              : ''
+                                          }
+                                        />
+                                        <span className="checkmark" />
+                                        {item.label}
+                                      </label>
+                                    </CheckBox>
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            ''
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </SideContent>
-                  {/* </div> */}
-                </MobileLeftSidebar>
+                    </SideContent>
+                  </MobileLeftSidebar>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </WhiteCard>
@@ -401,7 +420,6 @@ function CustomerListFilters({
       </div>
 
       <div className="straight-line horizontal-line mt-n2 d-lg-block d-none" />
-      {/* <div className="straight-line horizontal-line  d-lg-none d-block" /> */}
     </>
   );
 }
