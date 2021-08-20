@@ -286,7 +286,10 @@ const SponsoredKeyContribution = ({
       <tr
         className="cursor"
         onClick={() =>
-          history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
+          history.push(
+            PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
+            'adManager',
+          )
         }>
         <td className="product-body">
           {' '}
@@ -397,6 +400,7 @@ const SponsoredKeyContribution = ({
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
+            'adManager',
           )
         }>
         <td className="product-body">

@@ -140,6 +140,7 @@ const DSPPacing = ({
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
+            'adManager',
           )
         }>
         <td className="product-body">
