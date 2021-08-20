@@ -168,35 +168,6 @@ export default function AuthenticationComponent() {
             ''
           )}
 
-          {/* {(userInfo && userInfo.role === 'Sponsored Advertising Ad Manager') ||
-          (userInfo && userInfo.role === 'Ad Manager') ? (
-            <Route path={PATH_ADM_DASHBOARD} component={DashboardContainer} />
-          ) : (
-            ''
-          )}
-          {userInfo && userInfo.role === 'DSP Ad Manager' ? (
-            <Route path={PATH_DSP_DASHBOARD} component={DashboardContainer} />
-          ) : (
-            ''
-          )}
-          {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
-            <Route
-              path={PATH_HYBRID_DASHBOARD}
-              component={DashboardContainer}
-            />
-          ) : (
-            ''
-          )}
-
-          {userInfo && userInfo.role === 'Ad Manager Admin' ? (
-            <Route
-              path={PATH_AD_MANAGER_ADMIN_DASHBOARD}
-              component={DashboardContainer}
-            />
-          ) : (
-            ''
-          )} */}
-
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
           {/* On-Boarding Customer */}

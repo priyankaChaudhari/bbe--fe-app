@@ -10,7 +10,7 @@ import queryString from 'query-string';
 
 import { FormContainer } from '../../theme/Global';
 import { LeftArrowIcon, NextLogo } from '../../theme/images/index';
-// import GoogleIcons from '../../theme/images/icons/google.svg';
+
 import {
   Button,
   ErrorMsg,
@@ -125,7 +125,6 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      console.log('role', role);
       if (
         role.includes('Growth Strategist') ||
         role === 'BGS' ||
