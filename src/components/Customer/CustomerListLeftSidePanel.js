@@ -197,9 +197,7 @@ function CustomerListLeftSidePanel({
                         }
                         defaultChecked={
                           filters && filters.contract_type
-                            ? filters &&
-                              filters.contract_type &&
-                              filters.contract_type === item.value
+                            ? filters.contract_type === item.value
                             : ''
                         }
                       />
@@ -226,7 +224,7 @@ function CustomerListLeftSidePanel({
                           handleFilters(event, item, 'contract_status')
                         }
                         defaultChecked={
-                          filters.status
+                          filters.contract_status
                             ? filters.contract_status.find(
                                 (op) => op === item.value,
                               )

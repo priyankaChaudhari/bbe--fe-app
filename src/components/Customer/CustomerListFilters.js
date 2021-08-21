@@ -225,7 +225,7 @@ function CustomerListFilters({
                                         onChange={(event) =>
                                           handleFilters(event, item, 'status')
                                         }
-                                        defaultChecked={
+                                        checked={
                                           filters.status
                                             ? filters.status.find(
                                                 (op) => op === item.value,
@@ -266,7 +266,7 @@ function CustomerListFilters({
                                             'customer_account_type',
                                           )
                                         }
-                                        defaultChecked={
+                                        checked={
                                           filters.customer_account_type
                                             ? filters.customer_account_type.find(
                                                 (op) => op === item.value,
@@ -305,7 +305,7 @@ function CustomerListFilters({
                                       onChange={(event) =>
                                         handleFilters(event, item, 'radio')
                                       }
-                                      defaultChecked={
+                                      checked={
                                         filters.contract_type
                                           ? filters.contract_type === item.value
                                           : ''
@@ -346,7 +346,7 @@ function CustomerListFilters({
                                             'contract_status',
                                           )
                                         }
-                                        defaultChecked={
+                                        checked={
                                           filters.contract_status
                                             ? filters.contract_status.find(
                                                 (op) => op === item.value,

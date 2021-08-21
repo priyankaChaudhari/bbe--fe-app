@@ -10,6 +10,7 @@ import {
 import { PATH_CUSTOMER_DETAILS } from '../../constants';
 import { CommonPagination, PageLoader, WhiteCard } from '../../common';
 import { CustomerListTabletView } from '../../theme/CustomerListStyle';
+import NoRecordFound from '../../common/NoRecordFound';
 
 export default function CustomerListTablet({
   data,
@@ -468,36 +469,40 @@ export default function CustomerListTablet({
 
   return (
     <CustomerListTabletView>
-      <div className="container-fluid">
-        <div className="row cursor">
-          {data &&
-            data.map((item) => (
-              <div
-                key={Math.random()}
-                className="col-md-6 col-12"
-                onClick={() =>
-                  history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-                }
-                role="presentation">
-                {isLoading.loader && isLoading.type === 'page' ? (
-                  <PageLoader color="#FF5933" type="page" />
-                ) : (
-                  renderCustomerDetails(item)
-                )}
-              </div>
-            ))}
-        </div>
+      {data && data.length === 0 ? (
+        <NoRecordFound />
+      ) : (
+        <div className="container-fluid">
+          <div className="row cursor">
+            {data &&
+              data.map((item) => (
+                <div
+                  key={Math.random()}
+                  className="col-md-6 col-12"
+                  onClick={() =>
+                    history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
+                  }
+                  role="presentation">
+                  {isLoading.loader && isLoading.type === 'page' ? (
+                    <PageLoader color="#FF5933" type="page" />
+                  ) : (
+                    renderCustomerDetails(item)
+                  )}
+                </div>
+              ))}
+          </div>
 
-        {isLoading.loader && isLoading.type === 'page' ? (
-          <PageLoader color="#FF5933" type="page" />
-        ) : (
-          <CommonPagination
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
-        )}
-      </div>
+          {isLoading.loader && isLoading.type === 'page' ? (
+            <PageLoader color="#FF5933" type="page" />
+          ) : (
+            <CommonPagination
+              count={count}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          )}
+        </div>
+      )}
     </CustomerListTabletView>
   );
 }
