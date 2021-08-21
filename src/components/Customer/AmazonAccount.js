@@ -23,7 +23,11 @@ import {
 } from '../../api/OnboardingCustomerApi';
 import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
-export default function AmazonAccount({ marketplaceData, customStyles }) {
+export default function AmazonAccount({
+  marketplaceData,
+  customStyles,
+  getActivityLogInfo,
+}) {
   const { Option, SingleValue } = components;
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -349,6 +353,7 @@ export default function AmazonAccount({ marketplaceData, customStyles }) {
           showBtn={showBtn}
           amazonDetails={amazonDetails}
           sellerVendorCall={sellerVendorCall}
+          getActivityLogInfo={getActivityLogInfo}
         />
       </Modal>
     </WhiteCard>
@@ -362,4 +367,5 @@ AmazonAccount.defaultProps = {
 AmazonAccount.propTypes = {
   customStyles: PropTypes.objectOf(PropTypes.object),
   marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };

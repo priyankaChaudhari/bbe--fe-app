@@ -49,8 +49,10 @@ export default function Activity({
                       item.history_change_reason.split(' ').slice(0, 2) &&
                       item.history_change_reason.split(' ').slice(0, 2)[0] ===
                         'System' &&
-                      item.history_change_reason.split(' ').slice(0, 2)[1] ===
-                        '') ||
+                      item.history_change_reason
+                        .split(' ')
+                        .slice(0, 2)[1]
+                        .toLowerCase() === 'user') ||
                     (item && item.status !== undefined) ? (
                       <div
                         className={

@@ -191,6 +191,7 @@ export default function CompanyDetail({
             <AmazonAccount
               marketplaceData={marketplaceData}
               customStyles={customStyles}
+              getActivityLogInfo={getActivityLogInfo}
             />
           </div>
         </div>

@@ -19,8 +19,9 @@ export default function EditAmazonAccountDetails({
   selectedMarketplace,
   amazonDetails,
   sellerVendorCall,
+  getActivityLogInfo,
 }) {
-  const [isLoading, setIsLoading] = useState({ loader: true, type: 'button' });
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
 
   const vendorAccount = (vendor) => {
     saveAmazonVendorAccount(
@@ -36,6 +37,7 @@ export default function EditAmazonAccountDetails({
           selectedMarketplace && selectedMarketplace.value,
           selectedMarketplace,
         );
+        getActivityLogInfo();
       }
       if (re && re.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -77,6 +79,7 @@ export default function EditAmazonAccountDetails({
               selectedMarketplace && selectedMarketplace.value,
               selectedMarketplace,
             );
+            getActivityLogInfo();
           }
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
@@ -154,4 +157,5 @@ EditAmazonAccountDetails.propTypes = {
     Vendor: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
   sellerVendorCall: PropTypes.func.isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
