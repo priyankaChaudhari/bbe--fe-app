@@ -1,47 +1,92 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import { toast } from 'react-toastify';
 
+import { FormField, ModalBox, PageLoader, Button } from '../../common';
 import {
-  FormField,
-  ModalBox,
-  PageLoader,
-  Button,
-  DropDownSelect,
-} from '../../common';
-import { AmazonSellerAccountDetails } from '../../constants/FieldConstants';
+  saveAmazonSellerAccount,
+  saveAmazonVendorAccount,
+} from '../../api/OnboardingCustomerApi';
 
-export default function EditAmazonAccountDetails({ setShowAmazonModal }) {
-  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [showBtn, setShowBtn] = useState(false);
+export default function EditAmazonAccountDetails({
+  setShowModal,
+  generateDropdown,
+  generateAccountHTML,
+  formData,
+  showBtn,
+  selectedMarketplace,
+  amazonDetails,
+  sellerVendorCall,
+}) {
+  const [isLoading, setIsLoading] = useState({ loader: true, type: 'button' });
 
-  useEffect(() => {
-    setIsLoading({ loader: false, type: 'page' });
-  }, []);
-
-  const handleChange = () => {
-    setShowBtn(true);
-    //   setFormData({ ...formData, [key]: event.target.value });
-    //   setApiError({
-    //     ...apiError,
-    //     [event.target.name]: '',
-    //   });
+  const vendorAccount = (vendor) => {
+    saveAmazonVendorAccount(
+      vendor,
+      amazonDetails && amazonDetails.Vendor && amazonDetails.Vendor.id,
+    ).then((re) => {
+      if ((re && re.status === 201) || (re && re.status === 200)) {
+        toast.success('Amazon Account details saved!');
+        setIsLoading({ loader: false, type: 'button' });
+        setShowModal(false);
+        sellerVendorCall(
+          selectedMarketplace && selectedMarketplace.account_type,
+          selectedMarketplace && selectedMarketplace.value,
+          selectedMarketplace,
+        );
+      }
+      if (re && re.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
   };
 
-  const generateInput = (item) => {
-    return (
-      <input
-        className="form-control extra-space"
-        type="text"
-        name={item.key}
-        placeholder={item.label}
-        // defaultValue={mapInputValues(item)}
-        onChange={(event) => handleChange(event, item.key)}
-        id={item.key}
-      />
-    );
+  const saveAccountDetails = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    const seller = {
+      ...formData.Seller,
+      marketplace: selectedMarketplace && selectedMarketplace.value,
+    };
+    const vendor = {
+      ...formData.Vendor,
+      marketplace: selectedMarketplace && selectedMarketplace.value,
+    };
+
+    if (
+      (selectedMarketplace && selectedMarketplace.account_type === 'Seller') ||
+      (selectedMarketplace && selectedMarketplace.account_type === 'Hybrid')
+    ) {
+      return saveAmazonSellerAccount(
+        seller,
+        amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
+      ).then((res) => {
+        if ((res && res.status === 201) || (res && res.status === 200))
+          if (
+            selectedMarketplace &&
+            selectedMarketplace.account_type === 'Hybrid'
+          ) {
+            vendorAccount(vendor);
+          } else {
+            setIsLoading({ loader: false, type: 'button' });
+            toast.success('Amazon Account details saved!');
+            setShowModal(false);
+            sellerVendorCall(
+              selectedMarketplace && selectedMarketplace.account_type,
+              selectedMarketplace && selectedMarketplace.value,
+              selectedMarketplace,
+            );
+          }
+        if (res && res.status === 400) {
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    }
+    if (selectedMarketplace && selectedMarketplace.account_type === 'Vendor') {
+      vendorAccount(vendor);
+    }
+    return '';
   };
 
   return (
@@ -52,36 +97,10 @@ export default function EditAmazonAccountDetails({ setShowAmazonModal }) {
             <h4>Edit Amazon Account Names & IDs</h4>
             <div className="straight-line horizontal-line mt-3 mb-3" />
             <FormField className="mt-3">
-              <label htmlFor="marketplace" className="mb-2">
-                Marketplace
-              </label>
-              <DropDownSelect>
-                <Select
-                  classNamePrefix="react-select"
-                  className="active"
-                  options={AmazonSellerAccountDetails}
-                />
-              </DropDownSelect>
+              {generateDropdown()}
               <div className="straight-line horizontal-line mt-4 mb-3" />
             </FormField>
-            {AmazonSellerAccountDetails.map((item) => (
-              <React.Fragment key={item.key}>
-                <div className={item.property} id={item.key}>
-                  <FormField className="mt-3">
-                    <label htmlFor={item.id}>
-                      {item.label}
-                      <br />
-                      {generateInput(item)}
-                    </label>
-                    {/* <ErrorMsg>
-                        {apiError &&
-                          apiError[item.key] &&
-                          apiError[item.key][0]}
-                      </ErrorMsg> */}
-                  </FormField>
-                </div>
-              </React.Fragment>
-            ))}
+            {generateAccountHTML('edit')}
           </div>
         </div>
       </div>
@@ -89,7 +108,9 @@ export default function EditAmazonAccountDetails({ setShowAmazonModal }) {
         <>
           <div className="footer-line " />
           <div className=" col-12  modal-footer">
-            <Button className=" btn-primary mr-4">
+            <Button
+              className=" btn-primary mr-4"
+              onClick={() => saveAccountDetails()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
               ) : (
@@ -98,7 +119,7 @@ export default function EditAmazonAccountDetails({ setShowAmazonModal }) {
             </Button>
             <Button
               className=" btn-borderless"
-              onClick={() => setShowAmazonModal(false)}>
+              onClick={() => setShowModal(false)}>
               Discard Changes
             </Button>
           </div>
@@ -111,9 +132,26 @@ export default function EditAmazonAccountDetails({ setShowAmazonModal }) {
 }
 
 EditAmazonAccountDetails.defaultProps = {
-  setShowAmazonModal: () => {},
+  setShowModal: () => {},
+  showBtn: false,
 };
 
 EditAmazonAccountDetails.propTypes = {
-  setShowAmazonModal: PropTypes.func,
+  setShowModal: PropTypes.func,
+  selectedMarketplace: PropTypes.shape({
+    account_type: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
+  formData: PropTypes.shape({
+    Seller: PropTypes.objectOf(PropTypes.object),
+    Vendor: PropTypes.objectOf(PropTypes.object),
+  }).isRequired,
+  showBtn: PropTypes.bool,
+  generateDropdown: PropTypes.func.isRequired,
+  generateAccountHTML: PropTypes.func.isRequired,
+  amazonDetails: PropTypes.shape({
+    Seller: PropTypes.objectOf(PropTypes.object),
+    Vendor: PropTypes.objectOf(PropTypes.object),
+  }).isRequired,
+  sellerVendorCall: PropTypes.func.isRequired,
 };

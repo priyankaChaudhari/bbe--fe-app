@@ -28,6 +28,7 @@ export const API_AD_PERFORMANCE = '/performance-metrics/';
 export const API_ADM = '/manager-list/';
 export const API_SERVICES_FEE = '/type-of-services/';
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
+export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

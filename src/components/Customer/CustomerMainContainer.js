@@ -78,6 +78,7 @@ import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../constants';
 import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../store/actions/userState';
 import { SetupCheckList } from '../BrandAssetGathering/index';
+import { getAccountMarketplace } from '../../api/CustomerApi';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -176,6 +177,7 @@ export default function CustomerMainContainer() {
     (state) => state.customerState.showBrandAssetMsg,
   );
   const [noteData, setNoteData] = useState([]);
+  const [marketplaceData, setMarketplaceData] = useState([]);
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -331,6 +333,15 @@ export default function CustomerMainContainer() {
     getCustomerMemberList();
     getActivityLogInfo();
   }, [dispatch, id, getActivityLogInfo, getCustomerMemberList]);
+
+  useEffect(() => {
+    if (viewComponent === 'company') {
+      getAccountMarketplace(id).then((response) => {
+        setMarketplaceData(response && response.data);
+        setIsLoading({ loader: false, type: 'page' });
+      });
+    }
+  }, [id, viewComponent]);
 
   if (userInfo && userInfo.role === 'Customer') {
     viewOptions = [
@@ -1128,49 +1139,6 @@ export default function CustomerMainContainer() {
                       }}
                       defaultValue={viewOptions[0]}
                     />
-
-                    {/* <WhiteCard className="mb-3">
-                      <p className="black-heading-title mt-0 mb-4">
-                        {' '}
-                        Team Members (
-                        {memberCount &&
-                          (memberCount > 10 ? (
-                            <u
-                              className="link-video watch-video cursor"
-                              onClick={() =>
-                                setShowMemberList({
-                                  show: true,
-                                  add: false,
-                                  modal: true,
-                                })
-                              }
-                              role="presentation"
-                              title="See more...">
-                              {memberCount}
-                            </u>
-                          ) : (
-                            memberCount
-                          ))}
-                        )
-                      </p>
-                      {userInfo && userInfo.role !== 'Customer' ? (
-                        <div
-                          className="add-new-tab"
-                          onClick={() =>
-                            setShowMemberList({
-                              show: false,
-                              add: true,
-                              modal: true,
-                            })
-                          }
-                          role="presentation">
-                          <img className="mr-1" src={AddIcons} alt="" />
-                          Add new
-                        </div>
-                      ) : (
-                        ''
-                      )}
-                    </WhiteCard> */}
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails agreements={agreement} id={id} />
@@ -1188,6 +1156,7 @@ export default function CustomerMainContainer() {
                       }
                       getAmazon={getAmazon}
                       getActivityLogInfo={getActivityLogInfo}
+                      marketplaceData={marketplaceData}
                     />
                   ) : viewComponent === 'dashboard' ? (
                     <SetupCheckList

@@ -3,29 +3,21 @@ import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
-import copy from 'copy-to-clipboard';
-import Select from 'react-select';
 import Modal from 'react-modal';
 
-import {
-  EditOrangeIcon,
-  CopyLinkIcon,
-  CloseIcon,
-} from '../../theme/images/index';
+import { EditOrangeIcon, CloseIcon } from '../../theme/images/index';
 import { GroupUser } from '../../theme/Global';
-import {
-  AmazonSellerAccountDetails,
-  SocialIcons,
-} from '../../constants/FieldConstants';
-import { DropDownSelect, GetInitialName, WhiteCard } from '../../common';
+import { SocialIcons } from '../../constants/FieldConstants';
+import { GetInitialName, WhiteCard } from '../../common';
 import EditCompanyDetails from './EditCompanyDetails';
-import EditAmazonAccountDetails from './EditAmazonAccountDetails';
+import AmazonAccount from './AmazonAccount';
 
 export default function CompanyDetail({
   customer,
   id,
   getAmazon,
   getActivityLogInfo,
+  marketplaceData,
 }) {
   const customStyles = {
     content: {
@@ -45,7 +37,6 @@ export default function CompanyDetail({
   const [showModal, setShowModal] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [scrollDown, setScrollDown] = useState(false);
-  const [showAmazonModal, setShowAmazonModal] = useState(false);
 
   const generateSocialIcon = (item) => {
     const fields = [];
@@ -197,43 +188,10 @@ export default function CompanyDetail({
           </div>
 
           <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <WhiteCard>
-              <p className="black-heading-title mt-0 ">
-                Amazon Account Names & IDs
-              </p>
-              <div
-                className="edit-details"
-                onClick={() => setShowAmazonModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              <div className="label mt-3">Marketplace</div>
-              <div className="label-info">
-                <DropDownSelect>
-                  <Select
-                    classNamePrefix="react-select"
-                    className="active"
-                    options={AmazonSellerAccountDetails}
-                  />
-                </DropDownSelect>
-              </div>
-              {AmazonSellerAccountDetails.map((item) => (
-                <div className="copy-info">
-                  <div className="label mt-3">{item.label}</div>
-                  <div className="label-info">
-                    {(customer && customer[item.key]) || `No ${item.label}.`}
-                  </div>
-                  <div
-                    className="copy-text"
-                    onClick={() => copy(customer && customer[item.key])}
-                    role="presentation">
-                    <img src={CopyLinkIcon} alt="" />
-                    Copy
-                  </div>
-                </div>
-              ))}
-            </WhiteCard>
+            <AmazonAccount
+              marketplaceData={marketplaceData}
+              customStyles={customStyles}
+            />
           </div>
         </div>
         <Modal
@@ -261,28 +219,6 @@ export default function CompanyDetail({
             userInfo={userInfo}
           />
         </Modal>
-
-        <Modal
-          isOpen={showAmazonModal}
-          style={customStyles}
-          ariaHideApp={false}
-          contentLabel="Add team modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => setShowAmazonModal(false)}
-            role="presentation"
-          />
-          <EditAmazonAccountDetails
-            setShowAmazonModal={setShowAmazonModal}
-            id={id}
-            customer={customer}
-            showAmazonModal={showAmazonModal}
-            getAmazon={getAmazon}
-            getActivityLogInfo={getActivityLogInfo}
-          />
-        </Modal>
       </div>
     </>
   );
@@ -303,4 +239,5 @@ CompanyDetail.propTypes = {
   }).isRequired,
   getAmazon: PropTypes.func.isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
+  marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
 };
