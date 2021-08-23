@@ -449,6 +449,14 @@ export default function MainContainer() {
     );
   };
 
+  const showAmazonSubTitle = () => {
+    if (marketplaceDetails && setMarketplaceDetails.account_type === 'Hybrid')
+      return 'If you don’t have access to your Amazon Seller Central and Vender Central admin accounts then you can use the checkbox below';
+    if (marketplaceDetails && setMarketplaceDetails.account_type === 'Seller')
+      return 'If you don’t have access to your Amazon Seller Central admin account then you can use the checkbox below';
+    return 'If you don’t have access to your Amazon Vendor Central admin account then you can use the checkbox below';
+  };
+
   const generateHeader = (item) => {
     if (history.location.pathname.includes(item.path))
       return (
@@ -503,7 +511,21 @@ export default function MainContainer() {
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (
                   <p className="info-text-gray m-0 mb-4 ">
-                    {item.subTitle} <br />
+                    {history.location.pathname.includes(
+                      '/account-setup/amazon-merchant/',
+                    ) ? (
+                      <>
+                        {showAmazonSubTitle()} to assign this step to someone
+                        that does.
+                      </>
+                    ) : history.location.pathname.includes(
+                        '/account-setup/assigned-amazon-merchant/',
+                      ) ? (
+                      <>{showAmazonSubTitle()}.</>
+                    ) : (
+                      item.subTitle
+                    )}{' '}
+                    <br />
                     {item.video ? (
                       <span
                         className="video-link cursor"

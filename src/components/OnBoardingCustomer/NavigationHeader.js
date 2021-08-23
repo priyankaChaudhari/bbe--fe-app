@@ -27,7 +27,9 @@ export default function NavigationHeader({
   const redirect = (type) => {
     if (type === 'back') {
       if (backStep === '1') {
-        const originalEmail = params.email;
+        const originalEmail = /\s/.test(params.email)
+          ? params.email.replace(/\s/g, '+')
+          : params.email;
         delete params.email;
         const stringified =
           queryString &&
