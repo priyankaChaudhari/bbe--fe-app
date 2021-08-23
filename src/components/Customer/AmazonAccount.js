@@ -6,7 +6,7 @@ import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
-import { DropDownSelect, FormField, WhiteCard } from '../../common';
+import { ContractFormField, DropDownSelect, WhiteCard } from '../../common';
 import {
   EditOrangeIcon,
   CopyLinkIcon,
@@ -207,13 +207,13 @@ export default function AmazonAccount({
         {mapData &&
           mapData.map((item) => (
             <div className={item.property} id={item.key} key={item.key}>
-              <FormField className="mt-3">
+              <ContractFormField className="mt-3">
                 <label htmlFor={item.id}>
                   {item.label}
                   <br />
                   {generateInput(item, part)}
                 </label>
-              </FormField>
+              </ContractFormField>
             </div>
           ))}
       </>
@@ -250,11 +250,7 @@ export default function AmazonAccount({
       <>
         {selectedMarketplace &&
         selectedMarketplace.account_type === 'Hybrid' ? (
-          <div
-            className="straight-line horizontal-line spacing mt-4 mb-4"
-            style={{ lineHeight: 0, color: 'black', fontWeight: 600 }}>
-            Seller Central
-          </div>
+          <div className=" liner-titles spacing mt-4 mb-3">Seller Central</div>
         ) : (
           ''
         )}
@@ -271,11 +267,7 @@ export default function AmazonAccount({
         )}
         {selectedMarketplace &&
         selectedMarketplace.account_type === 'Hybrid' ? (
-          <div
-            className="straight-line horizontal-line spacing mt-4 mb-4"
-            style={{ lineHeight: 0, color: 'black', fontWeight: 600 }}>
-            Vendor Central
-          </div>
+          <div className=" liner-titles spacing mt-4 mb-3"> Vendor Central</div>
         ) : (
           ''
         )}
@@ -299,7 +291,7 @@ export default function AmazonAccount({
       <>
         <div className="label mt-3">Marketplace</div>
         <div className="label-info">
-          <DropDownSelect>
+          <DropDownSelect className="mt-2">
             <Select
               classNamePrefix="react-select"
               className="active"

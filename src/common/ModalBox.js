@@ -90,7 +90,7 @@ const ModalBox = styled.div`
           }
       }}
           .modal-heading {
-            padding: 7px 0;
+            padding: 0px 0;
             padding-left: 0;
 
             ::i-block-chrome, .modal-heading {

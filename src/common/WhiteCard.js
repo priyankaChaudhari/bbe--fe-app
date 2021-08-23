@@ -111,7 +111,7 @@ export const WhiteCard = styled.div`
         font-size: ${Theme.extraNormal};
         color: ${Theme.gray85};
         cursor: pointer;
-        top: 22px;
+        top: 28px;
         img {
           width: 12px;
           margin-right: 4px;

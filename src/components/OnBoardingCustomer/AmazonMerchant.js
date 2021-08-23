@@ -425,7 +425,7 @@ export default function AmazonMerchant({
 
   return (
     <>
-      <OnBoardingBody className="body-white">
+      <OnBoardingBody className="body-white pb-1">
         {noAmazonAccount ? (
           ''
         ) : (

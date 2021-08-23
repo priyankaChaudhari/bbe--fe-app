@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import { FormField, ModalBox, PageLoader, Button } from '../../common';
+import { ModalBox, PageLoader, Button, ContractFormField } from '../../common';
 import {
   saveAmazonSellerAccount,
   saveAmazonVendorAccount,
@@ -96,35 +96,43 @@ export default function EditAmazonAccountDetails({
     <ModalBox>
       <div className="modal-body ">
         <div className="row">
-          <div className="col-12 modal-heading">
+          <div className="col-12 modal-heading p-0">
             <h4>Edit Amazon Account Names & IDs</h4>
-            <div className="straight-line horizontal-line mt-3 mb-3" />
-            <FormField className="mt-3">
-              {generateDropdown()}
-              <div className="straight-line horizontal-line mt-4 mb-3" />
-            </FormField>
-            {generateAccountHTML('edit')}
+            <div className="straight-line horizontal-line mt-3 " />
+            <div className="body-content pb-0">
+              <ContractFormField>
+                {generateDropdown()}
+                <div className="straight-line horizontal-line mt-4 mb-3" />
+              </ContractFormField>
+              {generateAccountHTML('edit')}
+            </div>
           </div>
         </div>
       </div>
       {showBtn ? (
         <>
           <div className="footer-line " />
-          <div className=" col-12  modal-footer">
-            <Button
-              className=" btn-primary mr-4"
-              onClick={() => saveAccountDetails()}>
-              {isLoading.loader && isLoading.type === 'button' ? (
-                <PageLoader color="#fff" type="button" />
-              ) : (
-                'Save Changes'
-              )}
-            </Button>
-            <Button
-              className=" btn-borderless"
-              onClick={() => setShowModal(false)}>
-              Discard Changes
-            </Button>
+          <div className="modal-footer">
+            <div className="row">
+              <div className=" col-6  ">
+                <Button
+                  className=" btn-primary w-100"
+                  onClick={() => saveAccountDetails()}>
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Confirm'
+                  )}
+                </Button>
+              </div>
+              <div className=" col-6  ">
+                <Button
+                  className=" btn-borderless w-100"
+                  onClick={() => setShowModal(false)}>
+                  Discard Changes
+                </Button>
+              </div>
+            </div>
           </div>
         </>
       ) : (

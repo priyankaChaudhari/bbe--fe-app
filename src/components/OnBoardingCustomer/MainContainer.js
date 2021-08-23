@@ -511,8 +511,8 @@ export default function MainContainer() {
                   <CheckBox
                     className={
                       isLoading.loader && isLoading.type === 'check'
-                        ? 'mt-1 mb-4 isDisabled'
-                        : 'mt-1 mb-4'
+                        ? ' mb-4 isDisabled'
+                        : ' mb-4'
                     }>
                     <label
                       className="check-container customer-pannel "

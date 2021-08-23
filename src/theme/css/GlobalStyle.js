@@ -751,8 +751,8 @@ button:disabled {
   padding: 0 !important;
 
   .cross-icon {
-    width: 32px;
-    padding: 12px 14px 0 0;
+    width: 20px;
+    margin: 20px 14px 0 0;
   }
 
   .modal-body {
@@ -1723,8 +1723,27 @@ text.cust-label-avg {
     border-radius: 100px;
     transition: width 0.3s ease;
 }
- 
+.liner-titles {
+  color: black;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
 
+  &:after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background: #E2E2EA;
+    margin: auto;
+  }
+
+  &:after {
+    margin-left: 20px;
+  }
+
+}
 
 // .right-side-nav {
 //   list-style-type: none;
@@ -1762,4 +1781,5 @@ text.cust-label-avg {
   }
 
 `;
+
 export default bodyStyles;
