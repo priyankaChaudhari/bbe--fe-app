@@ -47,18 +47,22 @@ export default function AdManagerAdminContainer({ userInfo }) {
         {' '}
         <Tabs>
           <ul className="tabs">
-            <li
-              className={viewComponent === 'sponsored' ? 'active' : ''}
-              onClick={() => setViewComponent('sponsored')}
-              role="presentation">
-              Sponsored Advertising
-            </li>
-            <li
-              className={viewComponent === 'dsp' ? 'active' : ''}
-              onClick={() => setViewComponent('dsp')}
-              role="presentation">
-              DSP Advertising
-            </li>
+            {userInfo.role !== 'DSP Ad Manager' ? (
+              <li
+                className={viewComponent === 'sponsored' ? 'active' : ''}
+                onClick={() => setViewComponent('sponsored')}
+                role="presentation">
+                Sponsored Advertising
+              </li>
+            ) : null}
+            {userInfo.role !== 'Sponsored Advertising Ad Manager' ? (
+              <li
+                className={viewComponent === 'dsp' ? 'active' : ''}
+                onClick={() => setViewComponent('dsp')}
+                role="presentation">
+                DSP Advertising
+              </li>
+            ) : null}
           </ul>
         </Tabs>
         {viewComponent === 'sponsored' ? (
