@@ -203,73 +203,73 @@ function RequestSignature({
   };
 
   const displayContact = () => {
-    return contactInfoLoading ? (
-      <PageLoader
-        className="modal-loader"
-        color="#FF5933"
-        type="page"
-        width={40}
-      />
-    ) : (
-      contactInfo.map((info, i) => {
-        return (
-          <ModalRadioCheck className="gray-bg">
-            <label className="radio-container" htmlFor={info.id}>
-              {info.first_name} {info && info.last_name}
-              <br />
-              <input
-                type="radio"
-                checked={selectedContact.id === info.id}
-                name="radio"
-                id={info.id}
-                onClick={() => onSelectContact(info)}
-              />
-              <span className="checkmark" />
-            </label>
-            <img
-              className="delete-contact cursor"
-              src={TrashIcons}
-              alt="delete"
-              role="presentation"
-              onClick={() => removeContact(info.id || i)}
+    // return contactInfoLoading ? (
+    //   <PageLoader
+    //     className="modal-loader"
+    //     color="#FF5933"
+    //     type="page"
+    //     width={40}
+    //   />
+    // ) : (
+    return contactInfo.map((info, i) => {
+      return (
+        <ModalRadioCheck className="gray-bg">
+          <label className="radio-container" htmlFor={info.id}>
+            {info.first_name} {info && info.last_name}
+            <br />
+            <input
+              type="radio"
+              checked={selectedContact.id === info.id}
+              name="radio"
+              id={info.id}
+              onClick={() => onSelectContact(info)}
             />
-            <img
-              className="edit-contact cursor"
-              src={EditFileIcons}
-              alt="edit"
-              role="presentation"
-              onClick={() => {
-                setFormData(info);
-                setContactApiError({});
-                setModalName('Edit Contact');
-                setParams('add-new-contact');
-              }}
-            />
-            <div className="row ">
-              <div className="col-12 mb-2 mt-1">
-                <span className="owner-details">{info && info.role}</span>
-              </div>
-              <div className="col-6 ">
-                {' '}
-                <span className="owner-details">
-                  {' '}
-                  <img src={EmailIcon} alt="email" />
-                  {info && info.email}
-                </span>
-              </div>
-              <div className="col-6">
-                {' '}
-                <span className="owner-details">
-                  {' '}
-                  <img src={PhoneIcon} alt="email" />
-                  {info && info.phone_number}
-                </span>
-              </div>
+            <span className="checkmark" />
+          </label>
+          <img
+            className="delete-contact cursor"
+            src={TrashIcons}
+            alt="delete"
+            role="presentation"
+            onClick={() => removeContact(info.id || i)}
+          />
+          <img
+            className="edit-contact cursor"
+            src={EditFileIcons}
+            alt="edit"
+            role="presentation"
+            onClick={() => {
+              setFormData(info);
+              setContactApiError({});
+              setModalName('Edit Contact');
+              setParams('add-new-contact');
+            }}
+          />
+          <div className="row ">
+            <div className="col-12 mb-2 mt-1">
+              <span className="owner-details">{info && info.role}</span>
             </div>
-          </ModalRadioCheck>
-        );
-      })
-    );
+            <div className="col-6 ">
+              {' '}
+              <span className="owner-details">
+                {' '}
+                <img src={EmailIcon} alt="email" />
+                {info && info.email}
+              </span>
+            </div>
+            <div className="col-6">
+              {' '}
+              <span className="owner-details">
+                {' '}
+                <img src={PhoneIcon} alt="email" />
+                {info && info.phone_number}
+              </span>
+            </div>
+          </div>
+        </ModalRadioCheck>
+      );
+    });
+    // );
   };
 
   const handleContactChange = (event) => {
@@ -830,10 +830,10 @@ function RequestSignature({
       )}
       {params && params.step === 'select-contact' ? (
         <>
-          {/* {contractDesignData && showHelloSignPage ? displayHelloSign() : ''} */}
           <div className="modal-body ">
             <h4 className="on-boarding mb-4">Select contact</h4>
-            {isLoading.loader && isLoading.type === 'page' ? (
+            {(isLoading.loader && isLoading.type === 'page') ||
+            contactInfoLoading ? (
               <PageLoader
                 className="modal-loader"
                 color="#FF5933"
@@ -841,51 +841,54 @@ function RequestSignature({
                 width={40}
               />
             ) : (
-              <div className="body-content">
-                {displayContact()}
+              <>
+                <div className="body-content">
+                  {displayContact()}
 
-                <Button
-                  className="btn-add-contact"
+                  <Button
+                    className="btn-add-contact"
+                    role="presentation"
+                    onClick={() => {
+                      setFormData({});
+                      setContactApiError({});
+                      setParams('add-new-contact');
+                      setModalName('Add Contact');
+                    }}>
+                    {' '}
+                    <img
+                      className="mr-2 add-new-icon "
+                      src={AddNewIcons}
+                      alt="email"
+                    />
+                    Add New Contact
+                  </Button>
+                </div>
+                {/* )} */}
+                <ErrorMsg>
+                  {requestSignatureError && requestSignatureError.error}
+                </ErrorMsg>
+                <div
+                  className="mt-4"
                   role="presentation"
-                  onClick={() => {
-                    setFormData({});
-                    setContactApiError({});
-                    setParams('add-new-contact');
-                    setModalName('Add Contact');
-                  }}>
-                  {' '}
-                  <img
-                    className="mr-2 add-new-icon "
-                    src={AddNewIcons}
-                    alt="email"
-                  />
-                  Add New Contact
-                </Button>
-              </div>
+                  // onClick={() => verifyDocument()}>
+                  onClick={() => setParams('verify-document')}>
+                  <Button
+                    type="button"
+                    disabled={!(selectedContact && selectedContact.id)}
+                    className={
+                      selectedContact && selectedContact.id
+                        ? ' btn-primary on-boarding w-100'
+                        : ' btn-gray on-boarding w-100 btn-disabled '
+                    }>
+                    {isLoading.loader && isLoading.type === 'button' ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : (
+                      'Request Signature'
+                    )}
+                  </Button>
+                </div>
+              </>
             )}
-            <ErrorMsg>
-              {requestSignatureError && requestSignatureError.error}
-            </ErrorMsg>
-            <div
-              className="mt-4"
-              role="presentation"
-              // onClick={() => verifyDocument()}>
-              onClick={() => setParams('verify-document')}>
-              <Button
-                type="button"
-                disabled={!(selectedContact && selectedContact.id)}
-                className={
-                  selectedContact && selectedContact.id
-                    ? ' btn-primary on-boarding w-100'
-                    : ' btn-gray on-boarding w-100 btn-disabled '
-                }>
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  'Request Signature'
-                )}
-              </Button>
-            </div>
           </div>
         </>
       ) : (
