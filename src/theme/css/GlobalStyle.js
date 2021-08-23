@@ -686,6 +686,10 @@ a {
   height: 100% !important;
 }
 
+.h-100vh {
+  height: 100vh !important;
+}
+
 .float-left {
   float: left !important;
 }

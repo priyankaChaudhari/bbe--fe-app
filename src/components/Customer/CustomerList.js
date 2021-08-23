@@ -2097,7 +2097,7 @@ export default function CustomerList() {
                         <Table className="customer-list">
                           <tbody>
                             {data && data.length === 0 ? (
-                              <NoRecordFound />
+                              <NoRecordFound type="customer-list" />
                             ) : (
                               data &&
                               data.map((item) => renderCustomerDetails(item))

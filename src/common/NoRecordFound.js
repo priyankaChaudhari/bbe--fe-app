@@ -35,7 +35,8 @@ const NoRecord = styled.div`
   position: absolute;
   right: 0;
   left: 0;
-  top: 48%;
+  top: 40%;
+  padding-top: 100px;
 
   .NoRecordFound {
     margin: auto;
