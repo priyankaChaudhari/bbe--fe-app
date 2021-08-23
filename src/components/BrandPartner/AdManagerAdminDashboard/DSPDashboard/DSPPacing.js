@@ -258,7 +258,7 @@ const DSPPacing = ({
                 <span style={{ textTransform: 'capitalize' }}>
                   {dspSpendData && dspSpendData.dsp_pacing_flag_all === 1
                     ? 'Overspending'
-                    : dspSpendData.dsp_pacing_flag_all === -1
+                    : dspSpendData && dspSpendData.dsp_pacing_flag_all === -1
                     ? 'Underspending'
                     : 'N/A'}
                 </span>
