@@ -567,7 +567,7 @@ const DSPKeyContributors = ({
             </div>
           </div>
         </div>
-        {selectedAdDF.value === 'custom' ? (
+        {selectedAdDF.value === 'custom' && selectedKeyContribution ? (
           <NoData>
             Top contributors cannot be calculated when using custom dates.
           </NoData>

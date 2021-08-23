@@ -339,8 +339,20 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       }-${endDate.getFullYear()}`;
 
       getDSPData(value, temp, marketplace, adManagerUser, sd, ed);
-    } else {
-      getDSPData(value, temp, marketplace, adManagerUser);
+      if (!selectedKeyContribution) {
+        getContributionData(
+          value,
+          marketplace,
+          selectedAdManager.value,
+          keyContributionValue(
+            selectedAdManager.value,
+            selectedKeyContribution,
+          ),
+          selectedTabMatrics,
+          sd,
+          ed,
+        );
+      }
     }
   };
 
@@ -646,15 +658,17 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const handleContribution = (value) => {
     if (value !== selectedKeyContribution) {
       setSelectedKeyContribution(value);
-      if (selectedAdDF.value !== 'custom') {
-        getContributionData(
-          selectedAdDF.value,
-          selectedMarketplace.value,
-          selectedAdManager.value,
-          keyContributionValue(selectedAdManager.value, value),
-          selectedTabMatrics,
-        );
+      if (selectedAdDF.value === 'custom' && value) {
+        return;
       }
+
+      getContributionData(
+        selectedAdDF.value,
+        selectedMarketplace.value,
+        selectedAdManager.value,
+        keyContributionValue(selectedAdManager.value, value),
+        selectedTabMatrics,
+      );
     }
   };
 

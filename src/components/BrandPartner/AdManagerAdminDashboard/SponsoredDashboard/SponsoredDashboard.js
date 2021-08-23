@@ -539,6 +539,18 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         sd,
         ed,
       );
+      if (selectedContributionOption === 'keyMetrics') {
+        getContributionData(
+          selectedAdType,
+          dailyFactFlag,
+          marketplace,
+          selectedAdManager.value,
+          selectedContributionOption,
+          selectedTabMetrics,
+          sd,
+          ed,
+        );
+      }
     }
   };
 
@@ -736,16 +748,18 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const handleContributionOptions = (type) => {
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
-      if (selectedAdDF.value !== 'custom') {
-        getContributionData(
-          selectedAdType,
-          selectedAdDF.value,
-          selectedMarketplace.value,
-          selectedAdManager.value,
-          type,
-          selectedTabMetrics,
-        );
+      if (selectedAdDF.value === 'custom' && type === 'contribution') {
+        return;
       }
+
+      getContributionData(
+        selectedAdType,
+        selectedAdDF.value,
+        selectedMarketplace.value,
+        selectedAdManager.value,
+        type,
+        selectedTabMetrics,
+      );
     }
   };
 

@@ -543,7 +543,8 @@ const SponsoredKeyContribution = ({
           </div>
           {renderKeyContributionOptions()}
         </div>
-        {selectedAdDF.value === 'custom' ? (
+        {selectedAdDF.value === 'custom' &&
+        selectedContributionOption !== 'keyMetrics' ? (
           <NoData>
             Top contributors cannot be calculated when using custom dates.
           </NoData>
