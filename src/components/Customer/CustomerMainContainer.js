@@ -383,9 +383,14 @@ export default function CustomerMainContainer() {
 
   const displayMixedLog = (logUser, msg) => {
     return msg.map((item, index) => {
-      const field = item.split('from')[0];
-      let oldValue = item.split('from')[1].split(' to ')[0];
-      let newValue = item.split('from')[1].split(' to ')[1].split(', ,')[0];
+      const field = item && item.split('from')[0];
+      let oldValue =
+        item && item.split('from')[1] && item.split('from')[1].split(' to ')[0];
+      let newValue =
+        item &&
+        item.split('from')[1] &&
+        item.split('from')[1].split(' to ')[1] &&
+        item.split('from')[1].split(' to ')[1].split(', ,')[0];
 
       if (
         item.includes('annual revenue') ||
@@ -493,12 +498,16 @@ export default function CustomerMainContainer() {
     if (item && item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
       logUser = activityMessage[0];
-      field = activityMessage[1].split('from')[0];
-      oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
-      newValue = activityMessage[1]
-        .split('from')[1]
-        .split(' to ')[1]
-        .split(', ,')[0];
+      field = activityMessage[1] && activityMessage[1].split('from')[0];
+      oldValue =
+        activityMessage[1] &&
+        activityMessage[1].split('from')[1] &&
+        activityMessage[1].split('from')[1].split(' to ')[0];
+      newValue =
+        activityMessage[1] &&
+        activityMessage[1].split('from')[1] &&
+        activityMessage[1].split('from')[1].split(' to ')[1] &&
+        activityMessage[1].split('from')[1].split(' to ')[1].split(', ,')[0];
 
       if (activityMessage.length > 2) {
         mixedLog = true;

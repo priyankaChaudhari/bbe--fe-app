@@ -317,7 +317,10 @@ export default function AmazonAccount({
       <p className="black-heading-title mt-0 ">Amazon Account Names & IDs</p>
       <div
         className="edit-details"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+          setShowBtn(false);
+        }}
         role="presentation">
         <img src={EditOrangeIcon} alt="" />
         Edit
