@@ -57,6 +57,9 @@ function RequestSignature({
   const params = queryString.parse(history.location.search);
   const dispatch = useDispatch();
   const contactInfo = useSelector((state) => state.customerState.contactData);
+  const contactInfoLoading = useSelector(
+    (state) => state.customerState.isLoading,
+  );
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [contactDetails, setContactDetails] = useState(contactInfo);
   const [contactApiError, setContactApiError] = useState({});
@@ -200,64 +203,73 @@ function RequestSignature({
   };
 
   const displayContact = () => {
-    return contactInfo.map((info, i) => {
-      return (
-        <ModalRadioCheck className="gray-bg">
-          <label className="radio-container" htmlFor={info.id}>
-            {info.first_name} {info && info.last_name}
-            <br />
-            <input
-              type="radio"
-              checked={selectedContact.id === info.id}
-              name="radio"
-              id={info.id}
-              onClick={() => onSelectContact(info)}
+    return contactInfoLoading ? (
+      <PageLoader
+        className="modal-loader"
+        color="#FF5933"
+        type="page"
+        width={40}
+      />
+    ) : (
+      contactInfo.map((info, i) => {
+        return (
+          <ModalRadioCheck className="gray-bg">
+            <label className="radio-container" htmlFor={info.id}>
+              {info.first_name} {info && info.last_name}
+              <br />
+              <input
+                type="radio"
+                checked={selectedContact.id === info.id}
+                name="radio"
+                id={info.id}
+                onClick={() => onSelectContact(info)}
+              />
+              <span className="checkmark" />
+            </label>
+            <img
+              className="delete-contact cursor"
+              src={TrashIcons}
+              alt="delete"
+              role="presentation"
+              onClick={() => removeContact(info.id || i)}
             />
-            <span className="checkmark" />
-          </label>
-          <img
-            className="delete-contact cursor"
-            src={TrashIcons}
-            alt="delete"
-            role="presentation"
-            onClick={() => removeContact(info.id || i)}
-          />
-          <img
-            className="edit-contact cursor"
-            src={EditFileIcons}
-            alt="edit"
-            role="presentation"
-            onClick={() => {
-              setFormData(info);
-              setContactApiError({});
-              setModalName('Edit Contact');
-              setParams('add-new-contact');
-            }}
-          />
-          <div className="row ">
-            <div className="col-12 mb-2 mt-1">
-              <span className="owner-details">{info && info.role}</span>
-            </div>
-            <div className="col-6 ">
-              {' '}
-              <span className="owner-details">
+            <img
+              className="edit-contact cursor"
+              src={EditFileIcons}
+              alt="edit"
+              role="presentation"
+              onClick={() => {
+                setFormData(info);
+                setContactApiError({});
+                setModalName('Edit Contact');
+                setParams('add-new-contact');
+              }}
+            />
+            <div className="row ">
+              <div className="col-12 mb-2 mt-1">
+                <span className="owner-details">{info && info.role}</span>
+              </div>
+              <div className="col-6 ">
                 {' '}
-                <img src={EmailIcon} alt="email" />
-                {info && info.email}
-              </span>
-            </div>
-            <div className="col-6">
-              {' '}
-              <span className="owner-details">
+                <span className="owner-details">
+                  {' '}
+                  <img src={EmailIcon} alt="email" />
+                  {info && info.email}
+                </span>
+              </div>
+              <div className="col-6">
                 {' '}
-                <img src={PhoneIcon} alt="email" />
-                {info && info.phone_number}
-              </span>
+                <span className="owner-details">
+                  {' '}
+                  <img src={PhoneIcon} alt="email" />
+                  {info && info.phone_number}
+                </span>
+              </div>
             </div>
-          </div>
-        </ModalRadioCheck>
-      );
-    });
+          </ModalRadioCheck>
+        );
+      })
+    );
   };
 
   const handleContactChange = (event) => {
