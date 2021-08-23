@@ -1376,7 +1376,8 @@ export default function CustomerMainContainer() {
                                 .slice(0, 2)[0] === 'System' &&
                               item.history_change_reason
                                 .split(' ')
-                                .slice(0, 2)[1] === '') ||
+                                .slice(0, 2)[1]
+                                .toLowerCase() === 'user') ||
                             (item && item.status !== undefined) ? (
                               <div
                                 className={

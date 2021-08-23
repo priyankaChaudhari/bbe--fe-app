@@ -407,6 +407,33 @@ export default function MainContainer() {
     return `has asked that you provide <strong>${item.title}</strong> information, which will be used by our Creative Team to best understand your brand.`;
   };
 
+  const showNoAmazonAccountCheckbox = () => {
+    return (
+      <CheckBox
+        className={
+          isLoading.loader && isLoading.type === 'check'
+            ? ' mb-4 isDisabled'
+            : ' mb-4'
+        }>
+        <label className="check-container customer-pannel " htmlFor="noamazon">
+          I don’t have an Amazon account yet
+          <input
+            type="checkbox"
+            id="noamazon"
+            name="noamazon"
+            onChange={(event) => {
+              setNoAmazonAccount(event.target.checked);
+              setDisableBtn(false);
+            }}
+            readOnly
+            checked={noAmazonAccount}
+          />
+          <span className="checkmark" />
+        </label>
+      </CheckBox>
+    );
+  };
+
   const generateHeader = (item) => {
     if (history.location.pathname.includes(item.path))
       return (
@@ -501,37 +528,14 @@ export default function MainContainer() {
                     noAmazonAccount={noAmazonAccount}
                   />
                 )}
-                {!isChecked &&
-                (history.location.pathname.includes(
-                  '/account-setup/amazon-merchant',
-                ) ||
+                {(!isChecked &&
                   history.location.pathname.includes(
-                    '/account-setup/assigned-amazon-merchant/',
-                  )) ? (
-                  <CheckBox
-                    className={
-                      isLoading.loader && isLoading.type === 'check'
-                        ? ' mb-4 isDisabled'
-                        : ' mb-4'
-                    }>
-                    <label
-                      className="check-container customer-pannel "
-                      htmlFor="noamazon">
-                      I don’t have an Amazon account yet
-                      <input
-                        type="checkbox"
-                        id="noamazon"
-                        name="noamazon"
-                        onChange={(event) => {
-                          setNoAmazonAccount(event.target.checked);
-                          setDisableBtn(false);
-                        }}
-                        readOnly
-                        checked={noAmazonAccount}
-                      />
-                      <span className="checkmark" />
-                    </label>
-                  </CheckBox>
+                    '/account-setup/amazon-merchant',
+                  )) ||
+                history.location.pathname.includes(
+                  '/account-setup/assigned-amazon-merchant/',
+                ) ? (
+                  <>{showNoAmazonAccountCheckbox()}</>
                 ) : (
                   ''
                 )}
@@ -562,6 +566,15 @@ export default function MainContainer() {
                   </div>
                   <CollapseOpenContainer>
                     <Collapse isOpened={openCollapse}>
+                      {history.location.pathname.includes(
+                        '/account-setup/amazon-merchant',
+                      ) ? (
+                        <div className="mt-3">
+                          {showNoAmazonAccountCheckbox()}
+                        </div>
+                      ) : (
+                        ''
+                      )}
                       {generateHTML(item.path)}
                     </Collapse>
                   </CollapseOpenContainer>

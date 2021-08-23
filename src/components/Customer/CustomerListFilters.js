@@ -121,7 +121,7 @@ function CustomerListFilters({
                       </p>
                     </div>
                     {!isDesktop ? (
-                      <div className="col-1" role="presentation">
+                      <div role="presentation">
                         <div className="black-heading-title ">
                           <img
                             src={CaretUp}
