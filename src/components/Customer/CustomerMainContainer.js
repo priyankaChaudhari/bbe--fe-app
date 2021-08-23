@@ -381,16 +381,21 @@ export default function CustomerMainContainer() {
     return firstName + lastName;
   };
 
-  const displayMixedLog = (logUser, msg) => {
+  const displayMixedLog = (logUser, msg, header) => {
     return msg.map((item, index) => {
+      if (index === 0 && header !== '') {
+        return (
+          <>
+            {index === 0 ? logUser : ''}
+            <span>updated </span> {header}
+          </>
+        );
+      }
       const field = item && item.split('from')[0];
-      let oldValue =
-        item && item.split('from')[1] && item.split('from')[1].split(' to ')[0];
+
+      let oldValue = item && item.split('from')[1].split(' to ')[0];
       let newValue =
-        item &&
-        item.split('from')[1] &&
-        item.split('from')[1].split(' to ')[1] &&
-        item.split('from')[1].split(' to ')[1].split(', ,')[0];
+        item && item.split('from')[1].split(' to ')[1].split(', ,')[0];
 
       if (
         item.includes('annual revenue') ||
@@ -437,6 +442,7 @@ export default function CustomerMainContainer() {
     let oldValue;
     let newValue = '';
     let mixedLog = false;
+    let customerSetupHeader = '';
     if (
       item &&
       item.history_change_reason.includes('created new record by company name')
@@ -498,21 +504,33 @@ export default function CustomerMainContainer() {
     if (item && item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
       logUser = activityMessage[0];
-      field = activityMessage[1] && activityMessage[1].split('from')[0];
-      oldValue =
+      if (
         activityMessage[1] &&
-        activityMessage[1].split('from')[1] &&
-        activityMessage[1].split('from')[1].split(' to ')[0];
-      newValue =
-        activityMessage[1] &&
-        activityMessage[1].split('from')[1] &&
-        activityMessage[1].split('from')[1].split(' to ')[1] &&
-        activityMessage[1].split('from')[1].split(' to ')[1].split(', ,')[0];
+        activityMessage[1].includes('Amazon account names and id')
+      ) {
+        customerSetupHeader = activityMessage[1];
+        field = activityMessage[2] && activityMessage[2].split('from')[0];
+        oldValue =
+          activityMessage[2] &&
+          activityMessage[2].split('from')[1].split(' to ')[0];
+        newValue =
+          activityMessage[2] &&
+          activityMessage[2].split('from')[1].split(' to ')[1].split(', ,')[0];
+      } else {
+        field = activityMessage[1] && activityMessage[1].split('from')[0];
+        oldValue =
+          activityMessage[1] &&
+          activityMessage[1].split('from')[1].split(' to ')[0];
+        newValue =
+          activityMessage[1] &&
+          activityMessage[1].split('from')[1].split(' to ')[1].split(', ,')[0];
+      }
 
-      if (activityMessage.length > 2) {
+      if (activityMessage && activityMessage.length > 2) {
         mixedLog = true;
         activityMessage.shift();
       }
+
       if (
         !mixedLog &&
         ((item && item.history_change_reason.includes('annual revenue')) ||
@@ -574,7 +592,7 @@ export default function CustomerMainContainer() {
       return activityMessage && activityMessage[1].includes('addendum')
         ? item.history_change_reason
         : mixedLog
-        ? displayMixedLog(logUser, activityMessage)
+        ? displayMixedLog(logUser, activityMessage, customerSetupHeader)
         : displayLog(logUser, field, oldValue, newValue);
     }
     if (item && item.history_change_reason.includes('requested for')) {
