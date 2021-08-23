@@ -108,7 +108,11 @@ export default function AgreementDetails({ agreements, id }) {
                       <li>
                         <span className="dot" />
                         <p className="basic-text ">
-                          Started &nbsp;
+                          {agreement.contract_status &&
+                          agreement.contract_status.value === 'renewed'
+                            ? 'Renewed'
+                            : 'Started'}
+                          &nbsp;
                           {dayjs(agreement.start_date).format('MMM DD, YYYY')}
                         </p>
                       </li>
