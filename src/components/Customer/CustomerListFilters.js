@@ -43,20 +43,15 @@ function CustomerListFilters({
       <div className="customer-list-header-sticky">
         {isDesktop ? (
           <div className="row ">
-            <div className="col-3">
+            <div
+              className={
+                showAdPerformance || showDspAdPerformance || showPerformance
+                  ? 'col-3'
+                  : 'col-6'
+              }>
               <p className="black-heading-title pt-3 m-0"> Customers</p>
             </div>
-            <div className="col-lg-3 col-md-4 col-12   mb-2 pl-2 pr-2 ">
-              {showAdPerformance || showDspAdPerformance || showPerformance ? (
-                <DropDownSelect
-                  id="BT-stats-customerlist-dropdown"
-                  className="customer-list-header">
-                  {generateDropdown('stats')}
-                </DropDownSelect>
-              ) : (
-                <></>
-              )}
-            </div>
+
             <div className="col-lg-3 col-md-6  col-12   mb-2  pl-2 pr-2 ">
               <DropDownSelect
                 id="BT-view-customerlist-dropdown"
@@ -64,6 +59,15 @@ function CustomerListFilters({
                 {generateDropdown('view')}
               </DropDownSelect>{' '}
             </div>
+            {showAdPerformance || showDspAdPerformance || showPerformance ? (
+              <div className="col-lg-3 col-md-4 col-12   mb-2 pl-2 pr-2 ">
+                <DropDownSelect
+                  id="BT-stats-customerlist-dropdown"
+                  className="customer-list-header">
+                  {generateDropdown('stats')}
+                </DropDownSelect>
+              </div>
+            ) : null}
 
             <div className="col-lg-3 col-md-4 col-12  pl-2 pr-2">
               <DropDownSelect
@@ -140,7 +144,9 @@ function CustomerListFilters({
                   <SideContent>
                     <div className="row ">
                       <div className="col-12 mb-3">
-                        <InputSearchWithRadius className="customer-list-header w-80">
+                        <InputSearchWithRadius
+                          id="BT-order-customerlist-search-input"
+                          className="customer-list-header w-80">
                           <DebounceInput
                             // minLength={2}
                             debounceTimeout={600}
