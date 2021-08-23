@@ -15,7 +15,7 @@ export default function AdManagerAdminContainer({ userInfo }) {
     (userInfo.role === 'Ad Manager Admin' ||
       userInfo.role === 'Sponsored Advertising Ad Manager' ||
       userInfo.role === 'Hybrid Ad Manager')
-      ? 'sponsored'
+      ? 'dsp'
       : 'dsp';
   const [viewComponent, setViewComponent] = useState(setTab);
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);

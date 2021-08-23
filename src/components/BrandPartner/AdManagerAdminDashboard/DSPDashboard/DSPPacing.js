@@ -25,6 +25,19 @@ const DSPPacing = ({
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
 
+  const returnFromatNumber = (value, type) => {
+    const decimalDigits = 2;
+    if (value) {
+      return `${type === 'currency' ? currencySymbol : ''}${Math.abs(value)
+        .toFixed(decimalDigits)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${
+        type === 'percentage' ? '%' : ''
+      }`;
+    }
+    return `${currencySymbol}0`;
+  };
+
   const renderTablet = () => {
     return (
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
@@ -54,10 +67,10 @@ const DSPPacing = ({
                       <div className="label">This Period</div>
                       <div className="label-info ">
                         {itemData && itemData.planned_spend_to_date
-                          ? `${currencySymbol}${itemData.planned_spend_to_date
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                          ? `${returnFromatNumber(
+                              itemData.planned_spend_to_date,
+                              'currency',
+                            )}`
                           : `${currencySymbol}0`}
                       </div>
                     </div>
@@ -66,10 +79,10 @@ const DSPPacing = ({
                       <div className="label">Prev. Period</div>
                       <div className="label-info ">
                         {itemData && itemData.actual_spend_to_date
-                          ? `${currencySymbol}${itemData.actual_spend_to_date
-                              .toFixed(2)
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                          ? `${returnFromatNumber(
+                              itemData.actual_spend_to_date,
+                              'currency',
+                            )}`
                           : `${currencySymbol}0`}
                       </div>
                     </div>
@@ -79,13 +92,10 @@ const DSPPacing = ({
                       {itemData && itemData.change_to_date ? (
                         <div className="decrease-rate large">
                           {itemData && itemData.change_to_date
-                            ? `${currencySymbol}${Number(
-                                itemData.change_to_date
-                                  .toString()
-                                  .split('-')[1],
-                              )
-                                .toFixed(2)
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            ? `${returnFromatNumber(
+                                itemData.change_to_date,
+                                'currency',
+                              )}`
                             : `${currencySymbol}0`}
                         </div>
                       ) : null}
@@ -159,37 +169,21 @@ const DSPPacing = ({
         </td>
         <td className="product-body">
           {' '}
-          {itemData && itemData.planned_spend_to_date
-            ? `${currencySymbol}${itemData.planned_spend_to_date
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                .replace('-', '')}`
-            : `${currencySymbol}0`}
+          {returnFromatNumber(itemData.planned_spend_to_date, 'currency')}
         </td>
         <td className="product-body">
           {' '}
-          {itemData && itemData.actual_spend_to_date
-            ? `${currencySymbol}${itemData.actual_spend_to_date
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                .replace('-', '')}`
-            : `${currencySymbol}0`}
+          {returnFromatNumber(itemData.actual_spend_to_date, 'currency')}
         </td>
         <td className="product-body">
           {' '}
-          {itemData && itemData.change_to_date ? (
+          {itemData && itemData.contribution_bracket !== 'Low' ? (
             <div className="decrease-rate large">
-              {itemData && itemData.change_to_date
-                ? `${currencySymbol}${itemData.change_to_date
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    .replace('-', '')}`
-                : `${currencySymbol}0`}
+              {returnFromatNumber(itemData.change_to_date, 'currency')}
             </div>
-          ) : null}
+          ) : (
+            returnFromatNumber(itemData.change_to_date, 'currency')
+          )}
         </td>
         <td className="product-body">
           <Status
@@ -262,7 +256,11 @@ const DSPPacing = ({
               <span style={{ cursor: 'auto' }} className="orange-text">
                 {' '}
                 <span style={{ textTransform: 'capitalize' }}>
-                  {selectedOption}
+                  {dspSpendData && dspSpendData.dsp_pacing_flag_all === 1
+                    ? 'Overspending'
+                    : dspSpendData.dsp_pacing_flag_all === -1
+                    ? 'Underspending'
+                    : 'N/A'}
                 </span>
               </span>
             </p>
@@ -275,73 +273,69 @@ const DSPPacing = ({
                 <div className="label-range">
                   {' '}
                   {!loader &&
-                  dspSpendData &&
-                  dspSpendData.planned_spend_to_date_all
-                    ? `${currencySymbol}${dspSpendData.planned_spend_to_date_all
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : `${currencySymbol}0`}{' '}
+                    dspSpendData &&
+                    returnFromatNumber(
+                      dspSpendData.planned_spend_to_date_all,
+                      'currency',
+                    )}{' '}
                   (
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.planned_spend_to_date_percentage_all !== 'N/A'
-                    ? dspSpendData.planned_spend_to_date_percentage_all
-                        .toFixed(2)
-                        .toString()
-                        .replace('-', '')
-                    : '0'}
-                  %)
+                    ? returnFromatNumber(
+                        dspSpendData.planned_spend_to_date_percentage_all,
+                        'percentage',
+                      )
+                    : '0%'}
+                  )
                 </div>
               </li>
               <li>
                 <div className="label ">Actual Spend to date</div>
                 <div className="label-range">
                   {!loader &&
-                  dspSpendData &&
-                  dspSpendData.actual_spend_to_date_all
-                    ? `${currencySymbol}${dspSpendData.actual_spend_to_date_all
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : `${currencySymbol}0`}{' '}
+                    dspSpendData &&
+                    returnFromatNumber(
+                      dspSpendData.actual_spend_to_date_all,
+                      'currency',
+                    )}
                   (
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.actual_spend_to_date_percentage_all !== 'N/A'
-                    ? dspSpendData.actual_spend_to_date_percentage_all
-                        .toFixed(2)
-                        .toString()
-                        .replace('-', '')
-                    : '0'}
-                  %)
+                    ? returnFromatNumber(
+                        dspSpendData.actual_spend_to_date_percentage_all,
+                        'percentage',
+                      )
+                    : '0%'}
+                  )
                 </div>
               </li>
               <li>
                 {' '}
                 <div className="label ">
-                  {selectedOption === 'overspending'
+                  {dspSpendData && dspSpendData.dsp_pacing_flag_all === 1
                     ? 'Overspend'
                     : 'Underspend'}{' '}
                   to date
                 </div>
                 <div className="label-range red-range">
-                  {!loader && dspSpendData && dspSpendData.change_to_date_all
-                    ? `${currencySymbol}${dspSpendData.change_to_date_all
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                    : `${currencySymbol}0`}{' '}
+                  {!loader &&
+                    dspSpendData &&
+                    returnFromatNumber(
+                      dspSpendData.change_to_date_all,
+                      'currency',
+                    )}
                   (
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.change_to_date_percentage_all !== 'N/A'
-                    ? dspSpendData.change_to_date_percentage_all
-                        .toFixed(2)
-                        .toString()
-                        .replace('-', '')
-                    : '0'}
-                  %)
+                    ? returnFromatNumber(
+                        dspSpendData.change_to_date_percentage_all,
+                        'percentage',
+                      )
+                    : '0%'}
+                  )
                 </div>
               </li>
             </ul>
