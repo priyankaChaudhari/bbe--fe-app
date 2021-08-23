@@ -127,7 +127,7 @@ export default function Summary() {
                           alt="clock"
                         />
 
-                        {(item.email === userInfo.email || item.email) === ''
+                        {item.email === userInfo.email || item.email === ''
                           ? 'Skipped'
                           : `Assigned to ${item.email}`}
                       </div>

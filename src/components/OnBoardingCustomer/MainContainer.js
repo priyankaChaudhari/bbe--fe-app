@@ -96,6 +96,21 @@ export default function MainContainer() {
     ).then((response) => {
       if (response && response.data) {
         if (
+          history.location.pathname.includes(
+            '/account-setup/assigned-amazon-merchant/',
+          )
+        ) {
+          if (
+            (response.data &&
+              response.data.Seller &&
+              response.data.Seller.no_amazon_account) ||
+            (response.data &&
+              response.data.Vendor &&
+              response.data.Vendor.no_amazon_account)
+          ) {
+            setNoAmazonAccount(false);
+          }
+        } else if (
           (response.data &&
             response.data.Seller &&
             response.data.Seller.no_amazon_account) ||
