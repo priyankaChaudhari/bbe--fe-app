@@ -316,19 +316,29 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 60) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
       setDSPGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setDSPFilters({ daily: false, weekly: true, month: false });
+      setDSPFilters({ daily: false, weekly: true, month: true });
       setDSPGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setDSPFilters({ daily: false, weekly: false, month: true });
-      setDSPGroupBy('monthly');
     }
+
+    // } else if (diffDays > 60 && diffDays <= 180) {
+    //   temp = 'weekly';
+    //   setDSPFilters({ daily: false, weekly: true, month: true });
+    //   setDSPGroupBy('weekly');
+    // } else if (diffDays > 180) {
+    //   temp = 'weekly';
+    //   setDSPFilters({ daily: false, weekly: true, month: true });
+    //   setDSPGroupBy('weekly');
+    // }
 
     if (value === 'custom') {
       sd = `${startDate.getDate()}-${
@@ -621,12 +631,35 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const handleDSPGroupBy = (value) => {
     if (value !== dspGroupBy) {
       setDSPGroupBy(value);
-      getDSPData(
-        selectedAdDF.value,
-        value,
-        selectedMarketplace.value,
-        selectedAdManager.value,
-      );
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getDSPData(
+          selectedAdDF.value,
+          value,
+          selectedMarketplace.value,
+          selectedAdManager.value,
+          sd,
+          ed,
+        );
+      } else {
+        getDSPData(
+          selectedAdDF.value,
+          value,
+          selectedMarketplace.value,
+          selectedAdManager.value,
+        );
+      }
     }
   };
 
@@ -836,7 +869,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
                       id="monthlyCheck"
                       name="flexRadioDefault1"
                       value={dspGroupBy}
-                      checked={dspFilters.month}
+                      checked={dspFilters.month && dspGroupBy === 'monthly'}
                       onChange={() => handleDSPGroupBy('monthly')}
                     />
                     <label htmlFor="monthlyCheck">Monthly</label>

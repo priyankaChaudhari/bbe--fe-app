@@ -509,19 +509,28 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 60) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setAdFilters({ daily: false, weekly: true, month: false });
+      setAdFilters({ daily: false, weekly: true, month: true });
       setAdGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setAdFilters({ daily: false, weekly: false, month: true });
-      setAdGroupBy('monthly');
     }
+    // else if (diffDays > 60 && diffDays <= 180) {
+    //   temp = 'weekly';
+    //   setAdFilters({ daily: false, weekly: true, month: true });
+    //   setAdGroupBy('weekly');
+    // } else if (diffDays > 180) {
+    //   temp = 'weekly';
+    //   setAdFilters({ daily: false, weekly: true, month: true });
+    //   setAdGroupBy('weekly');
+    // }
 
     if (dailyFactFlag === 'custom') {
       sd = `${startDate.getDate()}-${
@@ -688,13 +697,37 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const handleAdGroupBy = (value) => {
     if (value !== adGroupBy) {
       setAdGroupBy(value);
-      getAdData(
-        selectedAdType,
-        selectedAdDF.value,
-        value,
-        selectedMarketplace.value,
-        selectedAdManager.value,
-      );
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getAdData(
+          selectedAdType,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace.value,
+          selectedAdManager.value,
+          sd,
+          ed,
+        );
+      } else {
+        getAdData(
+          selectedAdType,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace.value,
+          selectedAdManager.value,
+        );
+      }
     }
   };
 
@@ -929,7 +962,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                   id="monthlyCheck"
                   name="flexRadioDefault"
                   value={adGroupBy}
-                  checked={adFilters.month}
+                  checked={adFilters.month && adGroupBy === 'monthly'}
                   onChange={() => handleAdGroupBy('monthly')}
                 />
                 <label htmlFor="monthlyCheck">Monthly</label>
