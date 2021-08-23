@@ -423,6 +423,46 @@ export default function AmazonMerchant({
     );
   };
 
+  const btnDesign = () => {
+    return (
+      <Button
+        className="btn-primary w-100 mt-3"
+        onClick={() => saveAccountDetails()}>
+        {' '}
+        {isLoading.loader && isLoading.type === 'button' ? (
+          <PageLoader color="#fff" type="button" />
+        ) : (
+          <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
+        )}
+      </Button>
+    );
+  };
+
+  const generateBtn = () => {
+    if (
+      history.location.pathname.includes('/account-setup/amazon-merchant') &&
+      isChecked &&
+      noAmazonAccount
+    )
+      return '';
+
+    if (
+      history.location.pathname.includes(
+        '/account-setup/assigned-amazon-merchant',
+      ) &&
+      noAmazonAccount
+    )
+      return <>{btnDesign()}</>;
+
+    if (
+      history.location.pathname.includes('/account-setup/amazon-merchant') &&
+      !isChecked &&
+      noAmazonAccount
+    )
+      return <>{btnDesign()}</>;
+    return '';
+  };
+
   return (
     <>
       <OnBoardingBody
@@ -489,20 +529,7 @@ export default function AmazonMerchant({
             </Modal>
           </>
         )}
-        {noAmazonAccount ? (
-          <Button
-            className="btn-primary w-100 mt-3"
-            onClick={() => saveAccountDetails()}>
-            {' '}
-            {isLoading.loader && isLoading.type === 'button' ? (
-              <PageLoader color="#fff" type="button" />
-            ) : (
-              <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
-            )}
-          </Button>
-        ) : (
-          ''
-        )}
+        {generateBtn()}
       </OnBoardingBody>
     </>
   );
