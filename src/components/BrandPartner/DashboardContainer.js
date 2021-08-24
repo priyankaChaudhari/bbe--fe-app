@@ -102,6 +102,13 @@ function DashboardContainer() {
     'BGS Manager': 'BGS Dashboard',
   };
 
+  const adManagerRole = {
+    'Ad Manager Admin': '',
+    'Sponsored Advertising Ad Manager': '',
+    'DSP Ad Manager': '',
+    'Hybrid Ad Manager': '',
+  };
+
   const bgsCustomerList = useCallback(
     (
       currentPage,
@@ -516,30 +523,31 @@ function DashboardContainer() {
       {(userInfo && userInfo.role === 'Growth Strategist') ||
       (userInfo && userInfo.role === 'BGS') ||
       (userInfo && userInfo.role === 'BGS Manager') ? (
-        <Dashboard isLoading={isLoading} data={data} />
+        <>
+          <Dashboard isLoading={isLoading} data={data} />
+          {isLoading.loader ? (
+            ''
+          ) : (
+            <div className="footer-sticky">
+              <div className="straight-line horizontal-line" />
+              <div className="container-fluid">
+                <CommonPagination
+                  count={count}
+                  pageNumber={pageNumber}
+                  handlePageChange={handlePageChange}
+                />
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         ''
       )}
 
-      {_.has(adManagerRoleHeaders, userInfo && userInfo.role) ? (
+      {_.has(adManagerRole, userInfo && userInfo.role) ? (
         <AdManagerAdminContainer userInfo={userInfo} />
       ) : (
         ''
-      )}
-
-      {isLoading.loader ? (
-        ''
-      ) : (
-        <div className="footer-sticky">
-          <div className="straight-line horizontal-line" />
-          <div className="container-fluid">
-            <CommonPagination
-              count={count}
-              pageNumber={pageNumber}
-              handlePageChange={handlePageChange}
-            />
-          </div>
-        </div>
       )}
     </BrandPartnerDashboard>
   );
