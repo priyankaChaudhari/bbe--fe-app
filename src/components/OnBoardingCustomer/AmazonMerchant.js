@@ -215,8 +215,8 @@ export default function AmazonMerchant({
           setApiError(res && res.data);
           setIsLoading({ loader: false, type: 'button' });
           if (marketplaceDetails.type === 'Hybrid') {
-            document.body.scrollTop = 100; // For Safari
-            document.documentElement.scrollTop = 100; // For Chrome, Firefox, IE and Opera
+            document.body.scrollTop = 500; // For Safari
+            document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
           }
         }
       });
