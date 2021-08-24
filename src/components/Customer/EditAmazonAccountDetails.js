@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import $ from 'jquery';
 
 import { ModalBox, PageLoader, Button, ContractFormField } from '../../common';
 import {
@@ -86,6 +87,18 @@ export default function EditAmazonAccountDetails({
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
           setApiError(res && res.data);
+          if (
+            selectedMarketplace &&
+            selectedMarketplace.account_type === 'Hybrid'
+          ) {
+            const div = document.getElementById('scroll');
+            $('#scroll').animate(
+              {
+                scrollTop: div.scrollHeight,
+              },
+              500,
+            );
+          }
         }
       });
     }
@@ -97,8 +110,8 @@ export default function EditAmazonAccountDetails({
 
   return (
     <ModalBox>
-      <div className="modal-body ">
-        <div className="row">
+      <div className="modal-body" id="scroll">
+        <div className="row" id="scroll">
           <div className="col-12 modal-heading p-0">
             <h4>Edit Amazon Account Names & IDs</h4>
             <div className="straight-line horizontal-line mt-3 " />
@@ -131,7 +144,10 @@ export default function EditAmazonAccountDetails({
               <div className=" col-6  ">
                 <Button
                   className=" btn-borderless w-100"
-                  onClick={() => setShowModal(false)}>
+                  onClick={() => {
+                    setShowModal(false);
+                    setApiError({});
+                  }}>
                   Discard Changes
                 </Button>
               </div>

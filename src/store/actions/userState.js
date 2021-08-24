@@ -63,6 +63,21 @@ export const userMeSuccess = (data, type, history) => {
   };
 };
 
+export const clearToken = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('agreementID');
+  localStorage.removeItem('email');
+  localStorage.removeItem('customer');
+  localStorage.removeItem('match');
+  localStorage.removeItem('filters');
+  localStorage.removeItem('role');
+  localStorage.removeItem('step');
+  localStorage.removeItem('page');
+  localStorage.removeItem('noteFilters');
+  localStorage.removeItem('bgs');
+  window.location.href = PATH_LOGIN;
+};
+
 export const userRequestSuccess = (data, history, customer, onboardingId) => {
   const params = queryString.parse(history.location.search);
   localStorage.removeItem('email');
@@ -137,45 +152,49 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     }
 
     if (data.user && data.user.role === 'Customer') {
-      if (id === undefined || id === null) {
-        history.push(PATH_COMPANY_DETAILS);
+      if (data.user && data.user.customer_onboarding === null) {
+        clearToken();
       } else {
-        if (
-          data.user.step === null ||
-          data.user.step === undefined ||
-          data.user.step[id] === null ||
-          data.user.step[id] === undefined
-        ) {
+        if (id === undefined || id === null) {
           history.push(PATH_COMPANY_DETAILS);
-          const detail = { step: { ...data.user.step, [id]: 1 } };
-          updateUserMe(data.user.id, detail).then((user) => {
-            if (user && user.status === 200) {
-              history.push(PATH_COMPANY_DETAILS);
-            }
-          });
-        }
-        if (data.user.step[id] === 1) {
-          history.push(PATH_COMPANY_DETAILS);
-        }
-        if (data.user.step[id] === 2) {
-          history.push(PATH_BILLING_DETAILS);
-        }
-        if (data.user.step[id] === 3) {
-          history.push(PATH_AMAZON_MERCHANT);
-        }
-        // if (data.user.step[id] === 4) {
-        //   history.push(PATH_AMAZON_ACCOUNT);
-        // }
-        if (data.user.step[id] === 4 || data.user.step[id] === 5) {
-          history.push(PATH_SUMMARY);
-        }
-        if (data.user.step[id] === 6) {
-          history.push(
-            PATH_CUSTOMER_DETAILS.replace(
-              ':id',
-              customer.customer || data.user.customer,
-            ),
-          );
+        } else {
+          if (
+            data.user.step === null ||
+            data.user.step === undefined ||
+            data.user.step[id] === null ||
+            data.user.step[id] === undefined
+          ) {
+            history.push(PATH_COMPANY_DETAILS);
+            const detail = { step: { ...data.user.step, [id]: 1 } };
+            updateUserMe(data.user.id, detail).then((user) => {
+              if (user && user.status === 200) {
+                history.push(PATH_COMPANY_DETAILS);
+              }
+            });
+          }
+          if (data.user.step[id] === 1) {
+            history.push(PATH_COMPANY_DETAILS);
+          }
+          if (data.user.step[id] === 2) {
+            history.push(PATH_BILLING_DETAILS);
+          }
+          if (data.user.step[id] === 3) {
+            history.push(PATH_AMAZON_MERCHANT);
+          }
+          // if (data.user.step[id] === 4) {
+          //   history.push(PATH_AMAZON_ACCOUNT);
+          // }
+          if (data.user.step[id] === 4 || data.user.step[id] === 5) {
+            history.push(PATH_SUMMARY);
+          }
+          if (data.user.step[id] === 6) {
+            history.push(
+              PATH_CUSTOMER_DETAILS.replace(
+                ':id',
+                customer.customer || data.user.customer,
+              ),
+            );
+          }
         }
       }
     } else {
@@ -188,21 +207,6 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     type: actionTypes.USER_REQUEST_SUCCESS,
     payload: data,
   };
-};
-
-export const clearToken = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('agreementID');
-  localStorage.removeItem('email');
-  localStorage.removeItem('customer');
-  localStorage.removeItem('match');
-  localStorage.removeItem('filters');
-  localStorage.removeItem('role');
-  localStorage.removeItem('step');
-  localStorage.removeItem('page');
-  localStorage.removeItem('noteFilters');
-  localStorage.removeItem('bgs');
-  window.location.href = PATH_LOGIN;
 };
 
 export const userMe = (history, customer) => {
