@@ -185,13 +185,13 @@ export const CustomerListPage = styled.div`
     padding-left: 2%;
   }
   .account-type {
-    padding-left: 1.5%;
+    padding-left: 1.6%;
   }
   .status {
     padding-left: 1.2%;
   }
   .active-contracts {
-    padding-left: 1.5%;
+    padding-left: 1.6%;
   }
   .sticky-header {
     top: 130px;
