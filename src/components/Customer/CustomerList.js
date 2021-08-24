@@ -1628,7 +1628,7 @@ export default function CustomerList() {
         <div className="col-lg-3 col-12 customer-header">Customer</div>
         <div className="col-lg-2 col-12 account-type ">Account Type</div>
         <div className="col-lg-2 col-12 status">Status</div>
-        <div className="col-lg-5 col-12">Active Contracts</div>
+        <div className="col-lg-5 col-12 active-contracts">Active Contracts</div>
       </div>
     );
   };

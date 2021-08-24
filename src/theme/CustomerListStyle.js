@@ -32,7 +32,7 @@ export const CustomerListPage = styled.div`
         width: 100%;
         background-color: ${Theme.white};
         z-index: 2;
-        top: 130px;
+        top: 129px;
         padding-top: 5px;
       }
     }
@@ -170,13 +170,13 @@ export const CustomerListPage = styled.div`
     }
   }
   .revenue {
-    padding-left: 5%;
+    padding-left: 5.5%;
   }
   .units_sold {
-    padding-left: 4%;
+    padding-left: 4.2%;
   }
   .traffic {
-    padding-left: 3%;
+    padding-left: 2.5%;
   }
   .conversion {
     padding-left: 2%;
@@ -184,7 +184,15 @@ export const CustomerListPage = styled.div`
   .Brand_Strategist {
     padding-left: 2%;
   }
-
+  .account-type {
+    padding-left: 1.5%;
+  }
+  .status {
+    padding-left: 1.2%;
+  }
+  .active-contracts {
+    padding-left: 1.5%;
+  }
   .sticky-header {
     top: 130px;
     left: 353px;
@@ -221,6 +229,25 @@ export const CustomerListPage = styled.div`
     width: 64%;
     background: white;
   }
+  @media only screen and (min-width: 2500px) {
+    .conversion {
+      padding-left: 3%;
+    }
+  }
+  @media only screen and (min-width: 2000px) {
+    .revenue {
+      padding-left: 5.5%;
+    }
+    .units_sold {
+      padding-left: 4.5%;
+    }
+    .traffic {
+      padding-left: 3.4%;
+    }
+    .conversion {
+      padding-left: 2.9%;
+    }
+  }
   @media only screen and (min-width: 1920px) {
     .customer-list-header {
       &.w-80 {
@@ -233,6 +260,15 @@ export const CustomerListPage = styled.div`
       &.w-80 {
         width: 97%;
       }
+    }
+    .main-body-container {
+      .table-container {
+        height: auto;
+      }
+    }
+    .footer-sticky {
+      position: fixed;
+      bottom: 245px;
     }
     .dropdown-notes-filter {
       .notes-option {
@@ -547,7 +583,6 @@ export const CustomerListTabletView = styled.div`
         padding: 10px 4px 10px 12px;
         color: ${Theme.gray85};
         font-size: 14px;
-        display: flex;
 
         &.agreement {
           border: 1px solid ${Theme.gray45};
