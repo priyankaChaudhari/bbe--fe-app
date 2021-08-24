@@ -261,15 +261,15 @@ export const CustomerListPage = styled.div`
         width: 97%;
       }
     }
-    .main-body-container {
-      .table-container {
-        height: auto;
-      }
-    }
-    .footer-sticky {
-      position: fixed;
-      bottom: 245px;
-    }
+    // .main-body-container {
+    //   .table-container {
+    //     height: auto;
+    //   }
+    // }
+    // .footer-sticky {
+    //   position: fixed;
+    //   bottom: 245px;
+    // }
     .dropdown-notes-filter {
       .notes-option {
         li {
