@@ -468,7 +468,10 @@ export default function CustomerListTablet({
   };
 
   return (
-    <CustomerListTabletView>
+    <CustomerListTabletView
+      showPerformance={
+        !!(showPerformance || showAdPerformance || showDspAdPerformance)
+      }>
       {data && data.length === 0 ? (
         <NoRecordFound />
       ) : (

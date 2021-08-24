@@ -367,6 +367,8 @@ const Table = styled.table`
               padding: 8px 10px;
               border-radius: 3px;
               margin-left: 10px;
+              float: right;
+              margin-top: -9px;
               font-size: 14px;
 
               &.edit-file-icon {

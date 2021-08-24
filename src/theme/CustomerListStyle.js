@@ -25,7 +25,7 @@ export const CustomerListPage = styled.div`
       position: fixed;
 
       padding: 15px;
-      background: #ffff;
+      background: ${Theme.white};
       .fixed-customer-header {
         position: fixed;
         max-width: 64%;
@@ -213,7 +213,7 @@ export const CustomerListPage = styled.div`
   .table-part {
     overflow: auto;
     min-height: 892px;
-    height: 100%;
+    padding-bottom: 120px;
     position: relative;
   }
   .customer-list-header {
@@ -701,9 +701,9 @@ export const CustomerListTabletView = styled.div`
     }
   }
   @media (max-width: 996px) {
-    padding-top: 260px;
+    padding-top: ${(props) => (props.showPerformance ? '260px' : '200px')};
   }
   @media (max-width: 767px) {
-    padding-top: 360px;
+    padding-top: ${(props) => (props.showPerformance ? '360px' : '260px')};
   }
 `;
