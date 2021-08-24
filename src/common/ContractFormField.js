@@ -19,7 +19,7 @@ const ContractFormField = styled.div`
     color: ${Theme.gray40};
     font-size:${Theme.verySmall};
     text-transform: uppercase;
-    font-weight: bold;   
+    font-family: ${Theme.titleFontFamily};
   }
 
   .deleteSocial {

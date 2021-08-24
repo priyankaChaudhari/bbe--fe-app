@@ -290,24 +290,23 @@ export default function AmazonAccount({
     return (
       <>
         <div className="label mt-3">Marketplace</div>
-        <div className="label-info">
-          <DropDownSelect className="mt-2">
-            <Select
-              classNamePrefix="react-select"
-              className="active"
-              options={marketplaceChoices}
-              value={selectedMarketplace}
-              onChange={(event) =>
-                sellerVendorCall(event.account_type, event.value, event)
-              }
-              components={{
-                SingleValue: singleMarketplaceOption,
-                DropdownIndicator,
-                Option: IconOption,
-              }}
-            />
-          </DropDownSelect>
-        </div>
+
+        <DropDownSelect>
+          <Select
+            classNamePrefix="react-select"
+            className="active"
+            options={marketplaceChoices}
+            value={selectedMarketplace}
+            onChange={(event) =>
+              sellerVendorCall(event.account_type, event.value, event)
+            }
+            components={{
+              SingleValue: singleMarketplaceOption,
+              DropdownIndicator,
+              Option: IconOption,
+            }}
+          />
+        </DropDownSelect>
       </>
     );
   };

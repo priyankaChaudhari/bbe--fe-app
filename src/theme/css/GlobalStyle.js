@@ -1714,6 +1714,15 @@ text.cust-label-avg {
     }
   }
 
+  .label {
+    color: ${Theme.gray40};
+    text-transform: uppercase;
+    line-height: 22px;
+    font-family: ${Theme.titleFontFamily};
+    font-size: 11px;
+    margin-bottom: 3px;
+  }
+
 .react-sweet-progress {
     /* display: flex; */
     align-items: center;
