@@ -110,10 +110,8 @@ export default function CustomerList() {
   );
 
   const [showContractDetails, setShowContractDetails] = useState(
-    JSON.parse(
-      localStorage.getItem('filters') &&
-        JSON.parse(localStorage.getItem('filters')).showContractDetails,
-    )
+    JSON.parse(localStorage.getItem('filters')) &&
+      JSON.parse(localStorage.getItem('filters')).showContractDetails
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
       : true,
   );

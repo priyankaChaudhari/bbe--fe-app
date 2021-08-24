@@ -14,6 +14,7 @@ import {
   Button,
   PageLoader,
   ModalBox,
+  ErrorMsg,
 } from '../../common';
 import { askSomeoneData, updateAskSomeoneData, updateUserMe } from '../../api';
 import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
@@ -47,6 +48,7 @@ export default function AmazonMerchant({
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
+  const [apiError, setApiError] = useState({});
 
   const mapVideoData = () => {
     if (marketplaceDetails.type === 'Hybrid') {
@@ -160,6 +162,7 @@ export default function AmazonMerchant({
     ).then((re) => {
       if ((re && re.status === 201) || (re && re.status === 200)) saveDetails();
       if (re && re.status === 400) {
+        setApiError(re && re.data);
         setIsLoading({ loader: false, type: 'button' });
       }
     });
@@ -209,6 +212,7 @@ export default function AmazonMerchant({
             saveDetails();
           }
         if (res && res.status === 400) {
+          setApiError(res && res.data);
           setIsLoading({ loader: false, type: 'button' });
         }
       });
@@ -353,6 +357,7 @@ export default function AmazonMerchant({
                   readOnly={isChecked}
                 />
               </label>
+              <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
             </ContractFormField>
           ))}
       </fieldset>

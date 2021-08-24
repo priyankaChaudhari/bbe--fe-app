@@ -6,7 +6,12 @@ import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
-import { ContractFormField, DropDownSelect, WhiteCard } from '../../common';
+import {
+  ContractFormField,
+  DropDownSelect,
+  ErrorMsg,
+  WhiteCard,
+} from '../../common';
 import {
   EditOrangeIcon,
   CopyLinkIcon,
@@ -35,6 +40,7 @@ export default function AmazonAccount({
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [showBtn, setShowBtn] = useState(false);
+  const [apiError, setApiError] = useState({});
 
   const getVendorDetails = (id, sellerData) => {
     getAmazonVendor(id).then((vendor) => {
@@ -213,6 +219,7 @@ export default function AmazonAccount({
                   <br />
                   {generateInput(item, part)}
                 </label>
+                <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
               </ContractFormField>
             </div>
           ))}
@@ -348,6 +355,7 @@ export default function AmazonAccount({
           amazonDetails={amazonDetails}
           sellerVendorCall={sellerVendorCall}
           getActivityLogInfo={getActivityLogInfo}
+          setApiError={setApiError}
         />
       </Modal>
     </WhiteCard>

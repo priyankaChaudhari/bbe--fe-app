@@ -20,6 +20,7 @@ export default function EditAmazonAccountDetails({
   amazonDetails,
   sellerVendorCall,
   getActivityLogInfo,
+  setApiError,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
 
@@ -40,6 +41,7 @@ export default function EditAmazonAccountDetails({
         getActivityLogInfo();
       }
       if (re && re.status === 400) {
+        setApiError(re && re.data);
         setIsLoading({ loader: false, type: 'button' });
       }
     });
@@ -83,6 +85,7 @@ export default function EditAmazonAccountDetails({
           }
         if (res && res.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
+          setApiError(res && res.data);
         }
       });
     }
@@ -145,6 +148,7 @@ export default function EditAmazonAccountDetails({
 EditAmazonAccountDetails.defaultProps = {
   setShowModal: () => {},
   showBtn: false,
+  setApiError: () => {},
 };
 
 EditAmazonAccountDetails.propTypes = {
@@ -166,4 +170,5 @@ EditAmazonAccountDetails.propTypes = {
   }).isRequired,
   sellerVendorCall: PropTypes.func.isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
+  setApiError: PropTypes.func,
 };
