@@ -385,7 +385,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
       );
     } else {
-      getDSPData(selectedAdDF.value, dspGroupBy, event.value);
+      getDSPData(
+        selectedAdDF.value,
+        dspGroupBy,
+        event.value,
+        selectedAdManager.value,
+      );
       getContributionData(
         selectedAdDF.value,
         event.value,

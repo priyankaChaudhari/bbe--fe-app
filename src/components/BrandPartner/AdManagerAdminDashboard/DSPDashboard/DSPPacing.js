@@ -185,7 +185,7 @@ const DSPPacing = ({
               )}
             </div>
           ) : (
-            returnFromatNumber(itemData.change_to_date, 'currency')
+            returnFromatNumber(Math.abs(itemData.change_to_date), 'currency')
           )}
         </td>
         <td className="product-body">
