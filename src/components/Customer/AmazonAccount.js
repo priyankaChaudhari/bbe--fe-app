@@ -134,6 +134,10 @@ export default function AmazonAccount({
 
   const handleChange = (event, item, part) => {
     setShowBtn(true);
+    setApiError({
+      ...apiError,
+      [item]: '',
+    });
     if (
       selectedMarketplace &&
       selectedMarketplace.account_type === 'Hybrid' &&

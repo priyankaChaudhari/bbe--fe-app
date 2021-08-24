@@ -350,9 +350,13 @@ export default function AmazonMerchant({
                 <input
                   placeholder={`Enter ${item.label}`}
                   className="form-control"
-                  onChange={(event) =>
-                    setDefaultValues(item.key, event.target.value, part)
-                  }
+                  onChange={(event) => {
+                    setDefaultValues(item.key, event.target.value, part);
+                    setApiError({
+                      ...apiError,
+                      [item.key]: '',
+                    });
+                  }}
                   defaultValue={mapDefaultValues(item.key, part)}
                   readOnly={isChecked}
                 />
