@@ -110,7 +110,10 @@ export default function CustomerList() {
   );
 
   const [showContractDetails, setShowContractDetails] = useState(
-    JSON.parse(localStorage.getItem('filters'))
+    JSON.parse(
+      localStorage.getItem('filters') &&
+        JSON.parse(localStorage.getItem('filters')).showContractDetails,
+    )
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
       : true,
   );
@@ -683,7 +686,16 @@ export default function CustomerList() {
     // for multi select user
     // const handleFilters = (event, key, type) => {
     // for one select user
-    if (key === 'user') localStorage.setItem('bgs', JSON.stringify(event));
+
+    if (key === 'user')
+      localStorage.setItem(
+        'filters',
+        JSON.stringify({
+          ...filters,
+          cd_user: event,
+        }),
+      );
+
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
