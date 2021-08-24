@@ -177,16 +177,9 @@ const DSPPacing = ({
         </td>
         <td className="product-body">
           {' '}
-          {itemData && itemData.contribution_bracket !== 'Low' ? (
-            <div className="decrease-rate large">
-              {returnFromatNumber(
-                Math.abs(itemData.change_to_date),
-                'currency',
-              )}
-            </div>
-          ) : (
-            returnFromatNumber(Math.abs(itemData.change_to_date), 'currency')
-          )}
+          <div className="decrease-rate large">
+            {returnFromatNumber(Math.abs(itemData.change_to_date), 'currency')}
+          </div>
         </td>
         <td className="product-body">
           <Status

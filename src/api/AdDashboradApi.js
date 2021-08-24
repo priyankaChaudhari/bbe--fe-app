@@ -96,14 +96,14 @@ export async function getKeyContributionData(
     if (dashboardType === 'sponsored_ad_dashboard') {
       params = {
         ...params,
-        page: 1,
+        no_page: '',
         sequence: 'desc',
         'order-by': 'ad_sales',
       };
     } else {
       params = {
         ...params,
-        page: 1,
+        no_page: '',
         sequence: 'desc',
         'order-by': 'dsp_spend',
       };

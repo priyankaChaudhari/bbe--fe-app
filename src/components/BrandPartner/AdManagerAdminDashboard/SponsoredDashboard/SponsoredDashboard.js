@@ -363,8 +363,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
+          } else if (res.data) {
+            setContributionData(res.data);
           } else {
             setContributionData([]);
           }
