@@ -28,7 +28,7 @@ const DSPPacing = ({
   const returnFromatNumber = (value, type) => {
     const decimalDigits = 2;
     if (value) {
-      return `${type === 'currency' ? currencySymbol : ''}${Math.abs(value)
+      return `${type === 'currency' ? currencySymbol : ''}${value
         .toFixed(decimalDigits)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${
@@ -93,7 +93,7 @@ const DSPPacing = ({
                         <div className="decrease-rate large">
                           {itemData && itemData.change_to_date
                             ? `${returnFromatNumber(
-                                itemData.change_to_date,
+                                Math.abs(itemData.change_to_date),
                                 'currency',
                               )}`
                             : `${currencySymbol}0`}
@@ -179,7 +179,10 @@ const DSPPacing = ({
           {' '}
           {itemData && itemData.contribution_bracket !== 'Low' ? (
             <div className="decrease-rate large">
-              {returnFromatNumber(itemData.change_to_date, 'currency')}
+              {returnFromatNumber(
+                Math.abs(itemData.change_to_date),
+                'currency',
+              )}
             </div>
           ) : (
             returnFromatNumber(itemData.change_to_date, 'currency')
@@ -269,15 +272,14 @@ const DSPPacing = ({
           <div className="col-md-8 col-sm-12 pr-0 mb-3">
             <ul className="dsp-spent-date">
               <li>
-                <div className="label ">Planned Spend to date</div>
+                <div className="label ">Planned Spend to date </div>
                 <div className="label-range">
-                  {' '}
                   {!loader &&
                     dspSpendData &&
                     returnFromatNumber(
-                      dspSpendData.planned_spend_to_date_all,
+                      Math.abs(dspSpendData.planned_spend_to_date_all),
                       'currency',
-                    )}{' '}
+                    )}
                   (
                   {!loader &&
                   dspSpendData &&
@@ -291,12 +293,12 @@ const DSPPacing = ({
                 </div>
               </li>
               <li>
-                <div className="label ">Actual Spend to date</div>
+                <div className="label ">Actual Spend to date </div>
                 <div className="label-range">
                   {!loader &&
                     dspSpendData &&
                     returnFromatNumber(
-                      dspSpendData.actual_spend_to_date_all,
+                      Math.abs(dspSpendData.actual_spend_to_date_all),
                       'currency',
                     )}
                   (
@@ -312,7 +314,6 @@ const DSPPacing = ({
                 </div>
               </li>
               <li>
-                {' '}
                 <div className="label ">
                   {dspSpendData && dspSpendData.dsp_pacing_flag_all === 1
                     ? 'Overspend'
@@ -323,7 +324,7 @@ const DSPPacing = ({
                   {!loader &&
                     dspSpendData &&
                     returnFromatNumber(
-                      dspSpendData.change_to_date_all,
+                      Math.abs(dspSpendData.change_to_date_all),
                       'currency',
                     )}
                   (
@@ -353,7 +354,7 @@ const DSPPacing = ({
             width={40}
             height={40}
           />
-        ) : data && data.dsp_pacing ? (
+        ) : data && data.dsp_pacing && data.dsp_pacing.length > 0 ? (
           isDesktop ? (
             renderDesktopDSPPacingData()
           ) : (

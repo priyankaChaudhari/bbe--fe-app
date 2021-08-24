@@ -212,6 +212,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         endDate,
         userInfo,
       ).then((res) => {
+        console.log('res--', res, res.status);
+        if (res && res.status === 500) {
+          setKeyContributionLoader(false);
+          setContributionData(null);
+        }
+
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
         }
@@ -221,7 +227,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           } else if (res.data && res.data.results) {
             setContributionData(res.data.results);
           } else {
-            setContributionData([]);
+            setContributionData(null);
           }
           setKeyContributionLoader(false);
         }
