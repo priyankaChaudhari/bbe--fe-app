@@ -6,11 +6,11 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   UpDowGrayArrow,
-} from '../../theme/images/index';
-import { PATH_CUSTOMER_DETAILS } from '../../constants';
-import { CommonPagination, PageLoader, WhiteCard } from '../../common';
-import { CustomerListTabletView } from '../../theme/CustomerListStyle';
-import NoRecordFound from '../../common/NoRecordFound';
+} from '../../../theme/images/index';
+import { PATH_CUSTOMER_DETAILS } from '../../../constants';
+import { CommonPagination, PageLoader, WhiteCard } from '../../../common';
+import { CustomerListTabletView } from '../../../theme/CustomerListStyle';
+import NoRecordFound from '../../../common/NoRecordFound';
 
 export default function CustomerListTablet({
   data,

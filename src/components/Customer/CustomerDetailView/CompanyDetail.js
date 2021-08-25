@@ -5,10 +5,10 @@ import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
-import { EditOrangeIcon, CloseIcon } from '../../theme/images/index';
-import { GroupUser } from '../../theme/Global';
-import { SocialIcons } from '../../constants/FieldConstants';
-import { GetInitialName, WhiteCard } from '../../common';
+import { EditOrangeIcon, CloseIcon } from '../../../theme/images/index';
+import { GroupUser } from '../../../theme/Global';
+import { SocialIcons } from '../../../constants/FieldConstants';
+import { GetInitialName, WhiteCard } from '../../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
 

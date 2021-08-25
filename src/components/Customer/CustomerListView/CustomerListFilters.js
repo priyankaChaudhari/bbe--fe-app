@@ -11,13 +11,13 @@ import {
   InputSearchWithRadius,
   ModalRadioCheck,
   WhiteCard,
-} from '../../common';
+} from '../../../common';
 import {
   contractChoices,
   contractStatus,
-} from '../../constants/FieldConstants';
-import { SideContent } from '../../theme/CustomerListStyle';
-import { CaretUp, InfoIcon, SearchIcon } from '../../theme/images';
+} from '../../../constants/FieldConstants';
+import { SideContent } from '../../../theme/CustomerListStyle';
+import { CaretUp, InfoIcon, SearchIcon } from '../../../theme/images';
 
 function CustomerListFilters({
   handleFilters,

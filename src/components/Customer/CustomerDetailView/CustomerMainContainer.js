@@ -14,7 +14,7 @@ import Modal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 
-import Theme from '../../theme/Theme';
+import Theme from '../../../theme/Theme';
 import {
   FileContract,
   Organization,
@@ -35,8 +35,8 @@ import {
   EditOrangeIcon,
   NextActivityLogo,
   ContractEmailIcon,
-} from '../../theme/images/index';
-import { GroupUser } from '../../theme/Global';
+} from '../../../theme/images/index';
+import { GroupUser } from '../../../theme/Global';
 import {
   ModalBox,
   PageLoader,
@@ -47,13 +47,13 @@ import {
   Button,
   WhiteCard,
   Status,
-} from '../../common';
+} from '../../../common';
 import {
   getContactDetails,
   getCustomerDetails,
   setCustomerSelectedTab,
   showBrandAsset,
-} from '../../store/actions/customerState';
+} from '../../../store/actions/customerState';
 import {
   AgreementDetails,
   CompanyDetail,
@@ -61,8 +61,8 @@ import {
   EditAccountDetails,
   Notes,
   ProductCatalog,
-} from './index';
-import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
+} from '../index';
+import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import BillingDetails from './BillingDetails';
 import Activity from './Activity';
 import {
@@ -72,13 +72,13 @@ import {
   getDocumentList,
   getMarketPlaceList,
   getRecentNotes,
-} from '../../api';
-import { AddTeamMember, EditTeamMember } from '../Team/index';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../constants';
+} from '../../../api';
+import { AddTeamMember, EditTeamMember } from '../../Team/index';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import 'react-toastify/dist/ReactToastify.css';
-import { showOnboardingMsg } from '../../store/actions/userState';
-import { SetupCheckList } from '../BrandAssetGathering/index';
-import { getAccountMarketplace } from '../../api/CustomerApi';
+import { showOnboardingMsg } from '../../../store/actions/userState';
+import { SetupCheckList } from '../../BrandAssetGathering/index';
+import { getAccountMarketplace } from '../../../api/CustomerApi';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -766,60 +766,64 @@ export default function CustomerMainContainer() {
                   </div>
                   <div className="col-6 mt-4 text-right">
                     {' '}
-                    <div className="add-more-people">
-                      {memberData &&
-                        memberData.map((item) => (
-                          <React.Fragment key={item.id}>
-                            <div
-                              className="add-more-people cursor "
-                              data-tip
-                              data-for={item.id}
-                              onClick={() =>
-                                setShowMemberList({
-                                  show: true,
-                                  add: false,
-                                  modal: true,
-                                })
-                              }
-                              role="presentation">
-                              <GetInitialName
-                                userInfo={item.user_profile}
-                                type="team"
-                              />
-                            </div>
+                    {userInfo && userInfo.role !== 'Customer' ? (
+                      <div className="add-more-people">
+                        {memberData &&
+                          memberData.map((item) => (
+                            <React.Fragment key={item.id}>
+                              <div
+                                className="add-more-people cursor "
+                                data-tip
+                                data-for={item.id}
+                                onClick={() =>
+                                  setShowMemberList({
+                                    show: true,
+                                    add: false,
+                                    modal: true,
+                                  })
+                                }
+                                role="presentation">
+                                <GetInitialName
+                                  userInfo={item.user_profile}
+                                  type="team"
+                                />
+                              </div>
 
-                            <ReactTooltip
-                              place="bottom"
-                              id={item.id}
-                              aria-haspopup="true">
-                              <strong>
-                                {(item.user_profile &&
-                                  item.user_profile.first_name) ||
-                                  ' '}{' '}
-                                {(item.user_profile &&
-                                  item.user_profile.last_name) ||
-                                  ' '}
-                              </strong>
-                              <p style={{ color: 'white', fontSize: '11px' }}>
-                                {item.user_profile && item.user_profile.role}
-                              </p>
-                            </ReactTooltip>
-                          </React.Fragment>
-                        ))}
+                              <ReactTooltip
+                                place="bottom"
+                                id={item.id}
+                                aria-haspopup="true">
+                                <strong>
+                                  {(item.user_profile &&
+                                    item.user_profile.first_name) ||
+                                    ' '}{' '}
+                                  {(item.user_profile &&
+                                    item.user_profile.last_name) ||
+                                    ' '}
+                                </strong>
+                                <p style={{ color: 'white', fontSize: '11px' }}>
+                                  {item.user_profile && item.user_profile.role}
+                                </p>
+                              </ReactTooltip>
+                            </React.Fragment>
+                          ))}
 
-                      <div
-                        className="add-more-people btn-add-team cursor"
-                        role="presentation"
-                        onClick={() =>
-                          setShowMemberList({
-                            show: true,
-                            add: true,
-                            modal: true,
-                          })
-                        }>
-                        <img src={PlusIcon} alt="add" />
+                        <div
+                          className="add-more-people btn-add-team cursor"
+                          role="presentation"
+                          onClick={() =>
+                            setShowMemberList({
+                              show: true,
+                              add: true,
+                              modal: true,
+                            })
+                          }>
+                          <img src={PlusIcon} alt="add" />
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      ''
+                    )}
                   </div>
                 </div>
 
@@ -1234,116 +1238,123 @@ export default function CustomerMainContainer() {
                   )}
 
                   <div className="col-lg-3 col-12">
-                    <WhiteCard className="mb-3 note-height-card">
-                      <p className="black-heading-title mt-0 mb-4">
-                        {' '}
-                        Recent Notes
-                      </p>
-                      {noteData && noteData.length > 0 ? (
+                    {userInfo && userInfo.role !== 'Customer' ? (
+                      <WhiteCard className="mb-3 note-height-card">
+                        <p className="black-heading-title mt-0 mb-4">
+                          {' '}
+                          Recent Notes
+                        </p>
+                        {noteData && noteData.length > 0 ? (
+                          <div
+                            className="view-all-list "
+                            role="presentation"
+                            onClick={() =>
+                              setShowNotesModal({
+                                modal: true,
+                                apiCall: false,
+                              })
+                            }>
+                            View All
+                            <img src={ForwardOrangeIcon} alt="forward-arrow" />
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                        {isLoading.loader && isLoading.type === 'note' ? (
+                          <PageLoader
+                            component="activity"
+                            color="#FF5933"
+                            type="page"
+                            width={20}
+                            height={20}
+                          />
+                        ) : (
+                          <>
+                            {noteData && noteData.length === 0 ? (
+                              <div className="text-center">No notes found.</div>
+                            ) : (
+                              <>
+                                {noteData &&
+                                  noteData.slice(0, 3).map((item) => (
+                                    <GroupUser className="mb-3" key={item.id}>
+                                      {images.find(
+                                        (op) => op.entity_id === item.user.id,
+                                      ) &&
+                                      images.find(
+                                        (op) => op.entity_id === item.user.id,
+                                      ).presigned_url ? (
+                                        <img
+                                          src={
+                                            isLoading.loader &&
+                                            isLoading.type === 'page'
+                                              ? DefaultUser
+                                              : images.find(
+                                                  (op) =>
+                                                    op.entity_id ===
+                                                    item.user.id,
+                                                ).presigned_url
+                                          }
+                                          className="default-user-activity"
+                                          alt="pic"
+                                        />
+                                      ) : (
+                                        <div className="float-left mr-3">
+                                          <GetInitialName
+                                            userInfo={item.user}
+                                          />
+                                        </div>
+                                      )}
+                                      <div className="activity-user">
+                                        <span className="font-bold">
+                                          {item &&
+                                            item.user &&
+                                            item.user.first_name}{' '}
+                                          {item &&
+                                            item.user &&
+                                            item.user.last_name}
+                                          :
+                                        </span>{' '}
+                                        <p
+                                          className="m-0 note-text"
+                                          dangerouslySetInnerHTML={{
+                                            __html:
+                                              item && item.note.slice(0, 80),
+                                          }}
+                                        />
+                                        <div className="time-date  mt-1">
+                                          {item && item.created_at}{' '}
+                                        </div>
+                                      </div>
+                                      <div className="clear-fix" />
+                                    </GroupUser>
+                                  ))}
+                              </>
+                            )}
+                          </>
+                        )}
+                        <div className="straight-line horizontal-line  mt-3 mb-3" />
                         <div
-                          className="view-all-list "
+                          className="add-note-section cursor"
                           role="presentation"
-                          onClick={() =>
+                          onClick={() => {
                             setShowNotesModal({
                               modal: true,
                               apiCall: false,
-                            })
-                          }>
-                          View All
-                          <img src={ForwardOrangeIcon} alt="forward-arrow" />
+                            });
+                            setNewNoteEditor(true);
+                          }}>
+                          {' '}
+                          <img
+                            className="red-chat-icon"
+                            src={OrangeChat}
+                            alt="chat"
+                          />{' '}
+                          Add note
                         </div>
-                      ) : (
-                        ''
-                      )}
-                      {isLoading.loader && isLoading.type === 'note' ? (
-                        <PageLoader
-                          component="activity"
-                          color="#FF5933"
-                          type="page"
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        <>
-                          {noteData && noteData.length === 0 ? (
-                            <div className="text-center">No notes found.</div>
-                          ) : (
-                            <>
-                              {noteData &&
-                                noteData.slice(0, 3).map((item) => (
-                                  <GroupUser className="mb-3" key={item.id}>
-                                    {images.find(
-                                      (op) => op.entity_id === item.user.id,
-                                    ) &&
-                                    images.find(
-                                      (op) => op.entity_id === item.user.id,
-                                    ).presigned_url ? (
-                                      <img
-                                        src={
-                                          isLoading.loader &&
-                                          isLoading.type === 'page'
-                                            ? DefaultUser
-                                            : images.find(
-                                                (op) =>
-                                                  op.entity_id === item.user.id,
-                                              ).presigned_url
-                                        }
-                                        className="default-user-activity"
-                                        alt="pic"
-                                      />
-                                    ) : (
-                                      <div className="float-left mr-3">
-                                        <GetInitialName userInfo={item.user} />
-                                      </div>
-                                    )}
-                                    <div className="activity-user">
-                                      <span className="font-bold">
-                                        {item &&
-                                          item.user &&
-                                          item.user.first_name}{' '}
-                                        {item &&
-                                          item.user &&
-                                          item.user.last_name}
-                                        :
-                                      </span>{' '}
-                                      <p
-                                        className="m-0 note-text"
-                                        dangerouslySetInnerHTML={{
-                                          __html:
-                                            item && item.note.slice(0, 80),
-                                        }}
-                                      />
-                                      <div className="time-date  mt-1">
-                                        {item && item.created_at}{' '}
-                                      </div>
-                                    </div>
-                                    <div className="clear-fix" />
-                                  </GroupUser>
-                                ))}
-                            </>
-                          )}
-                        </>
-                      )}
-                      <div className="straight-line horizontal-line  mt-3 mb-3" />
-                      <div
-                        className="add-note-section cursor"
-                        role="presentation"
-                        onClick={() => {
-                          setShowNotesModal({
-                            modal: true,
-                            apiCall: false,
-                          });
-                          setNewNoteEditor(true);
-                        }}>
-                        {' '}
-                        <img
-                          className="red-chat-icon"
-                          src={OrangeChat}
-                          alt="chat"
-                        />{' '}
-                        Add note
-                      </div>
-                    </WhiteCard>
+                      </WhiteCard>
+                    ) : (
+                      ''
+                    )}
                     <WhiteCard className="mb-3 ">
                       <p className="black-heading-title mt-0 mb-4">
                         {' '}

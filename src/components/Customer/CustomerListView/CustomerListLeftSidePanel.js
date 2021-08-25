@@ -3,18 +3,18 @@ import { DebounceInput } from 'react-debounce-input';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 
-import { CustomerLeftPannel } from '../../theme/CustomerListStyle';
+import { CustomerLeftPannel } from '../../../theme/CustomerListStyle';
 import {
   CheckBox,
   DropDownSelect,
   InputSearchWithRadius,
   ModalRadioCheck,
-} from '../../common';
+} from '../../../common';
 import {
   contractChoices,
   contractStatus,
-} from '../../constants/FieldConstants';
-import { InfoIcon, SearchIcon } from '../../theme/images';
+} from '../../../constants/FieldConstants';
+import { InfoIcon, SearchIcon } from '../../../theme/images';
 
 function CustomerListLeftSidePanel({
   handleFilters,

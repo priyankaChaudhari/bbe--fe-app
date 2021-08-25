@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 
-import { GroupUser } from '../../theme/Global';
+import { GroupUser } from '../../../theme/Global';
 import {
   Button,
   ContractFormField,
@@ -14,21 +14,14 @@ import {
   ModalBox,
   PageLoader,
   WhiteCard,
-} from '../../common';
-import {
-  CloseIcon,
-  EditOrangeIcon,
-  // DefaultUser,
-  // BlackCheckMark,
-  // BellNotification,
-  // ClockIcon,
-} from '../../theme/images/index';
-import { getBillingDetails, saveBillingInfo } from '../../api';
+} from '../../../common';
+import { CloseIcon, EditOrangeIcon } from '../../../theme/images/index';
+import { getBillingDetails, saveBillingInfo } from '../../../api';
 import {
   BillingAddress,
   creditCardDetails,
-} from '../../constants/FieldConstants';
-import { showProfileLoader } from '../../store/actions/userState';
+} from '../../../constants/FieldConstants';
+import { showProfileLoader } from '../../../store/actions/userState';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const dispatch = useDispatch();

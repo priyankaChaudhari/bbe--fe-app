@@ -5,11 +5,16 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import $ from 'jquery';
 
-import { ModalBox, PageLoader, Button, ContractFormField } from '../../common';
+import {
+  ModalBox,
+  PageLoader,
+  Button,
+  ContractFormField,
+} from '../../../common';
 import {
   saveAmazonSellerAccount,
   saveAmazonVendorAccount,
-} from '../../api/OnboardingCustomerApi';
+} from '../../../api/OnboardingCustomerApi';
 
 export default function EditAmazonAccountDetails({
   setShowModal,

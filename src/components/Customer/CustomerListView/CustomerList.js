@@ -10,8 +10,8 @@ import $ from 'jquery';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
 
-import Theme from '../../theme/Theme';
-import NoRecordFound from '../../common/NoRecordFound';
+import Theme from '../../../theme/Theme';
+import NoRecordFound from '../../../common/NoRecordFound';
 import {
   CommonPagination,
   PageLoader,
@@ -19,7 +19,7 @@ import {
   ModalBox,
   Button,
   GetInitialName,
-} from '../../common';
+} from '../../../common';
 import {
   performanceSortOptions,
   sadSortOptions,
@@ -28,7 +28,7 @@ import {
   sortByOrderOptions,
   options,
   timeFrameFilters,
-} from '../../constants/FieldConstants';
+} from '../../../constants/FieldConstants';
 import {
   CountDayClock,
   CloseIcon,
@@ -41,13 +41,13 @@ import {
   UpDowGrayArrow,
   SortUp,
   CaretUp,
-} from '../../theme/images/index';
+} from '../../../theme/images/index';
 import CustomerListTablet from './CustomerListTablet';
-import { getCustomerList, getGrowthStrategist, getStatus } from '../../api';
-import { getManagersList, getSellerType } from '../../api/ChoicesApi';
-import { getcontract } from '../../api/AgreementApi';
-import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../constants';
-import { CustomerListPage } from '../../theme/CustomerListStyle';
+import { getCustomerList, getGrowthStrategist, getStatus } from '../../../api';
+import { getManagersList, getSellerType } from '../../../api/ChoicesApi';
+import { getcontract } from '../../../api/AgreementApi';
+import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../../constants';
+import { CustomerListPage } from '../../../theme/CustomerListStyle';
 import CustomerListFilters from './CustomerListFilters';
 import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 

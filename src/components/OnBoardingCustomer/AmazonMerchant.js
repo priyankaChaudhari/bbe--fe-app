@@ -317,6 +317,8 @@ export default function AmazonMerchant({
       });
   };
 
+  console.log(marketplaceDetails);
+
   const generateAccountType = (part, mapData) => {
     return (
       <fieldset className="shape-without-border  w-430 mt-3 mb-2">
@@ -416,9 +418,17 @@ export default function AmazonMerchant({
                 className="btn-primary w-100 mt-3"
                 onClick={() => saveAccountDetails()}
                 disabled={
-                  formData &&
-                  Object.values(formData) &&
-                  Object.values(formData).length === 0
+                  (formData &&
+                    Object.values(formData) &&
+                    Object.values(formData).length === 0) ||
+                  (marketplaceDetails &&
+                    marketplaceDetails.Seller &&
+                    Object.values(marketplaceDetails.Seller) &&
+                    Object.values(marketplaceDetails.Seller).length === 0) ||
+                  (marketplaceDetails &&
+                    marketplaceDetails.Vendor &&
+                    Object.values(marketplaceDetails.Vendor) &&
+                    Object.values(marketplaceDetails.Vendor).length === 0)
                 }>
                 {' '}
                 {isLoading.loader && isLoading.type === 'button' ? (

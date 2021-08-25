@@ -36,20 +36,21 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
 } from '../constants/index';
 
-import { CustomerListTablet, ProductDelegation } from '../components/Customer';
+import {
+  CustomerListTablet,
+  ProductDelegation,
+  CustomerMainContainer,
+  CustomerList,
+} from '../components/Customer';
 
 import { PageLoader, PageNotFound } from './index';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import { ContractContainer } from '../components/Contract';
-import { ArticleDetails, ArticleList } from '../components/Knowledge Base';
-import CustomerMainContainer from '../components/Customer/CustomerMainContainer';
-import CustomerList from '../components/Customer/CustomerList';
+import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
 import {
-  // Dashboard,
   TeamMember,
   TabletTeamMember,
-  // AdManagerDashboard,
   DashboardContainer,
 } from '../components/BrandPartner';
 import { Summary } from '../components/OnBoardingCustomer';

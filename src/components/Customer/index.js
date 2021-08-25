@@ -1,18 +1,18 @@
 /* eslint-disable import/no-cycle */
-import CustomerList from './CustomerList';
-import CustomerListTablet from './CustomerListTablet';
-import CompanyDetail from './CompanyDetail';
-import Activity from './Activity';
-import AgreementDetails from './AgreementDetails';
+import CustomerList from './CustomerListView/CustomerList';
+import CustomerListTablet from './CustomerListView/CustomerListTablet';
+import CompanyDetail from './CustomerDetailView/CompanyDetail';
+import Activity from './CustomerDetailView/Activity';
+import AgreementDetails from './CustomerDetailView/AgreementDetails';
 import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer';
-import EditCompanyDetails from './EditCompanyDetails';
-import EditAccountDetails from './EditAccountDetails';
-import CustomerStatus from './CustomerStatus';
-import BillingDetails from './BillingDetails';
-import Notes from './Notes';
+import EditCompanyDetails from './CustomerDetailView/EditCompanyDetails';
+import EditAccountDetails from './CustomerDetailView/EditAccountDetails';
+import CustomerStatus from './CustomerDetailView/CustomerStatus';
+import BillingDetails from './CustomerDetailView/BillingDetails';
+import Notes from './CustomerDetailView/Notes';
 import ProductCatalog from './ProductCatalog/ProductCatalog';
 import ProductDelegation from './ProductCatalog/ProductDelegation';
-// import AdPerformance from './AdPerformance';
+import CustomerMainContainer from './CustomerDetailView/CustomerMainContainer';
 
 export {
   CustomerList,
@@ -28,5 +28,5 @@ export {
   Notes,
   ProductCatalog,
   ProductDelegation,
-  // AdPerformance,
+  CustomerMainContainer,
 };

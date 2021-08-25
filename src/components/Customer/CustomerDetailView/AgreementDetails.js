@@ -6,17 +6,17 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
-import { Button, PageLoader, WhiteCard, Tabs } from '../../common';
+import { Button, PageLoader, WhiteCard, Tabs } from '../../../common';
 import {
   ClockIcon,
   FileContract,
   RecurringIcon,
   DspOnlyIcon,
   ServiceIcon,
-} from '../../theme/images';
-import { PATH_AGREEMENT } from '../../constants';
+} from '../../../theme/images';
+import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
-import { getAccountDetails } from '../../store/actions/accountState';
+import { getAccountDetails } from '../../../store/actions/accountState';
 
 export default function AgreementDetails({ agreements, id }) {
   const history = useHistory();

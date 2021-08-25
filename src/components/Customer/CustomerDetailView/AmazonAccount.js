@@ -11,21 +11,21 @@ import {
   DropDownSelect,
   ErrorMsg,
   WhiteCard,
-} from '../../common';
+} from '../../../common';
 import {
   EditOrangeIcon,
   CopyLinkIcon,
   CaretUp,
   CloseIcon,
-} from '../../theme/images';
+} from '../../../theme/images';
 import {
   AmazonSellerAccountDetails,
   AmazonVendorAccountDetails,
-} from '../../constants/FieldConstants';
+} from '../../../constants/FieldConstants';
 import {
   getAmazonSeller,
   getAmazonVendor,
-} from '../../api/OnboardingCustomerApi';
+} from '../../../api/OnboardingCustomerApi';
 import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
 export default function AmazonAccount({

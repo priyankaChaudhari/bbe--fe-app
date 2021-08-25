@@ -5,14 +5,14 @@ import NumberFormat from 'react-number-format';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 
-import { getCategories, getCountry, updateCustomerDetails } from '../../api';
+import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
 
-import { Button, ErrorMsg, FormField, PageLoader } from '../../common';
-import InputSelect from '../../common/InputSelect';
-import { editAccountFields } from '../../constants/FieldConstants';
-import { SortDownIcon } from '../../theme/images';
-import { getCustomerDetails } from '../../store/actions/customerState';
-import CropUploadImage from '../../common/CropUploadImage';
+import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
+import InputSelect from '../../../common/InputSelect';
+import { editAccountFields } from '../../../constants/FieldConstants';
+import { SortDownIcon } from '../../../theme/images';
+import { getCustomerDetails } from '../../../store/actions/customerState';
+import CropUploadImage from '../../../common/CropUploadImage';
 
 export default function EditAccountDetails({
   customer,

@@ -8,10 +8,10 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import { Button, ModalBox, FormField, PageLoader } from '../../common';
-import { RightArrowIcon } from '../../theme/images/index';
-import { updateCustomerDetails } from '../../api/index';
-import { getCustomerDetails } from '../../store/actions/customerState';
+import { Button, ModalBox, FormField, PageLoader } from '../../../common';
+import { RightArrowIcon } from '../../../theme/images/index';
+import { updateCustomerDetails } from '../../../api/index';
+import { getCustomerDetails } from '../../../store/actions/customerState';
 
 export default function CustomerStatus({ type, setStatusModal, customer }) {
   const dispatch = useDispatch();

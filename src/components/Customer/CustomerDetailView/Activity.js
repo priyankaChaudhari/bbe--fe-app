@@ -6,10 +6,15 @@ import {
   ContractEmailIcon,
   DefaultUser,
   NextActivityLogo,
-} from '../../theme/images/index';
-import { GroupUser } from '../../theme/Global';
-import { CommonPagination, PageLoader, Status, WhiteCard } from '../../common';
-import Theme from '../../theme/Theme';
+} from '../../../theme/images/index';
+import { GroupUser } from '../../../theme/Global';
+import {
+  CommonPagination,
+  PageLoader,
+  Status,
+  WhiteCard,
+} from '../../../common';
+import Theme from '../../../theme/Theme';
 
 export default function Activity({
   isLoading,

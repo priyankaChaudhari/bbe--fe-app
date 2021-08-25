@@ -17,7 +17,7 @@ import {
   PageLoader,
   ErrorMsg,
   GetInitialName,
-} from '../../common';
+} from '../../../common';
 import {
   // AddIcons,
   DefaultUser,
@@ -26,21 +26,21 @@ import {
   TrashIcons,
   NoContactIcon,
   InfoIcon,
-} from '../../theme/images/index';
+} from '../../../theme/images/index';
 import {
   updateCustomerDetails,
   updateContactInfo,
   createContactInfo,
   deleteContactInfo,
   updateAccountDetails,
-} from '../../api/index';
-import { editCompanyFields } from '../../constants/FieldConstants';
+} from '../../../api/index';
+import { editCompanyFields } from '../../../constants/FieldConstants';
 import {
   getContactDetails,
   getCustomerDetails,
-} from '../../store/actions/customerState';
-import { getAccountDetails } from '../../store/actions/accountState';
-import CheckPhoneNumber from '../../common/CheckPhoneNumber';
+} from '../../../store/actions/customerState';
+import { getAccountDetails } from '../../../store/actions/accountState';
+import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
 
 export default function EditCompanyDetails({
   setShowModal,

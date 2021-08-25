@@ -4,22 +4,16 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
+
 import debounce from 'lodash.debounce';
 import ReactTooltip from 'react-tooltip';
-
-// import htmlToText from 'html-to-text';
-// const { convert } = require('html-to-text');
-// const  htmlToText  = require('html-to-text');
-
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-// import ReadMoreAndLess from 'react-read-more-less';
 import $ from 'jquery';
-// import ReactHtmlParser from 'react-html-parser';
-// import Select from 'react-select';
+
 import styled from 'styled-components';
-import { GroupUser } from '../../theme/Global';
-import { getNotes, saveNotes, deleteNote, updateNotes } from '../../api';
+import { GroupUser } from '../../../theme/Global';
+import { getNotes, saveNotes, deleteNote, updateNotes } from '../../../api';
 import {
   InputSearchWithRadius,
   DropDownSelect,
@@ -28,8 +22,8 @@ import {
   CommonPagination,
   ModalRadioCheck,
   CheckBox,
-} from '../../common';
-import PageLoader from '../../common/PageLoader';
+} from '../../../common';
+import PageLoader from '../../../common/PageLoader';
 
 import {
   SearchIcon,
@@ -40,10 +34,10 @@ import {
   PinIcons,
   CaretUp,
   InfoIcon,
-} from '../../theme/images/index';
+} from '../../../theme/images/index';
 
-import EditorComponent from '../../common/EditorComponent';
-import Theme from '../../theme/Theme';
+import EditorComponent from '../../../common/EditorComponent';
+import Theme from '../../../theme/Theme';
 
 function Notes({
   setShowNotesModal,
@@ -251,12 +245,7 @@ function Notes({
                 ? ' btn-primary  w-10 on-boarding  '
                 : ' btn-primary  w-10 on-boarding disabled'
             }>
-            {
-              // isLoading.loader && isLoading.type === 'button' ? (
-              //   <PageLoader width={20} height={20} color="#fff" type="button" />
-              // ) :
-              data.selectedNote ? 'Save' : 'Add Note'
-            }
+            {data.selectedNote ? 'Save' : 'Add Note'}
           </Button>
         </div>
       </>
