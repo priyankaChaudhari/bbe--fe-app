@@ -363,6 +363,9 @@ p {
       font-weight: lighter;
     }
   }
+  .ghq-card-content__image {
+    width: -webkit-fill-available;
+  }
 
   &.text-detail-modal {
     font-size: ${Theme.title};
@@ -385,8 +388,6 @@ p {
   }
 
   span {
-    // font-weight: 800;
-    // font-family: ${Theme.boldArialTextFontFamily};
     &.input-field {  
       font-weight: 400;
       font-family: ${Theme.regularArialTextFontFamily};
@@ -747,8 +748,6 @@ button:disabled {
 }
 
 .ReactModal__Content.ReactModal__Content--after-open {
-  // max-width: 600px !important;
-  // width: 100% !important;
   border: 0 !important;
   border-radius: 8px ;
   overflow: unset !important;
@@ -772,7 +771,6 @@ button:disabled {
   }
 
   @media only screen and (max-width: 610px) {
-    // width: 90% !important;
     overflow: hidden;
 
     .modal-body {
@@ -781,7 +779,6 @@ button:disabled {
   }
 
   @media only screen and (max-width: 540px) {
-    // min-height: 550px;
     overflow-x: hidden;
   }
 }
@@ -1252,7 +1249,6 @@ fieldset {
 .react-pdf__Page__textContent {
   box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
   margin-bottom: 20px;
-  // top: 52% !important;
 }
 .react-pdf__message .react-pdf__message--error {
   text-align: center !important;
@@ -1262,8 +1258,6 @@ fieldset {
   width: 100% !important;
   background-color: ${Theme.gray3} !important;
   padding-right: 345px;
-  // padding-top: 60px !important;
-  // padding-bottom: 30px !important;
 
   .react-pdf__Page {
     background-color: ${Theme.gray3}  !important;
@@ -1345,8 +1339,7 @@ fieldset {
     font-size: ${Theme.small};
     font-family: ${Theme.baseFontFamily};
     min-height: 0;
-    // display: inline-block;
-
+    
     &.Toastify__toast--error {
       color: ${Theme.red};
       background-color: #fbf2f2;
@@ -1545,7 +1538,6 @@ fieldset {
 
 .recharts-tooltip-wrapper {
   width: 146px;
-  // min-height: 70px;
   background: ${Theme.gray90};
   border-radius: 5px;
 }
@@ -1614,7 +1606,6 @@ text.cust-label-avg {
 .loader-bar {
   top: 70px !important;
   height: 4px !important;
-  // position: sticky !important;
   z-index: 3 !important;
   background: ${Theme.gray4} !important;
   div {
@@ -1724,7 +1715,6 @@ text.cust-label-avg {
   }
 
 .react-sweet-progress {
-    /* display: flex; */
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -1757,33 +1747,6 @@ text.cust-label-avg {
   }
 
 }
-
-// .right-side-nav {
-//   list-style-type: none;
-//   padding: 0;
-//   margin: 0;
-
-//   li{
-//     display: inline-block;
-//     width: 32.3%;
-//     margin-right: 1%;
-
-//     &:last-child {
-//       margin-right: 0;
-//     }
-//   }
-//    @media only screen and (max-width: 991px)  {
-//     li{
-//       display: inline-block;
-//       width: 48%;
-//       margin-right: 1%;
-
-//       &:last-child {
-//         margin-right: 0;
-//       }
-//    }
-//   }
-// }
 
   .dot {
     background-color: ${Theme.gray35};

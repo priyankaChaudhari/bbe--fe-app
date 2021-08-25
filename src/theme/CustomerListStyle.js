@@ -13,7 +13,7 @@ export const CustomerListPage = styled.div`
     margin: 0 auto;
     height: 100%;
     .table-container {
-      height: calc(100% - 120px);
+      height: calc(100% - 200px);
       min-height: 600px;
       padding-bottom: 100px;
       overflow-y: auto;
@@ -225,8 +225,8 @@ export const CustomerListPage = styled.div`
   }
   .footer-sticky {
     position: fixed;
-    bottom: 0px;
     width: 64%;
+    bottom: 4%;
     background: white;
   }
   @media only screen and (min-width: 2500px) {
@@ -382,7 +382,7 @@ export const CustomerListPage = styled.div`
 `;
 
 export const CustomerLeftPannel = styled.div`
-  height: 82%;
+  height: 78%;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: auto;
@@ -391,18 +391,12 @@ export const CustomerLeftPannel = styled.div`
   width: 100%;
   position: fixed;
   max-width: 21.5%;
-  padding-bottom: 140px;
   background: ${Theme.white};
   .customer-list-pannel {
-    height: 80%;
     overflow: auto;
     padding-top: 20px;
-
     top: 130px;
     width: 100%;
-    position: fixed;
-    max-width: 21.5%;
-    padding-bottom: 20px;
   }
   .label {
     color: ${Theme.gray40};
