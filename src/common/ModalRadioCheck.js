@@ -66,6 +66,8 @@ const ModalRadioCheck = styled.div`
     color: ${Theme.gray35};
     margin-left: 25px;
     font-weight: 500;
+    word-break: break-all;
+    float: left;
 
     img {
       width: 13px;
