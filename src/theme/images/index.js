@@ -1,14 +1,9 @@
 import BannerBg from './banner-bg.png';
 import ArrowIcons from './icons/arrow-back.png';
 import Logo from './logo.svg';
-import GoogleIcons from './icons/google.svg';
-import SearchIcons from './icons/search-icon.svg';
 import DefaultUser from './default-user.svg';
 import SortUp from './icons/sort-up.png';
 import SortDown from './icons/sort-down.png';
-import BrandLogo from './brand.png';
-import ActivityLogIcon from './icons/activity-log.svg';
-import ActivityOpenIcon from './icons/activity-open.svg';
 import EditIcons from './icons/edit-icon.svg';
 import LogOutIcons from './icons/logout-icon.png';
 import EditFileIcons from './icons/edit-file.svg';
@@ -180,13 +175,9 @@ export {
   BannerBg,
   ArrowIcons,
   Logo,
-  GoogleIcons,
-  SearchIcons,
   DefaultUser,
   SortDown,
   SortUp,
-  ActivityLogIcon,
-  BrandLogo,
   EditIcons,
   LogOutIcons,
   EditFileIcons,
@@ -197,7 +188,6 @@ export {
   AttachFile,
   DownloadIcons,
   CopyPasteIcons,
-  ActivityOpenIcon,
   InstagramIcons,
   TwitterIcons,
   FaceBookIcons,

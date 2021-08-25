@@ -83,9 +83,9 @@ export default function EditPassword({ userInfo }) {
           <>
             {showPassword[item.key] ? (
               <img
-                src={CloseEyeIcon}
-                className="show-icon"
-                alt="close"
+                src={smallEyeIcon}
+                className="hide-icon cursor"
+                alt="see"
                 onClick={() =>
                   setShowPassword({ ...showPassword, [item.key]: false })
                 }
@@ -93,9 +93,9 @@ export default function EditPassword({ userInfo }) {
               />
             ) : (
               <img
-                src={smallEyeIcon}
-                className="hide-icon"
-                alt="see"
+                src={CloseEyeIcon}
+                className="show-icon cursor"
+                alt="close"
                 onClick={() =>
                   setShowPassword({ ...showPassword, [item.key]: true })
                 }

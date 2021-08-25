@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Select from 'react-select';
 import { ActionDropDown, WhiteCard } from '../../common';
 import Theme from '../../theme/Theme';
-import { CompanyDefaultUser, BrandLogo } from '../../theme/images';
+import { CompanyDefaultUser, DefaultUser } from '../../theme/images';
 
 export default function TabletTeamMember() {
   return (
@@ -31,7 +31,7 @@ export default function TabletTeamMember() {
                     />
                   </li>
                   <li>
-                    <img className="brand-logo" src={BrandLogo} alt="brand" />
+                    <img className="brand-logo" src={DefaultUser} alt="brand" />
                   </li>
                   <li>
                     <img

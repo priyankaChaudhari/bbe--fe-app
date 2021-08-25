@@ -138,7 +138,7 @@ const ModalBox = styled.div`
           }
         }
     }
-    .trash-icon {
+    .trash-icons {
       position: absolute;
       top: 40px;
       right: 21px;

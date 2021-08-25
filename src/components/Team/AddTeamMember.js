@@ -15,7 +15,7 @@ import {
   GetInitialName,
   CheckBoxList,
 } from '../../common';
-import { SearchIcons, SortDownIcon, CloseIcon } from '../../theme/images/index';
+import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images/index';
 import {
   addCustomerMember,
   getRoles,
@@ -238,7 +238,7 @@ export default function AddTeamMember({
                     onChange={(event) => searchList(event)}
                   />
                   <img
-                    src={SearchIcons}
+                    src={SearchIcon}
                     alt="search"
                     className="search-input-icon"
                   />

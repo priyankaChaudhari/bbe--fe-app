@@ -20,7 +20,7 @@ import {
   InfoIcon,
   SearchIcon,
   CompanyDefaultUser,
-  BrandLogo,
+  DefaultUser,
   CloseIcon,
   ArrowRightIcon,
   ArrowRightBlackIcon,
@@ -141,7 +141,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -155,7 +155,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -169,7 +169,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -219,7 +219,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -233,7 +233,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -247,7 +247,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -297,7 +297,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -311,7 +311,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -325,7 +325,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -375,7 +375,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -389,7 +389,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -403,7 +403,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -453,7 +453,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -467,7 +467,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -481,7 +481,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -531,7 +531,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -545,7 +545,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -559,7 +559,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -609,7 +609,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -623,7 +623,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>
@@ -637,7 +637,7 @@ export default function TeamMember() {
                         <li>
                           <img
                             className="brand-logo"
-                            src={BrandLogo}
+                            src={DefaultUser}
                             alt="brand"
                           />
                         </li>

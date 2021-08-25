@@ -180,7 +180,7 @@ export default function EditTeamMember({
                                 <img
                                   src={TrashIcons}
                                   alt="delete"
-                                  className="trash-icon cursor "
+                                  className="trash-icons cursor "
                                   onClick={() => {
                                     setRemoveMember({
                                       show: true,
