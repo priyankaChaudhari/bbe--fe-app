@@ -30,7 +30,14 @@ import {
 } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
-import { PATH_CUSTOMER_DETAILS, PATH_THANKS } from '../../constants';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_BILLING_DETAILS,
+  PATH_COMPANY_DETAILS,
+  PATH_CUSTOMER_DETAILS,
+  PATH_SUMMARY,
+  PATH_THANKS,
+} from '../../constants';
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
 import BillingInfo from './BillingInfo';
@@ -40,7 +47,7 @@ import {
   CheckSteps,
   CreateAccount,
 } from '.';
-import { stepPath, whichStep } from '../../constants/FieldConstants';
+import { stepPath } from '../../constants/FieldConstants';
 import { getAmazonAccountDetails } from '../../api/OnboardingCustomerApi';
 
 export default function MainContainer() {
@@ -64,6 +71,7 @@ export default function MainContainer() {
   const [noAmazonAccount, setNoAmazonAccount] = useState(false);
   const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
+  const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
 
   const customStyles = {
     content: {
@@ -79,6 +87,40 @@ export default function MainContainer() {
       transform: 'translate(-50%, -50%)',
     },
   };
+
+  const whichStep = [
+    {
+      key: 'digital presence',
+      stepof: 2,
+      title: 'Your company’s digital presence',
+      skip: PATH_BILLING_DETAILS,
+      bar: '40',
+      path: 'company-details',
+      subTitle: 'Need help on why we need this information?',
+      video: true,
+    },
+    {
+      key: 'billing information',
+      stepof: 3,
+      title: 'Billing Information',
+      skip: skipAmazonAccount ? PATH_SUMMARY : PATH_AMAZON_MERCHANT,
+      back: PATH_COMPANY_DETAILS,
+      bar: '60',
+      path: 'billing-details',
+      video: false,
+    },
+    {
+      key: 'merchant id',
+      stepof: 4,
+      title: 'Amazon Account Names & IDs',
+      skip: PATH_SUMMARY,
+      back: PATH_BILLING_DETAILS,
+      bar: '80',
+      path: 'amazon-merchant',
+      subTitle: '',
+      video: false,
+    },
+  ];
 
   const getStepName = () => {
     for (const item of whichStep) {
@@ -249,6 +291,11 @@ export default function MainContainer() {
             accountSummary(
               res && res.data && res.data.customer_onboarding,
             ).then((summary) => {
+              const skip =
+                summary &&
+                summary.data &&
+                summary.data.find((op) => op.step === 'merchant id');
+              setSkipAmazonAccount(skip && skip.step_not_applicable);
               const fields = [];
               stepPath.map((item) => {
                 if (summary && summary.data) {
@@ -361,9 +408,10 @@ export default function MainContainer() {
           isLoading={isLoading}
           isChecked={isChecked}
           summaryData={summaryData}
+          skipAmazonAccount={skipAmazonAccount}
         />
       );
-    if (path === 'amazon-merchant')
+    if (path === 'amazon-merchant' && !skipAmazonAccount)
       return (
         <AmazonMerchant
           setIsLoading={setIsLoading}

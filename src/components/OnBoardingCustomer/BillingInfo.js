@@ -49,6 +49,7 @@ export default function BillingInfo({
   data,
   isChecked,
   summaryData,
+  skipAmazonAccount,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -87,7 +88,9 @@ export default function BillingInfo({
   );
 
   const CheckStep = (step) => {
-    if (step === 'merchant id' || getIncompleteStep === undefined) {
+    if (skipAmazonAccount) {
+      history.push(PATH_SUMMARY);
+    } else if (step === 'merchant id' || getIncompleteStep === undefined) {
       history.push(PATH_SUMMARY);
     } else {
       for (const item of stepPath) {
@@ -750,6 +753,7 @@ BillingInfo.propTypes = {
   }).isRequired,
   isChecked: PropTypes.bool.isRequired,
   summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  skipAmazonAccount: PropTypes.bool.isRequired,
 };
 
 const CollapseOpenContainer = styled.div`

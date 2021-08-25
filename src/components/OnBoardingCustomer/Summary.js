@@ -5,7 +5,11 @@ import { useHistory } from 'react-router-dom';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import NavigationHeader from './NavigationHeader';
-import { PATH_AMAZON_MERCHANT, PATH_CUSTOMER_DETAILS } from '../../constants';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_BILLING_DETAILS,
+  PATH_CUSTOMER_DETAILS,
+} from '../../constants';
 import { accountSummary, updateUserMe } from '../../api';
 import { logout, userMe } from '../../store/actions';
 import { showOnboardingMsg } from '../../store/actions/userState';
@@ -18,10 +22,16 @@ export default function Summary() {
   const [data, setData] = useState([]);
   const [showDashboard, setShowDashboard] = useState(false);
   const userInfo = useSelector((state) => state.userState.userInfo);
+  const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
 
   useEffect(() => {
     accountSummary(userInfo.customer_onboarding).then((response) => {
       setData(response && response.data);
+      const skip =
+        response &&
+        response.data &&
+        response.data.find((op) => op.step === 'merchant id');
+      setSkipAmazonAccount(skip && skip.step_not_applicable);
       setIsLoading({ loader: false, type: 'page' });
       if (response && response.data && response.data.length < 3) {
         setShowDashboard(false);
@@ -66,7 +76,9 @@ export default function Summary() {
     <>
       <NavigationHeader
         bar="99.9"
-        backStep={PATH_AMAZON_MERCHANT}
+        backStep={
+          skipAmazonAccount ? PATH_BILLING_DETAILS : PATH_AMAZON_MERCHANT
+        }
         userInfo={userInfo}
         verifiedStepData={{}}
         stepData={{}}
@@ -109,14 +121,25 @@ export default function Summary() {
                   <div className="information-text mt-1" key={item.step}>
                     {getPath(item.step, 'label')}
                     {item.is_completed ? (
-                      <div className="completed-status">
-                        <img
-                          className="orange-check"
-                          src={OrangeCheckMark}
-                          alt="check"
-                        />
-                        {userInfo.email === item.email || item.email === ''
-                          ? ' Completed '
+                      <div
+                        className={
+                          skipAmazonAccount && item.step === 'merchant id'
+                            ? 'pending-status'
+                            : 'completed-status'
+                        }>
+                        {skipAmazonAccount && item.step === 'merchant id' ? (
+                          ''
+                        ) : (
+                          <img
+                            className="orange-check"
+                            src={OrangeCheckMark}
+                            alt="check"
+                          />
+                        )}
+                        {skipAmazonAccount && item.step === 'merchant id'
+                          ? 'Step Not Applicable'
+                          : userInfo.email === item.email || item.email === ''
+                          ? ' Completed'
                           : `Provided by ${item.email}`}
                       </div>
                     ) : (
@@ -133,13 +156,17 @@ export default function Summary() {
                       </div>
                     )}
 
-                    <div
-                      className="view-details"
-                      onClick={() => history.push(getPath(item.step, 'path'))}
-                      role="presentation">
-                      {' '}
-                      View
-                    </div>
+                    {skipAmazonAccount && item.step === 'merchant id' ? (
+                      ''
+                    ) : (
+                      <div
+                        className="view-details"
+                        onClick={() => history.push(getPath(item.step, 'path'))}
+                        role="presentation">
+                        {' '}
+                        View
+                      </div>
+                    )}
                   </div>
                 ))}
             </GreyCard>

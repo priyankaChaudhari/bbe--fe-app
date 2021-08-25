@@ -325,18 +325,35 @@ export default function AmazonAccount({
   return (
     <WhiteCard>
       <p className="black-heading-title mt-0 ">Amazon Account Names & IDs</p>
-      <div
-        className="edit-details"
-        onClick={() => {
-          setShowModal(true);
-          setShowBtn(false);
-        }}
-        role="presentation">
-        <img src={EditOrangeIcon} alt="" />
-        Edit
-      </div>
-      {generateDropdown()}
-      {generateAccountHTML('label')}
+      {(marketplaceChoices && marketplaceChoices.length === 0) ||
+      (selectedMarketplace && selectedMarketplace.account_type) === null ||
+      (selectedMarketplace && selectedMarketplace.account_type) === '' ? (
+        ''
+      ) : (
+        <div
+          className="edit-details"
+          onClick={() => {
+            setShowModal(true);
+            setShowBtn(false);
+          }}
+          role="presentation">
+          <img src={EditOrangeIcon} alt="" />
+          Edit
+        </div>
+      )}
+      {marketplaceChoices && marketplaceChoices.length === 0 ? (
+        'Marketplace not found.'
+      ) : (
+        <>
+          {generateDropdown()}
+          {selectedMarketplace && selectedMarketplace.account_type ? (
+            <>{generateAccountHTML('label')}</>
+          ) : (
+            <div className="mt-3">Account type not found.</div>
+          )}
+        </>
+      )}
+
       <Modal
         isOpen={showModal}
         style={customStyles}

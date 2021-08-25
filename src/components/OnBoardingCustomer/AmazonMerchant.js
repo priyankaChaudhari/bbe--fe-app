@@ -317,8 +317,6 @@ export default function AmazonMerchant({
       });
   };
 
-  console.log(marketplaceDetails);
-
   const generateAccountType = (part, mapData) => {
     return (
       <fieldset className="shape-without-border  w-430 mt-3 mb-2">
