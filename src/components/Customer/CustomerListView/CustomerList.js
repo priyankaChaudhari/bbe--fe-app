@@ -2170,16 +2170,15 @@ export default function CustomerList() {
                     {data && data.length > 9 ? (
                       <div className="footer-sticky">
                         <div className="straight-line horizontal-line" />
-                        <div className="container-fluid">
-                          <CommonPagination
-                            count={count}
-                            pageNumber={
-                              JSON.parse(localStorage.getItem('page')) ||
-                              pageNumber
-                            }
-                            handlePageChange={handlePageChange}
-                          />
-                        </div>
+
+                        <CommonPagination
+                          count={count}
+                          pageNumber={
+                            JSON.parse(localStorage.getItem('page')) ||
+                            pageNumber
+                          }
+                          handlePageChange={handlePageChange}
+                        />
                       </div>
                     ) : null}
                   </>

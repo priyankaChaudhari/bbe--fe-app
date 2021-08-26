@@ -13,8 +13,8 @@ export const CustomerListPage = styled.div`
     margin: 0 auto;
     height: 100%;
     .table-container {
-      height: calc(100% - 200px);
-      min-height: 578px;
+      height: calc(100% - 160px);
+      // min-height: 578px;
       padding-bottom: 100px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -225,9 +225,12 @@ export const CustomerListPage = styled.div`
   }
   .footer-sticky {
     position: fixed;
-    width: 64%;
-    bottom: 7%;
+    width: 66%;
+    bottom: 3%;
     background: white;
+    margin: 0 -14px;
+    border-radius: 15px;
+    padding: 0 15px;
   }
   @media only screen and (min-width: 2500px) {
     .conversion {
