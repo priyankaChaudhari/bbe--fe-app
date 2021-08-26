@@ -110,8 +110,7 @@ export default function CustomerList() {
   );
 
   const [showContractDetails, setShowContractDetails] = useState(
-    JSON.parse(localStorage.getItem('filters')) &&
-      JSON.parse(localStorage.getItem('filters')).showContractDetails
+    JSON.parse(localStorage.getItem('filters'))
       ? JSON.parse(localStorage.getItem('filters')).showContractDetails
       : true,
   );
@@ -304,11 +303,6 @@ export default function CustomerList() {
   );
 
   useEffect(() => {
-    getStatus().then((statusResponse) => {
-      if (statusResponse && statusResponse.status === 200) {
-        setStatus(statusResponse.data);
-      }
-    });
     if (showAdPerformance || showDspAdPerformance) {
       const type = showAdPerformance
         ? 'Sponsored Advertising Ad Manager'
@@ -349,6 +343,15 @@ export default function CustomerList() {
         }
       });
     }
+  }, [showAdPerformance, showDspAdPerformance]);
+
+  useEffect(() => {
+    getStatus().then((statusResponse) => {
+      if (statusResponse && statusResponse.status === 200) {
+        setStatus(statusResponse.data);
+      }
+    });
+
     getSellerType().then((sellerResponse) => {
       if (sellerResponse && sellerResponse.status === 200) {
         setAccountType(sellerResponse.data);
@@ -356,7 +359,8 @@ export default function CustomerList() {
     });
 
     customerList(1);
-  }, [customerList, showAdPerformance, showDspAdPerformance]);
+  }, [customerList]);
+
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowSortDropdown(false);
@@ -685,15 +689,53 @@ export default function CustomerList() {
     // const handleFilters = (event, key, type) => {
     // for one select user
 
-    if (key === 'user')
-      localStorage.setItem(
-        'filters',
-        JSON.stringify({
-          ...filters,
-          cd_user: event,
-        }),
-      );
+    // if (key === 'user')
+    //   localStorage.setItem(
+    //     'filters',
+    //     JSON.stringify({
+    //       ...filters,
+    //       cd_user: event,
+    //     }),
+    //   );
 
+    if (key === 'user') {
+      if (showContractDetails) {
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            cd_user: event.value,
+          }),
+        );
+      }
+      if (showPerformance) {
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            user: event.value,
+          }),
+        );
+      }
+      if (showAdPerformance) {
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            ad_user: event.value,
+          }),
+        );
+      }
+      if (showDspAdPerformance) {
+        localStorage.setItem(
+          'filters',
+          JSON.stringify({
+            ...filters,
+            dsp_user: event.value,
+          }),
+        );
+      }
+    }
     localStorage.setItem('page', 1);
     if (key === 'unselected') {
       $('.checkboxes input:checkbox').prop('checked', false);
