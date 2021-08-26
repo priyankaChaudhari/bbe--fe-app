@@ -130,7 +130,7 @@ function DashboardContainer() {
           hybridSelectedDashboard,
         ).then((gs) => {
           if (gs && gs.data && gs.data.length) {
-            const list = [];
+            const list = [{ value: userInfo.id, label: 'My Partners' }];
             for (const brand of gs.data) {
               list.push({
                 value: brand.id,
@@ -250,34 +250,40 @@ function DashboardContainer() {
       )
     );
   };
-  const IconOption = (props) => (
-    <Option {...props}>
-      {props.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={props.data.icon}
-          alt="user"
-          style={{
-            borderRadius: 50,
-            marginRight: '6px',
-            height: '30px',
-            verticalAlign: 'middle',
-            float: 'left',
-          }}
-        />
-      ) : (
-        <GetInitialName
-          userInfo={props.data.label}
-          type="list"
-          property="mr-2 float-left "
-          style={{
-            verticalAlign: 'middle',
-          }}
-        />
-      )}{' '}
-      {props.data.label}
-    </Option>
-  );
+  const IconOption = (props) => {
+    return (
+      <>
+        <Option {...props}>
+          {props.data.label !== 'My Partners' ? (
+            props.data.icon ? (
+              <img
+                className="drop-down-user"
+                src={props.data.icon}
+                alt="user"
+                style={{
+                  borderRadius: 50,
+                  marginRight: '6px',
+                  height: '30px',
+                  verticalAlign: 'middle',
+                  float: 'left',
+                }}
+              />
+            ) : (
+              <GetInitialName
+                userInfo={props.data.label}
+                type="list"
+                property="mr-2 float-left "
+                style={{
+                  verticalAlign: 'middle',
+                }}
+              />
+            )
+          ) : null}
+          {props.data.label}
+        </Option>
+      </>
+    );
+  };
   const IconSingleOption = (props) => (
     <MultiValue {...props}>
       {props.data.icon ? (
