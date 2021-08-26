@@ -288,27 +288,6 @@ export default function MainContainer() {
               }
             }
             setUserInfo(res && res.data);
-            accountSummary(
-              res && res.data && res.data.customer_onboarding,
-            ).then((summary) => {
-              const skip =
-                summary &&
-                summary.data &&
-                summary.data.find((op) => op.step === 'merchant id');
-              setSkipAmazonAccount(skip && skip.step_not_applicable);
-              const fields = [];
-              stepPath.map((item) => {
-                if (summary && summary.data) {
-                  fields.push({
-                    [item.key]: summary.data.some((op) => {
-                      return op.step === item.key ? op.is_completed : false;
-                    }),
-                  });
-                }
-                return '';
-              });
-              setSummaryData(fields);
-            });
             getStepDetails(
               (res && res.data && res.data.customer_onboarding) ||
                 verifiedStepData.customer_onboarding_id,
@@ -329,6 +308,27 @@ export default function MainContainer() {
               ) {
                 setIsChecked(true);
               }
+              accountSummary(
+                res && res.data && res.data.customer_onboarding,
+              ).then((summary) => {
+                const skip =
+                  summary &&
+                  summary.data &&
+                  summary.data.find((op) => op.step === 'merchant id');
+                setSkipAmazonAccount(skip && skip.step_not_applicable);
+                const fields = [];
+                stepPath.map((item) => {
+                  if (summary && summary.data) {
+                    fields.push({
+                      [item.key]: summary.data.some((op) => {
+                        return op.step === item.key ? op.is_completed : false;
+                      }),
+                    });
+                  }
+                  return '';
+                });
+                setSummaryData(fields);
+              });
               setIsLoading({ loader: false, type: 'page' });
             });
             if (
