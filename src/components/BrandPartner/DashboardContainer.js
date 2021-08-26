@@ -9,8 +9,6 @@ import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import dayjs from 'dayjs';
 import Dashboard from './Dashboard';
-// import AdManagerDashboard from './AdManagerDashboard';
-// import DspAdDashboard from './DspAdDashboard';
 
 import { BrandPartnerDashboard } from '../../theme/Global';
 import getBGSCustomerList from '../../api/BgsApi';
@@ -71,10 +69,6 @@ function DashboardContainer() {
     },
   ];
 
-  // const hybridDropdown = [
-  //   { value: 'sponsored_ad_dashboard', label: 'Sponsored Ad Partners' },
-  //   { value: 'dsp_ad_performance', label: 'DSP Ad Partners' },
-  // ];
   const [data, setData] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [count, setCount] = useState(null);
@@ -451,7 +445,9 @@ function DashboardContainer() {
                 </p>
               </div>
               <div className="straight-line horizontal-line  d-lg-none d-md-block" />
-              {!userInfo && userInfo.role.includes('Ad Manager') ? (
+              {(userInfo && userInfo.role === 'Growth Strategist') ||
+              (userInfo && userInfo.role === 'BGS') ||
+              (userInfo && userInfo.role === 'BGS Manager') ? (
                 <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
                   <ul className="partner-select">
                     <li
@@ -474,25 +470,6 @@ function DashboardContainer() {
                         />
                       </DropDownSelect>
                     </li>
-                    {/* {userInfo && userInfo.role === 'Hybrid Ad Manager' ? (
-                      <li className={isLoading.loader ? 'disabled' : ''}>
-                        <DropDownSelect>
-                          <Select
-                            className="text-left active"
-                            classNamePrefix="react-select"
-                            placeholder="Hybrid Dashboard type"
-                            options={hybridDropdown}
-                            components={getSelectComponents('dashboard')}
-                            defaultValue={hybridDropdown[0]}
-                            onChange={(event) =>
-                              handleOnchange(event, 'dashboard')
-                            }
-                          />
-                        </DropDownSelect>
-                      </li>
-                    ) : (
-                      ''
-                    )} */}
                     <li className={isLoading.loader ? 'disabled' : ''}>
                       <DropDownSelect className="days-performance">
                         <Select
@@ -507,9 +484,7 @@ function DashboardContainer() {
                     </li>
                   </ul>
                 </div>
-              ) : (
-                ''
-              )}
+              ) : null}
             </div>
           </div>
         </div>

@@ -137,7 +137,7 @@ export default function Summary() {
                           />
                         )}
                         {skipAmazonAccount && item.step === 'merchant id'
-                          ? 'Step Not Applicable'
+                          ? 'Step not applicable for your contract type'
                           : userInfo.email === item.email || item.email === ''
                           ? ' Completed'
                           : `Provided by ${item.email}`}
