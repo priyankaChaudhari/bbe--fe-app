@@ -349,7 +349,10 @@ export default function ContractContainer() {
         formData.contract_status.value === 'active') ||
       (formData &&
         formData.contract_status &&
-        formData.contract_status.value === 'inactive')
+        formData.contract_status.value === 'inactive') ||
+      (details &&
+        details.contract_status &&
+        details.contract_status.value === 'renewed')
     ) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
@@ -2910,6 +2913,9 @@ export default function ContractContainer() {
         (details &&
           details.contract_status &&
           details.contract_status.value === 'active') ||
+        (details &&
+          details.contract_status &&
+          details.contract_status.value === 'renewed') ||
         (details &&
           details.contract_status &&
           details.contract_status.value === 'inactive') ? (
