@@ -109,10 +109,19 @@ export default function CustomerList() {
     },
   );
 
+  // const [showContractDetails, setShowContractDetails] = useState(
+  //   JSON.parse(localStorage.getItem('filters'))
+  //     ? JSON.parse(localStorage.getItem('filters')).showContractDetails
+  //     : true,
+  // );
+
   const [showContractDetails, setShowContractDetails] = useState(
-    JSON.parse(localStorage.getItem('filters'))
-      ? JSON.parse(localStorage.getItem('filters')).showContractDetails
-      : true,
+    !(
+      JSON.parse(localStorage.getItem('filters')) &&
+      (JSON.parse(localStorage.getItem('filters')).showPerformance ||
+        JSON.parse(localStorage.getItem('filters')).showAdPerformance ||
+        JSON.parse(localStorage.getItem('filters')).showDspAdPerformance)
+    ),
   );
 
   const [showPerformance, setShowPerformance] = useState(
