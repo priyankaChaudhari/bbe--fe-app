@@ -1505,7 +1505,7 @@ export default function CustomerList() {
         data-tip={type.contract_status}
         style={{ textTransform: 'capitalize' }}>
         <div className="recurring-service agreement">
-          {type.contract_type} Service Agreement 2+ More
+          {type.contract_type} Service Agreement
         </div>
       </li>
     );
