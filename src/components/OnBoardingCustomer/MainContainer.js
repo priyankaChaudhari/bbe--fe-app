@@ -238,8 +238,7 @@ export default function MainContainer() {
           setIsChecked(true);
         }
         if (type === 'callSummary') summaryDetails(onboardingId);
-      }
-      setIsLoading({ loader: false, type: 'page' });
+      } else setIsLoading({ loader: false, type: 'page' });
     });
   };
 
@@ -297,6 +296,10 @@ export default function MainContainer() {
               (res && res.data && res.data.customer_onboarding) ||
                 verifiedStepData.customer_onboarding_id,
               'callSummary',
+            );
+            summaryDetails(
+              (res && res.data && res.data.customer_onboarding) ||
+                verifiedStepData.customer_onboarding_id,
             );
             getOnboardingStepData(
               (res && res.data && res.data.customer) ||
