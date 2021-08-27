@@ -109,12 +109,6 @@ export default function CustomerList() {
     },
   );
 
-  // const [showContractDetails, setShowContractDetails] = useState(
-  //   JSON.parse(localStorage.getItem('filters'))
-  //     ? JSON.parse(localStorage.getItem('filters')).showContractDetails
-  //     : true,
-  // );
-
   const [showContractDetails, setShowContractDetails] = useState(
     !(
       JSON.parse(localStorage.getItem('filters')) &&
@@ -329,8 +323,8 @@ export default function CustomerList() {
                 Object.values(brand.documents[0]) &&
                 Object.values(brand.documents[0])[0],
             });
-            setBrandGrowthStrategist(list);
           }
+          setBrandGrowthStrategist(list);
         }
       });
     } else {
@@ -347,8 +341,8 @@ export default function CustomerList() {
                 Object.values(brand.documents[0]) &&
                 Object.values(brand.documents[0])[0],
             });
-            setBrandGrowthStrategist(list);
           }
+          setBrandGrowthStrategist(list);
         }
       });
     }
