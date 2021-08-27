@@ -56,6 +56,7 @@ export default function AmazonMerchant({
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
+  const [latestSellerId, setLatestSellerId] = useState(null);
 
   const mapVideoData = () => {
     if (marketplaceDetails.type === 'Hybrid') {
@@ -210,11 +211,13 @@ export default function AmazonMerchant({
     ) {
       return saveAmazonSellerAccount(
         seller,
-        marketplaceDetails.Seller && marketplaceDetails.Seller.id,
+        (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
+          latestSellerId,
       ).then((res) => {
         if ((res && res.status === 201) || (res && res.status === 200))
           if (marketplaceDetails.type === 'Hybrid') {
             vendorAccount(vendor);
+            setLatestSellerId(res && res.data && res.data.id);
           } else {
             saveDetails();
           }
