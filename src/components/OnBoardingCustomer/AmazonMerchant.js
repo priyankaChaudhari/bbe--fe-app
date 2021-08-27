@@ -15,9 +15,15 @@ import {
   PageLoader,
   ModalBox,
   ErrorMsg,
+  CheckBox,
 } from '../../common';
 import { askSomeoneData, updateAskSomeoneData, updateUserMe } from '../../api';
-import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_SUMMARY,
+  PATH_THANKS,
+  PATH_UNAUTHORIZED_AMAZON_MERCHANT,
+} from '../../constants';
 import { userMe } from '../../store/actions';
 import {
   saveAmazonSellerAccount,
@@ -43,6 +49,7 @@ export default function AmazonMerchant({
   marketplaceDetails,
   videoData,
   setShowVideo,
+  setNoAmazonAccount,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -172,7 +179,7 @@ export default function AmazonMerchant({
     setIsLoading({ loader: true, type: 'button' });
     let seller = {};
     let vendor = {};
-    noAmazonAccount
+    noAmazonAccount.Seller
       ? (seller = {
           marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
           seller_central_name: null,
@@ -184,7 +191,7 @@ export default function AmazonMerchant({
           ...formData.Seller,
           marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
         });
-    noAmazonAccount
+    noAmazonAccount.Vendor
       ? (vendor = {
           vendor_central_name: null,
           advertiser_name: null,
@@ -372,6 +379,48 @@ export default function AmazonMerchant({
     );
   };
 
+  const disableBtn = () => {
+    if (
+      formData &&
+      Object.values(formData) &&
+      Object.values(formData).length === 0
+    )
+      return false;
+    if (
+      marketplaceDetails &&
+      marketplaceDetails.type &&
+      Object.values(marketplaceDetails[marketplaceDetails.type]) &&
+      Object.values(marketplaceDetails[marketplaceDetails.type]).length !== 0
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const generateSaveBtn = (part) => {
+    return (
+      <>
+        {(marketplaceDetails.type === 'Hybrid' && part === 7) ||
+        marketplaceDetails.type === 'Vendor' ||
+        marketplaceDetails.type === 'Seller' ? (
+          <Button
+            className="btn-primary w-100 mt-3"
+            onClick={() => saveAccountDetails()}
+            disabled={disableBtn()}>
+            {' '}
+            {isLoading.loader && isLoading.type === 'button' ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
+            )}
+          </Button>
+        ) : (
+          ''
+        )}
+      </>
+    );
+  };
+
   const generateAdvertiser = (part, mapData) => {
     return (
       <fieldset className="shape-without-border  w-430 mt-3 mb-1">
@@ -405,41 +454,7 @@ export default function AmazonMerchant({
                 </label>
               </ContractFormField>
             ))}
-        {isChecked ? (
-          ''
-        ) : (
-          <>
-            {(marketplaceDetails.type === 'Hybrid' && part === 6) ||
-            marketplaceDetails.type === 'Vendor' ||
-            marketplaceDetails.type === 'Seller' ? (
-              <Button
-                className="btn-primary w-100 mt-3"
-                onClick={() => saveAccountDetails()}
-                disabled={
-                  (formData &&
-                    Object.values(formData) &&
-                    Object.values(formData).length === 0) ||
-                  (marketplaceDetails &&
-                    marketplaceDetails.Seller &&
-                    Object.values(marketplaceDetails.Seller) &&
-                    Object.values(marketplaceDetails.Seller).length === 0) ||
-                  (marketplaceDetails &&
-                    marketplaceDetails.Vendor &&
-                    Object.values(marketplaceDetails.Vendor) &&
-                    Object.values(marketplaceDetails.Vendor).length === 0)
-                }>
-                {' '}
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  <>{assignedToSomeone ? 'Submit' : 'Continue'} </>
-                )}
-              </Button>
-            ) : (
-              ''
-            )}
-          </>
-        )}
+        {isChecked ? '' : <>{generateSaveBtn()}</>}
       </fieldset>
     );
   };
@@ -460,47 +475,85 @@ export default function AmazonMerchant({
   };
 
   const generateBtn = () => {
-    if (
-      history.location.pathname.includes('/account-setup/amazon-merchant') &&
-      isChecked &&
-      noAmazonAccount
-    )
-      return '';
-
-    if (
-      history.location.pathname.includes(
-        '/account-setup/assigned-amazon-merchant',
-      ) &&
-      noAmazonAccount
-    )
+    if (marketplaceDetails.type === 'Hybrid') {
+      if (isChecked) return '';
       return <>{btnDesign()}</>;
+    }
+    if (
+      history.location.pathname.includes(PATH_AMAZON_MERCHANT) &&
+      (noAmazonAccount.Seller || noAmazonAccount.Vendor)
+    ) {
+      if (isChecked) return '';
+      return <>{btnDesign()}</>;
+    }
 
     if (
-      history.location.pathname.includes('/account-setup/amazon-merchant') &&
-      !isChecked &&
-      noAmazonAccount
+      history.location.pathname.includes(PATH_UNAUTHORIZED_AMAZON_MERCHANT) &&
+      (noAmazonAccount.Seller || noAmazonAccount.Vendor)
     )
       return <>{btnDesign()}</>;
     return '';
+  };
+
+  const showNoAmazonAccountCheckbox = () => {
+    return (
+      <CheckBox
+        className={
+          isLoading.loader && isLoading.type === 'check'
+            ? ' mb-4 isDisabled'
+            : ' mb-4'
+        }>
+        <label className="check-container customer-pannel " htmlFor="Vendor">
+          I don’t have an Vendor Amazon account yet
+          <input
+            type="checkbox"
+            id="Vendor"
+            name="Vendor"
+            onChange={(event) =>
+              setNoAmazonAccount({
+                ...noAmazonAccount,
+                Vendor: event.target.checked,
+              })
+            }
+            readOnly
+            checked={noAmazonAccount.Vendor}
+          />
+          <span className="checkmark" />
+        </label>
+      </CheckBox>
+    );
   };
 
   return (
     <>
       <OnBoardingBody
         className={assignedToSomeone ? 'body-white' : 'body-white pb-1'}>
-        {noAmazonAccount ? (
+        {noAmazonAccount[marketplaceDetails.type] ? (
           ''
         ) : (
           <>
             {marketplaceDetails.type === 'Hybrid' ? (
               <>
-                {generateAmazon(1)}
-                {generateAccountType(2, AmazonSellerAccountDetails)}
-                {generateAdvertiser(3, AmazonSellerAccountDetails)}
+                {noAmazonAccount.Seller ? (
+                  ''
+                ) : (
+                  <>
+                    {generateAmazon(1)}
+                    {generateAccountType(2, AmazonSellerAccountDetails)}
+                    {generateAdvertiser(3, AmazonSellerAccountDetails)}
+                  </>
+                )}
                 <div className="straight-line horizontal-line spacing mt-4 mb-4" />
-                {generateAmazon(4)}
-                {generateAccountType(5, AmazonVendorAccountDetails)}
-                {generateAdvertiser(6, AmazonVendorAccountDetails)}
+                {showNoAmazonAccountCheckbox()}
+                {noAmazonAccount.Vendor ? (
+                  ''
+                ) : (
+                  <>
+                    {generateAmazon(4)}
+                    {generateAccountType(5, AmazonVendorAccountDetails)}
+                    {generateAdvertiser(6, AmazonVendorAccountDetails)}
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -560,6 +613,7 @@ AmazonMerchant.defaultProps = {
   stepData: {},
   setShowVideo: () => {},
   showVideo: {},
+  setNoAmazonAccount: () => {},
 };
 
 AmazonMerchant.propTypes = {
@@ -589,7 +643,10 @@ AmazonMerchant.propTypes = {
   }).isRequired,
   isChecked: PropTypes.bool.isRequired,
   customStyles: PropTypes.objectOf(PropTypes.object).isRequired,
-  noAmazonAccount: PropTypes.bool.isRequired,
+  noAmazonAccount: PropTypes.shape({
+    Seller: PropTypes.bool,
+    Vendor: PropTypes.bool,
+  }).isRequired,
   setShowVideo: PropTypes.func,
   showVideo: PropTypes.objectOf(PropTypes.object),
   marketplaceDetails: PropTypes.shape({
@@ -609,4 +666,5 @@ AmazonMerchant.propTypes = {
     vendor_central_info: PropTypes.string,
     vendor_ad_info: PropTypes.string,
   }).isRequired,
+  setNoAmazonAccount: PropTypes.func,
 };

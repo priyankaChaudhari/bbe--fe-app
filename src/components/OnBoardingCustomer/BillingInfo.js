@@ -433,13 +433,6 @@ export default function BillingInfo({
     return creditCardDetails.map((item) => (
       <div key={item.key} style={{ opacity: data && data.id ? 0.5 : '' }}>
         <div className="inner-content">
-          {/* <p className="account-steps m-0">Credit Card Type</p> */}
-          {/* <ul className="payment-option">
-            {item &&
-              item.choices.map((field) => (
-                <li key={field.key}>{generateRadio(field)}</li>
-              ))}
-          </ul> */}
           <div className="row">
             {item &&
               item.details.map((field) => (

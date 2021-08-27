@@ -29,6 +29,7 @@ export default function AskSomeone({
   setDisableBtn,
   setOpenCollapse,
   noAmazonAccount,
+  accountType,
 }) {
   const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
@@ -168,7 +169,9 @@ export default function AskSomeone({
       <CheckBox
         className={
           (isLoading.loader && isLoading.type === 'check') ||
-          (noAmazonAccount && !isChecked)
+          (accountType === 'Hybrid'
+            ? noAmazonAccount.Seller && noAmazonAccount.Vendor
+            : noAmazonAccount[accountType] && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'
         }>
@@ -292,7 +295,8 @@ AskSomeone.defaultProps = {
   stepData: {},
   setDisableBtn: () => {},
   setOpenCollapse: () => {},
-  noAmazonAccount: false,
+  noAmazonAccount: { Seller: false, Vendor: false },
+  accountType: null,
 };
 
 AskSomeone.propTypes = {
@@ -317,5 +321,9 @@ AskSomeone.propTypes = {
   }),
   setDisableBtn: PropTypes.func,
   setOpenCollapse: PropTypes.func,
-  noAmazonAccount: PropTypes.bool,
+  noAmazonAccount: PropTypes.shape({
+    Seller: PropTypes.bool,
+    Vendor: PropTypes.bool,
+  }),
+  accountType: PropTypes.string,
 };

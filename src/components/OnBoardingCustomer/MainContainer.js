@@ -37,6 +37,11 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_SUMMARY,
   PATH_THANKS,
+  PATH_UNAUTHORIZED_COMPANY_DETAILS,
+  PATH_UNAUTHORIZED_BILLING_DETAILS,
+  PATH_UNAUTHORIZED_AMAZON_MERCHANT,
+  PATH_CREATE_PASSWORD,
+  PATH_ACCOUNT_SETUP,
 } from '../../constants';
 import Header from '../../common/Header';
 import CompanyDigital from './CompanyDigital';
@@ -68,7 +73,10 @@ export default function MainContainer() {
   const [summaryData, setSummaryData] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
   const [billingData, setBillingData] = useState({});
-  const [noAmazonAccount, setNoAmazonAccount] = useState(false);
+  const [noAmazonAccount, setNoAmazonAccount] = useState({
+    Seller: false,
+    Vendor: false,
+  });
   const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
@@ -137,31 +145,13 @@ export default function MainContainer() {
       localStorage.getItem('customer') || id,
     ).then((response) => {
       if (response && response.data) {
-        if (
-          history.location.pathname.includes(
-            '/account-setup/assigned-amazon-merchant/',
-          )
-        ) {
-          if (
-            (response.data &&
-              response.data.Seller &&
-              response.data.Seller.no_amazon_account) ||
-            (response.data &&
-              response.data.Vendor &&
-              response.data.Vendor.no_amazon_account)
-          ) {
-            setNoAmazonAccount(false);
-          }
-        } else if (
-          (response.data &&
-            response.data.Seller &&
-            response.data.Seller.no_amazon_account) ||
-          (response.data &&
-            response.data.Vendor &&
-            response.data.Vendor.no_amazon_account)
-        ) {
-          setNoAmazonAccount(true);
-        } else setNoAmazonAccount(false);
+        setNoAmazonAccount({
+          Seller:
+            response.data.Seller && response.data.Seller.no_amazon_account,
+          Vendor:
+            response.data.Vendor && response.data.Vendor.no_amazon_account,
+        });
+
         setMarketplaceDetails({
           marketplace:
             response.data.marketplace &&
@@ -183,6 +173,76 @@ export default function MainContainer() {
     });
   };
 
+  const getOnboardingStepData = (customerId) => {
+    if (
+      history.location.pathname.includes(PATH_UNAUTHORIZED_COMPANY_DETAILS) ||
+      history.location.pathname.includes(PATH_COMPANY_DETAILS)
+    ) {
+      dispatch(getCustomerDetails(customerId));
+    } else if (
+      history.location.pathname.includes(PATH_UNAUTHORIZED_BILLING_DETAILS) ||
+      history.location.pathname.includes(PATH_BILLING_DETAILS)
+    ) {
+      getBillingDetails(customerId).then((response) => {
+        if (response && response.status === 200) {
+          setBillingData(response && response.data);
+        }
+        if (response && response.status === 404) {
+          setBillingData({});
+        }
+      });
+    } else if (
+      history.location.pathname.includes(PATH_UNAUTHORIZED_AMAZON_MERCHANT) ||
+      history.location.pathname.includes(PATH_AMAZON_MERCHANT)
+    ) {
+      getAccountDetails(customerId);
+    }
+  };
+
+  const summaryDetails = (onboardingId) => {
+    accountSummary(onboardingId).then((summary) => {
+      const skip =
+        summary &&
+        summary.data &&
+        summary.data.find((op) => op.step === 'merchant id');
+      setSkipAmazonAccount(skip && skip.step_not_applicable);
+      const fields = [];
+      stepPath.map((item) => {
+        if (summary && summary.data) {
+          fields.push({
+            [item.key]: summary.data.some((op) => {
+              return op.step === item.key ? op.is_completed : false;
+            }),
+          });
+        }
+        return '';
+      });
+      setSummaryData(fields);
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
+
+  const getStepsData = (onboardingId, type) => {
+    getStepDetails(onboardingId, getStepName()).then((response) => {
+      if (
+        response &&
+        response.data &&
+        response.data.results &&
+        response.data.results[0]
+      ) {
+        setStepData(response.data.results[0]);
+        if (
+          response.data.results[0] &&
+          response.data.results[0].step === getStepName()
+        ) {
+          setIsChecked(true);
+        }
+        if (type === 'callSummary') summaryDetails(onboardingId);
+      }
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
+
   useEffect(() => {
     if (
       (params && params.openCollapse === null) ||
@@ -191,9 +251,9 @@ export default function MainContainer() {
       setOpenCollapse(true);
     }
     setIsLoading({ loader: true, type: 'page' });
-    if (!history.location.pathname.includes('/account-setup/create-password')) {
+    if (!history.location.pathname.includes(PATH_CREATE_PASSWORD)) {
       if (
-        history.location.pathname.includes('/account-setup/') &&
+        history.location.pathname.includes(PATH_ACCOUNT_SETUP) &&
         params &&
         params.key
       ) {
@@ -208,69 +268,14 @@ export default function MainContainer() {
               search: `${stringified}`,
             });
           }
-          getStepDetails(
+          getStepsData(
             (verify && verify.data && verify.data.customer_onboarding_id) ||
               (userInfo && userInfo.customer_onboarding),
-            getStepName(),
-          ).then((response) => {
-            setStepData(
-              response &&
-                response.data &&
-                response.data.results &&
-                response.data.results[0],
-            );
-            if (
-              response &&
-              response.data &&
-              response.data.results &&
-              response.data.results[0] &&
-              response.data.results[0].step === getStepName()
-            ) {
-              setIsChecked(true);
-            }
-            setIsLoading({ loader: false, type: 'page' });
-          });
-
-          if (
-            history.location.pathname.includes(
-              '/account-setup/assigned-amazon-merchant',
-            )
-          ) {
-            getAccountDetails(
-              (verify && verify.data && verify.data.customer_id) ||
-                (userInfo && userInfo.customer),
-            );
-          }
-
-          if (
-            history.location.pathname.includes(
-              '/account-setup/assigned-company-details',
-            )
-          ) {
-            dispatch(
-              getCustomerDetails(
-                (verify && verify.data && verify.data.customer_id) ||
-                  (userInfo && userInfo.customer),
-              ),
-            );
-          }
-          if (
-            history.location.pathname.includes(
-              '/account-setup/assigned-billing-details',
-            )
-          ) {
-            getBillingDetails(
-              (verify && verify.data && verify.data.customer_id) ||
-                (userInfo && userInfo.customer),
-            ).then((response) => {
-              if (response && response.status === 200) {
-                setBillingData(response && response.data);
-              }
-              if (response && response.status === 404) {
-                setBillingData({});
-              }
-            });
-          }
+          );
+          getOnboardingStepData(
+            (verify && verify.data && verify.data.customer_id) ||
+              (userInfo && userInfo.customer),
+          );
           setVerifiedStepData(verify && verify.data);
         });
       }
@@ -288,89 +293,16 @@ export default function MainContainer() {
               }
             }
             setUserInfo(res && res.data);
-            getStepDetails(
+            getStepsData(
               (res && res.data && res.data.customer_onboarding) ||
                 verifiedStepData.customer_onboarding_id,
-              getStepName(),
-            ).then((response) => {
-              setStepData(
-                response &&
-                  response.data &&
-                  response.data.results &&
-                  response.data.results[0],
-              );
-              if (
-                response &&
-                response.data &&
-                response.data.results &&
-                response.data.results[0] &&
-                response.data.results[0].step === getStepName()
-              ) {
-                setIsChecked(true);
-              }
-              accountSummary(
-                res && res.data && res.data.customer_onboarding,
-              ).then((summary) => {
-                const skip =
-                  summary &&
-                  summary.data &&
-                  summary.data.find((op) => op.step === 'merchant id');
-                setSkipAmazonAccount(skip && skip.step_not_applicable);
-                const fields = [];
-                stepPath.map((item) => {
-                  if (summary && summary.data) {
-                    fields.push({
-                      [item.key]: summary.data.some((op) => {
-                        return op.step === item.key ? op.is_completed : false;
-                      }),
-                    });
-                  }
-                  return '';
-                });
-                setSummaryData(fields);
-              });
-              setIsLoading({ loader: false, type: 'page' });
-            });
-            if (
-              history.location.pathname.includes(
-                '/account-setup/company-details',
-              )
-            ) {
-              dispatch(
-                getCustomerDetails(
-                  (res && res.data && res.data.customer) ||
-                    verifiedStepData.customer_id,
-                ),
-              );
-            }
-
-            if (
-              history.location.pathname.includes(
-                '/account-setup/amazon-merchant',
-              )
-            ) {
-              getAccountDetails(
-                (res && res.data && res.data.customer) ||
-                  (userInfo && userInfo.customer),
-              );
-            }
-            if (
-              history.location.pathname.includes(
-                '/account-setup/billing-details',
-              )
-            ) {
-              getBillingDetails(
-                (res && res.data && res.data.customer) ||
-                  (userInfo && userInfo.customer),
-              ).then((response) => {
-                if (response && response.status === 200) {
-                  setBillingData(response && response.data);
-                }
-                if (response && response.status === 404) {
-                  setBillingData({});
-                }
-              });
-            }
+              'callSummary',
+            );
+            getOnboardingStepData(
+              (res && res.data && res.data.customer) ||
+                verifiedStepData.customer_id ||
+                (userInfo && userInfo.customer),
+            );
           } else {
             setIsLoading({ loader: false, type: 'page' });
           }
@@ -427,6 +359,7 @@ export default function MainContainer() {
           showVideo={showAmazonVideo}
           videoData={videoData}
           setShowVideo={setShowAmazonVideo}
+          setNoAmazonAccount={setNoAmazonAccount}
         />
       );
     if (path === 'amazon-account')
@@ -450,10 +383,8 @@ export default function MainContainer() {
     getVideoLink(
       (verifiedStepData && verifiedStepData.customer_id) ||
         (userInfo && userInfo.customer),
-      history.location.pathname.includes('/account-setup/company-details') ||
-        history.location.pathname.includes(
-          '/account-setup/assigned-company-details',
-        )
+      history.location.pathname.includes(PATH_COMPANY_DETAILS) ||
+        history.location.pathname.includes(PATH_UNAUTHORIZED_COMPANY_DETAILS)
         ? 4
         : 2,
     ).then((response) => {
@@ -478,18 +409,45 @@ export default function MainContainer() {
             ? ' mb-4 isDisabled'
             : ' mb-4'
         }>
-        <label className="check-container customer-pannel " htmlFor="noamazon">
-          I don’t have an Amazon account yet
+        <label
+          className="check-container customer-pannel "
+          htmlFor={
+            marketplaceDetails.type === 'Hybrid'
+              ? 'Seller'
+              : marketplaceDetails.type
+          }>
+          {marketplaceDetails && marketplaceDetails.type === 'Hybrid'
+            ? 'I don’t have an Seller Amazon account yet'
+            : 'I don’t have an Amazon account yet'}
           <input
             type="checkbox"
-            id="noamazon"
-            name="noamazon"
+            id={
+              marketplaceDetails.type === 'Hybrid'
+                ? 'Seller'
+                : marketplaceDetails.type
+            }
+            name={
+              marketplaceDetails.type === 'Hybrid'
+                ? 'Seller'
+                : marketplaceDetails.type
+            }
             onChange={(event) => {
-              setNoAmazonAccount(event.target.checked);
+              setNoAmazonAccount({
+                ...noAmazonAccount,
+                [marketplaceDetails.type === 'Hybrid'
+                  ? 'Seller'
+                  : marketplaceDetails.type]: event.target.checked,
+              });
               setDisableBtn(false);
             }}
             readOnly
-            checked={noAmazonAccount}
+            checked={
+              noAmazonAccount[
+                marketplaceDetails.type === 'Hybrid'
+                  ? 'Seller'
+                  : marketplaceDetails.type
+              ]
+            }
           />
           <span className="checkmark" />
         </label>
@@ -560,14 +518,14 @@ export default function MainContainer() {
                 {item.path === 'billing-details' ? null : (
                   <p className="info-text-gray m-0 mb-4 ">
                     {history.location.pathname.includes(
-                      '/account-setup/amazon-merchant',
+                      PATH_AMAZON_MERCHANT,
                     ) ? (
                       <>
                         {showAmazonSubTitle()} to assign this step to someone
                         that does.
                       </>
                     ) : history.location.pathname.includes(
-                        '/account-setup/assigned-amazon-merchant/',
+                        PATH_UNAUTHORIZED_AMAZON_MERCHANT,
                       ) ? (
                       <>{showAmazonSubTitle()}.</>
                     ) : (
@@ -609,16 +567,14 @@ export default function MainContainer() {
                     setDisableBtn={setDisableBtn}
                     setOpenCollapse={setOpenCollapse}
                     history={history}
-                    setNoAmazonAccount={setNoAmazonAccount}
                     noAmazonAccount={noAmazonAccount}
+                    accountType={marketplaceDetails.type}
                   />
                 )}
                 {(!isChecked &&
-                  history.location.pathname.includes(
-                    '/account-setup/amazon-merchant',
-                  )) ||
+                  history.location.pathname.includes(PATH_AMAZON_MERCHANT)) ||
                 history.location.pathname.includes(
-                  '/account-setup/assigned-amazon-merchant/',
+                  PATH_UNAUTHORIZED_AMAZON_MERCHANT,
                 ) ? (
                   <>{showNoAmazonAccountCheckbox()}</>
                 ) : (
@@ -652,7 +608,7 @@ export default function MainContainer() {
                   <CollapseOpenContainer>
                     <Collapse isOpened={openCollapse}>
                       {history.location.pathname.includes(
-                        '/account-setup/amazon-merchant',
+                        PATH_AMAZON_MERCHANT,
                       ) ? (
                         <div className="mt-3">
                           {showNoAmazonAccountCheckbox()}
@@ -700,10 +656,10 @@ export default function MainContainer() {
                     src={
                       videoData
                         ? history.location.pathname.includes(
-                            '/account-setup/company-details',
+                            PATH_COMPANY_DETAILS,
                           ) ||
                           history.location.pathname.includes(
-                            '/account-setup/assigned-company-details',
+                            PATH_UNAUTHORIZED_COMPANY_DETAILS,
                           )
                           ? videoData.step_4_video
                           : videoData.step_2_video
