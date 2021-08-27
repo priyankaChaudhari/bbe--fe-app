@@ -320,8 +320,7 @@ export default function CustomerList() {
               icon:
                 brand.documents &&
                 brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
+                Object.values(brand.documents[0]),
             });
           }
           setBrandGrowthStrategist(list);
@@ -338,8 +337,7 @@ export default function CustomerList() {
               icon:
                 brand.documents &&
                 brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
+                Object.values(brand.documents[0]),
             });
           }
           setBrandGrowthStrategist(list);

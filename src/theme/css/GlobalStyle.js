@@ -1018,7 +1018,6 @@ fieldset {
   font-size: ${Theme.extraMedium};
   font-weight: 600;
   padding-top: 10px;
-  margin-top: -2px;
 
   &.dropdown-avartName {
     width: 28px;
