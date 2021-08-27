@@ -38,6 +38,7 @@ function CustomerListFilters({
 }) {
   const isDesktop = useMediaQuery({ minWidth: 991 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
+
   return (
     <>
       <div className="customer-list-header-sticky">
@@ -233,10 +234,10 @@ function CustomerListFilters({
                                         }
                                         checked={
                                           filters.status
-                                            ? filters.status.find(
+                                            ? !!filters.status.find(
                                                 (op) => op === item.value,
                                               )
-                                            : ''
+                                            : false
                                         }
                                       />
                                       <span className="checkmark" />
@@ -274,10 +275,10 @@ function CustomerListFilters({
                                         }
                                         checked={
                                           filters.customer_account_type
-                                            ? filters.customer_account_type.find(
+                                            ? !!filters.customer_account_type.find(
                                                 (op) => op === item.value,
                                               )
-                                            : ''
+                                            : false
                                         }
                                       />
                                       <span className="checkmark" />
@@ -354,10 +355,10 @@ function CustomerListFilters({
                                         }
                                         checked={
                                           filters.contract_status
-                                            ? filters.contract_status.find(
+                                            ? !!filters.contract_status.find(
                                                 (op) => op === item.value,
                                               )
-                                            : ''
+                                            : false
                                         }
                                       />
                                       <span className="checkmark" />
