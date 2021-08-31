@@ -34,6 +34,7 @@ export default function CheckSteps({
         history.push(PATH_SUMMARY);
       } else if (step === 'billing information' && !skipAmazonAccount)
         history.push(PATH_AMAZON_MERCHANT);
+      if (step === 'merchant id') history.push(PATH_SUMMARY);
     } else {
       if (step === 'merchant id' || getIncompleteStep === undefined) {
         history.push(PATH_SUMMARY);
