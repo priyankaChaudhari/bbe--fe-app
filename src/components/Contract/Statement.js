@@ -321,7 +321,6 @@ export default function Statement({
 
   const mapMonthlyServiceTotal = () => {
     const totalFees = calculateTodalFee('monthly');
-
     return `
     ${
       totalFees.monthlyAmountAfterDiscount
@@ -416,6 +415,7 @@ export default function Statement({
   };
   const mapOnetimeServiceTotal = () => {
     const totalFees = calculateTodalFee('onetime');
+
     return `
     ${
       totalFees && totalFees.oneTimeAmountAfterDiscount

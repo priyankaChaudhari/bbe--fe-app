@@ -69,6 +69,7 @@ import {
   AgreementDetails,
   StatementDetails,
   DSPAddendumDetails,
+  additionaMarketplaceAmount,
 } from '../../constants/FieldConstants';
 
 const customStyles = {
@@ -1581,6 +1582,101 @@ export default function ContractContainer() {
     return RecurringLanguage;
   };
 
+  const calculateTotalFee = (type) => {
+    let oneTimeSubTotal = 0;
+    let monthlySubTotal = 0;
+    let oneTimeDiscount = 0;
+    let monthlyDiscount = 0;
+    let additionalMarketplacesTotal = 0;
+
+    if (formData) {
+      if (type === 'monthly') {
+        // caculate the total of additional monthly serviece
+        if (formData.additional_monthly_services !== null) {
+          formData.additional_monthly_services.forEach((item) => {
+            if (item && item.service) {
+              monthlySubTotal += item.service.fee;
+            } else {
+              const fixedFee = servicesFees.filter(
+                (n) => n.id === item.service_id,
+              );
+              monthlySubTotal += fixedFee[0].fee;
+            }
+          });
+        }
+        if (formData.additional_marketplaces !== null) {
+          // calculate the total of additional marketplaces
+          formData.additional_marketplaces.forEach((item) => {
+            if (item && item.fee) {
+              additionalMarketplacesTotal += item.fee;
+            } else {
+              additionalMarketplacesTotal += additionaMarketplaceAmount;
+            }
+          });
+
+          monthlySubTotal += additionalMarketplacesTotal;
+        }
+        if (formData.monthly_discount_type !== null) {
+          const discountType = formData.monthly_discount_type;
+          if (discountType === 'percentage') {
+            monthlyDiscount =
+              (monthlySubTotal * formData.monthly_discount_amount) / 100;
+          } else if (discountType === 'fixed amount') {
+            monthlyDiscount = formData.monthly_discount_amount;
+          }
+        } else {
+          monthlyDiscount = formData.monthly_discount_amount;
+        }
+        return {
+          monthlySubTotal,
+          monthlyAmountAfterDiscount: monthlyDiscount,
+          monthlyTotal: monthlySubTotal - monthlyDiscount,
+          monthlyDiscountType: formData.monthly_discount_type,
+          monthlyDiscount: formData.monthly_discount_amount,
+        };
+      }
+      if (
+        type === 'onetime' &&
+        formData.additional_one_time_services !== null
+      ) {
+        formData.additional_one_time_services.forEach((item) => {
+          const { quantity } = item;
+
+          if (item.custom_amazon_store_price) {
+            oneTimeSubTotal += item.custom_amazon_store_price * quantity;
+          } else if (item && item.service) {
+            oneTimeSubTotal += item.service.fee * quantity;
+          } else {
+            let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
+            fixedFee =
+              fixedFee && fixedFee[0] && fixedFee[0].fee ? fixedFee[0].fee : 0;
+            oneTimeSubTotal += fixedFee * quantity;
+          }
+        });
+
+        if (formData.one_time_discount_type !== null) {
+          const discountType = formData.one_time_discount_type;
+          if (discountType === 'percentage') {
+            oneTimeDiscount =
+              (oneTimeSubTotal * formData.one_time_discount_amount) / 100;
+          } else if (discountType === 'fixed amount') {
+            oneTimeDiscount = formData.one_time_discount_amount;
+          }
+        } else {
+          oneTimeDiscount = formData.one_time_discount_amount;
+        }
+        return {
+          oneTimeSubTotal,
+          oneTimeAmountAfterDiscount: oneTimeDiscount,
+          oneTimeTotal: oneTimeSubTotal - oneTimeDiscount,
+          oneTimeDiscountType: formData.one_time_discount_type,
+          oneTimeDiscount: formData.one_time_discount_amount,
+        };
+      }
+    }
+    return 0;
+  };
+
   const createAgreementDoc = () => {
     setContractDesignLoader(true);
 
@@ -2387,6 +2483,7 @@ export default function ContractContainer() {
           updatedFormData[val] = updatedFormData[val].replace(/,/g, '');
         }
       }
+
       const updatedContractFields = cloneDeep(updatedFormData);
       delete updatedContractFields.additional_one_time_services;
       delete updatedContractFields.additional_monthly_services;
@@ -2427,6 +2524,26 @@ export default function ContractContainer() {
       ) {
         updatedContractFields.sales_threshold = null;
         updatedContractFields.yoy_percentage = null;
+      }
+
+      // for set discount back to null if discount less than subtotal
+      if (
+        updatedFormData.additional_monthly_services ||
+        updatedFormData.additional_marketplaces
+      ) {
+        const totalFees = calculateTotalFee('monthly');
+        if (Math.sign(totalFees.monthlyTotal) === -1) {
+          updatedContractFields.monthly_discount_amount = null;
+          updatedContractFields.monthly_discount_type = null;
+        }
+      }
+
+      if (updatedFormData.additional_one_time_services) {
+        const totalFees = calculateTotalFee('onetime');
+        if (Math.sign(totalFees.oneTimeTotal) === -1) {
+          updatedContractFields.one_time_discount_amount = null;
+          updatedContractFields.one_time_discount_type = null;
+        }
       }
 
       const detail = {
