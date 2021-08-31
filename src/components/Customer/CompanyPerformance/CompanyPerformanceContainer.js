@@ -6,8 +6,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import PerformanceReport from './PerformanceReport';
-import AdPerformance from './AdPerformance';
+import PerformanceReport from './SalesPerformanceView/PerformanceReport';
+import AdPerformance from './AdPerformanceView/AdPerformance';
 
 export default function CompanyPerformance({ marketplaceChoices, id }) {
   const history = useHistory();

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
+import PropTypes, { instanceOf } from 'prop-types';
 import styled from 'styled-components';
 import Theme from '../../theme/Theme';
 import { PageLoader } from '../../common';
@@ -357,7 +357,7 @@ DspAdPacing.defaultProps = {
 };
 
 DspAdPacing.propTypes = {
-  dspData: PropTypes.shape(PropTypes.object),
+  dspData: instanceOf(Object),
   isDspPacingLoading: PropTypes.bool,
   currencySymbol: PropTypes.string,
 };

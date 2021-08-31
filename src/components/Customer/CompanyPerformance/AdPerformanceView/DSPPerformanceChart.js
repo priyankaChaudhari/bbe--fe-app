@@ -1,50 +1,38 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
-import PropTypes from 'prop-types';
+import PropTypes, { instanceOf } from 'prop-types';
+import { dspColorSet } from '../../../../constants/AdManagerAdminDashboardConstants';
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
 const _ = require('lodash');
 
-export default function AdPerformanceChart({
+export default function DSPPerformanceChart({
   chartId,
   chartData,
   currencySymbol,
   selectedBox,
   selectedDF,
+  isDashboard = false,
 }) {
   const chart = useRef(null);
   useEffect(() => {
-    const colorSet = {
-      adSales: '#0045B4',
-      adSpend: '#8C54FF',
-      adConversion: '#30A8BD',
-      impressions: '#D6A307',
-      adCos: '#E05D37',
-      adRoas: '#89A43C',
-      adClicks: '#C84EC6',
-      adClickRate: '#A04848',
-    };
-
     const tooltipNames = {
-      adSales: 'AD SALES',
-      adSpend: 'AD SPEND',
-      adConversion: 'AD CONVERSION RATE',
-      impressions: 'IMPRESSIONS',
-      adCos: 'ACOS',
-      adRoas: 'ROAS',
-      adClicks: 'CLICKS',
-      adClickRate: 'CLICK THROUGH RATE',
+      dspImpressions: 'IMPRESSIONS',
+      dspSpend: 'DSP SPEND',
+      dspTotalProductSales: 'TOTAL PRODUCT SALES',
+      dspTotalRoas: 'TOTAL ROAS',
+      dspTotalDpvr: 'TOTAL DPVR',
+      dspTtlNewBrandPurchases: 'TTL NEW BRAND PURCHASES',
+      dspProductSales: 'PRODUCT SALES',
+      dspRoas: 'ROAS',
     };
-
-    // const tooltipDate =
-    //   '<div style="color: white; font-size: 16px;">{date}</div>';
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
@@ -63,7 +51,6 @@ export default function AdPerformanceChart({
     valueAxis.renderer.grid.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.numberFormatter = new am4core.NumberFormatter();
-    valueAxis.extraMax = 0.005;
     valueAxis.numberFormatter.bigNumberPrefixes = [
       { number: 1e3, suffix: 'K' },
       { number: 1e6, suffix: 'M' },
@@ -71,6 +58,7 @@ export default function AdPerformanceChart({
     ];
     valueAxis.numberFormatter.smallNumberPrefixes = [];
     valueAxis.min = 0;
+    valueAxis.extraMax = 0.009;
     valueAxis.numberFormatter.numberFormat = `#.#a`;
 
     // Add cursor
@@ -80,7 +68,7 @@ export default function AdPerformanceChart({
     chart.current.cursor.behavior = 'none';
 
     function renderTooltip(name, color, value, currency, percent, formatter) {
-      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;">
+      const tooltipText = ` <ul style="padding:0; margin: 0 0 4px 0; max-width: 260px;">
       <li style="display: inline-block;">
         {' '}
         <div style="background-color: ${color};
@@ -114,20 +102,25 @@ export default function AdPerformanceChart({
     }
 
     function bindValueAxisFormatter(item) {
+      // console.log('item', item);
       let format = '';
-      if (item === 'adSales' || item === 'adSpend') {
+      if (
+        item === 'dspSpend' ||
+        item === 'dspTotalProductSales' ||
+        item === 'dspProductSales' ||
+        item === 'dspTotalRoas' ||
+        item === 'dspRoas'
+      ) {
         format = `${currencySymbol}#.#a`;
       } else if (
-        item === 'adConversion' ||
-        item === 'adClickRate' ||
-        item === 'adCos'
+        item === 'dspTtlNewBrandPurchases' ||
+        item === 'dspTotalDpvr'
       ) {
         format = `#.#'%'`;
-      } else if (item === 'adRoas') {
-        format = `${currencySymbol}#.#`;
       } else {
         format = `#.#a`;
       }
+      // console.log('format', format);
       return format;
     }
 
@@ -145,9 +138,21 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item) => {
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
-        const colorCode = colorSet[item];
-        tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        const colorCode = dspColorSet[item];
+        if (item === 'dspTtlNewBrandPurchases') {
+          tooltipValue = `${tooltipValue} TTL New Brand Purchases`;
+        } else {
+          tooltipValue = `${tooltipValue} ${_.startCase(
+            _.lowerCase(tooltipNames[item]),
+          )}`;
+        }
+        if (
+          item === 'dspSpend' ||
+          item === 'dspTotalProductSales' ||
+          item === 'dspProductSales' ||
+          item === 'dspTotalRoas' ||
+          item === 'dspRoas'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -167,9 +172,8 @@ export default function AdPerformanceChart({
             )}`;
           }
         } else if (
-          item === 'adConversion' ||
-          item === 'adClickRate' ||
-          item === 'adCos'
+          item === 'dspTtlNewBrandPurchases' ||
+          item === 'dspTotalDpvr'
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
@@ -189,10 +193,10 @@ export default function AdPerformanceChart({
               null,
             )}`;
           }
-        } else if (item === 'impressions') {
+        } else if (item === 'dspImpressions') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
-            colorCode,
+            dspColorSet[item],
             currentLabel,
             null,
             null,
@@ -208,26 +212,8 @@ export default function AdPerformanceChart({
               '#.#a',
             )}`;
           }
-        } else {
-          tooltipValue = `${tooltipValue} ${renderTooltip(
-            'Recent',
-            colorCode,
-            currentLabel,
-            null,
-            null,
-            null,
-          )}`;
-          if (selectedDF !== 'custom') {
-            tooltipValue = `${tooltipValue} ${renderTooltip(
-              'Previous',
-              colorCode,
-              previousLabel,
-              null,
-              null,
-              null,
-            )}`;
-          }
         }
+
         return '';
       });
 
@@ -237,20 +223,26 @@ export default function AdPerformanceChart({
         const currentValue = `${item}Current`;
         const previousValue = `${item}Previous`;
         const seriesName = `${item}Series`;
-        const colorCode = colorSet[item];
+        const colorCode = dspColorSet[item];
 
         if (index === 0) {
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-          if (item === 'adSales' || item === 'adSpend') {
+          if (
+            item === 'dspSpend' ||
+            item === 'dspProductSales' ||
+            (isDashboard && item === 'dspTotalProductSales')
+          ) {
             firstAxis = 'currency';
           }
         }
         if (index === 1) {
           if (
             firstAxis === 'currency' &&
-            (item === 'adSales' || item === 'adSpend')
+            (item === 'dspSpend' ||
+              item === 'dspProductSales' ||
+              (isDashboard && item === 'dspTotalProductSales'))
           ) {
             series.yAxis = valueAxis;
             series2.yAxis = valueAxis;
@@ -259,15 +251,15 @@ export default function AdPerformanceChart({
             valueAxis2.renderer.grid.template.disabled = true;
             valueAxis2.cursorTooltipEnabled = false;
             valueAxis2.numberFormatter = new am4core.NumberFormatter();
-            valueAxis2.numberFormatter.numberFormat = `#.#a`;
-            valueAxis2.extraMax = 0.005;
+            // valueAxis2.numberFormatter.numberFormat = `#.#a`;
+            valueAxis2.extraMax = 0.009;
             valueAxis2.numberFormatter.bigNumberPrefixes = [
               { number: 1e3, suffix: 'K' },
               { number: 1e6, suffix: 'M' },
               { number: 1e9, suffix: 'B' },
             ];
             valueAxis2.numberFormatter.smallNumberPrefixes = [];
-            valueAxis2.min = 0;
+
             series.yAxis = valueAxis2;
             series2.yAxis = valueAxis2;
             valueAxis2.renderer.opposite = true;
@@ -326,14 +318,13 @@ export default function AdPerformanceChart({
       valueAxis2.renderer.grid.template.disabled = true;
       valueAxis2.cursorTooltipEnabled = false;
       valueAxis2.numberFormatter = new am4core.NumberFormatter();
-      valueAxis2.numberFormatter.numberFormat = `#.#a`;
-      valueAxis2.extraMax = 0.005;
+      // valueAxis2.numberFormatter.numberFormat = `#.#a`;
+      valueAxis2.extraMax = 0.009;
       valueAxis2.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
         { number: 1e9, suffix: 'B' },
       ];
-      valueAxis2.min = 0;
       valueAxis2.numberFormatter.smallNumberPrefixes = [];
 
       // create object of 3rd value axis
@@ -341,29 +332,29 @@ export default function AdPerformanceChart({
       valueAxis3.renderer.grid.template.disabled = true;
       valueAxis3.cursorTooltipEnabled = false;
       valueAxis3.numberFormatter = new am4core.NumberFormatter();
-      valueAxis3.numberFormatter.numberFormat = `#.#a`;
-      valueAxis3.extraMax = 0.005;
+      valueAxis3.extraMax = 0.009;
+      // valueAxis3.numberFormatter.numberFormat = `#.#a`;
       valueAxis3.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
         { number: 1e9, suffix: 'B' },
       ];
       valueAxis3.numberFormatter.smallNumberPrefixes = [];
-      valueAxis3.min = 0;
+
       // create object of 4th value axis
       const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis4.renderer.grid.template.disabled = true;
       valueAxis4.cursorTooltipEnabled = false;
       valueAxis4.numberFormatter = new am4core.NumberFormatter();
-      valueAxis4.numberFormatter.numberFormat = `#.#a`;
-      valueAxis4.extraMax = 0.005;
+      valueAxis4.extraMax = 0.009;
+      // valueAxis4.numberFormatter.numberFormat = `#.#a`;
       valueAxis4.numberFormatter.bigNumberPrefixes = [
         { number: 1e3, suffix: 'K' },
         { number: 1e6, suffix: 'M' },
         { number: 1e9, suffix: 'B' },
       ];
       valueAxis4.numberFormatter.smallNumberPrefixes = [];
-      valueAxis4.min = 0;
+
       const snapToSeries = [];
       let tooltipValue = '';
 
@@ -371,33 +362,37 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item) => {
         const value = `${item}CurrentLabel`;
         // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
-
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        if (
+          item === 'dspSpend' ||
+          item === 'dspTotalProductSales' ||
+          item === 'dspProductSales' ||
+          item === 'dspTotalRoas' ||
+          item === 'dspRoas'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             currencySymbol,
             null,
             null,
           )}`;
         } else if (
-          item === 'adConversion' ||
-          item === 'adClickRate' ||
-          item === 'adCos'
+          item === 'dspTtlNewBrandPurchases' ||
+          item === 'dspTotalDpvr'
         ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             '%',
             null,
           )}`;
-        } else if (item === 'impressions') {
+        } else if (item === 'dspImpressions') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             null,
@@ -406,7 +401,7 @@ export default function AdPerformanceChart({
         } else {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
-            colorSet[item],
+            dspColorSet[item],
             value,
             null,
             null,
@@ -419,9 +414,13 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
 
-        if (item === 'adSales' || item === 'adSpend') {
+        if (
+          item === 'dspSpend' ||
+          item === 'dspProductSales' ||
+          (isDashboard && item === 'dspTotalProductSales')
+        ) {
           if (firstAxis === null || firstAxis === 'currency') {
-            // console.log('if currency');
+            // console.log('dspSpend if', item);
             series.yAxis = valueAxis;
             firstAxis = 'currency';
             valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -436,7 +435,7 @@ export default function AdPerformanceChart({
             valueAxis2.renderer.opposite = true;
             secondAxis = 'currency';
           } else if (thirdAxis === null || thirdAxis === 'currency') {
-            // console.log('second axis not null/currency');
+            // console.log('third axis not null/currency');
             series.yAxis = valueAxis3;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
@@ -449,8 +448,10 @@ export default function AdPerformanceChart({
             valueAxis.renderer.labels.template.disabled = true;
             valueAxis2.renderer.labels.template.disabled = true;
             valueAxis3.renderer.labels.template.disabled = true;
+
             thirdAxis = 'currency';
           } else {
+            // console.log('dsp 4th acis');
             series.yAxis = valueAxis4;
             valueAxis4.renderer.opposite = true;
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -467,10 +468,12 @@ export default function AdPerformanceChart({
             valueAxis4.renderer.labels.template.disabled = true;
           }
         } else if (index === 0) {
+          // console.log('index  0 if');
           series.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
           firstAxis = 'others';
         } else if (index === 1) {
+          // console.log('index last else 1');
           series.yAxis = valueAxis2;
           valueAxis2.renderer.opposite = true;
           valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -478,7 +481,9 @@ export default function AdPerformanceChart({
           );
           secondAxis = 'other';
         } else if (index === 2) {
+          // console.log('index 2 else');
           if (secondAxis === null) {
+            // console.log('index 2 else 2nd null');
             series.yAxis = valueAxis2;
             valueAxis2.renderer.opposite = true;
             valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -486,6 +491,7 @@ export default function AdPerformanceChart({
             );
             secondAxis = 'other';
           } else {
+            // console.log('index 2 else secons else');
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -500,8 +506,9 @@ export default function AdPerformanceChart({
             thirdAxis = 'others';
           }
         } else if (index === 3) {
-          // console.log('index last else 3');
+          // console.log('index  3 if');
           if (thirdAxis === null) {
+            // console.log('index  3 if 3rd null');
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -515,6 +522,7 @@ export default function AdPerformanceChart({
             valueAxis3.renderer.labels.template.disabled = true;
             thirdAxis = 'others';
           } else {
+            // console.log('index  3 if 3rd else');
             series.yAxis = valueAxis4;
             valueAxis4.renderer.opposite = true;
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -540,11 +548,11 @@ export default function AdPerformanceChart({
         series.name = seriesName;
         series.strokeWidth = 2;
         series.tooltipHTML = `${tooltipValue}`;
-        series.stroke = am4core.color(colorSet[item]);
+        series.stroke = am4core.color(dspColorSet[item]);
         series.fill = am4core.color('#2e384d');
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
-        circleBullet.circle.fill = am4core.color(colorSet[item]);
+        circleBullet.circle.fill = am4core.color(dspColorSet[item]);
         circleBullet.circle.strokeWidth = 1;
         circleBullet.circle.radius = 5;
 
@@ -554,23 +562,33 @@ export default function AdPerformanceChart({
 
       chart.current.cursor.snapToSeries = snapToSeries;
     }
+
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol, selectedBox, selectedDF]);
+  }, [
+    chartId,
+    chartData,
+    currencySymbol,
+    selectedDF,
+    selectedBox,
+    isDashboard,
+  ]);
 
   return <div id={chartId} style={{ width: '100%', height: '500px' }} />;
 }
 
-AdPerformanceChart.defaultProps = {
+DSPPerformanceChart.defaultProps = {
   chartData: [],
   currencySymbol: '',
-  selectedBox: {},
   selectedDF: '',
+  selectedBox: {},
+  isDashboard: false,
 };
 
-AdPerformanceChart.propTypes = {
+DSPPerformanceChart.propTypes = {
   chartId: PropTypes.string.isRequired,
   chartData: PropTypes.arrayOf(PropTypes.object),
   currencySymbol: PropTypes.string,
-  selectedBox: PropTypes.shape(PropTypes.object),
   selectedDF: PropTypes.string,
+  selectedBox: instanceOf(Object),
+  isDashboard: PropTypes.bool,
 };

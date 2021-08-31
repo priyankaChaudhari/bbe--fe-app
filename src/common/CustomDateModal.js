@@ -10,9 +10,8 @@ import ModalBox from './ModalBox';
 import Button from './Button';
 import Theme from '../theme/Theme';
 
-const currentDate = new Date();
-// const [adGraphLoader, setAdGraphLoader] = useState(false);
-currentDate.setDate(currentDate.getDate() - 2);
+const todaysDate = new Date();
+todaysDate.setDate(todaysDate.getDate() - 2);
 
 const customStyles = {
   content: {
@@ -37,6 +36,7 @@ const CustomDateModal = ({
   onApply,
   range,
   title,
+  currentDate,
   ...props
 }) => {
   return (
@@ -92,9 +92,10 @@ CustomDateModal.defaultProps = {
   style: {},
   title: 'Select Date Range',
   range: {
-    startDate: currentDate,
-    endDate: currentDate,
+    startDate: todaysDate,
+    endDate: todaysDate,
   },
+  currentDate: todaysDate,
 };
 
 CustomDateModal.propTypes = {
@@ -108,4 +109,5 @@ CustomDateModal.propTypes = {
     endDate: oneOfType([Date, string, object]).isRequired,
   }),
   title: string,
+  currentDate: todaysDate,
 };

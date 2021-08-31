@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { arrayOf, func, string } from 'prop-types';
+import { func, instanceOf, string } from 'prop-types';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -397,18 +397,18 @@ SponsoredAdMetrics.defaultProps = {
   currencySymbol: {},
   setSelectedAdMetrics: () => {},
   selectedAdMetrics: {},
-  adCurrentTotal: '',
+  adCurrentTotal: {},
   addThousandComma: () => {},
-  adPreviousTotal: '',
-  adDifference: '',
+  adPreviousTotal: {},
+  adDifference: {},
 };
 
 SponsoredAdMetrics.propTypes = {
   currencySymbol: string,
   setSelectedAdMetrics: func,
-  selectedAdMetrics: string,
-  adCurrentTotal: arrayOf(Array),
+  selectedAdMetrics: instanceOf(Object),
+  adCurrentTotal: instanceOf(Object),
   addThousandComma: func,
-  adPreviousTotal: arrayOf(Array),
-  adDifference: arrayOf(Array),
+  adPreviousTotal: instanceOf(Object),
+  adDifference: instanceOf(Object),
 };

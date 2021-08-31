@@ -14,7 +14,7 @@ import DSPPacing from './DSPPacing';
 import DSPKeyContributors from './DSPKeyContributors';
 import DSPFilter from './DSPFilter';
 import Theme from '../../../../theme/Theme';
-import DSPPerformanceChart from '../../../Customer/CompanyPerformance/DSPPerformanceChart';
+import DSPPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/DSPPerformanceChart';
 import {
   CustomDateModal,
   DropDownIndicator,
@@ -794,7 +794,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           />
           <CustomDateModal
             isOpen={showAdCustomDateModal}
-            ranges={adState}
+            range={adState}
             onClick={() => {
               setShowAdCustomDateModal(false);
               setAdState([
@@ -809,6 +809,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
               setAdState([item.adSelection]);
             }}
             onApply={() => applyCustomDate()}
+            currentDate={currentDate}
           />
           <div className="row mt-4 mb-3">
             <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">

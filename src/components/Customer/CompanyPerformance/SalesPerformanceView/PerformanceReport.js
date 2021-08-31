@@ -1,13 +1,11 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable camelcase */
 import React, { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { func, instanceOf, string } from 'prop-types';
 import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
 
+// eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select, { components } from 'react-select';
 import styled from 'styled-components';
@@ -24,36 +22,31 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import Modal from 'react-modal';
 
-import { DateRange } from 'react-date-range';
-import { enGB } from 'react-date-range/src/locale';
 import {
   DropDownSelect,
-  ModalBox,
-  Button,
   WhiteCard,
   PageLoader,
-} from '../../../common';
-import { getPerformance, getBuyBoxChartData } from '../../../api';
+  CustomDateModal,
+} from '../../../../common';
+import { getPerformance, getBuyBoxChartData } from '../../../../api';
 
 import {
   ArrowUpIcon,
   ArrowDownIcon,
   CaretUp,
-  CloseIcon,
-} from '../../../theme/images/index';
+} from '../../../../theme/images/index';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DropDown } from './DropDown';
+import { DropDown } from '../DropDown';
 import {
   dateOptions,
   bbDateOptions,
   noGraphDataMessage,
-} from '../../../constants/CompanyPerformanceConstants';
+} from '../../../../constants/CompanyPerformanceConstants';
 import SalesPerformanceChart from './SalePerformanceChart';
-import Theme from '../../../theme/Theme';
+import Theme from '../../../../theme/Theme';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -122,20 +115,6 @@ export default function PerformanceReport({
 
   const [isApiCall, setIsApiCall] = useState(false);
   const [activeSales, setActiveSales] = useState({ revenue: true });
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '420px ',
-      width: '100% ',
-      minHeight: '390px',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
 
   const renderCustomDateSubLabel = (props, flag) => {
     if (flag === 'sp') {
@@ -1360,114 +1339,6 @@ export default function PerformanceReport({
     );
   };
 
-  const renderSPCustomDateModal = () => {
-    return (
-      <Modal
-        isOpen={showCustomDateModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowCustomDateModal(false);
-            setState([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'selection',
-              },
-            ]);
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body">
-            <h4>Select Date Range</h4>
-            <DateRange
-              editableDateInputs
-              onChange={(item) => {
-                setState([item.selection]);
-              }}
-              showMonthAndYearPickers={false}
-              ranges={state}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              maxDate={currentDate}
-              rangeColors={['#FF5933']}
-              weekdayDisplayFormat="EEEEE"
-              locale={enGB}
-            />
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => applyCustomDate('SPDate')}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    );
-  };
-
-  const renderBBCustomDateModal = () => {
-    return (
-      <Modal
-        isOpen={showBBCustomDateModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowBBCustomDateModal(false);
-            setBBState([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'BBselection',
-              },
-            ]);
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body">
-            <h4>Select Date Range</h4>
-            <DateRange
-              editableDateInputs
-              onChange={(item) => {
-                setBBState([item.BBselection]);
-              }}
-              showMonthAndYearPickers={false}
-              ranges={BBstate}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              maxDate={currentDate}
-              rangeColors={['#FF5933']}
-              weekdayDisplayFormat="EEEEE"
-              locale={enGB}
-            />
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => applyCustomDate('BBDate')}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    );
-  };
-
   return (
     <>
       {renderMarketplaceDropDown()}
@@ -1478,67 +1349,64 @@ export default function PerformanceReport({
         {renderOrderIssuesPanel()}
       </div>
       <div className="row ">{renderBBPercentGraphPanel()}</div>
-      {renderSPCustomDateModal()}
-      {renderBBCustomDateModal()}
+      {/* custom date modal for sale performance graph */}
+      <CustomDateModal
+        isOpen={showCustomDateModal}
+        ranges={state}
+        onClick={() => {
+          setShowCustomDateModal(false);
+          setState([
+            {
+              startDate: currentDate,
+              endDate: currentDate,
+              key: 'selection',
+            },
+          ]);
+        }}
+        onChange={(item) => {
+          setState([item.selection]);
+        }}
+        onApply={() => applyCustomDate('SPDate')}
+        currentDate={currentDate}
+      />
+
+      {/* custom date modal for BB% graph */}
+      <CustomDateModal
+        isOpen={showBBCustomDateModal}
+        ranges={BBstate}
+        onClick={() => {
+          setShowBBCustomDateModal(false);
+          setBBState([
+            {
+              startDate: currentDate,
+              endDate: currentDate,
+              key: 'BBselection',
+            },
+          ]);
+        }}
+        onChange={(item) => {
+          setBBState([item.BBselection]);
+        }}
+        onApply={() => applyCustomDate('BBDate')}
+        currentDate={currentDate}
+      />
     </>
   );
 }
 
-PerformanceReport.propTypes = {
-  id: PropTypes.string.isRequired,
-  // agreement: PropTypes.shape({
-  //   id: PropTypes.string,
-  //   additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
-  //   primary_marketplace: PropTypes.shape({
-  //     id: PropTypes.string,
-  //   }),
-  // }).isRequired,
+PerformanceReport.defaultProps = {
+  marketplaceChoices: {},
+  id: '',
+  viewComponent: '',
+  setViewComponent: () => {},
 };
 
-// const PiechartResponsive = styled.div`
-//   .recharts-wrapper {
-//     .recharts-surface {
-//       width: 250px;
-//       @media only screen and (max-width: 1119px) {
-//         width: 220px;
-//       }
-//       @media only screen and (max-width: 1044px) {
-//         width: 210px;
-//       }
-//       @media only screen and (max-width: 991px) {
-//         width: 310px;
-//       }
-//       @media only screen and (max-width: 920px) {
-//         width: 280px;
-//       }
-//       @media only screen and (max-width: 846px) {
-//         width: 240px;
-//       }
-//       @media only screen and (max-width: 767px) {
-//         width: 622px;
-//       }
-//       @media only screen and (max-width: 640px) {
-//         width: 546px;
-//       }
-//       @media only screen and (max-width: 590px) {
-//         width: 512px;
-//       }
-//       @media only screen and (max-width: 530px) {
-//         width: 557px;
-//       }
-//       @media only screen and (max-width: 500px) {
-//         width: 450px;
-//       }
-//       @media only screen and (max-width: 475px) {
-//         width: 335px;
-//       }
-//       @media only screen and (max-width: 400px) {
-//         width: 260px;
-//       }
-//     }
-//   }
-// `;
-
+PerformanceReport.propTypes = {
+  marketplaceChoices: instanceOf(Object),
+  id: string,
+  viewComponent: string,
+  setViewComponent: func,
+};
 const Tab = styled.div`
   .tabs {
     list-style-type: none;

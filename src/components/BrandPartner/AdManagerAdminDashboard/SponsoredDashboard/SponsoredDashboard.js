@@ -6,24 +6,19 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { components } from 'react-select';
 import $ from 'jquery';
 import styled from 'styled-components';
-import Modal from 'react-modal';
-import { DateRange } from 'react-date-range';
-import { enGB } from 'react-date-range/src/locale';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 
-import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceChart';
+import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/AdPerformanceChart';
 
 import {
   WhiteCard,
-  ModalBox,
-  Button,
   PageLoader,
   DropDownIndicator,
+  CustomDateModal,
 } from '../../../../common';
 
-import { CloseIcon } from '../../../../theme/images/index';
 import {
   dateOptions,
   SponsoredAdTypeOptions,
@@ -109,21 +104,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     month: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
-
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '420px ',
-      width: '100% ',
-      minHeight: '390px',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
 
   const getAdManagersList = useCallback(() => {
     getManagersList('Sponsored Advertising Ad Manager').then((adm) => {
@@ -1001,60 +981,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     );
   };
 
-  const renderAdCustomDateModal = () => {
-    return (
-      <Modal
-        isOpen={showAdCustomDateModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowAdCustomDateModal(false);
-            setAdState([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'adSelection',
-              },
-            ]);
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body">
-            <h4>Select Date Range</h4>
-            <DateRange
-              editableDateInputs
-              onChange={(item) => {
-                setAdState([item.adSelection]);
-              }}
-              showMonthAndYearPickers={false}
-              ranges={adState}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              maxDate={currentDate}
-              rangeColors={['#FF5933']}
-              weekdayDisplayFormat="EEEEE"
-              locale={enGB}
-            />
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => applyCustomDate()}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    );
-  };
-
   return (
     <div className="row mt-3">
       <div className="col-lg-3 col-md-12">
@@ -1087,7 +1013,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             addThousandComma={addThousandComma}
             adPreviousTotal={adPreviousTotal}
             adDifference={adDifference}
-            DropDownIndicator={DropDownIndicator}
           />
           {renderAdGroupBy()}
           {adGraphLoader ? (
@@ -1124,7 +1049,25 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           currencySymbol={currencySymbol}
           selectedAdDF={selectedAdDF}
         />
-        {renderAdCustomDateModal()}
+        <CustomDateModal
+          isOpen={showAdCustomDateModal}
+          range={adState}
+          onClick={() => {
+            setShowAdCustomDateModal(false);
+            setAdState([
+              {
+                startDate: currentDate,
+                endDate: currentDate,
+                key: 'adSelection',
+              },
+            ]);
+          }}
+          onChange={(item) => {
+            setAdState([item.adSelection]);
+          }}
+          onApply={() => applyCustomDate()}
+          currentDate={currentDate}
+        />
       </div>
     </div>
   );
