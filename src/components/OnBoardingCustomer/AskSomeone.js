@@ -170,7 +170,10 @@ export default function AskSomeone({
         className={
           (isLoading.loader && isLoading.type === 'check') ||
           (accountType === 'Hybrid'
-            ? noAmazonAccount.Seller && noAmazonAccount.Vendor
+            ? noAmazonAccount.Seller &&
+              noAmazonAccount.Vendor &&
+              (step.email === undefined || step.email === '') &&
+              stepData.email === userInfo.email
             : noAmazonAccount[accountType] && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'

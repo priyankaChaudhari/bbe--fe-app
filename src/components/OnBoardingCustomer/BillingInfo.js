@@ -50,6 +50,7 @@ export default function BillingInfo({
   isChecked,
   summaryData,
   skipAmazonAccount,
+  summaryDetails,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -210,6 +211,9 @@ export default function BillingInfo({
         }
       });
     }
+    summaryDetails(
+      userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
+    );
   };
 
   const saveBillingData = () => {
@@ -708,6 +712,7 @@ export default function BillingInfo({
 
 BillingInfo.defaultProps = {
   stepData: {},
+  summaryDetails: () => {},
 };
 
 BillingInfo.propTypes = {
@@ -747,6 +752,7 @@ BillingInfo.propTypes = {
   isChecked: PropTypes.bool.isRequired,
   summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
   skipAmazonAccount: PropTypes.bool.isRequired,
+  summaryDetails: PropTypes.func,
 };
 
 const CollapseOpenContainer = styled.div`

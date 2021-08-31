@@ -344,6 +344,7 @@ export default function MainContainer() {
           isChecked={isChecked}
           summaryData={summaryData}
           skipAmazonAccount={skipAmazonAccount}
+          summaryDetails={summaryDetails}
         />
       );
     if (path === 'amazon-merchant' && !skipAmazonAccount)
