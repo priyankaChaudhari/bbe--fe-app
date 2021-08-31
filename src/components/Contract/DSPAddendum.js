@@ -286,7 +286,6 @@ export default function DSPAddendum({
                     'CUSTOMER_NAME',
                     mapDefaultValues('company_name', 'Customer Name'),
                   )
-
                   .replace(
                     'START_DATE',
                     mapDefaultValues('start_date', 'Start Date'),
@@ -302,14 +301,6 @@ export default function DSPAddendum({
                     'BUDGET_BREAKDOWN_TABLE',
                     `${mapBudgetBreakdownTable()}`,
                   )
-                  .replaceAll(
-                    'CONTRACT_LENGTH',
-                    mapDefaultValues(
-                      'dsp_length',
-                      'Initial Period',
-                      'number-currency',
-                    ),
-                  )
                   .replace(
                     'NO_OF_DAYS_BASED_ON_DATE',
                     mapDefaultValues(
@@ -321,6 +312,14 @@ export default function DSPAddendum({
                   .replaceAll(
                     'DSP_FEE',
                     mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+                  )
+                  .replaceAll(
+                    'CONTRACT_LENGTH',
+                    mapDefaultValues(
+                      'dsp_length',
+                      'Initial Period',
+                      'number-currency',
+                    ),
                   ),
             }}
           />
