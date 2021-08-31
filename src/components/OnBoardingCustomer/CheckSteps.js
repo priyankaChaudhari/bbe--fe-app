@@ -1,29 +1,50 @@
+/* eslint-disable no-lonely-if */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
 import { Button } from '../../common';
-import { PATH_SUMMARY } from '../../constants/index';
+import {
+  PATH_AMAZON_MERCHANT,
+  PATH_BILLING_DETAILS,
+  PATH_SUMMARY,
+} from '../../constants/index';
 import { stepPath } from '../../constants/FieldConstants';
 
-export default function CheckSteps({ summaryData, step, disableBtn }) {
+export default function CheckSteps({
+  summaryData,
+  step,
+  disableBtn,
+  skipAmazonAccount,
+}) {
   const history = useHistory();
 
   const getIncompleteStep = summaryData.find(
     (op) => Object.keys(op)[0] !== step && Object.values(op)[0] === false,
   );
+  const checkOnceVisited = summaryData.find(
+    (op) => Object.keys(op)[0] !== step && Object.values(op)[0] === true,
+  );
 
   const CheckStep = () => {
-    if (step === 'merchant id' || getIncompleteStep === undefined) {
-      history.push(PATH_SUMMARY);
+    if (checkOnceVisited === undefined) {
+      if (step === 'digital presence') history.push(PATH_BILLING_DETAILS);
+      if (step === 'billing information' && skipAmazonAccount) {
+        history.push(PATH_SUMMARY);
+      } else if (step === 'billing information' && !skipAmazonAccount)
+        history.push(PATH_AMAZON_MERCHANT);
     } else {
-      stepPath.map((item) => {
-        if (Object.keys(getIncompleteStep)[0] === item.key) {
-          return history.push(item.view);
-        }
-        return '';
-      });
+      if (step === 'merchant id' || getIncompleteStep === undefined) {
+        history.push(PATH_SUMMARY);
+      } else {
+        stepPath.map((item) => {
+          if (Object.keys(getIncompleteStep)[0] === item.key) {
+            return history.push(item.view);
+          }
+          return '';
+        });
+      }
     }
   };
 
@@ -44,4 +65,5 @@ CheckSteps.propTypes = {
   step: PropTypes.string.isRequired,
   summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableBtn: PropTypes.bool.isRequired,
+  skipAmazonAccount: PropTypes.bool.isRequired,
 };

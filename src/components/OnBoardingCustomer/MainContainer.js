@@ -626,6 +626,7 @@ export default function MainContainer() {
                     summaryData={summaryData}
                     step={item.key}
                     disableBtn={disableBtn}
+                    skipAmazonAccount={skipAmazonAccount}
                   />
                 </div>
               ) : (
