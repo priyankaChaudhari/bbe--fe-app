@@ -1705,10 +1705,10 @@ export default function ContractContainer() {
       'CUSTOMER_NAME',
       mapDefaultValues('company_name', 'Customer Name'),
     )
-      .replaceAll(
-        'AGREEMENT_DATE',
-        mapDefaultValues('start_date', 'Start Date'),
-      )
+      // .replaceAll(
+      //   'AGREEMENT_DATE',
+      //   mapDefaultValues('start_date', 'Start Date'),
+      // )
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());

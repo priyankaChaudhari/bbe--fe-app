@@ -295,11 +295,17 @@ export default function DSPAddendum({
                     `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
     padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails().replaceAll(
+      'DSP_FEE',
+      mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+    )}</table>`,
                   )
                   .replace(
                     'BUDGET_BREAKDOWN_TABLE',
-                    `${mapBudgetBreakdownTable()}`,
+                    `${mapBudgetBreakdownTable().replaceAll(
+                      'DSP_FEE',
+                      mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+                    )}`,
                   )
                   .replace(
                     'NO_OF_DAYS_BASED_ON_DATE',
@@ -309,10 +315,10 @@ export default function DSPAddendum({
                       'number-currency',
                     ),
                   )
-                  .replaceAll(
-                    'DSP_FEE',
-                    mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
-                  )
+                  // .replaceAll(
+                  //   'DSP_FEE',
+                  //   mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+                  // )
                   .replaceAll(
                     'CONTRACT_LENGTH',
                     mapDefaultValues(
