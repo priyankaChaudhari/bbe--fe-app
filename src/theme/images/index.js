@@ -170,6 +170,9 @@ import CircleBellIcon from './icons/circle-bell-icon.png';
 import HelpIcon from './icons/help.png';
 import ContractEmailIcon from './icons/contractEmail.png';
 import HelpDeskIcon from './icons/helpdesk.png';
+import ExternalLinkFile from './icons/external-link.svg';
+import ExternalLinkFileOrange from './icons/external-link-orange.svg';
+import CircleCross from './icons/circle-cross.svg';
 
 export {
   BannerBg,
@@ -344,4 +347,7 @@ export {
   HelpIcon,
   ContractEmailIcon,
   HelpDeskIcon,
+  ExternalLinkFile,
+  ExternalLinkFileOrange,
+  CircleCross,
 };

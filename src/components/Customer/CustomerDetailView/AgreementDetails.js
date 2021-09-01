@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ import {
   CloseIcon,
   OrangeDownloadPdf,
 } from '../../../theme/images';
-// import { PATH_AGREEMENT } from '../../../constants';
+import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
 
@@ -66,7 +66,7 @@ const customNotesStyles = {
 };
 
 export default function AgreementDetails({ agreements, id }) {
-  // const history = useHistory();
+  const history = useHistory();
   const dispatch = useDispatch();
   const [viewComponent, setViewComponent] = useState('current');
   const multipleAgreement = useSelector(
@@ -230,7 +230,7 @@ export default function AgreementDetails({ agreements, id }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {/* <Link
+                  <Link
                     to={{
                       pathname: PATH_AGREEMENT.replace(':id', id).replace(
                         ':contract_id',
@@ -240,16 +240,16 @@ export default function AgreementDetails({ agreements, id }) {
                         history &&
                         history.location &&
                         history.location.pathname,
-                    }}> */}
-                  <ActionDropDown>
-                    {' '}
-                    <Select
-                      classNamePrefix="react-select"
-                      placeholder="View Actions"
-                      className="active"
-                    />
-                  </ActionDropDown>
-                  {/* </Link> */}
+                    }}>
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                      />
+                    </ActionDropDown>
+                  </Link>
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />

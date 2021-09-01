@@ -310,7 +310,7 @@ const SidePanel = styled.div`
       text-transform: uppercase;
       border-bottom: 1px solid ${Theme.gray9};
   }
-  .menu{
+  .menu {
      padding:0;
       li {
         color:${Theme.white};
@@ -413,6 +413,30 @@ const SidePanel = styled.div`
         
       }
 
+    }
+  }
+  .amendments-section {
+    .label {
+      border-bottom: 1px solid #EEF3F5;
+      width: 100%;
+      text-align: left;
+    }
+    .text-delete {
+      text-decoration: line-through;
+    }
+    .added-remove-text {
+      font-size: ${Theme.extraSmall};
+      color: ${Theme.gray40};
+    }
+    .next-arrow {
+      width: 20px;
+      vertical-align: bottom;
+      margin: 0 5px;
+    }
+    .new-basic-text {
+      color: ${Theme.gray85};
+      // text-decoration: none;
+      font-size: ${Theme.extraNormal};
     }
   }
   @media only screen and (max-width: 350px) {  
