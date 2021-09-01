@@ -298,6 +298,7 @@ h6 {
   color: ${Theme.black};
   font-family: ${Theme.baseFontFamily};
   font-weight: 600;
+  max-width: 70%;
 }
 .normal-text {
   color: ${Theme.black};
