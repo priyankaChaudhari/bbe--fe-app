@@ -421,7 +421,7 @@ export default function MainContainer() {
               : marketplaceDetails.type
           }>
           {marketplaceDetails && marketplaceDetails.type === 'Hybrid'
-            ? 'I don’t have an Seller Amazon account yet'
+            ? 'I don’t have an Amazon Seller account yet'
             : 'I don’t have an Amazon account yet'}
           <input
             type="checkbox"

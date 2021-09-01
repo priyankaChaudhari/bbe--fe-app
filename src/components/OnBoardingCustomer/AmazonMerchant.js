@@ -507,7 +507,7 @@ export default function AmazonMerchant({
             : ' mb-4'
         }>
         <label className="check-container customer-pannel " htmlFor="Vendor">
-          I don’t have an Vendor Amazon account yet
+          I don’t have an Amazon Vendor account yet
           <input
             type="checkbox"
             id="Vendor"
