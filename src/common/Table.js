@@ -39,15 +39,24 @@ const Table = styled.table`
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
       font-weight: 600;
-      // vertical-align: top;
 
       &.product-body {
          padding: 13px 4px 13px 0;
       }
+      &.agreement {
+         font-size: ${Theme.normal};
+         border-bottom: 1px solid ${Theme.gray11};
+         font-weight: 300;
+        
+         .orange-icon {
+           margin-left: 10px;
+            vertical-align: middle;
+         }
+
+      }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};
         padding: 13px 4px 13px 0;
-        // display: inline-flex;
         cursor: pointer;
         font-size: ${Theme.extraNormal};
         .product-catalog-image {

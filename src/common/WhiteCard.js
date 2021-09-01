@@ -7,9 +7,13 @@ export const WhiteCard = styled.div`
   padding: 20px ;
   position: relative;
 
+  &.selected-card {
+    border: 0.1rem dotted #BFC5D2;
+  }
+
   .green {
-        color: ${Theme.lighterGreen};
-      }
+    color: ${Theme.lighterGreen};
+  }
   
   
  &.fix-height {
@@ -22,10 +26,12 @@ export const WhiteCard = styled.div`
     flex: initial;
     height: 100%;
   }
-  // &.customer-brand-details {
-  //   top: -30px;
-  //   width: 100%;
-  // }
+ 
+  .contract-status {
+    float: left;
+    max-width: 80%;
+    overflow-wrap: break-word;
+  }
 
   .company-contract-height {
    max-height: 145px;
@@ -263,32 +269,6 @@ export const WhiteCard = styled.div`
      &:first-child {
         margin-left: 0;
      }
-
-    //  .brand-label { 
-    //    color: ${Theme.gray40};
-    //    float:left;
-    //   }
-      // span { 
-      //   margin-left: 13px;
-      //   color: ${Theme.black};
-      //   float:left;
-      //   word-break: break-word;
-      //   max-width: 115px;
-      //   width:100%;
-
-      //   &.mid-width {
-      //     max-width: 158px;
-      //     width: 100%;
-
-      //       &.website {
-      //         margin-left: 20px;
-      //       }
-      //   }
-      //   &.company-size{
-      //     margin-left: 24px;
-      //   }
-      // }
-
     }
   }
 
@@ -433,7 +413,7 @@ export const WhiteCard = styled.div`
     padding: 0;
     margin: 0;
     list-style-type: none;
-    display: flow-root;
+    display: inline-block;
 
     li {
       display: inline-block;
@@ -468,32 +448,6 @@ export const WhiteCard = styled.div`
       }
     }
   }
-  // .monthly-retainer {
-  //   padding: 0;
-  //   margin: 0;
-  //   list-style-type: none;
-
-  //   li {
-  //     display: inline-block;
-  //     margin-right: 70px;
-  //     color: ${Theme.black};
-  //     font-size: ${Theme.normal};
-  //     font-weight: 500;
-
-  //     .label {
-  //       color: ${Theme.gray40};
-  //       text-transform: uppercase;
-  //       line-height: 22px;
-  //       font-family: ${Theme.titleFontFamily};
-  //       font-size: ${Theme.verySmall};
-  //       margin-bottom: 3px;
-  //     }
-
-  //     &:last-child {
-  //       margin-right: 0;
-  //     }
-  //   }
-  // }
 
 
   .DSP-contract-retainer {
@@ -1057,6 +1011,9 @@ export const WhiteCard = styled.div`
                 width:100%;
               }
             }   
+       }
+       .contract-status {
+         max-width: 70%;
        }
    }
  @media only screen and (max-width: 991px) {

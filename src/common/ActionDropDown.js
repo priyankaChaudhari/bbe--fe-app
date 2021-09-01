@@ -12,16 +12,16 @@ const ActionDropDown = styled.div`
     width: 100%;
     color: ${Theme.gray85} !important;
     font-size: ${Theme.normal};
-    font-weight: 300;
+    font-weight: 500;
     font-family: ${Theme.baseFontFamily};
 
     .css-yk16xz-control {
-      background-color: #f4f6fc;
+      // background-color: #f4f6fc;
       border: 1px solid #d5d8e1;
       border-radius: 2px;
       color: ${Theme.gray85};
       font-size: ${Theme.normal};
-      font-weight: 300px;
+      font-weight: 500;
       padding: 1px 5px 1px 5px;
       min-height: 40px;
       cursor: pointer;
@@ -29,7 +29,7 @@ const ActionDropDown = styled.div`
       .css-g1d714-ValueContainer {
         padding: 1px 20px 1px 5px !important;
         // color: ${Theme.gray85} !important;
-        font-weight: 300px;
+        font-weight: 500px;
         cursor: pointer;
 
         .cross-icon {
@@ -37,11 +37,9 @@ const ActionDropDown = styled.div`
         }
         .css-1wa3eu0-placeholder {
           color: ${Theme.gray85} !important;
-          font-weight: 300px;
         }
         .react-select__placeholder {
           color: ${Theme.gray85} !important;
-          font-weight: 300px !important;
         }
       }
       .css-1wa3eu0-placeholder {
@@ -60,7 +58,7 @@ const ActionDropDown = styled.div`
     }
 
     .css-1pahdxg-control {
-      background-color: #f4f6fc;
+      // background-color: #f4f6fc;
       border: 1px solid #d5d8e1;
       border-radius: 2px;
       font-size: ${Theme.normal};
@@ -69,7 +67,6 @@ const ActionDropDown = styled.div`
       box-shadow: none;
       outline: none;
       min-height: 40px;
-      font-weight: 300px;
       cursor: pointer;
       caret-color: transparent;
 

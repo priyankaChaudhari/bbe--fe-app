@@ -239,7 +239,7 @@ export default function AmazonAccount({
             return (
               <div className="copy-info" key={item.key}>
                 <div className="label mt-3">{item.label}</div>
-                <div className="label-info">
+                <div className="label-info card-title">
                   {mapDefaultValues(item.key, part) || `No ${item.label}.`}
                 </div>
                 <div
@@ -324,7 +324,9 @@ export default function AmazonAccount({
 
   return (
     <WhiteCard>
-      <p className="black-heading-title mt-0 ">Amazon Account Names & IDs</p>
+      <p className="black-heading-title card-title mt-0 ">
+        Amazon Account Names & IDs
+      </p>
       {(marketplaceChoices && marketplaceChoices.length === 0) ||
       (selectedMarketplace && selectedMarketplace.account_type) === null ||
       (selectedMarketplace && selectedMarketplace.account_type) === '' ? (

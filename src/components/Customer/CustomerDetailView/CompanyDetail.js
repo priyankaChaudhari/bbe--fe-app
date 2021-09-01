@@ -69,7 +69,9 @@ export default function CompanyDetail({
   const getContactCard = () => {
     return (
       <WhiteCard className=" mt-3">
-        <p className="black-heading-title mt-0 ">Company Contacts</p>
+        <p className="black-heading-title card-title  mt-0 ">
+          Company Contacts
+        </p>
         <div
           className="edit-details"
           onClick={() => {
@@ -105,7 +107,7 @@ export default function CompanyDetail({
   const getSocialIcons = () => {
     return (
       <WhiteCard className="mt-3">
-        <p className="black-heading-title mt-0">Contact Info</p>
+        <p className="black-heading-title card-title  mt-0">Contact Info</p>
         <div
           className="edit-details"
           onClick={() => setShowModal(true)}
@@ -132,7 +134,7 @@ export default function CompanyDetail({
         <WhiteCard>
           <div className="row">
             <div className="col-10">
-              <span className="black-heading-title ">Company Description</span>
+              <span className="black-heading-title  ">Company Description</span>
               <br />
               <br />
 
@@ -163,7 +165,7 @@ export default function CompanyDetail({
         <div className="row ">
           <div className="col-lg-6 col-md-6 col-12 mt-3">
             <WhiteCard>
-              <p className="black-heading-title mt-0">Brands</p>
+              <p className="black-heading-title card-title mt-0">Brands</p>
               <p className="no-result-found">
                 {(customer && customer.brand) || 'No brands added'}
               </p>

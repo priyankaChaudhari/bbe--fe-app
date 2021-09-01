@@ -34,7 +34,7 @@ const StatusWrapper = styled.div`
   float: left;
   border-radius: 5px;
   width: fit-content;
-  min-width: 80px;
+  min-width: 70px;
   padding: 5px 10px;
   display: flex;
   align-content: center;
