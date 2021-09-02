@@ -66,6 +66,7 @@ export default function ContractFooter({
     }
     return false;
   };
+
   return details &&
     details.contract_status &&
     details.contract_status.value === 'pending contract signature' ? (

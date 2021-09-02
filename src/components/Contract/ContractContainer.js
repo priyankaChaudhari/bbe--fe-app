@@ -1446,7 +1446,10 @@ export default function ContractContainer() {
           formData.customer_id.address &&
           formData.customer_id.state &&
           formData.customer_id.city &&
-          formData.customer_id.zip_code
+          formData.customer_id.zip_code &&
+          (formData.additional_one_time_services !== null ||
+            (formData.additional_one_time_services &&
+              formData.additional_one_time_services.length))
         ) {
           return true;
         }
@@ -2748,6 +2751,21 @@ export default function ContractContainer() {
     let agreementErrors = 0;
     let statementErrors = 0;
     let dspErrors = 0;
+
+    if (
+      formData &&
+      formData.contract_type &&
+      formData.contract_type.toLowerCase().includes('one') &&
+      (formData.additional_one_time_services === null ||
+        !formData.additional_one_time_services.length)
+    ) {
+      agreementErrors += 1;
+
+      setAdditionalMonthlySerError({
+        ...additionalMonthlySerError,
+        required: 'At least 1 one time service required',
+      });
+    }
 
     AgreementDetails.forEach((item) => {
       if (item.key !== 'contract_address') {

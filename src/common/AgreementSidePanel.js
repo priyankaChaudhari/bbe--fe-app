@@ -558,6 +558,7 @@ export default function AgreementSidePanel({
     }
     return null;
   };
+
   const handleChange = (event, key, type, val) => {
     showFooter(true);
     clearError(event, key, type);
@@ -1336,6 +1337,26 @@ export default function AgreementSidePanel({
             (item) => !item.label.includes('Amazon Store Package'),
           );
           setNotIncludedOneTimeServices(listWithoutAmazonStorePack);
+
+          if (
+            formData &&
+            formData.contract_type &&
+            formData.contract_type.toLowerCase().includes('one') &&
+            (additionalOnetimeServices.create !== null ||
+              (additionalOnetimeServices.create &&
+                additionalOnetimeServices.create.length))
+          ) {
+            setAdditionalMonthlySerError({
+              ...additionalMonthlySerError,
+              required: '',
+            });
+            setSectionError({
+              ...sectionError,
+              agreement: sectionError.agreement
+                ? sectionError.agreement - 1
+                : 0,
+            });
+          }
         } else {
           const itemInList =
             additionalOnetimeServices &&
@@ -1420,6 +1441,26 @@ export default function AgreementSidePanel({
                 },
               ]),
             );
+          }
+
+          if (
+            formData &&
+            formData.contract_type &&
+            formData.contract_type.toLowerCase().includes('one') &&
+            (additionalOnetimeServices.create === null ||
+              !(
+                additionalOnetimeServices.create &&
+                additionalOnetimeServices.create.length
+              ))
+          ) {
+            setAdditionalMonthlySerError({
+              ...additionalMonthlySerError,
+              required: 'At least 1 one time service required',
+            });
+            setSectionError({
+              ...sectionError,
+              agreement: sectionError.agreement + 1,
+            });
           }
         }
       }
@@ -1581,6 +1622,24 @@ export default function AgreementSidePanel({
           additionalOnetimeServices.create,
           'one_time_service',
         );
+
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('one') &&
+          (additionalOnetimeServices.create !== null ||
+            (additionalOnetimeServices.create &&
+              additionalOnetimeServices.create.length))
+        ) {
+          setAdditionalMonthlySerError({
+            ...additionalMonthlySerError,
+            required: '',
+          });
+          setSectionError({
+            ...sectionError,
+            agreement: sectionError.agreement ? sectionError.agreement - 1 : 0,
+          });
+        }
       }
       // if item unchecked or removed
       else {
@@ -1620,6 +1679,23 @@ export default function AgreementSidePanel({
           ...additionalOnetimeServices,
           // deletedUncheckedItemList,
         });
+
+        if (
+          formData &&
+          formData.contract_type &&
+          formData.contract_type.toLowerCase().includes('one') &&
+          (deletedUncheckedItemList === null ||
+            !(deletedUncheckedItemList && deletedUncheckedItemList.length))
+        ) {
+          setAdditionalMonthlySerError({
+            ...additionalMonthlySerError,
+            required: 'At least 1 one time service required',
+          });
+          setSectionError({
+            ...sectionError,
+            agreement: sectionError.agreement + 1,
+          });
+        }
       }
 
       fetchUncommonOptions(
@@ -2524,6 +2600,11 @@ export default function AgreementSidePanel({
               ? 'Edit Discount'
               : 'Add Discount'}
           </div>
+          {additionalMonthlySerError.required ? (
+            <ErrorMsg>{additionalMonthlySerError.required}</ErrorMsg>
+          ) : (
+            ''
+          )}
         </ContractFormField>
         <div className="row">
           {oneTimeService &&
