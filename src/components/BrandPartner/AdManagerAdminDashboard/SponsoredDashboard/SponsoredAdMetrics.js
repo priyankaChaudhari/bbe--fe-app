@@ -49,6 +49,7 @@ const SponsoredAdMetrics = ({
       <div className="row mr-1 ml-1">
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-sponsored-adsalescard"
             onClick={() => setBoxToggle('adSales')}
             role="presentation"
             className={setBoxClasses('adSales', 'ad-sales-active')}>
@@ -92,6 +93,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-adspendcard"
             role="presentation"
             onClick={() => setBoxToggle('adSpend')}
             className={setBoxClasses('adSpend', 'ad-spend-active')}>
@@ -136,6 +138,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3">
           <div
+            id="BT-sponsored-adconversioncard"
             onClick={() => setBoxToggle('adConversion')}
             role="presentation"
             className={setBoxClasses('adConversion', 'ad-conversion-active')}>
@@ -177,6 +180,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-impressionscard"
             onClick={() => setBoxToggle('impressions')}
             role="presentation"
             className={setBoxClasses('impressions', 'impression-active')}>
@@ -218,6 +222,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
+            id="BT-sponsored-Acoscard"
             onClick={() => setBoxToggle('adCos')}
             role="presentation"
             className={setBoxClasses('adCos', 'ad-cos-active')}>
@@ -259,6 +264,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-Roascard"
             onClick={() => setBoxToggle('adRoas', 'ad')}
             role="presentation"
             className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
@@ -301,6 +307,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickcard"
             onClick={() => setBoxToggle('adClicks', 'ad')}
             role="presentation"
             className={setBoxClasses('adClicks', 'ad-click-active', 'ad')}>
@@ -342,6 +349,7 @@ const SponsoredAdMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
+            id="BT-sponsored-clickratecard"
             onClick={() => setBoxToggle('adClickRate', 'ad')}
             role="presentation"
             className={setBoxClasses(
