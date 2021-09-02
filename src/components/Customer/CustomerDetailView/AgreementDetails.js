@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Select from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -34,6 +35,7 @@ import {
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
+import OneTimeAgreement from './OneTimeAgreement';
 
 const customStyles = {
   content: {
@@ -65,7 +67,7 @@ const customNotesStyles = {
   },
 };
 
-export default function AgreementDetails({ agreements, id }) {
+export default function AgreementDetails({ id }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [viewComponent, setViewComponent] = useState('current');
@@ -74,12 +76,7 @@ export default function AgreementDetails({ agreements, id }) {
   );
   const loader = useSelector((state) => state.accountState.isLoading);
   const [showModal, setShowModal] = useState(false);
-  const [showNotesModal, setShowNotesModal] = useState({
-    modal: false,
-    apiCall: false,
-    deleteNote: false,
-  });
-  const [setNewNoteEditor] = useState(false);
+  const [showPastAgreements, setShowPastAgreements] = useState(false);
 
   const agreementOptions = [
     { key: 'monthly_retainer', label: 'Monthly Retainer' },
@@ -114,7 +111,8 @@ export default function AgreementDetails({ agreements, id }) {
       if (
         agreement &&
         agreement.contract_status &&
-        agreement.contract_status.value !== 'inactive'
+        agreement.contract_status.value !== 'inactive' &&
+        !agreement.contract_type.toLowerCase().includes('one')
       )
         fields.push(
           <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
@@ -150,8 +148,8 @@ export default function AgreementDetails({ agreements, id }) {
                   <p className="black-heading-title mt-2 mb-0">
                     {agreement &&
                     agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('one')
-                      ? 'One Time Service Agreement'
+                    agreement.contract_type.toLowerCase().includes('notice')
+                      ? 'Recurring (90 day notice) Service Agreement'
                       : agreement &&
                         agreement.contract_type &&
                         agreement.contract_type.toLowerCase().includes('dsp')
@@ -373,12 +371,7 @@ export default function AgreementDetails({ agreements, id }) {
               <span
                 className="cursor"
                 role="presentation"
-                onClick={() => {
-                  setShowNotesModal({
-                    modal: true,
-                    apiCall: false,
-                  });
-                }}
+                onClick={() => setShowPastAgreements(true)}
                 style={{
                   fontWeight: '600',
                   marginLeft: '7px',
@@ -409,43 +402,16 @@ export default function AgreementDetails({ agreements, id }) {
       fields
     );
   };
-  const renderNotesModal = () => {
+  const renderPastAgreementModal = () => {
     return (
       <Modal
-        isOpen={showNotesModal.modal}
+        isOpen={showPastAgreements}
         style={customNotesStyles}
         ariaHideApp={false}
         contentLabel="Add team modal">
         <NotesSideBar>
           <HeaderDownloadFuntionality>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-6 col-sm-12">
-                  {' '}
-                  <div className="header-title "> Past Agreements</div>
-                </div>
-                <div className="col-md-6 col-sm-12">
-                  <ul className="contract-download-nav">
-                    <li>
-                      <span className="divide-arrow hide-mobile" />
-                    </li>
-                    <li>
-                      <img
-                        width="18px"
-                        src={CloseIcon}
-                        alt="close"
-                        className="float-right cursor remove-cross-icon"
-                        onClick={() => {
-                          setShowNotesModal(false);
-                          setNewNoteEditor(false);
-                        }}
-                        role="presentation"
-                      />
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <PastAgreement />
           </HeaderDownloadFuntionality>
           <div className="container-fluid">
             <Table className="mt-0 product-catalog-laptop ">
@@ -515,12 +481,18 @@ export default function AgreementDetails({ agreements, id }) {
               {viewComponent === 'current' ? (
                 <>{generateHTML()}</>
               ) : (
-                <PastAgreement agreement={agreements} id={id} />
+                <OneTimeAgreement
+                  agreements={multipleAgreement.filter((op) =>
+                    op.contract_type.toLowerCase().includes('one'),
+                  )}
+                  id={id}
+                  history={history}
+                />
               )}
             </>
           )}
         </>
-        {renderNotesModal()}
+        {renderPastAgreementModal()}
         <Modal
           isOpen={showModal}
           style={customStyles}
