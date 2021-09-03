@@ -100,6 +100,7 @@ export {
   sendReminderOfContract,
   checksignatureStatus,
   getContractActivityLog,
+  createContract,
 } from './AgreementApi';
 
 // Knowledge Base

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -6,9 +8,21 @@ import PropTypes from 'prop-types';
 import { Button, WhiteCard } from '../../../common';
 import { PATH_AGREEMENT } from '../../../constants';
 import { AddIcons, FileContract, ServiceIcon } from '../../../theme/images';
+import { createContract } from '../../../api';
+import { getAccountDetails } from '../../../store/actions/accountState';
 
 export default function OneTimeAgreement({ agreements, id, history }) {
-  const addNewOneTime = () => {};
+  const dispatch = useDispatch();
+
+  const addNewOneTime = () => {
+    const data = {
+      customer_id: id,
+      contract_type: 'one time',
+    };
+    createContract(data).then(() => {
+      dispatch(getAccountDetails(id));
+    });
+  };
 
   return (
     <>

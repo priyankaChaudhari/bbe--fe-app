@@ -313,3 +313,15 @@ export async function getServicesFee() {
     });
   return result;
 }
+
+export async function createContract(data) {
+  const result = await axiosInstance
+    .post(API_CUSTOMER_CONTRACT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
