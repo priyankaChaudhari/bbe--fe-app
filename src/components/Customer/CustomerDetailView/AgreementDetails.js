@@ -1,71 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
-import Theme from '../../../theme/Theme';
 
 import {
   PageLoader,
   WhiteCard,
   Tabs,
-  Status,
+  // Status,
   ActionDropDown,
   ModalBox,
   // ContractFormField,
   Button,
-  HeaderDownloadFuntionality,
-  Table,
 } from '../../../common';
 import {
   ClockIcon,
   FileContract,
   RecurringIcon,
   DspOnlyIcon,
-  ServiceIcon,
   ArrowIcons,
   CloseIcon,
-  OrangeDownloadPdf,
+  PauseIcon,
+  CloseCircleIcon,
+  CopyIcon,
+  CaretUp,
+  ViewExternalLink,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
 import OneTimeAgreement from './OneTimeAgreement';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    // minHeight: '200px',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-const customNotesStyles = {
-  content: {
-    top: '50%',
-    right: '0px',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    maxHeight: '100%',
-    overlay: ' {zIndex: 1000}',
-    inset: '0% 0% 0% auto',
-    marginRight: '0',
-    borderRadius: '0px !important',
-  },
-};
 
 export default function AgreementDetails({ id }) {
   const history = useHistory();
@@ -77,6 +47,12 @@ export default function AgreementDetails({ id }) {
   const loader = useSelector((state) => state.accountState.isLoading);
   const [showModal, setShowModal] = useState(false);
   const [showPastAgreements, setShowPastAgreements] = useState(false);
+  const contractOptions = [
+    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+    { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+    { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
+    { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+  ];
 
   const agreementOptions = [
     { key: 'monthly_retainer', label: 'Monthly Retainer' },
@@ -93,6 +69,59 @@ export default function AgreementDetails({ id }) {
     },
   ];
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '600px ',
+      width: '100% ',
+      // minHeight: '200px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+
+  const { Option } = components;
+  const DropdownIndicator = (dataProps) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...dataProps}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
+  const IconOption = (dataProps) => (
+    <Option {...dataProps}>
+      <img
+        className="drop-down-user"
+        src={dataProps.data.icon}
+        alt="user"
+        style={{
+          marginRight: '9px',
+          height: '20px',
+          verticalAlign: 'middle',
+          width: '20px',
+        }}
+      />
+      {dataProps.data.label}
+    </Option>
+  );
+
   useEffect(() => {
     dispatch(getAccountDetails(id));
   }, [dispatch, id]);
@@ -103,6 +132,28 @@ export default function AgreementDetails({ id }) {
     const diffTime = Math.abs(date2 - date1);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
+  };
+
+  const handleContractOptions = (event, agreementId) => {
+    switch (event.value) {
+      case 'view':
+        history.push({
+          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+            ':contract_id',
+            agreementId,
+          ),
+          state: history && history.location && history.location.pathname,
+        });
+        break;
+      case 'draft':
+        break;
+      case 'pause':
+        break;
+      case 'cancel':
+        break;
+      default:
+        break;
+    }
   };
 
   const generateHTML = () => {
@@ -124,11 +175,7 @@ export default function AgreementDetails({ id }) {
                   src={
                     agreement &&
                     agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('one')
-                      ? ServiceIcon
-                      : agreement &&
-                        agreement.contract_type &&
-                        agreement.contract_type.toLowerCase().includes('dsp')
+                    agreement.contract_type.toLowerCase().includes('dsp')
                       ? DspOnlyIcon
                       : RecurringIcon
                   }
@@ -140,11 +187,11 @@ export default function AgreementDetails({ id }) {
                   onClick={() => {
                     setShowModal(true);
                   }}>
-                  <Status
+                  {/* <Status
                     className="mr-2 mb-2"
                     label="Draft"
                     backgroundColor={Theme.gray8}
-                  />
+                  /> */}
                   <p className="black-heading-title mt-2 mb-0">
                     {agreement &&
                     agreement.contract_type &&
@@ -228,32 +275,28 @@ export default function AgreementDetails({ id }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  <Link
-                    to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                        ':contract_id',
-                        agreement.id,
-                      ),
-                      state:
-                        history &&
-                        history.location &&
-                        history.location.pathname,
-                    }}>
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                      />
-                    </ActionDropDown>
-                  </Link>
+                  <ActionDropDown>
+                    {' '}
+                    <Select
+                      classNamePrefix="react-select"
+                      placeholder="View Actions"
+                      className="active"
+                      options={contractOptions}
+                      onChange={(event) =>
+                        handleContractOptions(event, agreement.id)
+                      }
+                      components={{
+                        DropdownIndicator,
+                        Option: IconOption,
+                      }}
+                    />
+                  </ActionDropDown>
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />
             </div>
-
-            <CustomerDetailCoppase className="disabled">
+            {/* className="disabled" */}
+            <CustomerDetailCoppase>
               <div className="DSP-contract-retainer">
                 <div className="row ">
                   {agreement && agreement.contract_type === 'recurring' ? (
@@ -359,40 +402,6 @@ export default function AgreementDetails({ id }) {
               )}
             </CustomerDetailCoppase>
           </WhiteCard>,
-          <div className="looking-past-agre">
-            <p className="gray-normal-text">
-              <img
-                width="16px;"
-                style={{ verticalAlign: 'text-top', marginLeft: '5px' }}
-                src={FileContract}
-                alt="file"
-              />{' '}
-              Looking for Past Agreements?
-              <span
-                className="cursor"
-                role="presentation"
-                onClick={() => setShowPastAgreements(true)}
-                style={{
-                  fontWeight: '600',
-                  marginLeft: '7px',
-                  position: 'relative',
-                }}>
-                {' '}
-                View here
-                <img
-                  style={{
-                    transform: 'rotate(180deg)',
-                    width: '13px',
-                    top: '2px',
-                    right: '-16px',
-                    position: 'absolute',
-                  }}
-                  src={ArrowIcons}
-                  alt="arrow"
-                />
-              </span>
-            </p>
-          </div>,
         );
     }
 
@@ -400,51 +409,6 @@ export default function AgreementDetails({ id }) {
       <WhiteCard className="text-center">No Agreements Found.</WhiteCard>
     ) : (
       fields
-    );
-  };
-  const renderPastAgreementModal = () => {
-    return (
-      <Modal
-        isOpen={showPastAgreements}
-        style={customNotesStyles}
-        ariaHideApp={false}
-        contentLabel="Add team modal">
-        <NotesSideBar>
-          <HeaderDownloadFuntionality>
-            <PastAgreement />
-          </HeaderDownloadFuntionality>
-          <div className="container-fluid">
-            <Table className="mt-0 product-catalog-laptop ">
-              <tr>
-                <th width="75%" className="product-header ">
-                  Agreement Type
-                </th>
-                <th width="25%" className="product-header ">
-                  Date Expired
-                </th>
-              </tr>
-              <tbody>
-                <tr width="100%">
-                  <td className="product-body agreement">
-                    {' '}
-                    Recurring Contract
-                  </td>
-                  <td className="product-body agreement">
-                    {' '}
-                    05/20/2021{' '}
-                    <img
-                      className="orange-icon"
-                      width="18px"
-                      src={OrangeDownloadPdf}
-                      alt="download"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-        </NotesSideBar>
-      </Modal>
     );
   };
 
@@ -479,7 +443,46 @@ export default function AgreementDetails({ id }) {
           ) : (
             <>
               {viewComponent === 'current' ? (
-                <>{generateHTML()}</>
+                <>
+                  {generateHTML()}
+                  <div
+                    className="looking-past-agre"
+                    onClick={() => setShowPastAgreements(true)}
+                    role="presentation">
+                    <p className="gray-normal-text">
+                      <img
+                        width="16px;"
+                        style={{ verticalAlign: 'text-top', marginLeft: '5px' }}
+                        src={FileContract}
+                        alt="file"
+                      />{' '}
+                      Looking for Past Agreements?
+                      <span
+                        className="cursor"
+                        role="presentation"
+                        onClick={() => setShowPastAgreements(true)}
+                        style={{
+                          fontWeight: '600',
+                          marginLeft: '7px',
+                          position: 'relative',
+                        }}>
+                        {' '}
+                        View here
+                        <img
+                          style={{
+                            transform: 'rotate(180deg)',
+                            width: '13px',
+                            top: '2px',
+                            right: '-16px',
+                            position: 'absolute',
+                          }}
+                          src={ArrowIcons}
+                          alt="arrow"
+                        />
+                      </span>
+                    </p>
+                  </div>
+                </>
               ) : (
                 <OneTimeAgreement
                   agreements={multipleAgreement.filter((op) =>
@@ -492,11 +495,23 @@ export default function AgreementDetails({ id }) {
             </>
           )}
         </>
-        {renderPastAgreementModal()}
+        {showPastAgreements ? (
+          <PastAgreement
+            showPastAgreements={showPastAgreements}
+            setShowPastAgreements={setShowPastAgreements}
+            history={history}
+            id={id}
+            agreements={multipleAgreement.filter(
+              (op) =>
+                op.contract_status && op.contract_status.value === 'inactive',
+            )}
+          />
+        ) : (
+          ''
+        )}
         <Modal
           isOpen={showModal}
           style={customStyles}
-          // ={customStylesForAlert}
           ariaHideApp={false}
           contentLabel="Edit modal">
           <img
@@ -601,98 +616,5 @@ AgreementDetails.propTypes = {
 const CustomerDetailCoppase = styled.div`
   .ReactCollapse--content {
     width: 100%;
-  }
-`;
-const NotesSideBar = styled.div`
-  top: 0;
-  background: #ffff;
-  height: 100%;
-  .footer-sticky {
-    position: fixed;
-    bottom: 0;
-    max-width: 600px;
-    width: 100%;
-    background: white;
-  }
-  .notes-pin-unpin {
-    position: relative;
-
-    .pin-icon {
-      background: #0062ff;
-      padding: 2px;
-      border-radius: 50%;
-      width: 19px;
-      position: absolute;
-      top: 27px;
-      left: 25px;
-      transform: rotate(-46deg);
-    }
-  }
-  .chat-info-icon {
-    position: absolute;
-    right: 47px;
-  }
-  .dropdown-select-all-notes {
-    background-color: rgba(224, 231, 255, 0.2);
-    border: 1px solid ${Theme.gray2};
-    border-radius: 20px;
-    width: 230px;
-    height: 40px;
-    color: ${Theme.black};
-    padding: 11px 2px 0 14px;
-  }
-  .dropdown-notes-filter {
-    background-color: ${Theme.white};
-    border-radius: 8px;
-    box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
-    max-width: 230px;
-    padding: 15px;
-    position: absolute;
-    z-index: 99999;
-    top: 45px;
-    width: 100%;
-
-    &.hide {
-      display: none;
-    }
-    &.show {
-      display: block;
-    }
-    .notes-option {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        padding-bottom: 14px;
-
-        &.checkbox-option {
-          padding-bottom: 4px;
-        }
-
-        &.teams-title {
-          color: ${Theme.gray40};
-          text-transform: uppercase;
-          font-size: 11px;
-          padding: 5px 0 15px 0;
-          font-family: ${Theme.titleFontFamily};
-        }
-      }
-    }
-  }
-  .commemt-inbox-body {
-    height: 80vh;
-    overflow: scroll;
-    padding-bottom: 50px;
-  }
-  @media only screen and (max-width: 767px) {
-    .dropdown-select-all-notes {
-      width: 100%;
-      max-width: 100%;
-    }
-    .commemt-inbox-body {
-      height: 60vh;
-      overflow: scroll;
-    }
   }
 `;

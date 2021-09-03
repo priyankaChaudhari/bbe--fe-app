@@ -174,6 +174,10 @@ import ExternalLinkFile from './icons/external-link.svg';
 import ExternalLinkFileOrange from './icons/external-link-orange.svg';
 import CircleCross from './icons/circle-cross.svg';
 import HandShake from './icons/hand-shake.png';
+import PauseIcon from './icons/pause.svg';
+import CloseCircleIcon from './icons/cancel.svg';
+import CopyIcon from './icons/copy.svg';
+import ViewExternalLink from './icons/view-external-link.svg';
 
 export {
   BannerBg,
@@ -352,4 +356,8 @@ export {
   ExternalLinkFileOrange,
   CircleCross,
   HandShake,
+  PauseIcon,
+  CloseCircleIcon,
+  CopyIcon,
+  ViewExternalLink,
 };
