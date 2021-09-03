@@ -178,6 +178,7 @@ import PauseIcon from './icons/pause.svg';
 import CloseCircleIcon from './icons/cancel.svg';
 import CopyIcon from './icons/copy.svg';
 import ViewExternalLink from './icons/view-external-link.svg';
+import DeleteIcon from './icons/delete.svg';
 
 export {
   BannerBg,
@@ -360,4 +361,5 @@ export {
   CloseCircleIcon,
   CopyIcon,
   ViewExternalLink,
+  DeleteIcon,
 };

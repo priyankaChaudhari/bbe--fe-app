@@ -50,12 +50,13 @@ export default function AmazonMerchant({
   videoData,
   setShowVideo,
   setNoAmazonAccount,
+  apiError,
+  setApiError,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
-  const [apiError, setApiError] = useState({});
   const [latestSellerId, setLatestSellerId] = useState(null);
 
   const mapVideoData = () => {
@@ -167,6 +168,7 @@ export default function AmazonMerchant({
     saveAmazonVendorAccount(
       vendor,
       marketplaceDetails.Vendor && marketplaceDetails.Vendor.id,
+      noAmazonAccount.Vendor,
     ).then((re) => {
       if ((re && re.status === 201) || (re && re.status === 200)) saveDetails();
       if (re && re.status === 400) {
@@ -213,6 +215,7 @@ export default function AmazonMerchant({
         seller,
         (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
           latestSellerId,
+        noAmazonAccount.Seller,
       ).then((res) => {
         if ((res && res.status === 201) || (res && res.status === 200))
           if (marketplaceDetails.type === 'Hybrid') {
@@ -382,24 +385,6 @@ export default function AmazonMerchant({
     );
   };
 
-  const disableBtn = () => {
-    if (
-      formData &&
-      Object.values(formData) &&
-      Object.values(formData).length === 0
-    )
-      return false;
-    if (
-      marketplaceDetails &&
-      marketplaceDetails.type &&
-      Object.values(marketplaceDetails[marketplaceDetails.type]) &&
-      Object.values(marketplaceDetails[marketplaceDetails.type]).length !== 0
-    ) {
-      return true;
-    }
-    return false;
-  };
-
   const generateSaveBtn = (part) => {
     return (
       <>
@@ -408,8 +393,7 @@ export default function AmazonMerchant({
         marketplaceDetails.type === 'Seller' ? (
           <Button
             className="btn-primary w-100 mt-3"
-            onClick={() => saveAccountDetails()}
-            disabled={disableBtn()}>
+            onClick={() => saveAccountDetails()}>
             {' '}
             {isLoading.loader && isLoading.type === 'button' ? (
               <PageLoader color="#fff" type="button" />
@@ -448,13 +432,18 @@ export default function AmazonMerchant({
                   <input
                     placeholder={`Enter ${item.label}`}
                     className="form-control"
-                    onChange={(event) =>
-                      setDefaultValues(item.key, event.target.value, part)
-                    }
+                    onChange={(event) => {
+                      setDefaultValues(item.key, event.target.value, part);
+                      setApiError({
+                        ...apiError,
+                        [item.key]: '',
+                      });
+                    }}
                     defaultValue={mapDefaultValues(item.key, part)}
                     readOnly={isChecked}
                   />
                 </label>
+                <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
               </ContractFormField>
             ))}
         {isChecked ? '' : <>{generateSaveBtn()}</>}
@@ -512,12 +501,13 @@ export default function AmazonMerchant({
             type="checkbox"
             id="Vendor"
             name="Vendor"
-            onChange={(event) =>
+            onChange={(event) => {
               setNoAmazonAccount({
                 ...noAmazonAccount,
                 Vendor: event.target.checked,
-              })
-            }
+              });
+              setApiError({});
+            }}
             readOnly
             checked={noAmazonAccount.Vendor}
           />
@@ -617,6 +607,8 @@ AmazonMerchant.defaultProps = {
   setShowVideo: () => {},
   showVideo: {},
   setNoAmazonAccount: () => {},
+  setApiError: () => {},
+  apiError: {},
 };
 
 AmazonMerchant.propTypes = {
@@ -670,4 +662,6 @@ AmazonMerchant.propTypes = {
     vendor_ad_info: PropTypes.string,
   }).isRequired,
   setNoAmazonAccount: PropTypes.func,
+  setApiError: PropTypes.func,
+  apiError: PropTypes.objectOf(PropTypes.array),
 };

@@ -1172,7 +1172,10 @@ export default function CustomerMainContainer() {
                     />
                   </div>
                   {viewComponent === 'agreement' ? (
-                    <AgreementDetails agreements={agreement} id={id} />
+                    <AgreementDetails
+                      id={id}
+                      userId={userInfo && userInfo.id}
+                    />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />
                   ) : viewComponent === 'company' ? (

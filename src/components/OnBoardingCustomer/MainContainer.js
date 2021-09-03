@@ -80,6 +80,7 @@ export default function MainContainer() {
   const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
+  const [apiError, setApiError] = useState({});
 
   const customStyles = {
     content: {
@@ -364,6 +365,8 @@ export default function MainContainer() {
           videoData={videoData}
           setShowVideo={setShowAmazonVideo}
           setNoAmazonAccount={setNoAmazonAccount}
+          setApiError={setApiError}
+          apiError={apiError}
         />
       );
     if (path === 'amazon-account')
@@ -443,6 +446,7 @@ export default function MainContainer() {
                   : marketplaceDetails.type]: event.target.checked,
               });
               setDisableBtn(false);
+              setApiError({});
             }}
             readOnly
             checked={

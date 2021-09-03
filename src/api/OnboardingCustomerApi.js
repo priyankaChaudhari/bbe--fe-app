@@ -176,10 +176,12 @@ export async function getAmazonAccountDetails(step, id) {
   return result;
 }
 
-export async function saveAmazonSellerAccount(data, id) {
+export async function saveAmazonSellerAccount(data, id, NoAmazonAccount) {
+  const params = { no_amazon_account: NoAmazonAccount };
+
   if (id) {
     const result = await axiosInstance
-      .patch(`${API_AMAZON_SELLER_ACCOUNT + id}/`, data)
+      .patch(`${API_AMAZON_SELLER_ACCOUNT + id}/`, data, { params })
       .then((response) => {
         return response;
       })
@@ -189,7 +191,7 @@ export async function saveAmazonSellerAccount(data, id) {
     return result;
   }
   const result = await axiosInstance
-    .post(API_AMAZON_SELLER_ACCOUNT, data)
+    .post(API_AMAZON_SELLER_ACCOUNT, data, { params })
     .then((response) => {
       return response;
     })
@@ -199,10 +201,11 @@ export async function saveAmazonSellerAccount(data, id) {
   return result;
 }
 
-export async function saveAmazonVendorAccount(data, id) {
+export async function saveAmazonVendorAccount(data, id, NoAmazonAccount) {
+  const params = { no_amazon_account: NoAmazonAccount };
   if (id) {
     const result = await axiosInstance
-      .patch(`${API_AMAZON_VENDOR_ACCOUNT + id}/`, data)
+      .patch(`${API_AMAZON_VENDOR_ACCOUNT + id}/`, data, { params })
       .then((response) => {
         return response;
       })
@@ -212,7 +215,7 @@ export async function saveAmazonVendorAccount(data, id) {
     return result;
   }
   const result = await axiosInstance
-    .post(API_AMAZON_VENDOR_ACCOUNT, data)
+    .post(API_AMAZON_VENDOR_ACCOUNT, data, { params })
     .then((response) => {
       return response;
     })

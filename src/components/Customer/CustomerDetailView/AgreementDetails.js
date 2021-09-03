@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Select, { components } from 'react-select';
@@ -13,11 +13,11 @@ import {
   PageLoader,
   WhiteCard,
   Tabs,
-  // Status,
+  Status,
   ActionDropDown,
   ModalBox,
-  // ContractFormField,
   Button,
+  ContractFormField,
 } from '../../../common';
 import {
   ClockIcon,
@@ -31,13 +31,16 @@ import {
   CopyIcon,
   CaretUp,
   ViewExternalLink,
+  // DeleteIcon,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
 import OneTimeAgreement from './OneTimeAgreement';
+import { createTransactionData } from '../../../api';
+import Theme from '../../../theme/Theme';
 
-export default function AgreementDetails({ id }) {
+export default function AgreementDetails({ id, userId }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [viewComponent, setViewComponent] = useState('current');
@@ -45,13 +48,16 @@ export default function AgreementDetails({ id }) {
     (state) => state.accountState.multipleAgreement,
   );
   const loader = useSelector((state) => state.accountState.isLoading);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({ pause: false });
   const [showPastAgreements, setShowPastAgreements] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const contractOptions = [
     { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
     { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
     { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
     { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+    // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
   ];
 
   const agreementOptions = [
@@ -148,8 +154,10 @@ export default function AgreementDetails({ id }) {
       case 'draft':
         break;
       case 'pause':
+        setShowModal({ pause: true, agreementId });
         break;
       case 'cancel':
+        setShowModal({ cancel: true, agreementId });
         break;
       default:
         break;
@@ -187,11 +195,21 @@ export default function AgreementDetails({ id }) {
                   onClick={() => {
                     setShowModal(true);
                   }}>
-                  {/* <Status
-                    className="mr-2 mb-2"
-                    label="Draft"
-                    backgroundColor={Theme.gray8}
-                  /> */}
+                  {agreement &&
+                  agreement.contract_status &&
+                  agreement.contract_status.value === 'active' ? (
+                    ''
+                  ) : (
+                    <Status
+                      className="mr-2 mb-2"
+                      label={
+                        agreement &&
+                        agreement.contract_status &&
+                        agreement.contract_status.label
+                      }
+                      backgroundColor={Theme.gray8}
+                    />
+                  )}
                   <p className="black-heading-title mt-2 mb-0">
                     {agreement &&
                     agreement.contract_type &&
@@ -275,22 +293,50 @@ export default function AgreementDetails({ id }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  <ActionDropDown>
-                    {' '}
-                    <Select
-                      classNamePrefix="react-select"
-                      placeholder="View Actions"
-                      className="active"
-                      options={contractOptions}
-                      onChange={(event) =>
-                        handleContractOptions(event, agreement.id)
-                      }
-                      components={{
-                        DropdownIndicator,
-                        Option: IconOption,
-                      }}
-                    />
-                  </ActionDropDown>
+                  {agreement.contract_status.value !== 'pending contract' ||
+                  agreement.contract_status.value !==
+                    'pending contract approval' ||
+                  agreement.contract_status.value !== 'pending signature' ? (
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={contractOptions}
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
+                      />
+                    </ActionDropDown>
+                  ) : (
+                    <Link
+                      to={{
+                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                          ':contract_id',
+                          agreement.id,
+                        ),
+                        state:
+                          history &&
+                          history.location &&
+                          history.location.pathname,
+                      }}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Contract
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />
@@ -412,6 +458,75 @@ export default function AgreementDetails({ id }) {
     );
   };
 
+  const generateModals = () => {
+    if (showModal.cancel) {
+      return (
+        <>
+          <p className="black-heading-title text-center mt-3">
+            Cancel Contract
+          </p>
+          <p className="long-text mb-2 text-center ">
+            {' '}
+            Are you sure you would like to request approval to cancel this
+            contract?
+          </p>
+        </>
+      );
+    }
+    if (showModal.pause) {
+      return (
+        <>
+          <h4 className="on-boarding mb-3 pb-2">Pause Contract</h4>
+
+          <p className="long-text mb-2 pb-1">
+            {' '}
+            Before you proceed, please enter the duration to pause this
+            contract.
+          </p>
+          <div className="row">
+            <div className="col-6">
+              <ContractFormField>
+                <Select />
+              </ContractFormField>
+            </div>
+            <div className="col-6">
+              <ContractFormField>
+                <Select />
+              </ContractFormField>
+            </div>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        <p className="black-heading-title text-center  mt-2">Delete Contract</p>
+        <div className="alert-msg pb-3 ">
+          Are you sure you would like to delete this contract?
+          <div className="sure-to-proceed">This action cannot be undone.</div>
+        </div>
+      </>
+    );
+  };
+
+  const saveDetails = () => {
+    setIsLoading(true);
+    const data = {
+      contract: showModal.agreementId,
+      contract_status: 'pending for cancellation',
+      primary_email: 'vchavan+1908@buyboxexperts.com',
+      user: userId,
+    };
+    if (showModal.cancel) {
+      createTransactionData(data).then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          setShowModal(false);
+          setIsLoading(false);
+        }
+      });
+    }
+  };
+
   return (
     <>
       <div className="col-lg-6 col-12">
@@ -510,79 +625,50 @@ export default function AgreementDetails({ id }) {
           ''
         )}
         <Modal
-          isOpen={showModal}
+          isOpen={showModal[Object.keys(showModal)[0]]}
           style={customStyles}
           ariaHideApp={false}
           contentLabel="Edit modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => setShowModal(false)}
-            role="presentation"
-          />
-          {/* <ModalBox>
-            <div className="modal-body">
-              <h4 className="on-boarding mb-3 pb-2">Pause Contract</h4>
+          {showModal.pause ? (
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setShowModal(false)}
+              role="presentation"
+            />
+          ) : (
+            ''
+          )}
 
-              <p className="long-text mb-2 pb-1">
-                {' '}
-                Before you proceed, please enter the duration to pause this
-                contract.
-              </p>
-              <div className="row">
-                <div className="col-6">
-                  <ContractFormField>
-                    <Select />
-                  </ContractFormField>
-                </div>
-                <div className="col-6">
-                  <ContractFormField>
-                    <Select />
-                  </ContractFormField>
-                </div>
-              </div>
-              <div className="row mt-1">
-                <div className="col-6 mt-4">
-                  <Button className="btn-primary w-100">
-                    Confirm Duration
-                  </Button>
-                </div>
-                <div className="col-6 mt-4">
-                  <Button className="btn-transparent w-100">Cancel</Button>
-                </div>
-              </div>
-            </div>
-          </ModalBox> */}
           <ModalBox>
             <div className="modal-body">
-              {/* <p className="black-heading-title text-center mt-3">
-                Cancel Contract
-              </p>
-              <p className="long-text mb-2 text-center ">
-                {' '}
-                Are you sure you would like to request approval to cancel this
-                contract?
-              </p> */}
-              <p className="black-heading-title text-center  mt-2">
-                Delete Contract
-              </p>
-              <div className="alert-msg pb-3 ">
-                Are you sure you would like to delete this contract?
-                <div className="sure-to-proceed">
-                  This action cannot be undone.
-                </div>
-              </div>
-
-              <div className="row ">
-                <div className="col-6 mt-3">
-                  <Button className="btn-primary w-100">
-                    Request Approval
+              {generateModals()}
+              <div className="row mt-1">
+                <div className="col-6 mt-4">
+                  <Button
+                    className="btn-primary w-100"
+                    onClick={() => saveDetails()}>
+                    {isLoading ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : showModal.cancel ? (
+                      'Request Approval'
+                    ) : showModal.pause ? (
+                      'Confirm Duration'
+                    ) : (
+                      'Confirm Delete'
+                    )}
                   </Button>
                 </div>
-                <div className="col-6 mt-3">
-                  <Button className="btn-transparent w-100">
-                    Don&lsquo;t Request
+                <div className="col-6 mt-4">
+                  <Button
+                    className="btn-transparent w-100"
+                    onClick={() => setShowModal(false)}>
+                    {showModal.cancel
+                      ? "Don't Request"
+                      : showModal.pause
+                      ? 'Cancel'
+                      : "Don't Delete"}
                   </Button>
                 </div>
               </div>
@@ -611,6 +697,7 @@ AgreementDetails.propTypes = {
       name: PropTypes.string,
     }),
   }).isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`
