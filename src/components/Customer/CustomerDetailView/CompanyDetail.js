@@ -35,7 +35,6 @@ export default function CompanyDetail({
   };
   const contactInfo = useSelector((state) => state.customerState.contactData);
   const [showModal, setShowModal] = useState(false);
-  const userInfo = useSelector((state) => state.userState.userInfo);
   const [scrollDown, setScrollDown] = useState(false);
 
   const generateSocialIcon = (item) => {
@@ -177,16 +176,8 @@ export default function CompanyDetail({
                 Edit
               </div>
             </WhiteCard>
-            {userInfo && userInfo.role !== 'Customer' ? (
-              <>{getContactCard()}</>
-            ) : (
-              <>{getSocialIcons()}</>
-            )}
-            {userInfo && userInfo.role !== 'Customer' ? (
-              <>{getSocialIcons()}</>
-            ) : (
-              ''
-            )}
+            <>{getContactCard()}</>
+            <>{getSocialIcons()}</>
           </div>
 
           <div className="col-lg-6 col-md-6 col-12 mt-3">
@@ -214,12 +205,10 @@ export default function CompanyDetail({
             id={id}
             customer={customer}
             showModal={showModal}
-            // amazonDetails={amazonDetails}
             getAmazon={getAmazon}
             getActivityLogInfo={getActivityLogInfo}
             scrollDown={scrollDown}
             setScrollDown={setScrollDown}
-            userInfo={userInfo}
           />
         </Modal>
       </div>

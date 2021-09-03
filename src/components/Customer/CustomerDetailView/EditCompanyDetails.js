@@ -50,7 +50,6 @@ export default function EditCompanyDetails({
   getActivityLogInfo,
   scrollDown,
   setScrollDown,
-  userInfo,
 }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -726,61 +725,58 @@ export default function EditCompanyDetails({
                 )}
               </React.Fragment>
             ))}
-            {userInfo && userInfo.role !== 'Customer' ? (
-              <>
-                <div className="col-12">
-                  <div className="heading  mt-3 mb-3">Contact Details</div>
-                  {contactInfo.length === 0 &&
-                  contactDetails.length === 0 &&
-                  !loader ? (
-                    <div className="mb-2 pb-3" style={{ color: '#2E384D' }}>
-                      <img
-                        className="mr-3"
-                        src={NoContactIcon}
-                        alt="noContact"
-                        style={{ verticalAlign: 'middle' }}
-                      />
-                      No Contact Details Found.
-                    </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
 
-                {loader ? (
-                  <PageLoader color="#FF5933" type="buttonContact" />
-                ) : (
-                  <>
-                    {generateContactHTML(contactInfo)}
-                    {generateContactHTML(contactDetails)}
-                  </>
-                )}
-                <div className="col-12">
-                  <Button
-                    className={
-                      (contactDetails && contactDetails.length === 1) ||
-                      (contactApiError && Object.values(contactApiError).length)
-                        ? 'btn-add-contact  disabled'
-                        : 'btn-add-contact '
-                    }
-                    onClick={() => addNewContact()}
-                    disabled={
-                      (contactDetails && contactDetails.length === 1) ||
-                      (contactApiError && Object.values(contactApiError).length)
-                    }>
-                    {' '}
+            <>
+              <div className="col-12">
+                <div className="heading  mt-3 mb-3">Contact Details</div>
+                {contactInfo.length === 0 &&
+                contactDetails.length === 0 &&
+                !loader ? (
+                  <div className="mb-2 pb-3" style={{ color: '#2E384D' }}>
                     <img
-                      className="mr-2 add-new-icon "
-                      src={AddNewIcons}
-                      alt="add-icon"
+                      className="mr-3"
+                      src={NoContactIcon}
+                      alt="noContact"
+                      style={{ verticalAlign: 'middle' }}
                     />
-                    Add New Contact
-                  </Button>
-                </div>
-              </>
-            ) : (
-              ''
-            )}
+                    No Contact Details Found.
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+
+              {loader ? (
+                <PageLoader color="#FF5933" type="buttonContact" />
+              ) : (
+                <>
+                  {generateContactHTML(contactInfo)}
+                  {generateContactHTML(contactDetails)}
+                </>
+              )}
+              <div className="col-12">
+                <Button
+                  className={
+                    (contactDetails && contactDetails.length === 1) ||
+                    (contactApiError && Object.values(contactApiError).length)
+                      ? 'btn-add-contact  disabled'
+                      : 'btn-add-contact '
+                  }
+                  onClick={() => addNewContact()}
+                  disabled={
+                    (contactDetails && contactDetails.length === 1) ||
+                    (contactApiError && Object.values(contactApiError).length)
+                  }>
+                  {' '}
+                  <img
+                    className="mr-2 add-new-icon "
+                    src={AddNewIcons}
+                    alt="add-icon"
+                  />
+                  Add New Contact
+                </Button>
+              </div>
+            </>
           </div>
         </div>
       </div>
@@ -824,7 +820,4 @@ EditCompanyDetails.propTypes = {
   getActivityLogInfo: PropTypes.func.isRequired,
   setScrollDown: PropTypes.func.isRequired,
   scrollDown: PropTypes.bool,
-  userInfo: PropTypes.shape({
-    role: PropTypes.string,
-  }).isRequired,
 };

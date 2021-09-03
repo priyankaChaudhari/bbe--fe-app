@@ -173,6 +173,7 @@ import HelpDeskIcon from './icons/helpdesk.png';
 import ExternalLinkFile from './icons/external-link.svg';
 import ExternalLinkFileOrange from './icons/external-link-orange.svg';
 import CircleCross from './icons/circle-cross.svg';
+import HandShake from './icons/hand-shake.png';
 
 export {
   BannerBg,
@@ -350,4 +351,5 @@ export {
   ExternalLinkFile,
   ExternalLinkFileOrange,
   CircleCross,
+  HandShake,
 };

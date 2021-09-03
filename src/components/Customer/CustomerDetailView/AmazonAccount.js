@@ -240,7 +240,7 @@ export default function AmazonAccount({
               <div className="copy-info" key={item.key}>
                 <div className="label mt-3">{item.label}</div>
                 <div className="label-info card-title">
-                  {mapDefaultValues(item.key, part) || `No ${item.label}.`}
+                  {mapDefaultValues(item.key, part) || 'None'}
                 </div>
                 <div
                   className="copy-text"

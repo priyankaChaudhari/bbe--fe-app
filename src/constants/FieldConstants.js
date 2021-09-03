@@ -1057,7 +1057,7 @@ export const BrandSteps = [
 export const additionaMarketplaceAmount = 1500;
 
 export const managementLink =
-  'https://docs.google.com/forms/d/e/1FAIpQLScmUYT0PQqs5aYX1p4PefdccjArf7sbyWyh-7rRbC5gptAEwQ/viewform';
+  'https://sites.google.com/buyboxexperts.com/employee-engagement/home';
 export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
 

@@ -30,8 +30,8 @@ import {
   OrganizationActiveIcon,
   SpeedometerActive,
   Speedometer,
-  HelpIcon,
   HelpDeskIcon,
+  HandShake,
 } from '../theme/images/index';
 
 import { logout, showProfileLoader, userMe } from '../store/actions/userState';
@@ -382,7 +382,8 @@ export default function Header({ type, userInfo }) {
                               onClick={() =>
                                 window.open(managementLink, '_blank')
                               }>
-                              <img src={HelpIcon} alt="edit" /> Management Q&A
+                              <img src={HandShake} alt="edit" />
+                              Employee Engagement
                             </li>
                             <li
                               role="presentation"
