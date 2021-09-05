@@ -121,7 +121,7 @@ export default function AgreementDetails({ id, userId }) {
           marginRight: '9px',
           height: '20px',
           verticalAlign: 'middle',
-          width: '20px',
+          width: '18px',
         }}
       />
       {dataProps.data.label}
@@ -176,10 +176,10 @@ export default function AgreementDetails({ id, userId }) {
         fields.push(
           <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
             <div className="row">
-              <div className="col-lg-9 col-md-8 col-12">
+              <div className="col-lg-9 col-md-9 col-12">
                 <img
                   width="48px"
-                  className="solid-icon"
+                  className="solid-icon mb-2"
                   src={
                     agreement &&
                     agreement.contract_type &&
@@ -190,7 +190,7 @@ export default function AgreementDetails({ id, userId }) {
                   alt=""
                 />
                 <div
-                  className="contract-status"
+                  className="contract-status mb-2"
                   role="presentation"
                   onClick={() => {
                     setShowModal(true);
@@ -210,7 +210,7 @@ export default function AgreementDetails({ id, userId }) {
                       backgroundColor={Theme.gray8}
                     />
                   )}
-                  <p className="black-heading-title mt-2 mb-0">
+                  <p className="black-heading-title mt-0 mb-0">
                     {agreement &&
                     agreement.contract_type &&
                     agreement.contract_type.toLowerCase().includes('notice')
@@ -288,7 +288,7 @@ export default function AgreementDetails({ id, userId }) {
                 agreement.contract_status.value === 'active') &&
               agreement.contract_url === null ? null : (
                 <div
-                  className="col-lg-3  pl-0 col-md-4 col-12 text-right"
+                  className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
                   role="presentation"
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)

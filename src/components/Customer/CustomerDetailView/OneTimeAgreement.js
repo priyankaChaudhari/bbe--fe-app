@@ -27,14 +27,15 @@ export default function OneTimeAgreement({ agreements, id, history }) {
   return (
     <>
       <div
-        className="m-2 cursor"
-        style={{ color: 'black' }}
+        className=" mt-4  mb-3 cursor "
+        style={{ color: '#171725', fontSize: '14px' }}
         onClick={() => addNewOneTime()}
         role="presentation">
         <img
+          width="16px"
+          style={{ verticalAlign: 'middle' }}
           src={AddIcons}
-          className="mr-1"
-          style={{ width: '18px' }}
+          className="mr-2"
           alt="add"
         />
         New One Time Service Contract
@@ -103,23 +104,21 @@ export default function OneTimeAgreement({ agreements, id, history }) {
                 </div>
 
                 <div className="DSP-contract-retainer">
-                  <div className="row ">
-                    <div className="label mb-2">One Time Services</div>
-                    {agreement && agreement.additional_one_time_services ? (
-                      <ul className="selected-list">
-                        {agreement.additional_one_time_services.map((item) => (
-                          <li key={item.id}>
-                            {(item && item.service && item.service.name) || ''}{' '}
-                            ({(item && item.quantity) || ''})
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="mt-3 ml-3 text-center">
-                        No One Time services added.
-                      </div>
-                    )}
-                  </div>
+                  <div className="label mb-2">One Time Services</div>
+                  {agreement && agreement.additional_one_time_services ? (
+                    <ul className="selected-list">
+                      {agreement.additional_one_time_services.map((item) => (
+                        <li key={item.id}>
+                          {(item && item.service && item.service.name) || ''} (
+                          {(item && item.quantity) || ''})
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="mt-3 ml-3 text-center">
+                      No One Time services added.
+                    </div>
+                  )}
                 </div>
               </WhiteCard>
             ))}

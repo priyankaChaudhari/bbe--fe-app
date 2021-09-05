@@ -382,7 +382,11 @@ export default function Header({ type, userInfo }) {
                               onClick={() =>
                                 window.open(managementLink, '_blank')
                               }>
-                              <img src={HandShake} alt="edit" />
+                              <img
+                                className="mr-2"
+                                src={HandShake}
+                                alt="edit"
+                              />
                               Employee Engagement
                             </li>
                             <li
@@ -828,7 +832,7 @@ const MainHeader = styled.div`
   .dropdown-content {
     display: none;
     position: absolute;
-    max-width: 200px;
+    width: 210px;
     box-shadow: ${Theme.commonShadow};
     padding: 0px;
     z-index: 999999;
@@ -836,7 +840,7 @@ const MainHeader = styled.div`
     background: ${Theme.white};
     border: 1px solid ${Theme.gray9};
     margin-top: 8px;
-    margin-left: -140px;
+    margin-left: -160px;
 
     li {
       list-style-type: none;

@@ -27,7 +27,7 @@ const ActionDropDown = styled.div`
       cursor: pointer;
 
       .css-g1d714-ValueContainer {
-        padding: 1px 20px 1px 5px !important;
+        // padding: 1px 20px 1px 5px !important;
         // color: ${Theme.gray85} !important;
         font-weight: 500px;
         cursor: pointer;
@@ -75,7 +75,7 @@ const ActionDropDown = styled.div`
         margin: 0;
       }
       .css-g1d714-ValueContainer {
-        padding: 1px 20px 1px 5px !important;
+        // padding: 1px 20px 1px 5px !important;
       }
 
       // .cross-icon {
@@ -88,9 +88,9 @@ const ActionDropDown = styled.div`
       .remove-icon {
         display: none;
       }
-      // .css-1gtu0rj-indicatorContainer {
-      //   padding: 5px;
-      // }
+      .css-1gtu0rj-indicatorContainer {
+        padding: 5px;
+      }
 
       .css-1wa3eu0-placeholder {
         color: ${Theme.black};
@@ -105,6 +105,16 @@ const ActionDropDown = styled.div`
 
     .css-1okebmr-indicatorSeparator {
       display: none;
+    }
+    .css-26l3qy-menu {
+      width: 200px;
+      margin-left: -50px;
+      border: none !important;
+      outline: none !important;
+      box-shawdow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
+      .react-select__option {
+        padding: 15px 0 15px 10px;
+      }
     }
   }
 `;
