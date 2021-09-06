@@ -77,6 +77,18 @@ function ContractActivityLog({
           dispalyStatus = 'Inactive';
           break;
 
+        case 'cancel':
+          statusClass = '';
+          statusSrc = '';
+          dispalyStatus = 'Cancel';
+          break;
+
+        case 'pending for cancellation':
+          statusClass = '';
+          statusSrc = '';
+          dispalyStatus = 'Pending for cancellation';
+          break;
+
         default:
           statusClass = 'pending-contract';
           statusSrc = 'FileIcon';

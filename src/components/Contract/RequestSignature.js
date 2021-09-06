@@ -443,6 +443,8 @@ function RequestSignature({
           setShowModal(false);
           removeParams('step');
           toast.success('Approval Requested!');
+          getContractDetails();
+
           // setShowSuccessContact({ message: 'Approval Requested!', show: true });
           // setTimeout(() => clearSuccessMessage(), 3000);
 

@@ -356,8 +356,16 @@ function Discount({
                   </div>
                 </label>
                 <ErrorMsg>
-                  {apiError && apiError.monthly_discount_amount}
-                  {apiError && apiError.one_time_discount_amount}
+                  {apiError && apiError.monthly_discount_amount
+                    ? `${
+                        apiError && apiError.monthly_discount_amount
+                      } (if additional services are newly added, Please save the changes)`
+                    : ''}
+                  {apiError && apiError.one_time_discount_amount
+                    ? `${
+                        apiError && apiError.one_time_discount_amount
+                      } (if additional services are newly added, Please save the changes)`
+                    : ''}
                 </ErrorMsg>
               </>
             ) : (
@@ -401,8 +409,16 @@ function Discount({
                   </div>
                 </label>
                 <ErrorMsg>
-                  {apiError && apiError.monthly_discount_amount}
-                  {apiError && apiError.one_time_discount_amount}
+                  {apiError && apiError.monthly_discount_amount
+                    ? `${
+                        apiError && apiError.monthly_discount_amount
+                      } (if additional services are newly added, Please save the changes)`
+                    : ''}
+                  {apiError && apiError.one_time_discount_amount
+                    ? `${
+                        apiError && apiError.one_time_discount_amount
+                      } (if additional services are newly added, Please save the changes)`
+                    : ''}
                 </ErrorMsg>
               </>
             ) : (

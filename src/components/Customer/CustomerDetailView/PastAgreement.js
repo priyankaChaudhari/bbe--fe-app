@@ -36,8 +36,6 @@ export default function PastAgreement({
     },
   };
 
-  const downloadPDF = () => {};
-
   return (
     <Modal
       isOpen={showPastAgreements}
@@ -119,14 +117,22 @@ export default function PastAgreement({
                         ? dayjs(item.end_date).format('DD/MM/YYYY')
                         : ''}
 
-                      <img
-                        className="orange-icon cursor"
-                        width="18px"
-                        src={OrangeDownloadPdf}
-                        alt="download"
-                        onClick={() => downloadPDF()}
-                        role="presentation"
-                      />
+                      <a
+                        className="download-pdf-link"
+                        href={
+                          item && item.contract_url
+                            ? item && item.contract_url
+                            : null
+                        }
+                        download>
+                        <img
+                          className="orange-icon cursor"
+                          width="18px"
+                          src={OrangeDownloadPdf}
+                          alt="download"
+                          role="presentation"
+                        />
+                      </a>
                     </td>
                   </tr>
                 ))}

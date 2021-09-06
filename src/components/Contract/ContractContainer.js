@@ -343,18 +343,25 @@ export default function ContractContainer() {
     }
   }
 
+  const checkContractStatus = () => {
+    if (details && details.contract_status) {
+      if (
+        details.contract_status.value === 'pending account setup' ||
+        details.contract_status.value === 'active' ||
+        details.contract_status.value === 'renewed' ||
+        details.contract_status.value === 'cancel' ||
+        details.contract_status.value === 'pending for cancellation' ||
+        details.contract_status.value === 'inactive'
+      ) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  };
+
   if (isDocRendered && formData && formData.id) {
-    if (
-      (formData &&
-        formData.contract_status &&
-        formData.contract_status.value === 'active') ||
-      (formData &&
-        formData.contract_status &&
-        formData.contract_status.value === 'inactive') ||
-      (details &&
-        details.contract_status &&
-        details.contract_status.value === 'renewed')
-    ) {
+    if (checkContractStatus()) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
     }
@@ -433,6 +440,7 @@ export default function ContractContainer() {
     }
   };
   const isMounted = useRef(false);
+
   useEffect(() => {
     if (isMounted.current) {
       setIsLoading({ loader: true, type: 'page' });
@@ -2626,6 +2634,15 @@ export default function ContractContainer() {
       return true;
     }
 
+    // if (
+    //   details &&
+    //   details.contract_type &&
+    //   details.contract_type.toLowerCase().includes('one') &&
+    //   details &&
+    //   details.hs_deal_id === null
+    // ) {
+    //   return true;
+    // }
     if (
       newAddendumData &&
       newAddendumData.addendum &&
@@ -3003,6 +3020,7 @@ export default function ContractContainer() {
         renderEditContractBtn={renderEditContractBtn}
         showDiscardModal={showDiscardModal}
         createAgreementDoc={createAgreementDoc}
+        setIsLoading={setIsLoading}
       />
     );
   };
@@ -3042,18 +3060,7 @@ export default function ContractContainer() {
       />
       {showPageNotFound ? (
         <PageNotFound />
-      ) : (details &&
-          details.contract_status &&
-          details.contract_status.value === 'pending account setup') ||
-        (details &&
-          details.contract_status &&
-          details.contract_status.value === 'active') ||
-        (details &&
-          details.contract_status &&
-          details.contract_status.value === 'renewed') ||
-        (details &&
-          details.contract_status &&
-          details.contract_status.value === 'inactive') ? (
+      ) : checkContractStatus() ? (
         <>
           <ContractTab className="d-lg-none d-block">
             <ul className="tabs">
@@ -3182,6 +3189,13 @@ export default function ContractContainer() {
                 (isTablet && tabInResponsive === 'edit-fields') ||
                 (isMobile && tabInResponsive === 'edit-fields')
                   ? displayRightSidePanel()
+                  : ''}
+                {details &&
+                details.contract_status &&
+                details.contract_status.value === 'pending for cancellation' &&
+                userInfo &&
+                userInfo.role === 'BGS Manager'
+                  ? displayFooter()
                   : ''}
               </>
             )}

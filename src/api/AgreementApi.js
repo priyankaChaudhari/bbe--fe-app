@@ -17,6 +17,7 @@ import {
   API_ACTIVITY_LOG,
   API_CUSTOMER_CONTRACT,
   API_SERVICES_FEE,
+  API_CUSTOMER,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -317,6 +318,18 @@ export async function getServicesFee() {
 export async function createContract(data) {
   const result = await axiosInstance
     .post(API_CUSTOMER_CONTRACT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBGSManagers(id) {
+  const result = await axiosInstance
+    .get(`${API_CUSTOMER + id}/get-bgs-manager/`)
     .then((response) => {
       return response;
     })

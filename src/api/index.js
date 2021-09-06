@@ -101,6 +101,7 @@ export {
   checksignatureStatus,
   getContractActivityLog,
   createContract,
+  getBGSManagers,
 } from './AgreementApi';
 
 // Knowledge Base
