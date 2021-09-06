@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 // import { DateRange } from 'react-date-range';
-import { enGB } from 'react-date-range/src/locale';
+// import { enGB } from 'react-date-range/src/locale';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import styled from 'styled-components';
 import { func } from 'prop-types';
@@ -33,19 +33,12 @@ export default function FinanceDSP({
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
 
-  // const [customDate, setCustomDate] = useState([
-  //   {
-  //     startDate: currentDate,
-  //     endDate: currentDate,
-  //   },
-  // ]);
-
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setDummayDateType(selectedDateType);
-      setShowDropdown({ show: false });
-    }
-  };
+  // const handleClickOutside = (event) => {
+  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //     setShowDropdown({ show: false });
+  //     setDummayDateType(selectedDateType);
+  //   }
+  // };
 
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate).then((res) => {
@@ -65,10 +58,10 @@ export default function FinanceDSP({
       getDSPdata(dummyDateType);
       setResponseId('12345');
     }
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
+    // document.addEventListener('click', handleClickOutside, true);
+    // return () => {
+    //   document.removeEventListener('click', handleClickOutside, true);
+    // };
   }, []);
 
   const handleTimeTypeChange = (event) => {
@@ -180,7 +173,7 @@ export default function FinanceDSP({
               value={state}
               monthPlaceholder="MMM"
               yearPlaceholder="yyyy"
-              locale={enGB}
+              // locale={enGB}
               tileClassName
             />
           </div>
