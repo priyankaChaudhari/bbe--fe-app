@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -58,7 +58,14 @@ export default function AmazonMerchant({
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
-  const [latestSellerId, setLatestSellerId] = useState(null);
+  const [latestId, setLatestId] = useState({ Seller: null, Vendor: null });
+
+  useEffect(() => {
+    setFormData({
+      Seller: marketplaceDetails.Seller,
+      Vendor: marketplaceDetails.Vendor,
+    });
+  }, [marketplaceDetails]);
 
   const mapVideoData = () => {
     if (marketplaceDetails.type === 'Hybrid') {
@@ -183,13 +190,13 @@ export default function AmazonMerchant({
     saveAmazonSellerAccount(
       seller,
       (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
-        latestSellerId,
+        latestId.Seller,
       noAmazonAccount.Seller,
     ).then((res) => {
-      if ((res && res.status === 201) || (res && res.status === 200)) {
+      if ((res && res.status === 201) || (res && res.status === 200))
         saveDetails();
-        setLatestSellerId(res && res.data && res.data.id);
-      }
+      // setLatestId({ ...latestId, Seller: res && res.data && res.data.id });
+
       if (res && res.status === 400) {
         setApiError(res && res.data);
         setIsLoading({ loader: false, type: 'button' });
@@ -226,81 +233,76 @@ export default function AmazonMerchant({
           marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
         });
 
-    if (marketplaceDetails.type === 'Seller') {
-      if (formData.Seller === undefined) saveDetails();
-      else sellerAccount(seller);
-    }
-    if (marketplaceDetails.type === 'Vendor') {
-      if (formData.Vendor === undefined) saveDetails();
-      else vendorAccount(vendor);
-    }
+    if (marketplaceDetails.type === 'Seller') sellerAccount(seller);
+    if (marketplaceDetails.type === 'Vendor') vendorAccount(vendor);
     if (marketplaceDetails.type === 'Hybrid') {
-      if (formData.Seller === undefined && formData.Vendor === undefined)
-        saveDetails();
-      else
-        axios
-          .all([
-            saveAmazonSellerAccount(
-              seller,
-              (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
-                latestSellerId,
-              noAmazonAccount.Seller,
-            ),
-            saveAmazonVendorAccount(
-              vendor,
-              marketplaceDetails.Vendor && marketplaceDetails.Vendor.id,
-              noAmazonAccount.Vendor,
-            ),
-          ])
-          .then(
-            axios.spread((...res) => {
-              setLatestSellerId(res[0] && res[0].id);
-              if (
-                ((res[0] && res[0].status === 201) ||
-                  (res[0] && res[0].status === 201)) &&
-                ((res[1] && res[1].status === 201) ||
-                  (res[1] && res[1].status === 201))
-              )
-                saveDetails();
-              if (
-                (res[0] && res[0].status === 400) ||
-                (res[1] && res[1].status === 400)
-              ) {
-                setApiError({ Seller: res[0].data, Vendor: res[1].data });
-                setIsLoading({ loader: false, type: 'button' });
-                if (marketplaceDetails.type === 'Hybrid') {
-                  document.body.scrollTop = 500; // For Safari
-                  document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
-                }
+      axios
+        .all([
+          saveAmazonSellerAccount(
+            seller,
+            (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
+              latestId.Seller,
+            noAmazonAccount.Seller,
+          ),
+          saveAmazonVendorAccount(
+            vendor,
+            (marketplaceDetails.Vendor && marketplaceDetails.Vendor.id) ||
+              latestId.Vendor,
+            noAmazonAccount.Vendor,
+          ),
+        ])
+        .then(
+          axios.spread((...res) => {
+            setLatestId({
+              Seller: res[0] && res[0].data && res[0].data.id,
+              Vendor: res[1] && res[1].data && res[1].data.id,
+            });
+            if (
+              ((res[0] && res[0].status === 201) ||
+                (res[0] && res[0].status === 200)) &&
+              ((res[1] && res[1].status === 201) ||
+                (res[1] && res[1].status === 200))
+            )
+              saveDetails();
+            if (
+              (res[0] && res[0].status === 400) ||
+              (res[1] && res[1].status === 400)
+            ) {
+              setApiError({ Seller: res[0].data, Vendor: res[1].data });
+              setIsLoading({ loader: false, type: 'button' });
+              if (marketplaceDetails.type === 'Hybrid') {
+                document.body.scrollTop = 500; // For Safari
+                document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
               }
-            }),
-          );
+            }
+          }),
+        );
     }
   };
 
-  const disableBtn = () => {
-    if (marketplaceDetails.type !== 'Hybrid') {
-      if (noAmazonAccount[marketplaceDetails.type]) return false;
-      if (
-        marketplaceDetails[marketplaceDetails.type] === null &&
-        formData &&
-        Object.keys(formData) &&
-        Object.keys(formData).length === 0
-      )
-        return true;
-      return false;
-    }
-    if (noAmazonAccount.Seller || noAmazonAccount.Vendor) return false;
-    if (
-      (marketplaceDetails.Seller === null ||
-        marketplaceDetails.Vendor === null) &&
-      formData &&
-      Object.keys(formData) &&
-      Object.keys(formData).length === 0
-    )
-      return true;
-    return false;
-  };
+  // const disableBtn = () => {
+  //   if (marketplaceDetails.type !== 'Hybrid') {
+  //     if (noAmazonAccount[marketplaceDetails.type]) return false;
+  //     if (
+  //       marketplaceDetails[marketplaceDetails.type] === null &&
+  //       formData &&
+  //       Object.keys(formData) &&
+  //       Object.keys(formData).length === 0
+  //     )
+  //       return true;
+  //     return false;
+  //   }
+  //   if (noAmazonAccount.Seller || noAmazonAccount.Vendor) return false;
+  //   if (
+  //     (marketplaceDetails.Seller === null ||
+  //       marketplaceDetails.Vendor === null) &&
+  //     formData &&
+  //     Object.keys(formData) &&
+  //     Object.keys(formData).length === 0
+  //   )
+  //     return true;
+  //   return false;
+  // };
 
   const generateAmazon = (part) => {
     return (
@@ -361,6 +363,8 @@ export default function AmazonMerchant({
       marketplaceDetails[marketplaceDetails.type][item]
     );
   };
+
+  console.log(formData);
 
   const setDefaultValues = (item, value, part) => {
     if (marketplaceDetails.type === 'Hybrid') {
@@ -559,8 +563,7 @@ export default function AmazonMerchant({
     return (
       <Button
         className="btn-primary w-100 mt-3"
-        onClick={() => saveAccountDetails()}
-        disabled={disableBtn()}>
+        onClick={() => saveAccountDetails()}>
         {' '}
         {isLoading.loader && isLoading.type === 'button' ? (
           <PageLoader color="#fff" type="button" />
