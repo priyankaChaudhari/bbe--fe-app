@@ -211,7 +211,9 @@ export default function FinanceInvoices({
           <Status
             className="float-right"
             label={item.invoice_status}
-            backgroundColor={InvoiceStatusColorSet[item.invoice_status]}
+            backgroundColor={
+              InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
+            }
           />
           <div className="clear-fix" />
         </td>
@@ -227,17 +229,17 @@ export default function FinanceInvoices({
             <th width="38%" className="product-header">
               Invoice Type / Number
             </th>
-            <th width="18%" className="product-header">
+            <th width="17%" className="product-header">
               Amount
             </th>
-            <th width="18%" className="product-header">
+            <th width="17%" className="product-header">
               Created On
             </th>
-            <th width="18%" className="product-header">
+            <th width="17%" className="product-header">
               {' '}
               Due
             </th>
-            <th width="28%" className="product-header text-right pr-2">
+            <th width="31%" className="product-header text-right pr-2">
               {' '}
               Status
             </th>
@@ -278,7 +280,9 @@ export default function FinanceInvoices({
               label2="DUE"
               labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
               status={item.invoice_status}
-              statusColor={InvoiceStatusColorSet[item.invoice_status]}
+              statusColor={
+                InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
+              }
             />
           ))
         ) : (
@@ -332,7 +336,7 @@ export default function FinanceInvoices({
                 />
               </>
             ) : (
-              <NoData>no Data</NoData>
+              <NoData>Invoice Data Not Available</NoData>
             )}
           </WhiteCard>
         ) : (

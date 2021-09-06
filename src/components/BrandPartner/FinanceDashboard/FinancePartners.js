@@ -300,7 +300,7 @@ export default function FinancePartners({
                 />
               </>
             ) : (
-              <NoData>no Data</NoData>
+              <NoData>Partner Data Not Available</NoData>
             )}
           </WhiteCard>
         ) : (
