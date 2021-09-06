@@ -325,9 +325,7 @@ export default function AmazonMerchant({
           }
           target="_blank"
           rel="noopener noreferrer">
-          <Button
-            className="btn-transparent font-style-regular w-100 mt-4"
-            disabled={disableBtn()}>
+          <Button className="btn-transparent font-style-regular w-100 mt-4">
             Log into Amazon{' '}
             {(marketplaceDetails.type === 'Hybrid' && part === 1) ||
             marketplaceDetails.type === 'Seller'
