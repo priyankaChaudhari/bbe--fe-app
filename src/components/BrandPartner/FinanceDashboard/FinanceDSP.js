@@ -35,6 +35,21 @@ export default function FinanceDSP({
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
 
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
   // const handleClickOutside = (event) => {
   //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
   //     setShowDropdown({ show: false });
@@ -110,7 +125,12 @@ export default function FinanceDSP({
     if (selectedDateType === 'allTime') {
       return 'All-Time';
     }
-    return 'Custom Range';
+    const customDateLabel = `${
+      monthNames[state[0].getMonth() + 1]
+    } '${state[0].getFullYear()} - ${
+      monthNames[state[1].getMonth() + 1]
+    } '${state[1].getFullYear()}`;
+    return customDateLabel;
   };
 
   const displayTimeFilterOption = () => {
