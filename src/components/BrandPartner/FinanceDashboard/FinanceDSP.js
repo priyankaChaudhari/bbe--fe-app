@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { func } from 'prop-types';
 import { Card, ModalRadioCheck, Button } from '../../../common';
 import { CaretUp, CloseIcon } from '../../../theme/images/index';
+import ErrorMsg from '../../../common/ErrorMsg';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
@@ -28,6 +29,7 @@ export default function FinanceDSP({
   const [dummyDateType, setDummayDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
+  const [dateError, setDateError] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -69,24 +71,29 @@ export default function FinanceDSP({
   };
 
   const handleApply = () => {
-    let sd = state[0];
-    let ed = state[1];
-    setSelectedDateType(dummyDateType);
-    setTimeFrameType(dummyDateType);
-    setShowDropdown({ show: !showDropdown.show });
-    setIsTimeFrameChange(true);
-    if (dummyDateType === 'custom') {
-      sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
-      ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
-      setTimeFrame({
-        startDate: sd,
-        endDate: ed,
-      });
+    if (state !== null) {
+      setDateError(null);
+      let sd = state[0];
+      let ed = state[1];
+      setSelectedDateType(dummyDateType);
+      setTimeFrameType(dummyDateType);
+      setShowDropdown({ show: !showDropdown.show });
+      setIsTimeFrameChange(true);
+      if (dummyDateType === 'custom') {
+        sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
+        ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
+        setTimeFrame({
+          startDate: sd,
+          endDate: ed,
+        });
 
-      getDSPdata(dummyDateType, sd, ed);
-      return;
+        getDSPdata(dummyDateType, sd, ed);
+        return;
+      }
+      getDSPdata(dummyDateType);
+    } else {
+      setDateError('Please select valid date');
     }
-    getDSPdata(dummyDateType);
   };
 
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
@@ -173,11 +180,11 @@ export default function FinanceDSP({
               value={state}
               monthPlaceholder="MMM"
               yearPlaceholder="yyyy"
-              // locale={enGB}
-              tileClassName
+              onCalendarClose={() => setDateError(null)}
             />
           </div>
         ) : null}
+        <ErrorMsg className="text-left">{dateError}</ErrorMsg>
         <Button
           className="btn-primary w-100 mt-3"
           onClick={() => handleApply()}>

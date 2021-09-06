@@ -90,7 +90,7 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
     BGS: PATH_BGS_DASHBOARD,
     'BGS Manager': PATH_BGS_DASHBOARD,
-    finance: PATH_FINANCE_DASHBOARD,
+    Finance: PATH_FINANCE_DASHBOARD,
   };
 
   if (params && params.callback) {
