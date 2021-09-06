@@ -28,7 +28,8 @@ export default function ContractFooter({
   renderEditContractBtn,
   showDiscardModal,
   createAgreementDoc,
-  setIsLoading,
+  // setIsLoading,
+  getContractDetails,
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
 
@@ -70,10 +71,11 @@ export default function ContractFooter({
   };
 
   const updateContractData = (data) => {
-    setIsLoading({ loader: true, type: 'page' });
+    // setIsLoading({ loader: true, type: 'page' });
 
     updateAccountDetails(details.id, data).then(() => {
-      setIsLoading({ loader: false, type: 'page' });
+      getContractDetails();
+      // setIsLoading({ loader: false, type: 'page' });
     });
   };
 
@@ -460,7 +462,7 @@ ContractFooter.defaultProps = {
   renderEditContractBtn: () => {},
   showDiscardModal: () => {},
   createAgreementDoc: () => {},
-  setIsLoading: () => {},
+  getContractDetails: () => {},
 };
 
 ContractFooter.propTypes = {
@@ -498,5 +500,5 @@ ContractFooter.propTypes = {
   renderEditContractBtn: PropTypes.func,
   showDiscardModal: PropTypes.func,
   createAgreementDoc: PropTypes.func,
-  setIsLoading: PropTypes.func,
+  getContractDetails: PropTypes.func,
 };

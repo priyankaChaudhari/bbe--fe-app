@@ -3021,6 +3021,7 @@ export default function ContractContainer() {
         showDiscardModal={showDiscardModal}
         createAgreementDoc={createAgreementDoc}
         setIsLoading={setIsLoading}
+        getContractDetails={getContractDetails}
       />
     );
   };
