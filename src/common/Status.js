@@ -41,7 +41,7 @@ const StatusWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 5px;
+  // margin-top: 5px;
   .status_symbol {
     border-radius: 100%;
     width: 8px;
