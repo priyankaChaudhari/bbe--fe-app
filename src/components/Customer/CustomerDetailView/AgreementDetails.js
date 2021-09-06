@@ -122,6 +122,8 @@ export default function AgreementDetails({ id, userId }) {
           height: '20px',
           verticalAlign: 'middle',
           width: '18px',
+          float: 'left',
+          // maxWidth: '15%',
         }}
       />
       {dataProps.data.label}

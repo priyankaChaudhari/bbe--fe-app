@@ -272,7 +272,7 @@ function Discount({
                   }}
                   defaultChecked={setDefaultValue('none')}
                 />
-                <span className="checkmark" />
+                <span className="checkmark checkmark-customer-list" />
                 None
               </label>
             </ModalRadioCheck>
@@ -294,7 +294,7 @@ function Discount({
                   // defaultChecked={selectedDiscountType === 'fixed amount'}
                 />
                 {/* <input type="radio" name="radio" id="1" /> */}
-                <span className="checkmark" />
+                <span className="checkmark checkmark-customer-list" />
                 Fixed Amount ($)
               </label>
             </ModalRadioCheck>
@@ -316,7 +316,7 @@ function Discount({
                   // defaultChecked={selectedDiscountType === 'percentage'}
                 />
                 {/* <input type="radio" name="radio" id="1" /> */}
-                <span className="checkmark" />
+                <span className="checkmark checkmark-customer-list" />
                 Percentage (%)
               </label>
             </ModalRadioCheck>

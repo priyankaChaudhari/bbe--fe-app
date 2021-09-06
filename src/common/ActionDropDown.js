@@ -14,6 +14,7 @@ const ActionDropDown = styled.div`
     font-size: ${Theme.normal};
     font-weight: 500;
     font-family: ${Theme.baseFontFamily};
+    text-align: initial;
 
     .css-yk16xz-control {
       // background-color: #f4f6fc;
@@ -107,13 +108,14 @@ const ActionDropDown = styled.div`
       display: none;
     }
     .css-26l3qy-menu {
-      width: 200px;
-      margin-left: -50px;
       border: none !important;
       outline: none !important;
       box-shawdow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
       .react-select__option {
         padding: 15px 0 15px 10px;
+        float: left;
+        max-width: 99%;
+        word-break: keep-all;
       }
     }
   }

@@ -171,7 +171,7 @@ const Button = styled.button`
 
     .add-new-icon {
       vertical-align: top;
-      width: 15px;
+      width: 16px;
     }
 
     &:focus {
