@@ -364,8 +364,6 @@ export default function AmazonMerchant({
     );
   };
 
-  console.log(formData);
-
   const setDefaultValues = (item, value, part) => {
     if (marketplaceDetails.type === 'Hybrid') {
       if (part === 2 || part === 3) {
