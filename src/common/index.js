@@ -35,6 +35,7 @@ import Tabs from './Tabs';
 import Status from './Status';
 import DropDownIndicator from './DropDownIndicator';
 import CustomDateModal from './CustomDateModal';
+import Card from './Card';
 
 export {
   Button,
@@ -74,4 +75,5 @@ export {
   Status,
   DropDownIndicator,
   CustomDateModal,
+  Card,
 };

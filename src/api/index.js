@@ -50,6 +50,8 @@ export {
   getAdManagerAdminGraphData,
   getKeyContributionData,
   getDspPacingDahboardData,
+  getFinanceInvoices,
+  getDSPFinances,
 } from './AdDashboradApi';
 
 // Choices
@@ -149,6 +151,8 @@ export {
   deleteNote,
   getRecentNotes,
 } from './NotesApi';
+
+export { getDSPInvoiceData, getMetricsInvoiceData } from './BillingApi';
 
 export {
   getProductCatalog,

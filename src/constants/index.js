@@ -50,6 +50,9 @@ export const PATH_SPONSORED_DASHBOARD = '/adManager/sponsored/';
 export const PATH_DSP_DASHBOARD = '/adManager/dsp/';
 export const PATH_HYBRID_DASHBOARD = '/adManager/hybrid/';
 
+// Finance dashboar
+export const PATH_FINANCE_DASHBOARD = '/finance';
+
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;
 export const PATH_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/brand-asset/:brandId`;

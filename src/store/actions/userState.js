@@ -26,6 +26,7 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
 } from '../../constants/index';
 import * as actionTypes from './actionTypes';
 
@@ -89,6 +90,7 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
     BGS: PATH_BGS_DASHBOARD,
     'BGS Manager': PATH_BGS_DASHBOARD,
+    finance: PATH_FINANCE_DASHBOARD,
   };
 
   if (params && params.callback) {

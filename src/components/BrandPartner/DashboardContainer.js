@@ -24,6 +24,7 @@ import {
 
 import { CaretUp, CloseIcon } from '../../theme/images';
 import AdManagerAdminContainer from './AdManagerAdminDashboard/AdManagerAdminContainer';
+import FinanceDashboardContainer from './FinanceDashboard/FinanceDashboardContainer';
 
 const _ = require('lodash');
 
@@ -94,6 +95,7 @@ function DashboardContainer() {
     'Hybrid Ad Manager': 'Ad Manager Dashboard',
     BGS: 'BGS Dashboard',
     'BGS Manager': 'BGS Dashboard',
+    Finance: 'Finance Dashboard',
   };
 
   const adManagerRole = {
@@ -506,9 +508,7 @@ function DashboardContainer() {
       (userInfo && userInfo.role === 'BGS Manager') ? (
         <>
           <Dashboard isLoading={isLoading} data={data} />
-          {isLoading.loader ? (
-            ''
-          ) : (
+          {isLoading.loader ? null : (
             <div className="footer-sticky">
               <div className="straight-line horizontal-line" />
               <div className="container-fluid">
@@ -521,15 +521,15 @@ function DashboardContainer() {
             </div>
           )}
         </>
-      ) : (
-        ''
-      )}
+      ) : null}
 
       {_.has(adManagerRole, userInfo && userInfo.role) ? (
         <AdManagerAdminContainer userInfo={userInfo} />
-      ) : (
-        ''
-      )}
+      ) : null}
+
+      {userInfo && userInfo.role === 'Finance' ? (
+        <FinanceDashboardContainer />
+      ) : null}
     </BrandPartnerDashboard>
   );
 }

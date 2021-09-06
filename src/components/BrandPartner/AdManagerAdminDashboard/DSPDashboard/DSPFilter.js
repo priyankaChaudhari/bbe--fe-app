@@ -94,7 +94,7 @@ const DSPFilter = ({
             </div>
           </div>
           {!isDesktop ? (
-            <div className="col-1" role="presentation">
+            <div role="presentation">
               <div className="black-heading-title ">
                 <img
                   src={CaretUp}
@@ -103,6 +103,9 @@ const DSPFilter = ({
                     transform: isCollapseOpen ? 'rotate(180deg)' : '',
                     width: '25px',
                     height: '25px',
+                    position: ' absolute',
+                    right: '7px',
+                    top: '10px',
                   }}
                 />
               </div>

@@ -21,6 +21,7 @@ import {
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -58,9 +59,7 @@ export default function LeftSideBar({ userInfo }) {
                 alt=""
               />
             </li>
-          ) : (
-            ''
-          )}
+          ) : null}
           {userInfo &&
           userInfo.role &&
           userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
@@ -87,9 +86,7 @@ export default function LeftSideBar({ userInfo }) {
                 alt=""
               />
             </li>
-          ) : (
-            ''
-          )}
+          ) : null}
           {userInfo &&
           userInfo.role &&
           userInfo.role.includes('DSP Ad Manager') ? (
@@ -116,11 +113,7 @@ export default function LeftSideBar({ userInfo }) {
                 alt=""
               />
             </li>
-          ) : (
-            ''
-          )}
-          {/* else if (role.includes('')) {
-        history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD); */}
+          ) : null}
 
           {userInfo &&
           userInfo.role &&
@@ -148,9 +141,7 @@ export default function LeftSideBar({ userInfo }) {
                 alt=""
               />
             </li>
-          ) : (
-            ''
-          )}
+          ) : null}
 
           {userInfo &&
           userInfo.role &&
@@ -178,9 +169,33 @@ export default function LeftSideBar({ userInfo }) {
                 alt=""
               />
             </li>
-          ) : (
-            ''
-          )}
+          ) : null}
+
+          {userInfo && userInfo.role && userInfo.role.includes('Finance') ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('finance')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_FINANCE_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : null}
 
           <li
             className={

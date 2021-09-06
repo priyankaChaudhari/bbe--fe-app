@@ -63,7 +63,6 @@ import {
   ProductCatalog,
 } from '../index';
 import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
-import BillingDetails from './BillingDetails';
 import Activity from './Activity';
 import {
   getCustomerActivityLog,
@@ -79,6 +78,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { showOnboardingMsg } from '../../../store/actions/userState';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { getAccountMarketplace } from '../../../api/CustomerApi';
+import BillingContainer from './BillingContainer/BillingContainer';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -138,8 +138,7 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'agreement',
-    // 'performance',
+    customerSelectedTab || 'performance',
   );
   const [showMemberList, setShowMemberList] = useState({
     show: false,
@@ -206,6 +205,12 @@ export default function CustomerMainContainer() {
       transform: 'translate(-50%, -50%)',
     },
   };
+
+  useEffect(() => {
+    if (history.location.state === 'finance') {
+      setViewComponent('billing');
+    }
+  }, [dispatch, history.location.state]);
 
   const DropdownIndicator = (props) => {
     return (
@@ -1129,21 +1134,17 @@ export default function CustomerMainContainer() {
                             Company Details
                           </div>
                         </li>
-                        {customer && customer.status !== null ? (
-                          <li
-                            onClick={() => setViewComponent('billing')}
-                            role="presentation">
-                            <div
-                              className={`left-details ${
-                                viewComponent === 'billing' ? 'active' : ''
-                              }`}>
-                              <img src={BillingIcon} alt="dollar-invoice" />
-                              Billing
-                            </div>
-                          </li>
-                        ) : (
-                          ''
-                        )}
+                        <li
+                          onClick={() => setViewComponent('billing')}
+                          role="presentation">
+                          <div
+                            className={`left-details ${
+                              viewComponent === 'billing' ? 'active' : ''
+                            }`}>
+                            <img src={BillingIcon} alt="dollar-invoice" />
+                            Billing
+                          </div>
+                        </li>
                         <li
                           onClick={() => {
                             setViewComponent('activity');
@@ -1222,9 +1223,10 @@ export default function CustomerMainContainer() {
                       id={id}
                     />
                   ) : viewComponent === 'billing' ? (
-                    <BillingDetails
+                    <BillingContainer
                       id={id}
                       userInfo={userInfo}
+                      customerStatus={customer && customer.status}
                       onBoardingId={customer && customer.customer_onboarding_id}
                     />
                   ) : (

@@ -104,11 +104,11 @@ function CustomerListFilters({
                   onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
                   <div className="row">
                     <div className={isDesktop ? 'col-6' : 'col-5'}>
-                      <p className="black-heading-title pt-3 m-0"> Filters</p>
+                      <p className="black-heading-title  m-0"> Filters</p>
                     </div>
 
                     <div className="col-6 text-right">
-                      <p className=" gray-normal-text  d-lg-none d-block ">
+                      <div className=" gray-normal-text m-0 d-lg-none d-block ">
                         <label
                           className=" cursor "
                           htmlFor="tabletmenu-check"
@@ -119,7 +119,7 @@ function CustomerListFilters({
                           }}>
                           Reset filters
                         </label>
-                      </p>
+                      </div>
                     </div>
                     {!isDesktop ? (
                       <div role="presentation">
@@ -133,7 +133,7 @@ function CustomerListFilters({
                               height: '25px',
                               position: ' absolute',
                               right: '7px',
-                              top: '10px',
+                              top: '-5px',
                             }}
                           />
                         </div>

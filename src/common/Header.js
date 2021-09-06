@@ -46,6 +46,7 @@ import {
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
 } from '../constants';
 import { helpDeskLink, managementLink } from '../constants/FieldConstants';
 
@@ -569,6 +570,10 @@ export default function Header({ type, userInfo }) {
                       'adManager/admin',
                       PATH_AD_MANAGER_ADMIN_DASHBOARD,
                     )
+                  : null}
+
+                {userInfo && userInfo.role && userInfo.role === 'Finance'
+                  ? renderDashboardIcon('finance', PATH_FINANCE_DASHBOARD)
                   : null}
 
                 <li

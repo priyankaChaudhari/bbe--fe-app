@@ -42,6 +42,10 @@ const Table = styled.table`
 
       &.product-body {
          padding: 13px 4px 13px 0;
+
+         &.light-font {
+           font-weight: 300;
+         }
       }
       &.agreement {
          font-size: ${Theme.normal};
@@ -52,7 +56,14 @@ const Table = styled.table`
            margin-left: 10px;
             vertical-align: middle;
          }
+        }
+      &.product-table-body {
+         padding: 13px 4px 13px 0;
+         font-size: ${Theme.extraNormal};
 
+         &.light-font {
+           font-weight: 300;
+         }
       }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};
@@ -118,7 +129,6 @@ const Table = styled.table`
             display: none;
           }
            &:hover{
-             
               .product-image-large {
                 display: block;
                 background-color: ${Theme.gray8};
@@ -187,7 +197,7 @@ const Table = styled.table`
             top: 9px;
             left: 11px;
 
-            &.unoptimized {
+          &.unoptimized {
             background-color: ${Theme.gray25};
           }
           &.scheduled {

@@ -11,22 +11,24 @@ const Status = ({
   backgroundColor,
   pointColor,
   labelColor,
-}) => (
-  <StatusWrapper
-    pointColor={pointColor}
-    style={{ 'background-color': backgroundColor }}
-    className={['status_container capitalize', className]}>
-    {pointColor ? (
-      <div
-        style={{ 'background-color': pointColor }}
-        className="status_symbol"
-      />
-    ) : null}
-    <span style={{ color: labelColor }} className="status_text">
-      {label}
-    </span>
-  </StatusWrapper>
-);
+}) => {
+  return (
+    <StatusWrapper
+      pointColor={pointColor}
+      style={{ backgroundColor }}
+      className={['status_container', className]}>
+      {pointColor ? (
+        <div
+          style={{ backgroundColor: pointColor }}
+          className="status_symbol"
+        />
+      ) : null}
+      <span style={{ color: labelColor }} className="status_text">
+        {label ? label.charAt(0).toUpperCase() + label.slice(1) : ''}
+      </span>
+    </StatusWrapper>
+  );
+};
 
 export default Status;
 
@@ -59,12 +61,13 @@ Status.defaultProps = {
   backgroundColor: Theme.lightYellow,
   className: '',
   labelColor: Theme.black,
+  pointColor: '',
 };
 
 Status.propTypes = {
   label: string.isRequired,
   backgroundColor: string,
-  pointColor: string.isRequired,
+  pointColor: string,
   className: string,
   labelColor: string,
 };

@@ -10,7 +10,7 @@ import { PageLoader, Status, Table, WhiteCard } from '../../../../common';
 import { CompanyDefaultUser } from '../../../../theme/images';
 import { TabletViewManager } from '../../../../theme/Global';
 import { noGraphDataMessage } from '../../../../constants/CompanyPerformanceConstants';
-import { contributionColorSet } from '../../../../constants/AdManagerAdminDashboardConstants';
+import { contributionColorSet } from '../../../../constants/DashboardConstants';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 const DSPPacing = ({

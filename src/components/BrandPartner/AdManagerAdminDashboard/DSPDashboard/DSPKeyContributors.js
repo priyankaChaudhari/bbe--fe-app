@@ -11,7 +11,7 @@ import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
 import {
   contributionColorSet,
   dspTabOptions,
-} from '../../../../constants/AdManagerAdminDashboardConstants';
+} from '../../../../constants/DashboardConstants';
 import {
   noGraphDataMessage,
   keyContributionHeaders,

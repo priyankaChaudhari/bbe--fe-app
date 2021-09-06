@@ -34,6 +34,7 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_UPLOAD_PRODUCT_ASSET,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
 } from '../constants/index';
 
 import {
@@ -158,7 +159,6 @@ export default function AuthenticationComponent() {
           ) : (
             ''
           )}
-
           {/* AD MANAGER DASHBOARD PATH */}
           {_.has(adManagerRolePaths, userInfo && userInfo.role) ? (
             <Route
@@ -168,6 +168,12 @@ export default function AuthenticationComponent() {
           ) : (
             ''
           )}
+          {userInfo && userInfo.role === 'Finance' ? (
+            <Route
+              path={PATH_FINANCE_DASHBOARD}
+              component={DashboardContainer}
+            />
+          ) : null}
 
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
@@ -187,12 +193,11 @@ export default function AuthenticationComponent() {
             path={PATH_BRAND_ASSET_PREVIEW}
             component={BrandAssetsPreview}
           />
-          {/* {userInfo && userInfo.role === 'Customer' ? ( */}
+
           <Route
             path={PATH_UPLOAD_PRODUCT_ASSET}
             component={ProductDelegation}
           />
-
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}
           {/* <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} /> */}

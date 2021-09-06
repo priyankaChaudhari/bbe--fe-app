@@ -290,7 +290,6 @@ export const DashboardCard = styled.div`
       border-radius: 10px;
       width: 66px;
       height: 66px;
-      // margin-right: 14px;
       margin-bottom: 8px;
     }
 
@@ -347,8 +346,32 @@ export const DashboardCard = styled.div`
       margin: 10px 0 10px 0;
     }
   }
+  .white-card-container {
+    padding: 0;
+    margin: 0 0 15px 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    li {
+      width: 100%;
+      display: inline-block;
+      max-width: 20%;
+      flex: 0 0 20%;
+      position: relative;
+      width: 100%;
+      padding-right: 10px;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+  }
+
   @media only screen and (max-width: 768px) {
-    padding-top: 155px;
+    &.finance-dashboard {
+      padding-top: 70px;
+    }
+
     .dashboard-body {
       padding-left: 0;
       padding-top: 40px;
@@ -359,6 +382,17 @@ export const DashboardCard = styled.div`
     .dashboard-container-body {
       padding: 20px 15px 0 15px;
     }
+    .white-card-container {
+      li {
+        max-width: 50% !important;
+        flex: 0 0 50% !important;
+
+        &:first-child {
+          max-width: 100% !important;
+          flex: 0 0 100% !important;
+        }
+      }
+    }
   }
   @media only screen and (max-width: 991px) {
     .dashboard-container-body {
@@ -368,6 +402,12 @@ export const DashboardCard = styled.div`
       padding-top: 70px;
       padding-left: 0;
       padding-right: 15px;
+    }
+    .white-card-container {
+      li {
+        max-width: 33.333%;
+        flex: 0 0 33.333%;
+      }
     }
   }
 

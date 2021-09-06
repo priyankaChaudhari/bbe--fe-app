@@ -376,9 +376,6 @@ const SidePanel = styled.div`
           }
         }
       }
-
-      
-
         .default-user {
           width: 42px;
           height: 42px;

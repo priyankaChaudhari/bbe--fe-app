@@ -3,6 +3,7 @@ import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
   API_AD_MANAGER_ADMIN_DASHBOARD,
+  API_FINANCE_DASHBOARD,
 } from '../constants/ApiConstants';
 
 export async function getAdManagerAdminGraphData(
@@ -161,6 +162,85 @@ export async function getDspPacingDahboardData(
   let result = {};
   result = await axiosInstance
     .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}dsp-pacing/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getFinanceInvoices(
+  type,
+  searchKey,
+  status,
+  sortBy,
+  timeFilterType,
+  timeFilter,
+  page,
+) {
+  let params = {
+    page,
+    type,
+  };
+
+  if (type !== 'partner') {
+    params = {
+      ...params,
+      sort_by: `-${sortBy}`,
+    };
+  }
+
+  if (searchKey !== '') {
+    params = {
+      ...params,
+      q: searchKey,
+    };
+  }
+
+  if (timeFilterType === 'custom') {
+    params = {
+      ...params,
+      timeframe: timeFilterType,
+      start_month_year: timeFilter.startDate,
+      end_month_year: timeFilter.endDate,
+    };
+  }
+
+  if (status !== 'any') {
+    params = {
+      ...params,
+      invoice_status: status,
+    };
+  }
+  let result = {};
+  result = await axiosInstance
+    .get(`${API_FINANCE_DASHBOARD}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getDSPFinances(timeFilter, startDate, endDate) {
+  let params = {};
+
+  if (timeFilter === 'custom') {
+    params = {
+      ...params,
+      start_month_year: startDate,
+      end_month_year: endDate,
+      timeframe: timeFilter,
+    };
+  }
+
+  let result = {};
+  result = await axiosInstance
+    .get(`${API_FINANCE_DASHBOARD}finance-detail`, { params })
     .then((response) => {
       return response;
     })

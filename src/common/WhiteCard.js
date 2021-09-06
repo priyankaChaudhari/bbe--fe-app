@@ -21,11 +21,6 @@ export const WhiteCard = styled.div`
     flex: initial;
     height: 100%;
   }
-  .fix-height {
-    flex-wrap: wrap;
-    flex: initial;
-    height: 100%;
-  }
  
   .contract-status {
     float: left;

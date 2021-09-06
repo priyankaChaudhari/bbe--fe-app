@@ -266,6 +266,12 @@ h6 {
   margin: 0;
 }
 
+.medium-text-title {
+  color: ${Theme.black};
+  font-size: ${Theme.title};
+  font-weight: 600;
+}
+
 .ghq-card-content__horizontal-rule {
   display: block;
   &:first-of-type {
@@ -307,6 +313,11 @@ h6 {
 .normal-text {
   color: ${Theme.black};
   font-size: ${Theme.normal};
+}
+.fix-height {
+  flex-wrap: wrap;
+  flex: initial;
+  height: 100%;
 }
 
 p {
@@ -475,6 +486,7 @@ p {
     background: ${Theme.black};
   }
 
+  
   .container {
     display: block;
     position: relative;
@@ -561,6 +573,7 @@ p {
     }
   }
 }
+
 .public-DraftStyleDefault-block {
   margin: 0 !important;
   min-height: 22px !important;
