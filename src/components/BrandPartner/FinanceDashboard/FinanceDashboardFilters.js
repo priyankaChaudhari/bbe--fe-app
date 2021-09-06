@@ -31,15 +31,15 @@ export default function FinanceDashboardFilters({
             // debounceTimeout={600}
             className=" form-control search-filter"
             placeholder="Search"
-            onChange={(event) => {
-              onHandleSearch(event);
+            onChange={() => {
+              // onHandleSearch(event);
             }}
-            // onKeyPress={(event) => {
-            //   onHandleSearch(event);
-            //   // if (event.key === 'Enter') {
-            //   //   onHandleSearch(event);
-            //   // }
-            // }}
+            onKeyPress={(event) => {
+              // onHandleSearch(event);
+              if (event.key === 'Enter') {
+                onHandleSearch(event);
+              }
+            }}
             value={searchQuery}
           />
 

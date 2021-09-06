@@ -114,7 +114,6 @@ export default function FinanceDSP({
   };
 
   const displayTimeFilterOption = () => {
-    console.log('aaaaaaa', selectedDateType, dummyDateType);
     return showDropdown.show ? (
       <DateRangeDropDown>
         <h4 className="mb-3 text-left">Select Date Range</h4>
