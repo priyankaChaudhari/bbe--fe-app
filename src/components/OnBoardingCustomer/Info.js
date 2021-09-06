@@ -143,7 +143,7 @@ export default function Info() {
                   </li>
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
-                    Your Amazon merchant ID
+                    Your Amazon Account Names & IDs
                   </li>
                 </ul>
 

@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import axios from 'axios';
 
 import {
   OnBoardingBody,
@@ -178,6 +179,24 @@ export default function AmazonMerchant({
     });
   };
 
+  const sellerAccount = (seller) => {
+    saveAmazonSellerAccount(
+      seller,
+      (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
+        latestSellerId,
+      noAmazonAccount.Seller,
+    ).then((res) => {
+      if ((res && res.status === 201) || (res && res.status === 200)) {
+        saveDetails();
+        setLatestSellerId(res && res.data && res.data.id);
+      }
+      if (res && res.status === 400) {
+        setApiError(res && res.data);
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
+  };
+
   const saveAccountDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     let seller = {};
@@ -207,37 +226,47 @@ export default function AmazonMerchant({
           marketplace: marketplaceDetails && marketplaceDetails.marketplaceId,
         });
 
-    if (
-      marketplaceDetails.type === 'Seller' ||
-      marketplaceDetails.type === 'Hybrid'
-    ) {
-      return saveAmazonSellerAccount(
-        seller,
-        (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
-          latestSellerId,
-        noAmazonAccount.Seller,
-      ).then((res) => {
-        if ((res && res.status === 201) || (res && res.status === 200))
-          if (marketplaceDetails.type === 'Hybrid') {
-            vendorAccount(vendor);
-            setLatestSellerId(res && res.data && res.data.id);
-          } else {
-            saveDetails();
-          }
-        if (res && res.status === 400) {
-          setApiError(res && res.data);
-          setIsLoading({ loader: false, type: 'button' });
-          if (marketplaceDetails.type === 'Hybrid') {
-            document.body.scrollTop = 500; // For Safari
-            document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
-          }
-        }
-      });
+    if (marketplaceDetails.type === 'Seller') sellerAccount(seller);
+    if (marketplaceDetails.type === 'Vendor') vendorAccount(vendor);
+    if (marketplaceDetails.type === 'Hybrid') {
+      axios
+        .all([
+          saveAmazonSellerAccount(
+            seller,
+            (marketplaceDetails.Seller && marketplaceDetails.Seller.id) ||
+              latestSellerId,
+            noAmazonAccount.Seller,
+          ),
+          saveAmazonVendorAccount(
+            vendor,
+            marketplaceDetails.Vendor && marketplaceDetails.Vendor.id,
+            noAmazonAccount.Vendor,
+          ),
+        ])
+        .then(
+          axios.spread((...res) => {
+            setLatestSellerId(res[0] && res[0].id);
+            if (
+              ((res[0] && res[0].status === 201) ||
+                (res[0] && res[0].status === 201)) &&
+              ((res[1] && res[1].status === 201) ||
+                (res[1] && res[1].status === 201))
+            )
+              saveDetails();
+            if (
+              (res[0] && res[0].status === 400) ||
+              (res[1] && res[1].status === 400)
+            ) {
+              setApiError({ Seller: res[0].data, Vendor: res[1].data });
+              setIsLoading({ loader: false, type: 'button' });
+              if (marketplaceDetails.type === 'Hybrid') {
+                document.body.scrollTop = 500; // For Safari
+                document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
+              }
+            }
+          }),
+        );
     }
-    if (marketplaceDetails.type === 'Vendor') {
-      vendorAccount(vendor);
-    }
-    return '';
   };
 
   const generateAmazon = (part) => {
@@ -330,6 +359,29 @@ export default function AmazonMerchant({
       });
   };
 
+  const removeError = (key, part) => {
+    if (marketplaceDetails.type === 'Hybrid') {
+      if (part === 2 || part === 3) {
+        setApiError({
+          ...apiError,
+          Seller: {
+            ...apiError.Seller,
+            [key]: '',
+          },
+        });
+      }
+      if (part === 5 || part === 6) {
+        setApiError({
+          ...apiError,
+          Vendor: {
+            ...apiError.Vendor,
+            [key]: '',
+          },
+        });
+      }
+    }
+  };
+
   const generateAccountType = (part, mapData) => {
     return (
       <fieldset className="shape-without-border  w-430 mt-3 mb-2">
@@ -373,12 +425,19 @@ export default function AmazonMerchant({
                       ...apiError,
                       [item.key]: '',
                     });
+                    removeError(item.key, part);
                   }}
                   defaultValue={mapDefaultValues(item.key, part)}
                   readOnly={isChecked}
                 />
               </label>
               <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
+              <ErrorMsg>
+                {apiError && apiError.Seller && apiError.Seller[item.key]}
+              </ErrorMsg>
+              <ErrorMsg>
+                {apiError && apiError.Vendor && apiError.Vendor[item.key]}
+              </ErrorMsg>
             </ContractFormField>
           ))}
       </fieldset>
@@ -438,12 +497,24 @@ export default function AmazonMerchant({
                         ...apiError,
                         [item.key]: '',
                       });
+                      removeError(item.key, part);
                     }}
                     defaultValue={mapDefaultValues(item.key, part)}
                     readOnly={isChecked}
                   />
                 </label>
                 <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
+                {part === 3 ? (
+                  <ErrorMsg>
+                    {apiError && apiError.Seller && apiError.Seller[item.key]}
+                  </ErrorMsg>
+                ) : part === 6 ? (
+                  <ErrorMsg>
+                    {apiError && apiError.Vendor && apiError.Vendor[item.key]}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
               </ContractFormField>
             ))}
         {isChecked ? '' : <>{generateSaveBtn()}</>}
