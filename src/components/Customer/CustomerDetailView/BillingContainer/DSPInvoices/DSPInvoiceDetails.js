@@ -100,7 +100,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
         <td className="product-body">
           ${addThousandComma(item.monthly_budget)}
         </td>
-        <td className="product-body light-font">
+        <td className="product-table-body light-font">
           {dayjs(item.generated_at).format('MM/DD/YYYY')}
         </td>
         <td className="product-table-body light-font ">
