@@ -1773,6 +1773,43 @@ text.cust-label-avg {
     position: absolute;
   }
 
+.react-calendar__tile--hasActive {
+  background: ${Theme.white}; 
+}
+.react-calendar__tile--active {
+  background: ${Theme.orange}!important;
+  padding: 10px;
+  color: ${Theme.white}; 
+}
+
+.react-calendar__tile--now {
+  background: ${Theme.white}; 
+  border: 1px solid ${Theme.orange} !important;
+}
+.react-calendar {  
+  border: none;
+  background-color: ${Theme.white}; 
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  position: absolute;
+  right: 15px;
+  z-index: 22;
+  box-shadow: 0 3px 8px 0 rgb(0 0 0 / 10%);
+  padding: 15px;
+}
+.react-calendar__tile--now:enabled:hover, .react-calendar__tile--now:enabled:focus {
+    background: ${Theme.lighterOrange}
+}
+
+.react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus { 
+  background: ${Theme.orange} !important;
+  color: ${Theme.white}; 
+
+  abbr {
+    border-radius: 20px;
+  }
+}
 `;
 
 export default bodyStyles;

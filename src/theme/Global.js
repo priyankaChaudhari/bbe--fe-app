@@ -220,6 +220,7 @@ export const BrandPartnerDashboard = styled.div`
     right: 0;
     z-index: 1;
     background-color: ${Theme.white};
+    border-bottom: 1px solid ${Theme.gray7};
   }
   .footer-sticky {
     padding-left: 64px;

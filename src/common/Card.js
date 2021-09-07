@@ -34,7 +34,7 @@ const CardWrapper = styled.div`
   border-radius: 15px;
   padding: 15px 20px;
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: start;
   flex-direction: column;
 
@@ -49,7 +49,7 @@ const CardWrapper = styled.div`
   p.title {
     margin-bottom: 2px !important;
     margin-top: 0px !important;
-    word-break: break-all;
+    word-break: keep-all;
   }
 
   .title {

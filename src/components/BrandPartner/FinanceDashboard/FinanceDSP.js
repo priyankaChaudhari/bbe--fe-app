@@ -314,7 +314,7 @@ FinanceDSP.propTypes = {
 };
 
 const DateRangeDropDown = styled.div`
-  background-color: #ffffff;
+  background-color: ${Theme.white};
   border-radius: 8px;
   max-width: 400px;
   width: 100%;
@@ -354,6 +354,7 @@ const DropDownSelectMonthPicker = styled.div`
     color: ${Theme.black};
     padding: 11px 2px 0 14px;
     text-align: left;
+    cursor: pointer;
 
     @media only screen and (max-width: 450px) {
       width: 160px;
