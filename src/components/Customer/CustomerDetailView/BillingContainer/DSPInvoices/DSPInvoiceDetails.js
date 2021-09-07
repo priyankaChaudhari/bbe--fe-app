@@ -9,19 +9,10 @@ import Theme from '../../../../../theme/Theme';
 import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
 import TableMobileView from '../../../../../common/TableMobileView';
 import { noGraphDataMessage } from '../../../../../constants/CompanyPerformanceConstants';
+import { InvoiceStatusColorSet } from '../../../../../constants/DashboardConstants';
 
 const DSPInvoiceDetails = ({ loader, data }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
-
-  const invoceStatus = {
-    paid: {
-      backgroundColor: '#E3F2D2',
-    },
-    overdue: {
-      backgroundColor: '#F7D7DB',
-    },
-    open: { backgroundColor: Theme.extraLightYellow },
-  };
 
   const addThousandComma = useCallback((number, decimalDigits = 2) => {
     if (number !== undefined && number !== null) {
@@ -53,10 +44,12 @@ const DSPInvoiceDetails = ({ loader, data }) => {
                 invoiceId={item.invoiced_id}
                 status={item.invoice_status}
                 statusColor={
-                  invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
-                    ? invoceStatus[
+                  InvoiceStatusColorSet[
+                    item.invoice_status.split(' ')[0].toLowerCase()
+                  ]
+                    ? InvoiceStatusColorSet[
                         item.invoice_status.split(' ')[0].toLowerCase()
-                      ].backgroundColor
+                      ]
                     : '#E3F2D2'
                 }
                 label="Amount"
@@ -118,9 +111,12 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             className="float-right"
             label={item.invoice_status}
             backgroundColor={
-              invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
-                ? invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
-                    .backgroundColor
+              InvoiceStatusColorSet[
+                item.invoice_status.split(' ')[0].toLowerCase()
+              ]
+                ? InvoiceStatusColorSet[
+                    item.invoice_status.split(' ')[0].toLowerCase()
+                  ]
                 : '#E3F2D2'
             }
           />
