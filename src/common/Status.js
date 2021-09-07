@@ -54,6 +54,7 @@ const StatusWrapper = styled.div`
     margin-left: ${(props) => (props.pointColor ? 8 : 0)}px;
     font-size: ${Theme.extraNormal};
     font-weight: 500;
+    text-align: center;
   }
 `;
 

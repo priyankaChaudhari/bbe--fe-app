@@ -368,7 +368,7 @@ export const DashboardCard = styled.div`
     }
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 767px) {
     &.finance-dashboard {
       padding-top: 70px;
     }
@@ -506,6 +506,9 @@ export const FormContainer = styled.div`
         color: ${Theme.white};
       }
 
+      label {
+        color: ${Theme.white};
+      }
       h2 {
         font-size: ${Theme.MediumTitleFontSize};
         color: ${Theme.white};
