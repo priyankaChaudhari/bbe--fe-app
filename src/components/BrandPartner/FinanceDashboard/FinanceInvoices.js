@@ -226,7 +226,7 @@ export default function FinanceInvoices({
       <Table>
         <thead>
           <tr>
-            <th width="38%" className="product-header">
+            <th width="31%" className="product-header">
               Invoice Type / Number
             </th>
             <th width="17%" className="product-header">
@@ -235,11 +235,11 @@ export default function FinanceInvoices({
             <th width="17%" className="product-header">
               Created On
             </th>
-            <th width="17%" className="product-header">
+            <th width="15%" className="product-header">
               {' '}
               Due
             </th>
-            <th width="31%" className="product-header text-right pr-2">
+            <th width="20%" className="product-header text-right pr-2">
               {' '}
               Status
             </th>
