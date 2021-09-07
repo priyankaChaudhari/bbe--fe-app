@@ -20,7 +20,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
     overdue: {
       backgroundColor: '#F7D7DB',
     },
-    open: { backgroundColor: '#FDF3D7' },
+    open: { backgroundColor: Theme.extraLightYellow },
   };
 
   const addThousandComma = useCallback((number, decimalDigits = 2) => {
@@ -54,7 +54,10 @@ const DSPInvoiceDetails = ({ loader, data }) => {
                 status={item.invoice_status}
                 statusColor={
                   invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
-                    .backgroundColor
+                    ? invoceStatus[
+                        item.invoice_status.split(' ')[0].toLowerCase()
+                      ].backgroundColor
+                    : '#E3F2D2'
                 }
                 label="Amount"
                 labelInfo={addThousandComma(item.monthly_budget)}
@@ -116,7 +119,9 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             label={item.invoice_status}
             backgroundColor={
               invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
-                .backgroundColor
+                ? invoceStatus[item.invoice_status.split(' ')[0].toLowerCase()]
+                    .backgroundColor
+                : '#E3F2D2'
             }
           />
         </td>
