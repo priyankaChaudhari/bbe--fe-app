@@ -99,14 +99,14 @@ export async function getKeyContributionData(
         ...params,
         no_page: '',
         sequence: 'desc',
-        'order-by': 'ad_sales',
+        'order-by': 'company_name',
       };
     } else {
       params = {
         ...params,
         no_page: '',
         sequence: 'desc',
-        'order-by': 'dsp_spend',
+        'order-by': 'company_name',
       };
     }
   } else {
