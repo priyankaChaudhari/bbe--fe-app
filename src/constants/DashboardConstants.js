@@ -49,7 +49,7 @@ export const InvoicesSortByOptions = [
 export const PartnersSortByOptions = [
   { value: 'total_outstanding', label: 'Total Outstanding' },
   { value: 'total_overdue', label: 'Total Overdue' },
-  { value: 'average_days_past_due', label: 'Average Days Past Due' },
+  { value: 'avg_days_past_due', label: 'Average Days Past Due' },
   { value: 'paid_by_due_date', label: 'Paid By Due Date' },
 ];
 

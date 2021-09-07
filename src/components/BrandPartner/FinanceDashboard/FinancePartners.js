@@ -2,13 +2,13 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-// import { components } from 'react-select';
+import { components } from 'react-select';
 import $ from 'jquery';
 import { useMediaQuery } from 'react-responsive';
 import {
   WhiteCard,
   Table,
-  // DropDownIndicator,
+  DropDownIndicator,
   PageLoader,
   CommonPagination,
 } from '../../../common';
@@ -17,10 +17,10 @@ import FinanceDashboardFilters from './FinanceDashboardFilters';
 import TableMobileView from '../../../common/TableMobileView';
 import {
   PartnersStatusOptions,
-  // PartnersSortByOptions,
+  PartnersSortByOptions,
 } from '../../../constants/DashboardConstants';
 import { getFinanceInvoices } from '../../../api';
-// import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
+import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
 
 export default function FinancePartners({
   timeFrame,
@@ -34,7 +34,7 @@ export default function FinancePartners({
   const [partnerData, setPartnerData] = useState([]);
   const [partnerCount, setPartnerCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
-  // const { Option, SingleValue } = components;
+  const { Option, SingleValue } = components;
   const [responseId, setResponseId] = useState(null);
   const isDesktop = useMediaQuery({ minWidth: 768 });
   const [selectedSortBy, setSelectedSortBy] = useState({
@@ -86,29 +86,29 @@ export default function FinancePartners({
     isTimeFrameChange,
   ]);
 
-  // const filterOption = (props) => (
-  //   <Option {...props}>
-  //     <div className="pb-2">
-  //       <span style={{ fontSize: '15px', color: '#000000' }}>
-  //         {props.data.label}
-  //       </span>
+  const filterOption = (props) => (
+    <Option {...props}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>
+          {props.data.label}
+        </span>
 
-  //       <div style={{ fontSize: '12px', color: '#556178' }}>
-  //         {props.data.sub}
-  //       </div>
-  //     </div>
-  //   </Option>
-  // );
+        <div style={{ fontSize: '12px', color: '#556178' }}>
+          {props.data.sub}
+        </div>
+      </div>
+    </Option>
+  );
 
-  // const singleFilterOption = (props) => (
-  //   <SingleValue {...props}>
-  //     <span style={{ fontSize: '15px', color: '#000000' }}>
-  //       {`Sort by: ${props.data.label}`}
-  //     </span>
+  const singleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {`Sort by: ${props.data.label}`}
+      </span>
 
-  //     <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
-  //   </SingleValue>
-  // );
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
 
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
@@ -120,13 +120,13 @@ export default function FinancePartners({
     return number;
   };
 
-  // const getSelectComponents = () => {
-  //   return {
-  //     Option: filterOption,
-  //     SingleValue: singleFilterOption,
-  //     DropDownIndicator,
-  //   };
-  // };
+  const getSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropDownIndicator,
+    };
+  };
 
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -138,10 +138,10 @@ export default function FinancePartners({
     setSelectedStatus('any');
     setSearchQuery('');
     setSelectedSortBy({
-      value: 'totalOutstanding',
+      value: 'total_outstanding',
       label: 'Total Outstanding',
     });
-    getPartners('', 'any', selectedSortBy.value, 1);
+    getPartners('', 'any', 'total_outstanding', 1);
   };
 
   const handleStatusChange = (event) => {
@@ -149,31 +149,31 @@ export default function FinancePartners({
     getPartners(searchQuery, event.target.value, selectedSortBy.value, 1);
   };
 
-  // const handleSortByFilter = (event) => {
-  //   setSelectedSortBy(event);
-  //   getPartners(searchQuery, selectedStatus, event.value, 1);
-  // };
+  const handleSortByFilter = (event) => {
+    setSelectedSortBy(event);
+    getPartners(searchQuery, selectedStatus, event.value, 1);
+  };
 
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
     getPartners(searchQuery, selectedStatus, selectedSortBy.value, currentPage);
   };
 
-  // const renderSortByDropDown = () => {
-  //   return DropDown(
-  //     '',
-  //     PartnersSortByOptions,
-  //     PartnersSortByOptions &&
-  //       PartnersSortByOptions[0] &&
-  //       PartnersSortByOptions[0].label,
-  //     getSelectComponents,
-  //     PartnersSortByOptions && PartnersSortByOptions[0],
-  //     handleSortByFilter,
-  //     false,
-  //     null,
-  //     selectedSortBy,
-  //   );
-  // };
+  const renderSortByDropDown = () => {
+    return DropDown(
+      '',
+      PartnersSortByOptions,
+      PartnersSortByOptions &&
+        PartnersSortByOptions[0] &&
+        PartnersSortByOptions[0].label,
+      getSelectComponents,
+      PartnersSortByOptions && PartnersSortByOptions[0],
+      handleSortByFilter,
+      false,
+      null,
+      selectedSortBy,
+    );
+  };
 
   const renderTableData = (item) => {
     return (
@@ -277,7 +277,7 @@ export default function FinancePartners({
               <div
                 id="BT-finace-dah-invoice-partners"
                 className="col-3  text-right">
-                {/* {renderSortByDropDown()} */}
+                {renderSortByDropDown()}
               </div>
             </div>
             <div className="straight-line horizontal-line  mt-3 mb-1" />
@@ -310,9 +310,7 @@ export default function FinancePartners({
               <div className="col-5 pl-4 mt-3 ">
                 <div className="black-heading-title ">Invoices</div>{' '}
               </div>
-              <div className="col-7  pr-4 mb-3">
-                {/* {renderSortByDropDown()} */}
-              </div>
+              <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
             </div>
 
             {partnerLoader ? (

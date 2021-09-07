@@ -101,7 +101,8 @@ export default function FinanceInvoices({
     $('.checkboxes input:radio').filter("[value='any']").prop('checked', true);
     setSelectedStatus('any');
     setSearchQuery('');
-    getInvoices('', 'any', selectedSortBy.value, 1);
+    setSelectedSortBy({ value: 'created_at', label: 'Newest' });
+    getInvoices('', 'any', 'created_at', 1);
   };
 
   const handleStatusChange = (event) => {
