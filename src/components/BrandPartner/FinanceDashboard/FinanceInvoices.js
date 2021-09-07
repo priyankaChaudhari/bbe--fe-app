@@ -183,6 +183,7 @@ export default function FinanceInvoices({
     const dueDate = dayjs(item.due_date).format('MM/DD/YY');
     return (
       <tr
+        className="cursor"
         key={item.invoiced_id}
         onClick={() =>
           history.push(
