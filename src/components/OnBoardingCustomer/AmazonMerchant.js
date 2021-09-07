@@ -268,9 +268,21 @@ export default function AmazonMerchant({
               (res[0] && res[0].status === 400) ||
               (res[1] && res[1].status === 400)
             ) {
-              setApiError({ Seller: res[0].data, Vendor: res[1].data });
+              let sel = {};
+              let ven = {};
+              if (res[0] && res[0].status === 400) {
+                sel = res[0] && res[0].data;
+              }
+              if (res[1] && res[1].status === 400) {
+                ven = res[1] && res[1].data;
+              }
+              setApiError({ Seller: sel, Vendor: ven });
               setIsLoading({ loader: false, type: 'button' });
-              if (marketplaceDetails.type === 'Hybrid') {
+              if (
+                marketplaceDetails.type === 'Hybrid' &&
+                res[0] &&
+                res[0].status === 400
+              ) {
                 document.body.scrollTop = 500; // For Safari
                 document.documentElement.scrollTop = 500; // For Chrome, Firefox, IE and Opera
               }
@@ -279,30 +291,6 @@ export default function AmazonMerchant({
         );
     }
   };
-
-  // const disableBtn = () => {
-  //   if (marketplaceDetails.type !== 'Hybrid') {
-  //     if (noAmazonAccount[marketplaceDetails.type]) return false;
-  //     if (
-  //       marketplaceDetails[marketplaceDetails.type] === null &&
-  //       formData &&
-  //       Object.keys(formData) &&
-  //       Object.keys(formData).length === 0
-  //     )
-  //       return true;
-  //     return false;
-  //   }
-  //   if (noAmazonAccount.Seller || noAmazonAccount.Vendor) return false;
-  //   if (
-  //     (marketplaceDetails.Seller === null ||
-  //       marketplaceDetails.Vendor === null) &&
-  //     formData &&
-  //     Object.keys(formData) &&
-  //     Object.keys(formData).length === 0
-  //   )
-  //     return true;
-  //   return false;
-  // };
 
   const generateAmazon = (part) => {
     return (
