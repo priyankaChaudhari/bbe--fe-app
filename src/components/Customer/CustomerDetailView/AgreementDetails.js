@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -14,7 +14,7 @@ import {
   WhiteCard,
   Tabs,
   Status,
-  ActionDropDown,
+  // ActionDropDown,
   ModalBox,
   Button,
   ContractFormField,
@@ -26,11 +26,11 @@ import {
   DspOnlyIcon,
   ArrowIcons,
   CloseIcon,
-  PauseIcon,
-  CloseCircleIcon,
-  CopyIcon,
-  CaretUp,
-  ViewExternalLink,
+  //  PauseIcon,
+  // CloseCircleIcon,
+  // CopyIcon,
+  // CaretUp,
+  // ViewExternalLink,
   // DeleteIcon,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
@@ -52,13 +52,13 @@ export default function AgreementDetails({ id, userId }) {
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const contractOptions = [
-    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
-    { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
-    { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
-    { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
-    // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
-  ];
+  // const contractOptions = [
+  //   { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  //   { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+  //   { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
+  //   { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+  //   // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
+  // ];
 
   const agreementOptions = [
     { key: 'monthly_retainer', label: 'Monthly Retainer' },
@@ -90,45 +90,45 @@ export default function AgreementDetails({ id, userId }) {
     },
   };
 
-  const { Option } = components;
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
+  // const { Option } = components;
+  // const DropdownIndicator = (dataProps) => {
+  //   return (
+  //     components.DropdownIndicator && (
+  //       <components.DropdownIndicator {...dataProps}>
+  //         <img
+  //           src={CaretUp}
+  //           alt="caret"
+  //           style={{
+  //             transform: dataProps.selectProps.menuIsOpen
+  //               ? 'rotate(180deg)'
+  //               : '',
+  //             width: '25px',
+  //             height: '25px',
+  //           }}
+  //         />
+  //       </components.DropdownIndicator>
+  //     )
+  //   );
+  // };
 
-  const IconOption = (dataProps) => (
-    <Option {...dataProps}>
-      <img
-        className="drop-down-user"
-        src={dataProps.data.icon}
-        alt="user"
-        style={{
-          marginRight: '9px',
-          height: '20px',
-          verticalAlign: 'middle',
-          width: '18px',
-          float: 'left',
-          // maxWidth: '15%',
-        }}
-      />
-      {dataProps.data.label}
-    </Option>
-  );
+  // const IconOption = (dataProps) => (
+  //   <Option {...dataProps}>
+  //     <img
+  //       className="drop-down-user"
+  //       src={dataProps.data.icon}
+  //       alt="user"
+  //       style={{
+  //         marginRight: '9px',
+  //         height: '20px',
+  //         verticalAlign: 'middle',
+  //         width: '18px',
+  //         float: 'left',
+  //         // maxWidth: '15%',
+  //       }}
+  //     />
+  //     {dataProps.data.label}
+  //   </Option>
+  // );
 
   useEffect(() => {
     dispatch(getAccountDetails(id));
@@ -142,29 +142,29 @@ export default function AgreementDetails({ id, userId }) {
     return diffDays;
   };
 
-  const handleContractOptions = (event, agreementId) => {
-    switch (event.value) {
-      case 'view':
-        history.push({
-          pathname: PATH_AGREEMENT.replace(':id', id).replace(
-            ':contract_id',
-            agreementId,
-          ),
-          state: history && history.location && history.location.pathname,
-        });
-        break;
-      case 'draft':
-        break;
-      case 'pause':
-        setShowModal({ pause: true, agreementId });
-        break;
-      case 'cancel':
-        setShowModal({ cancel: true, agreementId });
-        break;
-      default:
-        break;
-    }
-  };
+  // const handleContractOptions = (event, agreementId) => {
+  //   switch (event.value) {
+  //     case 'view':
+  //       history.push({
+  //         pathname: PATH_AGREEMENT.replace(':id', id).replace(
+  //           ':contract_id',
+  //           agreementId,
+  //         ),
+  //         state: history && history.location && history.location.pathname,
+  //       });
+  //       break;
+  //     case 'draft':
+  //       break;
+  //     case 'pause':
+  //       setShowModal({ pause: true, agreementId });
+  //       break;
+  //     case 'cancel':
+  //       setShowModal({ cancel: true, agreementId });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const generateHTML = () => {
     const fields = [];
@@ -295,7 +295,7 @@ export default function AgreementDetails({ id, userId }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {agreement.contract_status.value !== 'pending contract' ||
+                  {/* {agreement.contract_status.value !== 'pending contract' ||
                   agreement.contract_status.value !==
                     'pending contract approval' ||
                   agreement.contract_status.value !== 'pending signature' ? (
@@ -316,29 +316,29 @@ export default function AgreementDetails({ id, userId }) {
                         value=""
                       />
                     </ActionDropDown>
-                  ) : (
-                    <Link
-                      to={{
-                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                          ':contract_id',
-                          agreement.id,
-                        ),
-                        state:
-                          history &&
-                          history.location &&
-                          history.location.pathname,
-                      }}>
-                      <Button className="btn-transparent w-100 view-contract">
-                        {' '}
-                        <img
-                          className="file-contract-icon"
-                          src={FileContract}
-                          alt=""
-                        />
-                        View Contract
-                      </Button>
-                    </Link>
-                  )}
+                  ) : ( */}
+                  <Link
+                    to={{
+                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                        ':contract_id',
+                        agreement.id,
+                      ),
+                      state:
+                        history &&
+                        history.location &&
+                        history.location.pathname,
+                    }}>
+                    <Button className="btn-transparent w-100 view-contract">
+                      {' '}
+                      <img
+                        className="file-contract-icon"
+                        src={FileContract}
+                        alt=""
+                      />
+                      View Agreement
+                    </Button>
+                  </Link>
+                  {/* )} */}
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />
