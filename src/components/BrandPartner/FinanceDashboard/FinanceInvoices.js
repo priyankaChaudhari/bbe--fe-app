@@ -134,12 +134,18 @@ export default function FinanceInvoices({
     </Option>
   );
 
-  const bindAmount = (orignalNumber, decimalDigits = 2) => {
-    const number = Number(orignalNumber);
+  const bindAmount = (orignalNumber, decimalDigits = 2, isRounded = false) => {
+    let number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
-      return number
+      number = number
         .toFixed(decimalDigits)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    if (isRounded) {
+      const no = number.toString().split('.');
+      if (no[1] === '00') {
+        return no[0];
+      }
     }
 
     return number;
@@ -205,7 +211,7 @@ export default function FinanceInvoices({
           </div>
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.monthly_budget)}
+          ${bindAmount(item.monthly_budget, 2, true)}
         </td>
         <td className="product-table-body light-font">{cretaedDate}</td>
         <td className="product-table-body light-font">{dueDate}</td>
@@ -276,7 +282,7 @@ export default function FinanceInvoices({
               invoiceType={item.invoice_type}
               invoiceId={item.invoiced_id}
               label="AMOUNT"
-              labelInfo={`$${bindAmount(item.monthly_budget)}`}
+              labelInfo={`$${bindAmount(item.monthly_budget, 2, true)}`}
               label1="CREATED ON"
               labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
               label2="DUE"

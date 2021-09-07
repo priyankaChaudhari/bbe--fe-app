@@ -110,13 +110,20 @@ export default function FinancePartners({
     </SingleValue>
   );
 
-  const bindAmount = (orignalNumber, decimalDigits = 2) => {
-    const number = Number(orignalNumber);
+  const bindAmount = (orignalNumber, decimalDigits = 2, isRounded = false) => {
+    let number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
-      return number
+      number = number
         .toFixed(decimalDigits)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+    if (isRounded) {
+      const no = number.toString().split('.');
+      if (no[1] === '00') {
+        return no[0];
+      }
+    }
+
     return number;
   };
 
@@ -184,10 +191,10 @@ export default function FinancePartners({
           <div className="company-name">{item.customer}</div>
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.total_outstanding)}
+          ${bindAmount(item.total_outstanding, 2, true)}
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.total_overdue)}
+          ${bindAmount(item.total_overdue, 2, true)}
         </td>
         <td className="product-table-body light-font">
           {item.avg_days_past_due} days
@@ -241,9 +248,9 @@ export default function FinancePartners({
               className="mb-3"
               CompanyName={item.customer}
               label="TOTAL OUTSTANDING"
-              labelInfo={`$${bindAmount(item.total_outstanding)}`}
+              labelInfo={`$${bindAmount(item.total_outstanding, 2, true)}`}
               label1="TOTAL OVERDUE"
-              labelInfo1={`$${bindAmount(item.total_overdue)}`}
+              labelInfo1={`$${bindAmount(item.total_overdue, 2, true)}`}
               label2="AVG. DAYS PAST DUE"
               labelInfo2={`${item.avg_days_past_due} days`}
               label3="PAID BY DUE DATE"
