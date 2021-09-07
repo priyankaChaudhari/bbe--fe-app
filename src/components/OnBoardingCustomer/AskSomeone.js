@@ -172,8 +172,9 @@ export default function AskSomeone({
           (accountType === 'Hybrid'
             ? noAmazonAccount.Seller &&
               noAmazonAccount.Vendor &&
-              (step.email === undefined || step.email === '') &&
-              stepData.email === userInfo.email
+              (step.email === undefined ||
+                step.email === '' ||
+                stepData.email === userInfo.email)
             : noAmazonAccount[accountType] && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'
