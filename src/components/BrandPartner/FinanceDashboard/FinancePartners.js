@@ -224,7 +224,7 @@ export default function FinancePartners({
           } days`}
         </td>
         <td className="product-table-body light-font">
-          {`${bindAmount(item.paid_by_due_date, 2, true)} %`}
+          {`${bindAmount(item.paid_by_due_date, 0, true)} %`}
         </td>
       </tr>
     );
@@ -294,7 +294,7 @@ export default function FinancePartners({
                   : 0
               } days`}
               label3="PAID BY DUE DATE"
-              labelInfo3={`${bindAmount(item.paid_by_due_date, 2, true)} %`}
+              labelInfo3={`${bindAmount(item.paid_by_due_date, 0, true)} %`}
             />
           ))
         ) : (
