@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 import { components } from 'react-select';
 import $ from 'jquery';
 import { useMediaQuery } from 'react-responsive';
+import { useHistory } from 'react-router-dom';
+
 import {
   WhiteCard,
   Table,
@@ -21,6 +24,7 @@ import {
 } from '../../../constants/DashboardConstants';
 import { getFinanceInvoices } from '../../../api';
 import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../constants';
 
 export default function FinancePartners({
   timeFrame,
@@ -41,6 +45,8 @@ export default function FinancePartners({
     value: 'total_outstanding',
     label: 'Total Outstanding',
   });
+
+  const history = useHistory();
 
   const getPartners = useCallback(
     (searchKey, status, sortBy, page) => {
@@ -184,11 +190,21 @@ export default function FinancePartners({
 
   const renderTableData = (item) => {
     return (
-      <tr key={item.id}>
+      <tr
+        onClick={() =>
+          history.push(
+            PATH_CUSTOMER_DETAILS.replace(
+              ':id',
+              item.customer && item.customer.id,
+            ),
+            'finance',
+          )
+        }
+        key={item.id}>
         <td className="product-body">
           {' '}
           <img className="company-logo" src={CompanyDefaultUser} alt="logo" />
-          <div className="company-name">{item.customer}</div>
+          <div className="company-name">{item.customer.name}</div>
         </td>
         <td className="product-table-body">
           ${bindAmount(item.total_outstanding, 2, true)}
@@ -244,9 +260,18 @@ export default function FinancePartners({
           partnerData &&
           partnerData.map((item) => (
             <TableMobileView
+              onClick={() =>
+                history.push(
+                  PATH_CUSTOMER_DETAILS.replace(
+                    ':id',
+                    item.customer && item.customer.id,
+                  ),
+                  'finance',
+                )
+              }
               key={item.id}
               className="mb-3"
-              CompanyName={item.customer}
+              CompanyName={item.customer.name}
               label="TOTAL OUTSTANDING"
               labelInfo={`$${bindAmount(item.total_outstanding, 2, true)}`}
               label1="TOTAL OVERDUE"
@@ -258,7 +283,7 @@ export default function FinancePartners({
             />
           ))
         ) : (
-          <NoData>Partner Data Not Available</NoData>
+          <NoData>No partners Found</NoData>
         )}
       </>
     );
@@ -307,7 +332,7 @@ export default function FinancePartners({
                 />
               </>
             ) : (
-              <NoData>Partner Data Not Available</NoData>
+              <NoData>No partners Found</NoData>
             )}
           </WhiteCard>
         ) : (

@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
+
 import $ from 'jquery';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
+import { shape, string } from 'prop-types';
+
 import {
   WhiteCard,
   Table,
@@ -120,16 +123,12 @@ export default function FinanceInvoices({
     getInvoices(searchQuery, selectedStatus, selectedSortBy.value, currentPage);
   };
 
-  const filterOption = (props) => (
+  const filterOption = ({ data, ...props }) => (
     <Option {...props}>
       <div className="pb-2">
-        <span style={{ fontSize: '15px', color: '#000000' }}>
-          {props.data.label}
-        </span>
+        <span style={{ fontSize: '15px', color: '#000000' }}>{data.label}</span>
 
-        <div style={{ fontSize: '12px', color: '#556178' }}>
-          {props.data.sub}
-        </div>
+        <div style={{ fontSize: '12px', color: '#556178' }}>{data.sub}</div>
       </div>
     </Option>
   );
@@ -294,7 +293,7 @@ export default function FinanceInvoices({
             />
           ))
         ) : (
-          <NoData>Invoice Data Not Available</NoData>
+          <NoData>No Invoices Found</NoData>
         )}
       </>
     );
@@ -344,7 +343,7 @@ export default function FinanceInvoices({
                 />
               </>
             ) : (
-              <NoData>Invoice Data Not Available</NoData>
+              <NoData>No Invoices Found</NoData>
             )}
           </WhiteCard>
         ) : (
@@ -382,8 +381,18 @@ export default function FinanceInvoices({
   );
 }
 
-FinanceInvoices.defaultProps = {};
-FinanceInvoices.propTypes = {};
+FinanceInvoices.defaultProps = {
+  data: shape({
+    label: '',
+    sub: '',
+  }),
+};
+FinanceInvoices.propTypes = {
+  data: shape({
+    label: string,
+    sub: string,
+  }),
+};
 
 const NoData = styled.div`
   margin: 3em;

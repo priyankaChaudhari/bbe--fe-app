@@ -6,9 +6,8 @@ import { useMediaQuery } from 'react-responsive';
 import { arrayOf, bool } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
-import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
 import TableMobileView from '../../../../../common/TableMobileView';
-import { noGraphDataMessage } from '../../../../../constants/CompanyPerformanceConstants';
+import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
 import { InvoiceStatusColorSet } from '../../../../../constants/DashboardConstants';
 
 const DSPInvoiceDetails = ({ loader, data }) => {
@@ -62,7 +61,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             );
           })
         ) : (
-          <NoData>{noGraphDataMessage}</NoData>
+          <NoData>No DSPInvoices Found</NoData>
         )}
       </>
     );
@@ -140,7 +139,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             ) : null}
           </Table>
           {!data || (data && data.length === 0) ? (
-            <NoData>{noGraphDataMessage}</NoData>
+            <NoData>No DSPInvoices Found</NoData>
           ) : null}
         </WhiteCard>
       </>

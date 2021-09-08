@@ -86,6 +86,7 @@ export default function FinanceDSP({
   };
 
   const handleApply = () => {
+    console.log(state, 'handleApply', dummyDateType);
     if (state !== null) {
       setDateError(null);
       let sd = state[0];
@@ -126,9 +127,9 @@ export default function FinanceDSP({
       return 'All-Time';
     }
     const customDateLabel = `${
-      monthNames[state[0].getMonth() + 1]
+      monthNames[state[0].getMonth()]
     } '${state[0].getFullYear()} - ${
-      monthNames[state[1].getMonth() + 1]
+      monthNames[state[1].getMonth()]
     } '${state[1].getFullYear()}`;
     return customDateLabel;
   };

@@ -1,8 +1,8 @@
-import { shape } from 'prop-types';
 import React from 'react';
 
-import { Card } from '../../../../../common';
+import { shape } from 'prop-types';
 
+import { Card } from '../../../../../common';
 import Theme from '../../../../../theme/Theme';
 
 const MetricsInvoices = ({ data }) => {
@@ -51,6 +51,7 @@ const MetricsInvoices = ({ data }) => {
           {renderCard(
             'Average days past due',
             `${data.avg_days_past_due} days`,
+            'After due date',
           )}
           {renderCard(
             'Paid by due date',
