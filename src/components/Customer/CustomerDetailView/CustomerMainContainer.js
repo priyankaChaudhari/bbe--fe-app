@@ -1007,7 +1007,7 @@ export default function CustomerMainContainer() {
                         <div className="straight-line horizontal-line mb-3 mt-4" />
                       </div>
 
-                      <ul className="left-details-card">
+                      <ul className="left-details-card ">
                         {userInfo && userInfo.role === 'Customer' ? (
                           <li
                             onClick={() => {

@@ -54,7 +54,7 @@ const CardWrapper = styled.div`
 
   .title {
     font-size: 26px;
-    font-family: ${Theme.titleFontFamily};
+    font-family: ${Theme.baseMediumFontFamily};
   }
 
   p.sub-title {

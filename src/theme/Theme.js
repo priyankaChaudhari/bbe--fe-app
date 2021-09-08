@@ -102,6 +102,7 @@ const Theme = {
   /* Font family */
   baseFontFamily: 'Noah-Regular',
   titleFontFamily: 'Noah-Bold',
+  baseMediumFontFamily: 'Noah-Medium',
   boldItalicFontFamily: 'Noah-BoldItalic',
   regularItalicFontFamily: 'Noah-RegularItalic',
   boldArialTextFontFamily: 'Arial-Bold',

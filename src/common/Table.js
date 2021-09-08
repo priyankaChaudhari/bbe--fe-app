@@ -38,19 +38,19 @@ const Table = styled.table`
       position: relative;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
-      font-weight: 600;
+       font-family: ${Theme.baseMediumFontFamily};
 
       &.product-body {
-         padding: 13px 4px 13px 0;
+         padding: 13px 20px 13px 0;
 
          &.light-font {
-           font-weight: 300;
+          font-family: ${Theme.baseFontFamily}
          }
       }
       &.agreement {
          font-size: ${Theme.normal};
          border-bottom: 1px solid ${Theme.gray11};
-         font-weight: 300;
+        font-family: ${Theme.baseFontFamily}
         
          .orange-icon {
            margin-left: 10px;
@@ -62,7 +62,7 @@ const Table = styled.table`
          font-size: ${Theme.extraNormal};
 
          &.light-font {
-           font-weight: 300;
+           font-family: ${Theme.baseFontFamily}
          }
       }
       &.product-catalog-body {
@@ -251,7 +251,7 @@ const Table = styled.table`
       .status {
         color: ${Theme.gray85};
         font-size: ${Theme.extraNormal};
-        font-weight: 300;
+        font-family: ${Theme.baseFontFamily}
       }
 
       .user-profile-circle {
