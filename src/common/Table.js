@@ -38,23 +38,24 @@ const Table = styled.table`
       position: relative;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
-       font-family: ${Theme.baseMediumFontFamily};
+      //  font-family: ${Theme.baseMediumFontFamily};
+       font-weight: 600;
 
       &.product-body {
          padding: 13px 20px 13px 0;
 
          &.light-font {
-          font-family: ${Theme.baseFontFamily}
+           font-weight: 300;
          }
       }
       &.agreement {
          font-size: ${Theme.normal};
          border-bottom: 1px solid ${Theme.gray11};
-        font-family: ${Theme.baseFontFamily}
+         font-weight: 300;
         
          .orange-icon {
            margin-left: 10px;
-            vertical-align: middle;
+           vertical-align: middle;
          }
         }
       &.product-table-body {
@@ -62,7 +63,7 @@ const Table = styled.table`
          font-size: ${Theme.extraNormal};
 
          &.light-font {
-           font-family: ${Theme.baseFontFamily}
+           font-weight: 300;
          }
       }
       &.product-catalog-body {
@@ -251,7 +252,7 @@ const Table = styled.table`
       .status {
         color: ${Theme.gray85};
         font-size: ${Theme.extraNormal};
-        font-family: ${Theme.baseFontFamily}
+        font-weight: 300;
       }
 
       .user-profile-circle {

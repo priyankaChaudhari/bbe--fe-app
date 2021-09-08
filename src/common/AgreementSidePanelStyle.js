@@ -38,8 +38,7 @@ const SidePanel = styled.div`
   .sendar-details {
     color: ${Theme.black};
     font-size: ${Theme.extraMedium};
-    font-family: ${Theme.baseMediumFontFamily};
-    font-weight: normal;
+    font-family: ${Theme.baseFontFamily};
     text-transform: inherit;
     margin-top: 6px;
     margin-left: 16px;
@@ -304,7 +303,7 @@ const SidePanel = styled.div`
     font-size: ${Theme.extraMedium};
     padding: 20px 20px 0 15px;
     color: ${Theme.black};
-    font-family: ${Theme.baseMediumFontFamily};
+    font-weight: 600;
   }
   .current-agreement-title {
       padding: 20px;

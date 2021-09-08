@@ -53,7 +53,7 @@ const StatusWrapper = styled.div`
   span.status_text {
     margin-left: ${(props) => (props.pointColor ? 8 : 0)}px;
     font-size: ${Theme.extraNormal};
-    font-family: ${Theme.baseFontFamily};
+    font-weight: 500;
     text-align: center;
   }
 `;

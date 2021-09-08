@@ -221,7 +221,8 @@ export const WhiteCard = styled.div`
     .brand-name {
       color: ${Theme.black};
       font-size: 28px;
-      font-family: ${Theme.baseMediumFontFamily};
+      // font-family: ${Theme.baseMediumFontFamily};
+      font-weight: 500; 
     }
     .company-status {
       background: ${Theme.darkGreen};
@@ -345,9 +346,7 @@ export const WhiteCard = styled.div`
       .left-details {
         color: ${Theme.black};
         padding: 0 0px 0px 25px;
-        border-left:  ${(props) =>
-          props.role === 'Customer' ? '45px' : '109px'};
-
+        border-left: 3px solid  ${Theme.white};
         img {
           width: 24px;
           margin-right: 15px;

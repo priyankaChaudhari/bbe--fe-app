@@ -1,15 +1,15 @@
 // globalStyles.js
 import { createGlobalStyle } from 'styled-components';
 import Theme from '../Theme';
-import NoahBold from '../fonts/noah-font/NoahBold.otf';
-import NoahRegular from '../fonts/noah-font/NoahRegular.otf';
+import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
+import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
 import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.woff';
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-import NoahMedium from '../fonts/noah-font/NoahMedium.otf';
+// import NoahMedium from '../fonts/noah-font/NoahMedium.otf';
 
 import { CalendarFontBackArrow } from '../images/index';
 
@@ -21,10 +21,7 @@ const bodyStyles = createGlobalStyle`
     font-family: 'Noah-Bold';
     src: url(${NoahBold});
   }  
-    @font-face {
-    font-family: 'Noah-Medium';
-    src: url(${NoahMedium});
-  } 
+ 
    @font-face {
     font-family: 'Noah-Regular';
     src: url(${NoahRegular});
@@ -275,8 +272,8 @@ h6 {
 .medium-text-title {
   color: ${Theme.black};
   font-size: ${Theme.title};
-  // font-weight: 600;
-  font-family: ${Theme.baseMediumFontFamily};
+  font-weight: 600;
+  
 }
 
 .ghq-card-content__horizontal-rule {
@@ -309,7 +306,9 @@ h6 {
 .black-heading-title {
   font-size: ${Theme.extraMedium}; 
   color: ${Theme.black};
-  font-family: ${Theme.baseMediumFontFamily};
+  // font-family: ${Theme.baseMediumFontFamily};
+   font-family: ${Theme.baseFontFamily};
+  font-weight: 600;
 }
  .card-title {
     word-break: break-all;
@@ -331,7 +330,9 @@ p {
   &.black-heading-title {
     font-size: ${Theme.extraMedium}; 
     color: ${Theme.black};
-    font-family: ${Theme.baseMediumFontFamily};
+    // font-family: ${Theme.baseMediumFontFamily};
+    font-family: ${Theme.baseFontFamily};
+    font-weight: 600;
   }
 
   &.basic-text {
