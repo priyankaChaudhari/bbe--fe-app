@@ -27,6 +27,8 @@ import {
   getVideoLink,
   verifyStepToken,
   getBillingDetails,
+  deleteAmazonAccount,
+  getAmazonAccountDetails,
 } from '../../api';
 import { getCustomerDetails } from '../../store/actions';
 import NavigationHeader from './NavigationHeader';
@@ -53,7 +55,6 @@ import {
   CreateAccount,
 } from '.';
 import { stepPath } from '../../constants/FieldConstants';
-import { getAmazonAccountDetails } from '../../api/OnboardingCustomerApi';
 
 export default function MainContainer() {
   const history = useHistory();
@@ -447,6 +448,14 @@ export default function MainContainer() {
               });
               setDisableBtn(false);
               setApiError({});
+              if (
+                event.target.checked === false &&
+                history.location.pathname.includes(PATH_AMAZON_MERCHANT) &&
+                marketplaceDetails.Seller &&
+                marketplaceDetails.Seller.id
+              ) {
+                deleteAmazonAccount('seller', marketplaceDetails.Seller.id);
+              }
             }}
             readOnly
             checked={

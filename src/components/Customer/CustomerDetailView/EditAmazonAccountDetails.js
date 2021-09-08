@@ -11,10 +11,7 @@ import {
   Button,
   ContractFormField,
 } from '../../../common';
-import {
-  saveAmazonSellerAccount,
-  saveAmazonVendorAccount,
-} from '../../../api/OnboardingCustomerApi';
+import { saveAmazonSellerAccount, saveAmazonVendorAccount } from '../../../api';
 
 export default function EditAmazonAccountDetails({
   setShowModal,

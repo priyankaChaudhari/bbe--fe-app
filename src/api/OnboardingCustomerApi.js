@@ -250,3 +250,19 @@ export async function getAmazonVendor(marketplace) {
     });
   return result;
 }
+
+export async function deleteAmazonAccount(type, id) {
+  const result = await axiosInstance
+    .delete(
+      type === 'seller'
+        ? `${API_AMAZON_SELLER_ACCOUNT + id}/`
+        : `${API_AMAZON_VENDOR_ACCOUNT + id}/`,
+    )
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

@@ -130,6 +130,12 @@ export {
   editCustomerEmail,
   verifyStepUser,
   getBillingDetails,
+  getAmazonAccountDetails,
+  saveAmazonSellerAccount,
+  saveAmazonVendorAccount,
+  getAmazonSeller,
+  getAmazonVendor,
+  deleteAmazonAccount,
 } from './OnboardingCustomerApi';
 
 export {

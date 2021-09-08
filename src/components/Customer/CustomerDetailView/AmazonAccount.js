@@ -22,10 +22,7 @@ import {
   AmazonSellerAccountDetails,
   AmazonVendorAccountDetails,
 } from '../../../constants/FieldConstants';
-import {
-  getAmazonSeller,
-  getAmazonVendor,
-} from '../../../api/OnboardingCustomerApi';
+import { getAmazonSeller, getAmazonVendor } from '../../../api';
 import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
 export default function AmazonAccount({

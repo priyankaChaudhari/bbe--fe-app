@@ -18,7 +18,14 @@ import {
   ErrorMsg,
   CheckBox,
 } from '../../common';
-import { askSomeoneData, updateAskSomeoneData, updateUserMe } from '../../api';
+import {
+  askSomeoneData,
+  updateAskSomeoneData,
+  updateUserMe,
+  deleteAmazonAccount,
+  saveAmazonSellerAccount,
+  saveAmazonVendorAccount,
+} from '../../api';
 import {
   PATH_AMAZON_MERCHANT,
   PATH_SUMMARY,
@@ -26,10 +33,6 @@ import {
   PATH_UNAUTHORIZED_AMAZON_MERCHANT,
 } from '../../constants';
 import { userMe } from '../../store/actions';
-import {
-  saveAmazonSellerAccount,
-  saveAmazonVendorAccount,
-} from '../../api/OnboardingCustomerApi';
 import {
   AmazonSellerAccountDetails,
   AmazonVendorAccountDetails,
@@ -467,6 +470,17 @@ export default function AmazonMerchant({
     );
   };
 
+  const disableBtn = () => {
+    if (
+      formData.Seller !== null ||
+      formData.Vendor !== null ||
+      noAmazonAccount.Seller !== null ||
+      noAmazonAccount.Vendor !== null
+    )
+      return false;
+    return true;
+  };
+
   const generateSaveBtn = (part) => {
     return (
       <>
@@ -549,7 +563,8 @@ export default function AmazonMerchant({
     return (
       <Button
         className="btn-primary w-100 mt-3"
-        onClick={() => saveAccountDetails()}>
+        onClick={() => saveAccountDetails()}
+        disabled={disableBtn()}>
         {' '}
         {isLoading.loader && isLoading.type === 'button' ? (
           <PageLoader color="#fff" type="button" />
@@ -601,6 +616,14 @@ export default function AmazonMerchant({
                 Vendor: event.target.checked,
               });
               setApiError({});
+              if (
+                event.target.checked === false &&
+                history.location.pathname.includes(PATH_AMAZON_MERCHANT) &&
+                marketplaceDetails.Vendor &&
+                marketplaceDetails.Vendor.id
+              ) {
+                deleteAmazonAccount('vendor', marketplaceDetails.Vendor.id);
+              }
             }}
             readOnly
             checked={noAmazonAccount.Vendor}
