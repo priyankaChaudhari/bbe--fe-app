@@ -260,7 +260,7 @@ export default function FinanceDSP({
       return bindAmount(data[key], 0);
     }
     if (key === 'percentage_past_due') {
-      return bindAmount(data[key], 1);
+      return bindAmount(data[key], 2);
     }
     if (key === 'avg_days_past_due') {
       return bindAmount(data[key], 1);

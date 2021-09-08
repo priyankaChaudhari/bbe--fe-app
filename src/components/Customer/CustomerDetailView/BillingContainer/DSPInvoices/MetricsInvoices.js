@@ -61,7 +61,7 @@ const MetricsInvoices = ({ data }) => {
           )}
           {renderCard(
             'Paid by due date',
-            returnFromatNumber(data.paid_by_due_date, 'percentage', 1),
+            returnFromatNumber(data.paid_by_due_date, 'percentage'),
           )}
         </>
       )}
