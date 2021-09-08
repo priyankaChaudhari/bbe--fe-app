@@ -210,7 +210,7 @@ export default function FinanceInvoices({
           </div>
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.monthly_budget, 2, true)}
+          ${bindAmount(item.monthly_budget, 0, true)}
         </td>
         <td className="product-table-body light-font">{cretaedDate}</td>
         <td className="product-table-body light-font">{dueDate}</td>
@@ -281,7 +281,7 @@ export default function FinanceInvoices({
               invoiceType={item.invoice_type}
               invoiceId={item.invoiced_id}
               label="AMOUNT"
-              labelInfo={`$${bindAmount(item.monthly_budget, 2, true)}`}
+              labelInfo={`$${bindAmount(item.monthly_budget, 0, true)}`}
               label1="CREATED ON"
               labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
               label2="DUE"

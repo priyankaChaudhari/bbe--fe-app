@@ -52,7 +52,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
                     : '#E3F2D2'
                 }
                 label="Amount"
-                labelInfo={addThousandComma(item.monthly_budget)}
+                labelInfo={addThousandComma(item.monthly_budget, 0)}
                 label1="Created on"
                 labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
                 label2="Due"
@@ -97,7 +97,7 @@ const DSPInvoiceDetails = ({ loader, data }) => {
           <div className="status">#{item.invoiced_id}</div>
         </td>
         <td className="product-body">
-          ${addThousandComma(item.monthly_budget)}
+          ${addThousandComma(item.monthly_budget, 0)}
         </td>
         <td className="product-table-body light-font">
           {dayjs(item.generated_at).format('MM/DD/YYYY')}
