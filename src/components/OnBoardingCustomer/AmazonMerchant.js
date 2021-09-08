@@ -56,6 +56,7 @@ export default function AmazonMerchant({
   setNoAmazonAccount,
   apiError,
   setApiError,
+  setMarketplaceDetails,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -489,7 +490,8 @@ export default function AmazonMerchant({
         marketplaceDetails.type === 'Seller' ? (
           <Button
             className="btn-primary w-100 mt-3"
-            onClick={() => saveAccountDetails()}>
+            onClick={() => saveAccountDetails()}
+            disabled={disableBtn()}>
             {' '}
             {isLoading.loader && isLoading.type === 'button' ? (
               <PageLoader color="#fff" type="button" />
@@ -622,7 +624,17 @@ export default function AmazonMerchant({
                 marketplaceDetails.Vendor &&
                 marketplaceDetails.Vendor.id
               ) {
-                deleteAmazonAccount('vendor', marketplaceDetails.Vendor.id);
+                deleteAmazonAccount(
+                  'vendor',
+                  marketplaceDetails.Vendor.id,
+                ).then((res) => {
+                  if (res && res.status === 204) {
+                    setMarketplaceDetails({
+                      ...marketplaceDetails,
+                      Vendor: {},
+                    });
+                  }
+                });
               }
             }}
             readOnly
@@ -726,6 +738,7 @@ AmazonMerchant.defaultProps = {
   setNoAmazonAccount: () => {},
   setApiError: () => {},
   apiError: {},
+  setMarketplaceDetails: () => {},
 };
 
 AmazonMerchant.propTypes = {
@@ -781,4 +794,5 @@ AmazonMerchant.propTypes = {
   setNoAmazonAccount: PropTypes.func,
   setApiError: PropTypes.func,
   apiError: PropTypes.objectOf(PropTypes.array),
+  setMarketplaceDetails: PropTypes.func,
 };

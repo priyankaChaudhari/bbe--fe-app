@@ -368,6 +368,7 @@ export default function MainContainer() {
           setNoAmazonAccount={setNoAmazonAccount}
           setApiError={setApiError}
           apiError={apiError}
+          setMarketplaceDetails={setMarketplaceDetails}
         />
       );
     if (path === 'amazon-account')
@@ -454,7 +455,17 @@ export default function MainContainer() {
                 marketplaceDetails.Seller &&
                 marketplaceDetails.Seller.id
               ) {
-                deleteAmazonAccount('seller', marketplaceDetails.Seller.id);
+                deleteAmazonAccount(
+                  'seller',
+                  marketplaceDetails.Seller.id,
+                ).then((res) => {
+                  if (res && res.status === 204) {
+                    setMarketplaceDetails({
+                      ...marketplaceDetails,
+                      Seller: {},
+                    });
+                  }
+                });
               }
             }}
             readOnly
