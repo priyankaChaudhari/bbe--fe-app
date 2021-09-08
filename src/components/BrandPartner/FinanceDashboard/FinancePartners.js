@@ -214,7 +214,14 @@ export default function FinancePartners({
           ${bindAmount(item.total_overdue, 2, true)}
         </td>
         <td className="product-table-body light-font">
-          {item.avg_days_past_due} days
+          {`${
+            item.avg_days_past_due !== 0
+              ? item.avg_days_past_due
+                  .toFixed(1)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              : 0
+          } days`}
         </td>
         <td className="product-table-body light-font">
           {`${bindAmount(item.paid_by_due_date, 2, true)} %`}
@@ -278,7 +285,14 @@ export default function FinancePartners({
               label1="TOTAL OVERDUE"
               labelInfo1={`$${bindAmount(item.total_overdue, 2, true)}`}
               label2="AVG. DAYS PAST DUE"
-              labelInfo2={`${item.avg_days_past_due} days`}
+              labelInfo2={`${
+                item.avg_days_past_due === 0
+                  ? item.avg_days_past_due
+                      .toFixed(1)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : 0
+              } days`}
               label3="PAID BY DUE DATE"
               labelInfo3={`${bindAmount(item.paid_by_due_date, 2, true)} %`}
             />

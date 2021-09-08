@@ -6,8 +6,7 @@ import { Card } from '../../../../../common';
 import Theme from '../../../../../theme/Theme';
 
 const MetricsInvoices = ({ data }) => {
-  const returnFromatNumber = (value, type) => {
-    const decimalDigits = 0;
+  const returnFromatNumber = (value, type, decimalDigits = 0) => {
     if (value) {
       return `${type === 'currency' ? '$' : ''}${value
         .toFixed(decimalDigits)
@@ -50,7 +49,14 @@ const MetricsInvoices = ({ data }) => {
           )}
           {renderCard(
             'Average days past due',
-            `${data.avg_days_past_due} days`,
+            `${
+              data.avg_days_past_due !== 0
+                ? data.avg_days_past_due
+                    .toFixed(1)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0
+            } days`,
             'After due date',
           )}
           {renderCard(
