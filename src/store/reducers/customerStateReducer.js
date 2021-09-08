@@ -45,7 +45,7 @@ const customerStateReducer = (state = initialState, action) => {
         //    error: null,
       };
     case actionTypes.CUSTOMER_SELECTED_TAB:
-      console.log('reducer', action);
+      // console.log('reducer', action);
       return {
         ...state,
         isLoading: false,
