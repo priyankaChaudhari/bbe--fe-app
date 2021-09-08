@@ -216,7 +216,7 @@ export default function FinancePartners({
           {item.avg_days_past_due} days
         </td>
         <td className="product-table-body light-font">
-          {item.paid_by_due_date}%
+          {`${bindAmount(item.paid_by_due_date, 2, true)} %`}
         </td>
       </tr>
     );
@@ -279,7 +279,7 @@ export default function FinancePartners({
               label2="AVG. DAYS PAST DUE"
               labelInfo2={`${item.avg_days_past_due} days`}
               label3="PAID BY DUE DATE"
-              labelInfo3={`${item.paid_by_due_date} %`}
+              labelInfo3={`${bindAmount(item.paid_by_due_date, 2, true)} %`}
             />
           ))
         ) : (

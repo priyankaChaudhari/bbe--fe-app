@@ -197,6 +197,10 @@ export async function getFinanceInvoices(
     };
   }
 
+  if (sortBy === '') {
+    delete params.sort_by;
+  }
+
   if (searchKey !== '') {
     params = {
       ...params,

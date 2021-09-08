@@ -81,7 +81,7 @@ export default function FinanceInvoices({
 
   useEffect(() => {
     if (responseId === null || isTimeFrameChange) {
-      getInvoices(searchQuery, selectedStatus, selectedSortBy.value, 1);
+      getInvoices(searchQuery, selectedStatus, '', 1);
       setResponseId('12345');
       setIsTimeFrameChange(false);
     }
