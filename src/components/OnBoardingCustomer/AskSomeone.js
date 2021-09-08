@@ -172,14 +172,15 @@ export default function AskSomeone({
           (accountType === 'Hybrid'
             ? noAmazonAccount.Seller &&
               noAmazonAccount.Vendor &&
-              (step.email === undefined ||
-                step.email === '' ||
-                stepData.email === userInfo.email)
+              (stepData.email === undefined ||
+                stepData.email === '' ||
+                stepData.email === userInfo.email) &&
+              stepData.is_completed
             : noAmazonAccount[accountType] && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'
         }>
-        <label className="check-container customer-pannel " htmlFor={step}>
+        <label className="check-container customer-pannel" htmlFor={step}>
           Ask someone else to complete this section
           <input
             type="checkbox"
