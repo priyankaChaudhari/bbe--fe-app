@@ -276,7 +276,7 @@ export default function FinanceInvoices({
                 )
               }
               key={item.invoiced_id}
-              className="mb-3"
+              className="mb-3 cursor"
               CompanyName={item.customer && item.customer.name}
               invoiceType={item.invoice_type}
               invoiceId={item.invoiced_id}

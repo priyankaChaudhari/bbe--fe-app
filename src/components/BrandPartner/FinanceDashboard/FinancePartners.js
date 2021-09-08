@@ -191,6 +191,7 @@ export default function FinancePartners({
   const renderTableData = (item) => {
     return (
       <tr
+        className="cursor"
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(
@@ -270,7 +271,7 @@ export default function FinancePartners({
                 )
               }
               key={item.id}
-              className="mb-3"
+              className="mb-3 cursor"
               CompanyName={item.customer.name}
               label="TOTAL OUTSTANDING"
               labelInfo={`$${bindAmount(item.total_outstanding, 2, true)}`}
