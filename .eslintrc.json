@@ -1,6 +1,9 @@
 {
   "root": true,
   "extends": ["airbnb", "airbnb/hooks", "prettier", "prettier/react"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
     "react/jsx-props-no-spreading": "off",
     "no-nested-ternary": "off",
@@ -29,7 +32,17 @@
         "controlComponents": ["CustomInput"],
         "depth": 3
       }
-    ]
+    ],
+    "no-param-reassign": 0
+    // "react/forbid-prop-types": [
+    //   "error",
+    //   {
+    //     "forbid": [
+    //       "object",
+    //       "string"
+    //     ]
+    //   }
+    // ]
   },
 
   "env": {

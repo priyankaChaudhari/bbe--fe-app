@@ -1,10 +1,20 @@
-/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
-
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
+import { useSelector } from 'react-redux';
+import {
+  string,
+  bool,
+  number,
+  func,
+  oneOfType,
+  arrayOf,
+  shape,
+} from 'prop-types';
+
+import PageLoader from '../../common/PageLoader';
+import Theme from '../../theme/Theme';
+import { ContractActivityLogFooter } from '../../theme/AgreementStyle';
+import { CommonPagination, Status } from '../../common';
 import {
   FileIcon,
   CheckFileIcon,
@@ -12,10 +22,7 @@ import {
   SignatureIcon,
   NextActivityLogo,
   ContractEmailIcon,
-} from '../../theme/images/index';
-import { CommonPagination, Status } from '../../common/index';
-import PageLoader from '../../common/PageLoader';
-import Theme from '../../theme/Theme';
+} from '../../theme/images';
 
 const _ = require('lodash');
 
@@ -33,13 +40,14 @@ function ContractActivityLog({
   checkContractStatus,
 }) {
   const loggedInuserInfo = useSelector((state) => state.userState.userInfo);
+  const contractStatusValue = agreementData?.contract_status?.value;
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
 
   const getContractStatusData = (type) => {
-    const status =
-      (agreementData &&
-        agreementData.contract_status &&
-        agreementData.contract_status.value) ||
-      '';
+    const status = contractStatusValue || '';
     let statusClass = '';
     let statusSrc = '';
     let dispalyStatus = '';
@@ -155,17 +163,15 @@ function ContractActivityLog({
       ) {
         oldValue = oldValue.replace('.00', '');
         newValue = newValue.replace('.00', '');
-        oldValue =
-          oldValue && oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        newValue =
-          newValue && newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        oldValue = displayNumber(oldValue && oldValue);
+        newValue = displayNumber(newValue && newValue);
       }
       return (
-        <>
+        <React.Fragment key={Math.random()}>
           {index === 0 ? logUser : ''}
           <span>updated {field || ''} from </span> {oldValue || ''}
           <span> to </span> {newValue === '' ? 'None' : newValue}
-        </>
+        </React.Fragment>
       );
     });
   };
@@ -179,7 +185,15 @@ function ContractActivityLog({
       </>
     );
   };
-
+  const renderHistoryChangeLog = (activityMessage, changeReason) => {
+    return (
+      <>
+        {activityMessage && activityMessage[0]}
+        <span>{changeReason}</span>
+        {activityMessage && activityMessage[1]}
+      </>
+    );
+  };
   const activityDetail = (item) => {
     let activityMessage = '';
     let logUser;
@@ -187,34 +201,27 @@ function ContractActivityLog({
     let oldValue;
     let newValue = '';
     let mixedLog = false;
-    if (
-      item &&
-      item.history_change_reason.includes('created new record by company name')
-    ) {
-      activityMessage = item.history_change_reason.split(
+    const historyChangeReason = item?.history_change_reason;
+
+    if (historyChangeReason.includes('created new record by company name')) {
+      activityMessage = historyChangeReason.split(
         'created new record by company name',
       );
       return (
         <>
-          {activityMessage[0]}
-          <span>created new record by company name</span>
-          {activityMessage[1]}
+          {renderHistoryChangeLog(
+            activityMessage,
+            'created new record by company name',
+          )}
         </>
       );
     }
-    if (item.history_change_reason.includes('deleted')) {
-      activityMessage = item.history_change_reason.split('deleted');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>deleted</span>
-          {activityMessage[1]}
-        </>
-      );
+    if (historyChangeReason.includes('deleted')) {
+      activityMessage = historyChangeReason.split('deleted');
+      return <>{renderHistoryChangeLog(activityMessage, 'deleted')}</>;
     }
-
-    if (item.history_change_reason.includes('updated addendum')) {
-      activityMessage = item.history_change_reason.split('updated addendum');
+    if (historyChangeReason.includes('updated addendum')) {
+      activityMessage = historyChangeReason.split('updated addendum');
       return (
         <>
           {activityMessage[0]}
@@ -223,92 +230,69 @@ function ContractActivityLog({
         </>
       );
     }
-
-    if (item.history_change_reason.includes('resumed')) {
-      activityMessage = item.history_change_reason.split('resumed');
+    if (historyChangeReason.includes('resumed')) {
+      activityMessage = historyChangeReason.split('resumed');
+      return <>{renderHistoryChangeLog(activityMessage, 'resumed')}</>;
+    }
+    if (historyChangeReason.includes('approved and sent')) {
+      activityMessage = historyChangeReason.split('approved and sent');
       return (
-        <>
-          {activityMessage[0]}
-          <span>resumed</span>
-          {activityMessage[1]}
-        </>
+        <>{renderHistoryChangeLog(activityMessage, 'approved and sent')}</>
       );
     }
-
-    if (item.history_change_reason.includes('approved and sent')) {
-      activityMessage = item.history_change_reason.split('approved and sent');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>approved and sent </span>
-          {activityMessage[1]}
-        </>
-      );
+    if (historyChangeReason.includes('sent')) {
+      activityMessage = historyChangeReason.split('sent');
+      return <>{renderHistoryChangeLog(activityMessage, 'sent')}</>;
     }
-
-    if (item.history_change_reason.includes('sent')) {
-      activityMessage = item.history_change_reason.split('sent');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>sent</span>
-          {activityMessage[1]}
-        </>
-      );
+    if (historyChangeReason.includes('signed')) {
+      activityMessage = historyChangeReason.split('signed');
+      return <>{renderHistoryChangeLog(activityMessage, 'signed')}</>;
     }
+    if (historyChangeReason.includes('approved')) {
+      activityMessage = historyChangeReason.split('approved');
 
-    if (item.history_change_reason.includes('signed')) {
-      activityMessage = item.history_change_reason.split('signed');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>signed</span>
-          {activityMessage[1]}
-        </>
-      );
-    }
+      const [activityUser, message] = activityMessage;
+      logUser = activityUser;
 
-    if (item.history_change_reason.includes('approved')) {
-      activityMessage = item.history_change_reason.split('approved');
-      logUser = activityMessage[0];
-      if (activityMessage[1].includes('from')) {
-        field = activityMessage[1].split('from')[0];
-        oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
-        newValue = activityMessage[1]
-          .split('from')[1]
-          .split(' to ')[1]
-          .split(', ,')[0];
+      if (message.includes('from')) {
+        const splittedMessage = message.split('from');
+        const [fieldLog, remainingMessage] = splittedMessage;
 
+        const splittedRemainingMessage = remainingMessage.split(' to ');
+        const [oldVal, subRemainingMessage] = splittedRemainingMessage;
+
+        field = fieldLog;
+        oldValue = oldVal;
+        newValue = subRemainingMessage;
         return (
           <>
-            {activityMessage && activityMessage[0]}
-            <span>
-              approved{' '}
-              {activityMessage && activityMessage[1].split(' from ')[0]} from{' '}
-            </span>{' '}
-            {oldValue}
-            <span> to </span> {newValue}
+            {logUser}
+            <span>approved {field} from</span> {oldValue} <span> to </span>
+            {newValue}
           </>
         );
       }
-      return (
-        <>
-          {activityMessage[0]}
-          <span>approved</span>
-          {activityMessage[1]}
-        </>
-      );
+      return <>{renderHistoryChangeLog(activityMessage, 'approved')}</>;
     }
 
-    if (item && item.history_change_reason.includes('updated')) {
-      activityMessage = item.history_change_reason.split('updated');
-      logUser = activityMessage[0];
-      field = activityMessage[1].split('from')[0];
-      oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
-      newValue = activityMessage[1]
-        .split('from')[1]
-        .split(' to ')[1]
-        .split(', ,')[0];
+    if (item && historyChangeReason.includes('updated')) {
+      activityMessage = historyChangeReason.split('updated');
+
+      const [activityUser, message] = activityMessage;
+
+      const splittedMessage = message.split('from');
+      const [fieldLabel, remainingMessage] = splittedMessage;
+
+      const splittedRemainingMessage = remainingMessage.split(' to ');
+      const [oldVal, subRemainingMessage] = splittedRemainingMessage;
+
+      const splittedSubRemainingMessage = subRemainingMessage.split(', ,');
+      const [newVal] = splittedSubRemainingMessage;
+
+      logUser = activityUser;
+      field = fieldLabel;
+      oldValue = oldVal;
+      newValue = newVal;
 
       if (activityMessage.length > 2) {
         mixedLog = true;
@@ -316,86 +300,73 @@ function ContractActivityLog({
       }
       if (
         !mixedLog &&
-        ((item && item.history_change_reason.includes('annual revenue')) ||
-          (item &&
-            item.history_change_reason.includes('number of employees')) ||
-          (item && item.history_change_reason.includes('monthly retainer')) ||
-          (item && item.history_change_reason.includes('sales threshold')) ||
-          (item && item.history_change_reason.includes('fee')) ||
-          (item && item.history_change_reason.includes('discount amount')) ||
-          (item &&
-            item.history_change_reason.includes('custom amazon store price')) ||
-          (item && item.history_change_reason.includes('billing cap')))
+        (historyChangeReason.includes('annual revenue') ||
+          historyChangeReason.includes('number of employees') ||
+          historyChangeReason.includes('monthly retainer') ||
+          historyChangeReason.includes('sales threshold') ||
+          historyChangeReason.includes('fee') ||
+          historyChangeReason.includes('discount amount') ||
+          historyChangeReason.includes('custom amazon store price') ||
+          historyChangeReason.includes('billing cap'))
       ) {
         let fromAmount = '';
         let toAmount = '';
         let rowAmount = [];
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
-        ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[0];
-          if (rowAmount.split('.')[1] === '00') {
-            fromAmount = rowAmount.split('.')[0];
+
+        if (oldValue !== '') {
+          rowAmount = oldValue;
+          const splittedRowAmount = rowAmount.split('.');
+          const [fromAmt, remainingRowAmount] = splittedRowAmount;
+          if (remainingRowAmount === '00') {
+            fromAmount = fromAmt;
           } else {
             fromAmount = rowAmount;
           }
         }
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
-        ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[1];
-          if (rowAmount.split('.')[1] === '00') {
-            toAmount = rowAmount.split('.')[0];
+
+        if (subRemainingMessage !== '') {
+          rowAmount = subRemainingMessage;
+          const splittedRowAmount = rowAmount.split('.');
+          const [toAmt, remainingRowAmount] = splittedRowAmount;
+          if (remainingRowAmount === '00') {
+            toAmount = toAmt;
           } else {
             toAmount = rowAmount;
           }
         }
+
         return (
           <>
             {activityMessage && activityMessage[0]}
             <span>
-              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
-              from{' '}
-            </span>{' '}
+              updated {activityMessage && activityMessage[1].split(' from ')[0]}
+              from
+            </span>
             {fromAmount === ''
               ? 'None'
-              : fromAmount &&
-                fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            <span> to </span>{' '}
-            {toAmount === ''
-              ? 'None'
-              : toAmount &&
-                toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              : displayNumber(fromAmount && fromAmount)}
+            <span> to </span>
+            {toAmount === '' ? 'None' : displayNumber(toAmount && toAmount)}
           </>
         );
       }
 
       return activityMessage && activityMessage[1].includes('addendum')
-        ? item && item.history_change_reason
+        ? historyChangeReason
         : mixedLog
         ? displayMixedLog(logUser, activityMessage)
         : displayLog(logUser, field, oldValue, newValue);
     }
-    if (item && item.history_change_reason.includes('requested for')) {
-      activityMessage = item.history_change_reason.split('requested for');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>requested for</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
+    if (historyChangeReason.includes('requested for')) {
+      activityMessage = historyChangeReason.split('requested for');
+      return <>{renderHistoryChangeLog(activityMessage, 'requested for')}</>;
     }
-    if (item && item.history_change_reason.includes('added')) {
-      activityMessage = item.history_change_reason.split('added');
+
+    if (historyChangeReason.includes('added')) {
+      activityMessage = historyChangeReason.split('added');
       let value;
-      if (
-        item &&
-        item.history_change_reason.includes('Amazon Store Package Custom')
-      ) {
-        // activityMessage = item.history_change_reason.split('as')[1];
+      if (item && historyChangeReason.includes('Amazon Store Package Custom')) {
+        // activityMessage = historyChangeReason.split('as')[1];
         value = activityMessage[1].split('as');
         return (
           <>
@@ -403,31 +374,17 @@ function ContractActivityLog({
             <span>added</span>
             {value && value[0]}
             as
-            {value &&
-              value[1] &&
-              value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {displayNumber(value && value[1] && value[1])}
           </>
         );
       }
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>added</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
+      return <>{renderHistoryChangeLog(activityMessage, 'added')}</>;
     }
-    if (item && item.history_change_reason.includes('removed')) {
-      activityMessage = item.history_change_reason.split('removed');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>removed</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
+    if (item && historyChangeReason.includes('removed')) {
+      activityMessage = historyChangeReason.split('removed');
+      return <>{renderHistoryChangeLog(activityMessage, 'removed')}</>;
     }
-    return item && item.history_change_reason ? item.history_change_reason : '';
+    return item && historyChangeReason ? historyChangeReason : '';
   };
 
   const handlePageChange = (currentPage) => {
@@ -438,9 +395,7 @@ function ContractActivityLog({
   const renderContractActivityPanel = () => {
     return (
       <>
-        {agreementData &&
-        agreementData.contract_status &&
-        agreementData.contract_status.value ? (
+        {contractStatusValue ? (
           <div className={`contract-status ${getContractStatusData('class')}`}>
             <img
               width="16px"
@@ -457,8 +412,8 @@ function ContractActivityLog({
         ) : activityData && activityData.length !== 0 ? (
           <>
             {activityData.map((item) => (
-              <ul className="menu">
-                <li>
+              <ul key={Math.random()} className="menu">
+                <li key={Math.random()}>
                   {(images &&
                     images.find(
                       (op) => op.entity_id === item.history_user_id,
@@ -535,10 +490,9 @@ function ContractActivityLog({
                           <div className="email-clicks">
                             <span className="email-opens">
                               Opens: {item.opens || 0}
-                            </span>{' '}
+                            </span>
                             <span className="email-opens">
-                              {' '}
-                              Clicks: {item.clicks || 0}{' '}
+                              Clicks: {item.clicks || 0}
                             </span>
                           </div>
                         ) : (
@@ -555,20 +509,13 @@ function ContractActivityLog({
             ))}
 
             {activityCount > 10 ? (
-              <Footer
+              <ContractActivityLogFooter
                 className="pdf-footer"
                 bottom={
                   checkContractStatus()
-                    ? ((agreementData &&
-                        agreementData.contract_status &&
-                        agreementData.contract_status.value ===
-                          'pending for cancellation') ||
-                        (agreementData &&
-                          agreementData.contract_status &&
-                          agreementData.contract_status.value ===
-                            'active pending for pause')) &&
-                      loggedInuserInfo &&
-                      loggedInuserInfo.role === 'BGS Manager'
+                    ? (contractStatusValue === 'pending for cancellation' ||
+                        contractStatusValue === 'active pending for pause') &&
+                      loggedInuserInfo?.role === 'BGS Manager'
                       ? '80px'
                       : '0px'
                     : '80px'
@@ -579,7 +526,7 @@ function ContractActivityLog({
                   handlePageChange={handlePageChange}
                   showLessItems
                 />
-              </Footer>
+              </ContractActivityLogFooter>
             ) : null}
           </>
         ) : isApicalled ? (
@@ -591,7 +538,6 @@ function ContractActivityLog({
 
   return <div>{renderContractActivityPanel()}</div>;
 }
-
 export default ContractActivityLog;
 
 ContractActivityLog.defaultProps = {
@@ -609,38 +555,20 @@ ContractActivityLog.defaultProps = {
 };
 
 ContractActivityLog.propTypes = {
-  activityLoader: PropTypes.bool,
-  activityData: PropTypes.arrayOf(PropTypes.object),
-  images: PropTypes.arrayOf(PropTypes.object),
-  activityCount: PropTypes.number,
-  pageNumber: PropTypes.number,
-  isApicalled: PropTypes.bool,
-  agreementData: PropTypes.shape({
-    contract_status: PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
+  activityLoader: bool,
+  activityData: arrayOf(shape({})),
+  images: arrayOf(shape({})),
+  activityCount: oneOfType([arrayOf(shape({})), number]),
+  pageNumber: number,
+  isApicalled: bool,
+  agreementData: shape({
+    contract_status: shape({
+      value: string,
+      label: string,
     }),
   }),
-  setPageNumber: PropTypes.func,
-  getContractActivityLogInfo: PropTypes.func,
-  loader: PropTypes.bool,
-  checkContractStatus: PropTypes.func,
+  setPageNumber: func,
+  getContractActivityLogInfo: func,
+  loader: bool,
+  checkContractStatus: func,
 };
-
-const Footer = styled.div`
-  border-top: 1px solid ${Theme.gray7};
-  bottom: ${(props) => (props.bottom ? props.bottom : '0px')};
-  background: ${Theme.white};
-  box-shadow: ${Theme.boxShadow};
-  position: fixed;
-  min-height: 60px;
-  z-index: 2;
-  width: 336px;
-
-  @media only screen and (max-width: 991px) {
-    width: 100%;
-  }
-  @media only screen and (min-width: 1500px) {
-    width: 405px;
-  }
-`;

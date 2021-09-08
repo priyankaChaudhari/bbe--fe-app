@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /* eslint-disable guard-for-in */
 
 import queryString from 'query-string';

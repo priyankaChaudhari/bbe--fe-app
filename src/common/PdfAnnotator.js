@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-// import { Document, Page } from 'react-pdf';
-import { Document, Page } from 'react-pdf/dist/entry.webpack';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
+
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
 import PdfLoadingMsg from './PdfLoadingMsg';
-// import styled from 'styled-components';
 
 export default function PdfAnnotator({
   pdf,

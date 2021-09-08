@@ -24,6 +24,7 @@ export default function AddTeamMember({
   showMemberList,
   setAgreementDetailModal,
   getActivityLogInfo,
+  setShowCloseBtn,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
@@ -136,6 +137,7 @@ export default function AddTeamMember({
           getCustomerMemberList();
           getActivityLogInfo();
         }
+        setShowCloseBtn(true);
         setIsLoading({ loader: false, type: 'button' });
         toast.success(`${userRoleId.length} Team Member(s) Added.`);
         const showAgreementModal = showMemberList.agreement;
@@ -235,13 +237,14 @@ export default function AddTeamMember({
         src={CloseIcon}
         alt="close"
         className="float-right cursor cross-icon"
-        onClick={() =>
+        onClick={() => {
           setShowMemberList({
             show: false,
             add: false,
             modal: false,
-          })
-        }
+          });
+          setShowCloseBtn(true);
+        }}
         role="presentation"
       />
       <div className={count > 9 ? 'modal-body pb-0' : 'modal-body'}>
@@ -417,6 +420,7 @@ AddTeamMember.defaultProps = {
   getCustomerMemberList: () => {},
   setShowMemberList: () => {},
   setAgreementDetailModal: () => {},
+  setShowCloseBtn: () => {},
 };
 
 AddTeamMember.propTypes = {
@@ -429,4 +433,5 @@ AddTeamMember.propTypes = {
   }).isRequired,
   setAgreementDetailModal: func,
   getActivityLogInfo: arrayOf(shape({})).isRequired,
+  setShowCloseBtn: func,
 };

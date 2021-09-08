@@ -1,6 +1,5 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 
