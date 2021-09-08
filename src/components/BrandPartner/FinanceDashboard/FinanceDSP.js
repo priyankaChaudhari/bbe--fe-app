@@ -86,7 +86,6 @@ export default function FinanceDSP({
   };
 
   const handleApply = () => {
-    console.log(state, 'handleApply', dummyDateType);
     if (state !== null) {
       setDateError(null);
       let sd = state[0];
@@ -202,6 +201,7 @@ export default function FinanceDSP({
               monthPlaceholder="MMM"
               yearPlaceholder="yyyy"
               onCalendarClose={() => setDateError(null)}
+              clearAriaLabel="Clear value"
             />
           </div>
         ) : null}

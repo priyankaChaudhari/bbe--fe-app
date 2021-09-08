@@ -46,7 +46,7 @@ export default function FinanceInvoices({
   const [responseId, setResponseId] = useState(null);
 
   const [selectedSortBy, setSelectedSortBy] = useState({
-    value: 'created_at',
+    value: '',
     label: 'Newest',
   });
   const history = useHistory();
@@ -81,7 +81,7 @@ export default function FinanceInvoices({
 
   useEffect(() => {
     if (responseId === null || isTimeFrameChange) {
-      getInvoices(searchQuery, selectedStatus, '', 1);
+      getInvoices(searchQuery, selectedStatus, selectedSortBy.value, 1);
       setResponseId('12345');
       setIsTimeFrameChange(false);
     }
