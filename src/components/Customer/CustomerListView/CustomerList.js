@@ -2164,7 +2164,7 @@ export default function CustomerList() {
                         <div
                           className={
                             data.length < 9 &&
-                            Math.round(count / 10) !== pageNumber
+                            Math.ceil(count / 10) !== pageNumber
                               ? ''
                               : 'straight-line horizontal-line'
                           }
