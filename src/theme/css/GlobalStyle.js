@@ -2,7 +2,8 @@
 import { createGlobalStyle } from 'styled-components';
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
-import NoahRegular from '../fonts/noah-font/Noah Light.otf';
+// import NoahRegular from '../fonts/noah-font/Noah Regular.otf';
+import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
 import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.woff';
@@ -25,7 +26,6 @@ const bodyStyles = createGlobalStyle`
    @font-face {
     font-family: 'Noah Regular';
     src: url(${NoahRegular});
-    format("OTF File");
   } 
   @font-face {
     font-family: 'Noah-RegularItalic';
