@@ -23,7 +23,7 @@ const bodyStyles = createGlobalStyle`
   }  
  
    @font-face {
-    font-family: 'NoahRegular';
+    font-family: 'Noah Regular';
     src: url(${NoahRegular});
     format("OTF File");
   } 

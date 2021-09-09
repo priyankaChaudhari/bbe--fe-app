@@ -100,7 +100,7 @@ const Theme = {
   // LargeCountFontSize: '74px',
 
   /* Font family */
-  baseFontFamily: 'NoahRegular',
+  baseFontFamily: 'Noah Regular',
   titleFontFamily: 'Noah-Bold',
   // baseMediumFontFamily: 'Noah-Medium',
   boldItalicFontFamily: 'Noah-BoldItalic',
