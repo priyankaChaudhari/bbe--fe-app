@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
+import DatePicker from 'react-date-picker';
+import { toast } from 'react-toastify';
 
 import {
   PageLoader,
@@ -26,12 +28,7 @@ import {
   DspOnlyIcon,
   ArrowIcons,
   CloseIcon,
-  PauseIcon,
-  CloseCircleIcon,
-  CopyIcon,
   CaretUp,
-  ViewExternalLink,
-  // DeleteIcon,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
@@ -41,8 +38,17 @@ import {
   createTransactionData,
   createContract,
   deleteContract,
+  getBGSManagers,
+  savePauseAgreement,
+  getPauseAgreement,
 } from '../../../api';
 import Theme from '../../../theme/Theme';
+import {
+  contractOptions,
+  draftContractOptions,
+  agreementOptions,
+  pauseAgreementOptions,
+} from '../../../constants/FieldConstants';
 
 export default function AgreementDetails({ id, userId }) {
   const history = useHistory();
@@ -55,35 +61,10 @@ export default function AgreementDetails({ id, userId }) {
   const [showModal, setShowModal] = useState({ pause: false });
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const contractOptions = [
-    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
-    { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
-    { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
-    { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
-    // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
-  ];
-
-  const draftContractOptions = [
-    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
-    { value: 'edit', label: 'Edit Agreement', icon: CopyIcon },
-    { value: 'delete', label: 'Delete Agreement', icon: PauseIcon },
-  ];
-
-  const agreementOptions = [
-    { key: 'monthly_retainer', label: 'Monthly Retainer' },
-    { key: 'rev_share', label: 'Rev Share' },
-    { key: 'sales_threshold', label: 'Sales Threshold' },
-    { key: 'billing_cap', label: 'Billing Cap' },
-    {
-      key: 'content_optimization',
-      label: 'Copy Optimization',
-    },
-    {
-      key: 'design_optimization',
-      label: 'Design Optimization',
-    },
-  ];
+  const [pauseDateDetails, setPauseDateDetails] = useState({
+    start_date: new Date(),
+    end_date: new Date(),
+  });
 
   const customStyles = {
     content: {
@@ -93,7 +74,6 @@ export default function AgreementDetails({ id, userId }) {
       bottom: 'auto',
       maxWidth: '600px ',
       width: '100% ',
-      // minHeight: '200px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -133,7 +113,6 @@ export default function AgreementDetails({ id, userId }) {
           verticalAlign: 'middle',
           width: '18px',
           float: 'left',
-          // maxWidth: '15%',
         }}
       />
       {dataProps.data.label}
@@ -199,6 +178,22 @@ export default function AgreementDetails({ id, userId }) {
         break;
       case 'delete':
         setShowModal({ delete: true, agreementId });
+        break;
+      case 'unpause':
+        getPauseAgreement(showModal.agreementId).then((res) => {
+          if (res && res.status === 200) {
+            const detail =
+              res && res.data && res.data.results && res.data.results[0];
+            savePauseAgreement(detail.id, {
+              ...detail,
+              rejected_by: userId,
+            }).then((r) => {
+              if (r && r.status === 200)
+                toast.success('Your Agreement has been unpaused successfully.');
+              dispatch(getAccountDetails(id));
+            });
+          }
+        });
         break;
       default:
         break;
@@ -360,28 +355,10 @@ export default function AgreementDetails({ id, userId }) {
                         value=""
                       />
                     </ActionDropDown>
-                  ) : agreement.contract_status.value !== 'pending contract' ||
-                    agreement.contract_status.value !==
+                  ) : agreement.contract_status.value === 'pending contract' ||
+                    agreement.contract_status.value ===
                       'pending contract approval' ||
-                    agreement.contract_status.value !== 'pending signature' ? (
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                        options={contractOptions}
-                        onChange={(event) =>
-                          handleContractOptions(event, agreement.id)
-                        }
-                        components={{
-                          DropdownIndicator,
-                          Option: IconOption,
-                        }}
-                        value=""
-                      />
-                    </ActionDropDown>
-                  ) : (
+                    agreement.contract_status.value === 'pending signature' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -403,6 +380,30 @@ export default function AgreementDetails({ id, userId }) {
                         View Agreement
                       </Button>
                     </Link>
+                  ) : (
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={
+                          agreement.contract_status.value === 'pause' ||
+                          agreement.contract_status.value ===
+                            'active pending for pause'
+                            ? pauseAgreementOptions
+                            : contractOptions
+                        }
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
+                      />
+                    </ActionDropDown>
                   )}
                 </div>
               )}
@@ -525,6 +526,10 @@ export default function AgreementDetails({ id, userId }) {
     );
   };
 
+  const handleChange = (date, type) => {
+    setPauseDateDetails({ ...pauseDateDetails, [type]: date });
+  };
+
   const generateModals = () => {
     if (showModal.cancel) {
       return (
@@ -553,12 +558,28 @@ export default function AgreementDetails({ id, userId }) {
           <div className="row">
             <div className="col-6">
               <ContractFormField>
-                <Select />
+                <DatePicker
+                  minDate={new Date()}
+                  className="form-control"
+                  id="date"
+                  value={pauseDateDetails.start_date}
+                  onChange={(date) => handleChange(date, 'start_date')}
+                  format="MM-dd-yyyy"
+                  clearIcon={null}
+                />
               </ContractFormField>
             </div>
             <div className="col-6">
               <ContractFormField>
-                <Select />
+                <DatePicker
+                  minDate={pauseDateDetails.start_date}
+                  className="form-control"
+                  id="date"
+                  value={pauseDateDetails.end_date}
+                  onChange={(date) => handleChange(date, 'end_date')}
+                  format="MM-dd-yyyy"
+                  clearIcon={null}
+                />
               </ContractFormField>
             </div>
           </div>
@@ -576,28 +597,52 @@ export default function AgreementDetails({ id, userId }) {
     );
   };
 
-  const saveDetails = () => {
-    setIsLoading(true);
-    const data = {
-      contract: showModal.agreementId,
-      contract_status: 'pending for cancellation',
-      primary_email: 'vchavan+1908@buyboxexperts.com',
-      user: userId,
-    };
-    if (showModal.cancel) {
-      createTransactionData(data).then((res) => {
-        if (res.status === 200 || res.status === 201) {
+  const transactionalAPI = (type) => {
+    let data = {};
+    getBGSManagers(id).then((res) => {
+      if (res && res.status === 200) {
+        data = {
+          contract: showModal.agreementId,
+          primary_email: res && res.data && res.data.email,
+          contract_status: type,
+          user: userId,
+        };
+      }
+      createTransactionData(data).then((response) => {
+        if (response.status === 200 || response.status === 201) {
           setShowModal(false);
           setIsLoading(false);
+          const statusName = showModal.pause ? 'Pausing' : 'Cancelling';
+          toast.success(
+            `We have emailed the BGS manager for ${statusName} your agreement.`,
+          );
+          dispatch(getAccountDetails(id));
+        }
+      });
+    });
+  };
+
+  const saveDetails = () => {
+    setIsLoading(true);
+    if (showModal.cancel) {
+      transactionalAPI('pending for cancellation');
+    } else if (showModal.pause) {
+      const detail = {
+        contract: showModal.agreementId,
+        start_date: dayjs(pauseDateDetails.start_date).format('YYYY-MM-DD'),
+        end_date: dayjs(pauseDateDetails.end_date).format('YYYY-MM-DD'),
+      };
+      savePauseAgreement(null, detail).then((res) => {
+        if ((res && res.status === 201) || (res && res.status === 200)) {
+          transactionalAPI('active pending for pause');
         }
       });
     } else {
-      console.log(showModal.agreementId, 'showModal.agreementId');
-      deleteContract(showModal.agreementId).then((res) => {
+      deleteContract(showModal.agreementId).then(() => {
         setShowModal(false);
         setIsLoading(false);
-        console.log(res);
         dispatch(getAccountDetails(id));
+        toast.success('Your Agreement is deleted successfully.');
       });
     }
   };
@@ -738,7 +783,14 @@ export default function AgreementDetails({ id, userId }) {
                 <div className="col-6 mt-4">
                   <Button
                     className="btn-transparent w-100"
-                    onClick={() => setShowModal(false)}>
+                    onClick={() => {
+                      setShowModal(false);
+                      if (showModal.pause)
+                        setPauseDateDetails({
+                          start_date: new Date(),
+                          end_date: new Date(),
+                        });
+                    }}>
                     {showModal.cancel
                       ? "Don't Request"
                       : showModal.pause

@@ -105,6 +105,8 @@ export {
   createContract,
   getBGSManagers,
   deleteContract,
+  savePauseAgreement,
+  getPauseAgreement,
 } from './AgreementApi';
 
 // Knowledge Base

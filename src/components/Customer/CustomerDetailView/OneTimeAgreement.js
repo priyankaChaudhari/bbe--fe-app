@@ -4,27 +4,29 @@ import PropTypes from 'prop-types';
 
 import { Button, WhiteCard } from '../../../common';
 import { PATH_AGREEMENT } from '../../../constants';
-import { FileContract, ServiceIcon } from '../../../theme/images';
-// import { createContract } from '../../../api';
+import { AddIcons, FileContract, ServiceIcon } from '../../../theme/images';
+import { createContract } from '../../../api';
 
 export default function OneTimeAgreement({ agreements, id, history }) {
-  // const addNewOneTime = () => {
-  //   const data = {
-  //     customer_id: id,
-  //     contract_type: 'one time',
-  //   };
-  //   createContract(data).then((res) => {
-  //     history.push({
-  //       pathname: PATH_AGREEMENT.replace(':id', id).replace(
-  //         ':contract_id',
-  //         res && res.data && res.data.id,
-  //       ),
-  //       state: history && history.location && history.location.pathname,
-  //     });
-  //   });
-  // };
+  const addNewOneTime = () => {
+    const data = {
+      customer_id: id,
+      contract_type: 'one time',
+    };
+    createContract(data).then((res) => {
+      history.push({
+        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+          ':contract_id',
+          res && res.data && res.data.id,
+        ),
+        state: history && history.location && history.location.pathname,
+      });
+    });
+  };
 
-  /* <div
+  return (
+    <>
+      <div
         className=" mt-4  mb-3 cursor "
         style={{ color: '#171725', fontSize: '14px' }}
         onClick={() => addNewOneTime()}
@@ -37,10 +39,7 @@ export default function OneTimeAgreement({ agreements, id, history }) {
           alt="add"
         />
         New One Time Service Contract
-      </div> */
-
-  return (
-    <>
+      </div>{' '}
       {agreements && agreements.length === 0 ? (
         <WhiteCard className="mt-3 mb-3 selected-card">
           No One Time Service Agreement found.

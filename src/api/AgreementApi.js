@@ -18,6 +18,7 @@ import {
   API_CUSTOMER_CONTRACT,
   API_SERVICES_FEE,
   API_CUSTOMER,
+  API_PAUSE_AGREEMENT,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -344,6 +345,42 @@ export async function deleteContract(id) {
     .delete(`${API_CUSTOMER_CONTRACT + id}/`)
     .then(() => {
       return '';
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function savePauseAgreement(id, data) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_PAUSE_AGREEMENT + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_PAUSE_AGREEMENT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getPauseAgreement(contract) {
+  const params = { contract };
+  const result = await axiosInstance
+    .get(API_PAUSE_AGREEMENT, { params })
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       return error.response;

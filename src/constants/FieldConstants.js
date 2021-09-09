@@ -31,6 +31,11 @@ import {
   TwitterIcon,
   LinkedinIcon,
   InstagramIcon,
+  ViewExternalLink,
+  CopyIcon,
+  PauseIcon,
+  CloseCircleIcon,
+  DeleteIcon,
 } from '../theme/images/index';
 
 export const userDetails = [
@@ -1100,4 +1105,39 @@ export const AmazonVendorAccountDetails = [
   { key: 'vendor_code', label: 'Vendor Code', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
   { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
+];
+
+export const contractOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+  { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
+  { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+];
+
+export const draftContractOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'edit', label: 'Edit Agreement', icon: CopyIcon },
+  { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
+];
+
+export const pauseAgreementOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+  { value: 'unpause', label: 'Unpause Agreement', icon: PauseIcon },
+  { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+];
+
+export const agreementOptions = [
+  { key: 'monthly_retainer', label: 'Monthly Retainer' },
+  { key: 'rev_share', label: 'Rev Share' },
+  { key: 'sales_threshold', label: 'Sales Threshold' },
+  { key: 'billing_cap', label: 'Billing Cap' },
+  {
+    key: 'content_optimization',
+    label: 'Copy Optimization',
+  },
+  {
+    key: 'design_optimization',
+    label: 'Design Optimization',
+  },
 ];
