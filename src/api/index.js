@@ -107,6 +107,7 @@ export {
   deleteContract,
   savePauseAgreement,
   getPauseAgreement,
+  updatePauseAgreement,
 } from './AgreementApi';
 
 // Knowledge Base

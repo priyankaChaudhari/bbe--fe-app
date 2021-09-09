@@ -351,6 +351,8 @@ export default function ContractContainer() {
         details.contract_status.value === 'renewed' ||
         details.contract_status.value === 'cancel' ||
         details.contract_status.value === 'pending for cancellation' ||
+        details.contract_status.value === 'active pending for pause' ||
+        details.contract_status.value === 'pause' ||
         details.contract_status.value === 'inactive'
       ) {
         return true;
@@ -421,6 +423,7 @@ export default function ContractContainer() {
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
+
           // setIsDocRendered(true);
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -3191,9 +3194,14 @@ export default function ContractContainer() {
                 (isMobile && tabInResponsive === 'edit-fields')
                   ? displayRightSidePanel()
                   : ''}
-                {details &&
-                details.contract_status &&
-                details.contract_status.value === 'pending for cancellation' &&
+                {((details &&
+                  details.contract_status &&
+                  details.contract_status.value ===
+                    'pending for cancellation') ||
+                  (details &&
+                    details.contract_status &&
+                    details.contract_status.value ===
+                      'active pending for pause')) &&
                 userInfo &&
                 userInfo.role === 'BGS Manager'
                   ? displayFooter()

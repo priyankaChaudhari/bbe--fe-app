@@ -1,12 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { PageLoader, Button } from '../../common';
 import Theme from '../../theme/Theme';
 import { InfoIcon } from '../../theme/images';
-import { updateAccountDetails } from '../../api';
+import { updateAccountDetails, updatePauseAgreement } from '../../api';
 
 export default function ContractFooter({
   details,
@@ -28,10 +31,11 @@ export default function ContractFooter({
   renderEditContractBtn,
   showDiscardModal,
   createAgreementDoc,
-  // setIsLoading,
+  setIsLoading,
   getContractDetails,
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
+  const { pauseId } = useParams();
 
   const checkAmazonStorePriceExists = () => {
     const service =
@@ -71,14 +75,25 @@ export default function ContractFooter({
   };
 
   const updateContractData = (data) => {
-    // setIsLoading({ loader: true, type: 'page' });
+    setIsLoading({ loader: true, type: 'button' });
 
     updateAccountDetails(details.id, data).then(() => {
+      if (data.contract_status === 'cancel') {
+        toast.success('Cancel Contract Approved!');
+      }
       getContractDetails();
-      // setIsLoading({ loader: false, type: 'page' });
+      setIsLoading({ loader: false, type: 'button' });
     });
   };
 
+  const updatePauseContract = () => {
+    setIsLoading({ loader: true, type: 'button' });
+
+    updatePauseAgreement(pauseId, { is_approved: true }).then(() => {
+      toast.success('Pause Contract Approved!');
+      updateContractData({ contract_status: 'pause' });
+    });
+  };
   return (
     <>
       {details &&
@@ -348,6 +363,34 @@ export default function ContractFooter({
         ''
       )}
       ;
+      {details &&
+      details.contract_status &&
+      details.contract_status.value === 'active pending for pause' &&
+      userInfo &&
+      userInfo.role === 'BGS Manager' ? (
+        <div className="mt-4 pt-5">
+          <Footer className=" mt-5 ">
+            <div className="container-fluid ">
+              <Button
+                className={`btn-primary sticky-btn-primary sidepanel mt-3  ${
+                  isEditContract ? 'w-sm-100 ml-0 mr-0' : 'w-sm-50 ml-0'
+                }`}
+                onClick={() => {
+                  updatePauseContract();
+                }}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Approval for Pause'
+                )}
+              </Button>
+            </div>
+          </Footer>
+        </div>
+      ) : (
+        ''
+      )}
+      ;
     </>
   );
 }
@@ -463,6 +506,7 @@ ContractFooter.defaultProps = {
   showDiscardModal: () => {},
   createAgreementDoc: () => {},
   getContractDetails: () => {},
+  setIsLoading: () => {},
 };
 
 ContractFooter.propTypes = {
@@ -501,4 +545,5 @@ ContractFooter.propTypes = {
   showDiscardModal: PropTypes.func,
   createAgreementDoc: PropTypes.func,
   getContractDetails: PropTypes.func,
+  setIsLoading: PropTypes.func,
 };

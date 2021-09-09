@@ -12,11 +12,7 @@ export const PATH_CUSTOMER_DETAILS = `${PATH_CUSTOMER_LIST}/:id`;
 
 // Contract
 export const PATH_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/agreement/:contract_id`;
-export const PATH_STATEMENT = `${PATH_CUSTOMER_DETAILS}/statement`;
-export const PATH_ADDENDUM = `${PATH_CUSTOMER_DETAILS}/addendum`;
-export const PATH_ONE_TIME_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/onetime-addendum`;
-export const PATH_SERVICE_AMENDMENT = `${PATH_CUSTOMER_DETAILS}/service-amendment`;
-export const PATH_DSP_ADDENDUM = `${PATH_CUSTOMER_DETAILS}/dsp-addendum`;
+export const PATH_PAUSE_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/agreement/:contract_id/:pauseId`;
 export const PATH_HELLO_SIGN = `/contract-signature`;
 export const PATH_WARNING = '/warning/';
 

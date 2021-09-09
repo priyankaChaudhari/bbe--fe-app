@@ -180,7 +180,7 @@ export default function AgreementDetails({ id, userId }) {
         setShowModal({ delete: true, agreementId });
         break;
       case 'unpause':
-        getPauseAgreement(showModal.agreementId).then((res) => {
+        getPauseAgreement(agreementId).then((res) => {
           if (res && res.status === 200) {
             const detail =
               res && res.data && res.data.results && res.data.results[0];

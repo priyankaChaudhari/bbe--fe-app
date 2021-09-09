@@ -387,3 +387,15 @@ export async function getPauseAgreement(contract) {
     });
   return result;
 }
+
+export async function updatePauseAgreement(pauseId, data) {
+  const result = await axiosInstance
+    .patch(`${API_PAUSE_AGREEMENT + pauseId}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
