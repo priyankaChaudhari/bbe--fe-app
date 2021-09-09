@@ -2163,8 +2163,7 @@ export default function CustomerList() {
                       <div className="footer-sticky">
                         <div
                           className={
-                            data.length < 9 &&
-                            Math.ceil(count / 10) !== pageNumber
+                            data.length < 9 && count < 10
                               ? ''
                               : 'straight-line horizontal-line'
                           }
