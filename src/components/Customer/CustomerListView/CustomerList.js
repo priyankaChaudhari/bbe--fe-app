@@ -2159,9 +2159,15 @@ export default function CustomerList() {
                         </Table>
                       )}
                     </div>
-                    {data && data.length > 9 ? (
+                    {data && data.length > 0 ? (
                       <div className="footer-sticky">
-                        <div className="straight-line horizontal-line" />
+                        <div
+                          className={
+                            data.length < 9
+                              ? ''
+                              : 'straight-line horizontal-line'
+                          }
+                        />
 
                         <CommonPagination
                           count={count}
