@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -14,7 +14,7 @@ import {
   WhiteCard,
   Tabs,
   Status,
-  // ActionDropDown,
+  ActionDropDown,
   ModalBox,
   Button,
   ContractFormField,
@@ -26,18 +26,22 @@ import {
   DspOnlyIcon,
   ArrowIcons,
   CloseIcon,
-  //  PauseIcon,
-  // CloseCircleIcon,
-  // CopyIcon,
-  // CaretUp,
-  // ViewExternalLink,
+  PauseIcon,
+  CloseCircleIcon,
+  CopyIcon,
+  CaretUp,
+  ViewExternalLink,
   // DeleteIcon,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
 import OneTimeAgreement from './OneTimeAgreement';
-import { createTransactionData } from '../../../api';
+import {
+  createTransactionData,
+  createContract,
+  deleteContract,
+} from '../../../api';
 import Theme from '../../../theme/Theme';
 
 export default function AgreementDetails({ id, userId }) {
@@ -52,13 +56,19 @@ export default function AgreementDetails({ id, userId }) {
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const contractOptions = [
-  //   { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
-  //   { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
-  //   { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
-  //   { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
-  //   // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
-  // ];
+  const contractOptions = [
+    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+    { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+    { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
+    { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+    // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
+  ];
+
+  const draftContractOptions = [
+    { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+    { value: 'edit', label: 'Edit Agreement', icon: CopyIcon },
+    { value: 'delete', label: 'Delete Agreement', icon: PauseIcon },
+  ];
 
   const agreementOptions = [
     { key: 'monthly_retainer', label: 'Monthly Retainer' },
@@ -90,45 +100,45 @@ export default function AgreementDetails({ id, userId }) {
     },
   };
 
-  // const { Option } = components;
-  // const DropdownIndicator = (dataProps) => {
-  //   return (
-  //     components.DropdownIndicator && (
-  //       <components.DropdownIndicator {...dataProps}>
-  //         <img
-  //           src={CaretUp}
-  //           alt="caret"
-  //           style={{
-  //             transform: dataProps.selectProps.menuIsOpen
-  //               ? 'rotate(180deg)'
-  //               : '',
-  //             width: '25px',
-  //             height: '25px',
-  //           }}
-  //         />
-  //       </components.DropdownIndicator>
-  //     )
-  //   );
-  // };
+  const { Option } = components;
+  const DropdownIndicator = (dataProps) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...dataProps}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
-  // const IconOption = (dataProps) => (
-  //   <Option {...dataProps}>
-  //     <img
-  //       className="drop-down-user"
-  //       src={dataProps.data.icon}
-  //       alt="user"
-  //       style={{
-  //         marginRight: '9px',
-  //         height: '20px',
-  //         verticalAlign: 'middle',
-  //         width: '18px',
-  //         float: 'left',
-  //         // maxWidth: '15%',
-  //       }}
-  //     />
-  //     {dataProps.data.label}
-  //   </Option>
-  // );
+  const IconOption = (dataProps) => (
+    <Option {...dataProps}>
+      <img
+        className="drop-down-user"
+        src={dataProps.data.icon}
+        alt="user"
+        style={{
+          marginRight: '9px',
+          height: '20px',
+          verticalAlign: 'middle',
+          width: '18px',
+          float: 'left',
+          // maxWidth: '15%',
+        }}
+      />
+      {dataProps.data.label}
+    </Option>
+  );
 
   useEffect(() => {
     dispatch(getAccountDetails(id));
@@ -142,29 +152,58 @@ export default function AgreementDetails({ id, userId }) {
     return diffDays;
   };
 
-  // const handleContractOptions = (event, agreementId) => {
-  //   switch (event.value) {
-  //     case 'view':
-  //       history.push({
-  //         pathname: PATH_AGREEMENT.replace(':id', id).replace(
-  //           ':contract_id',
-  //           agreementId,
-  //         ),
-  //         state: history && history.location && history.location.pathname,
-  //       });
-  //       break;
-  //     case 'draft':
-  //       break;
-  //     case 'pause':
-  //       setShowModal({ pause: true, agreementId });
-  //       break;
-  //     case 'cancel':
-  //       setShowModal({ cancel: true, agreementId });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
+  const createNewDraftVersion = (agreementId) => {
+    const data = {
+      customer_id: id,
+      draft_from: agreementId,
+    };
+    createContract(data).then((res) => {
+      history.push({
+        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+          ':contract_id',
+          res && res.data && res.data.id,
+        ),
+        state: history && history.location && history.location.pathname,
+      });
+    });
+  };
+
+  const handleContractOptions = (event, agreementId) => {
+    switch (event.value) {
+      case 'view':
+        history.push({
+          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+            ':contract_id',
+            agreementId,
+          ),
+          state: history && history.location && history.location.pathname,
+        });
+        break;
+      case 'draft':
+        createNewDraftVersion(agreementId);
+        break;
+      case 'pause':
+        setShowModal({ pause: true, agreementId });
+        break;
+      case 'cancel':
+        setShowModal({ cancel: true, agreementId });
+        break;
+      case 'edit':
+        history.push({
+          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+            ':contract_id',
+            agreementId,
+          ),
+          state: history && history.location && history.location.pathname,
+        });
+        break;
+      case 'delete':
+        setShowModal({ delete: true, agreementId });
+        break;
+      default:
+        break;
+    }
+  };
 
   const generateHTML = () => {
     const fields = [];
@@ -176,7 +215,13 @@ export default function AgreementDetails({ id, userId }) {
         !agreement.contract_type.toLowerCase().includes('one')
       )
         fields.push(
-          <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
+          <WhiteCard
+            className={
+              agreement && agreement.draft_from
+                ? 'mt-3 mb-3 selected-card'
+                : 'mt-3 mb-3'
+            }
+            key={agreement.id}>
             <div className="row">
               <div className="col-lg-9 col-md-9 col-12">
                 <img
@@ -205,9 +250,11 @@ export default function AgreementDetails({ id, userId }) {
                     <Status
                       className="mr-2 mb-2"
                       label={
-                        agreement &&
-                        agreement.contract_status &&
-                        agreement.contract_status.label
+                        agreement && agreement.draft_from
+                          ? 'Draft'
+                          : agreement &&
+                            agreement.contract_status &&
+                            agreement.contract_status.label
                       }
                       backgroundColor={Theme.gray8}
                     />
@@ -295,10 +342,28 @@ export default function AgreementDetails({ id, userId }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {/* {agreement.contract_status.value !== 'pending contract' ||
-                  agreement.contract_status.value !==
-                    'pending contract approval' ||
-                  agreement.contract_status.value !== 'pending signature' ? (
+                  {agreement.draft_from ? (
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={draftContractOptions}
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
+                      />
+                    </ActionDropDown>
+                  ) : agreement.contract_status.value !== 'pending contract' ||
+                    agreement.contract_status.value !==
+                      'pending contract approval' ||
+                    agreement.contract_status.value !== 'pending signature' ? (
                     <ActionDropDown>
                       {' '}
                       <Select
@@ -316,29 +381,29 @@ export default function AgreementDetails({ id, userId }) {
                         value=""
                       />
                     </ActionDropDown>
-                  ) : ( */}
-                  <Link
-                    to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                        ':contract_id',
-                        agreement.id,
-                      ),
-                      state:
-                        history &&
-                        history.location &&
-                        history.location.pathname,
-                    }}>
-                    <Button className="btn-transparent w-100 view-contract">
-                      {' '}
-                      <img
-                        className="file-contract-icon"
-                        src={FileContract}
-                        alt=""
-                      />
-                      View Agreement
-                    </Button>
-                  </Link>
-                  {/* )} */}
+                  ) : (
+                    <Link
+                      to={{
+                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                          ':contract_id',
+                          agreement.id,
+                        ),
+                        state:
+                          history &&
+                          history.location &&
+                          history.location.pathname,
+                      }}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Agreement
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />
@@ -525,6 +590,14 @@ export default function AgreementDetails({ id, userId }) {
           setShowModal(false);
           setIsLoading(false);
         }
+      });
+    } else {
+      console.log(showModal.agreementId, 'showModal.agreementId');
+      deleteContract(showModal.agreementId).then((res) => {
+        setShowModal(false);
+        setIsLoading(false);
+        console.log(res);
+        dispatch(getAccountDetails(id));
       });
     }
   };

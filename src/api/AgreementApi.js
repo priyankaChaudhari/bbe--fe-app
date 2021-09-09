@@ -338,3 +338,15 @@ export async function getBGSManagers(id) {
     });
   return result;
 }
+
+export async function deleteContract(id) {
+  const result = await axiosInstance
+    .delete(`${API_CUSTOMER_CONTRACT + id}/`)
+    .then(() => {
+      return '';
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

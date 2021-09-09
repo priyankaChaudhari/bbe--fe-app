@@ -104,6 +104,7 @@ export {
   getContractActivityLog,
   createContract,
   getBGSManagers,
+  deleteContract,
 } from './AgreementApi';
 
 // Knowledge Base
