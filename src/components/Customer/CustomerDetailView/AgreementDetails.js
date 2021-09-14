@@ -62,8 +62,8 @@ export default function AgreementDetails({ id, userId }) {
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [pauseDateDetails, setPauseDateDetails] = useState({
-    start_date: new Date(),
-    end_date: new Date(),
+    start_date: null,
+    end_date: null,
   });
 
   const customStyles = {
@@ -191,6 +191,7 @@ export default function AgreementDetails({ id, userId }) {
               if (r && r.status === 200)
                 toast.success('Your Agreement has been unpaused successfully.');
               dispatch(getAccountDetails(id));
+              setPauseDateDetails({ start_date: null, end_date: null });
             });
           }
         });
@@ -207,6 +208,7 @@ export default function AgreementDetails({ id, userId }) {
         agreement &&
         agreement.contract_status &&
         agreement.contract_status.value !== 'inactive' &&
+        agreement.contract_status.value !== 'cancel' &&
         !agreement.contract_type.toLowerCase().includes('one')
       )
         fields.push(
@@ -562,6 +564,7 @@ export default function AgreementDetails({ id, userId }) {
                   minDate={new Date()}
                   className="form-control"
                   id="date"
+                  placeholder="Start Date"
                   value={pauseDateDetails.start_date}
                   onChange={(date) => handleChange(date, 'start_date')}
                   format="MM-dd-yyyy"
@@ -575,10 +578,12 @@ export default function AgreementDetails({ id, userId }) {
                   minDate={pauseDateDetails.start_date}
                   className="form-control"
                   id="date"
+                  placeholder="End Date"
                   value={pauseDateDetails.end_date}
                   onChange={(date) => handleChange(date, 'end_date')}
                   format="MM-dd-yyyy"
                   clearIcon={null}
+                  disabled={!pauseDateDetails.start_date}
                 />
               </ContractFormField>
             </div>
@@ -738,7 +743,9 @@ export default function AgreementDetails({ id, userId }) {
             id={id}
             agreements={multipleAgreement.filter(
               (op) =>
-                op.contract_status && op.contract_status.value === 'inactive',
+                (op.contract_status &&
+                  op.contract_status.value === 'inactive') ||
+                (op.contract_status && op.contract_status.value === 'cancel'),
             )}
           />
         ) : (
@@ -754,7 +761,10 @@ export default function AgreementDetails({ id, userId }) {
               src={CloseIcon}
               alt="close"
               className="float-right cursor cross-icon"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setPauseDateDetails({ start_date: null, end_date: null });
+              }}
               role="presentation"
             />
           ) : (
