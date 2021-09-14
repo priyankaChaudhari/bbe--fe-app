@@ -82,6 +82,7 @@ export default function MainContainer() {
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
   const [apiError, setApiError] = useState({});
+  const [formData, setFormData] = useState({});
 
   const customStyles = {
     content: {
@@ -369,6 +370,8 @@ export default function MainContainer() {
           setApiError={setApiError}
           apiError={apiError}
           setMarketplaceDetails={setMarketplaceDetails}
+          setFormData={setFormData}
+          formData={formData}
         />
       );
     if (path === 'amazon-account')
@@ -463,6 +466,7 @@ export default function MainContainer() {
                     setMarketplaceDetails({
                       ...marketplaceDetails,
                       Seller: {},
+                      Vendor: formData.Vendor || marketplaceDetails.Vendor,
                     });
                   }
                 });

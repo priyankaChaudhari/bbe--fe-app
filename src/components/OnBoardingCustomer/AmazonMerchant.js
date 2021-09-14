@@ -57,10 +57,11 @@ export default function AmazonMerchant({
   apiError,
   setApiError,
   setMarketplaceDetails,
+  setFormData,
+  formData,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
   const [latestId, setLatestId] = useState({ Seller: null, Vendor: null });
 
@@ -631,6 +632,7 @@ export default function AmazonMerchant({
                   if (res && res.status === 204) {
                     setMarketplaceDetails({
                       ...marketplaceDetails,
+                      Seller: formData.Seller || marketplaceDetails.Seller,
                       Vendor: {},
                     });
                   }
@@ -739,6 +741,8 @@ AmazonMerchant.defaultProps = {
   setApiError: () => {},
   apiError: {},
   setMarketplaceDetails: () => {},
+  setFormData: () => {},
+  formData: {},
 };
 
 AmazonMerchant.propTypes = {
@@ -795,4 +799,9 @@ AmazonMerchant.propTypes = {
   setApiError: PropTypes.func,
   apiError: PropTypes.objectOf(PropTypes.array),
   setMarketplaceDetails: PropTypes.func,
+  setFormData: PropTypes.func,
+  formData: PropTypes.shape({
+    Seller: PropTypes.objectOf(PropTypes.Object),
+    Vendor: PropTypes.objectOf(PropTypes.Object),
+  }),
 };
