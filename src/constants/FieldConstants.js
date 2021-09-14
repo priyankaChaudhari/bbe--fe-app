@@ -987,7 +987,7 @@ export const stepPath = [
   {
     key: 'digital presence',
     view: PATH_COMPANY_DETAILS,
-    title: 'Your company website url & social links',
+    title: "Your Company's Digital Presence",
   },
   {
     key: 'billing information',
