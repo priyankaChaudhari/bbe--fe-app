@@ -25,6 +25,8 @@ export const WhiteCard = styled.div`
   .contract-status {
     float: left;
     max-width: 80%;
+    width: 100%;
+    word-break: keep-all;
     overflow-wrap: break-word;
   }
 

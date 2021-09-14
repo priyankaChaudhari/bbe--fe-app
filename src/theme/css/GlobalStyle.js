@@ -1125,7 +1125,7 @@ fieldset {
   padding-right: 368px;
   padding-left: 30px;
   font-family: ${Theme.contactregularFontFamily};
-  padding-top: 60px;
+  padding-top: 10px;
   background-color: ${Theme.gray3};
   margin-top: 0 !important;
 
@@ -1162,7 +1162,7 @@ fieldset {
 
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @media only screen and (max-width: 991px) {
-      padding-top: 150px;
+      padding-top: 60px;
     }
   }
 }

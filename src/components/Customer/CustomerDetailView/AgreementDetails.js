@@ -245,7 +245,7 @@ export default function AgreementDetails({ id, userId }) {
                     ''
                   ) : (
                     <Status
-                      className="mr-2 mb-2"
+                      className="mr-2 mb-1"
                       label={
                         agreement && agreement.draft_from
                           ? 'Draft'
