@@ -225,7 +225,7 @@ export default function AddTeamMember({
         }
         role="presentation"
       />
-      <div className="modal-body pb-0">
+      <div className={count > 9 ? 'modal-body pb-0' : 'modal-body'}>
         <h4>Add Team Member</h4>
         <div className="body-content mt-3 ">
           <>

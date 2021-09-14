@@ -49,6 +49,14 @@ export default function AmazonAccount({
           vendor.data.results &&
           vendor.data.results[0],
       });
+      setFormData({
+        Seller: sellerData,
+        Vendor:
+          vendor &&
+          vendor.data &&
+          vendor.data.results &&
+          vendor.data.results[0],
+      });
     });
   };
 
@@ -57,6 +65,14 @@ export default function AmazonAccount({
       getAmazonSeller(id).then((seller) => {
         setAmazonDetails({
           ...amazonDetails,
+          Seller:
+            seller &&
+            seller.data &&
+            seller.data.results &&
+            seller.data.results[0],
+        });
+        setFormData({
+          ...formData,
           Seller:
             seller &&
             seller.data &&
@@ -147,6 +163,13 @@ export default function AmazonAccount({
           [item]: event.target.value,
         },
       });
+      setApiError({
+        ...apiError,
+        Seller: {
+          ...apiError.Seller,
+          [item]: '',
+        },
+      });
     }
     if (
       selectedMarketplace &&
@@ -158,6 +181,13 @@ export default function AmazonAccount({
         Vendor: {
           ...formData.Vendor,
           [item]: event.target.value,
+        },
+      });
+      setApiError({
+        ...apiError,
+        Vendor: {
+          ...apiError.Vendor,
+          [item]: '',
         },
       });
     } else if (
@@ -221,6 +251,17 @@ export default function AmazonAccount({
                   {generateInput(item, part)}
                 </label>
                 <ErrorMsg>{apiError && apiError[item.key]}</ErrorMsg>
+                {part === 1 ? (
+                  <ErrorMsg>
+                    {apiError && apiError.Seller && apiError.Seller[item.key]}
+                  </ErrorMsg>
+                ) : part === 2 ? (
+                  <ErrorMsg>
+                    {apiError && apiError.Vendor && apiError.Vendor[item.key]}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
               </ContractFormField>
             </div>
           ))}
