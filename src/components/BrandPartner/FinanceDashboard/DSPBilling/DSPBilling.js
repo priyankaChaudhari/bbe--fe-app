@@ -5,17 +5,17 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import styled from 'styled-components';
 import { func } from 'prop-types';
-import { Card, ModalRadioCheck, Button } from '../../../common';
-import { CaretUp, CloseIcon } from '../../../theme/images/index';
-import ErrorMsg from '../../../common/ErrorMsg';
+import { Card, ModalRadioCheck, Button } from '../../../../common';
+import { CaretUp, CloseIcon } from '../../../../theme/images/index';
+import ErrorMsg from '../../../../common/ErrorMsg';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
-} from '../../../constants/DashboardConstants';
-import Theme from '../../../theme/Theme';
-import { getDSPFinances } from '../../../api';
+} from '../../../../constants/DashboardConstants';
+import Theme from '../../../../theme/Theme';
+import { getDSPFinances } from '../../../../api';
 
-export default function FinanceDSP({
+export default function DSPBilling({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
@@ -293,7 +293,7 @@ export default function FinanceDSP({
     <>
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
-          <div className="medium-text-title ">DSP Finances</div>{' '}
+          <div className="medium-text-title ">DSP Invoices</div>{' '}
         </div>
         {renderTimeFilterDropDown()}
       </div>
@@ -302,13 +302,13 @@ export default function FinanceDSP({
   );
 }
 
-FinanceDSP.defaultProps = {
+DSPBilling.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
 };
 
-FinanceDSP.propTypes = {
+DSPBilling.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,

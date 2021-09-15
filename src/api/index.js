@@ -52,6 +52,8 @@ export {
   getDspPacingDahboardData,
   getFinanceInvoices,
   getDSPFinances,
+  getDSPBillingMetrics,
+  getBills,
 } from './AdDashboradApi';
 
 // Choices

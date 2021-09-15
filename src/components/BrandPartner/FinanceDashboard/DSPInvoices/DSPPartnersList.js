@@ -5,8 +5,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { components } from 'react-select';
 import $ from 'jquery';
-import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
+import { bool, func, string } from 'prop-types';
 
 import {
   WhiteCard,
@@ -14,23 +14,28 @@ import {
   DropDownIndicator,
   PageLoader,
   CommonPagination,
-} from '../../../common';
-import { CompanyDefaultUser } from '../../../theme/images/index';
-import FinanceDashboardFilters from './FinanceDashboardFilters';
-import TableMobileView from '../../../common/TableMobileView';
+} from '../../../../common';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import DSPInvoiceFilters from './DSPInvoiceFilters';
+import TableMobileView from '../../../../common/TableMobileView';
 import {
   PartnersStatusOptions,
   PartnersSortByOptions,
-} from '../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../api';
-import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../constants';
+} from '../../../../constants/DashboardConstants';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import DSPInvoiceTabs from './DSPInvoiceTabs';
 
-export default function FinancePartners({
+export default function DSPPartnersList({
   timeFrame,
   timeFrameType,
   isTimeFrameChange,
   setIsTimeFrameChange,
+  onTabClick,
+  viewComponent,
+  isDesktop,
+  isTablet,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
@@ -40,7 +45,7 @@ export default function FinancePartners({
   const [pageNumber, setPageNumber] = useState();
   const { Option, SingleValue } = components;
   const [responseId, setResponseId] = useState(null);
-  const isDesktop = useMediaQuery({ minWidth: 768 });
+
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: 'total_outstanding',
     label: 'Total Outstanding',
@@ -306,16 +311,24 @@ export default function FinancePartners({
 
   return (
     <>
-      <FinanceDashboardFilters
-        searchQuery={searchQuery}
-        selectedStatus={selectedStatus}
-        statusOptions={PartnersStatusOptions}
-        onHandleSearch={onHandleSearch}
-        handleResetFilter={handleResetFilter}
-        handleStatusChange={handleStatusChange}
-      />
-      <div className="col-lg-9">
+      <div className="col-lg-3 col-md-12">
         {isDesktop ? (
+          <DSPInvoiceTabs
+            onTabClick={onTabClick}
+            viewComponent={viewComponent}
+          />
+        ) : null}
+        <DSPInvoiceFilters
+          searchQuery={searchQuery}
+          selectedStatus={selectedStatus}
+          statusOptions={PartnersStatusOptions}
+          onHandleSearch={onHandleSearch}
+          handleResetFilter={handleResetFilter}
+          handleStatusChange={handleStatusChange}
+        />
+      </div>
+      <div className="col-lg-9">
+        {isDesktop || isTablet ? (
           <WhiteCard className="d-lg-block d-md-block d-none">
             <div className="row">
               <div className="col-9 ">
@@ -385,8 +398,15 @@ export default function FinancePartners({
   );
 }
 
-FinancePartners.defaultProps = {};
-FinancePartners.propTypes = {};
+DSPPartnersList.defaultProps = {
+  onTabClick: () => {},
+};
+DSPPartnersList.propTypes = {
+  onTabClick: func,
+  viewComponent: string.isRequired,
+  isDesktop: bool.isRequired,
+  isTablet: bool.isRequired,
+};
 
 const NoData = styled.div`
   margin: 3em;

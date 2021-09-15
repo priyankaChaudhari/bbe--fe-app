@@ -101,9 +101,79 @@ export const DSPFinanceMetrics = [
   },
 ];
 
+export const DSPBillingMetrics = [
+  {
+    value: 'amazonAdvertisingLLC',
+    key: 'amazon_advertising_llc',
+    label: 'Amazon Advertising LLC',
+    titleColor: '#333333',
+    prefix: '',
+    postfix: '%',
+  },
+  {
+    value: 'amazonOnlineUKLimited',
+    key: 'amazon_online_uk_limited',
+    label: 'Amazon Online UK Limited',
+    titleColor: '#333333',
+    prefix: '',
+    postfix: '',
+  },
+  {
+    value: 'amazonOnlineUKLimitedEur',
+    key: 'amazon_online_uk_limited_eur',
+    label: 'Amazon Online UK Limited (EUR)',
+    titleColor: '#D60000',
+    prefix: '$',
+    postfix: '',
+  },
+  {
+    value: 'amazonCommercialServicesPtyLtd',
+    key: 'amazon_commercial_services_pty_ltd',
+    label: 'Amazon Commercial Services Pty Ltd',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+];
+
 export const InvoiceStatusColorSet = {
   open: '#FDF3D7',
   draft: '#FDF377',
   overdue: '#F7D7DB',
   paid: '#E3F2D2',
 };
+
+export const BillingVendorOptions = [
+  { value: 'amazon_advertising_llc', label: 'Amazon Advertising LLC' },
+  { value: 'amzon_online_uk_limited', label: 'Amzon Online UK Limited' },
+  {
+    value: 'amzon_online_uk_limited_eur',
+    label: 'Amzon Online UK Limited (EUR)',
+  },
+  {
+    value: 'amazon_commercial_services_pty_ltd',
+    label: 'Amazon Commercial Services Pty Ltd',
+  },
+];
+
+export const BillingSortByOptions = [
+  { value: 'created_at', label: 'Newest' },
+  { value: 'monthly_budget', label: 'Amount' },
+  { value: 'generated_at', label: 'Bill Date' },
+  { value: 'due_date', label: 'Due Date' },
+];
+
+export const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];

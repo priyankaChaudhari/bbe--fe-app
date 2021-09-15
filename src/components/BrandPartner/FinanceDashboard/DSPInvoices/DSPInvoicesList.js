@@ -5,9 +5,8 @@ import $ from 'jquery';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
-import { shape, string } from 'prop-types';
+import { func, shape, string, bool } from 'prop-types';
 
 import {
   WhiteCard,
@@ -16,24 +15,30 @@ import {
   DropDownIndicator,
   PageLoader,
   CommonPagination,
-} from '../../../common';
-import TableMobileView from '../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../theme/images/index';
-import FinanceDashboardFilters from './FinanceDashboardFilters';
+} from '../../../../common';
+import TableMobileView from '../../../../common/TableMobileView';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import DSPInvoiceFilters from './DSPInvoiceFilters';
 import {
   InvoicesStatusOptions,
   InvoicesSortByOptions,
   InvoiceStatusColorSet,
-} from '../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../api';
-import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../constants';
+} from '../../../../constants/DashboardConstants';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import Theme from '../../../../theme/Theme';
+import DSPInvoiceTabs from './DSPInvoiceTabs';
 
-export default function FinanceInvoices({
+export default function DSPInvoicesList({
   timeFrame,
   timeFrameType,
   isTimeFrameChange,
   setIsTimeFrameChange,
+  onTabClick,
+  viewComponent,
+  isDesktop,
+  isTablet,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
@@ -42,7 +47,6 @@ export default function FinanceInvoices({
   const [invoiceCount, setInvoiceCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const { Option, SingleValue } = components;
-  const isDesktop = useMediaQuery({ minWidth: 768 });
   const [responseId, setResponseId] = useState(null);
 
   const [selectedSortBy, setSelectedSortBy] = useState({
@@ -301,51 +305,61 @@ export default function FinanceInvoices({
 
   return (
     <>
-      <FinanceDashboardFilters
-        searchQuery={searchQuery}
-        selectedStatus={selectedStatus}
-        statusOptions={InvoicesStatusOptions}
-        onHandleSearch={onHandleSearch}
-        handleResetFilter={handleResetFilter}
-        handleStatusChange={handleStatusChange}
-      />
-      <div className="col-lg-9">
+      <div className="col-lg-3 col-md-12">
         {isDesktop ? (
+          <DSPInvoiceTabs
+            onTabClick={onTabClick}
+            viewComponent={viewComponent}
+          />
+        ) : null}
+        <DSPInvoiceFilters
+          searchQuery={searchQuery}
+          selectedStatus={selectedStatus}
+          statusOptions={InvoicesStatusOptions}
+          onHandleSearch={onHandleSearch}
+          handleResetFilter={handleResetFilter}
+          handleStatusChange={handleStatusChange}
+        />
+      </div>
+      <div className="col-lg-9">
+        {isDesktop || isTablet ? (
           // for dekstop/tablet View
-          <WhiteCard className="d-lg-block d-md-block d-none">
-            <div className="row">
-              <div className="col-9 ">
-                <div className="black-heading-title mt-3">Invoices</div>{' '}
+          <>
+            <WhiteCard className="d-lg-block d-md-block d-none">
+              <div className="row">
+                <div className="col-9 ">
+                  <div className="black-heading-title mt-3">Invoices</div>{' '}
+                </div>
+                <div
+                  id="BT-finace-dah-invoice-dropdown"
+                  className="col-3  text-right">
+                  {renderSortByDropDown()}
+                </div>
               </div>
-              <div
-                id="BT-finace-dah-invoice-dropdown"
-                className="col-3  text-right">
-                {renderSortByDropDown()}
-              </div>
-            </div>
-            <div className="straight-line horizontal-line  mt-3 mb-1" />
+              <div className="straight-line horizontal-line  mt-3 mb-1" />
 
-            {invoiceLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color="#FF5933"
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : invoiceData && invoiceData.length > 0 ? (
-              <>
-                {renderInvoicesTable()}
-                <CommonPagination
-                  count={invoiceCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+              {invoiceLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color={Theme.orange}
+                  type="detail"
+                  width={40}
+                  height={40}
                 />
-              </>
-            ) : (
-              <NoData>No Invoices Found</NoData>
-            )}
-          </WhiteCard>
+              ) : invoiceData && invoiceData.length > 0 ? (
+                <>
+                  {renderInvoicesTable()}
+                  <CommonPagination
+                    count={invoiceCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              ) : (
+                <NoData>No Invoices Found</NoData>
+              )}
+            </WhiteCard>
+          </>
         ) : (
           // for mobile View
           <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
@@ -359,7 +373,7 @@ export default function FinanceInvoices({
             {invoiceLoader ? (
               <PageLoader
                 component="performance-graph"
-                color="#FF5933"
+                color={Theme.orange}
                 type="detail"
                 width={40}
                 height={40}
@@ -381,17 +395,22 @@ export default function FinanceInvoices({
   );
 }
 
-FinanceInvoices.defaultProps = {
+DSPInvoicesList.defaultProps = {
   data: shape({
     label: '',
     sub: '',
   }),
+  onTabClick: () => {},
 };
-FinanceInvoices.propTypes = {
+DSPInvoicesList.propTypes = {
   data: shape({
     label: string,
     sub: string,
   }),
+  onTabClick: func,
+  viewComponent: string.isRequired,
+  isDesktop: bool.isRequired,
+  isTablet: bool.isRequired,
 };
 
 const NoData = styled.div`

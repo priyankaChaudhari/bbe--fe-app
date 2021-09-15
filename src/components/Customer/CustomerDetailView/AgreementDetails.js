@@ -221,18 +221,20 @@ export default function AgreementDetails({ id, userId }) {
             key={agreement.id}>
             <div className="row">
               <div className="col-lg-9 col-md-9 col-12">
-                <img
-                  width="48px"
-                  className="solid-icon mb-2"
-                  src={
-                    agreement &&
-                    agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('dsp')
-                      ? DspOnlyIcon
-                      : RecurringIcon
-                  }
-                  alt=""
-                />
+                <div className="solid-icon">
+                  <img
+                    width="48px"
+                    className=" mb-2"
+                    src={
+                      agreement &&
+                      agreement.contract_type &&
+                      agreement.contract_type.toLowerCase().includes('dsp')
+                        ? DspOnlyIcon
+                        : RecurringIcon
+                    }
+                    alt=""
+                  />
+                </div>
                 <div
                   className="contract-status mb-2"
                   role="presentation"
@@ -267,6 +269,7 @@ export default function AgreementDetails({ id, userId }) {
                       ? 'DSP Service Agreement'
                       : 'Recurring Service Agreement'}
                   </p>
+
                   {agreement && agreement.contract_type !== 'one time' ? (
                     <ul className="recurring-contact">
                       <li>

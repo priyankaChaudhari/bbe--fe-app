@@ -31,7 +31,8 @@ export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
-export const API_FINANCE_DASHBOARD = '/invoice/';
+export const API_DSP_INVOICES = '/invoice/';
+export const API_DSP_BILLING = '/billing/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

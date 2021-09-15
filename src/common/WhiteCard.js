@@ -27,7 +27,7 @@ export const WhiteCard = styled.div`
     max-width: 80%;
     width: 100%;
     word-break: keep-all;
-    overflow-wrap: break-word;
+    
   }
 
   .company-contract-height {
