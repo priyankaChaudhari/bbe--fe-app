@@ -262,7 +262,7 @@ export async function getDSPFinances(timeFilter, startDate, endDate) {
 
 export async function getBills(
   searchKey,
-  status,
+  vendor,
   sortBy,
   timeFilterType,
   timeFilter,
@@ -270,6 +270,7 @@ export async function getBills(
 ) {
   let params = {
     page,
+    vendor,
     sort_by: `-${sortBy}`,
   };
 
@@ -293,12 +294,6 @@ export async function getBills(
     };
   }
 
-  if (status !== 'any') {
-    params = {
-      ...params,
-      invoice_status: status,
-    };
-  }
   let result = {};
   result = await axiosInstance
     .get(`${API_DSP_BILLING}`, { params })
@@ -325,7 +320,7 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
 
   let result = {};
   result = await axiosInstance
-    .get(`${API_DSP_BILLING}billing-detail`, { params })
+    .get(`${API_DSP_BILLING}`, { params })
     .then((response) => {
       return response;
     })

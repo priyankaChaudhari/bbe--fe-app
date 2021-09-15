@@ -141,25 +141,26 @@ export const InvoiceStatusColorSet = {
   draft: '#FDF377',
   overdue: '#F7D7DB',
   paid: '#E3F2D2',
+  created: '#FDF3D7',
 };
 
 export const BillingVendorOptions = [
-  { value: 'amazon_advertising_llc', label: 'Amazon Advertising LLC' },
-  { value: 'amzon_online_uk_limited', label: 'Amzon Online UK Limited' },
+  { value: 'Amazon Advertising LLC', label: 'Amazon Advertising LLC' },
+  { value: 'Amazon Online UK Limited', label: 'Amazon Online UK Limited' },
   {
-    value: 'amzon_online_uk_limited_eur',
-    label: 'Amzon Online UK Limited (EUR)',
+    value: 'Amazon Online UK Limited (EUR)',
+    label: 'Amazon Online UK Limited (EUR)',
   },
   {
-    value: 'amazon_commercial_services_pty_ltd',
-    label: 'Amazon Commercial Services Pty Ltd',
+    value: 'Amazon Commercial Services Pty Ltd',
+    label: 'Amazon Commercial Services Pty Ltd.',
   },
 ];
 
 export const BillingSortByOptions = [
-  { value: 'created_at', label: 'Newest' },
-  { value: 'monthly_budget', label: 'Amount' },
-  { value: 'generated_at', label: 'Bill Date' },
+  { value: '', label: 'Newest' },
+  { value: 'amount', label: 'Amount' },
+  { value: 'bill_date', label: 'Bill Date' },
   { value: 'due_date', label: 'Due Date' },
 ];
 

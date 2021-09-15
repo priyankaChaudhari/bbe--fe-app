@@ -40,6 +40,7 @@ import {
   monthNames,
   InvoiceStatusColorSet,
 } from '../../../../constants/DashboardConstants';
+import { Apidata } from './dummyApiRes';
 
 export default function DSPBillingContainer() {
   const currentDate = new Date();
@@ -51,7 +52,9 @@ export default function DSPBillingContainer() {
     endDate: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
   });
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('any');
+  const [selectedVendor, setSelectedVendor] = useState(
+    'Amazon Advertising LLC',
+  );
   const [billingLoader, setBillingLoader] = useState(false);
   const [billingData, setBillingData] = useState([]);
   const [billsCount, setBillsCount] = useState(null);
@@ -89,11 +92,11 @@ export default function DSPBillingContainer() {
   }, []);
 
   const getBillsData = useCallback(
-    (searchKey, status, sortBy, page) => {
+    (searchKey, vendor, sortBy, page) => {
       setBillingLoader(true);
       getBills(
         searchKey,
-        status,
+        vendor,
         sortBy,
         selectedDateType,
         timeFrame,
@@ -110,6 +113,8 @@ export default function DSPBillingContainer() {
           setBillingLoader(false);
           setPageNumber(page);
         }
+        setBillingData(Apidata.results);
+        setBillsCount(Apidata.count);
         setBillingLoader(false);
       });
     },
@@ -119,7 +124,7 @@ export default function DSPBillingContainer() {
   useEffect(() => {
     if (responseId === null) {
       getBillingMetricsdata(dummyDateType);
-      getBillsData(searchQuery, selectedStatus, selectedSortBy.value, 1);
+      getBillsData(searchQuery, selectedVendor, selectedSortBy.value, 1);
       setResponseId('12345');
     }
   }, [
@@ -128,7 +133,7 @@ export default function DSPBillingContainer() {
     dummyDateType,
     getBillsData,
     searchQuery,
-    selectedStatus,
+    selectedVendor,
     selectedSortBy,
   ]);
 
@@ -164,24 +169,26 @@ export default function DSPBillingContainer() {
 
   const handleSortByFilter = (event) => {
     setSelectedSortBy(event);
-    getBillsData(searchQuery, selectedStatus, event.value, 1);
+    getBillsData(searchQuery, selectedVendor, event.value, 1);
   };
 
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getBillsData(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    getBillsData(event.target.value, selectedVendor, selectedSortBy.value, 1);
   };
 
   const handleResetFilter = () => {
-    $('.checkboxes input:radio').filter("[value='any']").prop('checked', true);
-    setSelectedStatus('any');
+    $('.checkboxes input:radio')
+      .filter("[value='Amazon Advertising LLC']")
+      .prop('checked', true);
+    setSelectedVendor('Amazon Advertising LLC');
     setSearchQuery('');
-    setSelectedSortBy({ value: 'created_at', label: 'Newest' });
-    getBillsData('', 'any', 'created_at', 1);
+    setSelectedSortBy({ value: '', label: 'Newest' });
+    getBillsData('', 'Amazon Advertising LLC', '', 1);
   };
 
   const handleStatusChange = (event) => {
-    setSelectedStatus(event.target.value);
+    setSelectedVendor(event.target.value);
     getBillsData(searchQuery, event.target.value, selectedSortBy.value, 1);
   };
 
@@ -189,7 +196,7 @@ export default function DSPBillingContainer() {
     setPageNumber(currentPage);
     getBillsData(
       searchQuery,
-      selectedStatus,
+      selectedVendor,
       selectedSortBy.value,
       currentPage,
     );
@@ -447,12 +454,12 @@ export default function DSPBillingContainer() {
   };
 
   const renderTableData = (item) => {
-    const billDate = dayjs(item.generated_at).format('MM/DD/YY');
+    const billDate = dayjs(item.bill_date).format('MM/DD/YY');
     const dueDate = dayjs(item.due_date).format('MM/DD/YY');
     return (
       <tr
         className="cursor"
-        key={item.invoiced_id}
+        key={item.id}
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(
@@ -464,24 +471,30 @@ export default function DSPBillingContainer() {
         }>
         <td className="product-body">
           {' '}
-          <img className="company-logo" src={CompanyDefaultUser} alt="logo" />
+          <img
+            className="company-logo"
+            src={
+              item && item.customer && item.customer.profile_picture !== null
+                ? item.customer.profile_picture
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
           <div className="company-name">
             {item.customer && item.customer.name}
           </div>
-          <div className="status">#{item.invoiced_id}</div>
+          <div className="status">#{item.bill_number}</div>
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.monthly_budget, 0, true)}
+          ${bindAmount(item.amount, 0, true)}
         </td>
         <td className="product-table-body light-font">{billDate}</td>
         <td className="product-table-body light-font">{dueDate}</td>
         <td className="product-table-body text-right">
           <Status
             className="float-right"
-            label={item.invoice_status}
-            backgroundColor={
-              InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
-            }
+            label={item.status}
+            backgroundColor={InvoiceStatusColorSet[item.status]}
           />
           <div className="clear-fix" />
         </td>
@@ -533,7 +546,7 @@ export default function DSPBillingContainer() {
       <div className="row ">
         <DSPBillingFilters
           searchQuery={searchQuery}
-          selectedStatus={selectedStatus}
+          selectedVendor={selectedVendor}
           statusOptions={BillingVendorOptions}
           onHandleSearch={onHandleSearch}
           handleResetFilter={handleResetFilter}

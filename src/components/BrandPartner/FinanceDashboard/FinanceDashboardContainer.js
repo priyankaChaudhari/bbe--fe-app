@@ -5,7 +5,7 @@ import DSPInvoiceContainer from './DSPInvoices/DSPInvoiceContainer';
 import DSPBillingContainer from './DSPBilling/DSPBillingContainer';
 
 export default function FinanceDashboardContainer() {
-  const [viewComponent, setViewComponent] = useState('invoices');
+  const [viewComponent, setViewComponent] = useState('billing');
   return (
     <DashboardCard>
       <div className="dashboard-container-body">

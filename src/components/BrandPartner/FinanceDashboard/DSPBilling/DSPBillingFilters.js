@@ -14,7 +14,7 @@ import { SearchIcon, CaretUp } from '../../../../theme/images/index';
 
 export default function DSPBillingFilters({
   searchQuery,
-  selectedStatus,
+  selectedVendor,
   statusOptions,
   onHandleSearch,
   handleResetFilter,
@@ -70,7 +70,7 @@ export default function DSPBillingFilters({
                 id={item.value}
                 value={item.value}
                 onChange={(event) => handleStatusChange(event)}
-                defaultChecked={item.value === selectedStatus}
+                defaultChecked={item.value === selectedVendor}
               />
               <span className="checkmark checkmark-customer-list" />
             </label>
@@ -129,7 +129,7 @@ export default function DSPBillingFilters({
 
 DSPBillingFilters.defaultProps = {
   searchQuery: '',
-  selectedStatus: '',
+  selectedVendor: '',
   statusOptions: [],
   onHandleSearch: () => {},
   handleResetFilter: () => {},
@@ -138,7 +138,7 @@ DSPBillingFilters.defaultProps = {
 
 DSPBillingFilters.propTypes = {
   searchQuery: string,
-  selectedStatus: string,
+  selectedVendor: string,
   statusOptions: arrayOf(Array),
   onHandleSearch: func,
   handleResetFilter: func,
