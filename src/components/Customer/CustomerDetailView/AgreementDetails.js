@@ -50,7 +50,14 @@ import {
   pauseAgreementOptions,
 } from '../../../constants/FieldConstants';
 
-export default function AgreementDetails({ id, userId }) {
+export default function AgreementDetails({
+  id,
+  userId,
+  setShowMemberList,
+  showModal,
+  setShowModal,
+  userRole,
+}) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [viewComponent, setViewComponent] = useState('current');
@@ -58,13 +65,13 @@ export default function AgreementDetails({ id, userId }) {
     (state) => state.accountState.multipleAgreement,
   );
   const loader = useSelector((state) => state.accountState.isLoading);
-  const [showModal, setShowModal] = useState({ pause: false });
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [pauseDateDetails, setPauseDateDetails] = useState({
     start_date: null,
     end_date: null,
   });
+  const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
 
   const customStyles = {
     content: {
@@ -121,6 +128,9 @@ export default function AgreementDetails({ id, userId }) {
 
   useEffect(() => {
     dispatch(getAccountDetails(id));
+    getBGSManagers(id).then((res) => {
+      setBgsManagerEmail(res && res.data && res.data.email);
+    });
   }, [dispatch, id]);
 
   const countDays = (value) => {
@@ -144,6 +154,17 @@ export default function AgreementDetails({ id, userId }) {
         ),
         state: history && history.location && history.location.pathname,
       });
+    });
+  };
+
+  const addBGSMangerEmail = () => {
+    const firstModal = showModal;
+    setShowModal(false);
+    setShowMemberList({
+      show: true,
+      add: true,
+      modal: true,
+      agreement: firstModal,
     });
   };
 
@@ -342,7 +363,7 @@ export default function AgreementDetails({ id, userId }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {agreement.draft_from ? (
+                  {agreement.draft_from && userRole !== 'Customer' ? (
                     <ActionDropDown>
                       {' '}
                       <Select
@@ -360,10 +381,12 @@ export default function AgreementDetails({ id, userId }) {
                         value=""
                       />
                     </ActionDropDown>
-                  ) : agreement.contract_status.value === 'pending contract' ||
-                    agreement.contract_status.value ===
-                      'pending contract approval' ||
-                    agreement.contract_status.value === 'pending signature' ? (
+                  ) : userRole === 'Customer' &&
+                    (agreement.contract_status.value === 'pending contract' ||
+                      agreement.contract_status.value ===
+                        'pending contract approval' ||
+                      agreement.contract_status.value ===
+                        'pending signature') ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -542,6 +565,21 @@ export default function AgreementDetails({ id, userId }) {
           <p className="black-heading-title text-center mt-3">
             Cancel Contract
           </p>
+          {!bgsManagerEmail ? (
+            <p className="long-text mb-2 text-center ">
+              For approval please add the{' '}
+              <span
+                className="cursor"
+                style={{ color: Theme.orange }}
+                onClick={() => addBGSMangerEmail()}
+                role="presentation">
+                BGS Manager
+              </span>{' '}
+              first.
+            </p>
+          ) : (
+            ''
+          )}
           <p className="long-text mb-2 text-center ">
             {' '}
             Are you sure you would like to request approval to cancel this
@@ -554,7 +592,21 @@ export default function AgreementDetails({ id, userId }) {
       return (
         <>
           <h4 className="on-boarding mb-3 pb-2">Pause Contract</h4>
-
+          {!bgsManagerEmail ? (
+            <p className="long-text mb-2 pb-1">
+              For approval please add the{' '}
+              <span
+                className="cursor"
+                style={{ color: Theme.orange }}
+                onClick={() => addBGSMangerEmail()}
+                role="presentation">
+                BGS Manager
+              </span>{' '}
+              first.
+            </p>
+          ) : (
+            ''
+          )}
           <p className="long-text mb-2 pb-1">
             {' '}
             Before you proceed, please enter the duration to pause this
@@ -606,27 +658,23 @@ export default function AgreementDetails({ id, userId }) {
   };
 
   const transactionalAPI = (type) => {
-    let data = {};
-    getBGSManagers(id).then((res) => {
-      if (res && res.status === 200) {
-        data = {
-          contract: showModal.agreementId,
-          primary_email: res && res.data && res.data.email,
-          contract_status: type,
-          user: userId,
-        };
+    const data = {
+      contract: showModal.agreementId,
+      primary_email: bgsManagerEmail,
+      contract_status: type,
+      user: userId,
+    };
+
+    createTransactionData(data).then((response) => {
+      if (response.status === 200 || response.status === 201) {
+        setShowModal(false);
+        setIsLoading(false);
+        const statusName = showModal.pause ? 'Pausing' : 'Cancelling';
+        toast.success(
+          `We have emailed the BGS manager for ${statusName} your agreement.`,
+        );
+        dispatch(getAccountDetails(id));
       }
-      createTransactionData(data).then((response) => {
-        if (response.status === 200 || response.status === 201) {
-          setShowModal(false);
-          setIsLoading(false);
-          const statusName = showModal.pause ? 'Pausing' : 'Cancelling';
-          toast.success(
-            `We have emailed the BGS manager for ${statusName} your agreement.`,
-          );
-          dispatch(getAccountDetails(id));
-        }
-      });
     });
   };
 
@@ -781,7 +829,8 @@ export default function AgreementDetails({ id, userId }) {
                 <div className="col-6 mt-4">
                   <Button
                     className="btn-primary w-100"
-                    onClick={() => saveDetails()}>
+                    onClick={() => saveDetails()}
+                    disabled={!bgsManagerEmail}>
                     {isLoading ? (
                       <PageLoader color="#fff" type="button" />
                     ) : showModal.cancel ? (
@@ -838,6 +887,10 @@ AgreementDetails.propTypes = {
     }),
   }).isRequired,
   userId: PropTypes.string.isRequired,
+  setShowMemberList: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  showModal: PropTypes.objectOf(PropTypes.object).isRequired,
+  userRole: PropTypes.string.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`

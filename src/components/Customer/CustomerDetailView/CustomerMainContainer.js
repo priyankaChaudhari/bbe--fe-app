@@ -177,6 +177,9 @@ export default function CustomerMainContainer() {
   );
   const [noteData, setNoteData] = useState([]);
   const [marketplaceData, setMarketplaceData] = useState([]);
+  const [agreementDetailModal, setAgreementDetailModal] = useState({
+    pause: false,
+  });
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -1176,6 +1179,10 @@ export default function CustomerMainContainer() {
                     <AgreementDetails
                       id={id}
                       userId={userInfo && userInfo.id}
+                      setShowMemberList={setShowMemberList}
+                      showModal={agreementDetailModal}
+                      setShowModal={setAgreementDetailModal}
+                      userRole={userInfo && userInfo.role}
                     />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />
@@ -1465,6 +1472,8 @@ export default function CustomerMainContainer() {
                     id={id}
                     getCustomerMemberList={getCustomerMemberList}
                     setShowMemberList={setShowMemberList}
+                    showMemberList={showMemberList}
+                    setAgreementDetailModal={setAgreementDetailModal}
                   />
                 ) : (
                   <EditTeamMember

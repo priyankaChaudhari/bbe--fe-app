@@ -26,6 +26,8 @@ export default function AddTeamMember({
   id,
   getCustomerMemberList,
   setShowMemberList,
+  showMemberList,
+  setAgreementDetailModal,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
@@ -36,7 +38,6 @@ export default function AddTeamMember({
     name: '',
     clear: false,
   });
-
   const [userRoleId, setUserRoleId] = useState([]);
   const [disabledRoles, setdisabledRoles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,10 +82,17 @@ export default function AddTeamMember({
     }),
   };
 
-  const CustomDropdownIndicator = (props) => {
+  const DropdownIndicator = (dataProps) => {
     return (
-      <components.DropdownIndicator {...props}>
-        <img src={SortDownIcon} alt="sort" style={{ width: '78%' }} />
+      <components.DropdownIndicator {...dataProps}>
+        <img
+          src={SortDownIcon}
+          alt="sort"
+          style={{
+            width: '78%',
+            transform: dataProps.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+          }}
+        />
       </components.DropdownIndicator>
     );
   };
@@ -96,11 +104,12 @@ export default function AddTeamMember({
         role.data.unshift({ value: 'All', label: 'All' });
         setRoles(role && role.data);
       });
+
       userCustomerRoleList(
         id,
         currentPage,
         searchQuery,
-        filterDetails.name.value,
+        showMemberList.agreement ? 'BGS Manager' : filterDetails.name.value,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setCount(response && response.data && response.data.count);
@@ -108,7 +117,7 @@ export default function AddTeamMember({
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [id, searchQuery, filterDetails.name.value],
+    [id, searchQuery, filterDetails.name.value, showMemberList.agreement],
   );
 
   useEffect(() => {
@@ -122,7 +131,9 @@ export default function AddTeamMember({
         getCustomerMemberList();
         setIsLoading({ loader: false, type: 'button' });
         toast.success(`${userRoleId.length} Team Member(s) Added.`);
+        const showAgreementModal = showMemberList.agreement;
         setShowMemberList({ add: false, show: false, modal: false });
+        setAgreementDetailModal(showAgreementModal);
       } else {
         setIsLoading({ loader: false, type: 'button' });
       }
@@ -257,7 +268,7 @@ export default function AddTeamMember({
                     value={filterDetails.name}
                     menuPortalTarget={document.body}
                     styles={customStyleCSS}
-                    components={{ DropdownIndicator: CustomDropdownIndicator }}
+                    components={{ DropdownIndicator }}
                     theme={(theme) => ({
                       ...theme,
                       border: 'none',
@@ -397,10 +408,15 @@ AddTeamMember.defaultProps = {
   id: '',
   getCustomerMemberList: () => {},
   setShowMemberList: () => {},
+  setAgreementDetailModal: () => {},
 };
 
 AddTeamMember.propTypes = {
   id: PropTypes.string,
   getCustomerMemberList: PropTypes.func,
   setShowMemberList: PropTypes.func,
+  showMemberList: PropTypes.shape({
+    agreement: PropTypes.objectOf(PropTypes.Object),
+  }).isRequired,
+  setAgreementDetailModal: PropTypes.func,
 };
