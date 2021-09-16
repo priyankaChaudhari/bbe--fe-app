@@ -136,7 +136,7 @@ const CustomDateRange = styled.div`
     .react-datepicker__month--selected {
       background-color: transparent;
       font-weight: bold;
-      color: ${Theme.black};
+      color: ${Theme.orange};
       border-radius: 25px;
     }
 
