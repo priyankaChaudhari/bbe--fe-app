@@ -21,8 +21,9 @@ export default function BackToTop() {
 
 const ScrollToTop = styled.div`
   .back-to-top {
-    position: relative;
-    bottom: -25px;
+    position: absolute;
+    bottom: 0;
+    right: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9;

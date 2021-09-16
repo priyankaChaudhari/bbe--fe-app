@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import DSPInvoicesList from './DSPInvoicesList';
 import DSPPartnersList from './DSPPartnersList';
 import DSPInvoices from './DSPInvoices';
-import { Tabs } from '../../../../common';
+import { BackToTop, Tabs } from '../../../../common';
 
 export default function DSPInvoiceContainer() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -74,6 +74,9 @@ export default function DSPInvoiceContainer() {
             isTablet={isTablet}
           />
         )}
+        <div className="col-12 mt-5">
+          <BackToTop />
+        </div>
       </div>
     </>
   );

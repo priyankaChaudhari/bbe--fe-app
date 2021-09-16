@@ -1462,8 +1462,10 @@ export default function CustomerMainContainer() {
                   </div>
                 </div>
               </CustomerDetailsBody>
+              <div className="col-12 mt-5">
+                <BackToTop />
+              </div>
               {renderNotesModal()}
-              <BackToTop />
 
               <Modal
                 isOpen={showMemberList.modal}

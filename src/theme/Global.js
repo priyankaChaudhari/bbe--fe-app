@@ -273,6 +273,7 @@ export const DashboardCard = styled.div`
   min-height: 100vh;
   height: 100%;
   padding-top: 70px;
+  // position: relative;
   .dashboard-container-body {
     max-width: 1220px;
     width: 100%;

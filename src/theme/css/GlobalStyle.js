@@ -386,7 +386,7 @@ p {
     }
   }
   .ghq-card-content__image {
-    width: -webkit-fill-available;
+    width: -webkit-fill-available !important;
   }
 
   &.text-detail-modal {
