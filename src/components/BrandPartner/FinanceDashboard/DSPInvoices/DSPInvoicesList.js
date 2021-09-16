@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
-import { func, shape, string, bool } from 'prop-types';
+import { func, string, bool } from 'prop-types';
 
 import {
   WhiteCard,
@@ -392,17 +392,11 @@ export default function DSPInvoicesList({
 }
 
 DSPInvoicesList.defaultProps = {
-  data: shape({
-    label: '',
-    sub: '',
-  }),
+  data: () => {},
   onTabClick: () => {},
 };
 DSPInvoicesList.propTypes = {
-  data: shape({
-    label: string,
-    sub: string,
-  }),
+  data: func,
   onTabClick: func,
   viewComponent: string.isRequired,
   isDesktop: bool.isRequired,

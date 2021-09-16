@@ -27,6 +27,7 @@ import {
   CommonPagination,
   Status,
   Table,
+  CustomDateRange,
 } from '../../../../common';
 import {
   CaretUp,
@@ -35,7 +36,7 @@ import {
 } from '../../../../theme/images/index';
 import {
   FinanceDateTypeOptions,
-  DSPBillingMetrics,
+  // DSPBillingMetrics,
   BillingVendorOptions,
   BillingSortByOptions,
   monthNames,
@@ -350,6 +351,7 @@ export default function DSPBillingContainer() {
   };
 
   const renderTimeFilterDropDown = () => {
+    console.log(dspData);
     return (
       <div className="col-md-6 col-lg-6 col-7 text-right">
         <DropDownSelectMonthPicker
@@ -382,87 +384,87 @@ export default function DSPBillingContainer() {
     );
   };
 
-  const renderTitle = (data, key) => {
-    if (data[key] === null) {
-      return 'N/A';
-    }
-    if (
-      key === 'total_overdue' ||
-      key === 'expected_by_end_of_month' ||
-      key === 'open_invoices'
-    ) {
-      return bindAmount(data[key], 0);
-    }
-    if (key === 'percentage_past_due') {
-      return bindAmount(data[key], 2);
-    }
-    if (key === 'avg_days_past_due') {
-      return bindAmount(data[key], 1);
-    }
+  // const renderTitle = (data, key) => {
+  //   if (data[key] === null) {
+  //     return 'N/A';
+  //   }
+  //   if (
+  //     key === 'total_overdue' ||
+  //     key === 'expected_by_end_of_month' ||
+  //     key === 'open_invoices'
+  //   ) {
+  //     return bindAmount(data[key], 0);
+  //   }
+  //   if (key === 'percentage_past_due') {
+  //     return bindAmount(data[key], 2);
+  //   }
+  //   if (key === 'avg_days_past_due') {
+  //     return bindAmount(data[key], 1);
+  //   }
 
-    return data[key];
-  };
+  //   return data[key];
+  // };
 
   const renderDSPFinanceMetrics = () => {
     return (
-      <div className="row mt-3">
-        {DSPBillingMetrics.map((item) => (
-          <div className="col-lg-3 col-md-6 col-sm-12 mb-3" key={item.key}>
-            {' '}
-            <Card
-              className="fix-height"
-              heading={item.label}
-              title={renderTitle(dspData, item.key)}
-              titleColor={item.titleColor}
-              prefix={dspData[item.key] !== null ? item.prefix : ''}
-              postfix={item.postfix}
-            />
-          </div>
-        ))}
-      </div>
       // <div className="row mt-3">
-      //   <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-      //     <Card
-      //       className="fix-height "
-      //       heading="Amazon Advertising LLC"
-      //       noBill="12"
-      //       noBillText="No. Bills"
-      //       totalBill="$118,396"
-      //       totalBillText="Total Billed"
-      //       type="billing"
-      //     />
-      //   </div>
-      //   <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-      //     <Card
-      //       className="fix-height"
-      //       heading="Amazon Online UK Limited"
-      //       noBill="12"
-      //       noBillText="No. Bills"
-      //       totalBill="£27,396"
-      //       totalBillText="Total Billed"
-      //     />
-      //   </div>
-      //   <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-      //     <Card
-      //       className="fix-height"
-      //       heading="Amazon Online UK Limited (EUR)"
-      //       noBill="12"
-      //       noBillText="No. Bills"
-      //       totalBill="€44,692"
-      //       totalBillText="Total Billed"
-      //     />
-      //   </div>
-      //   <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-      //     <Card
-      //       className="fix-height"
-      //       heading="Amazon Commercial Services Pty Ltd"
-      //       noBill="12"
-      //       noBillText="No. Bills"
-      //       totalBill="A$3,295"
-      //       totalBillText="Total Billed"
-      //     />
-      //   </div>
+      //   {DSPBillingMetrics.map((item) => (
+      //     <div className="col-lg-3 col-md-6 col-sm-12 mb-3" key={item.key}>
+      //       {' '}
+      //       <Card
+      //         className="fix-height"
+      //         heading={item.label}
+      //         title={renderTitle(dspData, item.key)}
+      //         titleColor={item.titleColor}
+      //         prefix={dspData[item.key] !== null ? item.prefix : ''}
+      //         postfix={item.postfix}
+      //       />
+      //     </div>
+      //   ))}
       // </div>
+      <div className="row mt-3">
+        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
+          <Card
+            className="fix-height "
+            heading="Amazon Advertising LLC"
+            noBill="12"
+            noBillText="No. Bills"
+            totalBill="$118,396"
+            totalBillText="Total Billed"
+            type="billing"
+          />
+        </div>
+        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
+          <Card
+            className="fix-height"
+            heading="Amazon Online UK Limited"
+            noBill="12"
+            noBillText="No. Bills"
+            totalBill="£27,396"
+            totalBillText="Total Billed"
+          />
+        </div>
+        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
+          <Card
+            className="fix-height"
+            heading="Amazon Online UK Limited (EUR)"
+            noBill="12"
+            noBillText="No. Bills"
+            totalBill="€44,692"
+            totalBillText="Total Billed"
+          />
+        </div>
+        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
+          <Card
+            className="fix-height"
+            heading="Amazon Commercial Services Pty Ltd"
+            noBill="12"
+            noBillText="No. Bills"
+            totalBill="A$3,295"
+            totalBillText="Total Billed"
+          />
+        </div>
+      </div>
     );
   };
 
@@ -737,170 +739,4 @@ const DropDownSelectMonthPicker = styled.div`
 const NoData = styled.div`
   margin: 3em;
   text-align: center;
-`;
-
-const CustomDateRange = styled.div`
-  .react-datepicker {
-    font-size: 16px !important;
-    font-family: ${Theme.baseFontFamily}!important;
-    border: none !important;
-    width: 100% !important;
-
-    .react-datepicker__triangle {
-      position: absolute;
-      width: 100% !important;
-      left: 50px;
-    }
-    .react-datepicker__month-container {
-      float: left;
-      width: 100% !important;
-    }
-    .react-datepicker__month-container {
-      width: 100% !important;
-      float: left;
-      .react-datepicker__header {
-        text-align: center;
-        font-size: 16px !important;
-        padding: 14px 0 !important;
-        position: relative;
-        border: none !important;
-        background: transparent !important;
-      }
-    }
-    .react-datepicker__month .react-datepicker__month-text,
-    .react-datepicker__month .react-datepicker__quarter-text {
-      display: inline-block;
-      width: 4rem;
-      margin: 5px 0;
-    }
-    .react-datepicker__month-text:hover,
-    .react-datepicker__quarter-text:hover {
-      background-color: transparent;
-      // border-radius: 0;
-      // border-radius: 25px;
-    }
-    .react-datepicker__month .react-datepicker__month-text,
-    .react-datepicker__month .react-datepicker__quarter-text {
-      display: inline-block;
-      max-width: 6rem;
-      width: 100%;
-      padding: 10px;
-
-      @media only screen and (max-width: 670px) {
-        max-width: 5rem;
-      }
-    }
-    .react-datepicker__day--keyboard-selected,
-    .react-datepicker__month-text--keyboard-selected,
-    .react-datepicker__quarter-text--keyboard-selected,
-    .react-datepicker__year-text--keyboard-selected {
-      // border-radius: 0;
-      // background-color: #ff5933;
-      // color: #fff;
-      border-radius: 25px;
-      background-color: transparent;
-      color: #171725;
-      border: 1px solid red;
-    }
-
-    .react-datepicker__month--range-end {
-      border-top-right-radius: 25px !important;
-      border-bottom-right-radius: 25px !important;
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0;
-      right: 2px;
-      border-left: none;
-    }
-
-    .react-datepicker__month-2,
-    .react-datepicker__month-5,
-    .react-datepicker__month-8,
-    .react-datepicker__month-11 {
-      border-top-right-radius: 25px !important;
-      border-bottom-right-radius: 25px !important;
-    }
-    .react-datepicker__month-0,
-    .react-datepicker__month-3,
-    .react-datepicker__month-6,
-    .react-datepicker__month-9 {
-      border-top-left-radius: 25px !important;
-      border-bottom-left-radius: 25px !important;
-    }
-    .react-datepicker__month-text--keyboard-selected {
-      border: 1px solid ${Theme.orange};
-    }
-    .jUfUYu .react-datepicker .react-datepicker__month--selected,
-    .jUfUYu .react-datepicker .react-datepicker__month--in-selecting-range,
-    .jUfUYu .react-datepicker .react-datepicker__month--in-range,
-    .jUfUYu .react-datepicker .react-datepicker__quarter--selected,
-    .jUfUYu .react-datepicker .react-datepicker__quarter--in-selecting-range,
-    .jUfUYu .react-datepicker .react-datepicker__quarter--in-range {
-      border-radius: 0.3rem;
-      background-color: transparent;
-      color: ${Theme.black} !important;
-    }
-    .coRVAu .react-datepicker .react-datepicker__month--selected,
-    .coRVAu .react-datepicker .react-datepicker__month--in-selecting-range,
-    .coRVAu .react-datepicker .react-datepicker__month--in-range,
-    .coRVAu .react-datepicker .react-datepicker__quarter--selected,
-    .coRVAu .react-datepicker .react-datepicker__quarter--in-selecting-range,
-    .coRVAu .react-datepicker .react-datepicker__quarter--in-range {
-      border-radius: 0.3rem;
-      background-color: transparent;
-      color: ${Theme.black} !important;
-    }
-    .react-datepicker__month--selected,
-    .react-datepicker__month--in-selecting-range,
-    .react-datepicker__month--in-range,
-    .react-datepicker__quarter--selected,
-    .react-datepicker__quarter--in-selecting-range,
-    .react-datepicker__quarter--in-range {
-      border-radius: 0.3rem;
-      // background-color: ${Theme.orange};
-      // color: ${Theme.black};
-    }
-    react-datepicker__month--selected,
-    .react-datepicker__month--in-selecting-range,
-    .react-datepicker__month--in-range,
-    .react-datepicker__quarter--selected,
-    .react-datepicker__quarter--in-selecting-range,
-    .react-datepicker__quarter--in-range {
-      // border-radius: 0;
-      background-color: transparent;
-      color: ${Theme.orange};
-      border: 1px solid ${Theme.orange};
-      font-weight: 600;
-    }
-    .react-datepicker__month--selected {
-      background-color: transparent;
-      font-weight: bold;
-      color: ${Theme.black};
-      border-radius: 25px;
-    }
-
-    .react-datepicker__month--range-start {
-      border-top-left-radius: 25px !important;
-      border-bottom-left-radius: 25px !important;
-      border-bottom-right-radius: 0;
-      border-top-right-radius: 0;
-      left: 2px;
-      border-right: none;
-    }
-
-    .react-datepicker__month--in-range {
-      border-right: none;
-      border-left: none;
-      border-bottom-right-radius: 0;
-      border-top-right-radius: 0;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-
-      &:first-child {
-        border-left: 1px solid ${Theme.orange};
-      }
-      &:last-child {
-        border-right: 1px solid ${Theme.orange};
-      }
-    }
-  }
 `;

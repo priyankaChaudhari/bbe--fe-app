@@ -2,10 +2,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 // import { DateRange } from 'react-date-range';
 // import { enGB } from 'react-date-range/src/locale';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { func } from 'prop-types';
-import { Card, ModalRadioCheck, Button } from '../../../../common';
+import {
+  Card,
+  ModalRadioCheck,
+  Button,
+  CustomDateRange,
+} from '../../../../common';
 import { CaretUp, CloseIcon } from '../../../../theme/images/index';
 import ErrorMsg from '../../../../common/ErrorMsg';
 import {
@@ -35,6 +41,7 @@ export default function DSPInvoices({
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
+  const [range, setRange] = useState([currentDate, currentDate]);
 
   // const handleClickOutside = (event) => {
   //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -97,6 +104,15 @@ export default function DSPInvoices({
     }
   };
 
+  const onDateChange = (date) => {
+    if (date[1] === null) {
+      setState([date[0], date[0]]);
+    } else {
+      setState(date);
+    }
+    setRange(date);
+  };
+
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
@@ -111,12 +127,18 @@ export default function DSPInvoices({
     if (selectedDateType === 'allTime') {
       return 'All-Time';
     }
-    const customDateLabel = `${
+    const startMonth = `${
       monthNames[state[0].getMonth()]
-    } '${state[0].getFullYear()} - ${
+    } '${state[0].getFullYear()}`;
+
+    const endMonth = `${
       monthNames[state[1].getMonth()]
     } '${state[1].getFullYear()}`;
-    return customDateLabel;
+
+    if (startMonth === endMonth) {
+      return startMonth;
+    }
+    return `${startMonth} - ${endMonth}`;
   };
 
   const displayTimeFilterOption = () => {
@@ -161,36 +183,37 @@ export default function DSPInvoices({
             </li>
           ))}
         </ul>{' '}
-        {dummyDateType === 'custom' ? (
-          // <DateRange
-          //   ranges={state}
-          //   date={new Date()}
-          //   onChange={(itemData) => setState([itemData.selection])}
-          //   dateFormat="MMM yyyy"
-          //   showDateDisplay={false}
-          //   locale={enGB}
-          //   editableDateInputs
-          //   showMonthAndYearPickers
-          //   moveRangeOnFirstSelection={false}
-          //   maxDate={currentDate}
-          //   rangeColors={[Theme.orange]}
-          //   weekdayDisplayFormat="EEEEE"
-          // />
-          <div className="text-left">
-            <DateRangePicker
-              onChange={setState}
-              maxDetail="year"
-              format="MMM yyyy"
-              defaultView="year"
-              maxDate={currentDate}
-              value={state}
-              monthPlaceholder="MMM"
-              yearPlaceholder="yyyy"
-              onCalendarClose={() => setDateError(null)}
-              clearAriaLabel="Clear value"
-            />
-          </div>
-        ) : null}
+        <CustomDateRange>
+          {dummyDateType === 'custom' ? (
+            // <DateRange
+            //   ranges={state}
+            //   date={new Date()}
+            //   onChange={(itemData) => setState([itemData.selection])}
+            //   dateFormat="MMM yyyy"
+            //   showDateDisplay={false}
+            //   locale={enGB}
+            //   editableDateInputs
+            //   showMonthAndYearPickers
+            //   moveRangeOnFirstSelection={false}
+            //   maxDate={currentDate}
+            //   rangeColors={[Theme.orange]}
+            //   weekdayDisplayFormat="EEEEE"
+            // />
+            <div className="text-left">
+              <DatePicker
+                selected={new Date()}
+                onChange={(date) => onDateChange(date)}
+                startDate={range[0]}
+                endDate={range[1]}
+                maxDate={new Date()}
+                selectsRange
+                inline
+                dateFormat="MM/yyyy"
+                showMonthYearPicker
+              />
+            </div>
+          ) : null}
+        </CustomDateRange>
         <ErrorMsg className="text-left">{dateError}</ErrorMsg>
         <Button
           className="btn-primary w-100 mt-3"

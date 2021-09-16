@@ -36,6 +36,7 @@ import Status from './Status';
 import DropDownIndicator from './DropDownIndicator';
 import CustomDateModal from './CustomDateModal';
 import Card from './Card';
+import CustomDateRange from './MonthPicket';
 
 export {
   Button,
@@ -76,4 +77,5 @@ export {
   DropDownIndicator,
   CustomDateModal,
   Card,
+  CustomDateRange,
 };
