@@ -449,7 +449,9 @@ const SidePanel = styled.div`
     }
   }
 
-
+  @media only screen and (max-width: 767px) {
+    top: 200px !important;
+  }
   @media only screen and (max-width: 991px) {  
     z-index: 1;
     padding-bottom: 390px;

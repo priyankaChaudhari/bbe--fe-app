@@ -566,12 +566,73 @@ export const ListingOptimization = [
   {
     key: 'content_optimization',
     label: 'Copy',
+    type: 'text',
   },
   {
     key: 'design_optimization',
     label: 'Design',
+    type: 'text',
   },
 ];
+
+export const remainingFieldsOfContract = [
+  {
+    key: 'contract_status',
+    label: 'Contract Status',
+    type: 'object',
+  },
+  {
+    key: 'contract_type',
+    label: 'Contract Type',
+    type: 'text',
+  },
+  {
+    key: 'monthly_discount_amount',
+    label: 'Monthly discount amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'monthly_discount_type',
+    label: 'Monthly discount type',
+    type: 'text',
+  },
+  {
+    key: 'one_time_deal_amount',
+    label: 'One time deal amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'one_time_discount_amount',
+    label: 'One time discount amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'one_time_discount_type',
+    label: 'One time discount type',
+    type: 'text',
+  },
+  {
+    key: 'sales_threshold',
+    label: 'Sales Threshold',
+    type: 'text',
+  },
+  {
+    key: 'seller_type',
+    label: 'Seller Type',
+    type: 'text',
+  },
+  {
+    key: 'threshold_type',
+    label: 'Threshold Type',
+    type: 'text',
+  },
+  {
+    key: 'yoy_percentage',
+    label: 'YOY Percentage',
+    type: 'text',
+  },
+];
+
 export const StatementDetails = [
   {
     key: 'monthly_retainer',

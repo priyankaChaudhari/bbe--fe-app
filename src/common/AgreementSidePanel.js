@@ -42,8 +42,10 @@ import {
 import { getLength, getRevenueShare, createAddendum } from '../api';
 import ContractInputSelect from './ContractInputSelect';
 import ContractActivityLog from '../components/Contract/ContractActivityLog';
+import ServicesAmendment from '../components/Contract/ServicesAmendment';
 import ErrorMsg from './ErrorMsg';
 import CheckBox from './CheckBox';
+import Tabs from './Tabs';
 
 export default function AgreementSidePanel({
   id,
@@ -125,11 +127,13 @@ export default function AgreementSidePanel({
   originalAddendumData,
   thresholdTypeOptions,
   yoyPercentageOptions,
+  amendmentData,
+  sidebarSection,
+  setSidebarSection,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
   const [amazonService, setSelectedAmazonStorePackService] = useState(false);
-
   const [selectedThreshold, setSelectedThreshold] = useState('');
 
   useEffect(() => {
@@ -3193,21 +3197,8 @@ export default function AgreementSidePanel({
     handleChange(event, key);
   };
 
-  return (
-    <SidePanel
-      className={
-        (agreementData &&
-          agreementData.contract_status &&
-          agreementData.contract_status.value === 'pending account setup') ||
-        (agreementData &&
-          agreementData.contract_status &&
-          agreementData.contract_status.value === 'active') ||
-        (agreementData &&
-          agreementData.contract_status &&
-          agreementData.contract_status.value === 'inactive')
-          ? 'pdf-sidebar'
-          : 'contract-sidebar'
-      }>
+  const displayEditFields = () => {
+    return (
       <div className="sidebar">
         <>
           {isEditContract ? (
@@ -3361,7 +3352,12 @@ export default function AgreementSidePanel({
                           formData.contract_type &&
                           formData.contract_type
                             .toLowerCase()
-                            .includes('one') ? (
+                            .includes('one') &&
+                          !(
+                            formData &&
+                            formData.draft_from &&
+                            formData.draft_from
+                          ) ? (
                             <>{displayOneTimeServices()}</>
                           ) : (
                             ''
@@ -3795,7 +3791,13 @@ export default function AgreementSidePanel({
                               ''
                             )}
                           </li>
-                          {displayOneTimeServices()}
+                          {!(
+                            formData &&
+                            formData.draft_from &&
+                            formData.draft_from
+                          )
+                            ? displayOneTimeServices()
+                            : ''}
                           <li>
                             <Button
                               className={
@@ -4017,56 +4019,6 @@ export default function AgreementSidePanel({
               </Collapse>
             </>
           ) : (
-            // <div className="amendments-section">
-            //   <ul className="menu">
-            //     <li>
-            //       <div className="row w-100">
-            //         <div className="col-12 mb-2">
-            //           <div className="label">Monthly Retainer</div>
-            //         </div>
-
-            //         <div className="col-8 text-left mb-3">
-            //           <span className=" new-basic-text text-delete ">
-            //             $3,000{' '}
-            //           </span>
-            //           <span>
-            //             <img
-            //               className="next-arrow"
-            //               src={ArrowRightIcon}
-            //               alt="arrow"
-            //             />{' '}
-            //           </span>
-            //           <span className=" new-basic-text">$2,400</span>
-            //         </div>
-            //         <div className="col-4 mb-3">
-            //           <div className="added-remove-text">Updated</div>
-            //         </div>
-            //       </div>
-            //     </li>
-            //     <li>
-            //       <div className="row w-100">
-            //         <div className="col-12 mb-2">
-            //           <div className="label">Monthly Services</div>
-            //         </div>
-
-            //         <div className="col-8 text-left mb-3">
-            //           <p className=" basic-text  ">Logistics Management</p>
-            //         </div>
-            //         <div className="col-4 mb-3">
-            //           <div className="added-remove-text">Added</div>
-            //         </div>
-            //         <div className="col-8 mb-3 text-left">
-            //           <p className=" basic-text text-delete ">
-            //             Logistics Management
-            //           </p>
-            //         </div>
-            //         <div className="col-4 mb-3">
-            //           <div className="added-remove-text">Removed</div>
-            //         </div>
-            //       </div>
-            //     </li>
-            //   </ul>
-            // </div>
             <ContractActivityLog
               activityLoader={activityLoader}
               activityData={activityData}
@@ -4082,6 +4034,63 @@ export default function AgreementSidePanel({
           )}
         </>
       </div>
+    );
+  };
+
+  const displaySection = () => {
+    if (sidebarSection === 'amendment') {
+      return <ServicesAmendment amendmentData={amendmentData} />;
+    }
+    if (sidebarSection === 'edit') {
+      return displayEditFields();
+    }
+    return '';
+  };
+
+  return (
+    <SidePanel
+      className={
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'pending account setup') ||
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'active') ||
+        (agreementData &&
+          agreementData.contract_status &&
+          agreementData.contract_status.value === 'inactive')
+          ? 'pdf-sidebar'
+          : 'contract-sidebar'
+      }>
+      {agreementData && agreementData.draft_from ? (
+        <>
+          <Tabs className="mt-4 d-none d-lg-block">
+            <ul style={{ textAlign: 'center' }} className="tabs ">
+              <li
+                style={{ width: '50%', margin: '0' }}
+                className={sidebarSection === 'edit' ? 'active' : ''}
+                role="presentation"
+                onClick={() => {
+                  setSidebarSection('edit');
+                }}>
+                {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              <li
+                style={{ width: '50%', margin: '0' }}
+                className={sidebarSection === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => {
+                  setSidebarSection('amendment');
+                }}>
+                Amendment
+              </li>
+            </ul>
+          </Tabs>
+          {displaySection()}
+        </>
+      ) : (
+        displayEditFields()
+      )}
     </SidePanel>
   );
 }

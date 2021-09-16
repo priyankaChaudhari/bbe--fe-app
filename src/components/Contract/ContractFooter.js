@@ -91,9 +91,20 @@ export default function ContractFooter({
 
     updatePauseAgreement(pauseId, { is_approved: true }).then(() => {
       toast.success('Pause Contract Approved!');
-      updateContractData({ contract_status: 'pause' });
+      let contractStatusData = {};
+      if (details && details.is_renewed) {
+        contractStatusData = {
+          contract_status: 'renewed',
+        };
+      } else {
+        contractStatusData = {
+          contract_status: 'active',
+        };
+      }
+      updateContractData(contractStatusData);
     });
   };
+
   return (
     <>
       {details &&
@@ -187,7 +198,8 @@ export default function ContractFooter({
             <div className="container-fluid">
               {checkApprovalCondition() ? (
                 (userInfo && userInfo.role === 'Team Manager - TAM') ||
-                (userInfo && userInfo.role === 'Sales Manager') ? (
+                (userInfo && userInfo.role === 'Sales Manager') ||
+                (userInfo && userInfo.role === 'BGS Manager') ? (
                   showRightTick('service_agreement') &&
                   showRightTick('statement') &&
                   showRightTick('dspAddendum') ? (
@@ -287,6 +299,36 @@ export default function ContractFooter({
                     Request Approval
                   </Button>
                 )
+              ) : details && details.draft_from ? (
+                <>
+                  <Button
+                    className={`btn-primary on-boarding mt-3  ${
+                      isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
+                    }`}
+                    // disabled={
+                    //   !(
+                    //     showRightTick('service_agreement') &&
+                    //     showRightTick('statement') &&
+                    //     showRightTick('dspAddendum')
+                    //   ) || Object.keys(updatedFormData).includes('addendum')
+                    // }
+                    onClick={() => {
+                      createAgreementDoc();
+                      setParams('request-approve');
+                      setShowModal(true);
+                    }}>
+                    Request Approval
+                  </Button>
+                  {!isEditContract
+                    ? renderEditContractBtn('light-orange w-sm-50 ml-5')
+                    : null}
+                  <span className="last-update">
+                    Last updated by You on{' '}
+                    {dayjs(details && details.updated_at).format(
+                      'MMM D, h:mm A',
+                    )}
+                  </span>
+                </>
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
@@ -334,7 +376,7 @@ export default function ContractFooter({
           </Footer>
         </div>
       )}
-      ;
+
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending for cancellation' &&
@@ -362,7 +404,7 @@ export default function ContractFooter({
       ) : (
         ''
       )}
-      ;
+
       {details &&
       details.contract_status &&
       details.contract_status.value === 'active pending for pause' &&
@@ -390,7 +432,6 @@ export default function ContractFooter({
       ) : (
         ''
       )}
-      ;
     </>
   );
 }
@@ -518,6 +559,8 @@ ContractFooter.propTypes = {
     }),
     id: PropTypes.string,
     updated_at: PropTypes.string,
+    draft_from: PropTypes.string,
+    is_renewed: PropTypes.string,
   }),
   setParams: PropTypes.func,
   setShowModal: PropTypes.func,

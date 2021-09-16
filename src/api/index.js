@@ -110,6 +110,7 @@ export {
   savePauseAgreement,
   getPauseAgreement,
   updatePauseAgreement,
+  getAmendment,
 } from './AgreementApi';
 
 // Knowledge Base

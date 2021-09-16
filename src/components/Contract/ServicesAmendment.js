@@ -1,311 +1,204 @@
-/* eslint-disable react/no-danger */
-
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { ArrowRightIcon } from '../../theme/images/index';
+import {
+  AgreementDetails,
+  StatementDetails,
+  DSPAddendumDetails,
+  ListingOptimization,
+  remainingFieldsOfContract,
+} from '../../constants/FieldConstants';
 
-import dayjs from 'dayjs';
+function ServicesAmendment({ amendmentData }) {
+  const allFields = [
+    ...AgreementDetails,
+    ...StatementDetails,
+    ...DSPAddendumDetails,
+    ...ListingOptimization,
+    ...remainingFieldsOfContract,
+  ];
 
-export default function ServicesAmendment({ formData, details, templateData }) {
-  const mapDefaultValues = (key, label, type) => {
-    if (key === 'contract_company_name') {
-      return details && details[key]
-        ? details && details[key]
-        : `Enter ${label}.`;
-    }
-    if (key === 'length') {
-      return details && details.length.label;
-    }
-    if (key === 'primary_marketplace') {
-      return (
-        details &&
-        details.primary_marketplace &&
-        details.primary_marketplace.name
-      );
-    }
-    if (key === 'start_date') {
-      return details && dayjs(details[key]).format('MM-DD-YYYY');
-    }
-    if (key === 'current_date') {
-      return dayjs(Date()).format('MM-DD-YYYY');
-    }
-
+  const displayValue = (value, type) => {
     if (type && type.includes('number')) {
-      return `${type === 'number-currency' ? '$' : '%'} ${
-        details && details[key]
-          ? details[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : ''
+      if (value === null) {
+        return 'None';
+      }
+      return `$${
+        value && value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
-    return key === 'rev_share' || key === 'seller_type'
-      ? details && details[key] && details[key].label
-      : details && details[key];
+    return value === null ? 'None' : value;
   };
 
-  const mapServiceTotal = (key) => {
-    if (key === 'additional_one_time_services') {
-      return `$ ${
-        details && details.total_fee.onetime_service
-          ? details.total_fee.onetime_service
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          : 0
-      }`;
-    }
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service
-      ? details.total_fee.monthly_service
-      : 0;
+  const displayUpdatedFields = () => {
+    if (
+      amendmentData &&
+      amendmentData.updated &&
+      amendmentData.updated.length
+    ) {
+      return amendmentData.updated.map((item) => {
+        const originalField = allFields.find((data) => data.key === item.label);
+        return (
+          <li>
+            <div className="row w-100">
+              <div className="col-12 mb-2">
+                <div className="label">
+                  {originalField && originalField.label
+                    ? originalField.label
+                    : item.label}
+                </div>
+              </div>
 
-    return `$ ${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  };
-
-  const mapMonthlyServices = (key) => {
-    const fields = [];
-    if (key !== 'additional_one_time_services') {
-      if (details && details[key]) {
-        for (const item of details[key]) {
-          if (
-            (item.service && item.service.name !== undefined) ||
-            item.name !== undefined
-          ) {
-            if (
-              item.service.name !== 'DSP Advertising' &&
-              item.service.name !== 'Inventory Reconciliation'
-            ) {
-              fields.push(
-                `<tr>
-                <td style="border: 1px solid black;padding: 13px;">${
-                  item.service ? item.service.name : item && item.name
-                }</td>
-                <td style="border: 1px solid black;padding: 13px;">$ ${
-                  item.service
-                    ? item.service.fee
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : item.fee
-                    ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : ''
-                } /month
-                </td>
-                </tr>`,
-              );
-            }
-          }
-        }
-      }
-    } else if (formData && formData.additional_one_time_services) {
-      formData.additional_one_time_services.forEach((service) => {
-        return fields.push(
-          `<tr>
-                  <td style="border: 1px solid black;padding: 13px;">${
-                    service.quantity
-                      ? service.quantity
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : 0
-                  }</td>
-                  
-                   <td style="border: 1px solid black;padding: 13px;">${
-                     service.service && service.service.name
-                       ? service.service.name
-                       : ''
-                   }
-      </td>
-      ${
-        service.service && service.service.fee
-          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.service &&
-            service.service.fee &&
-            service.service.name !== 'Amazon Store Package Custom'
-              ? service.service.fee
-              : service.custom_amazon_store_price
-              ? service.custom_amazon_store_price
-              : ''
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        </td>
-        `
-          : `<td>Yet to save</td>`
-      }
-
-      ${
-        service.service.name !== 'Amazon Store Package Custom'
-          ? service.quantity && service.service && service.service.fee
-            ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
-              service.service &&
-              service.service.fee
-                ? service.quantity * service.service.fee
-                : ''
-              )
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-            : `<td>Yet to save</td>`
-          : service.quantity && service.custom_amazon_store_price
-          ? `<td style="border: 1px solid black;padding: 13px;">$ ${(service.quantity &&
-            service.custom_amazon_store_price
-              ? service.quantity * service.custom_amazon_store_price
-              : ''
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-          : `<td>Yet to save</td>`
-      }
-         
-                  
-                  </tr>`,
+              <div className="col-8 text-left mb-3">
+                <span className=" new-basic-text text-delete ">
+                  {' '}
+                  {displayValue(item.old, originalField && originalField.type)}
+                </span>
+                <span>
+                  <img
+                    className="next-arrow"
+                    src={ArrowRightIcon}
+                    alt="arrow"
+                  />{' '}
+                </span>
+                <span className=" new-basic-text">
+                  {displayValue(item.new, originalField && originalField.type)}
+                </span>
+              </div>
+              <div className="col-4 mb-3">
+                <div className="added-remove-text">Updated</div>
+              </div>
+            </div>
+          </li>
         );
       });
     }
-    return fields.length ? fields.toString().replaceAll(',', '') : '';
+    return null;
   };
 
-  const showOneTimeServiceTable = () => {
-    if (
-      (details &&
-        details.additional_one_time_services &&
-        details.additional_one_time_services.length) ||
-      (formData &&
-        formData.additional_one_time_services &&
-        formData.additional_one_time_services.length)
-    ) {
-      return `<table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
-        'additional_one_time_services',
-        'One Time Services',
-      )}<tr><td class="total-service" colspan="3"> Total</td><td class="total-service text-right">${mapServiceTotal(
-        'additional_one_time_services',
-      )}
-                              </td></tr>
-                                </table>`;
-    }
-    return '';
+  const displayAdditionalService = (key) => {
+    return (
+      amendmentData &&
+      amendmentData[key] &&
+      amendmentData[key].length &&
+      amendmentData[key].map((item) => {
+        return (
+          <>
+            <div className="col-8 text-left mb-3">
+              <p
+                className={
+                  item.status === 'removed'
+                    ? '  basic-text text-delete  '
+                    : ' basic-text '
+                }>
+                {item.label}
+              </p>
+            </div>
+            <div className="col-4 mb-3">
+              <div className="added-remove-text">
+                {item.status === 'added' ? 'Added' : 'Removed'}
+              </div>
+            </div>
+          </>
+        );
+      })
+    );
   };
 
-  return (
-    <div>
-      <Paragraph>
-        <p
-          className="long-text"
-          dangerouslySetInnerHTML={{
-            __html:
-              templateData.amendment &&
-              templateData.amendment[0]
-                .replace(
-                  'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
-                )
-                .replace(
-                  'START_DATE',
-                  mapDefaultValues('start_date', 'Start Date'),
-                )
-                .replace('ONE_TIME_SERVICE_TABLE', showOneTimeServiceTable()),
-          }}
-        />
-        <p
-          className="long-text"
-          dangerouslySetInnerHTML={{
-            __html:
-              templateData.amendment &&
-              templateData.amendment[1]
-                .replace(
-                  'CUSTOMER_NAME',
-                  mapDefaultValues('contract_company_name', 'Customer Name'),
-                )
-                .replace(
-                  'AGREEMENT_DATE',
-                  mapDefaultValues('start_date', 'Start Date'),
-                )
-                .replace(
-                  'BBE_DATE',
-                  mapDefaultValues('current_date', 'Current Date'),
-                ),
-          }}
-        />
-      </Paragraph>
+  const displayAmendments = () => {
+    return !(
+      amendmentData &&
+      amendmentData.monthly_services &&
+      amendmentData.monthly_services.length
+    ) &&
+      !(
+        amendmentData &&
+        amendmentData.additional_marketplaces &&
+        amendmentData.additional_marketplaces.length
+      ) &&
+      !(
+        amendmentData &&
+        amendmentData.addendum &&
+        amendmentData.addendum.status
+      ) &&
+      !(
+        amendmentData &&
+        amendmentData.updated &&
+        amendmentData.updated.length
+      ) ? (
+      <div className="text-center mt-3">No data found</div>
+    ) : (
+      <div className="amendments-section">
+        <ul className="menu">
+          {displayUpdatedFields()}
 
-      {/* <AgreementSidePanel id={id} /> */}
-    </div>
-  );
+          <li>
+            <div className="row w-100">
+              {amendmentData &&
+              amendmentData.monthly_services &&
+              amendmentData.monthly_services.length ? (
+                <>
+                  <div className="col-12 mb-2">
+                    <div className="label">Monthly Services</div>
+                  </div>
+                  {displayAdditionalService('monthly_services')}
+                </>
+              ) : (
+                ''
+              )}
+              {amendmentData &&
+              amendmentData.additional_marketplaces &&
+              amendmentData.additional_marketplaces.length ? (
+                <>
+                  <div className="col-8 text-left mb-3">
+                    <p className=" basic-text ">Additional Marketplaces</p>
+                  </div>
+                  {displayAdditionalService('additional_marketplaces')}
+                </>
+              ) : (
+                ''
+              )}
+
+              {amendmentData &&
+              amendmentData.addendum &&
+              amendmentData.addendum.status ? (
+                <>
+                  <div className="col-8 text-left mb-3 mt-3">
+                    <div className="label">Addendum</div>
+                  </div>
+                  <div className="col-4 mb-3 mt-3">
+                    <div className="added-remove-text">
+                      {amendmentData &&
+                      amendmentData.addendum &&
+                      amendmentData.addendum.status === 'added'
+                        ? 'Added'
+                        : 'Updated'}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                ''
+              )}
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+  return <div>{displayAmendments()}</div>;
 }
 
+export default ServicesAmendment;
+
 ServicesAmendment.defaultProps = {
-  details: {},
-  formData: {},
-  templateData: {},
+  amendmentData: {},
 };
 
 ServicesAmendment.propTypes = {
-  formData: PropTypes.shape({
-    additional_one_time_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-  }),
-  details: PropTypes.shape({
-    length: PropTypes.string,
-    primary_marketplace: PropTypes.shape({
-      fee: PropTypes.number,
-      name: PropTypes.string,
-      id: PropTypes.string,
-    }),
-    total_fee: PropTypes.shape({
-      onetime_service: PropTypes.number,
-      additional_marketplaces: PropTypes.number,
-      monthly_service: PropTypes.number,
-    }),
-    additional_one_time_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-  }),
-  templateData: PropTypes.shape({
-    amendment: PropTypes.arrayOf(PropTypes.string),
+  amendmentData: PropTypes.shape({
+    addendum: PropTypes.arrayOf(PropTypes.object),
+    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
+    monthly_services: PropTypes.arrayOf(PropTypes.object),
+    updated: PropTypes.arrayOf(PropTypes.object),
   }),
 };
-
-const Paragraph = styled.div`
-  .summary {
-    margin: 0;
-    li {
-      margin-top: 10px;
-    }
-  }
-
-  .contact-list table,
-  td,
-  th {
-    border: 1px solid black;
-    padding: 13px;
-  }
-  tr {
-    .total-service {
-      font-weight: 800;
-    }
-    th {
-      text-align: left;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .refer-agreement {
-    border-bottom: 1px solid black;
-    font-weight: 400;
-    padding: 6px 0;
-    margin-left: 35px;
-
-    .label {
-      font-weight: 800;
-    }
-  }
-`;

@@ -35,6 +35,7 @@ import {
   agreementTemplate,
   getcontract,
   getServicesFee,
+  getAmendment,
 } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
@@ -217,6 +218,8 @@ export default function ContractContainer() {
   const [thresholdTypeOptions, setThresholdTypeOptions] = useState(false);
   const [yoyPercentageOptions, setYoyPercentageOptions] = useState(false);
   const [servicesFees, setServicesFees] = useState({});
+  const [amendmentData, setAmendmentData] = useState({});
+  const [sidebarSection, setSidebarSection] = useState('edit');
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -411,6 +414,12 @@ export default function ContractContainer() {
     }
   }
 
+  const getAmendmentData = (contractId) => {
+    getAmendment(contractId).then((amendments) => {
+      setAmendmentData(amendments && amendments.data);
+    });
+  };
+
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
@@ -423,6 +432,9 @@ export default function ContractContainer() {
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
+
+          // get amendment data
+          getAmendmentData(res && res.data && res.data.id);
 
           // setIsDocRendered(true);
         } else {
@@ -538,6 +550,10 @@ export default function ContractContainer() {
     if (section === 'view-contract') {
       setShowtabInResponsive('view-contract');
     }
+    if (section === 'amendment') {
+      setShowtabInResponsive('amendment');
+      setSidebarSection('edit');
+    }
   };
 
   const onEditAddendum = () => {
@@ -555,6 +571,7 @@ export default function ContractContainer() {
     setAdditionalOnetimeSerError({});
     setContractError({});
   };
+
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
@@ -1540,6 +1557,7 @@ export default function ContractContainer() {
 
   const onEditcontract = () => {
     setShowEditContractConfirmationModal(true);
+    setSidebarSection('edit');
   };
 
   const showStandardServicesTable = () => {
@@ -2171,7 +2189,7 @@ export default function ContractContainer() {
 
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
-
+          getAmendmentData(details && details.id);
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200 &&
@@ -2620,6 +2638,9 @@ export default function ContractContainer() {
       details.contract_type &&
       details.contract_type.toLowerCase().includes('recurring')
     ) {
+      if (details && details.draft_from) {
+        return true;
+      }
       if (
         (showSection.dspAddendum && dspFee < 10000) ||
         rev < 3 ||
@@ -2746,18 +2767,6 @@ export default function ContractContainer() {
               setUpdatedFormData={setUpdatedFormData}
               updatedFormData={updatedFormData}
               // originalAddendumData={originalAddendumData}
-            />
-          </div>
-        ) : (
-          ''
-        )}
-
-        {showSection.amendment ? (
-          <div id="amendment">
-            <ServicesAmendment
-              formData={formData}
-              details={details}
-              templateData={data}
             />
           </div>
         ) : (
@@ -2904,6 +2913,7 @@ export default function ContractContainer() {
         onClick={() => {
           setIsEditContract(true);
           setMandatoryFieldsErrors();
+          setSidebarSection('edit');
         }}>
         Edit Contract
       </Button>
@@ -2997,6 +3007,9 @@ export default function ContractContainer() {
         originalAddendumData={originalAddendumData}
         thresholdTypeOptions={thresholdTypeOptions}
         yoyPercentageOptions={yoyPercentageOptions}
+        amendmentData={amendmentData}
+        sidebarSection={sidebarSection}
+        setSidebarSection={setSidebarSection}
       />
     );
   };
@@ -3067,8 +3080,14 @@ export default function ContractContainer() {
       ) : checkContractStatus() ? (
         <>
           <ContractTab className="d-lg-none d-block">
-            <ul className="tabs">
+            <ul style={{ textAlign: 'center' }} className="tabs">
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3076,10 +3095,28 @@ export default function ContractContainer() {
               </li>
 
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
+                className={tabInResponsive === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('amendment')}>
+                Amendment
               </li>
             </ul>
           </ContractTab>
@@ -3206,6 +3243,13 @@ export default function ContractContainer() {
                 userInfo.role === 'BGS Manager'
                   ? displayFooter()
                   : ''}
+
+                {(isTablet && tabInResponsive === 'amendment') ||
+                (isMobile && tabInResponsive === 'amendment') ? (
+                  <ServicesAmendment amendmentData={amendmentData} />
+                ) : (
+                  ''
+                )}
               </>
             )}
           </div>
@@ -3213,8 +3257,14 @@ export default function ContractContainer() {
       ) : (
         <>
           <ContractTab className="d-lg-none d-block">
-            <ul className="tabs">
+            <ul style={{ textAlign: 'center' }} className="tabs">
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3222,10 +3272,28 @@ export default function ContractContainer() {
               </li>
 
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
+                className={tabInResponsive === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('amendment')}>
+                Amendment
               </li>
             </ul>
           </ContractTab>
@@ -3282,7 +3350,7 @@ export default function ContractContainer() {
                           </li>
                         )}
                         <li>
-                          <span className="divide-arrow" />
+                          <span className="divide-arrow hide-mobile" />
                         </li>
                         <li>
                           <img
@@ -3344,6 +3412,13 @@ export default function ContractContainer() {
                 (!isLoading.loader && isLoading.type === 'page')
                   ? displayFooter()
                   : null}
+
+                {(isTablet && tabInResponsive === 'amendment') ||
+                (isMobile && tabInResponsive === 'amendment') ? (
+                  <ServicesAmendment amendmentData={amendmentData} />
+                ) : (
+                  ''
+                )}
               </>
             ) : (
               ''

@@ -109,7 +109,9 @@ export default function AddTeamMember({
         id,
         currentPage,
         searchQuery,
-        showMemberList.agreement ? 'BGS Manager' : filterDetails.name.value,
+        showMemberList.agreement || showMemberList.requestApproval
+          ? 'BGS Manager'
+          : filterDetails.name.value,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setCount(response && response.data && response.data.count);
@@ -117,7 +119,13 @@ export default function AddTeamMember({
         setIsLoading({ loader: false, type: 'page' });
       });
     },
-    [id, searchQuery, filterDetails.name.value, showMemberList.agreement],
+    [
+      id,
+      searchQuery,
+      filterDetails.name.value,
+      showMemberList.agreement,
+      showMemberList.requestApproval,
+    ],
   );
 
   useEffect(() => {
@@ -128,7 +136,9 @@ export default function AddTeamMember({
     setIsLoading({ loader: true, type: 'button' });
     addCustomerMember(userRoleId, id).then((response) => {
       if (response && response.status === 200) {
-        getCustomerMemberList();
+        if (!showMemberList.requestApproval) {
+          getCustomerMemberList();
+        }
         setIsLoading({ loader: false, type: 'button' });
         toast.success(`${userRoleId.length} Team Member(s) Added.`);
         const showAgreementModal = showMemberList.agreement;
@@ -417,6 +427,7 @@ AddTeamMember.propTypes = {
   setShowMemberList: PropTypes.func,
   showMemberList: PropTypes.shape({
     agreement: PropTypes.objectOf(PropTypes.Object),
+    requestApproval: PropTypes.bool,
   }).isRequired,
   setAgreementDetailModal: PropTypes.func,
 };

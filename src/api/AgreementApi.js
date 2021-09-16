@@ -399,3 +399,15 @@ export async function updatePauseAgreement(pauseId, data) {
     });
   return result;
 }
+
+export async function getAmendment(contractId) {
+  const result = await axiosInstance
+    .get(`${API_CUSTOMER_CONTRACT + contractId}/amendments/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

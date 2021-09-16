@@ -91,24 +91,6 @@ body {
   max-width: 100% !important;
 }
 
-// .page-is-loading {
-//   width: 100%;
-//   height: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   text-align: center;
-//   z-index: 9999;
-//   background: rgba(255, 255, 255, 0.6);
-// }
-
-// .loader-outer {
-//   position: relative;
-//   z-index: 999;
-//   padding-top: calc(20%);
-//   text-align: center;
-// }
-
 .container-fluid {
   height: 100%;
 }
@@ -1152,7 +1134,7 @@ fieldset {
     }
 
     p.long-text {
-      font-size: ${Theme.extraNormal}; !important;
+      font-size: ${Theme.extraNormal} !important;
     }
   }
   @media only screen and (max-width: 768px) {
@@ -1305,7 +1287,7 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
     padding-right: 0;
-    margin-top: 50px;
+    // margin-top: 50px;
      .react-pdf__Page {
         &:first-child {
           top: 110px !important;
