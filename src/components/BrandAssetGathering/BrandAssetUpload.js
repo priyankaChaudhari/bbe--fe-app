@@ -1,9 +1,6 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-loop-func */
-/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 
@@ -13,7 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 import Modal from 'react-modal';
 
 import { Progress } from 'react-sweet-progress';
@@ -37,10 +34,6 @@ import {
   RedTrashIcon,
   WhiteArrowRight,
   FileCloud,
-  CaretUp,
-  DefaultUser,
-  ForwardOrangeIcon,
-  ArrowRightIcon,
 } from '../../theme/images';
 import {
   Button,
@@ -50,6 +43,7 @@ import {
   UnauthorizedHeader,
   ModalBox,
   ActionDropDown,
+  DropDownIndicator,
 } from '../../common';
 import {
   PATH_BRAND_ASSET,
@@ -150,24 +144,6 @@ export default function BrandAssetUpload() {
     if (ref.current && !ref.current.contains(event.target)) {
       setShowDeleteMsg(false);
     }
-  };
-
-  const DropdownIndicator = (props) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
   };
 
   const convertBlobToText = (value, type) => {
@@ -585,7 +561,7 @@ export default function BrandAssetUpload() {
           }
           return res;
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(
             <div>
               The person who asked you to complete this section has changed who
@@ -744,7 +720,7 @@ export default function BrandAssetUpload() {
     //   item.mime_type.includes('image'),
     // );
     // setImagesAssets(result);
-
+    setIsImgDeleted(false);
     setShowAssetPreview({
       selectedFile: file,
       show: true,
@@ -780,11 +756,11 @@ export default function BrandAssetUpload() {
                             theme={{
                               active: {
                                 symbol: '',
-                                color: '#ff5933',
+                                color: Theme.orange,
                               },
                               success: {
                                 symbol: '',
-                                color: '#ff5933',
+                                color: Theme.orange,
                               },
                               status: '',
                             }}
@@ -839,13 +815,13 @@ export default function BrandAssetUpload() {
                     {/* FOR Object tag clickable */}
                     <div
                       className="clickable"
-                      onClick={() =>
+                      onClick={() => {
                         brandAssetData &&
                         brandAssetData.is_completed &&
                         (showBtns.upload || showBtns.download)
                           ? ''
-                          : onClickOfObject(file, i)
-                      }
+                          : onClickOfObject(file, i);
+                      }}
                       role="presentation"
                     />
                     {showDeleteMsg[file.id] ? <div className="blur-bg" /> : ''}
@@ -1079,7 +1055,7 @@ export default function BrandAssetUpload() {
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="upload-brand-asset"
-          color="#FF5933"
+          color={Theme.orange}
           type="page"
         />
       ) : (
@@ -1105,60 +1081,11 @@ export default function BrandAssetUpload() {
                   search: `step=${event.value}`,
                 });
               }}
-              components={{ DropdownIndicator }}
+              components={DropDownIndicator}
             />
           </DropDownBrandAsset>
           <div className="container-fluid">
             <div className="row">
-              {/* <div className="col-12 ">
-                <AmazonProduct>
-                  <div className="amazon-product-image">
-                    <img src={DefaultUser} alt="product-pic" />
-                  </div>
-                  <div className="amazon-product-details">
-                    <ul className="other-details">
-                      <li>
-                        ASIN: <span>6291108300282 </span>
-                      </li>
-
-                      <li>
-                        <span className="dot" /> SKU:{' '}
-                        <span>6291108300282 </span>
-                      </li>
-
-                      <li className="amazon-link">
-                        {' '}
-                        <span className="dot" />
-                        View on Amazon
-                        <img
-                          className="forward-arrow"
-                          src={LeftArrowIcon}
-                          alt="arrow"
-                        />
-                      </li>
-                    </ul>
-                    Threadmill Home Linen 100% Combed Cotton Blanket Herringbone
-                    Soft Breathable Full/Queen Size Sage
-                  </div>
-                </AmazonProduct>
-                <ul className="steps-additional-asset">
-                  <li className="step-completed"> Product Images</li>
-                  <li>
-                    {' '}
-                    {/* <img
-                      className="forward-step-arrow"
-                      src={ArrowRightIcon}
-                      alt="arrow"
-                    />{' '} */}
-              {/* <img
-                      className="forward-step-arrow"
-                      src={ArrowRightBlackIcon}
-                      alt="arrow"
-                    />{' '}
-                  </li>
-                  <li className="active">Additional Assets</li>
-                </ul>
-              </div> */}
               <div className="col-9 ">
                 <div className="label-heading">
                   Part {selectedStep && selectedStep.step}/5
@@ -1183,7 +1110,7 @@ export default function BrandAssetUpload() {
                         data-for="format"
                       />
                       <ReactTooltip place="bottom" id="format">
-                        <span style={{ color: '#BFC5D2', fontSize: '12px' }}>
+                        <span style={{ color: Theme.gray25, fontSize: '12px' }}>
                           All Accepted Formats
                         </span>
                         <p
@@ -1319,7 +1246,7 @@ export default function BrandAssetUpload() {
                           : selectedDropdown.dropdownValue
                       }
                       onChange={(event) => handleDownloadOptions(event)}
-                      components={{ DropdownIndicator }}
+                      components={DropDownIndicator}
                     />
                   ) : (
                     ''
@@ -1334,7 +1261,7 @@ export default function BrandAssetUpload() {
         {isLoading.loader && isLoading.type === 'page' ? (
           <PageLoader
             component="upload-brand-asset"
-            color="#FF5933"
+            color={Theme.orange}
             type="page"
           />
         ) : (
@@ -1373,7 +1300,7 @@ export default function BrandAssetUpload() {
                               (downloadIds && downloadIds.length === 0)
                             }>
                             {isLoading.loader && isLoading.type === 'button' ? (
-                              <PageLoader color="#fff" type="button" />
+                              <PageLoader color={Theme.white} type="button" />
                             ) : (
                               'Download Selected'
                             )}
@@ -1415,7 +1342,7 @@ export default function BrandAssetUpload() {
                               : redirectTo('completed', '', '')
                           }>
                           {isLoading.loader && isLoading.type === 'button' ? (
-                            <PageLoader color="#fff" type="button" />
+                            <PageLoader color={Theme.white} type="button" />
                           ) : (
                             <>
                               {brandAssetData && brandAssetData.is_completed ? (
@@ -1492,7 +1419,7 @@ export default function BrandAssetUpload() {
                 type="button"
                 className="btn-primary on-boarding  mr-2 pb-2 mb-1">
                 {isLoadingDocument ? (
-                  <PageLoader color="#fff" type="button" />
+                  <PageLoader color={Theme.white} type="button" />
                 ) : (
                   'Yes'
                 )}
@@ -1582,7 +1509,7 @@ const BrandAssetBody = styled.div`
       &:hover {
         .remove-box {
           background-color: ${Theme.white};
-          border: 1px solid #e2e2ea;
+          border: 1px solid ${Theme.gray4};
           border-radius: 6px;
           width: 40px;
           height: 40px;
@@ -1898,52 +1825,3 @@ const DragDropImg = styled.div`
     max-height: 100vh;
   }
 `;
-
-// const AmazonProduct = styled.div`
-//   flex-wrap: wrap;
-//   display: flex;
-//   .amazon-product-image {
-//     border: 2px solid #bfc5d2;
-//     border-radius: 6px;
-//     width: 82px;
-//     height: 83px;
-//     margin-right: 15px;
-//   }
-//   .amazon-product-details {
-//     color: ${Theme.black};
-//     font-size: ${Theme.extraMedium};
-//   }
-//   .other-details {
-//     list-style-type: none;
-//     padding: 0;
-//     margin: 10px 0 3px 0;
-
-//     li {
-//       display: inline-block;
-//       margin-right: 20px;
-//       color: ${Theme.gray40};
-//       font-size: ${Theme.extraSmall};
-//       font-weight: bold;
-
-//       .dot {
-//         top: 19px;
-//         margin-left: -11px;
-//       }
-
-//       span {
-//         font-weight: 300;
-//       }
-//       &.amazon-link {
-//         color: ${Theme.orange};
-//         font-weight: 300;
-
-//         .forward-arrow {
-//           width: 14px;
-//           vertical-align: middle;
-//           transform: rotate(180deg);
-//           margin-left: 3px;
-//         }
-//       }
-//     }
-//   }
-// `;
