@@ -23,7 +23,7 @@ import DSPBillingFilters from './DSPBillingFilters';
 import {
   InvoicesStatusOptions,
   InvoicesSortByOptions,
-  InvoiceStatusColorSet,
+  StatusColorSet,
 } from '../../../../constants/DashboardConstants';
 import { getFinanceInvoices } from '../../../../api';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
@@ -218,9 +218,7 @@ export default function DSPBillsList({
           <Status
             className="float-right"
             label={item.invoice_status}
-            backgroundColor={
-              InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
-            }
+            backgroundColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
           />
           <div className="clear-fix" />
         </td>
@@ -287,9 +285,7 @@ export default function DSPBillsList({
               label2="DUE"
               labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
               status={item.invoice_status}
-              statusColor={
-                InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
-              }
+              statusColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
             />
           ))
         ) : (

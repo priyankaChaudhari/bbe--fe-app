@@ -23,6 +23,7 @@ const TableMobileView = ({
   status,
   statusColor,
   onClick,
+  icon,
 }) => {
   const col = `${label3 ? 'col-6' : 'col-4'}`;
   return (
@@ -34,15 +35,15 @@ const TableMobileView = ({
               <>
                 <img
                   className="company-logo"
-                  src={CompanyDefaultUser}
+                  src={icon || CompanyDefaultUser}
                   alt="logo"
                 />
                 <div className="CompanyName">{CompanyName}</div>
-                {invoiceType && invoiceId ? (
-                  <>
-                    <div className="CompanyName">{invoiceType}</div>
-                    <div className="CompanyId">#{invoiceId}</div>
-                  </>
+                {invoiceType !== null ? (
+                  <div className="CompanyName">{invoiceType}</div>
+                ) : null}
+                {invoiceId ? (
+                  <div className="CompanyId">{`#${invoiceId}`}</div>
                 ) : null}
               </>
             ) : (
@@ -148,6 +149,7 @@ TableMobileView.defaultProps = {
   invoiceId: '',
   status: '',
   statusColor: '',
+  icon: '',
   onClick: () => {},
 };
 
@@ -166,5 +168,6 @@ TableMobileView.propTypes = {
   invoiceId: string,
   status: string,
   statusColor: string,
+  icon: string,
   onClick: func,
 };

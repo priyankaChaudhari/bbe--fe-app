@@ -9,12 +9,14 @@ import { components } from 'react-select';
 import { func } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useMediaQuery } from 'react-responsive';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import DSPBillingFilters from './DSPBillingFilters';
 import { getDSPBillingMetrics, getBills } from '../../../../api';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import TableMobileView from '../../../../common/TableMobileView';
 import {
   Card,
   ModalRadioCheck,
@@ -37,7 +39,7 @@ import {
   BillingVendorOptions,
   BillingSortByOptions,
   monthNames,
-  InvoiceStatusColorSet,
+  StatusColorSet,
 } from '../../../../constants/DashboardConstants';
 import { Apidata } from './dummyApiRes';
 
@@ -60,6 +62,8 @@ export default function DSPBillingContainer() {
   const [billsCount, setBillsCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   // const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const [showDropdown, setShowDropdown] = useState({ show: false });
   const [dspData, setDSPData] = useState([]);
   const { Option, SingleValue } = components;
@@ -503,7 +507,7 @@ export default function DSPBillingContainer() {
           <Status
             className="float-right"
             label={item.status}
-            backgroundColor={InvoiceStatusColorSet[item.status]}
+            backgroundColor={StatusColorSet[item.status]}
           />
           <div className="clear-fix" />
         </td>
@@ -511,7 +515,7 @@ export default function DSPBillingContainer() {
     );
   };
 
-  const renderInvoicesTable = () => {
+  const renderBillsTable = () => {
     return (
       <Table>
         <thead>
@@ -542,6 +546,45 @@ export default function DSPBillingContainer() {
     );
   };
 
+  const renderTabletBillsTable = () => {
+    return (
+      <>
+        {billingData && billingData.length > 0 ? (
+          billingData &&
+          billingData.map((item) => (
+            <TableMobileView
+              onClick={() =>
+                history.push(
+                  PATH_CUSTOMER_DETAILS.replace(
+                    ':id',
+                    item.customer && item.customer.id,
+                  ),
+                  'finance',
+                )
+              }
+              key={item.id}
+              className="mb-3 cursor"
+              CompanyName={item.customer && item.customer.name}
+              icon={item && item.customer && item.customer.profile_picture}
+              invoiceType={null}
+              invoiceId={item.bill_number}
+              label="AMOUNT"
+              labelInfo={`$${bindAmount(item.amount, 0, true)}`}
+              label1="BILL DATE"
+              labelInfo1={dayjs(item.bill_date).format('MM/DD/YY')}
+              label2="DUE DATE"
+              labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
+              status={item.status}
+              statusColor={StatusColorSet[item.status]}
+            />
+          ))
+        ) : (
+          <NoData>No Bills Found</NoData>
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       <div className="row mb-4">
@@ -562,40 +605,70 @@ export default function DSPBillingContainer() {
           handleStatusChange={handleStatusChange}
         />
         <div className="col-lg-9">
-          <WhiteCard className="d-lg-block d-md-block d-none">
-            <div className="row">
-              <div className="col-9 ">
-                <div className="black-heading-title mt-3">Bills</div>{' '}
+          {isDesktop || isTablet ? (
+            <WhiteCard className="d-lg-block d-md-block d-none">
+              <div className="row">
+                <div className="col-9 ">
+                  <div className="black-heading-title mt-3">Bills</div>{' '}
+                </div>
+                <div
+                  id="BT-finace-dah-invoice-dropdown"
+                  className="col-3  text-right">
+                  {renderSortByDropDown()}
+                </div>
               </div>
-              <div
-                id="BT-finace-dah-invoice-dropdown"
-                className="col-3  text-right">
-                {renderSortByDropDown()}
-              </div>
-            </div>
-            <div className="straight-line horizontal-line  mt-3 mb-1" />
+              <div className="straight-line horizontal-line  mt-3 mb-1" />
 
-            {billingLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color="#FF5933"
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : billingData && billingData.length > 0 ? (
-              <>
-                {renderInvoicesTable()}
-                <CommonPagination
-                  count={billsCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+              {billingLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color="#FF5933"
+                  type="detail"
+                  width={40}
+                  height={40}
                 />
-              </>
-            ) : (
-              <NoData>No Invoices Found</NoData>
-            )}
-          </WhiteCard>
+              ) : billingData && billingData.length > 0 ? (
+                <>
+                  {renderBillsTable()}
+                  <CommonPagination
+                    count={billsCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              ) : (
+                <NoData>No Bills Found</NoData>
+              )}
+            </WhiteCard>
+          ) : (
+            <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
+              <div className="row mt-2">
+                <div className="col-5 pl-4 mt-3 ">
+                  <div className="black-heading-title ">Bills</div>{' '}
+                </div>
+                <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
+              </div>
+
+              {billingLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color={Theme.orange}
+                  type="detail"
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <>
+                  {renderTabletBillsTable()}
+                  <CommonPagination
+                    count={billsCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -603,10 +676,6 @@ export default function DSPBillingContainer() {
 }
 
 DSPBillingContainer.defaultProps = {
-  // data: shape({
-  //   label: '',
-  //   sub: '',
-  // }),
   data: () => {},
 };
 DSPBillingContainer.propTypes = {

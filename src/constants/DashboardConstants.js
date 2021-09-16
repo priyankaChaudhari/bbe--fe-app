@@ -136,7 +136,7 @@ export const DSPBillingMetrics = [
   },
 ];
 
-export const InvoiceStatusColorSet = {
+export const StatusColorSet = {
   open: '#FDF3D7',
   draft: '#FDF377',
   overdue: '#F7D7DB',
