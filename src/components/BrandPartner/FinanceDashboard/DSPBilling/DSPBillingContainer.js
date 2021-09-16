@@ -6,14 +6,13 @@ import dayjs from 'dayjs';
 // import { DateRange } from 'react-date-range';
 import DatePicker from 'react-datepicker';
 import { components } from 'react-select';
-import { shape, string } from 'prop-types';
+import { func } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import DSPBillingFilters from './DSPBillingFilters';
-import ErrorMsg from '../../../../common/ErrorMsg';
 import { getDSPBillingMetrics, getBills } from '../../../../api';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
@@ -51,6 +50,7 @@ export default function DSPBillingContainer() {
     startDate: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
     endDate: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
   });
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVendor, setSelectedVendor] = useState(
     'Amazon Advertising LLC',
@@ -63,7 +63,6 @@ export default function DSPBillingContainer() {
   const [showDropdown, setShowDropdown] = useState({ show: false });
   const [dspData, setDSPData] = useState([]);
   const { Option, SingleValue } = components;
-  const [dateError, setDateError] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: '',
@@ -71,6 +70,7 @@ export default function DSPBillingContainer() {
   });
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
+  const [range, setRange] = useState([currentDate, currentDate]);
   const [selectedDateType, setSelectedDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
@@ -142,29 +142,24 @@ export default function DSPBillingContainer() {
   };
 
   const handleApply = () => {
-    if (state !== null) {
-      setDateError(null);
+    setSelectedDateType(dummyDateType);
+    setShowDropdown({ show: !showDropdown.show });
+
+    if (dummyDateType === 'custom') {
       let sd = state[0];
       let ed = state[1];
-      setSelectedDateType(dummyDateType);
+      sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
+      ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
 
-      setShowDropdown({ show: !showDropdown.show });
+      setTimeFrame({
+        startDate: sd,
+        endDate: ed,
+      });
 
-      if (dummyDateType === 'custom') {
-        sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
-        ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
-        setTimeFrame({
-          startDate: sd,
-          endDate: ed,
-        });
-
-        getBillingMetricsdata(dummyDateType, sd, ed);
-        return;
-      }
-      getBillingMetricsdata(dummyDateType);
-    } else {
-      setDateError('Please select valid date');
+      getBillingMetricsdata(dummyDateType, sd, ed);
+      return;
     }
+    getBillingMetricsdata(dummyDateType);
   };
 
   const handleSortByFilter = (event) => {
@@ -238,6 +233,14 @@ export default function DSPBillingContainer() {
     }
     return number;
   };
+  const onDateChange = (date) => {
+    if (date[1] === null) {
+      setState([date[0], date[0]]);
+    } else {
+      setState(date);
+    }
+    setRange(date);
+  };
 
   const displayTimeFilterOption = () => {
     return showDropdown.show ? (
@@ -286,9 +289,9 @@ export default function DSPBillingContainer() {
             <div className="text-left">
               <DatePicker
                 selected={new Date()}
-                onChange={setState}
-                startDate={state[0]}
-                endDate={state[1]}
+                onChange={(date) => onDateChange(date)}
+                startDate={range[0]}
+                endDate={range[1]}
                 maxDate={new Date()}
                 selectsRange
                 inline
@@ -298,7 +301,6 @@ export default function DSPBillingContainer() {
             </div>
           ) : null}
         </CustomDateRange>
-        <ErrorMsg className="text-left">{dateError}</ErrorMsg>
         <Button
           className="btn-primary w-100 mt-3"
           onClick={() => handleApply()}>
@@ -312,12 +314,19 @@ export default function DSPBillingContainer() {
     if (selectedDateType === 'allTime') {
       return 'All-Time';
     }
-    const customDateLabel = `${
+
+    const startMonth = `${
       monthNames[state[0].getMonth()]
-    } '${state[0].getFullYear()} - ${
+    } '${state[0].getFullYear()}`;
+
+    const endMonth = `${
       monthNames[state[1].getMonth()]
     } '${state[1].getFullYear()}`;
-    return customDateLabel;
+
+    if (startMonth === endMonth) {
+      return startMonth;
+    }
+    return `${startMonth} - ${endMonth}`;
   };
 
   const renderSortByDropDown = () => {
@@ -394,7 +403,7 @@ export default function DSPBillingContainer() {
     return (
       <div className="row mt-3">
         {DSPBillingMetrics.map((item) => (
-          <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
+          <div className="col-lg-3 col-md-6 col-sm-12 mb-3" key={item.key}>
             {' '}
             <Card
               className="fix-height"
@@ -594,16 +603,14 @@ export default function DSPBillingContainer() {
 }
 
 DSPBillingContainer.defaultProps = {
-  data: shape({
-    label: '',
-    sub: '',
-  }),
+  // data: shape({
+  //   label: '',
+  //   sub: '',
+  // }),
+  data: () => {},
 };
 DSPBillingContainer.propTypes = {
-  data: shape({
-    label: string,
-    sub: string,
-  }),
+  data: func,
 };
 
 const DateRangeDropDown = styled.div`
