@@ -262,34 +262,37 @@ export default function AgreementDetails({
                   onClick={() => {
                     setShowModal(true);
                   }}>
-                  {agreement &&
-                  agreement.contract_status &&
-                  agreement.contract_status.value === 'active' ? (
-                    ''
-                  ) : (
-                    <Status
-                      className="mr-2 mb-1"
-                      label={
-                        agreement && agreement.draft_from
-                          ? 'Draft'
-                          : agreement &&
-                            agreement.contract_status &&
-                            agreement.contract_status.label
-                      }
-                      backgroundColor={Theme.gray8}
-                    />
-                  )}
-                  <p className="black-heading-title mt-0 mb-0">
+                  <div style={{ display: 'flow-root' }} className="">
                     {agreement &&
-                    agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('notice')
-                      ? 'Recurring (90 day notice) Service Agreement'
-                      : agreement &&
-                        agreement.contract_type &&
-                        agreement.contract_type.toLowerCase().includes('dsp')
-                      ? 'DSP Service Agreement'
-                      : 'Recurring Service Agreement'}
-                  </p>
+                    agreement.contract_status &&
+                    agreement.contract_status.value === 'active' ? (
+                      ''
+                    ) : (
+                      <Status
+                        className="mr-2 mb-1"
+                        label={
+                          agreement && agreement.draft_from
+                            ? 'Draft'
+                            : agreement &&
+                              agreement.contract_status &&
+                              agreement.contract_status.label
+                        }
+                        backgroundColor={Theme.gray8}
+                      />
+                    )}
+                    {/* <div className="clear-fix" /> */}
+                    <p className="black-heading-title mt-0 mb-0">
+                      {agreement &&
+                      agreement.contract_type &&
+                      agreement.contract_type.toLowerCase().includes('notice')
+                        ? 'Recurring (90 day notice) Service Agreement'
+                        : agreement &&
+                          agreement.contract_type &&
+                          agreement.contract_type.toLowerCase().includes('dsp')
+                        ? 'DSP Service Agreement'
+                        : 'Recurring Service Agreement'}
+                    </p>
+                  </div>
 
                   {agreement && agreement.contract_type !== 'one time' ? (
                     <ul className="recurring-contact">
