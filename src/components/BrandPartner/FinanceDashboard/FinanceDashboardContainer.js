@@ -18,12 +18,12 @@ export default function FinanceDashboardContainer() {
               DSP Invoicing
             </li>
 
-            <li
+            {/* <li
               className={viewComponent === 'billing' ? 'active' : ''}
               onClick={() => setViewComponent('billing')}
               role="presentation">
               DSP Billing
-            </li>
+            </li> */}
           </ul>
         </Tabs>
 
