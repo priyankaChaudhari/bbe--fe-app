@@ -473,14 +473,72 @@ export default function AmazonMerchant({
   };
 
   const disableBtn = () => {
-    if (
-      formData.Seller !== null ||
-      formData.Vendor !== null ||
-      noAmazonAccount.Seller !== null ||
-      noAmazonAccount.Vendor !== null
-    )
+    if (marketplaceDetails.type === 'Hybrid') {
+      if (noAmazonAccount.Seller && noAmazonAccount.Vendor) return false;
+      if (
+        noAmazonAccount.Seller &&
+        formData.Vendor &&
+        formData.Vendor.vendor_central_name &&
+        formData.Vendor &&
+        formData.Vendor.vendor_code &&
+        formData.Vendor &&
+        formData.Vendor.advertiser_name &&
+        formData.Vendor &&
+        formData.Vendor.advertiser_id
+      )
+        return false;
+      if (
+        noAmazonAccount.Vendor &&
+        formData.Seller &&
+        formData.Seller.seller_central_name &&
+        formData.Seller &&
+        formData.Seller.merchant_id &&
+        formData.Seller &&
+        formData.Seller.advertiser_name &&
+        formData.Seller &&
+        formData.Seller.advertiser_id
+      )
+        return false;
+      if (
+        !formData.Seller ||
+        !(formData.Seller && formData.Seller.seller_central_name) ||
+        !(formData.Seller && formData.Seller.merchant_id) ||
+        !(formData.Seller && formData.Seller.advertiser_name) ||
+        !(formData.Seller && formData.Seller.advertiser_id) ||
+        !formData.Vendor ||
+        !(formData.Vendor && formData.Vendor.vendor_central_name) ||
+        !(formData.Vendor && formData.Vendor.vendor_code) ||
+        !(formData.Vendor && formData.Vendor.advertiser_name) ||
+        !(formData.Vendor && formData.Vendor.advertiser_id)
+      )
+        return true;
       return false;
-    return true;
+    }
+    if (marketplaceDetails.type === 'Seller') {
+      if (noAmazonAccount.Seller) return false;
+      if (
+        !formData.Seller ||
+        !(formData.Seller && formData.Seller.seller_central_name) ||
+        !(formData.Seller && formData.Seller.merchant_id) ||
+        !(formData.Seller && formData.Seller.advertiser_name) ||
+        !(formData.Seller && formData.Seller.advertiser_id)
+      )
+        return true;
+      return false;
+    }
+    if (marketplaceDetails.type === 'Vendor') {
+      if (noAmazonAccount.Vendor) return false;
+      if (
+        !formData.Vendor ||
+        !(formData.Vendor && formData.Vendor.vendor_central_name) ||
+        !(formData.Vendor && formData.Vendor.vendor_code) ||
+        !(formData.Vendor && formData.Vendor.advertiser_name) ||
+        !(formData.Vendor && formData.Vendor.advertiser_id)
+      )
+        return true;
+      return false;
+    }
+    return false;
   };
 
   const generateSaveBtn = (part) => {

@@ -29,6 +29,7 @@ import {
   ArrowIcons,
   CloseIcon,
   CaretUp,
+  DisabledRecurring,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
@@ -168,6 +169,29 @@ export default function AgreementDetails({
     });
   };
 
+  const getPauseHTML = (agreement) => {
+    return (
+      <>
+        <li>
+          <p className="basic-text ">{agreement.pause_length} Days</p>
+        </li>
+        <li>
+          <span className="dot" />
+          <p className="basic-text ">
+            Paused &nbsp;
+            {dayjs(agreement.start_date).format('MMM DD, YYYY')}
+          </p>
+        </li>
+        <li>
+          <span className="dot" />
+          <p className="basic-text ">
+            Expires: {dayjs(agreement.end_date).format('MMM DD, YYYY')}
+          </p>
+        </li>
+      </>
+    );
+  };
+
   const handleContractOptions = (event, agreementId) => {
     switch (event.value) {
       case 'view':
@@ -248,8 +272,13 @@ export default function AgreementDetails({
                     className=" mb-2"
                     src={
                       agreement &&
-                      agreement.contract_type &&
-                      agreement.contract_type.toLowerCase().includes('dsp')
+                      agreement.contract_status &&
+                      (agreement.contract_status.value === 'pause' ||
+                        agreement.contract_status.value === 'draft')
+                        ? DisabledRecurring
+                        : agreement &&
+                          agreement.contract_type &&
+                          agreement.contract_type.toLowerCase().includes('dsp')
                         ? DspOnlyIcon
                         : RecurringIcon
                     }
@@ -296,40 +325,55 @@ export default function AgreementDetails({
 
                   {agreement && agreement.contract_type !== 'one time' ? (
                     <ul className="recurring-contact">
-                      <li>
-                        <p className="basic-text ">
-                          {agreement &&
-                            agreement.length &&
-                            agreement.length.label &&
-                            agreement.length.label.slice(0, -1)}{' '}
-                        </p>
-                      </li>
-                      {agreement && agreement.start_date ? (
-                        <li>
-                          <span className="dot" />
-                          <p className="basic-text ">
-                            {agreement.contract_status &&
-                            agreement.contract_status.value === 'renewed'
-                              ? 'Renewed'
-                              : 'Started'}
-                            &nbsp;
-                            {dayjs(agreement.start_date).format('MMM DD, YYYY')}
-                          </p>
-                        </li>
+                      {agreement &&
+                      agreement.contract_status &&
+                      agreement.contract_status.value !== 'pause' ? (
+                        <>
+                          <li>
+                            <p className="basic-text ">
+                              {agreement &&
+                                agreement.length &&
+                                agreement.length.label &&
+                                agreement.length.label.slice(0, -1)}{' '}
+                            </p>
+                          </li>
+                          {agreement && agreement.start_date ? (
+                            <li>
+                              <span className="dot" />
+                              <p className="basic-text ">
+                                {agreement.contract_status &&
+                                agreement.contract_status.value === 'renewed'
+                                  ? 'Renewed'
+                                  : 'Started'}
+                                &nbsp;
+                                {dayjs(agreement.start_date).format(
+                                  'MMM DD, YYYY',
+                                )}
+                              </p>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                          {agreement && agreement.end_date ? (
+                            <li>
+                              <span className="dot" />
+                              <p className="basic-text ">
+                                Expires:{' '}
+                                {dayjs(agreement.end_date).format(
+                                  'MMM DD, YYYY',
+                                )}
+                              </p>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                        </>
                       ) : (
-                        ''
+                        <>
+                          {getPauseHTML(agreement && agreement.pause_contract)}
+                        </>
                       )}
-                      {agreement && agreement.end_date ? (
-                        <li>
-                          <span className="dot" />
-                          <p className="basic-text ">
-                            Expires:{' '}
-                            {dayjs(agreement.end_date).format('MMM DD, YYYY')}
-                          </p>
-                        </li>
-                      ) : (
-                        ''
-                      )}
+
                       {agreement &&
                       agreement.end_date &&
                       countDays(agreement && agreement.end_date) <= 90 ? (
@@ -384,12 +428,11 @@ export default function AgreementDetails({
                         value=""
                       />
                     </ActionDropDown>
-                  ) : userRole === 'Customer' &&
-                    (agreement.contract_status.value === 'pending contract' ||
-                      agreement.contract_status.value ===
-                        'pending contract approval' ||
-                      agreement.contract_status.value ===
-                        'pending signature') ? (
+                  ) : userRole === 'Customer' ||
+                    agreement.contract_status.value === 'pending contract' ||
+                    agreement.contract_status.value ===
+                      'pending contract approval' ||
+                    agreement.contract_status.value === 'pending signature' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -441,7 +484,10 @@ export default function AgreementDetails({
               <div className="straight-line horizontal-line pt-3 mb-3" />
             </div>
             {/* className="disabled" */}
-            <CustomerDetailCoppase>
+            <CustomerDetailCoppase
+              className={
+                agreement.contract_status.value === 'pause' ? 'disabled' : ''
+              }>
               <div className="DSP-contract-retainer">
                 <div className="row ">
                   {agreement && agreement.contract_type === 'recurring' ? (
@@ -562,11 +608,11 @@ export default function AgreementDetails({
   };
 
   const generateModals = () => {
-    if (showModal.cancel) {
+    if (showModal.cancel || showModal.pauseApproval) {
       return (
         <>
           <p className="black-heading-title text-center mt-3">
-            Cancel Contract
+            {showModal.pauseApproval ? 'Pause Agreement' : 'Cancel Agreement'}
           </p>
           {!bgsManagerEmail ? (
             <p className="long-text mb-2 text-center ">
@@ -585,8 +631,8 @@ export default function AgreementDetails({
           )}
           <p className="long-text mb-2 text-center ">
             {' '}
-            Are you sure you would like to request approval to cancel this
-            contract?
+            Are you sure you would like to request approval to{' '}
+            {showModal.pauseApproval ? 'pause' : 'cancel'} this agreement?
           </p>
         </>
       );
@@ -594,7 +640,7 @@ export default function AgreementDetails({
     if (showModal.pause) {
       return (
         <>
-          <h4 className="on-boarding mb-3 pb-2">Pause Contract</h4>
+          <h4 className="on-boarding mb-3 pb-2">Pause Agreement</h4>
           {!bgsManagerEmail ? (
             <p className="long-text mb-2 pb-1">
               For approval please add the{' '}
@@ -613,7 +659,7 @@ export default function AgreementDetails({
           <p className="long-text mb-2 pb-1">
             {' '}
             Before you proceed, please enter the duration to pause this
-            contract.
+            agreement.
           </p>
           <div className="row">
             <div className="col-6">
@@ -651,9 +697,11 @@ export default function AgreementDetails({
     }
     return (
       <>
-        <p className="black-heading-title text-center  mt-2">Delete Contract</p>
+        <p className="black-heading-title text-center  mt-2">
+          Delete Agreement
+        </p>
         <div className="alert-msg pb-3 ">
-          Are you sure you would like to delete this contract?
+          Are you sure you would like to delete this agreement?
           <div className="sure-to-proceed">This action cannot be undone.</div>
         </div>
       </>
@@ -685,7 +733,8 @@ export default function AgreementDetails({
     setIsLoading(true);
     if (showModal.cancel) {
       transactionalAPI('pending for cancellation');
-    } else if (showModal.pause) {
+    } else if (showModal.pauseApproval) {
+      setIsLoading(true);
       const detail = {
         contract: showModal.agreementId,
         start_date: dayjs(pauseDateDetails.start_date).format('YYYY-MM-DD'),
@@ -696,6 +745,9 @@ export default function AgreementDetails({
           transactionalAPI('active pending for pause');
         }
       });
+    } else if (showModal.pause) {
+      setShowModal({ ...showModal, pauseApproval: true });
+      setIsLoading(false);
     } else {
       deleteContract(showModal.agreementId).then(() => {
         setShowModal(false);
@@ -836,7 +888,7 @@ export default function AgreementDetails({
                     disabled={!bgsManagerEmail}>
                     {isLoading ? (
                       <PageLoader color="#fff" type="button" />
-                    ) : showModal.cancel ? (
+                    ) : showModal.cancel || showModal.pauseApproval ? (
                       'Request Approval'
                     ) : showModal.pause ? (
                       'Confirm Duration'
@@ -856,7 +908,7 @@ export default function AgreementDetails({
                           end_date: new Date(),
                         });
                     }}>
-                    {showModal.cancel
+                    {showModal.cancel || showModal.pauseApproval
                       ? "Don't Request"
                       : showModal.pause
                       ? 'Cancel'
