@@ -353,6 +353,9 @@ const DateRangeDropDown = styled.div`
     right: 15px;
     width: 16px;
   }
+  @media only screen and (max-width: 500px) {
+    width: 290px;
+  }
 `;
 
 const DropDownSelectMonthPicker = styled.div`
