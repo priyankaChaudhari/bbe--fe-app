@@ -143,7 +143,8 @@ export default function AddTeamMember({
         toast.success(`${userRoleId.length} Team Member(s) Added.`);
         const showAgreementModal = showMemberList.agreement;
         setShowMemberList({ add: false, show: false, modal: false });
-        setAgreementDetailModal(showAgreementModal);
+        if (!showAgreementModal) setAgreementDetailModal({ pause: false });
+        else setAgreementDetailModal(showAgreementModal);
       } else {
         setIsLoading({ loader: false, type: 'button' });
       }

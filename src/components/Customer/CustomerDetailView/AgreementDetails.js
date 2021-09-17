@@ -174,19 +174,22 @@ export default function AgreementDetails({
     return (
       <>
         <li>
-          <p className="basic-text ">{agreement.pause_length} Days</p>
-        </li>
-        <li>
-          <span className="dot" />
           <p className="basic-text ">
-            Paused &nbsp;
-            {dayjs(agreement.start_date).format('MMM DD, YYYY')}
+            {agreement && agreement.pause_length} Days
           </p>
         </li>
         <li>
           <span className="dot" />
           <p className="basic-text ">
-            Expires: {dayjs(agreement.end_date).format('MMM DD, YYYY')}
+            Paused &nbsp;
+            {dayjs(agreement && agreement.start_date).format('MMM DD, YYYY')}
+          </p>
+        </li>
+        <li>
+          <span className="dot" />
+          <p className="basic-text ">
+            Expires:{' '}
+            {dayjs(agreement && agreement.end_date).format('MMM DD, YYYY')}
           </p>
         </li>
       </>
@@ -464,6 +467,8 @@ export default function AgreementDetails({
                         placeholder="View Actions"
                         className="active"
                         options={
+                          (agreement.pause_contract &&
+                            agreement.pause_contract.is_approved) ||
                           agreement.contract_status.value === 'pause' ||
                           agreement.contract_status.value ===
                             'active pending for pause'
@@ -903,7 +908,11 @@ export default function AgreementDetails({
                   <Button
                     className="btn-transparent w-100"
                     onClick={() => {
-                      setShowModal(false);
+                      setShowModal({
+                        pause: false,
+                        pauseApproval: false,
+                        cancel: false,
+                      });
                       if (showModal.pause)
                         setPauseDateDetails({
                           start_date: new Date(),
