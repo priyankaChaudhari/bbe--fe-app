@@ -433,7 +433,8 @@ export default function AgreementDetails({
                     agreement.contract_status.value === 'pending contract' ||
                     agreement.contract_status.value ===
                       'pending contract approval' ||
-                    agreement.contract_status.value === 'pending signature' ||
+                    agreement.contract_status.value ===
+                      'pending contract signature' ||
                     customerStatus === 'pending account setup' ? (
                     <Link
                       to={{
