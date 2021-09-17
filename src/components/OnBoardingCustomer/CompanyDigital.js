@@ -68,6 +68,25 @@ export default function CompanyDigital({
     setIsLoading({ loader: false, type: 'button' });
   };
 
+  const createBillingStep = () => {
+    const checkBillingAlreadyExists = summaryData.find(
+      (op) => Object.keys(op)[0] === 'billing information',
+    );
+    if (!checkBillingAlreadyExists) {
+      const detail = {
+        is_completed: false,
+        email: '',
+        step: 'billing information',
+        customer_onboarding: userInfo.customer_onboarding,
+      };
+      askSomeoneData(detail).then((stepResponse) => {
+        if (stepResponse && stepResponse.status === 201) {
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
+    }
+  };
+
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
 
@@ -119,7 +138,8 @@ export default function CompanyDigital({
                   } else dispatch(userMe());
                 }
               });
-              setIsLoading({ loader: false, type: 'button' });
+              createBillingStep();
+              // setIsLoading({ loader: false, type: 'button' });
             }
           });
         } else {
@@ -157,7 +177,8 @@ export default function CompanyDigital({
                   } else dispatch(userMe());
                 }
               });
-              setIsLoading({ loader: false, type: 'button' });
+              createBillingStep(stepData);
+              // setIsLoading({ loader: false, type: 'button' });
             }
           });
         }
