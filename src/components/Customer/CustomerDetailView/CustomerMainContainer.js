@@ -1183,6 +1183,9 @@ export default function CustomerMainContainer() {
                       showModal={agreementDetailModal}
                       setShowModal={setAgreementDetailModal}
                       userRole={userInfo && userInfo.role}
+                      customerStatus={
+                        customer && customer.status && customer.status.value
+                      }
                     />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />

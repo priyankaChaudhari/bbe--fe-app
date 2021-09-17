@@ -58,6 +58,7 @@ export default function AgreementDetails({
   showModal,
   setShowModal,
   userRole,
+  customerStatus,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -432,7 +433,8 @@ export default function AgreementDetails({
                     agreement.contract_status.value === 'pending contract' ||
                     agreement.contract_status.value ===
                       'pending contract approval' ||
-                    agreement.contract_status.value === 'pending signature' ? (
+                    agreement.contract_status.value === 'pending signature' ||
+                    customerStatus === 'pending account setup' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -946,6 +948,7 @@ AgreementDetails.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   showModal: PropTypes.objectOf(PropTypes.object).isRequired,
   userRole: PropTypes.string.isRequired,
+  customerStatus: PropTypes.string.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`
