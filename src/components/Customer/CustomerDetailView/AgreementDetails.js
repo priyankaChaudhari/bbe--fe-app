@@ -893,7 +893,7 @@ export default function AgreementDetails({
                   <Button
                     className="btn-primary w-100"
                     onClick={() => saveDetails()}
-                    disabled={!bgsManagerEmail}>
+                    disabled={!bgsManagerEmail && !showModal.delete}>
                     {isLoading ? (
                       <PageLoader color="#fff" type="button" />
                     ) : showModal.cancel || showModal.pauseApproval ? (
@@ -913,6 +913,7 @@ export default function AgreementDetails({
                         pause: false,
                         pauseApproval: false,
                         cancel: false,
+                        delete: false,
                       });
                       if (showModal.pause)
                         setPauseDateDetails({
