@@ -2327,6 +2327,7 @@ export default function AgreementSidePanel({
             if (updatedFormData && updatedFormData.addendum) {
               delete updatedFormData.addendum;
             }
+
             setUpdatedFormData({ ...updatedFormData });
             if (!Object.keys(updatedFormData).length) {
               getContractDetails();
@@ -3054,6 +3055,8 @@ export default function AgreementSidePanel({
         setUpdatedFormData({ ...updatedFormData, addendum: '<p></p>' });
         showFooter(true);
       }
+    } else if (Object.keys(updatedFormData).length) {
+      showFooter(true);
     } else {
       showFooter(false);
       delete updatedFormData.addendum;
