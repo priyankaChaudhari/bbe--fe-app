@@ -326,21 +326,21 @@ export default function CustomerMainContainer() {
   }, [id]);
 
   useEffect(() => {
-    getNotes();
+    if (userInfo && userInfo.role !== 'Customer') getNotes();
     if (showNotesModal.apiCall) {
       getNotes();
     }
     if (showNotesModal.deleteNote) {
       getActivityLogInfo();
     }
-  }, [getNotes, showNotesModal, getActivityLogInfo]);
+  }, [getNotes, showNotesModal, getActivityLogInfo, userInfo]);
 
   useEffect(() => {
     dispatch(getCustomerDetails(id));
     dispatch(getContactDetails(id));
-    getCustomerMemberList();
+    if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
     getActivityLogInfo();
-  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList]);
+  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList, userInfo]);
 
   useEffect(() => {
     if (viewComponent === 'company') {
