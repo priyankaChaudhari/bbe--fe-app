@@ -234,6 +234,7 @@ export default function AgreementDetails({
             const detail =
               res && res.data && res.data.results && res.data.results[0];
             savePauseAgreement(detail.id, {
+              is_approved: false,
               rejected_by: userId,
             }).then((r) => {
               if (r && r.status === 200)
