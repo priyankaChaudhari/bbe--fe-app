@@ -89,10 +89,19 @@ export default function ContractFooter({
   const updatePauseContract = () => {
     setIsLoading({ loader: true, type: 'button' });
 
-    updatePauseAgreement(pauseId, { is_approved: true }).then(() => {
+    updatePauseAgreement(pauseId, { is_approved: true }).then((pauseRes) => {
       toast.success('Pause Contract Approved!');
       let contractStatusData = {};
-      if (details && details.is_renewed) {
+      const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
+      if (
+        pauseRes &&
+        pauseRes.data &&
+        pauseRes.data.start_date === TodaysDate
+      ) {
+        contractStatusData = {
+          contract_status: 'pause',
+        };
+      } else if (details && details.is_renewed) {
         contractStatusData = {
           contract_status: 'renewed',
         };
@@ -103,6 +112,17 @@ export default function ContractFooter({
       }
       updateContractData(contractStatusData);
     });
+  };
+
+  const isAllMandetoryFieldsFilled = () => {
+    if (
+      showRightTick('service_agreement') &&
+      showRightTick('statement') &&
+      showRightTick('dspAddendum')
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -300,35 +320,47 @@ export default function ContractFooter({
                   </Button>
                 )
               ) : details && details.draft_from ? (
-                <>
+                isAllMandetoryFieldsFilled() ? (
+                  <>
+                    <Button
+                      className={`btn-primary on-boarding mt-3  ${
+                        isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
+                      }`}
+                      onClick={() => {
+                        createAgreementDoc();
+                        setParams('request-approve');
+                        setShowModal(true);
+                      }}>
+                      Request Approval
+                    </Button>
+                    {!isEditContract
+                      ? renderEditContractBtn('light-orange w-sm-50 ml-5')
+                      : null}
+                    <span className="last-update">
+                      Last updated by You on{' '}
+                      {dayjs(details && details.updated_at).format(
+                        'MMM D, h:mm A',
+                      )}
+                    </span>
+                  </>
+                ) : !isEditContract ? (
+                  <>
+                    {renderEditContractBtn('btn-primary')}
+
+                    <span className="last-update">
+                      <img src={InfoIcon} alt="info" className="info-icon" />
+                      This contract is missing mandatory information.
+                    </span>
+                  </>
+                ) : (
                   <Button
-                    className={`btn-primary on-boarding mt-3  ${
-                      isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
+                    className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
+                      isEditContract ? 'w-sm-100' : 'w-sm-50'
                     }`}
-                    // disabled={
-                    //   !(
-                    //     showRightTick('service_agreement') &&
-                    //     showRightTick('statement') &&
-                    //     showRightTick('dspAddendum')
-                    //   ) || Object.keys(updatedFormData).includes('addendum')
-                    // }
-                    onClick={() => {
-                      createAgreementDoc();
-                      setParams('request-approve');
-                      setShowModal(true);
-                    }}>
+                    disabled>
                     Request Approval
                   </Button>
-                  {!isEditContract
-                    ? renderEditContractBtn('light-orange w-sm-50 ml-5')
-                    : null}
-                  <span className="last-update">
-                    Last updated by You on{' '}
-                    {dayjs(details && details.updated_at).format(
-                      'MMM D, h:mm A',
-                    )}
-                  </span>
-                </>
+                )
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
