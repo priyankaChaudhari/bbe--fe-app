@@ -436,6 +436,24 @@ export default function ContractContainer() {
           // get amendment data
           getAmendmentData(res && res.data && res.data.id);
 
+          getAddendum({
+            customer_id: id,
+            contract_id: res && res.data && res.data.id,
+          }).then((addendum) => {
+            setNewAddendum(
+              addendum &&
+                addendum.data &&
+                addendum.data.results &&
+                addendum.data.results[0],
+            );
+            setOriginalAddendumData(
+              addendum &&
+                addendum.data &&
+                addendum.data.results &&
+                addendum.data.results[0],
+            );
+          });
+
           // setIsDocRendered(true);
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -475,21 +493,6 @@ export default function ContractContainer() {
       );
 
       getContractDetails();
-    });
-
-    getAddendum({ customer_id: id }).then((addendum) => {
-      setNewAddendum(
-        addendum &&
-          addendum.data &&
-          addendum.data.results &&
-          addendum.data.results[0],
-      );
-      setOriginalAddendumData(
-        addendum &&
-          addendum.data &&
-          addendum.data.results &&
-          addendum.data.results[0],
-      );
     });
 
     getThresholdType().then((thresholdType) => {

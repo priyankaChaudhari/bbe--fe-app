@@ -26,7 +26,7 @@ export const customerAccountRequestFail = (error) => {
 };
 
 export const getAccountDetails = (id) => {
-  const params = { customer: id };
+  const params = { customer: id, latest: 'True' };
   return (dispatch) => {
     dispatch(customerAccountRequestInitiated());
     axiosInstance
