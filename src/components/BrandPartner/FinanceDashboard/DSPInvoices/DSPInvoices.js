@@ -248,6 +248,7 @@ export default function DSPInvoices({
             onClick={() => {
               setShowDropdown({ show: !showDropdown.show });
               setRange(state);
+              setDummayDateRange(state);
             }}>
             {renderTimeFilterLabel()}
             <img

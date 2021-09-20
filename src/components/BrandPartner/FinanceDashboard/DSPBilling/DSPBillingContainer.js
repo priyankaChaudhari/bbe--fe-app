@@ -285,6 +285,7 @@ export default function DSPBillingContainer() {
             setDummayDateType(selectedDateType);
             setRange(state);
             setShowDropdown({ show: !showDropdown.show });
+            setDummayDateRange(state);
           }}
         />
         <ul>
