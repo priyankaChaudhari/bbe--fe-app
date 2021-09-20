@@ -693,7 +693,11 @@ export default function AgreementDetails({
             <div className="col-6">
               <ContractFormField>
                 <DatePicker
-                  minDate={pauseDateDetails.start_date}
+                  minDate={
+                    pauseDateDetails.start_date &&
+                    dayjs(pauseDateDetails.start_date).add(1, 'day') &&
+                    dayjs(pauseDateDetails.start_date).add(1, 'day').$d
+                  }
                   className="form-control"
                   id="date"
                   placeholder="End Date"
