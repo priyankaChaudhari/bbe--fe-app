@@ -470,7 +470,11 @@ export default function AgreementDetails({
                         placeholder="View Actions"
                         className="active"
                         options={
-                          (agreement.pause_contract &&
+                          (agreement &&
+                            agreement.pause_contract &&
+                            agreement.pause_contract.end_date >
+                              dayjs(new Date()).format('YYYY-MM-DD') &&
+                            agreement.pause_contract &&
                             agreement.pause_contract.is_approved) ||
                           agreement.contract_status.value === 'pause' ||
                           agreement.contract_status.value ===
@@ -896,7 +900,12 @@ export default function AgreementDetails({
                   <Button
                     className="btn-primary w-100"
                     onClick={() => saveDetails()}
-                    disabled={!bgsManagerEmail && !showModal.delete}>
+                    disabled={
+                      showModal.pause
+                        ? !pauseDateDetails.start_date ||
+                          !pauseDateDetails.end_date
+                        : !bgsManagerEmail && !showModal.delete
+                    }>
                     {isLoading ? (
                       <PageLoader color="#fff" type="button" />
                     ) : showModal.cancel || showModal.pauseApproval ? (
@@ -912,16 +921,30 @@ export default function AgreementDetails({
                   <Button
                     className="btn-transparent w-100"
                     onClick={() => {
-                      setShowModal({
-                        pause: false,
-                        pauseApproval: false,
-                        cancel: false,
-                        delete: false,
-                      });
                       if (showModal.pause)
                         setPauseDateDetails({
-                          start_date: new Date(),
-                          end_date: new Date(),
+                          start_date: null,
+                          end_date: null,
+                        });
+
+                      if (showModal.pauseApproval) {
+                        setPauseDateDetails({
+                          ...pauseDateDetails,
+                        });
+                        setShowModal({
+                          ...showModal,
+                          pause: true,
+                          pauseApproval: false,
+                          cancel: false,
+                          delete: false,
+                        });
+                      } else
+                        setShowModal({
+                          ...showModal,
+                          pause: false,
+                          pauseApproval: false,
+                          cancel: false,
+                          delete: false,
                         });
                     }}>
                     {showModal.cancel || showModal.pauseApproval
