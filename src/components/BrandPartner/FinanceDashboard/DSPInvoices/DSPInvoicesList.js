@@ -205,7 +205,15 @@ export default function DSPInvoicesList({
         }>
         <td className="product-body">
           {' '}
-          <img className="company-logo" src={CompanyDefaultUser} alt="logo" />
+          <img
+            className="company-logo"
+            src={
+              item && item.customer && item.customer.profile_picture
+                ? item.customer.profile_picture
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
           <div className="company-name">
             {item.customer && item.customer.name}
           </div>

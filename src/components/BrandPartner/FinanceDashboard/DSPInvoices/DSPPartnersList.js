@@ -209,7 +209,15 @@ export default function DSPPartnersList({
         key={item.id}>
         <td className="product-body">
           {' '}
-          <img className="company-logo" src={CompanyDefaultUser} alt="logo" />
+          <img
+            className="company-logo"
+            src={
+              item && item.customer && item.customer.profile_picture
+                ? item.customer.profile_picture
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
           <div className="company-name">{item.customer.name}</div>
         </td>
         <td className="product-table-body">
