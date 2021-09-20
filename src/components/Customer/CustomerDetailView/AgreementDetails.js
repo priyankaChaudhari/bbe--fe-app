@@ -59,6 +59,7 @@ export default function AgreementDetails({
   setShowModal,
   userRole,
   customerStatus,
+  getActivityLogInfo,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -241,6 +242,7 @@ export default function AgreementDetails({
                 toast.success('Your Agreement has been unpaused successfully.');
               dispatch(getAccountDetails(id));
               setPauseDateDetails({ start_date: null, end_date: null });
+              getActivityLogInfo();
             });
           }
         });
@@ -733,6 +735,7 @@ export default function AgreementDetails({
           `We have emailed the BGS manager for ${statusName} your agreement.`,
         );
         dispatch(getAccountDetails(id));
+        getActivityLogInfo();
       }
     });
   };
@@ -960,6 +963,7 @@ AgreementDetails.propTypes = {
   showModal: PropTypes.objectOf(PropTypes.object).isRequired,
   userRole: PropTypes.string.isRequired,
   customerStatus: PropTypes.string.isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`

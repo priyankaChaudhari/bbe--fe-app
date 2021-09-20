@@ -1186,6 +1186,7 @@ export default function CustomerMainContainer() {
                       customerStatus={
                         customer && customer.status && customer.status.value
                       }
+                      getActivityLogInfo={getActivityLogInfo}
                     />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />
