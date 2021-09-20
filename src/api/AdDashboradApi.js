@@ -320,7 +320,7 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
 
   let result = {};
   result = await axiosInstance
-    .get(`${API_DSP_BILLING}`, { params })
+    .get(`${API_DSP_BILLING}bill-detail/`, { params })
     .then((response) => {
       return response;
     })

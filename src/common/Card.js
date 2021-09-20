@@ -42,7 +42,11 @@ const Card = ({
         </li>
         <li>
           {' '}
-          <p className="title">{totalBill}</p>
+          <p className="title">
+            {prefix}
+            {totalBill}
+            {postfix}
+          </p>
           <p className="sub-title">{totalBillText}</p>
         </li>
       </ul>

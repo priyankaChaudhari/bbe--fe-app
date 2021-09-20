@@ -36,13 +36,12 @@ import {
 } from '../../../../theme/images/index';
 import {
   FinanceDateTypeOptions,
-  // DSPBillingMetrics,
+  DSPBillingMetrics,
   BillingVendorOptions,
   BillingSortByOptions,
   monthNames,
   StatusColorSet,
 } from '../../../../constants/DashboardConstants';
-import { Apidata } from './dummyApiRes';
 
 export default function DSPBillingContainer() {
   const currentDate = new Date();
@@ -66,7 +65,24 @@ export default function DSPBillingContainer() {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const [showDropdown, setShowDropdown] = useState({ show: false });
-  const [dspData, setDSPData] = useState([]);
+  const [dspMetricsData, setDSPMetricsData] = useState({
+    'Amazon Advertising LLC': {
+      total_bills: 0,
+      total_amount: 0,
+    },
+    'Amazon Online UK Limited': {
+      total_bills: 0,
+      total_amount: 0,
+    },
+    'Amazon Online UK Limited (EUR)': {
+      total_bills: 0,
+      total_amount: 0,
+    },
+    'Amazon Commercial Services Pty Ltd.': {
+      total_bills: 0,
+      total_amount: 0,
+    },
+  });
   const { Option, SingleValue } = components;
   const [responseId, setResponseId] = useState(null);
   const [selectedSortBy, setSelectedSortBy] = useState({
@@ -90,7 +106,7 @@ export default function DSPBillingContainer() {
       }
       if (res && res.status === 200) {
         if (res.data && res.data) {
-          setDSPData(res.data);
+          setDSPMetricsData(res.data);
         }
       }
     });
@@ -118,9 +134,6 @@ export default function DSPBillingContainer() {
           setBillingLoader(false);
           setPageNumber(page);
         }
-        setBillingData(Apidata.results);
-        setBillsCount(Apidata.count);
-        setBillingLoader(false);
       });
     },
     [selectedDateType, timeFrame],
@@ -238,6 +251,7 @@ export default function DSPBillingContainer() {
     }
     return number;
   };
+
   const onDateChange = (date) => {
     if (date[1] === null) {
       setState([date[0], date[0]]);
@@ -351,7 +365,6 @@ export default function DSPBillingContainer() {
   };
 
   const renderTimeFilterDropDown = () => {
-    console.log(dspData);
     return (
       <div className="col-md-6 col-lg-6 col-7 text-right">
         <DropDownSelectMonthPicker
@@ -384,86 +397,37 @@ export default function DSPBillingContainer() {
     );
   };
 
-  // const renderTitle = (data, key) => {
-  //   if (data[key] === null) {
-  //     return 'N/A';
-  //   }
-  //   if (
-  //     key === 'total_overdue' ||
-  //     key === 'expected_by_end_of_month' ||
-  //     key === 'open_invoices'
-  //   ) {
-  //     return bindAmount(data[key], 0);
-  //   }
-  //   if (key === 'percentage_past_due') {
-  //     return bindAmount(data[key], 2);
-  //   }
-  //   if (key === 'avg_days_past_due') {
-  //     return bindAmount(data[key], 1);
-  //   }
-
-  //   return data[key];
-  // };
-
   const renderDSPFinanceMetrics = () => {
     return (
-      // <div className="row mt-3">
-      //   {DSPBillingMetrics.map((item) => (
-      //     <div className="col-lg-3 col-md-6 col-sm-12 mb-3" key={item.key}>
-      //       {' '}
-      //       <Card
-      //         className="fix-height"
-      //         heading={item.label}
-      //         title={renderTitle(dspData, item.key)}
-      //         titleColor={item.titleColor}
-      //         prefix={dspData[item.key] !== null ? item.prefix : ''}
-      //         postfix={item.postfix}
-      //       />
-      //     </div>
-      //   ))}
-      // </div>
       <div className="row mt-3">
-        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <Card
-            className="fix-height "
-            heading="Amazon Advertising LLC"
-            noBill="12"
-            noBillText="No. Bills"
-            totalBill="$118,396"
-            totalBillText="Total Billed"
-            type="billing"
-          />
-        </div>
-        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <Card
-            className="fix-height"
-            heading="Amazon Online UK Limited"
-            noBill="12"
-            noBillText="No. Bills"
-            totalBill="£27,396"
-            totalBillText="Total Billed"
-          />
-        </div>
-        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <Card
-            className="fix-height"
-            heading="Amazon Online UK Limited (EUR)"
-            noBill="12"
-            noBillText="No. Bills"
-            totalBill="€44,692"
-            totalBillText="Total Billed"
-          />
-        </div>
-        <div className="col-lg-3 col-md-6 col-sm-12 mb-3">
-          <Card
-            className="fix-height"
-            heading="Amazon Commercial Services Pty Ltd"
-            noBill="12"
-            noBillText="No. Bills"
-            totalBill="A$3,295"
-            totalBillText="Total Billed"
-          />
-        </div>
+        {DSPBillingMetrics.map((item) => (
+          <div className="col-lg-3 col-md-6 col-sm-12 mb-3" key={item.key}>
+            {' '}
+            <Card
+              className="fix-height"
+              heading={item.label}
+              noBill={
+                dspMetricsData[item.key].total_bills === null
+                  ? '0'
+                  : bindAmount(dspMetricsData[item.key].total_bills, 0)
+              }
+              noBillText="No. Bills"
+              totalBill={
+                dspMetricsData[item.key].total_amount === null
+                  ? '0'
+                  : bindAmount(dspMetricsData[item.key].total_amount, 0)
+              }
+              totalBillText="Total Billed"
+              type="billing"
+              titleColor={item.titleColor}
+              prefix={
+                dspMetricsData[item.key].total_amount !== null
+                  ? item.prefix
+                  : ''
+              }
+            />
+          </div>
+        ))}
       </div>
     );
   };
