@@ -250,7 +250,7 @@ export async function getDSPFinances(timeFilter, startDate, endDate) {
 
   let result = {};
   result = await axiosInstance
-    .get(`${API_DSP_INVOICES}finance-detail`, { params })
+    .get(`${API_DSP_INVOICES}finance-detail/`, { params })
     .then((response) => {
       return response;
     })

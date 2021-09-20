@@ -41,6 +41,10 @@ export default function DSPInvoices({
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
+  const [dummayDateRange, setDummayDateRange] = useState([
+    currentDate,
+    currentDate,
+  ]);
   const [range, setRange] = useState([currentDate, currentDate]);
 
   // const handleClickOutside = (event) => {
@@ -79,17 +83,22 @@ export default function DSPInvoices({
   };
 
   const handleApply = () => {
-    if (state !== null) {
+    if (dummayDateRange !== null) {
+      setState(dummayDateRange);
       setDateError(null);
-      let sd = state[0];
-      let ed = state[1];
+      let sd = dummayDateRange[0];
+      let ed = dummayDateRange[1];
       setSelectedDateType(dummyDateType);
       setTimeFrameType(dummyDateType);
       setShowDropdown({ show: !showDropdown.show });
       setIsTimeFrameChange(true);
       if (dummyDateType === 'custom') {
-        sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
-        ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
+        sd = `${
+          dummayDateRange[0].getMonth() + 1
+        }-${dummayDateRange[0].getFullYear()}`;
+        ed = `${
+          dummayDateRange[1].getMonth() + 1
+        }-${dummayDateRange[1].getFullYear()}`;
         setTimeFrame({
           startDate: sd,
           endDate: ed,
@@ -106,9 +115,11 @@ export default function DSPInvoices({
 
   const onDateChange = (date) => {
     if (date[1] === null) {
-      setState([date[0], date[0]]);
+      setDummayDateRange([date[0], date[0]]);
+      // setState([date[0], date[0]]);
     } else {
-      setState(date);
+      setDummayDateRange(date);
+      // setState(date);
     }
     setRange(date);
   };
@@ -236,6 +247,7 @@ export default function DSPInvoices({
             id="clickbox"
             onClick={() => {
               setShowDropdown({ show: !showDropdown.show });
+              setRange(state);
             }}>
             {renderTimeFilterLabel()}
             <img
