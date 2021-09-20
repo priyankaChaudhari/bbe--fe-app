@@ -5,7 +5,7 @@ import DSPInvoiceContainer from './DSPInvoices/DSPInvoiceContainer';
 import DSPBillingContainer from './DSPBilling/DSPBillingContainer';
 
 export default function FinanceDashboardContainer() {
-  const [viewComponent, setViewComponent] = useState('invoices');
+  const [viewComponent, setViewComponent] = useState('billing');
   return (
     <DashboardCard>
       <div className="dashboard-container-body">
@@ -18,12 +18,12 @@ export default function FinanceDashboardContainer() {
               DSP Invoicing
             </li>
 
-            {/* <li
+            <li
               className={viewComponent === 'billing' ? 'active' : ''}
               onClick={() => setViewComponent('billing')}
               role="presentation">
               DSP Billing
-            </li> */}
+            </li>
           </ul>
         </Tabs>
 
