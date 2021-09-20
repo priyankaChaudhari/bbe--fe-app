@@ -69,27 +69,17 @@ export default function CompanyDigital({
   };
 
   const createBillingStep = () => {
-    const checkBillingAlreadyExists = summaryData.find(
-      (op) => Object.keys(op)[0] === 'billing information',
-    );
-    if (!checkBillingAlreadyExists) {
-      const detail = {
-        is_completed: false,
-        email: '',
-        step: 'billing information',
-        customer_onboarding: userInfo.customer_onboarding,
-      };
-      askSomeoneData(detail).then((stepResponse) => {
-        if (stepResponse && stepResponse.status === 201) {
-          setIsLoading({ loader: false, type: 'button' });
-        }
-      });
-    }
+    const detail = {
+      is_completed: false,
+      email: '',
+      step: 'billing information',
+      customer_onboarding: userInfo.customer_onboarding,
+    };
+    askSomeoneData(detail);
   };
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-
     updateCustomerDetails(
       userInfo.customer || verifiedStepData.customer_id,
       formData,
@@ -124,7 +114,6 @@ export default function CompanyDigital({
                 });
               } else {
                 CheckStep('digital presence');
-                // history.push(PATH_BILLING_DETAILS);
               }
               updateUserMe(userInfo.id || verifiedStepData.user_id, {
                 step: {
@@ -139,7 +128,7 @@ export default function CompanyDigital({
                 }
               });
               createBillingStep();
-              // setIsLoading({ loader: false, type: 'button' });
+              setIsLoading({ loader: false, type: 'button' });
             }
           });
         } else {
@@ -163,7 +152,6 @@ export default function CompanyDigital({
                 });
               } else {
                 CheckStep('digital presence');
-                // history.push(PATH_AMAZON_MERCHANT);
               }
               updateUserMe(userInfo.id || verifiedStepData.user_id, {
                 step: {
@@ -177,8 +165,7 @@ export default function CompanyDigital({
                   } else dispatch(userMe());
                 }
               });
-              createBillingStep(stepData);
-              // setIsLoading({ loader: false, type: 'button' });
+              setIsLoading({ loader: false, type: 'button' });
             }
           });
         }
