@@ -388,6 +388,18 @@ export async function getPauseAgreement(contract) {
   return result;
 }
 
+export async function getPauseAgreementDetails(pauseContractId) {
+  const result = await axiosInstance
+    .get(`${API_PAUSE_AGREEMENT + pauseContractId}/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function updatePauseAgreement(pauseId, data) {
   const result = await axiosInstance
     .patch(`${API_PAUSE_AGREEMENT + pauseId}/`, data)

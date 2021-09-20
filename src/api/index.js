@@ -111,6 +111,7 @@ export {
   getPauseAgreement,
   updatePauseAgreement,
   getAmendment,
+  getPauseAgreementDetails,
 } from './AgreementApi';
 
 // Knowledge Base
