@@ -98,42 +98,58 @@ export default function ContractFooter({
   const updateContractData = (data) => {
     setIsLoading({ loader: true, type: 'button' });
 
-    updateAccountDetails(details.id, data).then(() => {
-      if (data.contract_status === 'cancel') {
-        toast.success('Cancel Contract Approved!');
-      }
-      getContractDetails();
-      setShowPauseModal({ show: false, data: {} });
+    updateAccountDetails(details.id, data).then((res) => {
+      if (res && res.status === 200) {
+        if (data.contract_status === 'cancel') {
+          toast.success('Cancel Contract Approved!');
+        }
+        getContractDetails();
+        setShowPauseModal({ show: false, data: {} });
 
-      setIsLoading({ loader: false, type: 'button' });
+        setIsLoading({ loader: false, type: 'button' });
+      } else {
+        if (data.contract_status === 'cancel') {
+          toast.error(res && res.data && res.data.detail);
+        }
+        setShowPauseModal({ show: false, data: {} });
+
+        setIsLoading({ loader: false, type: 'button' });
+      }
     });
   };
 
   const updatePauseContract = () => {
     updatePauseAgreement(pauseId, { is_approved: true }).then((pauseRes) => {
-      toast.success('Pause Contract Approved!');
-      let contractStatusData = {};
-      const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
+      if (pauseRes && pauseRes.status === 200) {
+        toast.success('Pause Contract Approved!');
+        let contractStatusData = {};
+        const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
 
-      if (
-        pauseRes &&
-        pauseRes.data &&
-        pauseRes.data.start_date === TodaysDate
-      ) {
-        contractStatusData = {
-          contract_status: 'pause',
-        };
-      } else if (details && details.is_renewed) {
-        contractStatusData = {
-          contract_status: 'renewed',
-        };
+        if (
+          pauseRes &&
+          pauseRes.data &&
+          pauseRes.data.start_date === TodaysDate
+        ) {
+          contractStatusData = {
+            contract_status: 'pause',
+          };
+        } else if (details && details.is_renewed) {
+          contractStatusData = {
+            contract_status: 'renewed',
+          };
+        } else {
+          contractStatusData = {
+            contract_status: 'active',
+          };
+        }
+
+        updateContractData(contractStatusData);
       } else {
-        contractStatusData = {
-          contract_status: 'active',
-        };
-      }
+        toast.error(pauseRes && pauseRes.data && pauseRes.data.detail);
+        setShowPauseModal({ show: false, data: {} });
 
-      updateContractData(contractStatusData);
+        setIsLoading({ loader: false, type: 'button' });
+      }
     });
   };
 
