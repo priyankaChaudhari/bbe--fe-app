@@ -35,6 +35,7 @@ import {
   agreementTemplate,
   getcontract,
   getServicesFee,
+  getAmendment,
 } from '../../api/AgreementApi';
 import RequestSignature from './RequestSignature';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
@@ -217,6 +218,8 @@ export default function ContractContainer() {
   const [thresholdTypeOptions, setThresholdTypeOptions] = useState(false);
   const [yoyPercentageOptions, setYoyPercentageOptions] = useState(false);
   const [servicesFees, setServicesFees] = useState({});
+  const [amendmentData, setAmendmentData] = useState({});
+  const [sidebarSection, setSidebarSection] = useState('edit');
 
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
@@ -351,6 +354,8 @@ export default function ContractContainer() {
         details.contract_status.value === 'renewed' ||
         details.contract_status.value === 'cancel' ||
         details.contract_status.value === 'pending for cancellation' ||
+        details.contract_status.value === 'active pending for pause' ||
+        details.contract_status.value === 'pause' ||
         details.contract_status.value === 'inactive'
       ) {
         return true;
@@ -409,6 +414,146 @@ export default function ContractContainer() {
     }
   }
 
+  const getAmendmentData = (contractId) => {
+    getAmendment(contractId).then((amendments) => {
+      setAmendmentData(amendments && amendments.data);
+    });
+  };
+
+  const setMandatoryFieldsErrors = (contract) => {
+    let agreementErrors = 0;
+    let statementErrors = 0;
+    let dspErrors = 0;
+
+    if (
+      contract &&
+      contract.contract_type &&
+      contract.contract_type.toLowerCase().includes('one') &&
+      (contract.additional_one_time_services === null ||
+        !contract.additional_one_time_services.length)
+    ) {
+      agreementErrors += 1;
+
+      setAdditionalMonthlySerError({
+        ...additionalMonthlySerError,
+        required: 'At least 1 one time service required',
+      });
+    }
+
+    AgreementDetails.forEach((item) => {
+      if (item.key !== 'contract_address') {
+        if (
+          !(
+            item.key === 'length' &&
+            details &&
+            details.contract_type === 'one time'
+          )
+        ) {
+          if (
+            item.isMandatory &&
+            item.field === 'customer' &&
+            !(
+              contract &&
+              contract.customer_id &&
+              contract.customer_id[item.key]
+            )
+          ) {
+            agreementErrors += 1;
+            item.error = true;
+          }
+          if (
+            item.isMandatory &&
+            item.field !== 'customer' &&
+            !(contract && contract[item.key])
+          ) {
+            agreementErrors += 1;
+            item.error = true;
+          }
+        }
+      } else {
+        return (
+          item &&
+          item.sections.forEach((subItem) => {
+            if (
+              subItem &&
+              subItem.isMandatory &&
+              !(
+                contract &&
+                contract.customer_id &&
+                contract.customer_id[subItem.key]
+              )
+            ) {
+              subItem.error = true;
+              agreementErrors += 1;
+            }
+          })
+        );
+      }
+      return null;
+    });
+
+    StatementDetails.forEach((item) => {
+      if (
+        item.isMandatory &&
+        !(contract && contract[item.key]) &&
+        !(
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('one')
+        )
+      ) {
+        statementErrors += 1;
+        item.error = true;
+      }
+    });
+
+    DSPAddendumDetails.forEach((item) => {
+      if (item.isMandatory && !(contract && contract[item.key])) {
+        if (
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('dsp') &&
+          item.key !== 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
+
+        if (
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('recurring') &&
+          item.key === 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        } else if (
+          !(
+            contract &&
+            contract.contract_type &&
+            contract.contract_type.toLowerCase().includes('dsp')
+          )
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
+      }
+    });
+
+    setSectionError({
+      ...sectionError,
+      agreement: agreementErrors,
+      statement: statementErrors,
+      dsp: dspErrors,
+    });
+  };
+
+  const showEditView = (contract) => {
+    setIsEditContract(true);
+    setMandatoryFieldsErrors(contract);
+    setSidebarSection('edit');
+  };
+
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
@@ -421,6 +566,36 @@ export default function ContractContainer() {
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
+
+          // get amendment data
+          if (res && res.data && res.data.draft_from) {
+            getAmendmentData(res && res.data && res.data.id);
+          }
+
+          getAddendum({
+            customer_id: id,
+            contract_id: res && res.data && res.data.id,
+          }).then((addendum) => {
+            setNewAddendum(
+              addendum &&
+                addendum.data &&
+                addendum.data.results &&
+                addendum.data.results.length &&
+                addendum.data.results[0],
+            );
+            setOriginalAddendumData(
+              addendum &&
+                addendum.data &&
+                addendum.data.results &&
+                addendum.data.results.length &&
+                addendum.data.results[0],
+            );
+          });
+
+          if (history && history.location && history.location.showEditView) {
+            showEditView(res && res.data);
+          }
+
           // setIsDocRendered(true);
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -462,21 +637,6 @@ export default function ContractContainer() {
       getContractDetails();
     });
 
-    getAddendum({ customer_id: id }).then((addendum) => {
-      setNewAddendum(
-        addendum &&
-          addendum.data &&
-          addendum.data.results &&
-          addendum.data.results[0],
-      );
-      setOriginalAddendumData(
-        addendum &&
-          addendum.data &&
-          addendum.data.results &&
-          addendum.data.results[0],
-      );
-    });
-
     getThresholdType().then((thresholdType) => {
       setThresholdTypeOptions(thresholdType);
     });
@@ -501,7 +661,7 @@ export default function ContractContainer() {
     });
 
     getServicesFee().then((res) => {
-      setServicesFees(res.data);
+      setServicesFees(res && res.data);
     });
 
     getOneTimeService().then((r) => {
@@ -535,6 +695,10 @@ export default function ContractContainer() {
     if (section === 'view-contract') {
       setShowtabInResponsive('view-contract');
     }
+    if (section === 'amendment') {
+      setShowtabInResponsive('amendment');
+      setSidebarSection('edit');
+    }
   };
 
   const onEditAddendum = () => {
@@ -552,6 +716,7 @@ export default function ContractContainer() {
     setAdditionalOnetimeSerError({});
     setContractError({});
   };
+
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
@@ -1537,6 +1702,7 @@ export default function ContractContainer() {
 
   const onEditcontract = () => {
     setShowEditContractConfirmationModal(true);
+    setSidebarSection('edit');
   };
 
   const showStandardServicesTable = () => {
@@ -2001,6 +2167,7 @@ export default function ContractContainer() {
         'monthly_service',
       );
     }
+
     if (newAddendumData && newAddendumData.id) {
       if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
         sectionFlag.addendum = false;
@@ -2048,7 +2215,7 @@ export default function ContractContainer() {
     setShowCollpase(sectionFlag);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [details]);
+  }, [details, newAddendumData]);
 
   const createPrimaryMarketplace = () => {
     const statementData = {
@@ -2168,7 +2335,7 @@ export default function ContractContainer() {
 
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
-
+          getAmendmentData(details && details.id);
           if (
             additionalMonthlySerRes &&
             additionalMonthlySerRes.status === 200 &&
@@ -2617,6 +2784,9 @@ export default function ContractContainer() {
       details.contract_type &&
       details.contract_type.toLowerCase().includes('recurring')
     ) {
+      if (details && details.draft_from) {
+        return true;
+      }
       if (
         (showSection.dspAddendum && dspFee < 10000) ||
         rev < 3 ||
@@ -2625,6 +2795,16 @@ export default function ContractContainer() {
         return true;
       }
     }
+    if (
+      details &&
+      details.draft_from &&
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
+      return true;
+    }
+
     if (
       details &&
       details.contract_type &&
@@ -2748,148 +2928,8 @@ export default function ContractContainer() {
         ) : (
           ''
         )}
-
-        {showSection.amendment ? (
-          <div id="amendment">
-            <ServicesAmendment
-              formData={formData}
-              details={details}
-              templateData={data}
-            />
-          </div>
-        ) : (
-          ''
-        )}
       </div>
     );
-  };
-
-  const setMandatoryFieldsErrors = () => {
-    let agreementErrors = 0;
-    let statementErrors = 0;
-    let dspErrors = 0;
-
-    if (
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('one') &&
-      (formData.additional_one_time_services === null ||
-        !formData.additional_one_time_services.length)
-    ) {
-      agreementErrors += 1;
-
-      setAdditionalMonthlySerError({
-        ...additionalMonthlySerError,
-        required: 'At least 1 one time service required',
-      });
-    }
-
-    AgreementDetails.forEach((item) => {
-      if (item.key !== 'contract_address') {
-        if (
-          !(
-            item.key === 'length' &&
-            details &&
-            details.contract_type === 'one time'
-          )
-        ) {
-          if (
-            item.isMandatory &&
-            item.field === 'customer' &&
-            !(
-              formData &&
-              formData.customer_id &&
-              formData.customer_id[item.key]
-            )
-          ) {
-            agreementErrors += 1;
-            item.error = true;
-          }
-          if (
-            item.isMandatory &&
-            item.field !== 'customer' &&
-            !(formData && formData[item.key])
-          ) {
-            agreementErrors += 1;
-            item.error = true;
-          }
-        }
-      } else {
-        return (
-          item &&
-          item.sections.forEach((subItem) => {
-            if (
-              subItem &&
-              subItem.isMandatory &&
-              !(
-                formData &&
-                formData.customer_id &&
-                formData.customer_id[subItem.key]
-              )
-            ) {
-              subItem.error = true;
-              agreementErrors += 1;
-            }
-          })
-        );
-      }
-      return null;
-    });
-
-    StatementDetails.forEach((item) => {
-      if (
-        item.isMandatory &&
-        !(formData && formData[item.key]) &&
-        !(
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('one')
-        )
-      ) {
-        statementErrors += 1;
-        item.error = true;
-      }
-    });
-
-    DSPAddendumDetails.forEach((item) => {
-      if (item.isMandatory && !(formData && formData[item.key])) {
-        if (
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('dsp') &&
-          item.key !== 'dsp_length'
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        }
-
-        if (
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('recurring') &&
-          item.key === 'dsp_length'
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        } else if (
-          !(
-            formData &&
-            formData.contract_type &&
-            formData.contract_type.toLowerCase().includes('dsp')
-          )
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        }
-      }
-    });
-
-    setSectionError({
-      ...sectionError,
-      agreement: agreementErrors,
-      statement: statementErrors,
-      dsp: dspErrors,
-    });
   };
 
   const renderEditContractBtn = (btnClass) => {
@@ -2899,8 +2939,7 @@ export default function ContractContainer() {
           isEditContract ? 'w-sm-50' : 'w-sm-100'
         }`}
         onClick={() => {
-          setIsEditContract(true);
-          setMandatoryFieldsErrors();
+          showEditView(formData);
         }}>
         Edit Contract
       </Button>
@@ -2994,6 +3033,9 @@ export default function ContractContainer() {
         originalAddendumData={originalAddendumData}
         thresholdTypeOptions={thresholdTypeOptions}
         yoyPercentageOptions={yoyPercentageOptions}
+        amendmentData={amendmentData}
+        sidebarSection={sidebarSection}
+        setSidebarSection={setSidebarSection}
       />
     );
   };
@@ -3064,8 +3106,14 @@ export default function ContractContainer() {
       ) : checkContractStatus() ? (
         <>
           <ContractTab className="d-lg-none d-block">
-            <ul className="tabs">
+            <ul style={{ textAlign: 'center' }} className="tabs">
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3073,10 +3121,28 @@ export default function ContractContainer() {
               </li>
 
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
+                className={tabInResponsive === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('amendment')}>
+                Amendment
               </li>
             </ul>
           </ContractTab>
@@ -3191,13 +3257,25 @@ export default function ContractContainer() {
                 (isMobile && tabInResponsive === 'edit-fields')
                   ? displayRightSidePanel()
                   : ''}
-                {details &&
-                details.contract_status &&
-                details.contract_status.value === 'pending for cancellation' &&
+                {((details &&
+                  details.contract_status &&
+                  details.contract_status.value ===
+                    'pending for cancellation') ||
+                  (details &&
+                    details.contract_status &&
+                    details.contract_status.value ===
+                      'active pending for pause')) &&
                 userInfo &&
                 userInfo.role === 'BGS Manager'
                   ? displayFooter()
                   : ''}
+
+                {(isTablet && tabInResponsive === 'amendment') ||
+                (isMobile && tabInResponsive === 'amendment') ? (
+                  <ServicesAmendment amendmentData={amendmentData} />
+                ) : (
+                  ''
+                )}
               </>
             )}
           </div>
@@ -3205,8 +3283,14 @@ export default function ContractContainer() {
       ) : (
         <>
           <ContractTab className="d-lg-none d-block">
-            <ul className="tabs">
+            <ul style={{ textAlign: 'center' }} className="tabs">
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3214,10 +3298,28 @@ export default function ContractContainer() {
               </li>
 
               <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
+              </li>
+              <li
+                style={{
+                  width: '30%',
+                  margin: '0',
+                  paddingLeft: '0',
+                  paddingRight: '0',
+                }}
+                className={tabInResponsive === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('amendment')}>
+                Amendment
               </li>
             </ul>
           </ContractTab>
@@ -3274,7 +3376,7 @@ export default function ContractContainer() {
                           </li>
                         )}
                         <li>
-                          <span className="divide-arrow" />
+                          <span className="divide-arrow hide-mobile" />
                         </li>
                         <li>
                           <img
@@ -3336,6 +3438,13 @@ export default function ContractContainer() {
                 (!isLoading.loader && isLoading.type === 'page')
                   ? displayFooter()
                   : null}
+
+                {(isTablet && tabInResponsive === 'amendment') ||
+                (isMobile && tabInResponsive === 'amendment') ? (
+                  <ServicesAmendment amendmentData={amendmentData} />
+                ) : (
+                  ''
+                )}
               </>
             ) : (
               ''
@@ -3503,7 +3612,8 @@ const ContractTab = styled.div`
       }
     }
   }
+
   @media only screen and (max-width: 767px) {
-    padding-top: 107px;
+    padding-top: 120px;
   }
 `;

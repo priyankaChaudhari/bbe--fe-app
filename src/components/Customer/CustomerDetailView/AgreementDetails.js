@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
+import DatePicker from 'react-date-picker';
+import { toast } from 'react-toastify';
 
 import {
   PageLoader,
   WhiteCard,
   Tabs,
   Status,
-  // ActionDropDown,
+  ActionDropDown,
   ModalBox,
   Button,
   ContractFormField,
@@ -26,21 +28,39 @@ import {
   DspOnlyIcon,
   ArrowIcons,
   CloseIcon,
-  //  PauseIcon,
-  // CloseCircleIcon,
-  // CopyIcon,
-  // CaretUp,
-  // ViewExternalLink,
-  // DeleteIcon,
+  CaretUp,
+  DisabledRecurring,
 } from '../../../theme/images';
 import { PATH_AGREEMENT } from '../../../constants';
 import PastAgreement from './PastAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
 import OneTimeAgreement from './OneTimeAgreement';
-import { createTransactionData } from '../../../api';
+import {
+  createTransactionData,
+  createContract,
+  deleteContract,
+  getBGSManagers,
+  savePauseAgreement,
+  getPauseAgreement,
+} from '../../../api';
 import Theme from '../../../theme/Theme';
+import {
+  contractOptions,
+  draftContractOptions,
+  agreementOptions,
+  pauseAgreementOptions,
+} from '../../../constants/FieldConstants';
 
-export default function AgreementDetails({ id, userId }) {
+export default function AgreementDetails({
+  id,
+  userId,
+  setShowMemberList,
+  showModal,
+  setShowModal,
+  userRole,
+  customerStatus,
+  getActivityLogInfo,
+}) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [viewComponent, setViewComponent] = useState('current');
@@ -48,32 +68,13 @@ export default function AgreementDetails({ id, userId }) {
     (state) => state.accountState.multipleAgreement,
   );
   const loader = useSelector((state) => state.accountState.isLoading);
-  const [showModal, setShowModal] = useState({ pause: false });
   const [showPastAgreements, setShowPastAgreements] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const contractOptions = [
-  //   { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
-  //   { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
-  //   { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
-  //   { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
-  //   // { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
-  // ];
-
-  const agreementOptions = [
-    { key: 'monthly_retainer', label: 'Monthly Retainer' },
-    { key: 'rev_share', label: 'Rev Share' },
-    { key: 'sales_threshold', label: 'Sales Threshold' },
-    { key: 'billing_cap', label: 'Billing Cap' },
-    {
-      key: 'content_optimization',
-      label: 'Copy Optimization',
-    },
-    {
-      key: 'design_optimization',
-      label: 'Design Optimization',
-    },
-  ];
+  const [pauseDateDetails, setPauseDateDetails] = useState({
+    start_date: null,
+    end_date: null,
+  });
+  const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
 
   const customStyles = {
     content: {
@@ -83,55 +84,56 @@ export default function AgreementDetails({ id, userId }) {
       bottom: 'auto',
       maxWidth: '600px ',
       width: '100% ',
-      // minHeight: '200px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
     },
   };
 
-  // const { Option } = components;
-  // const DropdownIndicator = (dataProps) => {
-  //   return (
-  //     components.DropdownIndicator && (
-  //       <components.DropdownIndicator {...dataProps}>
-  //         <img
-  //           src={CaretUp}
-  //           alt="caret"
-  //           style={{
-  //             transform: dataProps.selectProps.menuIsOpen
-  //               ? 'rotate(180deg)'
-  //               : '',
-  //             width: '25px',
-  //             height: '25px',
-  //           }}
-  //         />
-  //       </components.DropdownIndicator>
-  //     )
-  //   );
-  // };
+  const { Option } = components;
+  const DropdownIndicator = (dataProps) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...dataProps}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
 
-  // const IconOption = (dataProps) => (
-  //   <Option {...dataProps}>
-  //     <img
-  //       className="drop-down-user"
-  //       src={dataProps.data.icon}
-  //       alt="user"
-  //       style={{
-  //         marginRight: '9px',
-  //         height: '20px',
-  //         verticalAlign: 'middle',
-  //         width: '18px',
-  //         float: 'left',
-  //         // maxWidth: '15%',
-  //       }}
-  //     />
-  //     {dataProps.data.label}
-  //   </Option>
-  // );
+  const IconOption = (dataProps) => (
+    <Option {...dataProps}>
+      <img
+        className="drop-down-user"
+        src={dataProps.data.icon}
+        alt="user"
+        style={{
+          marginRight: '9px',
+          height: '20px',
+          verticalAlign: 'middle',
+          width: '18px',
+          float: 'left',
+        }}
+      />
+      {dataProps.data.label}
+    </Option>
+  );
 
   useEffect(() => {
     dispatch(getAccountDetails(id));
+    getBGSManagers(id).then((res) => {
+      setBgsManagerEmail(res && res.data && res.data.email);
+    });
   }, [dispatch, id]);
 
   const countDays = (value) => {
@@ -142,29 +144,129 @@ export default function AgreementDetails({ id, userId }) {
     return diffDays;
   };
 
-  // const handleContractOptions = (event, agreementId) => {
-  //   switch (event.value) {
-  //     case 'view':
-  //       history.push({
-  //         pathname: PATH_AGREEMENT.replace(':id', id).replace(
-  //           ':contract_id',
-  //           agreementId,
-  //         ),
-  //         state: history && history.location && history.location.pathname,
-  //       });
-  //       break;
-  //     case 'draft':
-  //       break;
-  //     case 'pause':
-  //       setShowModal({ pause: true, agreementId });
-  //       break;
-  //     case 'cancel':
-  //       setShowModal({ cancel: true, agreementId });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
+  const createNewDraftVersion = (agreementId) => {
+    const data = {
+      customer_id: id,
+      draft_from: agreementId,
+    };
+    createContract(data).then((res) => {
+      history.push({
+        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+          ':contract_id',
+          res && res.data && res.data.id,
+        ),
+        state: history && history.location && history.location.pathname,
+        showEditView: true,
+      });
+    });
+  };
+
+  const addBGSMangerEmail = () => {
+    const firstModal = showModal;
+    setShowModal(false);
+    setShowMemberList({
+      show: true,
+      add: true,
+      modal: true,
+      agreement: firstModal,
+    });
+  };
+
+  const getPauseHTML = (agreement) => {
+    return (
+      <>
+        <li>
+          <p className="basic-text ">
+            {agreement && agreement.pause_length} Days
+          </p>
+        </li>
+        <li>
+          <span className="dot" />
+          <p className="basic-text ">
+            Paused &nbsp;
+            {dayjs(agreement && agreement.start_date).format('MMM DD, YYYY')}
+          </p>
+        </li>
+        <li>
+          <span className="dot" />
+          <p className="basic-text ">
+            Expires:{' '}
+            {dayjs(agreement && agreement.end_date).format('MMM DD, YYYY')}
+          </p>
+        </li>
+      </>
+    );
+  };
+
+  const handleContractOptions = (event, agreementId) => {
+    switch (event.value) {
+      case 'view':
+        history.push({
+          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+            ':contract_id',
+            agreementId,
+          ),
+          state: history && history.location && history.location.pathname,
+        });
+        break;
+      case 'draft':
+        createNewDraftVersion(agreementId);
+        break;
+      case 'pause':
+        setShowModal({ pause: true, agreementId });
+        break;
+      case 'cancel':
+        setShowModal({ cancel: true, agreementId });
+        break;
+      case 'edit':
+        history.push({
+          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+            ':contract_id',
+            agreementId,
+          ),
+          state: history && history.location && history.location.pathname,
+          showEditView: true,
+        });
+        break;
+      case 'delete':
+        setShowModal({ delete: true, agreementId });
+        break;
+      case 'unpause':
+        getPauseAgreement(agreementId).then((res) => {
+          if (res && res.status === 200) {
+            const detail =
+              res && res.data && res.data.results && res.data.results[0];
+            savePauseAgreement(detail.id, {
+              is_approved: false,
+              rejected_by: userId,
+            }).then((r) => {
+              if (r && r.status === 200)
+                toast.success('Your Agreement has been unpaused successfully.');
+              dispatch(getAccountDetails(id));
+              setPauseDateDetails({ start_date: null, end_date: null });
+              getActivityLogInfo();
+            });
+          }
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const isDraftContract = (agreement) => {
+    if (
+      agreement &&
+      agreement.draft_from &&
+      agreement.contract_status &&
+      (agreement.contract_status.value === 'pending contract' ||
+        agreement.contract_status.value === 'pending contract approval' ||
+        agreement.contract_status.value === 'pending contract signature')
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const generateHTML = () => {
     const fields = [];
@@ -173,92 +275,127 @@ export default function AgreementDetails({ id, userId }) {
         agreement &&
         agreement.contract_status &&
         agreement.contract_status.value !== 'inactive' &&
+        agreement.contract_status.value !== 'cancel' &&
         !agreement.contract_type.toLowerCase().includes('one')
       )
         fields.push(
-          <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
+          <WhiteCard
+            className={
+              agreement && agreement.draft_from
+                ? 'mt-3 mb-3 selected-card'
+                : 'mt-3 mb-3'
+            }
+            key={agreement.id}>
             <div className="row">
               <div className="col-lg-9 col-md-9 col-12">
-                <img
-                  width="48px"
-                  className="solid-icon mb-2"
-                  src={
-                    agreement &&
-                    agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('dsp')
-                      ? DspOnlyIcon
-                      : RecurringIcon
-                  }
-                  alt=""
-                />
+                <div className="solid-icon">
+                  <img
+                    width="48px"
+                    className=" mb-2"
+                    src={
+                      agreement &&
+                      agreement.contract_status &&
+                      (agreement.contract_status.value === 'pause' ||
+                        agreement.contract_status.value === 'draft')
+                        ? DisabledRecurring
+                        : agreement &&
+                          agreement.contract_type &&
+                          agreement.contract_type.toLowerCase().includes('dsp')
+                        ? DspOnlyIcon
+                        : RecurringIcon
+                    }
+                    alt=""
+                  />
+                </div>
                 <div
                   className="contract-status mb-2"
                   role="presentation"
                   onClick={() => {
                     setShowModal(true);
                   }}>
-                  {agreement &&
-                  agreement.contract_status &&
-                  agreement.contract_status.value === 'active' ? (
-                    ''
-                  ) : (
-                    <Status
-                      className="mr-2 mb-2"
-                      label={
-                        agreement &&
-                        agreement.contract_status &&
-                        agreement.contract_status.label
-                      }
-                      backgroundColor={Theme.gray8}
-                    />
-                  )}
-                  <p className="black-heading-title mt-0 mb-0">
+                  <div style={{ display: 'flow-root' }} className="">
                     {agreement &&
-                    agreement.contract_type &&
-                    agreement.contract_type.toLowerCase().includes('notice')
-                      ? 'Recurring (90 day notice) Service Agreement'
-                      : agreement &&
-                        agreement.contract_type &&
-                        agreement.contract_type.toLowerCase().includes('dsp')
-                      ? 'DSP Service Agreement'
-                      : 'Recurring Service Agreement'}
-                  </p>
+                    agreement.contract_status &&
+                    agreement.contract_status.value === 'active' ? (
+                      ''
+                    ) : (
+                      <Status
+                        className="mr-2 mb-1"
+                        label={
+                          isDraftContract(agreement)
+                            ? 'Draft'
+                            : agreement &&
+                              agreement.contract_status &&
+                              agreement.contract_status.label
+                        }
+                        backgroundColor={Theme.gray8}
+                      />
+                    )}
+                    {/* <div className="clear-fix" /> */}
+                    <p className="black-heading-title mt-0 mb-0">
+                      {agreement &&
+                      agreement.contract_type &&
+                      agreement.contract_type.toLowerCase().includes('notice')
+                        ? 'Recurring (90 day notice) Service Agreement'
+                        : agreement &&
+                          agreement.contract_type &&
+                          agreement.contract_type.toLowerCase().includes('dsp')
+                        ? 'DSP Service Agreement'
+                        : 'Recurring Service Agreement'}
+                    </p>
+                  </div>
+
                   {agreement && agreement.contract_type !== 'one time' ? (
                     <ul className="recurring-contact">
-                      <li>
-                        <p className="basic-text ">
-                          {agreement &&
-                            agreement.length &&
-                            agreement.length.label &&
-                            agreement.length.label.slice(0, -1)}{' '}
-                        </p>
-                      </li>
-                      {agreement && agreement.start_date ? (
-                        <li>
-                          <span className="dot" />
-                          <p className="basic-text ">
-                            {agreement.contract_status &&
-                            agreement.contract_status.value === 'renewed'
-                              ? 'Renewed'
-                              : 'Started'}
-                            &nbsp;
-                            {dayjs(agreement.start_date).format('MMM DD, YYYY')}
-                          </p>
-                        </li>
+                      {agreement &&
+                      agreement.contract_status &&
+                      agreement.contract_status.value !== 'pause' ? (
+                        <>
+                          <li>
+                            <p className="basic-text ">
+                              {agreement &&
+                                agreement.length &&
+                                agreement.length.label &&
+                                agreement.length.label.slice(0, -1)}{' '}
+                            </p>
+                          </li>
+                          {agreement && agreement.start_date ? (
+                            <li>
+                              <span className="dot" />
+                              <p className="basic-text ">
+                                {agreement.contract_status &&
+                                agreement.contract_status.value === 'renewed'
+                                  ? 'Renewed'
+                                  : 'Started'}
+                                &nbsp;
+                                {dayjs(agreement.start_date).format(
+                                  'MMM DD, YYYY',
+                                )}
+                              </p>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                          {agreement && agreement.end_date ? (
+                            <li>
+                              <span className="dot" />
+                              <p className="basic-text ">
+                                Expires:{' '}
+                                {dayjs(agreement.end_date).format(
+                                  'MMM DD, YYYY',
+                                )}
+                              </p>
+                            </li>
+                          ) : (
+                            ''
+                          )}
+                        </>
                       ) : (
-                        ''
+                        <>
+                          {getPauseHTML(agreement && agreement.pause_contract)}
+                        </>
                       )}
-                      {agreement && agreement.end_date ? (
-                        <li>
-                          <span className="dot" />
-                          <p className="basic-text ">
-                            Expires:{' '}
-                            {dayjs(agreement.end_date).format('MMM DD, YYYY')}
-                          </p>
-                        </li>
-                      ) : (
-                        ''
-                      )}
+
                       {agreement &&
                       agreement.end_date &&
                       countDays(agreement && agreement.end_date) <= 90 ? (
@@ -295,17 +432,28 @@ export default function AgreementDetails({ id, userId }) {
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {/* {agreement.contract_status.value !== 'pending contract' ||
-                  agreement.contract_status.value !==
-                    'pending contract approval' ||
-                  agreement.contract_status.value !== 'pending signature' ? (
+                  {agreement.draft_from && userRole !== 'Customer' ? (
                     <ActionDropDown>
                       {' '}
                       <Select
                         classNamePrefix="react-select"
                         placeholder="View Actions"
                         className="active"
-                        options={contractOptions}
+                        options={
+                          isDraftContract(agreement)
+                            ? draftContractOptions
+                            : (agreement &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.end_date >
+                                  dayjs(new Date()).format('YYYY-MM-DD') &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.is_approved) ||
+                              agreement.contract_status.value === 'pause' ||
+                              agreement.contract_status.value ===
+                                'active pending for pause'
+                            ? pauseAgreementOptions
+                            : contractOptions
+                        }
                         onChange={(event) =>
                           handleContractOptions(event, agreement.id)
                         }
@@ -316,35 +464,74 @@ export default function AgreementDetails({ id, userId }) {
                         value=""
                       />
                     </ActionDropDown>
-                  ) : ( */}
-                  <Link
-                    to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                        ':contract_id',
-                        agreement.id,
-                      ),
-                      state:
-                        history &&
-                        history.location &&
-                        history.location.pathname,
-                    }}>
-                    <Button className="btn-transparent w-100 view-contract">
+                  ) : userRole === 'Customer' ||
+                    agreement.contract_status.value === 'pending contract' ||
+                    agreement.contract_status.value ===
+                      'pending contract approval' ||
+                    agreement.contract_status.value ===
+                      'pending contract signature' ||
+                    customerStatus === 'pending account setup' ? (
+                    <Link
+                      to={{
+                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                          ':contract_id',
+                          agreement.id,
+                        ),
+                        state:
+                          history &&
+                          history.location &&
+                          history.location.pathname,
+                      }}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Agreement
+                      </Button>
+                    </Link>
+                  ) : (
+                    <ActionDropDown>
                       {' '}
-                      <img
-                        className="file-contract-icon"
-                        src={FileContract}
-                        alt=""
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={
+                          (agreement &&
+                            agreement.pause_contract &&
+                            agreement.pause_contract.end_date >
+                              dayjs(new Date()).format('YYYY-MM-DD') &&
+                            agreement.pause_contract &&
+                            agreement.pause_contract.is_approved) ||
+                          agreement.contract_status.value === 'pause' ||
+                          agreement.contract_status.value ===
+                            'active pending for pause'
+                            ? pauseAgreementOptions
+                            : contractOptions
+                        }
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
                       />
-                      View Agreement
-                    </Button>
-                  </Link>
-                  {/* )} */}
+                    </ActionDropDown>
+                  )}
                 </div>
               )}
               <div className="straight-line horizontal-line pt-3 mb-3" />
             </div>
             {/* className="disabled" */}
-            <CustomerDetailCoppase>
+            <CustomerDetailCoppase
+              className={
+                agreement.contract_status.value === 'pause' ? 'disabled' : ''
+              }>
               <div className="DSP-contract-retainer">
                 <div className="row ">
                   {agreement && agreement.contract_type === 'recurring' ? (
@@ -460,17 +647,36 @@ export default function AgreementDetails({ id, userId }) {
     );
   };
 
+  const handleChange = (date, type) => {
+    setPauseDateDetails({ ...pauseDateDetails, [type]: date });
+  };
+
   const generateModals = () => {
-    if (showModal.cancel) {
+    if (showModal.cancel || showModal.pauseApproval) {
       return (
         <>
           <p className="black-heading-title text-center mt-3">
-            Cancel Contract
+            {showModal.pauseApproval ? 'Pause Agreement' : 'Cancel Agreement'}
           </p>
+          {!bgsManagerEmail ? (
+            <p className="long-text mb-2 text-center ">
+              For approval please add the{' '}
+              <span
+                className="cursor"
+                style={{ color: Theme.orange }}
+                onClick={() => addBGSMangerEmail()}
+                role="presentation">
+                BGS Manager
+              </span>{' '}
+              first.
+            </p>
+          ) : (
+            ''
+          )}
           <p className="long-text mb-2 text-center ">
             {' '}
-            Are you sure you would like to request approval to cancel this
-            contract?
+            Are you sure you would like to request approval to{' '}
+            {showModal.pauseApproval ? 'pause' : 'cancel'} this agreement?
           </p>
         </>
       );
@@ -478,22 +684,59 @@ export default function AgreementDetails({ id, userId }) {
     if (showModal.pause) {
       return (
         <>
-          <h4 className="on-boarding mb-3 pb-2">Pause Contract</h4>
-
+          <h4 className="on-boarding mb-3 pb-2">Pause Agreement</h4>
+          {!bgsManagerEmail ? (
+            <p className="long-text mb-2 pb-1">
+              For approval please add the{' '}
+              <span
+                className="cursor"
+                style={{ color: Theme.orange }}
+                onClick={() => addBGSMangerEmail()}
+                role="presentation">
+                BGS Manager
+              </span>{' '}
+              first.
+            </p>
+          ) : (
+            ''
+          )}
           <p className="long-text mb-2 pb-1">
             {' '}
             Before you proceed, please enter the duration to pause this
-            contract.
+            agreement.
           </p>
           <div className="row">
             <div className="col-6">
               <ContractFormField>
-                <Select />
+                <DatePicker
+                  minDate={new Date()}
+                  className="form-control"
+                  id="date"
+                  placeholder="Start Date"
+                  value={pauseDateDetails.start_date}
+                  onChange={(date) => handleChange(date, 'start_date')}
+                  format="MM-dd-yyyy"
+                  clearIcon={null}
+                />
               </ContractFormField>
             </div>
             <div className="col-6">
               <ContractFormField>
-                <Select />
+                <DatePicker
+                  minDate={
+                    pauseDateDetails.start_date &&
+                    dayjs(pauseDateDetails.start_date).add(1, 'day') &&
+                    dayjs(pauseDateDetails.start_date).add(1, 'day').$d
+                  }
+                  className="form-control"
+                  id="date"
+                  placeholder="End Date"
+                  value={pauseDateDetails.end_date}
+                  onChange={(date) => handleChange(date, 'end_date')}
+                  format="MM-dd-yyyy"
+                  clearIcon={null}
+                  disabled={!pauseDateDetails.start_date}
+                />
               </ContractFormField>
             </div>
           </div>
@@ -502,29 +745,64 @@ export default function AgreementDetails({ id, userId }) {
     }
     return (
       <>
-        <p className="black-heading-title text-center  mt-2">Delete Contract</p>
+        <p className="black-heading-title text-center  mt-2">
+          Delete Agreement
+        </p>
         <div className="alert-msg pb-3 ">
-          Are you sure you would like to delete this contract?
+          Are you sure you would like to delete this agreement?
           <div className="sure-to-proceed">This action cannot be undone.</div>
         </div>
       </>
     );
   };
 
-  const saveDetails = () => {
-    setIsLoading(true);
+  const transactionalAPI = (type) => {
     const data = {
       contract: showModal.agreementId,
-      contract_status: 'pending for cancellation',
-      primary_email: 'vchavan+1908@buyboxexperts.com',
+      primary_email: bgsManagerEmail,
+      contract_status: type,
       user: userId,
     };
+
+    createTransactionData(data).then((response) => {
+      if (response.status === 200 || response.status === 201) {
+        setShowModal(false);
+        setIsLoading(false);
+        const statusName = showModal.pause ? 'Pausing' : 'Cancelling';
+        toast.success(
+          `We have emailed the BGS manager for ${statusName} your agreement.`,
+        );
+        dispatch(getAccountDetails(id));
+        getActivityLogInfo();
+      }
+    });
+  };
+
+  const saveDetails = () => {
+    setIsLoading(true);
     if (showModal.cancel) {
-      createTransactionData(data).then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          setShowModal(false);
-          setIsLoading(false);
+      transactionalAPI('pending for cancellation');
+    } else if (showModal.pauseApproval) {
+      setIsLoading(true);
+      const detail = {
+        contract: showModal.agreementId,
+        start_date: dayjs(pauseDateDetails.start_date).format('YYYY-MM-DD'),
+        end_date: dayjs(pauseDateDetails.end_date).format('YYYY-MM-DD'),
+      };
+      savePauseAgreement(null, detail).then((res) => {
+        if ((res && res.status === 201) || (res && res.status === 200)) {
+          transactionalAPI('active pending for pause');
         }
+      });
+    } else if (showModal.pause) {
+      setShowModal({ ...showModal, pauseApproval: true });
+      setIsLoading(false);
+    } else {
+      deleteContract(showModal.agreementId).then(() => {
+        setShowModal(false);
+        setIsLoading(false);
+        dispatch(getAccountDetails(id));
+        toast.success('Your Agreement is deleted successfully.');
       });
     }
   };
@@ -620,7 +898,9 @@ export default function AgreementDetails({ id, userId }) {
             id={id}
             agreements={multipleAgreement.filter(
               (op) =>
-                op.contract_status && op.contract_status.value === 'inactive',
+                (op.contract_status &&
+                  op.contract_status.value === 'inactive') ||
+                (op.contract_status && op.contract_status.value === 'cancel'),
             )}
           />
         ) : (
@@ -636,7 +916,10 @@ export default function AgreementDetails({ id, userId }) {
               src={CloseIcon}
               alt="close"
               className="float-right cursor cross-icon"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setPauseDateDetails({ start_date: null, end_date: null });
+              }}
               role="presentation"
             />
           ) : (
@@ -650,10 +933,16 @@ export default function AgreementDetails({ id, userId }) {
                 <div className="col-6 mt-4">
                   <Button
                     className="btn-primary w-100"
-                    onClick={() => saveDetails()}>
+                    onClick={() => saveDetails()}
+                    disabled={
+                      showModal.pause
+                        ? !pauseDateDetails.start_date ||
+                          !pauseDateDetails.end_date
+                        : !bgsManagerEmail && !showModal.delete
+                    }>
                     {isLoading ? (
                       <PageLoader color="#fff" type="button" />
-                    ) : showModal.cancel ? (
+                    ) : showModal.cancel || showModal.pauseApproval ? (
                       'Request Approval'
                     ) : showModal.pause ? (
                       'Confirm Duration'
@@ -665,8 +954,34 @@ export default function AgreementDetails({ id, userId }) {
                 <div className="col-6 mt-4">
                   <Button
                     className="btn-transparent w-100"
-                    onClick={() => setShowModal(false)}>
-                    {showModal.cancel
+                    onClick={() => {
+                      if (showModal.pause)
+                        setPauseDateDetails({
+                          start_date: null,
+                          end_date: null,
+                        });
+
+                      if (showModal.pauseApproval) {
+                        setPauseDateDetails({
+                          ...pauseDateDetails,
+                        });
+                        setShowModal({
+                          ...showModal,
+                          pause: true,
+                          pauseApproval: false,
+                          cancel: false,
+                          delete: false,
+                        });
+                      } else
+                        setShowModal({
+                          ...showModal,
+                          pause: false,
+                          pauseApproval: false,
+                          cancel: false,
+                          delete: false,
+                        });
+                    }}>
+                    {showModal.cancel || showModal.pauseApproval
                       ? "Don't Request"
                       : showModal.pause
                       ? 'Cancel'
@@ -700,6 +1015,12 @@ AgreementDetails.propTypes = {
     }),
   }).isRequired,
   userId: PropTypes.string.isRequired,
+  setShowMemberList: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  showModal: PropTypes.objectOf(PropTypes.object).isRequired,
+  userRole: PropTypes.string.isRequired,
+  customerStatus: PropTypes.string.isRequired,
+  getActivityLogInfo: PropTypes.func.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`

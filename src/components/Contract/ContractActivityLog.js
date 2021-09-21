@@ -50,7 +50,7 @@ function ContractActivityLog({
         case 'pending contract approval':
           statusClass = '';
           statusSrc = CheckFileIcon;
-          dispalyStatus = 'Pending Approval';
+          dispalyStatus = 'Pending Contract Approval';
           break;
 
         case 'pending contract signature':
@@ -87,6 +87,12 @@ function ContractActivityLog({
           statusClass = '';
           statusSrc = '';
           dispalyStatus = 'Pending for cancellation';
+          break;
+
+        case 'pause':
+          statusClass = '';
+          statusSrc = '';
+          dispalyStatus = 'Pause';
           break;
 
         default:
@@ -209,6 +215,82 @@ function ContractActivityLog({
           {activityMessage[0]}
           <span>updated </span>
           addendum
+        </>
+      );
+    }
+
+    if (item.history_change_reason.includes('resumed')) {
+      activityMessage = item.history_change_reason.split('resumed');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>resumed</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+
+    if (item.history_change_reason.includes('approved and sent')) {
+      activityMessage = item.history_change_reason.split('approved and sent');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>approved and sent </span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+
+    if (item.history_change_reason.includes('sent')) {
+      activityMessage = item.history_change_reason.split('sent');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>sent</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+
+    if (item.history_change_reason.includes('signed')) {
+      activityMessage = item.history_change_reason.split('signed');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>signed</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+
+    if (item.history_change_reason.includes('approved')) {
+      activityMessage = item.history_change_reason.split('approved');
+      logUser = activityMessage[0];
+      if (activityMessage[1].includes('from')) {
+        field = activityMessage[1].split('from')[0];
+        oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
+        newValue = activityMessage[1]
+          .split('from')[1]
+          .split(' to ')[1]
+          .split(', ,')[0];
+
+        return (
+          <>
+            {activityMessage && activityMessage[0]}
+            <span>
+              approved{' '}
+              {activityMessage && activityMessage[1].split(' from ')[0]} from{' '}
+            </span>{' '}
+            {oldValue}
+            <span> to </span> {newValue}
+          </>
+        );
+      }
+      return (
+        <>
+          {activityMessage[0]}
+          <span>approved</span>
+          {activityMessage[1]}
         </>
       );
     }

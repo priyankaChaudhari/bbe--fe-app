@@ -41,6 +41,7 @@ const Button = styled.button`
     border: 1px solid ${Theme.gray35};
     color: ${Theme.black};
     font-weight: 600;
+    word-break: keep-all;
 
     &.view-contract {
       font-size: ${Theme.extraNormal};
@@ -212,12 +213,12 @@ const Button = styled.button`
     width: 110px;
   }
 
-  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
-    font-size: ${Theme.normalRes};
-    &.btn-add-contact {
-      font-size: ${Theme.smallRes};
-    }
-  }
+  // @media only screen and (min-width: 1700px) and (max-width: 1920px) {
+  //   font-size: ${Theme.normalRes};
+  //   &.btn-add-contact {
+  //     font-size: ${Theme.smallRes};
+  //   }
+  // }
   @media only screen and (max-width: 1200px) {
     &.upload-asset {
       width: 152px;

@@ -63,6 +63,13 @@ export default function NavigationHeader({
         askSomeoneData(detail).then((stepResponse) => {
           if (stepResponse && stepResponse.status === 201) {
             history.push(skipStep);
+            if (stepName === 'digital presence') {
+              askSomeoneData({
+                email: '',
+                step: 'billing information',
+                customer_onboarding: userInfo.customer_onboarding,
+              });
+            }
           }
         });
       } else {

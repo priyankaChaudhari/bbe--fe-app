@@ -52,6 +52,8 @@ export {
   getDspPacingDahboardData,
   getFinanceInvoices,
   getDSPFinances,
+  getDSPBillingMetrics,
+  getBills,
 } from './AdDashboradApi';
 
 // Choices
@@ -104,6 +106,12 @@ export {
   getContractActivityLog,
   createContract,
   getBGSManagers,
+  deleteContract,
+  savePauseAgreement,
+  getPauseAgreement,
+  updatePauseAgreement,
+  getAmendment,
+  getPauseAgreementDetails,
 } from './AgreementApi';
 
 // Knowledge Base

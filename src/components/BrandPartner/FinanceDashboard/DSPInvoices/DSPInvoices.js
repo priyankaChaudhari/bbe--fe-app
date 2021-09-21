@@ -2,20 +2,27 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 // import { DateRange } from 'react-date-range';
 // import { enGB } from 'react-date-range/src/locale';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { func } from 'prop-types';
-import { Card, ModalRadioCheck, Button } from '../../../common';
-import { CaretUp, CloseIcon } from '../../../theme/images/index';
-import ErrorMsg from '../../../common/ErrorMsg';
+import {
+  Card,
+  ModalRadioCheck,
+  Button,
+  CustomDateRange,
+} from '../../../../common';
+import { CaretUp, CloseIcon } from '../../../../theme/images/index';
+import ErrorMsg from '../../../../common/ErrorMsg';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
-} from '../../../constants/DashboardConstants';
-import Theme from '../../../theme/Theme';
-import { getDSPFinances } from '../../../api';
+  monthNames,
+} from '../../../../constants/DashboardConstants';
+import Theme from '../../../../theme/Theme';
+import { getDSPFinances } from '../../../../api';
 
-export default function FinanceDSP({
+export default function DSPInvoices({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
@@ -34,21 +41,11 @@ export default function FinanceDSP({
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
-
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
+  const [dummayDateRange, setDummayDateRange] = useState([
+    currentDate,
+    currentDate,
+  ]);
+  const [range, setRange] = useState([currentDate, currentDate]);
 
   // const handleClickOutside = (event) => {
   //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -86,17 +83,22 @@ export default function FinanceDSP({
   };
 
   const handleApply = () => {
-    if (state !== null) {
+    if (dummayDateRange !== null) {
+      setState(dummayDateRange);
       setDateError(null);
-      let sd = state[0];
-      let ed = state[1];
+      let sd = dummayDateRange[0];
+      let ed = dummayDateRange[1];
       setSelectedDateType(dummyDateType);
       setTimeFrameType(dummyDateType);
       setShowDropdown({ show: !showDropdown.show });
       setIsTimeFrameChange(true);
       if (dummyDateType === 'custom') {
-        sd = `${state[0].getMonth() + 1}-${state[0].getFullYear()}`;
-        ed = `${state[1].getMonth() + 1}-${state[1].getFullYear()}`;
+        sd = `${
+          dummayDateRange[0].getMonth() + 1
+        }-${dummayDateRange[0].getFullYear()}`;
+        ed = `${
+          dummayDateRange[1].getMonth() + 1
+        }-${dummayDateRange[1].getFullYear()}`;
         setTimeFrame({
           startDate: sd,
           endDate: ed,
@@ -109,6 +111,17 @@ export default function FinanceDSP({
     } else {
       setDateError('Please select valid date');
     }
+  };
+
+  const onDateChange = (date) => {
+    if (date[1] === null) {
+      setDummayDateRange([date[0], date[0]]);
+      // setState([date[0], date[0]]);
+    } else {
+      setDummayDateRange(date);
+      // setState(date);
+    }
+    setRange(date);
   };
 
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
@@ -125,12 +138,18 @@ export default function FinanceDSP({
     if (selectedDateType === 'allTime') {
       return 'All-Time';
     }
-    const customDateLabel = `${
+    const startMonth = `${
       monthNames[state[0].getMonth()]
-    } '${state[0].getFullYear()} - ${
+    } '${state[0].getFullYear()}`;
+
+    const endMonth = `${
       monthNames[state[1].getMonth()]
     } '${state[1].getFullYear()}`;
-    return customDateLabel;
+
+    if (startMonth === endMonth) {
+      return startMonth;
+    }
+    return `${startMonth} - ${endMonth}`;
   };
 
   const displayTimeFilterOption = () => {
@@ -175,36 +194,37 @@ export default function FinanceDSP({
             </li>
           ))}
         </ul>{' '}
-        {dummyDateType === 'custom' ? (
-          // <DateRange
-          //   ranges={state}
-          //   date={new Date()}
-          //   onChange={(itemData) => setState([itemData.selection])}
-          //   dateFormat="MMM yyyy"
-          //   showDateDisplay={false}
-          //   locale={enGB}
-          //   editableDateInputs
-          //   showMonthAndYearPickers
-          //   moveRangeOnFirstSelection={false}
-          //   maxDate={currentDate}
-          //   rangeColors={[Theme.orange]}
-          //   weekdayDisplayFormat="EEEEE"
-          // />
-          <div className="text-left">
-            <DateRangePicker
-              onChange={setState}
-              maxDetail="year"
-              format="MMM yyyy"
-              defaultView="year"
-              maxDate={currentDate}
-              value={state}
-              monthPlaceholder="MMM"
-              yearPlaceholder="yyyy"
-              onCalendarClose={() => setDateError(null)}
-              clearAriaLabel="Clear value"
-            />
-          </div>
-        ) : null}
+        <CustomDateRange>
+          {dummyDateType === 'custom' ? (
+            // <DateRange
+            //   ranges={state}
+            //   date={new Date()}
+            //   onChange={(itemData) => setState([itemData.selection])}
+            //   dateFormat="MMM yyyy"
+            //   showDateDisplay={false}
+            //   locale={enGB}
+            //   editableDateInputs
+            //   showMonthAndYearPickers
+            //   moveRangeOnFirstSelection={false}
+            //   maxDate={currentDate}
+            //   rangeColors={[Theme.orange]}
+            //   weekdayDisplayFormat="EEEEE"
+            // />
+            <div className="text-left">
+              <DatePicker
+                selected={new Date()}
+                onChange={(date) => onDateChange(date)}
+                startDate={range[0]}
+                endDate={range[1]}
+                maxDate={new Date()}
+                selectsRange
+                inline
+                dateFormat="MM/yyyy"
+                showMonthYearPicker
+              />
+            </div>
+          ) : null}
+        </CustomDateRange>
         <ErrorMsg className="text-left">{dateError}</ErrorMsg>
         <Button
           className="btn-primary w-100 mt-3"
@@ -227,6 +247,8 @@ export default function FinanceDSP({
             id="clickbox"
             onClick={() => {
               setShowDropdown({ show: !showDropdown.show });
+              setRange(state);
+              setDummayDateRange(state);
             }}>
             {renderTimeFilterLabel()}
             <img
@@ -282,6 +304,7 @@ export default function FinanceDSP({
               titleColor={item.titleColor}
               prefix={dspData[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
+              type="invoices"
             />
           </li>
         ))}
@@ -293,7 +316,7 @@ export default function FinanceDSP({
     <>
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
-          <div className="medium-text-title ">DSP Finances</div>{' '}
+          <div className="medium-text-title ">DSP Invoices</div>{' '}
         </div>
         {renderTimeFilterDropDown()}
       </div>
@@ -302,13 +325,13 @@ export default function FinanceDSP({
   );
 }
 
-FinanceDSP.defaultProps = {
+DSPInvoices.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
 };
 
-FinanceDSP.propTypes = {
+DSPInvoices.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,
@@ -342,6 +365,9 @@ const DateRangeDropDown = styled.div`
     top: 15px;
     right: 15px;
     width: 16px;
+  }
+  @media only screen and (max-width: 500px) {
+    width: 290px;
   }
 `;
 

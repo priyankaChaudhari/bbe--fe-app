@@ -82,6 +82,7 @@ export default function MainContainer() {
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
   const [apiError, setApiError] = useState({});
+  const [formData, setFormData] = useState({});
 
   const customStyles = {
     content: {
@@ -102,7 +103,7 @@ export default function MainContainer() {
     {
       key: 'digital presence',
       stepof: 2,
-      title: 'Your company’s digital presence',
+      title: "Your Company's Digital Presence",
       skip: PATH_BILLING_DETAILS,
       bar: '40',
       path: 'company-details',
@@ -369,6 +370,8 @@ export default function MainContainer() {
           setApiError={setApiError}
           apiError={apiError}
           setMarketplaceDetails={setMarketplaceDetails}
+          setFormData={setFormData}
+          formData={formData}
         />
       );
     if (path === 'amazon-account')
@@ -426,8 +429,8 @@ export default function MainContainer() {
               : marketplaceDetails.type
           }>
           {marketplaceDetails && marketplaceDetails.type === 'Hybrid'
-            ? 'I don’t have an Amazon Seller account yet'
-            : 'I don’t have an Amazon account yet'}
+            ? "Our company hasn't setup an Amazon Seller account yet"
+            : "Our company hasn't setup an Amazon account yet"}
           <input
             type="checkbox"
             id={
@@ -463,6 +466,7 @@ export default function MainContainer() {
                     setMarketplaceDetails({
                       ...marketplaceDetails,
                       Seller: {},
+                      Vendor: formData.Vendor || marketplaceDetails.Vendor,
                     });
                   }
                 });

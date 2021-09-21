@@ -1,15 +1,14 @@
-/* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { shape, string } from 'prop-types';
+import { string } from 'prop-types';
 
 import { getDSPInvoiceData, getMetricsInvoiceData } from '../../../../../api';
-import { Card, PageLoader, Table } from '../../../../../common';
+import { PageLoader } from '../../../../../common';
 import Theme from '../../../../../theme/Theme';
 import MetricsInvoices from './MetricsInvoices';
 import DSPInvoiceDetails from './DSPInvoiceDetails';
 
-const DSPInvoices = ({ id, userInfo }) => {
+const DSPInvoices = ({ id }) => {
   const [loader, setLoader] = useState(false);
   const [invoicesData, setInvoicesData] = useState(null);
   const [invoiceMetricsData, setMetricsData] = useState(null);
@@ -89,7 +88,4 @@ DSPInvoices.defaultProps = {};
 
 DSPInvoices.propTypes = {
   id: string.isRequired,
-  userInfo: shape({
-    customer_onboarding: string,
-  }).isRequired,
 };

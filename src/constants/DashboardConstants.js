@@ -40,7 +40,7 @@ export const PartnersStatusOptions = [
 ];
 
 export const InvoicesSortByOptions = [
-  { value: 'created_at', label: 'Newest' },
+  { value: '', label: 'Status' },
   { value: 'monthly_budget', label: 'Amount' },
   { value: 'generated_at', label: 'Creation Date' },
   { value: 'due_date', label: 'Due Date' },
@@ -101,9 +101,80 @@ export const DSPFinanceMetrics = [
   },
 ];
 
-export const InvoiceStatusColorSet = {
+export const DSPBillingMetrics = [
+  {
+    value: 'amazonAdvertisingLLC',
+    key: 'Amazon Advertising LLC',
+    label: 'Amazon Advertising LLC',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+  {
+    value: 'amazonOnlineUKLimited',
+    key: 'Amazon Online UK Limited',
+    label: 'Amazon Online UK Limited',
+    titleColor: '#333333',
+    prefix: '£',
+    postfix: '',
+  },
+  {
+    value: 'amazonOnlineUKLimitedEur',
+    key: 'Amazon Online UK Limited (EUR)',
+    label: 'Amazon Online UK Limited (EUR)',
+    titleColor: '#D60000',
+    prefix: '€',
+    postfix: '',
+  },
+  {
+    value: 'amazonCommercialServicesPtyLtd',
+    key: 'Amazon Commercial Services Pty Ltd.',
+    label: 'Amazon Commercial Services Pty Ltd',
+    titleColor: '#333333',
+    prefix: 'A$',
+    postfix: '',
+  },
+];
+
+export const StatusColorSet = {
   open: '#FDF3D7',
   draft: '#FDF377',
   overdue: '#F7D7DB',
   paid: '#E3F2D2',
+  created: '#FDF3D7',
 };
+
+export const BillingVendorOptions = [
+  { value: 'Amazon Advertising LLC', label: 'Amazon Advertising LLC' },
+  { value: 'Amazon Online UK Limited', label: 'Amazon Online UK Limited' },
+  {
+    value: 'Amazon Online UK Limited (EUR)',
+    label: 'Amazon Online UK Limited (EUR)',
+  },
+  {
+    value: 'Amazon Commercial Services Pty Ltd',
+    label: 'Amazon Commercial Services Pty Ltd.',
+  },
+];
+
+export const BillingSortByOptions = [
+  { value: '', label: 'Status' },
+  { value: 'amount', label: 'Amount' },
+  { value: 'bill_date', label: 'Bill Date' },
+  { value: 'due_date', label: 'Due Date' },
+];
+
+export const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];

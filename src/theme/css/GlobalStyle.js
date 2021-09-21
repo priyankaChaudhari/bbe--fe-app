@@ -2,6 +2,7 @@
 import { createGlobalStyle } from 'styled-components';
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
+// import NoahRegular from '../fonts/noah-font/Noah Regular.otf';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
@@ -23,7 +24,7 @@ const bodyStyles = createGlobalStyle`
   }  
  
    @font-face {
-    font-family: 'Noah-Regular';
+    font-family: 'Noah Regular';
     src: url(${NoahRegular});
   } 
   @font-face {
@@ -89,24 +90,6 @@ body {
 .is-desktop .m-signer-mobile {
   max-width: 100% !important;
 }
-
-// .page-is-loading {
-//   width: 100%;
-//   height: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   text-align: center;
-//   z-index: 9999;
-//   background: rgba(255, 255, 255, 0.6);
-// }
-
-// .loader-outer {
-//   position: relative;
-//   z-index: 999;
-//   padding-top: calc(20%);
-//   text-align: center;
-// }
 
 .container-fluid {
   height: 100%;
@@ -385,7 +368,7 @@ p {
     }
   }
   .ghq-card-content__image {
-    width: -webkit-fill-available;
+    width: -webkit-fill-available !important;
   }
 
   &.text-detail-modal {
@@ -1124,7 +1107,7 @@ fieldset {
   padding-right: 368px;
   padding-left: 30px;
   font-family: ${Theme.contactregularFontFamily};
-  padding-top: 60px;
+  padding-top: 10px;
   background-color: ${Theme.gray3};
   margin-top: 0 !important;
 
@@ -1151,7 +1134,7 @@ fieldset {
     }
 
     p.long-text {
-      font-size: ${Theme.extraNormal}; !important;
+      font-size: ${Theme.extraNormal} !important;
     }
   }
   @media only screen and (max-width: 768px) {
@@ -1161,7 +1144,7 @@ fieldset {
 
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @media only screen and (max-width: 991px) {
-      padding-top: 150px;
+      padding-top: 60px;
     }
   }
 }
@@ -1304,7 +1287,7 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
     padding-right: 0;
-    margin-top: 50px;
+    // margin-top: 50px;
      .react-pdf__Page {
         &:first-child {
           top: 110px !important;

@@ -12,12 +12,8 @@ import {
   PATH_LOGIN,
   PATH_CUSTOMER_DETAILS,
   PATH_AGREEMENT,
-  PATH_STATEMENT,
-  PATH_ADDENDUM,
+  PATH_PAUSE_AGREEMENT,
   PATH_ROOT,
-  PATH_ONE_TIME_AGREEMENT,
-  PATH_SERVICE_AMENDMENT,
-  PATH_DSP_ADDENDUM,
   PATH_ARTICLE_LIST,
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
@@ -134,11 +130,12 @@ export default function AuthenticationComponent() {
           />
           {/* Contract */}
           <Route path={PATH_AGREEMENT} exact component={ContractContainer} />
-          <Route path={PATH_STATEMENT} exact component={ContractContainer} />
-          <Route path={PATH_ADDENDUM} exact component={ContractContainer} />
-          <Route path={PATH_ONE_TIME_AGREEMENT} component={ContractContainer} />
-          <Route path={PATH_SERVICE_AMENDMENT} component={ContractContainer} />
-          <Route path={PATH_DSP_ADDENDUM} component={ContractContainer} />
+          <Route
+            path={PATH_PAUSE_AGREEMENT}
+            exact
+            component={ContractContainer}
+          />
+
           {/* Account Setup */}
           {/* Knowledge Base  */}
           {userInfo && userInfo.role !== 'Customer' ? (

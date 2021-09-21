@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import $ from 'jquery';
+import axios from 'axios';
 
 import {
   ModalBox,
@@ -27,27 +28,110 @@ export default function EditAmazonAccountDetails({
 }) {
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
 
+  const afterSuccessAPI = () => {
+    toast.success('Amazon Account details saved!');
+    setIsLoading({ loader: false, type: 'button' });
+    setShowModal(false);
+    sellerVendorCall(
+      selectedMarketplace && selectedMarketplace.account_type,
+      selectedMarketplace && selectedMarketplace.value,
+      selectedMarketplace,
+    );
+    getActivityLogInfo();
+  };
+
   const vendorAccount = (vendor) => {
     saveAmazonVendorAccount(
       vendor,
       amazonDetails && amazonDetails.Vendor && amazonDetails.Vendor.id,
     ).then((re) => {
-      if ((re && re.status === 201) || (re && re.status === 200)) {
-        toast.success('Amazon Account details saved!');
-        setIsLoading({ loader: false, type: 'button' });
-        setShowModal(false);
-        sellerVendorCall(
-          selectedMarketplace && selectedMarketplace.account_type,
-          selectedMarketplace && selectedMarketplace.value,
-          selectedMarketplace,
-        );
-        getActivityLogInfo();
-      }
+      if ((re && re.status === 201) || (re && re.status === 200))
+        afterSuccessAPI();
+
       if (re && re.status === 400) {
         setApiError(re && re.data);
         setIsLoading({ loader: false, type: 'button' });
       }
     });
+  };
+
+  const sellerAccount = (seller) => {
+    saveAmazonSellerAccount(
+      seller,
+      amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
+    ).then((res) => {
+      if ((res && res.status === 201) || (res && res.status === 200))
+        afterSuccessAPI();
+
+      if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+        setApiError(res && res.data);
+        if (
+          selectedMarketplace &&
+          selectedMarketplace.account_type === 'Hybrid'
+        ) {
+          const div = document.getElementById('scroll');
+          $('#scroll').animate(
+            {
+              scrollTop: div.scrollHeight,
+            },
+            500,
+          );
+        }
+      }
+    });
+  };
+
+  const hybridAccount = (seller, vendor) => {
+    axios
+      .all([
+        saveAmazonSellerAccount(
+          seller,
+          amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
+        ),
+        saveAmazonVendorAccount(
+          vendor,
+          amazonDetails && amazonDetails.Vendor && amazonDetails.Vendor.id,
+        ),
+      ])
+      .then(
+        axios.spread((...res) => {
+          if (
+            ((res[0] && res[0].status === 201) ||
+              (res[0] && res[0].status === 200)) &&
+            ((res[1] && res[1].status === 201) ||
+              (res[1] && res[1].status === 200))
+          )
+            afterSuccessAPI();
+          if (
+            (res[0] && res[0].status === 400) ||
+            (res[1] && res[1].status === 400)
+          ) {
+            let sel = {};
+            let ven = {};
+            if (res[0] && res[0].status === 400) {
+              sel = res[0] && res[0].data;
+            }
+            if (res[1] && res[1].status === 400) {
+              ven = res[1] && res[1].data;
+            }
+            setApiError({ Seller: sel, Vendor: ven });
+            setIsLoading({ loader: false, type: 'button' });
+            if (
+              selectedMarketplace &&
+              selectedMarketplace.account_type === 'Hybrid'
+            ) {
+              const div = document.getElementById('scroll');
+              $('#scroll').animate(
+                {
+                  scrollTop: div.scrollHeight,
+                },
+                500,
+              );
+            }
+          }
+        }),
+      );
   };
 
   const saveAccountDetails = () => {
@@ -60,54 +144,12 @@ export default function EditAmazonAccountDetails({
       ...formData.Vendor,
       marketplace: selectedMarketplace && selectedMarketplace.value,
     };
-
-    if (
-      (selectedMarketplace && selectedMarketplace.account_type === 'Seller') ||
-      (selectedMarketplace && selectedMarketplace.account_type === 'Hybrid')
-    ) {
-      return saveAmazonSellerAccount(
-        seller,
-        amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
-      ).then((res) => {
-        if ((res && res.status === 201) || (res && res.status === 200))
-          if (
-            selectedMarketplace &&
-            selectedMarketplace.account_type === 'Hybrid'
-          ) {
-            vendorAccount(vendor);
-          } else {
-            setIsLoading({ loader: false, type: 'button' });
-            toast.success('Amazon Account details saved!');
-            setShowModal(false);
-            sellerVendorCall(
-              selectedMarketplace && selectedMarketplace.account_type,
-              selectedMarketplace && selectedMarketplace.value,
-              selectedMarketplace,
-            );
-            getActivityLogInfo();
-          }
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'button' });
-          setApiError(res && res.data);
-          if (
-            selectedMarketplace &&
-            selectedMarketplace.account_type === 'Hybrid'
-          ) {
-            const div = document.getElementById('scroll');
-            $('#scroll').animate(
-              {
-                scrollTop: div.scrollHeight,
-              },
-              500,
-            );
-          }
-        }
-      });
-    }
-    if (selectedMarketplace && selectedMarketplace.account_type === 'Vendor') {
+    if (selectedMarketplace && selectedMarketplace.account_type === 'Seller')
+      sellerAccount(seller);
+    if (selectedMarketplace && selectedMarketplace.account_type === 'Vendor')
       vendorAccount(vendor);
-    }
-    return '';
+    if (selectedMarketplace && selectedMarketplace.account_type === 'Hybrid')
+      hybridAccount(seller, vendor);
   };
 
   return (

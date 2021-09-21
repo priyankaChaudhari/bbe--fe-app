@@ -134,12 +134,11 @@ export default function Info() {
                 <ul className="account-steps-check">
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
-                    Your company website url & social links
+                    Your Company&apos;s Digital Presence
                   </li>
-                  {/* and MWS token */}
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
-                    Billing and payment details
+                    Billing Information
                   </li>
                   <li>
                     <img src={OrangeCheckMark} alt="check" />

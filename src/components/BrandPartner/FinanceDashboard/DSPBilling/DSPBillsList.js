@@ -16,20 +16,20 @@ import {
   DropDownIndicator,
   PageLoader,
   CommonPagination,
-} from '../../../common';
-import TableMobileView from '../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../theme/images/index';
-import FinanceDashboardFilters from './FinanceDashboardFilters';
+} from '../../../../common';
+import TableMobileView from '../../../../common/TableMobileView';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import DSPBillingFilters from './DSPBillingFilters';
 import {
   InvoicesStatusOptions,
   InvoicesSortByOptions,
-  InvoiceStatusColorSet,
-} from '../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../api';
-import { DropDown } from '../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../constants';
+  StatusColorSet,
+} from '../../../../constants/DashboardConstants';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
-export default function FinanceInvoices({
+export default function DSPBillsList({
   timeFrame,
   timeFrameType,
   isTimeFrameChange,
@@ -47,7 +47,7 @@ export default function FinanceInvoices({
 
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: '',
-    label: 'Newest',
+    label: 'Select',
   });
   const history = useHistory();
 
@@ -104,8 +104,8 @@ export default function FinanceInvoices({
     $('.checkboxes input:radio').filter("[value='any']").prop('checked', true);
     setSelectedStatus('any');
     setSearchQuery('');
-    setSelectedSortBy({ value: 'created_at', label: 'Newest' });
-    getInvoices('', 'any', 'created_at', 1);
+    setSelectedSortBy({ value: '', label: 'Select' });
+    getInvoices('', 'any', '', 1);
   };
 
   const handleStatusChange = (event) => {
@@ -201,7 +201,15 @@ export default function FinanceInvoices({
         }>
         <td className="product-body">
           {' '}
-          <img className="company-logo" src={CompanyDefaultUser} alt="logo" />
+          <img
+            className="company-logo"
+            src={
+              item && item.customer && item.customer.profile_picture
+                ? item.customer.profile_picture
+                : CompanyDefaultUser
+            }
+            alt="logo"
+          />
           <div className="company-name">
             {item.customer && item.customer.name}
           </div>
@@ -218,9 +226,7 @@ export default function FinanceInvoices({
           <Status
             className="float-right"
             label={item.invoice_status}
-            backgroundColor={
-              InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
-            }
+            backgroundColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
           />
           <div className="clear-fix" />
         </td>
@@ -287,9 +293,7 @@ export default function FinanceInvoices({
               label2="DUE"
               labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
               status={item.invoice_status}
-              statusColor={
-                InvoiceStatusColorSet[item.invoice_status.split(' ')[0]]
-              }
+              statusColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
             />
           ))
         ) : (
@@ -301,7 +305,7 @@ export default function FinanceInvoices({
 
   return (
     <>
-      <FinanceDashboardFilters
+      <DSPBillingFilters
         searchQuery={searchQuery}
         selectedStatus={selectedStatus}
         statusOptions={InvoicesStatusOptions}
@@ -381,13 +385,13 @@ export default function FinanceInvoices({
   );
 }
 
-FinanceInvoices.defaultProps = {
+DSPBillsList.defaultProps = {
   data: shape({
     label: '',
     sub: '',
   }),
 };
-FinanceInvoices.propTypes = {
+DSPBillsList.propTypes = {
   data: shape({
     label: string,
     sub: string,

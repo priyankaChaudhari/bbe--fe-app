@@ -177,6 +177,9 @@ export default function CustomerMainContainer() {
   );
   const [noteData, setNoteData] = useState([]);
   const [marketplaceData, setMarketplaceData] = useState([]);
+  const [agreementDetailModal, setAgreementDetailModal] = useState({
+    pause: false,
+  });
 
   let statusActions = [
     { value: 'active', label: 'Activate' },
@@ -323,21 +326,21 @@ export default function CustomerMainContainer() {
   }, [id]);
 
   useEffect(() => {
-    getNotes();
+    if (userInfo && userInfo.role !== 'Customer') getNotes();
     if (showNotesModal.apiCall) {
       getNotes();
     }
     if (showNotesModal.deleteNote) {
       getActivityLogInfo();
     }
-  }, [getNotes, showNotesModal, getActivityLogInfo]);
+  }, [getNotes, showNotesModal, getActivityLogInfo, userInfo]);
 
   useEffect(() => {
     dispatch(getCustomerDetails(id));
     dispatch(getContactDetails(id));
-    getCustomerMemberList();
+    if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
     getActivityLogInfo();
-  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList]);
+  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList, userInfo]);
 
   useEffect(() => {
     if (viewComponent === 'company') {
@@ -1176,6 +1179,14 @@ export default function CustomerMainContainer() {
                     <AgreementDetails
                       id={id}
                       userId={userInfo && userInfo.id}
+                      setShowMemberList={setShowMemberList}
+                      showModal={agreementDetailModal}
+                      setShowModal={setAgreementDetailModal}
+                      userRole={userInfo && userInfo.role}
+                      customerStatus={
+                        customer && customer.status && customer.status.value
+                      }
+                      getActivityLogInfo={getActivityLogInfo}
                     />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />
@@ -1452,8 +1463,10 @@ export default function CustomerMainContainer() {
                   </div>
                 </div>
               </CustomerDetailsBody>
+              <div className="col-12 mt-5">
+                <BackToTop />
+              </div>
               {renderNotesModal()}
-              <BackToTop />
 
               <Modal
                 isOpen={showMemberList.modal}
@@ -1465,6 +1478,8 @@ export default function CustomerMainContainer() {
                     id={id}
                     getCustomerMemberList={getCustomerMemberList}
                     setShowMemberList={setShowMemberList}
+                    showMemberList={showMemberList}
+                    setAgreementDetailModal={setAgreementDetailModal}
                   />
                 ) : (
                   <EditTeamMember

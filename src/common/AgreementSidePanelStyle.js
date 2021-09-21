@@ -417,7 +417,11 @@ const SidePanel = styled.div`
       border-bottom: 1px solid #EEF3F5;
       width: 100%;
       text-align: left;
+      &.label-addendum {
+        border-bottom: none;
+      }
     }
+
     .text-delete {
       text-decoration: line-through;
     }
@@ -449,7 +453,9 @@ const SidePanel = styled.div`
     }
   }
 
-
+  @media only screen and (max-width: 767px) {
+    top: 200px !important;
+  }
   @media only screen and (max-width: 991px) {  
     z-index: 1;
     padding-bottom: 390px;

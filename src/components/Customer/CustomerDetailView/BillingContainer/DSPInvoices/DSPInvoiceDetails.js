@@ -8,7 +8,7 @@ import { arrayOf, bool } from 'prop-types';
 import Theme from '../../../../../theme/Theme';
 import TableMobileView from '../../../../../common/TableMobileView';
 import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
-import { InvoiceStatusColorSet } from '../../../../../constants/DashboardConstants';
+import { StatusColorSet } from '../../../../../constants/DashboardConstants';
 
 const DSPInvoiceDetails = ({ loader, data }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -43,10 +43,10 @@ const DSPInvoiceDetails = ({ loader, data }) => {
                 invoiceId={item.invoiced_id}
                 status={item.invoice_status}
                 statusColor={
-                  InvoiceStatusColorSet[
+                  StatusColorSet[
                     item.invoice_status.split(' ')[0].toLowerCase()
                   ]
-                    ? InvoiceStatusColorSet[
+                    ? StatusColorSet[
                         item.invoice_status.split(' ')[0].toLowerCase()
                       ]
                     : '#E3F2D2'
@@ -110,10 +110,8 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             className="float-right"
             label={item.invoice_status}
             backgroundColor={
-              InvoiceStatusColorSet[
-                item.invoice_status.split(' ')[0].toLowerCase()
-              ]
-                ? InvoiceStatusColorSet[
+              StatusColorSet[item.invoice_status.split(' ')[0].toLowerCase()]
+                ? StatusColorSet[
                     item.invoice_status.split(' ')[0].toLowerCase()
                   ]
                 : '#E3F2D2'

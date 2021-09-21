@@ -11,19 +11,46 @@ const Card = ({
   title,
   subTitle,
   titleColor,
+  noBill,
+  totalBill,
+  noBillText,
+  totalBillText,
   prefix = null,
   postfix = null,
+  type,
 }) => (
   <CardWrapper className={[className]}>
     <p className="heading mt-0">{heading}</p>
-    <div style={{ marginBottom: subTitle ? '20px' : '32px' }}>
-      <p style={{ color: titleColor }} className="title">
-        {prefix}
-        {title}
-        {postfix}
-      </p>
-      {subTitle ? <p className="sub-title">{subTitle}</p> : null}
-    </div>
+    {type === 'invoices' ? (
+      <>
+        <div style={{ marginBottom: subTitle ? '20px' : '32px' }}>
+          <p style={{ color: titleColor }} className="title">
+            {prefix}
+            {title}
+            {postfix}
+          </p>
+
+          {subTitle ? <p className="sub-title">{subTitle}</p> : null}
+        </div>
+      </>
+    ) : (
+      <ul className="billing">
+        <li>
+          {' '}
+          <p className="title">{noBill}</p>
+          <p className="sub-title">{noBillText}</p>
+        </li>
+        <li>
+          {' '}
+          <p className="title">
+            {prefix}
+            {totalBill}
+            {postfix}
+          </p>
+          <p className="sub-title">{totalBillText}</p>
+        </li>
+      </ul>
+    )}
   </CardWrapper>
 );
 
@@ -45,7 +72,19 @@ const CardWrapper = styled.div`
     font-weight: bold;
     margin-bottom: 15px;
   }
-
+  .billing {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+    li {
+      display: inline-block;
+      margin-right: 25px;
+      color: ${Theme.gray80};
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
   p.title {
     margin-bottom: 2px !important;
     margin-top: 0px !important;
@@ -76,6 +115,11 @@ Card.defaultProps = {
   titleColor: Theme.gray80,
   prefix: null,
   postfix: null,
+  noBill: '',
+  totalBill: '',
+  noBillText: '',
+  totalBillText: '',
+  type: '',
 };
 
 Card.propTypes = {
@@ -86,4 +130,9 @@ Card.propTypes = {
   titleColor: string,
   prefix: string,
   postfix: string,
+  noBill: string,
+  totalBill: string,
+  noBillText: string,
+  totalBillText: string,
+  type: string,
 };

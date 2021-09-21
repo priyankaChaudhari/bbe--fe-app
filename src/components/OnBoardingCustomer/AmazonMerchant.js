@@ -57,10 +57,11 @@ export default function AmazonMerchant({
   apiError,
   setApiError,
   setMarketplaceDetails,
+  setFormData,
+  formData,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
   const params = queryString.parse(history.location.search);
   const [latestId, setLatestId] = useState({ Seller: null, Vendor: null });
 
@@ -472,14 +473,72 @@ export default function AmazonMerchant({
   };
 
   const disableBtn = () => {
-    if (
-      formData.Seller !== null ||
-      formData.Vendor !== null ||
-      noAmazonAccount.Seller !== null ||
-      noAmazonAccount.Vendor !== null
-    )
+    if (marketplaceDetails.type === 'Hybrid') {
+      if (noAmazonAccount.Seller && noAmazonAccount.Vendor) return false;
+      if (
+        noAmazonAccount.Seller &&
+        formData.Vendor &&
+        formData.Vendor.vendor_central_name &&
+        formData.Vendor &&
+        formData.Vendor.vendor_code &&
+        formData.Vendor &&
+        formData.Vendor.advertiser_name &&
+        formData.Vendor &&
+        formData.Vendor.advertiser_id
+      )
+        return false;
+      if (
+        noAmazonAccount.Vendor &&
+        formData.Seller &&
+        formData.Seller.seller_central_name &&
+        formData.Seller &&
+        formData.Seller.merchant_id &&
+        formData.Seller &&
+        formData.Seller.advertiser_name &&
+        formData.Seller &&
+        formData.Seller.advertiser_id
+      )
+        return false;
+      if (
+        !formData.Seller ||
+        !(formData.Seller && formData.Seller.seller_central_name) ||
+        !(formData.Seller && formData.Seller.merchant_id) ||
+        !(formData.Seller && formData.Seller.advertiser_name) ||
+        !(formData.Seller && formData.Seller.advertiser_id) ||
+        !formData.Vendor ||
+        !(formData.Vendor && formData.Vendor.vendor_central_name) ||
+        !(formData.Vendor && formData.Vendor.vendor_code) ||
+        !(formData.Vendor && formData.Vendor.advertiser_name) ||
+        !(formData.Vendor && formData.Vendor.advertiser_id)
+      )
+        return true;
       return false;
-    return true;
+    }
+    if (marketplaceDetails.type === 'Seller') {
+      if (noAmazonAccount.Seller) return false;
+      if (
+        !formData.Seller ||
+        !(formData.Seller && formData.Seller.seller_central_name) ||
+        !(formData.Seller && formData.Seller.merchant_id) ||
+        !(formData.Seller && formData.Seller.advertiser_name) ||
+        !(formData.Seller && formData.Seller.advertiser_id)
+      )
+        return true;
+      return false;
+    }
+    if (marketplaceDetails.type === 'Vendor') {
+      if (noAmazonAccount.Vendor) return false;
+      if (
+        !formData.Vendor ||
+        !(formData.Vendor && formData.Vendor.vendor_central_name) ||
+        !(formData.Vendor && formData.Vendor.vendor_code) ||
+        !(formData.Vendor && formData.Vendor.advertiser_name) ||
+        !(formData.Vendor && formData.Vendor.advertiser_id)
+      )
+        return true;
+      return false;
+    }
+    return false;
   };
 
   const generateSaveBtn = (part) => {
@@ -607,7 +666,7 @@ export default function AmazonMerchant({
             : ' mb-4'
         }>
         <label className="check-container customer-pannel " htmlFor="Vendor">
-          I don’t have an Amazon Vendor account yet
+          Our company hasn&apos;t setup an Amazon Vendor account yet
           <input
             type="checkbox"
             id="Vendor"
@@ -631,6 +690,7 @@ export default function AmazonMerchant({
                   if (res && res.status === 204) {
                     setMarketplaceDetails({
                       ...marketplaceDetails,
+                      Seller: formData.Seller || marketplaceDetails.Seller,
                       Vendor: {},
                     });
                   }
@@ -739,6 +799,8 @@ AmazonMerchant.defaultProps = {
   setApiError: () => {},
   apiError: {},
   setMarketplaceDetails: () => {},
+  setFormData: () => {},
+  formData: {},
 };
 
 AmazonMerchant.propTypes = {
@@ -795,4 +857,9 @@ AmazonMerchant.propTypes = {
   setApiError: PropTypes.func,
   apiError: PropTypes.objectOf(PropTypes.array),
   setMarketplaceDetails: PropTypes.func,
+  setFormData: PropTypes.func,
+  formData: PropTypes.shape({
+    Seller: PropTypes.objectOf(PropTypes.Object),
+    Vendor: PropTypes.objectOf(PropTypes.Object),
+  }),
 };

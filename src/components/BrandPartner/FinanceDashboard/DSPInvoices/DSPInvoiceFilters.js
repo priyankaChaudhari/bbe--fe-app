@@ -8,11 +8,11 @@ import {
   InputSearchWithRadius,
   WhiteCard,
   ModalRadioCheck,
-} from '../../../common';
+} from '../../../../common';
 
-import { SearchIcon, CaretUp } from '../../../theme/images/index';
+import { SearchIcon, CaretUp } from '../../../../theme/images/index';
 
-export default function FinanceDashboardFilters({
+export default function DSPInvoiceFilters({
   searchQuery,
   selectedStatus,
   statusOptions,
@@ -81,53 +81,51 @@ export default function FinanceDashboardFilters({
   };
 
   return (
-    <div className="col-lg-3 col-md-12">
-      <WhiteCard className="mb-2">
-        <div className="row ">
-          <div className="col-6">
-            <div className="black-heading-title ">Filters</div>
-          </div>
-          <div className="col-5 text-right">
-            <div
-              role="presentation"
-              className="gray-normal-text cursor"
-              onClick={() => handleResetFilter()}>
-              Reset filters
-            </div>
-          </div>
-          {!isDesktop ? (
-            <div
-              role="presentation"
-              onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
-              <div className="black-heading-title ">
-                <img
-                  src={CaretUp}
-                  alt="caret"
-                  style={{
-                    transform: isCollapseOpen ? 'rotate(180deg)' : '',
-                    width: '25px',
-                    height: '25px',
-                    position: ' absolute',
-                    right: '12px',
-                    top: '18px',
-                  }}
-                />
-              </div>
-            </div>
-          ) : null}
-          {isDesktop || isCollapseOpen ? (
-            <>
-              {renderSearchFunctionality()}
-              {renderStatus()}
-            </>
-          ) : null}
+    <WhiteCard className="mb-2">
+      <div className="row ">
+        <div className="col-6">
+          <div className="black-heading-title ">Filters</div>
         </div>
-      </WhiteCard>
-    </div>
+        <div className="col-5 text-right">
+          <div
+            role="presentation"
+            className="gray-normal-text cursor"
+            onClick={() => handleResetFilter()}>
+            Reset filters
+          </div>
+        </div>
+        {!isDesktop ? (
+          <div
+            role="presentation"
+            onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
+            <div className="black-heading-title ">
+              <img
+                src={CaretUp}
+                alt="caret"
+                style={{
+                  transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                  width: '25px',
+                  height: '25px',
+                  position: ' absolute',
+                  right: '12px',
+                  top: '18px',
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
+        {isDesktop || isCollapseOpen ? (
+          <>
+            {renderSearchFunctionality()}
+            {renderStatus()}
+          </>
+        ) : null}
+      </div>
+    </WhiteCard>
   );
 }
 
-FinanceDashboardFilters.defaultProps = {
+DSPInvoiceFilters.defaultProps = {
   searchQuery: '',
   selectedStatus: '',
   statusOptions: [],
@@ -136,7 +134,7 @@ FinanceDashboardFilters.defaultProps = {
   handleStatusChange: () => {},
 };
 
-FinanceDashboardFilters.propTypes = {
+DSPInvoiceFilters.propTypes = {
   searchQuery: string,
   selectedStatus: string,
   statusOptions: arrayOf(Array),

@@ -148,6 +148,14 @@ export default function AskSomeone({
         customer_onboarding: userInfo && userInfo.customer_onboarding,
         step,
       };
+      if (step === 'digital presence') {
+        askSomeoneData({
+          is_completed: false,
+          email: '',
+          step: 'billing information',
+          customer_onboarding: userInfo && userInfo.customer_onboarding,
+        });
+      }
       askSomeoneData(data).then((response) => {
         if (response && response.status === 201) {
           setStepData(response && response.data);

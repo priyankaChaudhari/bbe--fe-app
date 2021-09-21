@@ -34,9 +34,11 @@ import {
   createTransactionData,
   sendReminderOfContract,
   getTransactionData,
+  getBGSManagers,
 } from '../../api/index';
 // import { getAccountDetails } from '../../store/actions/accountState';
 import { getContactDetails } from '../../store/actions/customerState';
+import AddTeamMember from '../Team/AddTeamMember';
 
 // import { PATH_AGREEMENT } from '../../constants';
 
@@ -79,6 +81,13 @@ function RequestSignature({
   const [contactModalName, setModalName] = useState('Add Contact');
   const [transactionalData, setTransactionalData] = useState(null);
   const [requestSignatureError, setRequestSignatureError] = useState(null);
+  const [BGSManager, setBGSManagerData] = useState(null);
+  const [showAddTeamMember, setShowAddTeamMember] = useState(false);
+  const [showMemberList, setShowMemberList] = useState({
+    show: false,
+    add: false,
+    modal: false,
+  });
 
   const contactFields = [
     {
@@ -112,6 +121,14 @@ function RequestSignature({
       classname: 'col-6',
     },
   ];
+  const getBGSManagersData = () => {
+    getBGSManagers(id).then((managerData) => {
+      if (managerData && managerData.status === 200) {
+        setBGSManagerData(managerData && managerData.data);
+      }
+      setIsLoading({ loader: false, type: 'page' });
+    });
+  };
   useEffect(() => {
     dispatch(getContactDetails(id));
     if (params && params.step && params.step === 'send-remainder')
@@ -123,6 +140,11 @@ function RequestSignature({
         );
       });
     setIsLoading({ loader: false, type: 'page' });
+
+    if (agreementData && agreementData.draft_from) {
+      setIsLoading({ loader: true, type: 'page' });
+      getBGSManagersData();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -423,12 +445,19 @@ function RequestSignature({
       ...approvalNote,
       user: userInfo.id,
       contract: agreementData.id,
-      primary_email: 'thay@buyboxexperts.com',
       contract_status: 'pending contract approval',
       contract_data: pdfData
         .replaceAll('PRINTED_NAME', mapValue('printed_name'))
         .replace('CUSTOMER_ROLE', mapValue('customer_role')),
     };
+
+    if (agreementData && agreementData.draft_from) {
+      requestApprovalData.primary_email =
+        BGSManager && BGSManager.email ? BGSManager && BGSManager.email : '';
+    } else {
+      requestApprovalData.primary_email = 'thay@buyboxexperts.com';
+    }
+
     setIsLoading({ loader: true, type: 'button' });
 
     createTransactionData(requestApprovalData).then(
@@ -615,6 +644,130 @@ function RequestSignature({
     // );
   };
 
+  const getActivityInitials = () => {
+    const firstName =
+      (BGSManager &&
+        BGSManager.first_name &&
+        BGSManager.first_name.charAt(0)) ||
+      '';
+    const lastName =
+      (BGSManager && BGSManager.last_name && BGSManager.last_name.charAt(0)) ||
+      '';
+
+    return firstName + lastName;
+  };
+  const displayApprovalInfo = () => {
+    return (
+      <>
+        {agreementData && agreementData.draft_from ? (
+          BGSManager && BGSManager.email ? (
+            ''
+          ) : (
+            <p className="long-text mb-2 pb-1">
+              For approval please add the{' '}
+              <span
+                className="cursor"
+                style={{ color: 'red' }}
+                onClick={() => {
+                  setShowAddTeamMember(true);
+                  setShowMemberList({ add: false, show: true, modal: true });
+
+                  // setShowModal(false);
+                }}
+                role="presentation">
+                BGS Manager
+              </span>{' '}
+              first.
+            </p>
+          )
+        ) : (
+          ''
+        )}
+        <div className="edit-profile-text float-left mb-4">
+          {/* <GetInitialName property="mr-3" /> */}
+
+          {agreementData && agreementData.draft_from ? (
+            BGSManager && BGSManager.profile ? (
+              <img
+                src={BGSManager && BGSManager.profile}
+                className="default-user-activity"
+                alt="pic"
+              />
+            ) : BGSManager &&
+              BGSManager.first_name &&
+              BGSManager &&
+              BGSManager.last_name ? (
+              <div className="avatarName float-left mr-3">
+                {getActivityInitials()}
+              </div>
+            ) : (
+              ''
+            )
+          ) : (
+            <img
+              src={ThadProfileImg}
+              className="default-user-activity"
+              alt="pic"
+            />
+          )}
+          <div className="name-email">
+            <div className="team-member-name">
+              {agreementData && agreementData.draft_from
+                ? BGSManager && BGSManager.email
+                  ? `${BGSManager && BGSManager.first_name} ${
+                      BGSManager && BGSManager.last_name
+                    }`
+                  : ''
+                : 'Thaddeus Hay'}
+            </div>
+            <span>
+              {agreementData && agreementData.draft_from
+                ? BGSManager && BGSManager.email
+                  ? BGSManager && BGSManager.email
+                  : ''
+                : 'thay@buyboxexperts.com'}
+            </span>
+          </div>
+        </div>
+        {agreementData &&
+        agreementData.draft_from &&
+        BGSManager &&
+        BGSManager.email ? (
+          <FormField>
+            <textarea
+              className="form-control "
+              type="text"
+              rows="3"
+              placeholder="Add personal note to recipient"
+              name="note"
+              onChange={(event) => onRequestApprovalChange(event)}
+            />
+          </FormField>
+        ) : (
+          ''
+        )}
+        {agreementData && agreementData.draft_from ? (
+          ''
+        ) : (
+          <FormField>
+            <textarea
+              className="form-control "
+              type="text"
+              rows="3"
+              placeholder="Add personal note to recipient"
+              name="note"
+              onChange={(event) => onRequestApprovalChange(event)}
+            />
+          </FormField>
+        )}
+      </>
+    );
+  };
+  const setAgreementDetailModal = () => {
+    setIsLoading({ loader: true, type: 'page' });
+    getBGSManagersData();
+  };
+
   return (
     <>
       {params && params.step === 'verify-document' ? (
@@ -693,48 +846,50 @@ function RequestSignature({
         ''
       )}
       {params && params.step === 'request-approve' ? (
-        <>
-          <div className="modal-body on-boarding">
-            <h4 className="on-boarding mb-4">Request Approval</h4>
-            <div className="edit-profile-text float-left mb-4">
-              {/* <GetInitialName property="mr-3" /> */}
+        showAddTeamMember && (showMemberList.show || showMemberList.modal) ? (
+          <AddTeamMember
+            id={id}
+            getCustomerMemberList={null}
+            setShowMemberList={setShowMemberList}
+            showMemberList={{ ...showMemberList, requestApproval: true }}
+            setAgreementDetailModal={setAgreementDetailModal}
+          />
+        ) : (
+          <>
+            <div className="modal-body on-boarding">
+              <h4 className="on-boarding mb-4">Request Approval</h4>
+              {isLoading.loader && isLoading.type === 'page' ? (
+                <PageLoader
+                  className="modal-loader"
+                  color="#FF5933"
+                  type="page"
+                  width={40}
+                />
+              ) : (
+                <>
+                  {displayApprovalInfo()}
 
-              <img
-                src={ThadProfileImg}
-                className="default-user-activity"
-                alt="pic"
-              />
-
-              <div className="name-email">
-                <div className="team-member-name">Thaddeus Hay</div>
-                <span> thay@buyboxexperts.com</span>
-              </div>
+                  <div className=" mt-4">
+                    <Button
+                      className=" btn-primary on-boarding w-100"
+                      disabled={
+                        agreementData &&
+                        agreementData.draft_from &&
+                        !(BGSManager && BGSManager.email)
+                      }
+                      onClick={() => sendRequestApproval()}>
+                      {isLoading.loader && isLoading.type === 'button' ? (
+                        <PageLoader color="#fff" type="button" />
+                      ) : (
+                        'Request Approval'
+                      )}
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
-
-            <FormField>
-              <textarea
-                className="form-control "
-                type="text"
-                rows="3"
-                placeholder="Add personal note to recipient"
-                name="note"
-                onChange={(event) => onRequestApprovalChange(event)}
-              />
-            </FormField>
-
-            <div className=" mt-4">
-              <Button
-                className=" btn-primary on-boarding w-100"
-                onClick={() => sendRequestApproval()}>
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  'Request Approval'
-                )}
-              </Button>
-            </div>
-          </div>
-        </>
+          </>
+        )
       ) : (
         ''
       )}
@@ -996,6 +1151,7 @@ RequestSignature.propTypes = {
       name: PropTypes.string,
       id: PropTypes.string,
     }),
+    draft_from: PropTypes.string,
     additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
     additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
     steps_completed: PropTypes.objectOf(PropTypes.bool),

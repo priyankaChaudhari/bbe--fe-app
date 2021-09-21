@@ -25,7 +25,9 @@ export const WhiteCard = styled.div`
   .contract-status {
     float: left;
     max-width: 80%;
-    overflow-wrap: break-word;
+    width: 100%;
+    word-break: keep-all;
+    
   }
 
   .company-contract-height {
@@ -989,6 +991,9 @@ export const WhiteCard = styled.div`
       .order-chart-box { 
         max-width: 100%;
       }
+       .contract-status {
+         max-width: 85%;
+       }
     }
   @media only screen and (max-width: 1150px) {
      .company-label-info {

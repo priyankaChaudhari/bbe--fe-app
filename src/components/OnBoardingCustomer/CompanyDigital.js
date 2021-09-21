@@ -68,9 +68,18 @@ export default function CompanyDigital({
     setIsLoading({ loader: false, type: 'button' });
   };
 
+  const createBillingStep = () => {
+    const detail = {
+      is_completed: false,
+      email: '',
+      step: 'billing information',
+      customer_onboarding: userInfo.customer_onboarding,
+    };
+    askSomeoneData(detail);
+  };
+
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-
     updateCustomerDetails(
       userInfo.customer || verifiedStepData.customer_id,
       formData,
@@ -105,7 +114,6 @@ export default function CompanyDigital({
                 });
               } else {
                 CheckStep('digital presence');
-                // history.push(PATH_BILLING_DETAILS);
               }
               updateUserMe(userInfo.id || verifiedStepData.user_id, {
                 step: {
@@ -119,6 +127,7 @@ export default function CompanyDigital({
                   } else dispatch(userMe());
                 }
               });
+              createBillingStep();
               setIsLoading({ loader: false, type: 'button' });
             }
           });
@@ -143,7 +152,6 @@ export default function CompanyDigital({
                 });
               } else {
                 CheckStep('digital presence');
-                // history.push(PATH_AMAZON_MERCHANT);
               }
               updateUserMe(userInfo.id || verifiedStepData.user_id, {
                 step: {

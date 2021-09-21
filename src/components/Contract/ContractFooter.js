@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { PageLoader, Button } from '../../common';
+import { PageLoader, Button, ModalBox } from '../../common';
 import Theme from '../../theme/Theme';
 import { InfoIcon } from '../../theme/images';
-import { updateAccountDetails } from '../../api';
+import {
+  updateAccountDetails,
+  updatePauseAgreement,
+  getPauseAgreementDetails,
+} from '../../api';
 
+const customStylesForAlert = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    maxWidth: '474px ',
+    width: '100% ',
+    overlay: ' {zIndex: 1000}',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 export default function ContractFooter({
   details,
   setParams,
@@ -28,10 +48,15 @@ export default function ContractFooter({
   renderEditContractBtn,
   showDiscardModal,
   createAgreementDoc,
-  // setIsLoading,
+  setIsLoading,
   getContractDetails,
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
+  const { pauseId } = useParams();
+  const [showPauseModal, setShowPauseModal] = useState({
+    show: false,
+    data: {},
+  });
 
   const checkAmazonStorePriceExists = () => {
     const service =
@@ -71,16 +96,146 @@ export default function ContractFooter({
   };
 
   const updateContractData = (data) => {
-    // setIsLoading({ loader: true, type: 'page' });
+    setIsLoading({ loader: true, type: 'button' });
 
-    updateAccountDetails(details.id, data).then(() => {
-      getContractDetails();
-      // setIsLoading({ loader: false, type: 'page' });
+    updateAccountDetails(details.id, data).then((res) => {
+      if (res && res.status === 200) {
+        if (data.contract_status === 'cancel') {
+          toast.success('Cancel Contract Approved!');
+        }
+        getContractDetails();
+        setShowPauseModal({ show: false, data: {} });
+
+        setIsLoading({ loader: false, type: 'button' });
+      } else {
+        if (data.contract_status === 'cancel') {
+          toast.error(res && res.data && res.data.detail);
+        }
+        setShowPauseModal({ show: false, data: {} });
+
+        setIsLoading({ loader: false, type: 'button' });
+      }
     });
   };
 
+  const updatePauseContract = () => {
+    updatePauseAgreement(pauseId, { is_approved: true }).then((pauseRes) => {
+      if (pauseRes && pauseRes.status === 200) {
+        toast.success('Pause Contract Approved!');
+        let contractStatusData = {};
+        const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
+
+        if (
+          pauseRes &&
+          pauseRes.data &&
+          pauseRes.data.start_date === TodaysDate
+        ) {
+          contractStatusData = {
+            contract_status: 'pause',
+          };
+        } else if (details && details.is_renewed) {
+          contractStatusData = {
+            contract_status: 'renewed',
+          };
+        } else {
+          contractStatusData = {
+            contract_status: 'active',
+          };
+        }
+
+        updateContractData(contractStatusData);
+      } else {
+        toast.error(pauseRes && pauseRes.data && pauseRes.data.detail);
+        setShowPauseModal({ show: false, data: {} });
+
+        setIsLoading({ loader: false, type: 'button' });
+      }
+    });
+  };
+
+  const onClickOfUpdatePauseContract = () => {
+    setIsLoading({ loader: true, type: 'button' });
+
+    getPauseAgreementDetails(pauseId).then((res) => {
+      setIsLoading({ loader: false, type: 'button' });
+
+      if (res && res.status === 200) {
+        if (
+          res &&
+          res.data &&
+          res.data.end_date &&
+          new Date(res.data.end_date) < new Date()
+        ) {
+          setShowPauseModal({ show: true, data: res.data });
+        } else {
+          setIsLoading({ loader: true, type: 'button' });
+
+          updatePauseContract();
+        }
+      }
+    });
+  };
+
+  const isAllMandetoryFieldsFilled = () => {
+    if (
+      showRightTick('service_agreement') &&
+      showRightTick('statement') &&
+      showRightTick('dspAddendum')
+    ) {
+      return true;
+    }
+    return false;
+  };
   return (
     <>
+      {showPauseModal.show ? (
+        <Modal
+          isOpen={showPauseModal.show}
+          style={customStylesForAlert}
+          ariaHideApp={false}
+          contentLabel="Edit modal">
+          <ModalBox>
+            <div className="modal-body">
+              <div className="alert-msg ">
+                <span>
+                  Agreement pause duration was{' '}
+                  {showPauseModal.data && showPauseModal.data.start_date} to{' '}
+                  {showPauseModal.data && showPauseModal.data.end_date}.
+                </span>
+                <p>Are you sure you want to pause this Agreement?</p>
+              </div>
+              <div className="text-center ">
+                <Button
+                  onClick={() => {
+                    setIsLoading({ loader: true, type: 'button' });
+
+                    updatePauseContract();
+                    // setShowPauseModal({ show: false, data: {} });
+                  }}
+                  type="button"
+                  className="btn-primary on-boarding  mr-2 pb-2 mb-1">
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Pause Agreement'
+                  )}
+                </Button>
+                <Button
+                  onClick={() => setShowPauseModal({ show: false, data: {} })}
+                  type="button"
+                  className=" btn-transparent w-50 on-boarding ">
+                  Cancel
+                </Button>
+
+                {/* </Link> */}
+              </div>
+            </div>
+          </ModalBox>
+        </Modal>
+      ) : (
+        ''
+      )}
+
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending contract signature' ? (
@@ -172,7 +327,8 @@ export default function ContractFooter({
             <div className="container-fluid">
               {checkApprovalCondition() ? (
                 (userInfo && userInfo.role === 'Team Manager - TAM') ||
-                (userInfo && userInfo.role === 'Sales Manager') ? (
+                (userInfo && userInfo.role === 'Sales Manager') ||
+                (userInfo && userInfo.role === 'BGS Manager') ? (
                   showRightTick('service_agreement') &&
                   showRightTick('statement') &&
                   showRightTick('dspAddendum') ? (
@@ -272,6 +428,48 @@ export default function ContractFooter({
                     Request Approval
                   </Button>
                 )
+              ) : details && details.draft_from ? (
+                isAllMandetoryFieldsFilled() ? (
+                  <>
+                    <Button
+                      className={`btn-primary on-boarding mt-3  ${
+                        isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
+                      }`}
+                      onClick={() => {
+                        createAgreementDoc();
+                        setParams('request-approve');
+                        setShowModal(true);
+                      }}>
+                      Request Approval
+                    </Button>
+                    {!isEditContract
+                      ? renderEditContractBtn('light-orange w-sm-50 ml-5')
+                      : null}
+                    <span className="last-update">
+                      Last updated by You on{' '}
+                      {dayjs(details && details.updated_at).format(
+                        'MMM D, h:mm A',
+                      )}
+                    </span>
+                  </>
+                ) : !isEditContract ? (
+                  <>
+                    {renderEditContractBtn('btn-primary')}
+
+                    <span className="last-update">
+                      <img src={InfoIcon} alt="info" className="info-icon" />
+                      This contract is missing mandatory information.
+                    </span>
+                  </>
+                ) : (
+                  <Button
+                    className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
+                      isEditContract ? 'w-sm-100' : 'w-sm-50'
+                    }`}
+                    disabled>
+                    Request Approval
+                  </Button>
+                )
               ) : showRightTick('service_agreement') &&
                 showRightTick('statement') &&
                 showRightTick('dspAddendum') ? (
@@ -319,7 +517,7 @@ export default function ContractFooter({
           </Footer>
         </div>
       )}
-      ;
+
       {details &&
       details.contract_status &&
       details.contract_status.value === 'pending for cancellation' &&
@@ -347,7 +545,34 @@ export default function ContractFooter({
       ) : (
         ''
       )}
-      ;
+
+      {details &&
+      details.contract_status &&
+      details.contract_status.value === 'active pending for pause' &&
+      userInfo &&
+      userInfo.role === 'BGS Manager' ? (
+        <div className="mt-4 pt-5">
+          <Footer className=" mt-5 ">
+            <div className="container-fluid ">
+              <Button
+                className={`btn-primary sticky-btn-primary sidepanel mt-3  ${
+                  isEditContract ? 'w-sm-100 ml-0 mr-0' : 'w-sm-50 ml-0'
+                }`}
+                onClick={() => {
+                  onClickOfUpdatePauseContract();
+                }}>
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Approval for Pause'
+                )}
+              </Button>
+            </div>
+          </Footer>
+        </div>
+      ) : (
+        ''
+      )}
     </>
   );
 }
@@ -463,6 +688,7 @@ ContractFooter.defaultProps = {
   showDiscardModal: () => {},
   createAgreementDoc: () => {},
   getContractDetails: () => {},
+  setIsLoading: () => {},
 };
 
 ContractFooter.propTypes = {
@@ -474,6 +700,8 @@ ContractFooter.propTypes = {
     }),
     id: PropTypes.string,
     updated_at: PropTypes.string,
+    draft_from: PropTypes.string,
+    is_renewed: PropTypes.string,
   }),
   setParams: PropTypes.func,
   setShowModal: PropTypes.func,
@@ -501,4 +729,5 @@ ContractFooter.propTypes = {
   showDiscardModal: PropTypes.func,
   createAgreementDoc: PropTypes.func,
   getContractDetails: PropTypes.func,
+  setIsLoading: PropTypes.func,
 };

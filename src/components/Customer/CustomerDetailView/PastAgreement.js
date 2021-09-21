@@ -110,7 +110,13 @@ export default function PastAgreement({
                           item.contract_type.toLowerCase().includes('dsp')
                         ? 'DSP Service Agreement'
                         : 'Recurring Service Agreement'}{' '}
-                      <img src={ExternalLink} alt="link" />
+                      <img
+                        style={{ verticalAlign: 'middle' }}
+                        className="ml-1"
+                        width="20px"
+                        src={ExternalLink}
+                        alt="link"
+                      />
                     </td>
                     <td className="product-body agreement">
                       {item.end_date

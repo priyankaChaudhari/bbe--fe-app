@@ -11,25 +11,26 @@ const BillingContainer = ({ id, userInfo, onBoardingId, customerStatus }) => {
 
   return (
     <div className="col-lg-6 col-12">
-      {userInfo && userInfo.role === 'Finance' ? (
-        <Tabs>
-          <ul className="tabs">
+      <Tabs>
+        <ul className="tabs">
+          <li
+            className={viewComponent === 'DSPInvoices' ? 'active' : ''}
+            onClick={() => setViewComponent('DSPInvoices')}
+            role="presentation">
+            DSP Invoices
+          </li>
+          {customerStatus !== null && (
             <li
-              className={viewComponent === 'DSPInvoices' ? 'active' : ''}
-              onClick={() => setViewComponent('DSPInvoices')}
+              className={viewComponent === 'Billing' ? 'active' : ''}
+              onClick={() => setViewComponent('Billing')}
               role="presentation">
-              DSP Invoices
+              Billing Details
             </li>
-            {customerStatus !== null && (
-              <li
-                className={viewComponent === 'Billing' ? 'active' : ''}
-                onClick={() => setViewComponent('Billing')}
-                role="presentation">
-                Billing Details
-              </li>
-            )}
-          </ul>
-        </Tabs>
+          )}
+        </ul>
+      </Tabs>
+      {viewComponent === 'DSPInvoices' ? (
+        <DSPInvoices id={id} userInfo={userInfo} />
       ) : (
         <BillingDetails
           id={id}
@@ -37,17 +38,6 @@ const BillingContainer = ({ id, userInfo, onBoardingId, customerStatus }) => {
           onBoardingId={onBoardingId}
         />
       )}
-      {userInfo && userInfo.role === 'Finance' ? (
-        viewComponent === 'DSPInvoices' ? (
-          <DSPInvoices id={id} userInfo={userInfo} />
-        ) : (
-          <BillingDetails
-            id={id}
-            userInfo={userInfo}
-            onBoardingId={onBoardingId}
-          />
-        )
-      ) : null}
     </div>
   );
 };

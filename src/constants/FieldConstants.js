@@ -31,6 +31,11 @@ import {
   TwitterIcon,
   LinkedinIcon,
   InstagramIcon,
+  ViewExternalLink,
+  CopyIcon,
+  PauseIcon,
+  CloseCircleIcon,
+  DeleteIcon,
 } from '../theme/images/index';
 
 export const userDetails = [
@@ -561,12 +566,73 @@ export const ListingOptimization = [
   {
     key: 'content_optimization',
     label: 'Copy',
+    type: 'text',
   },
   {
     key: 'design_optimization',
     label: 'Design',
+    type: 'text',
   },
 ];
+
+export const remainingFieldsOfContract = [
+  {
+    key: 'contract_status',
+    label: 'Contract Status',
+    type: 'object',
+  },
+  {
+    key: 'contract_type',
+    label: 'Contract Type',
+    type: 'text',
+  },
+  {
+    key: 'monthly_discount_amount',
+    label: 'Monthly discount amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'monthly_discount_type',
+    label: 'Monthly discount type',
+    type: 'text',
+  },
+  {
+    key: 'one_time_deal_amount',
+    label: 'One time deal amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'one_time_discount_amount',
+    label: 'One time discount amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'one_time_discount_type',
+    label: 'One time discount type',
+    type: 'text',
+  },
+  {
+    key: 'sales_threshold',
+    label: 'Sales Threshold',
+    type: 'text',
+  },
+  {
+    key: 'seller_type',
+    label: 'Seller Type',
+    type: 'text',
+  },
+  {
+    key: 'threshold_type',
+    label: 'Threshold Type',
+    type: 'text',
+  },
+  {
+    key: 'yoy_percentage',
+    label: 'YOY Percentage',
+    type: 'text',
+  },
+];
+
 export const StatementDetails = [
   {
     key: 'monthly_retainer',
@@ -982,7 +1048,7 @@ export const stepPath = [
   {
     key: 'digital presence',
     view: PATH_COMPANY_DETAILS,
-    title: 'Your company website url & social links',
+    title: "Your Company's Digital Presence",
   },
   {
     key: 'billing information',
@@ -1100,4 +1166,39 @@ export const AmazonVendorAccountDetails = [
   { key: 'vendor_code', label: 'Vendor Code', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
   { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
+];
+
+export const contractOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+  { value: 'pause', label: 'Pause Agreement', icon: PauseIcon },
+  { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+];
+
+export const draftContractOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'edit', label: 'Edit Agreement', icon: CopyIcon },
+  { value: 'delete', label: 'Delete Agreement', icon: DeleteIcon },
+];
+
+export const pauseAgreementOptions = [
+  { value: 'view', label: 'View Agreement', icon: ViewExternalLink },
+  { value: 'draft', label: 'Draft New Version', icon: CopyIcon },
+  { value: 'unpause', label: 'Unpause Agreement', icon: PauseIcon },
+  { value: 'cancel', label: 'Cancel Agreement', icon: CloseCircleIcon },
+];
+
+export const agreementOptions = [
+  { key: 'monthly_retainer', label: 'Monthly Retainer' },
+  { key: 'rev_share', label: 'Rev Share' },
+  { key: 'sales_threshold', label: 'Sales Threshold' },
+  { key: 'billing_cap', label: 'Billing Cap' },
+  {
+    key: 'content_optimization',
+    label: 'Copy Optimization',
+  },
+  {
+    key: 'design_optimization',
+    label: 'Design Optimization',
+  },
 ];

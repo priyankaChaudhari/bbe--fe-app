@@ -31,7 +31,8 @@ export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
-export const API_FINANCE_DASHBOARD = '/invoice/';
+export const API_DSP_INVOICES = '/invoice/';
+export const API_DSP_BILLING = '/bill/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';
@@ -51,6 +52,7 @@ export const API_TRANSACTIONAL_SIGN_URL = `/sign-url/`;
 export const API_CONTRACT_ACTIVITY_LOG = `/contract_history/`;
 export const API_THRESHOLD_TYPE = `threshold-type`;
 export const API_YOY_PERCENTAGE = `yoy-percentage`;
+export const API_PAUSE_AGREEMENT = '/pause-contract/';
 
 // Knowledge Base
 export const API_KNOWLEDGE_BASE = '/knowledge/';

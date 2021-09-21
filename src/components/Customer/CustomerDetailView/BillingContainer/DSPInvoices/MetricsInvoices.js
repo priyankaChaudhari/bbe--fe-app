@@ -28,6 +28,7 @@ const MetricsInvoices = ({ data }) => {
           title={title}
           subTitle={subTitle}
           titleColor={titleColor}
+          type="invoices"
         />
       </div>
     );

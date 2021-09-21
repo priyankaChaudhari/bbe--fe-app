@@ -714,7 +714,9 @@ export default function ArticleDetails() {
                   ''
                 )}
               </div>
-              <BackToTop />
+              <div className="col-12 mt-5">
+                <BackToTop />
+              </div>
             </div>
           </div>
         </div>
