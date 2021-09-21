@@ -588,23 +588,42 @@ export default function ContractContainer() {
                 addendum.data.results &&
                 addendum.data.results[0],
             );
-
+            console.log(
+              addendum.data &&
+                addendum.data.results &&
+                addendum.data.results.length &&
+                addendum.data.results[0] &&
+                addendum.data.results[0].addendum &&
+                addendum.data.results[0].addendum.length <= 7,
+              ' addendum.data addendum.data.results',
+            );
             if (
               addendum.data &&
               addendum.data.results &&
-              addendum.data.results.length &&
-              addendum.data.results[0] &&
-              addendum.data.results[0].addendum &&
-              addendum.data.results[0].addendum.length <= 7
+              addendum.data.results.length
             ) {
-              setShowCollpase({
-                ...showSection,
-                addendum: false,
-              });
+              if (
+                addendum.data &&
+                addendum.data.results &&
+                addendum.data.results.length &&
+                addendum.data.results[0] &&
+                addendum.data.results[0].addendum &&
+                addendum.data.results[0].addendum.length <= 7
+              ) {
+                setShowCollpase({
+                  ...showSection,
+                  addendum: false,
+                });
+              } else {
+                setShowCollpase({
+                  ...showSection,
+                  addendum: true,
+                });
+              }
             } else {
               setShowCollpase({
                 ...showSection,
-                addendum: true,
+                addendum: false,
               });
             }
           });
