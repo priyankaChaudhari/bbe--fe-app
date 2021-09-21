@@ -417,7 +417,11 @@ const SidePanel = styled.div`
       border-bottom: 1px solid #EEF3F5;
       width: 100%;
       text-align: left;
+      &.label-addendum {
+        border-bottom: none;
+      }
     }
+
     .text-delete {
       text-decoration: line-through;
     }

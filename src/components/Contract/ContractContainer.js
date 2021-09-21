@@ -3612,6 +3612,7 @@ const ContractTab = styled.div`
       }
     }
   }
+
   @media only screen and (max-width: 767px) {
     padding-top: 120px;
   }

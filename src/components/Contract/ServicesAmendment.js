@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Theme from '../../theme/Theme';
 import { ArrowRightIcon } from '../../theme/images/index';
 import {
   AgreementDetails,
@@ -128,65 +130,67 @@ function ServicesAmendment({ amendmentData }) {
       ) ? (
       <div className="text-center mt-3">No data found</div>
     ) : (
-      <div className="amendments-section">
-        <ul className="menu">
-          {displayUpdatedFields()}
+      <MobileViewAmendment>
+        <div className="amendments-section">
+          <ul className="menu">
+            {displayUpdatedFields()}
 
-          <li>
-            <div className="row w-100">
-              {amendmentData &&
-              amendmentData.monthly_services &&
-              amendmentData.monthly_services.length ? (
-                <>
-                  <div className="col-12 mb-2">
-                    <div className="label">Monthly Services</div>
-                  </div>
-                  {displayAdditionalService('monthly_services')}
-                </>
-              ) : (
-                ''
-              )}
-              {amendmentData &&
-              amendmentData.additional_marketplaces &&
-              amendmentData.additional_marketplaces.length ? (
-                <>
-                  <div className="col-8 text-left mb-3">
-                    <p className=" basic-text ">Additional Marketplaces</p>
-                  </div>
-                  {displayAdditionalService('additional_marketplaces')}
-                </>
-              ) : (
-                ''
-              )}
-
-              {amendmentData &&
-              amendmentData.addendum &&
-              amendmentData.addendum.status ? (
-                <>
-                  <div className="col-8 text-left mb-3 mt-3">
-                    <div className="label">Addendum</div>
-                  </div>
-                  <div className="col-4 mb-3 mt-3">
-                    <div className="added-remove-text">
-                      {amendmentData &&
-                      amendmentData.addendum &&
-                      amendmentData.addendum.status === 'added'
-                        ? 'Added'
-                        : amendmentData &&
-                          amendmentData.addendum &&
-                          amendmentData.addendum.status === 'removed'
-                        ? 'Removed'
-                        : 'Updated'}
+            <li>
+              <div className="row w-100">
+                {amendmentData &&
+                amendmentData.monthly_services &&
+                amendmentData.monthly_services.length ? (
+                  <>
+                    <div className="col-12 mb-2">
+                      <div className="label">Monthly Services</div>
                     </div>
-                  </div>
-                </>
-              ) : (
-                ''
-              )}
-            </div>
-          </li>
-        </ul>
-      </div>
+                    {displayAdditionalService('monthly_services')}
+                  </>
+                ) : (
+                  ''
+                )}
+                {amendmentData &&
+                amendmentData.additional_marketplaces &&
+                amendmentData.additional_marketplaces.length ? (
+                  <>
+                    <div className="col-8 text-left mb-3">
+                      <p className=" basic-text ">Additional Marketplaces</p>
+                    </div>
+                    {displayAdditionalService('additional_marketplaces')}
+                  </>
+                ) : (
+                  ''
+                )}
+
+                {amendmentData &&
+                amendmentData.addendum &&
+                amendmentData.addendum.status ? (
+                  <>
+                    <div className="col-8 text-left mb-3 mt-3">
+                      <div className="label label-addendum">Addendum</div>
+                    </div>
+                    <div className="col-4 mb-3 mt-3">
+                      <div className="added-remove-text">
+                        {amendmentData &&
+                        amendmentData.addendum &&
+                        amendmentData.addendum.status === 'added'
+                          ? 'Added'
+                          : amendmentData &&
+                            amendmentData.addendum &&
+                            amendmentData.addendum.status === 'removed'
+                          ? 'Removed'
+                          : 'Updated'}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  ''
+                )}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </MobileViewAmendment>
     );
   };
   return <div>{displayAmendments()}</div>;
@@ -206,3 +210,33 @@ ServicesAmendment.propTypes = {
     updated: PropTypes.arrayOf(PropTypes.object),
   }),
 };
+
+const MobileViewAmendment = styled.div`
+  .amendments-section {
+    .label {
+      border-bottom: 1px solid #eef3f5;
+      width: 100%;
+      text-align: left;
+      &.label-addendum {
+        border-bottom: none;
+      }
+    }
+    .text-delete {
+      text-decoration: line-through;
+    }
+    .added-remove-text {
+      font-size: ${Theme.extraSmall};
+      color: ${Theme.gray40};
+    }
+    .next-arrow {
+      width: 20px;
+      vertical-align: bottom;
+      margin: 0 5px;
+    }
+    .new-basic-text {
+      color: ${Theme.gray85};
+      // text-decoration: none;
+      font-size: ${Theme.extraNormal};
+    }
+  }
+`;
