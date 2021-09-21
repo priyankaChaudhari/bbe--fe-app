@@ -40,7 +40,7 @@ export const PartnersStatusOptions = [
 ];
 
 export const InvoicesSortByOptions = [
-  { value: '', label: 'Select' },
+  { value: '', label: 'Status' },
   { value: 'monthly_budget', label: 'Amount' },
   { value: 'generated_at', label: 'Creation Date' },
   { value: 'due_date', label: 'Due Date' },
@@ -158,7 +158,7 @@ export const BillingVendorOptions = [
 ];
 
 export const BillingSortByOptions = [
-  { value: '', label: 'Select' },
+  { value: '', label: 'Status' },
   { value: 'amount', label: 'Amount' },
   { value: 'bill_date', label: 'Bill Date' },
   { value: 'due_date', label: 'Due Date' },

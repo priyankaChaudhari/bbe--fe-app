@@ -87,7 +87,7 @@ export default function DSPBillingContainer() {
   const [responseId, setResponseId] = useState(null);
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: '',
-    label: 'Select',
+    label: 'Status',
   });
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
@@ -205,7 +205,7 @@ export default function DSPBillingContainer() {
       .prop('checked', true);
     setSelectedVendor('Amazon Advertising LLC');
     setSearchQuery('');
-    setSelectedSortBy({ value: '', label: 'Newest' });
+    setSelectedSortBy({ value: '', label: 'Status' });
     getBillsData('', 'Amazon Advertising LLC', '', 1);
   };
 
