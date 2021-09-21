@@ -697,7 +697,7 @@ export default function ContractContainer() {
     });
 
     getServicesFee().then((res) => {
-      setServicesFees(res.data);
+      setServicesFees(res && res.data);
     });
 
     getOneTimeService().then((r) => {

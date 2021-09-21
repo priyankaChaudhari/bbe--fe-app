@@ -172,6 +172,10 @@ function ServicesAmendment({ amendmentData }) {
                       amendmentData.addendum &&
                       amendmentData.addendum.status === 'added'
                         ? 'Added'
+                        : amendmentData &&
+                          amendmentData.addendum &&
+                          amendmentData.addendum.status === 'removed'
+                        ? 'Removed'
                         : 'Updated'}
                     </div>
                   </div>
