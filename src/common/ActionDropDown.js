@@ -17,7 +17,6 @@ const ActionDropDown = styled.div`
     text-align: initial;
 
     .css-yk16xz-control {
-      // background-color: #f4f6fc;
       border: 1px solid #d5d8e1;
       border-radius: 2px;
       color: ${Theme.gray85};
@@ -28,8 +27,7 @@ const ActionDropDown = styled.div`
       cursor: pointer;
 
       .css-g1d714-ValueContainer {
-        // padding: 1px 20px 1px 5px !important;
-        // color: ${Theme.gray85} !important;
+        padding: 2px 4px;
         font-weight: 500px;
         cursor: pointer;
 
@@ -59,7 +57,6 @@ const ActionDropDown = styled.div`
     }
 
     .css-1pahdxg-control {
-      // background-color: #f4f6fc;
       border: 1px solid #d5d8e1;
       border-radius: 2px;
       font-size: ${Theme.normal};
@@ -76,16 +73,8 @@ const ActionDropDown = styled.div`
         margin: 0;
       }
       .css-g1d714-ValueContainer {
-        // padding: 1px 20px 1px 5px !important;
+        padding: 2px 4px;
       }
-
-      // .cross-icon {
-      //   width: 14px;
-      //   position: absolute;
-      //   top: 10px;
-      //   right: 10px;
-      // }
-
       .remove-icon {
         display: none;
       }
@@ -99,7 +88,6 @@ const ActionDropDown = styled.div`
 
       .css-1uccc91-singleValue {
         font-size: ${Theme.normal};
-        // padding: 4px;
         color: ${Theme.gray85} !important;
       }
     }
@@ -116,6 +104,11 @@ const ActionDropDown = styled.div`
         float: left;
         max-width: 99%;
         word-break: keep-all;
+      }
+    }
+    @media only screen and (min-width: 767px) and (max-width: 1600px) {
+      .css-26l3qy-menu {
+        width: 180px;
       }
     }
   }

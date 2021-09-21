@@ -212,7 +212,24 @@ ServicesAmendment.propTypes = {
 };
 
 const MobileViewAmendment = styled.div`
+  padding-bottom: 100px;
   .amendments-section {
+    .menu {
+      padding: 0;
+
+      li {
+        display: flex;
+        font-weight: 900;
+        list-style: none;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-text-decoration: none;
+        text-decoration: none;
+        padding: 10px 0px 15px 15px;
+      }
+    }
     .label {
       border-bottom: 1px solid #eef3f5;
       width: 100%;
