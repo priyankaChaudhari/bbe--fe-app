@@ -51,7 +51,7 @@ export default function DSPInvoicesList({
 
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: '',
-    label: 'Newest',
+    label: 'Select',
   });
   const history = useHistory();
 
@@ -108,8 +108,8 @@ export default function DSPInvoicesList({
     $('.checkboxes input:radio').filter("[value='any']").prop('checked', true);
     setSelectedStatus('any');
     setSearchQuery('');
-    setSelectedSortBy({ value: 'created_at', label: 'Newest' });
-    getInvoices('', 'any', 'created_at', 1);
+    setSelectedSortBy({ value: '', label: 'Select' });
+    getInvoices('', 'any', '', 1);
   };
 
   const handleStatusChange = (event) => {

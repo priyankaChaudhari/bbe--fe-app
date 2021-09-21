@@ -186,20 +186,18 @@ export async function getFinanceInvoices(
     type,
   };
 
-  if (type === 'partner') {
-    params = {
-      ...params,
-      sort: `${sortBy}`,
-    };
-  } else {
-    params = {
-      ...params,
-      sort_by: `-${sortBy}`,
-    };
-  }
-
-  if (sortBy === '') {
-    delete params.sort_by;
+  if (sortBy !== '') {
+    if (type === 'partner') {
+      params = {
+        ...params,
+        sort: `${sortBy}`,
+      };
+    } else {
+      params = {
+        ...params,
+        sort_by: `-${sortBy}`,
+      };
+    }
   }
 
   if (searchKey !== '') {
@@ -271,11 +269,13 @@ export async function getBills(
   let params = {
     page,
     vendor,
-    sort_by: `-${sortBy}`,
   };
 
-  if (sortBy === '') {
-    delete params.sort_by;
+  if (sortBy !== '') {
+    params = {
+      ...params,
+      sort_by: `-${sortBy}`,
+    };
   }
 
   if (searchKey !== '') {

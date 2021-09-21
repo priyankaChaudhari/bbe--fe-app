@@ -87,7 +87,7 @@ export default function DSPBillingContainer() {
   const [responseId, setResponseId] = useState(null);
   const [selectedSortBy, setSelectedSortBy] = useState({
     value: '',
-    label: 'Newest',
+    label: 'Select',
   });
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
