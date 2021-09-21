@@ -2079,6 +2079,7 @@ export default function AgreementSidePanel({
           onChange={(event) => handleChange(event, item.key)}
           thousandSeparator={item.key !== 'zip_code'}
           decimalScale={2}
+          allowNegative={false}
         />
       );
     }
