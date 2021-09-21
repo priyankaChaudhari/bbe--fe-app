@@ -588,6 +588,25 @@ export default function ContractContainer() {
                 addendum.data.results &&
                 addendum.data.results[0],
             );
+
+            if (
+              addendum.data &&
+              addendum.data.results &&
+              addendum.data.results.length &&
+              addendum.data.results[0] &&
+              addendum.data.results[0].addendum &&
+              addendum.data.results[0].addendum.length <= 7
+            ) {
+              setShowCollpase({
+                ...showSection,
+                addendum: false,
+              });
+            } else {
+              setShowCollpase({
+                ...showSection,
+                addendum: true,
+              });
+            }
           });
 
           if (history && history.location && history.location.showEditView) {
@@ -2172,6 +2191,13 @@ export default function ContractContainer() {
         sectionFlag.addendum = true;
       }
     }
+    console.log(
+      sectionFlag,
+      newAddendumData,
+      newAddendumData &&
+        newAddendumData.addendum &&
+        newAddendumData.addendum.length <= 7,
+    );
 
     if (
       !(
