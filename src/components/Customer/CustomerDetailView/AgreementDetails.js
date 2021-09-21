@@ -252,6 +252,20 @@ export default function AgreementDetails({
     }
   };
 
+  const isDraftContract = (agreement) => {
+    if (
+      agreement &&
+      agreement.draft_from &&
+      agreement.contract_status &&
+      (agreement.contract_status.value === 'pending contract' ||
+        agreement.contract_status.value === 'pending contract approval' ||
+        agreement.contract_status.value === 'pending contract signature')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const generateHTML = () => {
     const fields = [];
     for (const agreement of multipleAgreement) {
@@ -306,7 +320,7 @@ export default function AgreementDetails({
                       <Status
                         className="mr-2 mb-1"
                         label={
-                          agreement && agreement.draft_from
+                          isDraftContract(agreement)
                             ? 'Draft'
                             : agreement &&
                               agreement.contract_status &&
@@ -423,7 +437,21 @@ export default function AgreementDetails({
                         classNamePrefix="react-select"
                         placeholder="View Actions"
                         className="active"
-                        options={draftContractOptions}
+                        options={
+                          isDraftContract(agreement)
+                            ? draftContractOptions
+                            : (agreement &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.end_date >
+                                  dayjs(new Date()).format('YYYY-MM-DD') &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.is_approved) ||
+                              agreement.contract_status.value === 'pause' ||
+                              agreement.contract_status.value ===
+                                'active pending for pause'
+                            ? pauseAgreementOptions
+                            : contractOptions
+                        }
                         onChange={(event) =>
                           handleContractOptions(event, agreement.id)
                         }

@@ -138,7 +138,7 @@ export default function Info() {
                   </li>
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
-                    Billing and payment details
+                    Billing Information
                   </li>
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
