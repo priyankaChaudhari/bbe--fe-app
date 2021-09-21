@@ -580,52 +580,16 @@ export default function ContractContainer() {
               addendum &&
                 addendum.data &&
                 addendum.data.results &&
+                addendum.data.results.length &&
                 addendum.data.results[0],
             );
             setOriginalAddendumData(
               addendum &&
                 addendum.data &&
                 addendum.data.results &&
+                addendum.data.results.length &&
                 addendum.data.results[0],
             );
-            console.log(
-              addendum.data &&
-                addendum.data.results &&
-                addendum.data.results.length &&
-                addendum.data.results[0] &&
-                addendum.data.results[0].addendum &&
-                addendum.data.results[0].addendum.length <= 7,
-              ' addendum.data addendum.data.results',
-            );
-            if (
-              addendum.data &&
-              addendum.data.results &&
-              addendum.data.results.length
-            ) {
-              if (
-                addendum.data &&
-                addendum.data.results &&
-                addendum.data.results.length &&
-                addendum.data.results[0] &&
-                addendum.data.results[0].addendum &&
-                addendum.data.results[0].addendum.length <= 7
-              ) {
-                setShowCollpase({
-                  ...showSection,
-                  addendum: false,
-                });
-              } else {
-                setShowCollpase({
-                  ...showSection,
-                  addendum: true,
-                });
-              }
-            } else {
-              setShowCollpase({
-                ...showSection,
-                addendum: false,
-              });
-            }
           });
 
           if (history && history.location && history.location.showEditView) {
@@ -2203,6 +2167,7 @@ export default function ContractContainer() {
         'monthly_service',
       );
     }
+
     if (newAddendumData && newAddendumData.id) {
       if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
         sectionFlag.addendum = false;
@@ -2210,13 +2175,6 @@ export default function ContractContainer() {
         sectionFlag.addendum = true;
       }
     }
-    console.log(
-      sectionFlag,
-      newAddendumData,
-      newAddendumData &&
-        newAddendumData.addendum &&
-        newAddendumData.addendum.length <= 7,
-    );
 
     if (
       !(
@@ -2257,7 +2215,7 @@ export default function ContractContainer() {
     setShowCollpase(sectionFlag);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [details]);
+  }, [details, newAddendumData]);
 
   const createPrimaryMarketplace = () => {
     const statementData = {
@@ -2837,6 +2795,16 @@ export default function ContractContainer() {
         return true;
       }
     }
+    if (
+      details &&
+      details.draft_from &&
+      details &&
+      details.contract_type &&
+      details.contract_type.toLowerCase().includes('dsp')
+    ) {
+      return true;
+    }
+
     if (
       details &&
       details.contract_type &&

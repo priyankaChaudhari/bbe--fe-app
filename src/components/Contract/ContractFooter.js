@@ -186,7 +186,6 @@ export default function ContractFooter({
     }
     return false;
   };
-
   return (
     <>
       {showPauseModal.show ? (

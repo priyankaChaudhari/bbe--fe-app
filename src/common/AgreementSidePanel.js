@@ -4051,6 +4051,20 @@ export default function AgreementSidePanel({
     return '';
   };
 
+  const isDraftContract = (agreement) => {
+    if (
+      agreement &&
+      agreement.draft_from &&
+      agreement.contract_status &&
+      (agreement.contract_status.value === 'pending contract' ||
+        agreement.contract_status.value === 'pending contract approval' ||
+        agreement.contract_status.value === 'pending contract signature')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <SidePanel
       className={
@@ -4066,7 +4080,7 @@ export default function AgreementSidePanel({
           ? 'pdf-sidebar'
           : 'contract-sidebar'
       }>
-      {agreementData && agreementData.draft_from ? (
+      {isDraftContract(agreementData) ? (
         <>
           <Tabs className="mt-4 d-none d-lg-block">
             <ul style={{ textAlign: 'center' }} className="tabs ">
