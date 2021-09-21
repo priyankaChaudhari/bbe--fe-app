@@ -156,6 +156,7 @@ export default function AgreementDetails({
           res && res.data && res.data.id,
         ),
         state: history && history.location && history.location.pathname,
+        showEditView: true,
       });
     });
   };
@@ -224,6 +225,7 @@ export default function AgreementDetails({
             agreementId,
           ),
           state: history && history.location && history.location.pathname,
+          showEditView: true,
         });
         break;
       case 'delete':

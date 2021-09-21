@@ -420,6 +420,140 @@ export default function ContractContainer() {
     });
   };
 
+  const setMandatoryFieldsErrors = (contract) => {
+    let agreementErrors = 0;
+    let statementErrors = 0;
+    let dspErrors = 0;
+
+    if (
+      contract &&
+      contract.contract_type &&
+      contract.contract_type.toLowerCase().includes('one') &&
+      (contract.additional_one_time_services === null ||
+        !contract.additional_one_time_services.length)
+    ) {
+      agreementErrors += 1;
+
+      setAdditionalMonthlySerError({
+        ...additionalMonthlySerError,
+        required: 'At least 1 one time service required',
+      });
+    }
+
+    AgreementDetails.forEach((item) => {
+      if (item.key !== 'contract_address') {
+        if (
+          !(
+            item.key === 'length' &&
+            details &&
+            details.contract_type === 'one time'
+          )
+        ) {
+          if (
+            item.isMandatory &&
+            item.field === 'customer' &&
+            !(
+              contract &&
+              contract.customer_id &&
+              contract.customer_id[item.key]
+            )
+          ) {
+            agreementErrors += 1;
+            item.error = true;
+          }
+          if (
+            item.isMandatory &&
+            item.field !== 'customer' &&
+            !(contract && contract[item.key])
+          ) {
+            agreementErrors += 1;
+            item.error = true;
+          }
+        }
+      } else {
+        return (
+          item &&
+          item.sections.forEach((subItem) => {
+            if (
+              subItem &&
+              subItem.isMandatory &&
+              !(
+                contract &&
+                contract.customer_id &&
+                contract.customer_id[subItem.key]
+              )
+            ) {
+              subItem.error = true;
+              agreementErrors += 1;
+            }
+          })
+        );
+      }
+      return null;
+    });
+
+    StatementDetails.forEach((item) => {
+      if (
+        item.isMandatory &&
+        !(contract && contract[item.key]) &&
+        !(
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('one')
+        )
+      ) {
+        statementErrors += 1;
+        item.error = true;
+      }
+    });
+
+    DSPAddendumDetails.forEach((item) => {
+      if (item.isMandatory && !(contract && contract[item.key])) {
+        if (
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('dsp') &&
+          item.key !== 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
+
+        if (
+          contract &&
+          contract.contract_type &&
+          contract.contract_type.toLowerCase().includes('recurring') &&
+          item.key === 'dsp_length'
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        } else if (
+          !(
+            contract &&
+            contract.contract_type &&
+            contract.contract_type.toLowerCase().includes('dsp')
+          )
+        ) {
+          dspErrors += 1;
+          item.error = true;
+        }
+      }
+    });
+
+    setSectionError({
+      ...sectionError,
+      agreement: agreementErrors,
+      statement: statementErrors,
+      dsp: dspErrors,
+    });
+  };
+
+  const showEditView = (contract) => {
+    setIsEditContract(true);
+    setMandatoryFieldsErrors(contract);
+    setSidebarSection('edit');
+  };
+
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
@@ -434,7 +568,9 @@ export default function ContractContainer() {
           }
 
           // get amendment data
-          getAmendmentData(res && res.data && res.data.id);
+          if (res && res.data && res.data.draft_from) {
+            getAmendmentData(res && res.data && res.data.id);
+          }
 
           getAddendum({
             customer_id: id,
@@ -453,6 +589,10 @@ export default function ContractContainer() {
                 addendum.data.results[0],
             );
           });
+
+          if (history && history.location && history.location.showEditView) {
+            showEditView(res && res.data);
+          }
 
           // setIsDocRendered(true);
         } else {
@@ -2779,134 +2919,6 @@ export default function ContractContainer() {
     );
   };
 
-  const setMandatoryFieldsErrors = () => {
-    let agreementErrors = 0;
-    let statementErrors = 0;
-    let dspErrors = 0;
-
-    if (
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('one') &&
-      (formData.additional_one_time_services === null ||
-        !formData.additional_one_time_services.length)
-    ) {
-      agreementErrors += 1;
-
-      setAdditionalMonthlySerError({
-        ...additionalMonthlySerError,
-        required: 'At least 1 one time service required',
-      });
-    }
-
-    AgreementDetails.forEach((item) => {
-      if (item.key !== 'contract_address') {
-        if (
-          !(
-            item.key === 'length' &&
-            details &&
-            details.contract_type === 'one time'
-          )
-        ) {
-          if (
-            item.isMandatory &&
-            item.field === 'customer' &&
-            !(
-              formData &&
-              formData.customer_id &&
-              formData.customer_id[item.key]
-            )
-          ) {
-            agreementErrors += 1;
-            item.error = true;
-          }
-          if (
-            item.isMandatory &&
-            item.field !== 'customer' &&
-            !(formData && formData[item.key])
-          ) {
-            agreementErrors += 1;
-            item.error = true;
-          }
-        }
-      } else {
-        return (
-          item &&
-          item.sections.forEach((subItem) => {
-            if (
-              subItem &&
-              subItem.isMandatory &&
-              !(
-                formData &&
-                formData.customer_id &&
-                formData.customer_id[subItem.key]
-              )
-            ) {
-              subItem.error = true;
-              agreementErrors += 1;
-            }
-          })
-        );
-      }
-      return null;
-    });
-
-    StatementDetails.forEach((item) => {
-      if (
-        item.isMandatory &&
-        !(formData && formData[item.key]) &&
-        !(
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('one')
-        )
-      ) {
-        statementErrors += 1;
-        item.error = true;
-      }
-    });
-
-    DSPAddendumDetails.forEach((item) => {
-      if (item.isMandatory && !(formData && formData[item.key])) {
-        if (
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('dsp') &&
-          item.key !== 'dsp_length'
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        }
-
-        if (
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('recurring') &&
-          item.key === 'dsp_length'
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        } else if (
-          !(
-            formData &&
-            formData.contract_type &&
-            formData.contract_type.toLowerCase().includes('dsp')
-          )
-        ) {
-          dspErrors += 1;
-          item.error = true;
-        }
-      }
-    });
-
-    setSectionError({
-      ...sectionError,
-      agreement: agreementErrors,
-      statement: statementErrors,
-      dsp: dspErrors,
-    });
-  };
-
   const renderEditContractBtn = (btnClass) => {
     return (
       <Button
@@ -2914,9 +2926,7 @@ export default function ContractContainer() {
           isEditContract ? 'w-sm-50' : 'w-sm-100'
         }`}
         onClick={() => {
-          setIsEditContract(true);
-          setMandatoryFieldsErrors();
-          setSidebarSection('edit');
+          showEditView(formData);
         }}>
         Edit Contract
       </Button>
