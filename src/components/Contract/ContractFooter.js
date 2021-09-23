@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -13,6 +13,7 @@ import {
   updateAccountDetails,
   updatePauseAgreement,
   getPauseAgreementDetails,
+  getTransactionData,
 } from '../../api';
 
 const customStylesForAlert = {
@@ -58,6 +59,23 @@ export default function ContractFooter({
     data: {},
   });
   const [pauseAgreementData, setPauseAgreementData] = useState({});
+  const [transactionalData, setTransactionalData] = useState({});
+
+  const getTransactionalDataDetails = useCallback(() => {
+    getTransactionData({
+      contract_status: 'pending contract approval',
+      contract: details && details.id,
+    }).then((res) => {
+      if (res && res.data && res.data.results && res.data.results.length) {
+        setTransactionalData(res.data.results[0]);
+      }
+    });
+  }, [details]);
+
+  useEffect(() => {
+    getTransactionalDataDetails();
+  }, [getTransactionalDataDetails]);
+
   const checkAmazonStorePriceExists = () => {
     const service =
       formData &&
@@ -358,9 +376,11 @@ export default function ContractFooter({
           <Footer>
             <div className="container-fluid">
               {checkApprovalCondition() ? (
-                (userInfo && userInfo.role === 'Team Manager - TAM') ||
-                (userInfo && userInfo.role === 'Sales Manager') ||
-                (userInfo && userInfo.role === 'BGS Manager') ? (
+                ((userInfo && userInfo.role === 'Team Manager - TAM') ||
+                  (userInfo && userInfo.role === 'Sales Manager') ||
+                  (userInfo && userInfo.role === 'BGS Manager')) &&
+                transactionalData &&
+                transactionalData.can_approve ? (
                   showRightTick('service_agreement') &&
                   showRightTick('statement') &&
                   showRightTick('dspAddendum') ? (
