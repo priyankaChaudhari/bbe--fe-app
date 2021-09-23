@@ -602,8 +602,17 @@ export default function BillingInfo({
           />
           <p className="info-text-gray security mb-0">
             {' '}
-            We have partnered with Authorize.Net (link), to capture your credit
-            card payment information safely and securely.
+            We have partnered with{' '}
+            <a
+              className="cursor"
+              style={{ color: '#556178', fontSize: '12px' }}
+              href="https://www.authorize.net/en-us/about-us/dpa.html"
+              target="_BLANK"
+              rel="noreferrer">
+              Authorize.Net
+            </a>
+            , to capture your credit card payment information safely and
+            securely.
           </p>
 
           <div className="clear-fix" />
