@@ -1128,7 +1128,7 @@ export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
 
 export const options = [
-  { value: 'contract_details', label: 'Contract Details' },
+  { value: 'contract_details', label: 'Accounts' },
   { value: 'performance', label: 'Sales Performance' },
   { value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' },
   { value: 'dsp_ad_performance', label: 'DSP Ad Performance' },
