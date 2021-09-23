@@ -57,7 +57,7 @@ export default function ContractFooter({
     show: false,
     data: {},
   });
-
+  const [pauseAgreementData, setPauseAgreementData] = useState({});
   const checkAmazonStorePriceExists = () => {
     const service =
       formData &&
@@ -118,12 +118,13 @@ export default function ContractFooter({
     });
   };
 
-  const updatePauseContract = () => {
-    updatePauseAgreement(pauseId, { is_approved: true }).then((pauseRes) => {
+  const updatePauseContract = (pauseAgreementPauseData) => {
+    const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
+
+    updatePauseAgreement(pauseId, pauseAgreementPauseData).then((pauseRes) => {
       if (pauseRes && pauseRes.status === 200) {
         toast.success('Pause Contract Approved!');
         let contractStatusData = {};
-        const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
 
         if (
           pauseRes &&
@@ -153,27 +154,57 @@ export default function ContractFooter({
     });
   };
 
-  const onClickOfUpdatePauseContract = () => {
+  const getDataToUpdatePauseAgreement = (
+    pauseAgreement = pauseAgreementData,
+  ) => {
+    const TodaysDate = dayjs(new Date()).format('YYYY-MM-DD');
+    let pauseAgreementPauseData = {};
+
+    if (
+      pauseAgreement &&
+      pauseAgreement.start_date &&
+      pauseAgreement.start_date === TodaysDate
+    ) {
+      pauseAgreementPauseData = {
+        is_approved: true,
+        is_extended: true,
+        is_paused: true,
+      };
+    } else {
+      pauseAgreementPauseData = { is_approved: true };
+    }
+    return pauseAgreementPauseData;
+  };
+
+  const onClickOfUpdatePauseContract = (flag) => {
     setIsLoading({ loader: true, type: 'button' });
 
-    getPauseAgreementDetails(pauseId).then((res) => {
-      setIsLoading({ loader: false, type: 'button' });
+    if (flag.getPauseAgreement) {
+      getPauseAgreementDetails(pauseId).then((res) => {
+        setIsLoading({ loader: false, type: 'button' });
 
-      if (res && res.status === 200) {
-        if (
-          res &&
-          res.data &&
-          res.data.end_date &&
-          new Date(res.data.end_date) < new Date()
-        ) {
-          setShowPauseModal({ show: true, data: res.data });
-        } else {
-          setIsLoading({ loader: true, type: 'button' });
+        if (res && res.status === 200) {
+          setPauseAgreementData(res && res.data);
 
-          updatePauseContract();
+          if (
+            res &&
+            res.data &&
+            res.data.end_date &&
+            new Date(res.data.end_date) < new Date()
+          ) {
+            setShowPauseModal({ show: true, data: res.data });
+          } else {
+            setIsLoading({ loader: true, type: 'button' });
+
+            updatePauseContract(getDataToUpdatePauseAgreement(res && res.data));
+          }
         }
-      }
-    });
+      });
+    } else {
+      setIsLoading({ loader: true, type: 'button' });
+
+      updatePauseContract(getDataToUpdatePauseAgreement());
+    }
   };
 
   const isAllMandetoryFieldsFilled = () => {
@@ -186,6 +217,7 @@ export default function ContractFooter({
     }
     return false;
   };
+
   return (
     <>
       {showPauseModal.show ? (
@@ -207,9 +239,9 @@ export default function ContractFooter({
               <div className="text-center ">
                 <Button
                   onClick={() => {
-                    setIsLoading({ loader: true, type: 'button' });
-
-                    updatePauseContract();
+                    // setIsLoading({ loader: true, type: 'button' });
+                    onClickOfUpdatePauseContract({ getPauseAgreement: false });
+                    // updatePauseContract();
                     // setShowPauseModal({ show: false, data: {} });
                   }}
                   type="button"
@@ -559,7 +591,7 @@ export default function ContractFooter({
                   isEditContract ? 'w-sm-100 ml-0 mr-0' : 'w-sm-50 ml-0'
                 }`}
                 onClick={() => {
-                  onClickOfUpdatePauseContract();
+                  onClickOfUpdatePauseContract({ getPauseAgreement: true });
                 }}>
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
