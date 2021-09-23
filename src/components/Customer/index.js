@@ -8,7 +8,6 @@ import CompanyPerformance from './CompanyPerformance/CompanyPerformanceContainer
 import EditCompanyDetails from './CustomerDetailView/EditCompanyDetails';
 import EditAccountDetails from './CustomerDetailView/EditAccountDetails';
 import CustomerStatus from './CustomerDetailView/CustomerStatus';
-import BillingDetails from './CustomerDetailView/BillingDetails';
 import Notes from './CustomerDetailView/Notes';
 import ProductCatalog from './ProductCatalog/ProductCatalog';
 import ProductDelegation from './ProductCatalog/ProductDelegation';
@@ -24,7 +23,6 @@ export {
   EditCompanyDetails,
   EditAccountDetails,
   CustomerStatus,
-  BillingDetails,
   Notes,
   ProductCatalog,
   ProductDelegation,
