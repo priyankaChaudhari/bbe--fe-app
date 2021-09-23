@@ -13,7 +13,6 @@ import {
   CustomDateRange,
 } from '../../../../common';
 import { CaretUp, CloseIcon } from '../../../../theme/images/index';
-import ErrorMsg from '../../../../common/ErrorMsg';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
@@ -36,7 +35,6 @@ export default function DSPInvoices({
   const [dummyDateType, setDummayDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
-  const [dateError, setDateError] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -85,7 +83,6 @@ export default function DSPInvoices({
   const handleApply = () => {
     if (dummayDateRange !== null) {
       setState(dummayDateRange);
-      setDateError(null);
       let sd = dummayDateRange[0];
       let ed = dummayDateRange[1];
       setSelectedDateType(dummyDateType);
@@ -107,9 +104,9 @@ export default function DSPInvoices({
         getDSPdata(dummyDateType, sd, ed);
         return;
       }
+      setState([currentDate, currentDate]);
+      setRange([currentDate, currentDate]);
       getDSPdata(dummyDateType);
-    } else {
-      setDateError('Please select valid date');
     }
   };
 
@@ -225,7 +222,6 @@ export default function DSPInvoices({
             </div>
           ) : null}
         </CustomDateRange>
-        <ErrorMsg className="text-left">{dateError}</ErrorMsg>
         <Button
           className="btn-primary w-100 mt-3"
           onClick={() => handleApply()}>
