@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import $ from 'jquery';
@@ -6,7 +5,7 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
-import { func, string, bool } from 'prop-types';
+import { func, string, bool, objectOf } from 'prop-types';
 
 import {
   WhiteCard,
@@ -402,6 +401,10 @@ export default function DSPInvoicesList({
 DSPInvoicesList.defaultProps = {
   data: () => {},
   onTabClick: () => {},
+  timeFrame: new Date(),
+  timeFrameType: '',
+  isTimeFrameChange: false,
+  setIsTimeFrameChange: () => {},
 };
 DSPInvoicesList.propTypes = {
   data: func,
@@ -409,6 +412,10 @@ DSPInvoicesList.propTypes = {
   viewComponent: string.isRequired,
   isDesktop: bool.isRequired,
   isTablet: bool.isRequired,
+  timeFrame: objectOf(Object),
+  timeFrameType: string,
+  isTimeFrameChange: bool,
+  setIsTimeFrameChange: func,
 };
 
 const NoData = styled.div`

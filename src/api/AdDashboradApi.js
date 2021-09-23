@@ -262,9 +262,9 @@ export async function getBills(
   searchKey,
   vendor,
   sortBy,
+  page,
   timeFilterType,
   timeFilter,
-  page,
 ) {
   let params = {
     page,
@@ -274,7 +274,7 @@ export async function getBills(
   if (sortBy !== '') {
     params = {
       ...params,
-      sort_by: `-${sortBy}`,
+      'order-by': `-${sortBy}`,
     };
   }
 
