@@ -1128,7 +1128,7 @@ export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
 
 export const options = [
-  { value: 'contract_details', label: 'Contract Details' },
+  { value: 'contract_details', label: 'Accounts' },
   { value: 'performance', label: 'Sales Performance' },
   { value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' },
   { value: 'dsp_ad_performance', label: 'DSP Ad Performance' },
@@ -1154,7 +1154,7 @@ export const AmazonSellerAccountDetails = [
   },
   { key: 'merchant_id', label: 'Merchant ID', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
-  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser Entity ID', section: 2 },
 ];
 
 export const AmazonVendorAccountDetails = [
@@ -1165,7 +1165,7 @@ export const AmazonVendorAccountDetails = [
   },
   { key: 'vendor_code', label: 'Vendor Code', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
-  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser Entity ID', section: 2 },
 ];
 
 export const contractOptions = [
