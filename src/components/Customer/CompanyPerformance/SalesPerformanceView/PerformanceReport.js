@@ -1351,6 +1351,7 @@ export default function PerformanceReport({
       <div className="row ">{renderBBPercentGraphPanel()}</div>
       {/* custom date modal for sale performance graph */}
       <CustomDateModal
+        id="BT-performancereport-daterange-SPdate"
         isOpen={showCustomDateModal}
         ranges={state}
         onClick={() => {
@@ -1372,6 +1373,7 @@ export default function PerformanceReport({
 
       {/* custom date modal for BB% graph */}
       <CustomDateModal
+        id="BT-performancereport-daterange-BBdate"
         isOpen={showBBCustomDateModal}
         ranges={BBstate}
         onClick={() => {

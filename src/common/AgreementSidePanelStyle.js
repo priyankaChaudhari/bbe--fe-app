@@ -15,8 +15,11 @@ const SidePanel = styled.div`
    
     
     &.pdf-sidebar {
-      padding-bottom: 70px;
-      height: 90%;
+      height: 100%;
+
+      .sidebar {
+       padding-bottom: 170px;
+      }
     }
 
     &.contract-sidebar {
@@ -477,7 +480,7 @@ const SidePanel = styled.div`
 
    @media only screen and (min-width: 1500px)  {
      width: 406px;
-     height: 90%;
+     height: 93%;
      .sidebar {
       width: 400px;
     }

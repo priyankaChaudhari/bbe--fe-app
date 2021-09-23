@@ -191,7 +191,7 @@ export default function DSPInvoices({
             </li>
           ))}
         </ul>{' '}
-        <CustomDateRange>
+        <CustomDateRange id="BT-dspinvoices-daterange">
           {dummyDateType === 'custom' ? (
             // <DateRange
             //   ranges={state}

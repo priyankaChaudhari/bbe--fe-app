@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import {
   FileIcon,
@@ -548,15 +549,16 @@ function ContractActivityLog({
                 </li>
               </ul>
             ))}
+
             {activityCount > 10 ? (
-              <div className="pdf-footer">
+              <Footer className="pdf-footer">
                 <CommonPagination
                   count={activityCount}
                   pageNumber={pageNumber || 1}
                   handlePageChange={handlePageChange}
                   showLessItems
                 />
-              </div>
+              </Footer>
             ) : null}
           </>
         ) : isApicalled ? (
@@ -601,3 +603,21 @@ ContractActivityLog.propTypes = {
   getContractActivityLogInfo: PropTypes.func,
   loader: PropTypes.bool,
 };
+
+const Footer = styled.div`
+  // border: 1px solid ${Theme.gray7};
+  // bottom: ${(props) => (props.PdfSidebar ? '0' : '80px')};
+  // background: ${Theme.white};
+  // box-shadow: ${Theme.boxShadow};
+  // position: fixed;
+  // min-height: 60px;
+  // z-index: 2;
+  // width: 336px;
+
+  // @media only screen and (max-width: 991px) {
+  //   width: 100%;
+  // }
+  // @media only screen and (min-width: 1500px) {
+  //   width: 400px;
+  // }
+`;

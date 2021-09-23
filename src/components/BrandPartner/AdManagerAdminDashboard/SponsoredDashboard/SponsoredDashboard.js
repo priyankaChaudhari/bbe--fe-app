@@ -1050,6 +1050,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdDF={selectedAdDF}
         />
         <CustomDateModal
+          id="BT-sponsoreddashboard-daterange"
           isOpen={showAdCustomDateModal}
           range={adState}
           onClick={() => {

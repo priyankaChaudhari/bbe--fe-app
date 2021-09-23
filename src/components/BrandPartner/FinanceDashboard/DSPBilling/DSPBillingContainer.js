@@ -387,7 +387,7 @@ export default function DSPBillingContainer() {
             </li>
           ))}
         </ul>{' '}
-        <CustomDateRange>
+        <CustomDateRange id="BT-dspbilling-daterange">
           {dummyDateType === 'custom' ? (
             <div className="text-left">
               <DatePicker

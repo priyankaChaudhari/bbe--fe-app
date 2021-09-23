@@ -145,6 +145,11 @@ export default function AgreementSidePanel({
     });
   }, []);
 
+  const customStyleDesktopTabs = {
+    width: '50%',
+    margin: '0',
+  };
+
   const DropdownIndicator = (props) => {
     return (
       components.DropdownIndicator && (
@@ -4085,7 +4090,7 @@ export default function AgreementSidePanel({
           <Tabs className="mt-4 d-none d-lg-block">
             <ul style={{ textAlign: 'center' }} className="tabs ">
               <li
-                style={{ width: '50%', margin: '0' }}
+                style={customStyleDesktopTabs}
                 className={sidebarSection === 'edit' ? 'active' : ''}
                 role="presentation"
                 onClick={() => {
@@ -4094,7 +4099,7 @@ export default function AgreementSidePanel({
                 {isEditContract ? 'Edit Fields' : 'Activity'}
               </li>
               <li
-                style={{ width: '50%', margin: '0' }}
+                style={customStyleDesktopTabs}
                 className={sidebarSection === 'amendment' ? 'active' : ''}
                 role="presentation"
                 onClick={() => {

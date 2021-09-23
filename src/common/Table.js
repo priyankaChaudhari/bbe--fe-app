@@ -253,6 +253,7 @@ const Table = styled.table`
         color: ${Theme.gray85};
         font-size: ${Theme.extraNormal};
         font-weight: 300;
+        word-break: break-all;
       }
 
       .user-profile-circle {
