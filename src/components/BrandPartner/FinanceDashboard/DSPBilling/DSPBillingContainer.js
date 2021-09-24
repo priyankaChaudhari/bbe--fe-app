@@ -209,6 +209,14 @@ export default function DSPBillingContainer() {
     setRange([currentDate, currentDate]);
     setdummyDateRange([currentDate, currentDate]);
     getBillingMetricsdata(dummyDateType);
+    getBillsData(
+      searchQuery,
+      selectedVendor,
+      selectedSortBy.value,
+      1,
+      dummyDateType,
+      timeFrame,
+    );
   };
 
   const handleSortByFilter = (event) => {
