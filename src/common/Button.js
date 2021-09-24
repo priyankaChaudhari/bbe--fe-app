@@ -191,6 +191,12 @@ const Button = styled.button`
       outline: none;
     }
   }
+  &.btn-orange-border {
+    border: 1px solid ${Theme.baseColor};
+    color: ${Theme.orange};
+    background-color: ${Theme.white};
+    padding: 9px 20px;
+  }
   &.w-50 {
     width: 200px;
   }

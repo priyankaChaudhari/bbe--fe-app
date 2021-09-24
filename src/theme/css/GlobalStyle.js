@@ -1700,6 +1700,9 @@ text.cust-label-avg {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
+  .label-info-dark {
+    font-weight: 600;
+  }
   .label-range {
     color: ${Theme.black};
     font-size: 20px;

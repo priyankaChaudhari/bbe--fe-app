@@ -11,6 +11,12 @@ export default function FinanceDashboardContainer() {
       <div className="dashboard-container-body">
         <Tabs className="mb-3">
           <ul className="tabs">
+            {/* <li
+              className={viewComponent === 'invoices' ? 'active' : ''}
+              onClick={() => setViewComponent('invoices')}
+              role="presentation">
+              Rev Share Invoicing
+            </li> */}
             <li
               className={viewComponent === 'invoices' ? 'active' : ''}
               onClick={() => setViewComponent('invoices')}

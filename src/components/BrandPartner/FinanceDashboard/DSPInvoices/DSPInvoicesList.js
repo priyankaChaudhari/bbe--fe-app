@@ -328,6 +328,48 @@ export default function DSPInvoicesList({
         {isDesktop || isTablet ? (
           // for dekstop/tablet View
           <>
+            {/* <WhiteCard className="d-lg-block d-md-block d-none mb-3">
+              <div className="row">
+                <div className="col-12 ">
+                  <div className="black-heading-title mt-3">Enable Billing</div>{' '}
+                </div>
+              </div>
+              <div className="straight-line horizontal-line  mt-3 mb-1" />
+              <Table>
+                <thead>
+                  <tr>
+                    <th width="40%" className="product-header">
+                      Partner Name
+                    </th>
+                    <th width="37%" className="product-header">
+                      Contract Start Date
+                    </th>
+
+                    <th width="23%" className="product-header  pr-2">
+                      {' '}
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="cursor">
+                    <td className="product-body">
+                      {' '}
+                      <div className="company-name">TRX Training</div>
+                    </td>
+                    <td className="product-table-body">
+                      01/08/21 (21 days ago)
+                    </td>
+
+                    <td className="product-table-body ">
+                      <Button className="btn-orange-border">
+                        Enable Invoicing
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </WhiteCard> */}
             <WhiteCard className="d-lg-block d-md-block d-none">
               <div className="row">
                 <div className="col-9 ">
@@ -365,33 +407,53 @@ export default function DSPInvoicesList({
           </>
         ) : (
           // for mobile View
-          <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
-            <div className="row mt-2">
-              <div className="col-5 pl-4 mt-3 ">
-                <div className="black-heading-title ">Invoices</div>{' '}
+          <>
+            {/* <WhiteCard className="mb-3">
+              <div className="row">
+                <div className="col-6">
+                  <div className="label">Invoice Type / Number</div>
+                  <div className="label-info label-info-dark">TRX Training</div>
+                </div>
+                <div className="col-6">
+                  <div className="label">Invoice Type / Number</div>
+                  <div className="label-info label-info-dark">TRX Training</div>
+                </div>
+                <div className="col-12 text-center mt-3">
+                  <Button className="btn-orange-border">
+                    Enable Invoicing
+                  </Button>
+                </div>
               </div>
-              <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
-            </div>
+            </WhiteCard> */}
 
-            {invoiceLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color={Theme.orange}
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : (
-              <>
-                {renderTabletInvoicesTable()}
-                <CommonPagination
-                  count={invoiceCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+            <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
+              <div className="row mt-2">
+                <div className="col-5 pl-4 mt-3 ">
+                  <div className="black-heading-title ">Invoices</div>{' '}
+                </div>
+                <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
+              </div>
+
+              {invoiceLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color={Theme.orange}
+                  type="detail"
+                  width={40}
+                  height={40}
                 />
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  {renderTabletInvoicesTable()}
+                  <CommonPagination
+                    count={invoiceCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              )}
+            </div>
+          </>
         )}
       </div>
     </>
