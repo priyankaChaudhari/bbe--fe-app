@@ -988,6 +988,7 @@ export default function AdPerformance({
       />
 
       <CustomDateModal
+        id="BT-adperformance-daterange"
         isOpen={showAdCustomDateModal}
         ranges={adState}
         onClick={() => {

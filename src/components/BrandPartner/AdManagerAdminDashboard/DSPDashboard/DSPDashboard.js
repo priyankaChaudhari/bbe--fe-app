@@ -793,6 +793,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             setBoxClasses={setBoxClasses}
           />
           <CustomDateModal
+            id="BT-dspdashboard-daterange"
             isOpen={showAdCustomDateModal}
             range={adState}
             onClick={() => {

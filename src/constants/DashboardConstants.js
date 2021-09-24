@@ -152,7 +152,7 @@ export const BillingVendorOptions = [
     label: 'Amazon Online UK Limited (EUR)',
   },
   {
-    value: 'Amazon Commercial Services Pty Ltd',
+    value: 'Amazon Commercial Services Pty Ltd.',
     label: 'Amazon Commercial Services Pty Ltd.',
   },
 ];

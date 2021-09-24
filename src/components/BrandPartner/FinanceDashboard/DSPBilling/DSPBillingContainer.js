@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';
 import { components } from 'react-select';
 import { func } from 'prop-types';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMediaQuery } from 'react-responsive';
 
@@ -15,7 +15,7 @@ import Theme from '../../../../theme/Theme';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import DSPBillingFilters from './DSPBillingFilters';
 import { getDSPBillingMetrics, getBills } from '../../../../api';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+// import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import TableMobileView from '../../../../common/TableMobileView';
 import {
   Card,
@@ -46,7 +46,7 @@ import {
 export default function DSPBillingContainer() {
   const currentDate = new Date();
   const dropdownRef = useRef(null);
-  const history = useHistory();
+  // const history = useHistory();
 
   const [timeFrame, setTimeFrame] = useState({
     startDate: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
@@ -92,7 +92,7 @@ export default function DSPBillingContainer() {
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([currentDate, currentDate]);
   const [range, setRange] = useState([currentDate, currentDate]);
-  const [dummayDateRange, setDummayDateRange] = useState([
+  const [dummyDateRange, setdummyDateRange] = useState([
     currentDate,
     currentDate,
   ]);
@@ -117,15 +117,17 @@ export default function DSPBillingContainer() {
   }, []);
 
   const getBillsData = useCallback(
-    (searchKey, vendor, sortBy, page) => {
+    (searchKey, vendor, sortBy, page, dateType, dateRange) => {
       setBillingLoader(true);
       getBills(
         searchKey,
         vendor,
         sortBy,
-        selectedDateType,
-        timeFrame,
+        // selectedDateType,
+        // timeFrame,
         page,
+        dateType,
+        dateRange,
       ).then((res) => {
         if (res && res.status === 400) {
           setBillingLoader(false);
@@ -140,13 +142,20 @@ export default function DSPBillingContainer() {
         }
       });
     },
-    [selectedDateType, timeFrame],
+    [],
   );
 
   useEffect(() => {
     if (responseId === null) {
       getBillingMetricsdata(dummyDateType);
-      getBillsData(searchQuery, selectedVendor, selectedSortBy.value, 1);
+      getBillsData(
+        searchQuery,
+        selectedVendor,
+        selectedSortBy.value,
+        1,
+        selectedDateType,
+        timeFrame,
+      );
       setResponseId('12345');
     }
   }, [
@@ -157,6 +166,8 @@ export default function DSPBillingContainer() {
     searchQuery,
     selectedVendor,
     selectedSortBy,
+    selectedDateType,
+    timeFrame,
   ]);
 
   const handleTimeTypeChange = (event) => {
@@ -166,37 +177,70 @@ export default function DSPBillingContainer() {
   const handleApply = () => {
     setSelectedDateType(dummyDateType);
     setShowDropdown({ show: !showDropdown.show });
-
-    if (dummayDateRange !== null) {
-      setState(dummayDateRange);
-      let sd = dummayDateRange[0];
-      let ed = dummayDateRange[1];
+    if (dummyDateType === 'custom') {
+      setState(dummyDateRange);
+      let sd = dummyDateRange[0];
+      let ed = dummyDateRange[1];
       sd = `${
-        dummayDateRange[0].getMonth() + 1
-      }-${dummayDateRange[0].getFullYear()}`;
+        dummyDateRange[0].getMonth() + 1
+      }-${dummyDateRange[0].getFullYear()}`;
       ed = `${
-        dummayDateRange[1].getMonth() + 1
-      }-${dummayDateRange[1].getFullYear()}`;
-
+        dummyDateRange[1].getMonth() + 1
+      }-${dummyDateRange[1].getFullYear()}`;
       setTimeFrame({
         startDate: sd,
         endDate: ed,
       });
-
       getBillingMetricsdata(dummyDateType, sd, ed);
+      getBillsData(
+        searchQuery,
+        selectedVendor,
+        selectedSortBy.value,
+        1,
+        dummyDateType,
+        {
+          startDate: sd,
+          endDate: ed,
+        },
+      );
       return;
     }
+    setState([currentDate, currentDate]);
+    setRange([currentDate, currentDate]);
+    setdummyDateRange([currentDate, currentDate]);
     getBillingMetricsdata(dummyDateType);
+    getBillsData(
+      searchQuery,
+      selectedVendor,
+      selectedSortBy.value,
+      1,
+      dummyDateType,
+      timeFrame,
+    );
   };
 
   const handleSortByFilter = (event) => {
     setSelectedSortBy(event);
-    getBillsData(searchQuery, selectedVendor, event.value, 1);
+    getBillsData(
+      searchQuery,
+      selectedVendor,
+      event.value,
+      1,
+      selectedDateType,
+      timeFrame,
+    );
   };
 
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getBillsData(event.target.value, selectedVendor, selectedSortBy.value, 1);
+    getBillsData(
+      event.target.value,
+      selectedVendor,
+      selectedSortBy.value,
+      1,
+      selectedDateType,
+      timeFrame,
+    );
   };
 
   const handleResetFilter = () => {
@@ -206,12 +250,26 @@ export default function DSPBillingContainer() {
     setSelectedVendor('Amazon Advertising LLC');
     setSearchQuery('');
     setSelectedSortBy({ value: '', label: 'Status' });
-    getBillsData('', 'Amazon Advertising LLC', '', 1);
+    getBillsData(
+      '',
+      'Amazon Advertising LLC',
+      '',
+      1,
+      selectedDateType,
+      timeFrame,
+    );
   };
 
   const handleStatusChange = (event) => {
     setSelectedVendor(event.target.value);
-    getBillsData(searchQuery, event.target.value, selectedSortBy.value, 1);
+    getBillsData(
+      searchQuery,
+      event.target.value,
+      selectedSortBy.value,
+      1,
+      selectedDateType,
+      timeFrame,
+    );
   };
 
   const handlePageChange = (currentPage) => {
@@ -221,6 +279,8 @@ export default function DSPBillingContainer() {
       selectedVendor,
       selectedSortBy.value,
       currentPage,
+      selectedDateType,
+      timeFrame,
     );
   };
 
@@ -264,12 +324,31 @@ export default function DSPBillingContainer() {
   const onDateChange = (date) => {
     if (date[1] === null) {
       // setState([date[0], date[0]]);
-      setDummayDateRange([date[0], date[0]]);
+      setdummyDateRange([date[0], date[0]]);
     } else {
       // setState(date);
-      setDummayDateRange(date);
+      setdummyDateRange(date);
     }
     setRange(date);
+  };
+
+  const bindCurrencySymbol = () => {
+    switch (selectedVendor) {
+      case 'Amazon Advertising LLC':
+        return '$';
+      case 'Amazon Online UK Limited':
+        return '£';
+
+      case 'Amazon Online UK Limited (EUR)':
+        return '€';
+
+      case 'Amazon Commercial Services Pty Ltd.':
+        return 'A$';
+
+      default:
+        break;
+    }
+    return '$';
   };
 
   const displayTimeFilterOption = () => {
@@ -285,7 +364,7 @@ export default function DSPBillingContainer() {
             setDummayDateType(selectedDateType);
             setRange(state);
             setShowDropdown({ show: !showDropdown.show });
-            setDummayDateRange(state);
+            setdummyDateRange(state);
           }}
         />
         <ul>
@@ -316,7 +395,7 @@ export default function DSPBillingContainer() {
             </li>
           ))}
         </ul>{' '}
-        <CustomDateRange>
+        <CustomDateRange id="BT-dspbilling-daterange">
           {dummyDateType === 'custom' ? (
             <div className="text-left">
               <DatePicker
@@ -450,17 +529,17 @@ export default function DSPBillingContainer() {
     const dueDate = dayjs(item.due_date).format('MM/DD/YY');
     return (
       <tr
-        className="cursor"
         key={item.id}
-        onClick={() =>
-          history.push(
-            PATH_CUSTOMER_DETAILS.replace(
-              ':id',
-              item.customer && item.customer.id,
-            ),
-            'finance',
-          )
-        }>
+        // onClick={() =>
+        //   history.push(
+        //     PATH_CUSTOMER_DETAILS.replace(
+        //       ':id',
+        //       item.customer && item.customer.id,
+        //     ),
+        //     'finance',
+        //   )
+        // }
+      >
         <td className="product-body">
           {' '}
           <img
@@ -478,7 +557,7 @@ export default function DSPBillingContainer() {
           <div className="status">#{item.bill_number}</div>
         </td>
         <td className="product-table-body">
-          ${bindAmount(item.amount, 0, true)}
+          {`${bindCurrencySymbol()}${bindAmount(item.amount, 0, true)}`}
         </td>
         <td className="product-table-body light-font">{billDate}</td>
         <td className="product-table-body light-font">{dueDate}</td>
@@ -532,23 +611,27 @@ export default function DSPBillingContainer() {
           billingData &&
           billingData.map((item) => (
             <TableMobileView
-              onClick={() =>
-                history.push(
-                  PATH_CUSTOMER_DETAILS.replace(
-                    ':id',
-                    item.customer && item.customer.id,
-                  ),
-                  'finance',
-                )
-              }
+              // onClick={() =>
+              //   history.push(
+              //     PATH_CUSTOMER_DETAILS.replace(
+              //       ':id',
+              //       item.customer && item.customer.id,
+              //     ),
+              //     'finance',
+              //   )
+              // }
               key={item.id}
-              className="mb-3 cursor"
+              className="mb-3"
               CompanyName={item.customer && item.customer.name}
               icon={item && item.customer && item.customer.profile_picture}
               invoiceType={null}
               invoiceId={item.bill_number}
               label="AMOUNT"
-              labelInfo={`$${bindAmount(item.amount, 0, true)}`}
+              labelInfo={`${bindCurrencySymbol()}${bindAmount(
+                item.amount,
+                0,
+                true,
+              )}`}
               label1="BILL DATE"
               labelInfo1={dayjs(item.bill_date).format('MM/DD/YY')}
               label2="DUE DATE"

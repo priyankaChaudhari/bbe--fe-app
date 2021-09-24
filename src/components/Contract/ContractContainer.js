@@ -100,6 +100,12 @@ const customStylesForAlert = {
     transform: 'translate(-50%, -50%)',
   },
 };
+const customStylesForTabs = {
+  width: '33%',
+  margin: '0',
+  paddingLeft: '0',
+  paddingRight: '0',
+};
 export default function ContractContainer() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -3108,12 +3114,7 @@ export default function ContractContainer() {
           <ContractTab className="d-lg-none d-block">
             <ul style={{ textAlign: 'center' }} className="tabs">
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3121,24 +3122,14 @@ export default function ContractContainer() {
               </li>
 
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
               </li>
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'amendment' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('amendment')}>
@@ -3285,12 +3276,7 @@ export default function ContractContainer() {
           <ContractTab className="d-lg-none d-block">
             <ul style={{ textAlign: 'center' }} className="tabs">
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'view-contract' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('view-contract')}>
@@ -3298,24 +3284,14 @@ export default function ContractContainer() {
               </li>
 
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'edit-fields' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('edit-fields')}>
                 {isEditContract ? 'Edit Fields' : 'Activity'}
               </li>
               <li
-                style={{
-                  width: '30%',
-                  margin: '0',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                }}
+                style={customStylesForTabs}
                 className={tabInResponsive === 'amendment' ? 'active' : ''}
                 role="presentation"
                 onClick={() => showTabInResponsive('amendment')}>

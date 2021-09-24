@@ -471,7 +471,7 @@ export default function CustomerList() {
   const SortOption = (dataProps) => (
     <SingleValue {...dataProps}>
       {dataProps.data.label === 'Sales Performance' ||
-      dataProps.data.label === 'Contract Details' ||
+      dataProps.data.label === 'Accounts' ||
       dataProps.data.label === 'Sponsored Ad Performance' ||
       dataProps.data.label === 'DSP Ad Performance'
         ? 'View:'
@@ -1059,7 +1059,7 @@ export default function CustomerList() {
     }
     if (item === 'view') {
       if (isDesktop) {
-        return 'View: Contract Details';
+        return 'View: Accounts';
       }
       return 'View';
     }
@@ -1263,7 +1263,7 @@ export default function CustomerList() {
         },
       ];
     }
-    return [{ value: 'contract_details', label: 'Contract Details' }];
+    return [{ value: 'contract_details', label: 'Accounts' }];
   };
 
   const getDropDownOptions = (optionsFor) => {
