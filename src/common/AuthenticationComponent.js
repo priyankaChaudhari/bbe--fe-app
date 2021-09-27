@@ -75,7 +75,7 @@ export default function AuthenticationComponent() {
   };
 
   useIdleTimer({
-    timeout: 100000,
+    timeout: 600000,
     onIdle: handleOnIdle,
     debounce: 500,
   });
