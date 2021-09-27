@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import { FormField, Button, PageLoader, ErrorMsg } from '../../common/index';
-import { userDetails } from '../../constants/FieldConstants';
+import { userDetails } from '../../constants';
 import EditPassword from './EditPassword';
 import { updateUserInfo } from '../../api/index';
 import { userMe } from '../../store/actions/userState';

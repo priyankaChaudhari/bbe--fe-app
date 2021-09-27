@@ -38,152 +38,6 @@ import {
   DeleteIcon,
 } from '../theme/images/index';
 
-export const userDetails = [
-  {
-    key: 'first_name',
-    label: 'First name',
-    placeholder: 'Enter First name',
-    type: 'text',
-    section: 1,
-    pattern: {
-      value: /^[0-9a-zA-Z_-]*$/i,
-      message: 'Special characters are not allowed.',
-    },
-  },
-
-  {
-    key: 'email',
-    label: 'Email',
-    placeholder: 'Enter email',
-    type: 'text',
-    section: 1,
-    pattern: {
-      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-      message: 'Invalid email address.',
-    },
-  },
-  {
-    key: 'last_name',
-    label: 'Last name',
-    placeholder: 'Enter Last name',
-    type: 'text',
-    section: 2,
-    pattern: {
-      value: /^[0-9a-zA-Z_-]*$/i,
-      message: 'Special characters are not allowed.',
-    },
-  },
-  {
-    key: 'phone_number',
-    label: 'Phone',
-    placeholder: 'Enter Phone',
-    type: 'text',
-    section: 2,
-  },
-  {
-    key: 'old_password',
-    label: 'Current password',
-    placeholder: 'Enter current password',
-    type: 'password',
-    section: 3,
-  },
-  {
-    key: 'new_password',
-    label: 'New password',
-    placeholder: 'Enter new password',
-    type: 'password',
-    section: 4,
-  },
-];
-
-export const dataHeaders = [
-  {
-    key: 'company_name',
-    name: 'Company Name',
-    width: '25%',
-    section: 1,
-    type: 'icon',
-  },
-  { key: 'status', name: 'Status', width: '15%', section: 1 },
-  {
-    key: 'start_date',
-    name: 'Start Date',
-    width: '10%',
-    section: 1,
-    level: 'contract',
-  },
-  {
-    key: 'contract_type',
-    name: 'Contract Type',
-    width: '10%',
-    section: 1,
-    level: 'contract',
-  },
-
-  { key: 'brand', name: 'Brand', width: '10%', text: 'center', section: 1 },
-  {
-    key: 'monthly_retainer',
-    name: 'Monthly Retainer',
-    width: '10%',
-    section: 2,
-    type: 'number-currency',
-    level: 'contract',
-  },
-  {
-    key: 'length',
-    name: 'Length',
-    width: '10%',
-    section: 2,
-    type: 'number',
-    level: 'contract',
-  },
-  {
-    key: 'rev_share',
-    name: 'Revenue Share',
-    width: '10%',
-    section: 2,
-    type: 'number-percent',
-    level: 'contract',
-  },
-  {
-    key: 'seller_type',
-    name: 'Seller Type',
-    width: '10%',
-    section: 2,
-    level: 'contract',
-  },
-  {
-    key: 'brand_growth_strategist',
-    name: 'Brand Growth Strategist',
-    width: '15%',
-    section: 2,
-    type: 'icon',
-  },
-];
-
-export const sliderSettings = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-
-  responsive: [
-    {
-      breakpoint: 320,
-      settings: { slidesToShow: 1, slidesToScroll: 1, infinite: false },
-    },
-    {
-      breakpoint: 768,
-      settings: { slidesToShow: 1, slidesToScroll: 1, infinite: false },
-    },
-    {
-      breakpoint: 1024,
-      settings: { slidesToShow: 1, slidesToScroll: 1, infinite: false },
-    },
-  ],
-};
-
 export const sortByOrderOptions = [
   { value: true, label: 'Highest to Lowest' },
   { value: false, label: 'Lowest to Highest' },
@@ -257,120 +111,6 @@ export const timeFrameFilters = [
   },
 ];
 
-export const companyFields = [
-  { key: 'description', label: 'Description', section: 1, type: 'textarea' },
-  { key: 'website', label: 'Website', section: 1 },
-  {
-    key: 'social',
-    label: 'Social',
-    section: 1,
-    type: 'social',
-    choices: [
-      { key: 'facebook', value: FaceBookIcons },
-      { key: 'twitter', value: TwitterIcons },
-      { key: 'linkedin', value: LinkeDinIcons },
-      { key: 'instagram', value: InstagramIcons },
-      { key: 'pinterest', value: PinterestIcon },
-    ],
-  },
-  { key: 'phone_number', label: 'Phone', section: 1 },
-  { key: 'timezone', label: 'Time Zone', section: 1 },
-  { key: 'category', label: 'Category', section: 2, type: 'choice' },
-  {
-    key: 'annual_revenue',
-    label: 'Annual Revenue',
-    section: 2,
-    type: 'number-currency',
-  },
-  {
-    key: 'number_of_employees',
-    label: '# of Employees',
-    section: 2,
-    type: 'number',
-  },
-  { key: 'brand', label: 'Brands', section: 2 },
-];
-
-export const accountFields = [
-  { key: 'contract_type', label: 'Agreement type', section: 1 },
-  {
-    key: 'one_time_deal_amount',
-    label: 'One time deal amount',
-    section: 1,
-    type: 'number-currency',
-  },
-  { key: 'length', label: 'Agreement Length', section: 1, type: 'choice' },
-  { key: 'channel', label: 'Channel', section: 1, type: 'choice' },
-  {
-    key: 'dsp_fee',
-    label: 'DSP Monthly AD Budget',
-    section: 1,
-    type: 'number-currency',
-  },
-  { key: 'start_date', label: 'Agreement Start Date', section: 2 },
-  {
-    key: 'rev_share',
-    label: 'Rev Share %',
-    section: 2,
-    type: 'choice',
-  },
-  {
-    key: 'monthly_retainer',
-    label: 'Monthly Retainer',
-    section: 2,
-    type: 'number-currency',
-  },
-  { key: 'seller_type', label: 'Seller type', section: 2, type: 'choice' },
-  {
-    key: 'additional_monthly_services',
-    label: 'Additional Monthly services',
-    type: 'multichoice',
-    section: 2,
-  },
-  {
-    key: 'additional_one_time_services',
-    label: 'Additional One-time services',
-    type: 'multichoice',
-    section: 2,
-  },
-  {
-    key: 'sales_threshold',
-    label: 'Sales Threshold',
-    section: 1,
-    type: 'number-currency',
-  },
-];
-
-export const awsDetails = [
-  { key: 'merchant_id', label: 'Merchant ID', section: 1, type: 'text' },
-  { key: 'marketplace_id', label: 'Marketplace ID', section: 1, type: 'text' },
-  { key: 'secret_key', label: 'Secret ID', section: 1, type: 'password' },
-  { key: 'aws', label: 'AWS access key ID', section: 1, type: 'password' },
-  {
-    key: 'account_management_email',
-    label: 'Account Management Email',
-    type: 'email',
-    section: 2,
-  },
-  {
-    key: 'data_bots',
-    label: 'Data Bots Email',
-    type: 'email',
-    section: 2,
-  },
-  {
-    key: 'Vendor',
-    label: 'Vendor Central Username and Password',
-    section: 2,
-  },
-  {
-    key: 'Seller',
-    label: 'Seller Central Username and Password',
-    type: 'email',
-    section: 2,
-  },
-];
-
 export const editCompanyFields = [
   {
     key: 'description',
@@ -434,58 +174,6 @@ export const editAccountFields = [
     label: 'Postal Code',
     property: 'col-md-12',
     type: 'text',
-  },
-  // {
-  //   key: 'number_of_employees',
-  //   label: 'Company Size',
-  //   property: 'col-md-6',
-  //   type: 'number',
-  // },
-
-  // {
-  //   key: 'annual_revenue',
-  //   label: 'Annual Revenue',
-  //   type: 'number-currency',
-  //   property: 'col-md-6',
-  // },
-  // {
-  //   key: 'category',
-  //   label: 'Category',
-  //   type: 'choice',
-  //   property: 'col-md-6',
-  // },
-];
-
-export const contactDetails = [
-  {
-    key: 'first_name',
-    label: 'First name',
-    type: 'text',
-    property: 'col-md-3',
-  },
-  {
-    key: 'last_name',
-    label: 'Last name',
-    type: 'text',
-    property: 'col-md-3',
-  },
-  {
-    key: 'role',
-    label: 'Role',
-    type: 'choice',
-    property: 'col-md-6',
-  },
-  {
-    key: 'email',
-    label: 'Email',
-    type: 'email',
-    property: 'col-md-6',
-  },
-  {
-    key: 'phone_number',
-    label: 'Phone number',
-    type: 'text',
-    property: 'col-md-6',
   },
 ];
 
@@ -650,11 +338,6 @@ export const StatementDetails = [
     isMandatory: true,
     part: 'statement',
   },
-  // {
-  //   key: 'additional_marketplaces',
-  //   label: 'Additional Market Places',
-  //   type: 'multichoice',
-  // },
   {
     key: 'rev_share',
     label: 'Revenue Share',
@@ -663,14 +346,6 @@ export const StatementDetails = [
     isMandatory: true,
     part: 'statement',
   },
-  // {
-  //   key: 'sales_threshold',
-  //   label: 'REVENUE THRESHOLD',
-  //   type: 'number-currency',
-  //   placeholder: 'Enter Revenue Threshold (Optional)',
-  //   isMandatory: false,
-  //   part: 'statement',
-  // },
   {
     key: 'billing_cap',
     label: 'BILLING CAP',
@@ -861,33 +536,6 @@ export const creditCardDetails = [
   },
 ];
 
-// choices: [
-//       {
-//         key: 'visa',
-//         label: 'Visa',
-//         icon: VisaCardIcons,
-//         type: 'radio',
-//       },
-//       {
-//         key: 'mastercard',
-//         label: 'Mastercard',
-//         icon: MasterCardIcons,
-//         type: 'radio',
-//       },
-//       {
-//         key: 'discover',
-//         label: 'Discover',
-//         icon: DiscoverCardIcons,
-//         type: 'radio',
-//       },
-//       {
-//         key: 'american_express',
-//         label: 'American Express',
-//         icon: AmercianExpressCardIcons,
-//         type: 'radio',
-//       },
-//     ],
-
 export const customerContactDetails = [
   {
     key: 'first_name',
@@ -919,17 +567,6 @@ export const customerContactDetails = [
     type: 'text',
     property: 'col-md-12',
   },
-];
-
-export const AmazonMarketplaceDetails = [
-  { key: 'merchant_id', label: 'Merchant ID', section: 1 },
-  // { key: 'marketplace_id', label: 'Marketplace ID', section: 1 },
-  {
-    key: 'account_management_email',
-    label: 'Account Management Credentials',
-    section: 2,
-  },
-  { key: 'data_bots_email', label: 'Data Bots Credentials', section: 2 },
 ];
 
 export const BillingAddress = [
@@ -1030,18 +667,6 @@ export const whichStep = [
       'If you don’t have access to your Amazon Seller Central and Vender Central admin accounts then you can use the checkbox below to assign this step to someone that does.',
     video: false,
   },
-  // {
-  //   key: 'developer access',
-  //   stepof: 4,
-  //   title: 'Amazon Developer Access',
-  //   skip: PATH_SUMMARY,
-  //   back: PATH_AMAZON_MERCHANT,
-  //   bar: '83',
-  //   path: 'amazon-account',
-  //   subTitle:
-  //     'Finally, we need you to grant us developer access to your Amazon Seller account.',
-  //   video: true,
-  // },
 ];
 
 export const stepPath = [
@@ -1060,11 +685,6 @@ export const stepPath = [
     title: 'Amazon Account Names & IDs',
     view: PATH_AMAZON_MERCHANT,
   },
-  // {
-  //   key: 'developer access',
-  //   title: 'Amazon Developer Access',
-  //   view: PATH_AMAZON_ACCOUNT,
-  // },
 ];
 
 export const BrandSteps = [
