@@ -5,6 +5,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
+import { useIdleTimer } from 'react-idle-timer';
 
 import { userMe } from '../store/actions/index';
 import {
@@ -57,6 +58,7 @@ import {
   DelegationUpload,
   BrandAssetsPreview,
 } from '../components/BrandAssetGathering';
+import { clearToken } from '../store/actions/userState';
 
 const _ = require('lodash');
 
@@ -67,6 +69,16 @@ export default function AuthenticationComponent() {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const handleOnIdle = () => {
+    dispatch(clearToken());
+  };
+
+  useIdleTimer({
+    timeout: 100000,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  });
 
   useEffect(() => {
     if (
