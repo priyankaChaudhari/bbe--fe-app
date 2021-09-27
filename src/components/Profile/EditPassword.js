@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import { FormField, Button, ErrorMsg, PageLoader } from '../../common';
-import { userDetails } from '../../constants/FieldConstants';
+import { userDetails } from '../../constants';
 import { updatePassword } from '../../api/index';
 import { CloseEyeIcon, smallEyeIcon } from '../../theme/images/index';
 

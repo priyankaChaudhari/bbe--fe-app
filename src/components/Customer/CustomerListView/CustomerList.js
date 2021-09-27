@@ -2,16 +2,19 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
+import $ from 'jquery';
+import dayjs from 'dayjs';
+import Select, { components } from 'react-select';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import $ from 'jquery';
-import dayjs from 'dayjs';
-import Select, { components } from 'react-select';
 
 import Theme from '../../../theme/Theme';
 import NoRecordFound from '../../../common/NoRecordFound';
+import CustomerListTablet from './CustomerListTablet';
+import CustomerListFilters from './CustomerListFilters';
+import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 import {
   CommonPagination,
   PageLoader,
@@ -42,14 +45,12 @@ import {
   SortUp,
   CaretUp,
 } from '../../../theme/images/index';
-import CustomerListTablet from './CustomerListTablet';
+
 import { getCustomerList, getGrowthStrategist, getStatus } from '../../../api';
 import { getManagersList, getSellerType } from '../../../api/ChoicesApi';
 import { getcontract } from '../../../api/AgreementApi';
 import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../../constants';
 import { CustomerListPage } from '../../../theme/CustomerListStyle';
-import CustomerListFilters from './CustomerListFilters';
-import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 
 const salesSortOptions = sortOptions.concat(performanceSortOptions);
 const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);

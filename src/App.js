@@ -22,7 +22,7 @@ import {
   PATH_UNAUTHORIZED_BRAND_ASSET,
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
   PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE,
-} from './constants/index';
+} from './constants';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import { Login, ForgotPassword, ResetPassword } from './components/Auth';
 
