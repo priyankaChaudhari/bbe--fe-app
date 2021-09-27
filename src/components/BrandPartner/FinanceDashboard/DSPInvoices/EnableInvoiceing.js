@@ -54,8 +54,8 @@ export default function EnableInvoiceing({ view }) {
     );
   };
 
-  const renderInvoicesTable = () => {
-    return view === 'desktop' ? (
+  const renderDesktopView = () => {
+    return (
       <WhiteCard className="d-lg-block d-md-block d-none mb-3">
         <div className="row">
           <div className="col-12 ">
@@ -63,43 +63,47 @@ export default function EnableInvoiceing({ view }) {
           </div>
         </div>
         <div className="straight-line horizontal-line  mt-3 mb-1" />
-        <Table>
-          <thead>
-            <tr>
-              <th width="40%" className="product-header">
-                Partner Name
-              </th>
-              <th width="37%" className="product-header">
-                Contract Start Date
-              </th>
+        {invoiceLoader ? (
+          <PageLoader
+            component="performance-graph"
+            color={Theme.orange}
+            type="detail"
+            width={40}
+            height={40}
+          />
+        ) : billingData && billingData.length > 0 ? (
+          <>
+            <Table>
+              <thead>
+                <tr>
+                  <th width="40%" className="product-header">
+                    Partner Name
+                  </th>
+                  <th width="37%" className="product-header">
+                    Contract Start Date
+                  </th>
 
-              <th width="23%" className="product-header  pr-2">
-                {' '}
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoiceLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color={Theme.orange}
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : billingData && billingData.length > 0 ? (
-              <>
+                  <th width="23%" className="product-header  pr-2">
+                    {' '}
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
                 {billingData &&
                   billingData.map((item) => renderTableData(item))}
-              </>
-            ) : (
-              <NoData>No Invoices Found</NoData>
-            )}
-          </tbody>
-        </Table>
+              </tbody>
+            </Table>
+          </>
+        ) : (
+          <NoData>No Invoices Found</NoData>
+        )}
       </WhiteCard>
-    ) : (
+    );
+  };
+
+  const renderMobileView = () => {
+    return (
       <WhiteCard className="mb-3">
         <div className="row">
           <div className="col-6">
@@ -118,7 +122,15 @@ export default function EnableInvoiceing({ view }) {
     );
   };
 
-  return <>{renderInvoicesTable()}</>;
+  return (
+    <>
+      {view === 'desktop'
+        ? // for desktop/tablet view
+          renderDesktopView()
+        : // for mobile view
+          renderMobileView()}
+    </>
+  );
 }
 
 EnableInvoiceing.defaultProps = { view: '' };

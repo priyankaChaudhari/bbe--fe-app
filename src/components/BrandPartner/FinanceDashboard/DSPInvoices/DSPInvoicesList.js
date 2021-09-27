@@ -327,84 +327,41 @@ export default function DSPInvoicesList({
       <div className="col-lg-9">
         {isDesktop || isTablet ? (
           // for dekstop/tablet View
-          <>
-            {/* <WhiteCard className="d-lg-block d-md-block d-none mb-3">
-              <div className="row">
-                <div className="col-12 ">
-                  <div className="black-heading-title mt-3">Enable Billing</div>{' '}
-                </div>
+
+          <WhiteCard className="d-lg-block d-md-block d-none">
+            <div className="row">
+              <div className="col-9 ">
+                <div className="black-heading-title mt-3">Invoices</div>{' '}
               </div>
-              <div className="straight-line horizontal-line  mt-3 mb-1" />
-              <Table>
-                <thead>
-                  <tr>
-                    <th width="40%" className="product-header">
-                      Partner Name
-                    </th>
-                    <th width="37%" className="product-header">
-                      Contract Start Date
-                    </th>
-
-                    <th width="23%" className="product-header  pr-2">
-                      {' '}
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="cursor">
-                    <td className="product-body">
-                      {' '}
-                      <div className="company-name">TRX Training</div>
-                    </td>
-                    <td className="product-table-body">
-                      01/08/21 (21 days ago)
-                    </td>
-
-                    <td className="product-table-body ">
-                      <Button className="btn-orange-border">
-                        Enable Invoicing
-                      </Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            </WhiteCard> */}
-            <WhiteCard className="d-lg-block d-md-block d-none">
-              <div className="row">
-                <div className="col-9 ">
-                  <div className="black-heading-title mt-3">Invoices</div>{' '}
-                </div>
-                <div
-                  id="BT-finace-dah-invoice-dropdown"
-                  className="col-3  text-right">
-                  {renderSortByDropDown()}
-                </div>
+              <div
+                id="BT-finace-dah-invoice-dropdown"
+                className="col-3  text-right">
+                {renderSortByDropDown()}
               </div>
-              <div className="straight-line horizontal-line  mt-3 mb-1" />
+            </div>
+            <div className="straight-line horizontal-line  mt-3 mb-1" />
 
-              {invoiceLoader ? (
-                <PageLoader
-                  component="performance-graph"
-                  color={Theme.orange}
-                  type="detail"
-                  width={40}
-                  height={40}
+            {invoiceLoader ? (
+              <PageLoader
+                component="performance-graph"
+                color={Theme.orange}
+                type="detail"
+                width={40}
+                height={40}
+              />
+            ) : invoiceData && invoiceData.length > 0 ? (
+              <>
+                {renderInvoicesTable()}
+                <CommonPagination
+                  count={invoiceCount}
+                  pageNumber={pageNumber}
+                  handlePageChange={handlePageChange}
                 />
-              ) : invoiceData && invoiceData.length > 0 ? (
-                <>
-                  {renderInvoicesTable()}
-                  <CommonPagination
-                    count={invoiceCount}
-                    pageNumber={pageNumber}
-                    handlePageChange={handlePageChange}
-                  />
-                </>
-              ) : (
-                <NoData>No Invoices Found</NoData>
-              )}
-            </WhiteCard>
-          </>
+              </>
+            ) : (
+              <NoData>No Invoices Found</NoData>
+            )}
+          </WhiteCard>
         ) : (
           // for mobile View
           <>
