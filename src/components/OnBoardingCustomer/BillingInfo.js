@@ -608,7 +608,7 @@ export default function BillingInfo({
               style={{ color: '#556178', fontSize: '12px' }}
               href="https://www.authorize.net/en-us/about-us/dpa.html"
               target="_BLANK"
-              rel="noreferrer">
+              rel="noopener noreferrer">
               Authorize.Net
             </a>
             , to capture your credit card payment information safely and
