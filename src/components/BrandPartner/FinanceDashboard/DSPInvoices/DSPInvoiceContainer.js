@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
