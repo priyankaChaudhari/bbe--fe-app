@@ -38,6 +38,7 @@ export default function DSPInvoicesList({
   viewComponent,
   isDesktop,
   isTablet,
+  selectedNavigation,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
@@ -65,6 +66,7 @@ export default function DSPInvoicesList({
         timeFrameType,
         timeFrame,
         page,
+        selectedNavigation,
       ).then((res) => {
         if (res && res.status === 400) {
           setInvoiceLoader(false);
@@ -79,7 +81,7 @@ export default function DSPInvoicesList({
         }
       });
     },
-    [timeFrameType, timeFrame],
+    [timeFrameType, timeFrame, selectedNavigation],
   );
 
   useEffect(() => {
@@ -424,6 +426,7 @@ DSPInvoicesList.defaultProps = {
   timeFrameType: '',
   isTimeFrameChange: false,
   setIsTimeFrameChange: () => {},
+  selectedNavigation: '',
 };
 DSPInvoicesList.propTypes = {
   data: func,
@@ -435,4 +438,5 @@ DSPInvoicesList.propTypes = {
   timeFrameType: string,
   isTimeFrameChange: bool,
   setIsTimeFrameChange: func,
+  selectedNavigation: string,
 };

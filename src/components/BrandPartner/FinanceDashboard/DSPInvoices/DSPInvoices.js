@@ -54,16 +54,18 @@ export default function DSPInvoices({
   // };
 
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
-    getDSPFinances(dateType, startDate, endDate).then((res) => {
-      if (res && res.status === 400) {
-        // setInvoiceLoader(false);
-      }
-      if (res && res.status === 200) {
-        if (res.data && res.data) {
-          setDSPData(res.data);
+    getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
+      (res) => {
+        if (res && res.status === 400) {
+          // setInvoiceLoader(false);
         }
-      }
-    });
+        if (res && res.status === 200) {
+          if (res.data && res.data) {
+            setDSPData(res.data);
+          }
+        }
+      },
+    );
   }, []);
 
   useEffect(() => {

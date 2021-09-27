@@ -180,6 +180,7 @@ export async function getFinanceInvoices(
   timeFilterType,
   timeFilter,
   page,
+  selectedNavigation,
 ) {
   let params = {
     page,
@@ -222,6 +223,18 @@ export async function getFinanceInvoices(
       invoice_status: status,
     };
   }
+
+  if (selectedNavigation === 'revShare') {
+    params = {
+      ...params,
+      invoice_type: 'rev share',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'dsp service',
+    };
+  }
   let result = {};
   result = await axiosInstance
     .get(`${API_DSP_INVOICES}`, { params })
@@ -234,7 +247,12 @@ export async function getFinanceInvoices(
   return result;
 }
 
-export async function getDSPFinances(timeFilter, startDate, endDate) {
+export async function getDSPFinances(
+  timeFilter,
+  startDate,
+  endDate,
+  selectedNavigation,
+) {
   let params = {};
 
   if (timeFilter === 'custom') {
@@ -243,6 +261,18 @@ export async function getDSPFinances(timeFilter, startDate, endDate) {
       start_month_year: startDate,
       end_month_year: endDate,
       timeframe: timeFilter,
+    };
+  }
+
+  if (selectedNavigation === 'revShare') {
+    params = {
+      ...params,
+      invoice_type: 'rev share',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'dsp service',
     };
   }
 

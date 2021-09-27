@@ -65,6 +65,7 @@ export default function DSPPartnersList({
         timeFrameType,
         timeFrame,
         page,
+        selectedNavigation,
       ).then((res) => {
         if (res && res.status === 400) {
           setPartnerLoader(false);
@@ -79,7 +80,7 @@ export default function DSPPartnersList({
         }
       });
     },
-    [timeFrameType, timeFrame],
+    [timeFrameType, timeFrame, selectedNavigation],
   );
 
   useEffect(() => {
