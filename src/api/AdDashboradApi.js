@@ -329,3 +329,16 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
     });
   return result;
 }
+
+export async function getEnableInvoices() {
+  let result = {};
+  result = await axiosInstance
+    .get(`${API_DSP_BILLING}bill-detail/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

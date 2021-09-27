@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
-import { func } from 'prop-types';
+import { func, string } from 'prop-types';
 import {
   Card,
   ModalRadioCheck,
@@ -25,6 +25,7 @@ export default function DSPInvoices({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
+  selectedNavigation,
 }) {
   const [showDropdown, setShowDropdown] = useState({ show: false });
   const [dspData, setDSPData] = useState([]);
@@ -312,7 +313,11 @@ export default function DSPInvoices({
     <>
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
-          <div className="medium-text-title ">DSP Invoices</div>{' '}
+          <div className="medium-text-title ">
+            {selectedNavigation === 'revShare'
+              ? 'Rev Share Invoicing'
+              : 'DSP Invoices'}
+          </div>{' '}
         </div>
         {renderTimeFilterDropDown()}
       </div>
@@ -325,12 +330,14 @@ DSPInvoices.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
+  selectedNavigation: '',
 };
 
 DSPInvoices.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,
+  selectedNavigation: string,
 };
 
 const DateRangeDropDown = styled.div`

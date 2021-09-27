@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import $ from 'jquery';
-import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
@@ -14,6 +13,7 @@ import {
   DropDownIndicator,
   PageLoader,
   CommonPagination,
+  NoData,
 } from '../../../../common';
 import TableMobileView from '../../../../common/TableMobileView';
 import { CompanyDefaultUser } from '../../../../theme/images/index';
@@ -479,8 +479,3 @@ DSPInvoicesList.propTypes = {
   isTimeFrameChange: bool,
   setIsTimeFrameChange: func,
 };
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
-`;

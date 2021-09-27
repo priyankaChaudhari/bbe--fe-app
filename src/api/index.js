@@ -54,6 +54,7 @@ export {
   getDSPFinances,
   getDSPBillingMetrics,
   getBills,
+  getEnableInvoices,
 } from './AdDashboradApi';
 
 // Choices
