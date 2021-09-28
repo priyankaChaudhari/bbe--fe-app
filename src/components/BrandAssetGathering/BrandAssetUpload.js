@@ -803,8 +803,8 @@ export default function BrandAssetUpload() {
                       className="image-thumbnail"
                       data={file && file.presigned_url}
                       type={file && file.mime_type}
-                      width="250"
-                      height="200"
+                      // width="250"
+                      // height="200"
                       role="presentation">
                       <div className="unsupport-file-name">
                         <div className="file-path">
@@ -1664,9 +1664,14 @@ const CheckSelectImage = styled.div`
   position: relative;
 
   .image-thumbnail {
-    width: 170px;
-    height: 170px;
-    border-radius: 8px;
+    max-height: 100%;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
   }
   .unsupport-file-name {
     padding: 80px 0;
