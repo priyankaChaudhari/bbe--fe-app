@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export const userDetails = [
+const userDetails = [
   {
     key: 'first_name',
     label: 'First name',
@@ -56,3 +55,5 @@ export const userDetails = [
     section: 4,
   },
 ];
+
+export default userDetails;
