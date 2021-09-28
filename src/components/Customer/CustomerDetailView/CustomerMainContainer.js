@@ -914,9 +914,11 @@ export default function CustomerMainContainer() {
                         {customer &&
                         customer.status &&
                         customer.status.value !== null ? (
-                          customer &&
-                          customer.status &&
-                          customer.status.value === 'pending account setup' ? (
+                          (customer &&
+                            customer.status &&
+                            customer.status.value ===
+                              'pending account setup') ||
+                          customer.status.value === 'pending' ? (
                             <span className="company-status inactive ">
                               {customer &&
                                 customer.status &&
