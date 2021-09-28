@@ -27,7 +27,9 @@ export const WhiteCard = styled.div`
     max-width: 80%;
     width: 100%;
     word-break: keep-all;
-    
+     &.one-time-service {
+      max-width: 75%;
+    }
   }
 
   .company-contract-height {
@@ -993,6 +995,10 @@ export const WhiteCard = styled.div`
       }
        .contract-status {
          max-width: 85%;
+
+         &.one-time-service {
+           max-width: 80%;
+         }
        }
     }
   @media only screen and (max-width: 1150px) {
@@ -1014,6 +1020,9 @@ export const WhiteCard = styled.div`
        }
        .contract-status {
          max-width: 70%;
+          &.one-time-service {
+            max-width: 65%;
+          }
        }
    }
  @media only screen and (max-width: 991px) {
