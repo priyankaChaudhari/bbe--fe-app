@@ -1,2 +1,2 @@
 export * from './RouteConstants';
-export * from './UserConstants';
+export { default as userDetails } from './UserConstants';
