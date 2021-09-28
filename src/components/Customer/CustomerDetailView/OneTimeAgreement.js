@@ -22,7 +22,7 @@ export default function OneTimeAgreement({
 }) {
   const loader = useSelector((state) => state.accountState.isLoading);
   const dispatch = useDispatch();
-  const [setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addNewOneTime = () => {
     const data = {
@@ -49,7 +49,7 @@ export default function OneTimeAgreement({
       dispatch(getAccountDetails(id));
     });
   };
-  return loader ? (
+  return loader || isLoading ? (
     <PageLoader
       component="agrement-details"
       color="#FF5933"
