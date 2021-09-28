@@ -131,13 +131,6 @@ export default function OneTimeAgreement({
                           View Agreement
                         </Button>
                       </Link>
-
-                      {/* {isLoading ? (
-                          <PageLoader type="button" />
-                        ) : (
-                          'Delete Contract'
-                        )} */}
-                      {/* </Button> */}
                     </div>
                   )}
                   <img
