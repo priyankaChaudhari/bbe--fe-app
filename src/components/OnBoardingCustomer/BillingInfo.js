@@ -604,8 +604,7 @@ export default function BillingInfo({
             {' '}
             We have partnered with{' '}
             <a
-              className="cursor"
-              style={{ color: '#556178', fontSize: '12px' }}
+              className="cursor link-url"
               href="https://www.authorize.net/en-us/about-us/dpa.html"
               target="_BLANK"
               rel="noopener noreferrer">
