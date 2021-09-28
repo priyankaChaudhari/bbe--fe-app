@@ -361,8 +361,8 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
   return result;
 }
 
-export async function getEnableInvoices() {
-  const params = { is_invoicing_enable: 'False' };
+export async function getEnableInvoices(page) {
+  const params = { is_invoicing_enable: 'False', page };
   let result = {};
 
   result = await axiosInstance

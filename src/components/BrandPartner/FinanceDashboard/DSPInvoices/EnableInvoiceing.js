@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { string } from 'prop-types';
 import dayjs from 'dayjs';
+import Modal from 'react-modal';
 
 import {
   WhiteCard,
@@ -9,7 +10,9 @@ import {
   PageLoader,
   NoData,
   CommonPagination,
+  ModalBox,
 } from '../../../../common';
+
 import { getEnableInvoices, setEnableInvoices } from '../../../../api';
 
 import Theme from '../../../../theme/Theme';
@@ -17,8 +20,31 @@ import Theme from '../../../../theme/Theme';
 export default function EnableInvoiceing({ view }) {
   const [billingData, setBillingData] = useState([]);
   const [invoiceLoader, setInvoiceLoader] = useState(false);
+  const [enableInvoiceLoader, setEnableInvoiceLoader] = useState(false);
   const [billsCount, setBillsCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [enableInvoiceId, setEnableInvoiceId] = useState(null);
+  const now = new Date();
+  const invoiceGeneratedOn = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const title =
+    'Are you sure you want to enable revenue share invoicing for this partner';
+  const subTitle = 'Their first invoice will be generated on ';
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      maxWidth: '420px ',
+      width: '100% ',
+      minHeight: '390px',
+      overlay: ' {zIndex: 1000}',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   const getInvoices = useCallback((page) => {
     setInvoiceLoader(true);
@@ -40,13 +66,16 @@ export default function EnableInvoiceing({ view }) {
     getInvoices(1);
   }, [getInvoices]);
 
-  const onEnableClick = (id) => {
-    setEnableInvoices(id).then((res) => {
+  const onClickEnableInvoicing = () => {
+    setEnableInvoiceLoader(true);
+    setEnableInvoices(enableInvoiceId).then((res) => {
       if (res && res.status === 400) {
-        setInvoiceLoader(false);
+        setEnableInvoiceLoader(false);
       }
       if (res && res.status === 200) {
         getInvoices(1);
+        setIsModalOpen(false);
+        setEnableInvoiceLoader(false);
       }
     });
   };
@@ -56,20 +85,37 @@ export default function EnableInvoiceing({ view }) {
     getInvoices(currentPage);
   };
 
+  const bindDateMessage = (daysPast) => {
+    let msg = '';
+    if (daysPast !== null) {
+      if (daysPast >= 0) {
+        msg = `(${daysPast} days ago)`;
+      } else {
+        msg = `(${Math.abs(daysPast)} days to go)`;
+      }
+    }
+    return msg;
+  };
+
   const renderTableData = (item) => {
     const contractDate = dayjs(item.start_date).format('MM/DD/YY');
     return (
-      <tr className="cursor">
+      <tr className="cursor" key={item.id}>
         <td className="product-body">
           {' '}
-          <div className="company-name">{item && item.customer_id}</div>
+          <div className="company-name">{item && item.company_name}</div>
         </td>
-        <td className="product-table-body">{contractDate}</td>
+        <td className="product-table-body">{`${contractDate} ${bindDateMessage(
+          item.days_past,
+        )}`}</td>
 
         <td className="product-table-body ">
           <Button
             className="btn-orange-border"
-            onClick={() => onEnableClick(item.id)}>
+            onClick={() => {
+              setIsModalOpen(true);
+              setEnableInvoiceId(item.id);
+            }}>
             Enable Invoicing
           </Button>
         </td>
@@ -150,24 +196,29 @@ export default function EnableInvoiceing({ view }) {
           <>
             {billingData &&
               billingData.map((item) => (
-                <WhiteCard className="mb-3">
+                <WhiteCard className="mb-3" key={item.id}>
                   <div className="row">
                     <div className="col-6">
                       <div className="label">Partner Name</div>
                       <div className="label-info label-info-dark">
-                        {item.id}
+                        {item.company_name}
                       </div>
                     </div>
                     <div className="col-6">
                       <div className="label">Contract Start Date</div>
                       <div className="label-info label-info-dark">
-                        {dayjs(item.start_date).format('MM/DD/YY')}
+                        {`${dayjs(item.start_date).format(
+                          'MM/DD/YY',
+                        )} ${bindDateMessage(item.days_past)}`}
                       </div>
                     </div>
                     <div className="col-12 text-center mt-3">
                       <Button
                         className="btn-orange-border"
-                        onClick={() => onEnableClick(item.id)}>
+                        onClick={() => {
+                          setIsModalOpen(true);
+                          setEnableInvoiceId(item.id);
+                        }}>
                         Enable Invoicing
                       </Button>
                     </div>
@@ -187,6 +238,46 @@ export default function EnableInvoiceing({ view }) {
     );
   };
 
+  const renderEnableBillingModal = () => {
+    return (
+      <Modal
+        isOpen={isModalOpen}
+        style={{ ...customStyles }}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <ModalBox>
+          <div className="modal-body">
+            <div className="alert-msg ">
+              <span>{title}</span>
+            </div>
+            <div>{`${subTitle} ${dayjs(invoiceGeneratedOn).format(
+              'MMM D',
+            )}`}</div>
+            <div className="text-center mt-3">
+              <Button
+                onClick={() => setIsModalOpen(false)}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                Cancle
+              </Button>
+
+              <Button
+                onClick={() => onClickEnableInvoicing()}
+                type="button"
+                className="btn-primary on-boarding   w-100">
+                {enableInvoiceLoader ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Enable Billing'
+                )}
+              </Button>
+            </div>
+          </div>
+        </ModalBox>
+      </Modal>
+    );
+  };
+
   return (
     <>
       {view === 'desktop'
@@ -194,6 +285,7 @@ export default function EnableInvoiceing({ view }) {
           renderDesktopView()
         : // for mobile view
           renderMobileView()}
+      {renderEnableBillingModal()}
     </>
   );
 }
