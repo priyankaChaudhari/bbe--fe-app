@@ -5,6 +5,7 @@ import {
   API_AD_MANAGER_ADMIN_DASHBOARD,
   API_DSP_INVOICES,
   API_DSP_BILLING,
+  API_CUSTOMER_CONTRACT,
 } from '../constants/ApiConstants';
 
 export async function getAdManagerAdminGraphData(
@@ -361,9 +362,23 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
 }
 
 export async function getEnableInvoices() {
+  const params = { is_invoicing_enable: 'False' };
   let result = {};
+
   result = await axiosInstance
-    .get(`${API_DSP_BILLING}bill-detail/`)
+    .get(`${API_CUSTOMER_CONTRACT}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function setEnableInvoices(id) {
+  const result = await axiosInstance
+    .patch(`${API_CUSTOMER_CONTRACT}${id}/`, { is_invoicing_enable: true })
     .then((response) => {
       return response;
     })

@@ -8,47 +8,70 @@ import {
   Button,
   PageLoader,
   NoData,
+  CommonPagination,
 } from '../../../../common';
-import { getEnableInvoices } from '../../../../api';
-import { Apidata } from './dummyData';
+import { getEnableInvoices, setEnableInvoices } from '../../../../api';
+
 import Theme from '../../../../theme/Theme';
 
 export default function EnableInvoiceing({ view }) {
   const [billingData, setBillingData] = useState([]);
   const [invoiceLoader, setInvoiceLoader] = useState(false);
+  const [billsCount, setBillsCount] = useState(null);
+  const [pageNumber, setPageNumber] = useState();
 
-  const getInvoices = useCallback(() => {
+  const getInvoices = useCallback((page) => {
     setInvoiceLoader(true);
-    getEnableInvoices().then((res) => {
+    getEnableInvoices(page).then((res) => {
       if (res && res.status === 400) {
         setInvoiceLoader(false);
       }
       if (res && res.status === 200) {
         if (res.data && res.data.results) {
           setBillingData(res.data.results);
+          setBillsCount(res.data.count);
         }
         setInvoiceLoader(false);
       }
-      setBillingData(Apidata.results);
     });
   }, []);
 
   useEffect(() => {
-    getInvoices();
+    getInvoices(1);
   }, [getInvoices]);
 
+  const onEnableClick = (id) => {
+    setEnableInvoices(id).then((res) => {
+      if (res && res.status === 400) {
+        setInvoiceLoader(false);
+      }
+      if (res && res.status === 200) {
+        getInvoices(1);
+      }
+    });
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getInvoices(currentPage);
+  };
+
   const renderTableData = (item) => {
-    const contractDate = dayjs(item.generated_at).format('MM/DD/YY');
+    const contractDate = dayjs(item.start_date).format('MM/DD/YY');
     return (
       <tr className="cursor">
         <td className="product-body">
           {' '}
-          <div className="company-name">{item && item.customer.name}</div>
+          <div className="company-name">{item && item.customer_id}</div>
         </td>
         <td className="product-table-body">{contractDate}</td>
 
         <td className="product-table-body ">
-          <Button className="btn-orange-border">Enable Invoicing</Button>
+          <Button
+            className="btn-orange-border"
+            onClick={() => onEnableClick(item.id)}>
+            Enable Invoicing
+          </Button>
         </td>
       </tr>
     );
@@ -94,6 +117,11 @@ export default function EnableInvoiceing({ view }) {
                   billingData.map((item) => renderTableData(item))}
               </tbody>
             </Table>
+            <CommonPagination
+              count={billsCount}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
           </>
         ) : (
           <NoData>No Invoices Found</NoData>
@@ -104,21 +132,58 @@ export default function EnableInvoiceing({ view }) {
 
   const renderMobileView = () => {
     return (
-      <WhiteCard className="mb-3">
-        <div className="row">
-          <div className="col-6">
-            <div className="label">Invoice Type / Number</div>
-            <div className="label-info label-info-dark">TRX Training</div>
-          </div>
-          <div className="col-6">
-            <div className="label">Invoice Type / Number</div>
-            <div className="label-info label-info-dark">TRX Training</div>
-          </div>
-          <div className="col-12 text-center mt-3">
-            <Button className="btn-orange-border">Enable Invoicing</Button>
+      <>
+        <div className="row mt-2">
+          <div className="col-5 pl-4 mt-3 ">
+            <div className="black-heading-title ">Enable Billing</div>{' '}
           </div>
         </div>
-      </WhiteCard>
+        {invoiceLoader ? (
+          <PageLoader
+            component="performance-graph"
+            color={Theme.orange}
+            type="detail"
+            width={40}
+            height={40}
+          />
+        ) : billingData && billingData.length > 0 ? (
+          <>
+            {billingData &&
+              billingData.map((item) => (
+                <WhiteCard className="mb-3">
+                  <div className="row">
+                    <div className="col-6">
+                      <div className="label">Partner Name</div>
+                      <div className="label-info label-info-dark">
+                        {item.id}
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="label">Contract Start Date</div>
+                      <div className="label-info label-info-dark">
+                        {dayjs(item.start_date).format('MM/DD/YY')}
+                      </div>
+                    </div>
+                    <div className="col-12 text-center mt-3">
+                      <Button
+                        className="btn-orange-border"
+                        onClick={() => onEnableClick(item.id)}>
+                        Enable Invoicing
+                      </Button>
+                    </div>
+                  </div>
+                </WhiteCard>
+              ))}
+            <CommonPagination
+              count={billsCount}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          </>
+        ) : (
+          <NoData>No Invoices Found</NoData>
+        )}
+      </>
     );
   };
 
