@@ -5,7 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, WhiteCard, PageLoader } from '../../../common';
 import { PATH_AGREEMENT } from '../../../constants';
-import { AddIcons, FileContract, ServiceIcon } from '../../../theme/images';
+import {
+  AddIcons,
+  DeleteIcon,
+  FileContract,
+  ServiceIcon,
+} from '../../../theme/images';
 import { createContract, deleteContract } from '../../../api';
 import { getAccountDetails } from '../../../store/actions/accountState';
 
@@ -17,7 +22,7 @@ export default function OneTimeAgreement({
 }) {
   const loader = useSelector((state) => state.accountState.isLoading);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+  const [setIsLoading] = useState(false);
 
   const addNewOneTime = () => {
     const data = {
@@ -78,7 +83,7 @@ export default function OneTimeAgreement({
             agreements.map((agreement) => (
               <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
                 <div className="row">
-                  <div className="col-lg-9 col-md-8 col-12">
+                  <div className="col-lg-8 col-md-7 col-12">
                     <img
                       width="48px"
                       className="solid-icon"
@@ -100,7 +105,7 @@ export default function OneTimeAgreement({
                     agreement.contract_status.value === 'active') &&
                   agreement.contract_url === null ? null : (
                     <div
-                      className="col-lg-3  pl-0 col-md-4 col-12 text-right"
+                      className="col-lg-3  pl-lg-0 pr-lg-2 col-md-4 col-12 text-right"
                       role="presentation"
                       onClick={() =>
                         localStorage.setItem('agreementID', agreement.id)
@@ -126,17 +131,27 @@ export default function OneTimeAgreement({
                           View Agreement
                         </Button>
                       </Link>
-                      <Button
-                        className="btn-transparent w-100 view-contract"
-                        onClick={() => onDeleteContract(agreement.id)}>
-                        {isLoading ? (
+
+                      {/* {isLoading ? (
                           <PageLoader type="button" />
                         ) : (
                           'Delete Contract'
-                        )}
-                      </Button>
+                        )} */}
+                      {/* </Button> */}
                     </div>
                   )}
+                  <img
+                    style={{
+                      position: 'absolute',
+                      top: '30px',
+                      right: '15px',
+                      cursor: 'pointer',
+                    }}
+                    role="presentation"
+                    src={DeleteIcon}
+                    alt="delete"
+                    onClick={() => onDeleteContract(agreement.id)}
+                  />
                   <div className="straight-line horizontal-line pt-3 mb-3" />
                 </div>
 
