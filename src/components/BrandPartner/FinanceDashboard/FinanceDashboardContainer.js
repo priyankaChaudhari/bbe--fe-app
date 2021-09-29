@@ -12,10 +12,20 @@ export default function FinanceDashboardContainer() {
   const renderComponent = () => {
     switch (viewComponent) {
       case 'revShare':
-        return <DSPInvoiceContainer selectedNavigation={viewComponent} />;
+        return (
+          <DSPInvoiceContainer
+            selectedNavigation={viewComponent}
+            key={viewComponent}
+          />
+        );
 
       case 'dspInvoicing':
-        return <DSPInvoiceContainer selectedNavigation={viewComponent} />;
+        return (
+          <DSPInvoiceContainer
+            selectedNavigation={viewComponent}
+            key={viewComponent}
+          />
+        );
 
       case 'dspBilling':
         return <DSPBillingContainer />;

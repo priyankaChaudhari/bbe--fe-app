@@ -26,24 +26,25 @@ export default function DSPInvoices({
   setIsTimeFrameChange,
   selectedNavigation,
 }) {
-  const [showDropdown, setShowDropdown] = useState({ show: false });
-  const [dspData, setDSPData] = useState([]);
   const dropdownRef = useRef(null);
+  const currentDate = new Date();
+  const [dspData, setDSPData] = useState([]);
+  const [responseId, setResponseId] = useState(null);
+  const [showDropdown, setShowDropdown] = useState({ show: false });
+  currentDate.setDate(currentDate.getDate() - 3);
+  const [state, setState] = useState([currentDate, currentDate]);
+  const [range, setRange] = useState([currentDate, currentDate]);
   const [selectedDateType, setSelectedDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
   const [dummyDateType, setDummayDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
-  const [responseId, setResponseId] = useState(null);
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 3);
-  const [state, setState] = useState([currentDate, currentDate]);
   const [dummayDateRange, setDummayDateRange] = useState([
     currentDate,
     currentDate,
   ]);
-  const [range, setRange] = useState([currentDate, currentDate]);
+
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
       (res) => {

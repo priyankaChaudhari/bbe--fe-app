@@ -23,7 +23,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
   const onTabClick = (selectedTab) => {
     setViewComponent(selectedTab);
   };
-  console.log('conatnier', selectedNavigation);
+
   return (
     <>
       <DSPInvoices
@@ -87,6 +87,6 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
 }
 
 DSPInvoiceContainer.defaultProps = {
-  selectedNavigation: '',
+  selectedNavigation: 'revShare',
 };
 DSPInvoiceContainer.propTypes = { selectedNavigation: string };
