@@ -18,7 +18,7 @@ import {
   ModalBox,
   CheckBox,
 } from '../../common';
-import { CaretUp, CloseIcon } from '../../theme/images';
+import { CaretUp, CloseIcon, VideoCall } from '../../theme/images';
 import AskSomeone from './AskSomeone';
 import {
   accountSummary,
@@ -97,6 +97,12 @@ export default function MainContainer() {
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
     },
+  };
+  const customVideostyle = {
+    width: '16px',
+    marginRight: '6px',
+    verticalAlign: 'text-bottom',
+    cursor: 'pointer',
   };
 
   const whichStep = [
@@ -522,7 +528,7 @@ export default function MainContainer() {
           {loader || (isLoading.loader && isLoading.type === 'page') ? (
             <PageLoader color="#FF5933" type="page" />
           ) : (
-            <OnBoardingBody className="body-white">
+            <OnBoardingBody className="body-start">
               <div className="white-card-base panel ">
                 {assignedToSomeone ? (
                   <GreyCard className="yellow-card mt-2 mb-4">
@@ -548,7 +554,7 @@ export default function MainContainer() {
                 )}
                 <h3 className="page-heading ">{item.title}</h3>
                 {item.path === 'billing-details' ? null : (
-                  <p className="info-text-gray m-0 mb-4 ">
+                  <p className="info-text-gray mt-0 mb-4 ">
                     {history.location.pathname.includes(
                       PATH_AMAZON_MERCHANT,
                     ) ? (
@@ -565,12 +571,19 @@ export default function MainContainer() {
                     )}{' '}
                     <br />
                     {item.video ? (
-                      <span
-                        className="video-link cursor"
-                        onClick={() => getVideo()}
-                        role="presentation">
-                        Click here to watch the video.
-                      </span>
+                      <>
+                        <img
+                          style={customVideostyle}
+                          src={VideoCall}
+                          alt="video"
+                        />
+                        <span
+                          className="video-link cursor"
+                          onClick={() => getVideo()}
+                          role="presentation">
+                          Click here to watch the video.
+                        </span>
+                      </>
                     ) : null}
                   </p>
                 )}

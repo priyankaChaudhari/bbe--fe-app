@@ -605,19 +605,19 @@ ContractActivityLog.propTypes = {
 };
 
 const Footer = styled.div`
-  // border: 1px solid ${Theme.gray7};
-  // bottom: ${(props) => (props.PdfSidebar ? '0' : '80px')};
-  // background: ${Theme.white};
-  // box-shadow: ${Theme.boxShadow};
-  // position: fixed;
-  // min-height: 60px;
-  // z-index: 2;
-  // width: 336px;
+  border: 1px solid ${Theme.gray7};
+  bottom: 80px;
+  background: ${Theme.white};
+  box-shadow: ${Theme.boxShadow};
+  position: fixed;
+  min-height: 60px;
+  z-index: 2;
+  width: 336px;
 
-  // @media only screen and (max-width: 991px) {
-  //   width: 100%;
-  // }
-  // @media only screen and (min-width: 1500px) {
-  //   width: 400px;
-  // }
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+  }
+  @media only screen and (min-width: 1500px) {
+    width: 400px;
+  }
 `;
