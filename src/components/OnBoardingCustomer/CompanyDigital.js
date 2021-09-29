@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   OnBoardingBody,
@@ -19,8 +19,12 @@ import {
   updateUserMe,
 } from '../../api';
 import { getCustomerDetails, userMe } from '../../store/actions';
-import { SocialIcons, stepPath } from '../../constants/FieldConstants';
-import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
+import {
+  PATH_SUMMARY,
+  PATH_THANKS,
+  SocialIcons,
+  stepPath,
+} from '../../constants';
 import { TrashIcons } from '../../theme/images';
 
 export default function CompanyDigital({

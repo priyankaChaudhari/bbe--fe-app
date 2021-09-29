@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
+import AddTeamMember from './AddTeamMember';
 import {
   Button,
   CommonPagination,
@@ -11,13 +12,12 @@ import {
   SuccessMsg,
   GetInitialName,
 } from '../../common';
-import { TrashIcons, AddIcons, CloseIcon } from '../../theme/images/index';
-import AddTeamMember from './AddTeamMember';
+import { TrashIcons, AddIcons, CloseIcon } from '../../theme/images';
 import {
   deleteCustomerMember,
   getCustomerMembers,
   updateCustomerMember,
-} from '../../api/index';
+} from '../../api';
 
 export default function EditTeamMember({
   id,

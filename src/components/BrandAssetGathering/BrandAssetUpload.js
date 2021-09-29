@@ -5,23 +5,23 @@
 /* eslint-disable no-param-reassign */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
 import Modal from 'react-modal';
-
-import { Progress } from 'react-sweet-progress';
-import 'react-sweet-progress/lib/style.css';
-
-import { toast, ToastContainer } from 'react-toastify';
-import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import $ from 'jquery';
+import { useHistory, useParams } from 'react-router-dom';
+import { Progress } from 'react-sweet-progress';
+import 'react-sweet-progress/lib/style.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { useDropzone } from 'react-dropzone';
 
 import Theme from '../../theme/Theme';
+import BrandAssetsPreview from './BrandAssetsPreview';
+import axiosInstance from '../../axios';
 import {
   GrayCheckIcon,
   OrangeCheckMark,
@@ -51,17 +51,16 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
   PATH_UNAUTHORIZED_BRAND_ASSET,
+  API_DOCUMENTS,
+  BrandSteps,
 } from '../../constants';
-import { BrandSteps } from '../../constants/FieldConstants';
-import axiosInstance from '../../axios';
-import { API_DOCUMENTS } from '../../constants/ApiConstants';
-import { deleteDocument, getDocuments } from '../../api';
 import {
+  deleteDocument,
+  getDocuments,
   getBrandAssetsDetail,
   getBrandAssetsSummary,
   updateBrandAssetStep,
-} from '../../api/BrandAssestsApi';
-import BrandAssetsPreview from './BrandAssetsPreview';
+} from '../../api';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -1563,7 +1562,7 @@ const BrandAssetSideBar = styled.div`
   .asset-check-list {
     list-style-type: none;
     padding: 0;
-    marging: 0;
+    margin: 0;
     li {
       margin-bottom: 15px;
 

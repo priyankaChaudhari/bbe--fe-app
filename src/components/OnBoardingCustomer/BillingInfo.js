@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
@@ -10,6 +7,8 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 import NumberFormat from 'react-number-format';
 import $ from 'jquery';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import Theme from '../../theme/Theme';
 import {
@@ -29,15 +28,16 @@ import {
   updateUserMe,
   saveBillingInfo,
 } from '../../api';
-import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
-import { userMe } from '../../store/actions';
 import {
+  PATH_SUMMARY,
+  PATH_THANKS,
   ACHDetails,
   BillingAddress,
   creditCardDetails,
   stepPath,
-  // PaymentType,
-} from '../../constants/FieldConstants';
+  authorizeLink,
+} from '../../constants';
+import { userMe } from '../../store/actions';
 
 export default function BillingInfo({
   setIsLoading,
@@ -606,7 +606,7 @@ export default function BillingInfo({
             <a
               className="cursor link-url"
               style={{ fontSize: '12px' }}
-              href="https://www.authorize.net/en-us/about-us/dpa.html"
+              href={authorizeLink}
               target="_BLANK"
               rel="noopener noreferrer">
               Authorize.Net

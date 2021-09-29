@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { shape, string } from 'prop-types';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
+import { useDispatch } from 'react-redux';
+import { shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
@@ -16,12 +16,9 @@ import {
   PageLoader,
   WhiteCard,
 } from '../../../../../common';
-import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images/index';
+import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images';
 import { getBillingDetails, saveBillingInfo } from '../../../../../api';
-import {
-  BillingAddress,
-  creditCardDetails,
-} from '../../../../../constants/FieldConstants';
+import { BillingAddress, creditCardDetails } from '../../../../../constants';
 import { showProfileLoader } from '../../../../../store/actions/userState';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {

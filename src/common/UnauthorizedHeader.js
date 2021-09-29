@@ -1,7 +1,9 @@
 import React from 'react';
+
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
-import { NextLogo } from '../theme/images/index';
+import { NextLogo } from '../theme/images';
 
 export default function UnauthorizedHeader() {
   return (

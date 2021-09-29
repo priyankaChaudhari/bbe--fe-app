@@ -1,17 +1,20 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+
+import Theme from '../../theme/Theme';
 import {
   HeaderDownloadFuntionality,
   PageLoader,
   FormField,
   Button,
   CommonPagination,
+  ErrorMsg,
+  PdfAnnotator,
 } from '../../common';
-import ErrorMsg from '../../common/ErrorMsg';
-import PdfAnnotator from '../../common/PdfAnnotator';
 import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
@@ -21,13 +24,12 @@ import {
   AnnotationGoal,
   RedTrashIcon,
 } from '../../theme/images';
-import Theme from '../../theme/Theme';
 import {
   storeNewCommentData,
   getCommentsData,
   deleteComment,
   updateComment,
-} from '../../api/BrandAssestsApi';
+} from '../../api';
 
 function BrandAssetsPreview({
   showAssetPreview,

@@ -1,16 +1,17 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
-import { pickBy } from 'lodash';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
-import { useMediaQuery } from 'react-responsive';
-import $ from 'jquery';
 import queryString from 'query-string';
+import $ from 'jquery';
+import { useMediaQuery } from 'react-responsive';
+import { Link, useParams, useHistory } from 'react-router-dom';
+import { pickBy } from 'lodash';
 
 import Theme from '../../theme/Theme';
+import ArticleSearch from './ArticleSearch';
 import { getArticleBoards, updateArticle } from '../../api';
 import { PATH_ARTICLE_DETAILS, PATH_ARTICLE_LIST } from '../../constants';
 import {
@@ -20,8 +21,7 @@ import {
   PageLoader,
   BackToTop,
 } from '../../common';
-import { CloseIcon, LeftArrowIcon } from '../../theme/images/index';
-import ArticleSearch from './ArticleSearch';
+import { CloseIcon, LeftArrowIcon } from '../../theme/images';
 
 const customStyles = {
   content: {

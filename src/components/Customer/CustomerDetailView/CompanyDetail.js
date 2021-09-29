@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
-import { EditOrangeIcon, CloseIcon } from '../../../theme/images/index';
-import { GroupUser } from '../../../theme/Global';
-import { SocialIcons } from '../../../constants/FieldConstants';
-import { GetInitialName, WhiteCard } from '../../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
+import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
+import { GroupUser } from '../../../theme/Global';
+import { SocialIcons } from '../../../constants';
+import { GetInitialName, WhiteCard } from '../../../common';
 
 export default function CompanyDetail({
   customer,

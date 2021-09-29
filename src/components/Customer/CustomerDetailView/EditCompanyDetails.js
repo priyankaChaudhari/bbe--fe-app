@@ -1,13 +1,10 @@
-/* eslint-disable no-lonely-if */
-/* eslint jsx-a11y/label-has-associated-control: ["error", { assert: "either" } ] */
-
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import {
@@ -19,22 +16,21 @@ import {
   GetInitialName,
 } from '../../../common';
 import {
-  // AddIcons,
   DefaultUser,
   SaveIcon,
   AddNewIcons,
   TrashIcons,
   NoContactIcon,
   InfoIcon,
-} from '../../../theme/images/index';
+} from '../../../theme/images';
 import {
   updateCustomerDetails,
   updateContactInfo,
   createContactInfo,
   deleteContactInfo,
   updateAccountDetails,
-} from '../../../api/index';
-import { editCompanyFields } from '../../../constants/FieldConstants';
+} from '../../../api';
+import { editCompanyFields } from '../../../constants';
 import {
   getContactDetails,
   getCustomerDetails,

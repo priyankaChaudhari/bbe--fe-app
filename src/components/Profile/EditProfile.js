@@ -1,22 +1,21 @@
-/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
-import { FormField, Button, PageLoader, ErrorMsg } from '../../common/index';
-import { userDetails } from '../../constants';
 import EditPassword from './EditPassword';
-import { updateUserInfo } from '../../api/index';
-import { userMe } from '../../store/actions/userState';
 import CropUploadImage from '../../common/CropUploadImage';
-import { InfoIcon } from '../../theme/images';
 import CheckPhoneNumber from '../../common/CheckPhoneNumber';
+import { FormField, Button, PageLoader, ErrorMsg } from '../../common';
+import { userDetails } from '../../constants';
+import { updateUserInfo } from '../../api';
+import { userMe } from '../../store/actions/userState';
+import { InfoIcon } from '../../theme/images';
 
 export default function EditProfile({ initials, userInfo }) {
   const dispatch = useDispatch();

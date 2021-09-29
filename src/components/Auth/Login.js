@@ -1,15 +1,14 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import Select from 'react-select';
+import queryString from 'query-string';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
-import queryString from 'query-string';
 
 import { FormContainer } from '../../theme/Global';
-import { LeftArrowIcon, NextLogo } from '../../theme/images/index';
+import { LeftArrowIcon, NextLogo } from '../../theme/images';
 
 import {
   Button,

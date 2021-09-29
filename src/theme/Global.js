@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+
 import Theme from './Theme';
-import { BannerBg } from './images/index';
+import { BannerBg } from './images';
 
 export const GroupUser = styled.div`
   display: flex;
@@ -212,7 +213,7 @@ export const BrandPartnerDashboard = styled.div`
     text-align: right;
   }
   .text-sm-left {
-    dispaly: none;
+    display: none;
   }
   .dashboard-header-sticky {
     position: fixed;

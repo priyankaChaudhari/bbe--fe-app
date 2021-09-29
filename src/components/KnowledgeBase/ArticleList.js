@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
+
+import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import styled from 'styled-components';
-
 import Theme from '../../theme/Theme';
-import { PageLoader } from '../../common';
-
 import LeftSideBar from '../../common/LeftSideBar';
-import { getArticleCollections } from '../../api/index';
-import { collectionDetails } from '../../constants/FieldConstants';
-import { PATH_ARTICLE_DETAILS } from '../../constants';
 import ArticleSearch from './ArticleSearch';
+import { PageLoader } from '../../common';
+import { getArticleCollections } from '../../api';
+import { PATH_ARTICLE_DETAILS, collectionDetails } from '../../constants';
 
 export default function ArticleList() {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });

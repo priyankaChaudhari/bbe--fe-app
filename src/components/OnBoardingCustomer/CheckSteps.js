@@ -1,16 +1,16 @@
 /* eslint-disable no-lonely-if */
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import { Button } from '../../common';
 import {
   PATH_AMAZON_MERCHANT,
   PATH_BILLING_DETAILS,
   PATH_SUMMARY,
-} from '../../constants/index';
-import { stepPath } from '../../constants/FieldConstants';
+  stepPath,
+} from '../../constants';
 
 export default function CheckSteps({
   summaryData,
