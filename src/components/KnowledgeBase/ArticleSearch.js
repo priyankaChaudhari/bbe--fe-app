@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
+import PropTypes from 'prop-types';
+import { useHistory, useParams } from 'react-router-dom';
 import { DebounceInput } from 'react-debounce-input';
 
 import { InputSearchWithRadius } from '../../common';
-import { SearchIcon, RemoveIcon, ReadBookIcon } from '../../theme/images/index';
-import { getArticleBoards, getArticleSearch } from '../../api/index';
+import { SearchIcon, RemoveIcon, ReadBookIcon } from '../../theme/images';
+import { getArticleBoards, getArticleSearch } from '../../api';
 import { PATH_ARTICLE_DETAILS } from '../../constants';
 
 export default function ArticleSearch({

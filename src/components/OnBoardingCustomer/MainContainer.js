@@ -2,14 +2,18 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { Collapse } from 'react-collapse';
 import queryString from 'query-string';
 import Modal from 'react-modal';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Collapse } from 'react-collapse';
 
+import Header from '../../common/Header';
+import CompanyDigital from './CompanyDigital';
+import BillingInfo from './BillingInfo';
+import AskSomeone from './AskSomeone';
 import {
   OnBoardingBody,
   UnauthorizedHeader,
@@ -19,7 +23,6 @@ import {
   CheckBox,
 } from '../../common';
 import { CaretUp, CloseIcon, VideoCall } from '../../theme/images';
-import AskSomeone from './AskSomeone';
 import {
   accountSummary,
   getStepDetails,
@@ -44,17 +47,14 @@ import {
   PATH_UNAUTHORIZED_AMAZON_MERCHANT,
   PATH_CREATE_PASSWORD,
   PATH_ACCOUNT_SETUP,
+  stepPath,
 } from '../../constants';
-import Header from '../../common/Header';
-import CompanyDigital from './CompanyDigital';
-import BillingInfo from './BillingInfo';
 import {
   AmazonDeveloperAccess,
   AmazonMerchant,
   CheckSteps,
   CreateAccount,
 } from '.';
-import { stepPath } from '../../constants/FieldConstants';
 
 export default function MainContainer() {
   const history = useHistory();

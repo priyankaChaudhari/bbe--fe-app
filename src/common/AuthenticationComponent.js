@@ -1,12 +1,15 @@
 /* eslint no-else-return: "off" */
 
 import React, { useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useIdleTimer } from 'react-idle-timer';
 
+import Header from './Header';
+import LeftSideBar from './LeftSideBar';
+import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
 import { userMe } from '../store/actions/index';
 import {
   PATH_CUSTOMER_LIST,
@@ -33,17 +36,12 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
 } from '../constants/index';
-
 import {
   CustomerListTablet,
   ProductDelegation,
-  CustomerMainContainer,
   CustomerList,
 } from '../components/Customer';
-
 import { PageLoader, PageNotFound } from './index';
-import Header from './Header';
-import LeftSideBar from './LeftSideBar';
 import { ContractContainer } from '../components/Contract';
 import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
 import {

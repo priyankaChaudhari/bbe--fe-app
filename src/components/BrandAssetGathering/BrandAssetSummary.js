@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -10,8 +11,8 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_THANKS,
   PATH_UNAUTHORIZED_BRAND_ASSET,
+  BrandSteps,
 } from '../../constants';
-import { BrandSteps } from '../../constants/FieldConstants';
 import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import { showBrandAsset } from '../../store/actions/customerState';
 

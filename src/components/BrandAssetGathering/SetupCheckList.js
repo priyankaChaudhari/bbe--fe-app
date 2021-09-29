@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/label-has-for */
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -16,15 +15,9 @@ import {
   ServiceIcon,
   SignatureIcon,
   WhiteArrowRight,
-  // CircleBellIcon,
 } from '../../theme/images';
 import { getAgreementList, getAssigneeCount } from '../../api';
-import {
-  PATH_CHOOSE_BRAND_DELEGATE,
-  // PATH_UPLOAD_PRODUCT_ASSET,
-} from '../../constants';
-
-// import { UploadProductAsset } from '../../components/Customer/UploadProductAsset';
+import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
 export default function SetupCheckList({ id, brandId }) {
   // productAssetsId;
@@ -133,7 +126,7 @@ export default function SetupCheckList({ id, brandId }) {
             <div className="checklist-setup">
               {checkList.map((item) => (
                 <GreenCheckBox className={item.property} key={item.label}>
-                  <label className="">
+                  <label htmlFor={item.subtitle}>
                     {item.label}
                     <div className="steps-completed">
                       {item.subtitle && item.subtitle.includes(undefined)
@@ -150,7 +143,7 @@ export default function SetupCheckList({ id, brandId }) {
                 <div className="col-lg-7 col-md-6 col-12  ">
                   {' '}
                   <GreenCheckBox className="mt-3">
-                    <label className="">
+                    <label htmlFor={agreementData.assigneeCount}>
                       Upload Brand Assets
                       {agreementData &&
                       agreementData.assigneeCount &&
@@ -431,35 +424,34 @@ SetupCheckList.propTypes = {
 };
 
 const GreenCheckBox = styled.div`
-  
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    padding-bottom: 15px;
-    font-size: ${Theme.extraNormal};
-    color : ${Theme.black};
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-weight: 600;
-    border-bottom: 1px dotted ${Theme.gray25};
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  padding-bottom: 15px;
+  font-size: ${Theme.extraNormal};
+  color: ${Theme.black};
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-weight: 600;
+  border-bottom: 1px dotted ${Theme.gray25};
 
-    &:last-child {
-      border-bottom: none;
-      padding-bottom:0;
-    }
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
   }
+
   .steps-completed {
     color: ${Theme.lighterGreen};
     font-weight: 500;
 
-    &.gray-color{
+    &.gray-color {
       color: ${Theme.gray40};
     }
   }
 
-   input {
+  input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -476,10 +468,9 @@ const GreenCheckBox = styled.div`
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    
   }
 
-   input:checked ~ .checkmark {
+  input:checked ~ .checkmark {
     background-color: #e5f1e5;
   }
   .checkmark:after {
@@ -488,11 +479,10 @@ const GreenCheckBox = styled.div`
     display: none;
   }
 
-
   input:checked ~ .checkmark:after {
     display: block;
   }
-   .checkmark:after {
+  .checkmark:after {
     left: 9px;
     top: 4px;
     width: 5px;
@@ -503,8 +493,6 @@ const GreenCheckBox = styled.div`
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
-  
-
 `;
 
 const ActiveAgreementTable = styled.div`

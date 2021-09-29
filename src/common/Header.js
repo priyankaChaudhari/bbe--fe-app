@@ -1,17 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable import/no-cycle */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 import $ from 'jquery';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
-import PropTypes from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -19,9 +18,6 @@ import {
   EditIcons,
   LogOutIcons,
   CloseIcon,
-  // NotificationBell,
-  // ActiveNotificationBell,
-  // CompanyDefaultUser,
   LightBulb,
   ReadBookIcon,
   MenuIcon,
@@ -32,8 +28,7 @@ import {
   Speedometer,
   HelpDeskIcon,
   HandShake,
-} from '../theme/images/index';
-
+} from '../theme/images';
 import { logout, showProfileLoader, userMe } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
@@ -47,8 +42,9 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
+  helpDeskLink,
+  managementLink,
 } from '../constants';
-import { helpDeskLink, managementLink } from '../constants/FieldConstants';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();

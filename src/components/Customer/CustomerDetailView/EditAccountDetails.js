@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 import NumberFormat from 'react-number-format';
-import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
+import Select, { components } from 'react-select';
+import { useDispatch } from 'react-redux';
 
-import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
-
-import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 import InputSelect from '../../../common/InputSelect';
-import { editAccountFields } from '../../../constants/FieldConstants';
+import CropUploadImage from '../../../common/CropUploadImage';
+import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
+import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
+import { editAccountFields } from '../../../constants';
 import { SortDownIcon } from '../../../theme/images';
 import { getCustomerDetails } from '../../../store/actions/customerState';
-import CropUploadImage from '../../../common/CropUploadImage';
 
 export default function EditAccountDetails({
   customer,

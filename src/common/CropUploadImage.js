@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
@@ -8,20 +7,19 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import b64toBlob from 'b64-to-blob';
+import { useDispatch } from 'react-redux';
 
+import axiosInstance from '../axios';
 import {
   CloseIcon,
   CompanyDefaultUser,
   DefaultUser,
-} from '../theme/images/index';
+  EditIcons,
+} from '../theme/images';
 import { API_DOCUMENTS } from '../constants/ApiConstants';
-import axiosInstance from '../axios';
-import { Button, PageLoader } from './index';
-import ModalBox from './ModalBox';
-import EditIcons from '../theme/images/icons/edit-icon.svg';
+import { Button, PageLoader, ErrorMsg, ModalBox } from './index';
 import { getCustomerDetails } from '../store/actions/customerState';
 import { showProfileLoader, userMe } from '../store/actions/userState';
-import ErrorMsg from './ErrorMsg';
 
 export default function CropUploadImage({ type, id, setDocumentImage }) {
   const dispatch = useDispatch();
@@ -325,7 +323,7 @@ CropUploadImage.propTypes = {
 };
 
 const UpdateProfile = styled.div`
- position: relative;
+  position: relative;
   .update-profile {
     position: relative;
 
@@ -346,35 +344,32 @@ const UpdateProfile = styled.div`
     }
   }
 
-    .edit-account {
-        bottom: 5px;
-        width: 45px;
-        height: 45px;
-        position: absolute;
-        left: 98px;
-        padding: 10px;
-        border-radius: 50%;
-        background: white;
-        border: 1px solid rgba(46, 91, 255, 0.08);
-        cursor: pointer;
+  .edit-account {
+    bottom: 5px;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    left: 98px;
+    padding: 10px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid rgba(46, 91, 255, 0.08);
+    cursor: pointer;
 
-        .edit-icon {
-          width: 24px;
-            cursor: pointer;
-          
-        }
-          .hide_file {
-            position: absolute;
-            z-index: 1000;
-            opacity: 0;
-            right: 0;
-            top: 0;
-            height: 100%;
-            font-size: 24px;
-           
-          }
-        }
-      }
+    .edit-icon {
+      width: 24px;
+      cursor: pointer;
+    }
+    .hide_file {
+      position: absolute;
+      z-index: 1000;
+      opacity: 0;
+      right: 0;
+      top: 0;
+      height: 100%;
+      font-size: 24px;
+    }
+  }
 
   .edit-profile-pic {
     width: 25px;
