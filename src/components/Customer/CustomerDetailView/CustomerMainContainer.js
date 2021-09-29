@@ -1,20 +1,59 @@
 /* eslint-disable react/no-danger */
-/* eslint-disable import/no-cycle */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams, useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
+import 'react-toastify/dist/ReactToastify.css';
 import Select, { components } from 'react-select';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import Theme from '../../../theme/Theme';
+import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
+import Activity from './Activity';
+import BillingContainer from './BillingContainer/BillingContainer';
+import { showOnboardingMsg } from '../../../store/actions/userState';
+import { SetupCheckList } from '../../BrandAssetGathering/index';
+import { GroupUser } from '../../../theme/Global';
+import { AddTeamMember, EditTeamMember } from '../../Team/index';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
+import {
+  getContactDetails,
+  getCustomerDetails,
+  setCustomerSelectedTab,
+  showBrandAsset,
+} from '../../../store/actions/customerState';
+import {
+  AgreementDetails,
+  CompanyDetail,
+  CustomerStatus,
+  EditAccountDetails,
+  Notes,
+  ProductCatalog,
+} from '../index';
+import {
+  getCustomerActivityLog,
+  getAmazonDetails,
+  getCustomerMembers,
+  getDocumentList,
+  getMarketPlaceList,
+  getRecentNotes,
+  getAccountMarketplace,
+} from '../../../api';
+import {
+  ModalBox,
+  PageLoader,
+  GetInitialName,
+  DropDownStatus,
+  PageNotFound,
+  BackToTop,
+  Button,
+  WhiteCard,
+  Status,
+} from '../../../common';
 import {
   FileContract,
   Organization,
@@ -35,50 +74,7 @@ import {
   EditOrangeIcon,
   NextActivityLogo,
   ContractEmailIcon,
-} from '../../../theme/images/index';
-import { GroupUser } from '../../../theme/Global';
-import {
-  ModalBox,
-  PageLoader,
-  GetInitialName,
-  DropDownStatus,
-  PageNotFound,
-  BackToTop,
-  Button,
-  WhiteCard,
-  Status,
-} from '../../../common';
-import {
-  getContactDetails,
-  getCustomerDetails,
-  setCustomerSelectedTab,
-  showBrandAsset,
-} from '../../../store/actions/customerState';
-import {
-  AgreementDetails,
-  CompanyDetail,
-  CustomerStatus,
-  EditAccountDetails,
-  Notes,
-  ProductCatalog,
-} from '../index';
-import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
-import Activity from './Activity';
-import {
-  getCustomerActivityLog,
-  getAmazonDetails,
-  getCustomerMembers,
-  getDocumentList,
-  getMarketPlaceList,
-  getRecentNotes,
-} from '../../../api';
-import { AddTeamMember, EditTeamMember } from '../../Team/index';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
-import 'react-toastify/dist/ReactToastify.css';
-import { showOnboardingMsg } from '../../../store/actions/userState';
-import { SetupCheckList } from '../../BrandAssetGathering/index';
-import { getAccountMarketplace } from '../../../api/CustomerApi';
-import BillingContainer from './BillingContainer/BillingContainer';
+} from '../../../theme/images';
 
 const AccountSetupcustomStyles = {
   content: {
@@ -215,10 +211,10 @@ export default function CustomerMainContainer() {
     }
   }, [dispatch, history.location.state]);
 
-  const DropdownIndicator = (props) => {
+  const DropdownIndicator = (dataProps) => {
     return (
       components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
+        <components.DropdownIndicator {...dataProps}>
           <img
             src={
               customer &&
@@ -229,7 +225,9 @@ export default function CustomerMainContainer() {
             }
             alt="caret"
             style={{
-              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
               width:
                 customer &&
                 customer.status &&
@@ -511,12 +509,14 @@ export default function CustomerMainContainer() {
     }
     if (item && item.history_change_reason.includes('updated')) {
       activityMessage = item.history_change_reason.split('updated');
-      logUser = activityMessage[0];
+      const msg = activityMessage[0];
+      logUser = msg;
       if (
         activityMessage[1] &&
         activityMessage[1].includes('Amazon account names and id')
       ) {
-        customerSetupHeader = activityMessage[1];
+        const msg1 = activityMessage[1];
+        customerSetupHeader = msg1;
         field = activityMessage[2] && activityMessage[2].split('from')[0];
         oldValue =
           activityMessage[2] &&
@@ -559,9 +559,11 @@ export default function CustomerMainContainer() {
           activityMessage &&
           activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
         ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[0];
+          const temp = activityMessage[1].split(' from ')[1].split(' to ')[0];
+          rowAmount = temp;
           if (rowAmount.split('.')[1] === '00') {
-            fromAmount = rowAmount.split('.')[0];
+            const amt = rowAmount.split('.')[0];
+            fromAmount = amt;
           } else {
             fromAmount = rowAmount;
           }
@@ -570,9 +572,11 @@ export default function CustomerMainContainer() {
           activityMessage &&
           activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
         ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[1];
+          const temp = activityMessage[1].split(' from ')[1].split(' to ')[1];
+          rowAmount = temp;
           if (rowAmount.split('.')[1] === '00') {
-            toAmount = rowAmount.split('.')[0];
+            const amt = rowAmount.split('.')[0];
+            toAmount = amt;
           } else {
             toAmount = rowAmount;
           }

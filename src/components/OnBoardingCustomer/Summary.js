@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
-import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 import NavigationHeader from './NavigationHeader';
+import { logout, userMe } from '../../store/actions';
+import { showOnboardingMsg } from '../../store/actions/userState';
+import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
+import { accountSummary, updateUserMe } from '../../api';
+import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import {
   PATH_AMAZON_MERCHANT,
   PATH_BILLING_DETAILS,
   PATH_CUSTOMER_DETAILS,
+  stepPath,
 } from '../../constants';
-import { accountSummary, updateUserMe } from '../../api';
-import { logout, userMe } from '../../store/actions';
-import { showOnboardingMsg } from '../../store/actions/userState';
-import { stepPath } from '../../constants/FieldConstants';
 
 export default function Summary() {
   const history = useHistory();

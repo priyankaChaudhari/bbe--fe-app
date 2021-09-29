@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
@@ -10,6 +7,8 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 import NumberFormat from 'react-number-format';
 import $ from 'jquery';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import Theme from '../../theme/Theme';
 import {
@@ -29,15 +28,16 @@ import {
   updateUserMe,
   saveBillingInfo,
 } from '../../api';
-import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
-import { userMe } from '../../store/actions';
 import {
-  ACHDetails,
-  BillingAddress,
+  PATH_SUMMARY,
+  PATH_THANKS,
+  achDetails,
+  billingAddress,
   creditCardDetails,
   stepPath,
-  // PaymentType,
-} from '../../constants/FieldConstants';
+  authorizeLink,
+} from '../../constants';
+import { userMe } from '../../store/actions';
 
 export default function BillingInfo({
   setIsLoading,
@@ -411,7 +411,7 @@ export default function BillingInfo({
     if (formData.ach) {
       return (
         <>
-          {ACHDetails.map((item) => (
+          {achDetails.map((item) => (
             <React.Fragment key={item.key}>
               <ContractFormField
                 className={item.key !== 'account_name' ? 'mt-3' : ''}>
@@ -475,8 +475,9 @@ export default function BillingInfo({
           <p className="account-steps m-0">Part 2</p>
           <div className="billing-address"> Billing Address </div>
           <div className="row">
-            {BillingAddress.filter((op) => op.section === 'address').map(
-              (item) => (
+            {billingAddress
+              .filter((op) => op.section === 'address')
+              .map((item) => (
                 <div className={item.property} key={item.key}>
                   <ContractFormField className="mt-3">
                     <label htmlFor={item.label}>
@@ -496,8 +497,7 @@ export default function BillingInfo({
                       apiError.billing_address[item.key][0]}
                   </ErrorMsg>
                 </div>
-              ),
-            )}
+              ))}
           </div>
         </fieldset>
 
@@ -505,8 +505,9 @@ export default function BillingInfo({
           <p className="account-steps m-0">Part 3</p>
           <div className="billing-address">Billing Contact</div>
           <div className="row">
-            {BillingAddress.filter((op) => op.section === 'contact').map(
-              (item) => (
+            {billingAddress
+              .filter((op) => op.section === 'contact')
+              .map((item) => (
                 <div
                   className={item.property}
                   key={item.key}
@@ -531,8 +532,7 @@ export default function BillingInfo({
                       apiError.billing_contact[item.key][0]}
                   </ErrorMsg>
                 </div>
-              ),
-            )}
+              ))}
           </div>
         </fieldset>
       </>
@@ -556,7 +556,7 @@ export default function BillingInfo({
               </label>
             </li>
 
-            {/* {PaymentType.map((item) => (
+            {/* {paymentType.map((item) => (
               <li key={item.key}>
                 <ModalRadioCheck className="mt-1">
                   <label
@@ -606,7 +606,7 @@ export default function BillingInfo({
             <a
               className="cursor link-url"
               style={{ fontSize: '12px' }}
-              href="https://www.authorize.net/en-us/about-us/dpa.html"
+              href={authorizeLink}
               target="_BLANK"
               rel="noopener noreferrer">
               Authorize.Net

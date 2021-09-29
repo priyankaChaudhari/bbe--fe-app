@@ -24,6 +24,8 @@ import {
   GetInitialName,
 } from '../../../common';
 import {
+  PATH_AGREEMENT,
+  PATH_CUSTOMER_DETAILS,
   performanceSortOptions,
   sadSortOptions,
   dadSortOptions,
@@ -31,7 +33,7 @@ import {
   sortByOrderOptions,
   options,
   timeFrameFilters,
-} from '../../../constants/FieldConstants';
+} from '../../../constants';
 import {
   CountDayClock,
   CloseIcon,
@@ -44,12 +46,15 @@ import {
   UpDowGrayArrow,
   SortUp,
   CaretUp,
-} from '../../../theme/images/index';
-
-import { getCustomerList, getGrowthStrategist, getStatus } from '../../../api';
-import { getManagersList, getSellerType } from '../../../api/ChoicesApi';
-import { getcontract } from '../../../api/AgreementApi';
-import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../../constants';
+} from '../../../theme/images';
+import {
+  getCustomerList,
+  getGrowthStrategist,
+  getStatus,
+  getManagersList,
+  getSellerType,
+  getcontract,
+} from '../../../api';
 import { CustomerListPage } from '../../../theme/CustomerListStyle';
 
 const salesSortOptions = sortOptions.concat(performanceSortOptions);

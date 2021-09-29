@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
+import { useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { showBrandAsset } from '../../store/actions/customerState';
 import { getBrandAssetsSummary, updateBrandAssetStep } from '../../api';
+import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import {
   PATH_BRAND_ASSET,
   PATH_CUSTOMER_DETAILS,
   PATH_THANKS,
   PATH_UNAUTHORIZED_BRAND_ASSET,
+  brandSteps,
 } from '../../constants';
-import { BrandSteps } from '../../constants/FieldConstants';
-import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
-import { showBrandAsset } from '../../store/actions/customerState';
 
 export default function BrandAssetSummary() {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function BrandAssetSummary() {
         Object.keys(response.data).length > 0
       ) {
         setData(response && response.data);
-        const checkSkipped = BrandSteps.filter(
+        const checkSkipped = brandSteps.filter(
           (item) =>
             response.data[item.key] === 'Skipped' ||
             response.data[item.key] === '0 files uploaded',
@@ -82,7 +83,7 @@ export default function BrandAssetSummary() {
         ) : (
           <>
             <GreyCard>
-              {BrandSteps.map((item) => (
+              {brandSteps.map((item) => (
                 <div className="information-text mt-2" key={item.key}>
                   {item.label}
                   {data &&

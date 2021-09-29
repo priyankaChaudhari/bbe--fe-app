@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import copy from 'copy-to-clipboard';
-import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import Select, { components } from 'react-select';
 
 import {
   ContractFormField,
@@ -19,9 +19,9 @@ import {
   CloseIcon,
 } from '../../../theme/images';
 import {
-  AmazonSellerAccountDetails,
-  AmazonVendorAccountDetails,
-} from '../../../constants/FieldConstants';
+  amazonSellerAccountDetails,
+  amazonVendorAccountDetails,
+} from '../../../constants';
 import { getAmazonSeller, getAmazonVendor } from '../../../api';
 import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
@@ -308,8 +308,8 @@ export default function AmazonAccount({
           selectedMarketplace.account_type === 'Hybrid') ? (
           <>
             {html === 'edit'
-              ? generateEditHTML(AmazonSellerAccountDetails, 1)
-              : generateHTML(AmazonSellerAccountDetails, 1)}
+              ? generateEditHTML(amazonSellerAccountDetails, 1)
+              : generateHTML(amazonSellerAccountDetails, 1)}
           </>
         ) : (
           ''
@@ -325,8 +325,8 @@ export default function AmazonAccount({
           selectedMarketplace.account_type === 'Hybrid') ? (
           <>
             {html === 'edit'
-              ? generateEditHTML(AmazonVendorAccountDetails, 2)
-              : generateHTML(AmazonVendorAccountDetails, 2)}
+              ? generateEditHTML(amazonVendorAccountDetails, 2)
+              : generateHTML(amazonVendorAccountDetails, 2)}
           </>
         ) : (
           ''

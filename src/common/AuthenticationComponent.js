@@ -1,13 +1,37 @@
 /* eslint no-else-return: "off" */
 
 import React, { useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
 import { useIdleTimer } from 'react-idle-timer';
+import { useSelector, useDispatch } from 'react-redux';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
+import Header from './Header';
+import LeftSideBar from './LeftSideBar';
+import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
 import { userMe } from '../store/actions/index';
+import { Summary } from '../components/OnBoardingCustomer';
+import { clearToken } from '../store/actions/userState';
+import { ContractContainer } from '../components/Contract';
+import { PageLoader, PageNotFound } from './index';
+import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
+import {
+  CustomerListTablet,
+  ProductDelegation,
+  CustomerList,
+} from '../components/Customer';
+import {
+  TeamMember,
+  TabletTeamMember,
+  DashboardContainer,
+} from '../components/BrandPartner';
+import {
+  BrandAssetSummary,
+  BrandAssetUpload,
+  DelegationUpload,
+  BrandAssetsPreview,
+} from '../components/BrandAssetGathering';
 import {
   PATH_CUSTOMER_LIST,
   PATH_LOGIN,
@@ -33,32 +57,6 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
 } from '../constants/index';
-
-import {
-  CustomerListTablet,
-  ProductDelegation,
-  CustomerMainContainer,
-  CustomerList,
-} from '../components/Customer';
-
-import { PageLoader, PageNotFound } from './index';
-import Header from './Header';
-import LeftSideBar from './LeftSideBar';
-import { ContractContainer } from '../components/Contract';
-import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
-import {
-  TeamMember,
-  TabletTeamMember,
-  DashboardContainer,
-} from '../components/BrandPartner';
-import { Summary } from '../components/OnBoardingCustomer';
-import {
-  BrandAssetSummary,
-  BrandAssetUpload,
-  DelegationUpload,
-  BrandAssetsPreview,
-} from '../components/BrandAssetGathering';
-import { clearToken } from '../store/actions/userState';
 
 const _ = require('lodash');
 

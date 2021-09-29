@@ -1,12 +1,10 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
 import {
   Logo,
-  // EditIcons,
-  // LogOutIcons,
-  // DefaultUser,
   UserGroupIcon,
   ReadBookIcon,
   ReadBookIconActive,
@@ -14,7 +12,7 @@ import {
   LightBulb,
   MenuIcon,
   LogoMobileView,
-} from '../theme/images/index';
+} from '../theme/images';
 
 export default function KnowledgeBaseHeader() {
   return (

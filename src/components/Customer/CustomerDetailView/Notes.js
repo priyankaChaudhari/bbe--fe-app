@@ -3,15 +3,17 @@
 /* eslint-disable no-param-reassign */
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useSelector } from 'react-redux';
 
 import debounce from 'lodash.debounce';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import $ from 'jquery';
-
 import styled from 'styled-components';
+import $ from 'jquery';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+
+import EditorComponent from '../../../common/EditorComponent';
+import Theme from '../../../theme/Theme';
 import { GroupUser } from '../../../theme/Global';
 import { getNotes, saveNotes, deleteNote, updateNotes } from '../../../api';
 import {
@@ -22,9 +24,8 @@ import {
   CommonPagination,
   ModalRadioCheck,
   CheckBox,
+  PageLoader,
 } from '../../../common';
-import PageLoader from '../../../common/PageLoader';
-
 import {
   SearchIcon,
   CloseIcon,
@@ -34,10 +35,7 @@ import {
   PinIcons,
   CaretUp,
   InfoIcon,
-} from '../../../theme/images/index';
-
-import EditorComponent from '../../../common/EditorComponent';
-import Theme from '../../../theme/Theme';
+} from '../../../theme/images';
 
 function Notes({
   setShowNotesModal,

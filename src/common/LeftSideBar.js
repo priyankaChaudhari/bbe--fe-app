@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import Theme from '../theme/Theme';
 import {
@@ -12,7 +12,7 @@ import {
   OrganizationIcon,
   SpeedometerActive,
   Speedometer,
-} from '../theme/images/index';
+} from '../theme/images';
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
