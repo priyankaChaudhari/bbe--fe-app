@@ -6,6 +6,19 @@ import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { func, string, bool, objectOf } from 'prop-types';
 
+import DSPInvoiceFilters from './DSPInvoiceFilters';
+import Theme from '../../../../theme/Theme';
+import DSPInvoiceTabs from './DSPInvoiceTabs';
+import TableMobileView from '../../../../common/TableMobileView';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import {
+  InvoicesStatusOptions,
+  InvoicesSortByOptions,
+  StatusColorSet,
+} from '../../../../constants/DashboardConstants';
 import {
   WhiteCard,
   Table,
@@ -15,19 +28,6 @@ import {
   CommonPagination,
   NoData,
 } from '../../../../common';
-import TableMobileView from '../../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
-import DSPInvoiceFilters from './DSPInvoiceFilters';
-import {
-  InvoicesStatusOptions,
-  InvoicesSortByOptions,
-  StatusColorSet,
-} from '../../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../../api';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import Theme from '../../../../theme/Theme';
-import DSPInvoiceTabs from './DSPInvoiceTabs';
 
 export default function DSPInvoicesList({
   timeFrame,

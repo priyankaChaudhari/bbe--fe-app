@@ -265,6 +265,7 @@ export async function getDSPFinances(
     };
   }
 
+  console.log('selectedNavigation', selectedNavigation);
   if (selectedNavigation === 'revShare') {
     params = {
       ...params,

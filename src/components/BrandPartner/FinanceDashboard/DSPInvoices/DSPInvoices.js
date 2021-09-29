@@ -1,25 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-// import { DateRange } from 'react-date-range';
-// import { enGB } from 'react-date-range/src/locale';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 import { func, string } from 'prop-types';
-import {
-  Card,
-  ModalRadioCheck,
-  Button,
-  CustomDateRange,
-} from '../../../../common';
+
+import Theme from '../../../../theme/Theme';
+import { getDSPFinances } from '../../../../api';
 import { CaretUp, CloseIcon } from '../../../../theme/images/index';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
   monthNames,
 } from '../../../../constants/DashboardConstants';
-import Theme from '../../../../theme/Theme';
-import { getDSPFinances } from '../../../../api';
+import {
+  Card,
+  ModalRadioCheck,
+  Button,
+  CustomDateRange,
+} from '../../../../common';
 
 export default function DSPInvoices({
   setTimeFrame,
@@ -45,14 +44,6 @@ export default function DSPInvoices({
     currentDate,
   ]);
   const [range, setRange] = useState([currentDate, currentDate]);
-
-  // const handleClickOutside = (event) => {
-  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //     setShowDropdown({ show: false });
-  //     setDummayDateType(selectedDateType);
-  //   }
-  // };
-
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
       (res) => {
@@ -73,10 +64,6 @@ export default function DSPInvoices({
       getDSPdata(dummyDateType);
       setResponseId('12345');
     }
-    // document.addEventListener('click', handleClickOutside, true);
-    // return () => {
-    //   document.removeEventListener('click', handleClickOutside, true);
-    // };
   }, []);
 
   const handleTimeTypeChange = (event) => {
@@ -116,10 +103,8 @@ export default function DSPInvoices({
   const onDateChange = (date) => {
     if (date[1] === null) {
       setDummayDateRange([date[0], date[0]]);
-      // setState([date[0], date[0]]);
     } else {
       setDummayDateRange(date);
-      // setState(date);
     }
     setRange(date);
   };
@@ -196,20 +181,6 @@ export default function DSPInvoices({
         </ul>{' '}
         <CustomDateRange id="BT-dspinvoices-daterange">
           {dummyDateType === 'custom' ? (
-            // <DateRange
-            //   ranges={state}
-            //   date={new Date()}
-            //   onChange={(itemData) => setState([itemData.selection])}
-            //   dateFormat="MMM yyyy"
-            //   showDateDisplay={false}
-            //   locale={enGB}
-            //   editableDateInputs
-            //   showMonthAndYearPickers
-            //   moveRangeOnFirstSelection={false}
-            //   maxDate={currentDate}
-            //   rangeColors={[Theme.orange]}
-            //   weekdayDisplayFormat="EEEEE"
-            // />
             <div className="text-left">
               <DatePicker
                 selected={new Date()}

@@ -1,8 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { string } from 'prop-types';
+
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
+import { string } from 'prop-types';
 
+import Theme from '../../../../theme/Theme';
+import { getEnableInvoices, setEnableInvoices } from '../../../../api';
 import {
   WhiteCard,
   Table,
@@ -12,10 +15,6 @@ import {
   CommonPagination,
   ModalBox,
 } from '../../../../common';
-
-import { getEnableInvoices, setEnableInvoices } from '../../../../api';
-
-import Theme from '../../../../theme/Theme';
 
 export default function EnableInvoiceing({ view }) {
   const [billingData, setBillingData] = useState([]);

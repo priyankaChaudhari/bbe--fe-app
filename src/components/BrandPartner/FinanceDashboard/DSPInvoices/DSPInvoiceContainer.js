@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
@@ -22,7 +23,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
   const onTabClick = (selectedTab) => {
     setViewComponent(selectedTab);
   };
-
+  console.log('conatnier', selectedNavigation);
   return (
     <>
       <DSPInvoices

@@ -1,11 +1,24 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
-import { components } from 'react-select';
+
 import $ from 'jquery';
+import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { bool, func, string } from 'prop-types';
 
+import DSPInvoiceTabs from './DSPInvoiceTabs';
+import EnableInvoiceing from './EnableInvoiceing';
+import DSPInvoiceFilters from './DSPInvoiceFilters';
+import TableMobileView from '../../../../common/TableMobileView';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import {
+  PartnersStatusOptions,
+  PartnersSortByOptions,
+} from '../../../../constants/DashboardConstants';
 import {
   WhiteCard,
   Table,
@@ -14,18 +27,6 @@ import {
   CommonPagination,
   NoData,
 } from '../../../../common';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
-import DSPInvoiceFilters from './DSPInvoiceFilters';
-import TableMobileView from '../../../../common/TableMobileView';
-import {
-  PartnersStatusOptions,
-  PartnersSortByOptions,
-} from '../../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../../api';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import DSPInvoiceTabs from './DSPInvoiceTabs';
-import EnableInvoiceing from './EnableInvoiceing';
 
 export default function DSPPartnersList({
   timeFrame,
