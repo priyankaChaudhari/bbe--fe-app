@@ -605,6 +605,7 @@ export default function BillingInfo({
             We have partnered with{' '}
             <a
               className="cursor link-url"
+              style={{ fontSize: '12px' }}
               href="https://www.authorize.net/en-us/about-us/dpa.html"
               target="_BLANK"
               rel="noopener noreferrer">
