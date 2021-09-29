@@ -130,6 +130,7 @@ export default function AgreementSidePanel({
   amendmentData,
   sidebarSection,
   setSidebarSection,
+  checkContractStatus,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
@@ -4039,6 +4040,7 @@ export default function AgreementSidePanel({
               setPageNumber={setPageNumber}
               getContractActivityLogInfo={getContractActivityLogInfo}
               loader={loader}
+              checkContractStatus={checkContractStatus}
             />
           )}
         </>
@@ -4190,6 +4192,7 @@ AgreementSidePanel.defaultProps = {
   AmazonStoreOptions: [],
   fetchUncommonOptions: () => {},
   originalAddendumData: {},
+  checkContractStatus: () => {},
 };
 
 AgreementSidePanel.propTypes = {
@@ -4335,4 +4338,5 @@ AgreementSidePanel.propTypes = {
   AmazonStoreOptions: PropTypes.arrayOf(PropTypes.object),
   fetchUncommonOptions: PropTypes.func,
   originalAddendumData: PropTypes.shape(PropTypes.object),
+  checkContractStatus: PropTypes.func,
 };
