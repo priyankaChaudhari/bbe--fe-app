@@ -80,6 +80,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     maxWidth: '600px ',
+    minHeight: '170px',
     width: '100% ',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
