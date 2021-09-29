@@ -7,11 +7,11 @@ import { useDispatch } from 'react-redux';
 
 import InputSelect from '../../../common/InputSelect';
 import CropUploadImage from '../../../common/CropUploadImage';
-import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
-import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 import { editAccountFields } from '../../../constants';
 import { SortDownIcon } from '../../../theme/images';
 import { getCustomerDetails } from '../../../store/actions/customerState';
+import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
+import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 
 export default function EditAccountDetails({
   customer,

@@ -7,6 +7,10 @@ import { shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
+import { showProfileLoader } from '../../../../../store/actions/userState';
+import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images';
+import { billingAddress, creditCardDetails } from '../../../../../constants';
+import { getBillingDetails, saveBillingInfo } from '../../../../../api';
 import {
   Button,
   ContractFormField,
@@ -16,10 +20,6 @@ import {
   PageLoader,
   WhiteCard,
 } from '../../../../../common';
-import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images';
-import { getBillingDetails, saveBillingInfo } from '../../../../../api';
-import { BillingAddress, creditCardDetails } from '../../../../../constants';
-import { showProfileLoader } from '../../../../../store/actions/userState';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const dispatch = useDispatch();
@@ -190,34 +190,36 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const mapContactDetails = () => {
     return (
       <div className="row">
-        {BillingAddress.filter((op) => op.section === 'contact').map((item) => {
-          return (
-            <div
-              className="col-md-6"
-              key={item.key}
-              style={{
-                opacity: data && data.id && item.key === 'email' ? 0.5 : '',
-              }}>
-              <ContractFormField className="mt-3">
-                <label htmlFor={item.label}>
-                  {item.label}
-                  <br />
-                  {item.type === 'number' ? (
-                    <>{generateNumeric(item, 'billing_contact')}</>
-                  ) : (
-                    <>{generateInput(item, 'billing_contact')}</>
-                  )}
-                </label>
-              </ContractFormField>
-              <ErrorMsg>
-                {apiError &&
-                  apiError.billing_contact &&
-                  apiError.billing_contact[item.key] &&
-                  apiError.billing_contact[item.key][0]}
-              </ErrorMsg>
-            </div>
-          );
-        })}
+        {billingAddress
+          .filter((op) => op.section === 'contact')
+          .map((item) => {
+            return (
+              <div
+                className="col-md-6"
+                key={item.key}
+                style={{
+                  opacity: data && data.id && item.key === 'email' ? 0.5 : '',
+                }}>
+                <ContractFormField className="mt-3">
+                  <label htmlFor={item.label}>
+                    {item.label}
+                    <br />
+                    {item.type === 'number' ? (
+                      <>{generateNumeric(item, 'billing_contact')}</>
+                    ) : (
+                      <>{generateInput(item, 'billing_contact')}</>
+                    )}
+                  </label>
+                </ContractFormField>
+                <ErrorMsg>
+                  {apiError &&
+                    apiError.billing_contact &&
+                    apiError.billing_contact[item.key] &&
+                    apiError.billing_contact[item.key][0]}
+                </ErrorMsg>
+              </div>
+            );
+          })}
       </div>
     );
   };
@@ -225,32 +227,34 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const mapAddressDetails = () => {
     return (
       <div className="row">
-        {BillingAddress.filter((op) => op.section === 'address').map((item) => {
-          return (
-            <div
-              className="col-md-6"
-              key={item.key}
-              style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
-              <ContractFormField className="mt-3">
-                <label htmlFor={item.label}>
-                  {item.label}
-                  <br />
-                  {item.type === 'number' ? (
-                    <>{generateNumeric(item, 'billing_address')}</>
-                  ) : (
-                    <>{generateInput(item, 'billing_address')}</>
-                  )}
-                </label>
-              </ContractFormField>
-              <ErrorMsg>
-                {apiError &&
-                  apiError.billing_address &&
-                  apiError.billing_address[item.key] &&
-                  apiError.billing_address[item.key][0]}
-              </ErrorMsg>
-            </div>
-          );
-        })}
+        {billingAddress
+          .filter((op) => op.section === 'address')
+          .map((item) => {
+            return (
+              <div
+                className="col-md-6"
+                key={item.key}
+                style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
+                <ContractFormField className="mt-3">
+                  <label htmlFor={item.label}>
+                    {item.label}
+                    <br />
+                    {item.type === 'number' ? (
+                      <>{generateNumeric(item, 'billing_address')}</>
+                    ) : (
+                      <>{generateInput(item, 'billing_address')}</>
+                    )}
+                  </label>
+                </ContractFormField>
+                <ErrorMsg>
+                  {apiError &&
+                    apiError.billing_address &&
+                    apiError.billing_address[item.key] &&
+                    apiError.billing_address[item.key][0]}
+                </ErrorMsg>
+              </div>
+            );
+          })}
       </div>
     );
   };

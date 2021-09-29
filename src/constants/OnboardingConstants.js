@@ -5,7 +5,7 @@ import {
   PATH_SUMMARY,
 } from './RouteConstants';
 
-export const ACHDetails = [
+export const achDetails = [
   { key: 'account_name', label: 'Name on Account', type: 'text' },
   { key: 'bank_name', label: 'Bank Name', type: 'text' },
   { key: 'account_number', label: 'Account Number', type: 'number' },
@@ -46,7 +46,7 @@ export const creditCardDetails = [
   },
 ];
 
-export const BillingAddress = [
+export const billingAddress = [
   {
     key: 'address',
     label: 'Address',
@@ -106,7 +106,7 @@ export const BillingAddress = [
   },
 ];
 
-export const PaymentType = [
+export const paymentType = [
   { key: 'ach', label: 'ACH', type: 'radio' },
   { key: 'credit_card', label: 'Credit Card', type: 'radio' },
 ];

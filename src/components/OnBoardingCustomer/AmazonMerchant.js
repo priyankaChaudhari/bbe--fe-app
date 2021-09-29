@@ -9,15 +9,8 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import {
-  OnBoardingBody,
-  ContractFormField,
-  Button,
-  PageLoader,
-  ModalBox,
-  ErrorMsg,
-  CheckBox,
-} from '../../common';
+import { userMe } from '../../store/actions';
+import { CloseIcon, VideoCall } from '../../theme/images';
 import {
   askSomeoneData,
   updateAskSomeoneData,
@@ -34,8 +27,15 @@ import {
   amazonSellerAccountDetails,
   amazonVendorAccountDetails,
 } from '../../constants';
-import { userMe } from '../../store/actions';
-import { CloseIcon, VideoCall } from '../../theme/images';
+import {
+  OnBoardingBody,
+  ContractFormField,
+  Button,
+  PageLoader,
+  ModalBox,
+  ErrorMsg,
+  CheckBox,
+} from '../../common';
 
 export default function AmazonMerchant({
   setIsLoading,

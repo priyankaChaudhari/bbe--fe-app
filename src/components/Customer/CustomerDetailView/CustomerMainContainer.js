@@ -5,49 +5,21 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
+import 'react-toastify/dist/ReactToastify.css';
 import Select, { components } from 'react-select';
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import Theme from '../../../theme/Theme';
 import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import Activity from './Activity';
 import BillingContainer from './BillingContainer/BillingContainer';
-import 'react-toastify/dist/ReactToastify.css';
-import {
-  FileContract,
-  Organization,
-  ExchangeIcon,
-  DefaultUser,
-  CloseIcon,
-  CompanyDefaultUser,
-  LeftArrowIcon,
-  HeartMonitorIcon,
-  WhiteCaretUp,
-  CaretUp,
-  AccountSetupIcon,
-  BillingIcon,
-  CatalogBox,
-  PlusIcon,
-  ForwardOrangeIcon,
-  OrangeChat,
-  EditOrangeIcon,
-  NextActivityLogo,
-  ContractEmailIcon,
-} from '../../../theme/images';
+import { showOnboardingMsg } from '../../../store/actions/userState';
+import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { GroupUser } from '../../../theme/Global';
-import {
-  ModalBox,
-  PageLoader,
-  GetInitialName,
-  DropDownStatus,
-  PageNotFound,
-  BackToTop,
-  Button,
-  WhiteCard,
-  Status,
-} from '../../../common';
+import { AddTeamMember, EditTeamMember } from '../../Team/index';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
   getContactDetails,
   getCustomerDetails,
@@ -71,10 +43,38 @@ import {
   getRecentNotes,
   getAccountMarketplace,
 } from '../../../api';
-import { AddTeamMember, EditTeamMember } from '../../Team/index';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
-import { showOnboardingMsg } from '../../../store/actions/userState';
-import { SetupCheckList } from '../../BrandAssetGathering/index';
+import {
+  ModalBox,
+  PageLoader,
+  GetInitialName,
+  DropDownStatus,
+  PageNotFound,
+  BackToTop,
+  Button,
+  WhiteCard,
+  Status,
+} from '../../../common';
+import {
+  FileContract,
+  Organization,
+  ExchangeIcon,
+  DefaultUser,
+  CloseIcon,
+  CompanyDefaultUser,
+  LeftArrowIcon,
+  HeartMonitorIcon,
+  WhiteCaretUp,
+  CaretUp,
+  AccountSetupIcon,
+  BillingIcon,
+  CatalogBox,
+  PlusIcon,
+  ForwardOrangeIcon,
+  OrangeChat,
+  EditOrangeIcon,
+  NextActivityLogo,
+  ContractEmailIcon,
+} from '../../../theme/images';
 
 const AccountSetupcustomStyles = {
   content: {

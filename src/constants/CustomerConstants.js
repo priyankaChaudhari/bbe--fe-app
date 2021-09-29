@@ -43,6 +43,7 @@ export const sortByOrderOptions = [
   { value: false, label: 'Lowest to Highest' },
 ];
 
+// needs a name change
 export const sadSortOptions = [
   { value: 'ad_sales', label: 'Ad Sales', order: true, class: 'revenue' },
   { value: 'ad_spend', label: 'Ad Spend', order: true, class: 'units_sold' },
@@ -88,6 +89,7 @@ export const timeFrameFilters = [
   },
 ];
 
+// needs a name change
 export const options = [
   { value: 'contract_details', label: 'Accounts' },
   { value: 'performance', label: 'Sales Performance' },
@@ -161,7 +163,7 @@ export const editAccountFields = [
   },
 ];
 
-export const SocialIcons = [
+export const socialIcons = [
   {
     key: 'facebook',
     value: FaceBookIcons,

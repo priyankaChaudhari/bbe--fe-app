@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
 import Theme from '../../theme/Theme';
+import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
+import { getAgreementList, getAssigneeCount } from '../../api';
 import { Button, PageLoader, WhiteCard } from '../../common';
 import {
   DspOnlyIcon,
@@ -16,11 +18,8 @@ import {
   SignatureIcon,
   WhiteArrowRight,
 } from '../../theme/images';
-import { getAgreementList, getAssigneeCount } from '../../api';
-import { PATH_CHOOSE_BRAND_DELEGATE } from '../../constants';
 
 export default function SetupCheckList({ id, brandId }) {
-  // productAssetsId;
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [agreementData, setAgreementData] = useState({
     data: [],
