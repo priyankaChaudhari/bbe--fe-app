@@ -190,7 +190,8 @@ export default function Summary() {
                 <u
                   onClick={() => dispatch(logout())}
                   role="presentation"
-                  className="cursor">
+                  style={{ fontSize: '15px' }}
+                  className="cursor link-url">
                   sign out
                 </u>{' '}
                 or close this tab until you or an assignee provides the
