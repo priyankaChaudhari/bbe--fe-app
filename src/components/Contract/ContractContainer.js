@@ -3042,6 +3042,7 @@ export default function ContractContainer() {
         amendmentData={amendmentData}
         sidebarSection={sidebarSection}
         setSidebarSection={setSidebarSection}
+        checkContractStatus={checkContractStatus}
       />
     );
   };
