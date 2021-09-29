@@ -36,9 +36,8 @@ export default function EnableInvoiceing({ view }) {
       left: '50%',
       right: 'auto',
       bottom: 'auto',
-      maxWidth: '420px ',
+      maxWidth: '525px ',
       width: '100% ',
-      minHeight: '390px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -246,30 +245,31 @@ export default function EnableInvoiceing({ view }) {
         contentLabel="Edit modal">
         <ModalBox>
           <div className="modal-body">
-            <div className="alert-msg ">
-              <span>{title}</span>
-            </div>
-            <div>{`${subTitle} ${dayjs(invoiceGeneratedOn).format(
-              'MMM D',
-            )}`}</div>
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => setIsModalOpen(false)}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Cancle
-              </Button>
-
-              <Button
-                onClick={() => onClickEnableInvoicing()}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                {enableInvoiceLoader ? (
-                  <PageLoader color="#fff" type="button" />
-                ) : (
-                  'Enable Billing'
-                )}
-              </Button>
+            <div className="heading-title text-center mt-1">{title}</div>
+            <div className=" normal-text text-center mt-2 pt-1">{`${subTitle} ${dayjs(
+              invoiceGeneratedOn,
+            ).format('MMM D')}`}</div>
+            <div className="row mt-4 pt-3">
+              <div className="col-6 text-center ">
+                <Button
+                  onClick={() => setIsModalOpen(false)}
+                  type="button"
+                  className="btn-orange-border  w-100">
+                  Cancle
+                </Button>
+              </div>
+              <div className="col-6">
+                <Button
+                  onClick={() => onClickEnableInvoicing()}
+                  type="button"
+                  className="btn-primary on-boarding   w-100">
+                  {enableInvoiceLoader ? (
+                    <PageLoader color="#fff" type="button" />
+                  ) : (
+                    'Enable Billing'
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </ModalBox>
