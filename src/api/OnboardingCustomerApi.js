@@ -11,7 +11,7 @@ import {
   API_VERIFY_TOKEN,
   API_VERIFY_USER,
   API_VIDEO_LINKS,
-} from '../constants/ApiConstants';
+} from '../constants';
 
 export async function updateOnBoardCustomer(id, data) {
   const result = await axiosInstance
