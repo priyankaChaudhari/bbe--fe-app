@@ -314,7 +314,7 @@ export const WhiteCard = styled.div`
 
   }
   .decrease-rate {
-    color: ${Theme.darkRed};
+    color: ${Theme.red};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
     .red-arrow {
@@ -510,7 +510,7 @@ export const WhiteCard = styled.div`
         margin-left: -2px;
 
         &.down {
-          color: ${Theme.darkRed};
+          color: ${Theme.red};
         }
         .red-arrow{
            width: 14px;
@@ -616,7 +616,7 @@ export const WhiteCard = styled.div`
         margin-left: -2px;
 
         &.down {
-          color: ${Theme.darkRed};
+          color: ${Theme.red};
         }
 
         &.grey {
