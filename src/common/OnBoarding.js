@@ -4,6 +4,11 @@ import Theme from '../theme/Theme';
 const OnBoardingBody = styled.div`
   padding: 60px 0px 0 0px;
 
+  &.body-start {
+    min-height: calc(100% - 70px);
+    background: ${Theme.white};
+  }
+
   .already-user-msg {
     background-color: ${Theme.lightOrange};
     border-radius: 5px;
@@ -166,7 +171,6 @@ const OnBoardingBody = styled.div`
         color: ${Theme.orange};
         text-transform: initial;
         position: relative;
-        top: 8px;
       }
       &.security {
         font-size: 12px;

@@ -37,7 +37,7 @@ import {
   AmazonSellerAccountDetails,
   AmazonVendorAccountDetails,
 } from '../../constants/FieldConstants';
-import { CloseIcon } from '../../theme/images';
+import { CloseIcon, VideoCall } from '../../theme/images';
 
 export default function AmazonMerchant({
   setIsLoading,
@@ -60,6 +60,12 @@ export default function AmazonMerchant({
   setFormData,
   formData,
 }) {
+  const customVideostyle = {
+    width: '16px',
+    marginRight: '6px',
+    verticalAlign: 'text-bottom',
+    cursor: 'pointer',
+  };
   const history = useHistory();
   const dispatch = useDispatch();
   const params = queryString.parse(history.location.search);
@@ -430,7 +436,8 @@ export default function AmazonMerchant({
             : 'Vendor Code'}{' '}
         </strong>{' '}
         below.
-        <p className="info-text-gray m-0 mb-4 ">
+        <p className="info-text-gray mt-1 mb-4 ">
+          <img style={customVideostyle} src={VideoCall} alt="video" />
           <span
             className="video-link cursor"
             onClick={() => setShowVideo({ [part]: true })}
@@ -571,7 +578,8 @@ export default function AmazonMerchant({
         <p className="account-steps m-0">Part {part}</p>
         Navigate to Settings &gt; Account Info and enter your{' '}
         <strong>Advertiser Name</strong> and <strong>ID</strong> below.
-        <p className="info-text-gray m-0 mb-4 ">
+        <p className="info-text-gray mt-1 mb-4 ">
+          <img style={customVideostyle} src={VideoCall} alt="video" />
           <span
             className="video-link cursor"
             onClick={() => setShowVideo({ [part]: true })}
