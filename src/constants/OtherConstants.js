@@ -94,7 +94,7 @@ export const managementLink =
 export const helpDeskLink =
   'https://bbe.atlassian.net/servicedesk/customer/portals';
 
-export const BrandSteps = [
+export const brandSteps = [
   {
     key: 'brand_logo',
     url: 'brand-logo',

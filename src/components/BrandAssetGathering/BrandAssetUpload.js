@@ -13,15 +13,41 @@ import Select from 'react-select';
 import Modal from 'react-modal';
 import axios from 'axios';
 import $ from 'jquery';
-import { useHistory, useParams } from 'react-router-dom';
-import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
-import { toast, ToastContainer } from 'react-toastify';
+import { Progress } from 'react-sweet-progress';
 import { useDropzone } from 'react-dropzone';
+import { useHistory, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import BrandAssetsPreview from './BrandAssetsPreview';
 import axiosInstance from '../../axios';
+import {
+  deleteDocument,
+  getDocuments,
+  getBrandAssetsDetail,
+  getBrandAssetsSummary,
+  updateBrandAssetStep,
+} from '../../api';
+import {
+  PATH_BRAND_ASSET,
+  PATH_BRAND_ASSET_SUMMARY,
+  PATH_CUSTOMER_DETAILS,
+  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
+  PATH_UNAUTHORIZED_BRAND_ASSET,
+  API_DOCUMENTS,
+  brandSteps,
+} from '../../constants';
+import {
+  Button,
+  CheckBox,
+  HeaderDownloadFuntionality,
+  PageLoader,
+  UnauthorizedHeader,
+  ModalBox,
+  ActionDropDown,
+  DropDownIndicator,
+} from '../../common';
 import {
   GrayCheckIcon,
   OrangeCheckMark,
@@ -35,32 +61,6 @@ import {
   WhiteArrowRight,
   FileCloud,
 } from '../../theme/images';
-import {
-  Button,
-  CheckBox,
-  HeaderDownloadFuntionality,
-  PageLoader,
-  UnauthorizedHeader,
-  ModalBox,
-  ActionDropDown,
-  DropDownIndicator,
-} from '../../common';
-import {
-  PATH_BRAND_ASSET,
-  PATH_BRAND_ASSET_SUMMARY,
-  PATH_CUSTOMER_DETAILS,
-  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
-  PATH_UNAUTHORIZED_BRAND_ASSET,
-  API_DOCUMENTS,
-  BrandSteps,
-} from '../../constants';
-import {
-  deleteDocument,
-  getDocuments,
-  getBrandAssetsDetail,
-  getBrandAssetsSummary,
-  updateBrandAssetStep,
-} from '../../api';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -361,10 +361,10 @@ export default function BrandAssetUpload() {
   }, []);
 
   useEffect(() => {
-    setSelectedStep(BrandSteps.find((op) => op.url === params.step));
+    setSelectedStep(brandSteps.find((op) => op.url === params.step));
     const docType =
-      BrandSteps.find((op) => op.url === params.step) &&
-      BrandSteps.find((op) => op.url === params.step).key;
+      brandSteps.find((op) => op.url === params.step) &&
+      brandSteps.find((op) => op.url === params.step).key;
     if (
       selectedDropdown &&
       selectedDropdown.dropdownValue &&
@@ -984,7 +984,7 @@ export default function BrandAssetUpload() {
         history={history.location.pathname}>
         <div className="label-heading mb-3">Your BrandSteps</div>
         <ul className="asset-check-list">
-          {BrandSteps.map((item) => (
+          {brandSteps.map((item) => (
             <li
               className="cursor"
               key={item.key}

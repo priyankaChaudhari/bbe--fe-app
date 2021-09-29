@@ -13,6 +13,22 @@ import { ToastContainer } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
 
 import Theme from '../theme/Theme';
+import { EditProfile } from '../components/Profile';
+import { createArticle } from '../api';
+import { logout, showProfileLoader, userMe } from '../store/actions/userState';
+import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
+import {
+  PATH_ARTICLE_LIST,
+  PATH_BGS_DASHBOARD,
+  PATH_CUSTOMER_LIST,
+  PATH_SPONSORED_DASHBOARD,
+  PATH_DSP_DASHBOARD,
+  PATH_HYBRID_DASHBOARD,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
+  helpDeskLink,
+  managementLink,
+} from '../constants';
 import {
   NextLogo,
   EditIcons,
@@ -29,22 +45,6 @@ import {
   HelpDeskIcon,
   HandShake,
 } from '../theme/images';
-import { logout, showProfileLoader, userMe } from '../store/actions/userState';
-import { EditProfile } from '../components/Profile';
-import { createArticle } from '../api';
-import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
-import {
-  PATH_ARTICLE_LIST,
-  PATH_BGS_DASHBOARD,
-  PATH_CUSTOMER_LIST,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
-  helpDeskLink,
-  managementLink,
-} from '../constants';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();

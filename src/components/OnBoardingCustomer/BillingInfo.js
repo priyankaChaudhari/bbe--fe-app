@@ -31,8 +31,8 @@ import {
 import {
   PATH_SUMMARY,
   PATH_THANKS,
-  ACHDetails,
-  BillingAddress,
+  achDetails,
+  billingAddress,
   creditCardDetails,
   stepPath,
   authorizeLink,
@@ -411,7 +411,7 @@ export default function BillingInfo({
     if (formData.ach) {
       return (
         <>
-          {ACHDetails.map((item) => (
+          {achDetails.map((item) => (
             <React.Fragment key={item.key}>
               <ContractFormField
                 className={item.key !== 'account_name' ? 'mt-3' : ''}>
@@ -475,8 +475,9 @@ export default function BillingInfo({
           <p className="account-steps m-0">Part 2</p>
           <div className="billing-address"> Billing Address </div>
           <div className="row">
-            {BillingAddress.filter((op) => op.section === 'address').map(
-              (item) => (
+            {billingAddress
+              .filter((op) => op.section === 'address')
+              .map((item) => (
                 <div className={item.property} key={item.key}>
                   <ContractFormField className="mt-3">
                     <label htmlFor={item.label}>
@@ -496,8 +497,7 @@ export default function BillingInfo({
                       apiError.billing_address[item.key][0]}
                   </ErrorMsg>
                 </div>
-              ),
-            )}
+              ))}
           </div>
         </fieldset>
 
@@ -505,8 +505,9 @@ export default function BillingInfo({
           <p className="account-steps m-0">Part 3</p>
           <div className="billing-address">Billing Contact</div>
           <div className="row">
-            {BillingAddress.filter((op) => op.section === 'contact').map(
-              (item) => (
+            {billingAddress
+              .filter((op) => op.section === 'contact')
+              .map((item) => (
                 <div
                   className={item.property}
                   key={item.key}
@@ -531,8 +532,7 @@ export default function BillingInfo({
                       apiError.billing_contact[item.key][0]}
                   </ErrorMsg>
                 </div>
-              ),
-            )}
+              ))}
           </div>
         </fieldset>
       </>
@@ -556,7 +556,7 @@ export default function BillingInfo({
               </label>
             </li>
 
-            {/* {PaymentType.map((item) => (
+            {/* {paymentType.map((item) => (
               <li key={item.key}>
                 <ModalRadioCheck className="mt-1">
                   <label

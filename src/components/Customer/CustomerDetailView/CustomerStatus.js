@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { useDispatch } from 'react-redux';
 import DatePicker from 'react-date-picker';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { RightArrowIcon } from '../../../theme/images';
-import { Button, ModalBox, FormField, PageLoader } from '../../../common';
 import { updateCustomerDetails } from '../../../api';
 import { getCustomerDetails } from '../../../store/actions/customerState';
+import { Button, ModalBox, FormField, PageLoader } from '../../../common';
 
 export default function CustomerStatus({ type, setStatusModal, customer }) {
   const dispatch = useDispatch();

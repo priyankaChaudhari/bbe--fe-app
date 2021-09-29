@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
-import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
 import { GroupUser } from '../../../theme/Global';
-import { SocialIcons } from '../../../constants';
+import { socialIcons } from '../../../constants';
+import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
 import { GetInitialName, WhiteCard } from '../../../common';
 
 export default function CompanyDetail({
@@ -121,7 +121,7 @@ export default function CompanyDetail({
         <div className="label mt-3">Social Accounts</div>
 
         <ul className="social-media-icons">
-          {SocialIcons.map((item) => generateSocialIcon(item))}
+          {socialIcons.map((item) => generateSocialIcon(item))}
         </ul>
       </WhiteCard>
     );

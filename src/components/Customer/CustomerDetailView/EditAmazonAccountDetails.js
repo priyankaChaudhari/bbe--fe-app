@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import $ from 'jquery';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
+import { saveAmazonSellerAccount, saveAmazonVendorAccount } from '../../../api';
 import {
   ModalBox,
   PageLoader,
   Button,
   ContractFormField,
 } from '../../../common';
-import { saveAmazonSellerAccount, saveAmazonVendorAccount } from '../../../api';
 
 export default function EditAmazonAccountDetails({
   setShowModal,

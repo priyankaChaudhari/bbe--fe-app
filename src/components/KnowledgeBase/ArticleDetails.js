@@ -7,12 +7,13 @@ import dayjs from 'dayjs';
 import queryString from 'query-string';
 import $ from 'jquery';
 import { useMediaQuery } from 'react-responsive';
-import { Link, useParams, useHistory } from 'react-router-dom';
 import { pickBy } from 'lodash';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import Theme from '../../theme/Theme';
 import ArticleSearch from './ArticleSearch';
 import { getArticleBoards, updateArticle } from '../../api';
+import { CloseIcon, LeftArrowIcon } from '../../theme/images';
 import { PATH_ARTICLE_DETAILS, PATH_ARTICLE_LIST } from '../../constants';
 import {
   Button,
@@ -21,7 +22,6 @@ import {
   PageLoader,
   BackToTop,
 } from '../../common';
-import { CloseIcon, LeftArrowIcon } from '../../theme/images';
 
 const customStyles = {
   content: {

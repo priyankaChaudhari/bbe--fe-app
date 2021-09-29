@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
-import { NextLogo, LeftArrowIcon } from '../../theme/images';
-import { Button, ContractFormField, ErrorMsg, PageLoader } from '../../common';
 import { PATH_LOGIN } from '../../constants';
 import { getEmail } from '../../api';
 import { FormContainer } from '../../theme/Global';
 import { showOnboardingMsg } from '../../store/actions/userState';
+import { NextLogo, LeftArrowIcon } from '../../theme/images';
+import { Button, ContractFormField, ErrorMsg, PageLoader } from '../../common';
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
