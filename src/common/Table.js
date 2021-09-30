@@ -311,7 +311,7 @@ const Table = styled.table`
       }
 
       .decrease-rate {
-        color: ${Theme.darkRed};
+        color: ${Theme.red};
         font-size: ${Theme.extraNormal};
         font-weight: 300;
         .red-arrow {

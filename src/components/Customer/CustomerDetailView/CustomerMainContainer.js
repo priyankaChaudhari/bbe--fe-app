@@ -675,18 +675,18 @@ export default function CustomerMainContainer() {
   const checkStatusColor = () => {
     if (customer && customer.status) {
       if (customer.status.value === 'inactive') {
-        return '#69707f';
+        return Theme.gray60;
       }
       if (customer.status.value === 'pending cancellation') {
-        return '#f7c137';
+        return Theme.yellow;
       }
       if (customer.status.value === 'at risk') {
-        return '#d63649';
+        return Theme.darkRed;
       }
       if (customer.status.value === 'pending account setup') {
-        return '#69707f';
+        return Theme.gray60;
       }
-      return '#74B035';
+      return Theme.darkGreen;
     }
     return '';
   };
@@ -724,7 +724,7 @@ export default function CustomerMainContainer() {
           loader ||
           customerLoader ||
           (isLoading.loader && isLoading.type === 'page') ? (
-            <PageLoader color="#FF5933" type="page" width={20} />
+            <PageLoader color={Theme.orange} type="page" width={20} />
           ) : (
             <>
               {/* <AlertMsgUpdate className="account-verify">
@@ -987,8 +987,8 @@ export default function CustomerMainContainer() {
                                       customer.status &&
                                       customer.status.value ===
                                         'pending cancellation'
-                                        ? '#000'
-                                        : '#fff';
+                                        ? Theme.black
+                                        : Theme.white;
 
                                     return { ...provided, color };
                                   },
@@ -1285,7 +1285,7 @@ export default function CustomerMainContainer() {
                         {isLoading.loader && isLoading.type === 'note' ? (
                           <PageLoader
                             component="activity"
-                            color="#FF5933"
+                            color={Theme.orange}
                             type="page"
                             width={20}
                             height={20}
@@ -1818,7 +1818,7 @@ const CustomerDetailsBody = styled.div`
     width: 100%;
     padding: 10px 0;
     border-left: 3px solid ${Theme.orange};
-    color: #000000;
+    color: ${Theme.black};
     font-size: 16px;
     font-weight: bold;
     height: 55px;

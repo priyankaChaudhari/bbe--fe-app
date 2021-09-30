@@ -3,14 +3,14 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { arrayOf, bool } from 'prop-types';
+import { arrayOf, bool, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import TableMobileView from '../../../../../common/TableMobileView';
 import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
 import { StatusColorSet } from '../../../../../constants/DashboardConstants';
 
-const DSPInvoiceDetails = ({ loader, data }) => {
+const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const addThousandComma = useCallback((number, decimalDigits = 2) => {
@@ -30,7 +30,11 @@ const DSPInvoiceDetails = ({ loader, data }) => {
         <WhiteCard className="mb-3">
           <div className="row">
             <div className="col-12">
-              <div className="black-heading-title"> DSP Invoices</div>
+              <div className="black-heading-title">
+                {invoiceType === 'rev share'
+                  ? 'Revenue Share Invoices'
+                  : 'DSP Invoices'}
+              </div>
             </div>
           </div>
         </WhiteCard>
@@ -127,7 +131,9 @@ const DSPInvoiceDetails = ({ loader, data }) => {
       <>
         <WhiteCard className="mb-3">
           <p style={{ marginTop: '0px' }} className="black-heading-title mb-4">
-            DSP Invoices
+            {invoiceType === 'rev share'
+              ? 'Revenue Share Invoices'
+              : 'DSP Invoices'}
           </p>
           <div className="straight-line horizontal-line spacing " />
           <Table className="mt-0">
@@ -137,7 +143,13 @@ const DSPInvoiceDetails = ({ loader, data }) => {
             ) : null}
           </Table>
           {!data || (data && data.length === 0) ? (
-            <NoData>No DSPInvoices Found</NoData>
+            <NoData>
+              No{' '}
+              {invoiceType === 'rev share'
+                ? 'Revenue Share Invoices'
+                : 'DSP Invoices'}{' '}
+              Found
+            </NoData>
           ) : null}
         </WhiteCard>
       </>
@@ -167,11 +179,13 @@ export default DSPInvoiceDetails;
 
 DSPInvoiceDetails.defaultProps = {
   data: null,
+  invoiceType: 'rev share',
 };
 
 DSPInvoiceDetails.propTypes = {
   data: arrayOf(Array),
   loader: bool.isRequired,
+  invoiceType: string,
 };
 
 const Wrapper = styled.div`
@@ -180,6 +194,10 @@ const Wrapper = styled.div`
   }
   .statusContainer {
     margin-top: 0px !important;
+  }
+
+  .company-name {
+    text-transform: capitalize;
   }
 `;
 

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { shape } from 'prop-types';
 
-import { Card } from '../../../../../common';
 import Theme from '../../../../../theme/Theme';
+import { Card } from '../../../../../common';
 
 const MetricsInvoices = ({ data }) => {
   const returnFromatNumber = (value, type, decimalDigits = 0) => {
