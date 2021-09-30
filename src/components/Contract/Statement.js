@@ -5,10 +5,12 @@
 /* eslint no-useless-escape: "error" */
 
 import React from 'react';
+
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { additionaMarketplaceAmount } from '../../constants/FieldConstants';
+
+import { additionaMarketplaceAmount } from '../../constants';
 
 export default function Statement({
   formData,
