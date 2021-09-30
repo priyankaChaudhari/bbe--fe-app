@@ -602,6 +602,12 @@ a {
   }
 }
 
+.heading-title {
+  font-size: 26px;
+  color: ${Theme.black};
+  font-weight: 600;
+}
+
 .link {
   font-size: ${Theme.normal};
   font-weight: 500;
@@ -741,7 +747,6 @@ button:disabled {
 
   &.sidepanel {
     border-bottom: 1px solid ${Theme.gray4};
-    // padding: 18px 0;
   }
   &.horizontal-line {
     border-bottom: 1px solid ${Theme.gray4};

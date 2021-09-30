@@ -1,19 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-// import { DateRange } from 'react-date-range';
-// import { enGB } from 'react-date-range/src/locale';
+
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import styled from 'styled-components';
 import { func } from 'prop-types';
+
+import ErrorMsg from '../../../../common/ErrorMsg';
+import Theme from '../../../../theme/Theme';
 import { Card, ModalRadioCheck, Button } from '../../../../common';
 import { CaretUp, CloseIcon } from '../../../../theme/images/index';
-import ErrorMsg from '../../../../common/ErrorMsg';
+import { getDSPFinances } from '../../../../api';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
 } from '../../../../constants/DashboardConstants';
-import Theme from '../../../../theme/Theme';
-import { getDSPFinances } from '../../../../api';
 
 export default function DSPBilling({
   setTimeFrame,
@@ -50,17 +49,10 @@ export default function DSPBilling({
     'Dec',
   ];
 
-  // const handleClickOutside = (event) => {
-  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //     setShowDropdown({ show: false });
-  //     setDummayDateType(selectedDateType);
-  //   }
-  // };
-
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate).then((res) => {
       if (res && res.status === 400) {
-        // setInvoiceLoader(false);
+        //
       }
       if (res && res.status === 200) {
         if (res.data && res.data) {
@@ -75,11 +67,7 @@ export default function DSPBilling({
       getDSPdata(dummyDateType);
       setResponseId('12345');
     }
-    // document.addEventListener('click', handleClickOutside, true);
-    // return () => {
-    //   document.removeEventListener('click', handleClickOutside, true);
-    // };
-  }, []);
+  }, [dummyDateType, getDSPdata, setResponseId, responseId]);
 
   const handleTimeTypeChange = (event) => {
     setDummayDateType(event.target.value);
@@ -176,20 +164,6 @@ export default function DSPBilling({
           ))}
         </ul>{' '}
         {dummyDateType === 'custom' ? (
-          // <DateRange
-          //   ranges={state}
-          //   date={new Date()}
-          //   onChange={(itemData) => setState([itemData.selection])}
-          //   dateFormat="MMM yyyy"
-          //   showDateDisplay={false}
-          //   locale={enGB}
-          //   editableDateInputs
-          //   showMonthAndYearPickers
-          //   moveRangeOnFirstSelection={false}
-          //   maxDate={currentDate}
-          //   rangeColors={[Theme.orange]}
-          //   weekdayDisplayFormat="EEEEE"
-          // />
           <div className="text-left">
             <DateRangePicker
               onChange={setState}

@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import { arrayOf, func, string } from 'prop-types';
 import React, { useState } from 'react';
+
+import { arrayOf, func, string } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 import { useMediaQuery } from 'react-responsive';
 
+import { SearchIcon, CaretUp } from '../../../../theme/images/index';
 import {
   InputSearchWithRadius,
   WhiteCard,
   ModalRadioCheck,
 } from '../../../../common';
-
-import { SearchIcon, CaretUp } from '../../../../theme/images/index';
 
 export default function DSPInvoiceFilters({
   searchQuery,

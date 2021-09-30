@@ -1,68 +1,64 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-// import { DateRange } from 'react-date-range';
-// import { enGB } from 'react-date-range/src/locale';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
-import { func } from 'prop-types';
+import { func, string } from 'prop-types';
+
+import Theme from '../../../../theme/Theme';
+import { getDSPFinances } from '../../../../api';
+import { CaretUp, CloseIcon } from '../../../../theme/images/index';
 import {
   Card,
   ModalRadioCheck,
   Button,
   CustomDateRange,
 } from '../../../../common';
-import { CaretUp, CloseIcon } from '../../../../theme/images/index';
+
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
   monthNames,
 } from '../../../../constants/DashboardConstants';
-import Theme from '../../../../theme/Theme';
-import { getDSPFinances } from '../../../../api';
 
 export default function DSPInvoices({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
+  selectedNavigation,
 }) {
-  const [showDropdown, setShowDropdown] = useState({ show: false });
-  const [dspData, setDSPData] = useState([]);
   const dropdownRef = useRef(null);
+  const currentDate = new Date();
+  const [dspData, setDSPData] = useState([]);
+  const [responseId, setResponseId] = useState(null);
+  const [showDropdown, setShowDropdown] = useState({ show: false });
+  currentDate.setDate(currentDate.getDate() - 3);
+  const [state, setState] = useState([currentDate, currentDate]);
+  const [range, setRange] = useState([currentDate, currentDate]);
   const [selectedDateType, setSelectedDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
   const [dummyDateType, setDummayDateType] = useState(
     FinanceDateTypeOptions[0].value,
   );
-  const [responseId, setResponseId] = useState(null);
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 3);
-  const [state, setState] = useState([currentDate, currentDate]);
   const [dummayDateRange, setDummayDateRange] = useState([
     currentDate,
     currentDate,
   ]);
-  const [range, setRange] = useState([currentDate, currentDate]);
-
-  // const handleClickOutside = (event) => {
-  //   if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //     setShowDropdown({ show: false });
-  //     setDummayDateType(selectedDateType);
-  //   }
-  // };
 
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
-    getDSPFinances(dateType, startDate, endDate).then((res) => {
-      if (res && res.status === 400) {
-        // setInvoiceLoader(false);
-      }
-      if (res && res.status === 200) {
-        if (res.data && res.data) {
-          setDSPData(res.data);
+    getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
+      (res) => {
+        if (res && res.status === 400) {
+          // setInvoiceLoader(false);
         }
-      }
-    });
+        if (res && res.status === 200) {
+          if (res.data && res.data) {
+            setDSPData(res.data);
+          }
+        }
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -70,10 +66,6 @@ export default function DSPInvoices({
       getDSPdata(dummyDateType);
       setResponseId('12345');
     }
-    // document.addEventListener('click', handleClickOutside, true);
-    // return () => {
-    //   document.removeEventListener('click', handleClickOutside, true);
-    // };
   }, []);
 
   const handleTimeTypeChange = (event) => {
@@ -113,10 +105,8 @@ export default function DSPInvoices({
   const onDateChange = (date) => {
     if (date[1] === null) {
       setDummayDateRange([date[0], date[0]]);
-      // setState([date[0], date[0]]);
     } else {
       setDummayDateRange(date);
-      // setState(date);
     }
     setRange(date);
   };
@@ -193,20 +183,6 @@ export default function DSPInvoices({
         </ul>{' '}
         <CustomDateRange id="BT-dspinvoices-daterange">
           {dummyDateType === 'custom' ? (
-            // <DateRange
-            //   ranges={state}
-            //   date={new Date()}
-            //   onChange={(itemData) => setState([itemData.selection])}
-            //   dateFormat="MMM yyyy"
-            //   showDateDisplay={false}
-            //   locale={enGB}
-            //   editableDateInputs
-            //   showMonthAndYearPickers
-            //   moveRangeOnFirstSelection={false}
-            //   maxDate={currentDate}
-            //   rangeColors={[Theme.orange]}
-            //   weekdayDisplayFormat="EEEEE"
-            // />
             <div className="text-left">
               <DatePicker
                 selected={new Date()}
@@ -312,7 +288,11 @@ export default function DSPInvoices({
     <>
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
-          <div className="medium-text-title ">DSP Invoices</div>{' '}
+          <div className="medium-text-title ">
+            {selectedNavigation === 'revShare'
+              ? 'Rev Share Invoicing'
+              : 'DSP Invoices'}
+          </div>{' '}
         </div>
         {renderTimeFilterDropDown()}
       </div>
@@ -325,12 +305,14 @@ DSPInvoices.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
+  selectedNavigation: '',
 };
 
 DSPInvoices.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,
+  selectedNavigation: string,
 };
 
 const DateRangeDropDown = styled.div`
