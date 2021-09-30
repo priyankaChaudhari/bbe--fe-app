@@ -195,10 +195,6 @@ const Wrapper = styled.div`
   .statusContainer {
     margin-top: 0px !important;
   }
-
-  .company-name {
-    text-transform: capitalize;
-  }
 `;
 
 const NoData = styled.div`

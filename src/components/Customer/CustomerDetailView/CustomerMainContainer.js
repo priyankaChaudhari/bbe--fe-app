@@ -206,7 +206,10 @@ export default function CustomerMainContainer() {
   };
 
   useEffect(() => {
-    if (history.location.state === 'finance') {
+    if (
+      history.location.state === 'revShare' ||
+      history.location.state === 'dspInvoicing'
+    ) {
       setViewComponent('billing');
     }
   }, [dispatch, history.location.state]);
@@ -1241,6 +1244,7 @@ export default function CustomerMainContainer() {
                     />
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
+                      redirectType={history.location.state}
                       id={id}
                       userInfo={userInfo}
                       customerStatus={customer && customer.status}

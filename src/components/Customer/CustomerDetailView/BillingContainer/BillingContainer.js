@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { shape, string } from 'prop-types';
 
@@ -6,8 +6,22 @@ import DSPInvoices from './DSPInvoices/DSPInvoices';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
 
-const BillingContainer = ({ id, userInfo, onBoardingId, customerStatus }) => {
+const BillingContainer = ({
+  id,
+  userInfo,
+  onBoardingId,
+  customerStatus,
+  redirectType,
+}) => {
   const [viewComponent, setViewComponent] = useState('rev share');
+
+  useEffect(() => {
+    if (redirectType === 'dspInvoicing') {
+      setViewComponent('dsp service');
+    } else {
+      setViewComponent('rev share');
+    }
+  }, [redirectType]);
 
   return (
     <div className="col-lg-6 col-12">
@@ -53,6 +67,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
+  redirectType: null,
 };
 
 BillingContainer.propTypes = {
@@ -62,4 +77,5 @@ BillingContainer.propTypes = {
   }).isRequired,
   onBoardingId: string,
   customerStatus: string,
+  redirectType: string,
 };

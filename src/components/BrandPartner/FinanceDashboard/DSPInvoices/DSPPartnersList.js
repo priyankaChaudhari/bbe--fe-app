@@ -206,7 +206,7 @@ export default function DSPPartnersList({
               ':id',
               item.customer && item.customer.id,
             ),
-            'finance',
+            selectedNavigation,
           )
         }
         key={item.id}>
@@ -290,7 +290,7 @@ export default function DSPPartnersList({
                     ':id',
                     item.customer && item.customer.id,
                   ),
-                  'finance',
+                  selectedNavigation,
                 )
               }
               key={item.id}

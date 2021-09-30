@@ -201,7 +201,7 @@ export default function DSPInvoicesList({
               ':id',
               item.customer && item.customer.id,
             ),
-            'finance',
+            selectedNavigation,
           )
         }>
         <td className="product-body">
@@ -283,7 +283,7 @@ export default function DSPInvoicesList({
                     ':id',
                     item.customer && item.customer.id,
                   ),
-                  'finance',
+                  selectedNavigation,
                 )
               }
               key={item.invoiced_id}

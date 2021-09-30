@@ -247,6 +247,7 @@ const Table = styled.table`
 
       .company-name {
         min-height: 20px;
+        text-transform: capitalize;
       }
 
       .status {
@@ -254,6 +255,7 @@ const Table = styled.table`
         font-size: ${Theme.extraNormal};
         font-weight: 300;
         word-break: break-all;
+        text-transform: capitalize;
       }
 
       .user-profile-circle {
