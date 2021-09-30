@@ -10,15 +10,23 @@
 /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: true}}] */
 
 import React, { useState, useEffect } from 'react';
-// import styled from 'styled-components';
-import { Collapse } from 'react-collapse';
+
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
 import Select, { components } from 'react-select';
+import { Collapse } from 'react-collapse';
+
 import SidePanel from './AgreementSidePanelStyle';
-// import Theme from '../theme/Theme';
+import ContractInputSelect from './ContractInputSelect';
+import ContractActivityLog from '../components/Contract/ContractActivityLog';
+import ServicesAmendment from '../components/Contract/ServicesAmendment';
+import ErrorMsg from './ErrorMsg';
+import CheckBox from './CheckBox';
+import Tabs from './Tabs';
+import { Button, ContractFormField } from './index';
+import { getLength, getRevenueShare, createAddendum } from '../api';
 import {
   ServiceAgreement,
   CreateAddendum,
@@ -30,22 +38,13 @@ import {
   Advertise,
   CaretUp,
   RedCross,
-  // ArrowRightIcon,
 } from '../theme/images/index';
-import { Button, ContractFormField } from './index';
 import {
   AgreementDetails,
   StatementDetails,
   DSPAddendumDetails,
   ListingOptimization,
-} from '../constants/FieldConstants';
-import { getLength, getRevenueShare, createAddendum } from '../api';
-import ContractInputSelect from './ContractInputSelect';
-import ContractActivityLog from '../components/Contract/ContractActivityLog';
-import ServicesAmendment from '../components/Contract/ServicesAmendment';
-import ErrorMsg from './ErrorMsg';
-import CheckBox from './CheckBox';
-import Tabs from './Tabs';
+} from '../constants';
 
 export default function AgreementSidePanel({
   id,
