@@ -4015,7 +4015,7 @@ export default function AgreementSidePanel({
                               //  executeScroll('addendum');
                               // setNewAddendum({});
                             }}
-                            defaultChecked={showSection && showSection.addendum}
+                            checked={showSection && showSection.addendum}
                           />
                           <span className="checkmark" />
                         </label>
