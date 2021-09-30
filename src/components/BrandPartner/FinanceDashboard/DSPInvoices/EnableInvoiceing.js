@@ -180,7 +180,7 @@ export default function EnableInvoiceing({ view }) {
       <>
         <WhiteCard>
           <div className="row mt-2">
-            <div className="col-5 mb-3 ">
+            <div className="col-12 mb-3 ">
               <div className="black-heading-title ">Enable Billing</div>{' '}
             </div>
           </div>

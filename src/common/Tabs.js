@@ -40,6 +40,7 @@ const Tabs = styled.div`
      .tabs {
     li {
       margin-right: 20px;
+      font-size: ${Theme.normal};
     }
    }
 `;
