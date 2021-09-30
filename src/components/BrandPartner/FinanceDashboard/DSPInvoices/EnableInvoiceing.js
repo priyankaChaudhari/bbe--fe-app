@@ -54,6 +54,7 @@ export default function EnableInvoiceing({ view }) {
         if (res.data && res.data.results) {
           setBillingData(res.data.results);
           setBillsCount(res.data.count);
+          setPageNumber(page);
         }
         setInvoiceLoader(false);
       }
