@@ -177,61 +177,67 @@ export default function EnableInvoiceing({ view }) {
   const renderMobileView = () => {
     return (
       <>
-        <div className="row mt-2">
-          <div className="col-5 pl-4 mt-3 ">
-            <div className="black-heading-title ">Enable Billing</div>{' '}
+        <WhiteCard>
+          <div className="row mt-2">
+            <div className="col-5 mb-3 ">
+              <div className="black-heading-title ">Enable Billing</div>{' '}
+            </div>
           </div>
-        </div>
-        {invoiceLoader ? (
-          <PageLoader
-            component="performance-graph"
-            color={Theme.orange}
-            type="detail"
-            width={40}
-            height={40}
-          />
-        ) : billingData && billingData.length > 0 ? (
-          <>
-            {billingData &&
-              billingData.map((item) => (
-                <WhiteCard className="mb-3" key={item.id}>
-                  <div className="row">
-                    <div className="col-6">
-                      <div className="label">Partner Name</div>
-                      <div className="label-info label-info-dark">
-                        {item.company_name}
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="label">Contract Start Date</div>
-                      <div className="label-info label-info-dark">
-                        {`${dayjs(item.start_date).format(
-                          'MM/DD/YY',
-                        )} ${bindDateMessage(item.days_past)}`}
-                      </div>
-                    </div>
-                    <div className="col-12 text-center mt-3">
-                      <Button
-                        className="btn-orange-border"
-                        onClick={() => {
-                          setIsModalOpen(true);
-                          setEnableInvoiceId(item.id);
-                        }}>
-                        Enable Invoicing
-                      </Button>
-                    </div>
-                  </div>
-                </WhiteCard>
-              ))}
-            <CommonPagination
-              count={billsCount}
-              pageNumber={pageNumber}
-              handlePageChange={handlePageChange}
+
+          {invoiceLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color={Theme.orange}
+              type="detail"
+              width={40}
+              height={40}
             />
-          </>
-        ) : (
-          <NoData>No Invoices Found</NoData>
-        )}
+          ) : billingData && billingData.length > 0 ? (
+            <>
+              {billingData &&
+                billingData.map((item) => (
+                  <>
+                    <div key={item.id}>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="label">Partner Name</div>
+                          <div className="label-info label-info-dark">
+                            {item.company_name}
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="label">Contract Start Date</div>
+                          <div className="label-info label-info-dark">
+                            {`${dayjs(item.start_date).format(
+                              'MM/DD/YY',
+                            )} ${bindDateMessage(item.days_past)}`}
+                          </div>
+                        </div>
+                        <div className="col-12 text-center mt-4">
+                          <Button
+                            className="btn-orange-border"
+                            onClick={() => {
+                              setIsModalOpen(true);
+                              setEnableInvoiceId(item.id);
+                            }}>
+                            Enable Invoicing
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="straight-line horizontal-line spacing mt-3 mb-3" />
+                  </>
+                ))}
+              <CommonPagination
+                count={billsCount}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            </>
+          ) : (
+            <NoData>No Invoices Found</NoData>
+          )}
+        </WhiteCard>
       </>
     );
   };
