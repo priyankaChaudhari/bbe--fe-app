@@ -93,6 +93,7 @@ export default function EditCompanyDetails({
     updateCustomerDetails(detail.id, { [key]: null }).then((response) => {
       if (response && response.status === 200) {
         dispatch(getCustomerDetails(detail.id));
+        getActivityLogInfo();
         setIsLoading({ loader: false, type: 'page' });
       }
       if (response && response.status === 400) {
