@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
+import { getCustomerDetails } from '../../../api';
 import { GroupUser } from '../../../theme/Global';
 import { socialIcons } from '../../../constants';
 import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
@@ -36,14 +37,23 @@ export default function CompanyDetail({
   const contactInfo = useSelector((state) => state.customerState.contactData);
   const [showModal, setShowModal] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
+  const [detail, setDetail] = useState(customer);
+
+  const customerDetails = () => {
+    getCustomerDetails(id).then((res) => {
+      if (res && res.status === 200) {
+        setDetail(res && res.data);
+      }
+    });
+  };
 
   const generateSocialIcon = (item) => {
     const fields = [];
-    if (customer && customer[item.key]) {
+    if (detail && detail[item.key]) {
       fields.push(
-        <li key={customer && customer[item.key]}>
+        <li key={detail && detail[item.key]}>
           <a
-            href={customer && customer[item.key]}
+            href={detail && detail[item.key]}
             rel="noopener noreferrer"
             target="_blank">
             <img
@@ -116,7 +126,7 @@ export default function CompanyDetail({
         </div>
 
         <div className="label">Phone Number</div>
-        <div className="label-info">{customer.phone_number}</div>
+        <div className="label-info">{detail.phone_number}</div>
 
         <div className="label mt-3">Social Accounts</div>
 
@@ -145,7 +155,7 @@ export default function CompanyDetail({
                   readMoreText="Read more"
                   readLessText="Read less">
                   {`${
-                    customer.description === null ? '' : customer.description
+                    detail.description === null ? '' : detail.description
                   }${' '}` || ''}
                 </ReadMoreAndLess>
               </span>
@@ -166,7 +176,7 @@ export default function CompanyDetail({
             <WhiteCard>
               <p className="black-heading-title card-title mt-0">Brands</p>
               <p className="no-result-found">
-                {(customer && customer.brand) || 'No brands added'}
+                {(detail && detail.brand) || 'No brands added'}
               </p>
               <div
                 className="edit-details"
@@ -203,12 +213,13 @@ export default function CompanyDetail({
           <EditCompanyDetails
             setShowModal={setShowModal}
             id={id}
-            customer={customer}
+            detail={detail}
             showModal={showModal}
             getAmazon={getAmazon}
             getActivityLogInfo={getActivityLogInfo}
             scrollDown={scrollDown}
             setScrollDown={setScrollDown}
+            customerDetails={customerDetails}
           />
         </Modal>
       </div>

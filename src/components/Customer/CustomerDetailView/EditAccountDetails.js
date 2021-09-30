@@ -3,24 +3,23 @@ import React, { useState, useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
-import { useDispatch } from 'react-redux';
 
 import InputSelect from '../../../common/InputSelect';
 import CropUploadImage from '../../../common/CropUploadImage';
 import { editAccountFields } from '../../../constants';
 import { SortDownIcon } from '../../../theme/images';
-import { getCustomerDetails } from '../../../store/actions/customerState';
 import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
 import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 
 export default function EditAccountDetails({
-  customer,
   setShowModal,
   setDocumentImage,
   getActivityLogInfo,
   IsSaveDataClicked,
+  customerDetails,
+  customer,
+  id,
 }) {
-  const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({});
@@ -142,7 +141,7 @@ export default function EditAccountDetails({
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
-        dispatch(getCustomerDetails(customer.id));
+        customerDetails(id);
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'button' });
         IsSaveDataClicked(true);
@@ -160,7 +159,7 @@ export default function EditAccountDetails({
           <div className="row">
             <CropUploadImage
               type="customer"
-              id={customer.id}
+              id={id}
               setDocumentImage={setDocumentImage}
             />
 
@@ -220,6 +219,7 @@ EditAccountDetails.defaultProps = {
   id: '',
   setDocumentImage: [],
   IsSaveDataClicked: () => {},
+  customerDetails: () => {},
 };
 
 EditAccountDetails.propTypes = {
@@ -232,4 +232,5 @@ EditAccountDetails.propTypes = {
   setDocumentImage: PropTypes.arrayOf(PropTypes.object),
   getActivityLogInfo: PropTypes.func.isRequired,
   IsSaveDataClicked: PropTypes.func,
+  customerDetails: PropTypes.func,
 };

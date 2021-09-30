@@ -218,7 +218,7 @@ export async function updateCustomer(data = null, id) {
 
 export async function getCustomerDetails(id) {
   const result = await axiosInstance
-    .get(`${API_CUSTOMER + id}`)
+    .get(`${API_CUSTOMER + id}/`)
     .then((response) => {
       return response;
     })
