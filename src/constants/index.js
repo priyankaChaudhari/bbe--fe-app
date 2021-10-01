@@ -5,4 +5,6 @@ export * from './OnboardingConstants';
 export * from './OtherConstants';
 export * from './AgreementSign';
 export * from './AgreementFields';
+export * from './DashboardConstants';
+export * from './CompanyPerformanceConstants';
 export { default as userDetails } from './UserConstants';

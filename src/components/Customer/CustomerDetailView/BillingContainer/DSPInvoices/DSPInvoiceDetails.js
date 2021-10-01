@@ -8,7 +8,7 @@ import { arrayOf, bool, string } from 'prop-types';
 import Theme from '../../../../../theme/Theme';
 import TableMobileView from '../../../../../common/TableMobileView';
 import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
-import { StatusColorSet } from '../../../../../constants/DashboardConstants';
+import { StatusColorSet } from '../../../../../constants';
 
 const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
