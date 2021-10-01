@@ -1302,57 +1302,66 @@ export default function CustomerMainContainer() {
                               <>
                                 {noteData &&
                                   noteData.slice(0, 3).map((item) => (
-                                    <GroupUser className="mb-3" key={item.id}>
-                                      {images.find(
-                                        (op) => op.entity_id === item.user.id,
-                                      ) &&
-                                      images.find(
-                                        (op) => op.entity_id === item.user.id,
-                                      ).presigned_url ? (
-                                        <img
-                                          src={
-                                            isLoading.loader &&
-                                            isLoading.type === 'page'
-                                              ? DefaultUser
-                                              : images.find(
-                                                  (op) =>
-                                                    op.entity_id ===
-                                                    item.user.id,
-                                                ).presigned_url
-                                          }
-                                          className="default-user-activity"
-                                          alt="pic"
-                                        />
-                                      ) : (
-                                        <div className="float-left mr-3">
-                                          <GetInitialName
-                                            userInfo={item.user}
-                                          />
-                                        </div>
-                                      )}
-                                      <div className="activity-user">
-                                        <span className="font-bold">
-                                          {item &&
-                                            item.user &&
-                                            item.user.first_name}{' '}
-                                          {item &&
-                                            item.user &&
-                                            item.user.last_name}
-                                          :
-                                        </span>{' '}
-                                        <p
-                                          className="m-0 note-text"
-                                          dangerouslySetInnerHTML={{
-                                            __html:
-                                              item && item.note.slice(0, 80),
-                                          }}
-                                        />
-                                        <div className="time-date  mt-1">
-                                          {item && item.created_at}{' '}
-                                        </div>
-                                      </div>
-                                      <div className="clear-fix" />
-                                    </GroupUser>
+                                    <>
+                                      {item && item.user ? (
+                                        <GroupUser
+                                          className="mb-3"
+                                          key={item.id}>
+                                          {images.find(
+                                            (op) =>
+                                              op.entity_id === item.user.id,
+                                          ) &&
+                                          images.find(
+                                            (op) =>
+                                              op.entity_id === item.user.id,
+                                          ).presigned_url ? (
+                                            <img
+                                              src={
+                                                isLoading.loader &&
+                                                isLoading.type === 'page'
+                                                  ? DefaultUser
+                                                  : images.find(
+                                                      (op) =>
+                                                        op.entity_id ===
+                                                        item.user.id,
+                                                    ).presigned_url
+                                              }
+                                              className="default-user-activity"
+                                              alt="pic"
+                                            />
+                                          ) : (
+                                            <div className="float-left mr-3">
+                                              <GetInitialName
+                                                userInfo={item.user}
+                                              />
+                                            </div>
+                                          )}
+                                          <div className="activity-user">
+                                            <span className="font-bold">
+                                              {item &&
+                                                item.user &&
+                                                item.user.first_name}{' '}
+                                              {item &&
+                                                item.user &&
+                                                item.user.last_name}
+                                              :
+                                            </span>{' '}
+                                            <p
+                                              className="m-0 note-text"
+                                              dangerouslySetInnerHTML={{
+                                                __html:
+                                                  item &&
+                                                  item.note.slice(0, 80),
+                                              }}
+                                            />
+                                            <div className="time-date  mt-1">
+                                              {item && item.created_at}{' '}
+                                            </div>
+                                          </div>
+                                          <div className="clear-fix" />
+                                        </GroupUser>
+                                      ) : null}
+                                    </>
                                   ))}
                               </>
                             )}
