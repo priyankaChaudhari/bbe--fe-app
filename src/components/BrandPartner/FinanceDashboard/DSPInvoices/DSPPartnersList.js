@@ -1,11 +1,12 @@
-/* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import $ from 'jquery';
+import debounce from 'lodash.debounce';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
-import { bool, func, string } from 'prop-types';
+import { bool, func, objectOf, string } from 'prop-types';
 
 import DSPInvoiceTabs from './DSPInvoiceTabs';
 import EnableInvoiceing from './EnableInvoiceing';
@@ -149,9 +150,19 @@ export default function DSPPartnersList({
     };
   };
 
+  const debouncedSave = useCallback(
+    debounce(
+      (searchKey, status, sortBy, page) =>
+        getPartners(searchKey, status, sortBy, page),
+      500,
+    ),
+    [],
+  );
+
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getPartners(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    // getPartners(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 
   const handleResetFilter = () => {
@@ -423,6 +434,10 @@ export default function DSPPartnersList({
 DSPPartnersList.defaultProps = {
   onTabClick: () => {},
   selectedNavigation: '',
+  timeFrame: {},
+  timeFrameType: '',
+  isTimeFrameChange: false,
+  setIsTimeFrameChange: () => {},
 };
 DSPPartnersList.propTypes = {
   onTabClick: func,
@@ -430,4 +445,8 @@ DSPPartnersList.propTypes = {
   isDesktop: bool.isRequired,
   isTablet: bool.isRequired,
   selectedNavigation: string,
+  timeFrame: objectOf(string, string),
+  timeFrameType: string,
+  isTimeFrameChange: bool,
+  setIsTimeFrameChange: func,
 };
