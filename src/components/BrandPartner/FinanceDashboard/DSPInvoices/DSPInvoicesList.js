@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import $ from 'jquery';
 import dayjs from 'dayjs';
+import debounce from 'lodash.debounce';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { func, string, bool, objectOf } from 'prop-types';
@@ -100,9 +102,20 @@ export default function DSPInvoicesList({
     isTimeFrameChange,
   ]);
 
+  const debouncedSave = useCallback(
+    debounce(
+      (searchKey, status, sortBy, page) =>
+        getInvoices(searchKey, status, sortBy, page),
+      500,
+    ),
+    [],
+  );
+
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getInvoices(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    // getInvoices(event.target.value, selectedStatus, selectedSortBy.value, 1);
+
+    debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 
   const handleResetFilter = () => {
