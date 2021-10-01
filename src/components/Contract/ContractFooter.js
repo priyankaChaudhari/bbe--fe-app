@@ -630,7 +630,8 @@ export default function ContractFooter({
 }
 
 const Footer = styled.div`
-  border: 1px solid ${Theme.gray7};
+  border-top: 1px solid ${Theme.gray7};
+  border-bottom: 1px solid ${Theme.gray7};
   bottom: 0;
   width: 100%;
   background: ${Theme.white};
