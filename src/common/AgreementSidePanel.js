@@ -2135,6 +2135,7 @@ export default function AgreementSidePanel({
           monthPlaceholder="MM"
           yearPlaceholder="YYYY"
           placeholderText="Select Date"
+          disabled={formData && formData.draft_from}
         />
       );
     }
