@@ -28,6 +28,7 @@ import {
   WhiteCard,
   PageLoader,
   CustomDateModal,
+  Tabs,
 } from '../../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../../api';
 
@@ -805,8 +806,8 @@ export default function PerformanceReport({
 
   const renderMarketplaceDropDown = () => {
     return (
-      <Tab className="mb-3">
-        <WhiteCard>
+      <WhiteCard className="mb-3">
+        <Tabs>
           <ul className="tabs">
             <li
               className={viewComponent === 'salePerformance' ? 'active' : ''}
@@ -821,6 +822,8 @@ export default function PerformanceReport({
               Ad Performance
             </li>
           </ul>
+        </Tabs>
+        <ViewData>
           <div className="row">
             <div className="col-md-4  col-sm-12 ">
               <div className="view-data-for mt-4 ">View data for</div>{' '}
@@ -857,8 +860,8 @@ export default function PerformanceReport({
               </DropDownSelect>
             </div>
           </div>
-        </WhiteCard>
-      </Tab>
+        </ViewData>
+      </WhiteCard>
     );
   };
 
@@ -1409,41 +1412,8 @@ PerformanceReport.propTypes = {
   viewComponent: string,
   setViewComponent: func,
 };
-const Tab = styled.div`
-  .tabs {
-    list-style-type: none;
-    position: relative;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid ${Theme.gray11};
-
-    li {
-      display: inline-block;
-      margin-right: 60px;
-      padding-bottom: 15px;
-      font-weight: normal;
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
-      font-family: ${Theme.baseFontFamily};
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.a {
-        text-decoration: none;
-      }
-
-      &.active {
-        padding-bottom: 16px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-  }
+const ViewData = styled.div`
+ 
   .view-data-for {
     margin-right: 60px;
     font-weight: normal;
@@ -1454,12 +1424,6 @@ const Tab = styled.div`
   }
 
   @media only screen and (max-width: 767px) {
-    .tabs {
-      li {
-        font-size: 14px;
-        margin-right: 25px;
-      }
-    }
     .view-data-for {
       text-align: center;
       padding-bottom: 10px;

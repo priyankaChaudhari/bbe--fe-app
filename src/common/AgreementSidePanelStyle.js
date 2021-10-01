@@ -23,8 +23,7 @@ const SidePanel = styled.div`
     }
 
     &.contract-sidebar {
-     padding-bottom: 270px;
-
+      padding-bottom: 270px;
     }
 
     .sidebar {
@@ -439,7 +438,6 @@ const SidePanel = styled.div`
     }
     .new-basic-text {
       color: ${Theme.gray85};
-      // text-decoration: none;
       font-size: ${Theme.extraNormal};
     }
   }

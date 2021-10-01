@@ -3,7 +3,7 @@ import React from 'react';
 import Select from 'react-select';
 import { arrayOf, bool, func, instanceOf, oneOfType, string } from 'prop-types';
 import styled from 'styled-components';
-import { DropDownSelect, WhiteCard } from '../../../../common';
+import { DropDownSelect, WhiteCard, Tabs } from '../../../../common';
 import { DropDown } from '../DropDown';
 import Theme from '../../../../theme/Theme';
 
@@ -21,8 +21,8 @@ const AdPerformanceFilters = ({
   isApiCall,
 }) => {
   return (
-    <Tab className="mb-3">
-      <WhiteCard>
+    <WhiteCard className="mb-3">
+      <Tabs>
         <ul className="tabs">
           <li
             className={viewComponent === 'salePerformance' ? 'active' : ''}
@@ -37,6 +37,8 @@ const AdPerformanceFilters = ({
             Ad Performance
           </li>
         </ul>
+      </Tabs>
+      <ViewData>
         <div className="row">
           <div className="col-md-4  col-sm-12 ">
             <div className="view-data-for mt-4 ">View data for</div>{' '}
@@ -91,8 +93,8 @@ const AdPerformanceFilters = ({
             )}
           </div>
         </div>
-      </WhiteCard>
-    </Tab>
+      </ViewData>
+    </WhiteCard>
   );
 };
 
@@ -126,41 +128,8 @@ AdPerformanceFilters.propTypes = {
   selectedAdDF: instanceOf(Object),
 };
 
-const Tab = styled.div`
-  .tabs {
-    list-style-type: none;
-    position: relative;
-    text-align: left;
-    margin: 0;
-    padding: 0;
-    border-bottom: 1px solid ${Theme.gray11};
-
-    li {
-      display: inline-block;
-      margin-right: 60px;
-      padding-bottom: 15px;
-      font-weight: normal;
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
-      font-family: ${Theme.baseFontFamily};
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &.a {
-        text-decoration: none;
-      }
-
-      &.active {
-        padding-bottom: 16px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-  }
+const ViewData = styled.div`
+  
   .view-data-for {
     margin-right: 60px;
     font-weight: normal;

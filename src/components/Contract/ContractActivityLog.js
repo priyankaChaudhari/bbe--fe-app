@@ -628,7 +628,7 @@ ContractActivityLog.propTypes = {
 };
 
 const Footer = styled.div`
-  border: 1px solid ${Theme.gray7};
+  border-top: 1px solid ${Theme.gray7};
   bottom: ${(props) => (props.bottom ? props.bottom : '0px')};
   background: ${Theme.white};
   box-shadow: ${Theme.boxShadow};
@@ -641,6 +641,6 @@ const Footer = styled.div`
     width: 100%;
   }
   @media only screen and (min-width: 1500px) {
-    width: 400px;
+    width: 405px;
   }
 `;
