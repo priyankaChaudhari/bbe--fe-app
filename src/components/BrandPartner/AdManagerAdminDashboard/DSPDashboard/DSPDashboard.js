@@ -29,10 +29,7 @@ import {
 } from '../../../../api';
 import useBindDSPResponseData from '../../../../hooks/useBindDspData';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import {
-  dateOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { dateOptions, noGraphDataMessage } from '../../../../constants';
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 2);
