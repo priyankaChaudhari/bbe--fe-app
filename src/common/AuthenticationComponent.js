@@ -21,11 +21,7 @@ import {
   ProductDelegation,
   CustomerList,
 } from '../components/Customer';
-import {
-  TeamMember,
-  TabletTeamMember,
-  DashboardContainer,
-} from '../components/BrandPartner';
+import { DashboardContainer } from '../components/BrandPartner';
 import {
   BrandAssetSummary,
   BrandAssetUpload,
@@ -43,8 +39,6 @@ import {
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
   PATH_BGS_DASHBOARD,
-  PATH_TEAM_MEMBER,
-  PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
   PATH_SPONSORED_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
@@ -181,9 +175,10 @@ export default function AuthenticationComponent() {
               component={DashboardContainer}
             />
           ) : null}
-
+          {/* 
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
-          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
+          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
+
           {/* On-Boarding Customer */}
           <Route path={PATH_SUMMARY} component={Summary} />
           {/* Brand Assets */}

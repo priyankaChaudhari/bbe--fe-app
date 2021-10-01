@@ -730,35 +730,6 @@ export default function CustomerMainContainer() {
             <PageLoader color={Theme.orange} type="page" width={20} />
           ) : (
             <>
-              {/* <AlertMsgUpdate className="account-verify">
-                We’ve initiated a small charge to your bank account. We’ll email
-                you within 3 days to verify the payment.
-                Please verify your bank account
-                <Button
-                  className="btn-transparent verify-now-btn ml-3"
-                  onClick={() => {
-                    setShowModal(true);
-                  }}>
-                  Verify Now
-                </Button>
-              </AlertMsgUpdate> */}
-
-              {/* {userInfo && userInfo.role !== 'Customer' ? (
-                <BackBtn className="d-lg-none d-block ">
-                  <Link className="back-customer-list" to={PATH_CUSTOMER_LIST}>
-                    {' '}
-                    <img
-                      className="left-arrow"
-                      src={BackArrowIcon}
-                      alt=""
-                    />{' '}
-                    Back to all customers
-                  </Link>
-                </BackBtn>
-              ) : (
-                ''
-              )} */}
-
               <CustomerDetailsBody role={userInfo && userInfo.role}>
                 <div className="row">
                   <div className="col-6 mt-4 pt-1">
@@ -1598,73 +1569,7 @@ export default function CustomerMainContainer() {
                   </div>
                 </ModalBox>
               </Modal>
-              {/* <Modal
-                isOpen={showModal}
-                style={AccountSetupcustomStyles}
-                ariaHideApp={false}
-                contentLabel="Edit modal">
-                <img
-                  src={CloseIcon}
-                  alt="close"
-                  className="float-right cursor cross-icon"
-                  onClick={() => setShowModal(false)}
-                  role="presentation"
-                /> */}
-              {/* <ModalBox>
-                  <div className="modal-body "> */}
-              {/* <h4 className="on-boarding mb-3">
-                      Verify your bank account
-                    </h4>
-                    <p className="verify-info-text m-0">
-                      {' '}
-                      We have made a charge to your bank account for a small
-                      amount (typically less than $1) from Buy Box Experts. In
-                      order to verify your account, please enter the amount
-                      below. This will verify your account and trigger a refund
-                      for the amount we charged.
-                    </p>
-                    <p className=" verify-info-text font-italic mt-2">
-                      {' '}
-                      Please note the refund can take up to 3 business days to
-                      reach you from the point of verifying your bank account.
-                    </p>
 
-                    <div className="does-not-match-box mt-1 mb-1">
-                      <img
-                        className="times-circle-icon mr-2"
-                        src={TimesCircle}
-                        alt="cross-circle"
-                      />{' '}
-                      Amount entered does not match our records
-                    </div>
-                    <ContractFormField className="mt-3">
-                      <label htmlFor="emailAddress">
-                        Amount Charged
-                        <br />
-                        <input
-                          className="form-control"
-                          type="text"
-                          placeholder=" $"
-                        />
-                      </label>
-                    </ContractFormField> */}
-              {/* <Button className="btn-primary w-100  mt-3">Verify</Button> */}
-              {/* <img
-                      width="55px"
-                      className="mb-3"
-                      src={AccountSetupIcon}
-                      alt="check"
-                    />
-                    <h3 className=" page-heading ">Success!</h3>
-                    <p className="normal-text mt-2 mb-0">
-                      Thank you, your bank account has now been verified.{' '}
-                    </p>
-                    <Button className="btn-primary w-100  mt-4">
-                      Continue
-                    </Button>
-                  </div>
-                </ModalBox>
-              </Modal> */}
               <Modal
                 isOpen={showBrandAssetSuccessMsg}
                 style={AccountSetupcustomStyles}
@@ -1708,65 +1613,6 @@ export default function CustomerMainContainer() {
     </>
   );
 }
-
-// const CustomerDetailBanner = styled.div`
-//   background: ${Theme.gray6};
-//   min-height: 100%;
-//   .banner {
-//     height: 307px;
-//     padding-left: 62px;
-//     background-image: url(${GreyBannerBg});
-//     background-position: top;
-//     background-size: cover;
-//     background-repeat: no-repeat;
-//     width: 100%;
-
-//     .inner {
-//       height: 100%;
-//       top: 0;
-//       max-width: 100%;
-//       padding: 0 20px;
-//     }
-//   }
-
-//   @media only screen and (max-width: 991px) {
-//     .banner {
-//       padding-left: 0;
-//     }
-//   }
-
-//   @media only screen and (max-width: 991px) {
-//     .banner {
-//       padding-left: 0;
-//     }
-//   }
-// `;
-
-// const CustomerDetailsFooter = styled.div`
-//   border: 1px solid ${Theme.gray7};
-//   bottom: 0px;
-//   background: ${Theme.white};
-//   position: fixed;
-//   min-height: 60px;
-//   z-index: 2;
-//   box-shadow: inset 0 1px 0 0 #e2e2ea;
-//   padding-top: 270px;
-//   width: 100%;
-//   padding: 8px 0;
-
-//   .skip-step {
-//     color: ${Theme.gray40};
-//     font-size: ${Theme.extraNormal};
-//     margin-right: 20px;
-//   }
-//   @media only screen and (max-width: 330px) {
-//     .skip-step {
-//       color: ${Theme.gray40};
-//       font-size: ${Theme.extraNormal};
-//       margin-right: 10px;
-//     }
-//   }
-// `;
 
 const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
@@ -1880,44 +1726,16 @@ const CustomerDetailsBody = styled.div`
 
   @media only screen and (max-width: 991px) {
     padding: 0 20px;
+
+    .account-type {
+      float: none !important;
+      margin: unset;
+    }
   }
-
-  // @media only screen and (min-width: 1600px) and (max-width: 1920px) {
-  //   max-width: 1420px !important;
-  //   margin: 0 auto;
-  //   width: 100%;
-  // }
-  // @media only screen and (min-width: 1920px) {
-  //   max-width: 80% !important;
-  //   margin: 0 auto;
-  //   width: 100%;
-  // }
+  @media only screen and (max-width: 767px) {
+    .account-type {
+      float: none !important;
+      margin: 0 auto;
+    }
+  }
 `;
-// const BackBtn = styled.div`
-//   color: ${Theme.black};
-//   padding: 20px;
-//   font-size: ${Theme.normal};
-//   font-weight: 700;
-//   img {
-//     vertical-align: middle;
-//     width: 19px;
-//     margin-right: 6px;
-//   }
-// `;
-
-// const AlertMsgUpdate = styled.div`
-//   background: #fdf3d7;
-//   border-radius: 4px;
-//   width: 100%;
-//   height: 50px;
-//   color: #2e384d;
-//   font-size: 13px;
-//   text-align: center;
-//   padding-top: 16px;
-//   font-family: ${Theme.titleFontFamily};
-
-//   &.account-verify {
-//     background: #ffded6;
-//     padding-top: 11px;
-//   }
-// `;
