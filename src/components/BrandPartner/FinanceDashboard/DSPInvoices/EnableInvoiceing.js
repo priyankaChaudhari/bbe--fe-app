@@ -262,7 +262,7 @@ export default function EnableInvoiceing({ view }) {
                   onClick={() => setIsModalOpen(false)}
                   type="button"
                   className="btn-orange-border  w-100">
-                  Cancle
+                  Cancel
                 </Button>
               </div>
               <div className="col-6">
@@ -273,7 +273,7 @@ export default function EnableInvoiceing({ view }) {
                   {enableInvoiceLoader ? (
                     <PageLoader color="#fff" type="button" />
                   ) : (
-                    'Enable Billing'
+                    'Enable Invoicing'
                   )}
                 </Button>
               </div>
