@@ -46,6 +46,13 @@ export default function DSPInvoices({
     currentDate,
   ]);
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown({ show: false });
+      setDummayDateType(selectedDateType);
+    }
+  };
+
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
       (res) => {
@@ -66,6 +73,11 @@ export default function DSPInvoices({
       getDSPdata(dummyDateType);
       setResponseId('12345');
     }
+    document.addEventListener('click', handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
   }, []);
 
   const handleTimeTypeChange = (event) => {
