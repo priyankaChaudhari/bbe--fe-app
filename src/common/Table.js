@@ -17,18 +17,17 @@ const Table = styled.table`
     font-family: ${Theme.baseFontFamily};
     width: 100%;
     th {
-       padding: 13px 0px;
-        text-transform: uppercase;
-        color: ${Theme.gray40};
-        font-size: 11px;
-        background: ${Theme.white};
-        font-family: ${Theme.baseFontFamily};
+      padding: 13px 0px;
+      text-transform: uppercase;
+      color: ${Theme.gray40};
+      font-size: 11px;
+      background: ${Theme.white};
+      font-family: ${Theme.baseFontFamily};
       &.product-catalog-header {
         border-top: 1px solid ${Theme.gray11};
       }
-       &.product-header {
+      &.product-header {
         border-bottom: 1px solid ${Theme.gray11};
-       
       }
     }
 
@@ -38,33 +37,32 @@ const Table = styled.table`
       position: relative;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
-      //  font-family: ${Theme.baseMediumFontFamily};
-       font-weight: 600;
+      font-weight: 600;
 
       &.product-body {
-         padding: 13px 20px 13px 0;
+        padding: 13px 20px 13px 0;
 
-         &.light-font {
-           font-weight: 300;
-         }
+        &.light-font {
+          font-weight: 300;
+        }
       }
       &.agreement {
-         font-size: ${Theme.normal};
-         border-bottom: 1px solid ${Theme.gray11};
-         font-weight: 300;
-        
-         .orange-icon {
-           margin-left: 10px;
-           vertical-align: middle;
-         }
-        }
-      &.product-table-body {
-         padding: 13px 4px 13px 0;
-         font-size: ${Theme.extraNormal};
+        font-size: ${Theme.normal};
+        border-bottom: 1px solid ${Theme.gray11};
+        font-weight: 300;
 
-         &.light-font {
-           font-weight: 300;
-         }
+        .orange-icon {
+          margin-left: 10px;
+          vertical-align: middle;
+        }
+      }
+      &.product-table-body {
+        padding: 13px 4px 13px 0;
+        font-size: ${Theme.extraNormal};
+
+        &.light-font {
+          font-weight: 300;
+        }
       }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};
@@ -129,20 +127,19 @@ const Table = styled.table`
           .product-image-large {
             display: none;
           }
-           &:hover{
-              .product-image-large {
-                display: block;
-                background-color: ${Theme.gray8};
-                border: 4px solid ${Theme.white};
-                position: absolute;
-                z-index: 2;
-                border-radius: 8px;
-                width: 180px;
-                height: 180px;
-                left: 20px;
-              }
-            } 
-         
+          &:hover {
+            .product-image-large {
+              display: block;
+              background-color: ${Theme.gray8};
+              border: 4px solid ${Theme.white};
+              position: absolute;
+              z-index: 2;
+              border-radius: 8px;
+              width: 180px;
+              height: 180px;
+              left: 20px;
+            }
+          }
         }
         .product-data {
           float: left;
@@ -184,11 +181,11 @@ const Table = styled.table`
           &.assets-received {
             background-color: #d6eef2;
             max-width: 132px;
-          }  
-        &.assets-requested {
-          background-color: ${Theme.lightOrange};
-          max-width: 132px;
-        }
+          }
+          &.assets-requested {
+            background-color: ${Theme.lightOrange};
+            max-width: 132px;
+          }
           .bullet-point {
             background-color: ${Theme.lighterGreen};
             border-radius: 100%;
@@ -198,18 +195,18 @@ const Table = styled.table`
             top: 9px;
             left: 11px;
 
-          &.unoptimized {
-            background-color: ${Theme.gray25};
-          }
-          &.scheduled {
-            background-color: ${Theme.yellow};
-          }
-          &.assets-received {
-            background-color: #30a8bd;
-          }
-          &.assets-requested {
-            background-color: ${Theme.orange};
-          }
+            &.unoptimized {
+              background-color: ${Theme.gray25};
+            }
+            &.scheduled {
+              background-color: ${Theme.yellow};
+            }
+            &.assets-received {
+              background-color: #30a8bd;
+            }
+            &.assets-requested {
+              background-color: ${Theme.orange};
+            }
           }
           .status-text {
             color: ${Theme.black};
@@ -235,6 +232,11 @@ const Table = styled.table`
             margin-right: 2px;
           }
         }
+      }
+      .company-info-details {
+        float: left;
+        max-width: 68%;
+        word-break: break-all;
       }
 
       .company-logo {
@@ -362,7 +364,6 @@ const Table = styled.table`
             padding: 10px 4px 10px 12px;
             color: #171725;
             font-size: 14px;
-            
 
             &.agreement {
               border: 1px solid ${Theme.gray45};
@@ -434,7 +435,6 @@ const Table = styled.table`
             font-size: ${Theme.extraNormal};
             text-transform: initial;
           }
-         
         }
       }
 
@@ -455,6 +455,30 @@ const Table = styled.table`
       }
     }
   }
+   @media only screen and (min-width: 1920px) { 
+        tr {
+          td {
+           .company-info-details {
+              float: left;
+              max-width: 75%;
+             
+            }
+            
+          }
+        }
+  }
+   @media only screen and (max-width: 1020px) { 
+        tr {
+          td {
+           .company-info-details {
+              float: left;
+              max-width: 65%;
+              word-break: break-all;
+            }
+            
+          }
+        }
+  }
   &.product-catalog-laptop {
     @media only screen and (max-width: 767px) {
       display: none;
@@ -466,28 +490,30 @@ const Table = styled.table`
       display: none;
     }
 
-  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
-    tbody {
-      tr {
-        &.table-header {
-          th {
-            font-size: 17px;
+    @media only screen and (min-width: 1700px) and (max-width: 1920px) {
+      tbody {
+        tr {
+          &.table-header {
+            th {
+              font-size: 17px;
+            }
           }
-        }
 
-        td {
-          font-size: ${Theme.normalRes};
+          td {
+            font-size: ${Theme.normalRes};
 
-          .sub-address {
-            font-size: ${Theme.smallRes};
-          }
-          .company-name {
-            font-size: ${Theme.medium};
+            .sub-address {
+              font-size: ${Theme.smallRes};
+            }
+            .company-name {
+              font-size: ${Theme.medium};
+            }
+            
           }
         }
       }
-    }
   }
+
   @media only screen and (min-width: 991px) and (max-width: 1362px) {
     tbody {
       tr {
@@ -501,5 +527,6 @@ const Table = styled.table`
       }
     }
   }
+ 
 `;
 export default Table;

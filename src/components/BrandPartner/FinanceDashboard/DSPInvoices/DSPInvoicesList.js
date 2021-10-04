@@ -228,11 +228,13 @@ export default function DSPInvoicesList({
             }
             alt="logo"
           />
-          <div className="company-name">
-            {item.customer && item.customer.name}
-          </div>
-          <div className="status">
-            {item.invoice_type} | #{item.invoiced_id}
+          <div className="company-info-details">
+            <div className="company-name">
+              {item.customer && item.customer.name}
+            </div>
+            <div className="status">
+              {item.invoice_type} | #{item.invoiced_id}
+            </div>
           </div>
         </td>
         <td className="product-table-body">
