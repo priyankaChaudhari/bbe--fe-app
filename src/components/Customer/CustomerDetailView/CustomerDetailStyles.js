@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Theme from '../../../theme/Theme';
 
 const CustomerDetailsBody = styled.div`

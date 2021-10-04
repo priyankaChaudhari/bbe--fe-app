@@ -2,6 +2,7 @@ import React from 'react';
 
 import Modal from 'react-modal';
 import { func, shape, bool, string } from 'prop-types';
+
 import Notes from '../Notes';
 
 export default function NotesModal({

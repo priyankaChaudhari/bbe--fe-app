@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
+import { string, shape, bool, func } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
+import EditAccountDetails from './EditAccountDetails';
 import { getCustomerDetails } from '../../../api';
 import { DropDownStatus, ModalBox, Status } from '../../../common';
 import {
@@ -14,7 +15,6 @@ import {
   EditOrangeIcon,
   WhiteCaretUp,
 } from '../../../theme/images';
-import { EditAccountDetails } from '..';
 
 export default function AccountDetails({
   id,
@@ -44,13 +44,13 @@ export default function AccountDetails({
   }, [id]);
 
   useEffect(() => {
-    //   customerDetails();
+    customerDetails();
   }, [customerDetails]);
 
   const checkStatus = () => {
     if (customer && customer.status) {
       statusActions = statusActions.filter(
-        (op) => op.value !== customer.status.value,
+        (element) => element.value !== customer.status.value,
       );
     }
   };
@@ -295,20 +295,21 @@ AccountDetails.defaultProps = {
   setShowModal: () => {},
   setStatusModal: () => {},
   IsSaveDataClicked: () => {},
+  customStyles: {},
 };
 
 AccountDetails.propTypes = {
-  id: PropTypes.string,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  userInfo: PropTypes.shape({
-    role: PropTypes.string,
+  id: string,
+  getActivityLogInfo: func.isRequired,
+  userInfo: shape({
+    role: string,
   }).isRequired,
-  customerData: PropTypes.shape({
-    id: PropTypes.string,
+  customerData: shape({
+    id: string,
   }).isRequired,
-  setShowModal: PropTypes.func,
-  setStatusModal: PropTypes.func,
-  showModal: PropTypes.bool.isRequired,
-  customStyles: PropTypes.objectOf(PropTypes.object).isRequired,
-  IsSaveDataClicked: PropTypes.func,
+  setShowModal: func,
+  setStatusModal: func,
+  showModal: bool.isRequired,
+  customStyles: func,
+  IsSaveDataClicked: func,
 };

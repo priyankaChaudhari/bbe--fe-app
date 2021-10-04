@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+import { func, bool, string, shape } from 'prop-types';
 
 import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
 import { editCompanyFields } from '../../../constants';
@@ -758,13 +758,13 @@ EditCompanyDetails.defaultProps = {
 };
 
 EditCompanyDetails.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  detail: PropTypes.shape({
-    id: PropTypes.string,
+  setShowModal: func.isRequired,
+  id: string,
+  detail: shape({
+    id: string,
   }).isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  setScrollDown: PropTypes.func.isRequired,
-  scrollDown: PropTypes.bool,
-  customerDetails: PropTypes.func.isRequired,
+  getActivityLogInfo: func.isRequired,
+  setScrollDown: func.isRequired,
+  scrollDown: bool,
+  customerDetails: func.isRequired,
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+import { func, shape, string } from 'prop-types';
 import Select, { components } from 'react-select';
 
 import InputSelect from '../../../common/InputSelect';
@@ -223,14 +223,17 @@ EditAccountDetails.defaultProps = {
 };
 
 EditAccountDetails.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
+  setShowModal: func.isRequired,
+  id: string,
+  customer: shape({
+    id: string,
   }).isRequired,
-
-  setDocumentImage: PropTypes.arrayOf(PropTypes.object),
-  getActivityLogInfo: PropTypes.func.isRequired,
-  IsSaveDataClicked: PropTypes.func,
-  customerDetails: PropTypes.func,
+  setDocumentImage: shape([
+    {
+      id: string,
+    },
+  ]),
+  getActivityLogInfo: func.isRequired,
+  IsSaveDataClicked: func,
+  customerDetails: func,
 };
