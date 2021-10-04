@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
-import { func, shape, string } from 'prop-types';
 import Select, { components } from 'react-select';
+import { func, shape, string } from 'prop-types';
 
 import InputSelect from '../../../common/InputSelect';
 import CropUploadImage from '../../../common/CropUploadImage';
