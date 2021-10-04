@@ -232,7 +232,9 @@ export default function DSPPartnersList({
             }
             alt="logo"
           />
-          <div className="company-name">{item.customer.name}</div>
+          <div className="company-info-details">
+            <div className="company-name">{item.customer.name}</div>
+          </div>
         </td>
         <td className="product-table-body">
           ${bindAmount(item.total_outstanding, 2, true)}

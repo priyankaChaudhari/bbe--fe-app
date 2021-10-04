@@ -236,7 +236,10 @@ const Table = styled.table`
       .company-info-details {
         float: left;
         max-width: 68%;
-        word-break: break-all;
+        word-break: keep-all;
+      }
+      .customer-details {
+        max-width: 60%;
       }
 
       .company-logo {
@@ -460,20 +463,22 @@ const Table = styled.table`
           td {
            .company-info-details {
               float: left;
+              word-break: keep-all;
               max-width: 75%;
-             
             }
-            
           }
         }
   }
-   @media only screen and (max-width: 1020px) { 
+   @media only screen and (max-width: 1050px) { 
         tr {
           td {
            .company-info-details {
               float: left;
               max-width: 65%;
               word-break: break-all;
+            }
+            .customer-details {
+              max-width: 55%;
             }
             
           }

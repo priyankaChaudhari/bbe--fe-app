@@ -1697,9 +1697,11 @@ export default function CustomerList() {
           }
           alt="logo"
         />
-        <div className="company-name">{name}</div>
-        <div className="user-name">
-          {bgs.first_name} {bgs.last_name}
+        <div className="company-info-details customer-details">
+          <div className="company-name">{name}</div>
+          <div className="user-name">
+            {bgs.first_name} {bgs.last_name}
+          </div>
         </div>
       </>
     );
