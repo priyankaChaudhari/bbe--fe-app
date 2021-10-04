@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import styled from 'styled-components/macro';
-import Modal from 'react-modal';
 import ReactTooltip from 'react-tooltip';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
@@ -11,27 +9,31 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
-import Theme from '../../../theme/Theme';
-import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import Activity from './Activity';
+import Theme from '../../../theme/Theme';
+import AccountDetails from './AccountDetails';
+import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import BillingContainer from './BillingContainer/BillingContainer';
-import { showOnboardingMsg } from '../../../store/actions/userState';
+
 import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { GroupUser } from '../../../theme/Global';
-import { AddTeamMember, EditTeamMember } from '../../Team/index';
+import {
+  TeamMemberModal,
+  CustomerStatusModal,
+  OtherModals,
+  NotesModal,
+} from './Modals';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
   getContactDetails,
   getCustomerDetails,
   setCustomerSelectedTab,
-  showBrandAsset,
 } from '../../../store/actions/customerState';
 import {
   AgreementDetails,
   CompanyDetail,
-  CustomerStatus,
-  Notes,
   ProductCatalog,
+  CustomerDetailsBody,
 } from '../index';
 import {
   getCustomerActivityLog,
@@ -43,12 +45,10 @@ import {
   getAccountMarketplace,
 } from '../../../api';
 import {
-  ModalBox,
   PageLoader,
   GetInitialName,
   PageNotFound,
   BackToTop,
-  Button,
   WhiteCard,
 } from '../../../common';
 import {
@@ -56,10 +56,8 @@ import {
   Organization,
   ExchangeIcon,
   DefaultUser,
-  CloseIcon,
   LeftArrowIcon,
   HeartMonitorIcon,
-  AccountSetupIcon,
   BillingIcon,
   CatalogBox,
   PlusIcon,
@@ -68,50 +66,6 @@ import {
   NextActivityLogo,
   ContractEmailIcon,
 } from '../../../theme/images';
-import AccountDetails from './AccountDetails';
-
-const AccountSetupcustomStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '480px ',
-    width: '100% ',
-    minHeight: '200px',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-const alertCustomStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '474px ',
-    width: '100% ',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-const customNotesStyles = {
-  content: {
-    top: '50%',
-    right: '0px',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    maxHeight: '100%',
-    overlay: ' {zIndex: 1000}',
-    inset: '0% 0% 0% auto',
-    marginRight: '0',
-    borderRadius: '0px !important',
-  },
-};
 
 export default function CustomerMainContainer() {
   const history = useHistory();
@@ -156,15 +110,9 @@ export default function CustomerMainContainer() {
   const profileLoader = useSelector(
     (state) => state.userState.isActivityLoading,
   );
-  const [teamDeleteModal, setTeamDeleteModal] = useState(false);
   const customerError = useSelector((state) => state.customerState.error);
   const userInfo = useSelector((state) => state.userState.userInfo);
-  const showOnBoardingSuccessMsg = useSelector(
-    (state) => state.userState.showForgotMsg,
-  );
-  const showBrandAssetSuccessMsg = useSelector(
-    (state) => state.customerState.showBrandAssetMsg,
-  );
+
   const [noteData, setNoteData] = useState([]);
   const [marketplaceData, setMarketplaceData] = useState([]);
   const [agreementDetailModal, setAgreementDetailModal] = useState({
@@ -617,24 +565,6 @@ export default function CustomerMainContainer() {
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
     getActivityLogInfo(currentPage);
-  };
-
-  const renderNotesModal = () => {
-    return (
-      <Modal
-        isOpen={showNotesModal.modal}
-        style={customNotesStyles}
-        ariaHideApp={false}
-        contentLabel="Add team modal">
-        <Notes
-          setShowNotesModal={setShowNotesModal}
-          customerId={id}
-          setNewNoteEditor={setNewNoteEditor}
-          showNewNoteEditor={showNewNoteEditor}
-          showNotesModal={showNotesModal}
-        />
-      </Modal>
-    );
   };
 
   return (
@@ -1218,134 +1148,34 @@ export default function CustomerMainContainer() {
               <div className="col-12 mt-5">
                 <BackToTop />
               </div>
-              {renderNotesModal()}
 
-              <Modal
-                isOpen={showMemberList.modal}
-                style={teamDeleteModal ? alertCustomStyles : customStyles}
-                ariaHideApp={false}
-                contentLabel="Add team modal">
-                {showMemberList.add ? (
-                  <AddTeamMember
-                    id={id}
-                    getCustomerMemberList={getCustomerMemberList}
-                    setShowMemberList={setShowMemberList}
-                    showMemberList={showMemberList}
-                    setAgreementDetailModal={setAgreementDetailModal}
-                  />
-                ) : (
-                  <EditTeamMember
-                    id={id}
-                    getCustomerMemberList={getCustomerMemberList}
-                    setShowMemberList={setShowMemberList}
-                    showMemberList={showMemberList}
-                    setTeamDeleteModal={setTeamDeleteModal}
-                    userInfo={userInfo}
-                  />
-                )}
-              </Modal>
+              {/* Customer Modals starts */}
+              <TeamMemberModal
+                id={id}
+                getCustomerMemberList={getCustomerMemberList}
+                showMemberList={showMemberList}
+                setShowMemberList={setShowMemberList}
+                setAgreementDetailModal={setAgreementDetailModal}
+                userInfo={userInfo}
+                customStyles={customStyles}
+              />
 
-              <Modal
-                isOpen={statusModal.show}
-                style={customStyles}
-                ariaHideApp={false}
-                contentLabel="Status modal">
-                <img
-                  src={CloseIcon}
-                  alt="close"
-                  className="float-right cursor cross-icon"
-                  onClick={() =>
-                    setStatusModal({ ...statusModal, show: false })
-                  }
-                  role="presentation"
-                />
-                <CustomerStatus
-                  type={statusModal.type}
-                  setStatusModal={setStatusModal}
-                  customer={customer}
-                />
-              </Modal>
-              <Modal
-                isOpen={showOnBoardingSuccessMsg}
-                style={AccountSetupcustomStyles}
-                ariaHideApp={false}
-                contentLabel="Edit modal">
-                <ModalBox>
-                  <div className="modal-body account-setup-complete">
-                    <img
-                      className="mt-2"
-                      src={AccountSetupIcon}
-                      alt="company-icon"
-                    />
+              <CustomerStatusModal
+                statusModal={statusModal}
+                customStyles={customStyles}
+                setStatusModal={setStatusModal}
+                customer={customer}
+              />
 
-                    <h3 className="page-heading mb-3 mt-3 ">
-                      Account Set Up Complete
-                    </h3>
-                    <p className="extra-bold ">
-                      {' '}
-                      Congratulations on completing your account setup with Buy
-                      Box Experts! Expect to hear from your On-boarding
-                      Specialist in the next 24 hours to walk through final set
-                      up items and get you in contact with your Brand Growth
-                      Strategist.
-                    </p>
-
-                    <p className="extra-bold mt-2">
-                      If you have any questions in the meantime please reach out
-                      to{' '}
-                      <a
-                        className="link-url"
-                        target="_BLANK"
-                        rel="noopener noreferrer"
-                        href="https://www.buyboxexperts.com/">
-                        onboarding@buyboxexperts.com.
-                      </a>
-                    </p>
-                    <Button
-                      className="btn-primary w-100 on-boarding mt-3"
-                      onClick={() => dispatch(showOnboardingMsg(false))}>
-                      Ok. Got it!
-                    </Button>
-                  </div>
-                </ModalBox>
-              </Modal>
-
-              <Modal
-                isOpen={showBrandAssetSuccessMsg}
-                style={AccountSetupcustomStyles}
-                ariaHideApp={false}
-                contentLabel="Edit modal">
-                <ModalBox>
-                  <div className="modal-body account-setup-complete">
-                    <img
-                      className="mt-2"
-                      src={AccountSetupIcon}
-                      alt="company-icon"
-                    />
-
-                    <h3 className="page-heading mb-3 mt-3 ">
-                      Brand Assets Received
-                    </h3>
-                    <p className="extra-bold ">
-                      {' '}
-                      Thank you for uploading your brand assets. Once you’ve
-                      spoken with our Brand Growth Strategist and Creative
-                      Strategist, they will review your products and request
-                      assets for the products we will use in our brand sample,
-                      which will act as a guide for future optimization work.
-                      You will receive an email as well as a notification in
-                      NEXT that will take you to where you can upload the
-                      requested product assets.
-                    </p>
-
-                    <Button
-                      className="btn-primary w-100 on-boarding mt-3"
-                      onClick={() => dispatch(showBrandAsset(false))}>
-                      Ok. Got it!
-                    </Button>
-                  </div>
-                </ModalBox>
-              </Modal>
+              <NotesModal
+                id={id}
+                showNotesModal={showNotesModal}
+                setShowNotesModal={setShowNotesModal}
+                setNewNoteEditor={setNewNoteEditor}
+                showNewNoteEditor={showNewNoteEditor}
+              />
+              <OtherModals />
+              {/* Customer Modals ends */}
             </>
           )}
         </>
@@ -1353,129 +1183,3 @@ export default function CustomerMainContainer() {
     </>
   );
 }
-
-const CustomerDetailsBody = styled.div`
-  background: ${Theme.gray6};
-  min-height: 100%;
-  width: 100%;
-  padding-left: ${(props) => (props.role === 'Customer' ? '45px' : '109px')};
-  padding-right: 45px;
-  .back-btn-link {
-    color: ${Theme.gray85};
-    font-size: ${Theme.extraNormal};
-    text-transform: initial;
-    cursor: pointer;
-
-    .left-arrow {
-      width: 16px;
-      margin-right: 5px;
-      vertical-align: bottom;
-    }
-  }
-  .add-more-people {
-    background-size: 100%;
-    display: inline-block;
-    vertical-align: top;
-
-    img {
-      border-radius: 50%;
-      width: 40px;
-      margin-left: -7px;
-      height: 40px;
-    }
-
-    &.btn-add-team {
-      background-color: ${Theme.white};
-      border: 1px solid ${Theme.gray2};
-      border-radius: 100%;
-      width: 36px;
-      margin-left: 2px;
-      height: 36px;
-      img {
-        width: 15px;
-        margin: -2px 9px 3px 2px;
-      }
-    }
-  }
-
-  .customer-body-container {
-    max-width: 1220px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .account-type {
-    float: none !important;
-    margin: 0 auto;
-  }
-
-  .customer-dropdown-select {
-    color: ${Theme.black};
-    padding: 0 0px 0px 25px;
-    background-color: ${Theme.white};
-    border-radius: 8px;
-    width: 100%;
-    padding: 10px 0;
-    border-left: 3px solid ${Theme.orange};
-    color: ${Theme.black};
-    font-size: 16px;
-    font-weight: bold;
-    height: 55px;
-    border-right: none;
-    border-top: none;
-    border-bottom: none;
-
-    &:focus {
-      outline: none;
-    }
-
-    .css-yk16xz-control {
-      border: none;
-      cursor: pointer;
-
-      &:focus {
-        outline: none;
-      }
-    }
-    .css-1pahdxg-control {
-      border: none !important;
-      box-shadow: none !important;
-      cursor: pointer;
-
-      &:focus {
-        outline: none !important;
-        box-shadow: none !important;
-      }
-    }
-
-    .css-1okebmr-indicatorSeparator {
-      display: none;
-    }
-    .css-26l3qy-menu {
-      margin-top: -1px;
-      border-radius: 4px;
-      border-top: none;
-      padding: 18px 0;
-      border: none;
-      box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
-      font-weight: 500;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    padding: 0 20px;
-
-    .account-type {
-      float: none !important;
-      margin: unset;
-    }
-  }
-  @media only screen and (max-width: 767px) {
-    .account-type {
-      float: none !important;
-      margin: 0 auto;
-    }
-  }
-`;

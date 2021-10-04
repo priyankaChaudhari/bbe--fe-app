@@ -10,6 +10,7 @@ import CustomerStatus from './CustomerDetailView/CustomerStatus';
 import Notes from './CustomerDetailView/Notes';
 import ProductCatalog from './ProductCatalog/ProductCatalog';
 import ProductDelegation from './ProductCatalog/ProductDelegation';
+import CustomerDetailsBody from './CustomerDetailView/CustomerDetailStyles';
 
 export {
   CustomerList,
@@ -24,4 +25,5 @@ export {
   Notes,
   ProductCatalog,
   ProductDelegation,
+  CustomerDetailsBody,
 };
