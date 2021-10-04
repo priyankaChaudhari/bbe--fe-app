@@ -79,6 +79,9 @@ export default function CustomerTabDetails({
           Agreements
         </div>
       </li>
+
+      {/* waiting for MWS token */}
+
       {/* {role === 'Customer' ? (
                           ''
                         ) : (

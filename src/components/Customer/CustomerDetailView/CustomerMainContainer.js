@@ -12,22 +12,30 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import Activity from './Activity';
 import Theme from '../../../theme/Theme';
 import AccountDetails from './AccountDetails';
-import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
+import CustomerTabDetails from './CustomerTabDetails';
 import BillingContainer from './BillingContainer/BillingContainer';
-
+import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
+import { LeftArrowIcon, PlusIcon } from '../../../theme/images';
+import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
   TeamMemberModal,
   CustomerStatusModal,
   OtherModals,
   NotesModal,
 } from './Modals';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
   getContactDetails,
   getCustomerDetails,
   setCustomerSelectedTab,
 } from '../../../store/actions/customerState';
+import {
+  PageLoader,
+  GetInitialName,
+  PageNotFound,
+  BackToTop,
+  WhiteCard,
+} from '../../../common';
 import {
   AgreementDetails,
   CompanyDetail,
@@ -43,15 +51,6 @@ import {
   getMarketPlaceList,
   getAccountMarketplace,
 } from '../../../api';
-import {
-  PageLoader,
-  GetInitialName,
-  PageNotFound,
-  BackToTop,
-  WhiteCard,
-} from '../../../common';
-import { LeftArrowIcon, PlusIcon } from '../../../theme/images';
-import CustomerTabDetails from './CustomerTabDetails';
 
 export default function CustomerMainContainer() {
   const history = useHistory();
