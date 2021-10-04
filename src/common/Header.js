@@ -28,6 +28,7 @@ import {
   PATH_FINANCE_DASHBOARD,
   helpDeskLink,
   managementLink,
+  PATH_ACCOUNT_SETUP,
 } from '../constants';
 import {
   NextLogo,
@@ -175,9 +176,10 @@ export default function Header({ type, userInfo }) {
   return (
     <div
       className={
-        userInfo &&
-        userInfo.role === 'Customer' &&
-        !history.location.pathname.includes('/brand-asset/')
+        (userInfo &&
+          userInfo.role === 'Customer' &&
+          !history.location.pathname.includes('/brand-asset/')) ||
+        history.location.pathname.includes(PATH_ACCOUNT_SETUP)
           ? 'common-header-sticky  '
           : history.location.pathname.includes('/brand-asset/')
           ? 'header-hide  '

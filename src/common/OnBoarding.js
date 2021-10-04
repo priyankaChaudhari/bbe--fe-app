@@ -309,7 +309,7 @@ const OnBoardingBody = styled.div`
   .panel {
     padding: 0;
     max-width: 400px;
-    margin-top: 120px;
+    margin-top: 70px;
     box-shadow: none;
   }
   .panel-unauthorize-header {
