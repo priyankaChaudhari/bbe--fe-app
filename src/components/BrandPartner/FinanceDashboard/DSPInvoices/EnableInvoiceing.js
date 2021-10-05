@@ -255,7 +255,7 @@ export default function EnableInvoiceing({ view }) {
             <div className="heading-title text-center mt-1">{title}</div>
             <div className=" normal-text text-center mt-2 pt-1">{`${subTitle} ${dayjs(
               invoiceGeneratedOn,
-            ).format('MMM D')}`}</div>
+            ).format('D MMM')}`}</div>
             <div className="row mt-4 pt-3">
               <div className="col-6 text-center ">
                 <Button
