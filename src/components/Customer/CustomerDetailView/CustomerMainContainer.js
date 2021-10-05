@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-danger */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -44,7 +45,6 @@ import {
 } from '../index';
 import {
   getCustomerActivityLog,
-  getAmazonDetails,
   getCustomerMembers,
   getDocumentList,
   getMarketPlaceList,
@@ -79,7 +79,6 @@ export default function CustomerMainContainer() {
   const [activityCount, setActivityCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [images, setImages] = useState([]);
-  const [amazonDetails, setAmazonDetails] = useState([]);
   const [showNewNoteEditor, setNewNoteEditor] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState({
     modal: false,
@@ -157,14 +156,6 @@ export default function CustomerMainContainer() {
     });
   }, [id]);
 
-  const getAmazon = useCallback(() => {
-    getAmazonDetails(id).then((res) => {
-      setAmazonDetails(
-        res && res.data && res.data.results && res.data.results[0],
-      );
-    });
-  }, [id]);
-
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList(id).then((res) => {
       setMarketplaceChoices(res && res.data);
@@ -177,11 +168,6 @@ export default function CustomerMainContainer() {
   }
 
   useEffect(() => {
-    if (userInfo && userInfo.role !== 'Customer') {
-      getMarketPlace(id);
-      getAmazon();
-    }
-
     if (userInfo && userInfo.role === 'Customer') {
       setViewComponent('dashboard');
       dispatch(setCustomerSelectedTab('agreement'));
@@ -189,19 +175,17 @@ export default function CustomerMainContainer() {
     if (profileLoader) {
       getActivityLogInfo();
     }
-  }, [
-    dispatch,
-    id,
-    getActivityLogInfo,
-    getAmazon,
-    getMarketPlace,
-    profileLoader,
-    userInfo,
-  ]);
+  }, [dispatch, id, getActivityLogInfo, profileLoader, userInfo]);
 
   useEffect(() => {
     getActivityLogInfo();
   }, [getActivityLogInfo]);
+
+  useEffect(() => {
+    if (userInfo && userInfo.role !== 'Customer') {
+      getMarketPlace(id);
+    }
+  }, [id, getMarketPlace]);
 
   useEffect(() => {
     dispatch(getCustomerDetails(id));
@@ -209,7 +193,7 @@ export default function CustomerMainContainer() {
 
   useEffect(() => {
     if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
-  }, [getCustomerMemberList, userInfo]);
+  }, [getCustomerMemberList]);
 
   useEffect(() => {
     if (viewComponent === 'company') {
@@ -687,13 +671,11 @@ export default function CustomerMainContainer() {
                     <CompanyDetail
                       id={id}
                       customer={customer}
-                      amazonDetails={amazonDetails}
                       seller={
                         agreement &&
                         agreement.seller_type &&
                         agreement.seller_type.value
                       }
-                      getAmazon={getAmazon}
                       getActivityLogInfo={getActivityLogInfo}
                       marketplaceData={marketplaceData}
                     />

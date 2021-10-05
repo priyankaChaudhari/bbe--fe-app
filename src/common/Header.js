@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Modal from 'react-modal';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ import { useMediaQuery } from 'react-responsive';
 import Theme from '../theme/Theme';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
-import { logout, showProfileLoader, userMe } from '../store/actions/userState';
+import { logout, showProfileLoader } from '../store/actions/userState';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
 import {
   PATH_ARTICLE_LIST,
@@ -83,11 +83,11 @@ export default function Header({ type, userInfo }) {
     },
   };
 
-  useEffect(() => {
-    if (!history.location.pathname.includes('assigned')) {
-      dispatch(userMe(history));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!history.location.pathname.includes('assigned')) {
+  //     dispatch(userMe(history));
+  //   }
+  // }, []);
 
   const getInitials = () => {
     const firstName =

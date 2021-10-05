@@ -468,19 +468,6 @@ export async function createAmazonDetails(data) {
   return result;
 }
 
-export async function getAmazonDetails(customer) {
-  const params = { customer };
-  const result = await axiosInstance
-    .get(API_AMAZON_DETAILS, { params })
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
 export async function updateAmazonDetails(id, data, customer) {
   const params = { customer };
   const result = await axiosInstance

@@ -15,7 +15,6 @@ import { GetInitialName, WhiteCard } from '../../../common';
 export default function CompanyDetail({
   customer,
   id,
-  getAmazon,
   getActivityLogInfo,
   marketplaceData,
 }) {
@@ -225,7 +224,6 @@ export default function CompanyDetail({
             id={id}
             detail={detail}
             showModal={showModal}
-            getAmazon={getAmazon}
             getActivityLogInfo={getActivityLogInfo}
             scrollDown={scrollDown}
             setScrollDown={setScrollDown}
@@ -252,7 +250,6 @@ CompanyDetail.propTypes = {
     phone_number: PropTypes.string,
     merchant_id: PropTypes.string,
   }).isRequired,
-  getAmazon: PropTypes.func.isRequired,
   getActivityLogInfo: PropTypes.func.isRequired,
   marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
 };
