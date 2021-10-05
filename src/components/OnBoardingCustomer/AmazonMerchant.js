@@ -572,7 +572,7 @@ export default function AmazonMerchant({
 
   const generateAdvertiser = (part, mapData) => {
     return (
-      <fieldset className="shape-without-border  w-430 mt-3 mb-3">
+      <fieldset className="shape-without-border  w-430 mt-3 mb-1">
         <p className="account-steps m-0">Part {part}</p>
         Navigate to Settings &gt; Account Info and enter your{' '}
         <strong>Advertiser Name</strong> and <strong>ID</strong> below.

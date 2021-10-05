@@ -382,24 +382,6 @@ export default function DSPInvoicesList({
         ) : (
           // for mobile View
           <>
-            {/* <WhiteCard className="mb-3">
-              <div className="row">
-                <div className="col-6">
-                  <div className="label">Invoice Type / Number</div>
-                  <div className="label-info label-info-dark">TRX Training</div>
-                </div>
-                <div className="col-6">
-                  <div className="label">Invoice Type / Number</div>
-                  <div className="label-info label-info-dark">TRX Training</div>
-                </div>
-                <div className="col-12 text-center mt-3">
-                  <Button className="btn-orange-border">
-                    Enable Invoicing
-                  </Button>
-                </div>
-              </div>
-            </WhiteCard> */}
-
             <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
               <div className="row mt-2">
                 <div className="col-5 pl-4 mt-3 ">

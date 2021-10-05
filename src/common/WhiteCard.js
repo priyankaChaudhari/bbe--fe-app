@@ -1028,10 +1028,10 @@ export const WhiteCard = styled.div`
  @media only screen and (max-width: 991px) {
   .brand-logo-details{
     text-align: left;
-  //  max-width: 350px;
+
   } 
    .company-label-info {
-
+     max-width: 500px;
      margin-top: 10px;
 
      &:first-child {
@@ -1121,7 +1121,6 @@ export const WhiteCard = styled.div`
 
         &.mid-width {
           width: 100px;
-          // width:100%;
 
            &.website {
             margin-left: 5px;
