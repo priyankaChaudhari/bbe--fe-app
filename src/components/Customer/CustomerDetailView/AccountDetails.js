@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -42,10 +42,6 @@ export default function AccountDetails({
       }
     });
   }, [id]);
-
-  useEffect(() => {
-    customerDetails();
-  }, [customerDetails]);
 
   const checkStatus = () => {
     if (customer && customer.status) {

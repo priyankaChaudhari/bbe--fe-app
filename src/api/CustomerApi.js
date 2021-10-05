@@ -349,24 +349,6 @@ export async function addCustomerMember(data, id) {
   return result;
 }
 
-export async function getActivityLog(pageNumber, id) {
-  const params = {
-    page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-  };
-  if (id !== undefined) {
-    const result = await axiosInstance
-      .get(API_CUSTOMER + id + API_ACTIVITY_LOG, { params })
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        return error.response;
-      });
-    return result;
-  }
-  return null;
-}
-
 export async function getCustomerActivityLog(pageNumber, id) {
   const params = {
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
@@ -733,6 +715,21 @@ export async function getDspPacingData(id, marketplace) {
 export async function getAccountMarketplace(id) {
   const result = await axiosInstance
     .get(API_ACCOUNT_MARKETPLACE.replace(':id', id))
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getCustomerContactDetails(id) {
+  const params = {
+    customer: id,
+  };
+  const result = await axiosInstance
+    .get(API_CONTACT, { params })
     .then((response) => {
       return response;
     })

@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
-import { getCustomerDetails } from '../../../api';
+import { getCustomerDetails, getCustomerContactDetails } from '../../../api';
 import { GroupUser } from '../../../theme/Global';
 import { socialIcons } from '../../../constants';
 import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
@@ -34,10 +33,21 @@ export default function CompanyDetail({
       transform: 'translate(-50%, -50%)',
     },
   };
-  const contactInfo = useSelector((state) => state.customerState.contactData);
+
   const [showModal, setShowModal] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
   const [detail, setDetail] = useState(customer);
+  const [contactInfo, setContactInfo] = useState([]);
+
+  const getContactData = useCallback(() => {
+    getCustomerContactDetails(id).then((res) => {
+      setContactInfo(res && res.data);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    getContactData();
+  }, [id, getContactData]);
 
   const customerDetails = () => {
     getCustomerDetails(id).then((res) => {
@@ -220,6 +230,8 @@ export default function CompanyDetail({
             scrollDown={scrollDown}
             setScrollDown={setScrollDown}
             customerDetails={customerDetails}
+            getContactData={getContactData}
+            contactInfo={contactInfo}
           />
         </Modal>
       </div>

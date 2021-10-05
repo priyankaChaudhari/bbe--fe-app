@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
+import { string, func, shape, bool } from 'prop-types';
 
+import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
+import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
 import {
   CommonPagination,
   ModalBox,
@@ -14,8 +16,6 @@ import {
   GetInitialName,
   CheckBoxList,
 } from '../../common';
-import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
-import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
 
 export default function AddTeamMember({
   id,
@@ -23,6 +23,7 @@ export default function AddTeamMember({
   setShowMemberList,
   showMemberList,
   setAgreementDetailModal,
+  getActivityLogInfo,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [data, setData] = useState([]);
@@ -133,6 +134,7 @@ export default function AddTeamMember({
       if (response && response.status === 200) {
         if (!showMemberList.requestApproval) {
           getCustomerMemberList();
+          getActivityLogInfo();
         }
         setIsLoading({ loader: false, type: 'button' });
         toast.success(`${userRoleId.length} Team Member(s) Added.`);
@@ -418,12 +420,13 @@ AddTeamMember.defaultProps = {
 };
 
 AddTeamMember.propTypes = {
-  id: PropTypes.string,
-  getCustomerMemberList: PropTypes.func,
-  setShowMemberList: PropTypes.func,
-  showMemberList: PropTypes.shape({
-    agreement: PropTypes.objectOf(PropTypes.Object),
-    requestApproval: PropTypes.bool,
+  id: string,
+  getCustomerMemberList: func,
+  setShowMemberList: func,
+  showMemberList: shape({
+    agreement: shape({ id: string }),
+    requestApproval: bool,
   }).isRequired,
-  setAgreementDetailModal: PropTypes.func,
+  setAgreementDetailModal: func,
+  getActivityLogInfo: shape([{ id: string }]).isRequired,
 };

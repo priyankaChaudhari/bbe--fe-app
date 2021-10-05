@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { func, bool, string, shape } from 'prop-types';
+import { func, bool, string, shape, number } from 'prop-types';
 
 import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
 import { editCompanyFields } from '../../../constants';
-import { getContactDetails } from '../../../store/actions/customerState';
 import {
   FormField,
   Button,
@@ -41,8 +40,9 @@ export default function EditCompanyDetails({
   setScrollDown,
   customerDetails,
   detail,
+  getContactData,
+  contactInfo,
 }) {
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({});
@@ -59,7 +59,6 @@ export default function EditCompanyDetails({
     twitter: '',
   });
 
-  const contactInfo = useSelector((state) => state.customerState.contactData);
   const loader = useSelector((state) => state.customerState.isLoading);
 
   const modalScrollDown = () => {
@@ -287,7 +286,7 @@ export default function EditCompanyDetails({
     if (index && index.includes('CT')) {
       deleteContactInfo(index).then(() => {
         toast.success('Contact Removed!');
-        dispatch(getContactDetails(id));
+        getContactData(id);
       });
     } else {
       toast.success('Contact Removed!');
@@ -334,7 +333,7 @@ export default function EditCompanyDetails({
         }
         if (responseContact && responseContact.status === 201) {
           toast.success('Contact Saved!');
-          dispatch(getContactDetails(id));
+          getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
@@ -348,7 +347,7 @@ export default function EditCompanyDetails({
         }
         if (res && res.status === 200) {
           toast.success('Contact Saved!');
-          dispatch(getContactDetails(id));
+          getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
@@ -767,4 +766,10 @@ EditCompanyDetails.propTypes = {
   setScrollDown: func.isRequired,
   scrollDown: bool,
   customerDetails: func.isRequired,
+  getContactData: shape([{ id: string }]).isRequired,
+  contactInfo: shape([
+    {
+      length: number,
+    },
+  ]).isRequired,
 };

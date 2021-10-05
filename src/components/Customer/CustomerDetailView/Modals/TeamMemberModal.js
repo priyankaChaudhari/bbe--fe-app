@@ -13,6 +13,7 @@ export default function TeamMemberModal({
   setAgreementDetailModal,
   userInfo,
   customStyles,
+  getActivityLogInfo,
 }) {
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
   const alertCustomStyles = {
@@ -42,6 +43,7 @@ export default function TeamMemberModal({
           setShowMemberList={setShowMemberList}
           showMemberList={showMemberList}
           setAgreementDetailModal={setAgreementDetailModal}
+          getActivityLogInfo={getActivityLogInfo}
         />
       ) : (
         <EditTeamMember
@@ -51,6 +53,7 @@ export default function TeamMemberModal({
           showMemberList={showMemberList}
           setTeamDeleteModal={setTeamDeleteModal}
           userInfo={userInfo}
+          getActivityLogInfo={getActivityLogInfo}
         />
       )}
     </Modal>
@@ -76,4 +79,5 @@ TeamMemberModal.propTypes = {
   userInfo: func,
   customStyles: func,
   setAgreementDetailModal: func,
+  getActivityLogInfo: shape([{ id: string }]).isRequired,
 };

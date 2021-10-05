@@ -19,16 +19,15 @@ import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { LeftArrowIcon, PlusIcon } from '../../../theme/images';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
+  getCustomerDetails,
+  setCustomerSelectedTab,
+} from '../../../store/actions/customerState';
+import {
   TeamMemberModal,
   CustomerStatusModal,
   OtherModals,
   NotesModal,
 } from './Modals';
-import {
-  getContactDetails,
-  getCustomerDetails,
-  setCustomerSelectedTab,
-} from '../../../store/actions/customerState';
 import {
   PageLoader,
   GetInitialName,
@@ -153,11 +152,10 @@ export default function CustomerMainContainer() {
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
     getCustomerMembers(id).then((member) => {
-      getActivityLogInfo();
       setMemberData(member && member.data && member.data.results);
       setIsLoading({ loader: false, type: 'page' });
     });
-  }, [id, getActivityLogInfo]);
+  }, [id]);
 
   const getAmazon = useCallback(() => {
     getAmazonDetails(id).then((res) => {
@@ -194,7 +192,6 @@ export default function CustomerMainContainer() {
   }, [
     dispatch,
     id,
-    getCustomerMemberList,
     getActivityLogInfo,
     getAmazon,
     getMarketPlace,
@@ -203,11 +200,16 @@ export default function CustomerMainContainer() {
   ]);
 
   useEffect(() => {
-    dispatch(getCustomerDetails(id));
-    dispatch(getContactDetails(id));
-    if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
     getActivityLogInfo();
-  }, [dispatch, id, getActivityLogInfo, getCustomerMemberList, userInfo]);
+  }, [getActivityLogInfo]);
+
+  useEffect(() => {
+    dispatch(getCustomerDetails(id));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
+  }, [getCustomerMemberList, userInfo]);
 
   useEffect(() => {
     if (viewComponent === 'company') {
@@ -774,6 +776,7 @@ export default function CustomerMainContainer() {
                 setAgreementDetailModal={setAgreementDetailModal}
                 userInfo={userInfo}
                 customStyles={customStyles}
+                getActivityLogInfo={getActivityLogInfo}
               />
 
               <CustomerStatusModal
