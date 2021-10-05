@@ -3,6 +3,7 @@ import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
   API_AD_MANAGER_ADMIN_DASHBOARD,
+  API_AD_DASHBOARD,
   API_DSP_INVOICES,
   API_DSP_BILLING,
   API_CUSTOMER_CONTRACT,
@@ -48,8 +49,13 @@ export async function getAdManagerAdminGraphData(
     };
   }
 
+  const url =
+    dashboardType === 'sponsored-dashboard'
+      ? API_AD_DASHBOARD
+      : API_AD_MANAGER_ADMIN_DASHBOARD;
+
   const result = await axiosInstance
-    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}${dashboardType}/`, { params })
+    .get(`${url}${dashboardType}/`, { params })
     .then((response) => {
       return response;
     })
