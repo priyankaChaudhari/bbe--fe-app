@@ -28,17 +28,10 @@ export default function DSPInvoiceFilters({
       <div className="col-12">
         <InputSearchWithRadius className="customer-list-header w-80 mt-4">
           <DebounceInput
-            // debounceTimeout={600}
             className=" form-control search-filter"
             placeholder="Search"
             onChange={(event) => {
               onHandleSearch(event);
-            }}
-            onKeyPress={() => {
-              // onHandleSearch(event);
-              // if (event.key === 'Enter') {
-              //   onHandleSearch(event);
-              // }
             }}
             value={searchQuery}
           />

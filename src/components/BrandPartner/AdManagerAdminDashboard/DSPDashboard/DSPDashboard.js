@@ -332,16 +332,6 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setDSPGroupBy('weekly');
     }
 
-    // } else if (diffDays > 60 && diffDays <= 180) {
-    //   temp = 'weekly';
-    //   setDSPFilters({ daily: false, weekly: true, month: true });
-    //   setDSPGroupBy('weekly');
-    // } else if (diffDays > 180) {
-    //   temp = 'weekly';
-    //   setDSPFilters({ daily: false, weekly: true, month: true });
-    //   setDSPGroupBy('weekly');
-    // }
-
     if (value === 'custom') {
       sd = `${startDate.getDate()}-${
         startDate.getMonth() + 1

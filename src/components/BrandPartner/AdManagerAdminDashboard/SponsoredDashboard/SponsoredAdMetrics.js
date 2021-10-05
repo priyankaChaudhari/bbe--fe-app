@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { func, instanceOf, string } from 'prop-types';
+
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -99,7 +100,6 @@ const SponsoredAdMetrics = ({
             className={setBoxClasses('adSpend', 'ad-spend-active')}>
             <div className="chart-name">Ad Spend</div>
             <div className="number-rate">
-              {/* <span style={{ fontSize: '26px' }}>$241,498.33</span> */}
               {adCurrentTotal && adCurrentTotal.ad_spend
                 ? `${currencySign}${addThousandComma(adCurrentTotal.ad_spend)}`
                 : `${currencySign}0.00`}

@@ -119,32 +119,6 @@ const DSPFilter = ({
             : null}
         </div>
       </WhiteCard>
-      {/* <WhiteCard className="mb-3 d-lg-none d-block">
-        <div className="row ">
-          <div className="col-6">
-            <div className="black-heading-title ">Filters</div>
-          </div>
-          <div className="col-6 text-right">
-            <div className="gray-normal-text ">Reset filters</div>
-          </div>
-        </div>
-        <div className="row ">
-          <div className="col-12">
-            <div className="col-12">
-              <div className="label mt-3">Ad Manager</div>
-              <DropDownSelect className="customer-list-header">
-                <Select />
-              </DropDownSelect>
-            </div>
-            <div className="col-12">
-              <div className="label mt-3">Marketplace</div>
-              <DropDownSelect className="customer-list-header">
-                <Select />
-              </DropDownSelect>
-            </div>
-          </div>
-        </div>
-      </WhiteCard> */}
     </div>
   );
 };

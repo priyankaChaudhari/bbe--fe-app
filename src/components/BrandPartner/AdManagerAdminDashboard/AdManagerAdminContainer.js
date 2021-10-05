@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React, { useState, useEffect, useCallback } from 'react';
+
 import PropTypes, { string } from 'prop-types';
 
-import { Tabs } from '../../../common';
-import { DashboardCard } from '../../../theme/Global';
 import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
+import { Tabs } from '../../../common';
+import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
 
 export default function AdManagerAdminContainer({ userInfo }) {

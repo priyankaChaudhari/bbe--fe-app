@@ -113,8 +113,6 @@ export default function DSPInvoicesList({
 
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    // getInvoices(event.target.value, selectedStatus, selectedSortBy.value, 1);
-
     debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 
