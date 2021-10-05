@@ -967,6 +967,8 @@ const BrandAssetsPreviewBody = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  height: 100%;
 
   &.annotation-modal {
     background: #abafb8;
@@ -984,14 +986,14 @@ const BrandAssetsPreviewBody = styled.div`
   }
 
   .assetPreviewImg {
-    position: absolute;
-    top: 30%;
+    // position: absolute;
+    // top: 30%;
     display: flex;
     justify-content: center;
 
     .image-thumbnail {
-      max-width: 500px;
-      max-height: 250px;
+      height: auto;
+      width: 300px;
     }
 
     .cursorPointer {
@@ -1023,7 +1025,13 @@ const BrandAssetsPreviewBody = styled.div`
     width: 50px;
     height: 50px;
     position: absolute;
-    top: 40%;
+    // top: 45%;
+    cursor: pointer;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: cente;
     cursor: pointer;
     &.pervious-img {
       left: 29px;
@@ -1033,12 +1041,12 @@ const BrandAssetsPreviewBody = styled.div`
     }
     .arrow-icon {
       width: 15px;
-      margin: 13px 0px 0px 13px;
+      padding: 13px 0px 0px 0px;
       vertical-align: bottom;
       top: 5px;
       &.pervious {
         transform: rotate(180deg);
-        margin: 8px 0px 0px 18px;
+        padding: 13px 25px 0px 0px;
       }
     }
   }
@@ -1063,6 +1071,7 @@ const BrandAssetsPreviewBody = styled.div`
       }
     }
     .btn {
+      // top: 47%;
       &.pervious-img {
         left: 15px;
       }
@@ -1071,12 +1080,12 @@ const BrandAssetsPreviewBody = styled.div`
       }
       .arrow-icon {
         width: 15px;
-        margin: 13px 0px 0px 13px;
+        padding: 13px 0px 0px 0px;
         vertical-align: bottom;
         top: 5px;
         &.pervious {
           transform: rotate(180deg);
-          margin: 8px 0px 0px 18px;
+          padding: 13px 25px 0px 0px;
         }
       }
     }
@@ -1094,12 +1103,12 @@ const BrandAssetsPreviewBody = styled.div`
     .btn {
       .arrow-icon {
         width: 15px;
-        margin: 13px 0px 0px 13px;
+        padding: 13px 0px 0px 0px;
         vertical-align: bottom;
         top: 5px;
         &.pervious {
           transform: rotate(180deg);
-          margin: 8px 0px 0px 18px;
+          padding: 13px 25px 0px 0px;
         }
       }
     }
