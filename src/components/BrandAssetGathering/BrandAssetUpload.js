@@ -1525,14 +1525,10 @@ const BrandAssetBody = styled.div`
     }
   }
   @media only screen and (max-width: 991px) {
-    padding-left: 95px;
-    padding-right: 95px;
-    margin-top: 80px;
+    padding: 110px 15px 0 15px;
   }
   @media only screen and (max-width: 767px) {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-top: 80px;
+    padding: 100px 15px 0 15px;
 
     .Image-container {
       li {
@@ -1741,8 +1737,8 @@ const CheckSelectImage = styled.div`
     width: 160px;
     height: 160px;
     .image-thumbnail {
-      width: 160px;
-      height: 160px;
+      // width: 160px;
+      // height: 160px;
     }
     .blur-bg {
       width: 160px;
