@@ -475,7 +475,7 @@ const Table = styled.table`
            .company-info-details {
               float: left;
               max-width: 65%;
-              word-break: break-all;
+              word-break: keep-all;
             }
             .customer-details {
               max-width: 55%;
