@@ -802,8 +802,8 @@ export default function BrandAssetUpload() {
                       className="image-thumbnail"
                       data={file && file.presigned_url}
                       type={file && file.mime_type}
-                      // width="250"
-                      // height="200"
+                      width="250"
+                      height="200"
                       role="presentation">
                       <div className="unsupport-file-name">
                         <div className="file-path">
@@ -1525,10 +1525,14 @@ const BrandAssetBody = styled.div`
     }
   }
   @media only screen and (max-width: 991px) {
-    padding: 110px 15px 0 15px;
+    padding-left: 95px;
+    padding-right: 95px;
+    margin-top: 80px;
   }
   @media only screen and (max-width: 767px) {
-    padding: 100px 15px 0 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 80px;
 
     .Image-container {
       li {
@@ -1659,14 +1663,17 @@ const CheckSelectImage = styled.div`
   position: relative;
 
   .image-thumbnail {
-    max-height: 100%;
-    max-width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    // max-height: 100%;
+    // max-width: 100%;
+    // position: absolute;
+    // top: 0;
+    // bottom: 0;
+    // left: 0;
+    // right: 0;
+    // margin: auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 8px;
   }
   .unsupport-file-name {
     padding: 80px 0;
@@ -1737,8 +1744,8 @@ const CheckSelectImage = styled.div`
     width: 160px;
     height: 160px;
     .image-thumbnail {
-      // width: 160px;
-      // height: 160px;
+      width: 160px;
+      height: 160px;
     }
     .blur-bg {
       width: 160px;
