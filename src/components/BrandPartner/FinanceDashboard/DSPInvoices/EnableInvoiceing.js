@@ -99,7 +99,7 @@ export default function EnableInvoiceing({ view }) {
   const renderTableData = (item) => {
     const contractDate = dayjs(item.start_date).format('MM/DD/YY');
     return (
-      <tr className="cursor" key={item.id}>
+      <tr key={item.id}>
         <td className="product-body">
           {' '}
           <div className="company-name">{item && item.company_name}</div>
