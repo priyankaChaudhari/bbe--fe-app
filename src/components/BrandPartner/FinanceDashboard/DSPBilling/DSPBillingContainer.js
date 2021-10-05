@@ -1,34 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
 import $ from 'jquery';
 import dayjs from 'dayjs';
-// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-// import { DateRange } from 'react-date-range';
 import DatePicker from 'react-datepicker';
 import { components } from 'react-select';
 import { func } from 'prop-types';
-// import { useHistory } from 'react-router-dom';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useMediaQuery } from 'react-responsive';
+import 'react-datepicker/dist/react-datepicker.css';
 
+import DSPBillingFilters from './DSPBillingFilters';
+import TableMobileView from '../../../../common/TableMobileView';
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import DSPBillingFilters from './DSPBillingFilters';
 import { getDSPBillingMetrics, getBills } from '../../../../api';
-// import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import TableMobileView from '../../../../common/TableMobileView';
-import {
-  Card,
-  ModalRadioCheck,
-  Button,
-  WhiteCard,
-  DropDownIndicator,
-  PageLoader,
-  CommonPagination,
-  Status,
-  Table,
-  CustomDateRange,
-} from '../../../../common';
 import {
   CaretUp,
   CloseIcon,
@@ -42,11 +27,22 @@ import {
   monthNames,
   StatusColorSet,
 } from '../../../../constants/DashboardConstants';
+import {
+  Card,
+  ModalRadioCheck,
+  Button,
+  WhiteCard,
+  DropDownIndicator,
+  PageLoader,
+  CommonPagination,
+  Status,
+  Table,
+  CustomDateRange,
+} from '../../../../common';
 
 export default function DSPBillingContainer() {
   const currentDate = new Date();
   const dropdownRef = useRef(null);
-  // const history = useHistory();
 
   const [timeFrame, setTimeFrame] = useState({
     startDate: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
@@ -61,7 +57,6 @@ export default function DSPBillingContainer() {
   const [billingData, setBillingData] = useState([]);
   const [billsCount, setBillsCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
-  // const isDesktop = useMediaQuery({ minWidth: 768 });
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const [showDropdown, setShowDropdown] = useState({ show: false });
@@ -119,28 +114,21 @@ export default function DSPBillingContainer() {
   const getBillsData = useCallback(
     (searchKey, vendor, sortBy, page, dateType, dateRange) => {
       setBillingLoader(true);
-      getBills(
-        searchKey,
-        vendor,
-        sortBy,
-        // selectedDateType,
-        // timeFrame,
-        page,
-        dateType,
-        dateRange,
-      ).then((res) => {
-        if (res && res.status === 400) {
-          setBillingLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.results) {
-            setBillingData(res.data.results);
-            setBillsCount(res.data.count);
+      getBills(searchKey, vendor, sortBy, page, dateType, dateRange).then(
+        (res) => {
+          if (res && res.status === 400) {
+            setBillingLoader(false);
           }
-          setBillingLoader(false);
-          setPageNumber(page);
-        }
-      });
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setBillingData(res.data.results);
+              setBillsCount(res.data.count);
+            }
+            setBillingLoader(false);
+            setPageNumber(page);
+          }
+        },
+      );
     },
     [],
   );
@@ -323,10 +311,8 @@ export default function DSPBillingContainer() {
 
   const onDateChange = (date) => {
     if (date[1] === null) {
-      // setState([date[0], date[0]]);
       setdummyDateRange([date[0], date[0]]);
     } else {
-      // setState(date);
       setdummyDateRange(date);
     }
     setRange(date);
@@ -528,18 +514,7 @@ export default function DSPBillingContainer() {
     const billDate = dayjs(item.bill_date).format('MM/DD/YY');
     const dueDate = dayjs(item.due_date).format('MM/DD/YY');
     return (
-      <tr
-        key={item.id}
-        // onClick={() =>
-        //   history.push(
-        //     PATH_CUSTOMER_DETAILS.replace(
-        //       ':id',
-        //       item.customer && item.customer.id,
-        //     ),
-        //     'finance',
-        //   )
-        // }
-      >
+      <tr key={item.id}>
         <td className="product-body">
           {' '}
           <img
@@ -611,15 +586,6 @@ export default function DSPBillingContainer() {
           billingData &&
           billingData.map((item) => (
             <TableMobileView
-              // onClick={() =>
-              //   history.push(
-              //     PATH_CUSTOMER_DETAILS.replace(
-              //       ':id',
-              //       item.customer && item.customer.id,
-              //     ),
-              //     'finance',
-              //   )
-              // }
               key={item.id}
               className="mb-3"
               CompanyName={item.customer && item.customer.name}

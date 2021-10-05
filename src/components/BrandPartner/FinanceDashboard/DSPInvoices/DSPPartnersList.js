@@ -161,7 +161,6 @@ export default function DSPPartnersList({
 
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    // getPartners(event.target.value, selectedStatus, selectedSortBy.value, 1);
     debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 

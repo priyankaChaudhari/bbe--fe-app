@@ -9,6 +9,17 @@ import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 import { shape, string } from 'prop-types';
 
+import DSPBillingFilters from './DSPBillingFilters';
+import TableMobileView from '../../../../common/TableMobileView';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import {
+  InvoicesStatusOptions,
+  InvoicesSortByOptions,
+  StatusColorSet,
+} from '../../../../constants/DashboardConstants';
 import {
   WhiteCard,
   Table,
@@ -17,17 +28,6 @@ import {
   PageLoader,
   CommonPagination,
 } from '../../../../common';
-import TableMobileView from '../../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
-import DSPBillingFilters from './DSPBillingFilters';
-import {
-  InvoicesStatusOptions,
-  InvoicesSortByOptions,
-  StatusColorSet,
-} from '../../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../../api';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 export default function DSPBillsList({
   timeFrame,

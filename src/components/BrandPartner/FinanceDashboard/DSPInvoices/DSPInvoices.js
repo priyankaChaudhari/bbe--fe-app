@@ -9,17 +9,16 @@ import Theme from '../../../../theme/Theme';
 import { getDSPFinances } from '../../../../api';
 import { CaretUp, CloseIcon } from '../../../../theme/images/index';
 import {
+  FinanceDateTypeOptions,
+  DSPFinanceMetrics,
+  monthNames,
+} from '../../../../constants/DashboardConstants';
+import {
   Card,
   ModalRadioCheck,
   Button,
   CustomDateRange,
 } from '../../../../common';
-
-import {
-  FinanceDateTypeOptions,
-  DSPFinanceMetrics,
-  monthNames,
-} from '../../../../constants/DashboardConstants';
 
 export default function DSPInvoices({
   setTimeFrame,
