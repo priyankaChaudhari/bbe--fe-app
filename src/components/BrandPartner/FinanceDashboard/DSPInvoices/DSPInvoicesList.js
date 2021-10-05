@@ -245,7 +245,7 @@ export default function DSPInvoicesList({
         <td className="product-table-body text-right">
           <Status
             className="float-right"
-            label={item.invoice_status}
+            label={item.invoice_status.replace(' )', ')')}
             backgroundColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
           />
           <div className="clear-fix" />
@@ -312,7 +312,7 @@ export default function DSPInvoicesList({
               labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
               label2="DUE"
               labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
-              status={item.invoice_status}
+              status={item.invoice_status.replace(' )', ')')}
               statusColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
             />
           ))

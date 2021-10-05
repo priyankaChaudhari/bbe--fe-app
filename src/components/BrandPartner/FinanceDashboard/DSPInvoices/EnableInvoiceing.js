@@ -25,7 +25,7 @@ export default function EnableInvoiceing({ view }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enableInvoiceId, setEnableInvoiceId] = useState(null);
   const now = new Date();
-  const invoiceGeneratedOn = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const invoiceGeneratedOn = new Date(now.getFullYear(), now.getMonth() + 1, 3);
   const title =
     'Are you sure you want to enable revenue share invoicing for this partner';
   const subTitle = 'Their first invoice will be generated on ';
